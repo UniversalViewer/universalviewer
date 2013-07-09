@@ -1,0 +1,3 @@
+﻿{
+    "hello": "hello, world"
+}

@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{2B07A73F-52E9-47E2-85A2-0F55DAF28AC9}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="app\Utils.ts" />
+    <TypeScriptCompile Include="app\BaseApp.ts" />
+    <TypeScriptCompile Include="app\App.ts" />
+    <Content Include="app\App.js">
+      <DependentUpon>App.ts</DependentUpon>
+    </Content>
+    <Content Include="app\App.min.js">
+      <DependentUpon>App.ts</DependentUpon>
+    </Content>
+    <Content Include="app\BaseApp.js">
+      <DependentUpon>BaseApp.ts</DependentUpon>
+    </Content>
+    <Content Include="app\BaseApp.min.js">
+      <DependentUpon>BaseApp.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\BaseView.ts" />
+    <Content Include="app\BaseView.js">
+      <DependentUpon>BaseView.ts</DependentUpon>
+    </Content>
+    <Content Include="app\BaseView.min.js">
+      <DependentUpon>BaseView.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Config.js">
+      <DependentUpon>Config.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Config.min.js">
+      <DependentUpon>Config.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\IDataProvider.ts" />
+    <Content Include="app\DataProvider.min.js">
+      <DependentUpon>DataProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\IDataProvider.js">
+      <DependentUpon>IDataProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\IDataProvider.min.js">
+      <DependentUpon>IDataProvider.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\Panel.ts" />
+    <Content Include="app\Panel.js">
+      <DependentUpon>Panel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Panel.min.js">
+      <DependentUpon>Panel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Utils.js">
+      <DependentUpon>Utils.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Utils.min.js">
+      <DependentUpon>Utils.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\views\Header.ts" />
+    <TypeScriptCompile Include="app\views\Footer.ts" />
+    <Content Include="app\views\Footer.js">
+      <DependentUpon>Footer.ts</DependentUpon>
+    </Content>
+    <Content Include="app\views\Footer.min.js">
+      <DependentUpon>Footer.ts</DependentUpon>
+    </Content>
+    <Content Include="app\views\Header.js">
+      <DependentUpon>Header.ts</DependentUpon>
+    </Content>
+    <Content Include="app\views\Header.min.js">
+      <DependentUpon>Header.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="js\extensions.d.ts" />
+    <TypeScriptCompile Include="app\views\Main.ts" />
+    <Content Include="app\views\Main.js">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <Content Include="app\views\Main.min.js">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\DataProvider.ts" />
+    <Content Include="app\DataProvider.js">
+      <DependentUpon>DataProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="js\utils.js" />
+    <TypeScriptCompile Include="app\views\Shell.ts" />
+    <Content Include="app\views\Shell.js">
+      <DependentUpon>Shell.ts</DependentUpon>
+    </Content>
+    <Content Include="app\views\Shell.min.js">
+      <DependentUpon>Shell.ts</DependentUpon>
+    </Content>
+    <Content Include="css\app.css" />
+    <Content Include="app\AppConfig.min.js">
+      <DependentUpon>Config.ts</DependentUpon>
+    </Content>
+    <Content Include="data.js" />
+    <Content Include="index.html" />
+    <Content Include="js\config.js" />
+    <Content Include="js\console.js" />
+    <Content Include="js\easyXDM.min.js" />
+    <Content Include="js\easyxdm.swf" />
+    <Content Include="js\embed.js" />
+    <Content Include="js\jquery-1.10.2.min.js" />
+    <Content Include="js\json2.min.js" />
+    <Content Include="js\pubsub.js" />
+    <Content Include="js\require.js" />
+    <TypeScriptCompile Include="js\jquery.d.ts" />
+    <TypeScriptCompile Include="js\require.d.ts" />
+    <TypeScriptCompile Include="app\Config.ts" />
+    <Content Include="app\AppConfig.js">
+      <DependentUpon>Config.ts</DependentUpon>
+    </Content>
+    <Content Include="app.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\AppConfig.js.map">
+      <DependentUpon>Config.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Player</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>56180</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:65106/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+    <!--<TypeScriptSourceMap>true</TypeScriptSourceMap>-->
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+  </PropertyGroup>
+  <Target Name="BeforeBuild">
+    <Message Text="Compiling TypeScript files" />
+    <Message Text="Executing tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+    <Exec Command="tsc$(TypeScriptSourceMap) --module AMD @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
+  </Target>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptIncludeComments>false</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
+</Project>
