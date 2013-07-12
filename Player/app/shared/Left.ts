@@ -25,7 +25,7 @@ export class Left extends baseView.BaseView {
     toggle(): void {
         $.publish(baseApp.BaseApp.TOGGLE_LEFTPANEL_START, [this.isExpanded]);
 
-        var width = this.isExpanded ? baseApp.BaseApp.provider.options.leftPanelCollapsedWidth : baseApp.BaseApp.provider.options.leftPanelExpandedWidth;
+        var width = this.isExpanded ? this.options.leftPanelCollapsedWidth : this.options.leftPanelExpandedWidth;
 
         this.isExpanded = !this.isExpanded;
 
@@ -33,7 +33,7 @@ export class Left extends baseView.BaseView {
             {
                 width: width
             },
-            baseApp.BaseApp.provider.options.panelAnimationDuration,
+            this.options.panelAnimationDuration,
             function () {
                 $.publish(baseApp.BaseApp.TOGGLE_LEFTPANEL_END, [this.isExpanded]);
                 $.publish(baseApp.BaseApp.RESIZE);

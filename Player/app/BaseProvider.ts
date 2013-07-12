@@ -1,8 +1,9 @@
 /// <reference path="../js/jquery.d.ts" />
-import p = module("app/IProvider");
+import ip = module("app/IProvider");
 import utils = module("app/Utils");
 
-export class BaseProvider implements p.IProvider {
+export class BaseProvider implements ip.IProvider {
+    config: any;
     extensions: any;
     assetSequence: any;
     content: any;
@@ -21,8 +22,7 @@ export class BaseProvider implements p.IProvider {
 
         // get config.
         this.getData(configUri, (config) => {
-            // merge config and provider options.
-            this.options = $.extend(true, this.options, config.options);
+            this.config = config;
             this.content = config.content;
 
             var dataUri = utils.Utils.getParameterByName('dataUri');
@@ -48,7 +48,10 @@ export class BaseProvider implements p.IProvider {
         var extension = this.extensions[type];
 
         // bootstrap extension provider.
-        var provider = $.extend(true, this, new extension.provider());
+        var provider: ip.IProvider = <ip.IProvider>$.extend(true, this, new extension.provider());
+
+        // merge config and provider options.
+        provider.options = $.extend(true, provider.options, this.config.options);
 
         // create extension.
         new extension.type(provider);
