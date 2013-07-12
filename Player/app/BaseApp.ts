@@ -1,13 +1,12 @@
 /// <reference path="../js/jquery.d.ts" />
 /// <reference path="../js/extensions.d.ts" />
 import utils = module("app/Utils");
-import dp = module("app/IDataProvider");
+import p = module("app/IProvider");
 import shell = module("app/shared/Shell");
 
 export class BaseApp {
 
-    static config: any;
-    static dataProvider: dp.IDataProvider;
+    static provider: p.IProvider;
     socket: any;
     static isFullScreen: boolean = false;
     $element: JQuery;
@@ -20,13 +19,9 @@ export class BaseApp {
     static TOGGLE_RIGHTPANEL_START: string = 'onToggleRightPanelStart';
     static TOGGLE_RIGHTPANEL_END: string = 'onToggleRightPanelEnd';
 
-    constructor(config: any, dataProvider: dp.IDataProvider) {
-        
-        BaseApp.config = config;
-        BaseApp.dataProvider = dataProvider;
+    constructor(provider: p.IProvider) {
 
-        // merge config and provider options.
-        BaseApp.config.options = $.extend(dataProvider.options, BaseApp.config.options);
+        BaseApp.provider = provider;
 
         this.create();
     }

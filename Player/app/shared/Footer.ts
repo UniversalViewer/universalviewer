@@ -20,7 +20,7 @@ export class Footer extends baseView.BaseView {
             this.toggleFullScreen();
         });
 
-        this.$fullScreenBtn = $('<a href="#">' + baseApp.BaseApp.config.content.footer.fullScreen + '</a>');
+        this.$fullScreenBtn = $('<a href="#">' + baseApp.BaseApp.provider.content.footer.fullScreen + '</a>');
         this.$element.append(this.$fullScreenBtn);
 
         this.$fullScreenBtn.on('click', (e) => {
@@ -31,9 +31,9 @@ export class Footer extends baseView.BaseView {
 
     toggleFullScreen(): void {
         if (baseApp.BaseApp.isFullScreen) {
-            this.$fullScreenBtn.text(baseApp.BaseApp.config.content.footer.exitFullScreen);
+            this.$fullScreenBtn.text(baseApp.BaseApp.provider.content.footer.exitFullScreen);
         } else {
-            this.$fullScreenBtn.text(baseApp.BaseApp.config.content.footer.fullScreen);
+            this.$fullScreenBtn.text(baseApp.BaseApp.provider.content.footer.fullScreen);
         }
     }
 

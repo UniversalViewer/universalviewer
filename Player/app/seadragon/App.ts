@@ -2,8 +2,8 @@
 /// <reference path="../../js/extensions.d.ts" />
 import baseApp = module("app/BaseApp");
 import utils = module("app/Utils");
-import idp = module("app/IDataProvider");
-import dp = module("app/seadragon/DataProvider");
+import ip = module("app/IProvider");
+import p = module("app/seadragon/Provider");
 import shell = module("app/shared/Shell");
 import header = module("app/seadragon/Header");
 import main = module("app/seadragon/Main");
@@ -11,8 +11,8 @@ import footer = module("app/seadragon/Footer");
 
 export class App extends baseApp.BaseApp {
 
-    constructor(config: any, dataProvider: idp.IDataProvider) {
-        super(config, dataProvider);
+    constructor(provider: ip.IProvider) {
+        super(provider);
     }
 
     create(): void {
@@ -26,7 +26,7 @@ export class App extends baseApp.BaseApp {
     }
      
     // todo: this can be converted to a getter if willing to only support ECMA Script 5...
-    static getDataProvider(): dp.DataProvider {
-        return <dp.DataProvider>baseApp.BaseApp.dataProvider;
+    static getDataProvider(): p.Provider {
+        return <p.Provider>baseApp.BaseApp.provider;
     }
 }

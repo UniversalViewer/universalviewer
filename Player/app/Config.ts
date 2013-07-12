@@ -27,19 +27,15 @@ require.config({
     }
 });
 
-require(['jquery', 'plugins', 'console', 'pubsub', 'app/Main', 'app/seadragon/App', 'app/seadragon/DataProvider'],
-    ($, plugins, console, pubsub, main, seadragon, seadragondp) => {
-        
-        var typeEvaluator = function (data) {
-            return data.assetSequences[0].rootSection.sectionType.toLowerCase();
-        }
+require(['jquery', 'plugins', 'console', 'pubsub', 'app/BaseProvider', 'app/seadragon/App', 'app/seadragon/Provider'],
+    ($, plugins, console, pubsub, baseProvider, seadragon, seadragonProvider) => {
 
         var extensions = {};
 
         extensions['monograph'] = {
             type: seadragon.App,
-            provider: seadragondp.DataProvider
+            provider: seadragonProvider.Provider
         };
 
-        main.Main.Run('js/config.js', typeEvaluator, extensions);
+        new baseProvider.BaseProvider('js/config.js', extensions);
     });

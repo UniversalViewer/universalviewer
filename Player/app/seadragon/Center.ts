@@ -3,7 +3,7 @@
 import baseApp = module("app/BaseApp");
 import app = module("app/seadragon/App");
 import baseCenter = module("app/shared/Center");
-import dp = module("app/seadragon/DataProvider");
+import p = module("app/seadragon/Provider");
 
 export class Center extends baseCenter.Center {
 

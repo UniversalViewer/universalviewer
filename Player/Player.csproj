@@ -20,6 +20,20 @@
     <TypeScriptCompile Include="app\BaseApp.ts" />
     <TypeScriptCompile Include="app\seadragon\App.ts" />
     <TypeScriptCompile Include="app\Main.ts" />
+    <TypeScriptCompile Include="app\IProvider.ts" />
+    <TypeScriptCompile Include="app\BaseProvider.ts" />
+    <Content Include="app\BaseProvider.js">
+      <DependentUpon>BaseProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\BaseProvider.min.js">
+      <DependentUpon>BaseProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\IProvider.js">
+      <DependentUpon>IProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\IProvider.min.js">
+      <DependentUpon>IProvider.ts</DependentUpon>
+    </Content>
     <Content Include="app\Main.js">
       <DependentUpon>Main.ts</DependentUpon>
     </Content>
@@ -50,16 +64,6 @@
     </Content>
     <Content Include="app\Config.min.js">
       <DependentUpon>Config.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="app\IDataProvider.ts" />
-    <Content Include="app\seadragon\DataProvider.min.js">
-      <DependentUpon>DataProvider.ts</DependentUpon>
-    </Content>
-    <Content Include="app\IDataProvider.js">
-      <DependentUpon>IDataProvider.ts</DependentUpon>
-    </Content>
-    <Content Include="app\IDataProvider.min.js">
-      <DependentUpon>IDataProvider.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\Panel.ts" />
     <Content Include="app\Panel.js">
@@ -104,6 +108,13 @@
       <DependentUpon>Main.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\seadragon\Right.ts" />
+    <TypeScriptCompile Include="app\seadragon\Provider.ts" />
+    <Content Include="app\seadragon\Provider.js">
+      <DependentUpon>Provider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Provider.min.js">
+      <DependentUpon>Provider.ts</DependentUpon>
+    </Content>
     <Content Include="app\seadragon\Right.js">
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
@@ -155,10 +166,6 @@
     <Content Include="app\shared\Main.min.js">
       <DependentUpon>Main.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\seadragon\DataProvider.ts" />
-    <Content Include="app\seadragon\DataProvider.js">
-      <DependentUpon>DataProvider.ts</DependentUpon>
-    </Content>
     <TypeScriptCompile Include="app\shared\Right.ts" />
     <Content Include="app\shared\Right.js">
       <DependentUpon>Right.ts</DependentUpon>
@@ -207,12 +214,6 @@
     <Content Include="app\Main.js.map">
       <DependentUpon>Main.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\DataProvider.js.map">
-      <DependentUpon>DataProvider.ts</DependentUpon>
-    </Content>
-    <Content Include="app\IDataProvider.js.map">
-      <DependentUpon>IDataProvider.ts</DependentUpon>
-    </Content>
     <Content Include="app\seadragon\App.js.map">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
@@ -254,6 +255,18 @@
     </Content>
     <Content Include="app\shared\Right.js.map">
       <DependentUpon>Right.ts</DependentUpon>
+    </Content>
+    <Content Include="app\IProvider.js.map">
+      <DependentUpon>IProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Provider.js.map">
+      <DependentUpon>Provider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\BaseView.js.map">
+      <DependentUpon>BaseView.ts</DependentUpon>
+    </Content>
+    <Content Include="app\BaseProvider.js.map">
+      <DependentUpon>BaseProvider.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
