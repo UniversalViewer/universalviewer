@@ -25,6 +25,8 @@ export class Left extends baseView.BaseView {
     toggle(): void {
         $.publish(baseApp.BaseApp.TOGGLE_LEFTPANEL_START, [this.isExpanded]);
 
+        console.log(this.options.leftPanelExpandedWidth);
+
         var width = this.isExpanded ? this.options.leftPanelCollapsedWidth : this.options.leftPanelExpandedWidth;
 
         this.isExpanded = !this.isExpanded;

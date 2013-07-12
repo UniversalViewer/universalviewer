@@ -1,9 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
-import baseApp = module("app/BaseApp");
 import app = module("app/seadragon/App");
 import baseCenter = module("app/shared/Center");
-import p = module("app/seadragon/Provider");
 
 export class Center extends baseCenter.Center {
 
@@ -16,7 +14,7 @@ export class Center extends baseCenter.Center {
     create(): void {
         super.create();
 
-        this.title = app.App.getDataProvider().getTitle();
+        this.title = app.App.provider.getTitle();
     }
 
     resize(): void {

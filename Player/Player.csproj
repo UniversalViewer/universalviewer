@@ -20,19 +20,12 @@
     <TypeScriptCompile Include="app\BaseApp.ts" />
     <TypeScriptCompile Include="app\seadragon\App.ts" />
     <TypeScriptCompile Include="app\Main.ts" />
-    <TypeScriptCompile Include="app\IProvider.ts" />
     <TypeScriptCompile Include="app\BaseProvider.ts" />
     <Content Include="app\BaseProvider.js">
       <DependentUpon>BaseProvider.ts</DependentUpon>
     </Content>
     <Content Include="app\BaseProvider.min.js">
       <DependentUpon>BaseProvider.ts</DependentUpon>
-    </Content>
-    <Content Include="app\IProvider.js">
-      <DependentUpon>IProvider.ts</DependentUpon>
-    </Content>
-    <Content Include="app\IProvider.min.js">
-      <DependentUpon>IProvider.ts</DependentUpon>
     </Content>
     <Content Include="app\Main.js">
       <DependentUpon>Main.ts</DependentUpon>
@@ -255,9 +248,6 @@
     </Content>
     <Content Include="app\shared\Right.js.map">
       <DependentUpon>Right.ts</DependentUpon>
-    </Content>
-    <Content Include="app\IProvider.js.map">
-      <DependentUpon>IProvider.ts</DependentUpon>
     </Content>
     <Content Include="app\seadragon\Provider.js.map">
       <DependentUpon>Provider.ts</DependentUpon>

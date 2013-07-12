@@ -1,12 +1,12 @@
 /// <reference path="../js/jquery.d.ts" />
 /// <reference path="../js/extensions.d.ts" />
 import utils = module("app/Utils");
-import p = module("app/IProvider");
+import bp = module("app/BaseProvider");
 import shell = module("app/shared/Shell");
 
 export class BaseApp {
 
-    static provider: p.IProvider;
+    static provider: bp.BaseProvider;
     socket: any;
     static isFullScreen: boolean = false;
     $element: JQuery;
@@ -19,7 +19,7 @@ export class BaseApp {
     static TOGGLE_RIGHTPANEL_START: string = 'onToggleRightPanelStart';
     static TOGGLE_RIGHTPANEL_END: string = 'onToggleRightPanelEnd';
 
-    constructor(provider: p.IProvider) {
+    constructor(provider: bp.BaseProvider) {
 
         BaseApp.provider = provider;
 
