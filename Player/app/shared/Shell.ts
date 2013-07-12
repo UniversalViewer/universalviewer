@@ -1,17 +1,17 @@
 /// <reference path="../../js/jquery.d.ts" />
-import app = module("app/App");
+import baseapp = module("app/BaseApp");
 import utils = module("app/Utils");
 import baseView = module("app/BaseView");
-import header = module("app/views/Header");
-import main = module("app/views/Main");
-import footer = module("app/views/Footer");
+import header = module("app/shared/Header");
+import main = module("app/shared/Main");
+import footer = module("app/shared/Footer");
 
 export class Shell extends baseView.BaseView {
+    static $element: JQuery;
     static $headerPanel: JQuery;
     static $mainPanel: JQuery;
     static $footerPanel: JQuery;
-    static $element: JQuery;
-    
+
     constructor($element: JQuery) {
         Shell.$element = $element;
         super(Shell.$element, true, true);
@@ -20,17 +20,14 @@ export class Shell extends baseView.BaseView {
     create(): void {
         super.create();
 
-        Shell.$headerPanel = utils.Utils.createElement('div', null, 'headerPanel');
+        Shell.$headerPanel = utils.Utils.createDiv('headerPanel');
         this.$element.append(Shell.$headerPanel);
-        new header.Header(Shell.$headerPanel);
 
-        Shell.$mainPanel = utils.Utils.createElement('div', null, 'mainPanel');
+        Shell.$mainPanel = utils.Utils.createDiv('mainPanel');
         this.$element.append(Shell.$mainPanel);
-        new main.Main(Shell.$mainPanel);
 
-        Shell.$footerPanel = utils.Utils.createElement('div', null, 'footerPanel');
+        Shell.$footerPanel = utils.Utils.createDiv('footerPanel');
         this.$element.append(Shell.$footerPanel);
-        new footer.Footer(Shell.$footerPanel);
     }
     
     resize(): void{

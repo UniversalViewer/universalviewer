@@ -1,8 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 import utils = module("app/Utils");
 import baseApp = module("app/BaseApp");
-import app = module("app/App");
-import shell = module("app/views/Shell");
+import shell = module("app/shared/Shell");
 import baseView = module("app/BaseView");
 
 export class Footer extends baseView.BaseView {
@@ -17,24 +16,24 @@ export class Footer extends baseView.BaseView {
         super.create();
 
         // event handlers.
-        $.subscribe(app.App.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(baseApp.BaseApp.TOGGLE_FULLSCREEN, () => {
             this.toggleFullScreen();
         });
 
-        this.$fullScreenBtn = $('<a href="#">' + baseApp.BaseApp.config.footer.fullScreen + '</a>');
+        this.$fullScreenBtn = $('<a href="#">' + baseApp.BaseApp.config.content.footer.fullScreen + '</a>');
         this.$element.append(this.$fullScreenBtn);
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
-            $.publish(app.App.TOGGLE_FULLSCREEN);
+            $.publish(baseApp.BaseApp.TOGGLE_FULLSCREEN);
         });
     }
 
     toggleFullScreen(): void {
         if (baseApp.BaseApp.isFullScreen) {
-            this.$fullScreenBtn.text(baseApp.BaseApp.config.footer.exitFullScreen);
+            this.$fullScreenBtn.text(baseApp.BaseApp.config.content.footer.exitFullScreen);
         } else {
-            this.$fullScreenBtn.text(baseApp.BaseApp.config.footer.fullScreen);
+            this.$fullScreenBtn.text(baseApp.BaseApp.config.content.footer.fullScreen);
         }
     }
 

@@ -282,5 +282,9 @@ export class Utils{
         return $elem;
     }
 
+    static createDiv(className: string): JQuery {
+        return Utils.createElement('div', null, className)
+    }
+
     //#endregion
 }

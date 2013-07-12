@@ -345,12 +345,6 @@ interface JQueryStatic {
     * @param keepScripts A Boolean indicating whether to include scripts passed in the HTML string
     */
     parseHTML(data: string, context?: HTMLElement, keepScripts?: boolean): any[];
-
-    /*********
-     EXTENSIONS
-    **********/
-    publish(event: string, eventObj?: any[]);
-    subscribe(event: string, handler: Function);
 }
 
 /*

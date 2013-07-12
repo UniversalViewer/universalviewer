@@ -1,5 +1,5 @@
 /// <reference path="../js/jquery.d.ts" />
-import app = module("app/App");
+import baseApp = module("app/BaseApp");
 
 export class Panel {
     $element: JQuery;
@@ -15,7 +15,7 @@ export class Panel {
     }
 
     create(): void {
-        $.subscribe(app.App.RESIZE, () => {
+        $.subscribe(baseApp.BaseApp.RESIZE, () => {
             this.resize();
         });
     }

@@ -1,10 +1,11 @@
 /// <reference path="../js/require.d.ts" />
-/// <reference path="App.ts" />
+/// <reference path="Main.ts" />
 
 require.config({
     baseUrl: '../',
     paths: {
         'jquery': 'js/jquery-1.10.2.min',
+        'plugins': 'js/jquery.plugins',
         'console': 'js/console',
         'pubsub': 'js/pubsub'
     },
@@ -12,17 +13,33 @@ require.config({
         jquery: {
             exports: '$'
         },
+        plugins: {
+            deps: ['jquery'],
+            exports: 'plugins'
+        },
         console: {
-            exports: "console"
+            exports: 'console'
         },
         pubsub: {
-            deps: ["jquery"],
-            exports: "pubsub"
+            deps: ['jquery'],
+            exports: 'pubsub'
         },
     }
 });
 
-require(['jquery', 'console', 'pubsub', 'app/App', 'app/DataProvider'],
-    ($, console, pubsub, app, dp) => {
-        new app.App('js/config.js', new dp.DataProvider());
+require(['jquery', 'plugins', 'console', 'pubsub', 'app/Main', 'app/seadragon/App', 'app/seadragon/DataProvider'],
+    ($, plugins, console, pubsub, main, seadragon, seadragondp) => {
+        
+        var typeEvaluator = function (data) {
+            return data.assetSequences[0].rootSection.sectionType.toLowerCase();
+        }
+
+        var extensions = {};
+
+        extensions['monograph'] = {
+            type: seadragon.App,
+            provider: seadragondp.DataProvider
+        };
+
+        main.Main.Run('js/config.js', typeEvaluator, extensions);
     });

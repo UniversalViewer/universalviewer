@@ -2,7 +2,7 @@
 /// <reference path="../js/extensions.d.ts" />
 import utils = module("app/Utils");
 import dp = module("app/IDataProvider");
-import shell = module("app/views/Shell");
+import shell = module("app/shared/Shell");
 
 export class BaseApp {
 
@@ -10,29 +10,35 @@ export class BaseApp {
     static dataProvider: dp.IDataProvider;
     socket: any;
     static isFullScreen: boolean = false;
+    $element: JQuery;
 
     // events
     static RESIZE: string = 'onResize';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
+    static TOGGLE_LEFTPANEL_START: string = 'onToggleLeftPanelStart';
+    static TOGGLE_LEFTPANEL_END: string = 'onToggleLeftPanelEnd';
+    static TOGGLE_RIGHTPANEL_START: string = 'onToggleRightPanelStart';
+    static TOGGLE_RIGHTPANEL_END: string = 'onToggleRightPanelEnd';
 
-    // todo: look at using dependency injection for constructor params.
-    constructor(configUri: string, dataProvider: dp.IDataProvider) {
-
+    constructor(config: any, dataProvider: dp.IDataProvider) {
+        
+        BaseApp.config = config;
         BaseApp.dataProvider = dataProvider;
 
-        $.getJSON(configUri, (config) => {
-            BaseApp.config = config;
+        // merge config and provider options.
+        BaseApp.config.options = $.extend(dataProvider.options, BaseApp.config.options);
 
-            var dataUri = utils.Utils.getParameterByName('dataUri');
-
-            // todo: better to implement an mvc pattern, keeping it simple for now.
-            BaseApp.dataProvider.getData(dataUri, (data) => {
-                this.create();
-            });
-        });
+        this.create();
     }
 
     create(): void {
+
+        this.$element = $('#app');
+
+        // initial sizing.
+        var $win = $(window);
+        this.$element.width($win.width());
+        this.$element.height($win.height());
 
         // communication with parent frame.    
         this.socket = new easyXDM.Socket({
@@ -54,15 +60,7 @@ export class BaseApp {
         });
 
         // create shell.
-        var $content = $('#content');
-        new shell.Shell($content);
-
-        // initial sizing.
-        var $win = $(window);
-        $content.width($win.width());
-        $content.height($win.height());
-
-        $.publish(BaseApp.RESIZE);
+        new shell.Shell(this.$element);
     }
 
     triggerSocket(eventName, eventObject): void {

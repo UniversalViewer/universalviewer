@@ -1,7 +1,14 @@
 ﻿{
-    "footer":
+    "options":
     {
-        "fullScreen": "Full Screen",
-        "exitFullScreen": "Exit Full Screen"
+        
+    },
+    "content":
+    {
+        "footer":
+        {
+            "fullScreen": "Full Screen",
+            "exitFullScreen": "Exit Full Screen"
+        }
     }
 }

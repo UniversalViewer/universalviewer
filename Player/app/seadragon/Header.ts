@@ -1,15 +1,15 @@
 /// <reference path="../../js/jquery.d.ts" />
-import baseView = module("app/BaseView");
+import baseHeader = module("app/shared/Header");
 
-export class Header extends baseView.BaseView {
+export class Header extends baseHeader.Header {
 
     constructor($element: JQuery) {
-        super($element, true, false);
+        super($element);
     }
 
     create(): void {
         super.create();
-        this.$element.append('header');
+
     }
 
     resize(): void {

@@ -18,11 +18,18 @@
   <ItemGroup>
     <TypeScriptCompile Include="app\Utils.ts" />
     <TypeScriptCompile Include="app\BaseApp.ts" />
-    <TypeScriptCompile Include="app\App.ts" />
-    <Content Include="app\App.js">
+    <TypeScriptCompile Include="app\seadragon\App.ts" />
+    <TypeScriptCompile Include="app\Main.ts" />
+    <Content Include="app\Main.js">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Main.min.js">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\App.js">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
-    <Content Include="app\App.min.js">
+    <Content Include="app\seadragon\App.min.js">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
     <Content Include="app\BaseApp.js">
@@ -45,7 +52,7 @@
       <DependentUpon>Config.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\IDataProvider.ts" />
-    <Content Include="app\DataProvider.min.js">
+    <Content Include="app\seadragon\DataProvider.min.js">
       <DependentUpon>DataProvider.ts</DependentUpon>
     </Content>
     <Content Include="app\IDataProvider.js">
@@ -61,50 +68,114 @@
     <Content Include="app\Panel.min.js">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="app\seadragon\Center.ts" />
+    <Content Include="app\seadragon\Center.js">
+      <DependentUpon>Center.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Center.min.js">
+      <DependentUpon>Center.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\seadragon\Header.ts" />
+    <TypeScriptCompile Include="app\seadragon\Footer.ts" />
+    <Content Include="app\seadragon\Footer.js">
+      <DependentUpon>Footer.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Footer.min.js">
+      <DependentUpon>Footer.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Header.js">
+      <DependentUpon>Header.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Header.min.js">
+      <DependentUpon>Header.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\seadragon\Main.ts" />
+    <TypeScriptCompile Include="app\seadragon\Left.ts" />
+    <Content Include="app\seadragon\Left.js">
+      <DependentUpon>Left.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Left.min.js">
+      <DependentUpon>Left.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Main.js">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Main.min.js">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\seadragon\Right.ts" />
+    <Content Include="app\seadragon\Right.js">
+      <DependentUpon>Right.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Right.min.js">
+      <DependentUpon>Right.ts</DependentUpon>
+    </Content>
     <Content Include="app\Utils.js">
       <DependentUpon>Utils.ts</DependentUpon>
     </Content>
     <Content Include="app\Utils.min.js">
       <DependentUpon>Utils.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\views\Header.ts" />
-    <TypeScriptCompile Include="app\views\Footer.ts" />
-    <Content Include="app\views\Footer.js">
+    <TypeScriptCompile Include="app\shared\Header.ts" />
+    <TypeScriptCompile Include="app\shared\Footer.ts" />
+    <Content Include="app\seadragon\css\app.css" />
+    <TypeScriptCompile Include="app\shared\Center.ts" />
+    <Content Include="app\seadragon\js\openseadragon.min.js" />
+    <Content Include="app\shared\Center.js">
+      <DependentUpon>Center.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Center.min.js">
+      <DependentUpon>Center.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Footer.js">
       <DependentUpon>Footer.ts</DependentUpon>
     </Content>
-    <Content Include="app\views\Footer.min.js">
+    <Content Include="app\shared\Footer.min.js">
       <DependentUpon>Footer.ts</DependentUpon>
     </Content>
-    <Content Include="app\views\Header.js">
+    <Content Include="app\shared\Header.js">
       <DependentUpon>Header.ts</DependentUpon>
     </Content>
-    <Content Include="app\views\Header.min.js">
+    <Content Include="app\shared\Header.min.js">
       <DependentUpon>Header.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="js\extensions.d.ts" />
-    <TypeScriptCompile Include="app\views\Main.ts" />
-    <Content Include="app\views\Main.js">
+    <TypeScriptCompile Include="app\shared\Main.ts" />
+    <Content Include="app\shared\img\ajax-loader.gif" />
+    <TypeScriptCompile Include="app\shared\Left.ts" />
+    <Content Include="app\shared\Left.js">
+      <DependentUpon>Left.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Left.min.js">
+      <DependentUpon>Left.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Main.js">
       <DependentUpon>Main.ts</DependentUpon>
     </Content>
-    <Content Include="app\views\Main.min.js">
+    <Content Include="app\shared\Main.min.js">
       <DependentUpon>Main.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\DataProvider.ts" />
-    <Content Include="app\DataProvider.js">
+    <TypeScriptCompile Include="app\seadragon\DataProvider.ts" />
+    <Content Include="app\seadragon\DataProvider.js">
       <DependentUpon>DataProvider.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="app\shared\Right.ts" />
+    <Content Include="app\shared\Right.js">
+      <DependentUpon>Right.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Right.min.js">
+      <DependentUpon>Right.ts</DependentUpon>
+    </Content>
+    <Content Include="js\jquery.plugins.js" />
     <Content Include="js\utils.js" />
-    <TypeScriptCompile Include="app\views\Shell.ts" />
-    <Content Include="app\views\Shell.js">
+    <TypeScriptCompile Include="app\shared\Shell.ts" />
+    <Content Include="app\shared\Shell.js">
       <DependentUpon>Shell.ts</DependentUpon>
     </Content>
-    <Content Include="app\views\Shell.min.js">
+    <Content Include="app\shared\Shell.min.js">
       <DependentUpon>Shell.ts</DependentUpon>
     </Content>
-    <Content Include="css\app.css" />
-    <Content Include="app\AppConfig.min.js">
-      <DependentUpon>Config.ts</DependentUpon>
-    </Content>
+    <Content Include="app\shared\css\app.css" />
     <Content Include="data.js" />
     <Content Include="index.html" />
     <Content Include="js\config.js" />
@@ -119,16 +190,79 @@
     <TypeScriptCompile Include="js\jquery.d.ts" />
     <TypeScriptCompile Include="js\require.d.ts" />
     <TypeScriptCompile Include="app\Config.ts" />
-    <Content Include="app\AppConfig.js">
-      <DependentUpon>Config.ts</DependentUpon>
-    </Content>
     <Content Include="app.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\AppConfig.js.map">
+    <Content Include="Web.config" />
+    <Content Include="app\shared\Shell.js.map">
+      <DependentUpon>Shell.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Config.js.map">
       <DependentUpon>Config.ts</DependentUpon>
     </Content>
+    <Content Include="app\BaseApp.js.map">
+      <DependentUpon>BaseApp.ts</DependentUpon>
+    </Content>
+    <Content Include="js\jquery-1.10.2.min.map" />
+    <Content Include="app\Main.js.map">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\DataProvider.js.map">
+      <DependentUpon>DataProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\IDataProvider.js.map">
+      <DependentUpon>IDataProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\App.js.map">
+      <DependentUpon>App.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Header.js.map">
+      <DependentUpon>Header.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Header.js.map">
+      <DependentUpon>Header.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Main.js.map">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Footer.js.map">
+      <DependentUpon>Footer.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Main.js.map">
+      <DependentUpon>Main.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Center.js.map">
+      <DependentUpon>Center.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Center.js.map">
+      <DependentUpon>Center.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Left.js.map">
+      <DependentUpon>Left.ts</DependentUpon>
+    </Content>
+    <Content Include="app\seadragon\Right.js.map">
+      <DependentUpon>Right.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Utils.js.map">
+      <DependentUpon>Utils.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Left.js.map">
+      <DependentUpon>Left.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Footer.js.map">
+      <DependentUpon>Footer.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Right.js.map">
+      <DependentUpon>Right.ts</DependentUpon>
+    </Content>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -158,14 +292,9 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES3</TypeScriptTarget>
     <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
-    <!--<TypeScriptSourceMap>true</TypeScriptSourceMap>-->
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
   </PropertyGroup>
-  <Target Name="BeforeBuild">
-    <Message Text="Compiling TypeScript files" />
-    <Message Text="Executing tsc$(TypeScriptSourceMap) @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
-    <Exec Command="tsc$(TypeScriptSourceMap) --module AMD @(TypeScriptCompile ->'&quot;%(fullpath)&quot;', ' ')" />
-  </Target>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES3</TypeScriptTarget>
     <TypeScriptIncludeComments>false</TypeScriptIncludeComments>

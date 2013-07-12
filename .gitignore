@@ -4,6 +4,8 @@
 
 */app/*.js
 */app/**/*.js
+*.js.map
+*.min.map
 
 #################
 ## Eclipse

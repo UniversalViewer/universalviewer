@@ -1,0 +1,60 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    position: relative;
+    font-family: sans-serif;
+}
+
+/*#region Shell*/
+
+#app {
+    background-image: url(../img/ajax-loader.gif);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-color: #000;
+	position: relative;
+}
+
+#app .headerPanel{
+    height: 40px;
+}
+
+#app .mainPanel{
+	position: relative;
+}
+
+#app .leftPanel{
+	position: absolute;
+    background: red;
+    width: 20px;
+}
+
+#app .centerPanel{
+    position: absolute;
+}
+
+#app .rightPanel{
+    position: absolute;
+    background: green;
+    width: 20px;
+}
+
+#app .footerPanel{
+    height: 30px;
+}
+
+/*#endregion */
+
+#app .centerPanel .title {
+    padding: 5px 20px 5px 20px;
+    height: 30px;
+    background: pink;
+}
+
+#app .centerPanel .content {
+    background: beige;
+}
