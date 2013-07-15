@@ -7,7 +7,4 @@ export class Provider extends baseProvider.BaseProvider {
 
     };
 
-    getSillyTitle(): string{
-        return "silly";
-    }
 }

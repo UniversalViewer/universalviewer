@@ -18,6 +18,7 @@ export class BaseApp {
     static TOGGLE_LEFTPANEL_END: string = 'onToggleLeftPanelEnd';
     static TOGGLE_RIGHTPANEL_START: string = 'onToggleRightPanelStart';
     static TOGGLE_RIGHTPANEL_END: string = 'onToggleRightPanelEnd';
+    static ASSET_INDEX_CHANGED: string = 'onAssetIndexChanged';
 
     constructor(provider: bp.BaseProvider) {
 

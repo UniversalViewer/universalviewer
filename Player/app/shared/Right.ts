@@ -16,6 +16,8 @@ export class Right extends baseView.BaseView {
     create(): void {
         super.create();
 
+        this.$element.width(this.options.rightPanelCollapsedWidth);
+
         this.$element.on('click', (e) => {
             e.preventDefault();
 

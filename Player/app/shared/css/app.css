@@ -30,7 +30,6 @@ body {
 #app .leftPanel{
 	position: absolute;
     background: red;
-    width: 20px;
 }
 
 #app .centerPanel{
@@ -40,7 +39,6 @@ body {
 #app .rightPanel{
     position: absolute;
     background: green;
-    width: 20px;
 }
 
 #app .footerPanel{
