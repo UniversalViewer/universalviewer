@@ -26,3 +26,9 @@ declare function escape(s: string): any;
 declare function unescape(s: string): any;
 
 declare var easyXDM: any;
+
+declare var OpenSeadragon: any;
+
+interface Window{
+    app: any;
+}

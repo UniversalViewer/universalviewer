@@ -3,10 +3,12 @@ import bp = module("app/BaseProvider");
 import utils = module("app/Utils");
 
 export class BaseProvider {
+    
     config: any;
-    extensions: any;
+    pkg: any;
+    assetSequenceIndex: number;
     assetSequence: any;
-    content: any;
+    type: string;
 
     options: any = {
         panelAnimationDuration: 250,
@@ -16,51 +18,24 @@ export class BaseProvider {
         rightPanelExpandedWidth: 255
     };
 
-    constructor(configUri: string, extensions: any) {
+    constructor(config: any, pkg: any) {
+        this.config = config;
+        this.pkg = pkg;
+        
+        this.options.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain');
+        this.options.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance');
+        this.options.assetIndex = utils.Utils.getParameterByName('assetIndex');
 
-        this.extensions = extensions;
+        // duplication of bootstrapper code, ideas of how to avoid this welcome :-)
+        var hash = utils.Utils.getHashValues('/', parent.document);
+        
+        this.assetSequenceIndex = hash[0] || 0;
+        
+        this.assetSequence = pkg.assetSequences[this.assetSequenceIndex];
 
-        // get config.
-        this.getData(configUri, (config) => {
-            this.config = config;
-            this.content = config.content;
-
-            var dataUri = utils.Utils.getParameterByName('dataUri');
-
-            this.getData(dataUri, (data) => {
-                this.create(data);
-            });
-        });
-    }
-
-    getData(dataUri: string, callbackFunc: (data: any) => any): any {
-        $.getJSON(dataUri, (data) => {
-            callbackFunc(data);
-        });
-    }
-
-    create(data: any): void {
-
-        // todo: get the assetSequence hash value index or default to 0.
-        var index = 0;
-
-        this.assetSequence = data.assetSequences[index];
+        this.type = this.getRootSection().sectionType.toLowerCase();
 
         this.parseSections(this.getRootSection(), this.assetSequence.assets, '');
-
-        var type = this.assetSequence.rootSection.sectionType.toLowerCase();
-
-        var extension = this.extensions[type];
-
-        // bootstrap extension provider.
-        var provider: bp.BaseProvider = <bp.BaseProvider>$.extend(true, this, new extension.provider());
-
-        // merge config and provider options.
-        provider.options = $.extend(true, provider.options, this.config.options);
-
-        // create extension.
-        new extension.type(provider);
-        (<any>provider).create();
     }
 
     parseSections(section, assets, path): void {

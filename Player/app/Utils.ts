@@ -84,6 +84,11 @@ export class Utils{
 
     //#region QueryString
 
+    static getHashValues(delimiter: string, doc?: Document): string[]{
+        if (!doc) doc = window.document;
+        return doc.location.hash.replace('#', '').split(delimiter);
+    }
+
     static getParameterByName(name: string): string {
         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
         var regexS = "[\\?&]" + name + "=([^&#]*)";
@@ -214,17 +219,7 @@ export class Utils{
     static getUrlParts(url: string): any {
         var a = document.createElement('a');
         a.href = url;
-
-        return {
-            href: a.href,
-            host: a.host,
-            hostname: a.hostname,
-            port: a.port,
-            pathname: a.pathname,
-            protocol: a.protocol,
-            hash: a.hash,
-            search: a.search
-        };
+        return a;
     }
 
     static convertToRelativeUrl(url: string): string {

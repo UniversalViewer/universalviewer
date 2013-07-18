@@ -19,7 +19,6 @@
     <TypeScriptCompile Include="app\Utils.ts" />
     <TypeScriptCompile Include="app\BaseApp.ts" />
     <TypeScriptCompile Include="app\seadragon\App.ts" />
-    <TypeScriptCompile Include="app\Main.ts" />
     <TypeScriptCompile Include="app\BaseProvider.ts" />
     <Content Include="app\BaseProvider.js">
       <DependentUpon>BaseProvider.ts</DependentUpon>
@@ -27,11 +26,12 @@
     <Content Include="app\BaseProvider.min.js">
       <DependentUpon>BaseProvider.ts</DependentUpon>
     </Content>
-    <Content Include="app\Main.js">
-      <DependentUpon>Main.ts</DependentUpon>
+    <TypeScriptCompile Include="app\BootStrapper.ts" />
+    <Content Include="app\BootStrapper.js">
+      <DependentUpon>BootStrapper.ts</DependentUpon>
     </Content>
-    <Content Include="app\Main.min.js">
-      <DependentUpon>Main.ts</DependentUpon>
+    <Content Include="app\BootStrapper.min.js">
+      <DependentUpon>BootStrapper.ts</DependentUpon>
     </Content>
     <Content Include="app\seadragon\App.js">
       <DependentUpon>App.ts</DependentUpon>
@@ -88,6 +88,11 @@
     </Content>
     <TypeScriptCompile Include="app\seadragon\Main.ts" />
     <TypeScriptCompile Include="app\seadragon\Left.ts" />
+    <Content Include="app\seadragon\img\header\first.png" />
+    <Content Include="app\seadragon\img\header\go.png" />
+    <Content Include="app\seadragon\img\header\last.png" />
+    <Content Include="app\seadragon\img\header\next.png" />
+    <Content Include="app\seadragon\img\header\prev.png" />
     <Content Include="app\seadragon\Left.js">
       <DependentUpon>Left.ts</DependentUpon>
     </Content>
@@ -114,6 +119,7 @@
     <Content Include="app\seadragon\Right.min.js">
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
+    <Content Include="app\shared\img\sprite.png" />
     <Content Include="app\Utils.js">
       <DependentUpon>Utils.ts</DependentUpon>
     </Content>
@@ -167,6 +173,7 @@
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
     <Content Include="js\jquery.plugins.js" />
+    <Content Include="js\openseadragon.min.js" />
     <Content Include="js\utils.js" />
     <TypeScriptCompile Include="app\shared\Shell.ts" />
     <Content Include="app\shared\Shell.js">
@@ -204,9 +211,6 @@
       <DependentUpon>BaseApp.ts</DependentUpon>
     </Content>
     <Content Include="js\jquery-1.10.2.min.map" />
-    <Content Include="app\Main.js.map">
-      <DependentUpon>Main.ts</DependentUpon>
-    </Content>
     <Content Include="app\seadragon\App.js.map">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
@@ -258,6 +262,9 @@
     <Content Include="app\BaseProvider.js.map">
       <DependentUpon>BaseProvider.ts</DependentUpon>
     </Content>
+    <Content Include="app\BootStrapper.js.map">
+      <DependentUpon>BootStrapper.ts</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -265,7 +272,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="app\seadragon\img\viewer\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

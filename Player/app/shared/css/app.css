@@ -7,19 +7,42 @@
 body {
     position: relative;
     font-family: sans-serif;
+    font-size: 12px;
+}
+
+a:link, a:visited, .a {
+    color: #005870;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.action, a.action.black, input.action {
+    display: inline-block;
+    background: url(../img/sprite.png) 0 -1000px no-repeat;
+    text-transform: none;
+    padding: 0 0 0 16px;
 }
 
 /*#region Shell*/
 
 #app {
-    background-image: url(../img/ajax-loader.gif);
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 	background-color: #000;
 	position: relative;
 }
 
+#app.loading {
+    background-image: url(../img/ajax-loader.gif);
+}
+
 #app .headerPanel{
+    position: relative;
+    background-color: #D1D5DA;
     height: 40px;
 }
 
@@ -29,7 +52,7 @@ body {
 
 #app .leftPanel{
 	position: absolute;
-    background: red;
+    background: #656769;
 }
 
 #app .centerPanel{
@@ -38,21 +61,48 @@ body {
 
 #app .rightPanel{
     position: absolute;
-    background: green;
+    background: #656769;
 }
 
 #app .footerPanel{
     height: 30px;
+    background: #D1D5DA;
 }
 
 /*#endregion */
 
-#app .centerPanel .title {
-    padding: 5px 20px 5px 20px;
-    height: 30px;
-    background: pink;
+/*#region header panel*/
+
+.help {
+    margin-left: 1em;
+    padding-right: 22px;
+    padding-bottom: 2px;
+    background: url(../img/sprite.png);
+    background-repeat: no-repeat;
+    background-position: 0 -3000px;
+    margin-top: 6px;
 }
 
-#app .centerPanel .content {
-    background: beige;
+#app .headerPanel .centerOptions{
+    margin: 5px 0 0 0;
+    width: 380px;
+    position: absolute;
 }
+
+#app .headerPanel .rightOptions{
+    float: right;
+    margin: 6px 0 0 0;    
+}
+
+/*#endregion*/
+
+/*#region center panel */
+
+#app .centerPanel .title {
+    padding: 5px 20px 5px 20px;
+    height: 28px;
+    font-size: 20px;
+    color: #fff;
+}
+
+/*#endregion*/

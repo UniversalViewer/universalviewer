@@ -84,7 +84,7 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, isFullScreen, height, top, left;
+        var socket, $app, $appFrame, dataUri, assetIndex, isFullScreen, height, top, left;
 
         $app = $(element);
 
@@ -94,6 +94,7 @@
         // get initial params from the container's 'data-' attributes.
         dataUri = $app.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
+        assetIndex = $app.attr('data-assetIndex');
 
         isFullScreen = false;
         height = $app.height();
@@ -173,6 +174,10 @@
                 "&isOnlyInstance=" + isOnlyInstance +
                 "&dataUri=" + dataUri +
                 "&embedScriptUri=" + scriptUri;
+
+            if (assetIndex) {
+                uri += "&assetIndex=" + assetIndex;
+            }
 
             socket = new easyXDM.Socket({
                 remote: uri,
