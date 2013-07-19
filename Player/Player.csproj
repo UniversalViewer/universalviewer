@@ -119,7 +119,43 @@
     <Content Include="app\seadragon\Right.min.js">
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="app\shared\Dialogue.ts" />
+    <Content Include="app\shared\Dialogue.js">
+      <DependentUpon>Dialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Dialogue.min.js">
+      <DependentUpon>Dialogue.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\shared\GenericDialogue.ts" />
+    <Content Include="app\shared\GenericDialogue.js">
+      <DependentUpon>GenericDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\GenericDialogue.min.js">
+      <DependentUpon>GenericDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\img\arrows_left.png" />
+    <Content Include="app\shared\img\arrows_right.png" />
+    <Content Include="app\shared\img\bookmark.png" />
+    <Content Include="app\shared\img\close.png" />
+    <Content Include="app\shared\img\close_message_box.png" />
+    <Content Include="app\shared\img\contents.png" />
+    <Content Include="app\shared\img\contents_v.png" />
+    <Content Include="app\shared\img\dialogue_arrow.png" />
+    <Content Include="app\shared\img\download.png" />
+    <Content Include="app\shared\img\embed.png" />
+    <Content Include="app\shared\img\fullscreen.png" />
+    <Content Include="app\shared\img\hidden_thumb.png" />
+    <Content Include="app\shared\img\logo.png" />
+    <Content Include="app\shared\img\minus.png" />
+    <Content Include="app\shared\img\modal_bg.gif" />
+    <Content Include="app\shared\img\moreinfo.png" />
+    <Content Include="app\shared\img\moreinfo_v.png" />
+    <Content Include="app\shared\img\normal.png" />
+    <Content Include="app\shared\img\plus.png" />
+    <Content Include="app\shared\img\save.png" />
     <Content Include="app\shared\img\sprite.png" />
+    <Content Include="app\shared\img\transcription.png" />
+    <Content Include="app\shared\img\transcription_v.png" />
     <Content Include="app\Utils.js">
       <DependentUpon>Utils.ts</DependentUpon>
     </Content>
@@ -264,6 +300,12 @@
     </Content>
     <Content Include="app\BootStrapper.js.map">
       <DependentUpon>BootStrapper.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Dialogue.js.map">
+      <DependentUpon>Dialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\GenericDialogue.js.map">
+      <DependentUpon>GenericDialogue.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

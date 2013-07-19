@@ -14,18 +14,20 @@ export class App extends baseApp.BaseApp {
     static mode: string;
 
     // events
-    static MODE_CHANGED: string = 'seadragon.onModeChanged';
-    static OPEN_DZI: string = 'seadragon.openDzi';
+    static MODE_CHANGED: string = 'onModeChanged';
+    static OPEN_DZI: string = 'openDzi';
 
     // modes
-    static PAGE_MODE = "page";
-    static IMAGE_MODE = "image";
+    static PAGE_MODE = "pageMode";
+    static IMAGE_MODE = "imageMode";
 
     constructor(provider: p.Provider) {
         super(provider, 'seadragon');
     }
 
     static getMode(): string{
+        if (App.mode) return App.mode;
+        
         switch (baseApp.BaseApp.provider.type) {
             case 'monograph':
                 return App.PAGE_MODE;
@@ -61,6 +63,20 @@ export class App extends baseApp.BaseApp {
             if (baseApp.BaseApp.currentAssetIndex != baseApp.BaseApp.provider.assetSequence.assets.length - 1) {
                 this.viewPage(Number(baseApp.BaseApp.currentAssetIndex) + 1);
             }
+        });
+
+        $.subscribe(header.Header.MODE_CHANGED, (e, mode: string) => {
+            App.mode = mode;
+
+            $.publish(App.MODE_CHANGED, [mode]);
+        });
+
+        $.subscribe(header.Header.PAGE_SEARCH, (e, value: string) => {
+            this.viewLabel(value);
+        });
+        
+        $.subscribe(header.Header.IMAGE_SEARCH, (e, index: number) => {
+            this.viewPage(index);
         });
 
         new header.Header(shell.Shell.$headerPanel);
@@ -115,5 +131,21 @@ export class App extends baseApp.BaseApp {
                 this.setAddress(baseApp.BaseApp.provider.assetSequenceIndex.toString(), assetIndex.toString());
             }
         });
+    }
+
+    viewLabel(label: string): void {
+
+        if (!label) {
+            this.showDialogue(baseApp.BaseApp.provider.config.content.genericDialogue.enterValue);
+            return;
+        }
+        
+        var index = this.getAssetIndexByOrderLabel(label);
+
+        if (index != -1) {
+            this.viewPage(index);
+        } else {
+            this.showDialogue(baseApp.BaseApp.provider.config.content.genericDialogue.pageNotFound);
+        }
     }
 }

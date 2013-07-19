@@ -206,7 +206,7 @@
                             }
                             break;
                         default:
-                            jQuery(document).trigger(message.eventName, [message.eventObject]);
+                            $(document).trigger(message.eventName, [message.eventObject]);
                             break;
                     }
                 }

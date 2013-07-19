@@ -35,18 +35,10 @@ require(['jquery', 'plugins', 'console', 'pubsub', 'openseadragon', 'app/BootStr
 
         var extensions = {};
 
-        extensions['seadragon'] = {
+        extensions['seadragon/dzi'] = {
             type: seadragon.App,
             provider: seadragonProvider.Provider
         };
-
-        // todo: assetType should move to assetsequence - therefore no need for aliases
-
-        // aliases
-        extensions['monograph'] = extensions['seadragon'];
-        extensions['artwork'] = extensions['seadragon'];
-        extensions['archive'] = extensions['seadragon'];
-        extensions['boundmanuscript'] = extensions['seadragon'];
 
         new bootStrapper.BootStrapper('js/config.js', extensions);
     });

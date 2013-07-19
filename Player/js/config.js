@@ -24,7 +24,10 @@
         },
         "genericDialogue":
         {
-            "emptyValue": "please enter a value"
+            "emptyValue": "please enter a value",
+            "enterValue": "please enter a value",
+            "pageNotFound": "page not found",
+            "ok": "OK"
         }
     }
 }

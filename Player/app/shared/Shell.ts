@@ -1,16 +1,15 @@
 /// <reference path="../../js/jquery.d.ts" />
-import baseapp = module("app/BaseApp");
+import baseApp = module("app/BaseApp");
 import utils = module("app/Utils");
 import baseView = module("app/BaseView");
-import header = module("app/shared/Header");
-import main = module("app/shared/Main");
-import footer = module("app/shared/Footer");
 
 export class Shell extends baseView.BaseView {
     static $element: JQuery;
     static $headerPanel: JQuery;
     static $mainPanel: JQuery;
     static $footerPanel: JQuery;
+    static $overlayMask: JQuery;
+    static $genericDialogue: JQuery;
 
     constructor($element: JQuery) {
         Shell.$element = $element;
@@ -28,6 +27,18 @@ export class Shell extends baseView.BaseView {
 
         Shell.$footerPanel = utils.Utils.createDiv('footerPanel');
         this.$element.append(Shell.$footerPanel);
+
+        Shell.$overlayMask = utils.Utils.createDiv('overlayMask');
+        this.$element.append(Shell.$overlayMask);
+
+        Shell.$genericDialogue = utils.Utils.createDiv('genericDialogue');
+        this.$element.append(Shell.$genericDialogue);
+
+        Shell.$overlayMask.on('click', (e) => {
+            e.preventDefault();
+
+            $.publish(baseApp.BaseApp.CLOSE_ACTIVE_DIALOGUE);
+        });
     }
     
     resize(): void{

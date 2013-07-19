@@ -20,14 +20,13 @@ export class Header extends baseHeader.Header {
     $nextButton: JQuery;
     $lastButton: JQuery;
 
-    static FIRST: string = 'seadragon.header.onFirst';
-    static LAST: string = 'seadragon.header.onLast';
-    static PREV: string = 'seadragon.header.onPrev';
-    static NEXT: string = 'seadragon.header.onNext';
-    static IMAGE_MODE: string = 'seadragon.header.onImageMode';
-    static PAGE_MODE: string = 'seadragon.header.onPageMode';
-    static PAGE_SEARCH: string = 'seadragon.header.onPageSearch';
-    static IMAGE_SEARCH: string = 'seadragon.header.onImageSearch';
+    static FIRST: string = 'header.onFirst';
+    static LAST: string = 'header.onLast';
+    static PREV: string = 'header.onPrev';
+    static NEXT: string = 'header.onNext';
+    static PAGE_SEARCH: string = 'header.onPageSearch';
+    static IMAGE_SEARCH: string = 'header.onImageSearch';
+    static MODE_CHANGED: string = 'header.onModeChanged';
 
     constructor($element: JQuery) {
         super($element);
@@ -123,15 +122,11 @@ export class Header extends baseHeader.Header {
         });
 
         this.$imageModeOption.on('click', (e) => {
-            e.preventDefault();
-
-            $.publish(Header.IMAGE_MODE);
+            $.publish(Header.MODE_CHANGED, [app.App.IMAGE_MODE]);
         });
 
         this.$pageModeOption.on('click', (e) => {
-            e.preventDefault();
-
-            $.publish(Header.PAGE_MODE);
+            $.publish(Header.MODE_CHANGED, [app.App.PAGE_MODE]);
         });
 
         this.$searchText.on('keyup', (e) => {
@@ -204,7 +199,7 @@ export class Header extends baseHeader.Header {
         var value = this.$searchText.val();
 
         if (!value) {
-            $.publish(baseApp.BaseApp.SHOW_DIALOGUE, this.content.genericDialogue.emptyValue);
+            $.publish(baseApp.BaseApp.SHOW_GENERIC_DIALOGUE, this.content.genericDialogue.emptyValue);
             return;
         }
 

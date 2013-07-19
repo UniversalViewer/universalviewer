@@ -3,6 +3,7 @@
 import utils = module("app/Utils");
 import bp = module("app/BaseProvider");
 import shell = module("app/shared/Shell");
+import genericDialogue = module("app/shared/GenericDialogue");
 
 export class BaseApp {
 
@@ -10,6 +11,8 @@ export class BaseApp {
     static provider: bp.BaseProvider;
     static isFullScreen: boolean = false;
     static currentAssetIndex: number;
+    static mouseX: number;
+    static mouseY: number;
     $element: JQuery;
     extensions: any;
     socket: any;
@@ -23,7 +26,9 @@ export class BaseApp {
     static TOGGLE_RIGHTPANEL_END: string = 'onToggleRightPanelEnd';
     static ASSET_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static MODE_CHANGED: string = 'onModeChanged';
-    static SHOW_DIALOGUE: string = 'onShowDialogue';
+    static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
+    static HIDE_GENERIC_DIALOGUE: string = 'onHideGenericDialogue';
+    static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
 
     constructor(provider: bp.BaseProvider, extensionName: string) {
         BaseApp.provider = provider;
@@ -60,6 +65,11 @@ export class BaseApp {
             $.publish(BaseApp.RESIZE);
         }
 
+        document.onmousemove = (e) => {
+            BaseApp.mouseX = e.pageX;
+            BaseApp.mouseY = e.pageY;
+        }
+
         $.subscribe(BaseApp.TOGGLE_FULLSCREEN, () => {
             BaseApp.isFullScreen = !BaseApp.isFullScreen;
             this.triggerSocket(BaseApp.TOGGLE_FULLSCREEN, BaseApp.isFullScreen);
@@ -67,6 +77,9 @@ export class BaseApp {
 
         // create shell.
         var sh = new shell.Shell(this.$element);
+
+        // create shared views.
+        //new genericDialogue.GenericDialogue(shell.Shell.$genericDialogue);
     }
 
     triggerSocket(eventName, eventObject): void {
@@ -165,23 +178,64 @@ export class BaseApp {
     }
 
     static getAssetByIndex(index): any {
-        var self = this;
 
         return BaseApp.provider.assetSequence.assets[index];
     }
 
     static getLastAssetOrderLabel(): string {
-        
+
         // get the last orderlabel that isn't empty or '-'.
         for (var i = BaseApp.provider.assetSequence.assets.length - 1; i >= 0; i--) {
             var asset = BaseApp.provider.assetSequence.assets[i];
 
-            if (asset.orderLabel.trim() != '-' && asset.orderLabel.trim() != '') {
+            var regExp = /\d/;
+            
+            if (regExp.test(asset.orderLabel)) {
                 return asset.orderLabel;
             }
         }
 
         // none exists, so return '-'.
         return '-';
+    }
+    
+    getAssetIndexByOrderLabel(label: string): number {
+
+        // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
+        var regExp = /(\d*)\D*(\d*)|(\d*)/;
+        var match = regExp.exec(label);
+
+        var labelPart1 = match[1];
+        var labelPart2 = match[2];
+
+        var searchRegExp;
+
+        if (labelPart2) {
+            searchRegExp = new RegExp(labelPart1 + '\\D*' + labelPart2);
+        } else {
+            searchRegExp = new RegExp('^' + labelPart1 + '$');
+        }
+        
+        // loop through files, return first one with matching orderlabel.
+        for (var i = 0; i < BaseApp.provider.assetSequence.assets.length; i++) {
+            var asset = BaseApp.provider.assetSequence.assets[i];
+
+            if (searchRegExp.test(asset.orderLabel)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: bool) {
+        
+        $.publish(BaseApp.SHOW_GENERIC_DIALOGUE, [
+            {
+                message: message,
+                acceptCallback: acceptCallback,
+                buttonText: buttonText,
+                allowClose: allowClose
+            }]);
     }
 }

@@ -12,11 +12,11 @@ export class Center extends baseCenter.Center {
     title: string;
 
     // events
-    static SEADRAGON_OPEN: string = 'seadragon.center.open';
-    static SEADRAGON_RESIZE: string = 'seadragon.center.resize';
-    static SEADRAGON_ANIMATION_START: string = 'seadragon.center.animationstart';
-    static SEADRAGON_ANIMATION: string = 'seadragon.center.animation';
-    static SEADRAGON_ANIMATION_FINISH: string = 'seadragon.center.animationfinish';
+    static SEADRAGON_OPEN: string = 'center.open';
+    static SEADRAGON_RESIZE: string = 'center.resize';
+    static SEADRAGON_ANIMATION_START: string = 'center.animationstart';
+    static SEADRAGON_ANIMATION: string = 'center.animation';
+    static SEADRAGON_ANIMATION_FINISH: string = 'center.animationfinish';
 
     constructor($element: JQuery) {
         super($element);
@@ -42,6 +42,8 @@ export class Center extends baseCenter.Center {
             prefixUrl: "/app/seadragon/img/viewer/",
             showNavigator: true
         });
+
+        this.viewer.clearControls();
 
         this.viewer.setControlsEnabled(false);
 
@@ -94,7 +96,7 @@ export class Center extends baseCenter.Center {
 
         // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
         setTimeout(function () {
-            viewer.viewport.panTo(center, false);
+            viewer.viewport.panTo(center, true);
         }, 1);
     }
 

@@ -21,13 +21,11 @@ export class BootStrapper{
 
                 var assetSequence = pkg.assetSequences[assetIndex];
 
-                var type = assetSequence.rootSection.sectionType.toLowerCase();
-
                 // create provider.
-                var provider = new extensions[type].provider(config, pkg);
+                var provider = new extensions[assetSequence.assetType].provider(config, pkg);
 
                 // create extension.
-                new extensions[type].type(provider);
+                new extensions[assetSequence.assetType].type(provider);
             });
         });
     }
