@@ -4,18 +4,20 @@ import utils = module("app/Utils");
 import bp = module("app/BaseProvider");
 import shell = module("app/shared/Shell");
 import genericDialogue = module("app/shared/GenericDialogue");
+//import dialogue = module("app/shared/Dialogue");
+import test = module("app/shared/Test");
 
 export class BaseApp {
 
-    static extensionName: string;
-    static provider: bp.BaseProvider;
-    static isFullScreen: boolean = false;
-    static currentAssetIndex: number;
-    static mouseX: number;
-    static mouseY: number;
+    extensionName: string;
+    isFullScreen: boolean = false;
+    currentAssetIndex: number;
+    mouseX: number;
+    mouseY: number;
     $element: JQuery;
     extensions: any;
     socket: any;
+    provider: bp.BaseProvider;
 
     // events
     static RESIZE: string = 'onResize';
@@ -31,8 +33,11 @@ export class BaseApp {
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
 
     constructor(provider: bp.BaseProvider, extensionName: string) {
-        BaseApp.provider = provider;
-        BaseApp.extensionName = extensionName;
+
+        window.app = this;
+
+        this.provider = provider;
+        this.extensionName = extensionName;
 
         this.create();
     }
@@ -56,8 +61,8 @@ export class BaseApp {
 
         // add/remove classes.
         this.$element.removeClass();
-        this.$element.addClass(BaseApp.extensionName);
-        if (!BaseApp.provider.options.isHomeDomain) this.$element.addClass('embedded');
+        this.$element.addClass(this.extensionName);
+        if (!this.provider.options.isHomeDomain) this.$element.addClass('embedded');
 
         // events.
         window.onresize = () => {
@@ -66,20 +71,22 @@ export class BaseApp {
         }
 
         document.onmousemove = (e) => {
-            BaseApp.mouseX = e.pageX;
-            BaseApp.mouseY = e.pageY;
+            this.mouseX = e.pageX;
+            this.mouseY = e.pageY;
         }
-
+        
         $.subscribe(BaseApp.TOGGLE_FULLSCREEN, () => {
-            BaseApp.isFullScreen = !BaseApp.isFullScreen;
-            this.triggerSocket(BaseApp.TOGGLE_FULLSCREEN, BaseApp.isFullScreen);
+            this.isFullScreen = !this.isFullScreen;
+            this.triggerSocket(BaseApp.TOGGLE_FULLSCREEN, this.isFullScreen);
         });
 
         // create shell.
         var sh = new shell.Shell(this.$element);
 
         // create shared views.
-        //new genericDialogue.GenericDialogue(shell.Shell.$genericDialogue);
+        new genericDialogue.GenericDialogue(shell.Shell.$genericDialogue);
+        //new dialogue.Dialogue(shell.Shell.$genericDialogue);
+        //new test.Test(shell.Shell.$genericDialogue);
     }
 
     triggerSocket(eventName, eventObject): void {
@@ -100,7 +107,7 @@ export class BaseApp {
 
         // todo: authorisation.
 
-        BaseApp.currentAssetIndex = assetIndex;
+        this.currentAssetIndex = assetIndex;
 
         $.publish(BaseApp.ASSET_INDEX_CHANGED, [assetIndex]);
         
@@ -109,7 +116,7 @@ export class BaseApp {
 
     isDeepLinkingEnabled(): bool {
 
-        if (BaseApp.provider.options.isHomeDomain && BaseApp.provider.options.isOnlyInstance) {
+        if (this.provider.options.isHomeDomain && this.provider.options.isOnlyInstance) {
             return true;
         }
 
@@ -177,16 +184,16 @@ export class BaseApp {
         window.parent.document.location.replace(url + hash);
     }
 
-    static getAssetByIndex(index): any {
+    getAssetByIndex(index): any {
 
-        return BaseApp.provider.assetSequence.assets[index];
+        return this.provider.assetSequence.assets[index];
     }
 
-    static getLastAssetOrderLabel(): string {
+    getLastAssetOrderLabel(): string {
 
         // get the last orderlabel that isn't empty or '-'.
-        for (var i = BaseApp.provider.assetSequence.assets.length - 1; i >= 0; i--) {
-            var asset = BaseApp.provider.assetSequence.assets[i];
+        for (var i = this.provider.assetSequence.assets.length - 1; i >= 0; i--) {
+            var asset = this.provider.assetSequence.assets[i];
 
             var regExp = /\d/;
             
@@ -217,8 +224,8 @@ export class BaseApp {
         }
         
         // loop through files, return first one with matching orderlabel.
-        for (var i = 0; i < BaseApp.provider.assetSequence.assets.length; i++) {
-            var asset = BaseApp.provider.assetSequence.assets[i];
+        for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
+            var asset = this.provider.assetSequence.assets[i];
 
             if (searchRegExp.test(asset.orderLabel)) {
                 return i;

@@ -25,10 +25,10 @@ export class App extends baseApp.BaseApp {
         super(provider, 'seadragon');
     }
 
-    static getMode(): string{
+    getMode(): string{
         if (App.mode) return App.mode;
         
-        switch (baseApp.BaseApp.provider.type) {
+        switch (this.provider.type) {
             case 'monograph':
                 return App.PAGE_MODE;
                 break;
@@ -50,18 +50,18 @@ export class App extends baseApp.BaseApp {
         });
 
         $.subscribe(header.Header.LAST, (e) => {
-            this.viewPage(baseApp.BaseApp.provider.assetSequence.assets.length - 1);
+            this.viewPage(this.provider.assetSequence.assets.length - 1);
         });
 
         $.subscribe(header.Header.PREV, (e) => {
-            if (baseApp.BaseApp.currentAssetIndex != 0) {
-                this.viewPage(Number(baseApp.BaseApp.currentAssetIndex) - 1);
+            if (this.currentAssetIndex != 0) {
+                this.viewPage(Number(this.currentAssetIndex) - 1);
             }
         });
-
+        
         $.subscribe(header.Header.NEXT, (e) => {
-            if (baseApp.BaseApp.currentAssetIndex != baseApp.BaseApp.provider.assetSequence.assets.length - 1) {
-                this.viewPage(Number(baseApp.BaseApp.currentAssetIndex) + 1);
+            if (this.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
+                this.viewPage(Number(this.currentAssetIndex) + 1);
             }
         });
 
@@ -106,7 +106,7 @@ export class App extends baseApp.BaseApp {
             }
         } else {
             // the initial params are on the query string.
-            assetIndex = baseApp.BaseApp.provider.config.options.assetIndex;
+            assetIndex = this.provider.config.options.assetIndex;
 
             if (assetIndex) {
                 this.viewPage(assetIndex);
@@ -120,15 +120,15 @@ export class App extends baseApp.BaseApp {
     viewPage(assetIndex: number, preserveAddress?: bool): void {
         this.viewAsset(assetIndex, () => {
 
-            var asset = baseApp.BaseApp.provider.assetSequence.assets[assetIndex];
+            var asset = this.provider.assetSequence.assets[assetIndex];
 
             $.publish(App.OPEN_DZI, [asset.dziUri]);
 
             // update address                       
             if (preserveAddress) {
-                this.updateAddress(baseApp.BaseApp.provider.assetSequenceIndex.toString(), assetIndex.toString());
+                this.updateAddress(this.provider.assetSequenceIndex.toString(), assetIndex.toString());
             } else {
-                this.setAddress(baseApp.BaseApp.provider.assetSequenceIndex.toString(), assetIndex.toString());
+                this.setAddress(this.provider.assetSequenceIndex.toString(), assetIndex.toString());
             }
         });
     }
@@ -136,7 +136,7 @@ export class App extends baseApp.BaseApp {
     viewLabel(label: string): void {
 
         if (!label) {
-            this.showDialogue(baseApp.BaseApp.provider.config.content.genericDialogue.enterValue);
+            this.showDialogue(this.provider.config.content.genericDialogue.enterValue);
             return;
         }
         
@@ -145,7 +145,7 @@ export class App extends baseApp.BaseApp {
         if (index != -1) {
             this.viewPage(index);
         } else {
-            this.showDialogue(baseApp.BaseApp.provider.config.content.genericDialogue.pageNotFound);
+            this.showDialogue(this.provider.config.content.genericDialogue.pageNotFound);
         }
     }
 }

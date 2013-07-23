@@ -1,5 +1,4 @@
 /// <reference path="../js/jquery.d.ts" />
-import baseApp = module("app/BaseApp");
 
 export class Panel {
     $element: JQuery;
@@ -15,7 +14,9 @@ export class Panel {
     }
 
     create(): void {
-        $.subscribe(baseApp.BaseApp.RESIZE, () => {
+        // todo: can't use static BaseApp.RESIZE property here without breaking inheritance.
+        // possible bug with TS 0.9
+        $.subscribe('onResize', () => {
             this.resize();
         });
     }

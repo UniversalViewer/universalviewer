@@ -68,7 +68,7 @@ export class Center extends baseCenter.Center {
             $.publish(Center.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
 
-        this.title = baseApp.BaseApp.provider.getTitle();
+        this.title = window.app.provider.getTitle();
     }
 
     /*

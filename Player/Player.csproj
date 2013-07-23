@@ -156,6 +156,13 @@
     <Content Include="app\shared\img\sprite.png" />
     <Content Include="app\shared\img\transcription.png" />
     <Content Include="app\shared\img\transcription_v.png" />
+    <TypeScriptCompile Include="app\shared\Test.ts" />
+    <Content Include="app\shared\Test.js">
+      <DependentUpon>Test.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Test.min.js">
+      <DependentUpon>Test.ts</DependentUpon>
+    </Content>
     <Content Include="app\Utils.js">
       <DependentUpon>Utils.ts</DependentUpon>
     </Content>
@@ -306,6 +313,12 @@
     </Content>
     <Content Include="app\shared\GenericDialogue.js.map">
       <DependentUpon>GenericDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\Test.js.map">
+      <DependentUpon>Test.ts</DependentUpon>
+    </Content>
+    <Content Include="app\Panel.js.map">
+      <DependentUpon>Panel.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
