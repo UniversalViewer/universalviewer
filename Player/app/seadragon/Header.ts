@@ -55,11 +55,11 @@ export class Header extends baseHeader.Header {
         this.$modeOptions = $('<div class="mode"></div>');
         this.$centerOptions.append(this.$modeOptions);
 
-        this.$modeOptions.append('<label for="image">' + window.app.provider.config.content.header.image + '</label>');
+        this.$modeOptions.append('<label for="image">' + this.content.header.image + '</label>');
         this.$imageModeOption = $('<input type="radio" id="image" name="mode"></input>');
         this.$modeOptions.append(this.$imageModeOption);
         
-        this.$modeOptions.append('<label for="page">' + window.app.provider.config.content.header.page + '</label>');
+        this.$modeOptions.append('<label for="page">' + this.content.header.page + '</label>');
         this.$pageModeOption = $('<input type="radio" id="page" name="mode"></input>');
         this.$modeOptions.append(this.$pageModeOption);
              
@@ -84,7 +84,7 @@ export class Header extends baseHeader.Header {
         this.$lastButton = $('<a class="imageButton last"></a>');
         this.$nextOptions.append(this.$lastButton);
         
-        if (window.app.getMode() == app.App.PAGE_MODE) {
+        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             this.$pageModeOption.attr('checked', 'checked');
             this.$pageModeOption.removeAttr('disabled');
         } else {
@@ -98,7 +98,7 @@ export class Header extends baseHeader.Header {
         this.setTotal();
 
         // check if the book has more than one page, otherwise hide prev/next options.
-        if (window.app.provider.assetSequence.assets.length == 1) {
+        if (this.provider.assetSequence.assets.length == 1) {
             this.$centerOptions.hide();
         }
         
@@ -154,17 +154,17 @@ export class Header extends baseHeader.Header {
 
         var mode;
 
-        if (window.app.getMode() == app.App.PAGE_MODE) {
+        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             mode = "page";
         } else {
             mode = "image";
         }
 
-        this.$firstButton.prop('title', window.app.provider.config.content.header.first + " " + mode);
-        this.$prevButton.prop('title', window.app.provider.config.content.header.previous + " " + mode);
-        this.$nextButton.prop('title', window.app.provider.config.content.header.next + " " + mode);
-        this.$lastButton.prop('title', window.app.provider.config.content.header.last + " " + mode);
-        this.$searchButton.prop('title', window.app.provider.config.content.header.go);
+        this.$firstButton.prop('title', this.provider.config.content.header.first + " " + mode);
+        this.$prevButton.prop('title', this.provider.config.content.header.previous + " " + mode);
+        this.$nextButton.prop('title', this.provider.config.content.header.next + " " + mode);
+        this.$lastButton.prop('title', this.provider.config.content.header.last + " " + mode);
+        this.$searchButton.prop('title', this.provider.config.content.header.go);
     }
 
     setTotal(): void {
@@ -172,9 +172,9 @@ export class Header extends baseHeader.Header {
         var of = window.app.provider.config.content.header.of;
 
         if (window.app.getMode() == app.App.PAGE_MODE) {
-            this.$total.html(String.prototype.format(of, window.app.getLastAssetOrderLabel()));
+            this.$total.html(String.prototype.format(of, this.app.getLastAssetOrderLabel()));
         } else {
-            this.$total.html(String.prototype.format(of, window.app.provider.assetSequence.assets.length));
+            this.$total.html(String.prototype.format(of, this.provider.assetSequence.assets.length));
         }
     }
 
@@ -182,7 +182,7 @@ export class Header extends baseHeader.Header {
         
         var asset = window.app.getAssetByIndex(index);
 
-        if (window.app.getMode() == app.App.PAGE_MODE) {
+        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             if (asset.orderLabel.trim() === "-") {
                 this.$searchText.val("");
             } else {
@@ -199,11 +199,11 @@ export class Header extends baseHeader.Header {
         var value = this.$searchText.val();
 
         if (!value) {
-            $.publish(baseApp.BaseApp.SHOW_GENERIC_DIALOGUE, window.app.provider.config.content.genericDialogue.emptyValue);
+            $.publish(baseApp.BaseApp.SHOW_GENERIC_DIALOGUE, this.content.genericDialogue.emptyValue);
             return;
         }
 
-        if (window.app.getMode() == app.App.PAGE_MODE) {
+        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             $.publish(Header.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val());
@@ -217,7 +217,7 @@ export class Header extends baseHeader.Header {
     }
 
     modeChanged(mode): void {
-        this.setSearchPlaceholder(window.app.currentAssetIndex);
+        this.setSearchPlaceholder(this.app.currentAssetIndex);
         this.setTitles();
         this.setTotal();
     }

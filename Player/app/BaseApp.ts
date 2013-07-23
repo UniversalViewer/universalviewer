@@ -70,10 +70,10 @@ export class BaseApp {
             $.publish(BaseApp.RESIZE);
         }
 
-        document.onmousemove = (e) => {
+        $(document).mousemove(function (e) {
             this.mouseX = e.pageX;
             this.mouseY = e.pageY;
-        }
+        });
         
         $.subscribe(BaseApp.TOGGLE_FULLSCREEN, () => {
             this.isFullScreen = !this.isFullScreen;
@@ -85,8 +85,6 @@ export class BaseApp {
 
         // create shared views.
         new genericDialogue.GenericDialogue(shell.Shell.$genericDialogue);
-        //new dialogue.Dialogue(shell.Shell.$genericDialogue);
-        //new test.Test(shell.Shell.$genericDialogue);
     }
 
     triggerSocket(eventName, eventObject): void {
