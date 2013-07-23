@@ -169,9 +169,9 @@ export class Header extends baseHeader.Header {
 
     setTotal(): void {
 
-        var of = window.app.provider.config.content.header.of;
+        var of = this.app.provider.config.content.header.of;
 
-        if (window.app.getMode() == app.App.PAGE_MODE) {
+        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             this.$total.html(String.prototype.format(of, this.app.getLastAssetOrderLabel()));
         } else {
             this.$total.html(String.prototype.format(of, this.provider.assetSequence.assets.length));
@@ -180,7 +180,7 @@ export class Header extends baseHeader.Header {
 
     setSearchPlaceholder(index): void {
         
-        var asset = window.app.getAssetByIndex(index);
+        var asset = this.app.getAssetByIndex(index);
 
         if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             if (asset.orderLabel.trim() === "-") {
@@ -199,7 +199,9 @@ export class Header extends baseHeader.Header {
         var value = this.$searchText.val();
 
         if (!value) {
-            $.publish(baseApp.BaseApp.SHOW_GENERIC_DIALOGUE, this.content.genericDialogue.emptyValue);
+
+            this.app.showDialogue(this.content.genericDialogue.emptyValue);
+
             return;
         }
 

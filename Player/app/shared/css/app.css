@@ -27,6 +27,57 @@ a:hover {
     padding: 0 0 0 16px;
 }
 
+#app .imageButton{
+    display: block;
+    cursor: pointer;
+    padding: 0;
+}
+
+#app .button {
+    display: inline-block;
+    font-size: 1em;
+    margin: 0 0.5em 0 0;
+    padding: 0.25em 1em;
+    border: none;
+    background-color: #005870;
+    color: #FFF;
+    cursor: pointer;
+    text-transform: uppercase;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+}
+
+#app .button.disabled {
+    background-color: gray;
+    color: #000;
+    text-decoration: none; 
+}
+
+#app .button.disabled:hover {
+    background-color: gray;
+    color: #000;
+    text-decoration: none; 
+}
+
+#app .button.purple {
+    background-color: #005870;
+}
+
+#app .button:hover {
+    background-color: #428494;
+    text-decoration: none;
+}
+
+#app .button:active {
+    text-decoration: none; 
+}
+
+#app .button.purple:hover {
+    background-color: #005870;
+}
+
 /*#region Shell*/
 
 #app {
@@ -73,7 +124,7 @@ a:hover {
 
 /*#region header panel*/
 
-.help {
+#app .headerPanel .help {
     margin-left: 1em;
     padding-right: 22px;
     padding-bottom: 2px;
@@ -99,10 +150,14 @@ a:hover {
 /*#region center panel */
 
 #app .centerPanel .title {
-    padding: 5px 20px 5px 20px;
-    height: 28px;
+    height: 38px;
     font-size: 20px;
     color: #fff;
+    padding: 0 20px 0 20px;
+}
+
+#app .centerPanel .title span {
+    line-height: 38px;
 }
 
 /*#endregion*/

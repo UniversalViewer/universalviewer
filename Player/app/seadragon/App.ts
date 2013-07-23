@@ -83,9 +83,9 @@ export class App extends baseApp.BaseApp {
         new main.Main(shell.Shell.$mainPanel);
         new footer.Footer(shell.Shell.$footerPanel);
 
-        $.publish(baseApp.BaseApp.RESIZE);
-
         this.getUrlParams();
+
+        $.publish(baseApp.BaseApp.RESIZE);
     }
 
     getUrlParams(): void {

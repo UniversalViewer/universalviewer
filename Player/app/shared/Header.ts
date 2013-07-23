@@ -1,4 +1,5 @@
 /// <reference path="../../js/jquery.d.ts" />
+import baseApp = module("app/BaseApp");
 import baseView = module("app/BaseView");
 import utils = module("app/Utils");
 
@@ -21,7 +22,7 @@ export class Header extends baseView.BaseView {
         this.$rightOptions = utils.Utils.createDiv('rightOptions');
         this.$element.append(this.$rightOptions);
 
-        this.$helpButton = $('<a href="#" class="action help">' + window.app.provider.config.content.header.help + '</a>');
+        this.$helpButton = $('<a href="#" class="action help">' + this.content.header.help + '</a>');
         this.$rightOptions.append(this.$helpButton);
 
         // initialise ui.
@@ -30,7 +31,7 @@ export class Header extends baseView.BaseView {
         this.$helpButton.click(function (e) {
             e.preventDefault();
 
-            $.publish('header.help');
+            $.publish(baseApp.BaseApp.SHOW_HELP_DIALOGUE);
         });
     }
 

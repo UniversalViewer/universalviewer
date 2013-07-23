@@ -3,9 +3,6 @@
 import utils = module("app/Utils");
 import bp = module("app/BaseProvider");
 import shell = module("app/shared/Shell");
-import genericDialogue = module("app/shared/GenericDialogue");
-//import dialogue = module("app/shared/Dialogue");
-import test = module("app/shared/Test");
 
 export class BaseApp {
 
@@ -28,9 +25,11 @@ export class BaseApp {
     static TOGGLE_RIGHTPANEL_END: string = 'onToggleRightPanelEnd';
     static ASSET_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static MODE_CHANGED: string = 'onModeChanged';
+    static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
     static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
     static HIDE_GENERIC_DIALOGUE: string = 'onHideGenericDialogue';
-    static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
+    static SHOW_HELP_DIALOGUE: string = 'onShowHelpDialogue';
+    static HIDE_HELP_DIALOGUE: string = 'onHideHelpDialogue';
 
     constructor(provider: bp.BaseProvider, extensionName: string) {
 
@@ -66,7 +65,10 @@ export class BaseApp {
 
         // events.
         window.onresize = () => {
-            $('body').height($(window).height());
+            
+            var $win = $(window);
+            $('body').height($win.height());
+
             $.publish(BaseApp.RESIZE);
         }
 
@@ -80,11 +82,16 @@ export class BaseApp {
             this.triggerSocket(BaseApp.TOGGLE_FULLSCREEN, this.isFullScreen);
         });
 
-        // create shell.
+        // create shell and shared views.
         var sh = new shell.Shell(this.$element);
+    }
 
-        // create shared views.
-        new genericDialogue.GenericDialogue(shell.Shell.$genericDialogue);
+    width(): number {
+        return $(window).width();
+    }
+
+    height(): number {
+        return $(window).height();
     }
 
     triggerSocket(eventName, eventObject): void {
@@ -234,7 +241,7 @@ export class BaseApp {
     }
 
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: bool) {
-        
+
         $.publish(BaseApp.SHOW_GENERIC_DIALOGUE, [
             {
                 message: message,

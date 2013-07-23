@@ -16,7 +16,7 @@ export class Right extends baseView.BaseView {
     create(): void {
         super.create();
 
-        this.$element.width(window.app.provider.config.options.rightPanelCollapsedWidth);
+        this.$element.width(this.options.rightPanelCollapsedWidth);
 
         this.$element.on('click', (e) => {
             e.preventDefault();
@@ -28,8 +28,8 @@ export class Right extends baseView.BaseView {
     toggle(): void {
         $.publish(baseApp.BaseApp.TOGGLE_RIGHTPANEL_START, [this.isExpanded]);
 
-        var targetWidth = this.isExpanded ? window.app.provider.config.options.rightPanelCollapsedWidth : window.app.provider.config.options.rightPanelExpandedWidth;
-        var targetLeft = this.isExpanded ? this.$element.parent().width() - window.app.provider.config.options.rightPanelCollapsedWidth : this.$element.parent().width() - window.app.provider.config.options.rightPanelExpandedWidth;
+        var targetWidth = this.isExpanded ? this.options.rightPanelCollapsedWidth : this.options.rightPanelExpandedWidth;
+        var targetLeft = this.isExpanded ? this.$element.parent().width() - this.options.rightPanelCollapsedWidth : this.$element.parent().width() - this.options.rightPanelExpandedWidth;
 
         this.isExpanded = !this.isExpanded;
 
@@ -38,7 +38,7 @@ export class Right extends baseView.BaseView {
                 width: targetWidth,
                 left: targetLeft
             },
-            window.app.provider.config.options.panelAnimationDuration,
+            this.options.panelAnimationDuration,
             function () {
                 $.publish(baseApp.BaseApp.TOGGLE_RIGHTPANEL_END, [this.isExpanded]);
                 $.publish(baseApp.BaseApp.RESIZE);

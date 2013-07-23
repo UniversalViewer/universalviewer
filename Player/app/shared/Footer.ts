@@ -30,7 +30,7 @@ export class Footer extends baseView.BaseView {
     }
 
     toggleFullScreen(): void {
-        if (window.app.isFullScreen) {
+        if (this.app.isFullScreen) {
             this.$fullScreenBtn.text(this.content.footer.exitFullScreen);
         } else {
             this.$fullScreenBtn.text(this.content.footer.fullScreen);
