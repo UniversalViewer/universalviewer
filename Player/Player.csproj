@@ -18,7 +18,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app\Utils.ts" />
     <TypeScriptCompile Include="app\BaseApp.ts" />
-    <TypeScriptCompile Include="app\seadragon\App.ts" />
+    <TypeScriptCompile Include="app\extensions\seadragon\App.ts" />
     <TypeScriptCompile Include="app\BaseProvider.ts" />
     <Content Include="app\BaseProvider.js">
       <DependentUpon>BaseProvider.ts</DependentUpon>
@@ -33,10 +33,31 @@
     <Content Include="app\BootStrapper.min.js">
       <DependentUpon>BootStrapper.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\App.js">
+    <Content Include="app\modules\PagingHeaderPanel\css\styles.css" />
+    <Content Include="app\modules\PagingHeaderPanel\img\first.png" />
+    <Content Include="app\modules\PagingHeaderPanel\img\go.png" />
+    <Content Include="app\modules\PagingHeaderPanel\img\last.png" />
+    <Content Include="app\modules\PagingHeaderPanel\img\next.png" />
+    <Content Include="app\modules\PagingHeaderPanel\img\prev.png" />
+    <TypeScriptCompile Include="app\modules\PagingHeaderPanel\PagingHeaderPanel.ts" />
+    <Content Include="app\modules\PagingHeaderPanel\PagingHeaderPanel.js">
+      <DependentUpon>PagingHeaderPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\PagingHeaderPanel\PagingHeaderPanel.min.js">
+      <DependentUpon>PagingHeaderPanel.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\modules\SeadragonCenterPanel\SeadragonCenterPanel.ts" />
+    <Content Include="app\modules\SeadragonCenterPanel\css\styles.css" />
+    <Content Include="app\modules\SeadragonCenterPanel\SeadragonCenterPanel.js">
+      <DependentUpon>SeadragonCenterPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\SeadragonCenterPanel\SeadragonCenterPanel.min.js">
+      <DependentUpon>SeadragonCenterPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\extensions\seadragon\App.js">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\App.min.js">
+    <Content Include="app\extensions\seadragon\App.min.js">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
     <Content Include="app\BaseApp.js">
@@ -59,67 +80,39 @@
       <DependentUpon>Config.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\Panel.ts" />
+    <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.ts" />
+    <Content Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.js">
+      <DependentUpon>TreeViewLeftPanel.ts</DependentUpon>
+    </Content>
     <Content Include="app\Panel.js">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
     <Content Include="app\Panel.min.js">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\seadragon\Center.ts" />
-    <Content Include="app\seadragon\Center.js">
-      <DependentUpon>Center.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Center.min.js">
-      <DependentUpon>Center.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="app\seadragon\Header.ts" />
-    <TypeScriptCompile Include="app\seadragon\Footer.ts" />
-    <Content Include="app\seadragon\Footer.js">
+    <TypeScriptCompile Include="app\extensions\seadragon\Footer.ts" />
+    <Content Include="app\extensions\seadragon\Footer.js">
       <DependentUpon>Footer.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\Footer.min.js">
+    <Content Include="app\extensions\seadragon\Footer.min.js">
       <DependentUpon>Footer.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\Header.js">
-      <DependentUpon>Header.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Header.min.js">
-      <DependentUpon>Header.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="app\seadragon\Main.ts" />
-    <TypeScriptCompile Include="app\seadragon\Left.ts" />
-    <Content Include="app\seadragon\img\header\first.png" />
-    <Content Include="app\seadragon\img\header\go.png" />
-    <Content Include="app\seadragon\img\header\last.png" />
-    <Content Include="app\seadragon\img\header\next.png" />
-    <Content Include="app\seadragon\img\header\prev.png" />
-    <Content Include="app\seadragon\Left.js">
-      <DependentUpon>Left.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Left.min.js">
-      <DependentUpon>Left.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Main.js">
-      <DependentUpon>Main.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Main.min.js">
-      <DependentUpon>Main.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="app\seadragon\Right.ts" />
-    <TypeScriptCompile Include="app\seadragon\Provider.ts" />
-    <Content Include="app\seadragon\Provider.js">
+    <TypeScriptCompile Include="app\extensions\seadragon\Right.ts" />
+    <TypeScriptCompile Include="app\extensions\seadragon\Provider.ts" />
+    <Content Include="app\extensions\seadragon\Provider.js">
       <DependentUpon>Provider.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\Provider.min.js">
+    <Content Include="app\extensions\seadragon\Provider.min.js">
       <DependentUpon>Provider.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\Right.js">
+    <Content Include="app\extensions\seadragon\Right.js">
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\Right.min.js">
+    <Content Include="app\extensions\seadragon\Right.min.js">
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\shared\Dialogue.ts" />
+    <Content Include="app\shared\css\ie.css" />
     <Content Include="app\shared\Dialogue.js">
       <DependentUpon>Dialogue.ts</DependentUpon>
     </Content>
@@ -171,9 +164,8 @@
     </Content>
     <TypeScriptCompile Include="app\shared\Header.ts" />
     <TypeScriptCompile Include="app\shared\Footer.ts" />
-    <Content Include="app\seadragon\css\app.css" />
     <TypeScriptCompile Include="app\shared\Center.ts" />
-    <Content Include="app\seadragon\js\openseadragon.min.js" />
+    <Content Include="app\modules\SeadragonCenterPanel\js\openseadragon.min.js" />
     <Content Include="app\shared\Center.js">
       <DependentUpon>Center.ts</DependentUpon>
     </Content>
@@ -193,7 +185,6 @@
       <DependentUpon>Header.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="js\extensions.d.ts" />
-    <TypeScriptCompile Include="app\shared\Main.ts" />
     <Content Include="app\shared\img\ajax-loader.gif" />
     <TypeScriptCompile Include="app\shared\Left.ts" />
     <Content Include="app\shared\Left.js">
@@ -201,12 +192,6 @@
     </Content>
     <Content Include="app\shared\Left.min.js">
       <DependentUpon>Left.ts</DependentUpon>
-    </Content>
-    <Content Include="app\shared\Main.js">
-      <DependentUpon>Main.ts</DependentUpon>
-    </Content>
-    <Content Include="app\shared\Main.min.js">
-      <DependentUpon>Main.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\shared\Right.ts" />
     <Content Include="app\shared\Right.js">
@@ -226,7 +211,6 @@
       <DependentUpon>Shell.ts</DependentUpon>
     </Content>
     <Content Include="app\shared\css\app.css" />
-    <Content Include="data.js" />
     <Content Include="index.html" />
     <Content Include="js\config.js" />
     <Content Include="js\console.js" />
@@ -254,34 +238,19 @@
       <DependentUpon>BaseApp.ts</DependentUpon>
     </Content>
     <Content Include="js\jquery-1.10.2.min.map" />
-    <Content Include="app\seadragon\App.js.map">
+    <Content Include="app\extensions\seadragon\App.js.map">
       <DependentUpon>App.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Header.js.map">
-      <DependentUpon>Header.ts</DependentUpon>
     </Content>
     <Content Include="app\shared\Header.js.map">
       <DependentUpon>Header.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\Main.js.map">
-      <DependentUpon>Main.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Footer.js.map">
+    <Content Include="app\extensions\seadragon\Footer.js.map">
       <DependentUpon>Footer.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Main.js.map">
-      <DependentUpon>Main.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Center.js.map">
-      <DependentUpon>Center.ts</DependentUpon>
     </Content>
     <Content Include="app\shared\Center.js.map">
       <DependentUpon>Center.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\Left.js.map">
-      <DependentUpon>Left.ts</DependentUpon>
-    </Content>
-    <Content Include="app\seadragon\Right.js.map">
+    <Content Include="app\extensions\seadragon\Right.js.map">
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
     <Content Include="app\Utils.js.map">
@@ -296,7 +265,7 @@
     <Content Include="app\shared\Right.js.map">
       <DependentUpon>Right.ts</DependentUpon>
     </Content>
-    <Content Include="app\seadragon\Provider.js.map">
+    <Content Include="app\extensions\seadragon\Provider.js.map">
       <DependentUpon>Provider.ts</DependentUpon>
     </Content>
     <Content Include="app\BaseView.js.map">
@@ -320,6 +289,12 @@
     <Content Include="app\shared\HelpDialogue.js.map">
       <DependentUpon>HelpDialogue.ts</DependentUpon>
     </Content>
+    <Content Include="app\modules\PagingHeaderPanel\PagingHeaderPanel.js.map">
+      <DependentUpon>PagingHeaderPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\SeadragonCenterPanel\SeadragonCenterPanel.js.map">
+      <DependentUpon>SeadragonCenterPanel.ts</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -328,7 +303,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\seadragon\img\viewer\" />
+    <Folder Include="app\modules\SeadragonCenterPanel\img\" />
+    <Folder Include="app\modules\TreeViewLeftPanel\css\" />
+    <Folder Include="app\modules\TreeViewLeftPanel\img\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

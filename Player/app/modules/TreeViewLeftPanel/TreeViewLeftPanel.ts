@@ -1,7 +1,7 @@
-/// <reference path="../../js/jquery.d.ts" />
-import baseFooter = module("app/shared/Footer");
+/// <reference path="../../../js/jquery.d.ts" />
+import baseLeft = module("app/shared/Left");
 
-export class Footer extends baseFooter.Footer {
+export class TreeViewLeftPanel extends baseLeft.Left {
 
     constructor($element: JQuery) {
         super($element);
@@ -9,9 +9,11 @@ export class Footer extends baseFooter.Footer {
 
     create(): void {
         super.create();
+
     }
 
     resize(): void {
         super.resize();
+
     }
 }

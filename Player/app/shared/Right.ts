@@ -1,7 +1,6 @@
 /// <reference path="../../js/jquery.d.ts" />
 import baseApp = module("app/BaseApp");
 import shell = module("app/shared/Shell");
-import main = module("app/shared/Main");
 import utils = module("app/Utils");
 import baseView = module("app/BaseView");
 
@@ -52,5 +51,7 @@ export class Right extends baseView.BaseView {
         this.$element.css({
             'left': this.$element.parent().width() - this.$element.width()
         });
+
+        this.$element.actualHeight(this.$element.parent().height());
     }
 }

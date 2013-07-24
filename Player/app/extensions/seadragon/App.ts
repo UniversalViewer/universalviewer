@@ -1,13 +1,15 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
+/// <reference path="../../../js/jquery.d.ts" />
+/// <reference path="../../../js/extensions.d.ts" />
 import baseApp = module("app/BaseApp");
 import utils = module("app/Utils");
 import bp = module("app/BaseProvider");
-import p = module("app/seadragon/Provider");
+import p = module("app/extensions/seadragon/Provider");
 import shell = module("app/shared/Shell");
-import header = module("app/seadragon/Header");
-import main = module("app/seadragon/Main");
-import footer = module("app/seadragon/Footer");
+import header = module("app/modules/PagingHeaderPanel/PagingHeaderPanel");
+import left = module("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
+import center = module("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");
+import right = module("app/extensions/seadragon/Right");
+import footer = module("app/extensions/seadragon/Footer");
 
 export class App extends baseApp.BaseApp {
 
@@ -25,62 +27,48 @@ export class App extends baseApp.BaseApp {
         super(provider, 'seadragon');
     }
 
-    getMode(): string{
-        if (App.mode) return App.mode;
-        
-        switch (this.provider.type) {
-            case 'monograph':
-                return App.PAGE_MODE;
-                break;
-            case 'archive':
-            case 'boundmanuscript':
-                return App.IMAGE_MODE;
-                break;
-            default:
-                return App.IMAGE_MODE;
-        }
-    }
-
     create(): void {
         super.create();
 
         // events.
-        $.subscribe(header.Header.FIRST, (e) => {
+        $.subscribe(header.PagingHeaderPanel.FIRST, (e) => {
             this.viewPage(0);
         });
 
-        $.subscribe(header.Header.LAST, (e) => {
+        $.subscribe(header.PagingHeaderPanel.LAST, (e) => {
             this.viewPage(this.provider.assetSequence.assets.length - 1);
         });
 
-        $.subscribe(header.Header.PREV, (e) => {
+        $.subscribe(header.PagingHeaderPanel.PREV, (e) => {
             if (this.currentAssetIndex != 0) {
                 this.viewPage(Number(this.currentAssetIndex) - 1);
             }
         });
         
-        $.subscribe(header.Header.NEXT, (e) => {
+        $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
             if (this.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
                 this.viewPage(Number(this.currentAssetIndex) + 1);
             }
         });
 
-        $.subscribe(header.Header.MODE_CHANGED, (e, mode: string) => {
+        $.subscribe(header.PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
             App.mode = mode;
 
             $.publish(App.MODE_CHANGED, [mode]);
         });
 
-        $.subscribe(header.Header.PAGE_SEARCH, (e, value: string) => {
+        $.subscribe(header.PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
             this.viewLabel(value);
         });
         
-        $.subscribe(header.Header.IMAGE_SEARCH, (e, index: number) => {
+        $.subscribe(header.PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
         });
 
-        new header.Header(shell.Shell.$headerPanel);
-        new main.Main(shell.Shell.$mainPanel);
+        new header.PagingHeaderPanel(shell.Shell.$headerPanel);
+        new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
+        new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
+        new right.Right(shell.Shell.$rightPanel);
         new footer.Footer(shell.Shell.$footerPanel);
 
         this.getUrlParams();
@@ -146,6 +134,22 @@ export class App extends baseApp.BaseApp {
             this.viewPage(index);
         } else {
             this.showDialogue(this.provider.config.content.genericDialogue.pageNotFound);
+        }
+    }
+
+    getMode(): string {
+        if (App.mode) return App.mode;
+
+        switch (this.provider.type) {
+            case 'monograph':
+                return App.PAGE_MODE;
+                break;
+            case 'archive':
+            case 'boundmanuscript':
+                return App.IMAGE_MODE;
+                break;
+            default:
+                return App.IMAGE_MODE;
         }
     }
 }

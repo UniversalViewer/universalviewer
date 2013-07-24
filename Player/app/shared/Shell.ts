@@ -8,8 +8,10 @@ import helpDialogue = module("app/shared/HelpDialogue");
 export class Shell extends baseView.BaseView {
     static $element: JQuery;
     static $headerPanel: JQuery;
-    static $borderWrapper: JQuery;
     static $mainPanel: JQuery;
+    static $centerPanel: JQuery;
+    static $leftPanel: JQuery;
+    static $rightPanel: JQuery;
     static $footerPanel: JQuery;
     static $overlayMask: JQuery;
     static $genericDialogue: JQuery;
@@ -39,7 +41,16 @@ export class Shell extends baseView.BaseView {
         this.$element.append(Shell.$headerPanel);
 
         Shell.$mainPanel = utils.Utils.createDiv('mainPanel');
-        Shell.$element.append(Shell.$mainPanel);
+        this.$element.append(Shell.$mainPanel);
+
+        Shell.$centerPanel = utils.Utils.createDiv('centerPanel');
+        Shell.$mainPanel.append(Shell.$centerPanel);
+
+        Shell.$leftPanel = utils.Utils.createDiv('leftPanel');
+        Shell.$mainPanel.append(Shell.$leftPanel);
+
+        Shell.$rightPanel = utils.Utils.createDiv('rightPanel');
+        Shell.$mainPanel.append(Shell.$rightPanel);
 
         Shell.$footerPanel = utils.Utils.createDiv('footerPanel');
         Shell.$element.append(Shell.$footerPanel);
@@ -69,5 +80,8 @@ export class Shell extends baseView.BaseView {
 
         Shell.$overlayMask.width(this.app.width());
         Shell.$overlayMask.height(this.app.height());
+
+        var mainHeight = this.$element.height() - Shell.$headerPanel.height() -Shell.$footerPanel.height();
+        Shell.$mainPanel.actualHeight(mainHeight);
     }
 }

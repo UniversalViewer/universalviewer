@@ -1,10 +1,11 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
+/// <reference path="../../../js/jquery.d.ts" />
+/// <reference path="../../../js/extensions.d.ts" />
 import baseApp = module("app/BaseApp");
-import app = module("app/seadragon/App");
+import app = module("app/extensions/seadragon/App");
 import baseHeader = module("app/shared/Header");
+import utils = module("app/Utils");
 
-export class Header extends baseHeader.Header {
+export class PagingHeaderPanel extends baseHeader.Header {
 
     $prevOptions: JQuery;
     $firstButton: JQuery;
@@ -34,7 +35,10 @@ export class Header extends baseHeader.Header {
 
     create(): void {
         super.create();
-        
+
+        // load css.
+        utils.Utils.loadCss('app/modules/PagingHeaderPanel/css/styles.css');
+
         $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
             this.assetIndexChanged(assetIndex);
         });
@@ -51,39 +55,39 @@ export class Header extends baseHeader.Header {
 
         this.$prevButton = $('<a class="imageButton prev"></a>');
         this.$prevOptions.append(this.$prevButton);
-             
+        
         this.$modeOptions = $('<div class="mode"></div>');
         this.$centerOptions.append(this.$modeOptions);
 
         this.$modeOptions.append('<label for="image">' + this.content.header.image + '</label>');
         this.$imageModeOption = $('<input type="radio" id="image" name="mode"></input>');
         this.$modeOptions.append(this.$imageModeOption);
-        
+
         this.$modeOptions.append('<label for="page">' + this.content.header.page + '</label>');
         this.$pageModeOption = $('<input type="radio" id="page" name="mode"></input>');
         this.$modeOptions.append(this.$pageModeOption);
-             
+        
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
-             
+        
         this.$searchText = $('<input class="searchText" maxlength="5" type="text"></input>');
         this.$search.append(this.$searchText);
-             
+        
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
-             
+        
         this.$searchButton = $('<a class="imageButton go"></a>');
         this.$search.append(this.$searchButton);
-             
+        
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
-             
+        
         this.$nextButton = $('<a class="imageButton next"></a>');
         this.$nextOptions.append(this.$nextButton);
 
         this.$lastButton = $('<a class="imageButton last"></a>');
         this.$nextOptions.append(this.$lastButton);
-        
+
         if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             this.$pageModeOption.attr('checked', 'checked');
             this.$pageModeOption.removeAttr('disabled');
@@ -101,32 +105,32 @@ export class Header extends baseHeader.Header {
         if (this.provider.assetSequence.assets.length == 1) {
             this.$centerOptions.hide();
         }
-        
+
         // ui event handlers.
         this.$firstButton.click(function (e) {
             e.preventDefault();
-            
-            $.publish(Header.FIRST);
+
+            $.publish(PagingHeaderPanel.FIRST);
         });
 
         this.$prevButton.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(Header.PREV);
+            $.publish(PagingHeaderPanel.PREV);
         });
 
         this.$nextButton.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(Header.NEXT);
+            $.publish(PagingHeaderPanel.NEXT);
         });
 
         this.$imageModeOption.on('click', (e) => {
-            $.publish(Header.MODE_CHANGED, [app.App.IMAGE_MODE]);
+            $.publish(PagingHeaderPanel.MODE_CHANGED, [app.App.IMAGE_MODE]);
         });
 
         this.$pageModeOption.on('click', (e) => {
-            $.publish(Header.MODE_CHANGED, [app.App.PAGE_MODE]);
+            $.publish(PagingHeaderPanel.MODE_CHANGED, [app.App.PAGE_MODE]);
         });
 
         this.$searchText.on('keyup', (e) => {
@@ -146,7 +150,7 @@ export class Header extends baseHeader.Header {
         this.$lastButton.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(Header.LAST);
+            $.publish(PagingHeaderPanel.LAST);
         });
     }
 
@@ -179,7 +183,7 @@ export class Header extends baseHeader.Header {
     }
 
     setSearchPlaceholder(index): void {
-        
+
         var asset = this.app.getAssetByIndex(index);
 
         if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
@@ -206,11 +210,11 @@ export class Header extends baseHeader.Header {
         }
 
         if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
-            $.publish(Header.PAGE_SEARCH, [value]);
+            $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val());
             index--;
-            $.publish(Header.IMAGE_SEARCH, [index.toString()]);
+            $.publish(PagingHeaderPanel.IMAGE_SEARCH, [index.toString()]);
         }
     }
 

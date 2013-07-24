@@ -1,11 +1,11 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
+/// <reference path="../../../js/jquery.d.ts" />
+/// <reference path="../../../js/extensions.d.ts" />
 import baseApp = module("app/BaseApp");
-import app = module("app/seadragon/App");
+import app = module("app/extensions/seadragon/App");
 import baseCenter = module("app/shared/Center");
 import utils = module("app/Utils");
 
-export class Center extends baseCenter.Center {
+export class SeadragonCenterPanel extends baseCenter.Center {
 
     $viewer: JQuery;
     viewer: any;
@@ -24,7 +24,10 @@ export class Center extends baseCenter.Center {
 
     create(): void {
         super.create();
-        
+
+        // load css.
+        utils.Utils.loadCss('app/modules/SeadragonCenterPanel/css/styles.css');
+
         // events.
         $.subscribe(app.App.OPEN_DZI, (e, uri) => {
             this.viewer.openDzi(uri);
@@ -36,10 +39,10 @@ export class Center extends baseCenter.Center {
         // Seadragon
 
         OpenSeadragon.DEFAULT_SETTINGS.autoHideControls = true;
-        
+
         this.viewer = OpenSeadragon({
             id: "viewer",
-            prefixUrl: "/app/seadragon/img/viewer/",
+            prefixUrl: "/app/modules/SeadragonCenterPanel/img/",
             showNavigator: true
         });
 
@@ -48,24 +51,24 @@ export class Center extends baseCenter.Center {
         this.viewer.setControlsEnabled(false);
 
         this.viewer.addHandler('open', function (viewer) {
-            $.publish(Center.SEADRAGON_OPEN, [viewer]);
+            $.publish(SeadragonCenterPanel.SEADRAGON_OPEN, [viewer]);
         })
 
         this.viewer.addHandler('resize', (viewer) => {
-            $.publish(Center.SEADRAGON_RESIZE, [viewer]);
+            $.publish(SeadragonCenterPanel.SEADRAGON_RESIZE, [viewer]);
             this.viewerResize(viewer);
         });
 
         this.viewer.addHandler('animationstart', function (viewer) {
-            $.publish(Center.SEADRAGON_ANIMATION_START, [viewer]);
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_START, [viewer]);
         });
 
         this.viewer.addHandler('animation', function (viewer) {
-            $.publish(Center.SEADRAGON_ANIMATION, [viewer]);
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION, [viewer]);
         });
 
         this.viewer.addHandler('animationfinish', function (viewer) {
-            $.publish(Center.SEADRAGON_ANIMATION_FINISH, [viewer]);
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
 
         this.title = this.app.provider.getTitle();
@@ -88,7 +91,7 @@ export class Center extends baseCenter.Center {
     */
 
     viewerResize(viewer: any): void {
-        
+
         if (!viewer.viewport) return;
 
         var center = viewer.viewport.getCenter(true);

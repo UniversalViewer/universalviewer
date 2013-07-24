@@ -1,4 +1,4 @@
-/// <reference path="../../js/jquery.d.ts" />
+/// <reference path="../../../js/jquery.d.ts" />
 import baseRight = module("app/shared/Right");
 
 export class Right extends baseRight.Right {

@@ -1,5 +1,5 @@
 /// <reference path="../../js/jquery.d.ts" />
-import main = module("app/shared/Main");
+import shell = module("app/shared/Shell");
 import baseView = module("app/BaseView");
 import utils = module("app/Utils");
 
@@ -26,10 +26,12 @@ export class Center extends baseView.BaseView {
         super.resize();
 
         this.$element.css({
-            'left': main.Main.$leftPanel.width(),
-            'width': this.$element.parent().width() - main.Main.$leftPanel.width() - main.Main.$rightPanel.width()
+            'left': shell.Shell.$leftPanel.width(),
+            'width': this.$element.parent().width() - shell.Shell.$leftPanel.width() - shell.Shell.$rightPanel.width()
         });
 
-        this.$content.height(this.$element.height() - this.$title.outerHeight());
+        this.$element.actualHeight(this.$element.parent().height());
+
+        this.$content.height(this.$element.height() - this.$title.height());
     }
 }

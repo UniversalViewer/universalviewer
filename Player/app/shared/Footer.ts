@@ -10,7 +10,7 @@ export class Footer extends baseView.BaseView {
     $fullScreenBtn: JQuery;
 
     constructor($element: JQuery) {
-        super($element, false, false);
+        super($element, true, false);
     }
 
     create(): void {
@@ -45,7 +45,7 @@ export class Footer extends baseView.BaseView {
         super.resize();
 
         this.$element.css({
-            'top': shell.Shell.$headerPanel.height() + shell.Shell.$mainPanel.height()
+            'top': this.app.height() - this.$element.height()
         });
     }
 }

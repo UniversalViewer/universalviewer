@@ -282,4 +282,12 @@ export class Utils{
     }
 
     //#endregion
+
+    //#region Css
+
+    static loadCss(uri: string): void {
+        $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', uri));
+    }
+
+    //#endregion
 }

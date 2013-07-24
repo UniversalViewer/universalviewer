@@ -46,5 +46,6 @@ export class Left extends baseView.BaseView {
     resize(): void {
         super.resize();
 
+        this.$element.actualHeight(this.$element.parent().height());
     }
 }
