@@ -402,7 +402,9 @@
 
     };
     
-    $.fn.absHeight = function (height) {
+    // useful if stretching to fit a parent element's inner height.
+    // borders/margins/padding are included in final height, so no overspill.
+    $.fn.actualHeight = function (height) {
 
         return this.each(function () {
 
@@ -416,7 +418,7 @@
         });
     };
 
-    $.fn.absWidth = function (width) {
+    $.fn.actualWidth = function (width) {
 
         return this.each(function () {
 

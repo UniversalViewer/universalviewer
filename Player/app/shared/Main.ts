@@ -34,6 +34,6 @@ export class Main extends baseView.BaseView {
 
         var height = shell.Shell.$element.height() - shell.Shell.$headerPanel.height() - shell.Shell.$footerPanel.height();
 
-        this.$element.absHeight(height);
+        this.$element.actualHeight(height);
     }
 }
