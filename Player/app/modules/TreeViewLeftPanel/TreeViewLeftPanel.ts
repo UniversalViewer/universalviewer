@@ -1,7 +1,7 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseLeft = module("app/shared/Left");
+import baseLeft = module("app/shared/LeftPanel");
 
-export class TreeViewLeftPanel extends baseLeft.Left {
+export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
     constructor($element: JQuery) {
         super($element);

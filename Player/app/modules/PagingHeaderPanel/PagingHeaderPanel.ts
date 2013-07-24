@@ -2,10 +2,10 @@
 /// <reference path="../../../js/extensions.d.ts" />
 import baseApp = module("app/BaseApp");
 import app = module("app/extensions/seadragon/App");
-import baseHeader = module("app/shared/Header");
+import baseHeader = module("app/shared/HeaderPanel");
 import utils = module("app/Utils");
 
-export class PagingHeaderPanel extends baseHeader.Header {
+export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
     $prevOptions: JQuery;
     $firstButton: JQuery;

@@ -2,10 +2,10 @@
 /// <reference path="../../../js/extensions.d.ts" />
 import baseApp = module("app/BaseApp");
 import app = module("app/extensions/seadragon/App");
-import baseCenter = module("app/shared/Center");
+import baseCenter = module("app/shared/CenterPanel");
 import utils = module("app/Utils");
 
-export class SeadragonCenterPanel extends baseCenter.Center {
+export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     $viewer: JQuery;
     viewer: any;

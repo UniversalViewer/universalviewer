@@ -4,7 +4,7 @@ import baseApp = module("app/BaseApp");
 import shell = module("app/shared/Shell");
 import baseView = module("app/BaseView");
 
-export class Footer extends baseView.BaseView {
+export class FooterPanel extends baseView.BaseView {
 
     $options: JQuery;
     $fullScreenBtn: JQuery;

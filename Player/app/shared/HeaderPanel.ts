@@ -3,7 +3,7 @@ import baseApp = module("app/BaseApp");
 import baseView = module("app/BaseView");
 import utils = module("app/Utils");
 
-export class Header extends baseView.BaseView {
+export class HeaderPanel extends baseView.BaseView {
 
     $centerOptions: JQuery;
     $rightOptions: JQuery;
@@ -37,7 +37,7 @@ export class Header extends baseView.BaseView {
 
     resize(): void {
         super.resize();
-        
+
         var headerWidth = this.$element.width();
         var center = headerWidth / 2;
         var containerWidth = this.$centerOptions.outerWidth();

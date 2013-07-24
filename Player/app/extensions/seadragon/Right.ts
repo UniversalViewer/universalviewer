@@ -1,7 +1,7 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseRight = module("app/shared/Right");
+import baseRight = module("app/shared/RightPanel");
 
-export class Right extends baseRight.Right {
+export class Right extends baseRight.RightPanel {
 
     constructor($element: JQuery) {
         super($element);

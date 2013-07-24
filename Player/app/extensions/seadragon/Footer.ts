@@ -1,7 +1,7 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseFooter = module("app/shared/Footer");
+import baseFooter = module("app/shared/FooterPanel");
 
-export class Footer extends baseFooter.Footer {
+export class Footer extends baseFooter.FooterPanel {
 
     constructor($element: JQuery) {
         super($element);

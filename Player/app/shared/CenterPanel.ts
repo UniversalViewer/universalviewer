@@ -3,7 +3,7 @@ import shell = module("app/shared/Shell");
 import baseView = module("app/BaseView");
 import utils = module("app/Utils");
 
-export class Center extends baseView.BaseView {
+export class CenterPanel extends baseView.BaseView {
 
     $title: JQuery;
     $content: JQuery;
@@ -29,8 +29,6 @@ export class Center extends baseView.BaseView {
             'left': shell.Shell.$leftPanel.width(),
             'width': this.$element.parent().width() - shell.Shell.$leftPanel.width() - shell.Shell.$rightPanel.width()
         });
-
-        this.$element.actualHeight(this.$element.parent().height());
 
         this.$content.height(this.$element.height() - this.$title.height());
     }

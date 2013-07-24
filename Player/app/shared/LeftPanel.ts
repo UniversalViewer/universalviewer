@@ -4,7 +4,7 @@ import shell = module("app/shared/Shell");
 import utils = module("app/Utils");
 import baseView = module("app/BaseView");
 
-export class Left extends baseView.BaseView {
+export class LeftPanel extends baseView.BaseView {
 
     isExpanded: bool = false;
 
@@ -14,7 +14,7 @@ export class Left extends baseView.BaseView {
 
     create(): void {
         super.create();
-        
+
         this.$element.width(this.options.leftPanelCollapsedWidth);
 
         this.$element.on('click', (e) => {
@@ -40,12 +40,11 @@ export class Left extends baseView.BaseView {
                 $.publish(baseApp.BaseApp.TOGGLE_LEFTPANEL_END, [this.isExpanded]);
                 $.publish(baseApp.BaseApp.RESIZE);
             }
-        );
+            );
     }
 
     resize(): void {
         super.resize();
 
-        this.$element.actualHeight(this.$element.parent().height());
     }
 }
