@@ -10,7 +10,7 @@ export class Header extends baseView.BaseView {
     $helpButton: JQuery;
 
     constructor($element: JQuery) {
-        super($element, true, false);
+        super($element, false, false);
     }
 
     create(): void {

@@ -1,6 +1,19 @@
 ﻿
 (function ($) {
 
+    $.fn.absHeight = function (height) {
+
+        return this.each(function () {
+
+            var $self = $(this);
+
+            console.log('margin-top: ' + $self.css('margin-top'));
+            console.log('border-top: ' + $self.css('border-top'));
+            console.log('padding-top: ' + $self.css('padding-top'));
+        });
+
+    };
+
     $.fn.watch = function (props, callback, timeout) {
         if (!timeout)
             timeout = 10;
@@ -387,6 +400,34 @@
             }
         });
 
+    };
+    
+    $.fn.absHeight = function (height) {
+
+        return this.each(function () {
+
+            var $self = $(this);
+
+            $self.height(height);
+
+            height -= $self.outerHeight(true) - $self.height();
+
+            $self.height(height);
+        });
+    };
+
+    $.fn.absWidth = function (width) {
+
+        return this.each(function () {
+
+            var $self = $(this);
+
+            $self.width(width);
+
+            width -= $self.outerWidth(true) - $self.width();
+
+            $self.width(width);
+        });
     };
 
 })(jQuery);

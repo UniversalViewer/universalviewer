@@ -98,7 +98,8 @@ a:hover {
 }
 
 #app .mainPanel{
-	position: relative;
+    position: relative;
+    margin: 8px 8px 0 8px;
 }
 
 #app .leftPanel{
@@ -116,8 +117,7 @@ a:hover {
 }
 
 #app .footerPanel{
-    height: 30px;
-    background: #D1D5DA;
+    margin: 0 8px 0 8px;
 }
 
 /*#endregion */
@@ -158,6 +158,86 @@ a:hover {
 
 #app .centerPanel .title span {
     line-height: 38px;
+}
+
+/*#endregion*/
+
+/*#region footer panel */
+
+#app .footerPanel .options{
+    height: 41px;
+}
+
+#app .footerPanel .options a.imageButton{
+    float: left;
+    margin-top: 10px;
+    margin-right: 15px;
+}
+
+#app .footerPanel .options a.download{
+    background: url('../img/download.png') no-repeat;
+    height: 21px;
+    width: 91px;
+}
+
+#app .footerPanel .options a.imageButton.download.min{
+    width: 27px;
+}
+
+#app .footerPanel .options a.imageButton.bookmark{
+    background: url('../img/bookmark.png') no-repeat;
+    height: 21px;
+    width: 110px;
+}
+
+#app .footerPanel .options a.imageButton.bookmark.min{
+    width: 15px;
+}
+
+#app .footerPanel .options a.imageButton.save{
+    background: url('../img/save.png') no-repeat;
+    height: 21px;
+    width: 132px;
+}
+
+#app .footerPanel .options a.imageButton.save.min{
+    width: 20px;
+}
+
+#app .footerPanel .options a.imageButton.embed{
+    background: url('../img/embed.png') no-repeat;
+    height: 21px;
+    width: 75px;
+}
+
+#app .footerPanel .options a.imageButton.embed.min{
+    width: 27px;
+}
+
+#app .footerPanel .options a.imageButton.fullScreen{
+    background: url('../img/fullscreen.png') no-repeat;
+    height: 21px;
+    width: 140px;
+    float: right;
+    background-position: right;
+    margin-right: 0;
+}
+
+#app .footerPanel .options a.imageButton.fullScreen.min{
+    width: 21px;
+}
+
+#app .footerPanel .options a.imageButton.normal{
+    background: url('../img/normal.png') no-repeat;
+    height: 21px;
+    width: 140px;
+    float: right;
+    background-position: right;
+    margin-right: 0;
+}
+
+#app .footerPanel .options a.imageButton.normal.min{
+    width: 21px;
 }
 
 /*#endregion*/

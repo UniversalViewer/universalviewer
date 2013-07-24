@@ -13,7 +13,7 @@ export class Main extends baseView.BaseView {
     static $rightPanel: JQuery;
 
     constructor($element: JQuery) {
-        super($element, true, false);
+        super($element, false, false);
     }
 
     create(): void {
@@ -33,6 +33,7 @@ export class Main extends baseView.BaseView {
         super.resize();
 
         var height = shell.Shell.$element.height() - shell.Shell.$headerPanel.height() - shell.Shell.$footerPanel.height();
-        this.$element.height(height);
+
+        this.$element.absHeight(height);
     }
 }

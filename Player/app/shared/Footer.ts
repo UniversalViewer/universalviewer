@@ -6,22 +6,26 @@ import baseView = module("app/BaseView");
 
 export class Footer extends baseView.BaseView {
 
+    $options: JQuery;
     $fullScreenBtn: JQuery;
 
     constructor($element: JQuery) {
-        super($element, true, false);
+        super($element, false, false);
     }
 
     create(): void {
         super.create();
 
-        // event handlers.
+        // events.
         $.subscribe(baseApp.BaseApp.TOGGLE_FULLSCREEN, () => {
             this.toggleFullScreen();
         });
 
-        this.$fullScreenBtn = $('<a href="#">' + this.content.footer.fullScreen + '</a>');
-        this.$element.append(this.$fullScreenBtn);
+        this.$options = utils.Utils.createDiv('options');
+        this.$element.append(this.$options);
+
+        this.$fullScreenBtn = $('<a href="#" class="imageButton fullScreen"></a>');
+        this.$options.append(this.$fullScreenBtn);
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
@@ -31,9 +35,9 @@ export class Footer extends baseView.BaseView {
 
     toggleFullScreen(): void {
         if (this.app.isFullScreen) {
-            this.$fullScreenBtn.text(this.content.footer.exitFullScreen);
+            this.$fullScreenBtn.swapClass('fullScreen', 'normal');
         } else {
-            this.$fullScreenBtn.text(this.content.footer.fullScreen);
+            this.$fullScreenBtn.swapClass('normal', 'fullScreen');
         }
     }
 

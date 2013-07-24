@@ -8,6 +8,7 @@ import helpDialogue = module("app/shared/HelpDialogue");
 export class Shell extends baseView.BaseView {
     static $element: JQuery;
     static $headerPanel: JQuery;
+    static $borderWrapper: JQuery;
     static $mainPanel: JQuery;
     static $footerPanel: JQuery;
     static $overlayMask: JQuery;
@@ -38,10 +39,10 @@ export class Shell extends baseView.BaseView {
         this.$element.append(Shell.$headerPanel);
 
         Shell.$mainPanel = utils.Utils.createDiv('mainPanel');
-        this.$element.append(Shell.$mainPanel);
+        Shell.$element.append(Shell.$mainPanel);
 
         Shell.$footerPanel = utils.Utils.createDiv('footerPanel');
-        this.$element.append(Shell.$footerPanel);
+        Shell.$element.append(Shell.$footerPanel);
 
         Shell.$overlayMask = utils.Utils.createDiv('overlayMask');
         this.$element.append(Shell.$overlayMask);

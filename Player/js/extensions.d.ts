@@ -15,6 +15,8 @@ interface Array{
 
 interface JQuery {
     ellipsisFill(text: string): any;
+    swapClass(removeClass: string, addClass: string): void;
+    absHeight(height: number);
 }
 
 interface JQueryStatic {
