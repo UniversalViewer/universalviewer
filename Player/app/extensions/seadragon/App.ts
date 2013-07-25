@@ -8,8 +8,8 @@ import shell = module("app/shared/Shell");
 import header = module("app/modules/PagingHeaderPanel/PagingHeaderPanel");
 import left = module("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
 import center = module("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");
-import right = module("app/extensions/seadragon/Right");
-import footer = module("app/extensions/seadragon/Footer");
+import right = module("app/modules/MoreInfoRightPanel/MoreInfoRightPanel");
+import footer = module("app/modules/ExtendedFooterPanel/ExtendedFooterPanel");
 
 export class App extends baseApp.BaseApp {
 
@@ -68,8 +68,8 @@ export class App extends baseApp.BaseApp {
         new header.PagingHeaderPanel(shell.Shell.$headerPanel);
         new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
         new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
-        new right.Right(shell.Shell.$rightPanel);
-        new footer.Footer(shell.Shell.$footerPanel);
+        new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+        new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);
 
         this.getUrlParams();
 

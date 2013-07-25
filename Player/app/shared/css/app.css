@@ -104,7 +104,8 @@ a:hover {
 
 #app .leftPanel{
 	position: absolute;
-    background: #656769;
+    background: #1C191A;
+    border: 1px solid #525252;
 }
 
 #app .centerPanel{
@@ -113,7 +114,8 @@ a:hover {
 
 #app .rightPanel{
     position: absolute;
-    background: #656769;
+    background: #1C191A;
+    border: 1px solid #525252;
 }
 
 #app .footerPanel{
@@ -148,6 +150,58 @@ a:hover {
 
 /*#endregion*/
 
+/*#region Left Panel */
+
+#app .leftPanel a{
+    color: #fff;
+    text-decoration: none;
+}
+
+#app .leftPanel .top{
+    height: 35px;
+    position: relative;
+}
+
+#app .leftPanel .top .title{
+    height: 20px;
+    margin: 6px 0 0 10px;
+    float: left;
+    cursor: pointer;
+}
+
+#app .leftPanel .top .collapseButton{
+    float: right;
+    background: url(../img/arrows_left.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 7px 5px 0 0;
+    display: block;
+}
+
+#app .leftPanel .closed{
+    width: 25px;
+    float: right;
+}
+
+#app .leftPanel .closed .expandButton{
+    background: url(../img/arrows_right.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 7px 5px 0 0;
+    display: block;
+}
+
+#app .leftPanel .closed .title{
+    width: 20px;
+    display: block;
+    margin: 5px 0 0 0;
+    cursor: pointer;
+}
+
+/*#endregion */
+
 /*#region center panel */
 
 #app .centerPanel .title {
@@ -162,6 +216,54 @@ a:hover {
 }
 
 /*#endregion*/
+
+/*#region right panel */
+
+#app .rightPanel .top{
+    height: 35px;
+    position: relative;
+}
+
+#app .rightPanel .top .title{
+    position: absolute;
+    height: 20px;
+    margin-top: 6px;
+    cursor: pointer;
+    left: 35px;
+}
+
+#app .rightPanel .closed{
+    width: 25px;
+}
+
+#app .rightPanel .closed .expandButton{
+    background: url(../img/arrows_left.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 7px 0 0 5px;
+    display: block;
+}
+
+#app .rightPanel .closed .title{
+    width: 20px;
+    display: block;
+    margin: 5px 0 0 5px;
+    cursor: pointer;
+}
+
+#app .rightPanel .top .collapseButton{
+    position: absolute;
+    background: url(../img/arrows_right.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: 7px;
+    display: block;
+    left: 5px;
+}
+
+/*#endregion */
 
 /*#region footer panel */
 

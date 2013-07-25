@@ -33,6 +33,16 @@
     <Content Include="app\BootStrapper.min.js">
       <DependentUpon>BootStrapper.ts</DependentUpon>
     </Content>
+    <Content Include="app\modules\ExtendedFooterPanel\css\styles.css" />
+    <TypeScriptCompile Include="app\modules\ExtendedFooterPanel\ExtendedFooterPanel.ts" />
+    <Content Include="app\modules\ExtendedFooterPanel\ExtendedFooterPanel.js">
+      <DependentUpon>ExtendedFooterPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\MoreInfoRightPanel\css\styles.css" />
+    <TypeScriptCompile Include="app\modules\MoreInfoRightPanel\MoreInfoRightPanel.ts" />
+    <Content Include="app\modules\MoreInfoRightPanel\MoreInfoRightPanel.js">
+      <DependentUpon>MoreInfoRightPanel.ts</DependentUpon>
+    </Content>
     <Content Include="app\modules\PagingHeaderPanel\css\styles.css" />
     <Content Include="app\modules\PagingHeaderPanel\img\first.png" />
     <Content Include="app\modules\PagingHeaderPanel\img\go.png" />
@@ -81,7 +91,13 @@
     </Content>
     <TypeScriptCompile Include="app\Panel.ts" />
     <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.ts" />
+    <Content Include="app\modules\TreeViewLeftPanel\css\styles.css" />
+    <Content Include="app\modules\TreeViewLeftPanel\img\contents.png" />
+    <Content Include="app\modules\TreeViewLeftPanel\img\contents_v.png" />
     <Content Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.js">
+      <DependentUpon>TreeViewLeftPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.min.js">
       <DependentUpon>TreeViewLeftPanel.ts</DependentUpon>
     </Content>
     <Content Include="app\Panel.js">
@@ -90,14 +106,6 @@
     <Content Include="app\Panel.min.js">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\extensions\seadragon\Footer.ts" />
-    <Content Include="app\extensions\seadragon\Footer.js">
-      <DependentUpon>Footer.ts</DependentUpon>
-    </Content>
-    <Content Include="app\extensions\seadragon\Footer.min.js">
-      <DependentUpon>Footer.ts</DependentUpon>
-    </Content>
-    <TypeScriptCompile Include="app\extensions\seadragon\Right.ts" />
     <TypeScriptCompile Include="app\extensions\seadragon\Provider.ts" />
     <Content Include="app\extensions\seadragon\Provider.js">
       <DependentUpon>Provider.ts</DependentUpon>
@@ -105,14 +113,15 @@
     <Content Include="app\extensions\seadragon\Provider.min.js">
       <DependentUpon>Provider.ts</DependentUpon>
     </Content>
-    <Content Include="app\extensions\seadragon\Right.js">
-      <DependentUpon>Right.ts</DependentUpon>
-    </Content>
-    <Content Include="app\extensions\seadragon\Right.min.js">
-      <DependentUpon>Right.ts</DependentUpon>
-    </Content>
     <TypeScriptCompile Include="app\shared\Dialogue.ts" />
     <TypeScriptCompile Include="app\shared\CenterPanel.ts" />
+    <TypeScriptCompile Include="app\shared\BaseExpandPanel.ts" />
+    <Content Include="app\shared\BaseExpandPanel.js">
+      <DependentUpon>BaseExpandPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\BaseExpandPanel.min.js">
+      <DependentUpon>BaseExpandPanel.ts</DependentUpon>
+    </Content>
     <Content Include="app\shared\CenterPanel.js">
       <DependentUpon>CenterPanel.ts</DependentUpon>
     </Content>
@@ -150,33 +159,34 @@
     </Content>
     <Content Include="app\shared\img\arrows_left.png" />
     <Content Include="app\shared\img\arrows_right.png" />
-    <Content Include="app\shared\img\bookmark.png" />
     <Content Include="app\shared\img\close.png" />
     <Content Include="app\shared\img\close_message_box.png" />
-    <Content Include="app\shared\img\contents.png" />
-    <Content Include="app\shared\img\contents_v.png" />
     <Content Include="app\shared\img\dialogue_arrow.png" />
-    <Content Include="app\shared\img\download.png" />
+    <Content Include="app\modules\ExtendedFooterPanel\img\download.png" />
     <Content Include="app\shared\img\embed.png" />
     <Content Include="app\shared\img\fullscreen.png" />
-    <Content Include="app\shared\img\hidden_thumb.png" />
+    <Content Include="app\modules\TreeViewLeftPanel\img\hidden_thumb.png" />
     <Content Include="app\shared\img\logo.png" />
-    <Content Include="app\shared\img\minus.png" />
+    <Content Include="app\modules\TreeViewLeftPanel\img\minus.png" />
     <Content Include="app\shared\img\modal_bg.gif" />
-    <Content Include="app\shared\img\moreinfo.png" />
-    <Content Include="app\shared\img\moreinfo_v.png" />
+    <Content Include="app\modules\MoreInfoRightPanel\img\moreinfo.png" />
+    <Content Include="app\modules\MoreInfoRightPanel\img\moreinfo_v.png" />
     <Content Include="app\shared\img\normal.png" />
-    <Content Include="app\shared\img\plus.png" />
-    <Content Include="app\shared\img\save.png" />
+    <Content Include="app\modules\TreeViewLeftPanel\img\plus.png" />
+    <Content Include="app\modules\ExtendedFooterPanel\img\bookmarks.png" />
     <Content Include="app\shared\img\sprite.png" />
-    <Content Include="app\shared\img\transcription.png" />
-    <Content Include="app\shared\img\transcription_v.png" />
     <TypeScriptCompile Include="app\shared\LeftPanel.ts" />
     <Content Include="app\shared\LeftPanel.js">
       <DependentUpon>LeftPanel.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\shared\RightPanel.ts" />
+    <Content Include="app\shared\LeftPanel.min.js">
+      <DependentUpon>LeftPanel.ts</DependentUpon>
+    </Content>
     <Content Include="app\shared\RightPanel.js">
+      <DependentUpon>RightPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\RightPanel.min.js">
       <DependentUpon>RightPanel.ts</DependentUpon>
     </Content>
     <Content Include="app\Utils.js">
@@ -229,12 +239,6 @@
     <Content Include="app\extensions\seadragon\App.js.map">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
-    <Content Include="app\extensions\seadragon\Footer.js.map">
-      <DependentUpon>Footer.ts</DependentUpon>
-    </Content>
-    <Content Include="app\extensions\seadragon\Right.js.map">
-      <DependentUpon>Right.ts</DependentUpon>
-    </Content>
     <Content Include="app\Utils.js.map">
       <DependentUpon>Utils.ts</DependentUpon>
     </Content>
@@ -271,6 +275,18 @@
     <Content Include="app\shared\HeaderPanel.js.map">
       <DependentUpon>HeaderPanel.ts</DependentUpon>
     </Content>
+    <Content Include="app\shared\LeftPanel.js.map">
+      <DependentUpon>LeftPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.js.map">
+      <DependentUpon>TreeViewLeftPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\BaseExpandPanel.js.map">
+      <DependentUpon>BaseExpandPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\RightPanel.js.map">
+      <DependentUpon>RightPanel.ts</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -280,8 +296,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\modules\SeadragonCenterPanel\img\" />
-    <Folder Include="app\modules\TreeViewLeftPanel\css\" />
-    <Folder Include="app\modules\TreeViewLeftPanel\img\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

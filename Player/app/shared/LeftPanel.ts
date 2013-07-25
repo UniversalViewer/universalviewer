@@ -1,46 +1,32 @@
 /// <reference path="../../js/jquery.d.ts" />
+/// <reference path="../../js/extensions.d.ts" />
 import baseApp = module("app/BaseApp");
 import shell = module("app/shared/Shell");
 import utils = module("app/Utils");
-import baseView = module("app/BaseView");
+import baseExpandPanel = module("app/shared/BaseExpandPanel");
 
-export class LeftPanel extends baseView.BaseView {
-
-    isExpanded: bool = false;
+export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
 
     constructor($element: JQuery) {
-        super($element, false, true);
+        super($element);
     }
 
     create(): void {
         super.create();
 
         this.$element.width(this.options.leftPanelCollapsedWidth);
-
-        this.$element.on('click', (e) => {
-            e.preventDefault();
-
-            this.toggle();
-        });
     }
 
-    toggle(): void {
-        $.publish(baseApp.BaseApp.TOGGLE_LEFTPANEL_START, [this.isExpanded]);
+    getTargetWidth(): number {
+        return this.isExpanded ? this.options.leftPanelCollapsedWidth : this.options.leftPanelExpandedWidth;
+    }
 
-        var width = this.isExpanded ? this.options.leftPanelCollapsedWidth : this.options.leftPanelExpandedWidth;
+    getTargetLeft(): number {
+        return 0;
+    }
+    
+    toggleComplete(): void {
 
-        this.isExpanded = !this.isExpanded;
-
-        this.$element.stop().animate(
-            {
-                width: width
-            },
-            this.options.panelAnimationDuration,
-            function () {
-                $.publish(baseApp.BaseApp.TOGGLE_LEFTPANEL_END, [this.isExpanded]);
-                $.publish(baseApp.BaseApp.RESIZE);
-            }
-            );
     }
 
     resize(): void {

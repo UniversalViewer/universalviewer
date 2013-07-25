@@ -1,0 +1,70 @@
+﻿#app .rightPanel .top .title{
+    background: url(../img/moreinfo.png) no-repeat;
+    width: 140px;
+}
+
+#app .rightPanel .closed .title{
+    background: url(../img/moreinfo_v.png) no-repeat;
+    height: 140px;
+}
+
+#app .rightPanel .content{
+    padding: 10px;
+}
+
+#app .rightPanel .moreInfoView{
+    overflow: auto;
+}
+
+#app .rightPanel .moreInfoView.loading{
+    background-image: url(../../../shared/img/ajax-loader.gif);
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
+#app .rightPanel .moreInfoView .header{
+    color: #999999;
+    border-bottom: 1px solid #525252;
+    font-size: 11px;
+    margin: 15px 10px 0 0;
+    text-transform: uppercase;
+}
+
+#app .rightPanel .moreInfoView .text{
+    color: #fff;
+    margin: 5px 10px 0 0;
+}
+
+#app .rightPanel .moreInfoView .text a.toggle{
+    color: #FFB81D;
+    font-weight: normal;
+}
+
+#app .rightPanel .moreInfoView .text a.toggle:hover{
+    color: #FFB81D;
+}
+
+#app .rightPanel .moreInfoView .text.title{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#app .rightPanel .moreInfoView .action{
+    margin: 5px 0 0 0;
+    font-weight: normal;
+    background: url(../../../shared/img/sprite.png) 0 -1000px no-repeat;
+    color: #FFB81D;
+}
+
+#app .rightPanel .moreInfoView img{
+    margin: 15px 0 0 0;
+    max-width: 200px;
+}
+
+#app .rightPanel .moreInfoView .action.catalogue{
+    margin: 15px 0 0 0;
+}
+
+#app .rightPanel .moreInfoView .action.conditions{
+    margin: 15px 0 0 0;
+}
