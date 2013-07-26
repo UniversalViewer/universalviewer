@@ -1,3 +1,7 @@
 ﻿#app .centerPanel .displayregion {
     border: 2px solid #fff !important;
 }
+
+#app .centerPanel #viewer {
+    padding: 0 8px 0 8px;
+}

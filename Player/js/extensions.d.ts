@@ -18,11 +18,15 @@ interface JQuery {
     swapClass(removeClass: string, addClass: string): void;
     actualHeight(height: number);
     actualWidth(width: number);
+    link: any;
 }
 
 interface JQueryStatic {
     publish(event: string, eventObj?: any[]);
     subscribe(event: string, handler: Function);
+    observable: any;
+    templates: any;
+    views: any;
 }
 
 declare function escape(s: string): any;

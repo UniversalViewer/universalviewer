@@ -189,6 +189,18 @@ export class BaseApp {
         window.parent.document.location.replace(url + hash);
     }
 
+    getSectionByAssetIndex(index) {
+
+        var asset = this.getAssetByIndex(index);
+
+        return this.getAssetSection(asset);
+    }
+
+    getAssetSection(asset) {
+        // get the deepest section that this file belongs to.
+        return asset.sections.last();
+    } 
+
     getAssetByIndex(index): any {
 
         return this.provider.assetSequence.assets[index];

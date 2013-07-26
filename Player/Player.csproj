@@ -94,6 +94,19 @@
     <Content Include="app\modules\TreeViewLeftPanel\css\styles.css" />
     <Content Include="app\modules\TreeViewLeftPanel\img\contents.png" />
     <Content Include="app\modules\TreeViewLeftPanel\img\contents_v.png" />
+    <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\TreeView.ts" />
+    <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\ThumbsView.ts" />
+    <Content Include="app\modules\TreeViewLeftPanel\js\thumbsView.js" />
+    <Content Include="app\modules\TreeViewLeftPanel\js\treeView.js" />
+    <Content Include="app\modules\TreeViewLeftPanel\ThumbsView.js">
+      <DependentUpon>ThumbsView.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\TreeViewLeftPanel\TreeView.js">
+      <DependentUpon>TreeView.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\TreeViewLeftPanel\TreeView.min.js">
+      <DependentUpon>TreeView.ts</DependentUpon>
+    </Content>
     <Content Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.js">
       <DependentUpon>TreeViewLeftPanel.ts</DependentUpon>
     </Content>
@@ -199,7 +212,7 @@
     <TypeScriptCompile Include="js\extensions.d.ts" />
     <Content Include="app\shared\img\ajax-loader.gif" />
     <Content Include="js\jquery.plugins.js" />
-    <Content Include="js\openseadragon.min.js" />
+    <Content Include="js\jsviews.min.js" />
     <Content Include="js\utils.js" />
     <TypeScriptCompile Include="app\shared\Shell.ts" />
     <Content Include="app\shared\Shell.js">
@@ -286,6 +299,9 @@
     </Content>
     <Content Include="app\shared\RightPanel.js.map">
       <DependentUpon>RightPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\TreeViewLeftPanel\TreeView.js.map">
+      <DependentUpon>TreeView.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

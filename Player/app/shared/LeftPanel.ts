@@ -21,11 +21,8 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
         return this.isExpanded ? this.options.leftPanelCollapsedWidth : this.options.leftPanelExpandedWidth;
     }
 
-    getTargetLeft(): number {
-        return 0;
-    }
-    
     toggleComplete(): void {
+        super.toggleComplete();
 
     }
 

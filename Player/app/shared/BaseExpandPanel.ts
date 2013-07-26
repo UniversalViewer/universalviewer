@@ -8,6 +8,7 @@ import baseView = module("app/BaseView");
 export class BaseExpandPanel extends baseView.BaseView {
 
     isExpanded: bool = false;
+    isUnopened: bool = true;
 
     $top: JQuery;
     $title: JQuery;
@@ -70,6 +71,7 @@ export class BaseExpandPanel extends baseView.BaseView {
         });
 
         this.$top.hide();
+        this.$main.hide();
     }
 
     toggle(): void {
@@ -99,6 +101,8 @@ export class BaseExpandPanel extends baseView.BaseView {
                 
                 this.toggleComplete();
 
+                this.isUnopened = false;
+
                 $.publish(baseApp.BaseApp.RESIZE);
             });
     }
@@ -112,7 +116,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     }
 
     toggleComplete(): void {
-    
+        
     }
 
     resize(): void {

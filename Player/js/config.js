@@ -17,6 +17,11 @@
             "go": "go",
             "of": "of {0}"
         },
+        "leftPanel":
+        {
+            "index": "Index",
+            "thumbnails": "Thumbnails"
+        },
         "footer":
         {
             "fullScreen": "Full Screen",

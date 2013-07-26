@@ -109,6 +109,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$title.ellipsisFill(this.title);
 
         this.$viewer.height(this.$content.height());
-        this.$viewer.width(this.$content.width());
+        /*this.$viewer.width(this.$content.width());*/
     }
 }

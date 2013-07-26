@@ -7,7 +7,7 @@ require.config({
         'plugins': 'js/jquery.plugins',
         'console': 'js/console',
         'pubsub': 'js/pubsub',
-        'openseadragon': 'js/openseadragon.min'
+        'jsviews': 'js/jsviews.min'
     },
     shim: {
         jquery: {
@@ -24,14 +24,23 @@ require.config({
             deps: ['jquery'],
             exports: 'pubsub'
         },
-        openseadragon: {
-            exports: 'OpenSeadragon'
+        jsviews: {
+            exports: 'jsviews'
         }
     }
 });
 
-require(['jquery', 'plugins', 'console', 'pubsub', 'openseadragon', 'app/BootStrapper', 'app/extensions/seadragon/App', 'app/extensions/seadragon/Provider'],
-    ($, plugins, console, pubsub, OpenSeadragon, bootStrapper, seadragon, seadragonProvider) => {
+require([
+    'jquery',
+    'plugins',
+    'console',
+    'pubsub',
+    'app/modules/SeadragonCenterPanel/js/openseadragon.min',
+    'jsviews',
+    'app/BootStrapper',
+    'app/extensions/seadragon/App',
+    'app/extensions/seadragon/Provider'],
+    ($, plugins, console, pubsub, osd, jsviews, bootStrapper, seadragon, seadragonProvider) => {
 
         var extensions = {};
 
