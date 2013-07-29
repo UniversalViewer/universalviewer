@@ -4,10 +4,12 @@ import utils = module("app/Utils");
 import baseApp = module("app/BaseApp");
 import shell = module("app/shared/Shell");
 import baseView = module("app/BaseView");
+import app = module("app/extensions/seadragon/App");
 
 export class TreeView extends baseView.BaseView {
 
     $tree: JQuery;
+    selectedSection: any;
 
     constructor($element: JQuery) {
         super($element, true, false);
@@ -17,32 +19,49 @@ export class TreeView extends baseView.BaseView {
         super.create();
 
         $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
-            //this.indexChanged(assetIndex);
+            this.selectAssetIndex(assetIndex);
         });
 
-        this.$tree = $('<div></div>');
+        this.$tree = $('<ul class="tree"></ul>');
         this.$element.append(this.$tree);
 
+        /*
         $.templates({
-            pageTemplate: '<ul>{^{tree/}}</ul>',
+            pageTemplate: '{^{for sections}} {^{tree/}} {{/for}}',
+            treeTemplate: '<li> {{if sections && sections.length}} {^{if expanded}} <div class="toggle expanded"></div> {{else}} <div class="toggle"></div> {{/if}} {{else}} <div class="spacer"></div> {{/if}} {^{if selected}} <a href="#" class="selected">{{>sectionType}}</a> {{else}} <a href="#">{{>sectionType}}</a> {{/if}} </li> {^{if expanded}} <li> <ul> {{for sections}} {^{tree/}} {{/for}} </ul> </li>{{/if}}'
+        });
+        */
+
+        $.templates({
+            pageTemplate: '{^{for sections}}\
+                               {^{tree/}}\
+                           {{/for}}',
             treeTemplate: '<li>\
-		                       {{if folders && folders.length }}\
-			                       <span class="toggle" >{^{:expanded ? "-" : "+"}}</span>\
-		                       {{else}}\
-			                       <span class="spacer">></span>\
-		                       {{/if}}\
-                               {{>name}}\
-	                       </li>\
-	                        {^{if expanded}}\
-                                <li>\
-                                    <ul>\
-				                        {{for folders}}\
-					                        {^{tree/}}\
-                                        {{/for}}\
-			                        </ul>\
-		                        </li>\
-	                        {{/if}}'
-            });
+                               {^{if sections && sections.length}}\
+                                   {^{if expanded}}\
+                                       <div class="toggle expanded"></div>\
+                                   {{else}}\
+                                       <div class="toggle"></div>\
+                                   {{/if}}\
+                               {{else}}\
+                                   <div class="spacer"></div>\
+                               {{/if}}\
+                               {^{if selected}}\
+                                   <a href="#" class="selected">{{>sectionType}}</a>\
+                               {{else}}\
+                                   <a href="#">{{>sectionType}}</a>\
+                               {{/if}}\
+                           </li>\
+                           {^{if expanded}}\
+                               <li>\
+                                   <ul>\
+                                       {^{for sections}}\
+                                           {^{tree/}}\
+                                       {{/for}}\
+                                   </ul>\
+                               </li>\
+                           {{/if}}'
+        });
 
         $.views.tags({
             tree: {
@@ -54,120 +73,73 @@ export class TreeView extends baseView.BaseView {
                 },
                 onAfterLink: function () {
                     var self = this;
+                    
                     self.contents("li").first()
                         .on("click", ".toggle", function () {
                             self.toggle();
-                        });
+                        }).on("click", "a", function (e) {
+                            e.preventDefault();
+                            $.publish(app.App.VIEW_SECTION_PATH, [self.data.path]);
+                        })
                 },
                 template: $.templates.treeTemplate
             }
         });
 
-        /* Hierarchy of named folders */
-        var rootFolder = {
-            name: "Categories", folders: [
+        this.$tree.link($.templates.pageTemplate, this.provider.assetSequence.rootSection);
+
+        /*
+        // test data
+
+        var rootSection = {
+            "title": "The biocrats",
+            "sectionType": "Monograph",
+            "sections": [
                 {
-                    name: "Drama", folders: [
-                    { name: "Courtroom" },
-                    { name: "Political" }
-                ]
+                    "sectionType": "CoverFrontOutside",
+                    "assets": [
+                        0
+                    ],
+                    "sections": [
+                        {
+                            "sectionType": "Nested Section",
+                            "assets": [
+                                2
+                            ]
+                        }
+                    ]
                 },
                 {
-                    name: "Classic", folders: [
-                    {
-                        name: "Musicals", folders: [
-                        { name: "Jazz" },
-                        { name: "R&B/Soul" }
+                    "sectionType": "CoverBackOutside",
+                    "selected": true,
+                    "assets": [
+                        1
                     ]
-                    }
-                ]
+                },
+                {
+                    "sectionType": "TitlePage",
+                    "assets": [
+                        7
+                    ]
+                },
+                {
+                    "sectionType": "TableOfContents",
+                    "assets": [
+                        9
+                    ]
                 }
             ]
         };
 
-        this.$tree.link($.templates.pageTemplate, rootFolder);
+        this.$tree.link($.templates.pageTemplate, rootSection);
+        */
     }
 
-    /*
-    create(): void {
-        super.create();
-
-        $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
-            this.indexChanged(assetIndex);
-        });
-
-        this.$assetSequenceElem = $('<ul class="tree"></ul>');
-        this.$element.append(this.$assetSequenceElem);
-
-        $.templates({
-            assetSequenceTmpl: '<li>\
-		                            {{if ~hasContent() link=true}}\
-			                            {{toggle:expanded}}\
-		                            {{/if}}\
-		                            {{if isSelected}} \
-		                                <a href="#" class="selected">{{>SectionType}}</a> \
-                                    {{else}} \
-                                        <a href="#">{{>SectionType}}</a> \
-                                    {{/if}}\
-	                            </li>\
-	                            {{if expanded link=true}}\
-		                            <li>\
-			                            <ul>{{for sections tmpl="assetSequenceTmpl" link=true/}}</ul>\
-		                            </li>\
-	                            {{/if}}'
-        });
-
-        $.views.helpers({
-            hasContent: function () {
-                var item = this.data;
-                return item.expanded || item.sections && item.sections.length;
-            }
-        });
-
-        $.views.converters({
-            toggle: function (value) {
-                if (value) {
-                    return '<div class="toggle expanded"></div>';
-                } else {
-                    return '<div class="toggle"></div>';
-                }
-            }
-        });
-
-        if (!this.provider.assetSequence.rootSection.sections) return;
-
-        var treeElement = $.link.assetSequenceTmpl(this.$assetSequenceElem, this.provider.assetSequence.rootSection.sections)
-            .on("click", ".toggle", function () {
-                // Toggle expanded property on data, then refresh rendering
-                var view = $.view(this).parent;
-                view.data.expanded = !view.data.expanded;
-                view.refresh();
-            })
-            .on("click", "a", function (e) {
-                e.preventDefault();
-                var view = $.view(this).data;
-                this._trigger("onSelect", null, view.path);
-            });
-
-        var view = $.view(treeElement);
-
-        this.treeView = view.views._1;
-
-        // get current section.
-        var section = this.app.getSectionByAssetIndex(this.app.currentAssetIndex);
-        this.selectPath(section.path);
-    
-    }
-    */
-
-    /*
-    indexChanged(index: number): void {
+    selectAssetIndex(index: number): void {
         var section = this.app.getSectionByAssetIndex(index);
         this.selectPath(section.path);
     }
-    */
 
-    /*
     getSection(parentSection, path) {
 
         if (path.length == 0) return parentSection;
@@ -180,32 +152,23 @@ export class TreeView extends baseView.BaseView {
 
         return this.getSection(section, path);
     }
-    */
 
-    /*
     selectPath(path: string): void {
 
-        // split the path into array
         var pathArr = path.split("/");
 
         if (pathArr.length >= 1) pathArr.shift();
 
-        // walk the data to select the matching tree node.
+        // reset the previous selected node.
+        if (this.selectedSection) $.observable(this.selectedSection).setProperty("selected", false);
 
         // should have an array that looks like this: [0, 1, 0]
         // (1st section in root, 2nd section in that, 1st section in that).
-
-        // reset the previous selected node.
-        if (this.selectedSection) this.selectedSection.isSelected = false;
-
+        // recursively walk tree to set selected node.
         this.selectedSection = this.getSection(this.provider.assetSequence.rootSection, pathArr);
 
-        this.selectedSection.isSelected = true;
-
-        if (this.treeView)
-            this.treeView.refresh();
+        $.observable(this.selectedSection).setProperty("selected", true);
     }
-    */
 
     resize(): void {
         super.resize();

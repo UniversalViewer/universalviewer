@@ -189,11 +189,27 @@ export class BaseApp {
         window.parent.document.location.replace(url + hash);
     }
 
-    getSectionByAssetIndex(index) {
+    getSectionByAssetIndex(index: number) {
 
         var asset = this.getAssetByIndex(index);
 
         return this.getAssetSection(asset);
+    }
+    
+    getSectionIndex(path: string): number {
+
+        for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
+            var asset = this.provider.assetSequence.assets[i];
+            for (var j = 0; j < asset.sections.length; j++) {
+                var section = asset.sections[j];
+                
+                if (section.path == path) {
+                    return i;
+                }
+            }
+        }
+
+        return null;
     }
 
     getAssetSection(asset) {

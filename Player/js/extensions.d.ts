@@ -19,6 +19,7 @@ interface JQuery {
     actualHeight(height: number);
     actualWidth(width: number);
     link: any;
+    render: any;
 }
 
 interface JQueryStatic {
@@ -27,6 +28,7 @@ interface JQueryStatic {
     observable: any;
     templates: any;
     views: any;
+    view: any;
 }
 
 declare function escape(s: string): any;

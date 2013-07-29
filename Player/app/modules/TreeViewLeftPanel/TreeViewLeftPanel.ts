@@ -12,6 +12,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     $tabsContent: JQuery;
     $treeView: JQuery;
     $thumbsView: JQuery;
+    treeView: tree.TreeView;
+    thumbsView: thumbs.ThumbsView;
 
     constructor($element: JQuery) {
         super($element);
@@ -55,11 +57,11 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     createTreeView(): void {       
-        new tree.TreeView(this.$treeView);
+        this.treeView = new tree.TreeView(this.$treeView);
     }
 
     createThumbsView(): void {
-        new thumbs.ThumbsView(this.$thumbsView);
+        this.thumbsView = new thumbs.ThumbsView(this.$thumbsView);
     }
 
     toggleComplete(): void {
@@ -78,6 +80,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$thumbsButton.removeClass('on');
         this.$treeView.show();
         this.$thumbsView.hide();
+
+        this.treeView.selectAssetIndex(this.app.currentAssetIndex);
     }
 
     openThumbsView(): void {

@@ -45,11 +45,6 @@
 
 /*#region tree */
 
-#app .leftPanel .treeView {
-    color: #fff;
-}
-
-/*
 #app .leftPanel .treeView{
     overflow: auto;
     margin: 0 10px 0 10px;
@@ -66,6 +61,13 @@
 	background-image: url(../img/plus.png);
 }
 
+#app .leftPanel .treeView .spacer {
+	margin-right: 5px;
+	display: inline-block;
+	height: 10px;
+	width: 10px;
+}
+
 #app .leftPanel .treeView .toggle.expanded {
 	background-image: url(../img/minus.png);
 }
@@ -77,18 +79,18 @@
 }
    
 #app .leftPanel .treeView ul.tree ul {
-    margin-left: 16px;
+    margin-left: 15px;
 }
 
 #app .leftPanel .treeView ul.tree li {
     margin: 0;
-    padding: 0 0 4px 4px;
+    padding: 2px 0 2px 0;
 }
 
 #app .leftPanel .treeView ul a.selected {
     color: #FFB81D;
 }
-*/
+
 /*#endregion */
 
 /*#region thumbs */
@@ -147,61 +149,3 @@
 
 /*#endregion */
 
-.folderView {
-	margin-top: 24px;
-}
-
-.folderView li li {
-	margin-left: 30px;
-}
-
-.toggle {
-	cursor: pointer;
-	vertical-align: middle;
-	margin-right: 7px;
-	display: inline-block;
-	border: 1px solid #555;
-	text-align: center;
-	height: 12px;
-	width: 12px;
-	line-height: 11px;
-	background-color: #f8f8f8;
-	color: Blue;
-}
-
-.remove {
-	cursor: pointer;
-	vertical-align: middle;
-	margin-right: 7px;
-}
-
-.spacer {
-	margin-right: 7px;
-	display: inline-block;
-	width: 14px;
-}
-
-.folderView ul {
-	padding: 0;
-	margin: 0;
-}
-
-.folderView li {
-	margin-left: 8px;
-	list-style-type: none;
-	padding: 2px;
-}
-
-.add {
-	cursor: pointer;
-	vertical-align: middle;
-	margin-right: 7px;
-	display: inline-block;
-	border: 1px solid #555;
-	text-align: center;
-	height: 12px;
-	width: auto;
-	line-height: 11px;
-	background-color: #f8f8f8;
-	color: Blue;
-}

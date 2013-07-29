@@ -18,6 +18,7 @@ export class App extends baseApp.BaseApp {
     // events
     static MODE_CHANGED: string = 'onModeChanged';
     static OPEN_DZI: string = 'openDzi';
+    static VIEW_SECTION_PATH: string = 'onViewSectionPath';
 
     // modes
     static PAGE_MODE = "pageMode";
@@ -63,6 +64,10 @@ export class App extends baseApp.BaseApp {
         
         $.subscribe(header.PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
+        });
+
+        $.subscribe(App.VIEW_SECTION_PATH, (e, path: string) => {
+            this.viewSection(path);
         });
 
         new header.PagingHeaderPanel(shell.Shell.$headerPanel);
@@ -119,6 +124,15 @@ export class App extends baseApp.BaseApp {
                 this.setAddress(this.provider.assetSequenceIndex.toString(), assetIndex.toString());
             }
         });
+    }
+
+    viewSection(path: string): void {
+
+        var index = this.getSectionIndex(path);
+
+        var section = this.getSectionByAssetIndex(index);
+
+        this.viewPage(index);
     }
 
     viewLabel(label: string): void {
