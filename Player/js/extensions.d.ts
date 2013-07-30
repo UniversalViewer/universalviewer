@@ -1,6 +1,6 @@
 
 interface String {
-    format(template: string, ...args: string[]): string;
+    format(template: string, ...args: any[]): string;
     startsWith(text: string): bool;
     ltrim(): string;
     rtrim(): string;

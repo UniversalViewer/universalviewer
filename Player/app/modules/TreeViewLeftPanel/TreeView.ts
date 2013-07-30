@@ -11,6 +11,8 @@ export class TreeView extends baseView.BaseView {
     $tree: JQuery;
     selectedSection: any;
 
+    static VIEW_SECTION_PATH: string = 'treeView.onViewSectionPath';
+
     constructor($element: JQuery) {
         super($element, true, false);
     }
@@ -79,7 +81,7 @@ export class TreeView extends baseView.BaseView {
                             self.toggle();
                         }).on("click", "a", function (e) {
                             e.preventDefault();
-                            $.publish(app.App.VIEW_SECTION_PATH, [self.data.path]);
+                            $.publish(TreeView.VIEW_SECTION_PATH, [self.data.path]);
                         })
                 },
                 template: $.templates.treeTemplate

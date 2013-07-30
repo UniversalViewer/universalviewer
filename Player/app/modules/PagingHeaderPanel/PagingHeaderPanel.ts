@@ -107,7 +107,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         }
 
         // ui event handlers.
-        this.$firstButton.click(function (e) {
+        this.$firstButton.on('click', (e) => {
             e.preventDefault();
 
             $.publish(PagingHeaderPanel.FIRST);
@@ -164,11 +164,11 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             mode = "image";
         }
 
-        this.$firstButton.prop('title', this.provider.config.content.header.first + " " + mode);
-        this.$prevButton.prop('title', this.provider.config.content.header.previous + " " + mode);
-        this.$nextButton.prop('title', this.provider.config.content.header.next + " " + mode);
-        this.$lastButton.prop('title', this.provider.config.content.header.last + " " + mode);
-        this.$searchButton.prop('title', this.provider.config.content.header.go);
+        this.$firstButton.prop('title', this.content.header.first + " " + mode);
+        this.$prevButton.prop('title', this.content.header.previous + " " + mode);
+        this.$nextButton.prop('title', this.content.header.next + " " + mode);
+        this.$lastButton.prop('title', this.content.header.last + " " + mode);
+        this.$searchButton.prop('title', this.content.header.go);
     }
 
     setTotal(): void {

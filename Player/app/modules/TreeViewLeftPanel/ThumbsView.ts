@@ -1,19 +1,196 @@
 /// <reference path="../../../js/jquery.d.ts" />
 import utils = module("app/Utils");
 import baseApp = module("app/BaseApp");
+import app = module("app/extensions/seadragon/App");
 import shell = module("app/shared/Shell");
 import baseView = module("app/BaseView");
+import thumb = module("app/modules/TreeViewLeftPanel/Thumb");
 
 export class ThumbsView extends baseView.BaseView {
 
+    $thumbs: JQuery;
+    $selectedThumb: JQuery;
+
+    lastThumbClickedIndex: number;
+
+    static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
+
+    thumbs: Array<thumb.Thumb>;
+
     constructor($element: JQuery) {
-        super($element, true, false);
+        super($element, true, true);
     }
 
     create(): void {
         super.create();
 
-        this.$element.append('thumbsview');
+        $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
+            this.selectIndex(assetIndex);
+        });
+
+        $.subscribe(baseApp.BaseApp.MODE_CHANGED, (e, mode) => {
+            this.setLabel();
+        });
+
+        this.$thumbs = utils.Utils.createDiv('thumbs');
+        this.$element.append(this.$thumbs);
+
+        $.templates({
+            thumbsTemplate: '<div class="thumb" data-src="{{>url}}" data-visible="{{>visible}}">\
+                                <div class="wrap" style="height:{{>height}}px"></div>\
+                                <span class="index">{{:#index + 1}}</span>\
+                                <span class="label">{{>label}}&nbsp;</span>\
+                            </div>\
+                            {{if ~isEven(#index + 1)}} \
+                                <div class="separator"></div> \
+                            {{/if}}'
+        });
+        
+        $.views.helpers({
+            isEven: function (num) {
+                return (num % 2 == 0) ? true : false;
+            }
+        });
+
+        this.$element.on('scroll', () => {
+            this.scrollStop();
+        }, 1000);
+
+        this.createThumbs();
+    }
+
+    scrollStop(): void {
+
+        var scrollPos = 1 / ((this.$thumbs.height() - this.$element.height()) / this.$element.scrollTop());
+
+        if (scrollPos > 1) scrollPos = 1;
+
+        var thumbRangeMid = Math.floor((this.thumbs.length - 1) * scrollPos);
+
+        this.loadThumbs(thumbRangeMid);
+    }
+
+    loadThumbs(index: number): void {
+
+        var that = this;
+
+        var thumbRangeMid = index;
+        var thumbLoadRange = this.options.thumbsLoadRange;
+        var thumbs = this.thumbs;
+
+        var thumbRange = {
+            start: (thumbRangeMid > thumbLoadRange) ? thumbRangeMid - thumbLoadRange : 0,
+            end: (thumbRangeMid < (thumbs.length - 1) - thumbLoadRange) ? thumbRangeMid + thumbLoadRange : thumbs.length - 1
+        };
+
+        for (var i = thumbRange.start; i <= thumbRange.end; i++) {
+            var thumbElem = $(this.$thumbs.find('.thumb')[i]);
+            var imgCont = thumbElem.find('.wrap');
+
+            // if no img has been added yet
+            if (!imgCont.hasClass('loading') && !imgCont.hasClass('loaded')) {
+                var visible = thumbElem.attr('data-visible');
+
+                if (visible !== "false") {
+                    imgCont.addClass('loading');
+                    var src = thumbElem.attr('data-src');
+                    var img = $('<img src="' + src + '" />');
+                    // fade in on load.
+                    $(img).hide().load(function () {
+                        $(this).fadeIn(that.options.thumbsImageFadeInDuration, function () {
+                            $(this).parent().swapClass('loading', 'loaded');
+                        });
+                    });
+                    imgCont.append(img);
+                } else {
+                    imgCont.addClass('hidden');
+                }
+            }
+        }
+    }
+
+    createThumbs(): void {
+
+        var that = this;
+        this.thumbs = [];
+
+        for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
+            var asset = this.provider.assetSequence.assets[i];
+
+            var uri = this.provider.getThumbUri(asset);
+            var section = this.app.getAssetSection(asset);
+
+            var heightRatio = asset.height / asset.width;
+            var height = 90 * heightRatio;
+
+            // todo: decide how authstatus is defined in package
+            //var visible = section.AuthStatus.toLowerCase() === "allowed";
+            var visible = true;
+
+            if (asset.orderLabel.trim() === "-") {
+                asset.orderLabel = "";
+            }
+
+            this.thumbs.push(new thumb.Thumb(i, uri, asset.orderLabel, height, visible));
+        }
+
+        this.$thumbs.link($.templates.thumbsTemplate, this.thumbs);
+
+        this.$thumbs.delegate(".thumb", "click", function (e) {
+            e.preventDefault();
+
+            var data = $.view(this).data;
+
+            that.lastThumbClickedIndex = data.index;
+
+            $.publish(ThumbsView.THUMB_SELECTED, [data.index]);
+        });
+
+        this.selectIndex(this.app.currentAssetIndex);
+
+        this.setLabel();
+    }
+
+    reload(): void {
+        this.createThumbs();
+    }
+
+    opened(): void {
+        setTimeout(() => {
+            this.selectIndex(this.app.currentAssetIndex);
+        }, 1);
+    }
+
+    setLabel(): void {
+        if((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
+            $(this.$thumbs).find('span.index').hide();
+            $(this.$thumbs).find('span.label').show();
+        } else {
+            $(this.$thumbs).find('span.index').show();
+            $(this.$thumbs).find('span.label').hide();
+        }
+    }
+
+    selectIndex(index: number): void {
+
+        if (index === null) return;
+
+        if (this.$selectedThumb) {
+            this.$selectedThumb.removeClass('selected');
+        }
+        
+        this.$selectedThumb = $(this.$thumbs.find('.thumb')[index]);
+        this.$selectedThumb.addClass('selected');
+
+        // scroll to thumb if the index change didn't originate
+        // within the thumbs view.
+        if (this.lastThumbClickedIndex != index) {
+            var scrollTop = this.$element.scrollTop() + this.$selectedThumb.position().top;
+            this.$element.scrollTop(scrollTop);
+        }
+
+        // make sure visible images are loaded.
+        this.loadThumbs(index);
     }
 
     resize(): void {

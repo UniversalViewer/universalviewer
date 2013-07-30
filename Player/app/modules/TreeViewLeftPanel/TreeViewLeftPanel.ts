@@ -94,5 +94,6 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     resize(): void {
         super.resize();
 
+        this.$tabsContent.actualHeight(this.$main.height() - this.$tabs.outerHeight());
     }
 }

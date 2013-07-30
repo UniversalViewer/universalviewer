@@ -15,7 +15,8 @@ export class BaseProvider {
         leftPanelCollapsedWidth: 30,
         leftPanelExpandedWidth: 255,
         rightPanelCollapsedWidth: 30,
-        rightPanelExpandedWidth: 255
+        rightPanelExpandedWidth: 255,
+        mediaUri: 'http://wellcomelibrary.org'
     };
 
     constructor(config: any, pkg: any) {

@@ -7,6 +7,8 @@ import p = module("app/extensions/seadragon/Provider");
 import shell = module("app/shared/Shell");
 import header = module("app/modules/PagingHeaderPanel/PagingHeaderPanel");
 import left = module("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
+import thumbsView = module("app/modules/TreeViewLeftPanel/ThumbsView");
+import treeView = module("app/modules/TreeViewLeftPanel/TreeView");
 import center = module("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");
 import right = module("app/modules/MoreInfoRightPanel/MoreInfoRightPanel");
 import footer = module("app/modules/ExtendedFooterPanel/ExtendedFooterPanel");
@@ -18,7 +20,6 @@ export class App extends baseApp.BaseApp {
     // events
     static MODE_CHANGED: string = 'onModeChanged';
     static OPEN_DZI: string = 'openDzi';
-    static VIEW_SECTION_PATH: string = 'onViewSectionPath';
 
     // modes
     static PAGE_MODE = "pageMode";
@@ -66,8 +67,12 @@ export class App extends baseApp.BaseApp {
             this.viewPage(index);
         });
 
-        $.subscribe(App.VIEW_SECTION_PATH, (e, path: string) => {
+        $.subscribe(treeView.TreeView.VIEW_SECTION_PATH, (e, path: string) => {
             this.viewSection(path);
+        });
+
+        $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
+            this.viewPage(index);
         });
 
         new header.PagingHeaderPanel(shell.Shell.$headerPanel);
