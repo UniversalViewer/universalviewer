@@ -11,7 +11,8 @@ export class Provider extends baseProvider.BaseProvider {
             // override or extend BaseProvider options.
             thumbsUriTemplate: '{0}/thumbs/{1}/{2}/{3}.jpg',
             thumbsLoadRange: 15,
-            thumbsImageFadeInDuration: 300
+            thumbsImageFadeInDuration: 300,
+            leftPanelOpen: true
         }, config.options);
     }
 

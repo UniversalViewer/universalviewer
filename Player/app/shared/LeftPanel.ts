@@ -15,6 +15,10 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
         super.create();
 
         this.$element.width(this.options.leftPanelCollapsedWidth);
+
+        if (this.options.leftPanelOpen) {
+            this.toggle(true);
+        }
     }
 
     getTargetWidth(): number {

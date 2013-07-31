@@ -86,7 +86,8 @@ export class Utils{
 
     static getHashValues(delimiter: string, doc?: Document): string[]{
         if (!doc) doc = window.document;
-        return doc.location.hash.replace('#', '').split(delimiter);
+        var trailing = new RegExp(delimiter + "$");
+        return doc.location.hash.replace(/^#/, "").replace(trailing, "").split(delimiter);
     }
 
     static getParameterByName(name: string): string {

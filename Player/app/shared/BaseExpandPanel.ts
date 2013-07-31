@@ -74,7 +74,7 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.$main.hide();
     }
 
-    toggle(): void {
+    toggle(immediate?: bool): void {
 
         // if collapsing, hide contents immediately.
         if (this.isExpanded) {
@@ -82,13 +82,15 @@ export class BaseExpandPanel extends baseView.BaseView {
             this.$main.hide();
             this.$closed.show();
         }
+        
+        var duration = immediate ? 1 : this.options.panelAnimationDuration;
 
         this.$element.stop().animate(
             {
                 width: this.getTargetWidth(),
                 left: this.getTargetLeft()
             },
-            this.options.panelAnimationDuration, () => {
+            duration, () => {
 
                 this.isExpanded = !this.isExpanded;
 
