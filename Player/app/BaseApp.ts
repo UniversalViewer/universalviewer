@@ -129,7 +129,7 @@ export class BaseApp {
     }
 
     // non-destructive address update.
-    updateAddress(...args: string[]): void {
+    updateAddress(...args: any[]): void {
 
         if (!this.isDeepLinkingEnabled()) return;
         
@@ -160,7 +160,7 @@ export class BaseApp {
     }
 
     // destructive address update.
-    setAddress(...args: string[]): void {
+    setAddress(...args: any[]): void {
 
         if (!this.isDeepLinkingEnabled()) return;
 
@@ -187,6 +187,10 @@ export class BaseApp {
         }
 
         window.parent.document.location.replace(url + hash);
+    }
+
+    getHashValues(): string[] {
+        return utils.Utils.getHashValues('/', parent.document);
     }
 
     getSectionByAssetIndex(index: number) {

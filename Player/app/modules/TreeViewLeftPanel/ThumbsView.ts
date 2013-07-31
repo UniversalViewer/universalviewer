@@ -52,6 +52,7 @@ export class ThumbsView extends baseView.BaseView {
             }
         });
 
+        // use unevent to detect scroll stop.
         this.$element.on('scroll', () => {
             this.scrollStop();
         }, 1000);
@@ -151,14 +152,18 @@ export class ThumbsView extends baseView.BaseView {
         this.setLabel();
     }
 
-    reload(): void {
-        this.createThumbs();
-    }
-
-    opened(): void {
+    show(): void {
+        this.$element.show();
+        
         setTimeout(() => {
             this.selectIndex(this.app.currentAssetIndex);
         }, 1);
+
+        this.resize();
+    }
+
+    hide(): void {
+        this.$element.hide();
     }
 
     setLabel(): void {
@@ -172,8 +177,6 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     selectIndex(index: number): void {
-
-        if (index === null) return;
 
         if (this.$selectedThumb) {
             this.$selectedThumb.removeClass('selected');

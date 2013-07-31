@@ -15,6 +15,12 @@ import footer = module("app/modules/ExtendedFooterPanel/ExtendedFooterPanel");
 
 export class App extends baseApp.BaseApp {
 
+    headerPanel: header.PagingHeaderPanel;
+    leftPanel: left.TreeViewLeftPanel;
+    centerPanel: center.SeadragonCenterPanel;
+    rightPanel: right.MoreInfoRightPanel;
+    footerPanel: footer.ExtendedFooterPanel;
+
     static mode: string;
 
     // events
@@ -75,11 +81,15 @@ export class App extends baseApp.BaseApp {
             this.viewPage(index);
         });
 
-        new header.PagingHeaderPanel(shell.Shell.$headerPanel);
-        new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
-        new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
-        new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
-        new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);
+        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
+            this.updateAddress(this.provider.assetSequenceIndex, this.currentAssetIndex, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
+        });
+
+        this.headerPanel = new header.PagingHeaderPanel(shell.Shell.$headerPanel);
+        this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
+        this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
+        this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+        this.footerPanel = new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);
 
         this.getUrlParams();
 
@@ -92,7 +102,7 @@ export class App extends baseApp.BaseApp {
 
         if (this.isDeepLinkingEnabled()) {
 
-            var hash = utils.Utils.getHashValues('/', parent.document);
+            var hash = this.getHashValues();
 
             // has index been specified?
             if (hash.length > 1) {
@@ -114,7 +124,7 @@ export class App extends baseApp.BaseApp {
             }
         }
     }
-      
+
     viewPage(assetIndex: number, preserveAddress?: bool): void {
         this.viewAsset(assetIndex, () => {
 

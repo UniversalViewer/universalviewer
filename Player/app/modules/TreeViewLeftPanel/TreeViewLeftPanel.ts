@@ -69,26 +69,32 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         // if this is the first opening, create tree and thumbs views.
         if (this.isUnopened) {
-            this.createTreeView();
-            this.createThumbsView();
             this.openTreeView();
         }
     }
 
     openTreeView(): void {
+        if (!this.treeView) {
+            this.createTreeView();
+        }
+        
         this.$treeButton.addClass('on');
         this.$thumbsButton.removeClass('on');
-        this.$treeView.show();
-        this.$thumbsView.hide();
 
-        this.treeView.selectAssetIndex(this.app.currentAssetIndex);
+        this.treeView.show();
+        if (this.thumbsView) this.thumbsView.hide();
     }
 
     openThumbsView(): void {
+        if (!this.thumbsView) {
+            this.createThumbsView();
+        }
+
         this.$treeButton.removeClass('on');
         this.$thumbsButton.addClass('on');
-        this.$treeView.hide();
-        this.$thumbsView.show();
+
+        if (this.treeView) this.treeView.hide();
+        this.thumbsView.show();
     }
 
     resize(): void {

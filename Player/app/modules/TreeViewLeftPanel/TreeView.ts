@@ -21,7 +21,7 @@ export class TreeView extends baseView.BaseView {
         super.create();
 
         $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
-            this.selectAssetIndex(assetIndex);
+            this.selectIndex(assetIndex);
         });
 
         this.$tree = $('<ul class="tree"></ul>');
@@ -90,6 +90,8 @@ export class TreeView extends baseView.BaseView {
 
         this.$tree.link($.templates.pageTemplate, this.provider.assetSequence.rootSection);
 
+        this.resize();
+
         /*
         // test data
 
@@ -137,9 +139,21 @@ export class TreeView extends baseView.BaseView {
         */
     }
 
-    selectAssetIndex(index: number): void {
+    selectIndex(index: number): void {
         var section = this.app.getSectionByAssetIndex(index);
         this.selectPath(section.path);
+    }
+
+    show(): void {
+        this.$element.show();
+
+        setTimeout(() => {
+            this.selectIndex(this.app.currentAssetIndex);
+        }, 1);
+    }
+
+    hide(): void {
+        this.$element.hide();
     }
 
     getSection(parentSection, path) {

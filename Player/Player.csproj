@@ -96,7 +96,6 @@
     <Content Include="app\modules\TreeViewLeftPanel\img\contents_v.png" />
     <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\TreeView.ts" />
     <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\ThumbsView.ts" />
-    <Content Include="app\modules\TreeViewLeftPanel\js\thumbsView.js" />
     <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\Thumb.ts" />
     <Content Include="app\modules\TreeViewLeftPanel\Thumb.js">
       <DependentUpon>Thumb.ts</DependentUpon>
