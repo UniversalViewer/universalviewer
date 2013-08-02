@@ -33,9 +33,34 @@
     <Content Include="app\BootStrapper.min.js">
       <DependentUpon>BootStrapper.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="app\modules\Dialogues\EmbedDialogue.ts" />
+    <TypeScriptCompile Include="app\extensions\seadragon\EmbedDialogue.ts" />
+    <Content Include="app\extensions\seadragon\EmbedDialogue.js">
+      <DependentUpon>EmbedDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\extensions\seadragon\EmbedDialogue.min.js">
+      <DependentUpon>EmbedDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\Dialogues\css\styles.css" />
+    <Content Include="app\modules\Dialogues\EmbedDialogue.js">
+      <DependentUpon>EmbedDialogue.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="app\modules\Dialogues\HelpDialogue.ts" />
+    <Content Include="app\modules\Dialogues\EmbedDialogue.min.js">
+      <DependentUpon>EmbedDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\Dialogues\HelpDialogue.js">
+      <DependentUpon>HelpDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\Dialogues\HelpDialogue.min.js">
+      <DependentUpon>HelpDialogue.ts</DependentUpon>
+    </Content>
     <Content Include="app\modules\ExtendedFooterPanel\css\styles.css" />
     <TypeScriptCompile Include="app\modules\ExtendedFooterPanel\ExtendedFooterPanel.ts" />
     <Content Include="app\modules\ExtendedFooterPanel\ExtendedFooterPanel.js">
+      <DependentUpon>ExtendedFooterPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\ExtendedFooterPanel\ExtendedFooterPanel.min.js">
       <DependentUpon>ExtendedFooterPanel.ts</DependentUpon>
     </Content>
     <Content Include="app\modules\MoreInfoRightPanel\css\styles.css" />
@@ -158,13 +183,15 @@
     <Content Include="app\shared\FooterPanel.js">
       <DependentUpon>FooterPanel.ts</DependentUpon>
     </Content>
+    <Content Include="app\shared\FooterPanel.min.js">
+      <DependentUpon>FooterPanel.ts</DependentUpon>
+    </Content>
     <Content Include="app\shared\GenericDialogue.js">
       <DependentUpon>GenericDialogue.ts</DependentUpon>
     </Content>
     <Content Include="app\shared\GenericDialogue.min.js">
       <DependentUpon>GenericDialogue.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\shared\HelpDialogue.ts" />
     <TypeScriptCompile Include="app\shared\HeaderPanel.ts" />
     <Content Include="app\shared\HeaderPanel.js">
       <DependentUpon>HeaderPanel.ts</DependentUpon>
@@ -172,19 +199,13 @@
     <Content Include="app\shared\HeaderPanel.min.js">
       <DependentUpon>HeaderPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\HelpDialogue.js">
-      <DependentUpon>HelpDialogue.ts</DependentUpon>
-    </Content>
-    <Content Include="app\shared\HelpDialogue.min.js">
-      <DependentUpon>HelpDialogue.ts</DependentUpon>
-    </Content>
     <Content Include="app\shared\img\arrows_left.png" />
     <Content Include="app\shared\img\arrows_right.png" />
     <Content Include="app\shared\img\close.png" />
     <Content Include="app\shared\img\close_message_box.png" />
     <Content Include="app\shared\img\dialogue_arrow.png" />
     <Content Include="app\modules\ExtendedFooterPanel\img\download.png" />
-    <Content Include="app\shared\img\embed.png" />
+    <Content Include="app\modules\ExtendedFooterPanel\img\embed.png" />
     <Content Include="app\shared\img\fullscreen.png" />
     <Content Include="app\modules\TreeViewLeftPanel\img\hidden_thumb.png" />
     <Content Include="app\shared\img\logo.png" />
@@ -219,6 +240,7 @@
     <Content Include="app\modules\SeadragonCenterPanel\js\openseadragon.min.js" />
     <TypeScriptCompile Include="js\extensions.d.ts" />
     <Content Include="app\shared\img\ajax-loader.gif" />
+    <Content Include="embedtest.html" />
     <Content Include="js\jquery.plugins.js" />
     <Content Include="js\jsviews.min.js" />
     <Content Include="js\utils.js" />
@@ -229,7 +251,7 @@
     <Content Include="app\shared\Shell.min.js">
       <DependentUpon>Shell.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\css\app.css" />
+    <Content Include="app\shared\css\styles.css" />
     <Content Include="index.html" />
     <Content Include="js\config.js" />
     <Content Include="js\console.js" />
@@ -284,9 +306,6 @@
     <Content Include="app\Panel.js.map">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\HelpDialogue.js.map">
-      <DependentUpon>HelpDialogue.ts</DependentUpon>
-    </Content>
     <Content Include="app\modules\PagingHeaderPanel\PagingHeaderPanel.js.map">
       <DependentUpon>PagingHeaderPanel.ts</DependentUpon>
     </Content>
@@ -316,6 +335,21 @@
     </Content>
     <Content Include="app\modules\TreeViewLeftPanel\Thumb.js.map">
       <DependentUpon>Thumb.ts</DependentUpon>
+    </Content>
+    <Content Include="app\shared\FooterPanel.js.map">
+      <DependentUpon>FooterPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\ExtendedFooterPanel\ExtendedFooterPanel.js.map">
+      <DependentUpon>ExtendedFooterPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\Dialogues\HelpDialogue.js.map">
+      <DependentUpon>HelpDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\Dialogues\EmbedDialogue.js.map">
+      <DependentUpon>EmbedDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\extensions\seadragon\EmbedDialogue.js.map">
+      <DependentUpon>EmbedDialogue.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -74,7 +74,7 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.$main.hide();
     }
 
-    toggle(immediate?: bool): void {
+    toggle(): void {
 
         // if collapsing, hide contents immediately.
         if (this.isExpanded) {
@@ -82,31 +82,44 @@ export class BaseExpandPanel extends baseView.BaseView {
             this.$main.hide();
             this.$closed.show();
         }
-        
-        var duration = immediate ? 1 : this.options.panelAnimationDuration;
+
+        var targetWidth = this.getTargetWidth();
+        var targetLeft = this.getTargetLeft();
+
+        /*
+        if (immediate) {
+            this.$element.width(targetWidth);
+            this.$element.css('left', targetLeft);
+            this.toggled();
+            return;
+        }
+        */
 
         this.$element.stop().animate(
-            {
-                width: this.getTargetWidth(),
-                left: this.getTargetLeft()
-            },
-            duration, () => {
+        {
+            width: targetWidth,
+            left: targetLeft
+        },
+        this.options.panelAnimationDuration, () => {
+            this.toggled();               
+        });
+    }
 
-                this.isExpanded = !this.isExpanded;
+    toggled(): void {
+        this.isExpanded = !this.isExpanded;
 
-                // if expanded show content when animation finished.
-                if (this.isExpanded) {
-                    this.$closed.hide();
-                    this.$top.show();
-                    this.$main.show();
-                }
-                
-                this.toggleComplete();
+        // if expanded show content when animation finished.
+        if (this.isExpanded) {
+            this.$closed.hide();
+            this.$top.show();
+            this.$main.show();
+        }
+        
+        this.toggleComplete();
 
-                this.isUnopened = false;
+        this.isUnopened = false;
 
-                $.publish(baseApp.BaseApp.RESIZE);
-            });
+        $.publish(baseApp.BaseApp.RESIZE);
     }
 
     getTargetWidth(): number{

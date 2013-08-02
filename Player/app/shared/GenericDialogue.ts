@@ -10,6 +10,9 @@ export class GenericDialogue extends dialogue.Dialogue {
     $message: JQuery;
     $acceptButton: JQuery;
 
+    static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
+    static HIDE_GENERIC_DIALOGUE: string = 'onHideGenericDialogue';
+
     constructor($element: JQuery) {
         super($element);
     }
@@ -17,22 +20,11 @@ export class GenericDialogue extends dialogue.Dialogue {
     create(): void {
         super.create();
 
-        $.subscribe(baseApp.BaseApp.SHOW_GENERIC_DIALOGUE, (e, params) => {
-            
-            this.open();
-
-            if (params.acceptCallback) {
-                this.acceptCallback = params.acceptCallback;
-            }
-
-            if (params.allowClose === false) {
-                this.disableClose();
-            }
-
-            this.showMessage(params.message, params.buttonText);
+        $.subscribe(GenericDialogue.SHOW_GENERIC_DIALOGUE, (e, params) => {          
+            this.showMessage(params);
         });
 
-        $.subscribe(baseApp.BaseApp.HIDE_GENERIC_DIALOGUE, (e) => {
+        $.subscribe(GenericDialogue.HIDE_GENERIC_DIALOGUE, (e) => {
             this.close();
         });
 
@@ -59,15 +51,25 @@ export class GenericDialogue extends dialogue.Dialogue {
         if (this.acceptCallback) this.acceptCallback();
     }
 
-    showMessage(message: string, buttonText: string): void {
+    showMessage(params): void {
 
-        this.$message.html(message);
+        this.$message.html(params.message);
 
-        if (buttonText) {
-            this.$acceptButton.text(buttonText);
+        if (params.buttonText) {
+            this.$acceptButton.text(params.buttonText);
         } else {
             this.$acceptButton.text(this.content.genericDialogue.ok);
         }
+
+        if (params.acceptCallback) {
+            this.acceptCallback = params.acceptCallback;
+        }
+
+        if (params.allowClose === false) {
+            this.disableClose();
+        }
+
+        this.open();
     }
 
     resize(): void {

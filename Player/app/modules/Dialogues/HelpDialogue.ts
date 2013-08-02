@@ -1,4 +1,5 @@
 import baseApp = module("app/BaseApp");
+import app = module("app/extensions/seadragon/App");
 import shell = module("app/shared/Shell");
 import utils = module("app/Utils");
 import dialogue = module("app/shared/Dialogue");
@@ -9,6 +10,9 @@ export class HelpDialogue extends dialogue.Dialogue {
     $scroll: JQuery;
     $message: JQuery;
 
+    static SHOW_HELP_DIALOGUE: string = 'onShowHelpDialogue';
+    static HIDE_HELP_DIALOGUE: string = 'onHideHelpDialogue';
+
     constructor($element: JQuery) {
         super($element);
     }
@@ -16,11 +20,11 @@ export class HelpDialogue extends dialogue.Dialogue {
     create(): void {
         super.create();
 
-        $.subscribe(baseApp.BaseApp.SHOW_HELP_DIALOGUE, (e, params) => {
+        $.subscribe(HelpDialogue.SHOW_HELP_DIALOGUE, (e, params) => {
             this.open();
         });
 
-        $.subscribe(baseApp.BaseApp.HIDE_HELP_DIALOGUE, (e) => {
+        $.subscribe(HelpDialogue.HIDE_HELP_DIALOGUE, (e) => {
             this.close();
         });
 

@@ -3,7 +3,6 @@ import baseApp = module("app/BaseApp");
 import utils = module("app/Utils");
 import baseView = module("app/BaseView");
 import genericDialogue = module("app/shared/GenericDialogue");
-import helpDialogue = module("app/shared/HelpDialogue");
 
 export class Shell extends baseView.BaseView {
     static $element: JQuery;
@@ -13,12 +12,11 @@ export class Shell extends baseView.BaseView {
     static $leftPanel: JQuery;
     static $rightPanel: JQuery;
     static $footerPanel: JQuery;
-    static $overlayMask: JQuery;
+    static $overlays: JQuery;
     static $genericDialogue: JQuery;
-    static $helpDialogue: JQuery;
 
-    static SHOW_OVERLAY_MASK: string = 'onShowOverlayMask';
-    static HIDE_OVERLAY_MASK: string = 'onHideOverlayMask';
+    static SHOW_OVERLAY: string = 'onShowOverlay';
+    static HIDE_OVERLAY: string = 'onHideOverlay';
 
     constructor($element: JQuery) {
         Shell.$element = $element;
@@ -29,12 +27,12 @@ export class Shell extends baseView.BaseView {
         super.create();
 
         // events.
-        $.subscribe(Shell.SHOW_OVERLAY_MASK, () => {
-            Shell.$overlayMask.show();
+        $.subscribe(Shell.SHOW_OVERLAY, () => {
+            Shell.$overlays.show();
         });
 
-        $.subscribe(Shell.HIDE_OVERLAY_MASK, () => {
-            Shell.$overlayMask.hide();
+        $.subscribe(Shell.HIDE_OVERLAY, () => {
+            Shell.$overlays.hide();
         });
 
         Shell.$headerPanel = utils.Utils.createDiv('headerPanel');
@@ -55,31 +53,29 @@ export class Shell extends baseView.BaseView {
         Shell.$footerPanel = utils.Utils.createDiv('footerPanel');
         Shell.$element.append(Shell.$footerPanel);
 
-        Shell.$overlayMask = utils.Utils.createDiv('overlayMask');
-        this.$element.append(Shell.$overlayMask);
+        Shell.$overlays = utils.Utils.createDiv('overlays');
+        this.$element.append(Shell.$overlays);
 
         Shell.$genericDialogue = utils.Utils.createDiv('overlay genericDialogue');
-        this.$element.append(Shell.$genericDialogue);
+        Shell.$overlays.append(Shell.$genericDialogue);
 
-        Shell.$helpDialogue = utils.Utils.createDiv('overlay help');
-        this.$element.append(Shell.$helpDialogue);
-
-        Shell.$overlayMask.on('click', (e) => {
+        Shell.$overlays.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(baseApp.BaseApp.CLOSE_ACTIVE_DIALOGUE);
+            if ($(e.target).hasClass('overlays')) {
+                $.publish(baseApp.BaseApp.CLOSE_ACTIVE_DIALOGUE);
+            }
         });
 
         // create shared views.
         new genericDialogue.GenericDialogue(Shell.$genericDialogue);
-        new helpDialogue.HelpDialogue(Shell.$helpDialogue);
     }
     
     resize(): void{
         super.resize();
 
-        Shell.$overlayMask.width(this.app.width());
-        Shell.$overlayMask.height(this.app.height());
+        Shell.$overlays.width(this.app.width());
+        Shell.$overlays.height(this.app.height());
 
         var mainHeight = this.$element.height() - Shell.$headerPanel.height() -Shell.$footerPanel.height();
         Shell.$mainPanel.actualHeight(mainHeight);

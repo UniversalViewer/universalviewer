@@ -4,6 +4,7 @@ import baseApp = module("app/BaseApp");
 import app = module("app/extensions/seadragon/App");
 import baseHeader = module("app/shared/HeaderPanel");
 import utils = module("app/Utils");
+import help = module("app/modules/Dialogues/HelpDialogue");
 
 export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
@@ -151,6 +152,12 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             e.preventDefault();
 
             $.publish(PagingHeaderPanel.LAST);
+        });
+
+        this.$helpButton.click(function (e) {
+            e.preventDefault();
+
+            $.publish(help.HelpDialogue.SHOW_HELP_DIALOGUE);
         });
     }
 

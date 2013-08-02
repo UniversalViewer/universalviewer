@@ -11,12 +11,12 @@ export class BaseProvider {
     type: string;
 
     options: any = {
+        dataUriTemplate: '{0}/{1}',
         panelAnimationDuration: 250,
         leftPanelCollapsedWidth: 30,
         leftPanelExpandedWidth: 255,
         rightPanelCollapsedWidth: 30,
-        rightPanelExpandedWidth: 255,
-        mediaUri: 'http://wellcomelibrary.org'
+        rightPanelExpandedWidth: 255
     };
 
     constructor(config: any, pkg: any) {
@@ -26,8 +26,9 @@ export class BaseProvider {
         this.options.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain');
         this.options.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance');
         this.options.assetIndex = utils.Utils.getParameterByName('assetIndex');
+        this.options.assetsBaseUri = utils.Utils.getParameterByName('assetsBaseUri');
+        this.options.embedScriptUri = utils.Utils.getParameterByName('embedScriptUri');
 
-        // duplication of bootstrapper code, ideas of how to avoid this welcome :-)
         var hash = utils.Utils.getHashValues('/', parent.document);
         
         this.assetSequenceIndex = hash[0] || 0;

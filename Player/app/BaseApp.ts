@@ -3,6 +3,7 @@
 import utils = module("app/Utils");
 import bp = module("app/BaseProvider");
 import shell = module("app/shared/Shell");
+import genericDialogue = module("app/shared/GenericDialogue");
 
 export class BaseApp {
 
@@ -19,17 +20,8 @@ export class BaseApp {
     // events
     static RESIZE: string = 'onResize';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
-    static TOGGLE_LEFTPANEL_START: string = 'onToggleLeftPanelStart';
-    static TOGGLE_LEFTPANEL_END: string = 'onToggleLeftPanelEnd';
-    static TOGGLE_RIGHTPANEL_START: string = 'onToggleRightPanelStart';
-    static TOGGLE_RIGHTPANEL_END: string = 'onToggleRightPanelEnd';
     static ASSET_INDEX_CHANGED: string = 'onAssetIndexChanged';
-    static MODE_CHANGED: string = 'onModeChanged';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
-    static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
-    static HIDE_GENERIC_DIALOGUE: string = 'onHideGenericDialogue';
-    static SHOW_HELP_DIALOGUE: string = 'onShowHelpDialogue';
-    static HIDE_HELP_DIALOGUE: string = 'onHideHelpDialogue';
 
     constructor(provider: bp.BaseProvider, extensionName: string) {
 
@@ -72,7 +64,7 @@ export class BaseApp {
             $.publish(BaseApp.RESIZE);
         }
 
-        $(document).mousemove(function (e) {
+        $(document).on('mousemove', (e) => {
             this.mouseX = e.pageX;
             this.mouseY = e.pageY;
         });
@@ -274,7 +266,7 @@ export class BaseApp {
 
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: bool) {
 
-        $.publish(BaseApp.SHOW_GENERIC_DIALOGUE, [
+        $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [
             {
                 message: message,
                 acceptCallback: acceptCallback,

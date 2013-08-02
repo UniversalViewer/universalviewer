@@ -24,15 +24,6 @@ export class HeaderPanel extends baseView.BaseView {
 
         this.$helpButton = $('<a href="#" class="action help">' + this.content.header.help + '</a>');
         this.$rightOptions.append(this.$helpButton);
-
-        // initialise ui.
-
-        // ui event handlers.
-        this.$helpButton.click(function (e) {
-            e.preventDefault();
-
-            $.publish(baseApp.BaseApp.SHOW_HELP_DIALOGUE);
-        });
     }
 
     resize(): void {

@@ -61,7 +61,7 @@ export class Utils{
         return trimmedText + "&hellip;";
     }
 
-    static numericalInput(event: MSEventObj): boolean {
+    static numericalInput(event: JQueryKeyEventObject): boolean {
         // Allow: backspace, delete, tab and escape
         if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
             // Allow: Ctrl+A

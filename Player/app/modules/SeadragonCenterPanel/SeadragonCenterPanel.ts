@@ -141,6 +141,8 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     getBounds(): any {
 
+        if (!this.viewer.viewport) return null;
+
         var bounds = this.viewer.viewport.getBounds(true);
 
         return {

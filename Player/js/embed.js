@@ -7,18 +7,8 @@
     window.embedScriptIncluded = true;
 
     // get the script location.
-    var scripts = document.getElementsByTagName('script');
-    var scriptUri;
-
-    // loop backwards through the loaded scripts until you reach last one with a src.
-    // fixes problem in IE when using an empty script with a comment to prevent wordpress wysiwyg editor script-stripping.
-    for (var i = scripts.length - 1; i >= 0; i--) {
-        var s = scripts[i];
-        if (s.src) {
-            scriptUri = s.src;
-            break;
-        }
-    }
+    var s = document.getElementById('embedWellcomePlayer');
+    var scriptUri = s.src;
 
     var j, d;
     var loaded = false;
@@ -73,7 +63,7 @@
 
     $.when($.getScript(easyXDMUri),
            $.getScript(json2Uri)).done(function () {
-               var apps = $('.app');
+               var apps = $('.wellcomePlayer');
 
                var isHomeDomain = document.domain === domain;
                var isOnlyInstance = apps.length === 1;
@@ -84,7 +74,7 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, assetIndex, isFullScreen, height, top, left;
+        var socket, $app, $appFrame, dataUri, assetIndex, assetsBaseUri, isFullScreen, height, top, left;
 
         $app = $(element);
 
@@ -94,7 +84,8 @@
         // get initial params from the container's 'data-' attributes.
         dataUri = $app.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
-        assetIndex = $app.attr('data-assetIndex');
+        assetIndex = $app.attr('data-assetindex');
+        assetsBaseUri = $app.attr('data-assetsbaseuri');
 
         isFullScreen = false;
         height = $app.height();
@@ -177,6 +168,10 @@
 
             if (assetIndex) {
                 uri += "&assetIndex=" + assetIndex;
+            }
+            
+            if (assetsBaseUri) {
+                uri += "&assetsBaseUri=" + assetsBaseUri;
             }
 
             socket = new easyXDM.Socket({

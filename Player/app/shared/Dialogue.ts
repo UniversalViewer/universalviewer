@@ -65,7 +65,7 @@ export class Dialogue extends baseView.BaseView {
     setArrowPosition(): void {
         // set bottom background position to mouse x.
         var paddingLeft = parseInt(this.$element.css("padding-left"));
-        var pos = this.app.mouseX - paddingLeft - 10;
+        var pos = this.app.mouseX - paddingLeft - 10; // 10 = 1/2 arrow width.
         if (pos < 0) pos = 0;
         this.$bottom.css('backgroundPosition', pos + 'px 0px');
     }
@@ -75,7 +75,9 @@ export class Dialogue extends baseView.BaseView {
         this.setArrowPosition();
         this.isActive = true;
 
-        $.publish(shell.Shell.SHOW_OVERLAY_MASK);
+        $.publish(shell.Shell.SHOW_OVERLAY);
+
+        this.resize();
     }
 
     close(): void {
@@ -83,7 +85,7 @@ export class Dialogue extends baseView.BaseView {
             this.$element.hide();
             this.isActive = false;
 
-            $.publish(shell.Shell.HIDE_OVERLAY_MASK);
+            $.publish(shell.Shell.HIDE_OVERLAY);
         }
     }
 
@@ -91,8 +93,8 @@ export class Dialogue extends baseView.BaseView {
         super.resize();
 
         this.$element.css({
-            top: (this.app.height() / 2) - (this.$element.height() / 2),
-            left: (this.app.width() / 2) - (this.$element.width() / 2)
+            'top': (this.app.height() / 2) - (this.$element.height() / 2),
+            'left': (this.app.width() / 2) - (this.$element.width() / 2)
         });
     }
 }

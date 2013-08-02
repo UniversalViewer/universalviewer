@@ -12,6 +12,8 @@ import treeView = module("app/modules/TreeViewLeftPanel/TreeView");
 import center = module("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");
 import right = module("app/modules/MoreInfoRightPanel/MoreInfoRightPanel");
 import footer = module("app/modules/ExtendedFooterPanel/ExtendedFooterPanel");
+import help = module("app/modules/Dialogues/HelpDialogue");
+import embed = module("app/extensions/seadragon/EmbedDialogue");
 
 export class App extends baseApp.BaseApp {
 
@@ -20,6 +22,10 @@ export class App extends baseApp.BaseApp {
     centerPanel: center.SeadragonCenterPanel;
     rightPanel: right.MoreInfoRightPanel;
     footerPanel: footer.ExtendedFooterPanel;
+    $helpDialogue: JQuery;
+    helpDialogue: help.HelpDialogue;
+    $embedDialogue: JQuery;
+    embedDialogue: embed.EmbedDialogue;
 
     static mode: string;
 
@@ -37,6 +43,9 @@ export class App extends baseApp.BaseApp {
 
     create(): void {
         super.create();
+
+        // load css.
+        utils.Utils.loadCss('app/modules/Dialogues/css/styles.css');
 
         // events.
         $.subscribe(header.PagingHeaderPanel.FIRST, (e) => {
@@ -90,6 +99,14 @@ export class App extends baseApp.BaseApp {
         this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
         this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
         this.footerPanel = new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);
+
+        this.$helpDialogue = utils.Utils.createDiv('overlay help');
+        shell.Shell.$overlays.append(this.$helpDialogue);
+        this.helpDialogue = new help.HelpDialogue(this.$helpDialogue);
+
+        this.$embedDialogue = utils.Utils.createDiv('overlay embed');
+        shell.Shell.$overlays.append(this.$embedDialogue);
+        this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
 
         this.getUrlParams();
 
@@ -180,5 +197,13 @@ export class App extends baseApp.BaseApp {
             default:
                 return App.IMAGE_MODE;
         }
+    }
+
+    getViewerBounds(): string{
+        var bounds = this.centerPanel.getBounds();
+
+        if (bounds) return this.centerPanel.serialiseBounds(bounds);
+
+        return "";
     }
 }

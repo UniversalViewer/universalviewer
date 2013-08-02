@@ -7,6 +7,7 @@ import baseView = module("app/BaseView");
 export class FooterPanel extends baseView.BaseView {
 
     $options: JQuery;
+    $embedBtn: JQuery;
     $fullScreenBtn: JQuery;
 
     constructor($element: JQuery) {
