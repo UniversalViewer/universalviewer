@@ -23,11 +23,12 @@ export class BaseProvider {
         this.config = config;
         this.pkg = pkg;
         
-        this.options.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain');
-        this.options.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance');
+        this.options.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain') === "true";
+        this.options.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance') === "true";
         this.options.assetIndex = utils.Utils.getParameterByName('assetIndex');
         this.options.assetsBaseUri = utils.Utils.getParameterByName('assetsBaseUri');
         this.options.embedScriptUri = utils.Utils.getParameterByName('embedScriptUri');
+        this.options.zoom = utils.Utils.getParameterByName('zoom');
 
         var hash = utils.Utils.getHashValues('/', parent.document);
         

@@ -180,7 +180,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
     setTotal(): void {
 
-        var of = this.app.provider.config.content.header.of;
+        var of = this.content.header.of;
 
         if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             this.$total.html(String.prototype.format(of, this.app.getLastAssetOrderLabel()));

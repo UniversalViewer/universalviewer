@@ -1,6 +1,5 @@
 import baseApp = module("app/BaseApp");
 import app = module("app/extensions/seadragon/App");
-import shell = module("app/shared/Shell");
 import utils = module("app/Utils");
 import embed = module("app/modules/Dialogues/EmbedDialogue");
 import center = module("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");

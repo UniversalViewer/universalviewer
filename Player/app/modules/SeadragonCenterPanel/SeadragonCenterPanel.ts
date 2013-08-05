@@ -90,22 +90,19 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                 // the third param is the zoom bounds.
                 bounds = this.deserialiseBounds(hash[2]);
                 this.fitToBounds(bounds);
-            } else {
-                if (this.currentBounds) {
-                    this.fitToBounds(this.currentBounds);
-                }
+                return;
             }
-        } else {
-            if (this.currentBounds) {
-                this.fitToBounds(this.currentBounds);
-            } else {
-                // player is embedded, initial zoom params may be on the querystring.
-                bounds = utils.Utils.getParameterByName('z');
+        }
 
-                if (bounds) {
-                    bounds = this.deserialiseBounds(bounds);
-                    this.fitToBounds(bounds);
-                }
+        if (this.currentBounds) {
+            this.fitToBounds(this.currentBounds);
+        } else {
+            // player is embedded, initial zoom params may be on the querystring.
+            bounds = this.provider.config.options.zoom;
+
+            if (bounds) {
+                bounds = this.deserialiseBounds(bounds);
+                this.fitToBounds(bounds);
             }
         }
 

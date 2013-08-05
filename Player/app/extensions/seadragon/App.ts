@@ -125,20 +125,18 @@ export class App extends baseApp.BaseApp {
             if (hash.length > 1) {
                 assetIndex = hash[1];
                 this.viewPage(assetIndex, true);
-            } else {
-                // default to the first page.
-                this.viewPage(0);
+                return;
             }
-        } else {
-            // the initial params are on the query string.
-            assetIndex = this.provider.config.options.assetIndex;
+        } 
 
-            if (assetIndex) {
-                this.viewPage(assetIndex);
-            } else {
-                // default to the first page.
-                this.viewPage(0);
-            }
+        // have initial params been specified on the embedding div?
+        assetIndex = this.provider.config.options.assetIndex;
+
+        if (assetIndex) {
+            this.viewPage(assetIndex);
+        } else {
+            // default to the first page.
+            this.viewPage(0);
         }
     }
 
