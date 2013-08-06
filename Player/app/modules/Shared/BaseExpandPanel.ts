@@ -1,14 +1,14 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = module("app/modules/Shared/BaseApp");
-import shell = module("app/modules/Shared/Shell");
-import utils = module("app/Utils");
-import baseView = module("app/modules/Shared/BaseView");
+import baseApp = require("app/modules/Shared/BaseApp");
+import shell = require("app/modules/Shared/Shell");
+import utils = require("app/Utils");
+import baseView = require("app/modules/Shared/BaseView");
 
 export class BaseExpandPanel extends baseView.BaseView {
 
-    isExpanded: bool = false;
-    isUnopened: bool = true;
+    isExpanded: boolean = false;
+    isUnopened: boolean = true;
 
     $top: JQuery;
     $title: JQuery;

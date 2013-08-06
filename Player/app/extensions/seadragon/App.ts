@@ -1,19 +1,19 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = module("app/modules/Shared/BaseApp");
-import utils = module("app/Utils");
-import bp = module("app/modules/Shared/BaseProvider");
-import p = module("app/extensions/seadragon/Provider");
-import shell = module("app/modules/Shared/Shell");
-import header = module("app/modules/PagingHeaderPanel/PagingHeaderPanel");
-import left = module("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
-import thumbsView = module("app/modules/TreeViewLeftPanel/ThumbsView");
-import treeView = module("app/modules/TreeViewLeftPanel/TreeView");
-import center = module("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");
-import right = module("app/modules/MoreInfoRightPanel/MoreInfoRightPanel");
-import footer = module("app/modules/ExtendedFooterPanel/ExtendedFooterPanel");
-import help = module("app/modules/Dialogues/HelpDialogue");
-import embed = module("app/extensions/seadragon/EmbedDialogue");
+import baseApp = require("app/modules/Shared/BaseApp");
+import utils = require("app/Utils");
+import bp = require("app/modules/Shared/BaseProvider");
+import p = require("app/extensions/seadragon/Provider");
+import shell = require("app/modules/Shared/Shell");
+import header = require("app/modules/PagingHeaderPanel/PagingHeaderPanel");
+import left = require("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
+import thumbsView = require("app/modules/TreeViewLeftPanel/ThumbsView");
+import treeView = require("app/modules/TreeViewLeftPanel/TreeView");
+import center = require("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");
+import right = require("app/modules/MoreInfoRightPanel/MoreInfoRightPanel");
+import footer = require("app/modules/ExtendedFooterPanel/ExtendedFooterPanel");
+import help = require("app/modules/Dialogues/HelpDialogue");
+import embed = require("app/extensions/seadragon/EmbedDialogue");
 
 export class App extends baseApp.BaseApp {
 
@@ -140,7 +140,7 @@ export class App extends baseApp.BaseApp {
         }
     }
 
-    viewPage(assetIndex: number, preserveAddress?: bool): void {
+    viewPage(assetIndex: number, preserveAddress?: boolean): void {
         this.viewAsset(assetIndex, () => {
 
             var asset = this.provider.assetSequence.assets[assetIndex];

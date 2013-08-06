@@ -1,10 +1,10 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = module("app/modules/Shared/BaseApp");
-import app = module("app/extensions/seadragon/App");
-import baseHeader = module("app/modules/Shared/HeaderPanel");
-import utils = module("app/Utils");
-import help = module("app/modules/Dialogues/HelpDialogue");
+import baseApp = require("app/modules/Shared/BaseApp");
+import app = require("app/extensions/seadragon/App");
+import baseHeader = require("app/modules/Shared/HeaderPanel");
+import utils = require("app/Utils");
+import help = require("app/modules/Dialogues/HelpDialogue");
 
 export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 

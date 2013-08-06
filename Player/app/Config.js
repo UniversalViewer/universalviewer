@@ -39,7 +39,7 @@ require([
     'app/BootStrapper',
     'app/extensions/seadragon/App',
     'app/extensions/seadragon/Provider'
-], function ($, plugins, console, pubsub, osd, jsviews, bootStrapper, seadragon, seadragonProvider) {
+], function ($, plugins, console, pubsub, osd, jsviews, BootStrapper, seadragon, seadragonProvider) {
     var extensions = {};
 
     extensions['seadragon/dzi'] = {
@@ -48,6 +48,6 @@ require([
         configUri: '/app/extensions/seadragon/config.js'
     };
 
-    new bootStrapper.BootStrapper(extensions);
+    new BootStrapper(extensions);
 });
-//@ sourceMappingURL=Config.js.map
+//# sourceMappingURL=Config.js.map

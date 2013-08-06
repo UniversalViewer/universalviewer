@@ -1,9 +1,9 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import utils = module("app/Utils");
-import bp = module("app/modules/Shared/BaseProvider");
-import shell = module("app/modules/Shared/Shell");
-import genericDialogue = module("app/modules/Shared/GenericDialogue");
+import utils = require("app/Utils");
+import bp = require("app/modules/Shared/BaseProvider");
+import shell = require("app/modules/Shared/Shell");
+import genericDialogue = require("app/modules/Shared/GenericDialogue");
 
 export class BaseApp {
 
@@ -111,7 +111,7 @@ export class BaseApp {
         if (callback) callback(assetIndex);
     }
 
-    isDeepLinkingEnabled(): bool {
+    isDeepLinkingEnabled(): boolean {
 
         if (this.provider.isHomeDomain && this.provider.isOnlyInstance) {
             return true;
@@ -264,7 +264,7 @@ export class BaseApp {
         return -1;
     }
 
-    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: bool) {
+    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean) {
 
         $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [
             {

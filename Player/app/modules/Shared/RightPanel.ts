@@ -1,8 +1,8 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseApp = module("app/modules/Shared/BaseApp");
-import shell = module("app/modules/Shared/Shell");
-import utils = module("app/Utils");
-import baseExpandPanel = module("app/modules/Shared/BaseExpandPanel");
+import baseApp = require("app/modules/Shared/BaseApp");
+import shell = require("app/modules/Shared/Shell");
+import utils = require("app/Utils");
+import baseExpandPanel = require("app/modules/Shared/BaseExpandPanel");
 
 export class RightPanel extends baseExpandPanel.BaseExpandPanel {
 

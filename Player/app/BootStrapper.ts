@@ -1,7 +1,7 @@
 /// <reference path="../js/jquery.d.ts" />
-import utils = module("app/Utils");
+import utils = require("app/Utils");
 
-export class BootStrapper{
+class BootStrapper{
     
     pkg: any;
     extensions: any;
@@ -56,3 +56,5 @@ export class BootStrapper{
 
     }
 }
+
+export = BootStrapper

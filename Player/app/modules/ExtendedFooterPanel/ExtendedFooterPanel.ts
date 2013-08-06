@@ -1,9 +1,9 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseFooter = module("app/modules/Shared/FooterPanel");
-import baseApp = module("app/modules/Shared/BaseApp");
-import app = module("app/extensions/seadragon/App");
-import utils = module("app/Utils");
-import embed = module("app/modules/Dialogues/EmbedDialogue");
+import baseFooter = require("app/modules/Shared/FooterPanel");
+import baseApp = require("app/modules/Shared/BaseApp");
+import app = require("app/extensions/seadragon/App");
+import utils = require("app/Utils");
+import embed = require("app/modules/Dialogues/EmbedDialogue");
 
 export class ExtendedFooterPanel extends baseFooter.FooterPanel {
 

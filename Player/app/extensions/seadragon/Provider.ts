@@ -1,6 +1,6 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseProvider = module("app/modules/Shared/BaseProvider");
+import baseProvider = require("app/modules/Shared/BaseProvider");
 
 export class Provider extends baseProvider.BaseProvider {
 

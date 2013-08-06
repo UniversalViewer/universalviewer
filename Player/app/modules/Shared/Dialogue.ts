@@ -1,12 +1,13 @@
-import baseApp = module("app/modules/Shared/BaseApp");
-import shell = module("app/modules/Shared/Shell");
-import utils = module("app/Utils");
-import baseView = module("app/modules/Shared/BaseView");
+/// <reference path="../../../js/jquery.d.ts" />
+import baseApp = require("app/modules/Shared/BaseApp");
+import shell = require("app/modules/Shared/Shell");
+import utils = require("app/Utils");
+import baseView = require("app/modules/Shared/BaseView");
 
 export class Dialogue extends baseView.BaseView {
 
-    isActive: bool = false;
-    allowClose: bool = true;
+    isActive: boolean = false;
+    allowClose: boolean = true;
 
     $top: JQuery;
     $closeButton: JQuery;

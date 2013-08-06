@@ -1,8 +1,8 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseLeft = module("app/modules/Shared/LeftPanel");
-import utils = module("app/Utils");
-import tree = module("app/modules/TreeViewLeftPanel/TreeView");
-import thumbs = module("app/modules/TreeViewLeftPanel/ThumbsView");
+import baseLeft = require("app/modules/Shared/LeftPanel");
+import utils = require("app/Utils");
+import tree = require("app/modules/TreeViewLeftPanel/TreeView");
+import thumbs = require("app/modules/TreeViewLeftPanel/ThumbsView");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 

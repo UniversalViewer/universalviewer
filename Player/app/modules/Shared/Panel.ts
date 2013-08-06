@@ -2,10 +2,10 @@
 
 export class Panel {
     $element: JQuery;
-    fitToParentWidth: bool;
-    fitToParentHeight: bool;
+    fitToParentWidth: boolean;
+    fitToParentHeight: boolean;
 
-    constructor($element: JQuery, fitToParentWidth?: bool, fitToParentHeight?: bool) {
+    constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
         this.$element = $element;
         this.fitToParentWidth = fitToParentWidth || false;
         this.fitToParentHeight = fitToParentHeight || false;

@@ -1,6 +1,5 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import bp = module("app/modules/Shared/BaseProvider");
-import utils = module("app/Utils");
+import utils = require("app/Utils");
 
 export class BaseProvider {
     
@@ -9,8 +8,8 @@ export class BaseProvider {
     assetSequenceIndex: number;
     assetSequence: any;
     type: string;
-    isHomeDomain: bool;
-    isOnlyInstance: bool;
+    isHomeDomain: boolean;
+    isOnlyInstance: boolean;
     initialAssetIndex: string;
     assetsBaseUri: string;
     embedScriptUri: string;
@@ -24,7 +23,7 @@ export class BaseProvider {
     constructor(config: any, pkg: any) {
         this.config = config;
         this.pkg = pkg;
-        
+
         this.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain') === "true";
         this.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance') === "true";
         this.initialAssetIndex = utils.Utils.getParameterByName('assetIndex');
@@ -43,6 +42,12 @@ export class BaseProvider {
         this.parseSections(this.getRootSection(), this.assetSequence.assets, '');
     }
 
+    // the purpose of this is to give each asset in this.assetSequence.assets
+    // a collection of sections it belongs to.
+    // it also builds a path string property for each section.
+    // this can then be used when a section is clicked in the tree view
+    // where getSectionIndex in BaseApp loops though all assets and their
+    // associated sections until it finds one with a matching path.
     parseSections(section, assets, path): void {
 
         section.path = path;

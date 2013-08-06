@@ -1,8 +1,8 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import utils = module("app/Utils");
-import baseApp = module("app/modules/Shared/BaseApp");
-import shell = module("app/modules/Shared/Shell");
-import baseView = module("app/modules/Shared/BaseView");
+import utils = require("app/Utils");
+import baseApp = require("app/modules/Shared/BaseApp");
+import shell = require("app/modules/Shared/Shell");
+import baseView = require("app/modules/Shared/BaseView");
 
 export class FooterPanel extends baseView.BaseView {
 

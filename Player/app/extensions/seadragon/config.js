@@ -12,15 +12,6 @@
     },
     "modules":
     {
-        "shared":
-        {
-            "options":
-            {
-            },
-            "content":
-            {
-            }
-        }, 
         "genericDialogue":
         {
             "content":

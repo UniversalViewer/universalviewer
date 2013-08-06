@@ -1,6 +1,6 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import panel = module("app/modules/Shared/Panel");
-import baseApp = module("app/modules/Shared/BaseApp");
+import panel = require("app/modules/Shared/Panel");
+import baseApp = require("app/modules/Shared/BaseApp");
 
 export class BaseView extends panel.Panel{
 

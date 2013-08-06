@@ -1,10 +1,10 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import utils = module("app/Utils");
-import baseApp = module("app/modules/Shared/BaseApp");
-import app = module("app/extensions/seadragon/App");
-import shell = module("app/modules/Shared/Shell");
-import baseView = module("app/modules/Shared/BaseView");
-import thumb = module("app/modules/TreeViewLeftPanel/Thumb");
+import utils = require("app/Utils");
+import baseApp = require("app/modules/Shared/BaseApp");
+import app = require("app/extensions/seadragon/App");
+import shell = require("app/modules/Shared/Shell");
+import baseView = require("app/modules/Shared/BaseView");
+import Thumb = require("app/modules/TreeViewLeftPanel/Thumb");
 
 export class ThumbsView extends baseView.BaseView {
 
@@ -15,7 +15,7 @@ export class ThumbsView extends baseView.BaseView {
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
 
-    thumbs: Array<thumb.Thumb>;
+    thumbs: Array<Thumb>;
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -104,7 +104,7 @@ export class ThumbsView extends baseView.BaseView {
                 asset.orderLabel = "";
             }
 
-            this.thumbs.push(new thumb.Thumb(i, uri, asset.orderLabel, height, visible));
+            this.thumbs.push(new Thumb(i, uri, asset.orderLabel, height, visible));
         }
 
         this.$thumbs.link($.templates.thumbsTemplate, this.thumbs);

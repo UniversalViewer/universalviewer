@@ -1,7 +1,7 @@
-import baseApp = module("app/modules/Shared/BaseApp");
-import shell = module("app/modules/Shared/Shell");
-import utils = module("app/Utils");
-import dialogue = module("app/modules/Shared/Dialogue");
+import baseApp = require("app/modules/Shared/BaseApp");
+import shell = require("app/modules/Shared/Shell");
+import utils = require("app/Utils");
+import dialogue = require("app/modules/Shared/Dialogue");
 
 export class GenericDialogue extends dialogue.Dialogue {
 
