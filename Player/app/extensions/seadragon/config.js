@@ -1,7 +1,14 @@
 ﻿{
     "options":
     {
-        
+        "sectionMappings":
+        {
+            "CoverFrontOutside": "Front Cover",
+            "CoverBackOutside": "Back Cover",
+            "TitlePage": "Title Page",
+            "TableOfContents": "Table of Contents",
+            "PartOfWork": "Part of Work"
+        }
     },
     "modules":
     {
@@ -75,14 +82,6 @@
             {
                 "index": "Index",
                 "thumbnails": "Thumbnails"
-            },
-            "mappings":
-            {
-                "CoverFrontOutside": "Front Cover",
-                "CoverBackOutside": "Back Cover",
-                "TitlePage": "Title Page",
-                "TableOfContents": "Table of Contents",
-                "PartOfWork": "Part of Work"
             }
         },
         "moreInfoRightPanel":

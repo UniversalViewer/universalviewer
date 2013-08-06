@@ -47,6 +47,9 @@ export class BaseProvider {
 
         section.path = path;
 
+        // replace SectionType with config.js mapping (if exists).
+        section.sectionType = this.replaceSectionType(section.sectionType);
+
         for (var i = 0; i < section.assets.length; i++) {
             var index = section.assets[i];
 
@@ -62,6 +65,14 @@ export class BaseProvider {
                 this.parseSections(section.sections[j], assets, path + '/' + j);
             }
         }
+    }
+
+    replaceSectionType(sectionType: string): string {
+        if (this.config.options.sectionMappings[sectionType]) {
+            return this.config.options.sectionMappings[sectionType];
+        }
+
+        return sectionType;
     }
 
     getRootSection(): any {
