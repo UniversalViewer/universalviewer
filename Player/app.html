@@ -13,8 +13,10 @@
     <div id="app" class="loading"></div>
     <script type="text/javascript">
         var app = document.getElementById("app");
-        app.setAttribute("style", "width:" + window.innerWidth + "px");
-        app.setAttribute("style", "height:" + window.innerHeight + "px");
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        var height = window.innerHeight || document.documentElement.clientHeight;
+        app.setAttribute("style", "width:" + width + "px");
+        app.setAttribute("style", "height:" + height + "px");
     </script>
 </body>
 </html>
