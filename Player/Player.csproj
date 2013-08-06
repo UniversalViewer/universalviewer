@@ -20,7 +20,7 @@
     <TypeScriptCompile Include="app\modules\Shared\BaseApp.ts" />
     <TypeScriptCompile Include="app\extensions\seadragon\App.ts" />
     <TypeScriptCompile Include="app\modules\Shared\BaseProvider.ts" />
-    <None Include="app\extensions\seadragon\config.json" />
+    <Content Include="app\extensions\seadragon\config.js" />
     <Content Include="app\modules\MoreInfoRightPanel\MoreInfoRightPanel.min.js">
       <DependentUpon>MoreInfoRightPanel.ts</DependentUpon>
     </Content>

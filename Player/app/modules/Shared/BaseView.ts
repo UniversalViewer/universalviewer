@@ -26,8 +26,6 @@ export class BaseView extends panel.Panel{
             this.config = this.provider.config.modules[this.moduleName];
             this.content = this.config.content;
             this.options = this.config.options;
-
-            console.log(this.content);
         }
     }
 

@@ -1,3 +1,4 @@
+/// <reference path="../js/require.d.ts" />
 require.config({
     baseUrl: '../',
     paths: {
