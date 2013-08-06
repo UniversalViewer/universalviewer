@@ -1,8 +1,8 @@
-import baseApp = module("app/BaseApp");
+import baseApp = module("app/modules/Shared/BaseApp");
 import app = module("app/extensions/seadragon/App");
-import shell = module("app/shared/Shell");
+import shell = module("app/modules/Shared/Shell");
 import utils = module("app/Utils");
-import dialogue = module("app/shared/Dialogue");
+import dialogue = module("app/modules/Shared/Dialogue");
 
 export class HelpDialogue extends dialogue.Dialogue {
 
@@ -18,6 +18,9 @@ export class HelpDialogue extends dialogue.Dialogue {
     }
 
     create(): void {
+        
+        this.setConfig('helpDialogue');
+        
         super.create();
 
         $.subscribe(HelpDialogue.SHOW_HELP_DIALOGUE, (e, params) => {
@@ -38,8 +41,8 @@ export class HelpDialogue extends dialogue.Dialogue {
         this.$scroll.append(this.$message);
 
         // initialise ui.
-        this.$title.text(this.content.helpDialogue.title);
-        this.$message.html(this.content.helpDialogue.text);
+        this.$title.text(this.content.title);
+        this.$message.html(this.content.text);
 
         // ensure anchor tags link to _blank.
         this.$message.find('a').prop('target', '_blank');

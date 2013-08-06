@@ -1,4 +1,4 @@
-import baseApp = module("app/BaseApp");
+import baseApp = module("app/modules/Shared/BaseApp");
 import app = module("app/extensions/seadragon/App");
 import utils = module("app/Utils");
 import embed = module("app/modules/Dialogues/EmbedDialogue");
@@ -19,6 +19,9 @@ export class EmbedDialogue extends embed.EmbedDialogue {
     }
 
     create(): void {
+        
+        this.setConfig('embedDialogue');
+        
         super.create();
 
     }
@@ -28,7 +31,9 @@ export class EmbedDialogue extends embed.EmbedDialogue {
         var assetSequenceIndex = this.app.currentAssetIndex;
         var zoom = (<app.App>this.app).getViewerBounds();
 
-        this.code = this.provider.getEmbedScript(this.app.currentAssetIndex,
+        this.code = this.provider.getEmbedScript(
+            this.options.embedTemplate,
+            this.app.currentAssetIndex,
             zoom,
             this.currentWidth,
             this.currentHeight);

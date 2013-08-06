@@ -1,8 +1,8 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = module("app/BaseApp");
+import baseApp = module("app/modules/Shared/BaseApp");
 import app = module("app/extensions/seadragon/App");
-import baseHeader = module("app/shared/HeaderPanel");
+import baseHeader = module("app/modules/Shared/HeaderPanel");
 import utils = module("app/Utils");
 import help = module("app/modules/Dialogues/HelpDialogue");
 
@@ -35,6 +35,9 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     }
 
     create(): void {
+        
+        this.setConfig('pagingHeaderPanel');
+        
         super.create();
 
         // load css.
@@ -60,11 +63,11 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$modeOptions = $('<div class="mode"></div>');
         this.$centerOptions.append(this.$modeOptions);
 
-        this.$modeOptions.append('<label for="image">' + this.content.header.image + '</label>');
+        this.$modeOptions.append('<label for="image">' + this.content.image + '</label>');
         this.$imageModeOption = $('<input type="radio" id="image" name="mode"></input>');
         this.$modeOptions.append(this.$imageModeOption);
 
-        this.$modeOptions.append('<label for="page">' + this.content.header.page + '</label>');
+        this.$modeOptions.append('<label for="page">' + this.content.page + '</label>');
         this.$pageModeOption = $('<input type="radio" id="page" name="mode"></input>');
         this.$modeOptions.append(this.$pageModeOption);
         
@@ -171,16 +174,16 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             mode = "image";
         }
 
-        this.$firstButton.prop('title', this.content.header.first + " " + mode);
-        this.$prevButton.prop('title', this.content.header.previous + " " + mode);
-        this.$nextButton.prop('title', this.content.header.next + " " + mode);
-        this.$lastButton.prop('title', this.content.header.last + " " + mode);
-        this.$searchButton.prop('title', this.content.header.go);
+        this.$firstButton.prop('title', this.content.first + " " + mode);
+        this.$prevButton.prop('title', this.content.previous + " " + mode);
+        this.$nextButton.prop('title', this.content.next + " " + mode);
+        this.$lastButton.prop('title', this.content.last + " " + mode);
+        this.$searchButton.prop('title', this.content.go);
     }
 
     setTotal(): void {
 
-        var of = this.content.header.of;
+        var of = this.content.of;
 
         if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
             this.$total.html(String.prototype.format(of, this.app.getLastAssetOrderLabel()));
@@ -211,7 +214,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         if (!value) {
 
-            this.app.showDialogue(this.content.genericDialogue.emptyValue);
+            this.app.showDialogue(this.content.emptyValue);
 
             return;
         }

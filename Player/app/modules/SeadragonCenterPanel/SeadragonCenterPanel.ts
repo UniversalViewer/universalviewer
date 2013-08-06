@@ -1,8 +1,8 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = module("app/BaseApp");
+import baseApp = module("app/modules/Shared/BaseApp");
 import app = module("app/extensions/seadragon/App");
-import baseCenter = module("app/shared/CenterPanel");
+import baseCenter = module("app/modules/Shared/CenterPanel");
 import utils = module("app/Utils");
 
 export class SeadragonCenterPanel extends baseCenter.CenterPanel {
@@ -98,7 +98,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             this.fitToBounds(this.currentBounds);
         } else {
             // player is embedded, initial zoom params may be on the querystring.
-            bounds = this.provider.config.options.zoom;
+            bounds = this.provider.initialZoom;
 
             if (bounds) {
                 bounds = this.deserialiseBounds(bounds);

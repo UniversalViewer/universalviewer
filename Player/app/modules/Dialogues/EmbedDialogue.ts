@@ -1,7 +1,7 @@
-import baseApp = module("app/BaseApp");
-import shell = module("app/shared/Shell");
+import baseApp = module("app/modules/Shared/BaseApp");
+import shell = module("app/modules/Shared/Shell");
 import utils = module("app/Utils");
-import dialogue = module("app/shared/Dialogue");
+import dialogue = module("app/modules/Shared/Dialogue");
 
 export class EmbedDialogue extends dialogue.Dialogue {
 
@@ -39,6 +39,9 @@ export class EmbedDialogue extends dialogue.Dialogue {
     }
 
     create(): void {
+        
+        this.setConfig('embedDialogue');
+        
         super.create();
 
         var that = this;
@@ -65,10 +68,10 @@ export class EmbedDialogue extends dialogue.Dialogue {
         this.currentHeight = this.smallHeight;
 
         // create ui.
-        this.$title = $('<h1>' + this.content.embedDialogue.title + '</h1>');
+        this.$title = $('<h1>' + this.content.title + '</h1>');
         this.$content.append(this.$title);
 
-        this.$intro = $('<p>' + this.content.embedDialogue.instructions + '</p>');
+        this.$intro = $('<p>' + this.content.instructions + '</p>');
         this.$content.append(this.$intro);
 
         this.$code = $('<textarea class="code"></textarea>');

@@ -4,6 +4,7 @@
 
 */app/*.js
 */app/**/*.js
+!*/app/**/config.js
 *.js.map
 *.min.map
 

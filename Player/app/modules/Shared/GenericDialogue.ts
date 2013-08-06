@@ -1,7 +1,7 @@
-import baseApp = module("app/BaseApp");
-import shell = module("app/shared/Shell");
+import baseApp = module("app/modules/Shared/BaseApp");
+import shell = module("app/modules/Shared/Shell");
 import utils = module("app/Utils");
-import dialogue = module("app/shared/Dialogue");
+import dialogue = module("app/modules/Shared/Dialogue");
 
 export class GenericDialogue extends dialogue.Dialogue {
 
@@ -18,6 +18,9 @@ export class GenericDialogue extends dialogue.Dialogue {
     }
 
     create(): void {
+
+        this.setConfig('genericDialogue');
+        
         super.create();
 
         $.subscribe(GenericDialogue.SHOW_GENERIC_DIALOGUE, (e, params) => {          
@@ -33,7 +36,7 @@ export class GenericDialogue extends dialogue.Dialogue {
 
         this.$acceptButton = $('<a href="#" class="button accept"></a>');
         this.$content.append(this.$acceptButton);
-        this.$acceptButton.text(this.content.genericDialogue.ok);
+        this.$acceptButton.text(this.content.ok);
 
         this.$acceptButton.on('click', (e) => {
             e.preventDefault();
@@ -58,7 +61,7 @@ export class GenericDialogue extends dialogue.Dialogue {
         if (params.buttonText) {
             this.$acceptButton.text(params.buttonText);
         } else {
-            this.$acceptButton.text(this.content.genericDialogue.ok);
+            this.$acceptButton.text(this.content.ok);
         }
 
         if (params.acceptCallback) {

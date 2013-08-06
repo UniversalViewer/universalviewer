@@ -1,5 +1,3 @@
-/// <reference path="../js/require.d.ts" />
-
 require.config({
     baseUrl: '../',
     paths: {
@@ -39,16 +37,16 @@ require([
     'jsviews',
     'app/BootStrapper',
     'app/extensions/seadragon/App',
-    'app/extensions/seadragon/Provider'],
-    ($, plugins, console, pubsub, osd, jsviews, bootStrapper, seadragon, seadragonProvider) => {
+    'app/extensions/seadragon/Provider'
+], function ($, plugins, console, pubsub, osd, jsviews, bootStrapper, seadragon, seadragonProvider) {
+    var extensions = {};
 
-        var extensions = {};
+    extensions['seadragon/dzi'] = {
+        type: seadragon.App,
+        provider: seadragonProvider.Provider,
+        configUri: '/app/extensions/seadragon/config.js'
+    };
 
-        extensions['seadragon/dzi'] = {
-            type: seadragon.App,
-            provider: seadragonProvider.Provider,
-            configUri: '/app/extensions/seadragon/config.js'
-        };
-
-        new bootStrapper.BootStrapper(extensions);
-    });
+    new bootStrapper.BootStrapper(extensions);
+});
+//@ sourceMappingURL=Config.js.map

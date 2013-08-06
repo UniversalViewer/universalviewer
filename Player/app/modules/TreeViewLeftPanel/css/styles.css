@@ -117,7 +117,7 @@
 }
 
 #app .leftPanel .thumbsView .thumb .wrap.loading{
-    background: url(../../../shared/img/ajax-loader.gif) no-repeat 50% 50%;
+    background: url(../../../modules/Shared/img/ajax-loader.gif) no-repeat 50% 50%;
 }
 
 #app .leftPanel .thumbsView .thumb .wrap.hidden{

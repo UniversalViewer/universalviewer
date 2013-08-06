@@ -1,9 +1,9 @@
 /// <reference path="../../../js/jquery.d.ts" />
 import utils = module("app/Utils");
-import baseApp = module("app/BaseApp");
+import baseApp = module("app/modules/Shared/BaseApp");
 import app = module("app/extensions/seadragon/App");
-import shell = module("app/shared/Shell");
-import baseView = module("app/BaseView");
+import shell = module("app/modules/Shared/Shell");
+import baseView = module("app/modules/Shared/BaseView");
 import thumb = module("app/modules/TreeViewLeftPanel/Thumb");
 
 export class ThumbsView extends baseView.BaseView {
@@ -22,6 +22,9 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     create(): void {
+        
+        this.setConfig('treeViewLeftPanel');
+        
         super.create();
 
         $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, index) => {
@@ -87,7 +90,7 @@ export class ThumbsView extends baseView.BaseView {
         for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
             var asset = this.provider.assetSequence.assets[i];
 
-            var uri = this.provider.getThumbUri(asset);
+            var uri = this.provider.getThumbUri(this.options.thumbsUriTemplate, asset);
             var section = this.app.getAssetSection(asset);
 
             var heightRatio = asset.height / asset.width;

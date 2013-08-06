@@ -1,5 +1,5 @@
-/// <reference path="../js/jquery.d.ts" />
-import bp = module("app/BaseProvider");
+/// <reference path="../../../js/jquery.d.ts" />
+import bp = module("app/modules/Shared/BaseProvider");
 import utils = module("app/Utils");
 
 export class BaseProvider {
@@ -9,26 +9,28 @@ export class BaseProvider {
     assetSequenceIndex: number;
     assetSequence: any;
     type: string;
+    isHomeDomain: bool;
+    isOnlyInstance: bool;
+    initialAssetIndex: string;
+    assetsBaseUri: string;
+    embedScriptUri: string;
+    initialZoom: string;
 
     options: any = {
-        dataUriTemplate: '{0}/{1}',
-        panelAnimationDuration: 250,
-        leftPanelCollapsedWidth: 30,
-        leftPanelExpandedWidth: 255,
-        rightPanelCollapsedWidth: 30,
-        rightPanelExpandedWidth: 255
+        dataBaseUri: '/packagecore',
+        dataUriTemplate: '{0}/{1}'
     };
 
     constructor(config: any, pkg: any) {
         this.config = config;
         this.pkg = pkg;
         
-        this.options.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain') === "true";
-        this.options.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance') === "true";
-        this.options.assetIndex = utils.Utils.getParameterByName('assetIndex');
-        this.options.assetsBaseUri = utils.Utils.getParameterByName('assetsBaseUri');
-        this.options.embedScriptUri = utils.Utils.getParameterByName('embedScriptUri');
-        this.options.zoom = utils.Utils.getParameterByName('zoom');
+        this.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain') === "true";
+        this.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance') === "true";
+        this.initialAssetIndex = utils.Utils.getParameterByName('assetIndex');
+        this.assetsBaseUri = utils.Utils.getParameterByName('assetsBaseUri');
+        this.embedScriptUri = utils.Utils.getParameterByName('embedScriptUri');
+        this.initialZoom = utils.Utils.getParameterByName('zoom');
 
         var hash = utils.Utils.getHashValues('/', parent.document);
         

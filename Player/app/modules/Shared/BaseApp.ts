@@ -1,9 +1,9 @@
-/// <reference path="../js/jquery.d.ts" />
-/// <reference path="../js/extensions.d.ts" />
+/// <reference path="../../../js/jquery.d.ts" />
+/// <reference path="../../../js/extensions.d.ts" />
 import utils = module("app/Utils");
-import bp = module("app/BaseProvider");
-import shell = module("app/shared/Shell");
-import genericDialogue = module("app/shared/GenericDialogue");
+import bp = module("app/modules/Shared/BaseProvider");
+import shell = module("app/modules/Shared/Shell");
+import genericDialogue = module("app/modules/Shared/GenericDialogue");
 
 export class BaseApp {
 
@@ -53,7 +53,7 @@ export class BaseApp {
         // add/remove classes.
         this.$element.removeClass();
         this.$element.addClass(this.extensionName);
-        if (!this.provider.options.isHomeDomain) this.$element.addClass('embedded');
+        if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
 
         // events.
         window.onresize = () => {
@@ -113,7 +113,7 @@ export class BaseApp {
 
     isDeepLinkingEnabled(): bool {
 
-        if (this.provider.options.isHomeDomain && this.provider.options.isOnlyInstance) {
+        if (this.provider.isHomeDomain && this.provider.isOnlyInstance) {
             return true;
         }
 

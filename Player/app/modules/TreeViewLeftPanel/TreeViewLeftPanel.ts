@@ -1,5 +1,5 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseLeft = module("app/shared/LeftPanel");
+import baseLeft = module("app/modules/Shared/LeftPanel");
 import utils = module("app/Utils");
 import tree = module("app/modules/TreeViewLeftPanel/TreeView");
 import thumbs = module("app/modules/TreeViewLeftPanel/ThumbsView");
@@ -20,6 +20,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     create(): void {
+        
+        this.setConfig('treeViewLeftPanel');
+        
         super.create();
 
         // load css.
@@ -28,10 +31,10 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$tabs = utils.Utils.createDiv('tabs');
         this.$main.append(this.$tabs);
 
-        this.$treeButton = $('<a class="tab first">' + this.content.leftPanel.index + '</a>');
+        this.$treeButton = $('<a class="tab first">' + this.content.index + '</a>');
         this.$tabs.append(this.$treeButton);
 
-        this.$thumbsButton = $('<a class="tab">' + this.content.leftPanel.thumbnails + '</a>');
+        this.$thumbsButton = $('<a class="tab">' + this.content.thumbnails + '</a>');
         this.$tabs.append(this.$thumbsButton);
 
         this.$tabsContent = utils.Utils.createDiv('tabsContent');

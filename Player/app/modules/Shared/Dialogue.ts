@@ -1,7 +1,7 @@
-import baseApp = module("app/BaseApp");
-import shell = module("app/shared/Shell");
+import baseApp = module("app/modules/Shared/BaseApp");
+import shell = module("app/modules/Shared/Shell");
 import utils = module("app/Utils");
-import baseView = module("app/BaseView");
+import baseView = module("app/modules/Shared/BaseView");
 
 export class Dialogue extends baseView.BaseView {
 

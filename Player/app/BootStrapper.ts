@@ -1,33 +1,58 @@
 /// <reference path="../js/jquery.d.ts" />
 import utils = module("app/Utils");
-import bp = module("app/BaseProvider");
 
 export class BootStrapper{
     
+    pkg: any;
+    extensions: any;
+    packageUri: string;
+    assetIndex: number;
+    assetSequence: any;
+
     // this loads the package, determines what kind of extension and provider to use, and instantiates them.
+    constructor(extensions: any) {
 
-    constructor(configUri: string, extensions: any) {
+        this.extensions = extensions;
 
-        // get config.
-        $.getJSON(configUri, (config) => {
+        var that = this;
 
-            var packageUri = utils.Utils.getParameterByName('dataUri');
+        that.packageUri = utils.Utils.getParameterByName('dataUri');
 
-            $.getJSON(packageUri, (pkg) => {
+        $.getJSON(that.packageUri, (pkg) => {
 
-                var hash = utils.Utils.getHashValues('/', parent.document);
+            that.pkg = pkg;
 
-                var assetIndex = hash[0] || 0;
+            var hash = utils.Utils.getHashValues('/', parent.document);
 
-                var assetSequence = pkg.assetSequences[assetIndex];
+            that.assetIndex = hash[0] || 0;
 
-                // create provider.
-                var provider = new extensions[assetSequence.assetType].provider(config, pkg);
+            if (!that.pkg.assetSequences[that.assetIndex].$ref) {
+                that.assetSequence = that.pkg.assetSequences[that.assetIndex];
+                that.createExtension();
+            } else {
+                // load missing assetSequence.
+                var basePackageUri = that.packageUri.substr(0, that.packageUri.lastIndexOf('/') + 1);
+                var assetSequenceUri = basePackageUri + pkg.assetSequences[that.assetIndex].$ref;
 
-                // create extension.
-                new extensions[assetSequence.assetType].type(provider);
-            });
+                $.getJSON(assetSequenceUri, (assetSequenceData) => {
+                    that.assetSequence = that.pkg.assetSequences[that.assetIndex] = assetSequenceData;
+                    that.createExtension();
+                });
+            }
         });
     }
 
+    createExtension(): void {
+
+        var that = this;
+
+        $.getJSON(that.extensions[that.assetSequence.assetType].configUri, (config) => {
+            // create provider.
+            var provider = new that.extensions[that.assetSequence.assetType].provider(config, that.pkg);
+
+            // create extension.
+            new that.extensions[that.assetSequence.assetType].type(provider);
+        });
+
+    }
 }

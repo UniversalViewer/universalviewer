@@ -17,13 +17,17 @@
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app\Utils.ts" />
-    <TypeScriptCompile Include="app\BaseApp.ts" />
+    <TypeScriptCompile Include="app\modules\Shared\BaseApp.ts" />
     <TypeScriptCompile Include="app\extensions\seadragon\App.ts" />
-    <TypeScriptCompile Include="app\BaseProvider.ts" />
-    <Content Include="app\BaseProvider.js">
+    <TypeScriptCompile Include="app\modules\Shared\BaseProvider.ts" />
+    <None Include="app\extensions\seadragon\config.json" />
+    <Content Include="app\modules\MoreInfoRightPanel\MoreInfoRightPanel.min.js">
+      <DependentUpon>MoreInfoRightPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\Shared\BaseProvider.js">
       <DependentUpon>BaseProvider.ts</DependentUpon>
     </Content>
-    <Content Include="app\BaseProvider.min.js">
+    <Content Include="app\modules\Shared\BaseProvider.min.js">
       <DependentUpon>BaseProvider.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\BootStrapper.ts" />
@@ -95,17 +99,17 @@
     <Content Include="app\extensions\seadragon\App.min.js">
       <DependentUpon>App.ts</DependentUpon>
     </Content>
-    <Content Include="app\BaseApp.js">
+    <Content Include="app\modules\Shared\BaseApp.js">
       <DependentUpon>BaseApp.ts</DependentUpon>
     </Content>
-    <Content Include="app\BaseApp.min.js">
+    <Content Include="app\modules\Shared\BaseApp.min.js">
       <DependentUpon>BaseApp.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\BaseView.ts" />
-    <Content Include="app\BaseView.js">
+    <TypeScriptCompile Include="app\modules\Shared\BaseView.ts" />
+    <Content Include="app\modules\Shared\BaseView.js">
       <DependentUpon>BaseView.ts</DependentUpon>
     </Content>
-    <Content Include="app\BaseView.min.js">
+    <Content Include="app\modules\Shared\BaseView.min.js">
       <DependentUpon>BaseView.ts</DependentUpon>
     </Content>
     <Content Include="app\Config.js">
@@ -114,7 +118,7 @@
     <Content Include="app\Config.min.js">
       <DependentUpon>Config.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\Panel.ts" />
+    <TypeScriptCompile Include="app\modules\Shared\Panel.ts" />
     <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.ts" />
     <Content Include="app\modules\TreeViewLeftPanel\css\styles.css" />
     <Content Include="app\modules\TreeViewLeftPanel\img\contents.png" />
@@ -146,10 +150,10 @@
     <Content Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.min.js">
       <DependentUpon>TreeViewLeftPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\Panel.js">
+    <Content Include="app\modules\Shared\Panel.js">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
-    <Content Include="app\Panel.min.js">
+    <Content Include="app\modules\Shared\Panel.min.js">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="app\extensions\seadragon\Provider.ts" />
@@ -159,76 +163,76 @@
     <Content Include="app\extensions\seadragon\Provider.min.js">
       <DependentUpon>Provider.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\shared\Dialogue.ts" />
-    <TypeScriptCompile Include="app\shared\CenterPanel.ts" />
-    <TypeScriptCompile Include="app\shared\BaseExpandPanel.ts" />
-    <Content Include="app\shared\BaseExpandPanel.js">
+    <TypeScriptCompile Include="app\modules\Shared\Dialogue.ts" />
+    <TypeScriptCompile Include="app\modules\Shared\CenterPanel.ts" />
+    <TypeScriptCompile Include="app\modules\Shared\BaseExpandPanel.ts" />
+    <Content Include="app\modules\Shared\BaseExpandPanel.js">
       <DependentUpon>BaseExpandPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\BaseExpandPanel.min.js">
+    <Content Include="app\modules\Shared\BaseExpandPanel.min.js">
       <DependentUpon>BaseExpandPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\CenterPanel.js">
+    <Content Include="app\modules\Shared\CenterPanel.js">
       <DependentUpon>CenterPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\css\ie.css" />
-    <Content Include="app\shared\Dialogue.js">
+    <Content Include="app\modules\Shared\css\ie.css" />
+    <Content Include="app\modules\Shared\Dialogue.js">
       <DependentUpon>Dialogue.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\Dialogue.min.js">
+    <Content Include="app\modules\Shared\Dialogue.min.js">
       <DependentUpon>Dialogue.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\shared\GenericDialogue.ts" />
-    <TypeScriptCompile Include="app\shared\FooterPanel.ts" />
-    <Content Include="app\shared\FooterPanel.js">
+    <TypeScriptCompile Include="app\modules\Shared\GenericDialogue.ts" />
+    <TypeScriptCompile Include="app\modules\Shared\FooterPanel.ts" />
+    <Content Include="app\modules\Shared\FooterPanel.js">
       <DependentUpon>FooterPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\FooterPanel.min.js">
+    <Content Include="app\modules\Shared\FooterPanel.min.js">
       <DependentUpon>FooterPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\GenericDialogue.js">
+    <Content Include="app\modules\Shared\GenericDialogue.js">
       <DependentUpon>GenericDialogue.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\GenericDialogue.min.js">
+    <Content Include="app\modules\Shared\GenericDialogue.min.js">
       <DependentUpon>GenericDialogue.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\shared\HeaderPanel.ts" />
-    <Content Include="app\shared\HeaderPanel.js">
+    <TypeScriptCompile Include="app\modules\Shared\HeaderPanel.ts" />
+    <Content Include="app\modules\Shared\HeaderPanel.js">
       <DependentUpon>HeaderPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\HeaderPanel.min.js">
+    <Content Include="app\modules\Shared\HeaderPanel.min.js">
       <DependentUpon>HeaderPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\img\arrows_left.png" />
-    <Content Include="app\shared\img\arrows_right.png" />
-    <Content Include="app\shared\img\close.png" />
-    <Content Include="app\shared\img\close_message_box.png" />
-    <Content Include="app\shared\img\dialogue_arrow.png" />
+    <Content Include="app\modules\Shared\img\arrows_left.png" />
+    <Content Include="app\modules\Shared\img\arrows_right.png" />
+    <Content Include="app\modules\Shared\img\close.png" />
+    <Content Include="app\modules\Shared\img\close_message_box.png" />
+    <Content Include="app\modules\Shared\img\dialogue_arrow.png" />
     <Content Include="app\modules\ExtendedFooterPanel\img\download.png" />
     <Content Include="app\modules\ExtendedFooterPanel\img\embed.png" />
-    <Content Include="app\shared\img\fullscreen.png" />
+    <Content Include="app\modules\Shared\img\fullscreen.png" />
     <Content Include="app\modules\TreeViewLeftPanel\img\hidden_thumb.png" />
-    <Content Include="app\shared\img\logo.png" />
+    <Content Include="app\modules\Shared\img\logo.png" />
     <Content Include="app\modules\TreeViewLeftPanel\img\minus.png" />
-    <Content Include="app\shared\img\modal_bg.gif" />
+    <Content Include="app\modules\Shared\img\modal_bg.gif" />
     <Content Include="app\modules\MoreInfoRightPanel\img\moreinfo.png" />
     <Content Include="app\modules\MoreInfoRightPanel\img\moreinfo_v.png" />
-    <Content Include="app\shared\img\normal.png" />
+    <Content Include="app\modules\Shared\img\normal.png" />
     <Content Include="app\modules\TreeViewLeftPanel\img\plus.png" />
     <Content Include="app\modules\ExtendedFooterPanel\img\bookmarks.png" />
-    <Content Include="app\shared\img\sprite.png" />
-    <TypeScriptCompile Include="app\shared\LeftPanel.ts" />
-    <Content Include="app\shared\LeftPanel.js">
+    <Content Include="app\modules\Shared\img\sprite.png" />
+    <TypeScriptCompile Include="app\modules\Shared\LeftPanel.ts" />
+    <Content Include="app\modules\Shared\LeftPanel.js">
       <DependentUpon>LeftPanel.ts</DependentUpon>
     </Content>
-    <TypeScriptCompile Include="app\shared\RightPanel.ts" />
-    <Content Include="app\shared\LeftPanel.min.js">
+    <TypeScriptCompile Include="app\modules\Shared\RightPanel.ts" />
+    <Content Include="app\modules\Shared\LeftPanel.min.js">
       <DependentUpon>LeftPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\RightPanel.js">
+    <Content Include="app\modules\Shared\RightPanel.js">
       <DependentUpon>RightPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\RightPanel.min.js">
+    <Content Include="app\modules\Shared\RightPanel.min.js">
       <DependentUpon>RightPanel.ts</DependentUpon>
     </Content>
     <Content Include="app\Utils.js">
@@ -239,21 +243,20 @@
     </Content>
     <Content Include="app\modules\SeadragonCenterPanel\js\openseadragon.min.js" />
     <TypeScriptCompile Include="js\extensions.d.ts" />
-    <Content Include="app\shared\img\ajax-loader.gif" />
+    <Content Include="app\modules\Shared\img\ajax-loader.gif" />
     <Content Include="embedtest.html" />
     <Content Include="js\jquery.plugins.js" />
     <Content Include="js\jsviews.min.js" />
     <Content Include="js\utils.js" />
-    <TypeScriptCompile Include="app\shared\Shell.ts" />
-    <Content Include="app\shared\Shell.js">
+    <TypeScriptCompile Include="app\modules\Shared\Shell.ts" />
+    <Content Include="app\modules\Shared\Shell.js">
       <DependentUpon>Shell.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\Shell.min.js">
+    <Content Include="app\modules\Shared\Shell.min.js">
       <DependentUpon>Shell.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\css\styles.css" />
+    <Content Include="app\modules\Shared\css\styles.css" />
     <Content Include="index.html" />
-    <Content Include="js\config.js" />
     <Content Include="js\console.js" />
     <Content Include="js\easyXDM.min.js" />
     <Content Include="js\easyxdm.swf" />
@@ -269,13 +272,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
-    <Content Include="app\shared\Shell.js.map">
+    <Content Include="app\modules\Shared\Shell.js.map">
       <DependentUpon>Shell.ts</DependentUpon>
     </Content>
     <Content Include="app\Config.js.map">
       <DependentUpon>Config.ts</DependentUpon>
     </Content>
-    <Content Include="app\BaseApp.js.map">
+    <Content Include="app\modules\Shared\BaseApp.js.map">
       <DependentUpon>BaseApp.ts</DependentUpon>
     </Content>
     <Content Include="js\jquery-1.10.2.min.map" />
@@ -288,22 +291,22 @@
     <Content Include="app\extensions\seadragon\Provider.js.map">
       <DependentUpon>Provider.ts</DependentUpon>
     </Content>
-    <Content Include="app\BaseView.js.map">
+    <Content Include="app\modules\Shared\BaseView.js.map">
       <DependentUpon>BaseView.ts</DependentUpon>
     </Content>
-    <Content Include="app\BaseProvider.js.map">
+    <Content Include="app\modules\Shared\BaseProvider.js.map">
       <DependentUpon>BaseProvider.ts</DependentUpon>
     </Content>
     <Content Include="app\BootStrapper.js.map">
       <DependentUpon>BootStrapper.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\Dialogue.js.map">
+    <Content Include="app\modules\Shared\Dialogue.js.map">
       <DependentUpon>Dialogue.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\GenericDialogue.js.map">
+    <Content Include="app\modules\Shared\GenericDialogue.js.map">
       <DependentUpon>GenericDialogue.ts</DependentUpon>
     </Content>
-    <Content Include="app\Panel.js.map">
+    <Content Include="app\modules\Shared\Panel.js.map">
       <DependentUpon>Panel.ts</DependentUpon>
     </Content>
     <Content Include="app\modules\PagingHeaderPanel\PagingHeaderPanel.js.map">
@@ -312,19 +315,19 @@
     <Content Include="app\modules\SeadragonCenterPanel\SeadragonCenterPanel.js.map">
       <DependentUpon>SeadragonCenterPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\HeaderPanel.js.map">
+    <Content Include="app\modules\Shared\HeaderPanel.js.map">
       <DependentUpon>HeaderPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\LeftPanel.js.map">
+    <Content Include="app\modules\Shared\LeftPanel.js.map">
       <DependentUpon>LeftPanel.ts</DependentUpon>
     </Content>
     <Content Include="app\modules\TreeViewLeftPanel\TreeViewLeftPanel.js.map">
       <DependentUpon>TreeViewLeftPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\BaseExpandPanel.js.map">
+    <Content Include="app\modules\Shared\BaseExpandPanel.js.map">
       <DependentUpon>BaseExpandPanel.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\RightPanel.js.map">
+    <Content Include="app\modules\Shared\RightPanel.js.map">
       <DependentUpon>RightPanel.ts</DependentUpon>
     </Content>
     <Content Include="app\modules\TreeViewLeftPanel\TreeView.js.map">
@@ -336,7 +339,7 @@
     <Content Include="app\modules\TreeViewLeftPanel\Thumb.js.map">
       <DependentUpon>Thumb.ts</DependentUpon>
     </Content>
-    <Content Include="app\shared\FooterPanel.js.map">
+    <Content Include="app\modules\Shared\FooterPanel.js.map">
       <DependentUpon>FooterPanel.ts</DependentUpon>
     </Content>
     <Content Include="app\modules\ExtendedFooterPanel\ExtendedFooterPanel.js.map">
@@ -350,6 +353,18 @@
     </Content>
     <Content Include="app\extensions\seadragon\EmbedDialogue.js.map">
       <DependentUpon>EmbedDialogue.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\Shared\BaseApp.min.js.map">
+      <DependentUpon>BaseApp.js</DependentUpon>
+    </Content>
+    <Content Include="app\extensions\seadragon\App.min.js.map">
+      <DependentUpon>App.js</DependentUpon>
+    </Content>
+    <Content Include="app\modules\SeadragonCenterPanel\SeadragonCenterPanel.min.js.map">
+      <DependentUpon>SeadragonCenterPanel.js</DependentUpon>
+    </Content>
+    <Content Include="app\modules\MoreInfoRightPanel\MoreInfoRightPanel.js.map">
+      <DependentUpon>MoreInfoRightPanel.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

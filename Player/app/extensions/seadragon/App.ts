@@ -1,10 +1,10 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = module("app/BaseApp");
+import baseApp = module("app/modules/Shared/BaseApp");
 import utils = module("app/Utils");
-import bp = module("app/BaseProvider");
+import bp = module("app/modules/Shared/BaseProvider");
 import p = module("app/extensions/seadragon/Provider");
-import shell = module("app/shared/Shell");
+import shell = module("app/modules/Shared/Shell");
 import header = module("app/modules/PagingHeaderPanel/PagingHeaderPanel");
 import left = module("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
 import thumbsView = module("app/modules/TreeViewLeftPanel/ThumbsView");
@@ -130,7 +130,7 @@ export class App extends baseApp.BaseApp {
         } 
 
         // have initial params been specified on the embedding div?
-        assetIndex = this.provider.config.options.assetIndex;
+        assetIndex = this.provider.initialAssetIndex;
 
         if (assetIndex) {
             this.viewPage(assetIndex);
@@ -168,7 +168,7 @@ export class App extends baseApp.BaseApp {
     viewLabel(label: string): void {
 
         if (!label) {
-            this.showDialogue(this.provider.config.content.genericDialogue.enterValue);
+            this.showDialogue(this.provider.config.modules['genericDialogue'].content.emptyValue);
             return;
         }
         
@@ -177,7 +177,7 @@ export class App extends baseApp.BaseApp {
         if (index != -1) {
             this.viewPage(index);
         } else {
-            this.showDialogue(this.provider.config.content.genericDialogue.pageNotFound);
+            this.showDialogue(this.provider.config.modules['genericDialogue'].content.pageNotFound);
         }
     }
 

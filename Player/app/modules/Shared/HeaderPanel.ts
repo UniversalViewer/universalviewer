@@ -1,6 +1,6 @@
-/// <reference path="../../js/jquery.d.ts" />
-import baseApp = module("app/BaseApp");
-import baseView = module("app/BaseView");
+/// <reference path="../../../js/jquery.d.ts" />
+import baseApp = module("app/modules/Shared/BaseApp");
+import baseView = module("app/modules/Shared/BaseView");
 import utils = module("app/Utils");
 
 export class HeaderPanel extends baseView.BaseView {
@@ -14,6 +14,7 @@ export class HeaderPanel extends baseView.BaseView {
     }
 
     create(): void {
+
         super.create();
 
         this.$centerOptions = utils.Utils.createDiv('centerOptions');
@@ -22,7 +23,7 @@ export class HeaderPanel extends baseView.BaseView {
         this.$rightOptions = utils.Utils.createDiv('rightOptions');
         this.$element.append(this.$rightOptions);
 
-        this.$helpButton = $('<a href="#" class="action help">' + this.content.header.help + '</a>');
+        this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
         this.$rightOptions.append(this.$helpButton);
     }
 

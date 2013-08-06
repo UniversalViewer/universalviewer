@@ -1,5 +1,5 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseRight = module("app/shared/RightPanel");
+import baseRight = module("app/modules/Shared/RightPanel");
 import utils = module("app/Utils");
 
 export class MoreInfoRightPanel extends baseRight.RightPanel {
@@ -9,6 +9,9 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
     }
 
     create(): void {
+        
+        this.setConfig('moreInfoRightPanel');
+        
         super.create();
 
         // load css.
