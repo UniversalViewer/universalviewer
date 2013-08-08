@@ -6,7 +6,7 @@ class BootStrapper{
     pkg: any;
     extensions: any;
     packageUri: string;
-    assetIndex: number;
+    assetSequenceIndex: number;
     assetSequence: any;
 
     // this loads the package, determines what kind of extension and provider to use, and instantiates them.
@@ -22,20 +22,26 @@ class BootStrapper{
 
             that.pkg = pkg;
 
-            var hash = utils.Utils.getHashValues('/', parent.document);
+            // get params from querystring, these override hash ones if present.
+            var index = utils.Utils.getParameterByName('assetSequenceIndex');
 
-            that.assetIndex = hash[0] || 0;
+            if (index) {
+                that.assetSequenceIndex = parseInt(index);
+            } else {
+                var hash = utils.Utils.getHashValues('/', parent.document);
+                that.assetSequenceIndex = hash[0] || 0;
+            }
 
-            if (!that.pkg.assetSequences[that.assetIndex].$ref) {
-                that.assetSequence = that.pkg.assetSequences[that.assetIndex];
+            if (!that.pkg.assetSequences[that.assetSequenceIndex].$ref) {
+                that.assetSequence = that.pkg.assetSequences[that.assetSequenceIndex];
                 that.createExtension();
             } else {
                 // load missing assetSequence.
                 var basePackageUri = that.packageUri.substr(0, that.packageUri.lastIndexOf('/') + 1);
-                var assetSequenceUri = basePackageUri + pkg.assetSequences[that.assetIndex].$ref;
+                var assetSequenceUri = basePackageUri + pkg.assetSequences[that.assetSequenceIndex].$ref;
 
                 $.getJSON(assetSequenceUri, (assetSequenceData) => {
-                    that.assetSequence = that.pkg.assetSequences[that.assetIndex] = assetSequenceData;
+                    that.assetSequence = that.pkg.assetSequences[that.assetSequenceIndex] = assetSequenceData;
                     that.createExtension();
                 });
             }

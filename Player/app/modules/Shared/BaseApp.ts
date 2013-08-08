@@ -22,6 +22,7 @@ export class BaseApp {
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
     static ASSET_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
+    static ASSETSEQUENCE_INDEX_CHANGED: string = 'onAssetSequenceIndexChanged';
 
     constructor(provider: bp.BaseProvider, extensionName: string) {
 
@@ -109,6 +110,15 @@ export class BaseApp {
         $.publish(BaseApp.ASSET_INDEX_CHANGED, [assetIndex]);
         
         if (callback) callback(assetIndex);
+    }
+
+    viewAssetSequence(index): void {
+
+        if (this.isFullScreen) {
+            $.publish(BaseApp.TOGGLE_FULLSCREEN);
+        }
+
+        this.triggerSocket(BaseApp.ASSETSEQUENCE_INDEX_CHANGED, index);
     }
 
     isDeepLinkingEnabled(): boolean {

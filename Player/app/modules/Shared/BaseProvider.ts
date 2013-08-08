@@ -31,18 +31,39 @@ export class BaseProvider {
         this.embedScriptUri = utils.Utils.getParameterByName('embedScriptUri');
         this.initialZoom = utils.Utils.getParameterByName('zoom');
 
-        var hash = utils.Utils.getHashValues('/', parent.document);
-        
-        this.assetSequenceIndex = hash[0] || 0;
-        
+        // get params from querystring, these override hash ones if present.
+        var index = utils.Utils.getParameterByName('assetSequenceIndex');
+
+        if (index) {
+            this.assetSequenceIndex = parseInt(index);
+        } else {
+            var hash = utils.Utils.getHashValues('/', parent.document);
+            this.assetSequenceIndex = hash[0] || 0;
+        }
+
+        // we know that this assetSequence exists because the bootstrapper
+        // will have loaded it already.
         this.assetSequence = pkg.assetSequences[this.assetSequenceIndex];
 
+        // replace all ref assetSequences with an object that can store
+        // its path and sub structures. they won't get used for anything
+        // else without a reload.
+        for (var i = 0; i < pkg.assetSequences.length; i++) {
+            if (this.pkg.assetSequences[i].$ref) {
+                this.pkg.assetSequences[i] = {};
+            }
+        }
+
         this.type = this.getRootSection().sectionType.toLowerCase();
+
+        if (this.pkg.rootStructure) {
+            this.parseStructures(this.pkg.rootStructure, pkg.assetSequences, '');
+        }
 
         this.parseSections(this.getRootSection(), this.assetSequence.assets, '');
     }
 
-    // the purpose of this is to give each asset in this.assetSequence.assets
+    // the purpose of this is to give each asset in assetSequence.assets
     // a collection of sections it belongs to.
     // it also builds a path string property for each section.
     // this can then be used when a section is clicked in the tree view
@@ -71,6 +92,28 @@ export class BaseProvider {
             }
         }
     }
+
+    parseStructures(structure, assetSequences, path): void {
+
+        structure.path = path;
+
+        if (typeof(structure.assetSequence) != 'undefined') {
+
+            var assetSequence = assetSequences[structure.assetSequence];
+
+            assetSequence.index = structure.assetSequence;
+            assetSequence.structure = structure;
+
+            // replace index with actual object ref.
+            structure.assetSequence = assetSequence;
+        }
+
+        if (structure.structures) {
+            for (var j = 0; j < structure.structures.length; j++) {
+                this.parseStructures(structure.structures[j], assetSequences, path + '/' + j);
+            }
+        }
+    } 
 
     replaceSectionType(sectionType: string): string {
         if (this.config.options.sectionMappings[sectionType]) {

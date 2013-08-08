@@ -82,8 +82,12 @@ export class App extends baseApp.BaseApp {
             this.viewPage(index);
         });
 
-        $.subscribe(treeView.TreeView.VIEW_SECTION_PATH, (e, path: string) => {
-            this.viewSection(path);
+        $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
+            this.viewAssetSequence(structure.assetSequence.index);
+        });
+
+        $.subscribe(treeView.TreeView.VIEW_SECTION, (e, section: any) => {
+            this.viewSection(section.path);
         });
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
@@ -159,8 +163,6 @@ export class App extends baseApp.BaseApp {
     viewSection(path: string): void {
 
         var index = this.getSectionIndex(path);
-
-        var section = this.getSectionByAssetIndex(index);
 
         this.viewPage(index);
     }

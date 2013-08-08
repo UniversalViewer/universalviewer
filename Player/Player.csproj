@@ -138,6 +138,13 @@
     <Content Include="app\modules\TreeViewLeftPanel\ThumbsView.min.js">
       <DependentUpon>ThumbsView.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="app\modules\TreeViewLeftPanel\TreeNode.ts" />
+    <Content Include="app\modules\TreeViewLeftPanel\TreeNode.js">
+      <DependentUpon>TreeNode.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\TreeViewLeftPanel\TreeNode.min.js">
+      <DependentUpon>TreeNode.ts</DependentUpon>
+    </Content>
     <Content Include="app\modules\TreeViewLeftPanel\TreeView.js">
       <DependentUpon>TreeView.ts</DependentUpon>
     </Content>
@@ -365,6 +372,9 @@
     </Content>
     <Content Include="app\modules\MoreInfoRightPanel\MoreInfoRightPanel.js.map">
       <DependentUpon>MoreInfoRightPanel.ts</DependentUpon>
+    </Content>
+    <Content Include="app\modules\TreeViewLeftPanel\TreeNode.js.map">
+      <DependentUpon>TreeNode.ts</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

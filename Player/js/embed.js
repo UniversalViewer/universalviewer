@@ -19,7 +19,7 @@
         script.type = "text/javascript";
         script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
         script.onload = script.onreadystatechange = function () {
-            if (!loaded && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
+            if (!loaded && (!(d = this.readyState) || d === "loaded" || d === "complete")) {
                 callback((j = window.jQuery).noConflict(1), scriptUri, loaded = true);
                 j(script).remove();
             }
@@ -54,7 +54,7 @@
         json2Uri = String.format(json2Uri, window.embedBaseUri);
     } else {
         var port = '';
-        if (a.port && a.port != 80) port = ':' + a.port;
+        if (a.port && a.port !== 80) port = ':' + a.port;
 
         appUri = String.format(appUri, 'http://' + domain + port + '/');
         easyXDMUri = String.format(easyXDMUri, '//' + domain + port + '/');
@@ -74,7 +74,7 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, assetIndex, assetsBaseUri, zoom, isFullScreen, height, top, left;
+        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, assetsBaseUri, zoom, isFullScreen, height, top, left;
 
         $app = $(element);
 
@@ -84,6 +84,7 @@
         // get initial params from the container's 'data-' attributes.
         dataUri = $app.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
+        assetSequenceIndex = $app.attr('data-assetsequenceindex');
         assetIndex = $app.attr('data-assetindex');
         assetsBaseUri = $app.attr('data-assetsbaseuri');
         zoom = $app.attr('data-zoom');
@@ -159,6 +160,16 @@
             resize();
         }
 
+        function viewAssetSequence(index) {
+
+            $appFrame.prop('src', '');
+            $app.empty();
+
+            assetSequenceIndex = index;
+
+            createSocket();
+        }
+
         function createSocket() {
 
             var uri = appUri +
@@ -167,6 +178,7 @@
                 "&dataUri=" + dataUri +
                 "&embedScriptUri=" + scriptUri;
 
+            if (assetSequenceIndex) uri += "&assetSequenceIndex=" + assetSequenceIndex;
             if (assetIndex) uri += "&assetIndex=" + assetIndex;
             if (assetsBaseUri) uri += "&assetsBaseUri=" + assetsBaseUri;
             if (zoom) uri += "&zoom=" + zoom;
@@ -184,6 +196,9 @@
                     switch (message.eventName) {
                         case "onToggleFullScreen":
                             toggleFullScreen(message.eventObject);
+                            break;
+                        case "onAssetSequenceIndexChanged":
+                            viewAssetSequence(message.eventObject);
                             break;
                         case "onRedirect":
                             redirect(message.eventObject);
