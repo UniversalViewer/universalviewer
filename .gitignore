@@ -1,12 +1,39 @@
 #################
+## Webstorm
+#################
+
+.idea
+
+#################
+## Node
+#################
+
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+npm-debug.log
+node_modules
+
+#################
 ## TypeScript
 #################
 
-*/app/*.js
-*/app/**/*.js
-!*/app/**/config.js
-*.js.map
-*.min.map
+app/*.js
+app/*.js.map
+app/**/*.js
+app/**/*.js.map
+app/*.min.map
+app/**/*.min.map
 
 #################
 ## Eclipse
