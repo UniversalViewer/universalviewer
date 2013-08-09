@@ -5,6 +5,6 @@ install node
 
 open console on player directory
 
-> npm  install
+npm  install
 
-> grunt
+grunt
