@@ -6,36 +6,37 @@ module.exports = function (grunt) {
     grunt.initConfig({
 
         ts: {
-            debug: {                          // a particular target   
-                src: ["app/**/*.ts"], // The source typescript files, See : http://gruntjs.com/configuring-tasks#files                
+            debug: {                            
+                src: ["app/**/*.ts"],          
                 reference: 'app/reference.ts',
                 watch: 'app',
-                options: {                  // override the main options, See : http://gruntjs.com/configuring-tasks#options
-                    target: 'es3',            // es3 (default) / or es5
-                    module: 'amd',       // amd , commonjs (default)
-                    sourcemap: true,          // true  (default) | false
-                    declarations: false,       // true | false  (default)
-                    nolib: false,             // true | false (default)
-                    comments: false           // true | false (default)
+                options: {                      
+                    target: 'es3',              
+                    module: 'amd',              
+                    sourcemap: true,            
+                    declarations: false,        
+                    nolib: false,               
+                    comments: false             
                 }
             },
-            release: {                          // a particular target   
-                src: ["app/**/*.ts"], // The source typescript files, See : http://gruntjs.com/configuring-tasks#files                
-                out: 'app/player.js',    // If specified, generate an out.js file which is the merged js file   
+            release: {                          
+                src: ["app/**/*.ts"],           
+                out: 'app/player.js',           
                 reference: 'app/reference.ts',
                 watch: 'app',
-                options: {                  // override the main options, See : http://gruntjs.com/configuring-tasks#options
-                    target: 'es3',            // es3 (default) / or es5
-                    module: 'amd',       // amd , commonjs (default)
-                    sourcemap: false,          // true  (default) | false
-                    declarations: false,       // true | false  (default)
-                    nolib: false,             // true | false (default)
-                    comments: false           // true | false (default)
+                options: {                      
+                    target: 'es3',              
+                    module: 'amd',              
+                    sourcemap: false,           
+                    declarations: false,        
+                    nolib: false,               
+                    comments: false             
                 }
             }
         },
     });
 
     grunt.registerTask("default", ["ts:debug"]);
+    //grunt.registerTask("default", ["ts:release"]);
 
 };

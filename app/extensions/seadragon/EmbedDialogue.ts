@@ -32,11 +32,11 @@ export class EmbedDialogue extends embed.EmbedDialogue {
         var zoom = (<app.App>this.app).getViewerBounds();
 
         this.code = this.provider.getEmbedScript(
-            this.options.embedTemplate,
             this.app.currentAssetIndex,
             zoom,
             this.currentWidth,
-            this.currentHeight);
+            this.currentHeight,
+            this.options.embedTemplate);
 
         this.$code.val(this.code);        
     }

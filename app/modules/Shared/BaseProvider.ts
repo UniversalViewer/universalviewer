@@ -11,7 +11,6 @@ export class BaseProvider {
     isHomeDomain: boolean;
     isOnlyInstance: boolean;
     initialAssetIndex: string;
-    assetsBaseUri: string;
     embedScriptUri: string;
     initialZoom: string;
 
@@ -24,10 +23,10 @@ export class BaseProvider {
         this.config = config;
         this.pkg = pkg;
 
+        this.options.assetsBaseUri = utils.Utils.getParameterByName('assetsBaseUri');
         this.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain') === "true";
         this.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance') === "true";
         this.initialAssetIndex = utils.Utils.getParameterByName('assetIndex');
-        this.assetsBaseUri = utils.Utils.getParameterByName('assetsBaseUri');
         this.embedScriptUri = utils.Utils.getParameterByName('embedScriptUri');
         this.initialZoom = utils.Utils.getParameterByName('zoom');
 

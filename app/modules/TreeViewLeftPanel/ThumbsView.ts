@@ -90,7 +90,7 @@ export class ThumbsView extends baseView.BaseView {
         for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
             var asset = this.provider.assetSequence.assets[i];
 
-            var uri = this.provider.getThumbUri(this.options.thumbsUriTemplate, asset);
+            var uri = this.provider.getThumbUri(asset);
             var section = this.app.getAssetSection(asset);
 
             var heightRatio = asset.height / asset.width;

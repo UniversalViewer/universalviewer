@@ -10,17 +10,31 @@ export class Provider extends baseProvider.BaseProvider {
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
-            thumbsBaseUri: "http://wellcomelibrary.org"
+            dziBaseUri: "http://wellcomelibrary.org",
+            dziUriTemplate: "{0}{1}",
+            thumbsBaseUri: "http://wellcomelibrary.org",
+            thumbsUriTemplate: "{0}{1}"
         }, config.options);
     }
 
-    getThumbUri(thumbsUriTemplate: string, asset: any): string {
-        var baseUri = this.options.thumbsBaseUri ? this.options.thumbsBaseUri : this.assetsBaseUri;
-        return String.prototype.format(thumbsUriTemplate, baseUri, this.pkg.identifier, this.assetSequenceIndex, asset.identifier);
+    // base uris and templates can be set in the provider, overridden by the config.js root
+    // options object or can be passed in directly from module-specific options.
+
+    getDziUri(asset: any, dziBaseUri?: string, dziUriTemplate?: string){
+        var baseUri = dziBaseUri ? dziBaseUri : this.options.dziBaseUri || this.options.assetsBaseUri;
+        var template = dziUriTemplate? dziUriTemplate : this.options.dziUriTemplate;
+        return String.prototype.format(template, baseUri, asset.dziUri);
     }
 
-    getEmbedScript(embedTemplate: string, assetIndex: number, zoom: string, width: number, height: number): string{
+    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
+        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.assetsBaseUri;
+        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
+        return String.prototype.format(template, baseUri, asset.thumbnailPath);
+    }
+
+    getEmbedScript(assetIndex: number, zoom: string, width: number, height: number, embedTemplate: string): string{
         var dataUri = String.prototype.format(this.options.dataUriTemplate, this.options.dataBaseUri, this.pkg.identifier);
-        return String.prototype.format(embedTemplate, this.assetSequenceIndex, dataUri, assetIndex, zoom, width, height, this.embedScriptUri);
+        var template = embedTemplate? embedTemplate : this.options.embedTemplate;
+        return String.prototype.format(template, this.assetSequenceIndex, dataUri, assetIndex, zoom, width, height, this.embedScriptUri);
     }
 }

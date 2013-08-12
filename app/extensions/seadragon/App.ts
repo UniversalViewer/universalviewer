@@ -2,8 +2,8 @@
 /// <reference path="../../../js/extensions.d.ts" />
 import baseApp = require("app/modules/Shared/BaseApp");
 import utils = require("app/Utils");
-import bp = require("app/modules/Shared/BaseProvider");
-import p = require("app/extensions/seadragon/Provider");
+import baseProver = require("app/modules/Shared/BaseProvider");
+import provider = require("app/extensions/seadragon/Provider");
 import shell = require("app/modules/Shared/Shell");
 import header = require("app/modules/PagingHeaderPanel/PagingHeaderPanel");
 import left = require("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
@@ -37,7 +37,7 @@ export class App extends baseApp.BaseApp {
     static PAGE_MODE = "pageMode";
     static IMAGE_MODE = "imageMode";
 
-    constructor(provider: p.Provider) {
+    constructor(provider: provider.Provider) {
         super(provider, 'seadragon');
     }
 
@@ -149,7 +149,9 @@ export class App extends baseApp.BaseApp {
 
             var asset = this.provider.assetSequence.assets[assetIndex];
 
-            $.publish(App.OPEN_DZI, [asset.dziUri]);
+            var dziUri = (<provider.Provider>this.provider).getDziUri(asset);
+
+            $.publish(App.OPEN_DZI, [dziUri]);
 
             // update address                       
             if (preserveAddress) {

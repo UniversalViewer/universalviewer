@@ -61,7 +61,6 @@
         {
             "options":
             {
-                "thumbsUriTemplate": "{0}/thumbs/{1}/{2}/{3}.jpg",
                 "thumbsLoadRange": 15,
                 "thumbsImageFadeInDuration": 300,
                 "panelCollapsedWidth": 30,
