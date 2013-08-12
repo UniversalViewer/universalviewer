@@ -1,11 +1,8 @@
 {
-  "devDependencies": {
-    "grunt": "0.4.1",
-    "grunt-ts": "1.0.1",
-    "grunt-contrib-connect": "~0.1.0",
-    "connect-modrewrite": "0.5.3"
-  },
   "dependencies": {
+    "grunt": "~0.4.1",
+    "grunt-ts": "~1.0.1",
+    "connect": "~2.8.5",
     "connect-modrewrite": "~0.5.4"
   }
 }
