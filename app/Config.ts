@@ -47,7 +47,7 @@ require([
         extensions['seadragon/dzi'] = {
             type: seadragon.App,
             provider: seadragonProvider.Provider,
-            configUri: '/app/extensions/seadragon/config.js'
+            configUri: '/app/extensions/seadragon/js/config.js'
         };
 
         new BootStrapper(extensions);

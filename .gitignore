@@ -34,6 +34,8 @@ app/**/*.js
 app/**/*.js.map
 app/*.min.map
 app/**/*.min.map
+!app/**/js/*.js
+!app/**/js/*.js.map
 
 #################
 ## Eclipse
