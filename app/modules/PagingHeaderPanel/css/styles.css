@@ -42,6 +42,7 @@
 #app .headerPanel .centerOptions .search{
     float: left;
     margin: 0 0 0 5px;
+    width: 113px;
 }
 
 #app .headerPanel .centerOptions .nextOptions{
