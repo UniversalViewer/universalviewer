@@ -156,13 +156,15 @@ export class TreeView extends baseView.BaseView {
         // if there aren't any structures then the sectionsRootNode won't have been created.
         if (!this.sectionsRootNode) this.sectionsRootNode = this.structuresRootNode;
 
-        for (var i = 0; i < this.provider.assetSequence.rootSection.sections.length; i++) {
-            var section = this.provider.assetSequence.rootSection.sections[i];
+        if (this.provider.assetSequence.rootSection.sections){
+            for (var i = 0; i < this.provider.assetSequence.rootSection.sections.length; i++) {
+                var section = this.provider.assetSequence.rootSection.sections[i];
 
-            var childNode = new TreeNode();
-            this.sectionsRootNode.nodes.push(childNode);
+                var childNode = new TreeNode();
+                this.sectionsRootNode.nodes.push(childNode);
 
-            this.parseSection(childNode, section);
+                this.parseSection(childNode, section);
+            }
         }
     }
 

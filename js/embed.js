@@ -74,7 +74,7 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, assetsBaseUri, zoom, isFullScreen, height, top, left;
+        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, isFullScreen, height, top, left;
 
         $app = $(element);
 
@@ -82,11 +82,12 @@
         $app.empty();
 
         // get initial params from the container's 'data-' attributes.
+        dataBaseUri = $app.attr('data-baseuri');
+        if (dataBaseUri) dataBaseUri = encodeURIComponent(dataBaseUri);
         dataUri = $app.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
         assetSequenceIndex = $app.attr('data-assetsequenceindex');
         assetIndex = $app.attr('data-assetindex');
-        assetsBaseUri = $app.attr('data-assetsbaseuri');
         zoom = $app.attr('data-zoom');
 
         isFullScreen = false;
@@ -180,7 +181,7 @@
 
             if (assetSequenceIndex) uri += "&assetSequenceIndex=" + assetSequenceIndex;
             if (assetIndex) uri += "&assetIndex=" + assetIndex;
-            if (assetsBaseUri) uri += "&assetsBaseUri=" + assetsBaseUri;
+            if (dataBaseUri) uri += "&dataBaseUri=" + dataBaseUri;
             if (zoom) uri += "&zoom=" + zoom;
 
             socket = new easyXDM.Socket({

@@ -8,6 +8,7 @@ export class BaseProvider {
     assetSequenceIndex: number;
     assetSequence: any;
     type: string;
+    dataUri: string;
     isHomeDomain: boolean;
     isOnlyInstance: boolean;
     initialAssetIndex: string;
@@ -15,15 +16,17 @@ export class BaseProvider {
     initialZoom: string;
 
     options: any = {
-        dataBaseUri: '/packagecore',
-        dataUriTemplate: '{0}/{1}'
+        
     };
 
     constructor(config: any, pkg: any) {
         this.config = config;
         this.pkg = pkg;
 
-        this.options.assetsBaseUri = utils.Utils.getParameterByName('assetsBaseUri');
+        // add dataBaseUri to options so it can be overridden.
+        this.options.dataBaseUri = utils.Utils.getParameterByName('dataBaseUri');
+
+        this.dataUri = utils.Utils.getParameterByName('dataUri');
         this.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain') === "true";
         this.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance') === "true";
         this.initialAssetIndex = utils.Utils.getParameterByName('assetIndex');

@@ -36,6 +36,7 @@ export class EmbedDialogue extends embed.EmbedDialogue {
             zoom,
             this.currentWidth,
             this.currentHeight,
+            null,
             this.options.embedTemplate);
 
         this.$code.val(this.code);        

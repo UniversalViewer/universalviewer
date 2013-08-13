@@ -5,6 +5,7 @@ class BootStrapper{
     
     pkg: any;
     extensions: any;
+    dataBaseUri: string;
     packageUri: string;
     assetSequenceIndex: number;
     assetSequence: any;
@@ -16,7 +17,12 @@ class BootStrapper{
 
         var that = this;
 
+        that.dataBaseUri = utils.Utils.getParameterByName('dataBaseUri');
         that.packageUri = utils.Utils.getParameterByName('dataUri');
+
+        if (that.dataBaseUri){
+            that.packageUri = that.dataBaseUri + that.packageUri;
+        }
 
         $.getJSON(that.packageUri, (pkg) => {
 
