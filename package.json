@@ -2,7 +2,6 @@
   "dependencies": {
     "grunt": "~0.4.1",
     "grunt-ts": "~1.0.1",
-    "connect": "~2.8.5",
-    "connect-modrewrite": "~0.5.4"
+    "connect": "~2.8.5"
   }
 }
