@@ -1,10 +1,11 @@
-﻿#app .rightPanel .top .title{
-    background: url(../img/moreinfo.png) no-repeat;
+﻿
+#app .rightPanel .top .title{
+    background: url('@{moreInfoRightPanelImagePath}moreinfo.png') no-repeat;
     width: 140px;
 }
 
 #app .rightPanel .closed .title{
-    background: url(../img/moreinfo_v.png) no-repeat;
+    background: url('@{moreInfoRightPanelImagePath}moreinfo_v.png') no-repeat;
     height: 140px;
 }
 
@@ -17,7 +18,7 @@
 }
 
 #app .rightPanel .moreInfoView.loading{
-    background-image: url(../../../shared/img/ajax-loader.gif);
+    background-image: url('@{moreInfoRightPanelImagePath}ajax-loader.gif');
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 }
@@ -52,7 +53,7 @@
 #app .rightPanel .moreInfoView .action{
     margin: 5px 0 0 0;
     font-weight: normal;
-    background: url(../../../shared/img/sprite.png) 0 -1000px no-repeat;
+    background: url('@{sharedImagePath}sprite.png') 0 -1000px no-repeat;
     color: #FFB81D;
 }
 

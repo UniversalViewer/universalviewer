@@ -26,9 +26,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     create(): void {
         super.create();
 
-        // load css.
-        utils.Utils.loadCss('app/modules/SeadragonCenterPanel/css/styles.css');
-
         // events.
         $.subscribe(app.App.OPEN_DZI, (e, uri) => {
             this.viewer.openDzi(uri);

@@ -1,15 +1,15 @@
 module.exports = function (grunt) {
     
-    // load the task
-    grunt.loadNpmTasks("grunt-ts")
+    grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks("grunt-contrib-less");
 
     grunt.initConfig({
 
         ts: {
-            debug: {                            
+            dev: {                            
                 src: ["app/**/*.ts"],          
-                reference: 'app/reference.ts',
-                watch: 'app',
+                //reference: 'app/reference.ts',
+                //watch: 'app',
                 options: {                      
                     target: 'es3',              
                     module: 'amd',              
@@ -19,11 +19,11 @@ module.exports = function (grunt) {
                     comments: false             
                 }
             },
-            release: {                          
+            dist: {                          
                 src: ["app/**/*.ts"],           
-                out: 'app/player.js',           
-                reference: 'app/reference.ts',
-                watch: 'app',
+                out: 'app/main.js',           
+                //reference: 'app/reference.ts',
+                //watch: 'app',
                 options: {                      
                     target: 'es3',              
                     module: 'amd',              
@@ -34,9 +34,25 @@ module.exports = function (grunt) {
                 }
             }
         },
+
+        less: {
+            dev: {
+                files: {
+                    "css/styles.css": "css/styles.less"
+                }
+            },
+            dist: {
+                options: {
+                    yuicompress: true
+                },
+                files: {
+                  "css/styles.css": "css/styles.less"
+                }
+            }
+        }
     });
 
-    grunt.registerTask("default", ["ts:debug"]);
-    //grunt.registerTask("default", ["ts:release"]);
+    grunt.registerTask("default", ["ts:dev", "less:dev"]);
+    //grunt.registerTask("default", ["ts:dist", "less:dist"]);
 
 };

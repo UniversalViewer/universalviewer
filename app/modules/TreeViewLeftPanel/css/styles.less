@@ -1,10 +1,11 @@
-﻿#app .leftPanel .top .title{
-    background: url(../img/contents.png) no-repeat;
+﻿
+#app .leftPanel .top .title{
+    background: url('@{treeViewLeftPanelImagePath}contents.png') no-repeat;
     width: 78px;
 }
 
 #app .leftPanel .closed .title{
-    background: url(../img/contents_v.png) no-repeat;
+    background: url('@{treeViewLeftPanelImagePath}contents_v.png') no-repeat;
     height: 78px;
 }
 
@@ -58,7 +59,7 @@
 	display: inline-block;
 	height: 10px;
 	width: 10px;
-	background-image: url(../img/plus.png);
+	background-image: url('@{treeViewLeftPanelImagePath}plus.png');
 }
 
 #app .leftPanel .treeView .spacer {
@@ -69,7 +70,7 @@
 }
 
 #app .leftPanel .treeView .toggle.expanded {
-	background-image: url(../img/minus.png);
+	background-image: url('@{treeViewLeftPanelImagePath}minus.png');
 }
 
 #app .leftPanel .treeView ul.tree, ul.tree ul {
@@ -117,11 +118,11 @@
 }
 
 #app .leftPanel .thumbsView .thumb .wrap.loading{
-    background: url(../../../modules/Shared/img/ajax-loader.gif) no-repeat 50% 50%;
+    background: url('@{sharedImagePath}ajax-loader.gif') no-repeat 50% 50%;
 }
 
 #app .leftPanel .thumbsView .thumb .wrap.hidden{
-    background: url(../img/hidden_thumb.png) no-repeat 50% 50%;
+    background: url('@{treeViewLeftPanelImagePath}hidden_thumb.png') no-repeat 50% 50%;
 }
 
 #app .leftPanel .thumbsView .thumb.selected .wrap{

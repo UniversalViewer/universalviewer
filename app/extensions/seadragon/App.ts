@@ -44,9 +44,6 @@ export class App extends baseApp.BaseApp {
     create(): void {
         super.create();
 
-        // load css.
-        utils.Utils.loadCss('app/modules/Dialogues/css/styles.css');
-
         // events.
         $.subscribe(header.PagingHeaderPanel.FIRST, (e) => {
             this.viewPage(0);

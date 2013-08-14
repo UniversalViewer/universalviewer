@@ -14,9 +14,6 @@ export class ExtendedFooterPanel extends baseFooter.FooterPanel {
     create(): void {
         super.create();
 
-        // load css.
-        utils.Utils.loadCss('app/modules/ExtendedFooterPanel/css/styles.css');
-
         this.$embedBtn = $('<a href="#" class="imageButton embed"></a>');
         this.$options.prepend(this.$embedBtn);
 

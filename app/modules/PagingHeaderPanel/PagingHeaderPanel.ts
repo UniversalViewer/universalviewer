@@ -40,9 +40,6 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         
         super.create();
 
-        // load css.
-        utils.Utils.loadCss('app/modules/PagingHeaderPanel/css/styles.css');
-
         $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
             this.assetIndexChanged(assetIndex);
         });

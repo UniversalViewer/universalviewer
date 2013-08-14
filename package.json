@@ -2,6 +2,7 @@
   "dependencies": {
     "grunt": "~0.4.1",
     "grunt-ts": "~1.0.1",
-    "connect": "~2.8.5"
+    "connect": "~2.8.5",
+    "grunt-contrib-less": "~0.7.0"
   }
 }

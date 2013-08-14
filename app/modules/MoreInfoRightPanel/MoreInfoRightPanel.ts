@@ -13,9 +13,6 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         this.setConfig('moreInfoRightPanel');
         
         super.create();
-
-        // load css.
-        utils.Utils.loadCss('app/modules/MoreInfoRightPanel/css/styles.css');
     }
 
     resize(): void {

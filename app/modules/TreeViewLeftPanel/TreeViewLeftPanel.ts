@@ -25,9 +25,6 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         
         super.create();
 
-        // load css.
-        utils.Utils.loadCss('app/modules/TreeViewLeftPanel/css/styles.css');
-
         this.$tabs = utils.Utils.createDiv('tabs');
         this.$main.append(this.$tabs);
 
