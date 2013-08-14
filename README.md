@@ -1,24 +1,25 @@
 player
 ======
 
-install node (http://nodejs.org/)
+Install node (http://nodejs.org)
+We are using node for this project as it provides a cross-platform collection of tools with minimal setup overhead.
 
-install grunt command line interface globally if you don't already have it:
+Install the grunt command line interface globally if you don't already have it:
 
 ```$ npm install -g grunt-cli```
 
-open console on player directory
+Open the console on the player directory.
 
-install dependencies:
+Install dependencies:
 
 ```$ npm install```
 
-compile typescript to js:
+Run grunt compile tasks:
 
 ```$ grunt```
 
-run simple server to view player:
+Run the simple server (on Windows you will need to grant firewall permissions):
 
 ```$ node server.js```
 
-browse to http://localhost:3000
+Browse to http://localhost:3000
