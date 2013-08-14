@@ -1,7 +1,7 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import shell = require("app/modules/Shared/Shell");
-import baseView = require("app/modules/Shared/BaseView");
-import utils = require("app/Utils");
+import shell = require("app/modules/shared/shell");
+import baseView = require("app/modules/shared/baseView");
+import utils = require("app/utils");
 
 export class CenterPanel extends baseView.BaseView {
 

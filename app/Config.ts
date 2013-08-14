@@ -35,12 +35,12 @@ require([
     'plugins',
     'console',
     'pubsub',
-    'app/modules/SeadragonCenterPanel/js/openseadragon.min',
+    'app/modules/seadragonCenterPanel/js/openseadragon.min',
     'jsviews',
-    'app/BootStrapper',
-    'app/extensions/seadragon/App',
-    'app/extensions/seadragon/Provider'],
-    ($, plugins, console, pubsub, osd, jsviews, BootStrapper, seadragon, seadragonProvider) => {
+    'app/bootStrapper',
+    'app/extensions/seadragon/app',
+    'app/extensions/seadragon/provider'],
+    ($, plugins, console, pubsub, osd, jsviews, bootStrapper, seadragon, seadragonProvider) => {
 
         var extensions = {};
 
@@ -50,5 +50,5 @@ require([
             configUri: '/app/extensions/seadragon/js/config.js'
         };
 
-        new BootStrapper(extensions);
+        new bootStrapper(extensions);
     });

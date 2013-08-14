@@ -1,9 +1,9 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = require("app/modules/Shared/BaseApp");
-import shell = require("app/modules/Shared/Shell");
-import utils = require("app/Utils");
-import baseView = require("app/modules/Shared/BaseView");
+import baseApp = require("app/modules/shared/baseApp");
+import shell = require("app/modules/shared/shell");
+import utils = require("app/utils");
+import baseView = require("app/modules/shared/baseView");
 
 export class BaseExpandPanel extends baseView.BaseView {
 

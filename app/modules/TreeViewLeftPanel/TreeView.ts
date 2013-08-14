@@ -1,11 +1,11 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import utils = require("app/Utils");
-import baseApp = require("app/modules/Shared/BaseApp");
-import shell = require("app/modules/Shared/Shell");
-import baseView = require("app/modules/Shared/BaseView");
-import app = require("app/extensions/seadragon/App");
-import TreeNode = require("app/modules/TreeViewLeftPanel/TreeNode");
+import utils = require("app/utils");
+import baseApp = require("app/modules/shared/baseApp");
+import shell = require("app/modules/shared/shell");
+import baseView = require("app/modules/shared/baseView");
+import app = require("app/extensions/seadragon/app");
+import TreeNode = require("app/modules/treeViewLeftPanel/treeNode");
 
 export class TreeView extends baseView.BaseView {
 

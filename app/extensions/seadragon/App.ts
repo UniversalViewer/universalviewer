@@ -1,19 +1,20 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import baseApp = require("app/modules/Shared/BaseApp");
-import utils = require("app/Utils");
-import baseProver = require("app/modules/Shared/BaseProvider");
-import provider = require("app/extensions/seadragon/Provider");
-import shell = require("app/modules/Shared/Shell");
-import header = require("app/modules/PagingHeaderPanel/PagingHeaderPanel");
-import left = require("app/modules/TreeViewLeftPanel/TreeViewLeftPanel");
-import thumbsView = require("app/modules/TreeViewLeftPanel/ThumbsView");
-import treeView = require("app/modules/TreeViewLeftPanel/TreeView");
-import center = require("app/modules/SeadragonCenterPanel/SeadragonCenterPanel");
-import right = require("app/modules/MoreInfoRightPanel/MoreInfoRightPanel");
-import footer = require("app/modules/ExtendedFooterPanel/ExtendedFooterPanel");
-import help = require("app/modules/Dialogues/HelpDialogue");
-import embed = require("app/extensions/seadragon/EmbedDialogue");
+
+import baseApp = require("app/modules/shared/baseApp");
+import utils = require("app/utils");
+import baseProver = require("app/modules/shared/baseProvider");
+import provider = require("app/extensions/seadragon/provider");
+import shell = require("app/modules/shared/shell");
+import header = require("app/modules/pagingHeaderPanel/pagingHeaderPanel");
+import left = require("app/modules/treeViewLeftPanel/treeViewLeftPanel");
+import thumbsView = require("app/modules/treeViewLeftPanel/thumbsView");
+import treeView = require("app/modules/treeViewLeftPanel/treeView");
+import center = require("app/modules/seadragonCenterPanel/seadragonCenterPanel");
+import right = require("app/modules/moreInfoRightPanel/moreInfoRightPanel");
+import footer = require("app/modules/extendedFooterPanel/extendedFooterPanel");
+import help = require("app/modules/dialogues/helpDialogue");
+import embed = require("app/extensions/seadragon/embedDialogue");
 
 export class App extends baseApp.BaseApp {
 

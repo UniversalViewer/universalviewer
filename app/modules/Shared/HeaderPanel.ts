@@ -1,7 +1,7 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseApp = require("app/modules/Shared/BaseApp");
-import baseView = require("app/modules/Shared/BaseView");
-import utils = require("app/Utils");
+import baseApp = require("app/modules/shared/baseApp");
+import baseView = require("app/modules/shared/baseView");
+import utils = require("app/utils");
 
 export class HeaderPanel extends baseView.BaseView {
 

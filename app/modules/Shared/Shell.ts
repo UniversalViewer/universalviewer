@@ -1,8 +1,8 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseApp = require("app/modules/Shared/BaseApp");
-import utils = require("app/Utils");
-import baseView = require("app/modules/Shared/BaseView");
-import genericDialogue = require("app/modules/Shared/GenericDialogue");
+import baseApp = require("app/modules/shared/baseApp");
+import utils = require("app/utils");
+import baseView = require("app/modules/shared/baseView");
+import genericDialogue = require("app/modules/shared/genericDialogue");
 
 export class Shell extends baseView.BaseView {
     static $element: JQuery;

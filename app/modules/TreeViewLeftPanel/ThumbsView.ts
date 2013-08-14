@@ -1,10 +1,10 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import utils = require("app/Utils");
-import baseApp = require("app/modules/Shared/BaseApp");
-import app = require("app/extensions/seadragon/App");
-import shell = require("app/modules/Shared/Shell");
-import baseView = require("app/modules/Shared/BaseView");
-import Thumb = require("app/modules/TreeViewLeftPanel/Thumb");
+import utils = require("app/utils");
+import baseApp = require("app/modules/shared/baseApp");
+import app = require("app/extensions/seadragon/app");
+import shell = require("app/modules/shared/shell");
+import baseView = require("app/modules/shared/baseView");
+import Thumb = require("app/modules/treeViewLeftPanel/thumb");
 
 export class ThumbsView extends baseView.BaseView {
 

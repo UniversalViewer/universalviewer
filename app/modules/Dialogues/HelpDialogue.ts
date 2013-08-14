@@ -1,8 +1,8 @@
-import baseApp = require("app/modules/Shared/BaseApp");
-import app = require("app/extensions/seadragon/App");
-import shell = require("app/modules/Shared/Shell");
-import utils = require("app/Utils");
-import dialogue = require("app/modules/Shared/Dialogue");
+import baseApp = require("app/modules/shared/baseApp");
+import app = require("app/extensions/seadragon/app");
+import shell = require("app/modules/shared/shell");
+import utils = require("app/utils");
+import dialogue = require("app/modules/shared/dialogue");
 
 export class HelpDialogue extends dialogue.Dialogue {
 

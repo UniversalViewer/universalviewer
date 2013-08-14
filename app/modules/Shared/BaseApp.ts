@@ -1,9 +1,9 @@
 /// <reference path="../../../js/jquery.d.ts" />
 /// <reference path="../../../js/extensions.d.ts" />
-import utils = require("app/Utils");
-import bp = require("app/modules/Shared/BaseProvider");
-import shell = require("app/modules/Shared/Shell");
-import genericDialogue = require("app/modules/Shared/GenericDialogue");
+import utils = require("app/utils");
+import bp = require("app/modules/shared/baseProvider");
+import shell = require("app/modules/shared/shell");
+import genericDialogue = require("app/modules/shared/genericDialogue");
 
 export class BaseApp {
 

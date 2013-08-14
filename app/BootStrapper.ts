@@ -1,5 +1,5 @@
 /// <reference path="../js/jquery.d.ts" />
-import utils = require("app/Utils");
+import utils = require("app/utils");
 
 class BootStrapper{
     

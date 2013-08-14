@@ -1,6 +1,6 @@
 /// <reference path="../../../js/jquery.d.ts" />
-import baseRight = require("app/modules/Shared/RightPanel");
-import utils = require("app/Utils");
+import baseRight = require("app/modules/shared/rightPanel");
+import utils = require("app/utils");
 
 export class MoreInfoRightPanel extends baseRight.RightPanel {
 
