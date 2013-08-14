@@ -20,8 +20,7 @@ module.exports = function (grunt) {
                 }
             },
             dist: {                          
-                src: ["app/**/*.ts"],           
-                out: 'app/main.js',           
+                src: ["app/**/*.ts"],      
                 //reference: 'app/reference.ts',
                 //watch: 'app',
                 options: {                      

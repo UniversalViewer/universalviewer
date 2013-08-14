@@ -573,7 +573,8 @@ input.action {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
+  background-image: url('/app/modules/shared/img/modal_bg.gif');
   display: none;
 }
 #app .overlay {
@@ -694,10 +695,7 @@ input.action {
   padding: 0 10px 0 0;
   overflow: auto;
 }
-/*#endregion */#app .overlays {
-  background-image: url('/app/modules/shared/img/modal_bg.gif');
-}
-#app .leftPanel .top .title {
+/*#endregion */#app .leftPanel .top .title {
   background: url('/app/modules/treeviewleftpanel/img/contents.png') no-repeat;
   width: 78px;
 }
