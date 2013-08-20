@@ -74,6 +74,14 @@
                 "thumbnails": "Thumbnails"
             }
         },
+        "seadragonCenterPanel":
+        {
+            "content":
+            {
+                "previous": "Previous",
+                "next": "Next"
+            }
+        },
         "moreInfoRightPanel":
         {
             "options":

@@ -7,10 +7,17 @@ import utils = require("app/utils");
 
 export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
+    prevButtonEnabled: boolean = false;
+    nextButtonEnabled: boolean = false;
+
     $viewer: JQuery;
     viewer: any;
     title: string;
     currentBounds: any;
+    $prevButtonCont: JQuery;
+    $prevButton: JQuery;
+    $nextButtonCont: JQuery;
+    $nextButton: JQuery;
 
     // events
     static SEADRAGON_OPEN: string = 'center.open';
@@ -18,12 +25,17 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     static SEADRAGON_ANIMATION_START: string = 'center.animationstart';
     static SEADRAGON_ANIMATION: string = 'center.animation';
     static SEADRAGON_ANIMATION_FINISH: string = 'center.animationfinish';
+    static PREV: string = 'center.onPrev';
+    static NEXT: string = 'center.onNext';
 
     constructor($element: JQuery) {
         super($element);
     }
 
     create(): void {
+        
+        this.setConfig('seadragonCenterPanel');
+
         super.create();
 
         // events.
@@ -41,17 +53,48 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.viewer = OpenSeadragon({
             id: "viewer",
             prefixUrl: "/app/modules/SeadragonCenterPanel/img/",
-            showNavigator: true
+            showNavigator: true,
+            navigatorPosition: 'BOTTOM_RIGHT'
         });
 
         this.viewer.clearControls();
 
         this.viewer.setControlsEnabled(false);
 
+        // create prev/next buttons.
+        if (this.isMultiAsset()) {
+
+            this.$prevButton = $('<div class="paging btn prev"></div>');
+            this.$prevButton.prop('title', this.content.previous);
+            this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
+
+            this.$nextButton = $('<div class="paging btn next"></div>');
+            this.$nextButton.prop('title', this.content.next);
+            this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
+
+            this.$prevButton.click((e) => {
+                e.preventDefault();
+                OpenSeadragon.cancelEvent(e);
+
+                if (!this.prevButtonEnabled) return;
+
+                $.publish(SeadragonCenterPanel.PREV);
+            });
+
+            this.$nextButton.click((e) => {
+                e.preventDefault();
+                OpenSeadragon.cancelEvent(e);
+ 
+                if (!this.nextButtonEnabled) return;
+
+                $.publish(SeadragonCenterPanel.NEXT);
+            });
+        };
+
         this.viewer.addHandler('open', (viewer) => {
             this.viewerOpen();
             $.publish(SeadragonCenterPanel.SEADRAGON_OPEN, [viewer]);
-        })
+        });
 
         this.viewer.addHandler('resize', (viewer) => {
             $.publish(SeadragonCenterPanel.SEADRAGON_RESIZE, [viewer]);
@@ -73,6 +116,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         });
 
         this.title = this.app.provider.getTitle();
+    }
+
+    isMultiAsset(): boolean{
+        return this.provider.assetSequence.assets.length > 1;
     }
 
     viewerOpen() {
@@ -103,8 +150,42 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
         }
 
-        // create touch controller.
-        //var touchController = new Seadragon.TouchController(viewer);
+        if (this.isMultiAsset()) {
+            
+            $('.navigator').addClass('extraMargin');
+
+            if (this.app.currentAssetIndex != 0) {
+                this.enablePrevButton();
+            } else {
+                this.disablePrevButton();
+            }
+
+            if (this.app.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
+                this.enableNextButton();
+            } else {
+                this.disableNextButton();
+            }
+        }
+    }
+
+    disablePrevButton () {
+        this.prevButtonEnabled = false;
+        this.$prevButton.addClass('disabled');
+    }
+
+    enablePrevButton () {
+        this.prevButtonEnabled = true;
+        this.$prevButton.removeClass('disabled');
+    }
+
+    disableNextButton () {
+        this.nextButtonEnabled = false;
+        this.$nextButton.addClass('disabled');
+    }
+
+    enableNextButton () {
+        this.nextButtonEnabled = true;
+        this.$nextButton.removeClass('disabled');
     }
 
     serialiseBounds(bounds): string{
@@ -167,5 +248,16 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         this.$viewer.height(this.$content.height());
         /*this.$viewer.width(this.$content.width());*/
+
+        if (this.isMultiAsset()) {
+            //this.$prevButtonCont.height(this.$content.height());
+            //this.$nextButtonCont.height(this.$content.height());
+
+            //this.$prevButton.css('top', (this.$prevButtonCont.height() - this.$prevButton.height()) / 2);
+            //this.$nextButton.css('top', (this.$nextButtonCont.height() - this.$nextButton.height()) / 2);
+
+            this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
+            this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
+        }
     }
 }

@@ -215,6 +215,18 @@ export class Utils{
 
     //#endregion
 
+    //#region Boolean
+
+    static boolIfUndefined(val: any, defaultVal: boolean): boolean {
+        if (typeof (val) === 'undefined'){
+            return defaultVal;
+        }
+
+        return val;
+    }
+
+    //#endregion
+
     //#region Uri
 
     static getUrlParts(url: string): any {

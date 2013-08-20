@@ -96,8 +96,24 @@ export class App extends baseApp.BaseApp {
             this.updateAddress(this.provider.assetSequenceIndex, this.currentAssetIndex, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
         });
 
+        $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
+            if (this.currentAssetIndex != 0) {
+                this.viewPage(Number(this.currentAssetIndex) - 1);
+            }
+        });
+        
+        $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
+            if (this.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
+                this.viewPage(Number(this.currentAssetIndex) + 1);
+            }
+        });
+
         this.headerPanel = new header.PagingHeaderPanel(shell.Shell.$headerPanel);
-        this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
+
+        if (utils.Utils.boolIfUndefined(this.provider.options.leftPanelEnabled, true) && this.provider.assetSequence.assets.length > 1){
+            this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
+        }
+
         this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
         this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
         this.footerPanel = new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);

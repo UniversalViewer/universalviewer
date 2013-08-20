@@ -6,3 +6,33 @@
 #app .centerPanel #viewer {
     padding: 0 8px 0 8px;
 }
+
+#app .centerPanel .navigator.extraMargin{
+    margin: 0 30px 0 0 !important;
+}
+
+#app .centerPanel .paging.btn {
+    position: absolute;
+    width: 30px;
+    height: 90px;
+    background-repeat: no-repeat;
+    background-color: #000;
+    background-position: 0px 50%;
+    cursor: pointer;
+}
+
+#app .centerPanel .paging.btn.prev {
+    background-image: url('@{seadragonCenterPanelImagePath}/prev_page.png');
+}
+
+#app .centerPanel .paging.btn.prev.disabled {
+    background-image: url('@{seadragonCenterPanelImagePath}/prev_page_disabled.png');
+}
+
+#app .centerPanel .paging.btn.next{
+    background-image: url('@{seadragonCenterPanelImagePath}/next_page.png');
+}
+
+#app .centerPanel .paging.btn.next.disabled {
+    background-image: url('@{seadragonCenterPanelImagePath}/next_page_disabled.png');
+}

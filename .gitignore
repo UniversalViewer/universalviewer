@@ -14,6 +14,13 @@ test.js
 .idea
 
 #################
+## Sublime Text
+#################
+
+*.sublime-project
+*.sublime-workspace
+
+#################
 ## Node
 #################
 

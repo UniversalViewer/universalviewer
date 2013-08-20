@@ -11,7 +11,7 @@ Install the grunt command line interface globally if you don't already have it:
 Open the console on the player directory.
 
 Install dependencies:
-
+ 
 ```$ npm install```
 
 Run grunt compile tasks:
