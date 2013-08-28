@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
+    <script type="text/javascript" src="js/easyXDM.min.js"></script>
+    <script data-main="config" type="text/javascript" src="js/require.js"></script>
+</head>
+<body>
+    <div id="app" class="loading"></div>
+    <script type="text/javascript">
+        var app = document.getElementById("app");
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        var height = window.innerHeight || document.documentElement.clientHeight;
+        app.setAttribute("style", "width:" + width + "px");
+        app.setAttribute("style", "height:" + height + "px");
+    </script>
+</body>
+</html>

@@ -1,8 +1,11 @@
 {
-  "dependencies": {
-    "grunt": "~0.4.1",
-    "grunt-ts": "~1.0.1",
-    "connect": "~2.8.5",
-    "grunt-contrib-less": "~0.7.0"
-  }
+	"name": "WellcomePlayer",
+	"version": "0.0.1",
+	"description": "Navigate sequences of images in a zoomable, extensible interface.",
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-ts": "~1.0.1",
+		"grunt-contrib-connect": "~0.3.0",
+		"grunt-contrib-less": "~0.7.0"
+	}
 }

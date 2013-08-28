@@ -2,12 +2,13 @@ module.exports = function (grunt) {
     
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-contrib-less");
+    grunt.loadNpmTasks("grunt-contrib-connect");
 
     grunt.initConfig({
 
         ts: {
             dev: {                            
-                src: ["app/**/*.ts"],          
+                src: ["src/**/*.ts"],          
                 //reference: 'app/reference.ts',
                 //watch: 'app',
                 options: {                      
@@ -19,8 +20,8 @@ module.exports = function (grunt) {
                     comments: false             
                 }
             },
-            dist: {                          
-                src: ["app/**/*.ts"],      
+            build: {                          
+                src: ["src/**/*.ts"],      
                 //reference: 'app/reference.ts',
                 //watch: 'app',
                 options: {                      
@@ -37,21 +38,40 @@ module.exports = function (grunt) {
         less: {
             dev: {
                 files: {
-                    "css/styles.css": "css/styles.less"
+                    "src/css/styles.css": "src/css/styles.less"
                 }
             },
-            dist: {
+            build: {
                 options: {
                     yuicompress: true
                 },
                 files: {
-                  "css/styles.css": "css/styles.less"
+                  "src/css/styles.css": "src/css/styles.less"
+                }
+            }
+        },
+
+        connect: {
+            dev: {
+                options: {
+                    port: 3000,
+                    base: "src",
+                    keepalive: true
+                }
+            },
+            build: {
+                options: {
+                    port: 3000,
+                    base: "build",
+                    keepalive: true
                 }
             }
         }
+
     });
 
     grunt.registerTask("default", ["ts:dev", "less:dev"]);
-    //grunt.registerTask("default", ["ts:dist", "less:dist"]);
+
+    //grunt.registerTask("build", ["ts:build", "less:build"]);
 
 };
