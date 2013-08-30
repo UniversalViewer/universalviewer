@@ -1,12 +1,12 @@
 /// <reference path="js/require.d.ts" />
 
 require.config({
-    baseUrl: '../',
     paths: {
         'jquery': 'js/jquery-1.10.2.min',
         'plugins': 'js/jquery.plugins',
         'console': 'js/console',
         'pubsub': 'js/pubsub',
+        'openseadragon': 'modules/seadragonCenterPanel/js/openseadragon.min',
         'jsviews': 'js/jsviews.min'
     },
     shim: {
@@ -24,6 +24,9 @@ require.config({
             deps: ['jquery'],
             exports: 'pubsub'
         },
+        openseadragon: {
+            exports: 'openseadragon'
+        },
         jsviews: {
             exports: 'jsviews'
         }
@@ -35,9 +38,9 @@ require([
     'plugins',
     'console',
     'pubsub',
-    'modules/seadragonCenterPanel/js/openseadragon.min',
+    'openseadragon',
     'jsviews',
-    'bootStrapper',
+    'bootstrapper',
     'extensions/seadragon/app',
     'extensions/seadragon/provider'],
     ($, plugins, console, pubsub, osd, jsviews, bootstrapper, seadragon, seadragonProvider) => {

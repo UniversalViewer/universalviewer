@@ -13,7 +13,6 @@ dz
 test.json
 test.js
 
-
 #################
 ## Webstorm
 #################
@@ -48,7 +47,7 @@ npm-debug.log
 node_modules
 
 #################
-## TypeScript
+## JavaScript
 #################
 
 src/*.js
@@ -58,6 +57,7 @@ src/**/*.js.map
 src/*.min.map
 src/**/*.min.map
 !src/extensions/**/config.js
+app.min.js
 
 #################
 ## Eclipse

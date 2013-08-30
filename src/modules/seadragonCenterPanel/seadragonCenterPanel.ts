@@ -53,7 +53,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         this.viewer = OpenSeadragon({
             id: "viewer",
-            prefixUrl: "/app/modules/SeadragonCenterPanel/img/",
+            showNavigationControl: false,
             showNavigator: true,
             navigatorPosition: 'BOTTOM_RIGHT'
         });
