@@ -6,8 +6,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-exec");
+    grunt.loadNpmTasks('grunt-text-replace');
 
-    var packageJson = grunt.file.readJSON("package.json");
+    var packageJson = grunt.file.readJSON("package.json"),
+        buildDir = 'build/wellcomeplayer/';
 
     grunt.initConfig({
         pkg: packageJson,
@@ -45,7 +47,7 @@ module.exports = function (grunt) {
             },
             build: {
                 options: {
-                    yuicompress: true
+                    //yuicompress: true
                 },
                 files: {
                   "src/css/styles.css": "src/css/styles.less"
@@ -71,74 +73,110 @@ module.exports = function (grunt) {
         },
 
         clean: {
-            build: ["build"]
+            build : {
+                src : [ 
+                    "build/*"
+                ]
+            },
+            min : {
+                src : [ 
+                    "app.min.js"
+                ]
+            }
         },
 
         copy: {
-            images: {
+            build: {
                 files: [
+                    // images
+                    {
+                        expand: true,
+                        src: ['src/modules/**/img/*'],
+                        dest: buildDir + 'img/',
+                        rename: function(dest, src) {
+
+                            var fileName = src.substr(src.lastIndexOf('/'));
+
+                            // get the module name from the src string.
+                            // src/modules/modulename/img
+                            var moduleName = src.match(/modules\/(.*)\/img/)[1];
+
+                            return dest + moduleName + fileName;
+                        }
+                    },
+                    // app.min.js
+                    {
+                        src: ['app.min.js'],
+                        dest: buildDir
+                    },
+                    // index.html
                     {
                         expand: true,
                         flatten: true,
-                        cwd: 'src/',
-                        src: ['**/*.png', '**/*.gif', '**/*.jpg'],
-                        dest: 'build/wellcomeplayer/images/'
-                    }
-                ]
-            },
-            js: {
-                files: [
+                        src: 'src/index.html', 
+                        dest: buildDir
+                    },
+                    // js
                     {
-                        src: ['app.min.js'],
-                        dest: 'build/wellcomeplayer/'
+                        expand: true,
+                        flatten: true,
+                        cwd: 'src/js',
+                        src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js'],
+                        dest: buildDir + 'js/'
+                    },
+                    // extension configuration files
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: 'src/*.config.js', 
+                        dest: buildDir
                     }
                 ]
             }
-
-            // ,
-            // build: {
-            //     files: [
-            //         {
-            //             expand: true,
-            //             cwd: 'src/',
-                        
-            //             //src: ['**', '!**/*.less', '!**/*.ts', '!**/modules/**/css', '!**/*.js.map', '**/*.min.js.map'],
-            //             dest: 'build/wellcomeplayer/'
-            //         }
-            //     ]
-            // }
-
-            
         },
 
         exec: {
+            // concatenate and compress with r.js
             build: {
                 cmd: 'node tools/r.js -o tools/build.js'
+            }
+        },
+
+        replace: {
+            html: {
+                src: ['src/app.html'],
+                dest: buildDir,
+                replacements: [{ 
+                    from: 'data-main="app"',
+                    to: 'data-main="app.min"'
+                }]
+            },
+            css: {
+                src: ['src/css/styles.css'],
+                dest: buildDir + 'css/',
+                replacements: [{ 
+                    from: /(?:'|").*modules\/(.*)\/img\/(.*)(?:'|")/g,
+                    to: '\'../img/$1/$2\''
+                }]
             }
         }
 
     });
 
-    // ----------
-    // default task.
-    // compiles ts and less files with source maps.
     grunt.registerTask("default", [
         "ts:dev",
         "less:dev"
     ]);
 
-    // ----------
-    // build task.
-    // cleans out the build folder and builds the javascript, images and css into it.
     grunt.registerTask("build", [
         "ts:build", 
         "less:build",
         "exec:build",
         "clean:build", 
-        "copy:images", 
-        "copy:js"
+        "copy:build", 
+        "clean:min",
+        "replace:html",
+        "replace:css"
     ]);
 
-
-    // tools> node r.js -o build.js
 };

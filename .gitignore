@@ -56,7 +56,7 @@ src/**/*.js
 src/**/*.js.map
 src/*.min.map
 src/**/*.min.map
-!src/extensions/**/config.js
+!*.config.js
 app.min.js
 
 #################
