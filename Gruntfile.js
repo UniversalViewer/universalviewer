@@ -56,14 +56,14 @@ module.exports = function (grunt) {
         },
 
         connect: {
-            dev: {
+            debug: {
                 options: {
                     port: 3000,
                     base: "src",
                     keepalive: true
                 }
             },
-            build: {
+            release: {
                 options: {
                     port: 3001,
                     base: "build/wellcomeplayer",
