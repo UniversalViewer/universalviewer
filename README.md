@@ -26,7 +26,7 @@ To build the debug version of the player, just run (on the command line, in the 
 
 `$ grunt`
 
-This will compile the [.less](http://lesscss.org) files into .css and .ts ([TypeScript](http://typescriptlang.org)) files into .js with sourcemaps to aid in debugging.
+This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with sourcemaps to aid in debugging.
 
 ### Release Builds
 
