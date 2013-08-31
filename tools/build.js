@@ -3,6 +3,6 @@
     mainConfigFile: "../src/app.js",
     name: "app",
     out: "../app.min.js",
-    preserveLicenseComments: false
+    //preserveLicenseComments: false
     //optimize: "none"
 })

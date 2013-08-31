@@ -14,22 +14,13 @@ require.config({
             exports: '$'
         },
         plugins: {
-            deps: ['jquery'],
-            exports: 'plugins'
-        },
-        console: {
-            exports: 'console'
+            deps: ['jquery']
         },
         pubsub: {
-            deps: ['jquery'],
-            exports: 'pubsub'
+            deps: ['jquery']
         },
         jsviews: {
-            deps: ['jquery'],
-            exports: 'jsviews'
-        },
-        openseadragon: {
-            exports: 'openseadragon'
+            deps: ['jquery']
         }
     }
 });
@@ -44,7 +35,7 @@ require([
     'bootstrapper',
     'extensions/seadragon/app',
     'extensions/seadragon/provider'],
-    ($, plugins, console, pubsub, jsviews, osd, bootstrapper, seadragon, seadragonProvider) => {
+    ($, plugins, console, pubsub, jsviews, openseadragon, bootstrapper, seadragon, seadragonProvider) => {
 
         var extensions = {};
 

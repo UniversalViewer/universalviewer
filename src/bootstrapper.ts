@@ -69,4 +69,4 @@ class BootStrapper{
     }
 }
 
-export = BootStrapper
+export = BootStrapper;

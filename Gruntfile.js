@@ -7,9 +7,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks("grunt-contrib-compress");
 
     var packageJson = grunt.file.readJSON("package.json"),
-        buildDir = 'build/wellcomeplayer/';
+        buildDir = 'build/wellcomeplayer/',
+        packageDirName = "wellcomeplayer-bin-" + packageJson.version,
+        packageDir = "build/" + packageDirName + "/";
 
     grunt.initConfig({
         pkg: packageJson,
@@ -66,23 +69,16 @@ module.exports = function (grunt) {
             release: {
                 options: {
                     port: 3001,
-                    base: "build/wellcomeplayer",
+                    base: buildDir,
                     keepalive: true
                 }
             }
         },
 
         clean: {
-            build : {
-                src : [ 
-                    "build/*"
-                ]
-            },
-            min : {
-                src : [ 
-                    "app.min.js"
-                ]
-            }
+            build : ["build/*"],
+            min : ["app.min.js"],
+            package: [packageDir]
         },
 
         copy: {
@@ -132,6 +128,46 @@ module.exports = function (grunt) {
                         dest: buildDir
                     }
                 ]
+            },
+            package: {
+                // copy contents of /build to packageDir.
+                files: [
+                    {
+                        cwd: buildDir,
+                        expand: true,
+                        src: ['**'],
+                        dest: packageDir
+                    }
+                ]
+            }
+        },
+
+        compress: {
+            zip: {
+                options: {
+                    archive: "build/releases/" + packageDirName + ".zip",
+                    level: 9
+                },
+                files: [
+                    { 
+                        expand: true, 
+                        cwd: "build/", 
+                        src: [ packageDirName + "/**" ]
+                    }
+                ]
+            },
+            tar: {
+                options: {
+                    archive: "build/releases/" + packageDirName + ".tar.gz",
+                    level: 9
+                },
+                files: [
+                    { 
+                        expand: true,
+                        cwd: "build/",
+                        src: [ packageDirName + "/**" ]
+                    }
+                ]
             }
         },
 
@@ -179,4 +215,10 @@ module.exports = function (grunt) {
         "replace:css"
     ]);
 
+    grunt.registerTask("package", [
+        "build", 
+        "copy:package", 
+        "compress",
+        "clean:package"
+     ]);
 };
