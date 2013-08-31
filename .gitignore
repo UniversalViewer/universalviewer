@@ -58,6 +58,13 @@ src/*.min.map
 src/**/*.min.map
 !*.config.js
 app.min.js
+!src/js/*.js
+
+#################
+## Css
+#################
+
+src/css/*.css
 
 #################
 ## Eclipse
