@@ -12,7 +12,7 @@ If you want to use the Wellcome Player in your own projects, you can find the la
 
 ### First Time Setup
 
-All command-line operations for building and testing the Wellcome Player are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). We are using Node for this project as it provides a powerful cross-platform collection of tools with minimal setup overhead. To get set up:
+All command-line operations for building the Wellcome Player are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). We are using Node for this project because it provides a powerful cross-platform collection of tools with minimal setup overhead. To get set up:
 
 1. Install [Node.js](http://nodejs.org), if you haven't already
 1. Install the Grunt command line interface (if you haven't already); on the command line, run `$ npm install -g grunt-cli`
@@ -50,4 +50,4 @@ To see the release version of the player (located in the '/build' folder), run `
 
 ## License
 
-OpenSeadragon is released under the MIT license. For details, see the file LICENSE.txt.
+The Wellcome Player is released under the MIT license. For details, see the file LICENSE.txt.
