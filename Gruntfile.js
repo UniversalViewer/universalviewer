@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 
     var packageJson = grunt.file.readJSON("package.json"),
         buildDir = 'build/wellcomeplayer/',
-        packageDirName = "wellcomeplayer-bin-" + packageJson.version,
+        packageDirName = "wellcomeplayer-" + packageJson.version,
         packageDir = "build/" + packageDirName + "/";
 
     grunt.initConfig({
@@ -77,7 +77,6 @@ module.exports = function (grunt) {
 
         clean: {
             build : ["build/*"],
-            min : ["app.min.js"],
             package: [packageDir]
         },
 
@@ -99,11 +98,6 @@ module.exports = function (grunt) {
 
                             return dest + moduleName + fileName;
                         }
-                    },
-                    // app.min.js
-                    {
-                        src: ['app.min.js'],
-                        dest: buildDir
                     },
                     // index.html
                     {
@@ -207,10 +201,9 @@ module.exports = function (grunt) {
     grunt.registerTask("build", [
         "ts:build", 
         "less:build",
-        "exec:build",
         "clean:build", 
-        "copy:build", 
-        "clean:min",
+        "copy:build",
+        "exec:build",
         "replace:html",
         "replace:css"
     ]);
