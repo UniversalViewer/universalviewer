@@ -13,17 +13,18 @@
     padding: 10px;
 }
 
-#app .rightPanel .moreInfoView{
+#app .rightPanel .main{
+    padding: 0 10px;
     overflow: auto;
 }
 
-#app .rightPanel .moreInfoView.loading{
-    background-image: url('@{moreInfoRightPanelImagePath}ajax-loader.gif');
+#app .rightPanel .main.loading{
+    background-image: url('@{sharedImagePath}ajax-loader.gif');
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 }
 
-#app .rightPanel .moreInfoView .header{
+#app .rightPanel .main .header{
     color: #999999;
     border-bottom: 1px solid #525252;
     font-size: 11px;
@@ -31,41 +32,41 @@
     text-transform: uppercase;
 }
 
-#app .rightPanel .moreInfoView .text{
+#app .rightPanel .main .text{
     color: #fff;
     margin: 5px 10px 0 0;
 }
 
-#app .rightPanel .moreInfoView .text a.toggle{
+#app .rightPanel .main .text a.toggle{
     color: #FFB81D;
     font-weight: normal;
 }
 
-#app .rightPanel .moreInfoView .text a.toggle:hover{
+#app .rightPanel .main .text a.toggle:hover{
     color: #FFB81D;
 }
 
-#app .rightPanel .moreInfoView .text.title{
+#app .rightPanel .main .text.title{
     font-size: 14px;
     font-weight: bold;
 }
 
-#app .rightPanel .moreInfoView .action{
+#app .rightPanel .main .action{
     margin: 5px 0 0 0;
     font-weight: normal;
     background: url('@{sharedImagePath}sprite.png') 0 -1000px no-repeat;
     color: #FFB81D;
 }
 
-#app .rightPanel .moreInfoView img{
+#app .rightPanel .main img{
     margin: 15px 0 0 0;
     max-width: 200px;
 }
 
-#app .rightPanel .moreInfoView .action.catalogue{
+#app .rightPanel .main .action.catalogue{
     margin: 15px 0 0 0;
 }
 
-#app .rightPanel .moreInfoView .action.conditions{
+#app .rightPanel .main .action.conditions{
     margin: 15px 0 0 0;
 }

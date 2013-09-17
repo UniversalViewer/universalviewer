@@ -14,6 +14,7 @@ import center = require("../../modules/seadragonCenterPanel/seadragonCenterPanel
 import right = require("../../modules/moreInfoRightPanel/moreInfoRightPanel");
 import footer = require("../../modules/extendedFooterPanel/extendedFooterPanel");
 import help = require("../../modules/dialogues/helpDialogue");
+import conditions = require("../../modules/dialogues/conditionsDialogue");
 import embed = require("../../extensions/seadragon/embedDialogue");
 
 export class App extends baseApp.BaseApp {
@@ -25,6 +26,8 @@ export class App extends baseApp.BaseApp {
     footerPanel: footer.ExtendedFooterPanel;
     $helpDialogue: JQuery;
     helpDialogue: help.HelpDialogue;
+    $conditionsDialogue: JQuery;
+    conditionsDialogue: conditions.ConditionsDialogue;
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
 
@@ -121,6 +124,10 @@ export class App extends baseApp.BaseApp {
         this.$helpDialogue = utils.Utils.createDiv('overlay help');
         shell.Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new help.HelpDialogue(this.$helpDialogue);
+
+        this.$conditionsDialogue = utils.Utils.createDiv('overlay conditions');
+        shell.Shell.$overlays.append(this.$conditionsDialogue);
+        this.conditionsDialogue = new conditions.ConditionsDialogue(this.$conditionsDialogue);
 
         this.$embedDialogue = utils.Utils.createDiv('overlay embed');
         shell.Shell.$overlays.append(this.$embedDialogue);

@@ -82,6 +82,14 @@ export class Utils{
 
     //#endregion
 
+    //#region Date
+
+    static getTimeStamp(): number {
+        return new Date().getTime();
+    }
+
+    //#endregion
+
     //#region QueryString
 
     static getHashValues(delimiter: string, doc?: Document): string[]{

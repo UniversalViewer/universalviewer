@@ -37,6 +37,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
     create(): void {
         
+        // todo: try http://stackoverflow.com/questions/332422/how-do-i-get-the-name-of-an-objects-type-in-javascript
         this.setConfig('pagingHeaderPanel');
         
         super.create();
