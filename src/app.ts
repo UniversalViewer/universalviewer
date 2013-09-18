@@ -35,14 +35,22 @@ require([
     'bootstrapper',
     'extensions/seadragon/app',
     'extensions/seadragon/provider'],
-    ($, plugins, console, pubsub, jsviews, openseadragon, bootstrapper, seadragon, seadragonProvider) => {
+    ($, 
+    plugins, 
+    console, 
+    pubsub, 
+    jsviews, 
+    openseadragon, 
+    bootstrapper, 
+    seadragon, 
+    seadragonProvider) => {
 
         var extensions = {};
 
         extensions['seadragon/dzi'] = {
             type: seadragon.App,
             provider: seadragonProvider.Provider,
-            configUri: 'seadragon.config.js'
+            configUri: 'extensions/seadragon/config.js'
         };
 
         new bootstrapper(extensions);

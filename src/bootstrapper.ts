@@ -24,6 +24,8 @@ class BootStrapper{
             that.packageUri = that.dataBaseUri + that.packageUri;
         }
 
+        jQuery.support.cors = true;
+
         $.getJSON(that.packageUri, (pkg) => {
 
             that.pkg = pkg;
