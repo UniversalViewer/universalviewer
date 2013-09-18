@@ -1,9 +1,9 @@
 /// <reference path="../../js/jquery.d.ts" />
 
-import baseLeft = require("../shared/leftPanel");
+import baseLeft = require("../coreplayer-shared-module/leftPanel");
 import utils = require("../../utils");
-import tree = require("../treeViewLeftPanel/treeView");
-import thumbs = require("../treeViewLeftPanel/thumbsView");
+import tree = require("../coreplayer-treeviewleftpanel-module/treeView");
+import thumbs = require("../coreplayer-treeviewleftpanel-module/thumbsView");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 

@@ -1,7 +1,7 @@
-import baseApp = require("../shared/baseApp");
-import shell = require("../shared/shell");
+import baseApp = require("../coreplayer-shared-module/baseApp");
+import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
-import dialogue = require("../shared/dialogue");
+import dialogue = require("../coreplayer-shared-module/dialogue");
 
 export class EmbedDialogue extends dialogue.Dialogue {
 

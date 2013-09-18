@@ -1,10 +1,10 @@
 /// <reference path="../../js/jquery.d.ts" />
 
-import baseFooter = require("../shared/footerPanel");
-import baseApp = require("../shared/baseApp");
-import app = require("../../extensions/seadragon/app");
+import baseFooter = require("../coreplayer-shared-module/footerPanel");
+import baseApp = require("../coreplayer-shared-module/baseApp");
+import app = require("../../extensions/coreplayer-seadragon-extension/app");
 import utils = require("../../utils");
-import embed = require("../dialogues/embedDialogue");
+import embed = require("../coreplayer-dialogues-module/embedDialogue");
 
 export class ExtendedFooterPanel extends baseFooter.FooterPanel {
 

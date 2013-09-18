@@ -1,11 +1,11 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../shared/baseApp");
-import app = require("../../extensions/seadragon/app");
-import baseHeader = require("../shared/headerPanel");
+import baseApp = require("../coreplayer-shared-module/baseApp");
+import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import baseHeader = require("../coreplayer-shared-module/headerPanel");
 import utils = require("../../utils");
-import help = require("../dialogues/helpDialogue");
+import help = require("../coreplayer-dialogues-module/helpDialogue");
 
 export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 

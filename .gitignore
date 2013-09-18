@@ -67,6 +67,15 @@ app.min.js
 src/css/*.css
 
 #################
+## Extensions/Modules
+#################
+
+src/extensions/*
+!src/extensions/core*
+src/modules/*
+!src/modules/core*
+
+#################
 ## Eclipse
 #################
 

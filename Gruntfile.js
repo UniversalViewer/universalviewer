@@ -192,6 +192,13 @@ module.exports = function (grunt) {
         }
 
     });
+    
+    grunt.registerTask('fixmanifest', function() {
+        var tmpPkg = require('./path/to/manifest/manifest.json');
+
+        tmpPkg.foo = "bar";
+        fs.writeFileSync('./new/path/to/manifest.json', JSON.stringify(tmpPkg, null, 2));
+    });
 
     grunt.registerTask("default", [
         "ts:dev",

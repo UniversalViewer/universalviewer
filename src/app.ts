@@ -7,7 +7,7 @@ require.config({
         'console': 'js/console',
         'pubsub': 'js/pubsub',
         'jsviews': 'js/jsviews.min',
-        'openseadragon': 'modules/seadragonCenterPanel/js/openseadragon.min'
+        'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon.min'
     },
     shim: {
         jquery: {
@@ -33,8 +33,11 @@ require([
     'jsviews',
     'openseadragon',
     'bootstrapper',
-    'extensions/seadragon/app',
-    'extensions/seadragon/provider'],
+    'extensions/coreplayer-seadragon-extension/app',
+    //'extensions/wellcomeplayer-seadragon-extension/app',
+    'extensions/coreplayer-seadragon-extension/provider'
+    //'extensions/wellcomeplayer-seadragon-extension/provider'
+    ],
     ($, 
     plugins, 
     console, 
@@ -50,7 +53,8 @@ require([
         extensions['seadragon/dzi'] = {
             type: seadragon.App,
             provider: seadragonProvider.Provider,
-            configUri: 'extensions/seadragon/config.js'
+            configUri: 'extensions/coreplayer-seadragon-extension/config.js'
+            //configUri: 'extensions/wellcomeplayer-seadragon-extension/config.js'
         };
 
         new bootstrapper(extensions);

@@ -2,11 +2,11 @@
 /// <reference path="../../js/extensions.d.ts" />
 
 import utils = require("../../utils");
-import baseApp = require("../shared/baseApp");
-import shell = require("../shared/shell");
-import baseView = require("../shared/baseView");
-import app = require("../../extensions/seadragon/app");
-import TreeNode = require("../treeViewLeftPanel/treeNode");
+import baseApp = require("../coreplayer-shared-module/baseApp");
+import shell = require("../coreplayer-shared-module/shell");
+import baseView = require("../coreplayer-shared-module/baseView");
+import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import TreeNode = require("../coreplayer-treeviewleftpanel-module/treeNode");
 
 export class TreeView extends baseView.BaseView {
 

@@ -1,6 +1,6 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
-import baseProvider = require("../../modules/shared/baseProvider");
+import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import utils = require("../../utils");
 
 export class Provider extends baseProvider.BaseProvider {

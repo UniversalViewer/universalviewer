@@ -1,11 +1,11 @@
 /// <reference path="../../js/jquery.d.ts" />
 
 import utils = require("../../utils");
-import baseApp = require("../shared/baseApp");
-import app = require("../../extensions/seadragon/app");
-import shell = require("../shared/shell");
-import baseView = require("../shared/baseView");
-import Thumb = require("../treeViewLeftPanel/thumb");
+import baseApp = require("../coreplayer-shared-module/baseApp");
+import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import shell = require("../coreplayer-shared-module/shell");
+import baseView = require("../coreplayer-shared-module/baseView");
+import Thumb = require("../coreplayer-treeviewleftpanel-module/thumb");
 
 export class ThumbsView extends baseView.BaseView {
 

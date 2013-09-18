@@ -1,9 +1,9 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../shared/baseApp");
-import app = require("../../extensions/seadragon/app");
-import baseCenter = require("../shared/centerPanel");
+import baseApp = require("../coreplayer-shared-module/baseApp");
+import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import baseCenter = require("../coreplayer-shared-module/centerPanel");
 import utils = require("../../utils");
 
 export class SeadragonCenterPanel extends baseCenter.CenterPanel {

@@ -1,8 +1,8 @@
-import baseApp = require("../../modules/shared/baseApp");
-import app = require("../../extensions/seadragon/app");
+import baseApp = require("../../modules/coreplayer-shared-module/baseApp");
+import app = require("../../extensions/coreplayer-seadragon-extension/app");
 import utils = require("../../utils");
-import embed = require("../../modules/dialogues/embedDialogue");
-import center = require("../../modules/seadragonCenterPanel/seadragonCenterPanel");
+import embed = require("../../modules/coreplayer-dialogues-module/embedDialogue");
+import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
 
 export class EmbedDialogue extends embed.EmbedDialogue {
 

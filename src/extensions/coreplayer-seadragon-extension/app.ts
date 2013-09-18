@@ -1,21 +1,20 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../../modules/shared/baseApp");
+import baseApp = require("../../modules/coreplayer-shared-module/baseApp");
 import utils = require("../../utils");
-import baseProver = require("../../modules/shared/baseProvider");
-import provider = require("../../extensions/seadragon/provider");
-import shell = require("../../modules/shared/shell");
-import header = require("../../modules/pagingHeaderPanel/pagingHeaderPanel");
-import left = require("../../modules/treeViewLeftPanel/treeViewLeftPanel");
-import thumbsView = require("../../modules/treeViewLeftPanel/thumbsView");
-import treeView = require("../../modules/treeViewLeftPanel/treeView");
-import center = require("../../modules/seadragonCenterPanel/seadragonCenterPanel");
-import right = require("../../modules/moreInfoRightPanel/moreInfoRightPanel");
-import footer = require("../../modules/extendedFooterPanel/extendedFooterPanel");
-import help = require("../../modules/dialogues/helpDialogue");
-import conditions = require("../../modules/dialogues/conditionsDialogue");
-import embed = require("../../extensions/seadragon/embedDialogue");
+import baseProver = require("../../modules/coreplayer-shared-module/baseProvider");
+import provider = require("./provider");
+import shell = require("../../modules/coreplayer-shared-module/shell");
+import header = require("../../modules/coreplayer-pagingheaderpanel-module/pagingHeaderPanel");
+import left = require("../../modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
+import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/thumbsView");
+import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
+import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
+import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
+import footer = require("../../modules/coreplayer-extendedfooterpanel-module/extendedFooterPanel");
+import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
+import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
 
 export class App extends baseApp.BaseApp {
 
@@ -26,8 +25,6 @@ export class App extends baseApp.BaseApp {
     footerPanel: footer.ExtendedFooterPanel;
     $helpDialogue: JQuery;
     helpDialogue: help.HelpDialogue;
-    $conditionsDialogue: JQuery;
-    conditionsDialogue: conditions.ConditionsDialogue;
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
 
@@ -38,8 +35,8 @@ export class App extends baseApp.BaseApp {
     static OPEN_DZI: string = 'openDzi';
 
     // modes
-    static PAGE_MODE = "pageMode";
-    static IMAGE_MODE = "imageMode";
+    static PAGE_MODE: string = "pageMode";
+    static IMAGE_MODE: string = "imageMode";
 
     constructor(provider: provider.Provider) {
         super(provider, 'seadragon');
@@ -111,6 +108,8 @@ export class App extends baseApp.BaseApp {
             }
         });
 
+        // create modules
+
         this.headerPanel = new header.PagingHeaderPanel(shell.Shell.$headerPanel);
 
         if (utils.Utils.getBool(this.provider.options.leftPanelEnabled, true) && this.provider.assetSequence.assets.length > 1){
@@ -125,16 +124,13 @@ export class App extends baseApp.BaseApp {
         shell.Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new help.HelpDialogue(this.$helpDialogue);
 
-        this.$conditionsDialogue = utils.Utils.createDiv('overlay conditions');
-        shell.Shell.$overlays.append(this.$conditionsDialogue);
-        this.conditionsDialogue = new conditions.ConditionsDialogue(this.$conditionsDialogue);
-
         this.$embedDialogue = utils.Utils.createDiv('overlay embed');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
 
         this.getUrlParams();
 
+        // initial sizing
         $.publish(baseApp.BaseApp.RESIZE);
     }
 
