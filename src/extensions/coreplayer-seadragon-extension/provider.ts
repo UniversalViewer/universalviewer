@@ -45,15 +45,6 @@ export class Provider extends baseProvider.BaseProvider {
         return uri;
     }
 
-    getMoreInfoUri(): string{
-        var baseUri = this.options.dataBaseUri || "";
-        var uri = baseUri + this.pkg.bibliographicInformation;
-
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
-
-        return uri;
-    }
-
     addTimestamp(uri: string): string{
         return uri + "?t=" + utils.Utils.getTimeStamp();
     }

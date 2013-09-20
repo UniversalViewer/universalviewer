@@ -117,9 +117,16 @@ module.exports = function (grunt) {
                     // extension configuration files
                     {
                         expand: true,
-                        flatten: true,
-                        src: 'src/*.config.js', 
-                        dest: buildDir
+                        src: ['src/extensions/**/config.js'], 
+                        dest: buildDir,
+                        rename: function(dest, src) {
+
+                            // get the extension name from the src string.
+                            // src/extensions/extensionname/config.js
+                            var extensionName = src.match(/extensions\/(.*)\/config.js/)[1];
+
+                            return dest + extensionName + "-config.js";
+                        }
                     }
                 ]
             },
@@ -188,16 +195,18 @@ module.exports = function (grunt) {
                     from: /(?:'|").*modules\/(.*)\/img\/(.*)(?:'|")/g,
                     to: '\'../img/$1/$2\''
                 }]
+            },
+            js: {
+                // replace extension config paths.
+                src: [buildDir + 'app.min.js'],
+                overwrite: true,
+                replacements: [{ 
+                    from: /configUri:.*\"extensions\/(.*)\/config.js\"/g,
+                    to: 'configUri:"$1-config.js"'
+                }]
             }
         }
 
-    });
-    
-    grunt.registerTask('fixmanifest', function() {
-        var tmpPkg = require('./path/to/manifest/manifest.json');
-
-        tmpPkg.foo = "bar";
-        fs.writeFileSync('./new/path/to/manifest.json', JSON.stringify(tmpPkg, null, 2));
     });
 
     grunt.registerTask("default", [
@@ -212,7 +221,8 @@ module.exports = function (grunt) {
         "copy:build",
         "exec:build",
         "replace:html",
-        "replace:css"
+        "replace:css",
+        "replace:js"
     ]);
 
     grunt.registerTask("package", [
