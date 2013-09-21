@@ -33,10 +33,10 @@ require([
     'jsviews',
     'openseadragon',
     'bootstrapper',
-    'extensions/coreplayer-seadragon-extension/app',
-    //'extensions/wellcomeplayer-seadragon-extension/app',
-    'extensions/coreplayer-seadragon-extension/provider'
-    //'extensions/wellcomeplayer-seadragon-extension/provider'
+    //'extensions/coreplayer-seadragon-extension/app',
+    'extensions/wellcomeplayer-seadragon-extension/app',
+    //'extensions/coreplayer-seadragon-extension/provider'
+    'extensions/wellcomeplayer-seadragon-extension/provider'
     ],
     ($, 
     plugins, 
@@ -53,8 +53,8 @@ require([
         extensions['seadragon/dzi'] = {
             type: seadragon.App,
             provider: seadragonProvider.Provider,
-            configUri: 'extensions/coreplayer-seadragon-extension/config.js'
-            //configUri: 'extensions/wellcomeplayer-seadragon-extension/config.js'
+            //configUri: 'extensions/coreplayer-seadragon-extension/config.js'
+            configUri: 'extensions/wellcomeplayer-seadragon-extension/config.js'
         };
 
         new bootstrapper(extensions);
