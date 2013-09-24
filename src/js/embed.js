@@ -74,7 +74,7 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, isFullScreen, height, top, left;
+        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, isFullScreen, height, top, left, lastScroll;
 
         $app = $(element);
 
@@ -134,6 +134,10 @@
             isFullScreen = fs;
 
             if (isFullScreen) {
+                
+                // store current scroll position.
+                lastScroll = $(document).scrollTop();
+
                 $("html").css("overflow", "hidden");
                 window.scrollTo(0, 0);
 
@@ -156,6 +160,9 @@
                     'top': top,
                     'left': left
                 });
+
+                // return to last scroll position.
+                window.scrollTo(0, lastScroll);
             }
 
             resize();
