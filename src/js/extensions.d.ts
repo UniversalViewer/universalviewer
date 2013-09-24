@@ -3,6 +3,10 @@
 declare function escape(s: string): any;
 declare function unescape(s: string): any;
 
+interface HTMLElement{
+    ontouchstart: any;
+}
+
 // string utils
 interface String {
     format(template: string, ...args: any[]): string;

@@ -189,7 +189,7 @@ export class App extends baseApp.BaseApp {
     viewLabel(label: string): void {
 
         if (!label) {
-            this.showDialogue(this.provider.config.modules['genericDialogue'].content.emptyValue);
+            this.showDialogue(this.provider.config.modules.genericDialogue.content.emptyValue);
             return;
         }
         
@@ -198,7 +198,7 @@ export class App extends baseApp.BaseApp {
         if (index != -1) {
             this.viewPage(index);
         } else {
-            this.showDialogue(this.provider.config.modules['genericDialogue'].content.pageNotFound);
+            this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
         }
     }
 
