@@ -40,8 +40,6 @@ export class Provider extends baseProvider.BaseProvider {
         var template = embedTemplate? embedTemplate : this.options.embedTemplate;
         var uri = String.prototype.format(template, baseUri, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, width, height, this.embedScriptUri);
 
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
-
         return uri;
     }
 

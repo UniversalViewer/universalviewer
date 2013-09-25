@@ -2,6 +2,7 @@
 /// <reference path="../../js/extensions.d.ts" />
 
 import baseApp = require("../coreplayer-shared-module/baseApp");
+import baseProvider = require("../coreplayer-shared-module/baseProvider");
 import app = require("../../extensions/coreplayer-seadragon-extension/app");
 import baseCenter = require("../coreplayer-shared-module/centerPanel");
 import utils = require("../../utils");
@@ -125,6 +126,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         return this.provider.assetSequence.assets.length > 1;
     }
 
+    // called every time the seadragon viewer opens a new image.
     viewerOpen() {
 
         if (this.isMultiAsset()) {
@@ -144,28 +146,42 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
         }
         
-        // check for URL zoom params
-        if (this.app.isDeepLinkingEnabled()) {
-            
-            var z = utils.Utils.getHashParameter('z', parent.document);
+        // if there are no currentBounds check for initial zoom params.
+        if (!this.currentBounds){
+            var initialBounds = this.app.getParam(baseProvider.params.zoom);
 
-            if (z){
-                this.fitToBounds(this.deserialiseBounds(z));
-                return;
-            }
+            if (initialBounds){
+                initialBounds = this.deserialiseBounds(initialBounds);
+                this.currentBounds = initialBounds;
+            }   
         }
 
-        if (this.currentBounds) {
+        if (this.currentBounds){
             this.fitToBounds(this.currentBounds);
-        } else {
-            // player is embedded, initial zoom params may be on the querystring.
-            var bounds = this.provider.initialZoom;
-
-            if (bounds) {
-                bounds = this.deserialiseBounds(bounds);
-                this.fitToBounds(bounds);
-            }
         }
+
+        // if (this.app.isDeepLinkingEnabled()) {
+            
+        //     var z = utils.Utils.getHashParameter('z', parent.document);
+
+        //     if (z){
+        //         this.fitToBounds(this.deserialiseBounds(z));
+        //         return;
+        //     }
+        // }
+        
+        // if (this.currentBounds) {
+        //     this.fitToBounds(this.currentBounds);
+        // } else {
+        //     // player is embedded, initial zoom params may be on the querystring.
+        //     var bounds = this.provider.initialZoom;
+
+        //     if (bounds) {
+        //         bounds = this.deserialiseBounds(bounds);
+        //         this.fitToBounds(bounds);
+        //     }
+        // }
+        
     }
 
     disablePrevButton () {

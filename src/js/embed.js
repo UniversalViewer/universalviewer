@@ -74,7 +74,7 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, isFullScreen, height, top, left, lastScroll;
+        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, isFullScreen, height, top, left, lastScroll, reload;
 
         $app = $(element);
 
@@ -174,6 +174,7 @@
             $app.empty();
 
             assetSequenceIndex = index;
+            reload = true;
 
             createSocket();
         }
@@ -181,15 +182,16 @@
         function createSocket() {
 
             var uri = appUri +
-                "?isHomeDomain=" + isHomeDomain +
-                "&isOnlyInstance=" + isOnlyInstance +
-                "&dataUri=" + dataUri +
-                "&embedScriptUri=" + scriptUri;
+                "?hd=" + isHomeDomain +
+                "&oi=" + isOnlyInstance +
+                "&du=" + dataUri +
+                "&esu=" + scriptUri;
 
-            if (assetSequenceIndex) uri += "&assetSequenceIndex=" + assetSequenceIndex;
-            if (assetIndex) uri += "&assetIndex=" + assetIndex;
-            if (dataBaseUri) uri += "&dataBaseUri=" + dataBaseUri;
-            if (zoom) uri += "&zoom=" + zoom;
+            if (assetSequenceIndex) uri += "&asi=" + assetSequenceIndex;
+            if (assetIndex) uri += "&ai=" + assetIndex;
+            if (dataBaseUri) uri += "&dbu=" + dataBaseUri;
+            if (zoom) uri += "&z=" + zoom;
+            if (reload) uri += "&rl=true";
 
             socket = new easyXDM.Socket({
                 remote: uri,

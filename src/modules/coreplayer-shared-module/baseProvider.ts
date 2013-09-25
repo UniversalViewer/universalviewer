@@ -1,6 +1,12 @@
 /// <reference path="../../js/jquery.d.ts" />
 import utils = require("../../utils");
 
+export enum params {
+    assetSequenceIndex,
+    assetIndex,
+    zoom
+}
+
 export class BaseProvider {
     
     config: any;
@@ -11,9 +17,11 @@ export class BaseProvider {
     dataUri: string;
     isHomeDomain: boolean;
     isOnlyInstance: boolean;
-    initialAssetIndex: string;
     embedScriptUri: string;
-    initialZoom: string;
+    isReload: boolean;
+ 
+    // map param names to enum indexes.
+    static paramMap: string[] = ['asi', 'ai', 'z'];
 
     options: any = {
         
@@ -24,25 +32,22 @@ export class BaseProvider {
         this.pkg = pkg;
 
         // add dataBaseUri to options so it can be overridden.
-        this.options.dataBaseUri = utils.Utils.getQuerystringParameter('dataBaseUri');
+        this.options.dataBaseUri = utils.Utils.getQuerystringParameter('dbu');
 
-        this.dataUri = utils.Utils.getQuerystringParameter('dataUri');
-        this.isHomeDomain = utils.Utils.getQuerystringParameter('isHomeDomain') === "true";
-        this.isOnlyInstance = utils.Utils.getQuerystringParameter('isOnlyInstance') === "true";
-        this.initialAssetIndex = utils.Utils.getQuerystringParameter('assetIndex');
-        this.embedScriptUri = utils.Utils.getQuerystringParameter('embedScriptUri');
-        this.initialZoom = utils.Utils.getQuerystringParameter('zoom');
+        // get data-attributes that can't be overridden by hash params.
+        // other data-attributes are retrieved through app.getParam.
+        this.dataUri = utils.Utils.getQuerystringParameter('du');
+        this.isHomeDomain = utils.Utils.getQuerystringParameter('hd') === "true";
+        this.isOnlyInstance = utils.Utils.getQuerystringParameter('oi') === "true";
+        this.embedScriptUri = utils.Utils.getQuerystringParameter('esu');
+        this.isReload = utils.Utils.getQuerystringParameter('rl') == "true";
 
-        // get params from querystring, these override hash ones if present.
-        var index = utils.Utils.getQuerystringParameter('assetSequenceIndex');
+        if (this.isHomeDomain && !this.isReload){
+            this.assetSequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.assetSequenceIndex], parent.document));
+        } 
 
-        if (index) {
-            this.assetSequenceIndex = parseInt(index);
-        } else {
-            this.assetSequenceIndex = parseInt(utils.Utils.getHashParameter('asi', parent.document) || 0);
-
-            //var hash = utils.Utils.getHashValues('/', parent.document);
-            //this.assetSequenceIndex = hash[0] || 0;
+        if (!this.assetSequenceIndex){
+            this.assetSequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.assetSequenceIndex])) || 0;
         }
 
         // we know that this assetSequence exists because the bootstrapper

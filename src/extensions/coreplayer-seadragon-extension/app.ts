@@ -3,7 +3,7 @@
 
 import baseApp = require("../../modules/coreplayer-shared-module/baseApp");
 import utils = require("../../utils");
-import baseProver = require("../../modules/coreplayer-shared-module/baseProvider");
+import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import provider = require("./provider");
 import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-pagingheaderpanel-module/pagingHeaderPanel");
@@ -93,8 +93,7 @@ export class App extends baseApp.BaseApp {
         });
 
         $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
-            //this.updateAddress(this.provider.assetSequenceIndex, this.currentAssetIndex, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
-            utils.Utils.setHashParameter('z', this.centerPanel.serialiseBounds(this.centerPanel.currentBounds), parent.document);
+            this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
         });
 
         $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
@@ -129,33 +128,16 @@ export class App extends baseApp.BaseApp {
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
 
-        this.getUrlParams();
+        var assetIndex;
+
+        if (!this.provider.isReload){
+            assetIndex = parseInt(this.getParam(baseProvider.params.assetIndex)) || 0;
+        }
+
+        this.viewPage(assetIndex || 0);
 
         // initial sizing
         $.publish(baseApp.BaseApp.RESIZE);
-    }
-
-    getUrlParams(): void {
-
-        if (this.isDeepLinkingEnabled()) {
-
-            var ai = utils.Utils.getHashParameter('ai', parent.document);
-
-            if (ai){
-                this.viewPage(parseInt(ai));
-                return;
-            }
-        } 
-
-        // have initial params been specified on the embedding div?
-        var assetIndex: number = parseInt(this.provider.initialAssetIndex);
-
-        if (assetIndex) {
-            this.viewPage(assetIndex);
-        } else {
-            // default to the first page.
-            this.viewPage(0);
-        }
     }
 
     viewPage(assetIndex: number): void {
@@ -167,27 +149,9 @@ export class App extends baseApp.BaseApp {
 
             $.publish(App.OPEN_DZI, [dziUri]);
 
-            utils.Utils.setHashParameter('ai', assetIndex, parent.document);
+            this.setParam(baseProvider.params.assetIndex, assetIndex);
         });
     }
-
-    // viewPage(assetIndex: number, preserveAddress?: boolean): void {
-    //     this.viewAsset(assetIndex, () => {
-
-    //         var asset = this.provider.assetSequence.assets[assetIndex];
-
-    //         var dziUri = (<provider.Provider>this.provider).getDziUri(asset);
-
-    //         $.publish(App.OPEN_DZI, [dziUri]);
-
-    //         // update address                       
-    //         if (preserveAddress) {
-    //             this.updateAddress(this.provider.assetSequenceIndex.toString(), assetIndex.toString());
-    //         } else {
-    //             this.setAddress(this.provider.assetSequenceIndex.toString(), assetIndex.toString());
-    //         }
-    //     });
-    // }
 
     viewSection(path: string): void {
 

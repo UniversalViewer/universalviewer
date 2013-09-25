@@ -1,7 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 import utils = require("../../utils");
-import bp = require("./baseProvider");
+import baseProvider = require("./baseProvider");
 import shell = require("./shell");
 import genericDialogue = require("./genericDialogue");
 
@@ -15,7 +15,7 @@ export class BaseApp {
     $element: JQuery;
     extensions: any;
     socket: any;
-    provider: bp.BaseProvider;
+    provider: baseProvider.BaseProvider;
 
     // events
     static RESIZE: string = 'onResize';
@@ -24,7 +24,7 @@ export class BaseApp {
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
     static ASSETSEQUENCE_INDEX_CHANGED: string = 'onAssetSequenceIndexChanged';
 
-    constructor(provider: bp.BaseProvider, extensionName: string) {
+    constructor(provider: baseProvider.BaseProvider, extensionName: string) {
 
         window.app = this;
 
@@ -77,6 +77,9 @@ export class BaseApp {
 
         // create shell and shared views.
         var sh = new shell.Shell(this.$element);
+
+        // set assetSequenceIndex hash param.
+        this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
     }
 
     width(): number {
@@ -101,9 +104,31 @@ export class BaseApp {
         }
     }
 
-    viewAsset(assetIndex: number, callback?: (i: number) => any): void {
+    // get hash or data-attribute params depending on whether the player is embedded.
+    getParam(key: baseProvider.params): any{
+        var value;
 
-        // todo: authorisation.
+        // deep linking is only allowed when hosted on home domain.
+        if (this.isDeepLinkingEnabled()){
+            value = utils.Utils.getHashParameter(baseProvider.BaseProvider.paramMap[key], parent.document);
+        }
+
+        if (!value){
+            value = utils.Utils.getQuerystringParameter(baseProvider.BaseProvider.paramMap[key]);
+        }
+
+        return value;
+    }
+
+    // set hash params depending on whether the player is embedded.
+    setParam(key: baseProvider.params, value: any): void{
+        
+        if (this.isDeepLinkingEnabled()){
+            utils.Utils.setHashParameter(baseProvider.BaseProvider.paramMap[key], value, parent.document);
+        }
+    }
+
+    viewAsset(assetIndex: number, callback?: (i: number) => any): void {
 
         this.currentAssetIndex = assetIndex;
 
@@ -123,77 +148,8 @@ export class BaseApp {
 
     isDeepLinkingEnabled(): boolean {
 
-        if (this.provider.isHomeDomain && this.provider.isOnlyInstance) {
-            return true;
-        }
-
-        return false;
+        return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
     }
-
-    // non-destructive address update.
-    // updateAddress(...args: any[]): void {
-
-    //     if (!this.isDeepLinkingEnabled()) return;
-        
-    //     var currentPathNames = utils.Utils.getHashValues('/', parent.document);
-    //     var length = Math.max(args.length, currentPathNames.length);
-    //     var newPathNames = new Array(length);
-
-    //     // construct a new pathnames array containing the old pathnames, but with
-    //     // a length to accommodate new args.
-    //     for (var i = 0; i < currentPathNames.length; i++) {
-    //         newPathNames[i] = currentPathNames[i];
-    //     }
-
-    //     for (i = 0; i < args.length; i++) {
-    //         newPathNames[i] = args[i];
-    //     }
-
-    //     // serialise pathNames.
-    //     var hash = '#';
-
-    //     for (i = 0; i < length; i++) {
-    //         hash += newPathNames[i];
-
-    //         if (i != length - 1) hash += '/';
-    //     }
-
-    //     this.updateParentHash(hash);
-    // }
-
-    // destructive address update.
-    // setAddress(...args: any[]): void {
-
-    //     if (!this.isDeepLinkingEnabled()) return;
-
-    //     var hash = '#';
-
-    //     for (var i = 0; i < args.length; i++) {
-    //         hash += args[i];
-
-    //         if (i != args.length - 1) hash += '/';
-    //     }
-
-    //     this.updateParentHash(hash);
-    // }
-
-    // updateParentHash(hash): void {
-
-    //     var url = window.parent.document.URL;
-
-    //     // remove hash value (if present).
-    //     var index = url.indexOf('#');
-
-    //     if (index != -1) {
-    //         url = url.substr(0, url.indexOf('#'));
-    //     }
-
-    //     window.parent.document.location.replace(url + hash);
-    // }
-
-    // getHashValues(): string[] {
-    //     return utils.Utils.getHashValues('/', parent.document);
-    // }
 
     getSectionByAssetIndex(index: number) {
 
