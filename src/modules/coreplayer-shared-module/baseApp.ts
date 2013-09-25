@@ -131,69 +131,69 @@ export class BaseApp {
     }
 
     // non-destructive address update.
-    updateAddress(...args: any[]): void {
+    // updateAddress(...args: any[]): void {
 
-        if (!this.isDeepLinkingEnabled()) return;
+    //     if (!this.isDeepLinkingEnabled()) return;
         
-        var currentPathNames = utils.Utils.getHashValues('/', parent.document);
-        var length = Math.max(args.length, currentPathNames.length);
-        var newPathNames = new Array(length);
+    //     var currentPathNames = utils.Utils.getHashValues('/', parent.document);
+    //     var length = Math.max(args.length, currentPathNames.length);
+    //     var newPathNames = new Array(length);
 
-        // construct a new pathnames array containing the old pathnames, but with
-        // a length to accommodate new args.
-        for (var i = 0; i < currentPathNames.length; i++) {
-            newPathNames[i] = currentPathNames[i];
-        }
+    //     // construct a new pathnames array containing the old pathnames, but with
+    //     // a length to accommodate new args.
+    //     for (var i = 0; i < currentPathNames.length; i++) {
+    //         newPathNames[i] = currentPathNames[i];
+    //     }
 
-        for (i = 0; i < args.length; i++) {
-            newPathNames[i] = args[i];
-        }
+    //     for (i = 0; i < args.length; i++) {
+    //         newPathNames[i] = args[i];
+    //     }
 
-        // serialise pathNames.
-        var hash = '#';
+    //     // serialise pathNames.
+    //     var hash = '#';
 
-        for (i = 0; i < length; i++) {
-            hash += newPathNames[i];
+    //     for (i = 0; i < length; i++) {
+    //         hash += newPathNames[i];
 
-            if (i != length - 1) hash += '/';
-        }
+    //         if (i != length - 1) hash += '/';
+    //     }
 
-        this.updateParentHash(hash);
-    }
+    //     this.updateParentHash(hash);
+    // }
 
     // destructive address update.
-    setAddress(...args: any[]): void {
+    // setAddress(...args: any[]): void {
 
-        if (!this.isDeepLinkingEnabled()) return;
+    //     if (!this.isDeepLinkingEnabled()) return;
 
-        var hash = '#';
+    //     var hash = '#';
 
-        for (var i = 0; i < args.length; i++) {
-            hash += args[i];
+    //     for (var i = 0; i < args.length; i++) {
+    //         hash += args[i];
 
-            if (i != args.length - 1) hash += '/';
-        }
+    //         if (i != args.length - 1) hash += '/';
+    //     }
 
-        this.updateParentHash(hash);
-    }
+    //     this.updateParentHash(hash);
+    // }
 
-    updateParentHash(hash): void {
+    // updateParentHash(hash): void {
 
-        var url = window.parent.document.URL;
+    //     var url = window.parent.document.URL;
 
-        // remove hash value (if present).
-        var index = url.indexOf('#');
+    //     // remove hash value (if present).
+    //     var index = url.indexOf('#');
 
-        if (index != -1) {
-            url = url.substr(0, url.indexOf('#'));
-        }
+    //     if (index != -1) {
+    //         url = url.substr(0, url.indexOf('#'));
+    //     }
 
-        window.parent.document.location.replace(url + hash);
-    }
+    //     window.parent.document.location.replace(url + hash);
+    // }
 
-    getHashValues(): string[] {
-        return utils.Utils.getHashValues('/', parent.document);
-    }
+    // getHashValues(): string[] {
+    //     return utils.Utils.getHashValues('/', parent.document);
+    // }
 
     getSectionByAssetIndex(index: number) {
 

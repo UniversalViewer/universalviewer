@@ -24,23 +24,25 @@ export class BaseProvider {
         this.pkg = pkg;
 
         // add dataBaseUri to options so it can be overridden.
-        this.options.dataBaseUri = utils.Utils.getParameterByName('dataBaseUri');
+        this.options.dataBaseUri = utils.Utils.getQuerystringParameter('dataBaseUri');
 
-        this.dataUri = utils.Utils.getParameterByName('dataUri');
-        this.isHomeDomain = utils.Utils.getParameterByName('isHomeDomain') === "true";
-        this.isOnlyInstance = utils.Utils.getParameterByName('isOnlyInstance') === "true";
-        this.initialAssetIndex = utils.Utils.getParameterByName('assetIndex');
-        this.embedScriptUri = utils.Utils.getParameterByName('embedScriptUri');
-        this.initialZoom = utils.Utils.getParameterByName('zoom');
+        this.dataUri = utils.Utils.getQuerystringParameter('dataUri');
+        this.isHomeDomain = utils.Utils.getQuerystringParameter('isHomeDomain') === "true";
+        this.isOnlyInstance = utils.Utils.getQuerystringParameter('isOnlyInstance') === "true";
+        this.initialAssetIndex = utils.Utils.getQuerystringParameter('assetIndex');
+        this.embedScriptUri = utils.Utils.getQuerystringParameter('embedScriptUri');
+        this.initialZoom = utils.Utils.getQuerystringParameter('zoom');
 
         // get params from querystring, these override hash ones if present.
-        var index = utils.Utils.getParameterByName('assetSequenceIndex');
+        var index = utils.Utils.getQuerystringParameter('assetSequenceIndex');
 
         if (index) {
             this.assetSequenceIndex = parseInt(index);
         } else {
-            var hash = utils.Utils.getHashValues('/', parent.document);
-            this.assetSequenceIndex = hash[0] || 0;
+            this.assetSequenceIndex = parseInt(utils.Utils.getHashParameter('asi', parent.document) || 0);
+
+            //var hash = utils.Utils.getHashValues('/', parent.document);
+            //this.assetSequenceIndex = hash[0] || 0;
         }
 
         // we know that this assetSequence exists because the bootstrapper

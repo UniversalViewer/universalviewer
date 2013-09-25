@@ -17,8 +17,8 @@ class BootStrapper{
 
         var that = this;
 
-        that.dataBaseUri = utils.Utils.getParameterByName('dataBaseUri');
-        that.packageUri = utils.Utils.getParameterByName('dataUri');
+        that.dataBaseUri = utils.Utils.getQuerystringParameter('dataBaseUri');
+        that.packageUri = utils.Utils.getQuerystringParameter('dataUri');
 
         if (that.dataBaseUri){
             that.packageUri = that.dataBaseUri + that.packageUri;
@@ -31,13 +31,16 @@ class BootStrapper{
             that.pkg = pkg;
 
             // get params from querystring, these override hash ones if present.
-            var index = utils.Utils.getParameterByName('assetSequenceIndex');
+            var index = utils.Utils.getQuerystringParameter('assetSequenceIndex');
 
             if (index) {
                 that.assetSequenceIndex = parseInt(index);
             } else {
-                var hash = utils.Utils.getHashValues('/', parent.document);
-                that.assetSequenceIndex = hash[0] || 0;
+                
+                that.assetSequenceIndex = parseInt(utils.Utils.getHashParameter('asi', parent.document) || 0);
+
+                //var hash = utils.Utils.getHashValues('/', parent.document);
+                //that.assetSequenceIndex = hash[0] || 0;
             }
 
             if (!that.pkg.assetSequences[that.assetSequenceIndex].$ref) {

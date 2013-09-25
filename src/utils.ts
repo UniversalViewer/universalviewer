@@ -92,41 +92,59 @@ export class Utils{
 
     //#region QueryString
 
-    static getHashValues(delimiter: string, doc?: Document): string[]{
+    static getHashParameter(key: string, doc?: Document): string {
         if (!doc) doc = window.document;
-        var trailing = new RegExp(delimiter + "$");
-        return doc.location.hash.replace(/^#/, "").replace(trailing, "").split(delimiter);
+        var regex = new RegExp("#.*[?&]" + key + "=([^&]+)(&|$)");
+        var match = regex.exec(doc.location.hash);
+        return(match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null);
     }
 
-    static getParameterByName(name: string): string {
-        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-        var regexS = "[\\?&]" + name + "=([^&#]*)";
-        var regex = new RegExp(regexS);
-        var results = regex.exec(window.location.search);
-        if (results == null)
-            return "";
-        else
-            return decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
+    static setHashParameter(key: string, value: any, doc?: Document): void{
+        if (!doc) doc = window.document;
 
-    static addQuerystringParams(...params: string[]) {
-        var qs = document.location.search;
+        var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
 
-        for (var i = 0; i < params.length; i++) {
-            qs = this.addQuerystringParam(qs, params[i]);
+        var newHash = "#?" + kvp;
+
+        var url = doc.URL;
+
+        // remove hash value (if present).
+        var index = url.indexOf('#');
+
+        if (index != -1) {
+            url = url.substr(0, url.indexOf('#'));
         }
 
-        // redirect.
-        window.location.search = qs;
+        doc.location.replace(url + newHash);
     }
 
-    static addQuerystringParam(qs: string, param: any): string {
-        var key = escape(param.key);
-        var value = escape(param.value);
+    static getQuerystringParameter(key: string, doc?: Document): string {
+        if (!doc) doc = window.document;
+        key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
+        var match = regex.exec(window.location.search);
+        return(match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null);
+    }
 
-        var t = eval
+    static setQuerystringParameter(key: string, value: any, doc?: Document): void{
+        if (!doc) doc = window.document;
 
-            var kvp = qs.split('&');
+        var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
+
+        // redirects.
+        window.location.search = kvp;
+    }
+
+    static updateURIKeyValuePair(uriSegment: string, key: string, value: string): string{
+        
+        key = encodeURIComponent(key);
+        value = encodeURIComponent(value);
+
+        var kvp = uriSegment.split('&');
+
+        // Array.split() returns an array with a single "" item
+        // if the target string is empty. remove if present.
+        if (kvp[0] == "") kvp.shift();
 
         var i = kvp.length;
         var x;
@@ -149,7 +167,7 @@ export class Utils{
 
         return kvp.join('&');
     }
-
+    
     //#endregion
 
     //#region Math
