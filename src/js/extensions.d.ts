@@ -55,4 +55,5 @@ declare var OpenSeadragon: any;
 // app
 interface Window{
     app: any;
+    pkgCallback: any;
 }

@@ -1,4 +1,5 @@
 /// <reference path="../../js/jquery.d.ts" />
+/// <reference path="../../js/extensions.d.ts" />
 import utils = require("../../utils");
 
 export enum params {
@@ -50,14 +51,18 @@ export class BaseProvider {
             this.assetSequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.assetSequenceIndex])) || 0;
         }
 
+        this.load();
+    }
+
+    load(): void{
         // we know that this assetSequence exists because the bootstrapper
         // will have loaded it already.
-        this.assetSequence = pkg.assetSequences[this.assetSequenceIndex];
+        this.assetSequence = this.pkg.assetSequences[this.assetSequenceIndex];
 
         // replace all ref assetSequences with an object that can store
         // its path and sub structures. they won't get used for anything
         // else without a reload.
-        for (var i = 0; i < pkg.assetSequences.length; i++) {
+        for (var i = 0; i < this.pkg.assetSequences.length; i++) {
             if (this.pkg.assetSequences[i].$ref) {
                 this.pkg.assetSequences[i] = {};
             }
@@ -66,10 +71,37 @@ export class BaseProvider {
         this.type = this.getRootSection().sectionType.toLowerCase();
 
         if (this.pkg.rootStructure) {
-            this.parseStructures(this.pkg.rootStructure, pkg.assetSequences, '');
+            this.parseStructures(this.pkg.rootStructure, this.pkg.assetSequences, '');
         }
 
         this.parseSections(this.getRootSection(), this.assetSequence.assets, '');
+    }
+
+    reload(callback: any): void {
+
+        var packageUri = this.dataUri;
+
+        if (this.options.dataBaseUri){
+            packageUri = this.options.dataBaseUri + this.dataUri;
+        }
+
+        packageUri += "?t=" + utils.Utils.getTimeStamp();
+
+        window.pkgCallback = (data: any) => {
+            this.pkg = data;
+
+            this.load();
+
+            callback();
+        };
+
+        $.ajax({
+            url: packageUri,
+            type: 'GET',
+            dataType: 'jsonp',
+            jsonp: 'callback',
+            jsonpCallback: 'pkgCallback'
+        });
     }
 
     // the purpose of this is to give each asset in assetSequence.assets
