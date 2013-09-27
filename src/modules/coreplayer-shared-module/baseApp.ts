@@ -23,6 +23,8 @@ export class BaseApp {
     static ASSET_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
     static ASSETSEQUENCE_INDEX_CHANGED: string = 'onAssetSequenceIndexChanged';
+    static REDIRECT: string = 'onRedirect';
+    static REFRESH: string = 'onRefresh';
 
     constructor(provider: baseProvider.BaseProvider, extensionName: string) {
 
@@ -90,10 +92,18 @@ export class BaseApp {
         return $(window).height();
     }
 
-    triggerSocket(eventName, eventObject): void {
+    triggerSocket(eventName: string, eventObject: any): void {
         if (this.socket) {
             this.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
         }
+    }
+
+    redirect(uri) {
+        this.triggerSocket(BaseApp.REDIRECT, uri);
+    }
+
+    refresh() {
+        this.triggerSocket(BaseApp.REFRESH, null);
     }
 
     handleParentFrameEvent(message): void {
