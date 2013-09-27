@@ -170,6 +170,9 @@ export class TreeView extends baseView.BaseView {
     }
 
     selectIndex(index: number): void {
+        // may be authenticating
+        if (!index) return;
+
         var section = this.app.getSectionByAssetIndex(index);
         this.selectPath(section.path);
     }

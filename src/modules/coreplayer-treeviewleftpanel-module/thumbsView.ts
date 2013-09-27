@@ -194,6 +194,9 @@ export class ThumbsView extends baseView.BaseView {
 
     selectIndex(index): void {
 
+        // may be authenticating
+        if (!index) return;
+
         index = parseInt(index);
 
         if (this.$selectedThumb) {
