@@ -190,7 +190,7 @@ export class ThumbsView extends baseView.BaseView {
     selectIndex(index): void {
 
         // may be authenticating
-        if (!index) return;
+        if (index == -1) return;
 
         index = parseInt(index);
 

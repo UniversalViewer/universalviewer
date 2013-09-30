@@ -82,6 +82,9 @@ export class BaseApp {
 
         // set assetSequenceIndex hash param.
         this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
+
+        // set currentAssetIndex to -1 (nothing selected yet).
+        this.currentAssetIndex = -1;
     }
 
     width(): number {
