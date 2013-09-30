@@ -40,11 +40,6 @@ export class ThumbsView extends baseView.BaseView {
         this.$element.append(this.$thumbs);
 
         $.templates({
-            thumbsTemplate: '<div class="thumb" data-src="{{>url}}" data-visible="{{>visible}}"><div class="wrap" style="height:{{>height}}px"></div><span class="index">{{:#index + 1}}</span><span class="label">{{>label}}&nbsp;</span></div>{{if ~isEven(#index + 1)}}<div class="separator"></div>{{/if}}'
-        });
-
-        /*
-        $.templates({
             thumbsTemplate: '<div class="thumb" data-src="{{>url}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
@@ -54,7 +49,6 @@ export class ThumbsView extends baseView.BaseView {
                                 <div class="separator"></div> \
                             {{/if}}'
         });
-        */
 
         $.views.helpers({
             isEven: function (num) {
@@ -97,9 +91,7 @@ export class ThumbsView extends baseView.BaseView {
             var heightRatio = asset.height / asset.width;
             var height = 90 * heightRatio;
 
-            // todo: decide how authstatus is defined in package
-            //var visible = section.AuthStatus.toLowerCase() === "allowed";
-            var visible = true;
+            var visible = section.extensions.authStatus.toLowerCase() === "allowed";
 
             if (asset.orderLabel.trim() === "-") {
                 asset.orderLabel = "";
