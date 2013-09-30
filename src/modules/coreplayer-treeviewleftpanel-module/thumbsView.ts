@@ -115,6 +115,9 @@ export class ThumbsView extends baseView.BaseView {
         this.selectIndex(this.app.currentAssetIndex);
 
         this.setLabel();
+
+        // do initial load to show padlocks
+        this.loadThumbs(0);
     }
 
     loadThumbs(index): void {
