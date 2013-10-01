@@ -119,6 +119,8 @@
         }
 
         function redirect(uri) {
+            // store current location in cookie.
+            jQuery.cookie('wlredirect', window.location.href, { path: '/' });
             window.location.replace(uri);
         }
 
