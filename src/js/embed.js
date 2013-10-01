@@ -223,7 +223,7 @@
                             }
                             break;
                         default:
-                            $(document).trigger(message.eventName, [message.eventObject]);
+                            jQuery(document).trigger(message.eventName, [message.eventObject]);
                             break;
                     }
                 }
