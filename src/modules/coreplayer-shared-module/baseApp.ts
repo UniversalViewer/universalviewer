@@ -25,6 +25,7 @@ export class BaseApp {
     static ASSETSEQUENCE_INDEX_CHANGED: string = 'onAssetSequenceIndexChanged';
     static REDIRECT: string = 'onRedirect';
     static REFRESH: string = 'onRefresh';
+    static RELOAD: string = 'onReload';
 
     constructor(provider: baseProvider.BaseProvider, extensionName: string) {
 

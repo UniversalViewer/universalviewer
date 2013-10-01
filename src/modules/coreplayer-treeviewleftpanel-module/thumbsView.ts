@@ -36,6 +36,10 @@ export class ThumbsView extends baseView.BaseView {
             this.setLabel();
         });
 
+        $.subscribe(app.App.RELOAD, () => {
+            this.createThumbs();
+        });
+
         this.$thumbs = utils.Utils.createDiv('thumbs');
         this.$element.append(this.$thumbs);
 
