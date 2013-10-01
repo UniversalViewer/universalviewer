@@ -116,7 +116,7 @@ export class App extends baseApp.BaseApp {
             this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
         }
 
-        this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
+        //this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
         this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
         this.footerPanel = new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);
 
@@ -193,6 +193,9 @@ export class App extends baseApp.BaseApp {
     }
 
     getViewerBounds(): string{
+        
+        if (!this.centerPanel) return;
+
         var bounds = this.centerPanel.getBounds();
 
         if (bounds) return this.centerPanel.serialiseBounds(bounds);
