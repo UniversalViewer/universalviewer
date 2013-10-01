@@ -57,3 +57,6 @@ interface Window{
     app: any;
     pkgCallback: any;
 }
+
+// google
+declare function trackEvent(category: string, action: string, label: string): void;
