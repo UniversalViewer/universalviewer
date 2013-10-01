@@ -158,30 +158,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         if (this.currentBounds){
             this.fitToBounds(this.currentBounds);
-        }
-
-        // if (this.app.isDeepLinkingEnabled()) {
-            
-        //     var z = utils.Utils.getHashParameter('z', parent.document);
-
-        //     if (z){
-        //         this.fitToBounds(this.deserialiseBounds(z));
-        //         return;
-        //     }
-        // }
-        
-        // if (this.currentBounds) {
-        //     this.fitToBounds(this.currentBounds);
-        // } else {
-        //     // player is embedded, initial zoom params may be on the querystring.
-        //     var bounds = this.provider.initialZoom;
-
-        //     if (bounds) {
-        //         bounds = this.deserialiseBounds(bounds);
-        //         this.fitToBounds(bounds);
-        //     }
-        // }
-        
+        }        
     }
 
     disablePrevButton () {
@@ -263,15 +240,8 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$title.ellipsisFill(this.title);
 
         this.$viewer.height(this.$content.height());
-        /*this.$viewer.width(this.$content.width());*/
 
         if (this.isMultiAsset()) {
-            //this.$prevButtonCont.height(this.$content.height());
-            //this.$nextButtonCont.height(this.$content.height());
-
-            //this.$prevButton.css('top', (this.$prevButtonCont.height() - this.$prevButton.height()) / 2);
-            //this.$nextButton.css('top', (this.$nextButtonCont.height() - this.$nextButton.height()) / 2);
-
             this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
             this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
         }
