@@ -112,7 +112,7 @@ export class App extends baseApp.BaseApp {
 
         this.headerPanel = new header.PagingHeaderPanel(shell.Shell.$headerPanel);
 
-        if (utils.Utils.getBool(this.provider.options.leftPanelEnabled, true) && this.provider.assetSequence.assets.length > 1){
+        if (this.isLeftPanelEnabled()){
             this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
         }
 
@@ -128,6 +128,10 @@ export class App extends baseApp.BaseApp {
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
 
+        if (this.isLeftPanelEnabled()){
+            this.leftPanel.init();
+        }
+
         var assetIndex;
 
         if (!this.provider.isReload){
@@ -138,6 +142,11 @@ export class App extends baseApp.BaseApp {
 
         // initial sizing
         $.publish(baseApp.BaseApp.RESIZE);
+    }
+
+    isLeftPanelEnabled(): boolean{
+        return  utils.Utils.getBool(this.provider.options.leftPanelEnabled, true) 
+                && this.provider.assetSequence.assets.length > 1;
     }
 
     viewPage(assetIndex: number): void {

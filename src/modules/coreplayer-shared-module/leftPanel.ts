@@ -17,6 +17,11 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
 
         this.$element.width(this.options.panelCollapsedWidth);
 
+    }
+
+    init(): void{
+        super.init();
+
         if (this.options.panelOpen) {
             this.toggle();
         }

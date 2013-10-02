@@ -77,6 +77,10 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.$main.hide();
     }
 
+    init(): void{
+        super.init();
+    }
+
     toggle(): void {
 
         // if collapsing, hide contents immediately.
@@ -121,8 +125,6 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.toggleComplete();
 
         this.isUnopened = false;
-
-        $.publish(baseApp.BaseApp.RESIZE);
     }
 
     getTargetWidth(): number{
@@ -134,7 +136,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     }
 
     toggleComplete(): void {
-        
+        $.publish(baseApp.BaseApp.RESIZE);
     }
 
     resize(): void {

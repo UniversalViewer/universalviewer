@@ -29,6 +29,10 @@ export class BaseView extends panel.Panel{
         }
     }
 
+    init(): void{
+
+    }
+
     setConfig(moduleName: string): void {
         // the top-most class in the inheritance chain of views
         // overrides all other sub classes in that
