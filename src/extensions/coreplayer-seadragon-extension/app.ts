@@ -108,8 +108,21 @@ export class App extends baseApp.BaseApp {
             }
         });
 
-        // create modules
+        this.createModules();        
 
+        var assetIndex;
+
+        if (!this.provider.isReload){
+            assetIndex = parseInt(this.getParam(baseProvider.params.assetIndex)) || 0;
+        }
+
+        this.viewPage(assetIndex || 0);
+
+        // initial sizing
+        $.publish(baseApp.BaseApp.RESIZE);
+    }
+
+    createModules(): void{
         this.headerPanel = new header.PagingHeaderPanel(shell.Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
@@ -131,17 +144,6 @@ export class App extends baseApp.BaseApp {
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         }
-
-        var assetIndex;
-
-        if (!this.provider.isReload){
-            assetIndex = parseInt(this.getParam(baseProvider.params.assetIndex)) || 0;
-        }
-
-        this.viewPage(assetIndex || 0);
-
-        // initial sizing
-        $.publish(baseApp.BaseApp.RESIZE);
     }
 
     isLeftPanelEnabled(): boolean{
