@@ -48,6 +48,10 @@ if (!Array.prototype.last) {
     };
 };
 
+Array.prototype.contains = function (val:string){
+    return this.indexOf(val) !== −1;
+}
+
 //#endregion
 
 export class Utils{
