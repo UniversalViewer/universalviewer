@@ -38,9 +38,11 @@ if (!Array.prototype.indexOf) {
     };
 }
 
-Array.prototype.clone = function () {
-    return this.slice(0);
-};
+if (!Array.prototype.clone) {
+    Array.prototype.clone = function () {
+        return this.slice(0);
+    };
+}
 
 if (!Array.prototype.last) {
     Array.prototype.last = function () {
@@ -48,9 +50,11 @@ if (!Array.prototype.last) {
     };
 };
 
-Array.prototype.contains = function (val: string){
-    return this.indexOf(val) !== -1;
-};
+if (!Array.prototype.contains) {
+    Array.prototype.contains = function (val: any){
+        return this.indexOf(val) !== -1;
+    };
+}
 
 //#endregion
 

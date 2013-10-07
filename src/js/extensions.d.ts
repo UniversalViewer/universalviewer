@@ -21,6 +21,7 @@ interface String {
 interface Array{
     clone(): Array;
     last(): any;
+    contains(val: any): boolean;
 }
 
 interface JQuery {
