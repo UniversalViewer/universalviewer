@@ -18,13 +18,6 @@ export class ExtendedFooterPanel extends baseFooter.FooterPanel {
         this.$embedBtn = $('<a href="#" class="imageButton embed"></a>');
         this.$options.prepend(this.$embedBtn);
 
-        // hide embed button if some assets require authentication.
-        /*
-        if (this.provider.pkg.extensions && !this.provider.pkg.extensions.isAllOpen) {
-            this.$embedBtn.hide();
-        }
-        */
-
         this.$embedBtn.on('click', (e) => {
             e.preventDefault();
 
