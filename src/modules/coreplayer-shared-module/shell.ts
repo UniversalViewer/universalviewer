@@ -60,9 +60,9 @@ export class Shell extends baseView.BaseView {
         Shell.$overlays.append(Shell.$genericDialogue);
 
         Shell.$overlays.on('click', (e) => {
-            e.preventDefault();
 
             if ($(e.target).hasClass('overlays')) {
+                e.preventDefault();
                 $.publish(baseApp.BaseApp.CLOSE_ACTIVE_DIALOGUE);
             }
         });
