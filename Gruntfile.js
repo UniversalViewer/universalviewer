@@ -15,7 +15,8 @@ module.exports = function (grunt) {
         packageDir = 'build/' + packageDirName;
 
     var globalConfig = {
-        buildDir: 'build/wellcomeplayer'
+        buildDir: 'build/wellcomeplayer',
+        minifyOff: ''
     };
 
     grunt.initConfig({        
@@ -179,7 +180,7 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node tools/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app out=<%= globalConfig.buildDir %>/app.min.js'
+                cmd: 'node tools/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= globalConfig.minifyOff %> out=<%= globalConfig.buildDir %>/app.min.js'
             }
         },
 
@@ -224,6 +225,10 @@ module.exports = function (grunt) {
         // or prepend / to target relative to system root.
         var buildDir = grunt.option('buildDir');
         if (buildDir) grunt.config.set('globalConfig.buildDir', buildDir);
+
+        // grunt build --minifyOff
+        var minifyOff = grunt.option('minifyOff');
+        if (minifyOff) grunt.config.set('globalConfig.minifyOff', 'optimize=none');
 
         grunt.task.run(
             'ts:build', 
