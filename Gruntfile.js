@@ -9,14 +9,18 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks("grunt-contrib-compress");
 
-    var packageJson = grunt.file.readJSON("package.json"),
-        buildDir = 'build/wellcomeplayer/',
-        packageDirName = "wellcomeplayer-" + packageJson.version,
-        packageDir = "build/" + packageDirName + "/";
+    var packageJson = grunt.file.readJSON("package.json");
 
-    grunt.initConfig({
+    var packageDirName = 'wellcomeplayer-' + packageJson.version,
+        packageDir = 'build/' + packageDirName;
+
+    var globalConfig = {
+        buildDir: 'build/wellcomeplayer'
+    };
+
+    grunt.initConfig({        
+        globalConfig: globalConfig,
         pkg: packageJson,
-
         ts: {
             dev: {                            
                 src: ["src/**/*.ts"],
@@ -69,14 +73,14 @@ module.exports = function (grunt) {
             release: {
                 options: {
                     port: 3001,
-                    base: buildDir,
+                    base: '<%= globalConfig.buildDir %>',
                     keepalive: true
                 }
             }
         },
 
         clean: {
-            build : ["build/*"],
+            build : ["<%= globalConfig.buildDir %>/*"],
             package: [packageDir]
         },
 
@@ -87,7 +91,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/modules/**/img/*'],
-                        dest: buildDir + 'img/',
+                        dest: '<%= globalConfig.buildDir %>/img/',
                         rename: function(dest, src) {
 
                             var fileName = src.substr(src.lastIndexOf('/'));
@@ -104,7 +108,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: 'src/index.html', 
-                        dest: buildDir
+                        dest: '<%= globalConfig.buildDir %>'
                     },
                     // js
                     {
@@ -112,13 +116,13 @@ module.exports = function (grunt) {
                         flatten: true,
                         cwd: 'src/js',
                         src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js'],
-                        dest: buildDir + 'js/'
+                        dest: '<%= globalConfig.buildDir %>/js/'
                     },
                     // extension configuration files
                     {
                         expand: true,
                         src: ['src/extensions/**/config.js'], 
-                        dest: buildDir,
+                        dest: '<%= globalConfig.buildDir %>/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -134,7 +138,7 @@ module.exports = function (grunt) {
                 // copy contents of /build to packageDir.
                 files: [
                     {
-                        cwd: buildDir,
+                        cwd: '<%= globalConfig.buildDir %>',
                         expand: true,
                         src: ['**'],
                         dest: packageDir
@@ -175,14 +179,14 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node tools/r.js -o tools/build.js'
+                cmd: 'node tools/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app out=<%= globalConfig.buildDir %>/app.min.js'
             }
         },
 
         replace: {
             html: {
                 src: ['src/app.html'],
-                dest: buildDir,
+                dest: '<%= globalConfig.buildDir %>/',
                 replacements: [{ 
                     from: 'data-main="app"',
                     to: 'data-main="app.min"'
@@ -190,7 +194,7 @@ module.exports = function (grunt) {
             },
             css: {
                 src: ['src/css/styles.css'],
-                dest: buildDir + 'css/',
+                dest: '<%= globalConfig.buildDir %>/css/',
                 replacements: [{ 
                     from: /(?:'|").*modules\/(.*)\/img\/(.*)(?:'|")/g,
                     to: '\'../img/$1/$2\''
@@ -198,7 +202,7 @@ module.exports = function (grunt) {
             },
             js: {
                 // replace extension config paths.
-                src: [buildDir + 'app.min.js'],
+                src: ['<%= globalConfig.buildDir %>/app.min.js'],
                 overwrite: true,
                 replacements: [{ 
                     from: /configUri:.*\"extensions\/(.*)\/config.js\"/g,
@@ -214,21 +218,38 @@ module.exports = function (grunt) {
         "less:dev"
     ]);
 
-    grunt.registerTask("build", [
-        "ts:build", 
-        "less:build",
-        "clean:build", 
-        "copy:build",
-        "exec:build",
-        "replace:html",
-        "replace:css",
-        "replace:js"
-    ]);
+    grunt.registerTask('build', '', function() {
+      
+        // grunt build --buildDir=myDir
+        // or prepend / to target relative to system root.
+        var buildDir = grunt.option('buildDir');
+        if (buildDir) grunt.config.set('globalConfig.buildDir', buildDir);
 
-    grunt.registerTask("package", [
-        "build", 
-        "copy:package", 
-        "compress",
-        "clean:package"
-     ]);
+        grunt.task.run(
+            'ts:build', 
+            'less:build',
+            'clean:build',
+            'copy:build',
+            'exec:build',
+            'replace:html',
+            'replace:css',
+            'replace:js'
+        );
+    });
+
+    grunt.registerTask('package', '', function() {
+      
+        // grunt build --buildDir=myDir
+        // or prepend / to target relative to system root.
+        var buildDir = grunt.option('buildDir');
+        if (buildDir) grunt.config.set('globalConfig.buildDir', buildDir);
+
+        grunt.task.run(
+            'build', 
+            'copy:package', 
+            'compress',
+            'clean:package'
+        );
+    });
+
 };
