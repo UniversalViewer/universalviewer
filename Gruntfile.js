@@ -205,7 +205,7 @@ module.exports = function (grunt) {
                 src: ['<%= globalConfig.buildDir %>/app.min.js'],
                 overwrite: true,
                 replacements: [{ 
-                    from: /configUri:.*\"extensions\/(.*)\/config.js\"/g,
+                    from: /configUri:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
                     to: 'configUri:"$1-config.js"'
                 }]
             }
