@@ -81,9 +81,6 @@ export class BaseApp {
         // create shell and shared views.
         var sh = new shell.Shell(this.$element);
 
-        // set assetSequenceIndex hash param.
-        this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
-
         // set currentAssetIndex to -1 (nothing selected yet).
         this.currentAssetIndex = -1;
     }
