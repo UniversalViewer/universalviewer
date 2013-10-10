@@ -33,7 +33,6 @@ export class App extends baseApp.BaseApp {
     // events
     static MODE_CHANGED: string = 'onModeChanged';
     static OPEN_DZI: string = 'openDzi';
-    static CREATED: string = 'onCreated';
 
     // modes
     static PAGE_MODE: string = "pageMode";
