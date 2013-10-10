@@ -110,8 +110,7 @@ export class App extends baseApp.BaseApp {
 
         this.createModules();        
 
-        // set assetSequenceIndex hash param.
-        this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
+        this.setParams();
 
         var assetIndex;
 
@@ -147,6 +146,11 @@ export class App extends baseApp.BaseApp {
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         }
+    }
+
+    setParams(): void{
+        // set assetSequenceIndex hash param.
+        this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
     }
 
     isLeftPanelEnabled(): boolean{
