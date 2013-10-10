@@ -122,10 +122,7 @@ export class App extends baseApp.BaseApp {
         this.viewPage(assetIndex || 0);
 
         // initial sizing
-        $.publish(baseApp.BaseApp.RESIZE);
-
-        // publish created event
-        $.publish(App.CREATED);
+        $.publish(baseApp.BaseApp.RESIZE);        
     }
 
     createModules(): void{
