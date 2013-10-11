@@ -15,6 +15,7 @@ interface String {
     rtrim(): string;
     fulltrim(): string;
     toFileName(): string;
+    contains(str: string): boolean;
 }
 
 // array utils

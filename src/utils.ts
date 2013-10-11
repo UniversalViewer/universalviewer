@@ -19,6 +19,7 @@ String.prototype.ltrim = function () { return this.replace(/^\s+/, ''); };
 String.prototype.rtrim = function () { return this.replace(/\s+$/, ''); };
 String.prototype.fulltrim = function () { return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g, '').replace(/\s+/g, ' '); };
 String.prototype.toFileName = function () { return this.replace(/[^a-z0-9]/gi, '_').toLowerCase(); };
+String.prototype.contains = function(str) { return this.indexOf(str) !== -1; };
 
 //#endregion
 
