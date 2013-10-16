@@ -126,28 +126,12 @@
   margin: 10px 0 0 0;
 }
 #app .footerPanel .options a.imageButton.embed {
-  background: url('../../../modules/coreplayer-extendedfooterpanel-module/img/embed.png') no-repeat;
+  background: url('../modules/coreplayer-extendedfooterpanel-module/img/embed.png') no-repeat;
   height: 21px;
   width: 75px;
 }
 #app .footerPanel .options a.imageButton.embed.min {
   width: 27px;
-}
-#app .rightPanel .top .title {
-  background: url('../../../modules/coreplayer-moreinforightpanel-module/img/moreinfo.png') no-repeat;
-  width: 140px;
-}
-#app .rightPanel .closed .title {
-  background: url('../../../modules/coreplayer-moreinforightpanel-module/img/moreinfo_v.png') no-repeat;
-  height: 140px;
-}
-#app .rightPanel .content {
-  padding: 10px;
-}
-#app .rightPanel .main {
-  padding: 0 10px;
-  overflow: auto;
-  color: #fff;
 }
 #app .headerPanel a.imageButton {
   height: 30px;
@@ -155,23 +139,23 @@
   float: left;
 }
 #app .headerPanel a.imageButton.first {
-  background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/first.png') no-repeat;
+  background: url('../modules/coreplayer-pagingheaderpanel-module/img/first.png') no-repeat;
   margin: 0 0 0 0;
 }
 #app .headerPanel a.imageButton.prev {
-  background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/prev.png') no-repeat;
+  background: url('../modules/coreplayer-pagingheaderpanel-module/img/prev.png') no-repeat;
   margin: 0 0 0 5px;
 }
 #app .headerPanel a.imageButton.next {
-  background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/next.png') no-repeat;
+  background: url('../modules/coreplayer-pagingheaderpanel-module/img/next.png') no-repeat;
   margin: 0 5px 0 0;
 }
 #app .headerPanel a.imageButton.last {
-  background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/last.png') no-repeat;
+  background: url('../modules/coreplayer-pagingheaderpanel-module/img/last.png') no-repeat;
   margin: 0 0 0 0;
 }
 #app .headerPanel a.imageButton.go {
-  background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/go.png') no-repeat;
+  background: url('../modules/coreplayer-pagingheaderpanel-module/img/go.png') no-repeat;
   width: 28px;
 }
 #app .headerPanel .centerOptions .prevOptions {
@@ -242,16 +226,16 @@
   cursor: pointer;
 }
 #app .centerPanel .paging.btn.prev {
-  background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/prev_page.png');
+  background-image: url('../modules/coreplayer-seadragoncenterpanel-module/img/prev_page.png');
 }
 #app .centerPanel .paging.btn.prev.disabled {
-  background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/prev_page_disabled.png');
+  background-image: url('../modules/coreplayer-seadragoncenterpanel-module/img/prev_page_disabled.png');
 }
 #app .centerPanel .paging.btn.next {
-  background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page.png');
+  background-image: url('../modules/coreplayer-seadragoncenterpanel-module/img/next_page.png');
 }
 #app .centerPanel .paging.btn.next.disabled {
-  background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page_disabled.png');
+  background-image: url('../modules/coreplayer-seadragoncenterpanel-module/img/next_page_disabled.png');
 }
 input[type=text],
 input[type=password],
@@ -309,7 +293,7 @@ a:hover {
 a.action.black,
 input.action {
   display: inline-block;
-  background: url('../../../modules/coreplayer-shared-module/img/sprite.png') 0 -1000px no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/sprite.png') 0 -1000px no-repeat;
   text-transform: none;
   padding: 0 0 0 16px;
 }
@@ -364,7 +348,7 @@ input.action {
   position: relative;
 }
 #app.loading {
-  background-image: url('../../../modules/coreplayer-shared-module/img/ajax-loader.gif');
+  background-image: url('../modules/coreplayer-shared-module/img/ajax-loader.gif');
 }
 #app .headerPanel {
   position: relative;
@@ -398,7 +382,7 @@ input.action {
   margin-left: 1em;
   padding-right: 22px;
   padding-bottom: 2px;
-  background: url('../../../modules/coreplayer-shared-module/img/sprite.png');
+  background: url('../modules/coreplayer-shared-module/img/sprite.png');
   background-repeat: no-repeat;
   background-position: 0 -3000px;
   margin-top: 6px;
@@ -430,7 +414,7 @@ input.action {
 }
 #app .leftPanel .top .collapseButton {
   float: right;
-  background: url('../../../modules/coreplayer-shared-module/img/arrows_left.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/arrows_left.png') no-repeat;
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -442,7 +426,7 @@ input.action {
   float: right;
 }
 #app .leftPanel .closed .expandButton {
-  background: url('../../../modules/coreplayer-shared-module/img/arrows_right.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/arrows_right.png') no-repeat;
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -483,7 +467,7 @@ input.action {
   width: 25px;
 }
 #app .rightPanel .closed .expandButton {
-  background: url('../../../modules/coreplayer-shared-module/img/arrows_left.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/arrows_left.png') no-repeat;
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -498,7 +482,7 @@ input.action {
 }
 #app .rightPanel .top .collapseButton {
   position: absolute;
-  background: url('../../../modules/coreplayer-shared-module/img/arrows_right.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/arrows_right.png') no-repeat;
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -517,7 +501,7 @@ input.action {
   margin-right: 15px;
 }
 #app .footerPanel .options a.imageButton.fullScreen {
-  background: url('../../../modules/coreplayer-shared-module/img/fullscreen.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/fullscreen.png') no-repeat;
   height: 21px;
   width: 140px;
   float: right;
@@ -528,7 +512,7 @@ input.action {
   width: 21px;
 }
 #app .footerPanel .options a.imageButton.normal {
-  background: url('../../../modules/coreplayer-shared-module/img/normal.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/normal.png') no-repeat;
   height: 21px;
   width: 140px;
   float: right;
@@ -545,7 +529,7 @@ input.action {
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
-  background-image: url('../../../modules/coreplayer-shared-module/img/modal_bg.gif');
+  background-image: url('../modules/coreplayer-shared-module/img/modal_bg.gif');
   display: none;
 }
 #app .overlay {
@@ -558,7 +542,7 @@ input.action {
 #app .overlay .top .close {
   height: 24px;
   width: 85px;
-  background: url('../../../modules/coreplayer-shared-module/img/close.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/close.png') no-repeat;
   cursor: pointer;
   float: right;
 }
@@ -627,7 +611,7 @@ input.action {
 }
 #app .overlay .bottom {
   height: 11px;
-  background: url('../../../modules/coreplayer-shared-module/img/dialogue_arrow.png') no-repeat;
+  background: url('../modules/coreplayer-shared-module/img/dialogue_arrow.png') no-repeat;
 }
 #app .overlay.genericDialogue {
   width: 250px;
@@ -648,11 +632,11 @@ input.action {
   overflow: auto;
 }
 /*#endregion */#app .leftPanel .top .title {
-  background: url('../../../modules/coreplayer-treeviewleftpanel-module/img/contents.png') no-repeat;
+  background: url('../modules/coreplayer-treeviewleftpanel-module/img/contents.png') no-repeat;
   width: 78px;
 }
 #app .leftPanel .closed .title {
-  background: url('../../../modules/coreplayer-treeviewleftpanel-module/img/contents_v.png') no-repeat;
+  background: url('../modules/coreplayer-treeviewleftpanel-module/img/contents_v.png') no-repeat;
   height: 78px;
 }
 /*#region tabs */
@@ -696,7 +680,7 @@ input.action {
   display: inline-block;
   height: 10px;
   width: 10px;
-  background-image: url('../../../modules/coreplayer-treeviewleftpanel-module/img/plus.png');
+  background-image: url('../modules/coreplayer-treeviewleftpanel-module/img/plus.png');
 }
 #app .leftPanel .treeView .spacer {
   margin-right: 5px;
@@ -705,7 +689,7 @@ input.action {
   width: 10px;
 }
 #app .leftPanel .treeView .toggle.expanded {
-  background-image: url('../../../modules/coreplayer-treeviewleftpanel-module/img/minus.png');
+  background-image: url('../modules/coreplayer-treeviewleftpanel-module/img/minus.png');
 }
 #app .leftPanel .treeView ul.tree,
 ul.tree ul {
@@ -745,10 +729,10 @@ ul.tree ul {
   text-align: center;
 }
 #app .leftPanel .thumbsView .thumb .wrap.loading {
-  background: url('../../../modules/coreplayer-shared-module/img/ajax-loader.gif') no-repeat 50% 50%;
+  background: url('../modules/coreplayer-shared-module/img/ajax-loader.gif') no-repeat 50% 50%;
 }
 #app .leftPanel .thumbsView .thumb .wrap.hidden {
-  background: url('../../../modules/coreplayer-treeviewleftpanel-module/img/hidden_thumb.png') no-repeat 50% 50%;
+  background: url('../modules/coreplayer-treeviewleftpanel-module/img/hidden_thumb.png') no-repeat 50% 50%;
 }
 #app .leftPanel .thumbsView .thumb.selected .wrap {
   border: 1px solid #FFB81D;
@@ -771,3 +755,416 @@ ul.tree ul {
   border: none;
 }
 /*#endregion */
+#app .footerPanel .options a.download {
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/download.png') no-repeat;
+  height: 21px;
+  width: 91px;
+}
+#app .footerPanel .options a.download.min {
+  width: 27px;
+}
+#app .footerPanel .options a.bookmark {
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/bookmark.png') no-repeat;
+  height: 21px;
+  width: 110px;
+}
+#app .footerPanel .options a.bookmark.min {
+  width: 15px;
+}
+#app .footerPanel .options a.save {
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/save.png') no-repeat;
+  height: 21px;
+  width: 132px;
+}
+#app .footerPanel .options a.save.min {
+  width: 20px;
+}
+#app .footerPanel .searchResults {
+  position: relative;
+  height: 30px;
+  padding: 30px 9px 0 9px;
+}
+#app .footerPanel .searchResults .line {
+  background: #525252;
+  height: 2px;
+}
+#app .footerPanel .searchResults .searchResultPlacemarker {
+  position: absolute;
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/placemarker_down.png');
+  height: 24px;
+  width: 18px;
+  cursor: pointer;
+  margin: -24 0 0 -9;
+}
+#app .footerPanel .searchResults .searchResultPlacemarker.hover {
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/placemarker_down_hover.png');
+}
+#app .footerPanel .searchResults .positionPlacemarker {
+  position: absolute;
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/placemarker_up.png');
+  height: 24px;
+  width: 18px;
+  margin: 2px 0 0 -9px;
+  cursor: pointer;
+}
+#app .footerPanel .searchResults .placeMarkerDetails {
+  position: absolute;
+  width: 200px;
+  z-index: 1;
+  margin: 13px 0 0 9px;
+  background: #fff;
+  cursor: pointer;
+}
+#app .footerPanel .searchResults .placeMarkerDetails h1 {
+  color: #005870;
+  font-size: 11px;
+  border-bottom: 1px solid #999999;
+  font-weight: bold;
+  background-image: url('../modules/wellcomeplayer-footerpanel-module/img/arrow.png');
+  background-position: 0 1px;
+  background-repeat: no-repeat;
+  margin: 5px;
+  padding: 0 5px 5px 15px;
+  text-transform: none;
+}
+#app .footerPanel .searchResults .placeMarkerDetails p {
+  font-size: 11px;
+  font-weight: bold;
+  margin: 5px;
+  padding: 0;
+}
+#app .footerPanel .searchResults .placeMarkerDetails .top {
+  display: inline;
+}
+#app .footerPanel .searchResults .placeMarkerDetails .bottom {
+  display: inline;
+}
+#app .footerPanel .searchResults .label {
+  position: absolute;
+  color: #fff;
+  margin: 8px 15px 0 15px;
+  min-width: 160px;
+}
+#app .footerPanel .searchResults .label.left {
+  text-align: right;
+}
+#app .footerPanel .searchResults .label.right {
+  text-align: left;
+}
+#app .footerPanel .search {
+  position: relative;
+  background-color: #408294;
+  height: 32px;
+}
+#app .footerPanel .searchOptions {
+  position: absolute;
+  width: 420px;
+  margin: 3px 0 0 0;
+}
+/*
+#app .footerPanel .searchOptions .autoCompleteWidget {
+    position: relative;
+}
+
+#app .footerPanel .searchOptions .autoCompleteWidget input[type="text"]{
+    width: 300px;
+}
+
+#app .footerPanel .searchOptions .autoCompleteWidget .results {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow: auto;
+    max-height: 300px;
+    width: 300px;
+    background: #fff;
+    border: 1px solid;
+}
+
+#app .footerPanel .searchOptions .autoCompleteWidget .results ul{
+    list-style-type: none;
+    margin: 10px;
+    padding: 0;
+}
+
+#app .footerPanel .searchOptions .autoCompleteWidget .results ul li{
+    padding: 2px;
+}
+
+#app .footerPanel .searchOptions .autoCompleteWidget .results ul li.selected{
+    background: lightgrey;
+}
+
+#app .footerPanel .searchOptions .autoCompleteWidget .results ul li a:hover{
+    text-decoration: none;
+}
+*/
+#app .footerPanel .searchOptions .label {
+  color: #fff;
+  font-weight: bold;
+  padding: 0 10px 0 0;
+  margin: 5px 0 0 0;
+  float: left;
+}
+#app .footerPanel .search .searchTextContainer {
+  background: #fff;
+  float: left;
+  width: 270px;
+  border: 2px solid #BFD5DB;
+  position: relative;
+}
+#app .footerPanel .search .searchTextContainer ul {
+  position: absolute;
+  background: #fff;
+  width: 270px;
+  border: 2px solid #BFD5DB;
+  list-style-type: none;
+  -webkit-margin-before: 0px;
+  -webkit-margin-after: 0px;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+  margin: 0;
+  padding: 0;
+  left: -2px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#app .footerPanel .search .searchTextContainer ul li {
+  padding: 4px;
+  width: 270px;
+  overflow: hidden;
+}
+#app .footerPanel .search .searchTextContainer ul li.loading {
+  background-image: url('../modules/wellcomeplayer-footerpanel-module/img/search_ajax_loader.gif');
+  background-repeat: no-repeat;
+  background-position: 4px 4px;
+  height: 16px;
+}
+#app .footerPanel .search .searchTextContainer ul li.selected {
+  background: lightgrey;
+}
+#app .footerPanel .search .searchTextContainer .searchText {
+  width: 250px;
+  margin: 0;
+  font-size: 12px;
+  height: 22px;
+  line-height: 22px;
+  padding: 0;
+  float: left;
+  border: none;
+}
+#app .footerPanel .search .searchTextContainer a.imageButton.searchButton {
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/search.png') no-repeat;
+  height: 18px;
+  width: 18px;
+  margin: 2px 2px 0 0;
+  float: right;
+}
+#app .footerPanel .searchPager {
+  position: relative;
+  background-color: #BFD5DB;
+  height: 32px;
+  overflow: hidden;
+}
+#app .footerPanel .searchPager .controls {
+  position: absolute;
+  margin: 5px 0 0 0;
+}
+#app .footerPanel .searchPager .controls a.imageButton.previousResult {
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/previous_result.png') no-repeat;
+  height: 22px;
+  width: 109px;
+  margin: 0 15px 0 0;
+  float: left;
+}
+#app .footerPanel .searchPager .controls .searchResultsInfo {
+  margin: 2px 0 0 0;
+  color: #000;
+  text-align: center;
+  font-size: 14px;
+  float: left;
+}
+#app .footerPanel .searchPager .controls .searchResultsInfo .number {
+  font-weight: bold;
+}
+#app .footerPanel .searchPager .controls .searchResultsInfo .terms {
+  font-weight: bold;
+}
+#app .footerPanel .searchPager .controls a.clearSearch {
+  cursor: pointer;
+  color: #005870;
+  text-decoration: none;
+  margin: 0 0 0 10px;
+  font-size: 12px;
+}
+#app .footerPanel .searchPager .controls a.imageButton.nextResult {
+  background: url('../modules/wellcomeplayer-footerpanel-module/img/next_result.png') no-repeat;
+  height: 22px;
+  width: 90px;
+  float: left;
+  margin: 0 0 0 15px;
+}
+#app .rightPanel .top .title {
+  background: url('../modules/wellcomeplayer-moreinforightpanel-module/img/moreinfo.png') no-repeat;
+  width: 140px;
+}
+#app .rightPanel .closed .title {
+  background: url('../modules/wellcomeplayer-moreinforightpanel-module/img/moreinfo_v.png') no-repeat;
+  height: 140px;
+}
+#app .rightPanel .content {
+  padding: 10px;
+}
+#app .rightPanel .main {
+  padding: 0 10px;
+  overflow: auto;
+}
+#app .rightPanel .main.loading {
+  background-image: url('../modules/coreplayer-shared-module/img/ajax-loader.gif');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+#app .rightPanel .main .header {
+  color: #999999;
+  border-bottom: 1px solid #525252;
+  font-size: 11px;
+  margin: 15px 10px 0 0;
+  text-transform: uppercase;
+}
+#app .rightPanel .main .text {
+  color: #fff;
+  margin: 5px 10px 0 0;
+}
+#app .rightPanel .main .text a.toggle {
+  color: #FFB81D;
+  font-weight: normal;
+}
+#app .rightPanel .main .text a.toggle:hover {
+  color: #FFB81D;
+}
+#app .rightPanel .main .text.title {
+  font-size: 14px;
+  font-weight: bold;
+}
+#app .rightPanel .main .action {
+  margin: 5px 0 0 0;
+  font-weight: normal;
+  background: url('../modules/coreplayer-shared-module/img/sprite.png') 0 -1000px no-repeat;
+  color: #FFB81D;
+}
+#app .rightPanel .main img {
+  margin: 15px 0 0 0;
+  max-width: 200px;
+}
+#app .rightPanel .main .action.catalogue {
+  margin: 15px 0 0 0;
+}
+#app .rightPanel .main .action.conditions {
+  margin: 15px 0 0 0;
+}
+#app .overlay.conditions {
+  width: 470px;
+  height: 250px;
+}
+#app .overlay.conditions .scroll {
+  height: 180px;
+}
+#app .overlay.conditions .bottom {
+  background: none;
+}
+#app .overlay.login {
+  width: 468px;
+}
+#app .overlay.login a.login {
+  float: right;
+  margin: 10px 0 0 0;
+}
+#app .overlay.login .bottom {
+  background: none;
+}
+#app .overlay.restrictedFile {
+  width: 468px;
+}
+#app .overlay.restrictedFile a {
+  margin: 10px 15px 0 0;
+}
+#app .overlay.restrictedFile .bottom {
+  background: none;
+}
+#app .main-login label {
+  display: block;
+  float: none;
+  font-weight: bold;
+  font-size: 1.3333em;
+  text-align: left;
+  padding: 10px 0 5px 0;
+}
+#app .main-login-buttons {
+  overflow: hidden;
+  margin: 0 0 10px 0;
+}
+#app .main-login-buttons .forgot {
+  float: left;
+  margin: 10px 0 0 0;
+}
+#app .main-login-buttons .register {
+  float: left;
+  margin: 10px 0 0 20px;
+}
+#app .overlay.login a.login {
+  float: right;
+  margin: 10px 0 0 0;
+}
+#app .overlay.login .social-logins {
+  background: #F5F5F5;
+  border: 1px solid #CCC;
+  padding: 10px;
+  overflow: hidden;
+}
+#app .overlay.login .social-logins h6 {
+  margin: 0;
+  padding: 0 0 10px 0;
+  font-size: 1.3333em;
+}
+#app .overlay.login .social-login,
+a.social-login {
+  display: block;
+  background: #ffffff url('../modules/coreplayer-shared-module/img/sprite.png') 0 -3100px no-repeat;
+  background-image: url('../modules/coreplayer-shared-module/img/sprite.png'), -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 100%);
+  border: 1px solid #CCC;
+  font-size: 12px;
+  margin: 0 4px 0 0;
+  padding: 5px 10px 5px 30px;
+  color: #211F1F;
+  font-weight: normal;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  float: left;
+}
+#app .overlay.login .social-login.twitter {
+  background-position: -3px -3102px, 0 0;
+}
+#app .overlay.login .social-login.facebook {
+  background-position: -3px -3152px, 0 0;
+}
+#app .overlay.login .social-login.google {
+  background-position: -3px -3252px, 0 0;
+}
+#app .overlay.login .social-login.openid {
+  background-position: -3px -3202px, 0 0;
+}
+#app .centerPanel .searchOverlay {
+  background-color: #FFB81D;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+}

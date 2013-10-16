@@ -70,7 +70,7 @@ app.min.js
 ## Css
 #################
 
-src/css/*.css
+src/extensions/**/css/*.css
 
 #################
 ## Extensions/Modules
