@@ -241,6 +241,10 @@ export class BaseApp {
         return -1;
     }
 
+    getCurrentAsset(): any {
+        return this.provider.assetSequence.assets[this.currentAssetIndex];
+    }
+    
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean) {
 
         $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [

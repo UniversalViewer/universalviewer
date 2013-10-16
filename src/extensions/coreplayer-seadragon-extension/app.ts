@@ -220,8 +220,4 @@ export class App extends baseApp.BaseApp {
 
         return "";
     }
-
-    getCurrentAsset(): any {
-        return this.provider.assetSequence.assets[this.currentAssetIndex];
-    }
 }
