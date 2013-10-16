@@ -8,9 +8,9 @@ import embed = require("../coreplayer-dialogues-module/embedDialogue");
 
 export class ExtendedFooterPanel extends baseFooter.FooterPanel {
 
-    $downloadButton: JQuery;
+    $embedButton: JQuery;
     $saveButton: JQuery;
-    $embedBtn: JQuery;
+    $downloadButton: JQuery;
     
     static DOWNLOAD: string = 'footer.onDownload';
     static SAVE: string = 'footer.onSave';
@@ -50,7 +50,7 @@ export class ExtendedFooterPanel extends baseFooter.FooterPanel {
             $.publish(ExtendedFooterPanel.SAVE);
         });
 
-        // only embed button is always visible. hide others by default.
+        this.$embedButton.hide();
         this.$downloadButton.hide();
         this.$saveButton.hide();
     }
