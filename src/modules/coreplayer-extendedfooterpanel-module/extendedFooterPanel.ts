@@ -29,10 +29,10 @@ export class ExtendedFooterPanel extends baseFooter.FooterPanel {
         this.$saveButton = $('<a class="imageButton save"></a>');
         this.$options.append(this.$saveButton);
 
-        this.$embedBtn = $('<a href="#" class="imageButton embed"></a>');
-        this.$options.append(this.$embedBtn);        
+        this.$embedButton = $('<a href="#" class="imageButton embed"></a>');
+        this.$options.append(this.$embedButton);        
 
-        this.$embedBtn.on('click', (e) => {
+        this.$embedButton.on('click', (e) => {
             e.preventDefault();
 
             $.publish(ExtendedFooterPanel.EMBED);
