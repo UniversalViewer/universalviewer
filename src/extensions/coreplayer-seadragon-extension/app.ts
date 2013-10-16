@@ -108,6 +108,10 @@ export class App extends baseApp.BaseApp {
             }
         });
 
+        $.subscribe(footer.ExtendedFooterPanel.EMBED, (e) => {
+            $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        });
+
         this.createModules();        
 
         this.setParams();

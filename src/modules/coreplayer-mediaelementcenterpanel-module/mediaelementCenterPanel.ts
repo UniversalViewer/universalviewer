@@ -29,15 +29,19 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         var that = this;
 
         // events.
-        $.subscribe(baseApp.BaseApp.TOGGLE_FULLSCREEN, (e) => {
-            if (that.app.isFullScreen) {
-                that.$container.css('backgroundColor', '#000');
-                that.player.enterFullScreen(false);
-            } else {
-                that.$container.css('backgroundColor', 'transparent');
-                that.player.exitFullScreen(false);
-            }
-        });
+
+        // only full screen video
+        if (this.provider.type == 'video'){
+            $.subscribe(baseApp.BaseApp.TOGGLE_FULLSCREEN, (e) => {
+                if (that.app.isFullScreen) {
+                    that.$container.css('backgroundColor', '#000');
+                    that.player.enterFullScreen(false);
+                } else {
+                    that.$container.css('backgroundColor', 'transparent');
+                    that.player.exitFullScreen(false);
+                }
+            });
+        }
 
         $.subscribe(app.App.OPEN_MEDIA, (e, uri) => {
             that.viewMedia(uri);
