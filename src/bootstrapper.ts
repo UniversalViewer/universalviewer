@@ -63,14 +63,17 @@ class BootStrapper{
 
         var that = this;
 
-        $.getJSON(that.extensions[that.assetSequence.assetType].configUri, (config) => {
-            // create provider.
-            var provider = new that.extensions[that.assetSequence.assetType].provider(config, that.pkg);
+        var extension = that.extensions[that.assetSequence.assetType];
 
-            // create extension.
-            new that.extensions[that.assetSequence.assetType].type(provider);
+        yepnope.injectCss(extension.css, function () {
+            $.getJSON(extension.config, (config) => {
+                // create provider.
+                var provider = new extension.provider(config, that.pkg);
+
+                // create extension.
+                new extension.type(provider);
+            });
         });
-
     }
 }
 

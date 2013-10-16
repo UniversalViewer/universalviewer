@@ -2,6 +2,7 @@
 import baseApp = require("./baseApp");
 import baseView = require("./baseView");
 import utils = require("../../utils");
+import help = require("../coreplayer-dialogues-module/helpDialogue");
 
 export class HeaderPanel extends baseView.BaseView {
 
@@ -15,6 +16,8 @@ export class HeaderPanel extends baseView.BaseView {
 
     create(): void {
 
+        this.setConfig('headerPanel');
+
         super.create();
 
         this.$centerOptions = utils.Utils.createDiv('centerOptions');
@@ -25,6 +28,12 @@ export class HeaderPanel extends baseView.BaseView {
 
         this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
         this.$rightOptions.append(this.$helpButton);
+
+        this.$helpButton.click(function (e) {
+            e.preventDefault();
+
+            $.publish(help.HelpDialogue.SHOW_HELP_DIALOGUE);
+        });
     }
 
     resize(): void {

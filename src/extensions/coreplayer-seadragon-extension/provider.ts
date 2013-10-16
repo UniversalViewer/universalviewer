@@ -38,9 +38,9 @@ export class Provider extends baseProvider.BaseProvider {
     getEmbedScript(assetIndex: number, zoom: string, width: number, height: number, embedUri: string, embedTemplate: string): string{
         var baseUri = embedUri ? embedUri : this.options.embedUri || this.options.dataBaseUri || "";
         var template = embedTemplate? embedTemplate : this.options.embedTemplate;
-        var uri = String.prototype.format(template, baseUri, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, width, height, this.embedScriptUri);
+        var script = String.prototype.format(template, baseUri, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, width, height, this.embedScriptUri);
 
-        return uri;
+        return script;
     }
 
     addTimestamp(uri: string): string{

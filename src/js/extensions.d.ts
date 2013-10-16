@@ -53,11 +53,14 @@ interface JQueryStatic {
 // libs
 declare var easyXDM: any;
 declare var OpenSeadragon: any;
+declare var MediaElementPlayer: any;
+declare var yepnope: any;
 
 // app
 interface Window{
     app: any;
     pkgCallback: any;
+    BrowserDetect: any;
 }
 
 // google

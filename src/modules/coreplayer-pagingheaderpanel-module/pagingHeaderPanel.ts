@@ -155,12 +155,6 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
             $.publish(PagingHeaderPanel.LAST);
         });
-
-        this.$helpButton.click(function (e) {
-            e.preventDefault();
-
-            $.publish(help.HelpDialogue.SHOW_HELP_DIALOGUE);
-        });
     }
 
     setTitles(): void {

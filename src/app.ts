@@ -7,7 +7,10 @@ require.config({
         'console': 'js/console',
         'pubsub': 'js/pubsub',
         'jsviews': 'js/jsviews.min',
-        'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon.min'
+        'yepnope': 'js/yepnope.1.5.4-min',
+        'yepnopecss': 'js/yepnope.css',
+        'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon.min',
+        'mediaelement': 'modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player'
     },
     shim: {
         jquery: {
@@ -21,6 +24,12 @@ require.config({
         },
         jsviews: {
             deps: ['jquery']
+        },
+        yepnopecss: {
+            deps: ['yepnope']
+        },
+        mediaelement: {
+            deps: ['jquery']
         }
     }
 });
@@ -31,30 +40,52 @@ require([
     'console',
     'pubsub',
     'jsviews',
+    'yepnope',
+    'yepnopecss',
     'openseadragon',
+    'mediaelement',
     'bootstrapper',
     'extensions/coreplayer-seadragon-extension/app',
-    //'extensions/wellcomeplayer-seadragon-extension/app',
-    'extensions/coreplayer-seadragon-extension/provider'
-    //'extensions/wellcomeplayer-seadragon-extension/provider'
+    'extensions/coreplayer-seadragon-extension/provider',
+    'extensions/coreplayer-mediaelement-extension/app',
+    'extensions/coreplayer-mediaelement-extension/provider'
     ],
     ($, 
     plugins, 
     console, 
     pubsub, 
-    jsviews, 
-    openseadragon, 
+    jsviews,
+    yepnope,
+    yepnopecss,
+    openseadragon,
+    mediaelement,
     bootstrapper, 
-    seadragon, 
-    seadragonProvider) => {
+    seadragonExtension, 
+    seadragonProvider,
+    mediaelementExtension,
+    mediaelementProvider) => {
 
         var extensions = {};
 
         extensions['seadragon/dzi'] = {
-            type: seadragon.App,
+            type: seadragonExtension.App,
             provider: seadragonProvider.Provider,
-            configUri: 'extensions/coreplayer-seadragon-extension/config.js'
-            //configUri: 'extensions/wellcomeplayer-seadragon-extension/config.js'
+            config: 'extensions/coreplayer-seadragon-extension/config.js',
+            css: 'extensions/coreplayer-seadragon-extension/css/styles.css'
+        };
+
+        extensions['video/mp4'] = {
+            type: mediaelementExtension.App,
+            provider: mediaelementProvider.Provider,
+            config: 'extensions/coreplayer-mediaelement-extension/config.js',
+            css: 'extensions/coreplayer-mediaelement-extension/css/styles.css'
+        };
+
+        extensions['audio/mp3'] = {
+            type: mediaelementExtension.App,
+            provider: mediaelementProvider.Provider,
+            config: 'extensions/coreplayer-mediaelement-extension/config.js',
+            css: 'extensions/coreplayer-mediaelement-extension/css/styles.css'
         };
 
         new bootstrapper(extensions);

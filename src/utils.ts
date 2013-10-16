@@ -59,6 +59,56 @@ if (!Array.prototype.contains) {
 
 //#endregion
 
+//#region browser detection
+
+window.BrowserDetect = 
+{
+    init: function () 
+    {
+        this.browser = this.searchString(this.dataBrowser) || "Other";
+        this.version = this.searchVersion(navigator.userAgent) ||       this.searchVersion(navigator.appVersion) || "Unknown";
+    },
+
+    searchString: function (data) 
+    {
+        for (var i=0 ; i < data.length ; i++)   
+        {
+            var dataString = data[i].string;
+            this.versionSearchString = data[i].subString;
+
+            if (dataString.indexOf(data[i].subString) != -1)
+            {
+                return data[i].identity;
+            }
+        }
+    },
+
+    searchVersion: function (dataString) 
+    {
+        var index = dataString.indexOf(this.versionSearchString);
+        if (index == -1) return;
+        return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+    },
+
+    dataBrowser: 
+    [
+        { string: navigator.userAgent, subString: "Chrome",  identity: "Chrome" },
+        { string: navigator.userAgent, subString: "MSIE",    identity: "Explorer" },
+        { string: navigator.userAgent, subString: "Firefox", identity: "Firefox" },
+        { string: navigator.userAgent, subString: "Safari",  identity: "Safari" },
+        { string: navigator.userAgent, subString: "Opera",   identity: "Opera" }
+    ]
+
+};
+
+window.BrowserDetect.init();
+
+//#endregion
+
+export class Size{
+    constructor (public width: number, public height: number){}
+}
+
 export class Utils{
 
     //#region String
@@ -228,7 +278,7 @@ export class Utils{
         return (num - min) / (max - min);
     }
 
-    static fitRect(width1: number, height1: number, width2: number, height2: number): Object {
+    static fitRect(width1: number, height1: number, width2: number, height2: number): Size {
         var ratio1 = height1 / width1;
         var ratio2 = height2 / width2;
 
@@ -245,7 +295,7 @@ export class Utils{
             height = height1 * scale;
         }
 
-        return { width: Math.floor(width), height: Math.floor(height) };
+        return new Size(Math.floor(width), Math.floor(height));
     }
 
     //#endregion

@@ -49,17 +49,29 @@ module.exports = function (grunt) {
 
         less: {
             dev: {
-                files: {
-                    "src/css/styles.css": "src/css/styles.less"
-                }
+                options: {
+                    paths: ["src/modules"]
+                },
+                files: [
+                    {
+                        expand: true,
+                        src: "src/extensions/**/*.less",
+                        ext: ".css"
+                    }
+                ]
             },
             build: {
                 options: {
-                    //yuicompress: true
+                    paths: ["src/modules"]
+                    //compress: true
                 },
-                files: {
-                  "src/css/styles.css": "src/css/styles.less"
-                }
+                files: [
+                    {
+                        expand: true,
+                        src: "src/extensions/**/*.less",
+                        ext: ".css"
+                    }
+                ]
             }
         },
 
@@ -74,7 +86,7 @@ module.exports = function (grunt) {
             release: {
                 options: {
                     port: 3001,
-                    base: '<%= globalConfig.buildDir %>',
+                    base: "<%= globalConfig.buildDir %>",
                     keepalive: true
                 }
             }
@@ -108,7 +120,8 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: 'src/index.html', 
+                        cwd: 'src',
+                        src: ['index.html', 'app.html'], 
                         dest: '<%= globalConfig.buildDir %>'
                     },
                     // js
@@ -123,7 +136,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/extensions/**/config.js'], 
-                        dest: '<%= globalConfig.buildDir %>/',
+                        dest: '<%= globalConfig.buildDir %>/js/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -132,6 +145,29 @@ module.exports = function (grunt) {
 
                             return dest + extensionName + "-config.js";
                         }
+                    },
+                    // extensions css
+                    {
+                        expand: true,
+                        src: ['src/extensions/**/css/*.css'], 
+                        dest: '<%= globalConfig.buildDir %>/css/',
+                        rename: function(dest, src) {
+
+                            // get the extension name from the src string.
+                            // src/extensions/extensionname/css/styles.css
+                            var extensionName = src.match(/extensions\/(.*)\/css/)[1];
+
+                            return dest + extensionName + ".css";
+                        }
+                    },
+                    // anything in the module/js folders that isn't
+                    // a js file. could be swfs or supporting files
+                    // for a 3rd party library.
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/modules/**/js/*.*', '!src/modules/**/js/*.js'],
+                        dest: '<%= globalConfig.buildDir %>/js/'
                     }
                 ]
             },
@@ -180,36 +216,46 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node tools/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= globalConfig.minifyOff %> out=<%= globalConfig.buildDir %>/app.min.js'
+                cmd: 'node tools/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= globalConfig.minifyOff %> out=<%= globalConfig.buildDir %>/js/app.js'
             }
         },
 
         replace: {
-            html: {
-                src: ['src/app.html'],
-                dest: '<%= globalConfig.buildDir %>/',
-                replacements: [{ 
-                    from: 'data-main="app"',
-                    to: 'data-main="app.min"'
-                }]
-            },
-            css: {
-                src: ['src/css/styles.css'],
-                dest: '<%= globalConfig.buildDir %>/css/',
+            img: {
+                // replace img srcs to point to ../img/modulename/imgname
+                src: ['<%= globalConfig.buildDir %>/css/*.css'],
+                overwrite: true,
                 replacements: [{ 
                     from: /(?:'|").*modules\/(.*)\/img\/(.*)(?:'|")/g,
                     to: '\'../img/$1/$2\''
                 }]
             },
-            js: {
+            config: {
                 // replace extension config paths.
-                src: ['<%= globalConfig.buildDir %>/app.min.js'],
+                src: ['<%= globalConfig.buildDir %>/js/app.js'],
                 overwrite: true,
                 replacements: [{ 
-                    from: /configUri:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
-                    to: 'configUri:"$1-config.js"'
+                    from: /config:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
+                    to: 'config:"js/$1-config.js"'
                 }]
-            }
+            },
+            css: {
+                // replace css paths.
+                src: ['<%= globalConfig.buildDir %>/js/app.js'],
+                overwrite: true,
+                replacements: [{ 
+                    from: /css:.*(?:'|")extensions\/(.*)\/css\/styles.css(?:'|")/g,
+                    to: 'css:"css/$1.css"'
+                }]
+            },
+            html: {
+                src: ['<%= globalConfig.buildDir %>/app.html'],
+                overwrite: true,
+                replacements: [{ 
+                    from: 'data-main="app"',
+                    to: 'data-main="js/app"'
+                }]
+            },
         }
 
     });
@@ -236,9 +282,10 @@ module.exports = function (grunt) {
             'clean:build',
             'copy:build',
             'exec:build',
-            'replace:html',
+            'replace:img',
+            'replace:config',
             'replace:css',
-            'replace:js'
+            'replace:html'
         );
     });
 
