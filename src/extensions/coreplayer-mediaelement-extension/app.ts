@@ -9,7 +9,7 @@ import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-shared-module/headerPanel");
 import center = require("../../modules/coreplayer-mediaelementcenterpanel-module/mediaelementCenterPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
-import footer = require("../../modules/coreplayer-extendedfooterpanel-module/extendedFooterPanel");
+import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
 
@@ -18,7 +18,7 @@ export class App extends baseApp.BaseApp {
     headerPanel: header.HeaderPanel;
     centerPanel: center.MediaElementCenterPanel;
     rightPanel: right.MoreInfoRightPanel;
-    footerPanel: footer.ExtendedFooterPanel;
+    footerPanel: footer.FooterPanel;
     $helpDialogue: JQuery;
     helpDialogue: help.HelpDialogue;
     $embedDialogue: JQuery;
@@ -43,7 +43,7 @@ export class App extends baseApp.BaseApp {
             $.publish(baseApp.BaseApp.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(footer.ExtendedFooterPanel.EMBED, (e) => {
+        $.subscribe(footer.FooterPanel.EMBED, (e) => {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
@@ -62,7 +62,7 @@ export class App extends baseApp.BaseApp {
 
         this.centerPanel = new center.MediaElementCenterPanel(shell.Shell.$centerPanel);
         this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
-        this.footerPanel = new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);
+        this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
 
         this.$helpDialogue = utils.Utils.createDiv('overlay help');
         shell.Shell.$overlays.append(this.$helpDialogue);

@@ -116,7 +116,7 @@ module.exports = function (grunt) {
                             return dest + moduleName + fileName;
                         }
                     },
-                    // index.html
+                    // html
                     {
                         expand: true,
                         flatten: true,

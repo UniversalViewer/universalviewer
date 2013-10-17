@@ -8,8 +8,10 @@ import baseView = require("./baseView");
 export class FooterPanel extends baseView.BaseView {
 
     $options: JQuery;
-    $embedBtn: JQuery;
+    $embedButton: JQuery;
     $fullScreenBtn: JQuery;
+
+    static EMBED: string = 'footer.onEmbed';
 
     constructor($element: JQuery) {
         super($element, true, false);
@@ -26,8 +28,17 @@ export class FooterPanel extends baseView.BaseView {
         this.$options = utils.Utils.createDiv('options');
         this.$element.append(this.$options);
 
+        this.$embedButton = $('<a href="#" class="imageButton embed"></a>');
+        this.$options.append(this.$embedButton);        
+
         this.$fullScreenBtn = $('<a href="#" class="imageButton fullScreen"></a>');
         this.$options.append(this.$fullScreenBtn);
+
+        this.$embedButton.on('click', (e) => {
+            e.preventDefault();
+
+            $.publish(FooterPanel.EMBED);
+        });
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();

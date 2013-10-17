@@ -12,7 +12,7 @@ import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/t
 import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
 import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
-import footer = require("../../modules/coreplayer-extendedfooterpanel-module/extendedFooterPanel");
+import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
 
@@ -22,7 +22,7 @@ export class App extends baseApp.BaseApp {
     leftPanel: left.TreeViewLeftPanel;
     centerPanel: center.SeadragonCenterPanel;
     rightPanel: right.MoreInfoRightPanel;
-    footerPanel: footer.ExtendedFooterPanel;
+    footerPanel: footer.FooterPanel;
     $helpDialogue: JQuery;
     helpDialogue: help.HelpDialogue;
     $embedDialogue: JQuery;
@@ -108,7 +108,7 @@ export class App extends baseApp.BaseApp {
             }
         });
 
-        $.subscribe(footer.ExtendedFooterPanel.EMBED, (e) => {
+        $.subscribe(footer.FooterPanel.EMBED, (e) => {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
@@ -137,7 +137,7 @@ export class App extends baseApp.BaseApp {
 
         this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
         this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
-        this.footerPanel = new footer.ExtendedFooterPanel(shell.Shell.$footerPanel);
+        this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
 
         this.$helpDialogue = utils.Utils.createDiv('overlay help');
         shell.Shell.$overlays.append(this.$helpDialogue);
