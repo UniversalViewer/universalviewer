@@ -12,8 +12,9 @@ import right = require("../../modules/coreplayer-moreinforightpanel-module/moreI
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
+import IExtension = require("../../modules/coreplayer-shared-module/iExtension");
 
-export class App extends baseApp.BaseApp {
+export class App extends baseApp.BaseApp implements IExtension{
 
     headerPanel: header.HeaderPanel;
     centerPanel: center.MediaElementCenterPanel;
@@ -28,7 +29,7 @@ export class App extends baseApp.BaseApp {
     static OPEN_MEDIA: string = 'onOpenMedia';
 
     constructor(provider: provider.Provider) {
-        super(provider, 'mediaelement');
+        super(provider);
     }
 
     create(): void {

@@ -15,8 +15,9 @@ import right = require("../../modules/coreplayer-moreinforightpanel-module/moreI
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
+import IExtension = require("../../modules/coreplayer-shared-module/iExtension");
 
-export class App extends baseApp.BaseApp {
+export class App extends baseApp.BaseApp implements IExtension{
 
     headerPanel: header.PagingHeaderPanel;
     leftPanel: left.TreeViewLeftPanel;
@@ -39,7 +40,7 @@ export class App extends baseApp.BaseApp {
     static IMAGE_MODE: string = "imageMode";
 
     constructor(provider: provider.Provider) {
-        super(provider, 'seadragon');
+        super(provider);
     }
 
     create(): void {

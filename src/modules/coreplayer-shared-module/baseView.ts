@@ -1,10 +1,9 @@
 /// <reference path="../../js/jquery.d.ts" />
 import panel = require("./panel");
-import baseApp = require("./baseApp");
 
 export class BaseView extends panel.Panel{
 
-    app: baseApp.BaseApp;
+    app: any;
     provider: any;
     config: any;
     content: any;

@@ -7,7 +7,6 @@ import genericDialogue = require("./genericDialogue");
 
 export class BaseApp {
 
-    extensionName: string;
     isFullScreen: boolean = false;
     currentAssetIndex: number;
     mouseX: number;
@@ -27,12 +26,11 @@ export class BaseApp {
     static REFRESH: string = 'onRefresh';
     static RELOAD: string = 'onReload';
 
-    constructor(provider: baseProvider.BaseProvider, extensionName: string) {
+    constructor(provider: baseProvider.BaseProvider) {
 
         window.app = this;
 
         this.provider = provider;
-        this.extensionName = extensionName;
 
         this.create();
     }
@@ -56,7 +54,6 @@ export class BaseApp {
 
         // add/remove classes.
         this.$element.removeClass();
-        this.$element.addClass(this.extensionName);
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
 
         // events.
