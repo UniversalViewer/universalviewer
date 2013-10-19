@@ -1,9 +1,9 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../coreplayer-shared-module/baseApp");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import baseProvider = require("../coreplayer-shared-module/baseProvider");
-import app = require("../../extensions/coreplayer-mediaelement-extension/app");
+import extension = require("../../extensions/coreplayer-mediaelement-extension/extension");
 import baseCenter = require("../coreplayer-shared-module/centerPanel");
 import utils = require("../../utils");
 
@@ -32,8 +32,8 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
         // only full screen video
         if (this.provider.type == 'video'){
-            $.subscribe(baseApp.BaseApp.TOGGLE_FULLSCREEN, (e) => {
-                if (that.app.isFullScreen) {
+            $.subscribe(baseExtension.BaseExtension.TOGGLE_FULLSCREEN, (e) => {
+                if (that.extension.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
                     that.player.enterFullScreen(false);
                 } else {
@@ -43,14 +43,14 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             });
         }
 
-        $.subscribe(app.App.OPEN_MEDIA, (e, uri) => {
+        $.subscribe(extension.Extension.OPEN_MEDIA, (e, uri) => {
             that.viewMedia(uri);
         });
 
         this.$container = $('<div class="container"></div>');
         this.$content.append(this.$container);
 
-        this.title = this.app.provider.getTitle();
+        this.title = this.extension.provider.getTitle();
 
     }
 

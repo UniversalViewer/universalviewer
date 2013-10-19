@@ -2,8 +2,9 @@
 /// <reference path="../../js/extensions.d.ts" />
 import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import utils = require("../../utils");
+import IMediaElementProvider = require("./iMediaElementProvider");
 
-export class Provider extends baseProvider.BaseProvider {
+export class Provider extends baseProvider.BaseProvider implements IMediaElementProvider{
 
     constructor(config: any, pkg: any) {
         super(config, pkg);

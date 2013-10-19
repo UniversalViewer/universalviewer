@@ -1,6 +1,6 @@
 /// <reference path="../../js/jquery.d.ts" />
 
-import baseApp = require("./baseApp");
+import baseExtension = require("./baseExtension");
 import shell = require("./shell");
 import utils = require("../../utils");
 import baseExpandPanel = require("./baseExpandPanel");

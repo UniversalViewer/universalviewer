@@ -1,7 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../../modules/coreplayer-shared-module/baseApp");
+import baseExtension = require("../../modules/coreplayer-shared-module/baseExtension");
 import utils = require("../../utils");
 import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import provider = require("./provider");
@@ -15,9 +15,9 @@ import right = require("../../modules/coreplayer-moreinforightpanel-module/moreI
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
-import IExtension = require("../../modules/coreplayer-shared-module/iExtension");
+import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
 
-export class App extends baseApp.BaseApp implements IExtension{
+export class Extension extends baseExtension.BaseExtension {
 
     headerPanel: header.PagingHeaderPanel;
     leftPanel: left.TreeViewLeftPanel;
@@ -39,7 +39,7 @@ export class App extends baseApp.BaseApp implements IExtension{
     static PAGE_MODE: string = "pageMode";
     static IMAGE_MODE: string = "imageMode";
 
-    constructor(provider: provider.Provider) {
+    constructor(provider: IProvider) {
         super(provider);
     }
 
@@ -68,9 +68,9 @@ export class App extends baseApp.BaseApp implements IExtension{
         });
 
         $.subscribe(header.PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
-            App.mode = mode;
+            Extension.mode = mode;
 
-            $.publish(App.MODE_CHANGED, [mode]);
+            $.publish(Extension.MODE_CHANGED, [mode]);
         });
 
         $.subscribe(header.PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
@@ -126,7 +126,7 @@ export class App extends baseApp.BaseApp implements IExtension{
         this.viewPage(assetIndex || 0);
 
         // initial sizing
-        $.publish(baseApp.BaseApp.RESIZE);        
+        $.publish(baseExtension.BaseExtension.RESIZE);        
     }
 
     createModules(): void{
@@ -159,7 +159,7 @@ export class App extends baseApp.BaseApp implements IExtension{
     }
 
     isLeftPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.options.leftPanelEnabled, true) 
+        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true) 
                 && this.provider.assetSequence.assets.length > 1;
     }
 
@@ -170,7 +170,7 @@ export class App extends baseApp.BaseApp implements IExtension{
 
             var dziUri = (<provider.Provider>this.provider).getDziUri(asset);
 
-            $.publish(App.OPEN_DZI, [dziUri]);
+            $.publish(Extension.OPEN_DZI, [dziUri]);
 
             this.setParam(baseProvider.params.assetIndex, assetIndex);
         });
@@ -200,18 +200,18 @@ export class App extends baseApp.BaseApp implements IExtension{
     }
 
     getMode(): string {
-        if (App.mode) return App.mode;
+        if (Extension.mode) return Extension.mode;
 
         switch (this.provider.type) {
             case 'monograph':
-                return App.PAGE_MODE;
+                return Extension.PAGE_MODE;
                 break;
             case 'archive':
             case 'boundmanuscript':
-                return App.IMAGE_MODE;
+                return Extension.IMAGE_MODE;
                 break;
             default:
-                return App.IMAGE_MODE;
+                return Extension.IMAGE_MODE;
         }
     }
 

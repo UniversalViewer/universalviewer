@@ -1,8 +1,8 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../coreplayer-shared-module/baseApp");
-import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import baseHeader = require("../coreplayer-shared-module/headerPanel");
 import utils = require("../../utils");
 import help = require("../coreplayer-dialogues-module/helpDialogue");
@@ -42,11 +42,11 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         
         super.create();
 
-        $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
+        $.subscribe(baseExtension.BaseExtension.ASSET_INDEX_CHANGED, (e, assetIndex) => {
             this.assetIndexChanged(assetIndex);
         });
 
-        $.subscribe(app.App.MODE_CHANGED, (e, mode) => {
+        $.subscribe(extension.Extension.MODE_CHANGED, (e, mode) => {
             this.modeChanged(mode);
         });
 
@@ -91,7 +91,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$lastButton = $('<a class="imageButton last"></a>');
         this.$nextOptions.append(this.$lastButton);
 
-        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
+        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             this.$pageModeOption.attr('checked', 'checked');
             this.$pageModeOption.removeAttr('disabled');
         } else {
@@ -129,11 +129,11 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         });
 
         this.$imageModeOption.on('click', (e) => {
-            $.publish(PagingHeaderPanel.MODE_CHANGED, [app.App.IMAGE_MODE]);
+            $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.IMAGE_MODE]);
         });
 
         this.$pageModeOption.on('click', (e) => {
-            $.publish(PagingHeaderPanel.MODE_CHANGED, [app.App.PAGE_MODE]);
+            $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.PAGE_MODE]);
         });
 
         this.$searchText.on('keyup', (e) => {
@@ -161,7 +161,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var mode;
 
-        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
+        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             mode = "page";
         } else {
             mode = "image";
@@ -178,8 +178,8 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var of = this.content.of;
 
-        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
-            this.$total.html(String.prototype.format(of, this.app.getLastAssetOrderLabel()));
+        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+            this.$total.html(String.prototype.format(of, this.extension.getLastAssetOrderLabel()));
         } else {
             this.$total.html(String.prototype.format(of, this.provider.assetSequence.assets.length));
         }
@@ -187,9 +187,9 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
     setSearchPlaceholder(index): void {
 
-        var asset = this.app.getAssetByIndex(index);
+        var asset = this.extension.getAssetByIndex(index);
 
-        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
+        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             if (asset.orderLabel.trim() === "-") {
                 this.$searchText.val("");
             } else {
@@ -207,12 +207,12 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         if (!value) {
 
-            this.app.showDialogue(this.content.emptyValue);
+            this.extension.showDialogue(this.content.emptyValue);
 
             return;
         }
 
-        if ((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
+        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val());
@@ -226,7 +226,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     }
 
     modeChanged(mode): void {
-        this.setSearchPlaceholder(this.app.currentAssetIndex);
+        this.setSearchPlaceholder(this.extension.currentAssetIndex);
         this.setTitles();
         this.setTotal();
     }

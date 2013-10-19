@@ -1,5 +1,5 @@
 /// <reference path="../../js/jquery.d.ts" />
-import baseApp = require("./baseApp");
+import baseExtension = require("./baseExtension");
 import shell = require("./shell");
 import utils = require("../../utils");
 import baseView = require("./baseView");
@@ -23,7 +23,7 @@ export class Dialogue extends baseView.BaseView {
         super.create();
 
         // events.
-        $.subscribe(baseApp.BaseApp.CLOSE_ACTIVE_DIALOGUE, () => {
+        $.subscribe(baseExtension.BaseExtension.CLOSE_ACTIVE_DIALOGUE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -66,7 +66,7 @@ export class Dialogue extends baseView.BaseView {
     setArrowPosition(): void {
         // set bottom background position to mouse x.
         var paddingLeft = parseInt(this.$element.css("padding-left"));
-        var pos = this.app.mouseX - paddingLeft - 10; // 10 = 1/2 arrow width.
+        var pos = this.extension.mouseX - paddingLeft - 10; // 10 = 1/2 arrow width.
         if (pos < 0) pos = 0;
         this.$bottom.css('backgroundPosition', pos + 'px 0px');
     }
@@ -94,8 +94,8 @@ export class Dialogue extends baseView.BaseView {
         super.resize();
 
         this.$element.css({
-            'top': (this.app.height() / 2) - (this.$element.height() / 2),
-            'left': (this.app.width() / 2) - (this.$element.width() / 2)
+            'top': (this.extension.height() / 2) - (this.$element.height() / 2),
+            'left': (this.extension.width() / 2) - (this.$element.width() / 2)
         });
     }
 }

@@ -1,11 +1,12 @@
 /// <reference path="../../js/jquery.d.ts" />
 
 import utils = require("../../utils");
-import baseApp = require("../coreplayer-shared-module/baseApp");
-import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
 import Thumb = require("../coreplayer-treeviewleftpanel-module/thumb");
+import ISeadragonProvider = require("../../extensions/coreplayer-seadragon-extension/iSeadragonProvider");
 
 export class ThumbsView extends baseView.BaseView {
 
@@ -28,15 +29,15 @@ export class ThumbsView extends baseView.BaseView {
         
         super.create();
 
-        $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, index) => {
+        $.subscribe(baseExtension.BaseExtension.ASSET_INDEX_CHANGED, (e, index) => {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(app.App.MODE_CHANGED, (e, mode) => {
+        $.subscribe(extension.Extension.MODE_CHANGED, (e, mode) => {
             this.setLabel();
         });
 
-        $.subscribe(app.App.RELOAD, () => {
+        $.subscribe(extension.Extension.RELOAD, () => {
             this.createThumbs();
         });
 
@@ -89,8 +90,8 @@ export class ThumbsView extends baseView.BaseView {
         for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
             var asset = this.provider.assetSequence.assets[i];
 
-            var uri = this.provider.getThumbUri(asset);
-            var section = this.app.getAssetSection(asset);
+            var uri = (<ISeadragonProvider>this.provider).getThumbUri(asset);
+            var section = this.extension.getAssetSection(asset);
 
             var heightRatio = asset.height / asset.width;
             var height = 90 * heightRatio;
@@ -116,7 +117,7 @@ export class ThumbsView extends baseView.BaseView {
             $.publish(ThumbsView.THUMB_SELECTED, [data.index]);
         });
 
-        this.selectIndex(this.app.currentAssetIndex);
+        this.selectIndex(this.extension.currentAssetIndex);
 
         this.setLabel();
 
@@ -172,7 +173,7 @@ export class ThumbsView extends baseView.BaseView {
         this.$element.show();
 
         setTimeout(() => {
-            this.selectIndex(this.app.currentAssetIndex);
+            this.selectIndex(this.extension.currentAssetIndex);
         }, 1);
 
     }
@@ -182,7 +183,7 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     setLabel(): void {
-        if((<app.App>this.app).getMode() == app.App.PAGE_MODE) {
+        if((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             $(this.$thumbs).find('span.index').hide();
             $(this.$thumbs).find('span.label').show();
         } else {

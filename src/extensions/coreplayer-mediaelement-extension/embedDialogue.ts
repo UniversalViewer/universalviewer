@@ -1,7 +1,8 @@
-import baseApp = require("../../modules/coreplayer-shared-module/baseApp");
-import app = require("./app");
+import baseExtension = require("../../modules/coreplayer-shared-module/baseExtension");
+import extension = require("./extension");
 import utils = require("../../utils");
 import embed = require("../../modules/coreplayer-dialogues-module/embedDialogue");
+import IMediaElementProvider = require("./iMediaElementProvider");
 
 export class EmbedDialogue extends embed.EmbedDialogue {
 
@@ -14,7 +15,7 @@ export class EmbedDialogue extends embed.EmbedDialogue {
 
     formatCode(): void {
 
-        this.code = this.provider.getEmbedScript(
+        this.code = (<IMediaElementProvider>this.provider).getEmbedScript(
             this.currentWidth,
             this.currentHeight,
             null,

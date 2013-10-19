@@ -2,8 +2,9 @@
 /// <reference path="../../js/extensions.d.ts" />
 import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import utils = require("../../utils");
+import ISeadragonProvider = require("./iSeadragonProvider");
 
-export class Provider extends baseProvider.BaseProvider {
+export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
 
     constructor(config: any, pkg: any) {
         super(config, pkg);
@@ -17,7 +18,7 @@ export class Provider extends baseProvider.BaseProvider {
         }, config.options);
     }
 
-    getDziUri(asset: any, dziBaseUri?: string, dziUriTemplate?: string){
+    getDziUri(asset: any, dziBaseUri?: string, dziUriTemplate?: string): string{
         var baseUri = dziBaseUri ? dziBaseUri : this.options.dziBaseUri || this.options.dataBaseUri || "";
         var template = dziUriTemplate? dziUriTemplate : this.options.dziUriTemplate;
         var uri = String.prototype.format(template, baseUri, asset.dziUri);

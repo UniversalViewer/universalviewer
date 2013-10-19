@@ -14,7 +14,7 @@ export class Panel {
     }
 
     create(): void {
-        // todo: can't use static BaseApp.RESIZE property here without breaking inheritance.
+        // todo: can't use static baseExtension.RESIZE property here without breaking inheritance.
         // possible bug with TS 0.9
         $.subscribe('onResize', () => {
             this.resize();

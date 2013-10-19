@@ -1,7 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 
 import utils = require("../../utils");
-import baseApp = require("./baseApp");
+import baseExtension = require("./baseExtension");
 import shell = require("./shell");
 import baseView = require("./baseView");
 
@@ -21,7 +21,7 @@ export class FooterPanel extends baseView.BaseView {
         super.create();
 
         // events.
-        $.subscribe(baseApp.BaseApp.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(baseExtension.BaseExtension.TOGGLE_FULLSCREEN, () => {
             this.toggleFullScreen();
         });
 
@@ -42,12 +42,12 @@ export class FooterPanel extends baseView.BaseView {
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
-            $.publish(baseApp.BaseApp.TOGGLE_FULLSCREEN);
+            $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
     }
 
     toggleFullScreen(): void {
-        if (this.app.isFullScreen) {
+        if (this.extension.isFullScreen) {
             this.$fullScreenBtn.swapClass('fullScreen', 'normal');
         } else {
             this.$fullScreenBtn.swapClass('normal', 'fullScreen');
@@ -58,7 +58,7 @@ export class FooterPanel extends baseView.BaseView {
         super.resize();
 
         this.$element.css({
-            'top': this.app.height() - this.$element.height()
+            'top': this.extension.height() - this.$element.height()
         });
     }
 }

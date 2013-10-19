@@ -1,5 +1,5 @@
 /// <reference path="../../js/jquery.d.ts" />
-import baseApp = require("./baseApp");
+import baseExtension = require("./baseExtension");
 import baseView = require("./baseView");
 import utils = require("../../utils");
 import help = require("../coreplayer-dialogues-module/helpDialogue");

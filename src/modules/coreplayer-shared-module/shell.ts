@@ -1,5 +1,5 @@
 /// <reference path="../../js/jquery.d.ts" />
-import baseApp = require("./baseApp");
+import baseExtension = require("./baseExtension");
 import utils = require("../../utils");
 import baseView = require("./baseView");
 import genericDialogue = require("./genericDialogue");
@@ -63,7 +63,7 @@ export class Shell extends baseView.BaseView {
 
             if ($(e.target).hasClass('overlays')) {
                 e.preventDefault();
-                $.publish(baseApp.BaseApp.CLOSE_ACTIVE_DIALOGUE);
+                $.publish(baseExtension.BaseExtension.CLOSE_ACTIVE_DIALOGUE);
             }
         });
 
@@ -74,8 +74,8 @@ export class Shell extends baseView.BaseView {
     resize(): void{
         super.resize();
 
-        Shell.$overlays.width(this.app.width());
-        Shell.$overlays.height(this.app.height());
+        Shell.$overlays.width(this.extension.width());
+        Shell.$overlays.height(this.extension.height());
 
         var mainHeight = this.$element.height() - Shell.$headerPanel.height() - Shell.$footerPanel.height();
         Shell.$mainPanel.actualHeight(mainHeight);

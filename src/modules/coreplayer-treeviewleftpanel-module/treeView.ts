@@ -2,10 +2,10 @@
 /// <reference path="../../js/extensions.d.ts" />
 
 import utils = require("../../utils");
-import baseApp = require("../coreplayer-shared-module/baseApp");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
-import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import TreeNode = require("../coreplayer-treeviewleftpanel-module/treeNode");
 
 export class TreeView extends baseView.BaseView {
@@ -26,7 +26,7 @@ export class TreeView extends baseView.BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(baseApp.BaseApp.ASSET_INDEX_CHANGED, (e, assetIndex) => {
+        $.subscribe(baseExtension.BaseExtension.ASSET_INDEX_CHANGED, (e, assetIndex) => {
             this.selectIndex(assetIndex);
         });
 
@@ -173,7 +173,7 @@ export class TreeView extends baseView.BaseView {
         // may be authenticating
         if (index == -1) return;
 
-        var section = this.app.getSectionByAssetIndex(index);
+        var section = this.extension.getSectionByAssetIndex(index);
         this.selectPath(section.path);
     }
 
@@ -198,7 +198,7 @@ export class TreeView extends baseView.BaseView {
         this.$element.show();
 
         setTimeout(() => {
-            this.selectIndex(this.app.currentAssetIndex);
+            this.selectIndex(this.extension.currentAssetIndex);
         }, 1);
     }
 

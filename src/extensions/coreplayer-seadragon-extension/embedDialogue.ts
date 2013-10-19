@@ -1,8 +1,9 @@
-import baseApp = require("../../modules/coreplayer-shared-module/baseApp");
-import app = require("./app");
+import baseExtension = require("../../modules/coreplayer-shared-module/baseExtension");
+import extension = require("./extension");
 import utils = require("../../utils");
 import embed = require("../../modules/coreplayer-dialogues-module/embedDialogue");
 import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
+import ISeadragonProvider = require("./iSeadragonProvider");
 
 export class EmbedDialogue extends embed.EmbedDialogue {
 
@@ -28,11 +29,11 @@ export class EmbedDialogue extends embed.EmbedDialogue {
 
     formatCode(): void {
 
-        var assetSequenceIndex = this.app.currentAssetIndex;
-        var zoom = (<app.App>this.app).getViewerBounds();
+        var assetSequenceIndex = this.extension.currentAssetIndex;
+        var zoom = (<extension.Extension>this.extension).getViewerBounds();
 
-        this.code = this.provider.getEmbedScript(
-            this.app.currentAssetIndex,
+        this.code = (<ISeadragonProvider>this.provider).getEmbedScript(
+            this.extension.currentAssetIndex,
             zoom,
             this.currentWidth,
             this.currentHeight,

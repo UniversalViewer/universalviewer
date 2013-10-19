@@ -1,9 +1,9 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../coreplayer-shared-module/baseApp");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import baseProvider = require("../coreplayer-shared-module/baseProvider");
-import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import baseCenter = require("../coreplayer-shared-module/centerPanel");
 import utils = require("../../utils");
 
@@ -41,7 +41,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         super.create();
 
         // events.
-        $.subscribe(app.App.OPEN_DZI, (e, uri) => {
+        $.subscribe(extension.Extension.OPEN_DZI, (e, uri) => {
             this.viewer.openDzi(uri);
         });
 
@@ -119,7 +119,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
 
-        this.title = this.app.provider.getTitle();
+        this.title = this.extension.provider.getTitle();
     }
 
     isMultiAsset(): boolean{
@@ -133,13 +133,13 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             
             $('.navigator').addClass('extraMargin');
 
-            if (this.app.currentAssetIndex != 0) {
+            if (this.extension.currentAssetIndex != 0) {
                 this.enablePrevButton();
             } else {
                 this.disablePrevButton();
             }
 
-            if (this.app.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
+            if (this.extension.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
                 this.enableNextButton();
             } else {
                 this.disableNextButton();
@@ -148,7 +148,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         
         // if there are no currentBounds check for initial zoom params.
         if (!this.currentBounds){
-            var initialBounds = this.app.getParam(baseProvider.params.zoom);
+            var initialBounds = this.extension.getParam(baseProvider.params.zoom);
 
             if (initialBounds){
                 initialBounds = this.deserialiseBounds(initialBounds);

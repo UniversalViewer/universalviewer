@@ -1,6 +1,6 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
-import baseApp = require("./baseApp");
+import baseExtension = require("./baseExtension");
 import shell = require("./shell");
 import utils = require("../../utils");
 import baseView = require("./baseView");
@@ -136,7 +136,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     }
 
     toggleComplete(): void {
-        $.publish(baseApp.BaseApp.RESIZE);
+        $.publish(baseExtension.BaseExtension.RESIZE);
     }
 
     resize(): void {

@@ -4,8 +4,10 @@ import utils = require("../../utils");
 import baseProvider = require("./baseProvider");
 import shell = require("./shell");
 import genericDialogue = require("./genericDialogue");
+import IProvider = require("./iProvider");
+import IExtension = require("./iExtension");
 
-export class BaseApp {
+export class BaseExtension implements IExtension {
 
     isFullScreen: boolean = false;
     currentAssetIndex: number;
@@ -14,7 +16,7 @@ export class BaseApp {
     $element: JQuery;
     extensions: any;
     socket: any;
-    provider: baseProvider.BaseProvider;
+    provider: IProvider;
 
     // events
     static RESIZE: string = 'onResize';
@@ -26,9 +28,9 @@ export class BaseApp {
     static REFRESH: string = 'onRefresh';
     static RELOAD: string = 'onReload';
 
-    constructor(provider: baseProvider.BaseProvider) {
+    constructor(provider: IProvider) {
 
-        window.app = this;
+        window.extension = this;
 
         this.provider = provider;
 
@@ -62,7 +64,7 @@ export class BaseApp {
             var $win = $(window);
             $('body').height($win.height());
 
-            $.publish(BaseApp.RESIZE);
+            $.publish(BaseExtension.RESIZE);
         }
 
         $(document).on('mousemove', (e) => {
@@ -70,9 +72,9 @@ export class BaseApp {
             this.mouseY = e.pageY;
         });
         
-        $.subscribe(BaseApp.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
             this.isFullScreen = !this.isFullScreen;
-            this.triggerSocket(BaseApp.TOGGLE_FULLSCREEN, this.isFullScreen);
+            this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
         });
 
         // create shell and shared views.
@@ -96,18 +98,18 @@ export class BaseApp {
         }
     }
 
-    redirect(uri) {
-        this.triggerSocket(BaseApp.REDIRECT, uri);
+    redirect(uri: string): void {
+        this.triggerSocket(BaseExtension.REDIRECT, uri);
     }
 
-    refresh() {
-        this.triggerSocket(BaseApp.REFRESH, null);
+    refresh(): void {
+        this.triggerSocket(BaseExtension.REFRESH, null);
     }
 
     handleParentFrameEvent(message): void {
         switch (message.eventName) {
-            case BaseApp.TOGGLE_FULLSCREEN:
-                $.publish(BaseApp.TOGGLE_FULLSCREEN, message.eventObject);
+            case BaseExtension.TOGGLE_FULLSCREEN:
+                $.publish(BaseExtension.TOGGLE_FULLSCREEN, message.eventObject);
             break;
         }
     }
@@ -140,7 +142,7 @@ export class BaseApp {
 
         this.currentAssetIndex = assetIndex;
 
-        $.publish(BaseApp.ASSET_INDEX_CHANGED, [assetIndex]);
+        $.publish(BaseExtension.ASSET_INDEX_CHANGED, [assetIndex]);
         
         if (callback) callback(assetIndex);
     }
@@ -148,10 +150,10 @@ export class BaseApp {
     viewAssetSequence(index): void {
 
         if (this.isFullScreen) {
-            $.publish(BaseApp.TOGGLE_FULLSCREEN);
+            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
         }
 
-        this.triggerSocket(BaseApp.ASSETSEQUENCE_INDEX_CHANGED, index);
+        this.triggerSocket(BaseExtension.ASSETSEQUENCE_INDEX_CHANGED, index);
     }
 
     isDeepLinkingEnabled(): boolean {
@@ -159,7 +161,7 @@ export class BaseApp {
         return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
     }
 
-    getSectionByAssetIndex(index: number) {
+    getSectionByAssetIndex(index: number): any {
 
         var asset = this.getAssetByIndex(index);
 
@@ -182,7 +184,7 @@ export class BaseApp {
         return null;
     }
 
-    getAssetSection(asset) {
+    getAssetSection(asset): any {
         // get the deepest section that this file belongs to.
         return asset.sections.last();
     } 
@@ -242,7 +244,7 @@ export class BaseApp {
         return this.provider.assetSequence.assets[this.currentAssetIndex];
     }
     
-    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean) {
+    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
 
         $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [
             {

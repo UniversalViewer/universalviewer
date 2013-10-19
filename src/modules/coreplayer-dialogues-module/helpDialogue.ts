@@ -1,5 +1,5 @@
-import baseApp = require("../coreplayer-shared-module/baseApp");
-import app = require("../../extensions/coreplayer-seadragon-extension/app");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../coreplayer-shared-module/dialogue");

@@ -1,7 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseApp = require("../../modules/coreplayer-shared-module/baseApp");
+import baseExtension = require("../../modules/coreplayer-shared-module/baseExtension");
 import utils = require("../../utils");
 import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import provider = require("./provider");
@@ -12,9 +12,9 @@ import right = require("../../modules/coreplayer-moreinforightpanel-module/moreI
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
-import IExtension = require("../../modules/coreplayer-shared-module/iExtension");
+import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
 
-export class App extends baseApp.BaseApp implements IExtension{
+export class Extension extends baseExtension.BaseExtension{
 
     headerPanel: header.HeaderPanel;
     centerPanel: center.MediaElementCenterPanel;
@@ -28,7 +28,7 @@ export class App extends baseApp.BaseApp implements IExtension{
     // events
     static OPEN_MEDIA: string = 'onOpenMedia';
 
-    constructor(provider: provider.Provider) {
+    constructor(provider: IProvider) {
         super(provider);
     }
 
@@ -37,11 +37,11 @@ export class App extends baseApp.BaseApp implements IExtension{
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
-            $.publish(baseApp.BaseApp.TOGGLE_FULLSCREEN);
+            $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
         $(window).bind('exitfullscreen', () => {
-            $.publish(baseApp.BaseApp.TOGGLE_FULLSCREEN);
+            $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
         $.subscribe(footer.FooterPanel.EMBED, (e) => {
@@ -53,7 +53,7 @@ export class App extends baseApp.BaseApp implements IExtension{
         this.setParams();
 
         // initial sizing
-        $.publish(baseApp.BaseApp.RESIZE);
+        $.publish(baseExtension.BaseExtension.RESIZE);
 
         this.viewMedia();      
     }
@@ -84,7 +84,7 @@ export class App extends baseApp.BaseApp implements IExtension{
 
         this.viewAsset(0, () => {
 
-            $.publish(App.OPEN_MEDIA, [asset.fileUri]);
+            $.publish(Extension.OPEN_MEDIA, [asset.fileUri]);
 
             this.setParam(baseProvider.params.assetIndex, 0);
         });

@@ -1,10 +1,12 @@
 /// <reference path="../../js/jquery.d.ts" />
 import panel = require("./panel");
+import IProvider = require("./iProvider");
+import IExtension = require("./iExtension");
 
 export class BaseView extends panel.Panel{
 
-    app: any;
-    provider: any;
+    extension: IExtension;
+    provider: IProvider;
     config: any;
     content: any;
     options: any;
@@ -17,8 +19,8 @@ export class BaseView extends panel.Panel{
     create(): void {
         super.create();
 
-        this.app = window.app;
-        this.provider = this.app.provider;
+        this.extension = window.extension;
+        this.provider = this.extension.provider;
 
         // config.
         if (this.moduleName) {

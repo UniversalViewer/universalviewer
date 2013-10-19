@@ -1,4 +1,4 @@
-import baseApp = require("./baseApp");
+import baseExtension = require("./baseExtension");
 import shell = require("./shell");
 import utils = require("../../utils");
 import dialogue = require("./dialogue");
@@ -49,7 +49,7 @@ export class GenericDialogue extends dialogue.Dialogue {
 
     accept(): void {
 
-        $.publish(baseApp.BaseApp.CLOSE_ACTIVE_DIALOGUE);
+        $.publish(baseExtension.BaseExtension.CLOSE_ACTIVE_DIALOGUE);
 
         if (this.acceptCallback) this.acceptCallback();
     }

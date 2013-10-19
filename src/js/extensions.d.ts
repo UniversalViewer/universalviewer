@@ -58,7 +58,7 @@ declare var yepnope: any;
 
 // app
 interface Window{
-    app: any;
+    extension: any;
     pkgCallback: any;
     BrowserDetect: any;
 }

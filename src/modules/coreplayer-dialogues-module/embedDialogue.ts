@@ -1,4 +1,4 @@
-import baseApp = require("../coreplayer-shared-module/baseApp");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../coreplayer-shared-module/dialogue");
@@ -196,7 +196,7 @@ export class EmbedDialogue extends dialogue.Dialogue {
     resize(): void {
 
         this.$element.css({
-            'top': this.app.height() - this.$element.outerHeight(true)
+            'top': this.extension.height() - this.$element.outerHeight(true)
         });
     }
 }
