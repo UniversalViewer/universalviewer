@@ -18,7 +18,10 @@
             {
                 "emptyValue": "please enter a value",
                 "pageNotFound": "page not found",
-                "ok": "OK"
+                "ok": "OK",
+                "refresh": "Refresh",
+                "invalidNumber": "Please enter a valid number",
+                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'"
             }
         },
         "helpDialogue":
