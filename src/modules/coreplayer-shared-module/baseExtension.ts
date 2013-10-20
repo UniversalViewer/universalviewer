@@ -27,10 +27,9 @@ export class BaseExtension implements IExtension {
     static REDIRECT: string = 'onRedirect';
     static REFRESH: string = 'onRefresh';
     static RELOAD: string = 'onReload';
-    static WINDOW_UNLOAD: string = 'onWindowUnload';
     static ESCAPE: string = 'onEscape';
     static RETURN: string = 'onReturn';
-    static TRACK_EVENT: string = 'onTrackEvent';
+    static WINDOW_UNLOAD: string = 'onWindowUnload';
 
     constructor(provider: IProvider) {
 
@@ -161,11 +160,8 @@ export class BaseExtension implements IExtension {
     }
 
     isDeepLinkingEnabled(): boolean {
-        return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
-    }
 
-    isMultiAsset(): boolean{
-        return this.provider.assetSequence.assets.length > 1;
+        return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
     }
 
     getSectionByAssetIndex(index: number): any {
@@ -260,5 +256,13 @@ export class BaseExtension implements IExtension {
                 buttonText: buttonText,
                 allowClose: allowClose
             }]);
+    }
+
+    closeActiveDialogue(): void{
+        $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
+    }
+
+    isMultiAsset(): boolean{
+        return this.provider.assetSequence.assets.length > 1;
     }
 }
