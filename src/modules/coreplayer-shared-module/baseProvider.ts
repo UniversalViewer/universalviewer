@@ -113,9 +113,9 @@ export class BaseProvider implements IProvider{
     // a collection of sections it belongs to.
     // it also builds a path string property for each section.
     // this can then be used when a section is clicked in the tree view
-    // where getSectionIndex in BaseApp loops though all assets and their
+    // where getSectionIndex in baseExtension loops though all assets and their
     // associated sections until it finds one with a matching path.
-    parseSections(section, assets, path): void {
+    parseSections(section: any, assets: any[], path: string): void {
 
         section.path = path;
 
