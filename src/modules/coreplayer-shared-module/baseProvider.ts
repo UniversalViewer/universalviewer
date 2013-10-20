@@ -139,7 +139,7 @@ export class BaseProvider implements IProvider{
         }
     }
 
-    parseStructures(structure, assetSequences, path): void {
+    parseStructures(structure: any, assetSequences: any[], path: string): void {
 
         structure.path = path;
 
