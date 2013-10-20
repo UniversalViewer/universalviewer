@@ -80,6 +80,18 @@ export class BaseExtension implements IExtension {
             this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
         });
 
+        // keyboard events.
+        $(document).keyup((e) => {
+            if (e.keyCode === 27) $.publish(BaseExtension.ESCAPE);
+            if (e.keyCode === 13) $.publish(BaseExtension.RETURN);
+        });
+
+        $.subscribe(BaseExtension.ESCAPE, () => {
+            if (this.isFullScreen) {
+                $.publish(BaseExtension.TOGGLE_FULLSCREEN);
+            }
+        });
+
         // create shell and shared views.
         var sh = new shell.Shell(this.$element);
 

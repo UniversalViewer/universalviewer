@@ -141,7 +141,13 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             if (e.keyCode == 13) { // return pressed
                 e.preventDefault();
                 this.$searchText.blur();
-                this.search();
+
+                // needs to be delayed, otherwise
+                // the RETURN event closes
+                // not found dialogue.
+                setTimeout(() => {
+                    this.search();
+                }, 1);                
             }
         });
 
