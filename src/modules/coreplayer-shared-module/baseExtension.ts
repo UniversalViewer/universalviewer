@@ -9,6 +9,7 @@ import IExtension = require("./iExtension");
 
 export class BaseExtension implements IExtension {
 
+    shell: shell.Shell;
     isFullScreen: boolean = false;
     currentAssetIndex: number;
     mouseX: number;
@@ -76,8 +77,10 @@ export class BaseExtension implements IExtension {
         });
         
         $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
-            this.isFullScreen = !this.isFullScreen;
-            this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
+            if (!this.isOverlayActive()){
+                this.isFullScreen = !this.isFullScreen;
+                this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
+            }
         });
 
         // keyboard events.
@@ -93,7 +96,7 @@ export class BaseExtension implements IExtension {
         });
 
         // create shell and shared views.
-        var sh = new shell.Shell(this.$element);
+        this.shell = new shell.Shell(this.$element);
 
         // set currentAssetIndex to -1 (nothing selected yet).
         this.currentAssetIndex = -1;
@@ -276,5 +279,9 @@ export class BaseExtension implements IExtension {
 
     isMultiAsset(): boolean{
         return this.provider.assetSequence.assets.length > 1;
+    }
+
+    isOverlayActive(): boolean{
+        return shell.Shell.$overlays.is(':visible');
     }
 }

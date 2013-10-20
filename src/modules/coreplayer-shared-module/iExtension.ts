@@ -16,6 +16,7 @@ interface IExtension{
 	viewAssetSequence(index): void;
 	isDeepLinkingEnabled(): boolean;
 	isMultiAsset(): boolean;
+	isOverlayActive(): boolean;
 	getSectionByAssetIndex(index: number): any;
 	getSectionIndex(path: string): number;
 	getAssetSection(asset): any;
