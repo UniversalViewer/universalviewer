@@ -8,6 +8,7 @@ export class Dialogue extends baseView.BaseView {
 
     isActive: boolean = false;
     allowClose: boolean = true;
+    returnFunc: any;
 
     $top: JQuery;
     $closeButton: JQuery;
@@ -31,6 +32,20 @@ export class Dialogue extends baseView.BaseView {
             }
         });
 
+        $.subscribe(baseExtension.BaseExtension.ESCAPE, () => {
+            if (this.isActive) {
+                if (this.allowClose) {
+                    this.close();
+                }
+            }
+        });
+
+        // default behaviour on RETURN is to close.
+        // can be overridden.
+        $.subscribe(baseExtension.BaseExtension.RETURN, (e) => {
+            this.returnFunc();
+        });
+
         this.$top = utils.Utils.createDiv('top');
         this.$element.append(this.$top);
 
@@ -51,6 +66,8 @@ export class Dialogue extends baseView.BaseView {
 
             this.close();
         });
+
+        this.returnFunc = this.close;
     }
 
     enableClose(): void {

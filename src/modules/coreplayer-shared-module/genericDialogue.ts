@@ -44,6 +44,12 @@ export class GenericDialogue extends dialogue.Dialogue {
             this.accept();
         });
 
+        this.returnFunc = () => {
+            if (this.isActive){
+                this.accept();
+            }
+        }
+
         this.$element.hide();
     }
 

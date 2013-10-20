@@ -64,7 +64,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.viewer.setControlsEnabled(false);
 
         // create prev/next buttons.
-        if (this.isMultiAsset()) {
+        if (this.extension.isMultiAsset()) {
 
             this.$prevButton = $('<div class="paging btn prev"></div>');
             this.$prevButton.prop('title', this.content.previous);
@@ -122,14 +122,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.title = this.extension.provider.getTitle();
     }
 
-    isMultiAsset(): boolean{
-        return this.provider.assetSequence.assets.length > 1;
-    }
-
     // called every time the seadragon viewer opens a new image.
     viewerOpen() {
 
-        if (this.isMultiAsset()) {
+        if (this.extension.isMultiAsset()) {
             
             $('.navigator').addClass('extraMargin');
 
@@ -241,7 +237,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         this.$viewer.height(this.$content.height());
 
-        if (this.isMultiAsset()) {
+        if (this.extension.isMultiAsset()) {
             this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
             this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
         }

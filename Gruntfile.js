@@ -14,13 +14,12 @@ module.exports = function (grunt) {
     var packageDirName = 'wellcomeplayer-' + packageJson.version,
         packageDir = 'build/' + packageDirName;
 
-    var globalConfig = {
-        buildDir: 'build/wellcomeplayer',
-        minify: 'optimize=none'
-    };
-
     grunt.initConfig({        
-        globalConfig: globalConfig,
+        global: 
+        {
+            buildDir: 'build/wellcomeplayer',
+            minify: 'optimize=none'
+        },
         pkg: packageJson,
         ts: {
             dev: {                            
@@ -86,14 +85,14 @@ module.exports = function (grunt) {
             release: {
                 options: {
                     port: 3001,
-                    base: "<%= globalConfig.buildDir %>",
+                    base: "<%= global.buildDir %>",
                     keepalive: true
                 }
             }
         },
 
         clean: {
-            build : ["<%= globalConfig.buildDir %>/*"],
+            build : ["<%= global.buildDir %>/*"],
             package: [packageDir]
         },
 
@@ -104,7 +103,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/modules/**/img/*'],
-                        dest: '<%= globalConfig.buildDir %>/img/',
+                        dest: '<%= global.buildDir %>/img/',
                         rename: function(dest, src) {
 
                             var fileName = src.substr(src.lastIndexOf('/'));
@@ -122,7 +121,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         cwd: 'src',
                         src: ['index.html', 'app.html'], 
-                        dest: '<%= globalConfig.buildDir %>'
+                        dest: '<%= global.buildDir %>'
                     },
                     // js
                     {
@@ -130,13 +129,13 @@ module.exports = function (grunt) {
                         flatten: true,
                         cwd: 'src/js',
                         src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js'],
-                        dest: '<%= globalConfig.buildDir %>/js/'
+                        dest: '<%= global.buildDir %>/js/'
                     },
                     // extension configuration files
                     {
                         expand: true,
                         src: ['src/extensions/**/config.js'], 
-                        dest: '<%= globalConfig.buildDir %>/js/',
+                        dest: '<%= global.buildDir %>/js/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -150,7 +149,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/extensions/**/css/*.css'], 
-                        dest: '<%= globalConfig.buildDir %>/css/',
+                        dest: '<%= global.buildDir %>/css/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -167,7 +166,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: ['src/modules/**/js/*.*', '!src/modules/**/js/*.js'],
-                        dest: '<%= globalConfig.buildDir %>/js/'
+                        dest: '<%= global.buildDir %>/js/'
                     }
                 ]
             },
@@ -175,7 +174,7 @@ module.exports = function (grunt) {
                 // copy contents of /build to packageDir.
                 files: [
                     {
-                        cwd: '<%= globalConfig.buildDir %>',
+                        cwd: '<%= global.buildDir %>',
                         expand: true,
                         src: ['**'],
                         dest: packageDir
@@ -216,14 +215,14 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node tools/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= globalConfig.minify %> out=<%= globalConfig.buildDir %>/js/app.js'
+                cmd: 'node tools/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= global.minify %> out=<%= global.buildDir %>/js/app.js'
             }
         },
 
         replace: {
             img: {
                 // replace img srcs to point to ../img/modulename/imgname
-                src: ['<%= globalConfig.buildDir %>/css/*.css'],
+                src: ['<%= global.buildDir %>/css/*.css'],
                 overwrite: true,
                 replacements: [{ 
                     from: /(?:'|").*modules\/(.*)\/img\/(.*)(?:'|")/g,
@@ -232,7 +231,7 @@ module.exports = function (grunt) {
             },
             config: {
                 // replace extension config paths.
-                src: ['<%= globalConfig.buildDir %>/js/app.js'],
+                src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
                 replacements: [{ 
                     from: /config:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
@@ -241,7 +240,7 @@ module.exports = function (grunt) {
             },
             css: {
                 // replace css paths.
-                src: ['<%= globalConfig.buildDir %>/js/app.js'],
+                src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
                 replacements: [{ 
                     from: /css:.*(?:'|")extensions\/(.*)\/css\/styles.css(?:'|")/g,
@@ -249,7 +248,7 @@ module.exports = function (grunt) {
                 }]
             },
             html: {
-                src: ['<%= globalConfig.buildDir %>/app.html'],
+                src: ['<%= global.buildDir %>/app.html'],
                 overwrite: true,
                 replacements: [{ 
                     from: 'data-main="app"',
@@ -270,11 +269,11 @@ module.exports = function (grunt) {
         // grunt build --buildDir=myDir
         // or prepend / to target relative to system root.
         var buildDir = grunt.option('buildDir');
-        if (buildDir) grunt.config.set('globalConfig.buildDir', buildDir);
+        if (buildDir) grunt.config.set('global.buildDir', buildDir);
 
         // grunt build --minify
         var minify = grunt.option('minify');
-        if (minify) grunt.config.set('globalConfig.minify', '');
+        if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
             'ts:build', 
@@ -294,7 +293,7 @@ module.exports = function (grunt) {
         // grunt build --buildDir=myDir
         // or prepend / to target relative to system root.
         var buildDir = grunt.option('buildDir');
-        if (buildDir) grunt.config.set('globalConfig.buildDir', buildDir);
+        if (buildDir) grunt.config.set('global.buildDir', buildDir);
 
         grunt.task.run(
             'build', 

@@ -27,6 +27,10 @@ export class BaseExtension implements IExtension {
     static REDIRECT: string = 'onRedirect';
     static REFRESH: string = 'onRefresh';
     static RELOAD: string = 'onReload';
+    static WINDOW_UNLOAD: string = 'onWindowUnload';
+    static ESCAPE: string = 'onEscape';
+    static RETURN: string = 'onReturn';
+    static TRACK_EVENT: string = 'onTrackEvent';
 
     constructor(provider: IProvider) {
 
@@ -157,8 +161,11 @@ export class BaseExtension implements IExtension {
     }
 
     isDeepLinkingEnabled(): boolean {
-
         return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
+    }
+
+    isMultiAsset(): boolean{
+        return this.provider.assetSequence.assets.length > 1;
     }
 
     getSectionByAssetIndex(index: number): any {

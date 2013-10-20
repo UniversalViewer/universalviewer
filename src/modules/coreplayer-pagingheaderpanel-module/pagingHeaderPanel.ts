@@ -6,6 +6,7 @@ import extension = require("../../extensions/coreplayer-seadragon-extension/exte
 import baseHeader = require("../coreplayer-shared-module/headerPanel");
 import utils = require("../../utils");
 import help = require("../coreplayer-dialogues-module/helpDialogue");
+import IWellcomeSeadragonExtension = require("../../extensions/wellcomeplayer-seadragon-extension/iWellcomeSeadragonExtension");
 
 export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
@@ -91,7 +92,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$lastButton = $('<a class="imageButton last"></a>');
         this.$nextOptions.append(this.$lastButton);
 
-        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             this.$pageModeOption.attr('checked', 'checked');
             this.$pageModeOption.removeAttr('disabled');
         } else {
@@ -161,7 +162,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var mode;
 
-        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             mode = "page";
         } else {
             mode = "image";
@@ -178,7 +179,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var of = this.content.of;
 
-        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             this.$total.html(String.prototype.format(of, this.extension.getLastAssetOrderLabel()));
         } else {
             this.$total.html(String.prototype.format(of, this.provider.assetSequence.assets.length));
@@ -189,7 +190,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var asset = this.extension.getAssetByIndex(index);
 
-        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             if (asset.orderLabel.trim() === "-") {
                 this.$searchText.val("");
             } else {
@@ -212,7 +213,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             return;
         }
 
-        if ((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val());
