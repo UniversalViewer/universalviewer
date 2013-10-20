@@ -1,6 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 import utils = require("../../utils");
+import IProvider = require("./iProvider");
 
 export enum params {
     assetSequenceIndex,
@@ -8,7 +9,11 @@ export enum params {
     zoom
 }
 
-export class BaseProvider {
+// providers contain methods that could be implemented differently according
+// to factors like varying back end data provision systems.
+// they provide a consistent interface and set of data structures 
+// for extensions to operate against.
+export class BaseProvider implements IProvider{
     
     config: any;
     pkg: any;
