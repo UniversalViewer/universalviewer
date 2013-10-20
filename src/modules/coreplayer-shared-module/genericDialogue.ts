@@ -70,9 +70,7 @@ export class GenericDialogue extends dialogue.Dialogue {
             this.$acceptButton.text(this.content.ok);
         }
 
-        if (params.acceptCallback) {
-            this.acceptCallback = params.acceptCallback;
-        }
+        this.acceptCallback = params.acceptCallback;
 
         if (params.allowClose === false) {
             this.disableClose();
