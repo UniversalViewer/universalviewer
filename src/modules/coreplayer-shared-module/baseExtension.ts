@@ -238,6 +238,8 @@ export class BaseExtension implements IExtension {
         var labelPart1 = match[1];
         var labelPart2 = match[2];
 
+        if (!labelPart1) return -1;
+
         var searchRegExp;
 
         if (labelPart2) {

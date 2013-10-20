@@ -168,7 +168,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var mode;
 
-        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
             mode = "page";
         } else {
             mode = "image";
@@ -185,7 +185,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var of = this.content.of;
 
-        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
             this.$total.html(String.prototype.format(of, this.extension.getLastAssetOrderLabel()));
         } else {
             this.$total.html(String.prototype.format(of, this.provider.assetSequence.assets.length));
@@ -196,7 +196,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var asset = this.extension.getAssetByIndex(index);
 
-        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
             if (asset.orderLabel.trim() === "-") {
                 this.$searchText.val("");
             } else {
@@ -219,10 +219,23 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             return;
         }
 
-        if ((<IWellcomeSeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if ((<IWellcomeSeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
             $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val());
+
+            if (isNaN(index)){
+                this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.invalidNumber);
+                return;
+            }
+
+            var asset = this.extension.getAssetByIndex(index);
+
+            if (!asset){
+                this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+                return;
+            }
+
             index--;
             $.publish(PagingHeaderPanel.IMAGE_SEARCH, [index.toString()]);
         }
