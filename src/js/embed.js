@@ -8,7 +8,9 @@
 
     // get the script location.
     var s = document.getElementById('embedWellcomePlayer');
-    var scriptUri = s.src;
+    var scriptUri = (/.*src="(.*)"/).exec(s.outerHTML)[1];
+
+    var outer
 
     var j, d;
     var loaded = false;
@@ -44,22 +46,15 @@
         return s;
     };
 
+    // get the part preceding 'js/embed.js'
+    var baseUri = (/(.*)js\/embed.js/).exec(scriptUri)[1];
+    appUri = String.format(appUri, baseUri);
+    easyXDMUri = String.format(easyXDMUri,baseUri);
+    json2Uri = String.format(json2Uri, baseUri);
+
     var a = document.createElement('a');
     a.href = scriptUri;
     var domain = a.hostname;
-
-    if (window.embedBaseUri) {
-        appUri = String.format(appUri, window.embedBaseUri);
-        easyXDMUri = String.format(easyXDMUri, window.embedBaseUri);
-        json2Uri = String.format(json2Uri, window.embedBaseUri);
-    } else {
-        var port = '';
-        if (a.port && a.port !== 80) port = ':' + a.port;
-
-        appUri = String.format(appUri, 'http://' + domain + port + '/');
-        easyXDMUri = String.format(easyXDMUri, '//' + domain + port + '/');
-        json2Uri = String.format(json2Uri, '//' + domain + port + '/');
-    }
 
     $.when($.getScript(easyXDMUri),
            $.getScript(json2Uri)).done(function () {
