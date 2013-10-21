@@ -9,16 +9,16 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks("grunt-contrib-compress");
 
-    var packageJson = grunt.file.readJSON("package.json");
-
-    var packageDirName = 'wellcomeplayer-' + packageJson.version,
-        packageDir = 'build/' + packageDirName;
+    var packageJson = grunt.file.readJSON("package.json"),
+        packageDirName = 'wellcomeplayer-' + packageJson.version;
 
     grunt.initConfig({        
         global: 
         {
             buildDir: 'build/wellcomeplayer',
-            minify: 'optimize=none'
+            minify: 'optimize=none',
+            packageDirName: packageDirName,
+            packageDir: 'build/' + packageDirName
         },
         pkg: packageJson,
         ts: {
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
 
         clean: {
             build : ["<%= global.buildDir %>/*"],
-            package: [packageDir]
+            package: ['<%= global.packageDir %>']
         },
 
         copy: {
@@ -177,7 +177,7 @@ module.exports = function (grunt) {
                         cwd: '<%= global.buildDir %>',
                         expand: true,
                         src: ['**'],
-                        dest: packageDir
+                        dest: '<%= global.packageDir %>'
                     }
                 ]
             }
@@ -186,27 +186,27 @@ module.exports = function (grunt) {
         compress: {
             zip: {
                 options: {
-                    archive: "build/releases/" + packageDirName + ".zip",
+                    archive: "build/releases/<%= global.packageDirName %>.zip",
                     level: 9
                 },
                 files: [
                     { 
                         expand: true, 
                         cwd: "build/", 
-                        src: [ packageDirName + "/**" ]
+                        src: ["<%= global.packageDirName %>/**" ]
                     }
                 ]
             },
             tar: {
                 options: {
-                    archive: "build/releases/" + packageDirName + ".tar.gz",
+                    archive: "build/releases/<%= global.packageDirName %>.tar.gz",
                     level: 9
                 },
                 files: [
                     { 
                         expand: true,
                         cwd: "build/",
-                        src: [ packageDirName + "/**" ]
+                        src: ["<%= global.packageDirName %>/**" ]
                     }
                 ]
             }
@@ -290,7 +290,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('package', '', function() {
       
-        // grunt build --buildDir=myDir
+        // grunt package --buildDir=myDir
         // or prepend / to target relative to system root.
         var buildDir = grunt.option('buildDir');
         if (buildDir) grunt.config.set('global.buildDir', buildDir);
