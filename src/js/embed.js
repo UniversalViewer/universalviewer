@@ -74,7 +74,7 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, isFullScreen, height, top, left, lastScroll, reload;
+        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
 
         $app = $(element);
 
@@ -89,6 +89,7 @@
         assetSequenceIndex = $app.attr('data-assetsequenceindex');
         assetIndex = $app.attr('data-assetindex');
         zoom = $app.attr('data-zoom');
+        config = $app.attr('data-config');
 
         isFullScreen = false;
         height = $app.height();
@@ -194,6 +195,7 @@
             if (dataBaseUri) uri += "&dbu=" + dataBaseUri;
             if (zoom) uri += "&z=" + zoom;
             if (reload) uri += "&rl=true";
+            if (config) uri += "&c=" + config;
 
             socket = new easyXDM.Socket({
                 remote: uri,

@@ -45,7 +45,7 @@ class BootStrapper{
 
             if (!that.pkg.assetSequences[that.assetSequenceIndex].$ref) {
                 that.assetSequence = that.pkg.assetSequences[that.assetSequenceIndex];
-                that.createExtension();
+                that.loadDependencies();
             } else {
                 // load missing assetSequence.
                 var basePackageUri = that.packageUri.substr(0, that.packageUri.lastIndexOf('/') + 1);
@@ -53,27 +53,47 @@ class BootStrapper{
 
                 $.getJSON(assetSequenceUri, (assetSequenceData) => {
                     that.assetSequence = that.pkg.assetSequences[that.assetSequenceIndex] = assetSequenceData;
-                    that.createExtension();
+                    that.loadDependencies();
                 });
             }
         });
     }
 
-    createExtension(): void {
+    loadDependencies(): void {
 
         var that = this;
 
         var extension = that.extensions[that.assetSequence.assetType];
 
         yepnope.injectCss(extension.css, function () {
+            
             $.getJSON(extension.config, (config) => {
-                // create provider.
-                var provider = new extension.provider(config, that.pkg);
+                
+                var configExtension = utils.Utils.getQuerystringParameter('c');
 
-                // create extension.
-                new extension.type(provider);
+                // if data-config has been set on embedding div, load the js
+                // and extend the existing config object.
+                if (configExtension){
+
+                    $.getJSON(configExtension, (ext) => {
+                        $.extend(true, config, ext);
+
+                        that.createExtension(extension, config);
+                    });
+
+                } else {
+                    that.createExtension(extension, config);
+                }
             });
         });
+    }
+
+    createExtension(extension: any, config: any): void{
+        // create provider.
+        var provider = new extension.provider(config, this.pkg);
+
+        // create extension.
+        new extension.type(provider);
     }
 }
 

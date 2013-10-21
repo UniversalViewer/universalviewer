@@ -165,7 +165,7 @@ export class BaseExtension implements IExtension {
         if (callback) callback(assetIndex);
     }
 
-    viewAssetSequence(index): void {
+    viewAssetSequence(index: number): void {
 
         if (this.isFullScreen) {
             $.publish(BaseExtension.TOGGLE_FULLSCREEN);
@@ -202,12 +202,12 @@ export class BaseExtension implements IExtension {
         return null;
     }
 
-    getAssetSection(asset): any {
+    getAssetSection(asset: any): any {
         // get the deepest section that this file belongs to.
         return asset.sections.last();
     } 
 
-    getAssetByIndex(index): any {
+    getAssetByIndex(index: number): any {
 
         return this.provider.assetSequence.assets[index];
     }

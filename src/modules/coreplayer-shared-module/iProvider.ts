@@ -9,6 +9,7 @@ interface IProvider{
 	isOnlyInstance: boolean;
 	assetSequenceIndex: number;
 	isReload: boolean;
+	configExtension: string;
 
 	load(): void;
 	reload(callback: any): void;

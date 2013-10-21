@@ -14,7 +14,8 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             // these are in turn overridden by the root options object in this extension's config.js.
             dziUriTemplate: "{0}{1}",
             thumbsUriTemplate: "{0}{1}",
-            timestampUris: true
+            timestampUris: true,
+            saveToLightboxEnabled: true
         }, config.options);
     }
 
