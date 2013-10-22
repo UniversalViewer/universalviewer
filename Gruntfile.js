@@ -273,14 +273,30 @@ module.exports = function (grunt) {
     
     function getExtensionsConfig(){
 
-        // loop through all extension config files.
+        // loop through all extension.config files.
         // if found to have "extends": "..." in root
-        // add 
+        // add the file it extends and itself to
+        // the file list.
 
-        return {
-            //['src/extensions/**/config.js'],
-            'src/js/config.js': ['src/extensions/coreplayer-seadragon-extension/config.js', 'src/extensions/wellcomeplayer-seadragon-extension/config.js']
-        }
+        var files = {};
+
+        grunt.file.expand({}, 'src/extensions/**/extension.config').forEach(function(filepath) {
+
+            var dest = (/(.*)extension.config/).exec(filepath)[1] + 'config.js';
+
+            // add dest and filepath. (only happens once per extension).
+            files[dest] = [filepath];
+
+            // check if it extends another.
+            // if it does, add it before the filepath.
+            var json = grunt.file.readJSON(filepath);
+
+            if (json.extends){
+                files[dest].unshift(json.extends);
+            }
+        });
+
+        return files;
     }
 
     grunt.registerTask("default", '', function(){
@@ -306,6 +322,7 @@ module.exports = function (grunt) {
         grunt.task.run(
             'ts:build', 
             'less:build',
+            'extend:config',
             'clean:build',
             'copy:build',
             'exec:build',
