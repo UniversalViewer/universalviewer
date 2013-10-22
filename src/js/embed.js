@@ -9,6 +9,7 @@
     // get the script location.
     var s = document.getElementById('embedWellcomePlayer');
     var scriptUri = (/.*src="(.*)"/).exec(s.outerHTML)[1];
+    var absScriptUri = s.src;
 
     var outer
 
@@ -22,13 +23,13 @@
         script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
         script.onload = script.onreadystatechange = function () {
             if (!loaded && (!(d = this.readyState) || d === "loaded" || d === "complete")) {
-                callback((j = window.jQuery).noConflict(1), scriptUri, loaded = true);
+                callback((j = window.jQuery).noConflict(1), scriptUri, absScriptUri, loaded = true);
                 j(script).remove();
             }
         };
         document.getElementsByTagName("head")[0].appendChild(script);
     }
-})(window, document, "1.10.1", function ($, scriptUri, jqueryLoaded) {
+})(window, document, "1.10.1", function ($, scriptUri, absScriptUri, jqueryLoaded) {
 
     $.support.cors = true;
 
@@ -53,7 +54,7 @@
     json2Uri = String.format(json2Uri, baseUri);
 
     var a = document.createElement('a');
-    a.href = scriptUri;
+    a.href = absScriptUri;
     var domain = a.hostname;
 
     $.when($.getScript(easyXDMUri),
