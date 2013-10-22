@@ -8,6 +8,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks("grunt-contrib-compress");
+    grunt.loadNpmTasks("grunt-extend");
+
+    var extensionConfig;
 
     var packageJson = grunt.file.readJSON("package.json"),
         packageDirName = 'wellcomeplayer-' + packageJson.version;
@@ -255,14 +258,39 @@ module.exports = function (grunt) {
                     to: 'data-main="js/app"'
                 }]
             },
+        },
+
+        extend: {
+            config: {
+                options: {
+                    deep: true,
+                    defaults: {}
+                },
+                files: getExtensionsConfig()
+            }
         }
-
     });
+    
+    function getExtensionsConfig(){
 
-    grunt.registerTask("default", [
-        "ts:dev",
-        "less:dev"
-    ]);
+        // loop through all extension config files.
+        // if found to have "extends": "..." in root
+        // add 
+
+        return {
+            //['src/extensions/**/config.js'],
+            'src/js/config.js': ['src/extensions/coreplayer-seadragon-extension/config.js', 'src/extensions/wellcomeplayer-seadragon-extension/config.js']
+        }
+    }
+
+    grunt.registerTask("default", '', function(){
+
+        grunt.task.run(
+            'ts:dev',
+            'less:dev',
+            'extend:config'
+        );
+    });
 
     grunt.registerTask('build', '', function() {
       
