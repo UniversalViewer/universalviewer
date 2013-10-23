@@ -21,6 +21,10 @@ export class CenterPanel extends baseView.BaseView {
 
         this.$content = utils.Utils.createDiv('content');
         this.$element.append(this.$content);
+
+        if (this.options.titleEnabled === false){
+            this.$title.hide();
+        }
     }
 
     resize(): void {
@@ -31,6 +35,14 @@ export class CenterPanel extends baseView.BaseView {
             'width': this.$element.parent().width() - shell.Shell.$leftPanel.width() - shell.Shell.$rightPanel.width()
         });
 
-        this.$content.height(this.$element.height() - this.$title.height());
+        var titleHeight;
+
+        if (this.options.titleEnabled === false){
+            titleHeight = 0;
+        } else {
+            titleHeight = this.$title.height();
+        }
+
+        this.$content.height(this.$element.height() - titleHeight);
     }
 }
