@@ -166,6 +166,10 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             this.$modeOptions.hide();
             this.$centerOptions.addClass('modeOptionsDisabled');
         }
+
+        if (this.options.helpEnabled === false){
+            this.$helpButton.hide();
+        }
     }
 
     setTitles(): void {
