@@ -33,25 +33,21 @@
 
     $.support.cors = true;
 
-    var appUri = '{0}app.html';
-    var easyXDMUri = '{0}js/easyXDM.min.js';
-    var json2Uri = '{0}js/json2.min.js';
-
-    String.format = function () {
-        var s = arguments[0];
-        for (var i = 0; i < arguments.length - 1; i++) {
-            var reg = new RegExp("\\{" + i + "\\}", "gm");
-            s = s.replace(reg, arguments[i + 1]);
+    function createCookie(name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            var expires = "; expires=" + date.toGMTString();
         }
-
-        return s;
-    };
+        else var expires = "";
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
 
     // get the part preceding 'js/embed.js'
     var baseUri = (/(.*)js\/embed.js/).exec(scriptUri)[1];
-    appUri = String.format(appUri, baseUri);
-    easyXDMUri = String.format(easyXDMUri,baseUri);
-    json2Uri = String.format(json2Uri, baseUri);
+    appUri = baseUri + 'app.html';
+    easyXDMUri = baseUri + 'js/easyXDM.min.js';
+    json2Uri = baseUri + 'js/json2.min.js';
 
     var a = document.createElement('a');
     a.href = absScriptUri;
@@ -117,7 +113,7 @@
 
         function redirect(uri) {
             // store current location in cookie.
-            jQuery.cookie('wlredirect', window.location.href, { path: '/' });
+            createCookie('wlredirect', window.location.href);
             window.location.replace(uri);
         }
 
