@@ -18,6 +18,8 @@ export class FooterPanel extends baseView.BaseView {
     }
 
     create(): void {
+        this.setConfig('footerPanel');
+
         super.create();
 
         // events.
@@ -28,10 +30,10 @@ export class FooterPanel extends baseView.BaseView {
         this.$options = utils.Utils.createDiv('options');
         this.$element.append(this.$options);
 
-        this.$embedButton = $('<a href="#" class="imageButton embed"></a>');
+        this.$embedButton = $('<a href="#" class="imageButton embed" title="' + this.content.embed + '"></a>');
         this.$options.append(this.$embedButton);        
 
-        this.$fullScreenBtn = $('<a href="#" class="imageButton fullScreen"></a>');
+        this.$fullScreenBtn = $('<a href="#" class="imageButton fullScreen" title="' + this.content.fullScreen + '"></a>');
         this.$options.append(this.$fullScreenBtn);
 
         this.$embedButton.on('click', (e) => {
@@ -44,13 +46,19 @@ export class FooterPanel extends baseView.BaseView {
             e.preventDefault();
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
+
+        if (this.options.minimiseButtons === true){
+            this.$options.addClass('minimiseButtons');
+        }
     }
 
     toggleFullScreen(): void {
         if (this.extension.isFullScreen) {
             this.$fullScreenBtn.swapClass('fullScreen', 'normal');
+            this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
         } else {
             this.$fullScreenBtn.swapClass('normal', 'fullScreen');
+            this.$fullScreenBtn.attr('title', this.content.fullScreen);
         }
     }
 
