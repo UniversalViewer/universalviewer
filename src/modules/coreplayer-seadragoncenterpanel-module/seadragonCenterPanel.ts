@@ -51,11 +51,12 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // Seadragon
 
         OpenSeadragon.DEFAULT_SETTINGS.autoHideControls = true;
-
+        
         this.viewer = OpenSeadragon({
             id: "viewer",
             showNavigationControl: false,
             showNavigator: true,
+            defaultZoomLevel: this.options.defaultZoomLevel || 0,
             navigatorPosition: 'BOTTOM_RIGHT'
         });
 
