@@ -180,7 +180,8 @@
                 "?hd=" + isHomeDomain +
                 "&oi=" + isOnlyInstance +
                 "&du=" + dataUri +
-                "&esu=" + scriptUri;
+                "&esu=" + scriptUri + 
+                "&d=" + domain;
 
             if (assetSequenceIndex) uri += "&asi=" + assetSequenceIndex;
             if (assetIndex) uri += "&ai=" + assetIndex;
