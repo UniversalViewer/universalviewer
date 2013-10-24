@@ -10,8 +10,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-extend");
 
-    var extensionConfig;
-
     var packageJson = grunt.file.readJSON("package.json"),
         packageDirName = 'wellcomeplayer-' + packageJson.version;
 
