@@ -213,9 +213,13 @@
                             refresh();
                             break;
                         case "onTrackEvent":
-                            //console.log(message.eventObject.category, message.eventObject.action, message.eventObject.label, message.eventObject.value, message.eventObject.noninteraction);
-                            if ("undefined" !== typeof (_trackEvent)) {
-                                _trackEvent(message.eventObject.category, message.eventObject.action, message.eventObject.label, message.eventObject.value, message.eventObject.noninteraction);
+                            if ("undefined" !== typeof (trackEvent)) {
+                                trackEvent(message.eventObject.category, message.eventObject.action, message.eventObject.label);
+                            }
+                            break;
+                        case "onTrackVariable":
+                            if ("undefined" !== typeof (trackVariable)) {
+                                trackVariable(message.eventObject.slot, message.eventObject.name, message.eventObject.value, message.eventObject.scope);
                             }
                             break;
                         default:
