@@ -214,7 +214,7 @@
                             break;
                         case "onTrackEvent":
                             if ("undefined" !== typeof (trackEvent)) {
-                                trackEvent(message.eventObject.category, message.eventObject.action, message.eventObject.label);
+                                trackEvent(message.eventObject.category, message.eventObject.action, message.eventObject.label, message.eventObject.value);
                             }
                             break;
                         case "onTrackVariable":
