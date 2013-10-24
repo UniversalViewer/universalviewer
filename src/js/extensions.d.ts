@@ -61,6 +61,8 @@ interface Window{
     extension: any;
     pkgCallback: any;
     BrowserDetect: any;
+    trackEvent(category: string, action: string, label: string);
+    trackVariable(slot: number, name: string, value: string, scope: number);
 }
 
 // google
