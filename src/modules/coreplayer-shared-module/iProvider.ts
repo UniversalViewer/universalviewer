@@ -10,6 +10,7 @@ interface IProvider{
 	assetSequenceIndex: number;
 	isReload: boolean;
 	configExtension: string;
+	domain: string;
 
 	load(): void;
 	reload(callback: any): void;
