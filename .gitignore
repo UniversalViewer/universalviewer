@@ -48,20 +48,17 @@ node_modules
 ## JavaScript
 #################
 
-src/*.js
-src/*.js.map
-src/**/*.js
-src/**/*.js.map
-src/*.min.map
-src/**/*.min.map
-app.min.js
-!src/**/js/*.js
+*.js
+*.js.map
+*.min.map
+!Gruntfile.js
+!src/*/*/js/*.js
 
 #################
 ## Css
 #################
 
-src/extensions/**/css/*.css
+src/extensions/*/css/*.css
 
 #################
 ## Extensions/Modules
