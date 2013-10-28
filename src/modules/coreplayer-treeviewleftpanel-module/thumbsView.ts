@@ -99,7 +99,7 @@ export class ThumbsView extends baseView.BaseView {
             var visible = true;
 
             if (section.extensions){
-                if (section.extensions.authStatus.toLowerCase() !== "allowed";){
+                if (section.extensions.authStatus.toLowerCase() !== "allowed"){
                     visible = false;
                 }
             }
