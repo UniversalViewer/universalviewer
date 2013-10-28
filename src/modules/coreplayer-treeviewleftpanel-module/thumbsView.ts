@@ -96,7 +96,13 @@ export class ThumbsView extends baseView.BaseView {
             var heightRatio = asset.height / asset.width;
             var height = 90 * heightRatio;
 
-            var visible = section.extensions.authStatus.toLowerCase() === "allowed";
+            var visible = true;
+
+            if (section.extensions){
+                if (section.extensions.authStatus.toLowerCase() !== "allowed";){
+                    visible = false;
+                }
+            }
 
             if (asset.orderLabel.trim() === "-") {
                 asset.orderLabel = "";
