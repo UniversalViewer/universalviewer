@@ -1,6 +1,6 @@
 {
 	"name": "WellcomePlayer",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "Navigate sequences of images in a zoomable, extensible interface.",
 	"devDependencies": {
 		"grunt": "~0.4.1",
