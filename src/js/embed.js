@@ -137,12 +137,12 @@
                 window.scrollTo(0, 0);
 
                 $appFrame.css({
-                    'position': 'fixed',
+                    'position': 'absolute',
                     'z-index': 9999,
                     'height': $(window).height(),
                     'width': $(window).width(),
-                    'top': 0,
-                    'left': 0
+                    'top': $app[0].offsetParent.offsetTop * -1,
+                    'left': $app[0].offsetParent.offsetLeft * -1
                 });
             } else {
                 $("html").css("overflow", "auto");
