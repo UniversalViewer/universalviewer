@@ -141,8 +141,8 @@
                     'z-index': 9999,
                     'height': $(window).height(),
                     'width': $(window).width(),
-                    'top': $app[0].offsetParent.offsetTop * -1,
-                    'left': $app[0].offsetParent.offsetLeft * -1
+                    'top': ($app[0].offsetParent.offsetTop * -1) || 0,
+                    'left': ($app[0].offsetParent.offsetLeft * -1) || 0
                 });
             } else {
                 $("html").css("overflow", "auto");
