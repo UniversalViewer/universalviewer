@@ -16,10 +16,13 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
         }, config.options);
     }
 
-    getEmbedScript(width: number, height: number, embedUri: string, embedTemplate: string): string{
-        var baseUri = embedUri ? embedUri : this.options.embedUri || this.options.dataBaseUri || "";
-        var template = embedTemplate? embedTemplate : this.options.embedTemplate;
-        var script = String.prototype.format(template, baseUri, this.dataUri, this.assetSequenceIndex, width, height, this.embedScriptUri);
+    getEmbedScript(width: number, height: number, embedTemplate: string): string{
+
+        var esu = this.options.embedScriptUri || this.embedScriptUri;
+
+        var template = this.options.embedTemplate || embedTemplate;
+
+        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, width, height, esu);
 
         return script;
     }

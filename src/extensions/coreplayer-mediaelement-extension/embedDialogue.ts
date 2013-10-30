@@ -18,7 +18,6 @@ export class EmbedDialogue extends embed.EmbedDialogue {
         this.code = (<IMediaElementProvider>this.provider).getEmbedScript(
             this.currentWidth,
             this.currentHeight,
-            null,
             this.options.embedTemplate);
 
         this.$code.val(this.code);        

@@ -36,10 +36,13 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         return uri;
     }
 
-    getEmbedScript(assetIndex: number, zoom: string, width: number, height: number, embedUri: string, embedTemplate: string): string{
-        var baseUri = embedUri ? embedUri : this.options.embedUri || this.options.dataBaseUri || "";
-        var template = embedTemplate? embedTemplate : this.options.embedTemplate;
-        var script = String.prototype.format(template, baseUri, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, width, height, this.embedScriptUri);
+    getEmbedScript(assetIndex: number, zoom: string, width: number, height: number, embedTemplate: string): string{
+
+        var esu = this.options.embedScriptUri || this.embedScriptUri;
+
+        var template = this.options.embedTemplate || embedTemplate;
+
+        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, width, height, esu);
 
         return script;
     }
