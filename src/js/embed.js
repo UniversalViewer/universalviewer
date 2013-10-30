@@ -224,7 +224,11 @@
                             }
                             break;
                         default:
-                            jQuery(document).trigger(message.eventName, [message.eventObject]);
+                            try{
+                                jQuery(document).trigger(message.eventName, [message.eventObject]);
+                            } catch(e) {
+                                // do nothing
+                            }
                             break;
                     }
                 }
