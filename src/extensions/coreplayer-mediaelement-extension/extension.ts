@@ -75,6 +75,8 @@ export class Extension extends baseExtension.BaseExtension{
     }
 
     setParams(): void{
+        if (!this.provider.isHomeDomain) return;  
+
         // set assetSequenceIndex hash param.
         this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
     }
