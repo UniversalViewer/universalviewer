@@ -8,7 +8,7 @@ See the [GitHub releases page](https://github.com/wellcomelibrary/player/release
 
 ## Development
 
-If you want to use the Wellcome Player in your own projects, you can find the latest stable build, API documentation, and example code at http://wellcomeplayer.github.io. If you want to modify the Wellcome Player and/or contribute to its development, read on.
+Please see the [wiki](https://github.com/wellcomelibrary/player/wiki) for instructions on how to customise the player for your own projects.
 
 ### First Time Setup
 
