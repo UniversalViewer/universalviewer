@@ -24,7 +24,7 @@ All command-line operations for building the Wellcome Player are scripted using 
 
 To build the debug version of the player, just run (on the command line, in the 'player' folder):
 
-`grunt`
+	grunt
 
 This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with sourcemaps to aid in debugging.
 
@@ -32,13 +32,13 @@ This will compile the [.less](http://lesscss.org) files into .css and [.ts](http
 
 To build the release version of the player, just run (on the command line, in the 'player' folder):
 
-`grunt build`
+	grunt build
 
 The built files appear in the 'build' folder.
 
 If you want to build tar and zip files for distribution (they will also appear in the 'build' folder), use:
 
-`grunt package`
+	grunt package
 
 Note that the 'build' folder is masked with .gitignore; it's just for your local use, and won't be checked in to the repository.
 
