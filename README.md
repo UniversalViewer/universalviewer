@@ -52,7 +52,7 @@ and browse to 'http://localhost:3000'
 
 To see the release version of the player (located in the '/build' folder), run 
 
-grunt connect:release
+	grunt connect:release
 
 and browse to 'http://localhost:3001'
 
