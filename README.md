@@ -44,9 +44,17 @@ Note that the 'build' folder is masked with .gitignore; it's just for your local
 
 ### Viewing on localhost
 
-To see the debug version of the player (located in the '/src' folder), run `grunt connect:debug` and browse to 'http://localhost:3000'
+To see the debug version of the player (located in the '/src' folder), run 
 
-To see the release version of the player (located in the '/build' folder), run `grunt connect:release` and browse to 'http://localhost:3001'
+	grunt connect:debug
+
+and browse to 'http://localhost:3000'
+
+To see the release version of the player (located in the '/build' folder), run 
+
+grunt connect:release
+
+and browse to 'http://localhost:3001'
 
 ## License
 
