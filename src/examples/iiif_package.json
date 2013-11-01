@@ -1,51 +1,9 @@
 {
-  "extensions": {
-    "isAllOpen": true,
-    "parsed": "\/Date(1383050072628+0000)\/",
-    "defaultToFirstDip": false
-  },
-  "identifier": "b14658197",
   "assetSequences": [
     {
-      "extensions": {
-        "dzLicenseCode": "A",
-        "isAllOpen": true,
-        "permittedOperations": [
-          "currentViewAsJpg",
-          "wholeImageHighResAsJpg",
-          "wholeImageLowResAsJpg",
-          "entireFileAsOriginal"
-        ],
-        "isMultipleManifestation": false,
-        "volumeNumber": -1,
-        "copyNumber": 1
-      },
-      "packageIdentifier": "b14658197",
-      "index": 0,
       "assetType": "seadragon/dzi",
-      "assetCount": 0,
-      "supportsSearch": false,
       "rootSection": {
-        "extensions": {
-          "accessCondition": "Open",
-          "authStatus": "Allowed",
-          "mods": {
-            "title": "John Dee performing an experiment before Queen Elizabeth I. Oil painting by Henry Gillard Glindoni",
-            "classification": "Digitised",
-            "originPlace": "Wellcome Trust",
-            "originPublisher": "Wellcome Trust",
-            "physicalDescription": "reformatted digital",
-            "recordIdentifier": "b14658197",
-            "names": [],
-            "accessCondition": "Open",
-            "dzLicenseCode": "A",
-            "leader6": "k",
-            "wellcomeIdentifier": "Gibbs Building, 215 Euston Road, London, England",
-            "volumeNumber": -1,
-            "copyNumber": 1
-          }
-        },
-        "title": "John Dee performing an experiment before Queen Elizabeth I. Oil painting by Henry Gillard Glindoni",
+        "title": "IIIF Image Example",
         "sectionType": "Artwork",
         "assets": [
           0
@@ -53,19 +11,9 @@
       },
       "assets": [
         {
-          "extensions": {},
-          "identifier": "8ac70935-b55b-4c6f-89ca-33e6ab9bb161",
-          "order": 1,
-          "orderLabel": " - ",
-          "width": 5346,
-          "height": 3294,
-          "dziUri": "/examples/iiif_info.json",
-          "fileUri": "/dz/b14658197/0/8ac70935-b55b-4c6f-89ca-33e6ab9bb161.jp2",
-          "navigatorPath": "/nav/b14658197/0/8ac70935-b55b-4c6f-89ca-33e6ab9bb161/jp2",
-          "thumbnailPath": "/thumbs/b14658197/0/8ac70935-b55b-4c6f-89ca-33e6ab9bb161.jpg"
+          "dziUri": "/examples/iiif_info.json"
         }
       ]
     }
-  ],
-  "bibliographicInformation": "/biblio/b14658197"
+  ]
 }
