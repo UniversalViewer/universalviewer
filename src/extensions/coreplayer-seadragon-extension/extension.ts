@@ -33,7 +33,6 @@ export class Extension extends baseExtension.BaseExtension {
 
     // events
     static MODE_CHANGED: string = 'onModeChanged';
-    static OPEN_DZI: string = 'openDzi';
 
     // modes
     static PAGE_MODE: string = "pageMode";
@@ -172,7 +171,7 @@ export class Extension extends baseExtension.BaseExtension {
 
             var dziUri = (<provider.Provider>this.provider).getDziUri(asset);
 
-            $.publish(Extension.OPEN_DZI, [dziUri]);
+            $.publish(Extension.OPEN_MEDIA, [dziUri]);
 
             this.setParam(baseProvider.params.assetIndex, assetIndex);
         });

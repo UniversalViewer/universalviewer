@@ -41,7 +41,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         super.create();
 
         // events.
-        $.subscribe(extension.Extension.OPEN_DZI, (e, uri) => {
+        $.subscribe(extension.Extension.OPEN_MEDIA, (e, uri) => {
             this.viewer.openDzi(uri);
         });
 

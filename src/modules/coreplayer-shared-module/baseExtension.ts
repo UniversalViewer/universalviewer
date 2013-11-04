@@ -31,6 +31,7 @@ export class BaseExtension implements IExtension {
     static ESCAPE: string = 'onEscape';
     static RETURN: string = 'onReturn';
     static WINDOW_UNLOAD: string = 'onWindowUnload';
+    static OPEN_MEDIA: string = 'onOpenMedia';
     static CREATED: string = 'onCreated';
 
     constructor(provider: IProvider) {
