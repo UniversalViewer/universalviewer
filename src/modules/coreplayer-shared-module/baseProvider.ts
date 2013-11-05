@@ -179,4 +179,8 @@ export class BaseProvider implements IProvider{
     getTitle(): string {
         return this.getRootSection().title;
     }
+
+    getSeeAlso(): any {
+        return this.assetSequence.seeAlso;
+    }
 }

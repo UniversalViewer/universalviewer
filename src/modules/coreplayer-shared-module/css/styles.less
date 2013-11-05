@@ -171,6 +171,10 @@ a:hover {
     margin-top: 6px;
 }
 
+#app .headerPanel .options{
+    height: 40px;
+}
+
 #app .headerPanel .centerOptions{
     margin: 5px 0 0 0;
     width: 380px;
@@ -180,6 +184,35 @@ a:hover {
 #app .headerPanel .rightOptions{
     float: right;
     margin: 6px 0 0 0;    
+}
+
+#app .headerPanel.showMessage{
+    height: 80px;
+}
+
+#app .headerPanel .messageBox{
+    background: #ffb81d;
+    color: #333333;
+    width: 100%;
+    position: absolute;
+    height: 40px;
+}
+
+#app .headerPanel .messageBox .text{
+    float: left;
+    overflow: hidden;
+    margin: 13px;
+}
+
+#app .headerPanel .messageBox .close{
+    float: right;
+    background-image: url('../../../modules/coreplayer-shared-module/img/close_message_box.png');
+    background-repeat: no-repeat;
+    width: 17px;
+    height: 17px;
+    background-position: 4px 4px;
+    cursor: pointer;
+    margin: 12px;
 }
 
 /*#endregion*/

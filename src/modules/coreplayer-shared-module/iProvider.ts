@@ -19,6 +19,7 @@ interface IProvider{
 	replaceSectionType(sectionType: string): string;
 	getRootSection(): any;
 	getTitle(): string;
+	getSeeAlso(): any;
 }
 
 export = IProvider;

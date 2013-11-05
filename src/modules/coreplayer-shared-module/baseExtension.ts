@@ -33,6 +33,8 @@ export class BaseExtension implements IExtension {
     static WINDOW_UNLOAD: string = 'onWindowUnload';
     static OPEN_MEDIA: string = 'onOpenMedia';
     static CREATED: string = 'onCreated';
+    static SHOW_MESSAGE: string = 'onShowMessage';
+    static HIDE_MESSAGE: string = 'onHideMessage';
 
     constructor(provider: IProvider) {
 
