@@ -27,6 +27,7 @@ interface IExtension{
 	showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
 	getParam(key: baseProvider.params): any;
 	triggerSocket(eventName: string, eventObject: any): void;
+	isSeeAlsoEnabled(): boolean;
 }
 
 export = IExtension;
