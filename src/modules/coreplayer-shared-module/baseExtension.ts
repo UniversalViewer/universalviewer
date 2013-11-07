@@ -290,4 +290,8 @@ export class BaseExtension implements IExtension {
     isOverlayActive(): boolean{
         return shell.Shell.$overlays.is(':visible');
     }
+
+    isSeeAlsoEnabled(): boolean{
+        return this.provider.config.options.seeAlsoEnabled !== false;
+    }
 }
