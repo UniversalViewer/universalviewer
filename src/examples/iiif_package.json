@@ -6,12 +6,16 @@
         "title": "IIIF Image Example",
         "sectionType": "Artwork",
         "assets": [
-          0
+          0,
+          1
         ]
       },
       "assets": [
         {
-          "dziUri": "/examples/iiif_info.json"
+          "dziUri": "/examples/iiif_info1.json"
+        },
+        {
+          "dziUri": "/examples/iiif_info2.json"
         }
       ]
     }
