@@ -244,14 +244,16 @@ export class BaseExtension implements IExtension {
 
         if (!labelPart1) return -1;
 
-        var searchRegExp;
+        var searchRegExp, regStr;
 
         if (labelPart2) {
-            searchRegExp = new RegExp(labelPart1 + '\\D*' + labelPart2);
+            regStr = "^" + labelPart1 + "\\D*" + labelPart2 + "$";
         } else {
-            searchRegExp = new RegExp('^' + labelPart1 + '$');
+            regStr = "\\D*" + labelPart1 + "\\D*";
         }
         
+        searchRegExp = new RegExp(regStr);
+
         // loop through files, return first one with matching orderlabel.
         for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
             var asset = this.provider.assetSequence.assets[i];
