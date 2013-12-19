@@ -8,7 +8,7 @@ require.config({
         'jsviews': 'js/jsviews.min',
         'yepnope': 'js/yepnope.1.5.4-min',
         'yepnopecss': 'js/yepnope.css',
-        'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon.min',
+        'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon',
         'mediaelement': 'modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player'
     },
     shim: {
@@ -48,16 +48,16 @@ require([
     'extensions/coreplayer-mediaelement-extension/extension',
     'extensions/coreplayer-mediaelement-extension/provider'
     ],
-    ($, 
-    plugins, 
-    pubsub, 
+    ($,
+    plugins,
+    pubsub,
     jsviews,
     yepnope,
     yepnopecss,
     openseadragon,
     mediaelement,
-    bootstrapper, 
-    seadragonExtension, 
+    bootstrapper,
+    seadragonExtension,
     seadragonProvider,
     mediaelementExtension,
     mediaelementProvider) => {
