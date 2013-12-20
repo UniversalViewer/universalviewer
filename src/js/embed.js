@@ -17,7 +17,7 @@
     var loaded = false;
 
     // only load jQuery if not already included in page.
-    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, scriptUri, loaded)) {
+    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, scriptUri, absScriptUri, loaded)) {
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
