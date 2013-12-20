@@ -83,7 +83,7 @@ export class Extension extends baseExtension.BaseExtension{
 
         this.viewAsset(0, () => {
 
-            $.publish(Extension.OPEN_MEDIA, [asset.fileUri]);
+            $.publish(Extension.OPEN_MEDIA, [asset]);
 
             this.setParam(baseProvider.params.assetIndex, 0);
         });
