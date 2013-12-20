@@ -43,8 +43,8 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             });
         }
 
-        $.subscribe(extension.Extension.OPEN_MEDIA, (e, uri) => {
-            that.viewMedia(uri);
+        $.subscribe(extension.Extension.OPEN_MEDIA, (e, asset) => {
+            that.viewMedia(asset);
         });
 
         this.$container = $('<div class="container"></div>');
@@ -54,7 +54,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
     }
 
-    viewMedia(uri) {
+    viewMedia(asset) {
 
         var that = this;
 
@@ -72,9 +72,15 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
         switch (this.provider.type){
             case 'video':
-                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-wellcome" src="' + uri + '" controls="controls" preload="none" poster="' + poster + '"></video>');
+
+                if (!asset.sources){
+                    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + asset.fileUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+                } else {
+                    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+                }
 
                 this.player = new MediaElementPlayer("#" + id, {
+                    type: ['video/mp4', 'video/webm', 'video/flv'],
                     plugins: ['flash'],
                     alwaysShowControls: false,
                     autosizeProgress: false,
@@ -101,8 +107,12 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                             //$.wellcome.player.trackAction("Video", "Ended");
                         });
 
+                        if (asset.sources && asset.sources.length){
+                            media.setSrc(asset.sources);
+                        }
+
                         try {
-                            that.player.load();
+                            media.load();
                         } catch (e) {
                             // do nothing
                         }
@@ -111,7 +121,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             break;
             case 'audio':
 
-                this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" class="mejs-wellcome" src="' + uri + '" controls="controls" preload="none" poster="' + poster + '"></audio>');
+                this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + asset.fileUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></audio>');
 
                 this.player = new MediaElementPlayer("#" + id, {
                     plugins: ['flash'],
@@ -143,7 +153,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                         });
 
                         try {
-                            that.player.load();
+                            media.load();
                         } catch (e) {
                             // do nothing
                         }
@@ -152,11 +162,13 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             break;
         }
 
+        /*
         try {
             this.player.load();
         } catch (e) {
             // do nothing
         }
+        */
 
         this.resize();
     }
