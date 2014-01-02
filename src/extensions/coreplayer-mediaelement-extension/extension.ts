@@ -45,14 +45,14 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        this.createModules();        
+        this.createModules();
 
         this.setParams();
 
         // initial sizing
         $.publish(baseExtension.BaseExtension.RESIZE);
 
-        this.viewMedia();      
+        this.viewMedia();
     }
 
     createModules(): void{
@@ -72,7 +72,7 @@ export class Extension extends baseExtension.BaseExtension{
     }
 
     setParams(): void{
-        if (!this.provider.isHomeDomain) return;  
+        if (!this.provider.isHomeDomain) return;
 
         // set assetSequenceIndex hash param.
         this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
@@ -83,7 +83,9 @@ export class Extension extends baseExtension.BaseExtension{
 
         this.viewAsset(0, () => {
 
-            $.publish(Extension.OPEN_MEDIA, [asset.fileUri]);
+            var mediaUri = (<provider.Provider>this.provider).getMediaUri(asset);
+
+            $.publish(Extension.OPEN_MEDIA, [mediaUri]);
 
             this.setParam(baseProvider.params.assetIndex, 0);
         });

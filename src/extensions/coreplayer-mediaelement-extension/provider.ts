@@ -12,6 +12,7 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
+            mediaUriTemplate: "{0}{1}",
             timestampUris: true
         }, config.options);
     }
@@ -25,6 +26,14 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
         var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, width, height, esu);
 
         return script;
+    }
+
+    getMediaUri(asset: any): string{
+        var baseUri = this.options.mediaBaseUri || "";
+        var template = this.options.mediaUriTemplate;
+        var uri = String.prototype.format(template, baseUri, asset.fileUri);
+
+        return uri;
     }
 
     addTimestamp(uri: string): string{
