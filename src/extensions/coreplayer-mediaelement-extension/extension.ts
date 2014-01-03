@@ -45,11 +45,7 @@ export class Extension extends baseExtension.BaseExtension{
         });
 
         $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
-            if (structure.assetSequence.assetType === "application/pdf"){
-                window.open(structure.assetSequence.assets[0].fileUri);
-            }else{
-                this.viewAssetSequence(structure.assetSequence.index);
-            }
+            this.viewAssetSequence(structure.assetSequence.index);
         });
 
         $.subscribe(footer.FooterPanel.EMBED, (e) => {
