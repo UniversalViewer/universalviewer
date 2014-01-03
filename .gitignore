@@ -46,6 +46,7 @@ node_modules
 *.min.map
 !Gruntfile.js
 !src/*/*/js/*.js
+!src/examples/*.js
 
 #################
 ## Css
