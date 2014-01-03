@@ -36,6 +36,14 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
         return uri;
     }
 
+    getPosterImageUri(): string{
+        var baseUri = this.options.mediaBaseUri || "";
+        var template = this.options.mediaUriTemplate;
+        var uri = String.prototype.format(template, baseUri, this.assetSequence.extensions.posterImage);
+
+        return uri;
+    }
+
     addTimestamp(uri: string): string{
         return uri + "?t=" + utils.Utils.getTimeStamp();
     }

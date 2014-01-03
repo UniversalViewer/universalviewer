@@ -7,6 +7,8 @@ import baseProvider = require("../../modules/coreplayer-shared-module/baseProvid
 import provider = require("./provider");
 import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-shared-module/headerPanel");
+import left = require("../../modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
+import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
 import center = require("../../modules/coreplayer-mediaelementcenterpanel-module/mediaelementCenterPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
@@ -17,6 +19,7 @@ import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
 export class Extension extends baseExtension.BaseExtension{
 
     headerPanel: header.HeaderPanel;
+    leftPanel: left.TreeViewLeftPanel;
     centerPanel: center.MediaElementCenterPanel;
     rightPanel: right.MoreInfoRightPanel;
     footerPanel: footer.FooterPanel;
@@ -41,6 +44,14 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
+        $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
+            if (structure.assetSequence.assetType === "application/pdf"){
+                window.open(structure.assetSequence.assets[0].fileUri);
+            }else{
+                this.viewAssetSequence(structure.assetSequence.index);
+            }
+        });
+
         $.subscribe(footer.FooterPanel.EMBED, (e) => {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
@@ -58,6 +69,10 @@ export class Extension extends baseExtension.BaseExtension{
     createModules(): void{
         this.headerPanel = new header.HeaderPanel(shell.Shell.$headerPanel);
 
+        if (this.isLeftPanelEnabled()){
+            this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
+        }
+
         this.centerPanel = new center.MediaElementCenterPanel(shell.Shell.$centerPanel);
         this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
         this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
@@ -69,6 +84,10 @@ export class Extension extends baseExtension.BaseExtension{
         this.$embedDialogue = utils.Utils.createDiv('overlay embed');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
+
+        if (this.isLeftPanelEnabled()){
+            this.leftPanel.init();
+        }
     }
 
     setParams(): void{
@@ -76,6 +95,11 @@ export class Extension extends baseExtension.BaseExtension{
 
         // set assetSequenceIndex hash param.
         this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
+    }
+
+    isLeftPanelEnabled(): boolean{
+        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
+                && this.provider.pkg.assetSequences.length > 1;
     }
 
     viewMedia(): void {

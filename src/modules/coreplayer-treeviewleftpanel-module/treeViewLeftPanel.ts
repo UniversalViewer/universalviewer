@@ -2,8 +2,8 @@
 
 import baseLeft = require("../coreplayer-shared-module/leftPanel");
 import utils = require("../../utils");
-import tree = require("../coreplayer-treeviewleftpanel-module/treeView");
-import thumbs = require("../coreplayer-treeviewleftpanel-module/thumbsView");
+import tree = require("./treeView");
+import thumbs = require("./thumbsView");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
@@ -21,9 +21,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     create(): void {
-        
+
         this.setConfig('treeViewLeftPanel');
-        
+
         super.create();
 
         this.$tabs = utils.Utils.createDiv('tabs');
@@ -57,7 +57,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         });
     }
 
-    createTreeView(): void {       
+    createTreeView(): void {
         this.treeView = new tree.TreeView(this.$treeView);
     }
 
@@ -73,16 +73,22 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         if (this.isUnopened) {
             var type = this.provider.type;
 
-            if (type == 'archive' ||
-                type == 'boundmanuscript' ||
-                type == 'video' ||
-                type == 'audio' ||
-                type == 'artwork') {
-
+            // if thumbs are disabled, hide the tabs and show the tree view.
+            if (!utils.Utils.getBool(this.config.options.thumbsEnabled, true)){
                 this.$tabs.hide();
-                this.openThumbsView();
-            } else {
                 this.openTreeView();
+            } else {
+
+                if (type == 'archive' ||
+                    type == 'boundmanuscript' ||
+                    type == 'artwork') {
+
+                    this.$tabs.hide();
+                    this.openThumbsView();
+                } else {
+                    this.openTreeView();
+                }
+
             }
         }
     }
@@ -91,7 +97,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         if (!this.treeView) {
             this.createTreeView();
         }
-        
+
         this.$treeButton.addClass('on');
         this.$thumbsButton.removeClass('on');
 
