@@ -14,7 +14,9 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     $firstButton: JQuery;
     $prevButton: JQuery;
     $modeOptions: JQuery;
+    $imageModeLabel: JQuery;
     $imageModeOption: JQuery;
+    $pageModeLabel: JQuery;
     $pageModeOption: JQuery;
     $search: JQuery;
     $searchText: JQuery;
@@ -62,11 +64,13 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$modeOptions = $('<div class="mode"></div>');
         this.$centerOptions.append(this.$modeOptions);
 
-        this.$modeOptions.append('<label for="image">' + this.content.image + '</label>');
+        this.$imageModeLabel = $('<label for="image">' + this.content.image + '</label>');
+        this.$modeOptions.append(this.$imageModeLabel);
         this.$imageModeOption = $('<input type="radio" id="image" name="mode"></input>');
         this.$modeOptions.append(this.$imageModeOption);
 
-        this.$modeOptions.append('<label for="page">' + this.content.page + '</label>');
+        this.$pageModeLabel = $('<label for="page">' + this.content.page + '</label>');
+        this.$modeOptions.append(this.$pageModeLabel);
         this.$pageModeOption = $('<input type="radio" id="page" name="mode"></input>');
         this.$modeOptions.append(this.$pageModeOption);
         
@@ -94,10 +98,12 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         if ((<ISeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             this.$pageModeOption.attr('checked', 'checked');
             this.$pageModeOption.removeAttr('disabled');
+            this.$pageModeLabel.removeClass('disabled');
         } else {
             this.$imageModeOption.attr('checked', 'checked');
             // disable page mode option.
             this.$pageModeOption.attr('disabled', 'disabled');
+            this.$pageModeLabel.addClass('disabled');
         }
 
         this.setTitles();
