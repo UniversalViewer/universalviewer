@@ -2715,8 +2715,17 @@ if (typeof jQuery != 'undefined') {
                 timefloatcurrent  = controls.find('.mejs-time-float-current'),
 				handleMouseMove = function (e) {
 					// mouse position relative to the object
-					var x = e.pageX,
-						offset = total.offset(),
+
+					// touch handling added by @edsilv
+					var x;
+
+					if (e.type === 'touchmove'){
+						x = e.originalEvent.touches[0].pageX;
+					} else {
+						x = e.pageX;
+					}
+
+					var offset = total.offset(),
 						width = total.outerWidth(),
 						percentage = 0,
 						newTime = 0,
@@ -2746,9 +2755,9 @@ if (typeof jQuery != 'undefined') {
 			// handle clicks
 			//controls.find('.mejs-time-rail').delegate('span', 'click', handleMouseMove);
 			total
-				.bind('mousedown', function (e) {
+				.bind('mousedown touchstart', function (e) {
 					// only handle left clicks
-					if (e.which === 1) {
+					if (e.which === 1 || e.type === 'touchstart') {
 						mouseIsDown = true;
 						handleMouseMove(e);
 						return false;
@@ -2768,12 +2777,12 @@ if (typeof jQuery != 'undefined') {
 				});
 
 			$(document)
-				.bind('mouseup', function (e) {
+				.bind('mouseup touchend', function (e) {
 					mouseIsDown = false;
 					timefloat.hide();
 					//handleMouseMove(e);
 				})
-				.bind('mousemove', function (e) {
+				.bind('mousemove touchmove', function (e) {
 					if (mouseIsDown || mouseIsOver) {
 						handleMouseMove(e);
 					}
