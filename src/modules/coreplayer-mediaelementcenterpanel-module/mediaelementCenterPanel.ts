@@ -3,6 +3,7 @@
 
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import baseProvider = require("../coreplayer-shared-module/baseProvider");
+import IMediaElementProvider = require("../../extensions/coreplayer-mediaelement-extension/iMediaElementProvider");
 import extension = require("../../extensions/coreplayer-mediaelement-extension/extension");
 import baseCenter = require("../coreplayer-shared-module/centerPanel");
 import utils = require("../../utils");
@@ -21,7 +22,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
     }
 
     create(): void {
-        
+
         this.setConfig('mediaelementCenterPanel');
 
         super.create();
@@ -68,7 +69,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
         var id = utils.Utils.getTimeStamp();
 
-        var poster = this.provider.assetSequence.extensions.posterImage;
+        var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
 
         switch (this.provider.type){
             case 'video':
@@ -93,7 +94,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                             //$.wellcome.player.trackAction("Video", "Play: " + Math.floor(this.player.media.currentTime));
                             //$.wellcome.player.trackAction("Video", "Play");
                         });
-                
+
                         media.addEventListener('pause', (e) => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
@@ -138,7 +139,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                             //$.wellcome.player.trackAction("Video", "Play: " + Math.floor(this.player.media.currentTime));
                             //$.wellcome.player.trackAction("Video", "Play");
                         });
-                
+
                         media.addEventListener('pause', (e) => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
@@ -162,14 +163,6 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             break;
         }
 
-        /*
-        try {
-            this.player.load();
-        } catch (e) {
-            // do nothing
-        }
-        */
-
         this.resize();
     }
 
@@ -191,6 +184,10 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
             this.$container.height(size.height);
             this.$container.width(size.width);
+        }
+
+        if (this.player && !this.extension.isFullScreen){
+            this.player.resize();
         }
 
         var left = Math.floor((this.$content.width() - this.$container.width()) / 2);

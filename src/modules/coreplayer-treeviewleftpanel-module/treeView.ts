@@ -5,7 +5,6 @@ import utils = require("../../utils");
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
-import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import TreeNode = require("../coreplayer-treeviewleftpanel-module/treeNode");
 
 export class TreeView extends baseView.BaseView {
@@ -77,7 +76,7 @@ export class TreeView extends baseView.BaseView {
                 },
                 onAfterLink: function () {
                     var self = this;
-                    
+
                     self.contents("li").first()
                         .on("click", ".toggle", function () {
                             self.toggle();
@@ -106,7 +105,7 @@ export class TreeView extends baseView.BaseView {
         node.ref = structure;
         structure.treeNode = node;
         node.path = node.ref.path;
-        
+
         // if this is the structure node that contains the assetSequence.
         if (this.provider.assetSequence.structure == structure) {
             this.sectionsRootNode = node;
