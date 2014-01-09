@@ -8,12 +8,16 @@
   "rootStructure": {
     "structures": [
       {
-        "name": "Volume -1",
+       "name": "Lymphokines - Video",
         "assetSequence": 0
       },
       {
-        "name": "Transcript",
-        "assetSequence": 1
+        "name": "Lymphokines - Transcript",
+        "assetSequence": 1,
+        "seeAlso": {
+          "tag": "OpenExternal",
+          "data": "/media/b16781405/1/880a3315-e525-4ece-abc6-b4bc017887de.pdf"
+        }
       }
     ]
   },
