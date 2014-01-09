@@ -7,6 +7,9 @@ import baseExpandPanel = require("./baseExpandPanel");
 
 export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
 
+    static OPEN_LEFT_PANEL: string = 'onOpenLeftPanel';
+    static CLOSE_LEFT_PANEL: string = 'onCloseLeftPanel';
+
     constructor($element: JQuery) {
         super($element);
     }
@@ -34,6 +37,11 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
     toggleComplete(): void {
         super.toggleComplete();
 
+        if (this.isExpanded){
+            $.publish(LeftPanel.OPEN_LEFT_PANEL);
+        } else {
+            $.publish(LeftPanel.CLOSE_LEFT_PANEL);
+        }
     }
 
     resize(): void {
