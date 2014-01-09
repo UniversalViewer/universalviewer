@@ -1,1 +1,1710 @@
-{}
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"media",
+				"mediaUriTemplate"
+			],
+			[
+				"open",
+				"openTreeView"
+			],
+			[
+				"ass",
+				"assetSequence"
+			],
+			[
+				"test",
+				"testScope"
+			],
+			[
+				"strok",
+				"strokeWeight"
+			],
+			[
+				"Forces",
+				"ForcesAngularMotion"
+			],
+			[
+				"ellipse",
+				"ellipseMode"
+			],
+			[
+				"rect",
+				"rectMode"
+			],
+			[
+				"r",
+				"rectMode"
+			],
+			[
+				"assetS",
+				"assetSequenceIndex"
+			],
+			[
+				"asset",
+				"assetSequenceIndex"
+			],
+			[
+				"param",
+				"params"
+			],
+			[
+				"is",
+				"isReload"
+			],
+			[
+				"initial",
+				"initialBounds"
+			],
+			[
+				"setQuery",
+				"setQuerystringParameter"
+			],
+			[
+				"getU",
+				"getURIKeyValuePairs"
+			],
+			[
+				"selec",
+				"selectionStart"
+			],
+			[
+				"searchRe",
+				"searchResultTemplate"
+			],
+			[
+				"clearSe",
+				"clearSearchResults"
+			],
+			[
+				"wellcome",
+				"wellcomeApp"
+			],
+			[
+				"searchText",
+				"searchTextContainer"
+			],
+			[
+				"build",
+				"buildDir"
+			],
+			[
+				"scale",
+				"scaleCounties"
+			],
+			[
+				"select",
+				"selectAll"
+			],
+			[
+				"vector",
+				"VectorSubtraction"
+			],
+			[
+				"os",
+				"openseadragon"
+			],
+			[
+				"seadragon",
+				"seadragonExtension"
+			],
+			[
+				"und",
+				"undefinedVal"
+			],
+			[
+				"Seadragon",
+				"SeadragonCenterPanel"
+			],
+			[
+				"disbl",
+				"disableNextButton"
+			],
+			[
+				"disable",
+				"disablePrevButton"
+			],
+			[
+				"nextButton",
+				"nextButtonEnabled"
+			],
+			[
+				"prevButton",
+				"prevButtonCont"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Gruntfile.js",
+			"settings":
+			{
+				"buffer_size": 11496,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/examples/examples.html",
+			"settings":
+			{
+				"buffer_size": 1767,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/examples/pkg.js",
+			"settings":
+			{
+				"buffer_size": 2137,
+				"line_ending": "Windows",
+				"name": "{"
+			}
+		},
+		{
+			"file": "src/examples/iiif_info1.json",
+			"settings":
+			{
+				"buffer_size": 472,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/examples/iiif_info2.json",
+			"settings":
+			{
+				"buffer_size": 472,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/examples/iiif.html",
+			"settings":
+			{
+				"buffer_size": 457,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/modules/coreplayer-mediaelementcenterpanel-module/mediaelementCenterPanel.ts",
+			"settings":
+			{
+				"buffer_size": 7979,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player.js",
+			"settings":
+			{
+				"buffer_size": 118687,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-mediaelement-extension/extension.ts",
+			"settings":
+			{
+				"buffer_size": 4207,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-mediaelement-extension/css/styles.less",
+			"settings":
+			{
+				"buffer_size": 303,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel.ts",
+			"settings":
+			{
+				"buffer_size": 3354,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/examples/iiif-config.js",
+			"settings":
+			{
+				"buffer_size": 60,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/modules/coreplayer-treeviewleftpanel-module/treeView.ts",
+			"settings":
+			{
+				"buffer_size": 7486,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-mediaelement-extension/extension.config",
+			"settings":
+			{
+				"buffer_size": 3088,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/app.ts",
+			"settings":
+			{
+				"buffer_size": 3265,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 2689,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-pdf-extension/extension.ts",
+			"settings":
+			{
+				"buffer_size": 909,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-pdf-extension/iPDFProvider.ts",
+			"settings":
+			{
+				"buffer_size": 174,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-pdf-extension/extension.config",
+			"settings":
+			{
+				"buffer_size": 50,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/modules/coreplayer-shared-module/baseView.ts",
+			"settings":
+			{
+				"buffer_size": 1318,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-pdf-extension/provider.ts",
+			"settings":
+			{
+				"buffer_size": 962,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-pdf-extension/css/styles.less",
+			"settings":
+			{
+				"buffer_size": 62,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-seadragon-extension/extension.config",
+			"settings":
+			{
+				"buffer_size": 4306,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/modules/coreplayer-treeviewleftpanel-module/css/styles.less",
+			"settings":
+			{
+				"buffer_size": 2959,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-mediaelement-extension/provider.ts",
+			"settings":
+			{
+				"buffer_size": 1775,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-mediaelement-extension/iMediaElementProvider.ts",
+			"settings":
+			{
+				"buffer_size": 316,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/examples/examples-config.js",
+			"settings":
+			{
+				"buffer_size": 186,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/extensions/coreplayer-seadragon-extension/provider.ts",
+			"settings":
+			{
+				"buffer_size": 2190,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/modules/coreplayer-shared-module/baseExtension.ts",
+			"settings":
+			{
+				"buffer_size": 8753,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 173.0,
+		"selected_items":
+		[
+			[
+				"set syntax: jav",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"set syntax: java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"set",
+				"Set Syntax: LESS"
+			],
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"mardo",
+				"Set Syntax: Markdown Extended"
+			],
+			[
+				"mark",
+				"Set Syntax: Markdown"
+			],
+			[
+				"markdown",
+				"Strapdown.js Markdown: Preview in a browser"
+			],
+			[
+				"markdown pre",
+				"Strapdown.js Markdown: Preview in Sublime Text"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 163.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/edward.silverton/Work/wellcome/player/src/examples/pkg2.js",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/extensions/coreplayer-pdf-extension/extension.config",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/extensions/coreplayer-pdf-extension/iPDFExtension.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-assetsequencesleftpanel-module/css/styles.less",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-assetsequencesleftpanel-module/assetSequencesLeftPanel.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-assetsequencesleftpanel-module/listView.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/extensions/coreplayer-mediaelement-extension/config.js",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/extensions/coreplayer-mediaelement-extension/extension.config",
+		"/C/Users/edward.silverton/Work/wellcome/player/LICENSE.txt",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/node_modules/grunt-ts/package.json",
+		"/C/Users/edward.silverton/Work/wellcome/player/.gitignore",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-seadragoncenterpanel-module/js/openseadragon.min.js",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/utils.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/app.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/build/wellcomeplayer/js/app.js",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-shared-module/baseExtension.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-shared-module/baseProvider.ts",
+		"/C/Users/edward.silverton/AppData/Local/Temp/TortoiseGit/_Mo400D.tmp/_ModuleTrainings_d0c40ce.cshtml",
+		"/C/Users/edward.silverton/Work/wellcome/player-site/jumbotron.css",
+		"/C/Users/edward.silverton/Work/OTTW/Source/WebApplication/Views/Providers/Partial/Module.cshtml",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/tests/rectMode.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/processing/pgraphics.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/processing/extensions.d.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/processing/pmath.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/oscillator.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/processing/pevents.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/processing/pvector.ts",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower.json",
+		"/C/Users/edward.silverton/Work/OTTW/Tests/Front End - Joe/exam-example1.html",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap/bower.json",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/staticWave.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/Gruntfile.js",
+		"/C/Users/edward.silverton/Work/OTTW/Tests/Front End - Joe/module-training.html",
+		"/C/Users/edward.silverton/Work/OTTW/Tests/Front End - Joe/my-ott-profile.html",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/index.html",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap/dist/css/bootstrap.css",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap/dist/css/bootstrap-theme.css",
+		"/C/Users/edward.silverton/Work/OTTW/.gitignore",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-moreinforightpanel-module/css/styles.less",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-shared-module/css/styles.less",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/Website.csproj",
+		"/C/Users/edward.silverton/Work/OTTW - Copy/Source/Website/css/bootstrap-override.css",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/web.config",
+		"/C/Users/edward.silverton/Unwrong/cadetsite_static/tutorials.html",
+		"/C/Users/edward.silverton/Unwrong/cadetsite_static/services.html",
+		"/C/Users/edward.silverton/Unwrong/cadetsite_static/licensing.html",
+		"/C/Users/edward.silverton/Unwrong/cadetsite_static/index.html",
+		"/C/Users/edward.silverton/Unwrong/cadetsite_static/engine.html",
+		"/C/Users/edward.silverton/Unwrong/cadetsite_static/editors.html",
+		"/C/Users/edward.silverton/Unwrong/cadetsite_static/downloads.html",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/src/default.hbs",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/src/assets/css/main-desktop.less",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/src/assets/css/main-mobile.less",
+		"/C/Users/edward.silverton/Google Drive/blog/notes.txt",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap-datepicker/css/datepicker.css",
+		"//dglondc01/FolderRedirection$/edward.silverton/Desktop/cadetsite_static/index.html",
+		"//dglondc01/FolderRedirection$/edward.silverton/Desktop/cadetsite_static/engine.html",
+		"//dglondc01/FolderRedirection$/edward.silverton/Desktop/cadetsite_static/editors.html",
+		"//dglondc01/FolderRedirection$/edward.silverton/Desktop/cadetsite_static/tutorials.html",
+		"//dglondc01/FolderRedirection$/edward.silverton/Desktop/cadetsite_static/licensing.html",
+		"//dglondc01/FolderRedirection$/edward.silverton/Desktop/cadetsite_static/services.html",
+		"//dglondc01/FolderRedirection$/edward.silverton/Desktop/cadetsite_static/downloads.html",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/src/assets/css/essentials.less",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap/Gruntfile.js",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap/examples/non-responsive/non-responsive.css",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/App_Data/umbraco.config",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/bower_components/bootstrap/examples/carousel/index.html",
+		"/C/Users/edward.silverton/Work/OTTW/Source/Website/.bowerrc",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/src/assets/css/main-desktop.css",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/src/assets/css/essentials.css",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/src/assets/js/jquery.fitvids.js",
+		"/C/Users/edward.silverton/Google Drive/blog/Ghost/content/themes/casper/assets/js/jquery.fitvids.js",
+		"/C/Users/edward.silverton/Google Drive/blog/Ghost/content/themes/casper/assets/js/index.js",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/bower.json",
+		"/C/Users/edward.silverton/Google Drive/blog/seance-theme/package.json",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/extensions/coreplayer-mediaelement-extension/extension.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/package.json",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/modules/example-filelinkcenterpanel-module/fileLinkCenterPanel.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/extensions/coreplayer-seadragon-extension/extension.ts",
+		"/C/Users/edward.silverton/Google Drive/blog/Ghost/.gitignore",
+		"/C/Users/edward.silverton/Google Drive/blog/Ghost/config.js",
+		"/C/Users/edward.silverton/Work/wellcome/player/index.html",
+		"/C/Users/edward.silverton/Work/blog/Ghost/config.js",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/main.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/processing/p.d.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/pointingDirectionOfMotion.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/mover2.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/polarToCartesian.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/mover.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/forcesAngularMotion.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/processing/sketch.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/Gruntfile.js",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/package.json",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/chapters/oscillation/simpleHarmonicMotion.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/test.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/p.d.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/config.js",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/js/embed.js",
+		"/C/Users/edward.silverton/Work/EHT/src/js/detailsView.js",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/app.html",
+		"/C/Users/edward.silverton/Work/wellcome/player/src/bootstrapper.ts",
+		"/C/Users/edward.silverton/Work/wellcome/player/demo.html",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/bouncingBall.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/tests/styles.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/tests/ellipseMode.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/vectorSubtraction.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/vectorNormalization.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/vectorMultiplication.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/randomAcceleration.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/multipleAccelerateTowardsMouse.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/motionVelocity.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/constantAcceleration.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/oscillation/angularMotionUsingRotate.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/vectors/accelerateTowardsMouse.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/mutualAttraction.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/liquid.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/includingFriction.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/gravityScaledByMass.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/forces.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/fluidResistance.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/attractor.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/attraction.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/forces/attractionManyMovers.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/app.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/core/pcontext.ts",
+		"/C/Users/edward.silverton/Google Drive/nature-of-code/src/js/extensions.js"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"type",
+			"pdf",
+			"mejs-volume-button",
+			"b16758286",
+			"isleftpanelenabled",
+			"/config.js",
+			"single-config.js",
+			"setcontrols",
+			"resize",
+			"getbool",
+			"setplayersize",
+			"resize",
+			"this",
+			"extension",
+			"TreeView",
+			"treeView",
+			"TreeView",
+			"provider",
+			"copy",
+			"exec",
+			"setParam",
+			"getdzi",
+			"cookie",
+			"islog",
+			"islogged",
+			"b.location",
+			"anchor",
+			"rectMode(",
+			"rectmode",
+			"len",
+			"this.",
+			"dragging",
+			"dragOffset",
+			"damping",
+			"mass",
+			"acceleration",
+			"velocity",
+			"location",
+			"aAcceleration",
+			"aVelocity",
+			"location",
+			"Location",
+			"location",
+			"OscillatingObjects",
+			"oscillators",
+			"velocity",
+			"angle",
+			"spin",
+			"icon",
+			"icon-",
+			"icon",
+			"class^=\"icon\"",
+			"select",
+			"Start",
+			"start",
+			"language-sel",
+			"font-size",
+			"debug",
+			"headline",
+			"h1",
+			"@color-black-light",
+			"color: @color",
+			"line-",
+			"line-hei",
+			"      ",
+			"     ",
+			"    ",
+			"   ",
+			"  ",
+			"location",
+			"/player",
+			"src/",
+			"IWellcomeSeadragonExtension",
+			"location",
+			"app",
+			"import PContext = require(\"../pcontext\");",
+			"ColorUtils",
+			"$win",
+			"8",
+			"clear();",
+			"transform",
+			"ctx",
+			"30",
+			"RectMode",
+			"PGraphics",
+			"Graphics",
+			"this",
+			"movers",
+			"window.circle",
+			"window.",
+			"circle",
+			"location",
+			"createmodules",
+			"terms",
+			"bp.",
+			"baseProvider",
+			"sethashparameter",
+			"currentbounds",
+			"assetSequenceIndex",
+			"getHashParameter",
+			"assetsequenceindex",
+			"getParameterByName",
+			"getparameterbyname",
+			"enablePrevButton",
+			"prevButtonEnabled",
+			"sethashparameter",
+			"updateparenthash",
+			"sethashparameter",
+			"updateAddress",
+			"lastScroll",
+			"$searchtext",
+			"search",
+			"searchForItem",
+			".text",
+			".val",
+			"console",
+			"getterms",
+			"displaySearchResults",
+			"positionSearchResultPlacemarkers",
+			"getterms",
+			"this",
+			"searchtext",
+			"self",
+			"blur",
+			"this.",
+			"searchForItem",
+			"self",
+			"searchResultTemplate"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"/// <reference path=\"./core/p.d.ts\" />\n\nimport app = require(\"./app\");\n\nclass PContext{\n\n	constructor() {\n        this.setup();\n	}\n\n	setup(): void {\n\n	}\n\n	tick(): void{\n\n		// reset transform.\n		context.setTransform(1, 0, 0, 1, 0, 0);\n\n		// clear canvas.\n		context.clearRect(0, 0, width, height);\n\n		// reset drawing state.\n		noFill();\n		noStroke();\n\n		// todo: reset all other canvas styles?\n\n		this.draw();\n	}\n\n	draw(): void {\n		\n	}\n}\n\nimport PContext = require(\"../core/pcontext\");",
+			"background(255);",
+			"../coreplayer-dialogues-module/",
+			"../coreplayer-treeviewleftpanel-module/",
+			"../coreplayer-shared-module/",
+			"modules/coreplayer-extendedfooterpanel-module",
+			"modules/coreplayer-moreinforightpanel-module",
+			"extensions/coreplayer-seadragon-extension",
+			"modules/coreplayer-dialogues-module",
+			"modules/coreplayer-seadragoncenterpanel-module",
+			"modules/coreplayer-treeviewleftpanel-module",
+			"modules/coreplayer-pagingheaderpanel-module",
+			"modules/coreplayer-shared-module",
+			"\"",
+			"this.position",
+			"context",
+			"canvas",
+			"context",
+			"position",
+			"context",
+			"this",
+			"this.$prevButtonCont",
+			"#app",
+			"this",
+			"{sharedImagePath"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 14,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Gruntfile.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11496,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5387,
+								5387
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1543.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 28,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/examples/examples.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1767,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1767,
+								1767
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/examples/pkg.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2137,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								346,
+								346
+							]
+						],
+						"settings":
+						{
+							"auto_name": "{",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/examples/iiif_info1.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 472,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								165,
+								164
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/examples/iiif_info2.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 472,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								472,
+								472
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/examples/iiif.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 457,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								58,
+								58
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/modules/coreplayer-mediaelementcenterpanel-module/mediaelementCenterPanel.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7979,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2995,
+								2995
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 546.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 118687,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83179,
+								83179
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 40893.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/extensions/coreplayer-mediaelement-extension/extension.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4207,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1687,
+								1672
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 210.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/extensions/coreplayer-mediaelement-extension/css/styles.less",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 303,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								84,
+								84
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LESS-sublime/LESS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3354,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2123,
+								2123
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 588.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/examples/iiif-config.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 60,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								52,
+								52
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/modules/coreplayer-treeviewleftpanel-module/treeView.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7486,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								980,
+								980
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "src/extensions/coreplayer-mediaelement-extension/extension.config",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3088,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2378,
+								2378
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "src/app.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3265,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								572,
+								572
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": ".gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2689,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								283,
+								283
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 84.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "src/extensions/coreplayer-pdf-extension/extension.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 909,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								757,
+								757
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "src/extensions/coreplayer-pdf-extension/iPDFProvider.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 174,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								165,
+								165
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "src/extensions/coreplayer-pdf-extension/extension.config",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 50,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								50,
+								50
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "src/modules/coreplayer-shared-module/baseView.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1318,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								966,
+								966
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "src/extensions/coreplayer-pdf-extension/provider.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 962,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								953,
+								953
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "src/extensions/coreplayer-pdf-extension/css/styles.less",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 62,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								62,
+								62
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LESS-sublime/LESS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "src/extensions/coreplayer-seadragon-extension/extension.config",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4306,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "src/modules/coreplayer-treeviewleftpanel-module/css/styles.less",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2959,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								888,
+								888
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LESS-sublime/LESS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "src/extensions/coreplayer-mediaelement-extension/provider.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1775,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1663,
+								1437
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "src/extensions/coreplayer-mediaelement-extension/iMediaElementProvider.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 316,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								316
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "src/examples/examples-config.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 186,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								186
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "src/extensions/coreplayer-seadragon-extension/provider.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2190,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								2190
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "src/modules/coreplayer-shared-module/baseExtension.ts",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8753,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4673,
+								4673
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/TypeScript/TypeScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1764.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "player.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 304.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
