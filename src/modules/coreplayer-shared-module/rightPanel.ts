@@ -7,6 +7,9 @@ import baseExpandPanel = require("./baseExpandPanel");
 
 export class RightPanel extends baseExpandPanel.BaseExpandPanel {
 
+    static OPEN_RIGHT_PANEL: string = 'onOpenRightPanel';
+    static CLOSE_RIGHT_PANEL: string = 'onCloseRightPanel';
+
     constructor($element: JQuery) {
         super($element);
     }
@@ -29,6 +32,11 @@ export class RightPanel extends baseExpandPanel.BaseExpandPanel {
     toggleComplete(): void {
         super.toggleComplete();
 
+        if (this.isExpanded){
+            $.publish(RightPanel.OPEN_RIGHT_PANEL);
+        } else {
+            $.publish(RightPanel.CLOSE_RIGHT_PANEL);
+        }
     }
 
     resize(): void {

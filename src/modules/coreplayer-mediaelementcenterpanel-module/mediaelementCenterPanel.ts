@@ -91,21 +91,18 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                         });
 
                         media.addEventListener('play', (e) => {
-                            //$.wellcome.player.trackAction("Video", "Play: " + Math.floor(this.player.media.currentTime));
-                            //$.wellcome.player.trackAction("Video", "Play");
+                            $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                         });
 
                         media.addEventListener('pause', (e) => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                                //$.wellcome.player.trackAction("Video", "Pause: " + Math.floor(this.player.media.currentTime));
-                                //$.wellcome.player.trackAction("Video", "Pause");
+                                $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                             }
                         });
 
                         media.addEventListener('ended', (e) => {
-                            //$.wellcome.player.trackAction("Video", "Ended: " + Math.floor(this.player.media.duration));
-                            //$.wellcome.player.trackAction("Video", "Ended");
+                            $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                         });
 
                         if (asset.sources && asset.sources.length){
@@ -136,21 +133,18 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                         });
 
                         media.addEventListener('play', (e) => {
-                            //$.wellcome.player.trackAction("Video", "Play: " + Math.floor(this.player.media.currentTime));
-                            //$.wellcome.player.trackAction("Video", "Play");
+                            $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                         });
 
                         media.addEventListener('pause', (e) => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                                //$.wellcome.player.trackAction("Video", "Pause: " + Math.floor(this.player.media.currentTime));
-                                //$.wellcome.player.trackAction("Video", "Pause");
+                                $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                             }
                         });
 
                         media.addEventListener('ended', (e) => {
-                            //$.wellcome.player.trackAction("Video", "Ended: " + Math.floor(this.player.media.duration));
-                            //$.wellcome.player.trackAction("Video", "Ended");
+                            $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                         });
 
                         try {

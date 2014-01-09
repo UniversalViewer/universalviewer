@@ -16,6 +16,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     treeView: tree.TreeView;
     thumbsView: thumbs.ThumbsView;
 
+    static OPEN_TREE_VIEW: string = 'leftPanel.onOpenTreeView';
+    static OPEN_THUMBS_VIEW: string = 'leftPanel.onOpenThumbsView';
+
     constructor($element: JQuery) {
         super($element);
     }
@@ -48,12 +51,16 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             e.preventDefault();
 
             this.openTreeView();
+
+            $.publish(TreeViewLeftPanel.OPEN_TREE_VIEW);
         });
 
         this.$thumbsButton.on('click', (e) => {
             e.preventDefault();
 
             this.openThumbsView();
+
+            $.publish(TreeViewLeftPanel.OPEN_THUMBS_VIEW);
         });
     }
 
