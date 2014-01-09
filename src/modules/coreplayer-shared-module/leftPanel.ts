@@ -22,7 +22,7 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
     init(): void{
         super.init();
 
-        if (this.options.panelOpen) {
+        if (this.options.panelOpen && this.provider.isHomeDomain) {
             this.toggle();
         }
     }
