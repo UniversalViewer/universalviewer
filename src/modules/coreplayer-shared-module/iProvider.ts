@@ -20,6 +20,7 @@ interface IProvider{
 	getRootSection(): any;
 	getTitle(): string;
 	getSeeAlso(): any;
+	getMediaUri(fileUri: string): string;
 }
 
 export = IProvider;

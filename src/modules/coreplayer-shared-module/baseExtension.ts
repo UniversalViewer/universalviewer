@@ -54,7 +54,7 @@ export class BaseExtension implements IExtension {
         this.$element.width($win.width());
         this.$element.height($win.height());
 
-        // communication with parent frame.    
+        // communication with parent frame.
         this.socket = new easyXDM.Socket({
             onMessage: (message, origin) => {
                 message = $.parseJSON(message);
@@ -68,7 +68,7 @@ export class BaseExtension implements IExtension {
 
         // events.
         window.onresize = () => {
-            
+
             var $win = $(window);
             $('body').height($win.height());
 
@@ -79,7 +79,7 @@ export class BaseExtension implements IExtension {
             this.mouseX = e.pageX;
             this.mouseY = e.pageY;
         });
-        
+
         $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
             if (!this.isOverlayActive()){
                 this.isFullScreen = !this.isFullScreen;
@@ -154,7 +154,7 @@ export class BaseExtension implements IExtension {
 
     // set hash params depending on whether the player is embedded.
     setParam(key: baseProvider.params, value: any): void{
-        
+
         if (this.isDeepLinkingEnabled()){
             utils.Utils.setHashParameter(baseProvider.BaseProvider.paramMap[key], value, parent.document);
         }
@@ -165,7 +165,7 @@ export class BaseExtension implements IExtension {
         this.currentAssetIndex = assetIndex;
 
         $.publish(BaseExtension.ASSET_INDEX_CHANGED, [assetIndex]);
-        
+
         if (callback) callback(assetIndex);
     }
 
@@ -176,6 +176,17 @@ export class BaseExtension implements IExtension {
         }
 
         this.triggerSocket(BaseExtension.ASSETSEQUENCE_INDEX_CHANGED, index);
+    }
+
+    viewStructure(structure: any): void{
+        if (structure.seeAlso && structure.seeAlso.tag && structure.seeAlso.data){
+            if (structure.seeAlso.tag === 'OpenExternal'){
+                var uri = this.provider.getMediaUri(structure.seeAlso.data);
+                window.open(uri, '_blank');
+            }
+        } else {
+            this.viewAssetSequence(structure.assetSequence.index);
+        }
     }
 
     isDeepLinkingEnabled(): boolean {
@@ -189,14 +200,14 @@ export class BaseExtension implements IExtension {
 
         return this.getAssetSection(asset);
     }
-    
+
     getSectionIndex(path: string): number {
 
         for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
             var asset = this.provider.assetSequence.assets[i];
             for (var j = 0; j < asset.sections.length; j++) {
                 var section = asset.sections[j];
-                
+
                 if (section.path == path) {
                     return i;
                 }
@@ -209,7 +220,7 @@ export class BaseExtension implements IExtension {
     getAssetSection(asset: any): any {
         // get the deepest section that this file belongs to.
         return asset.sections.last();
-    } 
+    }
 
     getAssetByIndex(index: number): any {
 
@@ -223,7 +234,7 @@ export class BaseExtension implements IExtension {
             var asset = this.provider.assetSequence.assets[i];
 
             var regExp = /\d/;
-            
+
             if (regExp.test(asset.orderLabel)) {
                 return asset.orderLabel;
             }
@@ -232,7 +243,7 @@ export class BaseExtension implements IExtension {
         // none exists, so return '-'.
         return '-';
     }
-    
+
     getAssetIndexByOrderLabel(label: string): number {
 
         // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
@@ -251,7 +262,7 @@ export class BaseExtension implements IExtension {
         } else {
             regStr = "\\D*" + labelPart1 + "\\D*";
         }
-        
+
         searchRegExp = new RegExp(regStr);
 
         // loop through files, return first one with matching orderlabel.
@@ -269,7 +280,7 @@ export class BaseExtension implements IExtension {
     getCurrentAsset(): any {
         return this.provider.assetSequence.assets[this.currentAssetIndex];
     }
-    
+
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
 
         $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [

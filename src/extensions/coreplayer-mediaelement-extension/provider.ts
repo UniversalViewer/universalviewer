@@ -28,14 +28,6 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
         return script;
     }
 
-    getMediaUri(asset: any): string{
-        var baseUri = this.options.mediaBaseUri || "";
-        var template = this.options.mediaUriTemplate;
-        var uri = String.prototype.format(template, baseUri, asset.fileUri);
-
-        return uri;
-    }
-
     getPosterImageUri(): string{
         var baseUri = this.options.mediaBaseUri || "";
         var template = this.options.mediaUriTemplate;

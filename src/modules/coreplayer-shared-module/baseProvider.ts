@@ -11,10 +11,10 @@ export enum params {
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provision systems.
-// they provide a consistent interface and set of data structures 
+// they provide a consistent interface and set of data structures
 // for extensions to operate against.
 export class BaseProvider implements IProvider{
-    
+
     config: any;
     pkg: any;
     assetSequenceIndex: number;
@@ -27,12 +27,12 @@ export class BaseProvider implements IProvider{
     isReload: boolean;
     configExtension: string;
     domain: string;
- 
+
     // map param names to enum indexes.
     static paramMap: string[] = ['asi', 'ai', 'z'];
 
     options: any = {
-        
+
     };
 
     constructor(config: any, pkg: any) {
@@ -53,7 +53,7 @@ export class BaseProvider implements IProvider{
 
         if (this.isHomeDomain && !this.isReload){
             this.assetSequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.assetSequenceIndex], parent.document));
-        } 
+        }
 
         if (!this.assetSequenceIndex){
             this.assetSequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.assetSequenceIndex])) || 0;
@@ -162,7 +162,7 @@ export class BaseProvider implements IProvider{
                 this.parseStructures(structure.structures[j], assetSequences, path + '/' + j);
             }
         }
-    } 
+    }
 
     replaceSectionType(sectionType: string): string {
         if (this.config.options.sectionMappings && this.config.options.sectionMappings[sectionType]) {
@@ -182,5 +182,13 @@ export class BaseProvider implements IProvider{
 
     getSeeAlso(): any {
         return this.assetSequence.seeAlso;
+    }
+
+    getMediaUri(fileUri: string): string{
+        var baseUri = this.options.mediaBaseUri || "";
+        var template = this.options.mediaUriTemplate;
+        var uri = String.prototype.format(template, baseUri, fileUri);
+
+        return uri;
     }
 }

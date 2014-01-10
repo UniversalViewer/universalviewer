@@ -59,7 +59,7 @@ export class Extension extends baseExtension.BaseExtension {
                 this.viewPage(Number(this.currentAssetIndex) - 1);
             }
         });
-        
+
         $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
             if (this.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
                 this.viewPage(Number(this.currentAssetIndex) + 1);
@@ -75,13 +75,13 @@ export class Extension extends baseExtension.BaseExtension {
         $.subscribe(header.PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
             this.viewLabel(value);
         });
-        
+
         $.subscribe(header.PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
         });
 
         $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
-            this.viewAssetSequence(structure.assetSequence.index);
+            this.viewStructure(structure);
         });
 
         $.subscribe(treeView.TreeView.VIEW_SECTION, (e, section: any) => {
@@ -101,7 +101,7 @@ export class Extension extends baseExtension.BaseExtension {
                 this.viewPage(Number(this.currentAssetIndex) - 1);
             }
         });
-        
+
         $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
             if (this.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
                 this.viewPage(Number(this.currentAssetIndex) + 1);
@@ -112,7 +112,7 @@ export class Extension extends baseExtension.BaseExtension {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        this.createModules();        
+        this.createModules();
 
         this.setParams();
 
@@ -125,7 +125,7 @@ export class Extension extends baseExtension.BaseExtension {
         this.viewPage(assetIndex || 0);
 
         // initial sizing
-        $.publish(baseExtension.BaseExtension.RESIZE);        
+        $.publish(baseExtension.BaseExtension.RESIZE);
     }
 
     createModules(): void{
@@ -160,7 +160,7 @@ export class Extension extends baseExtension.BaseExtension {
     }
 
     isLeftPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true) 
+        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
                 && this.provider.assetSequence.assets.length > 1;
     }
 
@@ -190,7 +190,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.emptyValue);
             return;
         }
-        
+
         var index = this.getAssetIndexByOrderLabel(label);
 
         if (index != -1) {
@@ -217,7 +217,7 @@ export class Extension extends baseExtension.BaseExtension {
     }
 
     getViewerBounds(): string{
-        
+
         if (!this.centerPanel) return;
 
         var bounds = this.centerPanel.getBounds();
