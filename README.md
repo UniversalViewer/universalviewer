@@ -18,6 +18,8 @@ All command-line operations for building the Wellcome Player are scripted using 
 1. Install the Grunt command line interface (if you haven't already); on the command line, run `npm install -g grunt-cli`
 1. Clone the 'player' repository
 1. On the command line, go in to the 'player' folder
+1. Run `git submodule init`
+1. Run `git submodule update`
 1. Run `npm install`
 
 ### Debug Builds
@@ -44,13 +46,13 @@ Note that the 'build' folder is masked with .gitignore; it's just for your local
 
 ### Viewing on localhost
 
-To see the debug version of the player (located in the '/src' folder), run 
+To see the debug version of the player (located in the '/src' folder), run
 
 	grunt connect:debug
 
 and browse to 'http://localhost:3000'
 
-To see the release version of the player (located in the '/build' folder), run 
+To see the release version of the player (located in the '/build' folder), run
 
 	grunt connect:release
 
