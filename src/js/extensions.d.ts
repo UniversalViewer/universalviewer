@@ -32,7 +32,7 @@ interface JQuery {
     actualHeight(height: number);
     actualWidth(width: number);
     toggleExpandText(chars: string);
-    
+
     // jsviews
     link: any;
     render: any;
@@ -42,7 +42,7 @@ interface JQueryStatic {
     // pubsub
     publish(event: string, eventObj?: any[]);
     subscribe(event: string, handler: Function);
-    
+
     // jsviews
     observable: any;
     templates: any;
@@ -63,6 +63,7 @@ interface Window{
     BrowserDetect: any;
     trackEvent(category: string, action: string, label: string, value: string);
     trackVariable(slot: number, name: string, value: string, scope: number);
+    $: any;
 }
 
 // google

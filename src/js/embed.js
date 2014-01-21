@@ -11,8 +11,6 @@
     var scriptUri = (/.*src="(.*)"/).exec(s.outerHTML)[1];
     var absScriptUri = s.src;
 
-    var outer
-
     var j, d;
     var loaded = false;
 
@@ -129,7 +127,7 @@
             isFullScreen = fs;
 
             if (isFullScreen) {
-                
+
                 // store current scroll position.
                 lastScroll = $(document).scrollTop();
 
@@ -180,7 +178,7 @@
                 "?hd=" + isHomeDomain +
                 "&oi=" + isOnlyInstance +
                 "&du=" + dataUri +
-                "&esu=" + absScriptUri + 
+                "&esu=" + absScriptUri +
                 "&d=" + domain;
 
             if (assetSequenceIndex) uri += "&asi=" + assetSequenceIndex;
