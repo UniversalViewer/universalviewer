@@ -1,5 +1,7 @@
 # Wellcome Player
 
+[![Build Status](https://drone.io/github.com/wellcomelibrary/player/status.png)](https://drone.io/github.com/wellcomelibrary/player/latest)
+
 Navigate sequences of images in a zoomable, extensible interface.
 
 ## Stable Builds
