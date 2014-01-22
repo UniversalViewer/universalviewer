@@ -66,6 +66,8 @@ require([
     pdfExtension,
     pdfProvider) => {
 
+        window.DEV = true; // this line is removed on build.
+
         var extensions = {};
 
         extensions['seadragon/dzi'] = {

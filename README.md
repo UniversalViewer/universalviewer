@@ -44,19 +44,19 @@ If you want to build tar and zip files for distribution (they will also appear i
 
 Note that the 'build' folder is masked with .gitignore; it's just for your local use, and won't be checked in to the repository.
 
-### Viewing on localhost
+### Examples
 
-To see the debug version of the player (located in the '/src' folder), run
+To view the examples locally you can install node http-server:
 
-	grunt connect:debug
+`npm install http-server -g`
 
-and browse to 'http://localhost:3000'
+and run:
 
-To see the release version of the player (located in the '/build' folder), run
+`http-server`
 
-	grunt connect:release
+within the player directory, then browse to:
 
-and browse to 'http://localhost:3001'
+http://localhost:8080/src/examples/examples.html
 
 ## License
 

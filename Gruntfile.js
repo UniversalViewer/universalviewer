@@ -1,8 +1,7 @@
 module.exports = function (grunt) {
-    
+
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-contrib-less");
-    grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-exec");
@@ -13,8 +12,8 @@ module.exports = function (grunt) {
     var packageJson = grunt.file.readJSON("package.json"),
         packageDirName = 'wellcomeplayer-' + packageJson.version;
 
-    grunt.initConfig({        
-        global: 
+    grunt.initConfig({
+        global:
         {
             buildDir: 'build/wellcomeplayer',
             minify: 'optimize=none',
@@ -23,26 +22,26 @@ module.exports = function (grunt) {
         },
         pkg: packageJson,
         ts: {
-            dev: {                            
+            dev: {
                 src: ["src/**/*.ts"],
-                options: {                      
-                    target: 'es3',              
-                    module: 'amd',              
-                    sourcemap: true,            
-                    declarations: false,        
-                    nolib: false,               
-                    comments: true             
+                options: {
+                    target: 'es3',
+                    module: 'amd',
+                    sourcemap: true,
+                    declarations: false,
+                    nolib: false,
+                    comments: true
                 }
             },
-            build: {                          
-                src: ["src/**/*.ts"],      
-                options: {                      
-                    target: 'es3',              
-                    module: 'amd',              
-                    sourcemap: false,           
-                    declarations: false,        
-                    nolib: false,               
-                    comments: false             
+            build: {
+                src: ["src/**/*.ts"],
+                options: {
+                    target: 'es3',
+                    module: 'amd',
+                    sourcemap: false,
+                    declarations: false,
+                    nolib: false,
+                    comments: false
                 }
             }
         },
@@ -75,23 +74,6 @@ module.exports = function (grunt) {
             }
         },
 
-        connect: {
-            debug: {
-                options: {
-                    port: 3000,
-                    base: "src",
-                    keepalive: true
-                }
-            },
-            release: {
-                options: {
-                    port: 3001,
-                    base: "<%= global.buildDir %>",
-                    keepalive: true
-                }
-            }
-        },
-
         clean: {
             build : ["<%= global.buildDir %>/*"],
             package: ['<%= global.packageDir %>']
@@ -121,7 +103,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         cwd: 'src',
-                        src: ['index.html', 'app.html'], 
+                        src: ['index.html', 'app.html'],
                         dest: '<%= global.buildDir %>'
                     },
                     // js
@@ -135,7 +117,7 @@ module.exports = function (grunt) {
                     // extension configuration files
                     {
                         expand: true,
-                        src: ['src/extensions/**/config.js'], 
+                        src: ['src/extensions/**/config.js'],
                         dest: '<%= global.buildDir %>/js/',
                         rename: function(dest, src) {
 
@@ -149,7 +131,7 @@ module.exports = function (grunt) {
                     // extensions css
                     {
                         expand: true,
-                        src: ['src/extensions/**/css/*.css'], 
+                        src: ['src/extensions/**/css/*.css'],
                         dest: '<%= global.buildDir %>/css/',
                         rename: function(dest, src) {
 
@@ -191,9 +173,9 @@ module.exports = function (grunt) {
                     level: 9
                 },
                 files: [
-                    { 
-                        expand: true, 
-                        cwd: "build/", 
+                    {
+                        expand: true,
+                        cwd: "build/",
                         src: ["<%= global.packageDirName %>/**" ]
                     }
                 ]
@@ -204,7 +186,7 @@ module.exports = function (grunt) {
                     level: 9
                 },
                 files: [
-                    { 
+                    {
                         expand: true,
                         cwd: "build/",
                         src: ["<%= global.packageDirName %>/**" ]
@@ -225,7 +207,7 @@ module.exports = function (grunt) {
                 // replace img srcs to point to ../img/modulename/imgname
                 src: ['<%= global.buildDir %>/css/*.css'],
                 overwrite: true,
-                replacements: [{ 
+                replacements: [{
                     from: /(?:'|").*modules\/(.*)\/img\/(.*)(?:'|")/g,
                     to: '\'../img/$1/$2\''
                 }]
@@ -234,7 +216,7 @@ module.exports = function (grunt) {
                 // replace extension config paths.
                 src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
-                replacements: [{ 
+                replacements: [{
                     from: /config:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
                     to: 'config:"js/$1-config.js"'
                 }]
@@ -243,7 +225,7 @@ module.exports = function (grunt) {
                 // replace css paths.
                 src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
-                replacements: [{ 
+                replacements: [{
                     from: /css:.*(?:'|")extensions\/(.*)\/css\/styles.css(?:'|")/g,
                     to: 'css:"css/$1.css"'
                 }]
@@ -251,11 +233,20 @@ module.exports = function (grunt) {
             html: {
                 src: ['<%= global.buildDir %>/app.html'],
                 overwrite: true,
-                replacements: [{ 
+                replacements: [{
                     from: 'data-main="app"',
                     to: 'data-main="js/app"'
                 }]
             },
+            js: {
+                // replace js.
+                src: ['<%= global.buildDir %>/js/app.js'],
+                overwrite: true,
+                replacements: [{
+                    from: /window.DEV.*=.*true;/g,
+                    to: ''
+                }]
+            }
         },
 
         extend: {
@@ -268,7 +259,7 @@ module.exports = function (grunt) {
             }
         }
     });
-    
+
     function getExtensionsConfig(){
 
         // loop through all extension.config files.
@@ -307,7 +298,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build', '', function() {
-      
+
         // grunt build --buildDir=myDir
         // or prepend / to target relative to system root.
         var buildDir = grunt.option('buildDir');
@@ -318,7 +309,7 @@ module.exports = function (grunt) {
         if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
-            'ts:build', 
+            'ts:build',
             'less:build',
             'extend:config',
             'clean:build',
@@ -327,20 +318,21 @@ module.exports = function (grunt) {
             'replace:img',
             'replace:config',
             'replace:css',
-            'replace:html'
+            'replace:html',
+            'replace:js'
         );
     });
 
     grunt.registerTask('package', '', function() {
-      
+
         // grunt package --buildDir=myDir
         // or prepend / to target relative to system root.
         var buildDir = grunt.option('buildDir');
         if (buildDir) grunt.config.set('global.buildDir', buildDir);
 
         grunt.task.run(
-            'build', 
-            'copy:package', 
+            'build',
+            'copy:package',
             'compress',
             'clean:package'
         );

@@ -20,6 +20,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     $prevButton: JQuery;
     $nextButtonCont: JQuery;
     $nextButton: JQuery;
+    // $navigator: JQuery;
+    // $zoomControls: JQuery;
+    // $zoomInButton: JQuery;
+    // $zoomOutButton: JQuery;
 
     // events
     static SEADRAGON_OPEN: string = 'center.open';
@@ -52,17 +56,58 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         OpenSeadragon.DEFAULT_SETTINGS.autoHideControls = true;
 
+        var prefixUrl = (window.DEV)? 'modules/coreplayer-seadragoncenterpanel-module/img/' : 'img/coreplayer-seadragoncenterpanel-module/';
+
         this.viewer = OpenSeadragon({
             id: "viewer",
-            showNavigationControl: false,
+            showNavigationControl: true,
             showNavigator: true,
             defaultZoomLevel: this.options.defaultZoomLevel || 0,
-            navigatorPosition: 'BOTTOM_RIGHT'
+            navigatorPosition: 'BOTTOM_RIGHT',
+            prefixUrl: prefixUrl,
+            navImages: {
+                zoomIn: {
+                    REST:   'zoom_in.png',
+                    GROUP:  'zoom_in.png',
+                    HOVER:  'zoom_in.png',
+                    DOWN:   'zoom_in.png'
+                },
+                zoomOut: {
+                    REST:   'zoom_out.png',
+                    GROUP:  'zoom_out.png',
+                    HOVER:  'zoom_out.png',
+                    DOWN:   'zoom_out.png'
+                },
+                home: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                fullpage: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                previous: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                next: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                }
+            }
         });
 
-        this.viewer.clearControls();
+        //this.viewer.clearControls();
 
-        this.viewer.setControlsEnabled(false);
+        //this.viewer.setControlsEnabled(false);
 
         // create prev/next buttons.
         if (this.extension.isMultiAsset()) {
@@ -95,6 +140,29 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                 $.publish(SeadragonCenterPanel.NEXT);
             });
         };
+
+        // zoom buttons
+        // this.$zoomControls = $('<div class="zoomControls"></div>');
+
+        // this.$zoomInButton = $('<div class="zoomIn"></div>');
+        // this.$zoomInButton.prop('title', this.content.zoomIn);
+        // this.$zoomControls.append(this.$zoomInButton);
+
+        // this.$zoomInButton.on('click touchstart', function(e){
+        //     e.preventDefault;
+        //     //e.stopPropagation();
+        //     console.log('zoom in');
+        // });
+
+        // this.$zoomOutButton = $('<div class="zoomOut"></div>');
+        // this.$zoomOutButton.prop('title', this.content.zoomOut);
+        // this.$zoomControls.append(this.$zoomOutButton);
+
+        // this.$zoomOutButton.on('click touchstart', function(e){
+        //     e.preventDefault;
+        //     //e.stopPropagation();
+        //     console.log('zoom out');
+        // });
 
         this.viewer.addHandler('open', (viewer) => {
             this.viewerOpen();
@@ -142,6 +210,12 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                 this.disableNextButton();
             }
         }
+
+        // this.$navigator = $('.navigator', this.$element);
+        // this.$navigator.append(this.$zoomControls);
+        // this.$zoomControls.css('width', this.$navigator.width());
+        // this.$zoomControls.css('top', this.$navigator.height() - this.$zoomControls.height());
+
 
         // if there are no currentBounds check for initial zoom params.
         if (!this.currentBounds){

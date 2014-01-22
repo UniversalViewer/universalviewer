@@ -64,6 +64,7 @@ interface Window{
     trackEvent(category: string, action: string, label: string, value: string);
     trackVariable(slot: number, name: string, value: string, scope: number);
     $: any;
+    DEV: boolean;
 }
 
 // google

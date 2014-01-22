@@ -12,7 +12,7 @@
 }
 
 #app .centerPanel .paging.btn {
-    position: absolute;
+    position: absolute !important;
     width: 30px;
     height: 90px;
     background-repeat: no-repeat;
@@ -23,6 +23,7 @@
 
 #app .centerPanel .paging.btn.prev {
     background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/prev_page.png');
+    left: 0;
 }
 
 #app .centerPanel .paging.btn.prev.disabled {
@@ -31,8 +32,50 @@
 
 #app .centerPanel .paging.btn.next{
     background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page.png');
+    right: 0;
 }
 
 #app .centerPanel .paging.btn.next.disabled {
     background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page_disabled.png');
+}
+
+/*
+#app .centerPanel .zoomControls{
+    position: absolute;
+    height: 16px;
+}
+
+#app .centerPanel .zoomControls .zoomIn{
+    width: 16px;
+    height: 16px;
+    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/zoom_in.png');
+    float: left;
+    cursor: pointer;
+}
+
+#app .centerPanel .zoomControls .zoomOut{
+    width: 16px;
+    height: 16px;
+    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/zoom_out.png');
+    float: right;
+    cursor: pointer;
+}
+*/
+
+#app .centerPanel button[title="Zoom in"] {
+    margin: 4px 2px 0 4px !important;
+    cursor: pointer !important;
+}
+
+#app .centerPanel button[title="Zoom out"] {
+    margin: 4px 0 0 2px !important;
+    cursor: pointer !important;
+}
+
+#app .centerPanel button[title="Go home"] {
+    display: none !important;
+}
+
+#app .centerPanel button[title="Toggle full page"] {
+    display: none !important;
 }
