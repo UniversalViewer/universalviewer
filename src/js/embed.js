@@ -8,6 +8,12 @@
 
     // get the script location.
     var s = document.getElementById('embedWellcomePlayer');
+
+    if (!s){
+        var scripts = document.getElementsByTagName('script');
+        s = scripts[scripts.length - 1];
+    }
+
     var scriptUri = (/.*src="(.*)"/).exec(s.outerHTML)[1];
     var absScriptUri = s.src;
 
