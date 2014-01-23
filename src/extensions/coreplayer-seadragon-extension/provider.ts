@@ -42,7 +42,9 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var template = this.options.embedTemplate || embedTemplate;
 
-        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, width, height, esu);
+        var configUri = this.config.uri || '';
+
+        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, configUri, width, height, esu);
 
         return script;
     }

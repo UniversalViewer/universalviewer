@@ -23,7 +23,9 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
 
         var template = this.options.embedTemplate || embedTemplate;
 
-        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, width, height, esu);
+        var configUri = this.config.uri || '';
+
+        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, configUri, width, height, esu);
 
         return script;
     }

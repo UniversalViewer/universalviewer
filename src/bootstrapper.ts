@@ -82,6 +82,9 @@ class BootStrapper{
                 // and extend the existing config object.
                 if (configExtension){
 
+                    // save a reference to the config extension uri.
+                    config.uri = configExtension;
+
                     $.getJSON(configExtension, (ext) => {
                         $.extend(true, config, ext);
 
