@@ -2,7 +2,7 @@
 
 Navigate sequences of images in a zoomable, extensible interface.
 
-[example](http://wellcomelibrary.org/player/b1948799x#?asi=0&ai=2)
+[example](http://wellcomelibrary.org/player/b18021013#?asi=0&ai=9)
 
 ## Stable Builds
 
