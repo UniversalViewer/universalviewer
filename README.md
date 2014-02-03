@@ -2,6 +2,8 @@
 
 Navigate sequences of images in a zoomable, extensible interface.
 
+[example](http://wellcomelibrary.org/player/b1948799x)
+
 ## Stable Builds
 
 See the [GitHub releases page](https://github.com/wellcomelibrary/player/releases).
