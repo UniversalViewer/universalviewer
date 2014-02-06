@@ -66,3 +66,6 @@ interface Window{
     $: any;
     DEV: boolean;
 }
+
+// google
+declare function trackEvent(category: string, action: string, label: string, value?: any): void;
