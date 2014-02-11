@@ -27,6 +27,7 @@ export class BaseProvider implements IProvider{
     isReload: boolean;
     configExtension: string;
     domain: string;
+    isLightbox: boolean;
 
     // map param names to enum indexes.
     static paramMap: string[] = ['asi', 'ai', 'z'];
@@ -50,6 +51,7 @@ export class BaseProvider implements IProvider{
         this.embedScriptUri = utils.Utils.getQuerystringParameter('esu');
         this.isReload = utils.Utils.getQuerystringParameter('rl') === "true";
         this.domain = utils.Utils.getQuerystringParameter('d');
+        this.isLightbox = utils.Utils.getQuerystringParameter('lb') === "true";
 
         if (this.isHomeDomain && !this.isReload){
             this.assetSequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.assetSequenceIndex], parent.document));

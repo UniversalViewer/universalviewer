@@ -11,6 +11,7 @@ interface IProvider{
 	isReload: boolean;
 	configExtension: string;
 	domain: string;
+	isLightbox: boolean;
 
 	load(): void;
 	reload(callback: any): void;

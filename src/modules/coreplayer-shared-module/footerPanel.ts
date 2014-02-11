@@ -31,7 +31,7 @@ export class FooterPanel extends baseView.BaseView {
         this.$element.append(this.$options);
 
         this.$embedButton = $('<a href="#" class="imageButton embed" title="' + this.content.embed + '"></a>');
-        this.$options.append(this.$embedButton);        
+        this.$options.append(this.$embedButton);
 
         this.$fullScreenBtn = $('<a href="#" class="imageButton fullScreen" title="' + this.content.fullScreen + '"></a>');
         this.$options.append(this.$fullScreenBtn);
@@ -47,6 +47,10 @@ export class FooterPanel extends baseView.BaseView {
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
+        if (this.provider.isLightbox){
+            this.$fullScreenBtn.addClass('lightbox');
+        }
+
         if (this.options.minimiseButtons === true){
             this.$options.addClass('minimiseButtons');
         }
@@ -56,6 +60,8 @@ export class FooterPanel extends baseView.BaseView {
         if (this.extension.isFullScreen) {
             this.$fullScreenBtn.swapClass('fullScreen', 'normal');
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
+            // set focus to ensure escape key works.
+            this.$fullScreenBtn.focus();
         } else {
             this.$fullScreenBtn.swapClass('normal', 'fullScreen');
             this.$fullScreenBtn.attr('title', this.content.fullScreen);

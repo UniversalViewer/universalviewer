@@ -70,12 +70,22 @@
            });
 
     function app(element, isHomeDomain, isOnlyInstance) {
-        var socket, $app, $appFrame, dataUri, assetSequenceIndex, assetIndex, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
+        var socket, $app, $img, $appFrame, dataUri, assetSequenceIndex, assetIndex, isLightbox, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
 
         $app = $(element);
 
-        // empty the container of any 'no javascript' messages.
-        $app.empty();
+        // Lightbox behaviour
+        isLightbox = $app.attr('data-lightbox') === 'true';
+
+        if(isLightbox){
+            $img = $app.find('img');
+            $img.css('cursor', 'pointer');
+            // add overflow:hidden style to container div.
+            $app.css('overflow', 'hidden');
+        } else {
+            // empty the container of any 'no javascript' messages.
+            $app.empty();
+        }
 
         // get initial params from the container's 'data-' attributes.
         dataBaseUri = $app.attr('data-baseuri');
@@ -162,6 +172,9 @@
 
                 // return to last scroll position.
                 window.scrollTo(0, lastScroll);
+
+                // if lightbox, hide iframe.
+                if (isLightbox) hideLightbox();
             }
 
             resize();
@@ -178,6 +191,17 @@
             createSocket();
         }
 
+        function showLightbox(){
+            $img.hide();
+            $appFrame.show();
+            triggerSocket('onToggleFullScreen');
+        }
+
+        function hideLightbox(){
+            $appFrame.hide();
+            $img.show();
+        }
+
         function createSocket() {
 
             var uri = appUri +
@@ -185,7 +209,8 @@
                 "&oi=" + isOnlyInstance +
                 "&du=" + dataUri +
                 "&esu=" + absScriptUri +
-                "&d=" + domain;
+                "&d=" + domain +
+                "&lb=" + isLightbox;
 
             if (assetSequenceIndex) uri += "&asi=" + assetSequenceIndex;
             if (assetIndex) uri += "&ai=" + assetIndex;
@@ -200,6 +225,13 @@
                 props: { style: { width: "100%", height: $app.height() + "px" }, scrolling: "no" },
                 onReady: function () {
                     $appFrame = $app.find('iframe');
+                    if (isLightbox) {
+                        $img.on('click', function(e){
+                            e.preventDefault();
+                            showLightbox();
+                        });
+                        $appFrame.hide();
+                    }
                 },
                 onMessage: function (message, origin) {
                     message = $.parseJSON(message);
