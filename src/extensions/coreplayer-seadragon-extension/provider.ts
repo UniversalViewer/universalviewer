@@ -14,7 +14,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             // these are in turn overridden by the root options object in this extension's config.js.
             dziUriTemplate: "{0}{1}",
             thumbsUriTemplate: "{0}{1}",
-            timestampUris: true
+            timestampUris: false
         }, config.options);
     }
 
@@ -31,7 +31,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
         var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
 
-        // if (this.options.timestampUris) uri = this.addTimestamp(uri);
+        if (this.options.timestampUris) uri = this.addTimestamp(uri);
 
         return uri;
     }
