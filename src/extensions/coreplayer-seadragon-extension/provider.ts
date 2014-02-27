@@ -31,7 +31,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
         var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
 
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
+        //if (this.options.timestampUris) uri = this.addTimestamp(uri);
 
         return uri;
     }
