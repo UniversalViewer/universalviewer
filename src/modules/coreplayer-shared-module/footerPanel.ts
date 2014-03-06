@@ -61,7 +61,7 @@ export class FooterPanel extends baseView.BaseView {
             this.$fullScreenBtn.swapClass('fullScreen', 'normal');
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
             // set focus to ensure escape key works.
-            this.$fullScreenBtn.focus();
+            //this.$fullScreenBtn.focus();
         } else {
             this.$fullScreenBtn.swapClass('normal', 'fullScreen');
             this.$fullScreenBtn.attr('title', this.content.fullScreen);

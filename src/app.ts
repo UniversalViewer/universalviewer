@@ -9,7 +9,8 @@ require.config({
         'yepnope': 'js/yepnope.1.5.4-min',
         'yepnopecss': 'js/yepnope.css',
         'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon',
-        'mediaelement': 'modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player'
+        'mediaelement': 'modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player',
+        'pdfobject': 'modules/coreplayer-pdfcenterpanel-module/js/pdfobject'
     },
     shim: {
         jquery: {
@@ -29,6 +30,9 @@ require.config({
         },
         mediaelement: {
             deps: ['jquery']
+        },
+        pdfobject: {
+            deps: ['jquery']
         }
     }
 });
@@ -42,6 +46,7 @@ require([
     'yepnopecss',
     'openseadragon',
     'mediaelement',
+    'pdfobject',
     'bootstrapper',
     'extensions/coreplayer-seadragon-extension/extension',
     'extensions/coreplayer-seadragon-extension/provider',
@@ -58,6 +63,7 @@ require([
     yepnopecss,
     openseadragon,
     mediaelement,
+    pdfobject,
     bootstrapper,
     seadragonExtension,
     seadragonProvider,
@@ -66,7 +72,7 @@ require([
     pdfExtension,
     pdfProvider) => {
 
-        window.DEV = true; // this line is removed on build.
+        window.DEBUG = true; // this line is removed on build.
 
         var extensions = {};
 

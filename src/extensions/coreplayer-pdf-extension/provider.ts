@@ -23,4 +23,17 @@ export class Provider extends baseProvider.BaseProvider{
 
         return uri;
     }
+
+    getEmbedScript(width: number, height: number, embedTemplate: string): string{
+
+        var esu = this.options.embedScriptUri || this.embedScriptUri;
+
+        var template = this.options.embedTemplate || embedTemplate;
+
+        var configUri = this.config.uri || '';
+
+        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, configUri, width, height, esu);
+
+        return script;
+    }
 }

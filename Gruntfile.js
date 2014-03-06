@@ -243,7 +243,7 @@ module.exports = function (grunt) {
                 src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
                 replacements: [{
-                    from: /window.DEV.*=.*true;/g,
+                    from: /window.DEBUG.*=.*true;/g,
                     to: ''
                 }]
             }

@@ -83,6 +83,7 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
             if (!this.isOverlayActive()){
+                this.$element.focus();
                 this.isFullScreen = !this.isFullScreen;
                 this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
             }
