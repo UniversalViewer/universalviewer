@@ -81,9 +81,11 @@ export class BaseExtension implements IExtension {
             this.mouseY = e.pageY;
         });
 
+        this.$element.append('<a href="/" id="top"></a>');
+
         $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
             if (!this.isOverlayActive()){
-                this.$element.focus();
+                $('#top').focus();
                 this.isFullScreen = !this.isFullScreen;
                 this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
             }
