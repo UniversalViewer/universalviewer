@@ -75,29 +75,32 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     toggleComplete(): void {
         super.toggleComplete();
 
-        // if this is the first opening, if it's an archive, show
-        // thumbs, otherwise show tree.
         if (this.isUnopened) {
-            var type = this.provider.type;
 
-            // if thumbs are disabled, hide the tabs and show the tree view.
-            if (!utils.Utils.getBool(this.config.options.thumbsEnabled, true)){
-                this.$tabs.hide();
+            var treeEnabled = utils.Utils.getBool(this.config.options.treeEnabled, true);
+            var thumbsEnabled = utils.Utils.getBool(this.config.options.thumbsEnabled, true);
+
+            // hide the tabs if either tree or thumbs are disabled.
+            if (!treeEnabled || !thumbsEnabled) this.$tabs.hide();
+
+            if (thumbsEnabled && this.defaultToThumbsView()){
+                this.openThumbsView();
+            } else if (treeEnabled){
                 this.openTreeView();
-            } else {
-
-                if (type == 'archive' ||
-                    type == 'boundmanuscript' ||
-                    type == 'artwork') {
-
-                    this.$tabs.hide();
-                    this.openThumbsView();
-                } else {
-                    this.openTreeView();
-                }
-
             }
         }
+    }
+
+    defaultToThumbsView(): boolean{
+        var type = this.provider.type;
+
+        if (type == 'archive' ||
+                    type == 'boundmanuscript' ||
+                    type == 'artwork') {
+            return true;
+        }
+
+        return false;
     }
 
     openTreeView(): void {
