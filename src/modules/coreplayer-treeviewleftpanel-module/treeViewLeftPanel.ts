@@ -83,6 +83,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             // hide the tabs if either tree or thumbs are disabled.
             if (!treeEnabled || !thumbsEnabled) this.$tabs.hide();
 
+            // todo: need to check if it's a pdf too
             if (thumbsEnabled && this.defaultToThumbsView()){
                 this.openThumbsView();
             } else if (treeEnabled){
