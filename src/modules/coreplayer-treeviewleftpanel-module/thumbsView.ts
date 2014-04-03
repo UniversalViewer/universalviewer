@@ -6,6 +6,7 @@ import extension = require("../../extensions/coreplayer-seadragon-extension/exte
 import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
 import Thumb = require("../coreplayer-treeviewleftpanel-module/thumb");
+import IProvider = require("../coreplayer-shared-module/iProvider");
 import ISeadragonProvider = require("../../extensions/coreplayer-seadragon-extension/iSeadragonProvider");
 
 export class ThumbsView extends baseView.BaseView {
@@ -14,6 +15,8 @@ export class ThumbsView extends baseView.BaseView {
     $selectedThumb: JQuery;
 
     lastThumbClickedIndex: number;
+
+    isPDF: boolean = false;
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
 
@@ -24,9 +27,9 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     create(): void {
-        
+
         this.setConfig('treeViewLeftPanel');
-        
+
         super.create();
 
         $.subscribe(baseExtension.BaseExtension.ASSET_INDEX_CHANGED, (e, index) => {
@@ -66,6 +69,10 @@ export class ThumbsView extends baseView.BaseView {
             this.scrollStop();
         }, 1000);
 
+        if (this.provider.assetSequence.assetType === "application/pdf"){
+            this.isPDF = true;
+        }
+
         this.resize();
 
         this.createThumbs();
@@ -90,11 +97,15 @@ export class ThumbsView extends baseView.BaseView {
         for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
             var asset = this.provider.assetSequence.assets[i];
 
-            var uri = (<ISeadragonProvider>this.provider).getThumbUri(asset);
+            var uri = (<IProvider>this.provider).getThumbUri(asset);
             var section = this.extension.getAssetSection(asset);
 
             var heightRatio = asset.height / asset.width;
-            var height = 90 * heightRatio;
+            var height = 150;
+
+            if (heightRatio){
+                height = 90 * heightRatio;
+            }
 
             var visible = true;
 
@@ -189,13 +200,20 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     setLabel(): void {
-        if((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+
+        if (this.isPDF){
             $(this.$thumbs).find('span.index').hide();
-            $(this.$thumbs).find('span.label').show();
-        } else {
-            $(this.$thumbs).find('span.index').show();
             $(this.$thumbs).find('span.label').hide();
+        } else {
+            if((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+                $(this.$thumbs).find('span.index').hide();
+                $(this.$thumbs).find('span.label').show();
+            } else {
+                $(this.$thumbs).find('span.index').show();
+                $(this.$thumbs).find('span.label').hide();
+            }
         }
+
     }
 
     selectIndex(index): void {
@@ -208,7 +226,7 @@ export class ThumbsView extends baseView.BaseView {
         if (this.$selectedThumb) {
             this.$selectedThumb.removeClass('selected');
         }
-        
+
         this.$selectedThumb = $(this.$thumbs.find('.thumb')[index]);
         this.$selectedThumb.addClass('selected');
 

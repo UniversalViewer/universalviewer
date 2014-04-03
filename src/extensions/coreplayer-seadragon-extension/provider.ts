@@ -12,9 +12,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
-            dziUriTemplate: "{0}{1}",
-            thumbsUriTemplate: "{0}{1}",
-            timestampUris: false
+            dziUriTemplate: "{0}{1}"
         }, config.options);
     }
 
@@ -22,16 +20,6 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var baseUri = dziBaseUri ? dziBaseUri : this.options.dziBaseUri || this.options.dataBaseUri || "";
         var template = dziUriTemplate? dziUriTemplate : this.options.dziUriTemplate;
         var uri = String.prototype.format(template, baseUri, asset.dziUri);
-
-        return uri;
-    }
-
-    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
-        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
-        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-        var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
-
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
 
         return uri;
     }
@@ -47,9 +35,5 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, configUri, width, height, esu);
 
         return script;
-    }
-
-    addTimestamp(uri: string): string{
-        return uri + "?t=" + utils.Utils.getTimeStamp();
     }
 }

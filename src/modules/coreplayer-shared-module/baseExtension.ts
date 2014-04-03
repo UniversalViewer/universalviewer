@@ -66,6 +66,7 @@ export class BaseExtension implements IExtension {
         this.$element.removeClass();
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
+        this.$element.addClass(this.provider.assetSequence.assetType.split('/')[1]);
 
         // events.
         window.onresize = () => {

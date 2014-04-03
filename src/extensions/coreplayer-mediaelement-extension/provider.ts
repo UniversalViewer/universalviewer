@@ -12,8 +12,6 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
-            mediaUriTemplate: "{0}{1}",
-            timestampUris: true
         }, config.options);
     }
 

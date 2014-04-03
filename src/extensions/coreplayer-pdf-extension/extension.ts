@@ -15,6 +15,7 @@ import right = require("../../modules/coreplayer-moreinforightpanel-module/moreI
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
+import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/thumbsView");
 
 export class Extension extends baseExtension.BaseExtension{
 
@@ -35,7 +36,16 @@ export class Extension extends baseExtension.BaseExtension{
     create(): void {
         super.create();
 
+        var that = this;
+
         // events
+        $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
+            window.open((<IPDFProvider>that.provider).getPDFUri());
+        });
+
+        $.subscribe(footer.FooterPanel.EMBED, (e) => {
+            $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        });
 
         this.createModules();
 

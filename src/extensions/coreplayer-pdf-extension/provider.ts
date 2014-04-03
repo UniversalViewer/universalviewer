@@ -11,17 +11,11 @@ export class Provider extends baseProvider.BaseProvider{
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
-            mediaBaseUri: "http://wellcomelibrary.org",
-            mediaUriTemplate: "{0}{1}"
         }, config.options);
     }
 
     getPDFUri(): string{
-        var baseUri = this.options.mediaBaseUri || "";
-        var template = this.options.mediaUriTemplate;
-        var uri = String.prototype.format(template, baseUri, this.assetSequence.assets[0].fileUri);
-
-        return uri;
+        return this.assetSequence.assets[0].fileUri;
     }
 
     getEmbedScript(width: number, height: number, embedTemplate: string): string{

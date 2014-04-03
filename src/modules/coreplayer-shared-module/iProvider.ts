@@ -22,6 +22,7 @@ interface IProvider{
 	getTitle(): string;
 	getSeeAlso(): any;
 	getMediaUri(fileUri: string): string;
+	getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string;
 }
 
 export = IProvider;

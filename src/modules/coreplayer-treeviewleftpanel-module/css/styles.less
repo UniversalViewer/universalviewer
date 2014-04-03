@@ -78,7 +78,7 @@
     margin: 0;
     padding: 0;
 }
-   
+
 #app .leftPanel .treeView ul.tree ul {
     margin-left: 15px;
 }
@@ -117,6 +117,13 @@
     text-align: center;
 }
 
+#app.pdf .leftPanel .thumbsView .thumb .wrap{
+    border: none;
+    img{
+        width: 90px;
+    }
+}
+
 #app .leftPanel .thumbsView .thumb .wrap.loading{
     background: url(@loaderBlackBg) no-repeat 50% 50%;
 }
@@ -129,10 +136,12 @@
     border: 1px solid #FFB81D;
 }
 
+#app.pdf .leftPanel .thumbsView .thumb.selected .wrap{
+    border: none;
+}
+
 #app .leftPanel .thumbsView .thumb .wrap img{
-    /*width: 90px;
-    display: block;*/
-    margin:0 auto;
+    margin: 0 auto;
 }
 
 #app .leftPanel .thumbsView .thumb span{
@@ -141,6 +150,12 @@
     display: block;
     padding: 2px 0 0 0;
 }
+
+/*
+#app.pdf .leftPanel .thumbsView .thumb span{
+    display: none;
+}
+*/
 
 #app .leftPanel .thumbsView .separator{
     height: 1px;
