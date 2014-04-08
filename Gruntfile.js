@@ -125,8 +125,29 @@ module.exports = function (grunt) {
                             // src/extensions/extensionname/config.js
                             var extensionName = src.match(/extensions\/(.*)\/config.js/)[1];
 
-                            return dest + extensionName + "-config.js";
+                            return dest + extensionName + '-config.js';
                         }
+                    },
+                    // extension dependencies list
+                    {
+                        expand: true,
+                        src: ['src/extensions/**/dependencies.js'],
+                        dest: '<%= global.buildDir %>/js/',
+                        rename: function(dest, src) {
+
+                            // get the extension name from the src string.
+                            var reg = /extensions\/(.*)\/dependencies.js/;
+                            var extensionName = src.match(reg)[1];
+
+                            return dest + extensionName + '-dependencies.js';
+                        }
+                    },
+                    // extension dependencies
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/extensions/**/js/*'],
+                        dest: '<%= global.buildDir %>/js/'
                     },
                     // extensions css
                     {
@@ -203,8 +224,36 @@ module.exports = function (grunt) {
         },
 
         replace: {
+            // convert extension dynamic dependency files to use simplified commonjs wrapper.
+            dependenciesSimplify: {
+                src: ['src/extensions/**/dependencies.js'],
+                overwrite: true,
+                replacements: [{
+                    from: 'define(["require", "exports"], function(require, exports)',
+                    to: 'define(function()'
+                }]
+            },
+            // replace dependency paths to point to same /js directory.
+            dependenciesPaths: {
+                src: ['<%= global.buildDir %>/js/*dependencies.js'],
+                overwrite: true,
+                replacements: [{
+                    //from: /.\/js\/(.*)/g,
+                    from: /:.*(?:'|").*\/(.*)(?:'|")/g,
+                    to: ': \'$1\''
+                }]
+            },
+            // replace "./dependencies" with "../../[extension]-dependencies"
+            dependenciesExtension: {
+                src: ['<%= global.buildDir %>/js/app.js'],
+                overwrite: true,
+                replacements: [{
+                    from: /'extensions\/(.*)\/extension'(.*)(.\/dependencies)/g,
+                    to: '\'extensions/$1/extension\'$2../../$1-dependencies'
+                }]
+            },
             img: {
-                // replace img srcs to point to ../img/modulename/imgname
+                // replace img srcs to point to "../img/[module]/[img]"
                 src: ['<%= global.buildDir %>/css/*.css'],
                 overwrite: true,
                 replacements: [{
@@ -213,7 +262,7 @@ module.exports = function (grunt) {
                 }]
             },
             config: {
-                // replace extension config paths.
+                // replace "config.js" with "[extension]-config.js"
                 src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
                 replacements: [{
@@ -222,7 +271,7 @@ module.exports = function (grunt) {
                 }]
             },
             css: {
-                // replace css paths.
+                // replace "styles.css" with "[extension].css"
                 src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
                 replacements: [{
@@ -292,6 +341,7 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:dev',
+            'replace:dependenciesSimplify',
             'less:dev',
             'extend:config'
         );
@@ -310,6 +360,7 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:build',
+            'replace:dependenciesSimplify',
             'less:build',
             'extend:config',
             'clean:build',
@@ -319,7 +370,9 @@ module.exports = function (grunt) {
             'replace:config',
             'replace:css',
             'replace:html',
-            'replace:js'
+            'replace:js',
+            'replace:dependenciesPaths',
+            'replace:dependenciesExtension'
         );
     });
 

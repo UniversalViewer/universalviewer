@@ -15,6 +15,7 @@ import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
 import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
+import dependencies = require("./dependencies");
 
 export class Extension extends baseExtension.BaseExtension{
 
@@ -41,6 +42,8 @@ export class Extension extends baseExtension.BaseExtension{
     create(): void {
         super.create();
 
+        var that = this;
+
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
@@ -58,14 +61,19 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        this.createModules();
+        // dependencies
+        require(_.values(dependencies), function () {
+            //var deps = _.object(_.keys(dependencies), arguments);
 
-        this.setParams();
+            that.createModules();
 
-        // initial sizing
-        $.publish(baseExtension.BaseExtension.RESIZE);
+            that.setParams();
 
-        this.viewMedia();
+            // initial sizing
+            $.publish(baseExtension.BaseExtension.RESIZE);
+
+            that.viewMedia();
+        });
     }
 
     createModules(): void{

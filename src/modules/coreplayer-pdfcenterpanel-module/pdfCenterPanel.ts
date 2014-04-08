@@ -36,12 +36,18 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
     viewMedia(asset) {
 
         // create pdf object
-        this.$media = $('<object data="' + asset.fileUri + '" type="application/pdf">\
-                            <p>It appears you don\'t have a PDF plugin for this browser.\
-                            <a href="' + asset.fileUri + '">click here to download the PDF file.</a></p>\
-                         </object>');
 
-        this.$content.append(this.$media);
+        // this.$media = $('<object data="' + asset.fileUri + '" type="application/pdf">\
+        //                     <p>It appears you don\'t have a PDF plugin for this browser.\
+        //                     <a href="' + asset.fileUri + '">click here to download the PDF file.</a></p>\
+        //                  </object>');
+
+        // this.$content.append(this.$media);
+
+        var myPDF = new PDFObject({
+            url: asset.fileUri,
+            id: "PDF",
+        }).embed('content');
 
         this.resize();
     }
@@ -51,9 +57,9 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         super.resize();
 
 
-        if (this.$media){
-            this.$media.width(this.$content.width());
-            this.$media.height(this.$content.height());
-        }
+        // if (this.$media){
+        //     this.$media.width(this.$content.width());
+        //     this.$media.height(this.$content.height());
+        // }
     }
 }

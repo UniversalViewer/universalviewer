@@ -16,6 +16,7 @@ import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
 import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/thumbsView");
+import dependencies = require("./dependencies");
 
 export class Extension extends baseExtension.BaseExtension{
 
@@ -47,14 +48,20 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        this.createModules();
+        // dependencies
+        require(_.values(dependencies), function () {
+            //var deps = _.object(_.keys(dependencies), arguments);
 
-        //this.setParams();
+            that.createModules();
 
-        // initial sizing
-        $.publish(baseExtension.BaseExtension.RESIZE);
+            //this.setParams();
 
-        this.viewMedia();
+            // initial sizing
+            $.publish(baseExtension.BaseExtension.RESIZE);
+
+            that.viewMedia();
+        });
+
     }
 
     createModules(): void{
