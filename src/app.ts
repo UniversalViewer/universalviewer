@@ -8,10 +8,7 @@ require.config({
         'pubsub': 'js/pubsub',
         'jsviews': 'js/jsviews.min',
         'yepnope': 'js/yepnope.1.5.4-min',
-        'yepnopecss': 'js/yepnope.css'//,
-        //'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon',
-        //'mediaelement': 'modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player',
-        //'pdfobject': 'modules/coreplayer-pdfcenterpanel-module/js/pdfobject'
+        'yepnopecss': 'js/yepnope.css'
     },
     shim: {
         jquery: {
@@ -31,13 +28,7 @@ require.config({
         },
         yepnopecss: {
             deps: ['yepnope']
-        },
-        //mediaelement: {
-        //    deps: ['jquery']
-        //},
-        // pdfobject: {
-        //     deps: ['jquery']
-        // }
+        }
     }
 });
 
@@ -49,9 +40,6 @@ require([
     'jsviews',
     'yepnope',
     'yepnopecss',
-    //'openseadragon',
-    //'mediaelement',
-    //'pdfobject',
     'bootstrapper',
     'extensions/coreplayer-seadragon-extension/extension',
     'extensions/coreplayer-seadragon-extension/provider',
@@ -67,9 +55,6 @@ require([
     jsviews,
     yepnope,
     yepnopecss,
-    //openseadragon,
-    //mediaelement,
-    //pdfobject,
     bootstrapper,
     seadragonExtension,
     seadragonProvider,
