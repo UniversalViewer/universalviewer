@@ -16,6 +16,7 @@ import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
 import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
+import dependencies = require("./dependencies");
 
 export class Extension extends baseExtension.BaseExtension {
 
@@ -44,6 +45,8 @@ export class Extension extends baseExtension.BaseExtension {
 
     create(): void {
         super.create();
+
+        var that = this;
 
         // events.
         $.subscribe(header.PagingHeaderPanel.FIRST, (e) => {
@@ -112,20 +115,27 @@ export class Extension extends baseExtension.BaseExtension {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        this.createModules();
+        // dependencies
+        require(_.values(dependencies), function () {
+            //var deps = _.object(_.keys(dependencies), arguments);
 
-        this.setParams();
+            that.createModules();
 
-        var assetIndex;
+            that.setParams();
 
-        if (!this.provider.isReload){
-            assetIndex = parseInt(this.getParam(baseProvider.params.assetIndex)) || 0;
-        }
+            var assetIndex;
 
-        this.viewPage(assetIndex || 0);
+            if (!that.provider.isReload){
+                assetIndex = parseInt(that.getParam(baseProvider.params.assetIndex)) || 0;
+            }
 
-        // initial sizing
-        $.publish(baseExtension.BaseExtension.RESIZE);
+            that.viewPage(assetIndex || 0);
+
+            // initial sizing
+            $.publish(baseExtension.BaseExtension.RESIZE);
+        });
+
+
     }
 
     createModules(): void{

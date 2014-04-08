@@ -16,10 +16,10 @@ export class CenterPanel extends baseView.BaseView {
     create(): void {
         super.create();
 
-        this.$title = utils.Utils.createDiv('title');
+        this.$title = $('<div class="title"></div>');
         this.$element.append(this.$title);
 
-        this.$content = utils.Utils.createDiv('content');
+        this.$content = $('<div id="content" class="content"></div>');
         this.$element.append(this.$content);
 
         if (this.options.titleEnabled === false){

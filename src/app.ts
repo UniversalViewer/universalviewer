@@ -4,13 +4,14 @@ require.config({
     paths: {
         'jquery': 'js/jquery-1.10.2.min',
         'plugins': 'js/jquery.plugins',
+        'underscore': 'js/underscore-min',
         'pubsub': 'js/pubsub',
         'jsviews': 'js/jsviews.min',
         'yepnope': 'js/yepnope.1.5.4-min',
-        'yepnopecss': 'js/yepnope.css',
-        'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon',
-        'mediaelement': 'modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player',
-        'pdfobject': 'modules/coreplayer-pdfcenterpanel-module/js/pdfobject'
+        'yepnopecss': 'js/yepnope.css'//,
+        //'openseadragon': 'modules/coreplayer-seadragoncenterpanel-module/js/openseadragon',
+        //'mediaelement': 'modules/coreplayer-mediaelementcenterpanel-module/js/mediaelement-and-player',
+        //'pdfobject': 'modules/coreplayer-pdfcenterpanel-module/js/pdfobject'
     },
     shim: {
         jquery: {
@@ -18,6 +19,9 @@ require.config({
         },
         plugins: {
             deps: ['jquery']
+        },
+        underscore: {
+            exports: '_'
         },
         pubsub: {
             deps: ['jquery']
@@ -28,25 +32,26 @@ require.config({
         yepnopecss: {
             deps: ['yepnope']
         },
-        mediaelement: {
-            deps: ['jquery']
-        },
-        pdfobject: {
-            deps: ['jquery']
-        }
+        //mediaelement: {
+        //    deps: ['jquery']
+        //},
+        // pdfobject: {
+        //     deps: ['jquery']
+        // }
     }
 });
 
 require([
     'jquery',
     'plugins',
+    'underscore',
     'pubsub',
     'jsviews',
     'yepnope',
     'yepnopecss',
-    'openseadragon',
-    'mediaelement',
-    'pdfobject',
+    //'openseadragon',
+    //'mediaelement',
+    //'pdfobject',
     'bootstrapper',
     'extensions/coreplayer-seadragon-extension/extension',
     'extensions/coreplayer-seadragon-extension/provider',
@@ -57,13 +62,14 @@ require([
     ],
     ($,
     plugins,
+    _,
     pubsub,
     jsviews,
     yepnope,
     yepnopecss,
-    openseadragon,
-    mediaelement,
-    pdfobject,
+    //openseadragon,
+    //mediaelement,
+    //pdfobject,
     bootstrapper,
     seadragonExtension,
     seadragonProvider,

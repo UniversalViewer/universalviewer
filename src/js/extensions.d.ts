@@ -54,6 +54,7 @@ interface JQueryStatic {
 declare var easyXDM: any;
 declare var OpenSeadragon: any;
 declare var MediaElementPlayer: any;
+declare var PDFObject: any;
 declare var yepnope: any;
 
 // app
@@ -64,6 +65,7 @@ interface Window{
     trackEvent(category: string, action: string, label: string, value?: any);
     trackVariable(slot: number, name: string, value: string, scope: number);
     $: any;
+    _: any;
     DEBUG: boolean;
 }
 
