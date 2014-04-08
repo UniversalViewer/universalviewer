@@ -133,6 +133,9 @@ export class Extension extends baseExtension.BaseExtension {
 
             // initial sizing
             $.publish(baseExtension.BaseExtension.RESIZE);
+
+            // publish created event
+            $.publish(Extension.CREATED);
         });
 
 
