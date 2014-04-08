@@ -51,6 +51,7 @@ node_modules
 *.js.map
 *.min.map
 !Gruntfile.js
+!src/js/*.js
 !src/*/*/js/*.js
 !src/examples/*.js
 
