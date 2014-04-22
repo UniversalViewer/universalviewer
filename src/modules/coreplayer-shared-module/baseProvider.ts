@@ -35,7 +35,6 @@ export class BaseProvider implements IProvider{
     options: any = {
         thumbsUriTemplate: "{0}{1}",
         timestampUris: false,
-        mediaBaseUri: "http://wellcomelibrary.org",
         mediaUriTemplate: "{0}{1}"
     };
 
