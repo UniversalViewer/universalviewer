@@ -1,8 +1,8 @@
 
 var paths = {
         'pdfobject': './js/pdfobject',
-        'pdf': './js/pdf',
-        'pdfworker': './js/pdfworker',
+        'pdf': './js/pdf.min',
+        'pdfworker': './js/pdfworker.min',
         'compatibility': './js/compatibility'
     };
 
