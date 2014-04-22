@@ -1,14 +1,14 @@
 {
   "extensions": {
     "isAllOpen": true,
-    "parsed": "\/Date(1388750780877+0000)\/",
+    "parsed": "\/Date(1398148913344+0100)\/",
     "defaultToFirstDip": false
   },
   "identifier": "b16781405",
   "rootStructure": {
     "structures": [
       {
-       "name": "Lymphokines - Video",
+        "name": "Lymphokines - Video",
         "assetSequence": 0
       },
       {
@@ -26,7 +26,7 @@
       "extensions": {
         "dzLicenseCode": "A",
         "isAllOpen": true,
-        "posterImage": "/posterimages/videoplaceholder.png",
+        "posterImage": "/posterimages/0055-0000-3839-0000-0-0000-0000-0.jpg",
         "permittedOperations": [
           "entireFileAsOriginal"
         ],
@@ -36,7 +36,7 @@
       },
       "packageIdentifier": "b16781405",
       "index": 0,
-      "assetType": "video/mp4",
+      "assetType": "video/multiple-sources",
       "assetCount": 0,
       "supportsSearch": false,
       "rootSection": {
@@ -67,19 +67,29 @@
       },
       "assets": [
         {
-          "transcoded": false,
-          "identifier": "56df14e1-94dd-48c5-bdea-565e2a02cb60",
+          "transcoded": true,
+          "identifier": "1f788933-d742-46de-94b9-988e9aa788a8",
           "order": 1,
           "orderLabel": " - ",
           "width": 0,
           "height": 0,
           "length": "49mn 56s",
-          "fileUri": "/media/b16781405/0/56df14e1-94dd-48c5-bdea-565e2a02cb60.mp4"
+          "fileUri": "/media/b16781405/0/1f788933-d742-46de-94b9-988e9aa788a8.mpg",
+          "sources": [
+            {
+              "type": "video/mp4",
+              "src": "https://s3-eu-west-1.amazonaws.com/wdl-video-open/mp4/1f788933-d742-46de-94b9-988e9aa788a8.mp4"
+            },
+            {
+              "type": "video/webm",
+              "src": "https://s3-eu-west-1.amazonaws.com/wdl-video-open/webm/1f788933-d742-46de-94b9-988e9aa788a8.webm"
+            }
+          ]
         }
       ]
     },
     {
-      "$ref": "pkg2.js"
+      "$ref": "b16781405/1"
     }
   ],
   "bibliographicInformation": "/biblio/b16781405"
