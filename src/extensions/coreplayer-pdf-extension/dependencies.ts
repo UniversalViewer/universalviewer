@@ -2,7 +2,7 @@
 var paths = {
         'pdfobject': './js/pdfobject',
         'pdf': './js/pdf',
-        'pdfworker': './js/pdf.worker',
+        'pdfworker': './js/pdfworker',
         'compatibility': './js/compatibility'
     };
 
