@@ -50,7 +50,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         if (window.DEBUG){
             PDFJS.workerSrc = 'extensions/coreplayer-pdf-extension/js/pdf.worker.js';
         } else {
-            PDFJS.workerSrc = 'pdf.worker.js';
+            PDFJS.workerSrc = 'js/pdf.worker.js';
         }
 
 
