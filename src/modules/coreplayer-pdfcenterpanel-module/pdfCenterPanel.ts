@@ -14,6 +14,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
     $media: JQuery;
     mediaHeight: number;
     mediaWidth: number;
+    $canvas: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -31,23 +32,44 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         $.subscribe(extension.Extension.OPEN_MEDIA, (e, asset) => {
             that.viewMedia(asset);
         });
+
+        this.$canvas = $('<canvas id="pdf-canvas" style="border:1px solid black;"/>');
+        this.$content.append(this.$canvas);
     }
 
     viewMedia(asset) {
 
+        /*
         // create pdf object
-
-        // this.$media = $('<object data="' + asset.fileUri + '" type="application/pdf">\
-        //                     <p>It appears you don\'t have a PDF plugin for this browser.\
-        //                     <a href="' + asset.fileUri + '">click here to download the PDF file.</a></p>\
-        //                  </object>');
-
-        // this.$content.append(this.$media);
-
         var myPDF = new PDFObject({
             url: asset.fileUri,
             id: "PDF",
         }).embed('content');
+        */
+
+        PDFJS.workerSrc = 'extensions/coreplayer-pdf-extension/js/pdf.worker.js';
+
+        PDFJS.getDocument(asset.fileUri).then(function(pdf) {
+            // Using promise to fetch the page
+            pdf.getPage(1).then(function(page) {
+                var scale = 1.5;
+                var viewport = page.getViewport(scale);
+
+                // Prepare canvas using PDF page dimensions
+                var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('pdf-canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+
+                page.render(renderContext);
+            });
+        });
 
         this.resize();
     }
