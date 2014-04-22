@@ -47,7 +47,12 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         }).embed('content');
         */
 
-        PDFJS.workerSrc = 'extensions/coreplayer-pdf-extension/js/pdf.worker.js';
+        if (window.DEBUG){
+            PDFJS.workerSrc = 'extensions/coreplayer-pdf-extension/js/pdf.worker.js';
+        } else {
+            PDFJS.workerSrc = 'pdf.worker.js';
+        }
+
 
         PDFJS.getDocument(asset.fileUri).then(function(pdf) {
             // Using promise to fetch the page
