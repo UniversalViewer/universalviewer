@@ -68,6 +68,8 @@ interface Window{
     $: any;
     _: any;
     DEBUG: boolean;
+    // pdfjs
+    webViewerLoad: any;
 }
 
 // google

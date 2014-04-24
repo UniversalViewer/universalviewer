@@ -1,16 +1,19 @@
 
 var paths = {
-        'pdfobject': './js/pdfobject',
-        'pdf': './js/pdf.min',
-        'pdfworker': './js/pdfworker.min',
-        'compatibility': './js/compatibility'
+        //'pdfobject': './js/pdfobject',
+        'viewer': './js/viewer',
+        'pdf': './js/pdf',
+        //'pdfworker': './js/pdfworker.min',
+        'l10n': './js/l10n',
+        'compatibility': './js/compatibility',
+        'debugger': './js/debugger'
     };
 
 require.config({
     paths: paths,
     shim: {
-        pdf: {
-            deps: ['pdfworker', 'compatibility']
+        viewer: {
+            deps: ['pdf', 'compatibility', 'l10n']
         }
     }
 });
