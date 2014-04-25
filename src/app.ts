@@ -44,13 +44,13 @@ require([
     'yepnope',
     'yepnopecss',
     'bootstrapper',
+    'l10n',
     'extensions/coreplayer-seadragon-extension/extension',
     'extensions/coreplayer-seadragon-extension/provider',
     'extensions/coreplayer-mediaelement-extension/extension',
     'extensions/coreplayer-mediaelement-extension/provider',
     'extensions/coreplayer-pdf-extension/extension',
-    'extensions/coreplayer-pdf-extension/provider',
-    'l10n'
+    'extensions/coreplayer-pdf-extension/provider'
     ],
     ($,
     plugins,
@@ -60,6 +60,7 @@ require([
     yepnope,
     yepnopecss,
     bootstrapper,
+    l10n,
     seadragonExtension,
     seadragonProvider,
     mediaelementExtension,
