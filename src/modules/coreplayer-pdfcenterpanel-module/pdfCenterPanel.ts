@@ -36,8 +36,16 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
             browser == 'Opera' ||
             browser == 'Explorer' && version >= 10) {
 
+            var viewerPath;
+
+            if (window.DEBUG){
+                viewerPath = 'modules/coreplayer-pdfcenterpanel-module/html/viewer.html';
+            } else {
+                viewerPath = 'html/coreplayer-pdfcenterpanel-module/viewer.html';
+            }
+
             // load viewer.html
-            this.$content.load('modules/coreplayer-pdfcenterpanel-module/viewer.html', () => {
+            this.$content.load(viewerPath, () => {
                 if (window.DEBUG){
                     PDFJS.workerSrc = 'extensions/coreplayer-pdf-extension/js/pdf.worker.min.js';
                 } else {

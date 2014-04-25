@@ -171,6 +171,37 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['src/modules/**/js/*.*', '!src/modules/**/js/*.js'],
                         dest: '<%= global.buildDir %>/js/'
+                    },
+                    // l10n localisation files.
+                    {
+                        expand: true,
+                        flatten: false,
+                        cwd: 'src/modules/',
+                        src: ['**/l10n/**/*.properties'],
+                        dest: '<%= global.buildDir %>/l10n/',
+                        rename: function(dest, src) {
+                            // get the locale and .properties files.
+                            var reg = /.*\/l10n\/(.*)/;
+                            var locale = src.match(reg)[1];
+                            var path = dest + locale;
+                            return path;
+                        }
+                    },
+                    // module html.
+                    {
+                        expand: true,
+                        src: ['src/modules/**/html/*'],
+                        dest: '<%= global.buildDir %>/html/',
+                        rename: function(dest, src) {
+
+                            var fileName = src.substr(src.lastIndexOf('/'));
+
+                            // get the module name from the src string.
+                            // src/modules/modulename/img
+                            var moduleName = src.match(/modules\/(.*)\/html/)[1];
+
+                            return dest + moduleName + fileName;
+                        }
                     }
                 ]
             },
