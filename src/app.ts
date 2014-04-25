@@ -1,5 +1,7 @@
 /// <reference path="js/require.d.ts" />
 
+
+
 require.config({
     paths: {
         'jquery': 'js/jquery-1.10.2.min',
@@ -8,7 +10,8 @@ require.config({
         'pubsub': 'js/pubsub',
         'jsviews': 'js/jsviews.min',
         'yepnope': 'js/yepnope.1.5.4-min',
-        'yepnopecss': 'js/yepnope.css'
+        'yepnopecss': 'js/yepnope.css',
+        'l10n': 'js/l10n'
     },
     shim: {
         jquery: {
@@ -46,7 +49,8 @@ require([
     'extensions/coreplayer-mediaelement-extension/extension',
     'extensions/coreplayer-mediaelement-extension/provider',
     'extensions/coreplayer-pdf-extension/extension',
-    'extensions/coreplayer-pdf-extension/provider'
+    'extensions/coreplayer-pdf-extension/provider',
+    'l10n'
     ],
     ($,
     plugins,

@@ -1,23 +1,22 @@
 
+
 var paths = {
-        //'pdfobject': './js/pdfobject',
-        'viewer': './js/viewer',
-        'pdf': './js/pdf',
-        //'pdfworker': './js/pdfworker.min',
-        'l10n': './js/l10n',
-        'compatibility': './js/compatibility',
-        'debugger': './js/debugger'
+        'pdfobject': './js/pdfobject',
+        'viewer': './js/viewer.min',
+        'pdf': './js/pdf.min',
+        'compatibility': './js/compatibility'
     };
 
+/*
 require.config({
-    paths: paths,
+    //paths: paths,
     shim: {
-        viewer: {
-            deps: ['pdf', 'compatibility', 'l10n']
+        'viewer': {
+            deps: ['l10n', 'pdf', 'compatibility']
         }
     }
 });
-
+*/
 return paths;
 
 export class Dependencies{}

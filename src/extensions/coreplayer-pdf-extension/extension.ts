@@ -75,7 +75,11 @@ export class Extension extends baseExtension.BaseExtension{
         }
 
         this.centerPanel = new center.PDFCenterPanel(shell.Shell.$centerPanel);
-        this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+        }
+
         this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
 
         this.$helpDialogue = utils.Utils.createDiv('overlay help');
@@ -93,6 +97,10 @@ export class Extension extends baseExtension.BaseExtension{
 
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true);
+    }
+
+    isRightPanelEnabled(): boolean{
+        return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
     viewMedia(): void {

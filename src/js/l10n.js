@@ -268,6 +268,7 @@ document.webL10n = (function(window, document, undefined) {
 
   // load and parse all resources for the specified locale
   function loadLocale(lang, callback) {
+    console.log("load locale");
     callback = callback || function _callback() {};
 
     clear();
@@ -970,7 +971,9 @@ document.webL10n = (function(window, document, undefined) {
 
     // get|set the document language
     getLanguage: function() { return gLanguage; },
-    setLanguage: function(lang) { loadLocale(lang, translateFragment); },
+    setLanguage: function(lang) {
+      loadLocale(lang, translateFragment);
+    },
 
     // get the direction (ltr|rtl) of the current language
     getDirection: function() {

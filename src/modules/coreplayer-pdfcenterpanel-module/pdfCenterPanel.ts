@@ -20,8 +20,6 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
 
         super.create();
 
-        //var that = this;
-
         // events.
         $.subscribe(extension.Extension.OPEN_MEDIA, (e, asset) => {
             this.viewMedia(asset);
@@ -30,33 +28,39 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
 
     viewMedia(asset) {
 
-        // load viewer.html
-        this.$content.load('modules/coreplayer-pdfcenterpanel-module/viewer.html', () => {
-            if (window.DEBUG){
-                PDFJS.workerSrc = 'extensions/coreplayer-pdf-extension/js/pdfworker.js';
-            } else {
-                PDFJS.workerSrc = 'js/pdfworker.js';
-            }
+        var browser = window.BrowserDetect.browser;
+        var version = window.BrowserDetect.version;
 
-            PDFJS.DEFAULT_URL = asset.fileUri;
+        if (browser == 'Chrome' ||
+            browser == 'Firefox' ||
+            browser == 'Opera' ||
+            browser == 'Explorer' && version >= 10) {
 
-            window.webViewerLoad();
+            // load viewer.html
+            this.$content.load('modules/coreplayer-pdfcenterpanel-module/viewer.html', () => {
+                if (window.DEBUG){
+                    PDFJS.workerSrc = 'extensions/coreplayer-pdf-extension/js/pdf.worker.min.js';
+                } else {
+                    PDFJS.workerSrc = 'js/pdf.worker.min.js';
+                }
 
-            this.resize();
-        });
+                PDFJS.DEFAULT_URL = asset.fileUri;
 
-        /*
-        // create pdf object
-        var myPDF = new PDFObject({
-            url: asset.fileUri,
-            id: "PDF",
-        }).embed('content');
-        */
+                window.webViewerLoad();
+
+                this.resize();
+            });
+
+        } else {
+            // create pdf object
+            var myPDF = new PDFObject({
+                url: asset.fileUri,
+                id: "PDF",
+            }).embed('content');
+        }
     }
 
     resize() {
-
         super.resize();
-
     }
 }
