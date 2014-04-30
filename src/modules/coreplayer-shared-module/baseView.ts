@@ -1,12 +1,12 @@
 /// <reference path="../../js/jquery.d.ts" />
 import panel = require("./panel");
-import IProvider = require("./iProvider");
-import IExtension = require("./iExtension");
+//import IProvider = require("./iProvider");
+//import IExtension = require("./iExtension");
 
 export class BaseView extends panel.Panel{
 
-    extension: IExtension;
-    provider: IProvider;
+    extension: any;
+    provider: any;
     config: any;
     content: any;
     options: any;

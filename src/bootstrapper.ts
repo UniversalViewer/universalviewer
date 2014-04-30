@@ -3,14 +3,18 @@ import utils = require("utils");
 
 class BootStrapper{
 
-    pkg: any;
+    manifest: any;
     extensions: any;
     dataBaseUri: string;
-    packageUri: string;
-    assetSequenceIndex: number;
-    assetSequence: any;
+    manifestUri: string;
+    sequenceIndex: number;
+    sequences: any;
+    sequence: any;
+    IIIF: boolean = false;
+    configExtensionUri: string;
+    configExtension: any;
 
-    // this loads the package, determines what kind of extension and provider to use, and instantiates them.
+    // this loads the manifest, determines what kind of extension and provider to use, and instantiates them.
     constructor(extensions: any) {
 
         this.extensions = extensions;
@@ -18,78 +22,139 @@ class BootStrapper{
         var that = this;
 
         that.dataBaseUri = utils.Utils.getQuerystringParameter('dbu');
-        that.packageUri = utils.Utils.getQuerystringParameter('du');
+        that.manifestUri = utils.Utils.getQuerystringParameter('du');
+        that.configExtensionUri = utils.Utils.getQuerystringParameter('c');
 
         if (that.dataBaseUri){
-            that.packageUri = that.dataBaseUri + that.packageUri;
+            that.manifestUri = that.dataBaseUri + that.manifestUri;
         }
 
         jQuery.support.cors = true;
 
-        $.getJSON(that.packageUri, (pkg) => {
+        // if data-config has been set on embedding div, load the js
+        if (that.configExtensionUri){
 
-            that.pkg = pkg;
+            $.getJSON(that.configExtensionUri, (configExtension) => {
+                that.configExtension = configExtension;
+                that.loadManifest();
+            });
+
+        } else {
+            that.loadManifest();
+        }
+    }
+
+    loadManifest(): void{
+        var that = this;
+
+        $.getJSON(that.manifestUri, (manifest) => {
+
+            that.manifest = manifest;
 
             // if on home domain, check hash params. otherwise, use
             // embed data attributes or default to 0.
             var isHomeDomain = utils.Utils.getQuerystringParameter('hd') == "true";
             var isReload = utils.Utils.getQuerystringParameter('rl') == "true";
+            var sequenceParam = 'si';
+
+            if (that.configExtension && that.configExtension.options && that.configExtension.options.IIIF){
+                that.IIIF = true;
+            }
+
+            if (!that.IIIF) sequenceParam = 'asi';
 
             if (isHomeDomain && !isReload){
-                that.assetSequenceIndex = parseInt(utils.Utils.getHashParameter('asi', parent.document));
+                that.sequenceIndex = parseInt(utils.Utils.getHashParameter(sequenceParam, parent.document));
             }
 
-            if (!that.assetSequenceIndex){
-                that.assetSequenceIndex = parseInt(utils.Utils.getQuerystringParameter('asi')) || 0;
+            if (!that.sequenceIndex){
+                that.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(sequenceParam)) || 0;
             }
 
-            if (!that.pkg.assetSequences){
-                try{
-                    parent.$(parent.document).trigger("onNotFound");
-                    return;
-                } catch (e) {}
+            if (!that.IIIF){
+                that.sequences = that.manifest.assetSequences;
+            } else {
+                that.sequences = that.manifest.sequences;
             }
 
-            if (!that.pkg.assetSequences[that.assetSequenceIndex].$ref) {
-                that.assetSequence = that.pkg.assetSequences[that.assetSequenceIndex];
+            if (!that.sequences){
+                that.notFound();
+            }
+
+            that.loadSequence();
+
+        });
+    }
+
+    loadSequence(): void{
+
+        var that = this;
+
+        if (!that.IIIF){
+            // if it's not a reference, load dependencies
+            if (!that.sequences[that.sequenceIndex].$ref) {
+                that.sequence = that.sequences[that.sequenceIndex];
                 that.loadDependencies();
             } else {
-                // load missing assetSequence.
-                var basePackageUri = that.packageUri.substr(0, that.packageUri.lastIndexOf('/') + 1);
-                var assetSequenceUri = basePackageUri + pkg.assetSequences[that.assetSequenceIndex].$ref;
+                // load referenced sequence.
+                var baseManifestUri = that.manifestUri.substr(0, that.manifestUri.lastIndexOf('/') + 1);
+                var sequenceUri = baseManifestUri + that.sequences[that.sequenceIndex].$ref;
 
-                $.getJSON(assetSequenceUri, (assetSequenceData) => {
-                    that.assetSequence = that.pkg.assetSequences[that.assetSequenceIndex] = assetSequenceData;
+                $.getJSON(sequenceUri, (sequenceData) => {
+                    that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
                     that.loadDependencies();
                 });
             }
-        });
+        } else {
+            // if it's not a reference, load dependencies
+            if (that.sequences[that.sequenceIndex].canvases) {
+                that.sequence = that.sequences[that.sequenceIndex];
+                that.loadDependencies();
+            } else {
+                // load referenced sequence.
+                var baseManifestUri = that.manifestUri.substr(0, that.manifestUri.lastIndexOf('/') + 1);
+                var sequenceUri = String(that.sequences[that.sequenceIndex]['@id']);
+
+                $.getJSON(sequenceUri, (sequenceData) => {
+                    that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
+                    that.loadDependencies();
+                });
+            }
+        }
+    }
+
+    notFound(): void{
+        try{
+            parent.$(parent.document).trigger("onNotFound");
+            return;
+        } catch (e) {}
     }
 
     loadDependencies(): void {
 
         var that = this;
+        var extension;
 
-        var extension = that.extensions[that.assetSequence.assetType];
+        if (!that.IIIF){
+            extension = that.extensions[that.sequence.assetType];
+        } else {
+            // only seadragon extension is compatible with IIIF
+            extension = that.extensions['seadragon/iiif'];
+        }
 
         yepnope.injectCss(extension.css, function () {
 
             $.getJSON(extension.config, (config) => {
 
-                var configExtension = utils.Utils.getQuerystringParameter('c');
+                // if data-config has been set on embedding div, extend the existing config object.
+                if (that.configExtension){
 
-                // if data-config has been set on embedding div, load the js
-                // and extend the existing config object.
-                if (configExtension){
+                        // save a reference to the config extension uri.
+                        config.uri = that.configExtensionUri;
 
-                    // save a reference to the config extension uri.
-                    config.uri = configExtension;
-
-                    $.getJSON(configExtension, (ext) => {
-                        $.extend(true, config, ext);
+                        $.extend(true, config, that.configExtension);
 
                         that.createExtension(extension, config);
-                    });
 
                 } else {
                     that.createExtension(extension, config);
@@ -100,7 +165,7 @@ class BootStrapper{
 
     createExtension(extension: any, config: any): void{
         // create provider.
-        var provider = new extension.provider(config, this.pkg);
+        var provider = new extension.provider(config, this.manifest);
 
         // create extension.
         new extension.type(provider);

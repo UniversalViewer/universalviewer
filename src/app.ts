@@ -47,6 +47,8 @@ require([
     'l10n',
     'extensions/coreplayer-seadragon-extension/extension',
     'extensions/coreplayer-seadragon-extension/provider',
+    'extensions/coreplayer-seadragon-iiif-extension/extension',
+    'extensions/coreplayer-seadragon-iiif-extension/provider',
     'extensions/coreplayer-mediaelement-extension/extension',
     'extensions/coreplayer-mediaelement-extension/provider',
     'extensions/coreplayer-pdf-extension/extension',
@@ -63,6 +65,8 @@ require([
     l10n,
     seadragonExtension,
     seadragonProvider,
+    seadragonIIIFExtension,
+    seadragonIIIFProvider,
     mediaelementExtension,
     mediaelementProvider,
     pdfExtension,
@@ -77,6 +81,13 @@ require([
             provider: seadragonProvider.Provider,
             config: 'extensions/coreplayer-seadragon-extension/config.js',
             css: 'extensions/coreplayer-seadragon-extension/css/styles.css'
+        };
+
+        extensions['seadragon/iiif'] = {
+            type: seadragonIIIFExtension.Extension,
+            provider: seadragonIIIFProvider.Provider,
+            config: 'extensions/coreplayer-seadragon-iiif-extension/config.js',
+            css: 'extensions/coreplayer-seadragon-iiif-extension/css/styles.css'
         };
 
         extensions['video/mp4'] = {

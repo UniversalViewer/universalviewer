@@ -62,6 +62,7 @@ declare var PDFJS: any;
 interface Window{
     extension: any;
     pkgCallback: any;
+    manifestCallback: any;
     BrowserDetect: any;
     trackEvent(category: string, action: string, label: string, value?: any);
     trackVariable(slot: number, name: string, value: string, scope: number);

@@ -1,5 +1,5 @@
 {
     "options": {
-        "leftPanelEnabled": false
+        "IIIF": true
     }
 }
