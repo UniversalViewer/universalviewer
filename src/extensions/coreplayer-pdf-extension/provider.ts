@@ -5,8 +5,8 @@ import utils = require("../../utils");
 
 export class Provider extends baseProvider.BaseProvider{
 
-    constructor(config: any, pkg: any) {
-        super(config, pkg);
+    constructor(config: any, manifest: any) {
+        super(config, manifest);
 
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
@@ -15,7 +15,8 @@ export class Provider extends baseProvider.BaseProvider{
     }
 
     getPDFUri(): string{
-        return this.assetSequence.assets[0].fileUri;
+        var canvas = this.getCanvasByIndex(0);
+        return canvas.mediaUri;
     }
 
     getEmbedScript(width: number, height: number, embedTemplate: string): string{
@@ -26,7 +27,7 @@ export class Provider extends baseProvider.BaseProvider{
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, configUri, width, height, esu);
+        var script = String.prototype.format(template, this.dataUri, this.sequenceIndex, configUri, width, height, esu);
 
         return script;
     }

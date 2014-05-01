@@ -107,24 +107,24 @@ export class Extension extends baseExtension.BaseExtension{
         if (!this.provider.isHomeDomain) return;
 
         // set assetSequenceIndex hash param.
-        this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
+        this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
     }
 
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
-                && this.provider.pkg.assetSequences.length > 1;
+                && this.provider.isMultiCanvas();
     }
 
     viewMedia(): void {
-        var asset = this.getAssetByIndex(0);
+        var canvas = this.provider.getCanvasByIndex(0);
 
-        this.viewAsset(0, () => {
+        this.viewCanvas(0, () => {
 
-            asset.fileUri = (<provider.Provider>this.provider).getMediaUri(asset.fileUri);
+            this.provider.setMediaUri(canvas);
 
-            $.publish(Extension.OPEN_MEDIA, [asset]);
+            $.publish(Extension.OPEN_MEDIA, [canvas]);
 
-            this.setParam(baseProvider.params.assetIndex, 0);
+            this.setParam(baseProvider.params.canvasIndex, 0);
         });
     }
 }

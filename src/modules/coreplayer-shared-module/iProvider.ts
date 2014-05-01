@@ -5,7 +5,6 @@ interface IProvider{
 	config: any;
 	sequence: any;
 	manifest: any;
-	type: string;
 	isHomeDomain: boolean;
 	isOnlyInstance: boolean;
 	canvasIndex: number;
@@ -17,24 +16,23 @@ interface IProvider{
 
 	load(): void;
 	reload(callback: any): void;
-	//parseSections(section: any, assets: any[], path: string): void;
-	//parseStructures(structure: any, assetSequences: any[], path: string): void;
-	//replaceSectionType(sectionType: string): string;
-	//getRootSection(): any;
-	//getTitle(): string;
-	//getSeeAlso(): any;
-	//isSeeAlsoEnabled(): boolean;
-	//getSectionByAssetIndex(index: number): any;
-    //getSectionIndex(path: string): number;
-    //getAssetSection(asset): any;
-    //getLastAssetOrderLabel(): string;
-    //getAssetIndexByOrderLabel(label: string): number;
+
+    parseManifest(): void;
+    parseStructure(): void;
+
     getCanvasByIndex(index): any;
     getCurrentCanvas(): any;
 	getType(): string;
-	getMediaUri(fileUri: string): string;
+	getTitle(): string;
+	getMediaUri(mediaUri: string): string;
+	setMediaUri(canvas: any): void;
 	getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string;
+	getSeeAlso(): any;
+	isSeeAlsoEnabled(): boolean;
+	getStructureSeeAlsoUri(structure: any): string;
+	isMultiCanvas(): boolean;
 	addTimestamp(uri: string): string;
+	isDeepLinkingEnabled(): boolean;
 }
 
 export = IProvider;

@@ -25,7 +25,7 @@ export class TreeView extends baseView.BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.ASSET_INDEX_CHANGED, (e, assetIndex) => {
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, assetIndex) => {
             this.selectIndex(assetIndex);
         });
 

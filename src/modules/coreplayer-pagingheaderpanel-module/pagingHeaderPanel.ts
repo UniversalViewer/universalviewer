@@ -39,12 +39,12 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     }
 
     create(): void {
-        
+
         this.setConfig('pagingHeaderPanel');
-        
+
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.ASSET_INDEX_CHANGED, (e, assetIndex) => {
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, assetIndex) => {
             this.assetIndexChanged(assetIndex);
         });
 
@@ -60,7 +60,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         this.$prevButton = $('<a class="imageButton prev"></a>');
         this.$prevOptions.append(this.$prevButton);
-        
+
         this.$modeOptions = $('<div class="mode"></div>');
         this.$centerOptions.append(this.$modeOptions);
 
@@ -73,22 +73,22 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$modeOptions.append(this.$pageModeLabel);
         this.$pageModeOption = $('<input type="radio" id="page" name="mode"></input>');
         this.$modeOptions.append(this.$pageModeOption);
-        
+
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
-        
+
         this.$searchText = $('<input class="searchText" maxlength="5" type="text"></input>');
         this.$search.append(this.$searchText);
-        
+
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
-        
+
         this.$searchButton = $('<a class="imageButton go"></a>');
         this.$search.append(this.$searchButton);
-        
+
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
-        
+
         this.$nextButton = $('<a class="imageButton next"></a>');
         this.$nextOptions.append(this.$nextButton);
 
@@ -152,7 +152,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
                 // not found dialogue.
                 setTimeout(() => {
                     this.search();
-                }, 1);                
+                }, 1);
             }
         });
 

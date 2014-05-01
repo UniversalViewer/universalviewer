@@ -44,8 +44,8 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             });
         }
 
-        $.subscribe(extension.Extension.OPEN_MEDIA, (e, asset) => {
-            that.viewMedia(asset);
+        $.subscribe(extension.Extension.OPEN_MEDIA, (e, canvas) => {
+            that.viewMedia(canvas);
         });
 
         this.$container = $('<div class="container"></div>');
@@ -55,7 +55,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
     }
 
-    viewMedia(asset) {
+    viewMedia(canvas) {
 
         var that = this;
 
@@ -74,8 +74,8 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         switch (this.provider.type){
             case 'video':
 
-                if (!asset.sources){
-                    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + asset.fileUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+                if (!canvas.sources){
+                    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
                 } else {
                     this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
                 }
@@ -105,8 +105,8 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                             $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                         });
 
-                        if (asset.sources && asset.sources.length){
-                            media.setSrc(asset.sources);
+                        if (canvas.sources && canvas.sources.length){
+                            media.setSrc(canvas.sources);
                         }
 
                         try {
@@ -119,7 +119,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             break;
             case 'audio':
 
-                this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + asset.fileUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></audio>');
+                this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></audio>');
 
                 this.player = new MediaElementPlayer("#" + id, {
                     plugins: ['flash'],

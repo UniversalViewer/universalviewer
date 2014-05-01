@@ -146,7 +146,7 @@ export class BaseExtension implements IExtension {
         var value;
 
         // deep linking is only allowed when hosted on home domain.
-        if (this.isDeepLinkingEnabled()){
+        if (this.provider.isDeepLinkingEnabled()){
             value = utils.Utils.getHashParameter(baseProvider.BaseProvider.paramMap[key], parent.document);
         }
 
@@ -160,7 +160,7 @@ export class BaseExtension implements IExtension {
     // set hash params depending on whether the player is embedded.
     setParam(key: baseProvider.params, value: any): void{
 
-        if (this.isDeepLinkingEnabled()){
+        if (this.provider.isDeepLinkingEnabled()){
             utils.Utils.setHashParameter(baseProvider.BaseProvider.paramMap[key], value, parent.document);
         }
     }
@@ -202,102 +202,12 @@ export class BaseExtension implements IExtension {
         return shell.Shell.$overlays.is(':visible');
     }
 
-    isDeepLinkingEnabled(): boolean {
-        return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
-    }
-
-    /*
     viewStructure(structure: any): void{
-        if (structure.seeAlso && structure.seeAlso.tag && structure.seeAlso.data){
-            if (structure.seeAlso.tag === 'OpenExternal'){
-                var uri = this.provider.getMediaUri(structure.seeAlso.data);
-                window.open(uri, '_blank');
-            }
+        var seeAlsoUri = this.provider.getStructureSeeAlsoUri(structure);
+        if (seeAlsoUri){
+            window.open(seeAlsoUri, '_blank');
         } else {
-            this.viewAssetSequence(structure.assetSequence.index);
+            this.viewSequence(structure.sequence.index);
         }
     }
-
-    getSectionByAssetIndex(index: number): any {
-
-        var asset = this.getAssetByIndex(index);
-
-        return this.getAssetSection(asset);
-    }
-
-    getSectionIndex(path: string): number {
-
-        for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
-            var asset = this.provider.assetSequence.assets[i];
-            for (var j = 0; j < asset.sections.length; j++) {
-                var section = asset.sections[j];
-
-                if (section.path == path) {
-                    return i;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    getAssetSection(asset: any): any {
-        // get the deepest section that this file belongs to.
-        return asset.sections.last();
-    }
-
-    getLastAssetOrderLabel(): string {
-
-        // get the last orderlabel that isn't empty or '-'.
-        for (var i = this.provider.assetSequence.assets.length - 1; i >= 0; i--) {
-            var asset = this.provider.assetSequence.assets[i];
-
-            var regExp = /\d/;
-
-            if (regExp.test(asset.orderLabel)) {
-                return asset.orderLabel;
-            }
-        }
-
-        // none exists, so return '-'.
-        return '-';
-    }
-
-    getAssetIndexByOrderLabel(label: string): number {
-
-        // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
-        var regExp = /(\d*)\D*(\d*)|(\d*)/;
-        var match = regExp.exec(label);
-
-        var labelPart1 = match[1];
-        var labelPart2 = match[2];
-
-        if (!labelPart1) return -1;
-
-        var searchRegExp, regStr;
-
-        if (labelPart2) {
-            regStr = "^" + labelPart1 + "\\D*" + labelPart2 + "$";
-        } else {
-            regStr = "\\D*" + labelPart1 + "\\D*";
-        }
-
-        searchRegExp = new RegExp(regStr);
-
-        // loop through files, return first one with matching orderlabel.
-        for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
-            var asset = this.provider.assetSequence.assets[i];
-
-            if (searchRegExp.test(asset.orderLabel)) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    isSeeAlsoEnabled(): boolean{
-        return this.provider.config.options.seeAlsoEnabled !== false;
-    }
-    */
 }

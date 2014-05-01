@@ -6,8 +6,8 @@ import IMediaElementProvider = require("./iMediaElementProvider");
 
 export class Provider extends baseProvider.BaseProvider implements IMediaElementProvider{
 
-    constructor(config: any, pkg: any) {
-        super(config, pkg);
+    constructor(config: any, manifest: any) {
+        super(config, manifest);
 
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.

@@ -14,7 +14,7 @@ interface IExtension{
     refresh(): void;
     redirect(uri: string): void;
     viewSequence(index): void;
-    isDeepLinkingEnabled(): boolean;
+    viewStructure(structure: any): void;
     isOverlayActive(): boolean;
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     getParam(key: baseProvider.params): any;

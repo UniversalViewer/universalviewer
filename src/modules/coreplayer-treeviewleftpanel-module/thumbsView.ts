@@ -32,7 +32,7 @@ export class ThumbsView extends baseView.BaseView {
 
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.ASSET_INDEX_CHANGED, (e, index) => {
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
             this.selectIndex(parseInt(index));
         });
 

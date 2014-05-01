@@ -16,6 +16,7 @@ import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
 import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
+import ISeadragonProvider = require("./iSeadragonProvider");
 import dependencies = require("./dependencies");
 
 export class Extension extends baseExtension.BaseExtension {
@@ -136,7 +137,7 @@ export class Extension extends baseExtension.BaseExtension {
             that.viewPage(canvasIndex || 0);
 
             // initial sizing
-            $.publish(baseExtension.BaseIIIFExtension.RESIZE);
+            $.publish(baseExtension.BaseExtension.RESIZE);
 
             // publish created event
             $.publish(Extension.CREATED);
@@ -178,15 +179,15 @@ export class Extension extends baseExtension.BaseExtension {
 
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
-                && this.isMultiCanvas();
+                && this.provider.isMultiCanvas();
     }
 
     viewPage(canvasIndex: number): void {
         this.viewCanvas(canvasIndex, () => {
 
-            var canvas = this.getCanvasByIndex(canvasIndex);
+            var canvas = this.provider.getCanvasByIndex(canvasIndex);
 
-            var uri = (<provider.Provider>this.provider).getImageUri(canvas);
+            var uri = (<ISeadragonProvider>this.provider).getImageUri(canvas);
 
             $.publish(Extension.OPEN_MEDIA, [uri]);
 
@@ -197,7 +198,7 @@ export class Extension extends baseExtension.BaseExtension {
     getMode(): string {
         if (Extension.mode) return Extension.mode;
 
-        switch (this.provider.type) {
+        switch (this.provider.getType()) {
             case 'monograph':
                 return Extension.PAGE_MODE;
                 break;

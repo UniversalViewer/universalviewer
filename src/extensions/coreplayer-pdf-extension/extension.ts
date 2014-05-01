@@ -104,15 +104,15 @@ export class Extension extends baseExtension.BaseExtension{
     }
 
     viewMedia(): void {
-        var asset = this.getAssetByIndex(0);
+        var canvas = this.provider.getCanvasByIndex(0);
 
-        this.viewAsset(0, () => {
+        this.viewCanvas(0, () => {
 
-            asset.fileUri = (<provider.Provider>this.provider).getMediaUri(asset.fileUri);
+            this.provider.setMediaUri(canvas);
 
-            $.publish(Extension.OPEN_MEDIA, [asset]);
+            $.publish(Extension.OPEN_MEDIA, [canvas]);
 
-            this.setParam(baseProvider.params.assetIndex, 0);
+            this.setParam(baseProvider.params.canvasIndex, 0);
         });
     }
 

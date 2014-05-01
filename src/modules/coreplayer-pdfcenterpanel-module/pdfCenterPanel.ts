@@ -21,12 +21,12 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         super.create();
 
         // events.
-        $.subscribe(extension.Extension.OPEN_MEDIA, (e, asset) => {
-            this.viewMedia(asset);
+        $.subscribe(extension.Extension.OPEN_MEDIA, (e, canvas) => {
+            this.viewMedia(canvas);
         });
     }
 
-    viewMedia(asset) {
+    viewMedia(canvas) {
 
         var browser = window.BrowserDetect.browser;
         var version = window.BrowserDetect.version;
@@ -52,7 +52,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
                     PDFJS.workerSrc = 'js/pdf.worker.min.js';
                 }
 
-                PDFJS.DEFAULT_URL = asset.fileUri;
+                PDFJS.DEFAULT_URL = canvas.mediaUri;
 
                 window.webViewerLoad();
 
@@ -62,7 +62,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         } else {
             // create pdf object
             var myPDF = new PDFObject({
-                url: asset.fileUri,
+                url: canvas.mediaUri,
                 id: "PDF",
             }).embed('content');
         }

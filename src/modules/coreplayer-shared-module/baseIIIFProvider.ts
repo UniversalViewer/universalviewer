@@ -1,7 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 import utils = require("../../utils");
-import IIIIFProvider = require("./iIIIFProvider");
+import IProvider = require("./iProvider");
 
 export enum params {
     sequenceIndex,
@@ -13,14 +13,13 @@ export enum params {
 // to factors like varying back end data provision systems.
 // they provide a consistent interface and set of data structures
 // for extensions to operate against.
-export class BaseIIIFProvider implements IIIIFProvider{
+export class BaseProvider implements IProvider{
 
     config: any;
     manifest: any;
     sequenceIndex: number;
     sequence: any;
     canvasIndex: number;
-    type: string;
     dataUri: string;
     isHomeDomain: boolean;
     isOnlyInstance: boolean;
@@ -57,11 +56,11 @@ export class BaseIIIFProvider implements IIIIFProvider{
         this.isLightbox = utils.Utils.getQuerystringParameter('lb') === "true";
 
         if (this.isHomeDomain && !this.isReload){
-            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(BaseIIIFProvider.paramMap[params.sequenceIndex], parent.document));
+            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.sequenceIndex], parent.document));
         }
 
         if (!this.sequenceIndex){
-            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseIIIFProvider.paramMap[params.sequenceIndex])) || 0;
+            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.sequenceIndex])) || 0;
         }
 
         this.load();
@@ -81,15 +80,9 @@ export class BaseIIIFProvider implements IIIIFProvider{
             }
         }
 
-        /*
-        this.type = this.getRootSection().sectionType.toLowerCase();
+        this.parseManifest();
 
-
-        if (this.manifest.rootStructure) {
-            this.parseStructures(this.manifest.rootStructure, this.manifest.sequences, '');
-        }
-        */
-        //this.parseSections(this.getRootSection(), this.sequence.assets, '');
+        this.parseStructure();
     }
 
     reload(callback: any): void {
@@ -100,7 +93,7 @@ export class BaseIIIFProvider implements IIIIFProvider{
             manifestUri = this.options.dataBaseUri + this.dataUri;
         }
 
-        manifestUri += "?t=" + utils.Utils.getTimeStamp();
+        manifestUri = this.addTimestamp(manifestUri);
 
         window.manifestCallback = (data: any) => {
             this.manifest = data;
@@ -119,6 +112,24 @@ export class BaseIIIFProvider implements IIIIFProvider{
         });
     }
 
+    getType(): string{
+        // todo: perhaps use viewingHint attribute
+        // default to 'seadragon-iiif'
+        return 'seadragon-iiif';
+    }
+
+    getTitle(): string {
+        return this.sequence.label;
+    }
+
+    getSeeAlso(): any {
+        return this.manifest.seeAlso;
+    }
+
+    isSeeAlsoEnabled(): boolean{
+        return this.config.options.seeAlsoEnabled !== false;
+    }
+
     getCanvasByIndex(index: number): any {
         return this.sequence.canvases[index];
     }
@@ -131,100 +142,46 @@ export class BaseIIIFProvider implements IIIIFProvider{
         return this.sequence.canvases.length > 1;
     }
 
-    getMediaUri(fileUri: string): string{
+    getMediaUri(mediaUri: string): string{
         var baseUri = this.options.mediaBaseUri || "";
         var template = this.options.mediaUriTemplate;
-        var uri = String.prototype.format(template, baseUri, fileUri);
+        var uri = String.prototype.format(template, baseUri, mediaUri);
 
         return uri;
     }
 
-    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
+    setMediaUri(canvas: any): void{
+        canvas.mediaUri = this.getMediaUri(canvas.resources[0]['@id'] + '/info.json');
+    }
+
+    getThumbUri(canvas: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
         var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
         var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-        var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
+        var uri = String.prototype.format(template, baseUri, canvas.thumbnailPath);
 
         if (this.options.timestampUris) uri = this.addTimestamp(uri);
 
         return uri;
     }
 
+    parseManifest(): void{
+
+    }
+
+    parseStructure(): void{
+
+    }
+
+    getStructureSeeAlsoUri(structure: any): string{
+        // todo
+        return null;
+    }
+
     addTimestamp(uri: string): string{
         return uri + "?t=" + utils.Utils.getTimeStamp();
     }
 
-    /*
-    // the purpose of this is to give each asset in assetSequence.assets
-    // a collection of sections it belongs to.
-    // it also builds a path string property for each section.
-    // this can then be used when a section is clicked in the tree view
-    // where getSectionIndex in baseExtension loops though all assets and their
-    // associated sections until it finds one with a matching path.
-    parseSections(section: any, assets: any[], path: string): void {
-
-        section.path = path;
-
-        // replace SectionType with config.js mapping (if exists).
-        section.sectionType = this.replaceSectionType(section.sectionType);
-
-        for (var i = 0; i < section.assets.length; i++) {
-            var index = section.assets[i];
-
-            var asset = assets[index];
-
-            if (!asset.sections) asset.sections = [];
-
-            asset.sections.push(section);
-        }
-
-        if (section.sections) {
-            for (var j = 0; j < section.sections.length; j++) {
-                this.parseSections(section.sections[j], assets, path + '/' + j);
-            }
-        }
+    isDeepLinkingEnabled(): boolean {
+        return (this.isHomeDomain && this.isOnlyInstance);
     }
-
-    parseStructures(structure: any, assetSequences: any[], path: string): void {
-
-        structure.path = path;
-
-        if (typeof(structure.assetSequence) != 'undefined') {
-
-            var assetSequence = assetSequences[structure.assetSequence];
-
-            assetSequence.index = structure.assetSequence;
-            assetSequence.structure = structure;
-
-            // replace index with actual object ref.
-            structure.assetSequence = assetSequence;
-        }
-
-        if (structure.structures) {
-            for (var j = 0; j < structure.structures.length; j++) {
-                this.parseStructures(structure.structures[j], assetSequences, path + '/' + j);
-            }
-        }
-    }
-
-    replaceSectionType(sectionType: string): string {
-        if (this.config.options.sectionMappings && this.config.options.sectionMappings[sectionType]) {
-            return this.config.options.sectionMappings[sectionType];
-        }
-
-        return sectionType;
-    }
-
-    getRootSection(): any {
-        return this.assetSequence.rootSection;
-    }
-
-    getTitle(): string {
-        return this.getRootSection().title;
-    }
-
-    getSeeAlso(): any {
-        return this.assetSequence.seeAlso;
-    }
-    */
-
 }
