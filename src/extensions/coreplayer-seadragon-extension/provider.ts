@@ -6,6 +6,8 @@ import ISeadragonProvider = require("./iSeadragonProvider");
 
 export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
 
+    static paramMap: string[] = ['asi', 'ai', 'z'];
+
     constructor(config: any, pkg: any) {
         super(config, pkg);
 

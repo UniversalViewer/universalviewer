@@ -54,18 +54,18 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(header.PagingHeaderPanel.LAST, (e) => {
-            this.viewPage(this.provider.assetSequence.assets.length - 1);
+            this.viewPage(this.provider.sequence.canvases.length - 1);
         });
 
         $.subscribe(header.PagingHeaderPanel.PREV, (e) => {
-            if (this.currentAssetIndex != 0) {
-                this.viewPage(Number(this.currentAssetIndex) - 1);
+            if (this.currentCanvasIndex != 0) {
+                this.viewPage(Number(this.currentCanvasIndex) - 1);
             }
         });
 
         $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
-            if (this.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
-                this.viewPage(Number(this.currentAssetIndex) + 1);
+            if (this.currentCanvasIndex != this.provider.sequence.canvases.length - 1) {
+                this.viewPage(Number(this.currentCanvasIndex) + 1);
             }
         });
 
@@ -75,14 +75,17 @@ export class Extension extends baseExtension.BaseExtension {
             $.publish(Extension.MODE_CHANGED, [mode]);
         });
 
+        /*
         $.subscribe(header.PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
             this.viewLabel(value);
         });
+        */
 
         $.subscribe(header.PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
         });
 
+        /*
         $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
             this.viewStructure(structure);
         });
@@ -90,6 +93,7 @@ export class Extension extends baseExtension.BaseExtension {
         $.subscribe(treeView.TreeView.VIEW_SECTION, (e, section: any) => {
             this.viewSection(section.path);
         });
+        */
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
@@ -100,14 +104,14 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
-            if (this.currentAssetIndex != 0) {
-                this.viewPage(Number(this.currentAssetIndex) - 1);
+            if (this.currentCanvasIndex != 0) {
+                this.viewPage(Number(this.currentCanvasIndex) - 1);
             }
         });
 
         $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
-            if (this.currentAssetIndex != this.provider.assetSequence.assets.length - 1) {
-                this.viewPage(Number(this.currentAssetIndex) + 1);
+            if (this.currentCanvasIndex != this.provider.sequence.canvases.length - 1) {
+                this.viewPage(Number(this.currentCanvasIndex) + 1);
             }
         });
 
@@ -123,16 +127,16 @@ export class Extension extends baseExtension.BaseExtension {
 
             that.setParams();
 
-            var assetIndex;
+            var canvasIndex;
 
             if (!that.provider.isReload){
-                assetIndex = parseInt(that.getParam(baseProvider.params.assetIndex)) || 0;
+                canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || 0;
             }
 
-            that.viewPage(assetIndex || 0);
+            that.viewPage(canvasIndex || 0);
 
             // initial sizing
-            $.publish(baseExtension.BaseExtension.RESIZE);
+            $.publish(baseExtension.BaseIIIFExtension.RESIZE);
 
             // publish created event
             $.publish(Extension.CREATED);
@@ -168,49 +172,26 @@ export class Extension extends baseExtension.BaseExtension {
     setParams(): void{
         if (!this.provider.isHomeDomain) return;
 
-        // set assetSequenceIndex hash param.
-        this.setParam(baseProvider.params.assetSequenceIndex, this.provider.assetSequenceIndex);
+        // set sequenceIndex hash param.
+        this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
     }
 
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
-                && this.provider.assetSequence.assets.length > 1;
+                && this.isMultiCanvas();
     }
 
-    viewPage(assetIndex: number): void {
-        this.viewAsset(assetIndex, () => {
+    viewPage(canvasIndex: number): void {
+        this.viewCanvas(canvasIndex, () => {
 
-            var asset = this.provider.assetSequence.assets[assetIndex];
+            var canvas = this.getCanvasByIndex(canvasIndex);
 
-            var dziUri = (<provider.Provider>this.provider).getDziUri(asset);
+            var uri = (<provider.Provider>this.provider).getImageUri(canvas);
 
-            $.publish(Extension.OPEN_MEDIA, [dziUri]);
+            $.publish(Extension.OPEN_MEDIA, [uri]);
 
-            this.setParam(baseProvider.params.assetIndex, assetIndex);
+            this.setParam(baseProvider.params.canvasIndex, canvasIndex);
         });
-    }
-
-    viewSection(path: string): void {
-
-        var index = this.getSectionIndex(path);
-
-        this.viewPage(index);
-    }
-
-    viewLabel(label: string): void {
-
-        if (!label) {
-            this.showDialogue(this.provider.config.modules.genericDialogue.content.emptyValue);
-            return;
-        }
-
-        var index = this.getAssetIndexByOrderLabel(label);
-
-        if (index != -1) {
-            this.viewPage(index);
-        } else {
-            this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
-        }
     }
 
     getMode(): string {
@@ -239,4 +220,29 @@ export class Extension extends baseExtension.BaseExtension {
 
         return "";
     }
+
+    /*
+    viewSection(path: string): void {
+
+        var index = this.getSectionIndex(path);
+
+        this.viewPage(index);
+    }
+
+    viewLabel(label: string): void {
+
+        if (!label) {
+            this.showDialogue(this.provider.config.modules.genericDialogue.content.emptyValue);
+            return;
+        }
+
+        var index = this.getAssetIndexByOrderLabel(label);
+
+        if (index != -1) {
+            this.viewPage(index);
+        } else {
+            this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+        }
+    }
+    */
 }
