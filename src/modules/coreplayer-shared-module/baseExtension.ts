@@ -11,7 +11,7 @@ export class BaseExtension implements IExtension {
 
     shell: shell.Shell;
     isFullScreen: boolean = false;
-    currentAssetIndex: number;
+    currentCanvasIndex: number;
     mouseX: number;
     mouseY: number;
     $element: JQuery;
@@ -22,9 +22,9 @@ export class BaseExtension implements IExtension {
     // events
     static RESIZE: string = 'onResize';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
-    static ASSET_INDEX_CHANGED: string = 'onAssetIndexChanged';
+    static CANVAS_INDEX_CHANGED: string = 'onCanvasIndexChanged';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
-    static ASSETSEQUENCE_INDEX_CHANGED: string = 'onAssetSequenceIndexChanged';
+    static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
     static REDIRECT: string = 'onRedirect';
     static REFRESH: string = 'onRefresh';
     static RELOAD: string = 'onReload';
@@ -66,7 +66,7 @@ export class BaseExtension implements IExtension {
         this.$element.removeClass();
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
-        this.$element.addClass(this.provider.assetSequence.assetType.replace('/', '-'));
+        this.$element.addClass(this.provider.getType());
 
         // events.
         window.onresize = () => {
@@ -107,8 +107,8 @@ export class BaseExtension implements IExtension {
         // create shell and shared views.
         this.shell = new shell.Shell(this.$element);
 
-        // set currentAssetIndex to -1 (nothing selected yet).
-        this.currentAssetIndex = -1;
+        // set currentCanvasIndex to -1 (nothing selected yet).
+        this.currentCanvasIndex = -1;
     }
 
     width(): number {
@@ -165,24 +165,48 @@ export class BaseExtension implements IExtension {
         }
     }
 
-    viewAsset(assetIndex: number, callback?: (i: number) => any): void {
+    viewCanvas(canvasIndex: number, callback?: (i: number) => any): void {
 
-        this.currentAssetIndex = assetIndex;
+        this.currentCanvasIndex = canvasIndex;
 
-        $.publish(BaseExtension.ASSET_INDEX_CHANGED, [assetIndex]);
+        $.publish(BaseExtension.CANVAS_INDEX_CHANGED, [canvasIndex]);
 
-        if (callback) callback(assetIndex);
+        if (callback) callback(canvasIndex);
     }
 
-    viewAssetSequence(index: number): void {
+    viewSequence(index: number): void {
 
         if (this.isFullScreen) {
             $.publish(BaseExtension.TOGGLE_FULLSCREEN);
         }
 
-        this.triggerSocket(BaseExtension.ASSETSEQUENCE_INDEX_CHANGED, index);
+        this.triggerSocket(BaseExtension.SEQUENCE_INDEX_CHANGED, index);
     }
 
+    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
+
+        $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [
+            {
+                message: message,
+                acceptCallback: acceptCallback,
+                buttonText: buttonText,
+                allowClose: allowClose
+            }]);
+    }
+
+    closeActiveDialogue(): void{
+        $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
+    }
+
+    isOverlayActive(): boolean{
+        return shell.Shell.$overlays.is(':visible');
+    }
+
+    isDeepLinkingEnabled(): boolean {
+        return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
+    }
+
+    /*
     viewStructure(structure: any): void{
         if (structure.seeAlso && structure.seeAlso.tag && structure.seeAlso.data){
             if (structure.seeAlso.tag === 'OpenExternal'){
@@ -192,11 +216,6 @@ export class BaseExtension implements IExtension {
         } else {
             this.viewAssetSequence(structure.assetSequence.index);
         }
-    }
-
-    isDeepLinkingEnabled(): boolean {
-
-        return (this.provider.isHomeDomain && this.provider.isOnlyInstance);
     }
 
     getSectionByAssetIndex(index: number): any {
@@ -225,11 +244,6 @@ export class BaseExtension implements IExtension {
     getAssetSection(asset: any): any {
         // get the deepest section that this file belongs to.
         return asset.sections.last();
-    }
-
-    getAssetByIndex(index: number): any {
-
-        return this.provider.assetSequence.assets[index];
     }
 
     getLastAssetOrderLabel(): string {
@@ -282,34 +296,8 @@ export class BaseExtension implements IExtension {
         return -1;
     }
 
-    getCurrentAsset(): any {
-        return this.provider.assetSequence.assets[this.currentAssetIndex];
-    }
-
-    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
-
-        $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [
-            {
-                message: message,
-                acceptCallback: acceptCallback,
-                buttonText: buttonText,
-                allowClose: allowClose
-            }]);
-    }
-
-    closeActiveDialogue(): void{
-        $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
-    }
-
-    isMultiAsset(): boolean{
-        return this.provider.assetSequence.assets.length > 1;
-    }
-
-    isOverlayActive(): boolean{
-        return shell.Shell.$overlays.is(':visible');
-    }
-
     isSeeAlsoEnabled(): boolean{
         return this.provider.config.options.seeAlsoEnabled !== false;
     }
+    */
 }

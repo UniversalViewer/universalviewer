@@ -19,6 +19,7 @@ export class BaseIIIFProvider implements IIIIFProvider{
     manifest: any;
     sequenceIndex: number;
     sequence: any;
+    canvasIndex: number;
     type: string;
     dataUri: string;
     isHomeDomain: boolean;
@@ -118,6 +119,40 @@ export class BaseIIIFProvider implements IIIIFProvider{
         });
     }
 
+    getCanvasByIndex(index: number): any {
+        return this.sequence.canvases[index];
+    }
+
+    getCurrentCanvas(): any {
+        return this.sequence.canvases[this.currentCanvasIndex];
+    }
+
+    isMultiCanvas(): boolean{
+        return this.sequence.canvases.length > 1;
+    }
+
+    getMediaUri(fileUri: string): string{
+        var baseUri = this.options.mediaBaseUri || "";
+        var template = this.options.mediaUriTemplate;
+        var uri = String.prototype.format(template, baseUri, fileUri);
+
+        return uri;
+    }
+
+    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
+        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
+        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
+        var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
+
+        if (this.options.timestampUris) uri = this.addTimestamp(uri);
+
+        return uri;
+    }
+
+    addTimestamp(uri: string): string{
+        return uri + "?t=" + utils.Utils.getTimeStamp();
+    }
+
     /*
     // the purpose of this is to give each asset in assetSequence.assets
     // a collection of sections it belongs to.
@@ -192,25 +227,4 @@ export class BaseIIIFProvider implements IIIIFProvider{
     }
     */
 
-    getMediaUri(fileUri: string): string{
-        var baseUri = this.options.mediaBaseUri || "";
-        var template = this.options.mediaUriTemplate;
-        var uri = String.prototype.format(template, baseUri, fileUri);
-
-        return uri;
-    }
-
-    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
-        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
-        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-        var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
-
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
-
-        return uri;
-    }
-
-    addTimestamp(uri: string): string{
-        return uri + "?t=" + utils.Utils.getTimeStamp();
-    }
 }

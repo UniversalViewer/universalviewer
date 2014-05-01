@@ -45,9 +45,8 @@ require([
     'yepnopecss',
     'bootstrapper',
     'l10n',
-    'extensions/coreplayer-seadragon-extension/extension',
-    'extensions/coreplayer-seadragon-extension/provider',
     'extensions/coreplayer-seadragon-iiif-extension/extension',
+    'extensions/coreplayer-seadragon-iiif-extension/iiifProvider',
     'extensions/coreplayer-seadragon-iiif-extension/provider',
     'extensions/coreplayer-mediaelement-extension/extension',
     'extensions/coreplayer-mediaelement-extension/provider',
@@ -64,9 +63,8 @@ require([
     bootstrapper,
     l10n,
     seadragonExtension,
-    seadragonProvider,
-    seadragonIIIFExtension,
     seadragonIIIFProvider,
+    seadragonProvider,
     mediaelementExtension,
     mediaelementProvider,
     pdfExtension,
@@ -79,12 +77,12 @@ require([
         extensions['seadragon/dzi'] = {
             type: seadragonExtension.Extension,
             provider: seadragonProvider.Provider,
-            config: 'extensions/coreplayer-seadragon-extension/config.js',
+            config: 'extensions/coreplayer-seadragon-iiif-extension/config.js',
             css: 'extensions/coreplayer-seadragon-extension/css/styles.css'
         };
 
         extensions['seadragon/iiif'] = {
-            type: seadragonIIIFExtension.Extension,
+            type: seadragonExtension.Extension,
             provider: seadragonIIIFProvider.Provider,
             config: 'extensions/coreplayer-seadragon-iiif-extension/config.js',
             css: 'extensions/coreplayer-seadragon-iiif-extension/css/styles.css'

@@ -6,7 +6,7 @@ import ISeadragonProvider = require("./iSeadragonProvider");
 
 export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
 
-    static paramMap: string[] = ['asi', 'ai', 'z'];
+    static paramMap: string[] = ['si', 'ci', 'z'];
 
     constructor(config: any, pkg: any) {
         super(config, pkg);
@@ -14,19 +14,22 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
-            dziUriTemplate: "{0}{1}"
+            iiifUriTemplate: "{0}{1}"
         }, config.options);
     }
 
-    getDziUri(asset: any, dziBaseUri?: string, dziUriTemplate?: string): string{
-        var baseUri = dziBaseUri ? dziBaseUri : this.options.dziBaseUri || this.options.dataBaseUri || "";
-        var template = dziUriTemplate? dziUriTemplate : this.options.dziUriTemplate;
-        var uri = String.prototype.format(template, baseUri, asset.dziUri);
+    getIIIFUri(canvas: any, iiifBaseUri?: string, iiifUriTemplate?: string): string{
+        var baseUri = iiifBaseUri ? iiifBaseUri : this.options.iiifBaseUri || this.options.dataBaseUri || "";
+        var template = iiifUriTemplate? iiifUriTemplate : this.options.iiifUriTemplate;
+
+        var iiifUri = canvas.resources[0]['@id'] + "/info.json";
+
+        var uri = String.prototype.format(template, baseUri, iiifUri);
 
         return uri;
     }
 
-    getEmbedScript(assetIndex: number, zoom: string, width: number, height: number, embedTemplate: string): string{
+    getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, embedTemplate: string): string{
 
         var esu = this.options.embedScriptUri || this.embedScriptUri;
 
@@ -34,7 +37,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.dataUri, this.assetSequenceIndex, assetIndex, zoom, configUri, width, height, esu);
+        var script = String.prototype.format(template, this.dataUri, this.sequenceIndex, canvasIndex, zoom, configUri, width, height, esu);
 
         return script;
     }

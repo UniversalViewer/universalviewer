@@ -1,9 +1,9 @@
 
 import IExtension = require("../../modules/coreplayer-shared-module/iExtension");
 
-interface ISeadragonIIIFExtension extends IExtension{
+interface ISeadragonExtension extends IExtension{
 	getMode(): string;
     getViewerBounds(): string;
 }
 
-export = ISeadragonIIIFExtension;
+export = ISeadragonExtension;

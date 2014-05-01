@@ -4,8 +4,8 @@ import utils = require("../../utils");
 import IProvider = require("./iProvider");
 
 export enum params {
-    assetSequenceIndex,
-    assetIndex,
+    sequenceIndex,
+    canvasIndex,
     zoom
 }
 
@@ -16,9 +16,10 @@ export enum params {
 export class BaseProvider implements IProvider{
 
     config: any;
-    pkg: any;
-    assetSequenceIndex: number;
-    assetSequence: any;
+    manifest: any;
+    sequenceIndex: number;
+    sequence: any;
+    canvasIndex: number;
     type: string;
     dataUri: string;
     isHomeDomain: boolean;
@@ -30,7 +31,8 @@ export class BaseProvider implements IProvider{
     isLightbox: boolean;
 
     // map param names to enum indexes.
-    static paramMap: string[] = ['asi', 'ai', 'z'];
+    // (implemented in descendant).
+    static paramMap: string[];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -38,9 +40,9 @@ export class BaseProvider implements IProvider{
         mediaUriTemplate: "{0}{1}"
     };
 
-    constructor(config: any, pkg: any) {
+    constructor(config: any, manifest: any) {
         this.config = config;
-        this.pkg = pkg;
+        this.manifest = manifest;
 
         // add dataBaseUri to options so it can be overridden.
         this.options.dataBaseUri = utils.Utils.getQuerystringParameter('dbu');
@@ -56,51 +58,53 @@ export class BaseProvider implements IProvider{
         this.isLightbox = utils.Utils.getQuerystringParameter('lb') === "true";
 
         if (this.isHomeDomain && !this.isReload){
-            this.assetSequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.assetSequenceIndex], parent.document));
+            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.sequenceIndex], parent.document));
         }
 
-        if (!this.assetSequenceIndex){
-            this.assetSequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.assetSequenceIndex])) || 0;
+        if (!this.sequenceIndex){
+            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.sequenceIndex])) || 0;
         }
 
         this.load();
     }
 
     load(): void{
-        // we know that this assetSequence exists because the bootstrapper
+        // we know that this sequence exists because the bootstrapper
         // will have loaded it already.
-        this.assetSequence = this.pkg.assetSequences[this.assetSequenceIndex];
+        this.sequence = this.manifest.sequences[this.sequenceIndex];
 
-        // replace all ref assetSequences with an object that can store
+        // replace all ref sequences with an object that can store
         // its path and sub structures. they won't get used for anything
         // else without a reload.
-        for (var i = 0; i < this.pkg.assetSequences.length; i++) {
-            if (this.pkg.assetSequences[i].$ref) {
-                this.pkg.assetSequences[i] = {};
+        for (var i = 0; i < this.manifest.sequences.length; i++) {
+            if (!this.manifest.sequences[i].canvases) {
+                this.manifest.sequences[i] = {};
             }
         }
 
+        /*
         this.type = this.getRootSection().sectionType.toLowerCase();
 
-        if (this.pkg.rootStructure) {
-            this.parseStructures(this.pkg.rootStructure, this.pkg.assetSequences, '');
-        }
 
-        this.parseSections(this.getRootSection(), this.assetSequence.assets, '');
+        if (this.manifest.rootStructure) {
+            this.parseStructures(this.manifest.rootStructure, this.manifest.sequences, '');
+        }
+        */
+        //this.parseSections(this.getRootSection(), this.sequence.assets, '');
     }
 
     reload(callback: any): void {
 
-        var packageUri = this.dataUri;
+        var manifestUri = this.dataUri;
 
         if (this.options.dataBaseUri){
-            packageUri = this.options.dataBaseUri + this.dataUri;
+            manifestUri = this.options.dataBaseUri + this.dataUri;
         }
 
-        packageUri += "?t=" + utils.Utils.getTimeStamp();
+        manifestUri += "?t=" + utils.Utils.getTimeStamp();
 
-        window.pkgCallback = (data: any) => {
-            this.pkg = data;
+        window.manifestCallback = (data: any) => {
+            this.manifest = data;
 
             this.load();
 
@@ -108,14 +112,59 @@ export class BaseProvider implements IProvider{
         };
 
         $.ajax({
-            url: packageUri,
+            url: manifestUri,
             type: 'GET',
             dataType: 'jsonp',
             jsonp: 'callback',
-            jsonpCallback: 'pkgCallback'
+            jsonpCallback: 'manifestCallback'
         });
     }
 
+    getType(): string{
+        // todo: perhaps use viewingHint attribute
+        // default to 'seadragon-iiif'
+        if (this.sequence.assetType){
+            return this.sequence.assetType.replace('/', '-');
+        } else {
+            return 'seadragon-iiif';
+        }
+    }
+
+    getCanvasByIndex(index: number): any {
+        return this.sequence.canvases[index];
+    }
+
+    getCurrentCanvas(): any {
+        return this.sequence.canvases[this.currentCanvasIndex];
+    }
+
+    isMultiCanvas(): boolean{
+        return this.sequence.canvases.length > 1;
+    }
+
+    getMediaUri(fileUri: string): string{
+        var baseUri = this.options.mediaBaseUri || "";
+        var template = this.options.mediaUriTemplate;
+        var uri = String.prototype.format(template, baseUri, fileUri);
+
+        return uri;
+    }
+
+    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
+        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
+        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
+        var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
+
+        if (this.options.timestampUris) uri = this.addTimestamp(uri);
+
+        return uri;
+    }
+
+    addTimestamp(uri: string): string{
+        return uri + "?t=" + utils.Utils.getTimeStamp();
+    }
+
+    /*
     // the purpose of this is to give each asset in assetSequence.assets
     // a collection of sections it belongs to.
     // it also builds a path string property for each section.
@@ -187,26 +236,6 @@ export class BaseProvider implements IProvider{
     getSeeAlso(): any {
         return this.assetSequence.seeAlso;
     }
+    */
 
-    getMediaUri(fileUri: string): string{
-        var baseUri = this.options.mediaBaseUri || "";
-        var template = this.options.mediaUriTemplate;
-        var uri = String.prototype.format(template, baseUri, fileUri);
-
-        return uri;
-    }
-
-    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
-        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
-        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-        var uri = String.prototype.format(template, baseUri, asset.thumbnailPath);
-
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
-
-        return uri;
-    }
-
-    addTimestamp(uri: string): string{
-        return uri + "?t=" + utils.Utils.getTimeStamp();
-    }
 }

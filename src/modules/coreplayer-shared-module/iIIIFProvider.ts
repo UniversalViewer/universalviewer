@@ -7,6 +7,7 @@ interface IIIIFProvider{
 	type: string;
 	isHomeDomain: boolean;
 	isOnlyInstance: boolean;
+	canvasIndex: number;
 	sequenceIndex: number;
 	isReload: boolean;
 	configExtension: string;
@@ -23,6 +24,7 @@ interface IIIIFProvider{
 	//getSeeAlso(): any;
 	getMediaUri(fileUri: string): string;
 	getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string;
+	addTimestamp(uri: string): string;
 }
 
 export = IIIIFProvider;

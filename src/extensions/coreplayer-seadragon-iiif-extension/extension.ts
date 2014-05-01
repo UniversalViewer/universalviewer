@@ -1,9 +1,9 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
-import baseExtension = require("../../modules/coreplayer-shared-module/baseIIIFExtension");
+import baseExtension = require("../../modules/coreplayer-shared-module/baseExtension");
 import utils = require("../../utils");
-import baseIIIFProvider = require("../../modules/coreplayer-shared-module/baseIIIFProvider");
+import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import provider = require("./provider");
 import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-pagingheaderpanel-module/pagingHeaderPanel");
@@ -15,10 +15,10 @@ import right = require("../../modules/coreplayer-moreinforightpanel-module/moreI
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
-import IIIIFProvider = require("../../modules/coreplayer-shared-module/iIIIFProvider");
+import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
 import dependencies = require("./dependencies");
 
-export class Extension extends baseExtension.BaseIIIFExtension {
+export class Extension extends baseExtension.BaseExtension {
 
     headerPanel: header.PagingHeaderPanel;
     leftPanel: left.TreeViewLeftPanel;
@@ -39,7 +39,7 @@ export class Extension extends baseExtension.BaseIIIFExtension {
     static PAGE_MODE: string = "pageMode";
     static IMAGE_MODE: string = "imageMode";
 
-    constructor(provider: IIIIFProvider) {
+    constructor(provider: IProvider) {
         super(provider);
     }
 
@@ -100,7 +100,7 @@ export class Extension extends baseExtension.BaseIIIFExtension {
         });
 
         $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
-            this.setParam(baseIIIFProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
+            this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
         });
 
         $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
@@ -130,7 +130,7 @@ export class Extension extends baseExtension.BaseIIIFExtension {
             var canvasIndex;
 
             if (!that.provider.isReload){
-                canvasIndex = parseInt(that.getParam(baseIIIFProvider.params.canvasIndex)) || 0;
+                canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || 0;
             }
 
             that.viewPage(canvasIndex || 0);
@@ -173,7 +173,7 @@ export class Extension extends baseExtension.BaseIIIFExtension {
         if (!this.provider.isHomeDomain) return;
 
         // set sequenceIndex hash param.
-        this.setParam(baseIIIFProvider.params.sequenceIndex, this.provider.sequenceIndex);
+        this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
     }
 
     isLeftPanelEnabled(): boolean{
@@ -186,11 +186,11 @@ export class Extension extends baseExtension.BaseIIIFExtension {
 
             var canvas = this.getCanvasByIndex(canvasIndex);
 
-            var iiifUri = (<provider.Provider>this.provider).getIIIFUri(canvas);
+            var uri = (<provider.Provider>this.provider).getImageUri(canvas);
 
-            $.publish(Extension.OPEN_MEDIA, [iiifUri]);
+            $.publish(Extension.OPEN_MEDIA, [uri]);
 
-            this.setParam(baseIIIFProvider.params.canvasIndex, canvasIndex);
+            this.setParam(baseProvider.params.canvasIndex, canvasIndex);
         });
     }
 
