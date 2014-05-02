@@ -32,7 +32,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         // events.
 
         // only full screen video
-        if (this.provider.type == 'video'){
+        if (this.provider.getSequenceType().contains('video')){
             $.subscribe(baseExtension.BaseExtension.TOGGLE_FULLSCREEN, (e) => {
                 if (that.extension.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
@@ -71,90 +71,89 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
         var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
 
-        switch (this.provider.getSequenceType()){
-            case 'video', 'video-multiple-sources':
+        var type = this.provider.getSequenceType();
 
-                if (!canvas.sources){
-                    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
-                } else {
-                    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+        if (type.contains('video')){
+
+            if (!canvas.sources){
+                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+            } else {
+                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+            }
+
+            this.player = new MediaElementPlayer("#" + id, {
+                type: ['video/mp4', 'video/webm', 'video/flv'],
+                plugins: ['flash'],
+                alwaysShowControls: false,
+                autosizeProgress: false,
+                success: function (media) {
+                    media.addEventListener('canplay', (e) => {
+                        that.resize();
+                    });
+
+                    media.addEventListener('play', (e) => {
+                        $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
+                    });
+
+                    media.addEventListener('pause', (e) => {
+                        // mediaelement creates a pause event before the ended event. ignore this.
+                        if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
+                            $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
+                        }
+                    });
+
+                    media.addEventListener('ended', (e) => {
+                        $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
+                    });
+
+                    if (canvas.sources && canvas.sources.length){
+                        media.setSrc(canvas.sources);
+                    }
+
+                    try {
+                        media.load();
+                    } catch (e) {
+                        // do nothing
+                    }
                 }
+            });
+        } else if (type.contains('audio')){
 
-                this.player = new MediaElementPlayer("#" + id, {
-                    type: ['video/mp4', 'video/webm', 'video/flv'],
-                    plugins: ['flash'],
-                    alwaysShowControls: false,
-                    autosizeProgress: false,
-                    success: function (media) {
-                        media.addEventListener('canplay', (e) => {
-                            that.resize();
-                        });
+            this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></audio>');
 
-                        media.addEventListener('play', (e) => {
-                            $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
-                        });
+            this.player = new MediaElementPlayer("#" + id, {
+                plugins: ['flash'],
+                alwaysShowControls: false,
+                autosizeProgress: false,
+                defaultVideoWidth: that.mediaWidth,
+                defaultVideoHeight: that.mediaHeight,
+                success: function (media) {
+                    media.addEventListener('canplay', (e) => {
+                        that.resize();
+                    });
 
-                        media.addEventListener('pause', (e) => {
-                            // mediaelement creates a pause event before the ended event. ignore this.
-                            if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                                $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
-                            }
-                        });
+                    media.addEventListener('play', (e) => {
+                        $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
+                    });
 
-                        media.addEventListener('ended', (e) => {
-                            $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
-                        });
-
-                        if (canvas.sources && canvas.sources.length){
-                            media.setSrc(canvas.sources);
+                    media.addEventListener('pause', (e) => {
+                        // mediaelement creates a pause event before the ended event. ignore this.
+                        if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
+                            $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                         }
+                    });
 
-                        try {
-                            media.load();
-                        } catch (e) {
-                            // do nothing
-                        }
+                    media.addEventListener('ended', (e) => {
+                        $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
+                    });
+
+                    try {
+                        media.load();
+                    } catch (e) {
+                        // do nothing
                     }
-                });
-            break;
-            case 'audio':
-
-                this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></audio>');
-
-                this.player = new MediaElementPlayer("#" + id, {
-                    plugins: ['flash'],
-                    alwaysShowControls: false,
-                    autosizeProgress: false,
-                    defaultVideoWidth: that.mediaWidth,
-                    defaultVideoHeight: that.mediaHeight,
-                    success: function (media) {
-                        media.addEventListener('canplay', (e) => {
-                            that.resize();
-                        });
-
-                        media.addEventListener('play', (e) => {
-                            $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
-                        });
-
-                        media.addEventListener('pause', (e) => {
-                            // mediaelement creates a pause event before the ended event. ignore this.
-                            if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                                $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
-                            }
-                        });
-
-                        media.addEventListener('ended', (e) => {
-                            $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
-                        });
-
-                        try {
-                            media.load();
-                        } catch (e) {
-                            // do nothing
-                        }
-                    }
-                });
-            break;
+                }
+            });
         }
 
         this.resize();

@@ -112,7 +112,7 @@ export class Extension extends baseExtension.BaseExtension{
 
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
-                && this.provider.isMultiCanvas();
+                && this.provider.isMultiSequence();
     }
 
     viewMedia(): void {

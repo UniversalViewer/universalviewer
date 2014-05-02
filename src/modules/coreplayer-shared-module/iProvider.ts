@@ -39,6 +39,7 @@ interface IProvider{
     getTree(): TreeNode;
     isDeepLinkingEnabled(): boolean;
     isMultiCanvas(): boolean;
+    isMultiSequence(): boolean;
     isSeeAlsoEnabled(): boolean;
     load(): void;
     paramMap: string[];

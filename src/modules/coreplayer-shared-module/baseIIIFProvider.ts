@@ -176,6 +176,10 @@ export class BaseProvider implements IProvider{
         return this.sequence.canvases.length > 1;
     }
 
+    isMultiSequence(): boolean{
+        return this.manifest.sequences.length > 1;
+    }
+
     getMediaUri(mediaUri: string): string{
         var baseUri = this.options.mediaBaseUri || "";
         var template = this.options.mediaUriTemplate;
