@@ -5,9 +5,9 @@ import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
-import Thumb = require("../coreplayer-treeviewleftpanel-module/thumb");
 import IProvider = require("../coreplayer-shared-module/iProvider");
 import ISeadragonProvider = require("../../extensions/coreplayer-seadragon-extension/iSeadragonProvider");
+import Thumb = require("../coreplayer-shared-module/thumb");
 
 export class ThumbsView extends baseView.BaseView {
 
@@ -41,6 +41,7 @@ export class ThumbsView extends baseView.BaseView {
         });
 
         $.subscribe(extension.Extension.RELOAD, () => {
+            this.thumbs = this.provider.getThumbs();
             this.createThumbs();
         });
 
@@ -69,58 +70,20 @@ export class ThumbsView extends baseView.BaseView {
             this.scrollStop();
         }, 1000);
 
-        if (this.provider.assetSequence.assetType === "application/pdf"){
+        if (this.provider.getSequenceType() === "application-pdf"){
             this.isPDF = true;
         }
 
         this.resize();
 
+        this.thumbs = this.provider.getThumbs();
         this.createThumbs();
     }
 
-    scrollStop(): void {
-
-        var scrollPos = 1 / ((this.$thumbs.height() - this.$element.height()) / this.$element.scrollTop());
-
-        if (scrollPos > 1) scrollPos = 1;
-
-        var thumbRangeMid = Math.floor((this.thumbs.length - 1) * scrollPos);
-
-        this.loadThumbs(thumbRangeMid);
-    }
-
-    createThumbs(): void {
-
+    createThumbs(): void{
         var that = this;
-        this.thumbs = [];
 
-        for (var i = 0; i < this.provider.assetSequence.assets.length; i++) {
-            var asset = this.provider.assetSequence.assets[i];
-
-            var uri = (<IProvider>this.provider).getThumbUri(asset);
-            var section = this.extension.getAssetSection(asset);
-
-            var heightRatio = asset.height / asset.width;
-            var height = 150;
-
-            if (heightRatio){
-                height = 90 * heightRatio;
-            }
-
-            var visible = true;
-
-            if (section.extensions){
-                if (section.extensions.authStatus.toLowerCase() !== "allowed"){
-                    visible = false;
-                }
-            }
-
-            if (asset.orderLabel.trim() === "-") {
-                asset.orderLabel = "";
-            }
-
-            this.thumbs.push(new Thumb(i, uri, asset.orderLabel, height, visible));
-        }
+        if (!this.thumbs) return;
 
         this.$thumbs.link($.templates.thumbsTemplate, this.thumbs);
 
@@ -134,7 +97,7 @@ export class ThumbsView extends baseView.BaseView {
             $.publish(ThumbsView.THUMB_SELECTED, [data.index]);
         });
 
-        this.selectIndex(this.extension.currentAssetIndex);
+        this.selectIndex(this.provider.canvasIndex);
 
         this.setLabel();
 
@@ -142,7 +105,20 @@ export class ThumbsView extends baseView.BaseView {
         this.loadThumbs(0);
     }
 
+    scrollStop(): void {
+
+        var scrollPos = 1 / ((this.$thumbs.height() - this.$element.height()) / this.$element.scrollTop());
+
+        if (scrollPos > 1) scrollPos = 1;
+
+        var thumbRangeMid = Math.floor((this.thumbs.length - 1) * scrollPos);
+
+        this.loadThumbs(thumbRangeMid);
+    }
+
     loadThumbs(index): void {
+
+        if (!this.thumbs || !this.thumbs.length) return;
 
         index = parseInt(index);
 
@@ -190,7 +166,7 @@ export class ThumbsView extends baseView.BaseView {
         this.$element.show();
 
         setTimeout(() => {
-            this.selectIndex(this.extension.currentAssetIndex);
+            this.selectIndex(this.provider.canvasIndex);
         }, 1);
 
     }
@@ -220,6 +196,8 @@ export class ThumbsView extends baseView.BaseView {
 
         // may be authenticating
         if (index == -1) return;
+
+        if (!this.thumbs || !this.thumbs.length) return;
 
         index = parseInt(index);
 

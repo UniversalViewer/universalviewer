@@ -2,6 +2,8 @@
 /// <reference path="../../js/extensions.d.ts" />
 import utils = require("../../utils");
 import IProvider = require("./iProvider");
+import TreeNode = require("./treeNode");
+import Thumb = require("./thumb");
 
 export enum params {
     sequenceIndex,
@@ -15,22 +17,24 @@ export enum params {
 // for extensions to operate against.
 export class BaseProvider implements IProvider{
 
-    config: any;
-    manifest: any;
-    sequenceIndex: number;
-    sequence: any;
     canvasIndex: number;
-    dataUri: string;
-    isHomeDomain: boolean;
-    isOnlyInstance: boolean;
-    embedScriptUri: string;
-    isReload: boolean;
+    config: any;
     configExtension: string;
+    dataUri: string;
     domain: string;
+    embedScriptUri: string;
+    isHomeDomain: boolean;
     isLightbox: boolean;
+    isOnlyInstance: boolean;
+    isReload: boolean;
+    manifest: any;
+    sequence: any;
+    sequenceIndex: number;
+    sectionsRootNode: TreeNode;
+    treeRoot: TreeNode;
 
     // map param names to enum indexes.
-    static paramMap: string[] = ['asi', 'ai', 'z'];
+    paramMap: string[] = ['asi', 'ai', 'z'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -56,12 +60,15 @@ export class BaseProvider implements IProvider{
         this.isLightbox = utils.Utils.getQuerystringParameter('lb') === "true";
 
         if (this.isHomeDomain && !this.isReload){
-            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.sequenceIndex], parent.document));
+            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
         }
 
         if (!this.sequenceIndex){
-            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.sequenceIndex])) || 0;
+            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(this.paramMap[params.sequenceIndex])) || 0;
         }
+
+        // nothing selected yet.
+        this.canvasIndex = -1;
 
         this.load();
     }
@@ -114,16 +121,20 @@ export class BaseProvider implements IProvider{
         });
     }
 
-    getType(): string{
+    getManifestType(): string{
+        return this.getRootStructure().sectionType.toLowerCase();
+    }
+
+    getSequenceType(): string{
         return this.sequence.assetType.replace('/', '-');
     }
 
-    getRootSection(): any {
+    getRootStructure(): any {
         return this.sequence.rootSection;
     }
 
     getTitle(): string {
-        return this.getRootSection().title;
+        return this.getRootStructure().title;
     }
 
     getSeeAlso(): any {
@@ -135,15 +146,19 @@ export class BaseProvider implements IProvider{
     }
 
     getCanvasByIndex(index: number): any {
-        return this.sequence.canvases[index];
+        return this.sequence.assets[index];
     }
 
     getCurrentCanvas(): any {
-        return this.sequence.canvases[this.currentCanvasIndex];
+        return this.sequence.assets[this.canvasIndex];
+    }
+
+    getTotalCanvases(): number{
+        return this.sequence.assets.length;
     }
 
     isMultiCanvas(): boolean{
-        return this.sequence.canvases.length > 1;
+        return this.sequence.assets.length > 1;
     }
 
     getMediaUri(mediaUri: string): string{
@@ -177,14 +192,12 @@ export class BaseProvider implements IProvider{
 
         structure.path = path;
 
-        if (typeof(structure.sequence) != 'undefined') {
+        if (typeof(structure.assetSequence) != 'undefined') {
 
-            var sequence = sequences[structure.sequence];
+            var sequence = sequences[structure.assetSequence];
 
             sequence.index = structure.sequence;
             sequence.structure = structure;
-
-            // replace index with actual object ref.
             structure.sequence = sequence;
         }
 
@@ -196,74 +209,66 @@ export class BaseProvider implements IProvider{
     }
 
     parseStructure(): void{
-        this.parseStructures(this.getRootSection(), this.sequence.assets, '');
+        this.parseStructures(this.getRootStructure(), this.sequence.assets, '');
     }
 
     // the purpose of this is to give each asset in assetSequence.assets
-    // a collection of sections it belongs to.
+    // a collection of structures it belongs to.
     // it also builds a path string property for each section.
     // this can then be used when a section is clicked in the tree view
     // where getSectionIndex in baseExtension loops though all assets and their
-    // associated sections until it finds one with a matching path.
-    // (structures/ranges in iiif are called sections in the legacy format)
-    parseStructures(section: any, assets: any[], path: string): void {
+    // associated structures until it finds one with a matching path.
+    // (structures/ranges in iiif are called structures in the legacy format)
+    parseStructures(structure: any, canvases: any[], path: string): void {
 
-        section.path = path;
+        structure.path = path;
 
-        // replace SectionType with config.js mapping (if exists).
-        section.sectionType = this.replaceSectionType(section.sectionType);
+        // replace structureType with config.js mapping (if exists).
+        structure.structureType = this.replaceStructureType(structure.sectionType);
 
-        for (var i = 0; i < section.assets.length; i++) {
-            var index = section.assets[i];
+        for (var i = 0; i < structure.assets.length; i++) {
+            var index = structure.assets[i];
 
-            var canvas = assets[index];
+            var canvas = canvases[index];
 
-            if (!canvas.sections) canvas.sections = [];
+            if (!canvas.structures) canvas.structures = [];
 
-            canvas.sections.push(section);
+            canvas.structures.push(structure);
         }
 
-        if (section.sections) {
-            for (var j = 0; j < section.sections.length; j++) {
-                this.parseStructures(section.sections[j], assets, path + '/' + j);
+        if (structure.sections) {
+            for (var j = 0; j < structure.sections.length; j++) {
+                this.parseStructures(structure.sections[j], canvases, path + '/' + j);
             }
         }
     }
 
-    replaceSectionType(sectionType: string): string {
-        if (this.config.options.sectionMappings && this.config.options.sectionMappings[sectionType]) {
-            return this.config.options.sectionMappings[sectionType];
+    replaceStructureType(structureType: string): string {
+        if (this.config.options.sectionMappings && this.config.options.sectionMappings[structureType]) {
+            return this.config.options.sectionMappings[structureType];
         }
 
-        return sectionType;
+        return structureType;
     }
 
-    getSectionByCanvasIndex(index: number): any {
+    getStructureByCanvasIndex(index: number): any {
 
         var canvas = this.getCanvasByIndex(index);
 
-        return this.getCanvasSection(canvas);
+        return this.getCanvasStructure(canvas);
     }
 
-    getSectionIndex(path: string): number {
-
-        for (var i = 0; i < this.sequence.assets.length; i++) {
-            var canvas = this.sequence.assets[i];
-            for (var j = 0; j < canvas.sections.length; j++) {
-                var section = canvas.sections[j];
-
-                if (section.path == path) {
-                    return i;
-                }
-            }
-        }
-
-        return null;
+    getStructureByIndex(structure: any, index: number): any{
+        return structure.sections[index];
     }
 
-    getCanvasSection(canvas: any): any {
-        // get the deepest section that this file belongs to.
-        return canvas.sections.last();
+    getCanvasStructure(canvas: any): any {
+        // get the deepest structure that this file belongs to.
+        return canvas.structures.last();
+    }
+
+    getCanvasOrderLabel(canvas: any): string{
+        return canvas.orderLabel.trim();
     }
 
     getLastCanvasOrderLabel(): string {
@@ -281,6 +286,22 @@ export class BaseProvider implements IProvider{
 
         // none exists, so return '-'.
         return '-';
+    }
+
+    getStructureIndex(path: string): number {
+
+        for (var i = 0; i < this.sequence.assets.length; i++) {
+            var canvas = this.sequence.assets[i];
+            for (var j = 0; j < canvas.structures.length; j++) {
+                var section = canvas.structures[j];
+
+                if (section.path == path) {
+                    return i;
+                }
+            }
+        }
+
+        return null;
     }
 
     getCanvasIndexByOrderLabel(label: string): number {
@@ -316,10 +337,10 @@ export class BaseProvider implements IProvider{
         return -1;
     }
 
-    getStructureSeeAlsoUri(structure: any): string{
-        if (structure.seeAlso && structure.seeAlso.tag && structure.seeAlso.data){
-            if (structure.seeAlso.tag === 'OpenExternal'){
-                return this.getMediaUri(structure.seeAlso.data);
+    getManifestSeeAlsoUri(manifest: any): string{
+        if (manifest.seeAlso && manifest.seeAlso.tag && manifest.seeAlso.data){
+            if (manifest.seeAlso.tag === 'OpenExternal'){
+                return this.getMediaUri(manifest.seeAlso.data);
             }
         }
     }
@@ -330,5 +351,114 @@ export class BaseProvider implements IProvider{
 
     isDeepLinkingEnabled(): boolean {
         return (this.isHomeDomain && this.isOnlyInstance);
+    }
+
+    getTree(): TreeNode{
+        this.treeRoot = new TreeNode('root');
+
+        var rootStructure = this.manifest.rootStructure;
+
+        if (rootStructure) {
+            this.parseTreeStructure(this.treeRoot, rootStructure);
+        }
+
+        // if there aren't any structures then the sectionsRootNode won't have been created.
+        if (!this.sectionsRootNode) this.sectionsRootNode = this.treeRoot;
+
+        if (this.sequence.rootSection.sections){
+            for (var i = 0; i < this.sequence.rootSection.sections.length; i++) {
+                var section = this.sequence.rootSection.sections[i];
+
+                var childNode = new TreeNode();
+                this.sectionsRootNode.nodes.push(childNode);
+
+                this.parseTreeSection(childNode, section);
+            }
+        }
+
+        return this.treeRoot;
+    }
+
+    parseTreeStructure(node: TreeNode, structure: any): void {
+        node.label = structure.name || "root";
+        node.type = "manifest";
+        node.ref = structure;
+        structure.treeNode = node;
+        node.path = node.ref.path;
+
+        // if this is the structure node that contains the assetSequence.
+        if (this.sequence.structure == structure) {
+            this.sectionsRootNode = node;
+            this.sectionsRootNode.selected = true;
+            this.sectionsRootNode.expanded = true;
+        }
+
+        if (structure.structures) {
+
+            for (var i = 0; i < structure.structures.length; i++) {
+                var childStructure = structure.structures[i];
+
+                var childNode = new TreeNode();
+                node.nodes.push(childNode);
+
+                this.parseTreeStructure(childNode, childStructure);
+            }
+        }
+    }
+
+    parseTreeSection(node: TreeNode, section: any): void {
+        node.label = section.sectionType;
+        node.type = "structure";
+        node.ref = section;
+        section.treeNode = node;
+        node.path = node.ref.path;
+
+        if (section.sections) {
+
+            for (var i = 0; i < section.sections.length; i++) {
+                var childSection = section.sections[i];
+
+                var childNode = new TreeNode();
+                node.nodes.push(childNode);
+
+                this.parseTreeSection(childNode, childSection);
+            }
+        }
+    }
+
+    getThumbs(): Array<Thumb> {
+
+        var that = this;
+        var thumbs = new Array<Thumb>();
+
+        for (var i = 0; i < this.getTotalCanvases(); i++) {
+            var canvas = this.sequence.assets[i];
+
+            var uri = this.getThumbUri(canvas);
+            var structure = this.getCanvasStructure(canvas);
+
+            var heightRatio = canvas.height / canvas.width;
+            var height = 150;
+
+            if (heightRatio){
+                height = 90 * heightRatio;
+            }
+
+            var visible = true;
+
+            if (structure.extensions){
+                if (structure.extensions.authStatus.toLowerCase() !== "allowed"){
+                    visible = false;
+                }
+            }
+
+            if (canvas.orderLabel.trim() === "-") {
+                canvas.orderLabel = "";
+            }
+
+            thumbs.push(new Thumb(i, uri, canvas.orderLabel, height, visible));
+        }
+
+        return thumbs;
     }
 }

@@ -53,8 +53,8 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
-            this.viewStructure(structure);
+        $.subscribe(treeView.TreeView.VIEW_MANIFEST, (e, manifest: any) => {
+            this.viewManifest(manifest);
         });
 
         $.subscribe(footer.FooterPanel.EMBED, (e) => {
@@ -106,7 +106,7 @@ export class Extension extends baseExtension.BaseExtension{
     setParams(): void{
         if (!this.provider.isHomeDomain) return;
 
-        // set assetSequenceIndex hash param.
+        // set sequenceIndex hash param.
         this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
     }
 

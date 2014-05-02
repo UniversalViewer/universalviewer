@@ -2,6 +2,8 @@
 /// <reference path="../../js/extensions.d.ts" />
 import utils = require("../../utils");
 import IProvider = require("./iProvider");
+import TreeNode = require("./treeNode");
+import Thumb = require("./thumb");
 
 export enum params {
     sequenceIndex,
@@ -15,22 +17,23 @@ export enum params {
 // for extensions to operate against.
 export class BaseProvider implements IProvider{
 
-    config: any;
-    manifest: any;
-    sequenceIndex: number;
-    sequence: any;
     canvasIndex: number;
-    dataUri: string;
-    isHomeDomain: boolean;
-    isOnlyInstance: boolean;
-    embedScriptUri: string;
-    isReload: boolean;
+    config: any;
     configExtension: string;
+    dataUri: string;
     domain: string;
+    embedScriptUri: string;
+    isHomeDomain: boolean;
     isLightbox: boolean;
+    isOnlyInstance: boolean;
+    isReload: boolean;
+    manifest: any;
+    sequence: any;
+    sequenceIndex: number;
+    treeRoot: TreeNode;
 
     // map param names to enum indexes.
-    static paramMap: string[] = ['si', 'ci', 'z'];
+    paramMap: string[] = ['si', 'ci', 'z'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -56,11 +59,11 @@ export class BaseProvider implements IProvider{
         this.isLightbox = utils.Utils.getQuerystringParameter('lb') === "true";
 
         if (this.isHomeDomain && !this.isReload){
-            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(BaseProvider.paramMap[params.sequenceIndex], parent.document));
+            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
         }
 
         if (!this.sequenceIndex){
-            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(BaseProvider.paramMap[params.sequenceIndex])) || 0;
+            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(this.paramMap[params.sequenceIndex])) || 0;
         }
 
         this.load();
@@ -112,7 +115,12 @@ export class BaseProvider implements IProvider{
         });
     }
 
-    getType(): string{
+    // todo
+    getManifestType(): string{
+        return 'monograph';
+    }
+
+    getSequenceType(): string{
         // todo: perhaps use viewingHint attribute
         // default to 'seadragon-iiif'
         return 'seadragon-iiif';
@@ -126,6 +134,16 @@ export class BaseProvider implements IProvider{
         return this.manifest.seeAlso;
     }
 
+    // todo
+    getCanvasOrderLabel(canvas: any): string{
+        return null;
+    }
+
+    // todo
+    getLastCanvasOrderLabel(): string {
+        return '-';
+    }
+
     isSeeAlsoEnabled(): boolean{
         return this.config.options.seeAlsoEnabled !== false;
     }
@@ -134,8 +152,24 @@ export class BaseProvider implements IProvider{
         return this.sequence.canvases[index];
     }
 
+    // todo
+    getStructureByCanvasIndex(index: number): any {
+        return null;
+        //var canvas = this.getCanvasByIndex(index);
+
+        //return this.getCanvasStructure(canvas);
+    }
+
+    getCanvasStructure(canvas: any): any {
+        //return canvas.structures.last();
+    }
+
     getCurrentCanvas(): any {
-        return this.sequence.canvases[this.currentCanvasIndex];
+        return this.sequence.canvases[this.canvasIndex];
+    }
+
+    getTotalCanvases(): number{
+        return this.sequence.canvases.length;
     }
 
     isMultiCanvas(): boolean{
@@ -151,7 +185,7 @@ export class BaseProvider implements IProvider{
     }
 
     setMediaUri(canvas: any): void{
-        canvas.mediaUri = this.getMediaUri(canvas.resources[0]['@id'] + '/info.json');
+        //canvas.mediaUri = this.getMediaUri(canvas.resources[0].resource['@id'] + '/info.json');
     }
 
     getThumbUri(canvas: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
@@ -164,6 +198,19 @@ export class BaseProvider implements IProvider{
         return uri;
     }
 
+    addTimestamp(uri: string): string{
+        return uri + "?t=" + utils.Utils.getTimeStamp();
+    }
+
+    isDeepLinkingEnabled(): boolean {
+        return (this.isHomeDomain && this.isOnlyInstance);
+    }
+
+    // todo
+    getThumbs(): Array<Thumb> {
+        return null;
+    }
+
     parseManifest(): void{
 
     }
@@ -172,16 +219,27 @@ export class BaseProvider implements IProvider{
 
     }
 
-    getStructureSeeAlsoUri(structure: any): string{
-        // todo
+    getRootStructure(): any {
         return null;
     }
 
-    addTimestamp(uri: string): string{
-        return uri + "?t=" + utils.Utils.getTimeStamp();
+    getStructureIndex(path: string): number {
+        return null;
     }
 
-    isDeepLinkingEnabled(): boolean {
-        return (this.isHomeDomain && this.isOnlyInstance);
+    getStructureByIndex(structure: any, index: number): any{
+        return null;
+    }
+
+    getCanvasIndexByOrderLabel(label: string): number {
+        return null;
+    }
+
+    getManifestSeeAlsoUri(manifest: any): string{
+        return null;
+    }
+
+    getTree(): TreeNode{
+        return null;
     }
 }

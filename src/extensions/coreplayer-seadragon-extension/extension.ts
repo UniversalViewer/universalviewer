@@ -55,18 +55,18 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(header.PagingHeaderPanel.LAST, (e) => {
-            this.viewPage(this.provider.sequence.canvases.length - 1);
+            this.viewPage(this.provider.getTotalCanvases() - 1);
         });
 
         $.subscribe(header.PagingHeaderPanel.PREV, (e) => {
-            if (this.currentCanvasIndex != 0) {
-                this.viewPage(Number(this.currentCanvasIndex) - 1);
+            if (this.provider.canvasIndex != 0) {
+                this.viewPage(Number(this.provider.canvasIndex) - 1);
             }
         });
 
         $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
-            if (this.currentCanvasIndex != this.provider.sequence.canvases.length - 1) {
-                this.viewPage(Number(this.currentCanvasIndex) + 1);
+            if (this.provider.canvasIndex != this.provider.getTotalCanvases() - 1) {
+                this.viewPage(Number(this.provider.canvasIndex) + 1);
             }
         });
 
@@ -76,25 +76,21 @@ export class Extension extends baseExtension.BaseExtension {
             $.publish(Extension.MODE_CHANGED, [mode]);
         });
 
-        /*
         $.subscribe(header.PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
             this.viewLabel(value);
         });
-        */
 
         $.subscribe(header.PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
         });
 
-        /*
-        $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
-            this.viewStructure(structure);
+        $.subscribe(treeView.TreeView.VIEW_MANIFEST, (e, manifest: any) => {
+            this.viewManifest(manifest);
         });
 
-        $.subscribe(treeView.TreeView.VIEW_SECTION, (e, section: any) => {
-            this.viewSection(section.path);
+        $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
+            this.viewStructure(structure.path);
         });
-        */
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
@@ -105,14 +101,14 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
-            if (this.currentCanvasIndex != 0) {
-                this.viewPage(Number(this.currentCanvasIndex) - 1);
+            if (this.provider.canvasIndex != 0) {
+                this.viewPage(Number(this.provider.canvasIndex) - 1);
             }
         });
 
         $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
-            if (this.currentCanvasIndex != this.provider.sequence.canvases.length - 1) {
-                this.viewPage(Number(this.currentCanvasIndex) + 1);
+            if (this.provider.canvasIndex != this.provider.getTotalCanvases() - 1) {
+                this.viewPage(Number(this.provider.canvasIndex) + 1);
             }
         });
 
@@ -198,12 +194,12 @@ export class Extension extends baseExtension.BaseExtension {
     getMode(): string {
         if (Extension.mode) return Extension.mode;
 
-        switch (this.provider.getType()) {
+        switch (this.provider.getManifestType()) {
             case 'monograph':
                 return Extension.PAGE_MODE;
                 break;
-            case 'archive':
-            case 'boundmanuscript':
+            case 'archive',
+                 'boundmanuscript':
                 return Extension.IMAGE_MODE;
                 break;
             default:
@@ -222,10 +218,9 @@ export class Extension extends baseExtension.BaseExtension {
         return "";
     }
 
-    /*
-    viewSection(path: string): void {
+    viewStructure(path: string): void {
 
-        var index = this.getSectionIndex(path);
+        var index = this.provider.getStructureIndex(path);
 
         this.viewPage(index);
     }
@@ -237,7 +232,7 @@ export class Extension extends baseExtension.BaseExtension {
             return;
         }
 
-        var index = this.getAssetIndexByOrderLabel(label);
+        var index = this.provider.getCanvasIndexByOrderLabel(label);
 
         if (index != -1) {
             this.viewPage(index);
@@ -245,5 +240,4 @@ export class Extension extends baseExtension.BaseExtension {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
         }
     }
-    */
 }

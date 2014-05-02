@@ -92,19 +92,17 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     defaultToThumbsView(): boolean{
-        var type = this.provider.type;
+        var type = this.provider.getManifestType();
 
-        if (type == 'archive' ||
-                    type == 'boundmanuscript' ||
-                    type == 'artwork') {
-            return true;
+        switch (type){
+            case 'archive',
+                 'boundmanuscript',
+                 'artwork',
+                 'application-pdf':
+                return true;
+            default:
+                return false;
         }
-
-        if (this.provider.assetSequence.assetType == "application/pdf"){
-            return true;
-        }
-
-        return false;
     }
 
     openTreeView(): void {

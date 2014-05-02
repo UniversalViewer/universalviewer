@@ -11,7 +11,7 @@ export class BaseExtension implements IExtension {
 
     shell: shell.Shell;
     isFullScreen: boolean = false;
-    currentCanvasIndex: number;
+    canvasIndex: number;
     mouseX: number;
     mouseY: number;
     $element: JQuery;
@@ -66,7 +66,7 @@ export class BaseExtension implements IExtension {
         this.$element.removeClass();
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
-        this.$element.addClass(this.provider.getType());
+        this.$element.addClass(this.provider.getSequenceType());
 
         // events.
         window.onresize = () => {
@@ -107,8 +107,8 @@ export class BaseExtension implements IExtension {
         // create shell and shared views.
         this.shell = new shell.Shell(this.$element);
 
-        // set currentCanvasIndex to -1 (nothing selected yet).
-        this.currentCanvasIndex = -1;
+        // set canvasIndex to -1 (nothing selected yet).
+        this.canvasIndex = -1;
     }
 
     width(): number {
@@ -147,11 +147,11 @@ export class BaseExtension implements IExtension {
 
         // deep linking is only allowed when hosted on home domain.
         if (this.provider.isDeepLinkingEnabled()){
-            value = utils.Utils.getHashParameter(baseProvider.BaseProvider.paramMap[key], parent.document);
+            value = utils.Utils.getHashParameter(this.provider.paramMap[key], parent.document);
         }
 
         if (!value){
-            value = utils.Utils.getQuerystringParameter(baseProvider.BaseProvider.paramMap[key]);
+            value = utils.Utils.getQuerystringParameter(this.provider.paramMap[key]);
         }
 
         return value;
@@ -161,26 +161,17 @@ export class BaseExtension implements IExtension {
     setParam(key: baseProvider.params, value: any): void{
 
         if (this.provider.isDeepLinkingEnabled()){
-            utils.Utils.setHashParameter(baseProvider.BaseProvider.paramMap[key], value, parent.document);
+            utils.Utils.setHashParameter(this.provider.paramMap[key], value, parent.document);
         }
     }
 
     viewCanvas(canvasIndex: number, callback?: (i: number) => any): void {
 
-        this.currentCanvasIndex = canvasIndex;
+        this.provider.canvasIndex = canvasIndex;
 
         $.publish(BaseExtension.CANVAS_INDEX_CHANGED, [canvasIndex]);
 
         if (callback) callback(canvasIndex);
-    }
-
-    viewSequence(index: number): void {
-
-        if (this.isFullScreen) {
-            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
-        }
-
-        this.triggerSocket(BaseExtension.SEQUENCE_INDEX_CHANGED, index);
     }
 
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
@@ -202,12 +193,17 @@ export class BaseExtension implements IExtension {
         return shell.Shell.$overlays.is(':visible');
     }
 
-    viewStructure(structure: any): void{
-        var seeAlsoUri = this.provider.getStructureSeeAlsoUri(structure);
+    viewManifest(manifest: any): void{
+        var seeAlsoUri = this.provider.getManifestSeeAlsoUri(manifest);
         if (seeAlsoUri){
             window.open(seeAlsoUri, '_blank');
         } else {
-            this.viewSequence(structure.sequence.index);
+            //this.viewSequence(manifest.sequence.index);
+            if (this.isFullScreen) {
+                $.publish(BaseExtension.TOGGLE_FULLSCREEN);
+            }
+
+            this.triggerSocket(BaseExtension.SEQUENCE_INDEX_CHANGED, manifest.assetSequence);
         }
     }
 }

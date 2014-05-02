@@ -203,7 +203,7 @@ docReady(function() {
                });
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, dataUri, assetSequenceIndex, assetIndex, isLightbox, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -225,8 +225,8 @@ docReady(function() {
             if (dataBaseUri) dataBaseUri = encodeURIComponent(dataBaseUri);
             dataUri = $app.attr('data-uri');
             dataUri = encodeURIComponent(dataUri);
-            assetSequenceIndex = $app.attr('data-assetsequenceindex');
-            assetIndex = $app.attr('data-assetindex');
+            sequenceIndex = $app.attr('data-sequenceindex') || $app.attr('data-assetsequenceindex');
+            canvasIndex = $app.attr('data-canvasindex') || $app.attr('data-assetindex');
             zoom = $app.attr('data-zoom');
             config = $app.attr('data-config');
 
@@ -313,12 +313,12 @@ docReady(function() {
                 resize();
             }
 
-            function viewAssetSequence(index) {
+            function viewSequence(index) {
 
                 $appFrame.prop('src', '');
                 $app.empty();
 
-                assetSequenceIndex = index;
+                sequenceIndex = index;
                 reload = true;
 
                 createSocket();
@@ -345,8 +345,8 @@ docReady(function() {
                     "&d=" + domain +
                     "&lb=" + isLightbox;
 
-                if (assetSequenceIndex) uri += "&asi=" + assetSequenceIndex;
-                if (assetIndex) uri += "&ai=" + assetIndex;
+                if (sequenceIndex) uri += "&asi=" + sequenceIndex;
+                if (canvasIndex) uri += "&ai=" + canvasIndex;
                 if (dataBaseUri) uri += "&dbu=" + dataBaseUri;
                 if (zoom) uri += "&z=" + zoom;
                 if (reload) uri += "&rl=true";
@@ -373,8 +373,8 @@ docReady(function() {
                             case "onToggleFullScreen":
                                 toggleFullScreen(message.eventObject);
                                 break;
-                            case "onAssetSequenceIndexChanged":
-                                viewAssetSequence(message.eventObject);
+                            case "onSequenceIndexChanged":
+                                viewSequence(message.eventObject);
                                 break;
                             case "onRedirect":
                                 redirect(message.eventObject);

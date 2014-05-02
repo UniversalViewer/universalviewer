@@ -16,8 +16,6 @@
  */
 /* globals VBArray, PDFJS */
 
-console.log('load compatibility.js');
-
 'use strict';
 
 // Initializing PDFJS global object here, it case if we need to change/disable

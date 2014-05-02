@@ -5,18 +5,20 @@ import utils = require("../../utils");
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
-import TreeNode = require("../coreplayer-treeviewleftpanel-module/treeNode");
+import TreeNode = require("../coreplayer-shared-module/treeNode");
 
 export class TreeView extends baseView.BaseView {
 
     $tree: JQuery;
-    selectedSection: any;
+    selectedStructure: any;
 
-    structuresRootNode: TreeNode;
-    sectionsRootNode: TreeNode;
+    rootNode: TreeNode;
+    //sectionsRootNode: TreeNode;
 
-    static VIEW_SECTION: string = 'treeView.onViewSection';
+    //static VIEW_SECTION: string = 'treeView.onViewSection';
+    //static VIEW_STRUCTURE: string = 'treeView.onViewStructure';
     static VIEW_STRUCTURE: string = 'treeView.onViewStructure';
+    static VIEW_MANIFEST: string = 'treeView.onViewManifest';
 
     constructor($element: JQuery) {
         super($element, true, false);
@@ -25,12 +27,13 @@ export class TreeView extends baseView.BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, assetIndex) => {
-            this.selectIndex(assetIndex);
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+            this.selectIndex(canvasIndex);
         });
 
-        // parse the structures and sections into a single tree.
-        this.createTreeNodes();
+        this.rootNode = this.provider.getTree();
+
+        if (!this.rootNode) return;
 
         this.$tree = $('<ul class="tree"></ul>');
         this.$element.append(this.$tree);
@@ -83,10 +86,10 @@ export class TreeView extends baseView.BaseView {
                         }).on("click", "a", function (e) {
                             e.preventDefault();
 
-                            if (self.data.type == 'structure') {
-                                $.publish(TreeView.VIEW_STRUCTURE, [self.data.ref]);
+                            if (self.data.type == 'manifest') {
+                                $.publish(TreeView.VIEW_MANIFEST, [self.data.ref]);
                             } else {
-                                $.publish(TreeView.VIEW_SECTION, [self.data.ref]);
+                                $.publish(TreeView.VIEW_STRUCTURE, [self.data.ref]);
                             }
                         })
                 },
@@ -94,86 +97,20 @@ export class TreeView extends baseView.BaseView {
             }
         });
 
-        this.$tree.link($.templates.pageTemplate, this.structuresRootNode);
+        this.$tree.link($.templates.pageTemplate, this.rootNode);
 
         this.resize();
-    }
-
-    parseStructure(node: TreeNode, structure: any): void {
-        node.label = structure.name || "root";
-        node.type = "structure";
-        node.ref = structure;
-        structure.treeNode = node;
-        node.path = node.ref.path;
-
-        // if this is the structure node that contains the assetSequence.
-        if (this.provider.assetSequence.structure == structure) {
-            this.sectionsRootNode = node;
-            this.sectionsRootNode.selected = true;
-            this.sectionsRootNode.expanded = true;
-        }
-
-        if (structure.structures) {
-
-            for (var i = 0; i < structure.structures.length; i++) {
-                var childStructure = structure.structures[i];
-
-                var childNode = new TreeNode();
-                node.nodes.push(childNode);
-
-                this.parseStructure(childNode, childStructure);
-            }
-        }
-    }
-
-    parseSection(node: TreeNode, section: any): void {
-        node.label = section.sectionType;
-        node.type = "section";
-        node.ref = section;
-        section.treeNode = node;
-        node.path = node.ref.path;
-
-        if (section.sections) {
-
-            for (var i = 0; i < section.sections.length; i++) {
-                var childSection = section.sections[i];
-
-                var childNode = new TreeNode();
-                node.nodes.push(childNode);
-
-                this.parseSection(childNode, childSection);
-            }
-        }
-    }
-
-    createTreeNodes() {
-        this.structuresRootNode = new TreeNode('root');
-
-        if (this.provider.pkg.rootStructure) {
-            this.parseStructure(this.structuresRootNode, this.provider.pkg.rootStructure);
-        }
-
-        // if there aren't any structures then the sectionsRootNode won't have been created.
-        if (!this.sectionsRootNode) this.sectionsRootNode = this.structuresRootNode;
-
-        if (this.provider.assetSequence.rootSection.sections){
-            for (var i = 0; i < this.provider.assetSequence.rootSection.sections.length; i++) {
-                var section = this.provider.assetSequence.rootSection.sections[i];
-
-                var childNode = new TreeNode();
-                this.sectionsRootNode.nodes.push(childNode);
-
-                this.parseSection(childNode, section);
-            }
-        }
     }
 
     selectIndex(index: number): void {
         // may be authenticating
         if (index == -1) return;
 
-        var section = this.extension.getSectionByAssetIndex(index);
-        this.selectPath(section.path);
+        // has a tree been successfully generated?
+        if (!this.rootNode) return;
+
+        var structure = this.provider.getStructureByCanvasIndex(index);
+        this.selectPath(structure.path);
     }
 
     selectPath(path: string): void {
@@ -183,21 +120,21 @@ export class TreeView extends baseView.BaseView {
         if (pathArr.length >= 1) pathArr.shift();
 
         // reset the previous selected node.
-        if (this.selectedSection) $.observable(this.selectedSection.treeNode).setProperty("selected", false);
+        if (this.selectedStructure) $.observable(this.selectedStructure.treeNode).setProperty("selected", false);
 
         // should have an array that looks like this: [0, 1, 0]
-        // (1st section in root, 2nd section in that, 1st section in that).
+        // (1st structure in root, 2nd structure in that, 1st structure in that).
         // recursively walk tree to set selected node.
-        this.selectedSection = this.getSection(this.provider.assetSequence.rootSection, pathArr);
+        this.selectedStructure = this.getStructure(this.provider.getRootStructure(), pathArr);
 
-        $.observable(this.selectedSection.treeNode).setProperty("selected", true);
+        $.observable(this.selectedStructure.treeNode).setProperty("selected", true);
     }
 
     show(): void {
         this.$element.show();
 
         setTimeout(() => {
-            this.selectIndex(this.extension.currentAssetIndex);
+            this.selectIndex(this.provider.canvasIndex);
         }, 1);
     }
 
@@ -205,17 +142,17 @@ export class TreeView extends baseView.BaseView {
         this.$element.hide();
     }
 
-    getSection(parentSection, path) {
+    getStructure(parentStructure, path) {
 
-        if (path.length == 0) return parentSection;
+        if (path.length == 0) return parentStructure;
 
-        parentSection.expanded = true;
+        parentStructure.expanded = true;
 
         var index = path.shift();
 
-        var section = parentSection.sections[index];
+        var structure = this.provider.getStructureByIndex(parentStructure, index);
 
-        return this.getSection(section, path);
+        return this.getStructure(structure, path);
     }
 
     resize(): void {

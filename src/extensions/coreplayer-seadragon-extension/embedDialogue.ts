@@ -31,7 +31,7 @@ export class EmbedDialogue extends embed.EmbedDialogue {
         var zoom = (<ISeadragonExtension>this.extension).getViewerBounds();
 
         this.code = (<ISeadragonProvider>this.provider).getEmbedScript(
-            this.extension.currentCanvasIndex,
+            this.provider.canvasIndex,
             zoom,
             this.currentWidth,
             this.currentHeight,

@@ -1,4 +1,3 @@
-
 class TreeNode {
 
     nodes: Array<TreeNode>;

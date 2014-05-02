@@ -1,38 +1,51 @@
+import TreeNode = require("./treeNode");
+import Thumb = require("./thumb");
 
 // the provider contains all methods related to
 // interacting with the data model.
 interface IProvider{
-	config: any;
-	sequence: any;
-	manifest: any;
-	isHomeDomain: boolean;
-	isOnlyInstance: boolean;
 	canvasIndex: number;
-	sequenceIndex: number;
-	isReload: boolean;
+	config: any;
 	configExtension: string;
 	domain: string;
+	isHomeDomain: boolean;
 	isLightbox: boolean;
+	isOnlyInstance: boolean;
+	isReload: boolean;
+	manifest: any;
+	sequence: any;
+	sequenceIndex: number;
+	treeRoot: TreeNode;
 
-	load(): void;
-	reload(callback: any): void;
-
+    addTimestamp(uri: string): string;
+    getCanvasByIndex(index): any;
+    getCanvasIndexByOrderLabel(label: string): number; // todo: remove?
+    getCanvasOrderLabel(canvas: any): string;
+    getCanvasStructure(canvas: any): any;
+    getCurrentCanvas(): any;
+    getLastCanvasOrderLabel(): string; // todo: remove?
+    getManifestSeeAlsoUri(manifest: any): string;
+    getManifestType(): string;
+    getMediaUri(mediaUri: string): string;
+    getSeeAlso(): any;
+    getSequenceType(): string;
+    getStructureByCanvasIndex(index: number): any; // todo: remove?
+    getStructureByIndex(structure: any, index: number): any; // todo: remove?
+    getStructureIndex(path: string): number; // todo: remove?
+    getThumbs(): Array<Thumb>;
+    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string;
+    getTitle(): string;
+    getTotalCanvases(): number;
+    getTree(): TreeNode;
+    isDeepLinkingEnabled(): boolean;
+    isMultiCanvas(): boolean;
+    isSeeAlsoEnabled(): boolean;
+    load(): void;
+    paramMap: string[];
     parseManifest(): void;
     parseStructure(): void;
-
-    getCanvasByIndex(index): any;
-    getCurrentCanvas(): any;
-	getType(): string;
-	getTitle(): string;
-	getMediaUri(mediaUri: string): string;
-	setMediaUri(canvas: any): void;
-	getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string;
-	getSeeAlso(): any;
-	isSeeAlsoEnabled(): boolean;
-	getStructureSeeAlsoUri(structure: any): string;
-	isMultiCanvas(): boolean;
-	addTimestamp(uri: string): string;
-	isDeepLinkingEnabled(): boolean;
+    reload(callback: any): void;
+    setMediaUri(canvas: any): void; // todo: remove?
 }
 
 export = IProvider;

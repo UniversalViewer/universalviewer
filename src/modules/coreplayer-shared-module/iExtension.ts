@@ -3,22 +3,21 @@ import baseProvider = require("./baseProvider");
 
 interface IExtension{
 
-    provider: any;
-    currentCanvasIndex: number;
+    isFullScreen: boolean;
     mouseX: number;
     mouseY: number;
-    isFullScreen: boolean;
+    provider: any;
 
-    width(): number;
-    height(): number;
-    refresh(): void;
-    redirect(uri: string): void;
-    viewSequence(index): void;
-    viewStructure(structure: any): void;
-    isOverlayActive(): boolean;
-    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     getParam(key: baseProvider.params): any;
+    height(): number;
+    isOverlayActive(): boolean;
+    redirect(uri: string): void;
+    refresh(): void;
+    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     triggerSocket(eventName: string, eventObject: any): void;
+    viewManifest(manifest: any): void;
+    //viewSequence(index): void;
+    width(): number;
 }
 
 export = IExtension;

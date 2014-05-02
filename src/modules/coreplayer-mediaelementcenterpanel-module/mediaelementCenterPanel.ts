@@ -71,8 +71,8 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
         var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
 
-        switch (this.provider.type){
-            case 'video':
+        switch (this.provider.getSequenceType()){
+            case 'video', 'video-multiple-sources':
 
                 if (!canvas.sources){
                     this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
