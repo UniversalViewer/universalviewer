@@ -127,7 +127,7 @@ export class BaseProvider implements IProvider{
     }
 
     getTitle(): string {
-        return this.sequence.label;
+        return this.manifest.label;
     }
 
     getSeeAlso(): any {
