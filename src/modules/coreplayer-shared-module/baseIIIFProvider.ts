@@ -192,14 +192,16 @@ export class BaseProvider implements IProvider{
         //canvas.mediaUri = this.getMediaUri(canvas.resources[0].resource['@id'] + '/info.json');
     }
 
+    // todo
     getThumbUri(canvas: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
         var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
         var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-        var uri = String.prototype.format(template, baseUri, canvas.thumbnailPath);
 
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
+        //if (this.options.timestampUris) uri = this.addTimestamp(uri);
 
-        return uri;
+        //return uri;
+
+        return null;
     }
 
     addTimestamp(uri: string): string{
@@ -212,7 +214,26 @@ export class BaseProvider implements IProvider{
 
     // todo
     getThumbs(): Array<Thumb> {
-        return null;
+        var thumbs = new Array<Thumb>();
+
+        for (var i = 0; i < this.getTotalCanvases(); i++) {
+            var canvas = this.sequence.canvases[i];
+
+            var heightRatio = canvas.height / canvas.width;
+
+            var width = 90;
+            var height = 150;
+
+            if (heightRatio){
+                height = Math.floor(width * heightRatio);
+            }
+
+            var uri = canvas.resources[0].resource.service['@id'] + '/full/'+ width + ',' + height + '/0/native.jpg';
+
+            thumbs.push(new Thumb(i, uri, canvas.label, height, true));
+        }
+
+        return thumbs;
     }
 
     parseManifest(): void{
