@@ -288,7 +288,7 @@ module.exports = function (grunt) {
                 src: ['<%= global.buildDir %>/css/*.css'],
                 overwrite: true,
                 replacements: [{
-                    from: /\((?:'|"|)(?:.*modules\/(.*)\/img\/(.*.\w+))(?:'|"|)\)/g,
+                    from: /\((?:'|"|)(?:.*modules\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
                     to: '\(\'../img/$1/$2\'\)'
                 }]
             },
