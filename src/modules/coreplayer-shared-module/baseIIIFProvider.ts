@@ -228,7 +228,21 @@ export class BaseProvider implements IProvider{
                 height = Math.floor(width * heightRatio);
             }
 
-            var uri = canvas.resources[0].resource.service['@id'] + '/full/'+ width + ',' + height + '/0/native.jpg';
+            var uri;
+
+            if (canvas.resources){
+                uri = canvas.resources[0].resource.service['@id'];
+            } else if (canvas.images){
+                uri = canvas.images[0].resource.service['@id'];
+            }
+
+            var tile = 'full/'+ width + ',' + height + '/0/native.jpg';
+
+            if (uri.endsWith('/')){
+                uri += tile;
+            } else {
+                uri += '/' + tile;
+            }
 
             thumbs.push(new Thumb(i, uri, canvas.label, height, true));
         }

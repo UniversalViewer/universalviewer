@@ -14,6 +14,7 @@ String.prototype.format = function () {
 };
 
 String.prototype.startsWith = function (str) { return this.indexOf(str) == 0; };
+String.prototype.endsWith = function(str) { return this.indexOf(str, this.length - str.length) !== -1; };
 String.prototype.trim = function () { return this.replace(/^\s\s*/, '').replace(/\s\s*$/, ''); };
 String.prototype.ltrim = function () { return this.replace(/^\s+/, ''); };
 String.prototype.rtrim = function () { return this.replace(/\s+$/, ''); };
@@ -61,17 +62,17 @@ if (!Array.prototype.contains) {
 
 //#region browser detection
 
-window.BrowserDetect = 
+window.BrowserDetect =
 {
-    init: function () 
+    init: function ()
     {
         this.browser = this.searchString(this.dataBrowser) || "Other";
         this.version = this.searchVersion(navigator.userAgent) ||       this.searchVersion(navigator.appVersion) || "Unknown";
     },
 
-    searchString: function (data) 
+    searchString: function (data)
     {
-        for (var i=0 ; i < data.length ; i++)   
+        for (var i=0 ; i < data.length ; i++)
         {
             var dataString = data[i].string;
             this.versionSearchString = data[i].subString;
@@ -83,14 +84,14 @@ window.BrowserDetect =
         }
     },
 
-    searchVersion: function (dataString) 
+    searchVersion: function (dataString)
     {
         var index = dataString.indexOf(this.versionSearchString);
         if (index == -1) return;
         return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
     },
 
-    dataBrowser: 
+    dataBrowser:
     [
         { string: navigator.userAgent, subString: "Chrome",  identity: "Chrome" },
         { string: navigator.userAgent, subString: "MSIE",    identity: "Explorer" },
@@ -195,7 +196,7 @@ export class Utils{
     }
 
     static updateURIKeyValuePair(uriSegment: string, key: string, value: string): string{
-        
+
         key = encodeURIComponent(key);
         value = encodeURIComponent(value);
 
@@ -226,7 +227,7 @@ export class Utils{
 
         return kvp.join('&');
     }
-    
+
     //#endregion
 
     //#region Math
@@ -337,12 +338,12 @@ export class Utils{
 
     static debounce(fn, debounceDuration) {
         // summary:
-        //      Returns a debounced function that will make sure the given 
+        //      Returns a debounced function that will make sure the given
         //      function is not triggered too much.
         // fn: Function
         //      Function to debounce.
         // debounceDuration: Number
-        //      OPTIONAL. The amount of time in milliseconds for which we 
+        //      OPTIONAL. The amount of time in milliseconds for which we
         //      will debounce the function. (defaults to 100ms)
 
         debounceDuration = debounceDuration || 100;
@@ -368,7 +369,7 @@ export class Utils{
 
     static createElement(tagName: string, id?: string, className?: string): JQuery {
         var $elem = $(document.createElement(tagName));
-        
+
         if (id) $elem.attr('id', id);
         if (className) $elem.attr('class', className);
 

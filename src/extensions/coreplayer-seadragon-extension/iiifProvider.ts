@@ -20,7 +20,19 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var baseUri = imageBaseUri ? imageBaseUri : this.options.imageBaseUri || this.options.dataBaseUri || "";
         var template = imageUriTemplate? imageUriTemplate : this.options.imageUriTemplate;
 
-        var iiifUri = canvas.resources[0].resource.service['@id'] + "/info.json";
+        var iiifUri;
+
+        if (canvas.resources){
+            iiifUri = canvas.resources[0].resource.service['@id'];
+        } else if (canvas.images){
+            iiifUri = canvas.images[0].resource.service['@id'];
+        }
+
+        if (iiifUri.endsWith('/')){
+            iiifUri += 'info.json';
+        } else {
+            iiifUri += '/info.json';
+        }
 
         var uri = String.prototype.format(template, baseUri, iiifUri);
 
