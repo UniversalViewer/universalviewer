@@ -174,7 +174,11 @@ export class BaseProvider implements IProvider{
     }
 
     setMediaUri(canvas: any): void{
-        canvas.mediaUri = this.getMediaUri(canvas.mediaUri);
+        if (canvas.mediaUri){
+            canvas.mediaUri = this.getMediaUri(canvas.mediaUri);
+        } else {
+            canvas.mediaUri = this.getMediaUri(canvas.fileUri);
+        }
     }
 
     getThumbUri(canvas: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
