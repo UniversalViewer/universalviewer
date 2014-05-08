@@ -48,6 +48,17 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
+        /*
+        require.config({
+            paths: dependencies,
+            shim: {
+                'viewer': {
+                    deps: ['pdf']
+                }
+            }
+        });
+        */
+
         // dependencies
         require(_.values(dependencies), function () {
             //var deps = _.object(_.keys(dependencies), arguments);

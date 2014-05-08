@@ -1,10 +1,10 @@
 
 
 var paths = {
-        'pdfobject': './js/pdfobject',
-        'viewer': './js/viewer.min',
-        'pdf': './js/pdf.min',
-        'compatibility': './js/compatibility'
+        'pdf': './js/pdf_combined',
+        'pdfobject': './js/pdfobject'//,
+        //'viewer': './js/viewer',
+        //'compatibility': './js/compatibility'
     };
 
 /*

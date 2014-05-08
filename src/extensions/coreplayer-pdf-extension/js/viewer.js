@@ -21,8 +21,6 @@
            noContextMenuHandler, SecondaryToolbar, PasswordPrompt,
            PresentationMode, HandTool, Promise, DocumentProperties */
 
-console.log('load viewer.js');
-
 'use strict';
 
 //var DEFAULT_URL = 'http://local.wellcomelibrary.org/media/b20432963/0/957cb1a0-cf75-4015-a00d-8e246820b287.pdf';
