@@ -21,6 +21,8 @@ String.prototype.rtrim = function () { return this.replace(/\s+$/, ''); };
 String.prototype.fulltrim = function () { return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g, '').replace(/\s+/g, ' '); };
 String.prototype.toFileName = function () { return this.replace(/[^a-z0-9]/gi, '_').toLowerCase(); };
 String.prototype.contains = function(str) { return this.indexOf(str) !== -1; };
+String.prototype.utf8_to_b64 = function(str){ return window.btoa(unescape(encodeURIComponent(str))); };
+String.prototype.b64_to_utf8 = function(str){ return decodeURIComponent(escape(window.atob(str))); };
 
 //#endregion
 
