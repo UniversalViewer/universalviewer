@@ -35,7 +35,6 @@ interface JQuery {
     actualHeight(height: number);
     actualWidth(width: number);
     toggleExpandText(chars: string);
-    cookie(name: string);
 
     // jsviews
     link: any;
@@ -46,6 +45,7 @@ interface JQueryStatic {
     // pubsub
     publish(event: string, eventObj?: any[]);
     subscribe(event: string, handler: Function);
+    cookie(name: string);
 
     // jsviews
     observable: any;
