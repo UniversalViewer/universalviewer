@@ -32,7 +32,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         var version = window.BrowserDetect.version;
 
         if (browser == 'Chrome' ||
-            browser == 'Firefox' ||
+            browser == 'Firefox' && version > 20 ||
             browser == 'Opera') {// ||
             //browser == 'Explorer' && version >= 9) {
 
