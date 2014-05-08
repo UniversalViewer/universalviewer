@@ -232,7 +232,7 @@ export class BaseProvider implements IProvider{
         structure.path = path;
 
         // replace structureType with config.js mapping (if exists).
-        structure.structureType = this.replaceStructureType(structure.sectionType);
+        structure.sectionType = this.replaceStructureType(structure.sectionType);
 
         for (var i = 0; i < structure.assets.length; i++) {
             var index = structure.assets[i];
