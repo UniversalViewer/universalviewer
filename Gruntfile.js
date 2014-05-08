@@ -111,7 +111,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         cwd: 'src/js',
-                        src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js', 'l10n.js'],
+                        src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js', 'l10n.js', 'base64.min.js'],
                         dest: '<%= global.buildDir %>/js/'
                     },
                     // extension configuration files

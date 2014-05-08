@@ -142,24 +142,31 @@ class BootStrapper{
             extension = that.extensions['seadragon/iiif'];
         }
 
-        yepnope.injectCss(extension.css, function () {
+        // feature detection
+        yepnope({
+            test: window.btoa && window.atob,
+            nope: 'js/base64.min.js',
+            complete: function () {
+                yepnope.injectCss(extension.css, function () {
 
-            $.getJSON(extension.config, (config) => {
+                    $.getJSON(extension.config, (config) => {
 
-                // if data-config has been set on embedding div, extend the existing config object.
-                if (that.configExtension){
+                        // if data-config has been set on embedding div, extend the existing config object.
+                        if (that.configExtension){
 
-                        // save a reference to the config extension uri.
-                        config.uri = that.configExtensionUri;
+                                // save a reference to the config extension uri.
+                                config.uri = that.configExtensionUri;
 
-                        $.extend(true, config, that.configExtension);
+                                $.extend(true, config, that.configExtension);
 
-                        that.createExtension(extension, config);
+                                that.createExtension(extension, config);
 
-                } else {
-                    that.createExtension(extension, config);
-                }
-            });
+                        } else {
+                            that.createExtension(extension, config);
+                        }
+                    });
+                });
+            }
         });
     }
 
