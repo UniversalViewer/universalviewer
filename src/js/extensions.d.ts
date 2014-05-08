@@ -11,6 +11,7 @@ interface HTMLElement{
 interface String {
     format(template: string, ...args: any[]): string;
     startsWith(text: string): boolean;
+    endsWith(text: string): boolean;
     ltrim(): string;
     rtrim(): string;
     fulltrim(): string;
