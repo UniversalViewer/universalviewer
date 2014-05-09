@@ -2,8 +2,9 @@
 /// <reference path="../../js/extensions.d.ts" />
 import baseProvider = require("../../modules/coreplayer-shared-module/baseProvider");
 import utils = require("../../utils");
+import IPDFProvider = require("./iPDFProvider");
 
-export class Provider extends baseProvider.BaseProvider{
+export class Provider extends baseProvider.BaseProvider implements IPDFProvider{
 
     constructor(config: any, manifest: any) {
         super(config, manifest);
