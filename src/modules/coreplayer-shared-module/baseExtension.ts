@@ -22,7 +22,7 @@ export class BaseExtension implements IExtension {
     // events
     static RESIZE: string = 'onResize';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
-    static CANVAS_INDEX_CHANGED: string = 'onCanvasIndexChanged';
+    static CANVAS_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
     static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
     static REDIRECT: string = 'onRedirect';
