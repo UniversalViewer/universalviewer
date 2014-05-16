@@ -23,6 +23,7 @@ interface IProvider{
     getCanvasOrderLabel(canvas: any): string;
     getCanvasStructure(canvas: any): any;
     getCurrentCanvas(): any;
+    getDomain(): string;
     getLastCanvasOrderLabel(): string; // todo: remove?
     getManifestSeeAlsoUri(manifest: any): string;
     getManifestType(): string;

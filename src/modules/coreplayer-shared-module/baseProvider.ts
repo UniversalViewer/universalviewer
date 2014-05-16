@@ -469,4 +469,9 @@ export class BaseProvider implements IProvider{
 
         return thumbs;
     }
+
+    getDomain(): string{
+        var parts = utils.Utils.getUrlParts(this.dataUri);
+        return parts.host;
+    }
 }
