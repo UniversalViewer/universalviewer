@@ -281,4 +281,9 @@ export class BaseProvider implements IProvider{
     getTree(): TreeNode{
         return null;
     }
+
+    getDomain(): string{
+        var parts = utils.Utils.getUrlParts(this.dataUri);
+        return parts.domain;
+    }
 }
