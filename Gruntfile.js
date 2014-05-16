@@ -18,7 +18,8 @@ module.exports = function (grunt) {
             buildDir: 'build/wellcomeplayer',
             minify: 'optimize=none',
             packageDirName: packageDirName,
-            packageDir: 'build/' + packageDirName
+            packageDir: 'build/' + packageDirName,
+            examplesDir: 'examples'
         },
         pkg: packageJson,
         ts: {
@@ -76,7 +77,8 @@ module.exports = function (grunt) {
 
         clean: {
             build : ["<%= global.buildDir %>/*"],
-            package: ['<%= global.packageDir %>']
+            package: ['<%= global.packageDir %>'],
+            examples: ['<%= global.examplesDir %>/<%= global.buildDir %>']
         },
 
         copy: {
@@ -202,6 +204,17 @@ module.exports = function (grunt) {
 
                             return dest + moduleName + fileName;
                         }
+                    }
+                ]
+            },
+            examples: {
+                // copy contents of /build to examples.
+                files: [
+                    {
+                        cwd: '<%= global.buildDir %>',
+                        expand: true,
+                        src: ['**'],
+                        dest: '<%= global.examplesDir %>/<%= global.buildDir %>'
                     }
                 ]
             },
@@ -404,6 +417,21 @@ module.exports = function (grunt) {
             'replace:js',
             'replace:dependenciesPaths',
             'replace:dependenciesExtension'
+        );
+    });
+
+    // build and copy into examples folder
+    grunt.registerTask('examples', '', function() {
+
+        // grunt package --buildDir=myDir
+        // or prepend / to target relative to system root.
+        var buildDir = grunt.option('buildDir');
+        if (buildDir) grunt.config.set('global.buildDir', buildDir);
+
+        grunt.task.run(
+            'build',
+            'clean:examples',
+            'copy:examples'
         );
     });
 

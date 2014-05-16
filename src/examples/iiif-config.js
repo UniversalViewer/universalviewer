@@ -1,5 +1,0 @@
-{
-    "options": {
-        "IIIF": true
-    }
-}
