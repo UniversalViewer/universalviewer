@@ -60,7 +60,7 @@ and run:
 
 within the player directory, then browse to:
 
-http://localhost:8080/examples/
+`http://localhost:8080/examples/`
 
 ## License
 
