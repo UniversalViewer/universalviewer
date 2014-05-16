@@ -472,6 +472,6 @@ export class BaseProvider implements IProvider{
 
     getDomain(): string{
         var parts = utils.Utils.getUrlParts(this.dataUri);
-        return parts.domain;
+        return parts.host;
     }
 }
