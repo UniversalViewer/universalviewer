@@ -110,6 +110,9 @@ export class TreeView extends baseView.BaseView {
         if (!this.rootNode) return;
 
         var structure = this.provider.getStructureByCanvasIndex(index);
+
+        if (!structure) return;
+
         this.selectPath(structure.path);
     }
 

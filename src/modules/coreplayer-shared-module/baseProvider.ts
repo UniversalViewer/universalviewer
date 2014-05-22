@@ -221,12 +221,12 @@ export class BaseProvider implements IProvider{
     }
 
     // the purpose of this is to give each asset in assetSequence.assets
-    // a collection of structures it belongs to.
+    // a collection of sections it belongs to.
     // it also builds a path string property for each section.
     // this can then be used when a section is clicked in the tree view
-    // where getSectionIndex in baseExtension loops though all assets and their
-    // associated structures until it finds one with a matching path.
-    // (structures/ranges in iiif are called structures in the legacy format)
+    // where getSectionIndex loops though all assets and their
+    // associated sections until it finds one with a matching path.
+    // (structures/ranges in iiif are called sections in the legacy format)
     parseStructures(structure: any, canvases: any[], path: string): void {
 
         structure.path = path;
@@ -301,9 +301,9 @@ export class BaseProvider implements IProvider{
         for (var i = 0; i < this.sequence.assets.length; i++) {
             var canvas = this.sequence.assets[i];
             for (var j = 0; j < canvas.structures.length; j++) {
-                var section = canvas.structures[j];
+                var structure = canvas.structures[j];
 
-                if (section.path == path) {
+                if (structure.path == path) {
                     return i;
                 }
             }
