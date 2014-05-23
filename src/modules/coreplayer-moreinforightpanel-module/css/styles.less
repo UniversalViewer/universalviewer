@@ -14,7 +14,34 @@
 }
 
 #app .rightPanel .main{
-    padding: 0 10px;
+    padding: 0 10px 20px 10px;
     overflow: auto;
+}
+
+#app .rightPanel .main.loading{
+    background-image: url(@loaderBlackBg);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+#app .rightPanel .main .header{
+    color: #999999;
+    border-bottom: 1px solid #525252;
+    font-size: 11px;
+    margin: 15px 10px 0 0;
+    text-transform: uppercase;
+}
+
+#app .rightPanel .main .text{
     color: #fff;
+    margin: 5px 10px 0 0;
+}
+
+#app .rightPanel .main .text a.toggle{
+    color: #FFB81D;
+    font-weight: normal;
+}
+
+#app .rightPanel .main .text a.toggle:hover{
+    color: #FFB81D;
 }

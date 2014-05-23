@@ -28,6 +28,7 @@ interface IProvider{
     getManifestSeeAlsoUri(manifest: any): string;
     getManifestType(): string;
     getMediaUri(mediaUri: string): string;
+    getMetaData(callback: (data: any) => any): void;
     getSeeAlso(): any;
     getSequenceType(): string;
     getStructureByCanvasIndex(index: number): any; // todo: remove?

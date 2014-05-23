@@ -34,7 +34,7 @@ interface JQuery {
     swapClass(removeClass: string, addClass: string): void;
     actualHeight(height: number);
     actualWidth(width: number);
-    toggleExpandText(chars: string);
+    toggleExpandText(chars: number);
 
     // jsviews
     link: any;
