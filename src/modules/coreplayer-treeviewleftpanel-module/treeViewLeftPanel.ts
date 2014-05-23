@@ -99,9 +99,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
                  'boundmanuscript',
                  'artwork',
                  'application-pdf':
-                return true;
-            default:
                 return false;
+            default:
+                return true;
         }
     }
 
