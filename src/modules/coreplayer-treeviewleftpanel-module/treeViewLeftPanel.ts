@@ -92,16 +92,23 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         }
     }
 
+    // todo: should this be in the provider?
     defaultToThumbsView(): boolean{
-        var type = this.provider.getManifestType();
+        var manifestType = this.provider.getManifestType();
 
-        switch (type){
+        switch (manifestType){
             case 'archive': return true;
             case 'boundmanuscript': return true;
             case 'artwork': return true;
-            case 'application-pdf': return true;
-            default: return false;
         }
+
+        var sequenceType = this.provider.getSequenceType();
+
+        switch (sequenceType){
+            case 'application-pdf': return true;
+        }
+
+        return false;
     }
 
     openTreeView(): void {
