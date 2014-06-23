@@ -8,6 +8,7 @@ interface IProvider{
 	config: any;
 	configExtension: string;
 	domain: string;
+    embedDomain: string;
 	isHomeDomain: boolean;
 	isLightbox: boolean;
 	isOnlyInstance: boolean;

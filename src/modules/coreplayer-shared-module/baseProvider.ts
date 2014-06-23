@@ -23,6 +23,7 @@ export class BaseProvider implements IProvider{
     dataUri: string;
     domain: string;
     embedScriptUri: string;
+    embedDomain: string;
     isHomeDomain: boolean;
     isLightbox: boolean;
     isOnlyInstance: boolean;
@@ -52,6 +53,7 @@ export class BaseProvider implements IProvider{
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through app.getParam.
         this.dataUri = utils.Utils.getQuerystringParameter('du');
+        this.embedDomain = utils.Utils.getQuerystringParameter('ed');
         this.isHomeDomain = utils.Utils.getQuerystringParameter('hd') === "true";
         this.isOnlyInstance = utils.Utils.getQuerystringParameter('oi') === "true";
         this.embedScriptUri = utils.Utils.getQuerystringParameter('esu');
