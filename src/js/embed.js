@@ -342,6 +342,7 @@ docReady(function() {
                     "&oi=" + isOnlyInstance +
                     "&du=" + dataUri +
                     "&esu=" + absScriptUri +
+                    "&ed=" + document.domain +
                     "&d=" + domain +
                     "&lb=" + isLightbox;
 
