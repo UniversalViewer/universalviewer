@@ -8,7 +8,8 @@ import Thumb = require("./thumb");
 export enum params {
     sequenceIndex,
     canvasIndex,
-    zoom
+    zoom,
+    rotation
 }
 
 // providers contain methods that could be implemented differently according
@@ -33,8 +34,8 @@ export class BaseProvider implements IProvider{
     sequenceIndex: number;
     treeRoot: TreeNode;
 
-    // map param names to enum indexes.
-    paramMap: string[] = ['si', 'ci', 'z'];
+    // map param names to enum indices.
+    paramMap: string[] = ['si', 'ci', 'z', 'r'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",

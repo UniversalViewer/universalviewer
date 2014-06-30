@@ -217,8 +217,15 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // this.$zoomControls.css('top', this.$navigator.height() - this.$zoomControls.height());
 
 
-        // if there are no currentBounds check for initial zoom params.
+        // if there are no currentBounds check for initial zoom/rotation params.
         if (!this.currentBounds){
+
+            var initialRotation = this.extension.getParam(baseProvider.params.rotation);
+
+            if (initialRotation){
+                this.viewer.viewport.setRotation(parseInt(initialRotation));
+            }
+
             var initialBounds = this.extension.getParam(baseProvider.params.zoom);
 
             if (initialBounds){
