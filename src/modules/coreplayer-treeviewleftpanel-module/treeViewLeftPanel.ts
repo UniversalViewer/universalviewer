@@ -4,6 +4,7 @@ import baseLeft = require("../coreplayer-shared-module/leftPanel");
 import utils = require("../../utils");
 import tree = require("./treeView");
 import thumbs = require("./thumbsView");
+import baseView = require("../coreplayer-shared-module/baseView");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
@@ -13,8 +14,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     $tabsContent: JQuery;
     $treeView: JQuery;
     $thumbsView: JQuery;
-    treeView: tree.TreeView;
-    thumbsView: thumbs.ThumbsView;
+    treeView: baseView.BaseView;
+    thumbsView: baseView.BaseView;
 
     static OPEN_TREE_VIEW: string = 'leftPanel.onOpenTreeView';
     static OPEN_THUMBS_VIEW: string = 'leftPanel.onOpenThumbsView';
@@ -119,8 +120,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$treeButton.addClass('on');
         this.$thumbsButton.removeClass('on');
 
-        this.treeView.show();
-        if (this.thumbsView) this.thumbsView.hide();
+        (<tree.TreeView>this.treeView).show();
+        if (this.thumbsView) (<thumbs.ThumbsView>this.thumbsView).hide();
     }
 
     openThumbsView(): void {
@@ -131,8 +132,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$treeButton.removeClass('on');
         this.$thumbsButton.addClass('on');
 
-        if (this.treeView) this.treeView.hide();
-        this.thumbsView.show();
+        if (this.treeView) (<tree.TreeView>this.treeView).hide();
+        (<thumbs.ThumbsView>this.thumbsView).show();
     }
 
     resize(): void {
