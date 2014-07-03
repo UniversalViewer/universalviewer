@@ -44,7 +44,7 @@ export class Extension extends baseExtension.BaseExtension {
         super(provider);
     }
 
-    create(): void {
+    create(overrideDependencies?: any): void {
         super.create();
 
         var that = this;
@@ -117,7 +117,8 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         // dependencies
-        require(_.values(dependencies), function () {
+        var deps = overrideDependencies || dependencies;
+        require(_.values(deps), function () {
             //var deps = _.object(_.keys(dependencies), arguments);
 
             that.createModules();
