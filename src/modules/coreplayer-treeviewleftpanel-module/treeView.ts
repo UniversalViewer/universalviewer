@@ -21,7 +21,7 @@ export class TreeView extends baseView.BaseView {
     static VIEW_MANIFEST: string = 'treeView.onViewManifest';
 
     constructor($element: JQuery) {
-        super($element, true, false);
+        super($element, true, true);
     }
 
     create(): void {
