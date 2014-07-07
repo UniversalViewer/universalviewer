@@ -345,10 +345,9 @@ export class BaseProvider implements IProvider{
     getTree(): TreeNode{
         this.treeRoot = new TreeNode('root');
         this.treeRoot.label = "root";
-        this.treeRoot.type = "manifest";
-        this.treeRoot.ref = this.getRootStructure();
+        this.treeRoot.data = this.getRootStructure();
+        this.treeRoot.data.type = "manifest";
         this.getRootStructure().treeNode = node;
-        this.treeRoot.path = this.treeRoot.ref.path;
 
         for (var i = 0; i < this.getRootStructure().structures.length; i++){
             var structure = this.getRootStructure().structures[i];
@@ -357,10 +356,9 @@ export class BaseProvider implements IProvider{
             this.treeRoot.nodes.push(node);
 
             node.label = structure.label;
-            node.type = "structure";
-            node.ref = structure;
+            node.data = structure;
+            node.data.type = "structure";
             structure.treeNode = node;
-            node.path = node.ref.path;
         }
 
         return this.treeRoot;

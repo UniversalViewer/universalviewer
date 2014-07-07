@@ -4,7 +4,7 @@ class TreeNode {
     selected: boolean;
     expanded: boolean;
 
-    constructor(public label?: string, public type?: string, public ref?: any, public path?: string) {
+    constructor(public label?: string, public data?: any) {
         this.nodes = [];
     }
 }

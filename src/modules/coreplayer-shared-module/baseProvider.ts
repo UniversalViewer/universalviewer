@@ -390,10 +390,9 @@ export class BaseProvider implements IProvider{
 
     parseTreeStructure(node: TreeNode, structure: any): void {
         node.label = structure.name || "root";
-        node.type = "manifest";
-        node.ref = structure;
+        node.data = structure;
+        node.data.type = "manifest";
         structure.treeNode = node;
-        node.path = node.ref.path;
 
         // if this is the structure node that contains the assetSequence.
         if (this.sequence.structure == structure) {
@@ -417,10 +416,9 @@ export class BaseProvider implements IProvider{
 
     parseTreeSection(node: TreeNode, section: any): void {
         node.label = section.sectionType;
-        node.type = "structure";
-        node.ref = section;
+        node.data = section;
+        node.data.type = "structure";
         section.treeNode = node;
-        node.path = node.ref.path;
 
         if (section.sections) {
 

@@ -26,6 +26,7 @@ export class TreeView extends baseView.BaseView {
 
     create(): void {
         super.create();
+        super.create();
 
         $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.selectIndex(canvasIndex);
@@ -86,10 +87,10 @@ export class TreeView extends baseView.BaseView {
                         }).on("click", "a", function (e) {
                             e.preventDefault();
 
-                            if (self.data.type == 'manifest') {
-                                $.publish(TreeView.VIEW_MANIFEST, [self.data.ref]);
+                            if (self.data.data.type == 'manifest') {
+                                $.publish(TreeView.VIEW_MANIFEST, [self.data.data]);
                             } else {
-                                $.publish(TreeView.VIEW_STRUCTURE, [self.data.ref]);
+                                $.publish(TreeView.VIEW_STRUCTURE, [self.data.data]);
                             }
                         })
                 },
