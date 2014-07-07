@@ -6,6 +6,7 @@ class TreeNode {
 
     constructor(public label?: string, public data?: any) {
         this.nodes = [];
+        if (!data) this.data = {};
     }
 }
 
