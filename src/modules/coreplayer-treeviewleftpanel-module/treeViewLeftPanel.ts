@@ -147,6 +147,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         (<tree.TreeView>this.treeView).show();
         if (this.thumbsView) (<thumbs.ThumbsView>this.thumbsView).hide();
+
+        this.treeView.resize();
     }
 
     openThumbsView(): void {
@@ -159,6 +161,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         if (this.treeView) (<tree.TreeView>this.treeView).hide();
         (<thumbs.ThumbsView>this.thumbsView).show();
+
+        this.thumbsView.resize();
     }
 
     resize(): void {
