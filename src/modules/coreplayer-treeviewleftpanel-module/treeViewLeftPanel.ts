@@ -5,6 +5,7 @@ import utils = require("../../utils");
 import tree = require("./treeView");
 import thumbs = require("./thumbsView");
 import baseView = require("../coreplayer-shared-module/baseView");
+import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
@@ -14,8 +15,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     $tabsContent: JQuery;
     $treeView: JQuery;
     $thumbsView: JQuery;
-    treeView: baseView.BaseView;
-    thumbsView: baseView.BaseView;
+    treeView: tree.TreeView;
+    thumbsView: thumbs.ThumbsView;
 
     static OPEN_TREE_VIEW: string = 'leftPanel.onOpenTreeView';
     static OPEN_THUMBS_VIEW: string = 'leftPanel.onOpenThumbsView';
@@ -29,6 +30,10 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.setConfig('treeViewLeftPanel');
 
         super.create();
+
+        $.subscribe(extension.Extension.RELOAD, () => {
+            this.dataBindThumbsView();
+        });
 
         this.$tabs = utils.Utils.createDiv('tabs');
         this.$main.append(this.$tabs);
@@ -67,10 +72,22 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
     createTreeView(): void {
         this.treeView = new tree.TreeView(this.$treeView);
+        this.dataBindTreeView();
+    }
+
+    dataBindTreeView(): void{
+        this.treeView.rootNode = this.provider.getTree();
+        this.treeView.dataBind();
     }
 
     createThumbsView(): void {
         this.thumbsView = new thumbs.ThumbsView(this.$thumbsView);
+        this.dataBindThumbsView();
+    }
+
+    dataBindThumbsView(): void{
+        this.thumbsView.thumbs = this.provider.getThumbs();
+        this.thumbsView.dataBind();
     }
 
     toggleComplete(): void {

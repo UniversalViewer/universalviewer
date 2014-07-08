@@ -20,7 +20,7 @@ export class ThumbsView extends baseView.BaseView {
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
 
-    thumbs: Array<Thumb>;
+    public thumbs: Array<Thumb>;
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -38,11 +38,6 @@ export class ThumbsView extends baseView.BaseView {
 
         $.subscribe(extension.Extension.MODE_CHANGED, (e, mode) => {
             this.setLabel();
-        });
-
-        $.subscribe(extension.Extension.RELOAD, () => {
-            this.thumbs = this.provider.getThumbs();
-            this.createThumbs();
         });
 
         this.$thumbs = utils.Utils.createDiv('thumbs');
@@ -75,8 +70,10 @@ export class ThumbsView extends baseView.BaseView {
         }
 
         this.resize();
+    }
 
-        this.thumbs = this.provider.getThumbs();
+    dataBind(): void{
+        if (!this.thumbs) return;
         this.createThumbs();
     }
 

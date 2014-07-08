@@ -12,11 +12,8 @@ export class TreeView extends baseView.BaseView {
     $tree: JQuery;
     selectedStructure: any;
 
-    rootNode: TreeNode;
-    //sectionsRootNode: TreeNode;
+    public rootNode: TreeNode;
 
-    //static VIEW_SECTION: string = 'treeView.onViewSection';
-    //static VIEW_STRUCTURE: string = 'treeView.onViewStructure';
     static VIEW_STRUCTURE: string = 'treeView.onViewStructure';
     static VIEW_MANIFEST: string = 'treeView.onViewManifest';
 
@@ -26,15 +23,10 @@ export class TreeView extends baseView.BaseView {
 
     create(): void {
         super.create();
-        super.create();
 
         $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.selectIndex(canvasIndex);
         });
-
-        this.rootNode = this.provider.getTree();
-
-        if (!this.rootNode) return;
 
         this.$tree = $('<ul class="tree"></ul>');
         this.$element.append(this.$tree);
@@ -97,9 +89,11 @@ export class TreeView extends baseView.BaseView {
                 template: $.templates.treeTemplate
             }
         });
+    }
 
+    dataBind(): void{
+        if (!this.rootNode) return;
         this.$tree.link($.templates.pageTemplate, this.rootNode);
-
         this.resize();
     }
 
