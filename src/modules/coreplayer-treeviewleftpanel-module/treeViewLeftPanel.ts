@@ -13,6 +13,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     $treeButton: JQuery;
     $thumbsButton: JQuery;
     $tabsContent: JQuery;
+    $options: JQuery;
+    $views: JQuery;
     $treeView: JQuery;
     $thumbsView: JQuery;
     treeView: tree.TreeView;
@@ -47,11 +49,17 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$tabsContent = utils.Utils.createDiv('tabsContent');
         this.$main.append(this.$tabsContent);
 
+        this.$options = $('<div class="options"></div>');
+        this.$tabsContent.append(this.$options);
+
+        this.$views = $('<div class="views"></div>');
+        this.$tabsContent.append(this.$views);
+
         this.$treeView = utils.Utils.createDiv('treeView');
-        this.$tabsContent.append(this.$treeView);
+        this.$views.append(this.$treeView);
 
         this.$thumbsView = utils.Utils.createDiv('thumbsView');
-        this.$tabsContent.append(this.$thumbsView);
+        this.$views.append(this.$thumbsView);
 
         this.$treeButton.on('click', (e) => {
             e.preventDefault();
@@ -157,5 +165,6 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         super.resize();
 
         this.$tabsContent.actualHeight(this.$main.height() - this.$tabs.outerHeight());
+        this.$views.actualHeight(this.$tabsContent.height() - this.$options.outerHeight());
     }
 }
