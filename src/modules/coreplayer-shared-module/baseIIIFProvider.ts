@@ -343,17 +343,19 @@ export class BaseProvider implements IProvider{
 
     // currently only supports single-level
     getTree(): TreeNode{
+        var rootStructure = this.getRootStructure();
+
         this.treeRoot = new TreeNode('root');
         this.treeRoot.label = "root";
-        this.treeRoot.data = this.getRootStructure();
+        this.treeRoot.data = rootStructure;
         this.treeRoot.data.type = "manifest";
-        this.getRootStructure().treeNode = node;
+        rootStructure.treeNode = this.treeRoot;
 
-        for (var i = 0; i < this.getRootStructure().structures.length; i++){
-            var structure = this.getRootStructure().structures[i];
+        for (var i = 0; i < rootStructure.structures.length; i++){
+            var structure = rootStructure.structures[i];
 
             var node = new TreeNode();
-            this.treeRoot.nodes.push(node);
+            this.treeRoot.addNode(node);
 
             node.label = structure.label;
             node.data = structure;

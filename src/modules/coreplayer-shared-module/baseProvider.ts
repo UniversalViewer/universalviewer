@@ -364,7 +364,6 @@ export class BaseProvider implements IProvider{
 
     getTree(): TreeNode{
         this.treeRoot = new TreeNode('root');
-
         var rootStructure = this.manifest.rootStructure;
 
         if (rootStructure) {
@@ -372,14 +371,17 @@ export class BaseProvider implements IProvider{
         }
 
         // if there aren't any structures then the sectionsRootNode won't have been created.
-        if (!this.sectionsRootNode) this.sectionsRootNode = this.treeRoot;
+        if (!this.sectionsRootNode) {
+            this.sectionsRootNode = this.treeRoot;
+            this.sectionsRootNode.data = this.sequence.rootSection;
+        }
 
         if (this.sequence.rootSection.sections){
             for (var i = 0; i < this.sequence.rootSection.sections.length; i++) {
                 var section = this.sequence.rootSection.sections[i];
 
                 var childNode = new TreeNode();
-                this.sectionsRootNode.nodes.push(childNode);
+                this.sectionsRootNode.addNode(childNode);
 
                 this.parseTreeSection(childNode, section);
             }
@@ -388,11 +390,12 @@ export class BaseProvider implements IProvider{
         return this.treeRoot;
     }
 
+    // manifestations
     parseTreeStructure(node: TreeNode, structure: any): void {
         node.label = structure.name || "root";
         node.data = structure;
         node.data.type = "manifest";
-        structure.treeNode = node;
+        node.data.treeNode = node;
 
         // if this is the structure node that contains the assetSequence.
         if (this.sequence.structure == structure) {
@@ -407,18 +410,19 @@ export class BaseProvider implements IProvider{
                 var childStructure = structure.structures[i];
 
                 var childNode = new TreeNode();
-                node.nodes.push(childNode);
+                node.addNode(childNode);
 
                 this.parseTreeStructure(childNode, childStructure);
             }
         }
     }
 
+    // structures
     parseTreeSection(node: TreeNode, section: any): void {
         node.label = section.sectionType;
         node.data = section;
         node.data.type = "structure";
-        section.treeNode = node;
+        node.data.treeNode = node;
 
         if (section.sections) {
 
@@ -426,7 +430,7 @@ export class BaseProvider implements IProvider{
                 var childSection = section.sections[i];
 
                 var childNode = new TreeNode();
-                node.nodes.push(childNode);
+                node.addNode(childNode);
 
                 this.parseTreeSection(childNode, childSection);
             }
@@ -435,7 +439,6 @@ export class BaseProvider implements IProvider{
 
     getThumbs(): Array<Thumb> {
 
-        var that = this;
         var thumbs = new Array<Thumb>();
 
         for (var i = 0; i < this.getTotalCanvases(); i++) {

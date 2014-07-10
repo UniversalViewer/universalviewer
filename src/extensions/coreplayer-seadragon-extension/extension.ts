@@ -84,12 +84,12 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         });
 
-        $.subscribe(treeView.TreeView.VIEW_MANIFEST, (e, manifest: any) => {
-            this.viewManifest(manifest);
-        });
-
-        $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
-            this.viewStructure(structure.path);
+        $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
+            if (data.type == 'manifest') {
+                this.viewManifest(data);
+            } else {
+                this.viewStructure(data.path);
+            }
         });
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {

@@ -6,6 +6,7 @@ import tree = require("./treeView");
 import thumbs = require("./thumbsView");
 import baseView = require("../coreplayer-shared-module/baseView");
 import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
@@ -35,6 +36,10 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         $.subscribe(extension.Extension.RELOAD, () => {
             this.dataBindThumbsView();
+        });
+
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+            this.selectTreeNodeFromCanvasIndex(canvasIndex);
         });
 
         this.$tabs = utils.Utils.createDiv('tabs');
@@ -145,8 +150,14 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$treeButton.addClass('on');
         this.$thumbsButton.removeClass('on');
 
-        (<tree.TreeView>this.treeView).show();
-        if (this.thumbsView) (<thumbs.ThumbsView>this.thumbsView).hide();
+        this.treeView.show();
+
+        setTimeout(() => {
+            var structure = this.provider.getStructureByCanvasIndex(this.provider.canvasIndex);
+            if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
+        }, 1);
+
+        if (this.thumbsView) this.thumbsView.hide();
 
         this.treeView.resize();
     }
@@ -159,10 +170,21 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$treeButton.removeClass('on');
         this.$thumbsButton.addClass('on');
 
-        if (this.treeView) (<tree.TreeView>this.treeView).hide();
-        (<thumbs.ThumbsView>this.thumbsView).show();
+        if (this.treeView) this.treeView.hide();
+        this.thumbsView.show();
 
         this.thumbsView.resize();
+    }
+
+    selectTreeNodeFromCanvasIndex(index: number): void {
+        // may be authenticating
+        if (index == -1) return;
+
+        var structure = this.provider.getStructureByCanvasIndex(index);
+
+        if (!structure) return;
+
+        if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
     }
 
     resize(): void {

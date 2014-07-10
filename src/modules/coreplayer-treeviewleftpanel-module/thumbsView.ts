@@ -16,8 +16,6 @@ export class ThumbsView extends baseView.BaseView {
 
     lastThumbClickedIndex: number;
 
-    isPDF: boolean = false;
-
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
 
     public thumbs: Array<Thumb>;
@@ -65,14 +63,10 @@ export class ThumbsView extends baseView.BaseView {
             this.scrollStop();
         }, 1000);
 
-        if (this.provider.getSequenceType() === "application-pdf"){
-            this.isPDF = true;
-        }
-
         this.resize();
     }
 
-    dataBind(): void{
+    public dataBind(): void{
         if (!this.thumbs) return;
         this.createThumbs();
     }
@@ -172,9 +166,13 @@ export class ThumbsView extends baseView.BaseView {
         this.$element.hide();
     }
 
+    isPDF(): boolean{
+        return (this.provider.getSequenceType() === "application-pdf");
+    }
+
     setLabel(): void {
 
-        if (this.isPDF){
+        if (this.isPDF()){
             $(this.$thumbs).find('span.index').hide();
             $(this.$thumbs).find('span.label').hide();
         } else {
