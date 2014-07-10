@@ -239,6 +239,8 @@ export class Extension extends baseExtension.BaseExtension {
     }
 
     treeNodeSelected(data: any): void{
+        if (!data.type) return;
+
         if (data.type == 'manifest') {
             this.viewManifest(data);
         } else {
