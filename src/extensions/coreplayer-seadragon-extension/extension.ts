@@ -85,11 +85,7 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
-            if (data.type == 'manifest') {
-                this.viewManifest(data);
-            } else {
-                this.viewStructure(data.path);
-            }
+            this.treeNodeSelected(data);
         });
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
@@ -239,6 +235,14 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         } else {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+        }
+    }
+
+    treeNodeSelected(data: any): void{
+        if (data.type == 'manifest') {
+            this.viewManifest(data);
+        } else {
+            this.viewStructure(data.path);
         }
     }
 }
