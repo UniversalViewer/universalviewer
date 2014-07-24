@@ -1,3 +1,6 @@
 [submodule "examples"]
 	path = examples
 	url = https://github.com/wellcomelibrary/player-examples.git
+[submodule "src/themes/coreplayer-default-theme"]
+	path = src/themes/coreplayer-default-theme
+	url = https://github.com/wellcomelibrary/coreplayer-default-theme.git
