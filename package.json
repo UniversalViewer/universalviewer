@@ -4,8 +4,8 @@
 	"description": "Navigate sequences of images in a zoomable, extensible interface.",
 	"devDependencies": {
 		"grunt": "~0.4.1",
-		"grunt-ts": "~1.0.1",
-		"grunt-contrib-less": "~0.7.0",
+		"grunt-ts": "~1.11.5",
+		"grunt-contrib-less": "~0.11.3",
 		"grunt-contrib-clean": "~0.4.0",
 		"grunt-contrib-copy": "~0.4.1",
 		"grunt-exec": "~0.4.2",

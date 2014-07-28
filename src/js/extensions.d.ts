@@ -22,8 +22,8 @@ interface String {
 }
 
 // array utils
-interface Array{
-    clone(): Array;
+interface Array<T>{
+    clone(): Array<T>;
     last(): any;
     contains(val: any): boolean;
 }
@@ -39,6 +39,9 @@ interface JQuery {
     // jsviews
     link: any;
     render: any;
+
+    // unevent
+    on(events: string, handler: (eventObject: JQueryEventObject, ...args: any[]) => any, wait: Number): JQuery;
 }
 
 interface JQueryStatic {

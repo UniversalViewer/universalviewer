@@ -56,7 +56,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         OpenSeadragon.DEFAULT_SETTINGS.autoHideControls = true;
 
-        var prefixUrl = (window.DEBUG)? 'modules/coreplayer-seadragoncenterpanel-module/img/' : 'img/coreplayer-seadragoncenterpanel-module/';
+        var prefixUrl = (window.DEBUG)? 'modules/coreplayer-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/coreplayer-seadragoncenterpanel-module/';
 
         this.viewer = OpenSeadragon({
             id: "viewer",

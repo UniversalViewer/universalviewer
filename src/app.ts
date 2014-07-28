@@ -77,43 +77,37 @@ require([
         extensions['seadragon/dzi'] = {
             type: seadragonExtension.Extension,
             provider: seadragonProvider.Provider,
-            config: 'extensions/coreplayer-seadragon-extension/config.js',
-            css: 'extensions/coreplayer-seadragon-extension/css/styles.css'
+            name: 'coreplayer-seadragon-extension'
         };
 
         extensions['seadragon/iiif'] = {
             type: seadragonExtension.Extension,
             provider: seadragonIIIFProvider.Provider,
-            config: 'extensions/coreplayer-seadragon-extension/config.js',
-            css: 'extensions/coreplayer-seadragon-extension/css/styles.css'
+            name: 'coreplayer-seadragon-extension'
         };
 
         extensions['video/mp4'] = {
             type: mediaelementExtension.Extension,
             provider: mediaelementProvider.Provider,
-            config: 'extensions/coreplayer-mediaelement-extension/config.js',
-            css: 'extensions/coreplayer-mediaelement-extension/css/styles.css'
+            name: 'coreplayer-mediaelement-extension'
         };
 
         extensions['video/multiple-sources'] = {
             type: mediaelementExtension.Extension,
             provider: mediaelementProvider.Provider,
-            config: 'extensions/coreplayer-mediaelement-extension/config.js',
-            css: 'extensions/coreplayer-mediaelement-extension/css/styles.css'
+            name: 'coreplayer-mediaelement-extension'
         };
 
         extensions['audio/mp3'] = {
             type: mediaelementExtension.Extension,
             provider: mediaelementProvider.Provider,
-            config: 'extensions/coreplayer-mediaelement-extension/config.js',
-            css: 'extensions/coreplayer-mediaelement-extension/css/styles.css'
+            name: 'coreplayer-mediaelement-extension'
         };
 
         extensions['application/pdf'] = {
             type: pdfExtension.Extension,
             provider: pdfProvider.Provider,
-            config: 'extensions/coreplayer-pdf-extension/config.js',
-            css: 'extensions/coreplayer-pdf-extension/css/styles.css'
+            name: 'coreplayer-pdf-extension'
         };
 
         new bootstrapper(extensions);

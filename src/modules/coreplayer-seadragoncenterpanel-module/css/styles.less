@@ -1,43 +1,63 @@
 ﻿
+#app .centerPanel{
 
-#app .centerPanel .displayregion {
-    border: 2px solid #fff !important;
-}
+    @imgPath: '../../../modules/coreplayer-seadragoncenterpanel-module/img/';
 
-#app .centerPanel #viewer {
-    padding: 0 8px 0 8px;
-}
+    .displayregion {
+        border: 2px solid #fff !important;
+    }
 
-#app .centerPanel .navigator.extraMargin{
-    margin: 0 30px 0 0 !important;
-}
+    #viewer {
+        padding: 0 8px 0 8px;
+    }
 
-#app .centerPanel .paging.btn {
-    position: absolute !important;
-    width: 30px;
-    height: 90px;
-    background-repeat: no-repeat;
-    background-color: #000;
-    background-position: 0px 50%;
-    cursor: pointer;
-}
+    .navigator.extraMargin{
+        margin: 0 30px 0 0 !important;
+    }
 
-#app .centerPanel .paging.btn.prev {
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/prev_page.png');
-    left: 0;
-}
+    .paging.btn {
+        position: absolute !important;
+        width: 30px;
+        height: 90px;
+        background-repeat: no-repeat;
+        background-color: @black;
+        background-position: 0px 50%;
+        cursor: pointer;
 
-#app .centerPanel .paging.btn.prev.disabled {
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/prev_page_disabled.png');
-}
+        &.prev {
+            background-image: url('@{imgPath}prev_page.png');
+            left: 0;
+            &.disabled {
+                background-image: url('@{imgPath}prev_page_disabled.png');
+            }
+        }
 
-#app .centerPanel .paging.btn.next{
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page.png');
-    right: 0;
-}
+        &.next{
+            background-image: url('@{imgPath}next_page.png');
+            right: 0;
+            &.disabled {
+                background-image: url('@{imgPath}next_page_disabled.png');
+            }
+        }
+    }
 
-#app .centerPanel .paging.btn.next.disabled {
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page_disabled.png');
+    button[title="Zoom in"] {
+        margin: 4px 2px 0 4px !important;
+        cursor: pointer !important;
+    }
+
+    button[title="Zoom out"] {
+        margin: 4px 0 0 2px !important;
+        cursor: pointer !important;
+    }
+
+    button[title="Go home"] {
+        display: none !important;
+    }
+
+    button[title="Toggle full page"] {
+        display: none !important;
+    }
 }
 
 /*
@@ -62,21 +82,3 @@
     cursor: pointer;
 }
 */
-
-#app .centerPanel button[title="Zoom in"] {
-    margin: 4px 2px 0 4px !important;
-    cursor: pointer !important;
-}
-
-#app .centerPanel button[title="Zoom out"] {
-    margin: 4px 0 0 2px !important;
-    cursor: pointer !important;
-}
-
-#app .centerPanel button[title="Go home"] {
-    display: none !important;
-}
-
-#app .centerPanel button[title="Toggle full page"] {
-    display: none !important;
-}

@@ -19,7 +19,8 @@ module.exports = function (grunt) {
             minify: 'optimize=none',
             packageDirName: packageDirName,
             packageDir: 'build/' + packageDirName,
-            examplesDir: 'examples'
+            examplesDir: 'examples',
+            theme: 'coreplayer-default-theme'
         },
         pkg: packageJson,
         ts: {
@@ -50,7 +51,9 @@ module.exports = function (grunt) {
         less: {
             dev: {
                 options: {
-                    paths: ["src/modules"]
+                    modifyVars: {
+                        theme: '"<%= global.theme %>"'
+                    }
                 },
                 files: [
                     {
@@ -62,8 +65,9 @@ module.exports = function (grunt) {
             },
             build: {
                 options: {
-                    paths: ["src/modules"]
-                    //compress: true
+                    modifyVars: {
+                        theme: '"<%= global.theme %>"'
+                    }
                 },
                 files: [
                     {
@@ -82,14 +86,21 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            build: {
+            theme: {
                 files: [
-                    // images
+                    // theme images
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/themes/<%= global.theme%>/img/*'],
+                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/'
+                    },
+                    // module images
                     {
                         expand: true,
                         src: ['src/modules/**/img/*'],
-                        dest: '<%= global.buildDir %>/img/',
-                        rename: function(dest, src) {
+                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/',
+                        rename: function (dest, src) {
 
                             var fileName = src.substr(src.lastIndexOf('/'));
 
@@ -100,6 +111,24 @@ module.exports = function (grunt) {
                             return dest + moduleName + fileName;
                         }
                     },
+                    // extensions css
+                    {
+                        expand: true,
+                        src: ['src/extensions/**/css/*.css'],
+                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/css/',
+                        rename: function(dest, src) {
+
+                            // get the extension name from the src string.
+                            // src/extensions/extensionname/css/styles.css
+                            var extensionName = src.match(/extensions\/(.*)\/css/)[1];
+
+                            return dest + extensionName + ".css";
+                        }
+                    }
+                ]
+            },
+            build: {
+                files: [
                     // html
                     {
                         expand: true,
@@ -150,20 +179,6 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['src/extensions/**/js/*'],
                         dest: '<%= global.buildDir %>/js/'
-                    },
-                    // extensions css
-                    {
-                        expand: true,
-                        src: ['src/extensions/**/css/*.css'],
-                        dest: '<%= global.buildDir %>/css/',
-                        rename: function(dest, src) {
-
-                            // get the extension name from the src string.
-                            // src/extensions/extensionname/css/styles.css
-                            var extensionName = src.match(/extensions\/(.*)\/css/)[1];
-
-                            return dest + extensionName + ".css";
-                        }
                     },
                     // anything in the module/js folders that isn't
                     // a js file. could be swfs or supporting files
@@ -241,7 +256,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: "build/",
-                        src: ["<%= global.packageDirName %>/**" ]
+                        src: ["<%= global.packageDirName %>/**"]
                     }
                 ]
             },
@@ -298,31 +313,31 @@ module.exports = function (grunt) {
             },
             img: {
                 // replace img srcs to point to "../img/[module]/[img]"
-                src: ['<%= global.buildDir %>/css/*.css'],
+                src: ['<%= global.buildDir %>/themes/<%= global.theme%>/css/*.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*modules\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
                     to: '\(\'../img/$1/$2\'\)'
                 }]
             },
-            config: {
-                // replace "config.js" with "[extension]-config.js"
-                src: ['<%= global.buildDir %>/js/app.js'],
-                overwrite: true,
-                replacements: [{
-                    from: /config:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
-                    to: 'config:"js/$1-config.js"'
-                }]
-            },
-            css: {
-                // replace "styles.css" with "[extension].css"
-                src: ['<%= global.buildDir %>/js/app.js'],
-                overwrite: true,
-                replacements: [{
-                    from: /css:.*(?:'|")extensions\/(.*)\/css\/styles.css(?:'|")/g,
-                    to: 'css:"css/$1.css"'
-                }]
-            },
+//            config: {
+//                // replace "config.js" with "[extension]-config.js"
+//                src: ['<%= global.buildDir %>/js/app.js'],
+//                overwrite: true,
+//                replacements: [{
+//                    from: /config:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
+//                    to: 'config:"js/$1-config.js"'
+//                }]
+//            },
+//            css: {
+//                // replace "styles.css" with "[extension].css"
+//                src: ['<%= global.buildDir %>/js/app.js'],
+//                overwrite: true,
+//                replacements: [{
+//                    from: /css:.*(?:'|")extensions\/(.*)\/css\/styles.css(?:'|")/g,
+//                    to: 'css:"themes/<%= global.theme%>/css/$1.css"'
+//                }]
+//            },
             html: {
                 src: ['<%= global.buildDir %>/app.html'],
                 overwrite: true,
@@ -351,6 +366,7 @@ module.exports = function (grunt) {
                 files: getExtensionsConfig()
             }
         }
+
     });
 
     function getExtensionsConfig(){
@@ -386,8 +402,11 @@ module.exports = function (grunt) {
         grunt.task.run(
             'ts:dev',
             'replace:dependenciesSimplify',
-            'less:dev',
             'extend:config'
+        );
+
+        grunt.task.run(
+            'themedev'
         );
     });
 
@@ -405,18 +424,39 @@ module.exports = function (grunt) {
         grunt.task.run(
             'ts:build',
             'replace:dependenciesSimplify',
-            'less:build',
+            //'less:build',
             'extend:config',
             'clean:build',
             'copy:build',
             'exec:build',
-            'replace:img',
-            'replace:config',
-            'replace:css',
+            //'replace:img',
+            //'replace:config',
+            //'replace:css',
             'replace:html',
             'replace:js',
             'replace:dependenciesPaths',
             'replace:dependenciesExtension'
+        );
+
+        grunt.task.run(
+            'themebuild'
+        );
+    });
+
+    // theme
+    grunt.registerTask('themedev', '', function() {
+        grunt.task.run(
+            'less:dev',
+            'copy:theme',
+            'replace:img'
+        );
+    });
+
+    grunt.registerTask('themebuild', '', function() {
+        grunt.task.run(
+            'less:build',
+            'copy:theme',
+            'replace:img'
         );
     });
 
