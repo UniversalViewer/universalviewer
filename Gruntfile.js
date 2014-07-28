@@ -402,11 +402,8 @@ module.exports = function (grunt) {
         grunt.task.run(
             'ts:dev',
             'replace:dependenciesSimplify',
-            'extend:config'
-        );
-
-        grunt.task.run(
-            'themedev'
+            'extend:config',
+            'less:dev'
         );
     });
 
@@ -439,20 +436,12 @@ module.exports = function (grunt) {
         );
 
         grunt.task.run(
-            'themebuild'
+            'theme'
         );
     });
 
     // theme
-    grunt.registerTask('themedev', '', function() {
-        grunt.task.run(
-            'less:dev',
-            'copy:theme',
-            'replace:img'
-        );
-    });
-
-    grunt.registerTask('themebuild', '', function() {
+    grunt.registerTask('theme', '', function() {
         grunt.task.run(
             'less:build',
             'copy:theme',
