@@ -1,3 +1,6 @@
+
+var async = require('async');
+
 module.exports = function (grunt) {
 
     grunt.loadNpmTasks("grunt-ts");
@@ -366,7 +369,6 @@ module.exports = function (grunt) {
                 files: getExtensionsConfig()
             }
         }
-
     });
 
     function getExtensionsConfig(){
@@ -421,27 +423,25 @@ module.exports = function (grunt) {
         grunt.task.run(
             'ts:build',
             'replace:dependenciesSimplify',
-            //'less:build',
             'extend:config',
             'clean:build',
             'copy:build',
             'exec:build',
-            //'replace:img',
-            //'replace:config',
-            //'replace:css',
             'replace:html',
             'replace:js',
             'replace:dependenciesPaths',
-            'replace:dependenciesExtension'
-        );
-
-        grunt.task.run(
+            'replace:dependenciesExtension',
             'theme'
         );
     });
 
     // theme
     grunt.registerTask('theme', '', function() {
+
+        // pass --name=mytheme to add to build/themes/mytheme
+        var themeName = grunt.option('name');
+        if (themeName) grunt.config.set('global.theme', themeName);
+
         grunt.task.run(
             'less:build',
             'copy:theme',
@@ -449,30 +449,19 @@ module.exports = function (grunt) {
         );
     });
 
-    // build and copy into examples folder
+    // copy into examples folder
     grunt.registerTask('examples', '', function() {
 
-        // grunt package --buildDir=myDir
-        // or prepend / to target relative to system root.
-        var buildDir = grunt.option('buildDir');
-        if (buildDir) grunt.config.set('global.buildDir', buildDir);
-
         grunt.task.run(
-            'build',
             'clean:examples',
             'copy:examples'
         );
     });
 
+    // compress build into .zip package
     grunt.registerTask('package', '', function() {
 
-        // grunt package --buildDir=myDir
-        // or prepend / to target relative to system root.
-        var buildDir = grunt.option('buildDir');
-        if (buildDir) grunt.config.set('global.buildDir', buildDir);
-
         grunt.task.run(
-            'build',
             'copy:package',
             'compress',
             'clean:package'

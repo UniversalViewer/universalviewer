@@ -4,6 +4,7 @@
 #################
 
 .tscache
+*.tmp.txt
 
 #################
 ## Ignore everything but the default theme.
