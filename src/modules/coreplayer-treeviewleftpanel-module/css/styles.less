@@ -1,161 +1,184 @@
 ﻿
-#app .leftPanel .top .title{
-    background: url('../../../modules/coreplayer-treeviewleftpanel-module/img/contents.png') no-repeat;
-    width: 78px;
-}
+#app{
 
-#app .leftPanel .closed .title{
-    background: url('../../../modules/coreplayer-treeviewleftpanel-module/img/contents_v.png') no-repeat;
-    height: 78px;
-}
+    .leftPanel{
 
-/*#region tabs */
+        @img-path: '../../../modules/coreplayer-treeviewleftpanel-module/img/';
 
-#app .leftPanel .tabs{
-    height: 25px;
-    border-bottom: 1px solid #525252;
-}
+        .top{
 
-#app .leftPanel .tabs .tab{
-    color: #FFB81D;
-    height: 24px;
-    display: inline-block;
-    text-align: center;
-    line-height: 24px;
-    overflow: hidden;
-    width: 75px;
-    margin: 0;
-    cursor: pointer;
-}
+            .title{
+                background: url('@{img-path}contents.png') no-repeat;
+                width: 78px;
+            }
+        }
 
-#app .leftPanel .tabs .tab.first{
-    margin: 0 0 0 10px;
-}
+        .closed{
 
-#app .leftPanel .tabs .tab.on{
-    border: 1px solid #525252;
-    border-bottom: 1px solid #1C191A;
-    color: #fff;
-}
+            .title{
+                background: url('@{img-path}contents_v.png') no-repeat;
+                height: 78px;
+            }
+        }
 
-#app .tabsContent{
-    padding: 10px;
-}
+        .tabs{
+            height: 25px;
+            border-bottom: 1px solid @panel-border-color;
 
-/*#endregion */
+            .tab{
+                color: @brand-secondary;
+                height: 24px;
+                display: inline-block;
+                text-align: center;
+                line-height: 24px;
+                overflow: hidden;
+                width: 75px;
+                margin: 0;
+                cursor: pointer;
 
-/*#region tree */
+                &.first{
+                    margin: 0 0 0 @margin-medium-horizontal;
+                }
 
-#app .leftPanel .views .treeView{
-    overflow: auto;
-    margin: 0 10px 0 10px;
-    color: #fff;
-    font-weight: normal;
-}
+                &.on{
+                    border: 1px solid @panel-border-color;
+                    border-bottom: 1px solid @panel-dark-bg;
+                    color: @text-color;
+                }
+            }
+        }
 
-#app .leftPanel .views .treeView .toggle {
-	cursor: pointer;
-	margin-right: 5px;
-	display: inline-block;
-	height: 10px;
-	width: 10px;
-	background-image: url('../../../modules/coreplayer-treeviewleftpanel-module/img/plus.png');
-}
+        .tabsContent{
+            padding: @padding-medium;
+        }
 
-#app .leftPanel .views .treeView .spacer {
-	margin-right: 5px;
-	display: inline-block;
-	height: 10px;
-	width: 10px;
-}
+        .views{
 
-#app .leftPanel .views .treeView .toggle.expanded {
-	background-image: url('../../../modules/coreplayer-treeviewleftpanel-module/img/minus.png');
-}
+            .treeView{
+                overflow: auto;
+                color: @text-color;
+                font-weight: normal;
 
-#app .leftPanel .views .treeView ul.tree, ul.tree ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+                .toggle {
+                    cursor: pointer;
+                    margin-right: @margin-small-horizontal;
+                    display: inline-block;
+                    height: 10px;
+                    width: 10px;
+                    background-image: url('@{img-path}plus.png');
 
-#app .leftPanel .views .treeView ul.tree ul {
-    margin-left: 15px;
-}
+                    &.expanded {
+                        background-image: url('@{img-path}minus.png');
+                    }
+                }
 
-#app .leftPanel .views .treeView ul.tree li {
-    margin: 0;
-    padding: 2px 0 2px 0;
-}
+                .spacer {
+                    margin-right: @margin-small-horizontal;
+                    display: inline-block;
+                    height: 10px;
+                    width: 10px;
+                }
 
-#app .leftPanel .views .treeView ul a.selected {
-    color: #FFB81D;
-}
+                ul.tree, ul.tree ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                }
 
-/*#endregion */
+                ul.tree ul {
+                    margin-left: @margin-large-horizontal;
+                }
 
-/*#region thumbs */
+                ul.tree li {
+                    margin: 0;
+                    padding: 2px 0 2px 0;
+                }
 
-#app .leftPanel .thumbsView{
-    overflow: auto;
-    /*-webkit-overflow-scrolling: touch;*/
-    position: relative;
-}
+                ul a.selected {
+                    color: @brand-secondary;
+                }
+            }
 
-#app .leftPanel .thumbsView .thumb{
-    margin: 0 10px 10px 0;
-    float: left;
-    cursor: pointer;
-}
+            .thumbsView{
 
-#app .leftPanel .thumbsView .thumb .wrap{
-    border: 1px solid #525252;
-    padding: 2px;
-    max-height: 150px;
-    overflow: hidden;
-    min-width: 90px;
-    text-align: center;
-}
+                overflow: auto;
 
-#app.application-pdf .leftPanel .thumbsView .thumb .wrap{
-    border: none;
-    img{
-        width: 90px;
+                .thumb{
+                    margin: 0 @margin-medium-horizontal @margin-medium-vertical 0;
+                    float: left;
+                    cursor: pointer;
+
+                    .wrap{
+                        border: 1px solid @panel-border-color; // was #525252
+                        padding: 2px;
+                        max-height: 150px;
+                        overflow: hidden;
+                        min-width: 90px;
+                        text-align: center;
+
+                        &.loading{
+                            .loading(@loader-black-bg);
+                        }
+
+                        &.hidden{
+                            background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                        }
+
+                        img{
+                            margin: 0 auto;
+                        }
+                    }
+
+                    &.selected{
+
+                        .wrap{
+                            border: 1px solid @brand-secondary;
+                        }
+                    }
+
+                    span{
+                        font-size: @font-size-small;
+                        color: #fff;
+                        display: block;
+                        padding: 2px 0 0 0;
+                    }
+                }
+
+                .separator{
+                    height: 1px;
+                    clear: both;
+                    border: none;
+                }
+            }
+        }
+
+
     }
 }
 
-#app .leftPanel .thumbsView .thumb .wrap.loading{
-    background: url(@loaderBlackBg) no-repeat 50% 50%;
+
+#app.application-pdf{
+
+    .leftPanel{
+
+        .thumbsView{
+
+            .thumb{
+
+                .wrap{
+                    border: none;
+                    img{
+                        width: 90px;
+                    }
+                }
+
+                &.selected{
+
+                    .wrap{
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
 }
-
-#app .leftPanel .thumbsView .thumb .wrap.hidden{
-    background: url('../../../modules/coreplayer-treeviewleftpanel-module/img/hidden_thumb.png') no-repeat 50% 50%;
-}
-
-#app .leftPanel .thumbsView .thumb.selected .wrap{
-    border: 1px solid #FFB81D;
-}
-
-#app.application-pdf .leftPanel .thumbsView .thumb.selected .wrap{
-    border: none;
-}
-
-#app .leftPanel .thumbsView .thumb .wrap img{
-    margin: 0 auto;
-}
-
-#app .leftPanel .thumbsView .thumb span{
-    font-size: 11px;
-    color: #fff;
-    display: block;
-    padding: 2px 0 0 0;
-}
-
-#app .leftPanel .thumbsView .separator{
-    height: 1px;
-    clear: both;
-    border: none;
-}
-
-/*#endregion */
-

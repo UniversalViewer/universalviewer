@@ -1,48 +1,57 @@
 ﻿
-#app .rightPanel .top .title{
-    background: url('../../../modules/coreplayer-moreinforightpanel-module/img/moreinfo.png') no-repeat;
-    width: 140px;
-}
+#app{
 
-#app .rightPanel .closed .title{
-    background: url('../../../modules/coreplayer-moreinforightpanel-module/img/moreinfo_v.png') no-repeat;
-    height: 140px;
-}
+    .rightPanel{
+        @img-path: '../../../modules/coreplayer-moreinforightpanel-module/img/';
 
-#app .rightPanel .content{
-    padding: 10px;
-}
+        .top{
+            .title{
+                background: url('@{img-path}moreinfo.png') no-repeat;
+                width: 140px;
+            }
+        }
 
-#app .rightPanel .main{
-    padding: 0 10px 20px 10px;
-    overflow: auto;
-    color: #fff;
-}
+        .closed{
+            .title{
+                background: url('@{img-path}moreinfo_v.png') no-repeat;
+                height: 140px;
+            }
+        }
 
-#app .rightPanel .main.loading{
-    background-image: url(@loaderBlackBg);
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-}
+        .content{
+            padding: @padding-medium-vertical @padding-medium-horizontal @padding-medium-vertical @padding-medium-horizontal;
+        }
 
-#app .rightPanel .main .header{
-    color: #999999;
-    border-bottom: 1px solid #525252;
-    font-size: 11px;
-    margin: 15px 10px 0 0;
-    text-transform: uppercase;
-}
+        .main{
+            padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
+            overflow: auto;
+            color: @text-color;
 
-#app .rightPanel .main .text{
-    color: #fff;
-    margin: 5px 10px 0 0;
-}
+            &.loading{
+                .loading(@loader-black-bg);
+            }
 
-#app .rightPanel .main .text a.toggle{
-    color: #FFB81D;
-    font-weight: normal;
-}
+            .header{
+                color: @gray-light;
+                border-bottom: 1px solid @gray;
+                font-size: @font-size-small;
+                margin: @margin-large-vertical @margin-medium-horizontal 0 0;
+                text-transform: uppercase;
+            }
 
-#app .rightPanel .main .text a.toggle:hover{
-    color: #FFB81D;
+            .text{
+                color: @text-color;
+                margin: @margin-small-vertical @margin-medium-horizontal 0 0;
+
+                a.toggle{
+                    color: @link-secondary-color;
+                    font-weight: normal;
+
+                    &:hover{
+                        color: @link-secondary-hover-color;
+                    }
+                }
+            }
+        }
+    }
 }

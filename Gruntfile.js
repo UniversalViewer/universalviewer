@@ -323,24 +323,6 @@ module.exports = function (grunt) {
                     to: '\(\'../img/$1/$2\'\)'
                 }]
             },
-//            config: {
-//                // replace "config.js" with "[extension]-config.js"
-//                src: ['<%= global.buildDir %>/js/app.js'],
-//                overwrite: true,
-//                replacements: [{
-//                    from: /config:.*(?:'|")extensions\/(.*)\/config.js(?:'|")/g,
-//                    to: 'config:"js/$1-config.js"'
-//                }]
-//            },
-//            css: {
-//                // replace "styles.css" with "[extension].css"
-//                src: ['<%= global.buildDir %>/js/app.js'],
-//                overwrite: true,
-//                replacements: [{
-//                    from: /css:.*(?:'|")extensions\/(.*)\/css\/styles.css(?:'|")/g,
-//                    to: 'css:"themes/<%= global.theme%>/css/$1.css"'
-//                }]
-//            },
             html: {
                 src: ['<%= global.buildDir %>/app.html'],
                 overwrite: true,

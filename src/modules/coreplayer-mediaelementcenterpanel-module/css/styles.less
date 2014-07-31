@@ -1,18 +1,19 @@
 @import 'mediaelementplayer.less';
 @import 'mejs-skins.less';
 
-#app .mejs-container.mejs-wellcome {
-    background-color: #000;
-}
+#app{
+    .mejs-container.mejs-wellcome {
+        background-color: @body-bg;
+    }
 
-#app .centerPanel .content{
-    position: relative;
-}
+    .centerPanel{
 
-#app .centerPanel .content .container{
-    position: absolute;
-}
+        .content{
+            position: relative;
 
-#app .centerPanel .content .container{
-    position: absolute;
+            .container{
+                position: absolute;
+            }
+        }
+    }
 }

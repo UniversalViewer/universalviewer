@@ -30,10 +30,10 @@ export class FooterPanel extends baseView.BaseView {
         this.$options = utils.Utils.createDiv('options');
         this.$element.append(this.$options);
 
-        this.$embedButton = $('<a href="#" class="imageButton embed" title="' + this.content.embed + '"></a>');
+        this.$embedButton = $('<a href="#" class="imageBtn embed" title="' + this.content.embed + '"></a>');
         this.$options.append(this.$embedButton);
 
-        this.$fullScreenBtn = $('<a href="#" class="imageButton fullScreen" title="' + this.content.fullScreen + '"></a>');
+        this.$fullScreenBtn = $('<a href="#" class="imageBtn fullScreen" title="' + this.content.fullScreen + '"></a>');
         this.$options.append(this.$fullScreenBtn);
 
         this.$embedButton.on('click', (e) => {
