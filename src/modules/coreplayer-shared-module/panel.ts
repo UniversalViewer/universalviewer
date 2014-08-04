@@ -25,11 +25,13 @@ export class Panel {
         var $parent = this.$element.parent();
 
         if (this.fitToParentWidth) {
-            this.$element.actualWidth($parent.width());
+            //this.$element.actualWidth($parent.width());
+            this.$element.width($parent.width());
         }
 
         if (this.fitToParentHeight) {
-            this.$element.actualHeight($parent.height());
+            //this.$element.actualHeight($parent.height());
+            this.$element.height($parent.height());
         }
     }
 }

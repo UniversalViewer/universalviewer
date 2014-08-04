@@ -1,16 +1,4 @@
-
-var async = require('async');
-
 module.exports = function (grunt) {
-
-    grunt.loadNpmTasks("grunt-ts");
-    grunt.loadNpmTasks("grunt-contrib-less");
-    grunt.loadNpmTasks("grunt-contrib-clean");
-    grunt.loadNpmTasks("grunt-contrib-copy");
-    grunt.loadNpmTasks("grunt-exec");
-    grunt.loadNpmTasks('grunt-text-replace');
-    grunt.loadNpmTasks("grunt-contrib-compress");
-    grunt.loadNpmTasks("grunt-extend");
 
     var packageJson = grunt.file.readJSON("package.json"),
         packageDirName = 'wellcomeplayer-' + packageJson.version;
@@ -380,6 +368,15 @@ module.exports = function (grunt) {
 
         return files;
     }
+
+    grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks("grunt-contrib-less");
+    grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-contrib-copy");
+    grunt.loadNpmTasks("grunt-exec");
+    grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks("grunt-contrib-compress");
+    grunt.loadNpmTasks("grunt-extend");
 
     grunt.registerTask("default", '', function(){
 

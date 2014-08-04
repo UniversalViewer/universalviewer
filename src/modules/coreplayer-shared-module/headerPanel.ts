@@ -93,7 +93,8 @@ export class HeaderPanel extends baseView.BaseView {
 
         if (this.$messageBox.is(':visible')){
             var $text = this.$messageBox.find('.text');
-            $text.actualWidth(this.$element.width() - this.$messageBox.find('.close').outerWidth(true));
+            //$text.actualWidth(this.$element.width() - this.$messageBox.find('.close').outerWidth(true));
+            $text.width(this.$element.width() - this.$messageBox.find('.close').outerWidth(true));
             $text.ellipsisFill(this.message);
         }
     }

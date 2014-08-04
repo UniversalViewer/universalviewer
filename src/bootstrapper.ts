@@ -142,6 +142,7 @@ class BootStrapper{
             extension = that.extensions['seadragon/iiif'];
         }
 
+        // todo: use a compiler flag
         var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config.js' : 'js/' + extension.name + '-config.js';
 
         // feature detection
@@ -159,6 +160,7 @@ class BootStrapper{
                         $.extend(true, config, that.configExtension);
                     }
 
+                    // todo: use a compiler flag
                     var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/css/styles.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '.css';
 
                     yepnope.injectCss(cssPath, function () {

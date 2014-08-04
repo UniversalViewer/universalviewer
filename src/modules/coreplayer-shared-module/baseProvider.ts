@@ -451,7 +451,7 @@ export class BaseProvider implements IProvider{
             var height = 150;
 
             if (heightRatio){
-                height = 90 * heightRatio;
+                Math.floor(height = 90 * heightRatio);
             }
 
             var visible = true;

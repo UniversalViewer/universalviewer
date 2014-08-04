@@ -43,7 +43,7 @@ export class ThumbsView extends baseView.BaseView {
 
         $.templates({
             thumbsTemplate: '<div class="thumb" data-src="{{>url}}" data-visible="{{>visible}}">\
-                                <div class="wrap" style="height:{{>height}}px"></div>\
+                                <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
                             </div>\
@@ -52,9 +52,14 @@ export class ThumbsView extends baseView.BaseView {
                             {{/if}}'
         });
 
+        var extraHeight = this.options.thumbsExtraHeight;
+
         $.views.helpers({
-            isEven: function (num) {
+            isEven: function(num){
                 return (num % 2 == 0) ? true : false;
+            },
+            extraHeight: function(){
+                return extraHeight;
             }
         });
 
@@ -206,7 +211,7 @@ export class ThumbsView extends baseView.BaseView {
         // scroll to thumb if the index change didn't originate
         // within the thumbs view.
         if (this.lastThumbClickedIndex != index) {
-            var scrollTop = this.$element.scrollTop() + this.$selectedThumb.position().top;
+            var scrollTop = this.$element.scrollTop() + this.$selectedThumb.position().top - (this.$selectedThumb.height() / 2);
             this.$element.scrollTop(scrollTop);
         }
 

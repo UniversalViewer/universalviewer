@@ -27,6 +27,7 @@
 
             .tab{
                 color: @brand-secondary;
+                background-color: @panel-dark-bg;
                 height: 24px;
                 display: inline-block;
                 text-align: center;
@@ -44,6 +45,7 @@
                     border: 1px solid @panel-border-color;
                     border-bottom: 1px solid @panel-dark-bg;
                     color: @text-color;
+                    margin-bottom: -1px;
                 }
             }
         }
@@ -109,11 +111,11 @@
                     cursor: pointer;
 
                     .wrap{
-                        border: 1px solid @panel-border-color; // was #525252
+                        border: 1px solid @panel-border-color;
                         padding: 2px;
-                        max-height: 150px;
+                        max-height: 180px;
                         overflow: hidden;
-                        min-width: 90px;
+                        min-width: 96px;
                         text-align: center;
 
                         &.loading{
