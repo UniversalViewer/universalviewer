@@ -48,11 +48,15 @@ export class FooterPanel extends baseView.BaseView {
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
+        if (!utils.Utils.getBool(this.options.embedEnabled, true)){
+            this.$embedButton.hide();
+        }
+
         if (this.provider.isLightbox){
             this.$fullScreenBtn.addClass('lightbox');
         }
 
-        if (this.options.minimiseButtons === true){
+        if (utils.Utils.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
         }
     }
@@ -61,8 +65,6 @@ export class FooterPanel extends baseView.BaseView {
         if (this.extension.isFullScreen) {
             this.$fullScreenBtn.swapClass('fullScreen', 'normal');
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
-            // set focus to ensure escape key works.
-            //this.$fullScreenBtn.focus();
         } else {
             this.$fullScreenBtn.swapClass('normal', 'fullScreen');
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
@@ -71,9 +73,5 @@ export class FooterPanel extends baseView.BaseView {
 
     resize(): void {
         super.resize();
-
-//        this.$element.css({
-//            'top': this.extension.height() - this.$element.height()
-//        });
     }
 }

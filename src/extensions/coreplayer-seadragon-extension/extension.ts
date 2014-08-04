@@ -147,7 +147,11 @@ export class Extension extends baseExtension.BaseExtension {
         }
 
         this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
-        this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+        }
+
         this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
 
         this.$helpDialogue = utils.Utils.createDiv('overlay help');
@@ -161,6 +165,10 @@ export class Extension extends baseExtension.BaseExtension {
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         }
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel.init();
+        }
     }
 
     setParams(): void{
@@ -173,6 +181,10 @@ export class Extension extends baseExtension.BaseExtension {
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
                 && this.provider.isMultiCanvas();
+    }
+
+    isRightPanelEnabled(): boolean{
+        return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
     viewPage(canvasIndex: number): void {

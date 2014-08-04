@@ -21,6 +21,14 @@ export class RightPanel extends baseExpandPanel.BaseExpandPanel {
         this.$element.width(this.options.panelCollapsedWidth);
     }
 
+    init(): void{
+        super.init();
+
+        if (this.options.panelOpen && this.provider.isHomeDomain) {
+            this.toggle();
+        }
+    }
+
     getTargetWidth(): number {
         return this.isExpanded ? this.options.panelCollapsedWidth : this.options.panelExpandedWidth;
     }
