@@ -193,17 +193,15 @@ docReady(function() {
 
         $.when($.getScript(easyXDMUri),
                $.getScript(json2Uri)).done(function () {
-                   initPlayers();
+                   initPlayers($('.wellcomePlayer').not('[data-no-load*=true]'));
                });
 
         // find all players on a page and initialise them
-        window.initPlayers = function(){
-            var apps = $('.wellcomePlayer');
+        window.initPlayers = function($players){
+            var isOnlyInstance = $players.length === 1;
 
-            var isOnlyInstance = apps.length === 1;
-
-            for (var i = 0; i < apps.length; i++) {
-                app(apps[i], isHomeDomain, isOnlyInstance);
+            for (var i = 0; i < $players.length; i++) {
+                app($players[i], isHomeDomain, isOnlyInstance);
             }
         }
 
