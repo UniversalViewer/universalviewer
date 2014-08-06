@@ -189,18 +189,23 @@ docReady(function() {
         var a = document.createElement('a');
         a.href = absScriptUri;
         var domain = a.hostname;
+        window.isHomeDomain = document.domain === domain;
 
         $.when($.getScript(easyXDMUri),
                $.getScript(json2Uri)).done(function () {
-                   var apps = $('.wellcomePlayer');
-
-                   var isHomeDomain = document.domain === domain;
-                   var isOnlyInstance = apps.length === 1;
-
-                   for (var i = 0; i < apps.length; i++) {
-                       app(apps[i], isHomeDomain, isOnlyInstance);
-                   }
+                   initPlayers();
                });
+
+        // find all players on a page and initialise them
+        window.initPlayers = function(){
+            var apps = $('.wellcomePlayer');
+
+            var isOnlyInstance = apps.length === 1;
+
+            for (var i = 0; i < apps.length; i++) {
+                app(apps[i], isHomeDomain, isOnlyInstance);
+            }
+        }
 
         function app(element, isHomeDomain, isOnlyInstance) {
             var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
