@@ -1,20 +1,18 @@
 ﻿
-#app.embedded{
-
-    .headerPanel {
-        @img-path: '../../../modules/coreplayer-pagingheaderpanel-module/img/';
-
-        background-image: url('@{img-path}logo.png');
-        background-repeat: no-repeat;
-        background-position: 8px 8px;
-    }
-}
-
 #app{
 
-    .headerPanel{
+    @img-path: '../../../modules/coreplayer-pagingheaderpanel-module/img/';
 
-        @img-path: '../../../modules/coreplayer-pagingheaderpanel-module/img/';
+    &.embedded{
+
+        .headerPanel {
+            background-image: url('@{img-path}logo.png');
+            background-repeat: no-repeat;
+            background-position: 8px 8px;
+        }
+    }
+
+    .headerPanel{
 
         color: @text-secondary-color;
 
