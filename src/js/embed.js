@@ -272,8 +272,13 @@ docReady(function() {
                 socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
             }
 
-            function toggleFullScreen(fs) {
-                isFullScreen = fs;
+            function toggleFullScreen(obj) {
+                isFullScreen = obj.isFullScreen;
+
+                if (obj.overrideFullScreen){
+                    jQuery(document).trigger('toggleFullScreen', [obj.isFullScreen]);
+                    return;
+                }
 
                 if (isFullScreen) {
 
