@@ -190,7 +190,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     resize(): void {
         super.resize();
 
-        this.$tabsContent.height(this.$main.height() - this.$tabs.height() - this.$tabsContent.verticalPadding());
+        this.$tabsContent.height(this.$main.height() - (this.$tabs.is(':visible') ? this.$tabs.height() : 0) - this.$tabsContent.verticalPadding());
         this.$views.height(this.$tabsContent.height() - this.$options.height());
     }
 }
