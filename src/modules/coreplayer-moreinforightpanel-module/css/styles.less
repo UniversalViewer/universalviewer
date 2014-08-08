@@ -23,12 +23,15 @@
         }
 
         .main{
-            padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
             overflow: auto;
             color: @text-color;
 
             &.loading{
                 .loading(@loader-black-bg);
+            }
+
+            .items{
+                padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
             }
 
             .header{
