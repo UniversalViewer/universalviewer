@@ -39,7 +39,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         return uri;
     }
 
-    getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, embedTemplate: string): string{
+    getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string{
 
         var esu = this.options.embedScriptUri || this.embedScriptUri;
 
@@ -47,7 +47,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.dataUri, this.sequenceIndex, canvasIndex, zoom, configUri, width, height, esu);
+        var script = String.prototype.format(template, this.dataUri, this.sequenceIndex, canvasIndex, zoom, rotation, configUri, width, height, esu);
 
         return script;
     }

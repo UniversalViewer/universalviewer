@@ -31,6 +31,8 @@ export class Extension extends baseExtension.BaseExtension {
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
 
+    currentRotation: number = 0;
+
     static mode: string;
 
     // events
@@ -94,6 +96,11 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
+        });
+
+        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
+            this.currentRotation = rotation;
+            this.setParam(baseProvider.params.rotation, rotation);
         });
 
         $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
@@ -225,6 +232,13 @@ export class Extension extends baseExtension.BaseExtension {
         if (bounds) return this.centerPanel.serialiseBounds(bounds);
 
         return "";
+    }
+
+    getViewerRotation(): number{
+
+        if (!this.centerPanel) return;
+
+        return this.currentRotation;
     }
 
     viewStructure(path: string): void {

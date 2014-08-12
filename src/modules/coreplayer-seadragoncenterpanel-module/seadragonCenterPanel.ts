@@ -16,9 +16,9 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     viewer: any;
     title: string;
     currentBounds: any;
-    $prevButtonCont: JQuery;
+    //$prevButtonCont: JQuery;
     $prevButton: JQuery;
-    $nextButtonCont: JQuery;
+    //$nextButtonCont: JQuery;
     $nextButton: JQuery;
     // $navigator: JQuery;
     // $zoomControls: JQuery;
@@ -26,11 +26,12 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     // $zoomOutButton: JQuery;
 
     // events
-    static SEADRAGON_OPEN: string = 'center.open';
-    static SEADRAGON_RESIZE: string = 'center.resize';
-    static SEADRAGON_ANIMATION_START: string = 'center.animationstart';
-    static SEADRAGON_ANIMATION: string = 'center.animation';
-    static SEADRAGON_ANIMATION_FINISH: string = 'center.animationfinish';
+    static SEADRAGON_OPEN: string = 'center.onOpen';
+    static SEADRAGON_RESIZE: string = 'center.onResize';
+    static SEADRAGON_ANIMATION_START: string = 'center.onAnimationStart';
+    static SEADRAGON_ANIMATION: string = 'center.onAnimation';
+    static SEADRAGON_ANIMATION_FINISH: string = 'center.onAnimationfinish';
+    static SEADRAGON_ROTATION: string = 'center.onRotation';
     static PREV: string = 'center.onPrev';
     static NEXT: string = 'center.onNext';
 
@@ -62,6 +63,9 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             id: "viewer",
             showNavigationControl: true,
             showNavigator: true,
+            showRotationControl: true,
+            showHomeControl: false,
+            showFullPageControl: false,
             defaultZoomLevel: this.options.defaultZoomLevel || 0,
             navigatorPosition: 'BOTTOM_RIGHT',
             prefixUrl: prefixUrl,
@@ -78,30 +82,42 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                     HOVER:  'zoom_out.png',
                     DOWN:   'zoom_out.png'
                 },
-                home: {
-                    REST:   'pixel.gif',
-                    GROUP:  'pixel.gif',
-                    HOVER:  'pixel.gif',
-                    DOWN:   'pixel.gif'
+                rotateright: {
+                    REST:   'rotate_right.png',
+                    GROUP:  'rotate_right.png',
+                    HOVER:  'rotate_right.png',
+                    DOWN:   'rotate_right.png'
                 },
-                fullpage: {
+                rotateleft: {
                     REST:   'pixel.gif',
                     GROUP:  'pixel.gif',
                     HOVER:  'pixel.gif',
                     DOWN:   'pixel.gif'
-                },
-                previous: {
-                    REST:   'pixel.gif',
-                    GROUP:  'pixel.gif',
-                    HOVER:  'pixel.gif',
-                    DOWN:   'pixel.gif'
-                },
-                next: {
-                    REST:   'pixel.gif',
-                    GROUP:  'pixel.gif',
-                    HOVER:  'pixel.gif',
-                    DOWN:   'pixel.gif'
-                }
+                }//,
+//                home: {
+//                    REST:   'pixel.gif',
+//                    GROUP:  'pixel.gif',
+//                    HOVER:  'pixel.gif',
+//                    DOWN:   'pixel.gif'
+//                },
+//                fullpage: {
+//                    REST:   'pixel.gif',
+//                    GROUP:  'pixel.gif',
+//                    HOVER:  'pixel.gif',
+//                    DOWN:   'pixel.gif'
+//                },
+//                previous: {
+//                    REST:   'pixel.gif',
+//                    GROUP:  'pixel.gif',
+//                    HOVER:  'pixel.gif',
+//                    DOWN:   'pixel.gif'
+//                },
+//                next: {
+//                    REST:   'pixel.gif',
+//                    GROUP:  'pixel.gif',
+//                    HOVER:  'pixel.gif',
+//                    DOWN:   'pixel.gif'
+//                }
             }
         });
 
@@ -186,6 +202,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             this.currentBounds = this.getBounds();
 
             $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
+        });
+
+        $('div[title="Rotate right"]').on('click', () => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
         });
 
         this.title = this.extension.provider.getTitle();

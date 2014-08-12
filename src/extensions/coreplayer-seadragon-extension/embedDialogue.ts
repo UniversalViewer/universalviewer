@@ -29,12 +29,14 @@ export class EmbedDialogue extends embed.EmbedDialogue {
     formatCode(): void {
 
         var zoom = (<ISeadragonExtension>this.extension).getViewerBounds();
+        var rotation = (<ISeadragonExtension>this.extension).getViewerRotation();
 
         this.code = (<ISeadragonProvider>this.provider).getEmbedScript(
             this.provider.canvasIndex,
             zoom,
             this.currentWidth,
             this.currentHeight,
+            rotation,
             this.options.embedTemplate);
 
         this.$code.val(this.code);
