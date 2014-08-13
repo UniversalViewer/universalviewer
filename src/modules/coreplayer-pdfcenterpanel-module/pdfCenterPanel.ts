@@ -63,7 +63,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
             // create pdf object
             var myPDF = new PDFObject({
                 url: canvas.mediaUri,
-                id: "PDF",
+                id: "PDF"
             }).embed('content');
         }
     }
