@@ -155,6 +155,14 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
                 $.publish(SeadragonCenterPanel.NEXT);
             });
+
+            $('.paging.btn.next').on('pointerdown', function(){
+                console.log('hover');
+            });
+
+//            this.viewer.addHandler('pointerdown', (e) => {
+//                e.stopPropagation();
+//            });
         };
 
         // zoom buttons

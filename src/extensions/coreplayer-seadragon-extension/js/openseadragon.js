@@ -2957,7 +2957,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
          */
         this.element            = $.getElement( options.element );
         /**
-         * The number of milliseconds within which a pointer down-up event combination 
+         * The number of milliseconds within which a pointer down-up event combination
          * will be treated as a click gesture.
          * @member {Number} clickTimeThreshold
          * @memberof OpenSeadragon.MouseTracker#
@@ -3062,7 +3062,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
 
             // Active pointers lists. Array of GesturePointList objects, one for each pointer device type.
             // GesturePointList objects are added each time a pointer is tracked by a new pointer device type (see getActivePointersListByType()).
-            // Active pointers are any pointer being tracked for this element which are in the hit-test area 
+            // Active pointers are any pointer being tracked for this element which are in the hit-test area
             //     of the element (for hover-capable devices) and/or have contact or a button press initiated in the element.
             activePointersLists:   [],
 
@@ -3698,7 +3698,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
         $.MouseTracker.mousePointerId = "legacy-mouse";
         $.MouseTracker.maxTouchPoints = 10;
     }
-    
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes and typedefs
@@ -3744,7 +3744,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
     /**
      * @class GesturePointList
      * @classdesc Provides an abstraction for a set of active {@link OpenSeadragon.MouseTracker.GesturePoint|GesturePoint} objects for a given pointer device type.
-     *            Active pointers are any pointer being tracked for this element which are in the hit-test area 
+     *            Active pointers are any pointer being tracked for this element which are in the hit-test area
      *            of the element (for hover-capable devices) and/or have contact or a button press initiated in the element.
      * @memberof OpenSeadragon.MouseTracker
      * @param {String} type - The pointer device type: "mouse", "touch", "pen", etc.
@@ -3858,7 +3858,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
             return null;
         }
     };
-    
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Utility functions
@@ -4195,7 +4195,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
 
 
     /**
-     * Handles 'wheel' events. 
+     * Handles 'wheel' events.
      * The event may be simulated by the legacy mouse wheel event handler (onMouseWheel()).
      *
      * @private
@@ -4379,7 +4379,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
 
     /**
      * This handler is attached to the window object (on the capture phase) to emulate mouse capture.
-     * Only triggered in W3C browsers that don't have setCapture/releaseCapture 
+     * Only triggered in W3C browsers that don't have setCapture/releaseCapture
      * methods or don't support the new pointer events model.
      * onMouseUp is still attached to the tracked element, so stop propagation to avoid processing twice.
      *
@@ -4423,10 +4423,10 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
         handleMouseMove( tracker, event );
    }
 
-    
+
     /**
      * This handler is attached to the window object (on the capture phase) to emulate mouse capture.
-     * Only triggered in W3C browsers that don't have setCapture/releaseCapture 
+     * Only triggered in W3C browsers that don't have setCapture/releaseCapture
      * methods or don't support the new pointer events model.
      * onMouseMove is still attached to the tracked element, so stop propagation to avoid processing twice.
      *
@@ -4609,7 +4609,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
         var i,
             touchCount = event.changedTouches.length,
             gPoints = [];
-        
+
         for ( i = 0; i < touchCount; i++ ) {
             gPoints.push( {
                 id: event.changedTouches[ i ].identifier,
@@ -4788,7 +4788,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      */
     function startTrackingPointer( pointsList, gPoint ) {
 
-        // If isPrimary is not known for the pointer then set it according to our rules: 
+        // If isPrimary is not known for the pointer then set it according to our rules:
         //    true if the first pointer in the gesture, otherwise false
         if ( !gPoint.hasOwnProperty( 'isPrimary' ) ) {
             if ( pointsList.getLength() === 0 ) {
@@ -4983,7 +4983,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      *      Gesture points associated with the event.
      * @param {Number} buttonChanged
      *      The button involved in the event: -1: none, 0: primary, 1: aux, 2: secondary, 3: X1, 4: X2, 5: pen eraser.
-     *      Note on chorded button presses (a button pressed when another button is already pressed): In the W3C Pointer Events model, 
+     *      Note on chorded button presses (a button pressed when another button is already pressed): In the W3C Pointer Events model,
      *      only one pointerdown/pointerup event combo is fired. Chorded button state changes instead fire pointermove events.
      *
      * @returns {Boolean} True if pointers should be captured to the tracked element, otherwise false.
@@ -5103,7 +5103,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      *      Gesture points associated with the event.
      * @param {Number} buttonChanged
      *      The button involved in the event: -1: none, 0: primary, 1: aux, 2: secondary, 3: X1, 4: X2, 5: pen eraser.
-     *      Note on chorded button presses (a button pressed when another button is already pressed): In the W3C Pointer Events model, 
+     *      Note on chorded button presses (a button pressed when another button is already pressed): In the W3C Pointer Events model,
      *      only one pointerdown/pointerup event combo is fired. Chorded button state changes instead fire pointermove events.
      *
      * @returns {Boolean} True if pointer capture should be released from the tracked element, otherwise false.
@@ -6082,7 +6082,7 @@ $.Viewer = function( options ) {
         /**
          * A &lt;textarea&gt; element, the element where keyboard events are handled.<br><br>
          * Child element of {@link OpenSeadragon.Viewer#container},
-         * positioned below {@link OpenSeadragon.Viewer#canvas}. 
+         * positioned below {@link OpenSeadragon.Viewer#canvas}.
          * @member {Element} keyboardCommandArea
          * @memberof OpenSeadragon.Viewer#
          */
@@ -6091,7 +6091,7 @@ $.Viewer = function( options ) {
          * A &lt;div&gt; element, the element where user-input events are handled for panning and zooming.<br><br>
          * Child element of {@link OpenSeadragon.Viewer#container},
          * positioned on top of {@link OpenSeadragon.Viewer#keyboardCommandArea}.<br><br>
-         * The parent of {@link OpenSeadragon.Drawer#canvas} instances. 
+         * The parent of {@link OpenSeadragon.Drawer#canvas} instances.
          * @member {Element} canvas
          * @memberof OpenSeadragon.Viewer#
          */
@@ -6217,14 +6217,14 @@ $.Viewer = function( options ) {
             if( this.tileSources.length > 1 ){
                 THIS[ this.hash ].sequenced = true;
             }
-            
+
             //Keeps the initial page within bounds
             if ( this.initialPage > this.tileSources.length - 1 ){
                 this.initialPage = this.tileSources.length - 1;
             }
-            
+
             initialTileSource = this.tileSources[ this.initialPage ];
-            
+
             //Update the sequence (aka currrent page) property
             THIS[ this.hash ].sequence = this.initialPage;
         } else {
@@ -7194,7 +7194,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
     /**
      * Remove a layer. If there is only one layer, close the viewer.
      * @function
-     * @param {OpenSeadragon.Drawer} drawer The underlying drawer of the layer 
+     * @param {OpenSeadragon.Drawer} drawer The underlying drawer of the layer
      * to remove
      * @returns {OpenSeadragon.Viewer} Chainable.
      * @fires OpenSeadragon.Viewer.event:remove-layer
@@ -7485,7 +7485,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
         }
         return this;
     },
-    
+
     /**
      * Gets the active page of a sequence
      * @function
@@ -7724,7 +7724,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
                 }
             }
       },
-      
+
     /**
      * Display a message in the viewport
      * @function OpenSeadragon.Viewer.prototype._showMessage
@@ -8981,7 +8981,7 @@ $.Navigator = function( options ){
                options.controlOptions.width = options.width;
             }
         }
-        
+
     } else {
         this.element            = document.getElementById( options.id );
         options.controlOptions  = {
@@ -9111,7 +9111,7 @@ $.Navigator = function( options ){
 $.extend( $.Navigator.prototype, $.EventSource.prototype, $.Viewer.prototype, /** @lends OpenSeadragon.Navigator.prototype */{
 
     /**
-     * Used to notify the navigator when its size has changed. 
+     * Used to notify the navigator when its size has changed.
      * Especially useful when {@link OpenSeadragon.Options}.navigatorAutoResize is set to false and the navigator is resizable.
      * @function
      */
@@ -9768,7 +9768,7 @@ $.TileSource = function( width, height, tileSize, tileOverlap, minLevel, maxLeve
      * @memberof OpenSeadragon.TileSource#
      */
     /**
-     * 
+     *
      * @member {Boolean} ready
      * @memberof OpenSeadragon.TileSource#
      */
@@ -10943,7 +10943,7 @@ $.IIIF1_1TileSource = function( options ){
             // If we're smaller than 256, just use the short side.
             options.tileSize = shortDim;
         }
-        this.tile_width = options.tileSize;  // So that 'full' gets used for 
+        this.tile_width = options.tileSize;  // So that 'full' gets used for
         this.tile_height = options.tileSize; // the region below
     }
 
@@ -12363,7 +12363,7 @@ $.ButtonGroup = function( options ) {
      */
     this.element = options.element || $.makeNeutralElement( "div" );
 
-    // TODO What if there IS an options.group specified? 
+    // TODO What if there IS an options.group specified?
     if( !options.group ){
         this.label   = $.makeNeutralElement( "label" );
         //TODO: support labels for ButtonGroups
@@ -13163,7 +13163,7 @@ function loadPanels( strip, viewerSize, scroll ) {
  */
 function onStripEnter( event ) {
     var element = event.eventSource.element;
-    
+
     //$.setElementOpacity(element, 0.8);
 
     //element.style.border = '1px solid #555';
@@ -13191,7 +13191,7 @@ function onStripEnter( event ) {
  */
 function onStripExit( event ) {
     var element = event.eventSource.element;
-    
+
     if ( 'horizontal' == this.scroll ) {
 
         //element.style.paddingTop = "10px";
@@ -13933,7 +13933,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
                 placement: placement
             };
         }
-        
+
         this.element    = options.element;
         this.scales     = options.location instanceof $.Rect;
         this.bounds     = new $.Rect(
@@ -14192,7 +14192,7 @@ var DEVICE_SCREEN       = $.getWindowSize(),
 
 /**
  * @class Drawer
- * @classdesc Handles rendering of tiles for an {@link OpenSeadragon.Viewer}. 
+ * @classdesc Handles rendering of tiles for an {@link OpenSeadragon.Viewer}.
  * A new instance is created for each TileSource opened (see {@link OpenSeadragon.Viewer#drawer}).
  *
  * @memberof OpenSeadragon
@@ -16060,7 +16060,7 @@ $.Viewport.prototype = /** @lends OpenSeadragon.Viewport.prototype */{
         }
         this.degrees = degrees;
         this.viewer.forceRedraw();
-        
+
         return this;
     },
 
@@ -16398,7 +16398,7 @@ $.Viewport.prototype = /** @lends OpenSeadragon.Viewport.prototype */{
         return viewerCoordinates.plus(
                 OpenSeadragon.getElementPosition( this.viewer.element ));
     },
-    
+
     /**
      * Convert a viewport zoom to an image zoom.
      * Image zoom: ratio of the original image size to displayed image size.
@@ -16416,7 +16416,7 @@ $.Viewport.prototype = /** @lends OpenSeadragon.Viewport.prototype */{
         var viewportToImageZoomRatio = containerWidth / imageWidth;
         return viewportZoom * viewportToImageZoomRatio;
     },
-    
+
     /**
      * Convert an image zoom to a viewport zoom.
      * Image zoom: ratio of the original image size to displayed image size.
