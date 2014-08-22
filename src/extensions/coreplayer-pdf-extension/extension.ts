@@ -48,16 +48,29 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        /*
-        require.config({
-            paths: dependencies,
-            shim: {
-                'viewer': {
-                    deps: ['pdf']
-                }
-            }
-        });
-        */
+        // load dependencies
+
+//        // if in debug mode, map to extension's path
+//        if (window.DEBUG){
+//            _.values(dependencies)
+//        }
+//
+//        yepnope({
+//            load: ,
+//            complete: function () {
+//                that.createModules();
+//
+//                //this.setParams();
+//
+//                // initial sizing
+//                $.publish(baseExtension.BaseExtension.RESIZE);
+//
+//                that.viewMedia();
+//
+//                // publish created event
+//                $.publish(Extension.CREATED);
+//            }
+//        });
 
         // dependencies
         require(_.values(dependencies), function () {
