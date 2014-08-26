@@ -48,6 +48,18 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
+        $.subscribe(shell.Shell.SHOW_OVERLAY, (e, params) => {
+            if (this.IsOldIE()) {
+                this.centerPanel.$element.hide();
+            }
+        });
+
+        $.subscribe(shell.Shell.HIDE_OVERLAY, (e, params) => {
+            if (this.IsOldIE()) {
+                this.centerPanel.$element.show();
+            }
+        });
+
         // load dependencies
 
 //        // if in debug mode, map to extension's path
@@ -89,6 +101,14 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(Extension.CREATED);
         });
 
+    }
+
+    IsOldIE(): boolean {
+        var browser = window.BrowserDetect.browser;
+        var version = window.BrowserDetect.version;
+
+        if (browser == 'Explorer' && version < 9) return true;
+        return false;
     }
 
     createModules(): void{

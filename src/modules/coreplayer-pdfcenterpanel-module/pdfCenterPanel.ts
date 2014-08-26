@@ -33,8 +33,8 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
 
         if (browser == 'Chrome' ||
             browser == 'Firefox' && version > 20 ||
-            browser == 'Opera') {// ||
-            //browser == 'Explorer' && version >= 9) {
+            browser == 'Opera' ||
+            browser == 'Explorer' && version >= 9) {
 
             var viewerPath;
 
