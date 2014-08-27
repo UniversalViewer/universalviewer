@@ -16,14 +16,8 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     viewer: any;
     title: string;
     currentBounds: any;
-    //$prevButtonCont: JQuery;
     $prevButton: JQuery;
-    //$nextButtonCont: JQuery;
     $nextButton: JQuery;
-    // $navigator: JQuery;
-    // $zoomControls: JQuery;
-    // $zoomInButton: JQuery;
-    // $zoomOutButton: JQuery;
 
     // events
     static SEADRAGON_OPEN: string = 'center.onOpen';
@@ -93,31 +87,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                     GROUP:  'pixel.gif',
                     HOVER:  'pixel.gif',
                     DOWN:   'pixel.gif'
-                }//,
-//                home: {
-//                    REST:   'pixel.gif',
-//                    GROUP:  'pixel.gif',
-//                    HOVER:  'pixel.gif',
-//                    DOWN:   'pixel.gif'
-//                },
-//                fullpage: {
-//                    REST:   'pixel.gif',
-//                    GROUP:  'pixel.gif',
-//                    HOVER:  'pixel.gif',
-//                    DOWN:   'pixel.gif'
-//                },
-//                previous: {
-//                    REST:   'pixel.gif',
-//                    GROUP:  'pixel.gif',
-//                    HOVER:  'pixel.gif',
-//                    DOWN:   'pixel.gif'
-//                },
-//                next: {
-//                    REST:   'pixel.gif',
-//                    GROUP:  'pixel.gif',
-//                    HOVER:  'pixel.gif',
-//                    DOWN:   'pixel.gif'
-//                }
+                }
             }
         });
 
@@ -217,6 +187,15 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         });
 
         this.title = this.extension.provider.getTitle();
+
+        // if firefox, hide rotation and prev/next until this is resolved
+        var browser = window.BrowserDetect.browser;
+
+        if (browser == 'Firefox') {
+            this.$prevButton.hide();
+            this.$nextButton.hide();
+            $('div[title="Rotate right"]').hide();
+        }
     }
 
     // called every time the seadragon viewer opens a new image.
