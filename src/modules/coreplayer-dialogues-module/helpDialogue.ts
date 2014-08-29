@@ -45,7 +45,7 @@ export class HelpDialogue extends dialogue.Dialogue {
         this.$message.html(this.content.text);
 
         // ensure anchor tags link to _blank.
-        this.$message.find('a').prop('target', '_blank');
+        this.$message.targetBlank();
 
         this.$element.hide();
     }

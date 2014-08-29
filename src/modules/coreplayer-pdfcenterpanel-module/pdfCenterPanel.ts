@@ -38,6 +38,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
 
             var viewerPath;
 
+            // todo: use compiler conditional
             if (window.DEBUG){
                 viewerPath = 'modules/coreplayer-pdfcenterpanel-module/html/viewer.html';
             } else {

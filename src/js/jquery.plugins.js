@@ -1,6 +1,12 @@
 ﻿
 (function ($) {
 
+    $.fn.targetBlank = function () {
+        return this.each(function () {
+            $(this).find('a').prop('target', '_blank');
+        });
+    }
+
     $.fn.swapClass = function (removeClass, addClass) {
         return this.each(function () {
             $(this).removeClass(removeClass).addClass(addClass);
