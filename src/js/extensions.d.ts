@@ -32,7 +32,7 @@ interface JQuery {
     // plugins
     ellipsisFill(text: string): any;
     swapClass(removeClass: string, addClass: string): void;
-    targetBlank(): void;
+    targetBlank(): void;  
     verticalMargins(): number;
     horizontalMargins(): number;
     verticalPadding(): number;
