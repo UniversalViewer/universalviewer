@@ -31,11 +31,16 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         var browser = window.BrowserDetect.browser;
         var version = window.BrowserDetect.version;
 
-        if (browser == 'Chrome' ||
-            browser == 'Firefox' && version > 20 ||
-            browser == 'Opera' ||
-            browser == 'Explorer' && version >= 9) {
+        if (browser == 'Explorer' && version < 9) {
 
+            // create pdf object
+            var myPDF = new PDFObject({
+                url: canvas.mediaUri,
+                id: "PDF"
+            }).embed('content');
+
+        } else {
+            
             var viewerPath;
 
             // todo: use compiler conditional
@@ -59,13 +64,6 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
 
                 this.resize();
             });
-
-        } else {
-            // create pdf object
-            var myPDF = new PDFObject({
-                url: canvas.mediaUri,
-                id: "PDF"
-            }).embed('content');
         }
     }
 
