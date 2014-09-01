@@ -480,4 +480,33 @@ export class BaseProvider implements IProvider{
     getMetaData(callback: (data: any) => any): void{
         callback(null);
     }
+
+    defaultToThumbsView(): boolean{
+        var manifestType = this.getManifestType();
+
+        switch (manifestType){
+            case 'monograph':
+                if (!this.isMultiSequence()) return true;
+                break;
+            case 'archive':
+                return true;
+                break;
+            case 'boundmanuscript':
+                return true;
+                break;
+            case 'artwork':
+                return true;
+
+        }
+
+        var sequenceType = this.getSequenceType();
+
+        switch (sequenceType){
+            case 'application-pdf':
+                return true;
+                break;
+        }
+
+        return false;
+    }
 }

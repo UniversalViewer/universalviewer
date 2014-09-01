@@ -7,6 +7,7 @@ import thumbs = require("./thumbsView");
 import baseView = require("../coreplayer-shared-module/baseView");
 import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import IProvider = require("../coreplayer-shared-module/iProvider");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
@@ -114,32 +115,12 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             // hide the tabs if either tree or thumbs are disabled.
             if (!treeEnabled || !thumbsEnabled) this.$tabs.hide();
 
-            if (thumbsEnabled && this.defaultToThumbsView()){
-                this.$tabs.hide();
+            if (thumbsEnabled && (<IProvider>this.provider).defaultToThumbsView()){
                 this.openThumbsView();
             } else if (treeEnabled){
                 this.openTreeView();
             }
         }
-    }
-
-    // todo: should this be in the provider?
-    defaultToThumbsView(): boolean{
-        var manifestType = this.provider.getManifestType();
-
-        switch (manifestType){
-            case 'archive': return true;
-            case 'boundmanuscript': return true;
-            case 'artwork': return true;
-        }
-
-        var sequenceType = this.provider.getSequenceType();
-
-        switch (sequenceType){
-            case 'application-pdf': return true;
-        }
-
-        return false;
     }
 
     openTreeView(): void {
