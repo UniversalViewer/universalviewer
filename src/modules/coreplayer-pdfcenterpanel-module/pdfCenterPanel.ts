@@ -31,7 +31,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         var browser = window.BrowserDetect.browser;
         var version = window.BrowserDetect.version;
 
-        if (browser == 'Explorer' && version < 9) {
+        if (browser == 'Explorer' && version < 10) {
 
             // create pdf object
             var myPDF = new PDFObject({
