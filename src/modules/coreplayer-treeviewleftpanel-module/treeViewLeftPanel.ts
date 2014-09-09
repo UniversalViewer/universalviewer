@@ -135,7 +135,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         setTimeout(() => {
             var structure = this.provider.getStructureByCanvasIndex(this.provider.canvasIndex);
-            if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
+            if (this.treeView && structure && structure.treeNode) this.treeView.selectNode(structure.treeNode);
         }, 1);
 
         if (this.thumbsView) this.thumbsView.hide();
