@@ -181,6 +181,8 @@ export class BaseExtension implements IExtension {
 
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
 
+        this.closeActiveDialogue();
+
         $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [
             {
                 message: message,
