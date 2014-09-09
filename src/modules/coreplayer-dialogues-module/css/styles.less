@@ -1,159 +1,166 @@
 ﻿
-#app .overlay.embed{   
-    width: 470px;
-    padding: 0 0 30px 8px;
-}
+#app{
 
-#app .overlay.embed .middle textarea.code{
-    width: 100%;
-    height: 90px;
-    background: #EAEAEB;
-    border: 1px solid #CCCCCC;
-    font-size: 11px;
-}
+    .overlay{
 
-#app .overlay.embed .copyToClipboard{
-    overflow: auto;  
-}
+        color: @text-secondary-color;
 
-#app .overlay.embed .copyToClipboard .button{
-    float: right; 
-    margin: 10px 0 0 0;   
-}
+        &.embed{
+            width: 470px;
+            padding: 0 0 30px 8px;
 
-#app .overlay.embed .middle .sizes{
-    height: 105px;
-    margin: 10px 0 0 0;
-}
+            .middle{
+                textarea.code {
+                    width: 100%;
+                    height: 90px;
+                    background: @gray-lighter;
+                    border: 1px solid @gray-light;
+                    font-size: @font-size-small;
+                }
 
-#app .overlay.embed .middle .size{
-    border: 1px solid #CCCCCC;
-    float: left;
-    margin: 0 10px 0 0;
-}
+                .sizes{
+                    height: 105px;
+                    margin: 10px 0 0 0;
 
-#app .overlay.embed .middle .size.selected{
-    border: 1px solid #FFB81D;
-    background: #FFF4DD;
-}
+                    p{
+                        margin: 5px 0 0 0;
+                        padding: 0;
+                        font-size: 12px;
+                        text-align: center;
+                    }
+                }
 
-#app .overlay.embed .middle .size.selected p{
-    font-weight: bold;
-}
+                .size{
+                    border: 1px solid @gray-light;
+                    float: left;
+                    margin: 0 10px 0 0;
 
-#app .overlay.embed .middle .sizes p{
-    margin: 5px 0 0 0;
-    padding: 0;
-    font-size: 12px;
-    text-align: center;
-}
+                    &.selected{
+                        border: 1px solid @brand-secondary;
+                        background: lighten(@brand-secondary, 30%); // was #FFF4DD
 
-#app .overlay.embed .middle .size .box{
-    background: #CCCCCC;
-    margin: 5px 10px 10px 10px;
-}
+                        p{
+                            font-weight: bold;
+                        }
+                    }
 
-#app .overlay.embed .middle .size.small{
-    height: 80px;
-    width: 80px;
-    cursor: pointer;
-}
+                    .box{
+                        background: #CCCCCC;
+                        margin: 5px 10px 10px 10px;
+                    }
 
-#app .overlay.embed .middle .size.small .box{
-    height: 45px;
-}
+                    &.small{
+                        height: 80px;
+                        width: 80px;
+                        cursor: pointer;
 
-#app .overlay.embed .middle .size.medium{
-    height: 90px;
-    width: 90px;
-    cursor: pointer;
-}
+                        .box{
+                            height: 45px;
+                        }
+                    }
 
-#app .overlay.embed .middle .size.medium .box{
-    height: 55px;
-}
+                    &.medium{
+                        height: 90px;
+                        width: 90px;
+                        cursor: pointer;
 
-#app .overlay.embed .middle .size.large{
-    height: 100px;
-    width: 100px;
-    cursor: pointer;
-}
+                        .box{
+                            height: 55px;
+                        }
+                    }
 
-#app .overlay.embed .middle .size.large .box{
-    height: 65px;
-}
+                    &.large{
+                        height: 100px;
+                        width: 100px;
+                        cursor: pointer;
 
-#app .overlay.embed .middle .size.custom{
-    width: 140px;
-    height: 100px;
-    margin: 0;
-}
+                        .box{
+                            height: 65px;
+                        }
+                    }
 
-#app .overlay.embed .middle .size.custom p{
-    margin: 12px 0 0 0;
-}
+                    &.custom{
+                        width: 140px;
+                        height: 100px;
+                        margin: 0;
 
-#app .overlay.embed .middle .size.custom .wrap{
-    width: 135px;
-    margin: 10px 0 0 15px;
-    padding: 0;
-    max-width: none;
-}
+                        p{
+                            margin: 12px 0 0 0;
+                        }
 
-#app .overlay.embed .middle .size.custom .wrap .width{
+                        .wrap{
+                            width: 135px;
+                            margin: 10px 0 0 15px;
+                            padding: 0;
+                            max-width: none;
 
-}
+                            .height{
+                                margin: 5px 0 0 0;
+                            }
+                        }
 
-#app .overlay.embed .middle .size.custom .wrap .height{
-    margin: 5px 0 0 0;
-}
+                        label{
+                            margin: 0;
+                            padding: 0 5px 0 0;
+                            display: inline-block;
+                            float: none;
+                            clear: none;
+                            text-align: right;
+                            line-height: 16px;
+                            font-size: @font-size-small;
+                            width: 35px;
+                        }
 
-#app .overlay.embed .middle .size.custom label{
-    margin: 0;
-    padding: 0 5px 0 0;
-    display: inline-block;
-    float: none;
-    clear: none;
-    text-align: right;
-    line-height: 16px;
-    font-size: 11px;
-    width: 35px;
-}
+                        input{
+                            width: 50px;
+                            line-height: 12px;
+                            height: 18px;
+                            display: inline-block;
+                            margin: 0;
+                            padding: 0;
+                            font-size: @font-size-small;
+                        }
 
-#app .overlay.embed .middle .size.custom input{
-    width: 50px;
-    line-height: 12px;
-    height: 18px;
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    font-size: 11px;
-}
+                        span{
+                            margin: 0;
+                            padding: 0 0 0 5px;
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
 
-#app .overlay.embed .middle .size.custom span{
-    margin: 0;
-    padding: 0 0 0 5px;
-    display: inline-block;
-}
+            .copyToClipboard{
+                overflow: auto;
 
-#app .overlay.download{   
-    width: 250px;
-    padding: 0 0 30px 8px;
-}
+                .btn{
+                    float: right;
+                    margin: 10px 0 0 0;
+                }
+            }
+        }
 
-#app .overlay.help{   
-    width: 470px;
-    height: 250px;
-}
+        &.download{
+            width: 250px;
+            padding: 0 0 30px 8px;
 
-#app .overlay.help .scroll{   
-    height: 180px;
-}
+            .middle ol.options{
+                margin: 10px 0 0 0;
+            }
+        }
 
-#app .overlay.help .bottom{
-    background: none;
-}
+        &.help{
+            width: 470px;
+            height: 250px;
 
-#app .overlay.download .middle ol.options{
-    margin: 10px 0 0 0;
+            .scroll{
+                height: 180px;
+            }
+
+            .bottom{
+                background: none;
+            }
+        }
+    }
+
 }

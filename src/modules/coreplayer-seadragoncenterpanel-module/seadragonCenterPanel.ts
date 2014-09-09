@@ -16,21 +16,16 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     viewer: any;
     title: string;
     currentBounds: any;
-    $prevButtonCont: JQuery;
     $prevButton: JQuery;
-    $nextButtonCont: JQuery;
     $nextButton: JQuery;
-    // $navigator: JQuery;
-    // $zoomControls: JQuery;
-    // $zoomInButton: JQuery;
-    // $zoomOutButton: JQuery;
 
     // events
-    static SEADRAGON_OPEN: string = 'center.open';
-    static SEADRAGON_RESIZE: string = 'center.resize';
-    static SEADRAGON_ANIMATION_START: string = 'center.animationstart';
-    static SEADRAGON_ANIMATION: string = 'center.animation';
-    static SEADRAGON_ANIMATION_FINISH: string = 'center.animationfinish';
+    static SEADRAGON_OPEN: string = 'center.onOpen';
+    static SEADRAGON_RESIZE: string = 'center.onResize';
+    static SEADRAGON_ANIMATION_START: string = 'center.onAnimationStart';
+    static SEADRAGON_ANIMATION: string = 'center.onAnimation';
+    static SEADRAGON_ANIMATION_FINISH: string = 'center.onAnimationfinish';
+    static SEADRAGON_ROTATION: string = 'center.onRotation';
     static PREV: string = 'center.onPrev';
     static NEXT: string = 'center.onNext';
 
@@ -56,12 +51,15 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         OpenSeadragon.DEFAULT_SETTINGS.autoHideControls = true;
 
-        var prefixUrl = (window.DEBUG)? 'modules/coreplayer-seadragoncenterpanel-module/img/' : 'img/coreplayer-seadragoncenterpanel-module/';
+        var prefixUrl = (window.DEBUG)? 'modules/coreplayer-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/coreplayer-seadragoncenterpanel-module/';
 
         this.viewer = OpenSeadragon({
             id: "viewer",
             showNavigationControl: true,
             showNavigator: true,
+            showRotationControl: true,
+            showHomeControl: false,
+            showFullPageControl: false,
             defaultZoomLevel: this.options.defaultZoomLevel || 0,
             navigatorPosition: 'BOTTOM_RIGHT',
             prefixUrl: prefixUrl,
@@ -78,25 +76,13 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                     HOVER:  'zoom_out.png',
                     DOWN:   'zoom_out.png'
                 },
-                home: {
-                    REST:   'pixel.gif',
-                    GROUP:  'pixel.gif',
-                    HOVER:  'pixel.gif',
-                    DOWN:   'pixel.gif'
+                rotateright: {
+                    REST:   'rotate_right.png',
+                    GROUP:  'rotate_right.png',
+                    HOVER:  'rotate_right.png',
+                    DOWN:   'rotate_right.png'
                 },
-                fullpage: {
-                    REST:   'pixel.gif',
-                    GROUP:  'pixel.gif',
-                    HOVER:  'pixel.gif',
-                    DOWN:   'pixel.gif'
-                },
-                previous: {
-                    REST:   'pixel.gif',
-                    GROUP:  'pixel.gif',
-                    HOVER:  'pixel.gif',
-                    DOWN:   'pixel.gif'
-                },
-                next: {
+                rotateleft: {
                     REST:   'pixel.gif',
                     GROUP:  'pixel.gif',
                     HOVER:  'pixel.gif',
@@ -139,6 +125,14 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
                 $.publish(SeadragonCenterPanel.NEXT);
             });
+
+            $('.paging.btn.next').on('pointerdown', function(){
+                console.log('hover');
+            });
+
+//            this.viewer.addHandler('pointerdown', (e) => {
+//                e.stopPropagation();
+//            });
         };
 
         // zoom buttons
@@ -188,7 +182,20 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
 
+        $('div[title="Rotate right"]').on('click', () => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
+        });
+
         this.title = this.extension.provider.getTitle();
+
+        // if firefox, hide rotation and prev/next until this is resolved
+        var browser = window.BrowserDetect.browser;
+
+        if (browser == 'Firefox') {
+            this.$prevButton.hide();
+            this.$nextButton.hide();
+            $('div[title="Rotate right"]').hide();
+        }
     }
 
     // called every time the seadragon viewer opens a new image.
@@ -217,8 +224,15 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // this.$zoomControls.css('top', this.$navigator.height() - this.$zoomControls.height());
 
 
-        // if there are no currentBounds check for initial zoom params.
+        // if there are no currentBounds check for initial zoom/rotation params.
         if (!this.currentBounds){
+
+            var initialRotation = this.extension.getParam(baseProvider.params.rotation);
+
+            if (initialRotation){
+                this.viewer.viewport.setRotation(parseInt(initialRotation));
+            }
+
             var initialBounds = this.extension.getParam(baseProvider.params.zoom);
 
             if (initialBounds){

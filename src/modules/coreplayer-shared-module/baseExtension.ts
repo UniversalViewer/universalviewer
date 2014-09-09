@@ -88,7 +88,12 @@ export class BaseExtension implements IExtension {
             if (!this.isOverlayActive()){
                 $('#top').focus();
                 this.isFullScreen = !this.isFullScreen;
-                this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
+                //this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
+                this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN,
+                    {
+                        isFullScreen: this.isFullScreen,
+                        overrideFullScreen: this.provider.config.options.overrideFullScreen
+                    });
             }
         });
 

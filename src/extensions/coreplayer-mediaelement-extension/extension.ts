@@ -53,8 +53,8 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(treeView.TreeView.VIEW_MANIFEST, (e, manifest: any) => {
-            this.viewManifest(manifest);
+        $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
+            this.viewManifest(data);
         });
 
         $.subscribe(footer.FooterPanel.EMBED, (e) => {

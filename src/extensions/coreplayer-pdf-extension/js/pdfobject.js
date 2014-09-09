@@ -1,2 +1,250 @@
-/* PDFObject, copyright (C) 2008 Philip Hutchison (pipwerks.com). Documentation and examples are at www.pdfobject.com. Version 1.2, April 2011. MIT style license */
-var PDFObject=function(y){if(!y||!y.url){return false;}var w="1.2",b=y.id||false,i=y.width||"100%",z=y.height||"100%",r=y.pdfOpenParams,a,x;var v=function(){var c=null;if(window.ActiveXObject){c=new ActiveXObject("AcroPDF.PDF");if(!c){c=new ActiveXObject("PDF.PdfCtrl");}if(c!==null){return true;}}return false;};var u=function(){var c,f=navigator.plugins,d=f.length,e=/Adobe Reader|Adobe PDF|Acrobat/gi;for(c=0;c<d;c++){if(e.test(f[c].name)){return true;}}return false;};var t=function(){var c=navigator.mimeTypes["application/pdf"];return(c&&c.enabledPlugin);};var s=function(){var c=null;if(u()||v()){c="Adobe";}else{if(t()){c="generic";}}return c;};var q=function(){var e=document.getElementsByTagName("html");if(!e){return false;}var c=e[0].style,d=document.body.style;c.height="100%";c.overflow="hidden";d.margin="0";d.padding="0";d.height="100%";d.overflow="hidden";};var p=function(d){var c="",e;if(!d){return c;}for(e in d){if(d.hasOwnProperty(e)){c+=e+"=";if(e==="search"){c+=encodeURI(d[e]);}else{c+=d[e];}c+="&";}}return c.slice(0,c.length-1);};var o=function(d){var c=null;switch(d){case"url":c=a;break;case"id":c=b;break;case"width":c=i;break;case"height":c=z;break;case"pdfOpenParams":c=r;break;case"pluginTypeFound":c=x;break;case"pdfobjectversion":c=w;break;}return c;};var n=function(d){if(!x){return false;}var c=null;if(d){c=(d.nodeType&&d.nodeType===1)?d:document.getElementById(d);if(!c){return false;}}else{c=document.body;q();i="100%";z="100%";}c.innerHTML='<object	data="'+a+'" type="application/pdf" width="'+i+'" height="'+z+'"></object>';return c.getElementsByTagName("object")[0];};a=encodeURI(y.url)+"#"+p(r);x=s();this.get=function(c){return o(c);};this.embed=function(c){return n(c);};return this;};
+/*
+    PDFObject v1.2.20111123
+    https://github.com/pipwerks/PDFObject
+    Copyright (c) Philip Hutchison
+    MIT-style license: http://pipwerks.mit-license.org/
+*/
+
+/*jslint browser: true, sloppy: true, white: true, plusplus: true */
+/*global ActiveXObject, window */
+
+var PDFObject = function (obj){
+
+    if(!obj || !obj.url){ return false; }
+
+    var pdfobjectversion = "1.2",
+        //Set reasonable defaults
+        id = obj.id || false,
+        width = obj.width || "100%",
+        height = obj.height || "100%",
+        pdfOpenParams = obj.pdfOpenParams,
+        url,
+        pluginTypeFound,
+
+        //declare functions
+        createAXO,
+        hasReaderActiveX,
+        hasReader,
+        hasGeneric,
+        pluginFound,
+        setCssForFullWindowPdf,
+        buildQueryString,
+        get,
+        embed;
+
+
+    /* ----------------------------------------------------
+       Supporting functions
+       ---------------------------------------------------- */
+
+    createAXO = function (type){
+        var ax;
+        try {
+            ax = new ActiveXObject(type);
+        } catch (e) {
+            //ensure ax remains null
+            ax = null;
+        }
+        return ax;
+    };
+
+    //Tests specifically for Adobe Reader (aka Acrobat) in Internet Explorer
+    hasReaderActiveX = function (){
+
+        var axObj = null;
+        
+         try {
+            axObj = new ActiveXObject("AcroPDF.PDF");
+        } catch (e) {
+            // Adobe installed
+        }
+
+        if (axObj != null || window.ActiveXObject) {
+
+            axObj = createAXO("AcroPDF.PDF");
+
+            //If "AcroPDF.PDF" didn't work, try "PDF.PdfCtrl"
+            if(!axObj){ axObj = createAXO("PDF.PdfCtrl"); }
+
+            //If either "AcroPDF.PDF" or "PDF.PdfCtrl" are found, return true
+            if (axObj !== null) { return true; }
+
+        }
+
+        //If you got to this point, there's no ActiveXObject for PDFs
+        return false;
+
+    };
+
+
+
+    //Tests specifically for Adobe Reader (aka Adobe Acrobat) in non-IE browsers
+    hasReader = function (){
+
+        var i,
+            n = navigator.plugins,
+            count = n.length,
+            regx = /Adobe Reader|Adobe PDF|Acrobat/gi;
+
+        for(i=0; i<count; i++){
+            if(regx.test(n[i].name)){
+                return true;
+            }
+        }
+
+        return false;
+
+    };
+
+
+    //Detects unbranded PDF support
+    hasGeneric = function (){
+        var plugin = navigator.mimeTypes["application/pdf"];
+        return (plugin && plugin.enabledPlugin);
+    };
+
+
+    //Determines what kind of PDF support is available: Adobe or generic
+    pluginFound = function (){
+
+        var type = null;
+
+        if(hasReader() || hasReaderActiveX()){
+
+            type = "Adobe";
+
+        } else if(hasGeneric()) {
+
+            type = "generic";
+
+        }
+
+        return type;
+
+    };
+
+
+    //If setting PDF to fill page, need to handle some CSS first
+    setCssForFullWindowPdf = function (){
+
+        var html = document.getElementsByTagName("html"),
+            html_style,
+            body_style;
+
+        if(!html){ return false; }
+
+        html_style = html[0].style;
+        body_style = document.body.style;
+
+        html_style.height = "100%";
+        html_style.overflow = "hidden";
+        body_style.margin = "0";
+        body_style.padding = "0";
+        body_style.height = "100%";
+        body_style.overflow = "hidden";
+
+    };
+
+
+    //Creating a querystring for using PDF Open parameters when embedding PDF
+    buildQueryString = function(pdfParams){
+
+        var string = "",
+            prop;
+
+        if(!pdfParams){ return string; }
+
+        for (prop in pdfParams) {
+
+            if (pdfParams.hasOwnProperty(prop)) {
+
+                string += prop + "=";
+
+                if(prop === "search") {
+
+                    string += encodeURI(pdfParams[prop]);
+
+                } else {
+
+                    string += pdfParams[prop];
+
+                }
+
+                string += "&";
+
+            }
+
+        }
+
+        //Remove last ampersand
+        return string.slice(0, string.length - 1);
+
+    };
+
+
+    //Simple function for returning values from PDFObject
+    get = function(prop){
+
+        var value = null;
+
+        switch(prop){
+            case "url" : value = url; break;
+            case "id" : value = id; break;
+            case "width" : value = width; break;
+            case "height" : value = height; break;
+            case "pdfOpenParams" : value = pdfOpenParams; break;
+            case "pluginTypeFound" : value = pluginTypeFound; break;
+            case "pdfobjectversion" : value = pdfobjectversion; break;
+        }
+
+        return value;
+
+    };
+
+
+    /* ----------------------------------------------------
+       PDF Embedding functions
+       ---------------------------------------------------- */
+
+
+    embed = function(targetID){
+
+        if(!pluginTypeFound){ return false; }
+
+        var targetNode = null;
+
+        if(targetID){
+
+            //Allow users to pass an element OR an element's ID
+            targetNode = (targetID.nodeType && targetID.nodeType === 1) ? targetID : document.getElementById(targetID);
+
+            //Ensure target element is found in document before continuing
+            if(!targetNode){ return false; }
+
+        } else {
+
+            targetNode = document.body;
+            setCssForFullWindowPdf();
+            width = "100%";
+            height = "100%";
+
+        }
+
+        targetNode.innerHTML = '<object    data="' +url +'" type="application/pdf" width="' +width +'" height="' +height +'"></object>';
+
+        return targetNode.getElementsByTagName("object")[0];
+
+    };
+
+    //The hash (#) prevents odd behavior in Windows
+    //Append optional Adobe params for opening document
+    url = encodeURI(obj.url) + "#" + buildQueryString(pdfOpenParams);
+    pluginTypeFound = pluginFound();
+
+    this.get = function(prop){ return get(prop); };
+    this.embed = function(id){ return embed(id); };
+    this.pdfobjectversion = pdfobjectversion;
+
+    return this;
+
+};

@@ -19,6 +19,7 @@ interface IProvider{
 	treeRoot: TreeNode;
 
     addTimestamp(uri: string): string;
+    defaultToThumbsView(): boolean;
     getCanvasByIndex(index): any;
     getCanvasIndexByOrderLabel(label: string): number; // todo: remove?
     getCanvasOrderLabel(canvas: any): string;

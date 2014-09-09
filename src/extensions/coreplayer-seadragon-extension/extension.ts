@@ -31,6 +31,8 @@ export class Extension extends baseExtension.BaseExtension {
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
 
+    currentRotation: number = 0;
+
     static mode: string;
 
     // events
@@ -44,7 +46,7 @@ export class Extension extends baseExtension.BaseExtension {
         super(provider);
     }
 
-    create(): void {
+    create(overrideDependencies?: any): void {
         super.create();
 
         var that = this;
@@ -84,12 +86,8 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         });
 
-        $.subscribe(treeView.TreeView.VIEW_MANIFEST, (e, manifest: any) => {
-            this.viewManifest(manifest);
-        });
-
-        $.subscribe(treeView.TreeView.VIEW_STRUCTURE, (e, structure: any) => {
-            this.viewStructure(structure.path);
+        $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
+            this.treeNodeSelected(data);
         });
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
@@ -98,6 +96,11 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
+        });
+
+        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
+            this.currentRotation = rotation;
+            this.setParam(baseProvider.params.rotation, rotation);
         });
 
         $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
@@ -117,7 +120,8 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         // dependencies
-        require(_.values(dependencies), function () {
+        var deps = overrideDependencies || dependencies;
+        require(_.values(deps), function () {
             //var deps = _.object(_.keys(dependencies), arguments);
 
             that.createModules();
@@ -150,7 +154,11 @@ export class Extension extends baseExtension.BaseExtension {
         }
 
         this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
-        this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+        }
+
         this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
 
         this.$helpDialogue = utils.Utils.createDiv('overlay help');
@@ -164,6 +172,10 @@ export class Extension extends baseExtension.BaseExtension {
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         }
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel.init();
+        }
     }
 
     setParams(): void{
@@ -176,6 +188,10 @@ export class Extension extends baseExtension.BaseExtension {
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
                 && this.provider.isMultiCanvas();
+    }
+
+    isRightPanelEnabled(): boolean{
+        return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
     viewPage(canvasIndex: number): void {
@@ -218,6 +234,13 @@ export class Extension extends baseExtension.BaseExtension {
         return "";
     }
 
+    getViewerRotation(): number{
+
+        if (!this.centerPanel) return;
+
+        return this.currentRotation;
+    }
+
     viewStructure(path: string): void {
 
         var index = this.provider.getStructureIndex(path);
@@ -238,6 +261,16 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         } else {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+        }
+    }
+
+    treeNodeSelected(data: any): void{
+        if (!data.type) return;
+
+        if (data.type == 'manifest') {
+            this.viewManifest(data);
+        } else {
+            this.viewStructure(data.path);
         }
     }
 }

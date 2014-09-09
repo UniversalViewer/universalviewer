@@ -1,6 +1,12 @@
 ﻿
 (function ($) {
 
+    $.fn.targetBlank = function () {
+        return this.each(function () {
+            $(this).find('a').prop('target', '_blank');
+        });
+    }
+
     $.fn.swapClass = function (removeClass, addClass) {
         return this.each(function () {
             $(this).removeClass(removeClass).addClass(addClass);
@@ -151,35 +157,55 @@
 
     };
 
+    $.fn.horizontalMargins = function () {
+        var $self = $(this);
+        return parseInt($self.css('marginLeft')) + parseInt($self.css('marginRight'));
+    };
+
+    $.fn.verticalMargins = function () {
+        var $self = $(this);
+        return parseInt($self.css('marginTop')) + parseInt($self.css('marginBottom'));
+    };
+
+    $.fn.horizontalPadding = function () {
+        var $self = $(this);
+        return parseInt($self.css('paddingLeft')) + parseInt($self.css('paddingRight'));
+    };
+
+    $.fn.verticalPadding = function () {
+        var $self = $(this);
+        return parseInt($self.css('paddingTop')) + parseInt($self.css('paddingBottom'));
+    };
+
     // useful if stretching to fit a parent element's inner height.
     // borders/margins/padding are included in final height, so no overspill.
-    $.fn.actualHeight = function (height) {
-
-        return this.each(function () {
-
-            var $self = $(this);
-
-            $self.height(height);
-
-            height -= $self.outerHeight(true) - $self.height();
-
-            $self.height(height);
-        });
-    };
-
-    $.fn.actualWidth = function (width) {
-
-        return this.each(function () {
-
-            var $self = $(this);
-
-            $self.width(width);
-
-            width -= $self.outerWidth(true) - $self.width();
-
-            $self.width(width);
-        });
-    };
+//    $.fn.actualHeight = function (height) {
+//
+//        return this.each(function () {
+//
+//            var $self = $(this);
+//
+//            $self.height(height);
+//
+//            height -= $self.outerHeight(true) - $self.height();
+//
+//            $self.height(height);
+//        });
+//    };
+//
+//    $.fn.actualWidth = function (width) {
+//
+//        return this.each(function () {
+//
+//            var $self = $(this);
+//
+//            $self.width(width);
+//
+//            width -= $self.outerWidth(true) - $self.width();
+//
+//            $self.width(width);
+//        });
+//    };
 
 })(jQuery);
 

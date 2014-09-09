@@ -1,102 +1,121 @@
 ﻿
-#app.embedded .headerPanel {
-    background-image: url('../../../modules/coreplayer-pagingheaderpanel-module/img/logo.png');
-    background-repeat: no-repeat;
-    background-position: 8px 8px;
-}
+#app{
 
-#app .headerPanel a.imageButton{
-    height: 30px;
-    width: 30px;
-    float: left;
-}
+    @img-path: '../../../modules/coreplayer-pagingheaderpanel-module/img/';
 
-#app .headerPanel a.imageButton.first{
-    background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/first.png') no-repeat;
-    margin: 0 0 0 0;
-}
+    &.embedded{
 
-#app .headerPanel a.imageButton.prev{
-    background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/prev.png') no-repeat;
-    margin: 0 0 0 5px;
-}
+        .headerPanel {
+            background-image: url('@{img-path}logo.png');
+            background-repeat: no-repeat;
+            background-position: 8px 8px;
+        }
+    }
 
-#app .headerPanel a.imageButton.next{
-    background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/next.png') no-repeat;
-    margin: 0 5px 0 0;
-}
+    .headerPanel{
 
-#app .headerPanel a.imageButton.last{
-    background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/last.png') no-repeat;
-    margin: 0 0 0 0;
-}
+        color: @text-secondary-color;
 
-#app .headerPanel a.imageButton.go{
-    background: url('../../../modules/coreplayer-pagingheaderpanel-module/img/go.png') no-repeat;
-    width: 28px;
-}
+        a.imageBtn{
+            height: 30px;
+            width: 30px;
+            float: left;
 
-#app .headerPanel .centerOptions .prevOptions{
-    float: left;
-    margin: 0 15px 0 0;
-}
+            &.first{
+                background: url('@{img-path}first.png') no-repeat;
+                margin: 0 0 0 0;
+            }
 
-#app .headerPanel .centerOptions .mode{
-    float: left;
-    margin: 6px 0 0 0;
-}
+            &.prev{
+                background: url('@{img-path}prev.png') no-repeat;
+                margin: 0 0 0 5px;
+            }
 
-#app .headerPanel .centerOptions .search{
-    float: left;
-    margin: 0 0 0 5px;
-    width: 113px;
-}
+            &.next{
+                background: url('@{img-path}next.png') no-repeat;
+                margin: 0 5px 0 0;
+            }
 
-#app .headerPanel .centerOptions .nextOptions{
-    float: left;
-    margin: 0 0 0 15px;
-}
+            &.last{
+                background: url('@{img-path}last.png') no-repeat;
+                margin: 0 0 0 0;
+            }
 
-#app .headerPanel .centerOptions .mode input{
-    float: left;
-}
+            &.go{
+                background: url('@{img-path}go.png') no-repeat;
+                width: 28px;
+            }
+        }
 
-#app .headerPanel .centerOptions .mode label{
-    clear: none;
-    width: 30px;
-    margin: 0 0 0 0;
-    padding: 0;
-    float: left;
-    font-size: 11px;
-    line-height: 18px;
-    text-align: right;
-}
+        .centerOptions{
 
-#app .headerPanel .centerOptions .mode label.disabled{
-    color: grey;
-}
+            .prevOptions{
+                float: left;
+                margin: 0 15px 0 0;
+            }
 
-#app .headerPanel .centerOptions.modeOptionsDisabled{
-    width: 280px;
-}
+            .mode{
+                float: left;
+                margin: 6px 0 0 0;
+            }
 
-#app .headerPanel .searchText{
-    width: 30px;
-    height: 19px;
-    line-height: 19px;
-    float: left;
-    font-size: 11px;
-    padding: 0;
-    margin-top: 6px;
-}
+            .search{
+                float: left;
+                margin: 0 0 0 5px;
+                width: 113px;
+            }
 
-#app .headerPanel .total{
-    float: left;
-    display: block;
-    height: 18px;
-    line-height: 18px;
-    margin: 6px 5px 0 5px;
-    width: 41px;
-    font-size: 11px;
-    overflow: hidden;
+            .nextOptions{
+                float: left;
+                margin: 0 0 0 15px;
+            }
+
+            .mode{
+
+                input{
+                    float: left;
+                }
+
+                label{
+                    clear: none;
+                    width: 30px;
+                    margin: 0 0 0 0;
+                    padding: 0;
+                    float: left;
+                    font-size: @font-size-small;
+                    line-height: 18px;
+                    text-align: right;
+
+                    &.disabled{
+                        color: @disabled;
+                    }
+                }
+            }
+
+            &.modeOptionsDisabled{
+                width: 280px;
+            }
+        }
+
+        .searchText{
+            width: 30px;
+            height: 19px;
+            line-height: 19px;
+            float: left;
+            font-size: @font-size-small;
+            padding: 0;
+            margin-top: 6px;
+        }
+
+        .total{
+            float: left;
+            display: block;
+            height: 18px;
+            line-height: 18px;
+            margin: 6px 5px 0 5px;
+            width: 41px;
+            font-size: @font-size-small;
+            overflow: hidden;
+        }
+    }
 }

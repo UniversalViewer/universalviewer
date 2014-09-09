@@ -4,6 +4,10 @@ import baseLeft = require("../coreplayer-shared-module/leftPanel");
 import utils = require("../../utils");
 import tree = require("./treeView");
 import thumbs = require("./thumbsView");
+import baseView = require("../coreplayer-shared-module/baseView");
+import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import IProvider = require("../coreplayer-shared-module/iProvider");
 
 export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
@@ -11,6 +15,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     $treeButton: JQuery;
     $thumbsButton: JQuery;
     $tabsContent: JQuery;
+    $options: JQuery;
+    $views: JQuery;
     $treeView: JQuery;
     $thumbsView: JQuery;
     treeView: tree.TreeView;
@@ -29,6 +35,14 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         super.create();
 
+        $.subscribe(extension.Extension.RELOAD, () => {
+            this.dataBindThumbsView();
+        });
+
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+            this.selectTreeNodeFromCanvasIndex(canvasIndex);
+        });
+
         this.$tabs = utils.Utils.createDiv('tabs');
         this.$main.append(this.$tabs);
 
@@ -41,11 +55,17 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$tabsContent = utils.Utils.createDiv('tabsContent');
         this.$main.append(this.$tabsContent);
 
+        this.$options = $('<div class="options"></div>');
+        this.$tabsContent.append(this.$options);
+
+        this.$views = $('<div class="views"></div>');
+        this.$tabsContent.append(this.$views);
+
         this.$treeView = utils.Utils.createDiv('treeView');
-        this.$tabsContent.append(this.$treeView);
+        this.$views.append(this.$treeView);
 
         this.$thumbsView = utils.Utils.createDiv('thumbsView');
-        this.$tabsContent.append(this.$thumbsView);
+        this.$views.append(this.$thumbsView);
 
         this.$treeButton.on('click', (e) => {
             e.preventDefault();
@@ -66,10 +86,22 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
     createTreeView(): void {
         this.treeView = new tree.TreeView(this.$treeView);
+        this.dataBindTreeView();
+    }
+
+    dataBindTreeView(): void{
+        this.treeView.rootNode = this.provider.getTree();
+        this.treeView.dataBind();
     }
 
     createThumbsView(): void {
         this.thumbsView = new thumbs.ThumbsView(this.$thumbsView);
+        this.dataBindThumbsView();
+    }
+
+    dataBindThumbsView(): void{
+        this.thumbsView.thumbs = this.provider.getThumbs();
+        this.thumbsView.dataBind();
     }
 
     toggleComplete(): void {
@@ -83,32 +115,12 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             // hide the tabs if either tree or thumbs are disabled.
             if (!treeEnabled || !thumbsEnabled) this.$tabs.hide();
 
-            if (thumbsEnabled && this.defaultToThumbsView()){
-                this.$tabs.hide();
+            if (thumbsEnabled && (<IProvider>this.provider).defaultToThumbsView()){
                 this.openThumbsView();
             } else if (treeEnabled){
                 this.openTreeView();
             }
         }
-    }
-
-    // todo: should this be in the provider?
-    defaultToThumbsView(): boolean{
-        var manifestType = this.provider.getManifestType();
-
-        switch (manifestType){
-            case 'archive': return true;
-            case 'boundmanuscript': return true;
-            case 'artwork': return true;
-        }
-
-        var sequenceType = this.provider.getSequenceType();
-
-        switch (sequenceType){
-            case 'application-pdf': return true;
-        }
-
-        return false;
     }
 
     openTreeView(): void {
@@ -120,7 +132,15 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$thumbsButton.removeClass('on');
 
         this.treeView.show();
+
+        setTimeout(() => {
+            var structure = this.provider.getStructureByCanvasIndex(this.provider.canvasIndex);
+            if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
+        }, 1);
+
         if (this.thumbsView) this.thumbsView.hide();
+
+        this.treeView.resize();
     }
 
     openThumbsView(): void {
@@ -133,11 +153,25 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         if (this.treeView) this.treeView.hide();
         this.thumbsView.show();
+
+        this.thumbsView.resize();
+    }
+
+    selectTreeNodeFromCanvasIndex(index: number): void {
+        // may be authenticating
+        if (index == -1) return;
+
+        var structure = this.provider.getStructureByCanvasIndex(index);
+
+        if (!structure) return;
+
+        if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
     }
 
     resize(): void {
         super.resize();
 
-        this.$tabsContent.actualHeight(this.$main.height() - this.$tabs.outerHeight());
+        this.$tabsContent.height(this.$main.height() - (this.$tabs.is(':visible') ? this.$tabs.height() : 0) - this.$tabsContent.verticalPadding());
+        this.$views.height(this.$tabsContent.height() - this.$options.height());
     }
 }

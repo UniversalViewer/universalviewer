@@ -1,5 +1,20 @@
 
 #################
+## TypeScript
+#################
+
+.tscache
+*.tmp.txt
+
+#################
+## Ignore everything but the default theme.
+## Allows experimentation
+#################
+
+src/themes/*
+!src/themes/coreplayer-default-theme
+
+#################
 ## Build
 #################
 

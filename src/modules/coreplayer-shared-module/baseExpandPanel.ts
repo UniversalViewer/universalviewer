@@ -142,6 +142,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     resize(): void {
         super.resize();
 
-        this.$main.actualHeight(this.$element.parent().height() - this.$top.outerHeight(true));
+        //this.$main.actualHeight(this.$element.parent().height() - this.$top.outerHeight(true));
+        this.$main.height(this.$element.parent().height() - this.$top.outerHeight(true));
     }
 }

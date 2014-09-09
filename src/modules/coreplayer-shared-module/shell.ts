@@ -35,28 +35,28 @@ export class Shell extends baseView.BaseView {
             Shell.$overlays.hide();
         });
 
-        Shell.$headerPanel = utils.Utils.createDiv('headerPanel');
+        Shell.$headerPanel = $('<div class="headerPanel"></div>');
         this.$element.append(Shell.$headerPanel);
 
-        Shell.$mainPanel = utils.Utils.createDiv('mainPanel');
+        Shell.$mainPanel = $('<div class="mainPanel"></div>');
         this.$element.append(Shell.$mainPanel);
 
-        Shell.$centerPanel = utils.Utils.createDiv('centerPanel');
+        Shell.$centerPanel = $('<div class="centerPanel"></div>');
         Shell.$mainPanel.append(Shell.$centerPanel);
 
-        Shell.$leftPanel = utils.Utils.createDiv('leftPanel');
+        Shell.$leftPanel = $('<div class="leftPanel"></div>');
         Shell.$mainPanel.append(Shell.$leftPanel);
 
-        Shell.$rightPanel = utils.Utils.createDiv('rightPanel');
+        Shell.$rightPanel = $('<div class="rightPanel"></div>');
         Shell.$mainPanel.append(Shell.$rightPanel);
 
-        Shell.$footerPanel = utils.Utils.createDiv('footerPanel');
+        Shell.$footerPanel = $('<div class="footerPanel"></div>');
         Shell.$element.append(Shell.$footerPanel);
 
-        Shell.$overlays = utils.Utils.createDiv('overlays');
+        Shell.$overlays = $('<div class="overlays"></div>');
         this.$element.append(Shell.$overlays);
 
-        Shell.$genericDialogue = utils.Utils.createDiv('overlay genericDialogue');
+        Shell.$genericDialogue = $('<div class="overlay genericDialogue"></div>');
         Shell.$overlays.append(Shell.$genericDialogue);
 
         Shell.$overlays.on('click', (e) => {
@@ -77,7 +77,8 @@ export class Shell extends baseView.BaseView {
         Shell.$overlays.width(this.extension.width());
         Shell.$overlays.height(this.extension.height());
 
-        var mainHeight = this.$element.height() - Shell.$headerPanel.height() - Shell.$footerPanel.height();
-        Shell.$mainPanel.actualHeight(mainHeight);
+        var mainHeight = this.$element.height() - parseInt(Shell.$mainPanel.css('marginTop')) - Shell.$headerPanel.height() - Shell.$footerPanel.height();
+        //Shell.$mainPanel.actualHeight(mainHeight);
+        Shell.$mainPanel.height(mainHeight);
     }
 }

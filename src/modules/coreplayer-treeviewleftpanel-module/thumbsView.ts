@@ -16,11 +16,9 @@ export class ThumbsView extends baseView.BaseView {
 
     lastThumbClickedIndex: number;
 
-    isPDF: boolean = false;
-
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
 
-    thumbs: Array<Thumb>;
+    public thumbs: Array<Thumb>;
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -40,17 +38,12 @@ export class ThumbsView extends baseView.BaseView {
             this.setLabel();
         });
 
-        $.subscribe(extension.Extension.RELOAD, () => {
-            this.thumbs = this.provider.getThumbs();
-            this.createThumbs();
-        });
-
         this.$thumbs = utils.Utils.createDiv('thumbs');
         this.$element.append(this.$thumbs);
 
         $.templates({
             thumbsTemplate: '<div class="thumb" data-src="{{>url}}" data-visible="{{>visible}}">\
-                                <div class="wrap" style="height:{{>height}}px"></div>\
+                                <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
                             </div>\
@@ -59,9 +52,14 @@ export class ThumbsView extends baseView.BaseView {
                             {{/if}}'
         });
 
+        var extraHeight = this.options.thumbsExtraHeight;
+
         $.views.helpers({
-            isEven: function (num) {
+            isEven: function(num){
                 return (num % 2 == 0) ? true : false;
+            },
+            extraHeight: function(){
+                return extraHeight;
             }
         });
 
@@ -70,13 +68,11 @@ export class ThumbsView extends baseView.BaseView {
             this.scrollStop();
         }, 1000);
 
-        if (this.provider.getSequenceType() === "application-pdf"){
-            this.isPDF = true;
-        }
-
         this.resize();
+    }
 
-        this.thumbs = this.provider.getThumbs();
+    public dataBind(): void{
+        if (!this.thumbs) return;
         this.createThumbs();
     }
 
@@ -175,9 +171,13 @@ export class ThumbsView extends baseView.BaseView {
         this.$element.hide();
     }
 
+    isPDF(): boolean{
+        return (this.provider.getSequenceType() === "application-pdf");
+    }
+
     setLabel(): void {
 
-        if (this.isPDF){
+        if (this.isPDF()){
             $(this.$thumbs).find('span.index').hide();
             $(this.$thumbs).find('span.label').hide();
         } else {
@@ -211,7 +211,7 @@ export class ThumbsView extends baseView.BaseView {
         // scroll to thumb if the index change didn't originate
         // within the thumbs view.
         if (this.lastThumbClickedIndex != index) {
-            var scrollTop = this.$element.scrollTop() + this.$selectedThumb.position().top;
+            var scrollTop = this.$element.scrollTop() + this.$selectedThumb.position().top - (this.$selectedThumb.height() / 2);
             this.$element.scrollTop(scrollTop);
         }
 

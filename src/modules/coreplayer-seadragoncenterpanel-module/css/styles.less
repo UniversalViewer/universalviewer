@@ -1,43 +1,68 @@
 ﻿
+#app {
 
-#app .centerPanel .displayregion {
-    border: 2px solid #fff !important;
-}
+    .centerPanel {
 
-#app .centerPanel #viewer {
-    padding: 0 8px 0 8px;
-}
+        @img-path: '../../../modules/coreplayer-seadragoncenterpanel-module/img/';
 
-#app .centerPanel .navigator.extraMargin{
-    margin: 0 30px 0 0 !important;
-}
+        .displayregion {
+            border: 2px solid #fff !important;
+        }
 
-#app .centerPanel .paging.btn {
-    position: absolute !important;
-    width: 30px;
-    height: 90px;
-    background-repeat: no-repeat;
-    background-color: #000;
-    background-position: 0px 50%;
-    cursor: pointer;
-}
+        #viewer {
+            padding: 0 8px 0 8px;
+        }
 
-#app .centerPanel .paging.btn.prev {
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/prev_page.png');
-    left: 0;
-}
+        .navigator.extraMargin {
+            margin: 0 30px 0 0 !important;
+        }
 
-#app .centerPanel .paging.btn.prev.disabled {
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/prev_page_disabled.png');
-}
+        .paging.btn {
+            position: absolute !important;
+            width: 30px;
+            height: 90px;
+            background-repeat: no-repeat;
+            background-color: @body-bg;
+            background-position: 0px 50%;
+            cursor: pointer;
 
-#app .centerPanel .paging.btn.next{
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page.png');
-    right: 0;
-}
+            .border-radius(0);
 
-#app .centerPanel .paging.btn.next.disabled {
-    background-image: url('../../../modules/coreplayer-seadragoncenterpanel-module/img/next_page_disabled.png');
+            &.prev {
+                background-image: url('@{img-path}prev_page.png');
+                left: 0;
+                &.disabled {
+                    background-image: url('@{img-path}prev_page_disabled.png');
+                }
+            }
+
+            &.next {
+                background-image: url('@{img-path}next_page.png');
+                right: 0;
+                &.disabled {
+                    background-image: url('@{img-path}next_page_disabled.png');
+                }
+            }
+        }
+
+        div[title="Zoom in"] {
+            //margin: 4px 0 0 4px !important;
+            cursor: pointer !important;
+        }
+
+        div[title="Zoom out"] {
+            //margin: 4px 0 0 0 !important;
+            cursor: pointer !important;
+        }
+
+        div[title="Rotate left"] {
+            display: none !important;
+        }
+
+        div[title="Rotate right"] {
+            cursor: pointer !important;
+        }
+    }
 }
 
 /*
@@ -62,21 +87,3 @@
     cursor: pointer;
 }
 */
-
-#app .centerPanel button[title="Zoom in"] {
-    margin: 4px 2px 0 4px !important;
-    cursor: pointer !important;
-}
-
-#app .centerPanel button[title="Zoom out"] {
-    margin: 4px 0 0 2px !important;
-    cursor: pointer !important;
-}
-
-#app .centerPanel button[title="Go home"] {
-    display: none !important;
-}
-
-#app .centerPanel button[title="Toggle full page"] {
-    display: none !important;
-}

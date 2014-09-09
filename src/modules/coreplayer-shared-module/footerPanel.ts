@@ -14,7 +14,8 @@ export class FooterPanel extends baseView.BaseView {
     static EMBED: string = 'footer.onEmbed';
 
     constructor($element: JQuery) {
-        super($element, true, false);
+        //super($element, true, false);
+        super($element);
     }
 
     create(): void {
@@ -27,13 +28,13 @@ export class FooterPanel extends baseView.BaseView {
             this.toggleFullScreen();
         });
 
-        this.$options = utils.Utils.createDiv('options');
+        this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
-        this.$embedButton = $('<a href="#" class="imageButton embed" title="' + this.content.embed + '"></a>');
+        this.$embedButton = $('<a href="#" class="imageBtn embed" title="' + this.content.embed + '"></a>');
         this.$options.append(this.$embedButton);
 
-        this.$fullScreenBtn = $('<a href="#" class="imageButton fullScreen" title="' + this.content.fullScreen + '"></a>');
+        this.$fullScreenBtn = $('<a href="#" class="imageBtn fullScreen" title="' + this.content.fullScreen + '"></a>');
         this.$options.append(this.$fullScreenBtn);
 
         this.$embedButton.on('click', (e) => {
@@ -47,11 +48,15 @@ export class FooterPanel extends baseView.BaseView {
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
         });
 
+        if (!utils.Utils.getBool(this.options.embedEnabled, true)){
+            this.$embedButton.hide();
+        }
+
         if (this.provider.isLightbox){
             this.$fullScreenBtn.addClass('lightbox');
         }
 
-        if (this.options.minimiseButtons === true){
+        if (utils.Utils.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
         }
     }
@@ -60,8 +65,6 @@ export class FooterPanel extends baseView.BaseView {
         if (this.extension.isFullScreen) {
             this.$fullScreenBtn.swapClass('fullScreen', 'normal');
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
-            // set focus to ensure escape key works.
-            //this.$fullScreenBtn.focus();
         } else {
             this.$fullScreenBtn.swapClass('normal', 'fullScreen');
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
@@ -70,9 +73,5 @@ export class FooterPanel extends baseView.BaseView {
 
     resize(): void {
         super.resize();
-
-        this.$element.css({
-            'top': this.extension.height() - this.$element.height()
-        });
     }
 }

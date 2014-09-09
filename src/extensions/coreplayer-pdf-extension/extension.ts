@@ -48,16 +48,41 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        /*
-        require.config({
-            paths: dependencies,
-            shim: {
-                'viewer': {
-                    deps: ['pdf']
-                }
+        $.subscribe(shell.Shell.SHOW_OVERLAY, (e, params) => {
+            if (this.IsOldIE()) {
+                this.centerPanel.$element.hide();
             }
         });
-        */
+
+        $.subscribe(shell.Shell.HIDE_OVERLAY, (e, params) => {
+            if (this.IsOldIE()) {
+                this.centerPanel.$element.show();
+            }
+        });
+
+        // load dependencies
+
+//        // if in debug mode, map to extension's path
+//        if (window.DEBUG){
+//            _.values(dependencies)
+//        }
+//
+//        yepnope({
+//            load: ,
+//            complete: function () {
+//                that.createModules();
+//
+//                //this.setParams();
+//
+//                // initial sizing
+//                $.publish(baseExtension.BaseExtension.RESIZE);
+//
+//                that.viewMedia();
+//
+//                // publish created event
+//                $.publish(Extension.CREATED);
+//            }
+//        });
 
         // dependencies
         require(_.values(dependencies), function () {
@@ -76,6 +101,14 @@ export class Extension extends baseExtension.BaseExtension{
             $.publish(Extension.CREATED);
         });
 
+    }
+
+    IsOldIE(): boolean {
+        var browser = window.BrowserDetect.browser;
+        var version = window.BrowserDetect.version;
+
+        if (browser == 'Explorer' && version < 9) return true;
+        return false;
     }
 
     createModules(): void{

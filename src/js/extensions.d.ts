@@ -22,8 +22,8 @@ interface String {
 }
 
 // array utils
-interface Array{
-    clone(): Array;
+interface Array<T>{
+    clone(): Array<T>;
     last(): any;
     contains(val: any): boolean;
 }
@@ -32,13 +32,19 @@ interface JQuery {
     // plugins
     ellipsisFill(text: string): any;
     swapClass(removeClass: string, addClass: string): void;
-    actualHeight(height: number);
-    actualWidth(width: number);
+    targetBlank(): void;  
+    verticalMargins(): number;
+    horizontalMargins(): number;
+    verticalPadding(): number;
+    horizontalPadding(): number;
     toggleExpandText(chars: number);
 
     // jsviews
     link: any;
     render: any;
+
+    // unevent
+    on(events: string, handler: (eventObject: JQueryEventObject, ...args: any[]) => any, wait: Number): JQuery;
 }
 
 interface JQueryStatic {

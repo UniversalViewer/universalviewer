@@ -189,18 +189,21 @@ docReady(function() {
         var a = document.createElement('a');
         a.href = absScriptUri;
         var domain = a.hostname;
+        window.isHomeDomain = document.domain === domain;
 
         $.when($.getScript(easyXDMUri),
                $.getScript(json2Uri)).done(function () {
-                   var apps = $('.wellcomePlayer');
-
-                   var isHomeDomain = document.domain === domain;
-                   var isOnlyInstance = apps.length === 1;
-
-                   for (var i = 0; i < apps.length; i++) {
-                       app(apps[i], isHomeDomain, isOnlyInstance);
-                   }
+                   initPlayers($('.wellcomePlayer').not('[data-no-load*=true]'));
                });
+
+        // find all players on a page and initialise them
+        window.initPlayers = function($players){
+            var isOnlyInstance = $players.length === 1;
+
+            for (var i = 0; i < $players.length; i++) {
+                app($players[i], isHomeDomain, isOnlyInstance);
+            }
+        }
 
         function app(element, isHomeDomain, isOnlyInstance) {
             var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
@@ -272,8 +275,13 @@ docReady(function() {
                 socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
             }
 
-            function toggleFullScreen(fs) {
-                isFullScreen = fs;
+            function toggleFullScreen(obj) {
+                isFullScreen = obj.isFullScreen;
+
+                if (obj.overrideFullScreen){
+                    jQuery(document).trigger('onToggleFullScreen', [obj.isFullScreen]);
+                    return;
+                }
 
                 if (isFullScreen) {
 

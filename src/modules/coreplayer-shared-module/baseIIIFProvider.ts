@@ -8,7 +8,8 @@ import Thumb = require("./thumb");
 export enum params {
     sequenceIndex,
     canvasIndex,
-    zoom
+    zoom,
+    rotation
 }
 
 // providers contain methods that could be implemented differently according
@@ -34,8 +35,8 @@ export class BaseProvider implements IProvider{
     sequenceIndex: number;
     treeRoot: TreeNode;
 
-    // map param names to enum indexes.
-    paramMap: string[] = ['si', 'ci', 'z'];
+    // map param names to enum indices.
+    paramMap: string[] = ['si', 'ci', 'z', 'r'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -156,6 +157,7 @@ export class BaseProvider implements IProvider{
     }
 
     getStructureByCanvasIndex(index: number): any {
+        if (!index) return null;
         var canvas = this.getCanvasByIndex(index);
         return this.getCanvasStructure(canvas);
     }
@@ -344,24 +346,24 @@ export class BaseProvider implements IProvider{
 
     // currently only supports single-level
     getTree(): TreeNode{
+        var rootStructure = this.getRootStructure();
+
         this.treeRoot = new TreeNode('root');
         this.treeRoot.label = "root";
-        this.treeRoot.type = "manifest";
-        this.treeRoot.ref = this.getRootStructure();
-        this.getRootStructure().treeNode = node;
-        this.treeRoot.path = this.treeRoot.ref.path;
+        this.treeRoot.data = rootStructure;
+        this.treeRoot.data.type = "manifest";
+        rootStructure.treeNode = this.treeRoot;
 
-        for (var i = 0; i < this.getRootStructure().structures.length; i++){
-            var structure = this.getRootStructure().structures[i];
+        for (var i = 0; i < rootStructure.structures.length; i++){
+            var structure = rootStructure.structures[i];
 
             var node = new TreeNode();
-            this.treeRoot.nodes.push(node);
+            this.treeRoot.addNode(node);
 
             node.label = structure.label;
-            node.type = "structure";
-            node.ref = structure;
+            node.data = structure;
+            node.data.type = "structure";
             structure.treeNode = node;
-            node.path = node.ref.path;
         }
 
         return this.treeRoot;
@@ -378,5 +380,34 @@ export class BaseProvider implements IProvider{
 
     getMetaData(callback: (data: any) => any): void{
         callback(this.manifest.metadata);
+    }
+
+    defaultToThumbsView(): boolean{
+        var manifestType = this.getManifestType();
+
+        switch (manifestType){
+            case 'monograph':
+                if (!this.isMultiSequence()) return true;
+                break;
+            case 'archive':
+                return true;
+                break;
+            case 'boundmanuscript':
+                return true;
+                break;
+            case 'artwork':
+                return true;
+
+        }
+
+        var sequenceType = this.getSequenceType();
+
+        switch (sequenceType){
+            case 'application-pdf':
+                return true;
+                break;
+        }
+
+        return false;
     }
 }

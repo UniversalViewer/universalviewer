@@ -55,10 +55,10 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$prevOptions = $('<div class="prevOptions"></div>');
         this.$centerOptions.append(this.$prevOptions);
 
-        this.$firstButton = $('<a class="imageButton first"></a>');
+        this.$firstButton = $('<a class="imageBtn first"></a>');
         this.$prevOptions.append(this.$firstButton);
 
-        this.$prevButton = $('<a class="imageButton prev"></a>');
+        this.$prevButton = $('<a class="imageBtn prev"></a>');
         this.$prevOptions.append(this.$prevButton);
 
         this.$modeOptions = $('<div class="mode"></div>');
@@ -83,16 +83,16 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
 
-        this.$searchButton = $('<a class="imageButton go"></a>');
+        this.$searchButton = $('<a class="imageBtn go"></a>');
         this.$search.append(this.$searchButton);
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
 
-        this.$nextButton = $('<a class="imageButton next"></a>');
+        this.$nextButton = $('<a class="imageBtn next"></a>');
         this.$nextOptions.append(this.$nextButton);
 
-        this.$lastButton = $('<a class="imageButton last"></a>');
+        this.$lastButton = $('<a class="imageBtn last"></a>');
         this.$nextOptions.append(this.$lastButton);
 
         if ((<ISeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {

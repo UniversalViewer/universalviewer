@@ -8,7 +8,8 @@ import Thumb = require("./thumb");
 export enum params {
     sequenceIndex,
     canvasIndex,
-    zoom
+    zoom,
+    rotation
 }
 
 // providers contain methods that could be implemented differently according
@@ -34,8 +35,8 @@ export class BaseProvider implements IProvider{
     sectionsRootNode: TreeNode;
     treeRoot: TreeNode;
 
-    // map param names to enum indexes.
-    paramMap: string[] = ['asi', 'ai', 'z'];
+    // map param names to enum indices.
+    paramMap: string[] = ['asi', 'ai', 'z', 'r'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -262,9 +263,8 @@ export class BaseProvider implements IProvider{
     }
 
     getStructureByCanvasIndex(index: number): any {
-
+        if (!index) return null;
         var canvas = this.getCanvasByIndex(index);
-
         return this.getCanvasStructure(canvas);
     }
 
@@ -365,7 +365,6 @@ export class BaseProvider implements IProvider{
 
     getTree(): TreeNode{
         this.treeRoot = new TreeNode('root');
-
         var rootStructure = this.manifest.rootStructure;
 
         if (rootStructure) {
@@ -373,14 +372,17 @@ export class BaseProvider implements IProvider{
         }
 
         // if there aren't any structures then the sectionsRootNode won't have been created.
-        if (!this.sectionsRootNode) this.sectionsRootNode = this.treeRoot;
+        if (!this.sectionsRootNode) {
+            this.sectionsRootNode = this.treeRoot;
+            this.sectionsRootNode.data = this.sequence.rootSection;
+        }
 
         if (this.sequence.rootSection.sections){
             for (var i = 0; i < this.sequence.rootSection.sections.length; i++) {
                 var section = this.sequence.rootSection.sections[i];
 
                 var childNode = new TreeNode();
-                this.sectionsRootNode.nodes.push(childNode);
+                this.sectionsRootNode.addNode(childNode);
 
                 this.parseTreeSection(childNode, section);
             }
@@ -389,12 +391,12 @@ export class BaseProvider implements IProvider{
         return this.treeRoot;
     }
 
+    // manifestations
     parseTreeStructure(node: TreeNode, structure: any): void {
         node.label = structure.name || "root";
-        node.type = "manifest";
-        node.ref = structure;
-        structure.treeNode = node;
-        node.path = node.ref.path;
+        node.data = structure;
+        node.data.type = "manifest";
+        node.data.treeNode = node;
 
         // if this is the structure node that contains the assetSequence.
         if (this.sequence.structure == structure) {
@@ -409,19 +411,19 @@ export class BaseProvider implements IProvider{
                 var childStructure = structure.structures[i];
 
                 var childNode = new TreeNode();
-                node.nodes.push(childNode);
+                node.addNode(childNode);
 
                 this.parseTreeStructure(childNode, childStructure);
             }
         }
     }
 
+    // structures
     parseTreeSection(node: TreeNode, section: any): void {
         node.label = section.sectionType;
-        node.type = "structure";
-        node.ref = section;
-        section.treeNode = node;
-        node.path = node.ref.path;
+        node.data = section;
+        node.data.type = "structure";
+        node.data.treeNode = node;
 
         if (section.sections) {
 
@@ -429,7 +431,7 @@ export class BaseProvider implements IProvider{
                 var childSection = section.sections[i];
 
                 var childNode = new TreeNode();
-                node.nodes.push(childNode);
+                node.addNode(childNode);
 
                 this.parseTreeSection(childNode, childSection);
             }
@@ -438,7 +440,6 @@ export class BaseProvider implements IProvider{
 
     getThumbs(): Array<Thumb> {
 
-        var that = this;
         var thumbs = new Array<Thumb>();
 
         for (var i = 0; i < this.getTotalCanvases(); i++) {
@@ -451,7 +452,7 @@ export class BaseProvider implements IProvider{
             var height = 150;
 
             if (heightRatio){
-                height = 90 * heightRatio;
+                Math.floor(height = 90 * heightRatio);
             }
 
             var visible = true;
@@ -483,5 +484,34 @@ export class BaseProvider implements IProvider{
 
     getMetaData(callback: (data: any) => any): void{
         callback(null);
+    }
+
+    defaultToThumbsView(): boolean{
+        var manifestType = this.getManifestType();
+
+        switch (manifestType){
+            case 'monograph':
+                if (!this.isMultiSequence()) return true;
+                break;
+            case 'archive':
+                return true;
+                break;
+            case 'boundmanuscript':
+                return true;
+                break;
+            case 'artwork':
+                return true;
+
+        }
+
+        var sequenceType = this.getSequenceType();
+
+        switch (sequenceType){
+            case 'application-pdf':
+                return true;
+                break;
+        }
+
+        return false;
     }
 }
