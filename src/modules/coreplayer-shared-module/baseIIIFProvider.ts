@@ -157,7 +157,6 @@ export class BaseProvider implements IProvider{
     }
 
     getStructureByCanvasIndex(index: number): any {
-        if (!index) return null;
         var canvas = this.getCanvasByIndex(index);
         return this.getCanvasStructure(canvas);
     }
