@@ -192,8 +192,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         var browser = window.BrowserDetect.browser;
 
         if (browser == 'Firefox') {
-            this.$prevButton.hide();
-            this.$nextButton.hide();
+            if (this.provider.isMultiCanvas()){
+                this.$prevButton.hide();
+                this.$nextButton.hide();
+            }
             $('div[title="Rotate right"]').hide();
         }
     }
