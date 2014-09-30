@@ -24,11 +24,13 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         if (canvas.resources){
             iiifUri = canvas.resources[0].resource.service['@id'];
-        } else if (canvas.images){
+        } else if (canvas.images && canvas.images[0].resource.service){
             iiifUri = canvas.images[0].resource.service['@id'];
         }
 
-        if (iiifUri.endsWith('/')){
+        if (!iiifUri){
+            console.warn('no service endpoint available');
+        }else if (iiifUri.endsWith('/')){
             iiifUri += 'info.json';
         } else {
             iiifUri += '/info.json';
