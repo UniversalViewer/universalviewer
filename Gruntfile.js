@@ -12,7 +12,7 @@ module.exports = function (grunt) {
             packageDir: 'build/' + packageDirName,
             examplesDir: 'examples',
             theme: 'coreplayer-default-theme',
-            port: '8000'
+            port: '8001'
         },
         pkg: packageJson,
         ts: {
@@ -349,7 +349,7 @@ module.exports = function (grunt) {
                     directory: '.',
                     keepalive: true,
                     open: {
-                        target: 'http://localhost:8000/<%= global.examplesDir %>/'
+                        target: 'http://localhost:<%= global.port %>/<%= global.examplesDir %>/'
                     }
                 }
             }
