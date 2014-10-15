@@ -107,7 +107,7 @@ export class Extension extends baseExtension.BaseExtension{
         var browser = window.BrowserDetect.browser;
         var version = window.BrowserDetect.version;
 
-        if (browser == 'Explorer' && version < 9) return true;
+        if (browser == 'Explorer' && version <= 9) return true;
         return false;
     }
 
