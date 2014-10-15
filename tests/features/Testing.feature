@@ -1,6 +1,8 @@
 Feature: A feature file for testing the Wellcome Player
 
-  Scenario: The player is embedded
-    Given The player div is present
-    And The player embed script is present
+  Scenario: Load the player
+    Given The player loaded
+
+  Scenario: Check the title
+    Given The title is "The biocrats"
 
