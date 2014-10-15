@@ -20,6 +20,7 @@ export class BaseExtension implements IExtension {
     provider: IProvider;
 
     // events
+    static LOAD: string = 'onLoad';
     static RESIZE: string = 'onResize';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
     static CANVAS_INDEX_CHANGED: string = 'onAssetIndexChanged';
@@ -61,6 +62,8 @@ export class BaseExtension implements IExtension {
                 this.handleParentFrameEvent(message);
             }
         });
+
+        this.triggerSocket(BaseExtension.LOAD);
 
         // add/remove classes.
         this.$element.removeClass();
@@ -124,7 +127,7 @@ export class BaseExtension implements IExtension {
         return $(window).height();
     }
 
-    triggerSocket(eventName: string, eventObject: any): void {
+    triggerSocket(eventName: string, eventObject?: any): void {
         if (this.socket) {
             this.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
         }

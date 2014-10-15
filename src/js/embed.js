@@ -382,6 +382,9 @@ docReady(function() {
                             case "onToggleFullScreen":
                                 toggleFullScreen(message.eventObject);
                                 break;
+                            case "onToggleFullScreen":
+                                toggleFullScreen(message.eventObject);
+                                break;
                             case "onSequenceIndexChanged":
                                 viewSequence(message.eventObject);
                                 break;
