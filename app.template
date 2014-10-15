@@ -6,6 +6,8 @@
 
 <script type='text/javascript'>
   $(document).bind("onLoad", function (event) {
-      startCucumberRun();
+      setTimeout(function(){
+        startCucumberRun();
+      }, 1000);
   });
 </script>
