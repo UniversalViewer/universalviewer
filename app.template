@@ -6,6 +6,7 @@
 
 <script type='text/javascript'>
   $(document).bind("onLoad", function (event) {
+      // give it some time to initialise
       setTimeout(function(){
         startCucumberRun();
       }, 1000);
