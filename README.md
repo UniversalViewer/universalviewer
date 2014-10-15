@@ -52,7 +52,7 @@ Note that the 'build' folder is masked with .gitignore; it's just for your local
 
 To view the examples run:
 
-`grunt serve`
+    grunt serve
 
 ## License
 
