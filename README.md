@@ -50,17 +50,9 @@ Note that the 'build' folder is masked with .gitignore; it's just for your local
 
 ### Examples
 
-To view the examples locally you can install node http-server:
+To view the examples run:
 
-`npm install http-server -g`
-
-and run:
-
-`http-server`
-
-within the player directory, then browse to:
-
-`http://localhost:8080/examples/`
+    grunt serve
 
 ## License
 
