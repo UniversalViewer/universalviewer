@@ -18,7 +18,7 @@ module.exports = function(config) {
             {pattern: 'tests/features/step_definitions/**/*.js', watched: true, included: true, served: true}
         ],
 
-        plugins: ["karma-*", require("./lib/index")],
+        plugins: ["karma-*", require("./lib/index"), require("./lib/index")],
 
         // list of files to exclude
         exclude: [
