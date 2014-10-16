@@ -66,6 +66,8 @@ node_modules
 *.js.map
 *.min.map
 !Gruntfile.js
+!karma.conf.js
+!lib/*.js
 !src/js/*.js
 !src/*/*/js/*.js
 !src/examples/*.js
