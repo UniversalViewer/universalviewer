@@ -4,3 +4,8 @@
 [submodule "src/themes/coreplayer-default-theme"]
 	path = src/themes/coreplayer-default-theme
 	url = https://github.com/wellcomelibrary/coreplayer-default-theme.git
+[submodule "tests"]
+	
+	path = tests
+	
+	url = https://github.com/wellcomelibrary/player-tests.git
