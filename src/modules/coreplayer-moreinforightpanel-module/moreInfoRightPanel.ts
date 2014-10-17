@@ -5,7 +5,7 @@ import baseRight = require("../coreplayer-shared-module/rightPanel");
 export class MoreInfoRightPanel extends baseRight.RightPanel {
 
     moreInfoItemTemplate: JQuery;
-    $conditionsLink: JQuery;
+    $items: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -21,6 +21,9 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
                                            <div class="header"></div>\
                                            <div class="text"></div>\
                                        </div>');
+
+        this.$items = $('<div class="items"></div>');
+        this.$main.append(this.$items);
     }
 
     toggleComplete(): void {
@@ -50,7 +53,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         }
 
         _.each(data, (item: any) => {
-            this.$main.append(this.buildItem(item, 130));
+            this.$items.append(this.buildItem(item, 130));
         });
     }
 
