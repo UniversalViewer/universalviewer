@@ -1,12 +1,12 @@
 module.exports = function (grunt) {
 
     var packageJson = grunt.file.readJSON("package.json"),
-        packageDirName = 'wellcomeplayer-' + packageJson.version;
+        packageDirName = 'universalviewer-' + packageJson.version;
 
     grunt.initConfig({
         global:
         {
-            buildDir: 'build/wellcomeplayer',
+            buildDir: 'build/uv',
             minify: 'optimize=none',
             packageDirName: packageDirName,
             packageDir: 'build/' + packageDirName,

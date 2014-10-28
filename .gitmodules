@@ -1,11 +1,9 @@
 [submodule "examples"]
 	path = examples
-	url = https://github.com/wellcomelibrary/player-examples.git
+	url = git@github.com:britishlibrary/UniversalViewerExamples.git
 [submodule "src/themes/coreplayer-default-theme"]
 	path = src/themes/coreplayer-default-theme
-	url = https://github.com/wellcomelibrary/coreplayer-default-theme.git
+	url = git@github.com:britishlibrary/UniversalViewerDefaultTheme.git
 [submodule "tests"]
-	
 	path = tests
-	
-	url = https://github.com/wellcomelibrary/player-tests.git
+	url = git@github.com:britishlibrary/UniversalViewerTests.git
