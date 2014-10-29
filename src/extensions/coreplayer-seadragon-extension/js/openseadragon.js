@@ -10690,7 +10690,7 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
 
         //# constants
         var IIIF_ROTATION = '0',
-            IIIF_QUALITY = 'native.jpg',
+            IIIF_QUALITY = 'default.jpg',
 
             //## get the scale (level as a decimal)
             scale = Math.pow( 0.5, this.maxLevel - level ),
