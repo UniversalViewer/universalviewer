@@ -1,7 +1,7 @@
 <!-- hosts the app being tested -->
 
 <div class="wellcomePlayer" data-config="/examples/examples-config.js" data-uri="http://wellcomelibrary.org/package/b18035978" style="width:640px; height:480px; background-color: #000"></div>
-<script type="text/javascript" id="embedWellcomePlayer" src="/build/wellcomeplayer/js/embed.js"></script>
+<script type="text/javascript" id="embedWellcomePlayer" src="/build/uv/js/embed.js"></script>
 
 <script type='text/javascript'>
   $(document).bind("onLoad", function (event) {
