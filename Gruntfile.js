@@ -353,6 +353,15 @@ module.exports = function (grunt) {
                     }
                 }
             }
+        },
+
+        protractor: {
+            dev: {
+                options: {
+                    //todo: port
+                    configFile: "tests/protractor-conf.js"
+                }
+            }
         }
     });
 
@@ -393,6 +402,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-extend");
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-protractor-runner');
 
     grunt.registerTask("default", '', function(){
 
@@ -468,6 +478,12 @@ module.exports = function (grunt) {
         grunt.task.run(
             'default',
             'connect'
+        );
+    });
+
+    grunt.registerTask("test", '', function(){
+        grunt.task.run(
+            'protractor:dev'
         );
     });
 
