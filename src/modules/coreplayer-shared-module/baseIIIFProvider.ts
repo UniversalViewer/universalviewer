@@ -148,6 +148,14 @@ export class BaseProvider implements IProvider{
         return '-';
     }
 
+    isFirstCanvas(): boolean {
+        return this.canvasIndex == 0;
+    }
+
+    isLastCanvas(): boolean {
+        return this.canvasIndex == this.getTotalCanvases() - 1;
+    }
+
     isSeeAlsoEnabled(): boolean{
         return this.config.options.seeAlsoEnabled !== false;
     }
@@ -185,6 +193,10 @@ export class BaseProvider implements IProvider{
 
     isMultiSequence(): boolean{
         return this.manifest.sequences.length > 1;
+    }
+
+    isPaged(): boolean{
+        return this.sequence.viewingHint && this.sequence.viewingHint == "paged";
     }
 
     getMediaUri(mediaUri: string): string{
@@ -264,11 +276,11 @@ export class BaseProvider implements IProvider{
         return this.rootStructure;
     }
 
-    // the purpose of this is to give each asset in sequence.canvases
+    // the purpose of this is to give each canvas in sequence.canvases
     // a collection of structures it belongs to.
     // it also builds a path string property for each structure.
     // this can then be used when a structure is clicked in the tree view
-    // where getStructureIndex loops though all assets and their
+    // where getStructureIndex loops though all canvases and their
     // associated structures until it finds one with a matching path.
     parseStructure(): void{
         // create root structure
@@ -336,15 +348,17 @@ export class BaseProvider implements IProvider{
         return structure.structures[index];
     }
 
+    // todo
     getCanvasIndexByOrderLabel(label: string): number {
         return null;
     }
 
+    // todo
     getManifestSeeAlsoUri(manifest: any): string{
         return null;
     }
 
-    // currently only supports single-level
+    // todo: currently only supports single-level
     getTree(): TreeNode{
         var rootStructure = this.getRootStructure();
 

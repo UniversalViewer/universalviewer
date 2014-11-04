@@ -10,7 +10,9 @@ import header = require("../../modules/coreplayer-pagingheaderpanel-module/pagin
 import left = require("../../modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
 import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/thumbsView");
 import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
+import baseCenter = require("../../modules/coreplayer-shared-module/seadragonCenterPanel");
 import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
+import centerCol = require("../../modules/coreplayer-seadragoncollectioncenterpanel-module/seadragonCollectionCenterPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
@@ -23,7 +25,7 @@ export class Extension extends baseExtension.BaseExtension {
 
     headerPanel: header.PagingHeaderPanel;
     leftPanel: left.TreeViewLeftPanel;
-    centerPanel: center.SeadragonCenterPanel;
+    centerPanel: baseCenter.SeadragonCenterPanel;
     rightPanel: right.MoreInfoRightPanel;
     footerPanel: footer.FooterPanel;
     $helpDialogue: JQuery;
@@ -94,22 +96,22 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         });
 
-        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
+        $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
         });
 
-        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
+        $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
             this.currentRotation = rotation;
             this.setParam(baseProvider.params.rotation, rotation);
         });
 
-        $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
+        $.subscribe(baseCenter.SeadragonCenterPanel.PREV, (e) => {
             if (this.provider.canvasIndex != 0) {
                 this.viewPage(Number(this.provider.canvasIndex) - 1);
             }
         });
 
-        $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
+        $.subscribe(baseCenter.SeadragonCenterPanel.NEXT, (e) => {
             if (this.provider.canvasIndex != this.provider.getTotalCanvases() - 1) {
                 this.viewPage(Number(this.provider.canvasIndex) + 1);
             }
@@ -153,7 +155,11 @@ export class Extension extends baseExtension.BaseExtension {
             this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
         }
 
-        this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
+        if (this.provider.isPaged()) {
+            this.centerPanel = new centerCol.SeadragonCollectionCenterPanel(shell.Shell.$centerPanel);
+        } else {
+            this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
+        }
 
         if (this.isRightPanelEnabled()){
             this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);

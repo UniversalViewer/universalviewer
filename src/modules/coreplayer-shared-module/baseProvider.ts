@@ -144,6 +144,14 @@ export class BaseProvider implements IProvider{
         return this.sequence.seeAlso;
     }
 
+    isFirstCanvas(): boolean {
+        return this.canvasIndex == 0;
+    }
+
+    isLastCanvas(): boolean {
+        return this.canvasIndex == this.getTotalCanvases() - 1;
+    }
+
     isSeeAlsoEnabled(): boolean{
         return this.config.options.seeAlsoEnabled !== false;
     }
@@ -166,6 +174,11 @@ export class BaseProvider implements IProvider{
 
     isMultiSequence(): boolean{
         return this.manifest.assetSequences.length > 1;
+    }
+
+    isPaged(): boolean{
+        // not applicable to non-iiif manifest.
+        return false;
     }
 
     getMediaUri(mediaUri: string): string{
