@@ -48,6 +48,7 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             collectionRows: 1,
             collectionTileSize: 1024,
             collectionTileMargin: 0,
+            tileSources: this.getCanvasImageUri(0),
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
@@ -90,12 +91,13 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
     }
 
     getTileSources(){
+
         if (this.provider.isFirstCanvas()){
             // if it's the first page, return an empty tilesource and the first page.
-            return ["", this.getCanvasImageUri(0)];
+            return [this.getCanvasImageUri(0)];
         } else if (this.provider.isLastCanvas()){
             // if it's the last page, return the last page and an empty tilesource.
-            return [this.getCanvasImageUri(this.provider.getTotalCanvases() - 1), ""];
+            return [this.getCanvasImageUri(this.provider.getTotalCanvases() - 1)];
         } else {
             // if it's not the first or last page, return the current two-page spread.
             return [this.getCanvasImageUri(this.provider.canvasIndex), this.getCanvasImageUri(this.provider.canvasIndex + 1)];
