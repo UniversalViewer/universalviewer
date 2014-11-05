@@ -26,13 +26,15 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
         $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
 
             // method 1
-            that.viewer.tileSources = this.getTileSources();
-            that.viewer.forceRedraw();
+            //that.viewer.tileSources = that.getTileSources();
+            //that.viewer.forceRedraw();
 
             // method 2
-            //var tileSources = that.getTileSources();
-            //that.viewer.open(tileSources[0]);
-            //that.viewer.open(tileSources[1]);
+            //that.viewer.open(that.getTileSources());
+
+            // method 3
+            that.$viewer.empty();
+            that.createSeadragonViewer();
         });
     }
 
@@ -46,9 +48,9 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             id: "viewer",
             collectionMode: true,
             collectionRows: 1,
-            collectionTileSize: 1024,
+            collectionTileSize: 10,
             collectionTileMargin: 0,
-            tileSources: this.getCanvasImageUri(0),
+            tileSources: this.getTileSources(),
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
@@ -81,6 +83,18 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
                     GROUP:  'pixel.gif',
                     HOVER:  'pixel.gif',
                     DOWN:   'pixel.gif'
+                },
+                next: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                previous: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 }
             }
         });
@@ -92,6 +106,10 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
 
     getTileSources(){
 
+        if (typeof this.provider.canvasIndex == "undefined"){
+            return [this.getCanvasImageUri(0)];
+        }
+
         if (this.provider.isFirstCanvas()){
             // if it's the first page, return an empty tilesource and the first page.
             return [this.getCanvasImageUri(0)];
@@ -100,7 +118,16 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             return [this.getCanvasImageUri(this.provider.getTotalCanvases() - 1)];
         } else {
             // if it's not the first or last page, return the current two-page spread.
-            return [this.getCanvasImageUri(this.provider.canvasIndex), this.getCanvasImageUri(this.provider.canvasIndex + 1)];
+            // if the canvasIndex is even, it's on the left. odd on the right.
+
+            var isEven = this.provider.canvasIndex % 2;
+
+            if (isEven){
+                return [this.getCanvasImageUri(this.provider.canvasIndex), this.getCanvasImageUri(this.provider.canvasIndex + 1)];
+            } else {
+                return [this.getCanvasImageUri(this.provider.canvasIndex - 1), this.getCanvasImageUri(this.provider.canvasIndex)];
+            }
+
         }
     }
 
