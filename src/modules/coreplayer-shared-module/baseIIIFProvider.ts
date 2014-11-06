@@ -223,6 +223,16 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
+    getTwoUpIndices(): number[]{
+        if (this.isFirstCanvas() || this.isLastCanvas()){
+            return [this.canvasIndex];
+        } else if (this.canvasIndex % 2){
+            return [this.canvasIndex, this.canvasIndex + 1];
+        } else {
+            return [this.canvasIndex - 1, this.canvasIndex];
+        }
+    }
+
     addTimestamp(uri: string): string{
         return uri + "?t=" + utils.Utils.getTimeStamp();
     }

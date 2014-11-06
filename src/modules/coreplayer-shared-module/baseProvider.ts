@@ -207,6 +207,16 @@ export class BaseProvider implements IProvider{
         return uri;
     }
 
+    getTwoUpIndices(): number[]{
+        if (this.isFirstCanvas() || this.isLastCanvas()){
+            return [this.canvasIndex];
+        } else if (this.canvasIndex % 2){
+            return [this.canvasIndex, this.canvasIndex + 1];
+        } else {
+            return [this.canvasIndex - 1, this.canvasIndex];
+        }
+    }
+
     parseManifest(): void{
         this.parseManifestation(this.manifest.rootStructure, this.manifest.assetSequences, '');
     }

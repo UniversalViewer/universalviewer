@@ -42,6 +42,7 @@ interface IProvider{
     getTitle(): string;
     getTotalCanvases(): number;
     getTree(): TreeNode;
+    getTwoUpIndices(): number[];
     isDeepLinkingEnabled(): boolean;
     isFirstCanvas(): boolean;
     isLastCanvas(): boolean;

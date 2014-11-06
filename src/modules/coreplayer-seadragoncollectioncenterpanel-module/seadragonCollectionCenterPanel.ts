@@ -20,21 +20,9 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
 
         super.create();
 
-        var that = this;
-
         // events.
         $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
-
-            // method 1
-            //that.viewer.tileSources = that.getTileSources();
-            //that.viewer.forceRedraw();
-
-            // method 2
-            that.viewer.open(that.getTileSources());
-
-            // method 3
-            //that.$viewer.empty();
-            //that.createSeadragonViewer();
+            this.viewer.open(this.getTileSources());
         });
     }
 
@@ -46,11 +34,6 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
 
         this.viewer = OpenSeadragon({
             id: "viewer",
-            //collectionMode: true,
-            //collectionRows: 1,
-            //collectionTileSize: 10,
-            //collectionTileMargin: 0,
-            //tileSources: this.getTileSources(),
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
@@ -98,36 +81,28 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
                 }
             }
         });
-
-        //this.viewer.clearControls();
-
-        //this.viewer.setControlsEnabled(false);
     }
 
     getTileSources(): Array<any>{
 
-        //if (typeof this.provider.canvasIndex == "undefined"){
-        //    return [this.getCanvasImageUri(0)];
-        //}
-
         if (this.provider.isFirstCanvas()){
-            // if it's the first page, return an empty tilesource and the first page.
             return [this.getRightTileSource(0)];
         } else if (this.provider.isLastCanvas()){
-            // if it's the last page, return the last page and an empty tilesource.
             return [this.getLeftTileSource(this.provider.getTotalCanvases() - 1)];
         } else {
             // if it's not the first or last page, return the current two-page spread.
             // if the canvasIndex is even, it's on the left. odd on the right.
+            var indices = this.provider.getTwoUpIndices();
+            indices[0] = this.getLeftTileSource(indices[0]);
+            indices[1] = this.getRightTileSource(indices[1]);
 
-            var isEven = this.provider.canvasIndex % 2;
+            return indices;
 
-            if (isEven){
-                return [this.getLeftTileSource(this.provider.canvasIndex), this.getRightTileSource(this.provider.canvasIndex + 1)];
-            } else {
-                return [this.getLeftTileSource(this.provider.canvasIndex - 1), this.getRightTileSource(this.provider.canvasIndex)];
-            }
-
+            //if (this.provider.canvasIndex % 2){
+            //    return [this.getLeftTileSource(this.provider.canvasIndex), this.getRightTileSource(this.provider.canvasIndex + 1)];
+            //} else {
+            //    return [this.getLeftTileSource(this.provider.canvasIndex - 1), this.getRightTileSource(this.provider.canvasIndex)];
+            //}
         }
     }
 
@@ -147,7 +122,7 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
 
         return {
             tileSource: uri,
-            x: 0.57,
+            x: 0.56,
             y: 0,
             height: 1
         }
