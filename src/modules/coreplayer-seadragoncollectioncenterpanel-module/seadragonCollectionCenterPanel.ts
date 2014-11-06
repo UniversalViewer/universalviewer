@@ -30,11 +30,11 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             //that.viewer.forceRedraw();
 
             // method 2
-            //that.viewer.open(that.getTileSources());
+            that.viewer.open(that.getTileSources());
 
             // method 3
-            that.$viewer.empty();
-            that.createSeadragonViewer();
+            //that.$viewer.empty();
+            //that.createSeadragonViewer();
         });
     }
 
@@ -46,11 +46,11 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
 
         this.viewer = OpenSeadragon({
             id: "viewer",
-            collectionMode: true,
-            collectionRows: 1,
-            collectionTileSize: 10,
-            collectionTileMargin: 0,
-            tileSources: this.getTileSources(),
+            //collectionMode: true,
+            //collectionRows: 1,
+            //collectionTileSize: 10,
+            //collectionTileMargin: 0,
+            //tileSources: this.getTileSources(),
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
@@ -104,18 +104,18 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
         //this.viewer.setControlsEnabled(false);
     }
 
-    getTileSources(){
+    getTileSources(): Array<any>{
 
-        if (typeof this.provider.canvasIndex == "undefined"){
-            return [this.getCanvasImageUri(0)];
-        }
+        //if (typeof this.provider.canvasIndex == "undefined"){
+        //    return [this.getCanvasImageUri(0)];
+        //}
 
         if (this.provider.isFirstCanvas()){
             // if it's the first page, return an empty tilesource and the first page.
-            return [this.getCanvasImageUri(0)];
+            return [this.getRightTileSource(0)];
         } else if (this.provider.isLastCanvas()){
             // if it's the last page, return the last page and an empty tilesource.
-            return [this.getCanvasImageUri(this.provider.getTotalCanvases() - 1)];
+            return [this.getLeftTileSource(this.provider.getTotalCanvases() - 1)];
         } else {
             // if it's not the first or last page, return the current two-page spread.
             // if the canvasIndex is even, it's on the left. odd on the right.
@@ -123,11 +123,33 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             var isEven = this.provider.canvasIndex % 2;
 
             if (isEven){
-                return [this.getCanvasImageUri(this.provider.canvasIndex), this.getCanvasImageUri(this.provider.canvasIndex + 1)];
+                return [this.getLeftTileSource(this.provider.canvasIndex), this.getRightTileSource(this.provider.canvasIndex + 1)];
             } else {
-                return [this.getCanvasImageUri(this.provider.canvasIndex - 1), this.getCanvasImageUri(this.provider.canvasIndex)];
+                return [this.getLeftTileSource(this.provider.canvasIndex - 1), this.getRightTileSource(this.provider.canvasIndex)];
             }
 
+        }
+    }
+
+    getLeftTileSource(canvasIndex: number): any{
+        var uri = this.getCanvasImageUri(canvasIndex);
+
+        return {
+            tileSource: uri,
+            x: 0,
+            y: 0,
+            height: 1
+        }
+    }
+
+    getRightTileSource(canvasIndex: number): any{
+        var uri = this.getCanvasImageUri(canvasIndex);
+
+        return {
+            tileSource: uri,
+            x: 0.57,
+            y: 0,
+            height: 1
         }
     }
 
