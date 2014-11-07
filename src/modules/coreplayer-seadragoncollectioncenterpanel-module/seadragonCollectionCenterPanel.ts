@@ -97,12 +97,6 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             indices[1] = this.getRightTileSource(indices[1]);
 
             return indices;
-
-            //if (this.provider.canvasIndex % 2){
-            //    return [this.getLeftTileSource(this.provider.canvasIndex), this.getRightTileSource(this.provider.canvasIndex + 1)];
-            //} else {
-            //    return [this.getLeftTileSource(this.provider.canvasIndex - 1), this.getRightTileSource(this.provider.canvasIndex)];
-            //}
         }
     }
 
