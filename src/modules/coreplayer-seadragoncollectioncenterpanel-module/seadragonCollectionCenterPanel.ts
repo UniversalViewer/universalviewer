@@ -22,7 +22,22 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
 
         // events.
         $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
-            this.viewer.open(this.getTileSources());
+            var tileSources = this.getTileSources();
+
+            var that = this;
+
+            if (tileSources.length > 1) {
+                that.viewer.addHandler('open', function openHandler() {
+                    that.viewer.removeHandler('open', openHandler);
+
+                    tileSources[1].x = that.viewer.world.getItemAt(0)._worldX + 
+                      that.viewer.world.getItemAt(0)._worldWidth + 0.01;
+
+                    that.viewer.addTiledImage(tileSources[1]);
+                });
+            }
+
+            this.viewer.open(tileSources[0]);
         });
     }
 
@@ -40,7 +55,7 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             showHomeControl: false,
             showFullPageControl: false,
             defaultZoomLevel: this.options.defaultZoomLevel || 0,
-            navigatorPosition: 'BOTTOM_RIGHT',
+            //navigatorPosition: 'BOTTOM_RIGHT',
             prefixUrl: prefixUrl,
             navImages: {
                 zoomIn: {
@@ -104,10 +119,7 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
         var uri = this.getCanvasImageUri(canvasIndex);
 
         return {
-            tileSource: uri,
-            x: 0,
-            y: 0,
-            height: 1
+            tileSource: uri
         }
     }
 
@@ -115,10 +127,7 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
         var uri = this.getCanvasImageUri(canvasIndex);
 
         return {
-            tileSource: uri,
-            x: 0.56,
-            y: 0,
-            height: 1
+            tileSource: uri
         }
     }
 
