@@ -201,14 +201,33 @@ export class Extension extends baseExtension.BaseExtension {
     }
 
     viewPage(canvasIndex: number): void {
+
+        // if paged, if the canvas index is already displayed, show the next/prev canvas.
+        if (this.provider.isPaged()){
+            var indices = this.provider.getTwoUpIndices();
+            if (indices.contains(canvasIndex)){
+
+                if (canvasIndex < this.provider.canvasIndex){
+                    canvasIndex = indices[0] - 1;
+                } else {
+                    canvasIndex = indices[1] + 1;
+                }
+
+                this.viewCanvas(canvasIndex, () => {
+                    var canvas = this.provider.getCanvasByIndex(canvasIndex);
+                    var uri = (<ISeadragonProvider>this.provider).getImageUri(canvas);
+                    $.publish(Extension.OPEN_MEDIA, [uri]);
+                    this.setParam(baseProvider.params.canvasIndex, canvasIndex);
+                });
+
+                return;
+            }
+        }
+
         this.viewCanvas(canvasIndex, () => {
-
             var canvas = this.provider.getCanvasByIndex(canvasIndex);
-
             var uri = (<ISeadragonProvider>this.provider).getImageUri(canvas);
-
             $.publish(Extension.OPEN_MEDIA, [uri]);
-
             this.setParam(baseProvider.params.canvasIndex, canvasIndex);
         });
     }
