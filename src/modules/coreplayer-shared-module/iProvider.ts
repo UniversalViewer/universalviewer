@@ -42,10 +42,14 @@ interface IProvider{
     getTitle(): string;
     getTotalCanvases(): number;
     getTree(): TreeNode;
-    getPagedIndices(): number[];
+    getPagedIndices(canvasIndex?: number): number[];
+    getFirstPageIndex(): number;
+    getLastPageIndex(): number;
+    getPrevPageIndex(canvasIndex?: number): number;
+    getNextPageIndex(canvasIndex?: number): number;
     isDeepLinkingEnabled(): boolean;
-    isFirstCanvas(): boolean;
-    isLastCanvas(): boolean;
+    isFirstCanvas(canvasIndex?: number): boolean;
+    isLastCanvas(canvasIndex?: number): boolean;
     isPaged(): boolean;
     isMultiCanvas(): boolean;
     isMultiSequence(): boolean;

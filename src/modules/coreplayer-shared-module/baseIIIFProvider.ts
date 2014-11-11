@@ -148,12 +148,14 @@ export class BaseProvider implements IProvider{
         return '-';
     }
 
-    isFirstCanvas(): boolean {
-        return this.canvasIndex == 0;
+    isFirstCanvas(canvasIndex?: number): boolean {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+        return canvasIndex == 0;
     }
 
-    isLastCanvas(): boolean {
-        return this.canvasIndex == this.getTotalCanvases() - 1;
+    isLastCanvas(canvasIndex?: number): boolean {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+        return canvasIndex == this.getTotalCanvases() - 1;
     }
 
     isSeeAlsoEnabled(): boolean{
@@ -223,14 +225,58 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
-    getPagedIndices(): number[]{
-        if (this.isFirstCanvas() || this.isLastCanvas()){
-            return [this.canvasIndex];
-        } else if (this.canvasIndex % 2){
-            return [this.canvasIndex, this.canvasIndex + 1];
+    getPagedIndices(canvasIndex?: number): number[]{
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+
+        if (this.isFirstCanvas(canvasIndex) || this.isLastCanvas(canvasIndex)){
+            return [canvasIndex];
+        } else if (canvasIndex % 2){
+            return [canvasIndex, canvasIndex + 1];
         } else {
-            return [this.canvasIndex - 1, this.canvasIndex];
+            return [canvasIndex - 1, canvasIndex];
         }
+    }
+
+    getFirstPageIndex(): number {
+        return 0;
+    }
+
+    getLastPageIndex(): number {
+        return this.getTotalCanvases() - 1;
+    }
+
+getPrevPageIndex(canvasIndex?: number): number {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+
+        var index;
+
+        if (this.isPaged()){
+            var indices = this.getPagedIndices(canvasIndex);
+            index = indices[0] - 1;
+        } else {
+            index = canvasIndex - 1;
+        }
+
+        return index;
+    }
+
+    getNextPageIndex(canvasIndex?: number): number {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+
+        var index;
+
+        if (this.isPaged()){
+            var indices = this.getPagedIndices(canvasIndex);
+            index = indices.last() + 1;
+        } else {
+            index = canvasIndex + 1;
+        }
+
+        if (index > this.getTotalCanvases() - 1) {
+            return -1;
+        }
+
+        return index;
     }
 
     addTimestamp(uri: string): string{
