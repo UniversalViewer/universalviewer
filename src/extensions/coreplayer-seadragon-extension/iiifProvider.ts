@@ -54,4 +54,29 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         return script;
     }
 
+    getTileSources(): any[] {
+
+        if (!this.isPaged()){
+            return [this.getImageUri(this.getCurrentCanvas())];
+        } else {
+            if (this.isFirstCanvas() || this.isLastCanvas()){
+                return [{
+                    tileSource: this.getImageUri(this.getCurrentCanvas())
+                }];
+            } else {
+                var indices = this.getPagedIndices();
+
+                var tileSources: any[] = [];
+
+                _.each(indices, (index) => {
+                    tileSources.push({
+                        tileSource: this.getImageUri(this.getCanvasByIndex(index))
+                    });
+                });
+
+                return tileSources;
+            }
+        }
+    }
+
 }

@@ -36,4 +36,10 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         return script;
     }
+
+    // currently only applicable to IIIF
+    getTileSources(): any[] {
+
+        return null;
+    }
 }

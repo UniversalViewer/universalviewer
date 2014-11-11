@@ -39,7 +39,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
             showHomeControl: false,
             showFullPageControl: false,
             defaultZoomLevel: this.options.defaultZoomLevel || 0,
-            //navigatorPosition: 'BOTTOM_RIGHT',
+            navigatorPosition: 'BOTTOM_RIGHT',
             prefixUrl: prefixUrl,
             navImages: {
                 zoomIn: {

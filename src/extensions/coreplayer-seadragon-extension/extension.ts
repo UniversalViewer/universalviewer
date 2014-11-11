@@ -204,7 +204,7 @@ export class Extension extends baseExtension.BaseExtension {
 
         // if paged, if the canvas index is already displayed, show the next/prev canvas.
         if (this.provider.isPaged()){
-            var indices = this.provider.getTwoUpIndices();
+            var indices = this.provider.getPagedIndices();
             if (indices.contains(canvasIndex)){
 
                 if (canvasIndex < this.provider.canvasIndex){

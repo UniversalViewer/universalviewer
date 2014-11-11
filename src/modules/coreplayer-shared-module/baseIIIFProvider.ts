@@ -223,7 +223,7 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
-    getTwoUpIndices(): number[]{
+    getPagedIndices(): number[]{
         if (this.isFirstCanvas() || this.isLastCanvas()){
             return [this.canvasIndex];
         } else if (this.canvasIndex % 2){

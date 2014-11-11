@@ -132,7 +132,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         if (this.provider.isMultiCanvas()) {
 
-            //$('.navigator').addClass('extraMargin');
+            $('.navigator').addClass('extraMargin');
 
             if (this.provider.canvasIndex != 0) {
                 this.enablePrevButton();

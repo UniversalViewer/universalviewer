@@ -42,7 +42,7 @@ interface IProvider{
     getTitle(): string;
     getTotalCanvases(): number;
     getTree(): TreeNode;
-    getTwoUpIndices(): number[];
+    getPagedIndices(): number[];
     isDeepLinkingEnabled(): boolean;
     isFirstCanvas(): boolean;
     isLastCanvas(): boolean;
