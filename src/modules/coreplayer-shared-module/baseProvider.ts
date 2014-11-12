@@ -209,6 +209,60 @@ export class BaseProvider implements IProvider{
         return uri;
     }
 
+    getPagedIndices(canvasIndex?: number): number[]{
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+
+        if (this.isFirstCanvas() || this.isLastCanvas()){
+            return [canvasIndex];
+        } else if (canvasIndex % 2){
+            return [canvasIndex, canvasIndex + 1];
+        } else {
+            return [canvasIndex - 1, canvasIndex];
+        }
+    }
+
+    getFirstPageIndex(): number {
+        return 0;
+    }
+
+    getLastPageIndex(): number {
+        return this.getTotalCanvases() - 1;
+    }
+
+    getPrevPageIndex(canvasIndex?: number): number {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+
+        var index;
+
+        if (this.isPaged()){
+            var indices = this.getPagedIndices(canvasIndex);
+            index = indices[0] - 1;
+        } else {
+            index = canvasIndex - 1;
+        }
+
+        return index;
+    }
+
+    getNextPageIndex(canvasIndex?: number): number {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+
+        var index;
+
+        if (this.isPaged()){
+            var indices = this.getPagedIndices(canvasIndex);
+            index = indices.last() + 1;
+        } else {
+            index = canvasIndex + 1;
+        }
+
+        if (index > this.getTotalCanvases() - 1) {
+            return -1;
+        }
+
+        return index;
+    }
+
     parseManifest(): void{
         this.parseManifestation(this.manifest.rootStructure, this.manifest.assetSequences, '');
     }

@@ -46,17 +46,17 @@ export class ThumbsView extends baseView.BaseView {
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
-                            </div>\
-                            {{if ~isEven(#index + 1)}} \
-                                <div class="separator"></div> \
-                            {{/if}}'
+                             </div>\
+                             {{if ~isOdd(#index + 1)}} \
+                                 <div class="separator"></div> \
+                             {{/if}}'
         });
 
         var extraHeight = this.options.thumbsExtraHeight;
 
         $.views.helpers({
-            isEven: function(num){
-                return (num % 2 == 0) ? true : false;
+            isOdd: function(num){
+                return (num % 2 == 0) ? false : true;
             },
             extraHeight: function(){
                 return extraHeight;
@@ -201,12 +201,23 @@ export class ThumbsView extends baseView.BaseView {
 
         index = parseInt(index);
 
-        if (this.$selectedThumb) {
-            this.$selectedThumb.removeClass('selected');
-        }
+        //if (this.$selectedThumb) {
+        //    this.$selectedThumb.removeClass('selected');
+        //}
+
+        this.$thumbs.find('.thumb').removeClass('selected');
 
         this.$selectedThumb = $(this.$thumbs.find('.thumb')[index]);
-        this.$selectedThumb.addClass('selected');
+
+        if (this.provider.isPaged()){
+            var indices = this.provider.getPagedIndices(index);
+
+            _.each(indices, (index: number) => {
+                $(this.$thumbs.find('.thumb')[index]).addClass('selected');
+            });
+        } else {
+            this.$selectedThumb.addClass('selected');
+        }
 
         // scroll to thumb if the index change didn't originate
         // within the thumbs view.

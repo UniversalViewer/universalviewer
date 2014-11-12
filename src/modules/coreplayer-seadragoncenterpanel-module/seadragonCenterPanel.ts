@@ -21,7 +21,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         // events.
         $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
-            this.viewer.openDzi(uri);
+            this.viewer.open(uri);
         });
     }
 

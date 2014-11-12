@@ -254,7 +254,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             }
 
             index--;
-            $.publish(PagingHeaderPanel.IMAGE_SEARCH, [index.toString()]);
+            $.publish(PagingHeaderPanel.IMAGE_SEARCH, [index]);
         }
     }
 
