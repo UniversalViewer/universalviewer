@@ -1,3 +1,5 @@
+/// <reference path="./iSettings.d.ts" />
+
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
 
@@ -61,6 +63,8 @@ interface IProvider{
     parseStructure(): void;
     reload(callback: any): void;
     setMediaUri(canvas: any): void; // todo: remove?
+    getSettings(): ISettings;
+    updateSettings(settings: ISettings): void;
 }
 
 export = IProvider;

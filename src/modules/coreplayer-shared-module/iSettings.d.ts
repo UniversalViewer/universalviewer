@@ -1,7 +1,11 @@
 
-interface IOptions {
-    labelsEnabled: boolean;
-    pagingEnabled: boolean;
+declare enum viewingHint{
+    individuals,
+    paged
+}
+
+interface ISettings {
+    viewingHint: viewingHint;
     theme: string;
     leftPanelEnabled: boolean;
     rightPanelEnabled: boolean;
@@ -25,5 +29,3 @@ interface IOptions {
     //imageBaseUri: string;
     //sectionMappings: any;
 }
-
-export = IOptions;

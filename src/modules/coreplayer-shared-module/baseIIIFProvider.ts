@@ -494,4 +494,12 @@ export class BaseProvider implements IProvider{
 
         return false;
     }
+
+    getSettings(): ISettings {
+        return this.config.options;
+    }
+
+    updateSettings(settings: ISettings): void {
+        this.config.options = settings;
+    }
 }

@@ -1,5 +1,6 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
+/// <reference path="./iSettings.d.ts" />
 
 import baseExtension = require("../../modules/coreplayer-shared-module/baseExtension");
 import utils = require("../../utils");
@@ -18,6 +19,7 @@ import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
 import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
+import settings = require("../../modules/coreplayer-shared-module/settings");
 import ISeadragonProvider = require("./iSeadragonProvider");
 import dependencies = require("./dependencies");
 
@@ -81,6 +83,23 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(header.PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
+        });
+
+        $.subscribe(header.PagingHeaderPanel.SETTINGS, (e) => {
+            var settings: ISettings = this.provider.getSettings();
+
+            //if (settings.viewingHint == settings.viewingHint.individuals){
+            //    settings.viewingHint = settings.viewingHint.paged;
+            //} else {
+            //    settings.viewingHint = settings.viewingHint.individuals
+            //}
+            //
+            //this.provider.updateSettings(settings);
+            //
+            //this.provider.reload(() => {
+            //    $.publish(baseExtension.BaseExtension.RELOAD);
+            //    this.viewPage(this.provider.canvasIndex);
+            //});
         });
 
         $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
