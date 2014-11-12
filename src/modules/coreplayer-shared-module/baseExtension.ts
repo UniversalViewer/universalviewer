@@ -20,6 +20,7 @@ export class BaseExtension implements IExtension {
     provider: IProvider;
 
     // events
+    static SETTINGS_CHANGED: string = 'onSettingsChanged';
     static LOAD: string = 'onLoad';
     static RESIZE: string = 'onResize';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';

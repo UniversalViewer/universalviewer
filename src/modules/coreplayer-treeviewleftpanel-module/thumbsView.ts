@@ -34,7 +34,7 @@ export class ThumbsView extends baseView.BaseView {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(extension.Extension.MODE_CHANGED, (e, mode) => {
+        $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
             this.setLabel();
         });
 

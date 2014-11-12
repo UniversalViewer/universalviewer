@@ -48,7 +48,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(extension.Extension.MODE_CHANGED, (e, mode) => {
+        $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
             this.modeChanged(mode);
         });
 

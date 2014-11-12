@@ -37,9 +37,6 @@ export class Extension extends baseExtension.BaseExtension {
 
     static mode: string;
 
-    // events
-    static MODE_CHANGED: string = 'onModeChanged';
-
     // modes
     static PAGE_MODE: string = "pageMode";
     static IMAGE_MODE: string = "imageMode";
@@ -75,9 +72,11 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(header.PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
-            Extension.mode = mode;
+            //Extension.mode = mode;
 
-            $.publish(Extension.MODE_CHANGED, [mode]);
+            //this.provider.updateSetting(this.provider.settings.labelling, mode);
+
+            $.publish(Extension.SETTINGS_CHANGED, [mode]);
         });
 
         $.subscribe(header.PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
