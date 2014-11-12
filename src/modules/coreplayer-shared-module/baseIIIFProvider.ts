@@ -279,6 +279,20 @@ export class BaseProvider implements IProvider{
         return index;
     }
 
+    getStartCanvasIndex(): number {
+        if (this.sequence.startCanvas) {
+            // if there's a startCanvas attribute, loop through the canvases and return the matching index.
+            for (var i = 0; i < this.sequence.canvases.length; i++) {
+                var canvas = this.sequence.canvases[i];
+
+                if (canvas["@id"] == this.sequence.startCanvas) return i;
+            }
+        }
+
+        // default to first canvas.
+        return 0;
+    }
+
     addTimestamp(uri: string): string{
         return uri + "?t=" + utils.Utils.getTimeStamp();
     }

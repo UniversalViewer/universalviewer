@@ -47,6 +47,7 @@ interface IProvider{
     getLastPageIndex(): number;
     getPrevPageIndex(canvasIndex?: number): number;
     getNextPageIndex(canvasIndex?: number): number;
+    getStartCanvasIndex(): number;
     isDeepLinkingEnabled(): boolean;
     isFirstCanvas(canvasIndex?: number): boolean;
     isLastCanvas(canvasIndex?: number): boolean;

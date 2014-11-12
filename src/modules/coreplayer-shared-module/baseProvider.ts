@@ -263,6 +263,10 @@ export class BaseProvider implements IProvider{
         return index;
     }
 
+    getStartCanvasIndex(): number {
+        return 0;
+    }
+
     parseManifest(): void{
         this.parseManifestation(this.manifest.rootStructure, this.manifest.assetSequences, '');
     }

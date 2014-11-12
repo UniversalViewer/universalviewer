@@ -124,10 +124,10 @@ export class Extension extends baseExtension.BaseExtension {
             var canvasIndex;
 
             if (!that.provider.isReload){
-                canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || 0;
+                canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || that.provider.getStartCanvasIndex();
             }
 
-            that.viewPage(canvasIndex || 0);
+            that.viewPage(canvasIndex || that.provider.getStartCanvasIndex());
 
             // initial sizing
             $.publish(baseExtension.BaseExtension.RESIZE);
