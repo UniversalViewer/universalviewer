@@ -144,12 +144,14 @@ export class BaseProvider implements IProvider{
         return this.sequence.seeAlso;
     }
 
-    isFirstCanvas(): boolean {
-        return this.canvasIndex == 0;
+    isFirstCanvas(canvasIndex?: number): boolean {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+        return canvasIndex == 0;
     }
 
-    isLastCanvas(): boolean {
-        return this.canvasIndex == this.getTotalCanvases() - 1;
+    isLastCanvas(canvasIndex?: number): boolean {
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+        return canvasIndex == this.getTotalCanvases() - 1;
     }
 
     isSeeAlsoEnabled(): boolean{
