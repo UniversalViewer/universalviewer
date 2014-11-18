@@ -79,8 +79,8 @@ interface Window{
     $: any;
     _: any;
     DEBUG: boolean;
-    // pdfjs
-    webViewerLoad: any;
+    webViewerLoad: any; // pdfjs
+    IEXMLHttpRequest: any;
 }
 
 // google

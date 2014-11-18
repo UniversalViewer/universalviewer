@@ -42,7 +42,7 @@ export class ThumbsView extends baseView.BaseView {
         this.$element.append(this.$thumbs);
 
         $.templates({
-            thumbsTemplate: '<div class="thumb" data-src="{{>url}}" data-visible="{{>visible}}">\
+            thumbsTemplate: '<div class="{{:~class()}}" data-src="{{>url}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
@@ -60,6 +60,13 @@ export class ThumbsView extends baseView.BaseView {
             },
             extraHeight: function(){
                 return extraHeight;
+            },
+            class: function(){
+                if (this.data.url){
+                    return "thumb";
+                }
+
+                return "thumb placeholder";
             }
         });
 

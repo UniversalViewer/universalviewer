@@ -26,6 +26,8 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             iiifUri = canvas.resources[0].resource.service['@id'];
         } else if (canvas.images && canvas.images[0].resource.service){
             iiifUri = canvas.images[0].resource.service['@id'];
+        } else {
+            return null;
         }
 
         if (!iiifUri){

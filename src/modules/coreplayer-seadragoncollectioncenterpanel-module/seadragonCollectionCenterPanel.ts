@@ -36,7 +36,11 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
                 });
             }
 
-            this.viewer.open(tileSources[0]);
+            if (tileSources[0].tileSource){
+                that.viewer.open(tileSources[0]);
+            } else {
+                that.extension.showDialogue(that.config.content.imageUnavailable);
+            }
         });
     }
 
@@ -95,5 +99,9 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
                 }
             }
         });
+
+        //this.viewer.addHandler("open-failed", () => {
+        //    this.viewer.open();
+        //});
     }
 }

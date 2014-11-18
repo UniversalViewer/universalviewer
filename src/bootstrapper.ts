@@ -47,18 +47,19 @@ class BootStrapper{
     loadManifest(): void{
         var that = this;
 
+        var settings: JQueryAjaxSettings = {
+            url: that.manifestUri,
+            type: 'GET',
+            dataType: 'jsonp',
+            jsonp: 'callback',
+            jsonpCallback: 'manifestCallback'
+        };
 
-        //$.ajax({
-        //    url: that.manifestUri,
-        //    type: 'GET',
-        //    dataType: 'jsonp',
-        //    jsonp: 'callback',
-        //    jsonpCallback: 'manifestCallback'
-        //});
+        $.ajax(settings);
 
-        $.getJSON(that.manifestUri, (manifest) => {
+        //$.getJSON(that.manifestUri, (manifest) => {
 
-        //window.manifestCallback = (manifest: any) => {
+        window.manifestCallback = (manifest: any) => {
 
             that.manifest = manifest;
 
@@ -93,8 +94,8 @@ class BootStrapper{
             }
 
             that.loadSequence();
-        //};
-        });
+        };
+        //});
     }
 
     loadSequence(): void{

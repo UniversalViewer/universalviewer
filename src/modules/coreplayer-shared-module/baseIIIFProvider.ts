@@ -213,18 +213,6 @@ export class BaseProvider implements IProvider{
         //canvas.mediaUri = this.getMediaUri(canvas.resources[0].resource['@id'] + '/info.json');
     }
 
-    // todo
-    getThumbUri(canvas: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
-        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
-        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-
-        //if (this.options.timestampUris) uri = this.addTimestamp(uri);
-
-        //return uri;
-
-        return null;
-    }
-
     getPagedIndices(canvasIndex?: number): number[]{
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
 
@@ -301,6 +289,29 @@ export class BaseProvider implements IProvider{
         return (this.isHomeDomain && this.isOnlyInstance);
     }
 
+    getThumbUri(canvas: any, width: number, height: number): string {
+
+        var uri;
+
+        if (canvas.resources){
+            uri = canvas.resources[0].resource.service['@id'];
+        } else if (canvas.images && canvas.images[0].resource.service){
+            uri = canvas.images[0].resource.service['@id'];
+        } else {
+            return "";
+        }
+
+        var tile = 'full/' + width + ',' + height + '/0/default.jpg';
+
+        if (uri.endsWith('/')){
+            uri += tile;
+        } else {
+            uri += '/' + tile;
+        }
+
+        return uri;
+    }
+
     getThumbs(): Array<Thumb> {
         var thumbs = new Array<Thumb>();
 
@@ -309,28 +320,14 @@ export class BaseProvider implements IProvider{
 
             var heightRatio = canvas.height / canvas.width;
 
-            var width = 90;
-            var height = 150;
+            var width = this.config.modules["treeViewLeftPanel"].options.thumbWidth;
+            var height = this.config.modules["treeViewLeftPanel"].options.thumbHeight;
 
             if (heightRatio){
                 height = Math.floor(width * heightRatio);
             }
 
-            var uri;
-
-            if (canvas.resources){
-                uri = canvas.resources[0].resource.service['@id'];
-            } else if (canvas.images){
-                uri = canvas.images[0].resource.service['@id'];
-            }
-
-            var tile = 'full/'+ width + ',' + height + '/0/default.jpg';
-
-            if (uri.endsWith('/')){
-                uri += tile;
-            } else {
-                uri += '/' + tile;
-            }
+            var uri = this.getThumbUri(canvas, width, height);
 
             thumbs.push(new Thumb(i, uri, canvas.label, height, true));
         }
