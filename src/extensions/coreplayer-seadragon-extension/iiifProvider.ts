@@ -33,9 +33,9 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         if (!iiifUri){
             console.warn('no service endpoint available');
         }else if (iiifUri.endsWith('/')){
-            iiifUri += 'info.json';
+            iiifUri += 'info.js';
         } else {
-            iiifUri += '/info.json';
+            iiifUri += '/info.js';
         }
 
         var uri = String.prototype.format(template, baseUri, iiifUri);
