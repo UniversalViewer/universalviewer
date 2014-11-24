@@ -208,10 +208,6 @@ export class ThumbsView extends baseView.BaseView {
 
         index = parseInt(index);
 
-        //if (this.$selectedThumb) {
-        //    this.$selectedThumb.removeClass('selected');
-        //}
-
         this.$thumbs.find('.thumb').removeClass('selected');
 
         this.$selectedThumb = $(this.$thumbs.find('.thumb')[index]);

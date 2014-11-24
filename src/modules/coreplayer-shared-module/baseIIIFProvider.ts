@@ -198,7 +198,7 @@ export class BaseProvider implements IProvider{
     }
 
     isPaged(): boolean{
-        return this.sequence.viewingHint && this.sequence.viewingHint == "paged";
+        return this.sequence.viewingHint && (this.sequence.viewingHint == "paged") && this.getSettings().pagingEnabled;
     }
 
     getMediaUri(mediaUri: string): string{

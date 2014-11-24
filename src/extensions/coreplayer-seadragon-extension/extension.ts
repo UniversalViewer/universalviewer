@@ -13,7 +13,6 @@ import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/t
 import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
 import baseCenter = require("../../modules/coreplayer-shared-module/seadragonCenterPanel");
 import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
-import centerCol = require("../../modules/coreplayer-seadragoncollectioncenterpanel-module/seadragonCollectionCenterPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
@@ -88,18 +87,16 @@ export class Extension extends baseExtension.BaseExtension {
         $.subscribe(header.PagingHeaderPanel.SETTINGS, (e) => {
             var settings: ISettings = this.provider.getSettings();
 
-            //if (settings.viewingHint == settings.viewingHint.individuals){
-            //    settings.viewingHint = settings.viewingHint.paged;
-            //} else {
-            //    settings.viewingHint = settings.viewingHint.individuals
-            //}
-            //
-            //this.provider.updateSettings(settings);
-            //
-            //this.provider.reload(() => {
-            //    $.publish(baseExtension.BaseExtension.RELOAD);
-            //    this.viewPage(this.provider.canvasIndex);
-            //});
+            // todo: this is just to test changing the togglePagingEnabled setting.
+            // move this to a settings dialogue with checkboxes etc.
+            settings.pagingEnabled = !settings.pagingEnabled;
+
+            this.provider.updateSettings(settings);
+
+            this.provider.reload(() => {
+                $.publish(baseExtension.BaseExtension.RELOAD);
+                this.viewPage(this.provider.canvasIndex, true);
+            });
         });
 
         $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
@@ -165,11 +162,11 @@ export class Extension extends baseExtension.BaseExtension {
             this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
         }
 
-        if (this.provider.isPaged()) {
-            this.centerPanel = new centerCol.SeadragonCollectionCenterPanel(shell.Shell.$centerPanel);
-        } else {
+        //if (this.provider.isPaged()) {
+        //    this.centerPanel = new centerCol.SeadragonCollectionCenterPanel(shell.Shell.$centerPanel);
+        //} else {
             this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
-        }
+        //}
 
         if (this.isRightPanelEnabled()){
             this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
@@ -210,13 +207,12 @@ export class Extension extends baseExtension.BaseExtension {
         return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
-    viewPage(canvasIndex: number): void {
+    viewPage(canvasIndex: number, isReload?: boolean): void {
 
         // if it's a valid canvas index.
         if (canvasIndex == -1) return;
 
-        // if paged, if the canvas index is already displayed, show the next/prev canvas.
-        if (this.provider.isPaged()){
+        if (this.provider.isPaged() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.

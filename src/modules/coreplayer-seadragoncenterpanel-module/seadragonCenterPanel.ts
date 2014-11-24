@@ -5,9 +5,12 @@ import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import baseProvider = require("../coreplayer-shared-module/baseProvider");
 import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import baseCenter = require("../coreplayer-shared-module/seadragonCenterPanel");
+import ISeadragonProvider = require("../../extensions/coreplayer-seadragon-extension/iSeadragonProvider");
 import utils = require("../../utils");
 
 export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
+
+    private lastTilesNum;
 
     constructor($element: JQuery) {
         super($element);
@@ -20,8 +23,12 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         super.create();
 
         // events.
+        //$.subscribe(baseExtension.BaseExtension.RELOAD, () => {
+        //    this.loadTileSources();
+        //});
+
         $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
-            this.viewer.open(uri);
+            this.loadTileSources();
         });
     }
 
@@ -65,12 +72,55 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
                     GROUP:  'pixel.gif',
                     HOVER:  'pixel.gif',
                     DOWN:   'pixel.gif'
+                },
+                next: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
+                },
+                previous: {
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 }
             }
         });
 
-        //this.viewer.clearControls();
+        //this.viewer.addHandler("open-failed", () => {
+        //    this.viewer.open();
+        //});
+    }
 
-        //this.viewer.setControlsEnabled(false);
+    loadTileSources(): void {
+        var tileSources = this.provider.getTileSources();
+
+        var that = this;
+
+        if (tileSources.length > 1) {
+            that.viewer.addHandler('open', function openHandler() {
+                that.viewer.removeHandler('open', openHandler);
+
+                tileSources[1].x = that.viewer.world.getItemAt(0).getWorldBounds().x + that.viewer.world.getItemAt(0).getWorldBounds().width + 0.01;
+
+                that.viewer.addTiledImage(tileSources[1]);
+            });
+        }
+
+        if (tileSources[0].tileSource){
+            that.viewer.open(tileSources[0]);
+        } else {
+            that.extension.showDialogue(that.config.content.imageUnavailable);
+        }
+
+        if (tileSources.length != that.lastTilesNum){
+            that.viewer.addHandler('open', function openHandler() {
+                that.viewer.removeHandler('open', openHandler);
+                that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, tileSources.length, that.viewer.world.getItemAt(0).normHeight));
+            });
+        }
+
+        that.lastTilesNum = tileSources.length;
     }
 }
