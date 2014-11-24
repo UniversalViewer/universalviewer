@@ -10,6 +10,8 @@ import utils = require("../../utils");
 
 export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPanel {
 
+    private lastTilesNum;
+
     constructor($element: JQuery) {
         super($element);
     }
@@ -26,11 +28,13 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
 
             var that = this;
 
+
+
             if (tileSources.length > 1) {
                 that.viewer.addHandler('open', function openHandler() {
                     that.viewer.removeHandler('open', openHandler);
 
-                    tileSources[1].x = that.viewer.world.getItemAt(0).getWorldBounds().x + that.viewer.world.getItemAt(0).getWorldBounds().width;
+                    tileSources[1].x = that.viewer.world.getItemAt(0).getWorldBounds().x + that.viewer.world.getItemAt(0).getWorldBounds().width + 0.01;
 
                     that.viewer.addTiledImage(tileSources[1]);
                 });
@@ -41,6 +45,15 @@ export class SeadragonCollectionCenterPanel extends baseCenter.SeadragonCenterPa
             } else {
                 that.extension.showDialogue(that.config.content.imageUnavailable);
             }
+
+            if (tileSources.length != this.lastTilesNum){
+                that.viewer.addHandler('open', function openHandler() {
+                    that.viewer.removeHandler('open', openHandler);
+                    that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, tileSources.length, that.viewer.world.getItemAt(0).normHeight));
+                });
+            }
+
+            this.lastTilesNum = tileSources.length;
         });
     }
 

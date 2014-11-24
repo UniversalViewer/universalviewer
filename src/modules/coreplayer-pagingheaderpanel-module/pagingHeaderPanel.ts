@@ -26,6 +26,11 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     $nextButton: JQuery;
     $lastButton: JQuery;
 
+    firstButtonEnabled: boolean = false;
+    lastButtonEnabled: boolean = false;
+    prevButtonEnabled: boolean = false;
+    nextButtonEnabled: boolean = false;
+
     static FIRST: string = 'header.onFirst';
     static LAST: string = 'header.onLast';
     static PREV: string = 'header.onPrev';
@@ -260,6 +265,62 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
     canvasIndexChanged(index): void {
         this.setSearchPlaceholder(index);
+
+        if (this.provider.isFirstCanvas()){
+            this.disableFirstButton();
+            this.disablePrevButton();
+        } else {
+            this.enableFirstButton();
+            this.enablePrevButton();
+        }
+
+        if (this.provider.isLastCanvas()){
+            this.disableLastButton();
+            this.disableNextButton();
+        } else {
+            this.enableLastButton();
+            this.enableNextButton();
+        }
+    }
+
+    disableFirstButton () {
+        this.firstButtonEnabled = false;
+        this.$firstButton.addClass('disabled');
+    }
+
+    enableFirstButton () {
+        this.firstButtonEnabled = true;
+        this.$firstButton.removeClass('disabled');
+    }
+
+    disableLastButton () {
+        this.lastButtonEnabled = false;
+        this.$lastButton.addClass('disabled');
+    }
+
+    enableLastButton () {
+        this.lastButtonEnabled = true;
+        this.$lastButton.removeClass('disabled');
+    }
+
+    disablePrevButton () {
+        this.prevButtonEnabled = false;
+        this.$prevButton.addClass('disabled');
+    }
+
+    enablePrevButton () {
+        this.prevButtonEnabled = true;
+        this.$prevButton.removeClass('disabled');
+    }
+
+    disableNextButton () {
+        this.nextButtonEnabled = false;
+        this.$nextButton.addClass('disabled');
+    }
+
+    enableNextButton () {
+        this.nextButtonEnabled = true;
+        this.$nextButton.removeClass('disabled');
     }
 
     modeChanged(mode): void {

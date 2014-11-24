@@ -72,6 +72,11 @@ export class TreeView extends baseView.BaseView {
                             self.toggle();
                         }).on("click", "a", function (e) {
                             e.preventDefault();
+
+                            if (self.data.nodes.length){
+                                self.toggle();
+                            }
+
                             $.publish(TreeView.NODE_SELECTED, [self.data.data]);
                         })
                 },
