@@ -23,9 +23,6 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         super.create();
 
         // events.
-        //$.subscribe(baseExtension.BaseExtension.RELOAD, () => {
-        //    this.loadTileSources();
-        //});
 
         $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
             this.loadTileSources();
@@ -36,7 +33,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         OpenSeadragon.DEFAULT_SETTINGS.autoHideControls = true;
 
         // todo: use compiler flag (when available)
-        var prefixUrl = (window.DEBUG)? 'modules/coreplayer-seadragoncollectioncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/coreplayer-seadragoncollectioncenterpanel-module/';
+        var prefixUrl = (window.DEBUG)? 'modules/coreplayer-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/coreplayer-seadragoncenterpanel-module/';
 
         this.viewer = OpenSeadragon({
             id: "viewer",

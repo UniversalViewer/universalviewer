@@ -17,6 +17,7 @@ import right = require("../../modules/coreplayer-moreinforightpanel-module/moreI
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
+import settingsDialogue = require("../../modules/coreplayer-dialogues-module/settingsDialogue");
 import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
 import settings = require("../../modules/coreplayer-shared-module/settings");
 import ISeadragonProvider = require("./iSeadragonProvider");
@@ -33,8 +34,11 @@ export class Extension extends baseExtension.BaseExtension {
     helpDialogue: help.HelpDialogue;
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
+    $settingsDialogue: JQuery;
+    settingsDialogue: settingsDialogue.SettingsDialogue;
 
     currentRotation: number = 0;
+
 
     static mode: string;
 
@@ -70,9 +74,6 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(header.PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
             Extension.mode = mode;
-
-            //this.provider.updateSetting(this.provider.settings.labelling, mode);
-
             $.publish(Extension.SETTINGS_CHANGED, [mode]);
         });
 
@@ -84,15 +85,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         });
 
-        $.subscribe(header.PagingHeaderPanel.SETTINGS, (e) => {
-            var settings: ISettings = this.provider.getSettings();
-
-            // todo: this is just to test changing the togglePagingEnabled setting.
-            // move this to a settings dialogue with checkboxes etc.
-            settings.pagingEnabled = !settings.pagingEnabled;
-
-            this.provider.updateSettings(settings);
-
+        $.subscribe(settingsDialogue.SettingsDialogue.UPDATE_SETTINGS, (e) => {
             this.provider.reload(() => {
                 $.publish(baseExtension.BaseExtension.RELOAD);
                 this.viewPage(this.provider.canvasIndex, true);
@@ -162,11 +155,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
         }
 
-        //if (this.provider.isPaged()) {
-        //    this.centerPanel = new centerCol.SeadragonCollectionCenterPanel(shell.Shell.$centerPanel);
-        //} else {
-            this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
-        //}
+        this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
 
         if (this.isRightPanelEnabled()){
             this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
@@ -181,6 +170,10 @@ export class Extension extends baseExtension.BaseExtension {
         this.$embedDialogue = utils.Utils.createDiv('overlay embed');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
+
+        this.$settingsDialogue = utils.Utils.createDiv('overlay settings');
+        shell.Shell.$overlays.append(this.$settingsDialogue);
+        this.settingsDialogue = new settingsDialogue.SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();

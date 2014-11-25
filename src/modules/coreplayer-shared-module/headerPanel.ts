@@ -3,6 +3,7 @@ import baseExtension = require("./baseExtension");
 import baseView = require("./baseView");
 import utils = require("../../utils");
 import help = require("../coreplayer-dialogues-module/helpDialogue");
+import settings = require("../coreplayer-dialogues-module/settingsDialogue");
 
 export class HeaderPanel extends baseView.BaseView {
 
@@ -14,8 +15,6 @@ export class HeaderPanel extends baseView.BaseView {
     $messageBox: JQuery;
 
     message: string;
-
-    static SETTINGS: string = 'header.onSettings';
 
     constructor($element: JQuery) {
         super($element, false, false);
@@ -74,7 +73,7 @@ export class HeaderPanel extends baseView.BaseView {
         this.$settingsButton.click(function (e) {
             e.preventDefault();
 
-            $.publish(HeaderPanel.SETTINGS);
+            $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
     }
 
