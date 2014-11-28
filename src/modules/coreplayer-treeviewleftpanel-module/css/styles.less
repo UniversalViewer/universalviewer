@@ -106,17 +106,18 @@
                 overflow: auto;
 
                 .thumb{
-                    margin: 0 @margin-medium-horizontal @margin-medium-vertical 0;
+                    margin: 0 7px 7px 0;
                     float: left;
                     cursor: pointer;
 
                     .wrap{
-                        border: 1px solid @panel-border-color;
+                        border: 2px solid @panel-border-color;
                         padding: 2px;
-                        max-height: 180px;
+                        max-height: 182px;
                         overflow: hidden;
-                        width: 96px;
+                        width: 98px;
                         text-align: center;
+                        background: none;
 
                         &.loading{
                             .loading(@loader-black-bg);
@@ -135,7 +136,7 @@
                     &.selected{
 
                         .wrap{
-                            border: 1px solid @brand-secondary;
+                            border: 2px solid #fff;
                         }
                     }
 
