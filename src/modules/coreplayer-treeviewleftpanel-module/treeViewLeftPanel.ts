@@ -4,6 +4,7 @@ import baseLeft = require("../coreplayer-shared-module/leftPanel");
 import utils = require("../../utils");
 import tree = require("./treeView");
 import thumbs = require("./thumbsView");
+import gallery = require("./galleryView");
 import baseView = require("../coreplayer-shared-module/baseView");
 import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
@@ -19,11 +20,17 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     $views: JQuery;
     $treeView: JQuery;
     $thumbsView: JQuery;
+    $galleryView: JQuery;
     treeView: tree.TreeView;
     thumbsView: thumbs.ThumbsView;
+    galleryView: gallery.GalleryView;
 
     static OPEN_TREE_VIEW: string = 'leftPanel.onOpenTreeView';
     static OPEN_THUMBS_VIEW: string = 'leftPanel.onOpenThumbsView';
+    static EXPAND_FULL_START: string = 'leftPanel.onExpandFullStart';
+    static EXPAND_FULL_FINISH: string = 'leftPanel.onExpandFullFinish';
+    static COLLAPSE_FULL_START: string = 'leftPanel.onCollapseFullStart';
+    static COLLAPSE_FULL_FINISH: string = 'leftPanel.onCollapseFullFinish';
 
     constructor($element: JQuery) {
         super($element);
@@ -37,13 +44,14 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         $.subscribe(extension.Extension.RELOAD, () => {
             this.dataBindThumbsView();
+            this.dataBindGalleryView();
         });
 
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
-            this.selectTreeNodeFromCanvasIndex(canvasIndex);
+        $.subscribe(gallery.GalleryView.THUMB_SELECTED, () => {
+            this.collapseFull();
         });
 
-        this.$tabs = utils.Utils.createDiv('tabs');
+        this.$tabs = $('<div class="tabs"></div>');
         this.$main.append(this.$tabs);
 
         this.$treeButton = $('<a class="tab first">' + this.content.index + '</a>');
@@ -52,7 +60,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$thumbsButton = $('<a class="tab">' + this.content.thumbnails + '</a>');
         this.$tabs.append(this.$thumbsButton);
 
-        this.$tabsContent = utils.Utils.createDiv('tabsContent');
+        this.$tabsContent = $('<div class="tabsContent"></div>');
         this.$main.append(this.$tabsContent);
 
         this.$options = $('<div class="options"></div>');
@@ -61,11 +69,14 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$views = $('<div class="views"></div>');
         this.$tabsContent.append(this.$views);
 
-        this.$treeView = utils.Utils.createDiv('treeView');
+        this.$treeView = $('<div class="treeView"></div>');
         this.$views.append(this.$treeView);
 
-        this.$thumbsView = utils.Utils.createDiv('thumbsView');
+        this.$thumbsView = $('<div class="thumbsView"></div>');
         this.$views.append(this.$thumbsView);
+
+        this.$galleryView = $('<div class="galleryView"></div>');
+        this.$views.append(this.$galleryView);
 
         this.$treeButton.on('click', (e) => {
             e.preventDefault();
@@ -104,8 +115,18 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.thumbsView.dataBind();
     }
 
-    toggleComplete(): void {
-        super.toggleComplete();
+    createGalleryView(): void {
+        this.galleryView = new gallery.GalleryView(this.$galleryView);
+        this.dataBindGalleryView();
+    }
+
+    dataBindGalleryView(): void{
+        this.galleryView.thumbs = this.provider.getThumbs();
+        this.galleryView.dataBind();
+    }
+
+    toggleFinish(): void {
+        super.toggleFinish();
 
         if (this.isUnopened) {
 
@@ -121,6 +142,40 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
                 this.openTreeView();
             }
         }
+    }
+
+    expandFullStart(): void {
+        super.expandFullStart();
+        $.publish(TreeViewLeftPanel.EXPAND_FULL_START);
+    }
+
+    expandFullFinish(): void {
+        super.expandFullFinish();
+
+        if (!this.galleryView) {
+            this.createGalleryView();
+        }
+
+        this.thumbsView.hide();
+        this.galleryView.show();
+        this.galleryView.resize();
+
+        $.publish(TreeViewLeftPanel.EXPAND_FULL_FINISH);
+    }
+
+    collapseFullStart(): void {
+        super.collapseFullStart();
+
+        this.galleryView.hide();
+        this.thumbsView.show();
+
+        $.publish(TreeViewLeftPanel.COLLAPSE_FULL_START);
+    }
+
+    collapseFullFinish(): void {
+        super.collapseFullFinish();
+
+        $.publish(TreeViewLeftPanel.COLLAPSE_FULL_FINISH);
     }
 
     openTreeView(): void {
@@ -139,6 +194,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         }, 1);
 
         if (this.thumbsView) this.thumbsView.hide();
+        if (this.galleryView) this.galleryView.hide();
 
         this.treeView.resize();
     }
@@ -152,20 +208,14 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$thumbsButton.addClass('on');
 
         if (this.treeView) this.treeView.hide();
-        this.thumbsView.show();
 
-        this.thumbsView.resize();
-    }
-
-    selectTreeNodeFromCanvasIndex(index: number): void {
-        // may be authenticating
-        if (index == -1) return;
-
-        var structure = this.provider.getStructureByCanvasIndex(index);
-
-        if (!structure) return;
-
-        if (this.treeView && structure.treeNode) this.treeView.selectNode(structure.treeNode);
+        if (this.isFullyExpanded){
+            this.galleryView.show();
+            this.galleryView.resize();
+        } else {
+            this.thumbsView.show();
+            this.thumbsView.resize();
+        }
     }
 
     resize(): void {

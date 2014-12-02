@@ -105,59 +105,121 @@
 
                 overflow: auto;
 
-                .thumb{
-                    margin: 0 7px 7px 0;
-                    float: left;
-                    cursor: pointer;
+                .thumbs {
+                    overflow: hidden;
 
-                    .wrap{
-                        border: 2px solid @panel-border-color;
-                        padding: 2px;
-                        max-height: 182px;
-                        overflow: hidden;
-                        width: 98px;
-                        text-align: center;
-                        background: none;
+                    .thumb {
+                        margin: 0 7px 7px 0;
+                        float: left;
+                        cursor: pointer;
 
-                        &.loading{
-                            .loading(@loader-black-bg);
-                        }
-
-                        &.hidden{
-                            background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
-                        }
-
-                        img{
-                            display: block;
-                            //margin: 0 auto;
-                        }
-                    }
-
-                    &.selected{
-
-                        .wrap{
-                            border: 2px solid #fff;
-                        }
-                    }
-
-                    span{
-                        font-size: @font-size-small;
-                        color: #fff;
-                        display: block;
-                        padding: 2px 0 0 0;
-                    }
-
-                    &.placeholder{
                         .wrap {
-                            background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                            border: 2px solid @panel-border-color;
+                            padding: 2px;
+                            max-height: 182px;
+                            overflow: hidden;
+                            width: 98px;
+                            text-align: center;
+                            background: none;
+
+                            &.loading {
+                                .loading(@loader-black-bg);
+                            }
+
+                            &.hidden {
+                                background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                            }
+
+                            img {
+                                display: block;
+                                //margin: 0 auto;
+                            }
                         }
+
+                        &.selected {
+
+                            .wrap {
+                                border: 2px solid #fff;
+                            }
+                        }
+
+                        span {
+                            font-size: @font-size-small;
+                            color: #fff;
+                            display: block;
+                            padding: 2px 0 0 0;
+                        }
+
+                        &.placeholder {
+                            .wrap {
+                                background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                            }
+                        }
+                    }
+
+                    .separator {
+                        height: 1px;
+                        clear: both;
+                        border: none;
                     }
                 }
+            }
 
-                .separator{
-                    height: 1px;
-                    clear: both;
-                    border: none;
+            .galleryView{
+
+                overflow: auto;
+
+                .thumbs{
+                    overflow: hidden;
+
+                    .thumb{
+                        margin: 0 7px 7px 0;
+                        float: left;
+                        cursor: pointer;
+
+                        .wrap{
+                            border: 2px solid @panel-border-color;
+                            padding: 2px;
+                            max-height: 182px;
+                            overflow: hidden;
+                            width: 98px;
+                            text-align: center;
+                            background: none;
+
+                            &.loading{
+                                .loading(@loader-black-bg);
+                            }
+
+                            &.hidden{
+                                background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                            }
+
+                            img{
+                                display: block;
+                                //margin: 0 auto;
+                            }
+                        }
+
+                        &.selected{
+
+                            .wrap{
+                                border: 2px solid #fff;
+                            }
+                        }
+
+                        span{
+                            font-size: @font-size-small;
+                            color: #fff;
+                            display: block;
+                            padding: 2px 0 0 0;
+                        }
+
+                        &.placeholder{
+                            .wrap {
+                                background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                            }
+                        }
+                    }
                 }
             }
         }

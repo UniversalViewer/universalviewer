@@ -8,6 +8,7 @@ import baseView = require("./baseView");
 export class BaseExpandPanel extends baseView.BaseView {
 
     isExpanded: boolean = false;
+    isFullyExpanded: boolean = false;
     isUnopened: boolean = true;
 
     $top: JQuery;
@@ -16,6 +17,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     $main: JQuery;
     $closed: JQuery;
     $expandButton: JQuery;
+    $expandFullButton: JQuery;
     $closedTitle: JQuery;
 
     constructor($element: JQuery) {
@@ -33,6 +35,9 @@ export class BaseExpandPanel extends baseView.BaseView {
 
         this.$title = utils.Utils.createDiv('title');
         this.$top.append(this.$title);
+
+        this.$expandFullButton = $('<a class="expandFullButton"></a>');
+        this.$top.append(this.$expandFullButton);
 
         this.$collapseButton = utils.Utils.createDiv('collapseButton');
         this.$top.append(this.$collapseButton);
@@ -55,6 +60,12 @@ export class BaseExpandPanel extends baseView.BaseView {
             this.toggle();
         });
 
+        this.$expandFullButton.on('click', (e) => {
+            e.preventDefault();
+
+            this.expandFull();
+        });
+
         this.$closedTitle.on('click', (e) => {
             e.preventDefault();
 
@@ -70,7 +81,11 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.$collapseButton.on('click', (e) => {
             e.preventDefault();
 
-            this.toggle();
+            if (this.isFullyExpanded){
+                this.collapseFull();
+            } else {
+                this.toggle();
+            }
         });
 
         this.$top.hide();
@@ -103,16 +118,18 @@ export class BaseExpandPanel extends baseView.BaseView {
         */
 
         this.$element.stop().animate(
-        {
-            width: targetWidth,
-            left: targetLeft
-        },
-        this.options.panelAnimationDuration, () => {
-            this.toggled();               
-        });
+            {
+                width: targetWidth,
+                left: targetLeft
+            },
+            this.options.panelAnimationDuration, () => {
+                this.toggled();
+            });
     }
 
     toggled(): void {
+        this.toggleStart();
+
         this.isExpanded = !this.isExpanded;
 
         // if expanded show content when animation finished.
@@ -122,9 +139,41 @@ export class BaseExpandPanel extends baseView.BaseView {
             this.$main.show();
         }
         
-        this.toggleComplete();
+        this.toggleFinish();
 
         this.isUnopened = false;
+    }
+
+    expandFull(): void {
+        var targetWidth = this.getFullTargetWidth();
+        var targetLeft = this.getFullTargetLeft();
+
+        this.expandFullStart();
+
+        this.$element.stop().animate(
+            {
+                width: targetWidth,
+                left: targetLeft
+            },
+            this.options.panelAnimationDuration, () => {
+                this.expandFullFinish();
+            });
+    }
+
+    collapseFull(): void {
+        var targetWidth = this.getTargetWidth();
+        var targetLeft = this.getTargetLeft();
+
+        this.collapseFullStart();
+
+        this.$element.stop().animate(
+            {
+                width: targetWidth,
+                left: targetLeft
+            },
+            this.options.panelAnimationDuration, () => {
+                this.collapseFullFinish();
+            });
     }
 
     getTargetWidth(): number{
@@ -135,14 +184,43 @@ export class BaseExpandPanel extends baseView.BaseView {
         return 0;
     }
 
-    toggleComplete(): void {
-        $.publish(baseExtension.BaseExtension.RESIZE);
+    getFullTargetWidth(): number{
+        return 0;
+    }
+
+    getFullTargetLeft(): number{
+        return 0;
+    }
+
+    toggleStart(): void {
+
+    }
+
+    toggleFinish(): void {
+
+    }
+
+    expandFullStart(): void {
+
+    }
+
+    expandFullFinish(): void {
+        this.isFullyExpanded = true;
+        this.$expandFullButton.hide();
+    }
+
+    collapseFullStart(): void {
+
+    }
+
+    collapseFullFinish(): void {
+        this.isFullyExpanded = false;
+        this.$expandFullButton.show();
     }
 
     resize(): void {
         super.resize();
 
-        //this.$main.actualHeight(this.$element.parent().height() - this.$top.outerHeight(true));
         this.$main.height(this.$element.parent().height() - this.$top.outerHeight(true));
     }
 }

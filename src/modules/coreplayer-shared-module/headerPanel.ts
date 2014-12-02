@@ -82,13 +82,13 @@ export class HeaderPanel extends baseView.BaseView {
         this.$messageBox.find('.text').html(message).find('a').attr('target', '_top');
         this.$messageBox.show();
         this.$element.addClass('showMessage');
-        $.publish(baseExtension.BaseExtension.RESIZE);
+        this.extension.resize();
     }
 
     hideMessage(): void {
         this.$element.removeClass('showMessage');
         this.$messageBox.hide();
-        $.publish(baseExtension.BaseExtension.RESIZE);
+        this.extension.resize();
     }
 
     resize(): void {

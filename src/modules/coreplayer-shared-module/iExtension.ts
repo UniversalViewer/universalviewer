@@ -13,10 +13,10 @@ interface IExtension{
     isOverlayActive(): boolean;
     redirect(uri: string): void;
     refresh(): void;
+    resize(): void;
     showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     triggerSocket(eventName: string, eventObject: any): void;
     viewManifest(manifest: any): void;
-    //viewSequence(index): void;
     width(): number;
 }
 

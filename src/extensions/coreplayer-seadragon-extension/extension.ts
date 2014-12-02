@@ -8,11 +8,14 @@ import baseProvider = require("../../modules/coreplayer-shared-module/baseProvid
 import provider = require("./provider");
 import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-pagingheaderpanel-module/pagingHeaderPanel");
+import baseLeft = require("../../modules/coreplayer-shared-module/leftPanel");
 import left = require("../../modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
 import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/thumbsView");
+import galleryView = require("../../modules/coreplayer-treeviewleftpanel-module/galleryView");
 import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
 import baseCenter = require("../../modules/coreplayer-shared-module/seadragonCenterPanel");
 import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
+import baseRight = require("../../modules/coreplayer-shared-module/rightPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
@@ -38,7 +41,6 @@ export class Extension extends baseExtension.BaseExtension {
     settingsDialogue: settingsDialogue.SettingsDialogue;
 
     currentRotation: number = 0;
-
 
     static mode: string;
 
@@ -98,6 +100,37 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
+        });
+
+        $.subscribe(galleryView.GalleryView.THUMB_SELECTED, (e, index: number) => {
+            this.viewPage(index);
+        });
+
+        $.subscribe(baseLeft.LeftPanel.OPEN_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseLeft.LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.OPEN_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(left.TreeViewLeftPanel.EXPAND_FULL_START, (e) => {
+            shell.Shell.$centerPanel.hide();
+            shell.Shell.$rightPanel.hide();
+        });
+
+        $.subscribe(left.TreeViewLeftPanel.COLLAPSE_FULL_FINISH, (e) => {
+            shell.Shell.$centerPanel.show();
+            shell.Shell.$rightPanel.show();
+            this.resize();
         });
 
         $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {

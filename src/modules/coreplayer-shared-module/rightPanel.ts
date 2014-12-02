@@ -37,8 +37,8 @@ export class RightPanel extends baseExpandPanel.BaseExpandPanel {
         return this.isExpanded ? this.$element.parent().width() - this.options.panelCollapsedWidth : this.$element.parent().width() - this.options.panelExpandedWidth;
     }
 
-    toggleComplete(): void {
-        super.toggleComplete();
+    toggleFinish(): void {
+        super.toggleFinish();
 
         if (this.isExpanded){
             $.publish(RightPanel.OPEN_RIGHT_PANEL);

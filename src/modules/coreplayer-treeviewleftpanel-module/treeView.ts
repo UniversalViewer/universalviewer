@@ -5,6 +5,7 @@ import utils = require("../../utils");
 import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
 import TreeNode = require("../coreplayer-shared-module/treeNode");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
 
 export class TreeView extends baseView.BaseView {
 
@@ -21,6 +22,10 @@ export class TreeView extends baseView.BaseView {
 
     create(): void {
         super.create();
+
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+            this.selectTreeNodeFromCanvasIndex(canvasIndex);
+        });
 
         this.$tree = $('<ul class="tree"></ul>');
         this.$element.append(this.$tree);
@@ -102,11 +107,25 @@ export class TreeView extends baseView.BaseView {
         this.selectNode(node);
     }
 
-    public selectNode(node: TreeNode): void{
-        if (!this.rootNode) return;
+    selectTreeNodeFromCanvasIndex(index: number): void {
+        // may be authenticating
+        if (index == -1) return;
 
-        // reset the previous selected node (if any).
+        this.deselectCurrentNode();
+
+        var structure = this.provider.getStructureByCanvasIndex(index);
+
+        if (!structure) return;
+
+        if (structure.treeNode) this.selectNode(structure.treeNode);
+    }
+
+    deselectCurrentNode(): void {
         if (this.selectedNode) $.observable(this.selectedNode).setProperty("selected", false);
+    }
+
+    selectNode(node: TreeNode): void{
+        if (!this.rootNode) return;
 
         this.selectedNode = node;
         $.observable(this.selectedNode).setProperty("selected", true);

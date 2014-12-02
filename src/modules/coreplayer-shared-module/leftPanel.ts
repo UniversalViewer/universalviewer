@@ -31,11 +31,19 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
     }
 
     getTargetWidth(): number {
-        return this.isExpanded ? this.options.panelCollapsedWidth : this.options.panelExpandedWidth;
+        if (this.isFullyExpanded || !this.isExpanded){
+            return this.options.panelExpandedWidth;
+        } else {
+            return this.options.panelCollapsedWidth;
+        }
     }
 
-    toggleComplete(): void {
-        super.toggleComplete();
+    getFullTargetWidth(): number{
+        return this.$element.parent().width();
+    }
+
+    toggleFinish(): void {
+        super.toggleFinish();
 
         if (this.isExpanded){
             $.publish(LeftPanel.OPEN_LEFT_PANEL);
@@ -47,5 +55,8 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
     resize(): void {
         super.resize();
 
+        if (this.isFullyExpanded){
+            this.$element.width(this.$element.parent().width());
+        }
     }
 }
