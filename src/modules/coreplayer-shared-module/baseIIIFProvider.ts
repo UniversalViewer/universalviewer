@@ -138,13 +138,23 @@ export class BaseProvider implements IProvider{
         return this.manifest.seeAlso;
     }
 
-    // todo
     getCanvasOrderLabel(canvas: any): string{
-        return null;
+        return canvas.label;
     }
 
-    // todo
     getLastCanvasOrderLabel(): string {
+        // get the last orderlabel that isn't empty or '-'.
+        for (var i = this.sequence.canvases.length - 1; i >= 0; i--) {
+            var canvas = this.sequence.canvases[i];
+
+            var regExp = /\d/;
+
+            if (regExp.test(canvas.label)) {
+                return canvas.label;
+            }
+        }
+
+        // none exists, so return '-'.
         return '-';
     }
 
@@ -417,7 +427,35 @@ export class BaseProvider implements IProvider{
 
     // todo
     getCanvasIndexByOrderLabel(label: string): number {
-        return null;
+        // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
+        var regExp = /(\d*)\D*(\d*)|(\d*)/;
+        var match = regExp.exec(label);
+
+        var labelPart1 = match[1];
+        var labelPart2 = match[2];
+
+        if (!labelPart1) return -1;
+
+        var searchRegExp, regStr;
+
+        if (labelPart2) {
+            regStr = "^" + labelPart1 + "\\D*" + labelPart2 + "$";
+        } else {
+            regStr = "\\D*" + labelPart1 + "\\D*";
+        }
+
+        searchRegExp = new RegExp(regStr);
+
+        // loop through files, return first one with matching orderlabel.
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var canvas = this.sequence.canvases[i];
+
+            if (searchRegExp.test(canvas.label)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     // todo
