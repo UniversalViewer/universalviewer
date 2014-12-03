@@ -158,13 +158,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     expandFullFinish(): void {
         super.expandFullFinish();
 
-        if (!this.galleryView) {
-            this.createGalleryView();
+        if (this.$thumbsButton.hasClass('on')){
+            this.openThumbsView();
         }
-
-        this.thumbsView.hide();
-        this.galleryView.show();
-        this.galleryView.resize();
 
         $.publish(TreeViewLeftPanel.EXPAND_FULL_FINISH);
     }
@@ -172,17 +168,18 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        this.galleryView.hide();
-
-        if (!this.treeView.isOpen){
-            this.thumbsView.show();
-        }
-
         $.publish(TreeViewLeftPanel.COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
         super.collapseFullFinish();
+
+        // todo: write a more generic tabs system with base tab class.
+        // thumbsView may not necessarily have been created yet.
+        // replace thumbsView with galleryView.
+        if (this.$thumbsButton.hasClass('on')){
+            this.openThumbsView();
+        }
 
         $.publish(TreeViewLeftPanel.COLLAPSE_FULL_FINISH);
     }
@@ -213,15 +210,21 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             this.createThumbsView();
         }
 
+        if (this.isFullyExpanded && !this.galleryView) {
+            this.createGalleryView();
+        }
+
         this.$treeButton.removeClass('on');
         this.$thumbsButton.addClass('on');
 
         if (this.treeView) this.treeView.hide();
 
         if (this.isFullyExpanded){
-            this.galleryView.show();
-            this.galleryView.resize();
+            this.thumbsView.hide();
+            if (this.galleryView) this.galleryView.show();
+            if (this.galleryView) this.galleryView.resize();
         } else {
+            if (this.galleryView) this.galleryView.hide();
             this.thumbsView.show();
             this.thumbsView.resize();
         }

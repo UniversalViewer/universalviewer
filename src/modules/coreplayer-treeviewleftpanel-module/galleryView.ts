@@ -13,7 +13,7 @@ export class GalleryView extends baseView.BaseView {
 
     $thumbs: JQuery;
     $selectedThumb: JQuery;
-
+    isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
     static THUMB_SELECTED: string = 'galleryView.onThumbSelected';
@@ -152,6 +152,7 @@ export class GalleryView extends baseView.BaseView {
     }
 
     show(): void {
+        this.isOpen = true;
         this.$element.show();
 
         setTimeout(() => {
@@ -160,6 +161,7 @@ export class GalleryView extends baseView.BaseView {
     }
 
     hide(): void {
+        this.isOpen = false;
         this.$element.hide();
     }
 
