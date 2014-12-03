@@ -13,7 +13,7 @@ export class ThumbsView extends baseView.BaseView {
 
     $thumbs: JQuery;
     $selectedThumb: JQuery;
-
+    isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
@@ -166,15 +166,16 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     show(): void {
+        this.isOpen = true;
         this.$element.show();
 
         setTimeout(() => {
             this.selectIndex(this.provider.canvasIndex);
         }, 1);
-
     }
 
     hide(): void {
+        this.isOpen = false;
         this.$element.hide();
     }
 

@@ -11,6 +11,7 @@ export class TreeView extends baseView.BaseView {
 
     $tree: JQuery;
     selectedNode: any;
+    isOpen: boolean = false;
 
     public rootNode: TreeNode;
 
@@ -151,10 +152,12 @@ export class TreeView extends baseView.BaseView {
     }
 
     public show(): void {
+        this.isOpen = true;
         this.$element.show();
     }
 
     public hide(): void {
+        this.isOpen = false;
         this.$element.hide();
     }
 

@@ -173,7 +173,10 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         super.collapseFullStart();
 
         this.galleryView.hide();
-        this.thumbsView.show();
+
+        if (!this.treeView.isOpen){
+            this.thumbsView.show();
+        }
 
         $.publish(TreeViewLeftPanel.COLLAPSE_FULL_START);
     }
