@@ -69,7 +69,7 @@ export class GalleryView extends baseView.BaseView {
 
         // use unevent to detect scroll stop.
         this.$element.on('scroll', () => {
-            this.scrollStop();
+            this.loadThumbs();
         }, 1000);
 
         this.resize();
@@ -102,63 +102,52 @@ export class GalleryView extends baseView.BaseView {
         this.setLabel();
 
         // do initial load to show padlocks
-        this.loadThumbs(0);
+        this.loadThumbs();
     }
 
-    scrollStop(): void {
-
-        var scrollPos = 1 / ((this.$thumbs.height() - this.$element.height()) / this.$element.scrollTop());
-
-        if (scrollPos > 1) scrollPos = 1;
-
-        var thumbRangeMid = Math.floor((this.thumbs.length - 1) * scrollPos);
-
-        this.loadThumbs(thumbRangeMid);
-    }
-
-    loadThumbs(index): void {
+    loadThumbs(): void {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
-        index = parseInt(index);
+        // test which thumbs are scrolled into view
+        var thumbs = this.$thumbs.find('.thumb');
+        var scrollTop = this.$element.scrollTop();
+        var scrollHeight = this.$element.height();
 
-        var thumbRangeMid = index;
-        var thumbLoadRange = this.options.thumbsLoadRange;
+        for (var i = 0; i < thumbs.length; i++) {
 
-        var thumbRange = {
-            start: (thumbRangeMid > thumbLoadRange) ? thumbRangeMid - thumbLoadRange : 0,
-            end: (thumbRangeMid < (this.thumbs.length - 1) - thumbLoadRange) ? thumbRangeMid + thumbLoadRange : this.thumbs.length - 1
-        };
+            var $thumb = $(thumbs[i]);
+            var thumbTop = $thumb.position().top;
+            var thumbBottom = thumbTop + $thumb.height();
 
-        //console.log('start: ' + thumbRange.start + ' end: ' + thumbRange.end);
+            if (thumbBottom >= scrollTop && thumbTop <= scrollTop + scrollHeight){
+                this.loadThumb($thumb);
+            }
+        }
+    }
 
+    loadThumb($thumb): void {
         var fadeDuration = this.options.thumbsImageFadeInDuration;
 
-        for (var i = thumbRange.start; i <= thumbRange.end; i++) {
+        var $wrap = $thumb.find('.wrap');
 
-            var thumbElem = $(this.$thumbs.find('.thumb')[i]);
-            var imgCont = thumbElem.find('.wrap');
+        // if no img has been added yet
 
-            // if no img has been added yet
-            if (!imgCont.hasClass('loading') && !imgCont.hasClass('loaded')) {
-                var visible = thumbElem.attr('data-visible');
+        var visible = $thumb.attr('data-visible');
 
-                if (visible !== "false") {
-                    imgCont.addClass('loading');
-                    var src = thumbElem.attr('data-src');
-                    //console.log(i, src);
-                    var img = $('<img src="' + src + '" />');
-                    // fade in on load.
-                    $(img).hide().load(function () {
-                        $(this).fadeIn(fadeDuration, function () {
-                            $(this).parent().swapClass('loading', 'loaded');
-                        });
-                    });
-                    imgCont.append(img);
-                } else {
-                    imgCont.addClass('hidden');
-                }
-            }
+        if (visible !== "false") {
+            $wrap.addClass('loading');
+            var src = $thumb.attr('data-src');
+            var img = $('<img src="' + src + '" />');
+            // fade in on load.
+            $(img).hide().load(function () {
+                $(this).fadeIn(fadeDuration, function () {
+                    $(this).parent().swapClass('loading', 'loaded');
+                });
+            });
+            $wrap.append(img);
+        } else {
+            $wrap.addClass('hidden');
         }
     }
 
@@ -208,11 +197,12 @@ export class GalleryView extends baseView.BaseView {
         }
 
         // make sure visible images are loaded.
-        this.loadThumbs(index);
+        this.loadThumbs();
     }
 
     resize(): void {
         super.resize();
 
+        this.loadThumbs();
     }
 }
