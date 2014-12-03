@@ -51,6 +51,12 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             this.collapseFull();
         });
 
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
+            if (this.isFullyExpanded){
+                this.collapseFull();
+            }
+        });
+
         this.$tabs = $('<div class="tabs"></div>');
         this.$main.append(this.$tabs);
 

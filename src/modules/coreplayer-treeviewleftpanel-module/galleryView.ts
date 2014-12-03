@@ -34,7 +34,7 @@ export class GalleryView extends baseView.BaseView {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(extension.Extension.SETTINGS_CHANGED, () => {
             this.setLabel();
         });
 
