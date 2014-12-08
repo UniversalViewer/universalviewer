@@ -112,17 +112,6 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         var that = this;
 
-        // if there's more than one tilesource, align them next to each other.
-        if (tileSources.length > 1) {
-            that.viewer.addHandler('open', function openHandler() {
-                that.viewer.removeHandler('open', openHandler);
-
-                tileSources[1].x = that.viewer.world.getItemAt(0).getWorldBounds().x + that.viewer.world.getItemAt(0).getWorldBounds().width + that.config.options.pageGap;
-
-                that.viewer.addTiledImage(tileSources[1]);
-            });
-        }
-
         // if there's no tilesource, show an 'image unavailable' error.
         if (tileSources[0].tileSource){
             that.viewer.open(tileSources[0]);
@@ -130,14 +119,21 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
             that.extension.showDialogue(that.config.content.imageUnavailable);
         }
 
-        // if the number of tilesources being displayed differs from the last number, re-center the viewer.
-        if (tileSources.length != that.lastTilesNum){
-            that.viewer.addHandler('open', function openHandler() {
-                that.viewer.removeHandler('open', openHandler);
-                that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, tileSources.length, that.viewer.world.getItemAt(0).normHeight));
-            });
-        }
+        that.viewer.addHandler('open', function openHandler() {
+            that.viewer.removeHandler('open', openHandler);
 
-        that.lastTilesNum = tileSources.length;
+            // if there's more than one tilesource, align them next to each other.
+            if (tileSources.length > 1) {
+                tileSources[1].x = that.viewer.world.getItemAt(0).getBounds().x + that.viewer.world.getItemAt(0).getBounds().width + that.config.options.pageGap;
+                that.viewer.addTiledImage(tileSources[1]);
+            }
+
+            // if the number of tilesources being displayed differs from the last number, re-center the viewer.
+            if (tileSources.length != that.lastTilesNum){
+                that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, tileSources.length, that.viewer.world.getItemAt(0).normHeight));
+            }
+
+            that.lastTilesNum = tileSources.length;
+        });
     }
 }

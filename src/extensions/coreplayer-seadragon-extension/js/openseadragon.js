@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.1.1
-//! Built on 2014-12-03
-//! Git commit: v1.1.1-257-4985b2e
+//! Built on 2014-12-05
+//! Git commit: v1.1.1-258-6c63cd2
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -10487,8 +10487,10 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             var ns;
             if ( data.Image ) {
                 ns = data.Image.xmlns;
-            } else if ( data.documentElement && "Image" == data.documentElement.localName ) {
-                ns = data.documentElement.namespaceURI;
+            } else if ( data.documentElement) {
+                if ("Image" == data.documentElement.localName || "Image" == data.documentElement.tagName) {
+                    ns = data.documentElement.namespaceURI;
+                }
             }
 
             return ( "http://schemas.microsoft.com/deepzoom/2008" == ns ||
@@ -10601,7 +10603,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
         }
 
         var root           = xmlDoc.documentElement,
-            rootName       = root.localName,
+            rootName       = root.localName || root.tagName,
             ns             = xmlDoc.documentElement.namespaceURI,
             configuration  = null,
             displayRects   = [],
@@ -10614,7 +10616,10 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
         if ( rootName == "Image" ) {
 
             try {
-                sizeNode = root.getElementsByTagNameNS(ns, "Size" )[ 0 ];
+                sizeNode = root.getElementsByTagName("Size" )[ 0 ];
+                if (sizeNode === undefined) {
+                    sizeNode = root.getElementsByTagNameNS(ns, "Size" )[ 0 ];
+                }
 
                 configuration = {
                     Image: {
@@ -10637,11 +10642,17 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                     );
                 }
 
-                dispRectNodes = root.getElementsByTagNameNS(ns, "DisplayRect" );
+                dispRectNodes = root.getElementsByTagName("DisplayRect" );
+                if (dispRectNodes === undefined) {
+                    dispRectNodes = root.getElementsByTagNameNS(ns, "DisplayRect" )[ 0 ];
+                }
 
                 for ( i = 0; i < dispRectNodes.length; i++ ) {
                     dispRectNode = dispRectNodes[ i ];
-                    rectNode     = dispRectNode.getElementsByTagNameNS(ns, "Rect" )[ 0 ];
+                    rectNode     = dispRectNode.getElementsByTagName("Rect" )[ 0 ];
+                    if (rectNode === undefined) {
+                        rectNode = dispRectNode.getElementsByTagNameNS(ns, "Rect" )[ 0 ];
+                    }
 
                     displayRects.push({
                         Rect: {
@@ -17410,7 +17421,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
         removeItem: function( item ) {
             $.console.assert(item, "[World.removeItem] item is required");
 
-            var index = this._items.indexOf( item );
+            var index = $.indexOf(this._items, item );
             if ( index === -1 ) {
                 return;
             }

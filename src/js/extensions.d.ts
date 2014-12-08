@@ -39,6 +39,7 @@ interface JQuery {
     horizontalPadding(): number;
     toggleExpandText(chars: number);
     ismouseover(): boolean;
+    equaliseHeight(): any;
 
     // jsviews
     link: any;
