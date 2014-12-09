@@ -157,14 +157,16 @@
 
     };
 
-    $.fn.equaliseHeight = function () {
+    $.fn.equaliseHeight = function (reset) {
 
         var maxHeight = -1;
 
         // reset all heights to auto first so they can be re-measured.
-        this.each(function () {
-            $(this).height('auto');
-        });
+        if (reset){
+            this.each(function () {
+                $(this).height('auto');
+            });
+        }
 
         this.each(function () {
             maxHeight = maxHeight > $(this).height() ? maxHeight : $(this).height();

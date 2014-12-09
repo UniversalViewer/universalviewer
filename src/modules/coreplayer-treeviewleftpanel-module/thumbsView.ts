@@ -18,7 +18,7 @@ export class ThumbsView extends baseView.BaseView {
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
 
-    public thumbs: Array<Thumb>;
+    public thumbs: Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);

@@ -39,7 +39,7 @@ interface IProvider{
     getStructureByCanvasIndex(index: number): any; // todo: remove?
     getStructureByIndex(structure: any, index: number): any; // todo: remove?
     getStructureIndex(path: string): number; // todo: remove?
-    getThumbs(): Array<Thumb>;
+    getThumbs(width: number, height: number): Thumb[];
     getThumbUri(canvas: any, width: number, height: number): string;
     getTitle(): string;
     getTotalCanvases(): number;

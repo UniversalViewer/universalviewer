@@ -11,6 +11,9 @@ import Thumb = require("../coreplayer-shared-module/thumb");
 
 export class GalleryView extends baseView.BaseView {
 
+    $header: JQuery;
+    $sizeRange: JQuery;
+    $main: JQuery;
     $thumbs: JQuery;
     $selectedThumb: JQuery;
     isOpen: boolean = false;
@@ -18,7 +21,7 @@ export class GalleryView extends baseView.BaseView {
 
     static THUMB_SELECTED: string = 'galleryView.onThumbSelected';
 
-    public thumbs: Array<Thumb>;
+    public thumbs: Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -38,12 +41,25 @@ export class GalleryView extends baseView.BaseView {
             this.setLabel();
         });
 
-        this.$thumbs = utils.Utils.createDiv('thumbs');
-        this.$element.append(this.$thumbs);
+        this.$header = $('<div class="header"></div>');
+        this.$element.append(this.$header);
+
+        this.$sizeRange = $('<input type="range" name="size" min="0" max="10">');
+        this.$header.append(this.$sizeRange);
+
+        this.$main = $('<div class="main"></div>');
+        this.$element.append(this.$main);
+
+        this.$thumbs = $('<div class="thumbs"></div>');
+        this.$main.append(this.$thumbs);
+
+        this.$sizeRange.on('change', () => {
+            this.updateThumbs();
+        });
 
         $.templates({
-            galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}">\
-                                <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
+            galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
+                                <div class="wrap"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
                              </div>'
@@ -68,8 +84,8 @@ export class GalleryView extends baseView.BaseView {
         });
 
         // use unevent to detect scroll stop.
-        this.$element.on('scroll', () => {
-            this.loadThumbs();
+        this.$main.on('scroll', () => {
+            this.updateThumbs();
         }, 1000);
 
         this.resize();
@@ -101,18 +117,17 @@ export class GalleryView extends baseView.BaseView {
 
         this.setLabel();
 
-        // do initial load to show padlocks
-        this.loadThumbs();
+        this.updateThumbs();
     }
 
-    loadThumbs(): void {
+    updateThumbs(): void {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
         // test which thumbs are scrolled into view
         var thumbs = this.$thumbs.find('.thumb');
-        var scrollTop = this.$element.scrollTop();
-        var scrollHeight = this.$element.height();
+        var scrollTop = this.$main.scrollTop();
+        var scrollHeight = this.$main.height();
 
         for (var i = 0; i < thumbs.length; i++) {
 
@@ -122,18 +137,46 @@ export class GalleryView extends baseView.BaseView {
 
             if (thumbBottom >= scrollTop && thumbTop <= scrollTop + scrollHeight){
                 this.loadThumb($thumb);
+                //$thumb.find('.wrap').css('background', 'red');
+            //} else {
+                //$thumb.find('.wrap').css('background', 'none');
             }
+
+            this.sizeThumb($thumb);
         }
+
+        this.equaliseHeights();
     }
 
-    loadThumb($thumb): void {
-        var fadeDuration = this.options.thumbsImageFadeInDuration;
+    equaliseHeights(): void {
+        this.$thumbs.find('.thumb .wrap').equaliseHeight();
+    }
+
+    sizeThumb($thumb: JQuery) : void {
+        var range = utils.Utils.normalise(Number(this.$sizeRange.val()), 0, 10) || 0.5;
+
+        var width = $thumb.data('width');
+        var height = $thumb.data('height');
 
         var $wrap = $thumb.find('.wrap');
+        var $img = $wrap.find('img');
+
+        $wrap.width(width * range);
+        $wrap.height(height * range);
+        $img.width(width * range);
+        $img.height(height * range);
+    }
+
+    loadThumb($thumb: JQuery): void {
+        var $wrap = $thumb.find('.wrap');
+
+        if ($wrap.hasClass('loading') || $wrap.hasClass('loaded')) return;
 
         // if no img has been added yet
 
         var visible = $thumb.attr('data-visible');
+
+        var fadeDuration = this.options.thumbsImageFadeInDuration;
 
         if (visible !== "false") {
             $wrap.addClass('loading');
@@ -199,12 +242,14 @@ export class GalleryView extends baseView.BaseView {
         }
 
         // make sure visible images are loaded.
-        this.loadThumbs();
+        this.updateThumbs();
     }
 
     resize(): void {
         super.resize();
 
-        this.loadThumbs();
+        this.$main.height(this.$element.height() - this.$header.height());
+
+        this.updateThumbs();
     }
 }

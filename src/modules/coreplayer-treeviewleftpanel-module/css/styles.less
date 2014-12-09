@@ -167,57 +167,64 @@
 
             .galleryView{
 
-                overflow: auto;
+                .header{
+                    height: 40px;
+                }
 
-                .thumbs{
-                    overflow: hidden;
-                    position: relative;
+                .main{
+                    overflow: auto;
 
-                    .thumb{
-                        margin: 0 7px 7px 0;
-                        float: left;
-                        cursor: pointer;
+                    .thumbs {
 
-                        .wrap{
-                            border: 2px solid @panel-border-color;
-                            padding: 2px;
-                            max-height: 182px;
-                            overflow: hidden;
-                            width: 98px;
-                            text-align: center;
-                            background: none;
+                        overflow: hidden;
+                        position: relative;
 
-                            &.loading{
-                                .loading(@loader-black-bg);
-                            }
-
-                            &.hidden{
-                                background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
-                            }
-
-                            img{
-                                display: block;
-                                //margin: 0 auto;
-                            }
-                        }
-
-                        &.selected{
+                        .thumb{
+                            margin: 0 7px 7px 0;
+                            float: left;
+                            cursor: pointer;
 
                             .wrap{
-                                border: 2px solid #fff;
+                                border: 2px solid @panel-border-color;
+                                padding: 2px;
+                                //max-height: 182px;
+                                overflow: hidden;
+                                //width: 98px;
+                                text-align: center;
+                                background: none;
+
+                                &.loading{
+                                    .loading(@loader-black-bg);
+                                }
+
+                                &.hidden{
+                                    background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                                }
+
+                                img{
+                                    display: block;
+                                    //margin: 0 auto;
+                                }
                             }
-                        }
 
-                        span{
-                            font-size: @font-size-small;
-                            color: #fff;
-                            display: block;
-                            padding: 2px 0 0 0;
-                        }
+                            &.selected{
 
-                        &.placeholder{
-                            .wrap {
-                                background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                                .wrap{
+                                    border: 2px solid #fff;
+                                }
+                            }
+
+                            span{
+                                font-size: @font-size-small;
+                                color: #fff;
+                                display: block;
+                                padding: 2px 0 0 0;
+                            }
+
+                            &.placeholder{
+                                .wrap {
+                                    background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                                }
                             }
                         }
                     }

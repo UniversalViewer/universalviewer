@@ -322,16 +322,13 @@ export class BaseProvider implements IProvider{
         return uri;
     }
 
-    getThumbs(): Array<Thumb> {
-        var thumbs = new Array<Thumb>();
+    getThumbs(width: number, height: number): Thumb[] {
+        var thumbs: Thumb[] = [];
 
         for (var i = 0; i < this.getTotalCanvases(); i++) {
             var canvas = this.sequence.canvases[i];
 
             var heightRatio = canvas.height / canvas.width;
-
-            var width = this.config.modules["treeViewLeftPanel"].options.thumbWidth;
-            var height = this.config.modules["treeViewLeftPanel"].options.thumbHeight;
 
             if (heightRatio){
                 height = Math.floor(width * heightRatio);
@@ -339,7 +336,7 @@ export class BaseProvider implements IProvider{
 
             var uri = this.getThumbUri(canvas, width, height);
 
-            thumbs.push(new Thumb(i, uri, canvas.label, height, true));
+            thumbs.push(new Thumb(i, uri, canvas.label, width, height, true));
         }
 
         return thumbs;

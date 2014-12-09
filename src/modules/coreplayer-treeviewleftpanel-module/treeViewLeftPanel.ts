@@ -117,7 +117,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     dataBindThumbsView(): void{
-        this.thumbsView.thumbs = this.provider.getThumbs();
+        var width = this.config.options.thumbWidth;
+        var height = this.config.options.thumbHeight;
+        this.thumbsView.thumbs = this.provider.getThumbs(width, height);
         this.thumbsView.dataBind();
     }
 
@@ -127,7 +129,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     dataBindGalleryView(): void{
-        this.galleryView.thumbs = this.provider.getThumbs();
+        var width = this.config.options.galleryThumbWidth;
+        var height = this.config.options.galleryThumbHeight;
+        this.galleryView.thumbs = this.provider.getThumbs(width, height);
         this.galleryView.dataBind();
     }
 

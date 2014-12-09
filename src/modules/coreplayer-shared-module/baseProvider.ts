@@ -507,7 +507,7 @@ export class BaseProvider implements IProvider{
     }
 
     // todo
-    getThumbs(): Array<Thumb> {
+    getThumbs(width: number, height: number): Thumb[]{
         return null;
     }
 

@@ -3100,7 +3100,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
 
             // Active pointers lists. Array of GesturePointList objects, one for each pointer device type.
             // GesturePointList objects are added each time a pointer is tracked by a new pointer device type (see getActivePointersListByType()).
-            // Active pointers are any pointer being tracked for this element which are in the hit-test area 
+            // Active pointers are any pointer being tracked for this element which are in the hit-test area
             //     of the element (for hover-capable devices) and/or have contact or a button press initiated in the element.
             activePointersLists:   [],
 
@@ -4902,7 +4902,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
      */
     function startTrackingPointer( pointsList, gPoint ) {
 
-        // If isPrimary is not known for the pointer then set it according to our rules: 
+        // If isPrimary is not known for the pointer then set it according to our rules:
         //    true if the first pointer in the gesture, otherwise false
         if ( !gPoint.hasOwnProperty( 'isPrimary' ) ) {
             if ( pointsList.getLength() === 0 ) {
@@ -10843,7 +10843,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 // If we're smaller than 256, just use the short side.
                 options.tileSize = shortDim;
             }
-            this.tile_width = options.tileSize;  // So that 'full' gets used for 
+            this.tile_width = options.tileSize;  // So that 'full' gets used for
             this.tile_height = options.tileSize; // the region below
         }
 
@@ -12268,7 +12268,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
          */
         this.element = options.element || $.makeNeutralElement( "div" );
 
-        // TODO What if there IS an options.group specified? 
+        // TODO What if there IS an options.group specified?
         if( !options.group ){
             this.label   = $.makeNeutralElement( "label" );
             //TODO: support labels for ButtonGroups
