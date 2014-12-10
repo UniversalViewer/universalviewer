@@ -9,8 +9,10 @@ import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
 import IPDFProvider = require("./iPDFProvider");
 import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-shared-module/headerPanel");
+import baseLeft = require("../../modules/coreplayer-shared-module/leftPanel");
 import left = require("../../modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
 import center = require("../../modules/coreplayer-pdfcenterpanel-module/pdfCenterPanel");
+import baseRight = require("../../modules/coreplayer-shared-module/rightPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
@@ -58,6 +60,22 @@ export class Extension extends baseExtension.BaseExtension{
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
             }
+        });
+
+        $.subscribe(baseLeft.LeftPanel.OPEN_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseLeft.LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.OPEN_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+            this.resize();
         });
 
         // load dependencies

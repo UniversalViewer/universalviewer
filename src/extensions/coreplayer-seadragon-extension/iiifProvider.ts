@@ -26,14 +26,16 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             iiifUri = canvas.resources[0].resource.service['@id'];
         } else if (canvas.images && canvas.images[0].resource.service){
             iiifUri = canvas.images[0].resource.service['@id'];
+        } else {
+            return null;
         }
 
         if (!iiifUri){
             console.warn('no service endpoint available');
         }else if (iiifUri.endsWith('/')){
-            iiifUri += 'info.json';
+            iiifUri += 'info.js';
         } else {
-            iiifUri += '/info.json';
+            iiifUri += '/info.js';
         }
 
         var uri = String.prototype.format(template, baseUri, iiifUri);
@@ -57,7 +59,9 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     getTileSources(): any[] {
 
         if (!this.isPaged()){
-            return [this.getImageUri(this.getCurrentCanvas())];
+            return [{
+                tileSource: this.getImageUri(this.getCurrentCanvas())
+            }];
         } else {
             if (this.isFirstCanvas() || this.isLastCanvas()){
                 return [{

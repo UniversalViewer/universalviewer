@@ -1,5 +1,6 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
+/// <reference path="./iSettings.d.ts" />
 
 import baseExtension = require("../../modules/coreplayer-shared-module/baseExtension");
 import utils = require("../../utils");
@@ -7,17 +8,21 @@ import baseProvider = require("../../modules/coreplayer-shared-module/baseProvid
 import provider = require("./provider");
 import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-pagingheaderpanel-module/pagingHeaderPanel");
+import baseLeft = require("../../modules/coreplayer-shared-module/leftPanel");
 import left = require("../../modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
 import thumbsView = require("../../modules/coreplayer-treeviewleftpanel-module/thumbsView");
+import galleryView = require("../../modules/coreplayer-treeviewleftpanel-module/galleryView");
 import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
 import baseCenter = require("../../modules/coreplayer-shared-module/seadragonCenterPanel");
 import center = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
-import centerCol = require("../../modules/coreplayer-seadragoncollectioncenterpanel-module/seadragonCollectionCenterPanel");
+import baseRight = require("../../modules/coreplayer-shared-module/rightPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
 import embed = require("../../extensions/coreplayer-seadragon-extension/embedDialogue");
+import settingsDialogue = require("../../modules/coreplayer-dialogues-module/settingsDialogue");
 import IProvider = require("../../modules/coreplayer-shared-module/iProvider");
+import settings = require("../../modules/coreplayer-shared-module/settings");
 import ISeadragonProvider = require("./iSeadragonProvider");
 import dependencies = require("./dependencies");
 
@@ -32,6 +37,8 @@ export class Extension extends baseExtension.BaseExtension {
     helpDialogue: help.HelpDialogue;
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
+    $settingsDialogue: JQuery;
+    settingsDialogue: settingsDialogue.SettingsDialogue;
 
     currentRotation: number = 0;
 
@@ -69,9 +76,6 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(header.PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
             Extension.mode = mode;
-
-            //this.provider.updateSetting(this.provider.settings.labelling, mode);
-
             $.publish(Extension.SETTINGS_CHANGED, [mode]);
         });
 
@@ -83,12 +87,50 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         });
 
+        $.subscribe(settingsDialogue.SettingsDialogue.UPDATE_SETTINGS, (e) => {
+            this.provider.reload(() => {
+                $.publish(baseExtension.BaseExtension.RELOAD);
+                this.viewPage(this.provider.canvasIndex, true);
+            });
+        });
+
         $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
             this.treeNodeSelected(data);
         });
 
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
+        });
+
+        $.subscribe(galleryView.GalleryView.THUMB_SELECTED, (e, index: number) => {
+            this.viewPage(index);
+        });
+
+        $.subscribe(baseLeft.LeftPanel.OPEN_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseLeft.LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.OPEN_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(left.TreeViewLeftPanel.EXPAND_FULL_START, (e) => {
+            shell.Shell.$centerPanel.hide();
+            shell.Shell.$rightPanel.hide();
+        });
+
+        $.subscribe(left.TreeViewLeftPanel.COLLAPSE_FULL_FINISH, (e) => {
+            shell.Shell.$centerPanel.show();
+            shell.Shell.$rightPanel.show();
+            this.resize();
         });
 
         $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
@@ -124,10 +166,10 @@ export class Extension extends baseExtension.BaseExtension {
             var canvasIndex;
 
             if (!that.provider.isReload){
-                canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || 0;
+                canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || that.provider.getStartCanvasIndex();
             }
 
-            that.viewPage(canvasIndex || 0);
+            that.viewPage(canvasIndex || that.provider.getStartCanvasIndex());
 
             // initial sizing
             $.publish(baseExtension.BaseExtension.RESIZE);
@@ -146,11 +188,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
         }
 
-        if (this.provider.isPaged()) {
-            this.centerPanel = new centerCol.SeadragonCollectionCenterPanel(shell.Shell.$centerPanel);
-        } else {
-            this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
-        }
+        this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
 
         if (this.isRightPanelEnabled()){
             this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
@@ -165,6 +203,10 @@ export class Extension extends baseExtension.BaseExtension {
         this.$embedDialogue = utils.Utils.createDiv('overlay embed');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
+
+        this.$settingsDialogue = utils.Utils.createDiv('overlay settings');
+        shell.Shell.$overlays.append(this.$settingsDialogue);
+        this.settingsDialogue = new settingsDialogue.SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
@@ -191,13 +233,12 @@ export class Extension extends baseExtension.BaseExtension {
         return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
-    viewPage(canvasIndex: number): void {
+    viewPage(canvasIndex: number, isReload?: boolean): void {
 
         // if it's a valid canvas index.
         if (canvasIndex == -1) return;
 
-        // if paged, if the canvas index is already displayed, show the next/prev canvas.
-        if (this.provider.isPaged()){
+        if (this.provider.isPaged() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.

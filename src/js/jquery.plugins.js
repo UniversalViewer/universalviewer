@@ -157,6 +157,28 @@
 
     };
 
+    $.fn.equaliseHeight = function (reset) {
+
+        var maxHeight = -1;
+
+        // reset all heights to auto first so they can be re-measured.
+        if (reset){
+            this.each(function () {
+                $(this).height('auto');
+            });
+        }
+
+        this.each(function () {
+            maxHeight = maxHeight > $(this).height() ? maxHeight : $(this).height();
+        });
+
+        this.each(function () {
+            $(this).height(maxHeight);
+        });
+
+        return this;
+    };
+
     $.fn.horizontalMargins = function () {
         var $self = $(this);
         return parseInt($self.css('marginLeft')) + parseInt($self.css('marginRight'));
@@ -176,36 +198,6 @@
         var $self = $(this);
         return parseInt($self.css('paddingTop')) + parseInt($self.css('paddingBottom'));
     };
-
-    // useful if stretching to fit a parent element's inner height.
-    // borders/margins/padding are included in final height, so no overspill.
-//    $.fn.actualHeight = function (height) {
-//
-//        return this.each(function () {
-//
-//            var $self = $(this);
-//
-//            $self.height(height);
-//
-//            height -= $self.outerHeight(true) - $self.height();
-//
-//            $self.height(height);
-//        });
-//    };
-//
-//    $.fn.actualWidth = function (width) {
-//
-//        return this.each(function () {
-//
-//            var $self = $(this);
-//
-//            $self.width(width);
-//
-//            width -= $self.outerWidth(true) - $self.width();
-//
-//            $self.width(width);
-//        });
-//    };
 
 })(jQuery);
 
@@ -277,5 +269,25 @@
             if (decode(pair[0]) === key) return decode(pair[1] || ''); // IE saves cookies with empty string as "c; ", e.g. without "=" as opposed to EOMB, thus pair[1] may be undefined
         }
         return null;
+    };
+})(jQuery);
+
+(function($){
+    $.mlp = {x:0,y:0}; // Mouse Last Position
+    function documentHandler(){
+        var $current = this === document ? $(this) : $(this).contents();
+        $current.mousemove(function(e){jQuery.mlp = {x:e.pageX,y:e.pageY}});
+        $current.find("iframe").load(documentHandler);
+    }
+    $(documentHandler);
+    $.fn.ismouseover = function(overThis) {
+        var result = false;
+        this.eq(0).each(function() {
+            var $current = $(this).is("iframe") ? $(this).contents().find("body") : $(this);
+            var offset = $current.offset();
+            result =    offset.left<=$.mlp.x && offset.left + $current.outerWidth() > $.mlp.x &&
+            offset.top<=$.mlp.y && offset.top + $current.outerHeight() > $.mlp.y;
+        });
+        return result;
     };
 })(jQuery);

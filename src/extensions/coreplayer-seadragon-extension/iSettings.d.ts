@@ -1,13 +1,8 @@
+/// <reference path="../../modules/coreplayer-shared-module/iSettings.d.ts" />
 
-interface IOptions {
-    labelsEnabled: boolean;
-    pagingEnabled: boolean;
-    theme: string;
-    leftPanelEnabled: boolean;
-    rightPanelEnabled: boolean;
-    overrideFullScreen: boolean;
+interface ISettings {
 
-    // add these to extension-specific providers
+    // todo: these belong in wellcome extension
     //preloadMoreInfo: boolean;
     //embedEnabled: boolean;
     //downloadEnabled: boolean;
@@ -25,5 +20,3 @@ interface IOptions {
     //imageBaseUri: string;
     //sectionMappings: any;
 }
-
-export = IOptions;

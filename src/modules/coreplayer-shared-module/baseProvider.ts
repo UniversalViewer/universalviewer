@@ -199,14 +199,9 @@ export class BaseProvider implements IProvider{
         }
     }
 
-    getThumbUri(canvas: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
-        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
-        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-        var uri = String.prototype.format(template, baseUri, canvas.thumbnailPath);
-
-        if (this.options.timestampUris) uri = this.addTimestamp(uri);
-
-        return uri;
+    // todo
+    getThumbUri(canvas: any, width: number, height: number): string {
+        return null;
     }
 
     getPagedIndices(canvasIndex?: number): number[]{
@@ -261,6 +256,10 @@ export class BaseProvider implements IProvider{
         }
 
         return index;
+    }
+
+    getStartCanvasIndex(): number {
+        return 0;
     }
 
     parseManifest(): void{
@@ -507,39 +506,9 @@ export class BaseProvider implements IProvider{
         }
     }
 
-    getThumbs(): Array<Thumb> {
-
-        var thumbs = new Array<Thumb>();
-
-        for (var i = 0; i < this.getTotalCanvases(); i++) {
-            var canvas = this.sequence.assets[i];
-
-            var uri = this.getThumbUri(canvas);
-            var structure = this.getCanvasStructure(canvas);
-
-            var heightRatio = canvas.height / canvas.width;
-            var height = 150;
-
-            if (heightRatio){
-                Math.floor(height = 90 * heightRatio);
-            }
-
-            var visible = true;
-
-            if (structure.extensions){
-                if (structure.extensions.authStatus.toLowerCase() !== "allowed"){
-                    visible = false;
-                }
-            }
-
-            if (canvas.orderLabel.trim() === "-") {
-                canvas.orderLabel = "";
-            }
-
-            thumbs.push(new Thumb(i, uri, canvas.orderLabel, height, visible));
-        }
-
-        return thumbs;
+    // todo
+    getThumbs(width: number, height: number): Thumb[]{
+        return null;
     }
 
     getDomain(): string{
@@ -582,5 +551,13 @@ export class BaseProvider implements IProvider{
         }
 
         return false;
+    }
+
+    getSettings(): ISettings {
+        return this.config.options;
+    }
+
+    updateSettings(settings: ISettings): void {
+        this.config.options = settings;
     }
 }

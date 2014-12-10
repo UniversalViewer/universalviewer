@@ -13,12 +13,12 @@ export class ThumbsView extends baseView.BaseView {
 
     $thumbs: JQuery;
     $selectedThumb: JQuery;
-
+    isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
 
-    public thumbs: Array<Thumb>;
+    public thumbs: Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -42,7 +42,7 @@ export class ThumbsView extends baseView.BaseView {
         this.$element.append(this.$thumbs);
 
         $.templates({
-            thumbsTemplate: '<div class="thumb" data-src="{{>url}}" data-visible="{{>visible}}">\
+            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
@@ -60,6 +60,13 @@ export class ThumbsView extends baseView.BaseView {
             },
             extraHeight: function(){
                 return extraHeight;
+            },
+            className: function(){
+                if (this.data.url){
+                    return "thumb";
+                }
+
+                return "thumb placeholder";
             }
         });
 
@@ -159,15 +166,16 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     show(): void {
+        this.isOpen = true;
         this.$element.show();
 
         setTimeout(() => {
             this.selectIndex(this.provider.canvasIndex);
         }, 1);
-
     }
 
     hide(): void {
+        this.isOpen = false;
         this.$element.hide();
     }
 
@@ -200,10 +208,6 @@ export class ThumbsView extends baseView.BaseView {
         if (!this.thumbs || !this.thumbs.length) return;
 
         index = parseInt(index);
-
-        //if (this.$selectedThumb) {
-        //    this.$selectedThumb.removeClass('selected');
-        //}
 
         this.$thumbs.find('.thumb').removeClass('selected');
 

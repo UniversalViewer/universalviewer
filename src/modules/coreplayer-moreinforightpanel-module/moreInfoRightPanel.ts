@@ -26,8 +26,8 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         this.$main.append(this.$items);
     }
 
-    toggleComplete(): void {
-        super.toggleComplete();
+    toggleFinish(): void {
+        super.toggleFinish();
 
         if (this.isUnopened) {
             this.getInfo();

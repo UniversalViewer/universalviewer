@@ -3,6 +3,7 @@ import baseExtension = require("./baseExtension");
 import baseView = require("./baseView");
 import utils = require("../../utils");
 import help = require("../coreplayer-dialogues-module/helpDialogue");
+import settings = require("../coreplayer-dialogues-module/settingsDialogue");
 
 export class HeaderPanel extends baseView.BaseView {
 
@@ -10,6 +11,7 @@ export class HeaderPanel extends baseView.BaseView {
     $centerOptions: JQuery;
     $rightOptions: JQuery;
     $helpButton: JQuery;
+    $settingsButton: JQuery;
     $messageBox: JQuery;
 
     message: string;
@@ -41,8 +43,12 @@ export class HeaderPanel extends baseView.BaseView {
         this.$rightOptions = $('<div class="rightOptions"></div>');
         this.$options.append(this.$rightOptions);
 
-        this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
-        this.$rightOptions.append(this.$helpButton);
+        //this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
+        //this.$rightOptions.append(this.$helpButton);
+
+        // todo: add title content
+        this.$settingsButton = $('<a class="imageBtn settings"></a>')
+        this.$rightOptions.append(this.$settingsButton);
 
         this.$messageBox = $('<div class="messageBox"> \
                                 <div class="text"></div> \
@@ -58,10 +64,16 @@ export class HeaderPanel extends baseView.BaseView {
             this.hideMessage();            
         });
 
-        this.$helpButton.click(function (e) {
+        //this.$helpButton.click(function (e) {
+        //    e.preventDefault();
+        //
+        //    $.publish(help.HelpDialogue.SHOW_HELP_DIALOGUE);
+        //});
+
+        this.$settingsButton.click(function (e) {
             e.preventDefault();
 
-            $.publish(help.HelpDialogue.SHOW_HELP_DIALOGUE);
+            $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
     }
 
@@ -70,13 +82,13 @@ export class HeaderPanel extends baseView.BaseView {
         this.$messageBox.find('.text').html(message).find('a').attr('target', '_top');
         this.$messageBox.show();
         this.$element.addClass('showMessage');
-        $.publish(baseExtension.BaseExtension.RESIZE);
+        this.extension.resize();
     }
 
     hideMessage(): void {
         this.$element.removeClass('showMessage');
         this.$messageBox.hide();
-        $.publish(baseExtension.BaseExtension.RESIZE);
+        this.extension.resize();
     }
 
     resize(): void {

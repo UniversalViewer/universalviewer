@@ -7,9 +7,11 @@ import baseProvider = require("../../modules/coreplayer-shared-module/baseProvid
 import provider = require("./provider");
 import shell = require("../../modules/coreplayer-shared-module/shell");
 import header = require("../../modules/coreplayer-shared-module/headerPanel");
+import baseLeft = require("../../modules/coreplayer-shared-module/leftPanel");
 import left = require("../../modules/coreplayer-treeviewleftpanel-module/treeViewLeftPanel");
 import treeView = require("../../modules/coreplayer-treeviewleftpanel-module/treeView");
 import center = require("../../modules/coreplayer-mediaelementcenterpanel-module/mediaelementCenterPanel");
+import baseRight = require("../../modules/coreplayer-shared-module/rightPanel");
 import right = require("../../modules/coreplayer-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/coreplayer-shared-module/footerPanel");
 import help = require("../../modules/coreplayer-dialogues-module/helpDialogue");
@@ -59,6 +61,22 @@ export class Extension extends baseExtension.BaseExtension{
 
         $.subscribe(footer.FooterPanel.EMBED, (e) => {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        });
+
+        $.subscribe(baseLeft.LeftPanel.OPEN_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseLeft.LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.OPEN_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+            this.resize();
         });
 
         // dependencies

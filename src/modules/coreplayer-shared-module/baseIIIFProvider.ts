@@ -138,13 +138,23 @@ export class BaseProvider implements IProvider{
         return this.manifest.seeAlso;
     }
 
-    // todo
     getCanvasOrderLabel(canvas: any): string{
-        return null;
+        return canvas.label;
     }
 
-    // todo
     getLastCanvasOrderLabel(): string {
+        // get the last orderlabel that isn't empty or '-'.
+        for (var i = this.sequence.canvases.length - 1; i >= 0; i--) {
+            var canvas = this.sequence.canvases[i];
+
+            var regExp = /\d/;
+
+            if (regExp.test(canvas.label)) {
+                return canvas.label;
+            }
+        }
+
+        // none exists, so return '-'.
         return '-';
     }
 
@@ -198,7 +208,7 @@ export class BaseProvider implements IProvider{
     }
 
     isPaged(): boolean{
-        return this.sequence.viewingHint && this.sequence.viewingHint == "paged";
+        return this.sequence.viewingHint && (this.sequence.viewingHint == "paged") && this.getSettings().pagingEnabled;
     }
 
     getMediaUri(mediaUri: string): string{
@@ -211,18 +221,6 @@ export class BaseProvider implements IProvider{
 
     setMediaUri(canvas: any): void{
         //canvas.mediaUri = this.getMediaUri(canvas.resources[0].resource['@id'] + '/info.json');
-    }
-
-    // todo
-    getThumbUri(canvas: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string {
-        var baseUri = thumbsBaseUri ? thumbsBaseUri : this.options.thumbsBaseUri || this.options.dataBaseUri || "";
-        var template = thumbsUriTemplate? thumbsUriTemplate : this.options.thumbsUriTemplate;
-
-        //if (this.options.timestampUris) uri = this.addTimestamp(uri);
-
-        //return uri;
-
-        return null;
     }
 
     getPagedIndices(canvasIndex?: number): number[]{
@@ -279,6 +277,20 @@ export class BaseProvider implements IProvider{
         return index;
     }
 
+    getStartCanvasIndex(): number {
+        if (this.sequence.startCanvas) {
+            // if there's a startCanvas attribute, loop through the canvases and return the matching index.
+            for (var i = 0; i < this.sequence.canvases.length; i++) {
+                var canvas = this.sequence.canvases[i];
+
+                if (canvas["@id"] == this.sequence.startCanvas) return i;
+            }
+        }
+
+        // default to first canvas.
+        return 0;
+    }
+
     addTimestamp(uri: string): string{
         return uri + "?t=" + utils.Utils.getTimeStamp();
     }
@@ -287,38 +299,44 @@ export class BaseProvider implements IProvider{
         return (this.isHomeDomain && this.isOnlyInstance);
     }
 
-    getThumbs(): Array<Thumb> {
-        var thumbs = new Array<Thumb>();
+    getThumbUri(canvas: any, width: number, height: number): string {
+
+        var uri;
+
+        if (canvas.resources){
+            uri = canvas.resources[0].resource.service['@id'];
+        } else if (canvas.images && canvas.images[0].resource.service){
+            uri = canvas.images[0].resource.service['@id'];
+        } else {
+            return "";
+        }
+
+        var tile = 'full/' + width + ',' + height + '/0/default.jpg';
+
+        if (uri.endsWith('/')){
+            uri += tile;
+        } else {
+            uri += '/' + tile;
+        }
+
+        return uri;
+    }
+
+    getThumbs(width: number, height: number): Thumb[] {
+        var thumbs: Thumb[] = [];
 
         for (var i = 0; i < this.getTotalCanvases(); i++) {
             var canvas = this.sequence.canvases[i];
 
             var heightRatio = canvas.height / canvas.width;
 
-            var width = 90;
-            var height = 150;
-
             if (heightRatio){
                 height = Math.floor(width * heightRatio);
             }
 
-            var uri;
+            var uri = this.getThumbUri(canvas, width, height);
 
-            if (canvas.resources){
-                uri = canvas.resources[0].resource.service['@id'];
-            } else if (canvas.images){
-                uri = canvas.images[0].resource.service['@id'];
-            }
-
-            var tile = 'full/'+ width + ',' + height + '/0/default.jpg';
-
-            if (uri.endsWith('/')){
-                uri += tile;
-            } else {
-                uri += '/' + tile;
-            }
-
-            thumbs.push(new Thumb(i, uri, canvas.label, height, true));
+            thumbs.push(new Thumb(i, uri, canvas.label, width, height, true));
         }
 
         return thumbs;
@@ -406,7 +424,35 @@ export class BaseProvider implements IProvider{
 
     // todo
     getCanvasIndexByOrderLabel(label: string): number {
-        return null;
+        // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
+        var regExp = /(\d*)\D*(\d*)|(\d*)/;
+        var match = regExp.exec(label);
+
+        var labelPart1 = match[1];
+        var labelPart2 = match[2];
+
+        if (!labelPart1) return -1;
+
+        var searchRegExp, regStr;
+
+        if (labelPart2) {
+            regStr = "^" + labelPart1 + "\\D*" + labelPart2 + "$";
+        } else {
+            regStr = "\\D*" + labelPart1 + "\\D*";
+        }
+
+        searchRegExp = new RegExp(regStr);
+
+        // loop through files, return first one with matching orderlabel.
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var canvas = this.sequence.canvases[i];
+
+            if (searchRegExp.test(canvas.label)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     // todo
@@ -479,5 +525,13 @@ export class BaseProvider implements IProvider{
         }
 
         return false;
+    }
+
+    getSettings(): ISettings {
+        return this.config.options;
+    }
+
+    updateSettings(settings: ISettings): void {
+        this.config.options = settings;
     }
 }

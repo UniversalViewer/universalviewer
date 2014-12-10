@@ -78,7 +78,7 @@ export class BaseExtension implements IExtension {
             var $win = $(window);
             $('body').height($win.height());
 
-            $.publish(BaseExtension.RESIZE);
+            this.resize();
         }
 
         $(document).on('mousemove', (e) => {
@@ -140,6 +140,10 @@ export class BaseExtension implements IExtension {
 
     refresh(): void {
         this.triggerSocket(BaseExtension.REFRESH, null);
+    }
+
+    resize(): void {
+        $.publish(BaseExtension.RESIZE);
     }
 
     handleParentFrameEvent(message): void {

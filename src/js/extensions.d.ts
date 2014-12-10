@@ -38,6 +38,8 @@ interface JQuery {
     verticalPadding(): number;
     horizontalPadding(): number;
     toggleExpandText(chars: number);
+    ismouseover(): boolean;
+    equaliseHeight(reset?: boolean): any;
 
     // jsviews
     link: any;
@@ -79,8 +81,8 @@ interface Window{
     $: any;
     _: any;
     DEBUG: boolean;
-    // pdfjs
-    webViewerLoad: any;
+    webViewerLoad: any; // pdfjs
+    IEXMLHttpRequest: any;
 }
 
 // google

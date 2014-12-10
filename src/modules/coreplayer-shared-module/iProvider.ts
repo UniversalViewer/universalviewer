@@ -1,3 +1,5 @@
+/// <reference path="./iSettings.d.ts" />
+
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
 
@@ -37,8 +39,8 @@ interface IProvider{
     getStructureByCanvasIndex(index: number): any; // todo: remove?
     getStructureByIndex(structure: any, index: number): any; // todo: remove?
     getStructureIndex(path: string): number; // todo: remove?
-    getThumbs(): Array<Thumb>;
-    getThumbUri(asset: any, thumbsBaseUri?: string, thumbsUriTemplate?: string): string;
+    getThumbs(width: number, height: number): Thumb[];
+    getThumbUri(canvas: any, width: number, height: number): string;
     getTitle(): string;
     getTotalCanvases(): number;
     getTree(): TreeNode;
@@ -47,6 +49,7 @@ interface IProvider{
     getLastPageIndex(): number;
     getPrevPageIndex(canvasIndex?: number): number;
     getNextPageIndex(canvasIndex?: number): number;
+    getStartCanvasIndex(): number;
     isDeepLinkingEnabled(): boolean;
     isFirstCanvas(canvasIndex?: number): boolean;
     isLastCanvas(canvasIndex?: number): boolean;
@@ -60,6 +63,8 @@ interface IProvider{
     parseStructure(): void;
     reload(callback: any): void;
     setMediaUri(canvas: any): void; // todo: remove?
+    getSettings(): ISettings;
+    updateSettings(settings: ISettings): void;
 }
 
 export = IProvider;

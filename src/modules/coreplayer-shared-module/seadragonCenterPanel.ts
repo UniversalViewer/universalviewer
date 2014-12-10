@@ -134,13 +134,13 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
             $('.navigator').addClass('extraMargin');
 
-            if (this.provider.canvasIndex != 0) {
+            if (!this.provider.isFirstCanvas()) {
                 this.enablePrevButton();
             } else {
                 this.disablePrevButton();
             }
 
-            if (this.provider.canvasIndex != this.provider.getTotalCanvases() - 1) {
+            if (!this.provider.isLastCanvas()) {
                 this.enableNextButton();
             } else {
                 this.disableNextButton();

@@ -47,7 +47,19 @@ class BootStrapper{
     loadManifest(): void{
         var that = this;
 
-        $.getJSON(that.manifestUri, (manifest) => {
+        var settings: JQueryAjaxSettings = {
+            url: that.manifestUri,
+            type: 'GET',
+            dataType: 'jsonp',
+            jsonp: 'callback',
+            jsonpCallback: 'manifestCallback'
+        };
+
+        $.ajax(settings);
+
+        //$.getJSON(that.manifestUri, (manifest) => {
+
+        window.manifestCallback = (manifest: any) => {
 
             that.manifest = manifest;
 
@@ -57,33 +69,33 @@ class BootStrapper{
             var isReload = utils.Utils.getQuerystringParameter('rl') == "true";
             var sequenceParam = 'si';
 
-            if (that.configExtension && that.configExtension.options && that.configExtension.options.IIIF){
+            if (that.configExtension && that.configExtension.options && that.configExtension.options.IIIF) {
                 that.IIIF = true;
             }
 
             if (!that.IIIF) sequenceParam = 'asi';
 
-            if (isHomeDomain && !isReload){
+            if (isHomeDomain && !isReload) {
                 that.sequenceIndex = parseInt(utils.Utils.getHashParameter(sequenceParam, parent.document));
             }
 
-            if (!that.sequenceIndex){
+            if (!that.sequenceIndex) {
                 that.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(sequenceParam)) || 0;
             }
 
-            if (!that.IIIF){
+            if (!that.IIIF) {
                 that.sequences = that.manifest.assetSequences;
             } else {
                 that.sequences = that.manifest.sequences;
             }
 
-            if (!that.sequences){
+            if (!that.sequences) {
                 that.notFound();
             }
 
             that.loadSequence();
-
-        });
+        };
+        //});
     }
 
     loadSequence(): void{
@@ -142,7 +154,7 @@ class BootStrapper{
             extension = that.extensions['seadragon/iiif'];
         }
 
-        // todo: use a compiler flag
+        // todo: use a compiler flag when available
         var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config.js' : 'js/' + extension.name + '-config.js';
 
         // feature detection
@@ -160,7 +172,7 @@ class BootStrapper{
                         $.extend(true, config, that.configExtension);
                     }
 
-                    // todo: use a compiler flag
+                    // todo: use a compiler flag when available
                     var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/css/styles.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '.css';
 
                     yepnope.injectCss(cssPath, function () {
