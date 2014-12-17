@@ -168,7 +168,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         super.resize();
 
         // if in Firefox < v13 don't resize the media container.
-        if (window.BrowserDetect.browser == 'Firefox' && window.BrowserDetect.version < 13) {
+        if (window.browserDetect.browser == 'Firefox' && window.browserDetect.version < 13) {
             this.$container.width(this.mediaWidth);
             this.$container.height(this.mediaHeight);
         } else {

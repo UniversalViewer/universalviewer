@@ -61,44 +61,6 @@ function numericalInput(event) {
 
 // math
 
-function getScaleFraction(minSize, currentSize, scaleFactor, maxScale) {
-
-    // get the max size.
-    var maxSize = minSize * Math.pow(scaleFactor, maxScale);
-
-    // get the current fraction of the max size.
-    var n = currentSize / maxSize;
-
-    // assuming the scaleFactor is 3.
-    // log base 3 of n (3 to the what power is equal to n?)
-    var l = (Math.log(n) / Math.log(scaleFactor));
-
-    // if l = -4 it means 3 ^-4 = n
-
-    // assuming maxScale is 4 we want the following powers to fractions map:
-
-    // -4 = 0
-    // -3 = 1/4
-    // -2 = 2/4
-    // -1 = 3/4
-    //  0 = 1
-
-    // the formula for getting the fraction.
-    // (4 - abs(l)) / 4
-
-    var f = (maxScale - Math.abs(l)) / maxScale;
-
-    return f;
-}
-
-function getScaleFromFraction(fraction, minSize, scaleFactor, maxScale) {
-    var p = maxScale * fraction;
-
-    var s = minSize * Math.pow(scaleFactor, p);
-
-    return s;
-}
-
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }

@@ -168,7 +168,28 @@
             .galleryView{
 
                 .header{
-                    height: 40px;
+                    overflow: hidden;
+                    height: 45px;
+
+                    .btn {
+                        float: left;
+                        width: 30px;
+                        height: 30px;
+
+                        &.size-up{
+                            margin-left: 5px;
+                        }
+
+                        &.size-down{
+                            margin-right: 5px;
+                        }
+                    }
+
+                    input[type="range"]{
+                        float: left;
+                        margin-top: 12px;
+                        width: 100px;
+                    }
                 }
 
                 .main{
@@ -233,6 +254,34 @@
         }
 
 
+    }
+}
+
+#app.browser-Explorer {
+    .leftPanel{
+        .views{
+            .galleryView{
+                .header{
+                    input[type="range"] {
+                        margin-top: -11px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#app.browser-Firefox {
+    .leftPanel{
+        .views{
+            .galleryView{
+                .header{
+                    input[type="range"] {
+                        margin-top: 9px;
+                    }
+                }
+            }
+        }
     }
 }
 

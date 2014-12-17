@@ -75,7 +75,7 @@ interface Window{
     extension: any;
     pkgCallback: any;
     manifestCallback: any;
-    BrowserDetect: any;
+    browserDetect: any;
     trackEvent(category: string, action: string, label: string, value?: any);
     trackVariable(slot: number, name: string, value: string, scope: number);
     $: any;

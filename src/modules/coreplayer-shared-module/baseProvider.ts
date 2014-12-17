@@ -115,7 +115,7 @@ export class BaseProvider implements IProvider{
             callback();
         };
 
-        $.ajax({
+        $.ajax(<JQueryAjaxSettings>{
             url: manifestUri,
             type: 'GET',
             dataType: 'jsonp',
@@ -160,6 +160,11 @@ export class BaseProvider implements IProvider{
 
     getCanvasByIndex(index: number): any {
         return this.sequence.assets[index];
+    }
+
+    // todo
+    getCanvasIndexById(id: string): number {
+        return null;
     }
 
     getCurrentCanvas(): any {
@@ -338,6 +343,11 @@ export class BaseProvider implements IProvider{
 
     getStructureByIndex(structure: any, index: number): any{
         return structure.sections[index];
+    }
+
+    // todo
+    getStructureByPath(path: string): any{
+        return null;
     }
 
     getCanvasStructure(canvas: any): any {

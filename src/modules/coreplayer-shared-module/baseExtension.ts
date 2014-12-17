@@ -68,6 +68,8 @@ export class BaseExtension implements IExtension {
 
         // add/remove classes.
         this.$element.removeClass();
+        this.$element.addClass('browser-' + window.browserDetect.browser);
+        this.$element.addClass('browser-version-' + window.browserDetect.version);
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
         this.$element.addClass(this.provider.getSequenceType());

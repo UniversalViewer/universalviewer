@@ -12,12 +12,15 @@ import Thumb = require("../coreplayer-shared-module/thumb");
 export class GalleryView extends baseView.BaseView {
 
     $header: JQuery;
+    $sizeUpButton: JQuery;
     $sizeRange: JQuery;
     $main: JQuery;
+    $sizeDownButton: JQuery;
     $thumbs: JQuery;
     $selectedThumb: JQuery;
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
+    range: number;
 
     static THUMB_SELECTED: string = 'galleryView.onThumbSelected';
 
@@ -44,14 +47,38 @@ export class GalleryView extends baseView.BaseView {
         this.$header = $('<div class="header"></div>');
         this.$element.append(this.$header);
 
-        this.$sizeRange = $('<input type="range" name="size" min="0" max="10">');
+        this.$sizeDownButton = $('<input class="btn btn-default size-down" type="button" value="-" />');
+        this.$header.append(this.$sizeDownButton);
+
+        this.$sizeRange = $('<input type="range" name="size" min="0" max="10" value="5" />');
         this.$header.append(this.$sizeRange);
+
+        this.$sizeUpButton = $('<input class="btn btn-default size-up" type="button" value="+" />');
+        this.$header.append(this.$sizeUpButton);
 
         this.$main = $('<div class="main"></div>');
         this.$element.append(this.$main);
 
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$main.append(this.$thumbs);
+
+        this.$sizeDownButton.on('click', () => {
+            var val = Number(this.$sizeRange.val()) - 1;
+
+            if (val >= Number(this.$sizeRange.attr('min'))){
+                this.$sizeRange.val(val.toString());
+                this.$sizeRange.trigger('change');
+            }
+        });
+
+        this.$sizeUpButton.on('click', () => {
+            var val = Number(this.$sizeRange.val()) + 1
+
+            if (val <= Number(this.$sizeRange.attr('max'))){
+                this.$sizeRange.val(val.toString());
+                this.$sizeRange.trigger('change');
+            }
+        });
 
         this.$sizeRange.on('change', () => {
             this.updateThumbs();
@@ -65,14 +92,9 @@ export class GalleryView extends baseView.BaseView {
                              </div>'
         });
 
-        var extraHeight = this.options.thumbsExtraHeight;
-
         $.views.helpers({
             isOdd: function(num){
                 return (num % 2 == 0) ? false : true;
-            },
-            extraHeight: function(){
-                return extraHeight;
             },
             className: function(){
                 if (this.data.url){
@@ -87,6 +109,10 @@ export class GalleryView extends baseView.BaseView {
         this.$main.on('scroll', () => {
             this.updateThumbs();
         }, 1000);
+
+        if (!Modernizr.inputtypes.range){
+            this.$sizeRange.hide();
+        }
 
         this.resize();
     }
@@ -124,6 +150,10 @@ export class GalleryView extends baseView.BaseView {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
+        // cache range size
+        this.range = utils.Utils.normalise(Number(this.$sizeRange.val()), 0, 10);
+        this.range = utils.Utils.clamp(this.range, 0.05, 1);
+
         // test which thumbs are scrolled into view
         var thumbs = this.$thumbs.find('.thumb');
         var scrollTop = this.$main.scrollTop();
@@ -153,18 +183,16 @@ export class GalleryView extends baseView.BaseView {
     }
 
     sizeThumb($thumb: JQuery) : void {
-        var range = utils.Utils.normalise(Number(this.$sizeRange.val()), 0, 10) || 0.5;
-
         var width = $thumb.data('width');
         var height = $thumb.data('height');
 
         var $wrap = $thumb.find('.wrap');
         var $img = $wrap.find('img');
 
-        $wrap.width(width * range);
-        $wrap.height(height * range);
-        $img.width(width * range);
-        $img.height(height * range);
+        $wrap.width(width * this.range);
+        $wrap.height(height * this.range);
+        $img.width(width * this.range);
+        $img.height(height * this.range);
     }
 
     loadThumb($thumb: JQuery): void {

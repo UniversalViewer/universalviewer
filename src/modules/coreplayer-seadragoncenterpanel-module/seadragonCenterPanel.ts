@@ -10,7 +10,9 @@ import utils = require("../../utils");
 
 export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
-    private lastTilesNum;
+    private lastTilesNum: number;
+    private tileSources: any[];
+    private userData: any;
 
     constructor($element: JQuery) {
         super($element);
@@ -107,33 +109,37 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         //});
     }
 
-    loadTileSources(): void {
-        var tileSources = this.provider.getTileSources();
+    openHandler() {
+        var that = this.userData;
 
-        var that = this;
+        that.viewer.removeHandler('open', this);
 
-        // if there's no tilesource, show an 'image unavailable' error.
-        if (tileSources[0].tileSource){
-            that.viewer.open(tileSources[0]);
-        } else {
-            that.extension.showDialogue(that.config.content.imageUnavailable);
+        // if there's more than one tilesource, align them next to each other.
+        if (that.tileSources.length > 1) {
+            that.tileSources[1].x = that.viewer.world.getItemAt(0).getBounds().x + that.viewer.world.getItemAt(0).getBounds().width + that.config.options.pageGap;
+            that.viewer.addTiledImage(that.tileSources[1]);
         }
 
-        that.viewer.addHandler('open', function openHandler() {
-            that.viewer.removeHandler('open', openHandler);
+        // if the number of tilesources being displayed differs from the last number, re-center the viewer.
+        if (that.tileSources.length != that.lastTilesNum){
+            that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, that.tileSources.length, that.viewer.world.getItemAt(0).normHeight));
+        }
 
-            // if there's more than one tilesource, align them next to each other.
-            if (tileSources.length > 1) {
-                tileSources[1].x = that.viewer.world.getItemAt(0).getBounds().x + that.viewer.world.getItemAt(0).getBounds().width + that.config.options.pageGap;
-                that.viewer.addTiledImage(tileSources[1]);
-            }
-
-            // if the number of tilesources being displayed differs from the last number, re-center the viewer.
-            if (tileSources.length != that.lastTilesNum){
-                that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, tileSources.length, that.viewer.world.getItemAt(0).normHeight));
-            }
-
-            that.lastTilesNum = tileSources.length;
-        });
+        that.lastTilesNum = that.tileSources.length;
     }
+
+    loadTileSources(): void {
+        this.tileSources = this.provider.getTileSources();
+
+        // if there's no tilesource, show an 'image unavailable' error.
+        if (this.tileSources[0].tileSource){
+            this.viewer.open(this.tileSources[0]);
+        } else {
+            this.extension.showDialogue(this.config.content.imageUnavailable);
+        }
+
+        this.viewer.addHandler('open', this.openHandler, this);
+    }
+
+
 }

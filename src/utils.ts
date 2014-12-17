@@ -64,47 +64,59 @@ if (!Array.prototype.contains) {
 
 //#region browser detection
 
-window.BrowserDetect =
-{
-    init: function ()
-    {
+window.browserDetect = {
+    init: function () {
         this.browser = this.searchString(this.dataBrowser) || "Other";
-        this.version = this.searchVersion(navigator.userAgent) ||       this.searchVersion(navigator.appVersion) || "Unknown";
+        this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "Unknown";
+        // detect IE 11
+        if (this.browser == 'Explorer' && this.version == '7' && navigator.userAgent.match(/Trident/i)) {
+            this.version = this.searchVersionIE();
+        }
     },
 
-    searchString: function (data)
-    {
-        for (var i=0 ; i < data.length ; i++)
-        {
+    searchString: function (data) {
+        for (var i = 0 ; i < data.length ; i++) {
             var dataString = data[i].string;
             this.versionSearchString = data[i].subString;
 
-            if (dataString.indexOf(data[i].subString) != -1)
-            {
+            if (dataString.indexOf(data[i].subString) != -1) {
                 return data[i].identity;
             }
         }
     },
 
-    searchVersion: function (dataString)
-    {
+    searchVersion: function (dataString) {
         var index = dataString.indexOf(this.versionSearchString);
         if (index == -1) return;
-        return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+        return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
+    },
+
+    searchVersionIE: function() {
+        var ua = navigator.userAgent.toString().toLowerCase(),
+            match = /(trident)(?:.*rv:([\w.]+))?/.exec(ua) || /(msie) ([\w.]+)/.exec(ua) || ['', null, -1],
+            ver;
+        try {
+            ver = match[2].split('.')[0]; // version
+        }
+        catch (err) {
+            ver = 'unknown'; //
+        }
+        return ver;
     },
 
     dataBrowser:
     [
-        { string: navigator.userAgent, subString: "Chrome",  identity: "Chrome" },
-        { string: navigator.userAgent, subString: "MSIE",    identity: "Explorer" },
+        { string: navigator.userAgent, subString: "Chrome", identity: "Chrome" },
+        { string: navigator.userAgent, subString: "MSIE", identity: "Explorer" },
+        { string: navigator.userAgent, subString: "Trident", identity: "Explorer" },
         { string: navigator.userAgent, subString: "Firefox", identity: "Firefox" },
-        { string: navigator.userAgent, subString: "Safari",  identity: "Safari" },
-        { string: navigator.userAgent, subString: "Opera",   identity: "Opera" }
+        { string: navigator.userAgent, subString: "Safari", identity: "Safari" },
+        { string: navigator.userAgent, subString: "Opera", identity: "Opera" },
     ]
 
 };
 
-window.BrowserDetect.init();
+window.browserDetect.init();
 
 //#endregion
 
@@ -233,41 +245,6 @@ export class Utils{
     //#endregion
 
     //#region Math
-
-    static getScaleFraction(minSize: number, currentSize: number, scaleFactor: number, maxScale: number): number {
-
-        // get the max size.
-        var maxSize = minSize * Math.pow(scaleFactor, maxScale);
-
-        // get the current fraction of the max size.
-        var n = currentSize / maxSize;
-
-        // assuming the scaleFactor is 3.
-        // log base 3 of n (3 to the what power is equal to n?)
-        var l = (Math.log(n) / Math.log(scaleFactor));
-
-        // if l = -4 it means 3 ^-4 = n
-
-        // assuming maxScale is 4 we want the following powers to fractions map:
-
-        // -4 = 0
-        // -3 = 1/4
-        // -2 = 2/4
-        // -1 = 3/4
-        //  0 = 1
-
-        // the formula for getting the fraction.
-        // (4 - abs(l)) / 4
-
-        var f = (maxScale - Math.abs(l)) / maxScale;
-
-        return f;
-    }
-
-    static getScaleFromFraction(fraction: number, minSize: number, scaleFactor: number, maxScale: number): number {
-        var p = maxScale * fraction;
-        return minSize * Math.pow(scaleFactor, p);
-    }
 
     static clamp(value: number, min: number, max: number): number {
         return Math.min(Math.max(value, min), max);

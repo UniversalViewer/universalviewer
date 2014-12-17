@@ -122,8 +122,8 @@ export class Extension extends baseExtension.BaseExtension{
     }
 
     IsOldIE(): boolean {
-        var browser = window.BrowserDetect.browser;
-        var version = window.BrowserDetect.version;
+        var browser = window.browserDetect.browser;
+        var version = window.browserDetect.version;
 
         if (browser == 'Explorer' && version <= 9) return true;
         return false;

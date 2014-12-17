@@ -129,6 +129,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     dataBindGalleryView(): void{
+        if (!this.galleryView) return;
         var width = this.config.options.galleryThumbWidth;
         var height = this.config.options.galleryThumbHeight;
         this.galleryView.thumbs = this.provider.getThumbs(width, height);
