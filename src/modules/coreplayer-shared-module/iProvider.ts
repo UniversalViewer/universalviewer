@@ -24,6 +24,7 @@ interface IProvider{
     defaultToThumbsView(): boolean;
     getCanvasByIndex(index): any;
     getCanvasIndexByOrderLabel(label: string): number; // todo: remove?
+    getCanvasIndexById(id: string): number;
     getCanvasOrderLabel(canvas: any): string;
     getCanvasStructure(canvas: any): any;
     getCurrentCanvas(): any;
@@ -39,6 +40,7 @@ interface IProvider{
     getStructureByCanvasIndex(index: number): any; // todo: remove?
     getStructureByIndex(structure: any, index: number): any; // todo: remove?
     getStructureIndex(path: string): number; // todo: remove?
+    getStructureByPath(path: string): any;
     getThumbs(width: number, height: number): Thumb[];
     getThumbUri(canvas: any, width: number, height: number): string;
     getTitle(): string;

@@ -112,7 +112,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.title = this.extension.provider.getTitle();
 
         // if firefox, hide rotation and prev/next until this is resolved
-        var browser = window.BrowserDetect.browser;
+        var browser = window.browserDetect.browser;
 
         if (browser == 'Firefox') {
             if (this.provider.isMultiCanvas()){

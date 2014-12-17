@@ -22,23 +22,43 @@
             float: left;
 
             &.first{
-                background: url('@{img-path}first.png') no-repeat;
+                background-color: @gray;
+                background-image: url('@{img-path}first.png');
+                background-repeat: no-repeat;
                 margin: 0 0 0 0;
+                &:hover{
+                    background-color: @gray-dark;
+                }
             }
 
             &.prev{
-                background: url('@{img-path}prev.png') no-repeat;
+                background-color: @gray;
+                background-image: url('@{img-path}prev.png');
+                background-repeat: no-repeat;
                 margin: 0 0 0 5px;
+                &:hover{
+                    background-color: @gray-dark;
+                }
             }
 
             &.next{
-                background: url('@{img-path}next.png') no-repeat;
+                background-color: @gray;
+                background-image: url('@{img-path}next.png');
+                background-repeat: no-repeat;
                 margin: 0 5px 0 0;
+                &:hover{
+                    background-color: @gray-dark;
+                }
             }
 
             &.last{
-                background: url('@{img-path}last.png') no-repeat;
+                background-color: @gray;
+                background-image: url('@{img-path}last.png') ;
+                background-repeat: no-repeat;
                 margin: 0 0 0 0;
+                &:hover{
+                    background-color: @gray-dark;
+                }
             }
 
             &.go{
@@ -47,8 +67,12 @@
             }
 
             &.disabled{
-                opacity: 0.5;
-                filter: alpha(opacity=50);
+                opacity: 0.4;
+                filter: alpha(opacity=40);
+                background-color: transparent;
+                &:hover{
+                    background-color: transparent;
+                }
             }
         }
 

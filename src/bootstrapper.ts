@@ -47,7 +47,7 @@ class BootStrapper{
     loadManifest(): void{
         var that = this;
 
-        var settings: JQueryAjaxSettings = {
+        var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
             url: that.manifestUri,
             type: 'GET',
             dataType: 'jsonp',

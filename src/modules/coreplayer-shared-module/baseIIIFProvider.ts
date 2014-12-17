@@ -110,7 +110,7 @@ export class BaseProvider implements IProvider{
             callback();
         };
 
-        $.ajax({
+        $.ajax(<JQueryAjaxSettings>{
             url: manifestUri,
             type: 'GET',
             dataType: 'jsonp',
@@ -346,48 +346,6 @@ export class BaseProvider implements IProvider{
 
     }
 
-    getRootStructure(): any {
-        return this.rootStructure;
-    }
-
-    // the purpose of this is to give each canvas in sequence.canvases
-    // a collection of structures it belongs to.
-    // it also builds a path string property for each structure.
-    // this can then be used when a structure is clicked in the tree view
-    // where getStructureIndex loops though all canvases and their
-    // associated structures until it finds one with a matching path.
-    parseStructure(): void{
-        // create root structure
-        this.rootStructure = {
-            path: "",
-            structures: []
-        };
-
-        if (!this.manifest.structures) return;
-
-        for (var i = 0; i < this.manifest.structures.length; i++) {
-            var structure = this.manifest.structures[i];
-            this.rootStructure.structures.push(structure);
-            structure.path = "/" + i;
-
-            // loop through canvases and associate sequence.canvas with matching @id
-            for (var j = 0; j < structure.canvases.length; j++){
-                var canvas = this.getCanvasById(structure.canvases[j]);
-
-                if (!canvas){
-                    // canvas not found - json invalid.
-                    structure.canvases[j] = null;
-                    continue;
-                }
-
-                if (!canvas.structures) canvas.structures = [];
-                canvas.structures.push(structure);
-                // create two-way relationship
-                structure.canvases[j] = canvas;
-            }
-        }
-    }
-
     getStructureIndex(path: string): number {
         for (var i = 0; i < this.sequence.canvases.length; i++) {
             var canvas = this.sequence.canvases[i];
@@ -399,6 +357,24 @@ export class BaseProvider implements IProvider{
 
                 if (structure.path == path) {
                     return i;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    getStructureByPath(path: string): any{
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var canvas = this.sequence.canvases[i];
+
+            if (!canvas.structures) continue;
+
+            for (var j = 0; j < canvas.structures.length; j++) {
+                var structure = canvas.structures[j];
+
+                if (structure.path == path) {
+                    return structure;
                 }
             }
         }
@@ -418,11 +394,34 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
+    getCanvasIndexById(id: string): number {
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var c = this.sequence.canvases[i];
+
+            if (c['@id'] === id){
+                return i;
+            }
+        }
+
+        return null;
+    }
+
     getStructureByIndex(structure: any, index: number): any{
         return structure.structures[index];
     }
 
-    // todo
+    getStructureById(id: string): any {
+        for (var i = 0; i < this.manifest.structures.length; i++) {
+            var s = this.manifest.structures[i];
+
+            if (s['@id'] === id){
+                return s;
+            }
+        }
+
+        return null;
+    }
+
     getCanvasIndexByOrderLabel(label: string): number {
         // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
         var regExp = /(\d*)\D*(\d*)|(\d*)/;
@@ -460,7 +459,82 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
-    // todo: currently only supports single-level
+    getRootStructure(): any {
+
+        // todo: loop through structures looking for viewingHint="top"
+        // if found, use that as root, otherwise, create one.
+
+        if (!this.rootStructure){
+            this.rootStructure = {
+                path: "",
+                ranges: this.manifest.structures
+            };
+        }
+
+        return this.rootStructure;
+    }
+
+    parseStructure(): void {
+        if (!this.manifest.structures || !this.manifest.structures.length) return;
+
+        this.parseStructures(this.getRootStructure(), '');
+    }
+
+    // the purpose of this is to give each canvas in sequence.canvases
+    // a collection of structures it belongs to.
+    // it also builds a path string property for each structure
+    // that can be used when a node is clicked in the tree view
+    parseStructures(structure: any, path: string): void{
+
+        structure.path = path;
+
+        if (structure.canvases){
+            // loop through canvases and associate with matching @id
+            for (var j = 0; j < structure.canvases.length; j++){
+
+                var canvas = structure.canvases[j];
+
+                if (typeof(canvas) === "string"){
+                    canvas = this.getCanvasById(canvas);
+                }
+
+                if (!canvas){
+                    // canvas not found - json invalid.
+                    structure.canvases[j] = null;
+                    continue;
+                }
+
+                if (!canvas.structures) canvas.structures = [];
+
+                canvas.structures.push(structure);
+                // create two-way relationship
+                structure.canvases[j] = canvas;
+            }
+        }
+
+        if (structure.ranges) {
+            structure.structures = [];
+
+            for (var k = 0; k < structure.ranges.length; k++) {
+                var s = structure.ranges[k];
+
+                // if it's a url ref
+                if (typeof(s) === "string"){
+                    s = this.getStructureById(s);
+                }
+
+                // if this structure already has a parent, continue.
+                if (s.parentStructure) continue;
+
+                s.parentStructure = structure;
+
+                structure.structures.push(s);
+
+                this.parseStructures(s, path + '/' + k);
+            }
+        }
+    }
+
     getTree(): TreeNode{
         var rootStructure = this.getRootStructure();
 
@@ -476,13 +550,29 @@ export class BaseProvider implements IProvider{
             var node = new TreeNode();
             this.treeRoot.addNode(node);
 
-            node.label = structure.label;
-            node.data = structure;
-            node.data.type = "structure";
-            structure.treeNode = node;
+            this.parseTreeNode(node, structure);
         }
 
         return this.treeRoot;
+    }
+
+    parseTreeNode(node: TreeNode, structure: any): void {
+        node.label = structure.label;
+        node.data = structure;
+        node.data.type = "structure";
+        structure.treeNode = node;
+
+        if (structure.structures) {
+
+            for (var i = 0; i < structure.structures.length; i++) {
+                var childStructure = structure.structures[i];
+
+                var childNode = new TreeNode();
+                node.addNode(childNode);
+
+                this.parseTreeNode(childNode, childStructure);
+            }
+        }
     }
 
     getDomain(): string{

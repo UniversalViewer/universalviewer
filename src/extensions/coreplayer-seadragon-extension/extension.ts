@@ -295,7 +295,11 @@ export class Extension extends baseExtension.BaseExtension {
 
     viewStructure(path: string): void {
 
-        var index = this.provider.getStructureIndex(path);
+        var structure = this.provider.getStructureByPath(path);
+
+        var canvas = structure.canvases[0];
+
+        var index = this.provider.getCanvasIndexById(canvas['@id']);
 
         this.viewPage(index);
     }

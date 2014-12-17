@@ -1,9 +1,8 @@
 /// <reference path="js/require.d.ts" />
 
-
-
 require.config({
     paths: {
+        'modernizr': 'js/modernizr',
         'jquery': 'js/jquery-1.10.2.min',
         'plugins': 'js/jquery.plugins',
         'underscore': 'js/underscore-min',
@@ -36,39 +35,40 @@ require.config({
 });
 
 require([
-    'jquery',
-    'plugins',
-    'underscore',
-    'pubsub',
-    'jsviews',
-    'yepnope',
-    'yepnopecss',
-    'bootstrapper',
-    'l10n',
-    'extensions/coreplayer-seadragon-extension/extension',
-    'extensions/coreplayer-seadragon-extension/iiifProvider',
-    'extensions/coreplayer-seadragon-extension/provider',
-    'extensions/coreplayer-mediaelement-extension/extension',
-    'extensions/coreplayer-mediaelement-extension/provider',
-    'extensions/coreplayer-pdf-extension/extension',
-    'extensions/coreplayer-pdf-extension/provider'
-    ],
-    ($,
-    plugins,
-    _,
-    pubsub,
-    jsviews,
-    yepnope,
-    yepnopecss,
-    bootstrapper,
-    l10n,
-    seadragonExtension,
-    seadragonIIIFProvider,
-    seadragonProvider,
-    mediaelementExtension,
-    mediaelementProvider,
-    pdfExtension,
-    pdfProvider) => {
+        'modernizr',
+        'jquery',
+        'plugins',
+        'underscore',
+        'pubsub',
+        'jsviews',
+        'yepnope',
+        'yepnopecss',
+        'bootstrapper',
+        'l10n',
+        'extensions/coreplayer-seadragon-extension/extension',
+        'extensions/coreplayer-seadragon-extension/iiifProvider',
+        'extensions/coreplayer-seadragon-extension/provider',
+        'extensions/coreplayer-mediaelement-extension/extension',
+        'extensions/coreplayer-mediaelement-extension/provider',
+        'extensions/coreplayer-pdf-extension/extension',
+        'extensions/coreplayer-pdf-extension/provider'
+    ], (modernizr,
+        $,
+        plugins,
+        _,
+        pubsub,
+        jsviews,
+        yepnope,
+        yepnopecss,
+        bootstrapper,
+        l10n,
+        seadragonExtension,
+        seadragonIIIFProvider,
+        seadragonProvider,
+        mediaelementExtension,
+        mediaelementProvider,
+        pdfExtension,
+        pdfProvider) => {
 
         window.DEBUG = true; // this line is removed on build.
 

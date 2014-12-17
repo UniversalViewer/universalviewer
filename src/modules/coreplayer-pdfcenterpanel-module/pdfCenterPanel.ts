@@ -28,8 +28,8 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
 
     viewMedia(canvas) {
 
-        var browser = window.BrowserDetect.browser;
-        var version = window.BrowserDetect.version;
+        var browser = window.browserDetect.browser;
+        var version = window.browserDetect.version;
 
         if (browser == 'Explorer' && version < 10) {
 
