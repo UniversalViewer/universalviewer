@@ -156,6 +156,15 @@ export class GalleryView extends baseView.BaseView {
 
         // test which thumbs are scrolled into view
         var thumbs = this.$thumbs.find('.thumb');
+
+        for (var i = 0; i < thumbs.length; i++) {
+
+            var $thumb = $(thumbs[i]);
+            this.sizeThumb($thumb);
+        }
+
+        this.equaliseHeights();
+
         var scrollTop = this.$main.scrollTop();
         var scrollHeight = this.$main.height();
 
@@ -171,11 +180,7 @@ export class GalleryView extends baseView.BaseView {
             //} else {
                 //$thumb.find('.wrap').css('background', 'none');
             }
-
-            this.sizeThumb($thumb);
         }
-
-        this.equaliseHeights();
     }
 
     equaliseHeights(): void {
