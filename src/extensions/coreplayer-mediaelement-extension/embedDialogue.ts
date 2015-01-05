@@ -6,6 +6,10 @@ import IMediaElementProvider = require("./iMediaElementProvider");
 
 export class EmbedDialogue extends embed.EmbedDialogue {
 
+    constructor($element: JQuery) {
+        super($element);
+    }
+
     create(): void {
         
         this.setConfig('embedDialogue');

@@ -461,8 +461,14 @@ export class BaseProvider implements IProvider{
 
     getRootStructure(): any {
 
-        // todo: loop through structures looking for viewingHint="top"
-        // if found, use that as root, otherwise, create one.
+        // loop through structures looking for viewingHint="top"
+        for (var i = 0; i < this.manifest.structures.length; i++){
+            var s = this.manifest.structures[i];
+            if (s.viewingHint == "top"){
+                this.rootStructure = s;
+                break;
+            }
+        }
 
         if (!this.rootStructure){
             this.rootStructure = {

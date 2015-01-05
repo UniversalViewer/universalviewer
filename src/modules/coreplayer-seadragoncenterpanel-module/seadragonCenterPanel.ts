@@ -13,6 +13,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
     private lastTilesNum: number;
     private tileSources: any[];
     private userData: any;
+    private handler: any;
 
     constructor($element: JQuery) {
         super($element);
@@ -112,7 +113,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
     openHandler() {
         var that = this.userData;
 
-        that.viewer.removeHandler('open', this);
+        that.viewer.removeHandler('open', this.handler);
 
         // if there's more than one tilesource, align them next to each other.
         if (that.tileSources.length > 1) {
