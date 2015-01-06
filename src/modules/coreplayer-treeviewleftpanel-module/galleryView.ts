@@ -161,6 +161,7 @@ export class GalleryView extends baseView.BaseView {
 
             var $thumb = $(thumbs[i]);
             this.sizeThumb($thumb);
+            this.sizeThumbImage($thumb);
         }
 
         this.equaliseHeights();
