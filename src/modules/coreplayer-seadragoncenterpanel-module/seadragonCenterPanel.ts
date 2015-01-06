@@ -113,7 +113,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
     openHandler() {
         var that = this.userData;
 
-        that.viewer.removeHandler('open', this.handler);
+        that.viewer.removeHandler('open', that.handler);
 
         // if there's more than one tilesource, align them next to each other.
         if (that.tileSources.length > 1) {

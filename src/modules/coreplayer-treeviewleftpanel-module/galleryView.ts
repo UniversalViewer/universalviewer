@@ -156,6 +156,16 @@ export class GalleryView extends baseView.BaseView {
 
         // test which thumbs are scrolled into view
         var thumbs = this.$thumbs.find('.thumb');
+
+        for (var i = 0; i < thumbs.length; i++) {
+
+            var $thumb = $(thumbs[i]);
+            this.sizeThumb($thumb);
+            this.sizeThumbImage($thumb);
+        }
+
+        this.equaliseHeights();
+
         var scrollTop = this.$main.scrollTop();
         var scrollHeight = this.$main.height();
 
@@ -166,16 +176,14 @@ export class GalleryView extends baseView.BaseView {
             var thumbBottom = thumbTop + $thumb.height();
 
             if (thumbBottom >= scrollTop && thumbTop <= scrollTop + scrollHeight){
-                this.loadThumb($thumb);
+                this.loadThumb($thumb, () => {
+                    this.sizeThumbImage($thumb);
+                });
                 //$thumb.find('.wrap').css('background', 'red');
             //} else {
                 //$thumb.find('.wrap').css('background', 'none');
             }
-
-            this.sizeThumb($thumb);
         }
-
-        this.equaliseHeights();
     }
 
     equaliseHeights(): void {
@@ -187,15 +195,22 @@ export class GalleryView extends baseView.BaseView {
         var height = $thumb.data('height');
 
         var $wrap = $thumb.find('.wrap');
-        var $img = $wrap.find('img');
 
         $wrap.width(width * this.range);
         $wrap.height(height * this.range);
+    }
+
+    sizeThumbImage($thumb: JQuery) : void {
+        var width = $thumb.data('width');
+        var height = $thumb.data('height');
+
+        var $img = $thumb.find('img');
+
         $img.width(width * this.range);
         $img.height(height * this.range);
     }
 
-    loadThumb($thumb: JQuery): void {
+    loadThumb($thumb: JQuery, callback?: (img: JQuery) => void): void {
         var $wrap = $thumb.find('.wrap');
 
         if ($wrap.hasClass('loading') || $wrap.hasClass('loaded')) return;
@@ -217,6 +232,7 @@ export class GalleryView extends baseView.BaseView {
                 });
             });
             $wrap.append(img);
+            if (callback) callback(img);
         } else {
             $wrap.addClass('hidden');
         }
