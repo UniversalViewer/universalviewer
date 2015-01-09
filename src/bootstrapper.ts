@@ -34,11 +34,17 @@ class BootStrapper{
         // if data-config has been set on embedding div, load the js
         if (that.configExtensionUri){
 
-            $.getJSON(that.configExtensionUri, (configExtension) => {
-                that.configExtension = configExtension;
+            // if "sessionstorage"
+            if (that.configExtensionUri.toLowerCase() === "sessionstorage"){
+                var config = sessionStorage.getItem("uv-config");
+                that.configExtension = JSON.parse(config);
                 that.loadManifest();
-            });
-
+            } else {
+                $.getJSON(that.configExtensionUri, (configExtension) => {
+                    that.configExtension = configExtension;
+                    that.loadManifest();
+                });
+            }
         } else {
             that.loadManifest();
         }

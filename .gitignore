@@ -18,7 +18,7 @@ src/themes/*
 ## Build
 #################
 
-build/
+build/uv-*
 
 #################
 ## Tests
@@ -237,7 +237,6 @@ Desktop.ini
 *.egg
 *.egg-info
 dist
-build
 eggs
 parts
 bin

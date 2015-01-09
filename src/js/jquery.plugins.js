@@ -13,6 +13,32 @@
         });
     };
 
+    $.fn.toggleClass = function (class1, class2) {
+        return this.each(function () {
+            var $this = $(this);
+
+            if ($this.hasClass(class1)){
+                $(this).removeClass(class1).addClass(class2);
+            } else {
+                $(this).removeClass(class2).addClass(class1);
+            }
+
+        });
+    };
+
+    $.fn.toggleText = function (text1, text2) {
+        return this.each(function () {
+            var $this = $(this);
+
+            if ($this.text() == text1){
+                $(this).text(text2);
+            } else {
+                $(this).text(text1);
+            }
+
+        });
+    };
+
     $.fn.ellipsisFill = function (text) {
 
         return this.each(function () {
