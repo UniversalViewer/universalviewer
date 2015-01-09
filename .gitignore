@@ -15,12 +15,6 @@ src/themes/*
 !src/themes/coreplayer-default-theme
 
 #################
-## Build
-#################
-
-build/uv-*
-
-#################
 ## Tests
 #################
 
@@ -76,6 +70,14 @@ node_modules
 !src/js/*.js
 !src/*/*/js/*.js
 !src/examples/*.js
+
+#################
+## Build
+#################
+
+build/uv-*
+!build/*.js
+!build/**/*js
 
 #################
 ## Css
