@@ -103,6 +103,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
     createTreeView(): void {
         this.treeView = new tree.TreeView(this.$treeView);
+        this.treeView.elideCount = this.config.options.elideCount;
         this.dataBindTreeView();
     }
 
@@ -163,7 +164,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     expandFullFinish(): void {
         super.expandFullFinish();
 
-        if (this.$thumbsButton.hasClass('on')){
+        if (this.$treeButton.hasClass('on')){
+            this.openTreeView();
+        } else if (this.$thumbsButton.hasClass('on')){
             this.openThumbsView();
         }
 

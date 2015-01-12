@@ -2,13 +2,20 @@ var version = require('./build/version');
 
 module.exports = function (grunt) {
 
-    var packageJson = grunt.file.readJSON("package.json"),
-        packageDirName = 'universalviewer-' + packageJson.version;
+    var packageJson,
+        packageDirName;
+
+    function loadPackage() {
+        packageJson = grunt.file.readJSON("package.json");
+        packageDirName = 'universalviewer-' + packageJson.version
+    }
+
+    loadPackage();
 
     grunt.initConfig({
         global:
         {
-            buildDir: 'build/uv-' + packageJson.version,
+            //buildDir: 'build/uv-' + packageJson.version,
             minify: 'optimize=none',
             packageDirName: packageDirName,
             packageDir: 'build/' + packageDirName,
@@ -78,9 +85,9 @@ module.exports = function (grunt) {
         },
 
         clean: {
-            build : ["<%= global.buildDir %>/*"],
+            build : ["build/uv-*"],
             package: ['<%= global.packageDir %>'],
-            examples: ['<%= global.examplesDir %>/<%= global.buildDir %>']
+            examples: ['<%= global.examplesDir %>/build/uv-*']
         },
 
         copy: {
@@ -444,12 +451,19 @@ module.exports = function (grunt) {
         );
     });
 
+    function refresh() {
+        loadPackage();
+        var buildDir = 'build/uv-' + packageJson.version;
+        grunt.config.set('global.buildDir', buildDir);
+    }
+
     grunt.registerTask('build', '', function() {
 
         // grunt build --buildDir=myDir
         // or prepend / to target relative to system root.
-        var buildDir = grunt.option('buildDir');
-        if (buildDir) grunt.config.set('global.buildDir', buildDir);
+        //var buildDir = grunt.option('buildDir');
+
+        refresh();
 
         // grunt build --minify
         var minify = grunt.option('minify');
@@ -486,6 +500,8 @@ module.exports = function (grunt) {
 
     // copy into examples folder
     grunt.registerTask('examples', '', function() {
+
+        refresh();
 
         grunt.task.run(
             'replace:examples',

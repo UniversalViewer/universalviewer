@@ -6,12 +6,14 @@ import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
 import TreeNode = require("../coreplayer-shared-module/treeNode");
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import util = utils.Utils;
 
 export class TreeView extends baseView.BaseView {
 
     $tree: JQuery;
     selectedNode: any;
     isOpen: boolean = false;
+    elideCount: number;
 
     public rootNode: TreeNode;
 
@@ -23,6 +25,8 @@ export class TreeView extends baseView.BaseView {
 
     create(): void {
         super.create();
+
+        var that = this;
 
         $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.selectTreeNodeFromCanvasIndex(canvasIndex);
@@ -46,9 +50,9 @@ export class TreeView extends baseView.BaseView {
                                    <div class="spacer"></div>\
                                {{/if}}\
                                {^{if selected}}\
-                                   <a href="#" class="selected">{{>label}}</a>\
+                                   <a href="#" title="{{>label}}" class="selected">{{>text}}</a>\
                                {{else}}\
-                                   <a href="#">{{>label}}</a>\
+                                   <a href="#" title="{{>label}}">{{>text}}</a>\
                                {{/if}}\
                            </li>\
                            {^{if expanded}}\
@@ -68,6 +72,8 @@ export class TreeView extends baseView.BaseView {
                     $.observable(this.data).setProperty("expanded", !this.data.expanded);
                 },
                 init: function (tagCtx, linkCtx, ctx) {
+                    var data = tagCtx.view.data;
+                    data.text = util.htmlDecode(util.ellipsis(data.label, that.elideCount));
                     this.data = tagCtx.view.data;
                 },
                 onAfterLink: function () {
