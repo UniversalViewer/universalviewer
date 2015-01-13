@@ -2,7 +2,7 @@
 
 interface ISettings {
 
-    // todo: these belong in wellcome extension
+    // todo: these belong in uv extension
     //preloadMoreInfo: boolean;
     //embedEnabled: boolean;
     //downloadEnabled: boolean;

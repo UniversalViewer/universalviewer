@@ -79,7 +79,7 @@ docReady(function() {
         window.embedScriptIncluded = true;
 
         // get the script location.
-        var s = document.getElementById('embedWellcomePlayer');
+        var s = document.getElementById('embedUV');
 
         if (!s){
             var scripts = document.getElementsByTagName('script');
@@ -193,7 +193,7 @@ docReady(function() {
 
         $.when($.getScript(easyXDMUri),
                $.getScript(json2Uri)).done(function () {
-                   initPlayers($('.wellcomePlayer').not('[data-no-load*=true]'));
+                   initPlayers($('.uv').not('[data-no-load*=true]'));
                });
 
         // find all players on a page and initialise them

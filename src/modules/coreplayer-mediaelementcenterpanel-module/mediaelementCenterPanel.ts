@@ -76,9 +76,9 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         if (type.contains('video')){
 
             if (!canvas.sources){
-                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
             } else {
-                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></video>');
+                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
             }
 
             this.player = new MediaElementPlayer("#" + id, {
@@ -119,7 +119,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             });
         } else if (type.contains('audio')){
 
-            this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + canvas.mediaUri + '" class="mejs-wellcome" controls="controls" preload="none" poster="' + poster + '"></audio>');
+            this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
 
             this.player = new MediaElementPlayer("#" + id, {
                 plugins: ['flash'],

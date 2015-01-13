@@ -23,7 +23,6 @@
 
 'use strict';
 
-//var DEFAULT_URL = 'http://local.wellcomelibrary.org/media/b20432963/0/957cb1a0-cf75-4015-a00d-8e246820b287.pdf';
 var DEFAULT_SCALE = 'auto';
 var DEFAULT_SCALE_DELTA = 1.1;
 var UNKNOWN_SCALE = 0;
