@@ -99,6 +99,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
             $.publish(TreeViewLeftPanel.OPEN_THUMBS_VIEW);
         });
+
+        this.$element.attr('tabindex', '7');
     }
 
     createTreeView(): void {
@@ -153,6 +155,14 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             } else if (treeEnabled){
                 this.openTreeView();
             }
+        }
+
+        if (this.isExpanded){
+            this.$treeButton.attr('tabindex', '8');
+            this.$thumbsButton.attr('tabindex', '9');
+        } else {
+            this.$treeButton.attr('tabindex', '');
+            this.$thumbsButton.attr('tabindex', '');
         }
     }
 

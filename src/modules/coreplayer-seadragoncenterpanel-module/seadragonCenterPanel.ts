@@ -46,6 +46,10 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
                 this.viewer.hideControls();
             }
         }, this.config.options.controlsFadeAfterInactive);
+
+        this.$element.on('click', () => {
+            this.$viewer.find('.keyboard-command-area').focus();
+        });
     }
 
     createSeadragonViewer(): void {
@@ -63,7 +67,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
             controlsFadeDelay: this.config.options.controlsFadeDelay,
             controlsFadeLength: this.config.options.controlsFadeLength,
-            navigatorPosition: 'BOTTOM_RIGHT',
+            navigatorPosition: this.config.options.navigatorPosition,
             prefixUrl: prefixUrl,
             navImages: {
                 zoomIn: {
@@ -127,6 +131,10 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         }
 
         that.lastTilesNum = that.tileSources.length;
+
+        that.$viewer.find('div[title="Zoom in"]').attr('tabindex', 10);
+        that.$viewer.find('div[title="Zoom out"]').attr('tabindex', 11);
+        that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 12);
     }
 
     loadTileSources(): void {

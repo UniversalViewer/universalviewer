@@ -60,10 +60,10 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$prevOptions = $('<div class="prevOptions"></div>');
         this.$centerOptions.append(this.$prevOptions);
 
-        this.$firstButton = $('<a class="imageBtn first"></a>');
+        this.$firstButton = $('<a class="imageBtn first" tabindex="13"></a>');
         this.$prevOptions.append(this.$firstButton);
 
-        this.$prevButton = $('<a class="imageBtn prev"></a>');
+        this.$prevButton = $('<a class="imageBtn prev" tabindex="14"></a>');
         this.$prevOptions.append(this.$prevButton);
 
         this.$modeOptions = $('<div class="mode"></div>');
@@ -71,33 +71,33 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         this.$imageModeLabel = $('<label for="image">' + this.content.image + '</label>');
         this.$modeOptions.append(this.$imageModeLabel);
-        this.$imageModeOption = $('<input type="radio" id="image" name="mode"></input>');
+        this.$imageModeOption = $('<input type="radio" id="image" name="mode" tabindex="15"></input>');
         this.$modeOptions.append(this.$imageModeOption);
 
         this.$pageModeLabel = $('<label for="page">' + this.content.page + '</label>');
         this.$modeOptions.append(this.$pageModeLabel);
-        this.$pageModeOption = $('<input type="radio" id="page" name="mode"></input>');
+        this.$pageModeOption = $('<input type="radio" id="page" name="mode" tabindex="16"></input>');
         this.$modeOptions.append(this.$pageModeOption);
 
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
 
-        this.$searchText = $('<input class="searchText" maxlength="5" type="text"></input>');
+        this.$searchText = $('<input class="searchText" maxlength="5" type="text" tabindex="17"></input>');
         this.$search.append(this.$searchText);
 
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
 
-        this.$searchButton = $('<a class="imageBtn go"></a>');
+        this.$searchButton = $('<a class="imageBtn go" tabindex="18"></a>');
         this.$search.append(this.$searchButton);
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
 
-        this.$nextButton = $('<a class="imageBtn next"></a>');
+        this.$nextButton = $('<a class="imageBtn next" tabindex="1"></a>');
         this.$nextOptions.append(this.$nextButton);
 
-        this.$lastButton = $('<a class="imageBtn last"></a>');
+        this.$lastButton = $('<a class="imageBtn last" tabindex="2"></a>');
         this.$nextOptions.append(this.$lastButton);
 
         if ((<ISeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
