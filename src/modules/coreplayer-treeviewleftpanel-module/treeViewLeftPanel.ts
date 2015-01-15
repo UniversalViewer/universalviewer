@@ -84,23 +84,19 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$galleryView = $('<div class="galleryView"></div>');
         this.$views.append(this.$galleryView);
 
-        this.$treeButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$treeButton.onPressed(() => {
             this.openTreeView();
 
             $.publish(TreeViewLeftPanel.OPEN_TREE_VIEW);
         });
 
-        this.$thumbsButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
             $.publish(TreeViewLeftPanel.OPEN_THUMBS_VIEW);
         });
 
-        this.$element.attr('tabindex', '7');
+        this.$expandButton.attr('tabindex', '7');
     }
 
     createTreeView(): void {

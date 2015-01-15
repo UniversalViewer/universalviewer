@@ -225,6 +225,41 @@
         return parseInt($self.css('paddingTop')) + parseInt($self.css('paddingBottom'));
     };
 
+    $.fn.onPressed = function (callback) {
+
+        return this.each(function() {
+
+            var $this = $(this);
+
+            $this.on('click', function(e) {
+                e.preventDefault();
+                callback();
+            });
+
+            $this.on('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    callback();
+                }
+            });
+        });
+    };
+
+    $.fn.onEnter = function (callback) {
+
+        return this.each(function() {
+
+            var $this = $(this);
+
+            $this.on('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    callback();
+                }
+            });
+        });
+    };
+
 })(jQuery);
 
 (function ($) {

@@ -121,55 +121,36 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         }
 
         // ui event handlers.
-        this.$firstButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$firstButton.onPressed(() => {
             $.publish(PagingHeaderPanel.FIRST);
         });
 
-        this.$prevButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$prevButton.onPressed(() => {
             $.publish(PagingHeaderPanel.PREV);
         });
 
-        this.$nextButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$nextButton.onPressed(() => {
             $.publish(PagingHeaderPanel.NEXT);
         });
 
-        this.$imageModeOption.on('click', (e) => {
+        this.$imageModeOption.onPressed(() => {
             $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.IMAGE_MODE]);
         });
 
-        this.$pageModeOption.on('click', (e) => {
+        this.$pageModeOption.onPressed(() => {
             $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.PAGE_MODE]);
         });
 
-        this.$searchText.on('keyup', (e) => {
-            if (e.keyCode == 13) { // return pressed
-                e.preventDefault();
-                this.$searchText.blur();
-
-                // needs to be delayed, otherwise
-                // the RETURN event closes
-                // not found dialogue.
-                setTimeout(() => {
-                    this.search();
-                }, 1);
-            }
-        });
-
-        this.$searchButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$searchText.onEnter(() => {
+            this.$searchText.blur();
             this.search();
         });
 
-        this.$lastButton.on('click', (e) => {
-            e.preventDefault();
+        this.$searchButton.onPressed(() => {
+            this.search();
+        });
 
+        this.$lastButton.onPressed(() => {
             $.publish(PagingHeaderPanel.LAST);
         });
 

@@ -40,11 +40,14 @@ export class Dialogue extends baseView.BaseView {
             }
         });
 
+        // this causesed problems when dialogue was opened by pressing enter.
+        // instead, set the focus to .btn.default
+
         // default behaviour on RETURN is to close.
         // can be overridden.
-        $.subscribe(baseExtension.BaseExtension.RETURN, (e) => {
-            this.returnFunc();
-        });
+        //$.subscribe(baseExtension.BaseExtension.RETURN, (e) => {
+        //    this.returnFunc();
+        //});
 
         this.$top = utils.Utils.createDiv('top');
         this.$element.append(this.$top);
@@ -92,6 +95,9 @@ export class Dialogue extends baseView.BaseView {
         this.$element.show();
         this.setArrowPosition();
         this.isActive = true;
+
+        // set the focus to the default button.
+        this.$element.find('.btn.default').focus();
 
         $.publish(shell.Shell.SHOW_OVERLAY);
 

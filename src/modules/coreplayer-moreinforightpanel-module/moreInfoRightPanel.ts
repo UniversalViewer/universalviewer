@@ -25,7 +25,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         this.$items = $('<div class="items"></div>');
         this.$main.append(this.$items);
 
-        this.$element.attr('tabindex', '4');
+        this.$expandButton.attr('tabindex', '4');
     }
 
     toggleFinish(): void {
@@ -83,5 +83,6 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
     resize(): void {
         super.resize();
 
+        this.$main.height(this.$element.height() - this.$top.height() - this.$main.verticalMargins());
     }
 }

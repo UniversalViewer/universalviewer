@@ -54,38 +54,32 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.$main = utils.Utils.createDiv('main');
         this.$element.append(this.$main);
 
-        this.$expandButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$expandButton.onPressed(() => {
             this.toggle();
         });
 
-        this.$expandFullButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$expandFullButton.onPressed(() => {
             this.expandFull();
         });
 
-        this.$closedTitle.on('click', (e) => {
-            e.preventDefault();
-
+        this.$closedTitle.onPressed(() => {
             this.toggle();
         });
 
-        this.$title.on('click', (e) => {
-            e.preventDefault();
-
+        this.$title.onPressed(() => {
             this.toggle();
         });
 
-        this.$collapseButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$collapseButton.onPressed(() => {
             if (this.isFullyExpanded){
                 this.collapseFull();
             } else {
                 this.toggle();
             }
+        });
+
+        this.$collapseButton.onPressed(() => {
+            this.toggle();
         });
 
         this.$top.hide();
@@ -207,6 +201,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     expandFullFinish(): void {
         this.isFullyExpanded = true;
         this.$expandFullButton.hide();
+        this.$collapseButton.focus();
     }
 
     collapseFullStart(): void {

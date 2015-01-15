@@ -40,6 +40,8 @@ interface JQuery {
     toggleExpandText(chars: number);
     ismouseover(): boolean;
     equaliseHeight(reset?: boolean): any;
+    onPressed(callback: () => void): any;
+    onEnter(callback: () => void): any;
 
     // jsviews
     link: any;

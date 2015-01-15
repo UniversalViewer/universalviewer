@@ -34,13 +34,11 @@ export class GenericDialogue extends dialogue.Dialogue {
         this.$message = $('<p></p>');
         this.$content.append(this.$message);
 
-        this.$acceptButton = $('<a href="#" class="btn btn-primary accept"></a>');
+        this.$acceptButton = $('<a href="#" class="btn btn-primary accept default"></a>');
         this.$content.append(this.$acceptButton);
         this.$acceptButton.text(this.content.ok);
 
-        this.$acceptButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$acceptButton.onPressed(() => {
             this.accept();
         });
 

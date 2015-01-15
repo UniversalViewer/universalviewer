@@ -64,15 +64,7 @@ export class HeaderPanel extends baseView.BaseView {
             this.hideMessage();            
         });
 
-        //this.$helpButton.click(function (e) {
-        //    e.preventDefault();
-        //
-        //    $.publish(help.HelpDialogue.SHOW_HELP_DIALOGUE);
-        //});
-
-        this.$settingsButton.click(function (e) {
-            e.preventDefault();
-
+        this.$settingsButton.onPressed(() => {
             $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
     }
