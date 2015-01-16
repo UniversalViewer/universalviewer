@@ -30,19 +30,19 @@ export class BaseExpandPanel extends baseView.BaseView {
         
         super.create();
 
-        this.$top = utils.Utils.createDiv('top');
+        this.$top = $('<div class="top"></div>');
         this.$element.append(this.$top);
 
-        this.$title = utils.Utils.createDiv('title');
+        this.$title = $('<div class="title"></div>');
         this.$top.append(this.$title);
 
         this.$expandFullButton = $('<a class="expandFullButton"></a>');
         this.$top.append(this.$expandFullButton);
 
-        this.$collapseButton = utils.Utils.createDiv('collapseButton');
+        this.$collapseButton = $('<div class="collapseButton"></div>');
         this.$top.append(this.$collapseButton);
 
-        this.$closed = utils.Utils.createDiv('closed');
+        this.$closed = $('<div class="closed"></div>');
         this.$element.append(this.$closed);
 
         this.$expandButton = $('<a class="expandButton"></a>');
@@ -51,7 +51,7 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.$closedTitle = $('<a class="title"></a>');
         this.$closed.append(this.$closedTitle);
 
-        this.$main = utils.Utils.createDiv('main');
+        this.$main = $('<div class="main"></div>');
         this.$element.append(this.$main);
 
         this.$expandButton.onPressed(() => {
@@ -76,10 +76,6 @@ export class BaseExpandPanel extends baseView.BaseView {
             } else {
                 this.toggle();
             }
-        });
-
-        this.$collapseButton.onPressed(() => {
-            this.toggle();
         });
 
         this.$top.hide();
