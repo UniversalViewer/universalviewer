@@ -133,11 +133,11 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             $.publish(PagingHeaderPanel.NEXT);
         });
 
-        this.$imageModeOption.onPressed(() => {
+        this.$imageModeOption.on('click', (e) => {
             $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.IMAGE_MODE]);
         });
 
-        this.$pageModeOption.onPressed(() => {
+        this.$pageModeOption.on('click', (e) => {
             $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.PAGE_MODE]);
         });
 
@@ -206,7 +206,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
                 this.$searchText.val(orderLabel);
             }
         } else {
-            index++;
+            index += 1;
             this.$searchText.val(index);
         }
     }
@@ -227,6 +227,8 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         } else {
             var index = parseInt(this.$searchText.val());
 
+            index -= 1;
+
             if (isNaN(index)){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.invalidNumber);
                 return;
@@ -239,7 +241,6 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
                 return;
             }
 
-            index--;
             $.publish(PagingHeaderPanel.IMAGE_SEARCH, [index]);
         }
     }
