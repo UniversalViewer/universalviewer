@@ -423,8 +423,17 @@ export class BaseProvider implements IProvider{
     }
 
     getCanvasIndexByOrderLabel(label: string): number {
+        // first, check if there's a literal match
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var canvas = this.sequence.canvases[i];
+
+            if (canvas.label === label) {
+                return i;
+            }
+        }
+
         // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
-        var regExp = /(\d*)\D*(\d*)|(\d*)/;
+        var regExp = /(\d*)|(\d*)\D*(\d*)/;
         var match = regExp.exec(label);
 
         var labelPart1 = match[1];
@@ -437,7 +446,7 @@ export class BaseProvider implements IProvider{
         if (labelPart2) {
             regStr = "^" + labelPart1 + "\\D*" + labelPart2 + "$";
         } else {
-            regStr = "\\D*" + labelPart1 + "\\D*";
+            regStr = "^\\D*" + labelPart1 + "\\D*$";
         }
 
         searchRegExp = new RegExp(regStr);
@@ -462,11 +471,13 @@ export class BaseProvider implements IProvider{
     getRootStructure(): any {
 
         // loop through structures looking for viewingHint="top"
-        for (var i = 0; i < this.manifest.structures.length; i++){
-            var s = this.manifest.structures[i];
-            if (s.viewingHint == "top"){
-                this.rootStructure = s;
-                break;
+        if (this.manifest.structures){
+            for (var i = 0; i < this.manifest.structures.length; i++){
+                var s = this.manifest.structures[i];
+                if (s.viewingHint == "top"){
+                    this.rootStructure = s;
+                    break;
+                }
             }
         }
 
@@ -550,13 +561,15 @@ export class BaseProvider implements IProvider{
         this.treeRoot.data.type = "manifest";
         rootStructure.treeNode = this.treeRoot;
 
-        for (var i = 0; i < rootStructure.structures.length; i++){
-            var structure = rootStructure.structures[i];
+        if (rootStructure.structures){
+            for (var i = 0; i < rootStructure.structures.length; i++){
+                var structure = rootStructure.structures[i];
 
-            var node = new TreeNode();
-            this.treeRoot.addNode(node);
+                var node = new TreeNode();
+                this.treeRoot.addNode(node);
 
-            this.parseTreeNode(node, structure);
+                this.parseTreeNode(node, structure);
+            }
         }
 
         return this.treeRoot;

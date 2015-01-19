@@ -82,7 +82,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
 
-        this.$searchText = $('<input class="searchText" maxlength="5" type="text" tabindex="17"></input>');
+        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="17"></input>');
         this.$search.append(this.$searchText);
 
         this.$total = $('<span class="total"></span>');
