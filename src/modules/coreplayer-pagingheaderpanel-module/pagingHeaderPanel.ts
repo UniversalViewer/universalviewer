@@ -49,12 +49,18 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         super.create();
 
+        var that = this;
+
         $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged(canvasIndex);
         });
 
         $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
             this.modeChanged(mode);
+        });
+
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED, (e) => {
+            this.setSearchFieldValue(this.provider.canvasIndex);
         });
 
         this.$prevOptions = $('<div class="prevOptions"></div>');
@@ -192,7 +198,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         }
     }
 
-    setSearchPlaceholder(index): void {
+    setSearchFieldValue(index): void {
 
         var canvas = this.provider.getCanvasByIndex(index);
 
@@ -218,6 +224,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         if (!value) {
 
             this.extension.showDialogue(this.content.emptyValue);
+            $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
 
             return;
         }
@@ -231,6 +238,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
             if (isNaN(index)){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.invalidNumber);
+                $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
@@ -238,6 +246,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
             if (!asset){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+                $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
@@ -246,7 +255,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     }
 
     canvasIndexChanged(index): void {
-        this.setSearchPlaceholder(index);
+        this.setSearchFieldValue(index);
 
         if (this.provider.isFirstCanvas()){
             this.disableFirstButton();
@@ -306,7 +315,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     }
 
     modeChanged(mode): void {
-        this.setSearchPlaceholder(this.provider.canvasIndex);
+        this.setSearchFieldValue(this.provider.canvasIndex);
         this.setTitles();
         this.setTotal();
     }

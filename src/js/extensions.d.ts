@@ -30,7 +30,7 @@ interface Array<T>{
 
 interface JQuery {
     // plugins
-    ellipsisFill(text: string): any;
+    ellipsisFill(text?: string): any;
     swapClass(removeClass: string, addClass: string): void;
     targetBlank(): void;  
     verticalMargins(): number;

@@ -41,9 +41,14 @@
 
     $.fn.ellipsisFill = function (text) {
 
+        var textPassed = true;
+        if (!text) textPassed = false;
+
         return this.each(function () {
 
             var $self = $(this);
+
+            if (!textPassed) text = $self.text();
 
             $self.empty();
 
