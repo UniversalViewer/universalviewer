@@ -425,6 +425,11 @@ export class BaseProvider implements IProvider{
     getCanvasIndexByOrderLabel(label: string): number {
         label = label.trim();
 
+        // trim any preceding zeros.
+        if ($.isNumeric(label)) {
+            label = parseInt(label, 10).toString();
+        }
+
         var doublePageRegExp = /(\d*)\D+(\d*)/;
         var match, regExp, regStr, labelPart1, labelPart2;
 

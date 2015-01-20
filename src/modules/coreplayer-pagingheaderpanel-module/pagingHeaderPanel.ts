@@ -230,7 +230,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
             $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
-            var index = parseInt(this.$searchText.val());
+            var index = parseInt(this.$searchText.val(), 10);
 
             index -= 1;
 
