@@ -147,7 +147,16 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         //    this.extension.showDialogue(this.config.content.imageUnavailable);
         //}
 
-        this.viewer.open(this.tileSources);
+        // todo: use compiler flag (when available)
+        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/coreplayer-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
+
+        _.each(this.tileSources, function(ts) {
+            if (!ts.tileSource){
+                ts.tileSource = imageUnavailableUri
+            }
+        });
+
+        this.viewer.open(this.tileSources[0]);
 
         this.viewer.addHandler('open', this.openHandler, this);
     }
