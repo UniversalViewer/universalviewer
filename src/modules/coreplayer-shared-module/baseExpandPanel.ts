@@ -67,7 +67,11 @@ export class BaseExpandPanel extends baseView.BaseView {
         });
 
         this.$title.onPressed(() => {
-            this.toggle();
+            if (this.isFullyExpanded){
+                this.collapseFull();
+            } else {
+                this.toggle();
+            }
         });
 
         this.$collapseButton.onPressed(() => {
