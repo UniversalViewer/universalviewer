@@ -141,11 +141,13 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         this.tileSources = this.provider.getTileSources();
 
         // if there's no tilesource, show an 'image unavailable' error.
-        if (this.tileSources[0].tileSource){
-            this.viewer.open(this.tileSources[0]);
-        } else {
-            this.extension.showDialogue(this.config.content.imageUnavailable);
-        }
+        //if (this.tileSources[0].tileSource){
+        //    this.viewer.open(this.tileSources[0]);
+        //} else {
+        //    this.extension.showDialogue(this.config.content.imageUnavailable);
+        //}
+
+        this.viewer.open(this.tileSources);
 
         this.viewer.addHandler('open', this.openHandler, this);
     }
