@@ -50,9 +50,9 @@ export class TreeView extends baseView.BaseView {
                                    <div class="spacer"></div>\
                                {{/if}}\
                                {^{if selected}}\
-                                   <a href="#" title="{{>label}}" class="selected">{{>text}}</a>\
+                                   <a href="#" title="{{>label}}" class="selected">{{:~elide(text)}}</a>\
                                {{else}}\
-                                   <a href="#" title="{{>label}}">{{>text}}</a>\
+                                   <a href="#" title="{{>label}}">{{:~elide(text)}}</a>\
                                {{/if}}\
                            </li>\
                            {^{if expanded}}\
@@ -66,13 +66,20 @@ export class TreeView extends baseView.BaseView {
                            {{/if}}'
         });
 
+        $.views.helpers({
+            elide: function(text){
+                return util.htmlDecode(util.ellipsis(text, 40));
+                //todo: https://github.com/BorisMoore/jsviews/issues/296
+            }
+        });
+
         $.views.tags({
             tree: {
                 toggle: function () {
                     $.observable(this.data).setProperty("expanded", !this.data.expanded);
-                    this.contents().find('a').each(function() {
-                        that.elide($(this));
-                    });
+                    //this.contents().find('a').each(function() {
+                    //    that.elide($(this));
+                    //});
                 },
                 init: function (tagCtx, linkCtx, ctx) {
                     var data = tagCtx.view.data;
@@ -93,7 +100,7 @@ export class TreeView extends baseView.BaseView {
                             }
 
                             $.publish(TreeView.NODE_SELECTED, [self.data.data]);
-                        })
+                        });
                 },
                 template: $.templates.treeTemplate
             }
@@ -176,6 +183,15 @@ export class TreeView extends baseView.BaseView {
         $a.text(util.htmlDecode(util.ellipsis($a.attr('title'), elideCount)));
     }
 
+    private elideAll(): void {
+        var that = this;
+
+        this.$tree.find('a').each(function() {
+            var $this = $(this);
+            that.elide($this);
+        });
+    }
+
     resize(): void {
         super.resize();
 
@@ -183,9 +199,7 @@ export class TreeView extends baseView.BaseView {
 
         // elide links
         //this.$tree.find('a').ellipsisFill();
-        this.$tree.find('a').each(function() {
-            var $this = $(this);
-            that.elide($this);
-        });
+        this.elideAll();
+
     }
 }

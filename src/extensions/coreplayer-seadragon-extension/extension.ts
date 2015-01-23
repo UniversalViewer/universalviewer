@@ -313,6 +313,8 @@ export class Extension extends baseExtension.BaseExtension {
 
         var structure = this.provider.getStructureByPath(path);
 
+        if (!structure) return;
+
         var canvas = structure.canvases[0];
 
         var index = this.provider.getCanvasIndexById(canvas['@id']);
