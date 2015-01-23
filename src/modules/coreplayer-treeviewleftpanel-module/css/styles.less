@@ -47,6 +47,8 @@
                     color: @text-color;
                     margin-bottom: -1px;
                 }
+
+                .btn-focus();
             }
         }
 
@@ -58,6 +60,8 @@
 
             .treeView{
                 overflow: auto;
+//                overflow-y: scroll;
+//                overflow-x: hidden;
                 color: @text-color;
                 font-weight: normal;
 
@@ -278,6 +282,7 @@
                 .header{
                     input[type="range"] {
                         margin-top: 9px;
+                        overflow: hidden;
                     }
                 }
             }

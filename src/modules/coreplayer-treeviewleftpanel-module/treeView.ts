@@ -6,12 +6,14 @@ import shell = require("../coreplayer-shared-module/shell");
 import baseView = require("../coreplayer-shared-module/baseView");
 import TreeNode = require("../coreplayer-shared-module/treeNode");
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
+import util = utils.Utils;
 
 export class TreeView extends baseView.BaseView {
 
     $tree: JQuery;
     selectedNode: any;
     isOpen: boolean = false;
+    elideCount: number;
 
     public rootNode: TreeNode;
 
@@ -23,6 +25,8 @@ export class TreeView extends baseView.BaseView {
 
     create(): void {
         super.create();
+
+        var that = this;
 
         $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.selectTreeNodeFromCanvasIndex(canvasIndex);
@@ -46,9 +50,9 @@ export class TreeView extends baseView.BaseView {
                                    <div class="spacer"></div>\
                                {{/if}}\
                                {^{if selected}}\
-                                   <a href="#" class="selected">{{>label}}</a>\
+                                   <a href="#" title="{{>label}}" class="selected">{{>text}}</a>\
                                {{else}}\
-                                   <a href="#">{{>label}}</a>\
+                                   <a href="#" title="{{>label}}">{{>text}}</a>\
                                {{/if}}\
                            </li>\
                            {^{if expanded}}\
@@ -66,8 +70,13 @@ export class TreeView extends baseView.BaseView {
             tree: {
                 toggle: function () {
                     $.observable(this.data).setProperty("expanded", !this.data.expanded);
+                    this.contents().find('a').each(function() {
+                        that.elide($(this));
+                    });
                 },
                 init: function (tagCtx, linkCtx, ctx) {
+                    var data = tagCtx.view.data;
+                    data.text = data.label;//util.htmlDecode(util.ellipsis(data.label, that.elideCount));
                     this.data = tagCtx.view.data;
                 },
                 onAfterLink: function () {
@@ -161,7 +170,22 @@ export class TreeView extends baseView.BaseView {
         this.$element.hide();
     }
 
+    private elide($a: JQuery): void {
+        if (!$a.is(':visible')) return;
+        var elideCount = Math.floor($a.parent().width() / 7);
+        $a.text(util.htmlDecode(util.ellipsis($a.attr('title'), elideCount)));
+    }
+
     resize(): void {
         super.resize();
+
+        var that = this;
+
+        // elide links
+        //this.$tree.find('a').ellipsisFill();
+        this.$tree.find('a').each(function() {
+            var $this = $(this);
+            that.elide($this);
+        });
     }
 }

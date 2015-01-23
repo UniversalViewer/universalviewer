@@ -1,12 +1,21 @@
+var version = require('./build/version');
+
 module.exports = function (grunt) {
 
-    var packageJson = grunt.file.readJSON("package.json"),
-        packageDirName = 'universalviewer-' + packageJson.version;
+    var packageJson,
+        packageDirName;
+
+    function loadPackage() {
+        packageJson = grunt.file.readJSON("package.json");
+        packageDirName = 'universalviewer-' + packageJson.version
+    }
+
+    loadPackage();
 
     grunt.initConfig({
         global:
         {
-            buildDir: 'build/uv',
+            //buildDir: 'build/uv-' + packageJson.version,
             minify: 'optimize=none',
             packageDirName: packageDirName,
             packageDir: 'build/' + packageDirName,
@@ -17,7 +26,11 @@ module.exports = function (grunt) {
         pkg: packageJson,
         ts: {
             dev: {
-                src: ["src/**/*.ts"],
+                src: [
+                    './src/_Version.ts',
+                    './src/*.ts',
+                    './src/**/*.ts'
+                ],
                 options: {
                     target: 'es3',
                     module: 'amd',
@@ -72,9 +85,9 @@ module.exports = function (grunt) {
         },
 
         clean: {
-            build : ["<%= global.buildDir %>/*"],
+            build : ["build/uv-*"],
             package: ['<%= global.packageDir %>'],
-            examples: ['<%= global.examplesDir %>/<%= global.buildDir %>']
+            examples: ['<%= global.examplesDir %>/build/uv-*']
         },
 
         copy: {
@@ -289,7 +302,6 @@ module.exports = function (grunt) {
                 src: ['<%= global.buildDir %>/js/*dependencies.js'],
                 overwrite: true,
                 replacements: [{
-                    //from: /.\/js\/(.*)/g,
                     from: /:.*(?:'|").*\/(.*)(?:'|")/g,
                     to: ': \'$1\''
                 }]
@@ -321,12 +333,22 @@ module.exports = function (grunt) {
                 }]
             },
             js: {
-                // replace js.
+                // replace window.DEBUG=true
+                // todo: use a compiler flag when available
                 src: ['<%= global.buildDir %>/js/app.js'],
                 overwrite: true,
                 replacements: [{
                     from: /window.DEBUG.*=.*true;/g,
                     to: ''
+                }]
+            },
+            examples: {
+                // replace script paths with latest build version
+                src: ['<%= global.examplesDir %>/examples.js'],
+                overwrite: true,
+                replacements: [{
+                    from: /build\/uv.*?\//g,
+                    to: '<%= global.buildDir %>/'
                 }]
             }
         },
@@ -361,6 +383,15 @@ module.exports = function (grunt) {
                     //todo: port
                     configFile: "tests/protractor-conf.js"
                 }
+            }
+        },
+
+        version: {
+            bump: {
+            },
+            apply: {
+                src: './build/_VersionTemplate._ts',
+                dest: './src/_Version.ts'
             }
         }
     });
@@ -404,6 +435,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-protractor-runner');
 
+    version(grunt);
+
+    grunt.registerTask('dist:upbuild', ['version:bump', 'version:apply', 'build']);
+    grunt.registerTask('dist:upminor', ['version:bump:minor', 'version:apply', 'build']);
+    grunt.registerTask('dist:upmajor', ['version:bump:major', 'version:apply', 'build']);
+
     grunt.registerTask("default", '', function(){
 
         grunt.task.run(
@@ -414,12 +451,19 @@ module.exports = function (grunt) {
         );
     });
 
+    function refresh() {
+        loadPackage();
+        var buildDir = 'build/uv-' + packageJson.version;
+        grunt.config.set('global.buildDir', buildDir);
+    }
+
     grunt.registerTask('build', '', function() {
 
         // grunt build --buildDir=myDir
         // or prepend / to target relative to system root.
-        var buildDir = grunt.option('buildDir');
-        if (buildDir) grunt.config.set('global.buildDir', buildDir);
+        //var buildDir = grunt.option('buildDir');
+
+        refresh();
 
         // grunt build --minify
         var minify = grunt.option('minify');
@@ -457,7 +501,10 @@ module.exports = function (grunt) {
     // copy into examples folder
     grunt.registerTask('examples', '', function() {
 
+        refresh();
+
         grunt.task.run(
+            'replace:examples',
             'clean:examples',
             'copy:examples'
         );

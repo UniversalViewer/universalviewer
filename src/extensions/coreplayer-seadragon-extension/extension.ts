@@ -62,7 +62,15 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
+        $.subscribe(Extension.HOME, (e) => {
+            this.viewPage(this.provider.getFirstPageIndex());
+        });
+
         $.subscribe(header.PagingHeaderPanel.LAST, (e) => {
+            this.viewPage(this.provider.getLastPageIndex());
+        });
+
+        $.subscribe(Extension.END, (e) => {
             this.viewPage(this.provider.getLastPageIndex());
         });
 
@@ -70,7 +78,15 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
+        $.subscribe(Extension.PAGE_UP, (e) => {
+            this.viewPage(this.provider.getPrevPageIndex());
+        });
+
         $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
+            this.viewPage(this.provider.getNextPageIndex());
+        });
+
+        $.subscribe(Extension.PAGE_DOWN, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
@@ -308,6 +324,7 @@ export class Extension extends baseExtension.BaseExtension {
 
         if (!label) {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.emptyValue);
+            $.publish(Extension.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
 
@@ -317,6 +334,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         } else {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+            $.publish(Extension.CANVAS_INDEX_CHANGE_FAILED);
         }
     }
 

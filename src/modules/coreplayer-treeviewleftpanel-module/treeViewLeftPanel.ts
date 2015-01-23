@@ -84,25 +84,24 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$galleryView = $('<div class="galleryView"></div>');
         this.$views.append(this.$galleryView);
 
-        this.$treeButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$treeButton.onPressed(() => {
             this.openTreeView();
 
             $.publish(TreeViewLeftPanel.OPEN_TREE_VIEW);
         });
 
-        this.$thumbsButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
             $.publish(TreeViewLeftPanel.OPEN_THUMBS_VIEW);
         });
+
+        this.$expandButton.attr('tabindex', '7');
     }
 
     createTreeView(): void {
         this.treeView = new tree.TreeView(this.$treeView);
+        this.treeView.elideCount = this.config.options.elideCount;
         this.dataBindTreeView();
     }
 
@@ -153,6 +152,14 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
                 this.openTreeView();
             }
         }
+
+        if (this.isExpanded){
+            this.$treeButton.attr('tabindex', '8');
+            this.$thumbsButton.attr('tabindex', '9');
+        } else {
+            this.$treeButton.attr('tabindex', '');
+            this.$thumbsButton.attr('tabindex', '');
+        }
     }
 
     expandFullStart(): void {
@@ -163,7 +170,9 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     expandFullFinish(): void {
         super.expandFullFinish();
 
-        if (this.$thumbsButton.hasClass('on')){
+        if (this.$treeButton.hasClass('on')){
+            this.openTreeView();
+        } else if (this.$thumbsButton.hasClass('on')){
             this.openThumbsView();
         }
 

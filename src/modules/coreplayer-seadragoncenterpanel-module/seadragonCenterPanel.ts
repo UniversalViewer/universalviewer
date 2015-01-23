@@ -13,6 +13,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
     private lastTilesNum: number;
     private tileSources: any[];
     private userData: any;
+    private handler: any;
 
     constructor($element: JQuery) {
         super($element);
@@ -45,6 +46,10 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
                 this.viewer.hideControls();
             }
         }, this.config.options.controlsFadeAfterInactive);
+
+        this.$element.on('click', () => {
+            this.$viewer.find('.keyboard-command-area').focus();
+        });
     }
 
     createSeadragonViewer(): void {
@@ -62,7 +67,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
             controlsFadeDelay: this.config.options.controlsFadeDelay,
             controlsFadeLength: this.config.options.controlsFadeLength,
-            navigatorPosition: 'BOTTOM_RIGHT',
+            navigatorPosition: this.config.options.navigatorPosition,
             prefixUrl: prefixUrl,
             navImages: {
                 zoomIn: {
@@ -112,7 +117,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
     openHandler() {
         var that = this.userData;
 
-        that.viewer.removeHandler('open', this);
+        that.viewer.removeHandler('open', that.handler);
 
         // if there's more than one tilesource, align them next to each other.
         if (that.tileSources.length > 1) {
@@ -126,17 +131,32 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         }
 
         that.lastTilesNum = that.tileSources.length;
+
+        that.$viewer.find('div[title="Zoom in"]').attr('tabindex', 10);
+        that.$viewer.find('div[title="Zoom out"]').attr('tabindex', 11);
+        that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 12);
     }
 
     loadTileSources(): void {
         this.tileSources = this.provider.getTileSources();
 
         // if there's no tilesource, show an 'image unavailable' error.
-        if (this.tileSources[0].tileSource){
-            this.viewer.open(this.tileSources[0]);
-        } else {
-            this.extension.showDialogue(this.config.content.imageUnavailable);
-        }
+        //if (this.tileSources[0].tileSource){
+        //    this.viewer.open(this.tileSources[0]);
+        //} else {
+        //    this.extension.showDialogue(this.config.content.imageUnavailable);
+        //}
+
+        // todo: use compiler flag (when available)
+        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/coreplayer-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
+
+        _.each(this.tileSources, function(ts) {
+            if (!ts.tileSource){
+                ts.tileSource = imageUnavailableUri
+            }
+        });
+
+        this.viewer.open(this.tileSources[0]);
 
         this.viewer.addHandler('open', this.openHandler, this);
     }

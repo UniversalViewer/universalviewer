@@ -14,7 +14,6 @@ export class FooterPanel extends baseView.BaseView {
     static EMBED: string = 'footer.onEmbed';
 
     constructor($element: JQuery) {
-        //super($element, true, false);
         super($element);
     }
 
@@ -33,13 +32,13 @@ export class FooterPanel extends baseView.BaseView {
 
         this.$embedButton = $('<a href="#" class="imageBtn embed" title="' + this.content.embed + '"></a>');
         this.$options.append(this.$embedButton);
+        this.$embedButton.attr('tabindex', '6');
 
         this.$fullScreenBtn = $('<a href="#" class="imageBtn fullScreen" title="' + this.content.fullScreen + '"></a>');
         this.$options.append(this.$fullScreenBtn);
+        this.$fullScreenBtn.attr('tabindex', '5');
 
-        this.$embedButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$embedButton.onPressed(() => {
             $.publish(FooterPanel.EMBED);
         });
 

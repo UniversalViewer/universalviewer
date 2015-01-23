@@ -30,7 +30,7 @@ interface Array<T>{
 
 interface JQuery {
     // plugins
-    ellipsisFill(text: string): any;
+    ellipsisFill(text?: string): any;
     swapClass(removeClass: string, addClass: string): void;
     targetBlank(): void;  
     verticalMargins(): number;
@@ -40,6 +40,8 @@ interface JQuery {
     toggleExpandText(chars: number);
     ismouseover(): boolean;
     equaliseHeight(reset?: boolean): any;
+    onPressed(callback: () => void): any;
+    onEnter(callback: () => void): any;
 
     // jsviews
     link: any;

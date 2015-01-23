@@ -25,6 +25,7 @@ export class BaseExtension implements IExtension {
     static RESIZE: string = 'onResize';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
     static CANVAS_INDEX_CHANGED: string = 'onAssetIndexChanged';
+    static CANVAS_INDEX_CHANGE_FAILED: string = 'onAssetIndexChangeFailed';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
     static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
     static REDIRECT: string = 'onRedirect';
@@ -32,6 +33,10 @@ export class BaseExtension implements IExtension {
     static RELOAD: string = 'onReload';
     static ESCAPE: string = 'onEscape';
     static RETURN: string = 'onReturn';
+    static PAGE_UP: string = 'onPageUp';
+    static PAGE_DOWN: string = 'onPageDown';
+    static HOME: string = 'onHome';
+    static END: string = 'onEnd';
     static WINDOW_UNLOAD: string = 'onWindowUnload';
     static OPEN_MEDIA: string = 'onOpenMedia';
     static CREATED: string = 'onCreated';
@@ -94,7 +99,6 @@ export class BaseExtension implements IExtension {
             if (!this.isOverlayActive()){
                 $('#top').focus();
                 this.isFullScreen = !this.isFullScreen;
-                //this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN, this.isFullScreen);
                 this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN,
                     {
                         isFullScreen: this.isFullScreen,
@@ -105,8 +109,12 @@ export class BaseExtension implements IExtension {
 
         // keyboard events.
         $(document).keyup((e) => {
-            if (e.keyCode === 27) $.publish(BaseExtension.ESCAPE);
             if (e.keyCode === 13) $.publish(BaseExtension.RETURN);
+            if (e.keyCode === 27) $.publish(BaseExtension.ESCAPE);
+            if (e.keyCode === 33) $.publish(BaseExtension.PAGE_UP);
+            if (e.keyCode === 34) $.publish(BaseExtension.PAGE_DOWN);
+            if (e.keyCode === 35) $.publish(BaseExtension.END);
+            if (e.keyCode === 36) $.publish(BaseExtension.HOME);
         });
 
         $.subscribe(BaseExtension.ESCAPE, () => {

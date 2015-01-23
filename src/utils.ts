@@ -135,6 +135,12 @@ export class Utils{
         return trimmedText + "&hellip;";
     }
 
+    static htmlDecode(encoded: string): string {
+        var div = document.createElement('div');
+        div.innerHTML = encoded;
+        return div.firstChild.nodeValue;
+    }
+
     static numericalInput(event: JQueryKeyEventObject): boolean {
         // Allow: backspace, delete, tab and escape
         if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||

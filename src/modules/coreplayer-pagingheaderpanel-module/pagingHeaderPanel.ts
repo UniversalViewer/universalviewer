@@ -57,13 +57,17 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             this.modeChanged(mode);
         });
 
+        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED, (e) => {
+            this.setSearchFieldValue(this.provider.canvasIndex);
+        });
+
         this.$prevOptions = $('<div class="prevOptions"></div>');
         this.$centerOptions.append(this.$prevOptions);
 
-        this.$firstButton = $('<a class="imageBtn first"></a>');
+        this.$firstButton = $('<a class="imageBtn first" tabindex="13"></a>');
         this.$prevOptions.append(this.$firstButton);
 
-        this.$prevButton = $('<a class="imageBtn prev"></a>');
+        this.$prevButton = $('<a class="imageBtn prev" tabindex="14"></a>');
         this.$prevOptions.append(this.$prevButton);
 
         this.$modeOptions = $('<div class="mode"></div>');
@@ -71,33 +75,33 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         this.$imageModeLabel = $('<label for="image">' + this.content.image + '</label>');
         this.$modeOptions.append(this.$imageModeLabel);
-        this.$imageModeOption = $('<input type="radio" id="image" name="mode"></input>');
+        this.$imageModeOption = $('<input type="radio" id="image" name="mode" tabindex="15"></input>');
         this.$modeOptions.append(this.$imageModeOption);
 
         this.$pageModeLabel = $('<label for="page">' + this.content.page + '</label>');
         this.$modeOptions.append(this.$pageModeLabel);
-        this.$pageModeOption = $('<input type="radio" id="page" name="mode"></input>');
+        this.$pageModeOption = $('<input type="radio" id="page" name="mode" tabindex="16"></input>');
         this.$modeOptions.append(this.$pageModeOption);
 
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
 
-        this.$searchText = $('<input class="searchText" maxlength="5" type="text"></input>');
+        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="17"></input>');
         this.$search.append(this.$searchText);
 
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
 
-        this.$searchButton = $('<a class="imageBtn go"></a>');
+        this.$searchButton = $('<a class="imageBtn go" tabindex="18"></a>');
         this.$search.append(this.$searchButton);
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
 
-        this.$nextButton = $('<a class="imageBtn next"></a>');
+        this.$nextButton = $('<a class="imageBtn next" tabindex="1"></a>');
         this.$nextOptions.append(this.$nextButton);
 
-        this.$lastButton = $('<a class="imageBtn last"></a>');
+        this.$lastButton = $('<a class="imageBtn last" tabindex="2"></a>');
         this.$nextOptions.append(this.$lastButton);
 
         if ((<ISeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
@@ -121,21 +125,15 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         }
 
         // ui event handlers.
-        this.$firstButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$firstButton.onPressed(() => {
             $.publish(PagingHeaderPanel.FIRST);
         });
 
-        this.$prevButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$prevButton.onPressed(() => {
             $.publish(PagingHeaderPanel.PREV);
         });
 
-        this.$nextButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$nextButton.onPressed(() => {
             $.publish(PagingHeaderPanel.NEXT);
         });
 
@@ -147,29 +145,16 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.PAGE_MODE]);
         });
 
-        this.$searchText.on('keyup', (e) => {
-            if (e.keyCode == 13) { // return pressed
-                e.preventDefault();
-                this.$searchText.blur();
-
-                // needs to be delayed, otherwise
-                // the RETURN event closes
-                // not found dialogue.
-                setTimeout(() => {
-                    this.search();
-                }, 1);
-            }
-        });
-
-        this.$searchButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$searchText.onEnter(() => {
+            this.$searchText.blur();
             this.search();
         });
 
-        this.$lastButton.on('click', (e) => {
-            e.preventDefault();
+        this.$searchButton.onPressed(() => {
+            this.search();
+        });
 
+        this.$lastButton.onPressed(() => {
             $.publish(PagingHeaderPanel.LAST);
         });
 
@@ -211,7 +196,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         }
     }
 
-    setSearchPlaceholder(index): void {
+    setSearchFieldValue(index): void {
 
         var canvas = this.provider.getCanvasByIndex(index);
 
@@ -225,7 +210,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
                 this.$searchText.val(orderLabel);
             }
         } else {
-            index++;
+            index += 1;
             this.$searchText.val(index);
         }
     }
@@ -237,6 +222,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         if (!value) {
 
             this.extension.showDialogue(this.content.emptyValue);
+            $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
 
             return;
         }
@@ -244,10 +230,13 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
             $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
-            var index = parseInt(this.$searchText.val());
+            var index = parseInt(this.$searchText.val(), 10);
+
+            index -= 1;
 
             if (isNaN(index)){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.invalidNumber);
+                $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
@@ -255,16 +244,16 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
             if (!asset){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+                $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            index--;
             $.publish(PagingHeaderPanel.IMAGE_SEARCH, [index]);
         }
     }
 
     canvasIndexChanged(index): void {
-        this.setSearchPlaceholder(index);
+        this.setSearchFieldValue(index);
 
         if (this.provider.isFirstCanvas()){
             this.disableFirstButton();
@@ -324,7 +313,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     }
 
     modeChanged(mode): void {
-        this.setSearchPlaceholder(this.provider.canvasIndex);
+        this.setSearchFieldValue(this.provider.canvasIndex);
         this.setTitles();
         this.setTotal();
     }

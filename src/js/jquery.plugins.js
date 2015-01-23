@@ -13,11 +13,42 @@
         });
     };
 
+    $.fn.toggleClass = function (class1, class2) {
+        return this.each(function () {
+            var $this = $(this);
+
+            if ($this.hasClass(class1)){
+                $(this).removeClass(class1).addClass(class2);
+            } else {
+                $(this).removeClass(class2).addClass(class1);
+            }
+
+        });
+    };
+
+    $.fn.toggleText = function (text1, text2) {
+        return this.each(function () {
+            var $this = $(this);
+
+            if ($this.text() == text1){
+                $(this).text(text2);
+            } else {
+                $(this).text(text1);
+            }
+
+        });
+    };
+
     $.fn.ellipsisFill = function (text) {
+
+        var textPassed = true;
+        if (!text) textPassed = false;
 
         return this.each(function () {
 
             var $self = $(this);
+
+            if (!textPassed) text = $self.text();
 
             $self.empty();
 
@@ -197,6 +228,41 @@
     $.fn.verticalPadding = function () {
         var $self = $(this);
         return parseInt($self.css('paddingTop')) + parseInt($self.css('paddingBottom'));
+    };
+
+    $.fn.onPressed = function (callback) {
+
+        return this.each(function() {
+
+            var $this = $(this);
+
+            $this.on('click', function(e) {
+                e.preventDefault();
+                callback();
+            });
+
+            $this.on('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    callback();
+                }
+            });
+        });
+    };
+
+    $.fn.onEnter = function (callback) {
+
+        return this.each(function() {
+
+            var $this = $(this);
+
+            $this.on('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    callback();
+                }
+            });
+        });
     };
 
 })(jQuery);

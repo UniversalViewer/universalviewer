@@ -1,0 +1,18 @@
+{
+  "name": "Universal Viewer",
+  "version": "0.1.30",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BritishLibrary/UniversalViewer"
+  },
+  "authors": [
+    "edsilv <e.silverton@gmail.com>"
+  ],
+  "ignore": [
+    "build",
+    "tests",
+    "Gruntfile.js"
+  ],
+  "dependencies": {},
+  "devDependencies": {}
+}

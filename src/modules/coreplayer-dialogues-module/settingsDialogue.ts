@@ -3,11 +3,13 @@ import extension = require("../../extensions/coreplayer-seadragon-extension/exte
 import shell = require("../coreplayer-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../coreplayer-shared-module/dialogue");
+import version = require("../../_Version");
 
 export class SettingsDialogue extends dialogue.Dialogue {
 
     $title: JQuery;
     $scroll: JQuery;
+    $version: JQuery;
     $pagingEnabledTitle: JQuery;
     $pagingEnabledCheckbox: JQuery;
 
@@ -39,6 +41,9 @@ export class SettingsDialogue extends dialogue.Dialogue {
         this.$scroll = $('<div class="scroll"></div>');
         this.$content.append(this.$scroll);
 
+        this.$version = $('<div class="version"></div>');
+        this.$content.append(this.$version);
+
         this.$pagingEnabledCheckbox = $('<input id="pagingEnabled" type="checkbox" />');
         this.$scroll.append(this.$pagingEnabledCheckbox);
 
@@ -49,6 +54,8 @@ export class SettingsDialogue extends dialogue.Dialogue {
         this.$title.text(this.content.title);
 
         var that = this;
+
+        this.$version.text("v" + version.Version);
 
         this.$pagingEnabledCheckbox.change(function() {
             var settings: ISettings = that.getSettings();

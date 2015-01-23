@@ -423,30 +423,39 @@ export class BaseProvider implements IProvider{
     }
 
     getCanvasIndexByOrderLabel(label: string): number {
-        // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
-        var regExp = /(\d*)\D*(\d*)|(\d*)/;
-        var match = regExp.exec(label);
+        label = label.trim();
 
-        var labelPart1 = match[1];
-        var labelPart2 = match[2];
-
-        if (!labelPart1) return -1;
-
-        var searchRegExp, regStr;
-
-        if (labelPart2) {
-            regStr = "^" + labelPart1 + "\\D*" + labelPart2 + "$";
-        } else {
-            regStr = "\\D*" + labelPart1 + "\\D*";
+        // trim any preceding zeros.
+        if ($.isNumeric(label)) {
+            label = parseInt(label, 10).toString();
         }
 
-        searchRegExp = new RegExp(regStr);
+        var doublePageRegExp = /(\d*)\D+(\d*)/;
+        var match, regExp, regStr, labelPart1, labelPart2;
 
-        // loop through files, return first one with matching orderlabel.
         for (var i = 0; i < this.sequence.canvases.length; i++) {
             var canvas = this.sequence.canvases[i];
 
-            if (searchRegExp.test(canvas.label)) {
+            // check if there's a literal match
+            if (canvas.label === label) {
+                return i;
+            }
+
+            // check if there's a match for double-page spreads e.g. 100-101, 100_101, 100 101
+            match = doublePageRegExp.exec(label);
+
+            if (!match) continue;
+
+            labelPart1 = match[1];
+            labelPart2 = match[2];
+
+            if (!labelPart2) continue;
+
+            regStr = "^" + labelPart1 + "\\D+" + labelPart2 + "$";
+
+            regExp = new RegExp(regStr);
+
+            if (regExp.test(canvas.label)) {
                 return i;
             }
         }
@@ -461,8 +470,16 @@ export class BaseProvider implements IProvider{
 
     getRootStructure(): any {
 
-        // todo: loop through structures looking for viewingHint="top"
-        // if found, use that as root, otherwise, create one.
+        // loop through structures looking for viewingHint="top"
+        if (this.manifest.structures){
+            for (var i = 0; i < this.manifest.structures.length; i++){
+                var s = this.manifest.structures[i];
+                if (s.viewingHint == "top"){
+                    this.rootStructure = s;
+                    break;
+                }
+            }
+        }
 
         if (!this.rootStructure){
             this.rootStructure = {
@@ -544,13 +561,15 @@ export class BaseProvider implements IProvider{
         this.treeRoot.data.type = "manifest";
         rootStructure.treeNode = this.treeRoot;
 
-        for (var i = 0; i < rootStructure.structures.length; i++){
-            var structure = rootStructure.structures[i];
+        if (rootStructure.structures){
+            for (var i = 0; i < rootStructure.structures.length; i++){
+                var structure = rootStructure.structures[i];
 
-            var node = new TreeNode();
-            this.treeRoot.addNode(node);
+                var node = new TreeNode();
+                this.treeRoot.addNode(node);
 
-            this.parseTreeNode(node, structure);
+                this.parseTreeNode(node, structure);
+            }
         }
 
         return this.treeRoot;
