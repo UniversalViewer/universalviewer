@@ -10,7 +10,7 @@ class BootStrapper{
     sequenceIndex: number;
     sequences: any;
     sequence: any;
-    IIIF: boolean = false;
+    IIIF: boolean = true;
     configExtensionUri: string;
     configExtension: any;
 
@@ -76,7 +76,7 @@ class BootStrapper{
             var sequenceParam = 'si';
 
             if (that.configExtension && that.configExtension.options && that.configExtension.options.IIIF) {
-                that.IIIF = true;
+                that.IIIF = that.configExtension.options.IIIF;
             }
 
             if (!that.IIIF) sequenceParam = 'asi';
