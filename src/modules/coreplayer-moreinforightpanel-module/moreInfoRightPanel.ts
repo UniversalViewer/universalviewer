@@ -26,6 +26,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         this.$main.append(this.$items);
 
         this.$expandButton.attr('tabindex', '4');
+        this.$collapseButton.attr('tabindex', '4');
     }
 
     toggleFinish(): void {

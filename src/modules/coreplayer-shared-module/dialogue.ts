@@ -97,7 +97,9 @@ export class Dialogue extends baseView.BaseView {
         this.isActive = true;
 
         // set the focus to the default button.
-        this.$element.find('.btn.default').focus();
+        setTimeout(() => {
+            this.$element.find('.btn.default').focus();
+        }, 1);
 
         $.publish(shell.Shell.SHOW_OVERLAY);
 

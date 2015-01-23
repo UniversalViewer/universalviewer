@@ -223,7 +223,6 @@ export class BaseExtension implements IExtension {
         if (seeAlsoUri){
             window.open(seeAlsoUri, '_blank');
         } else {
-            //this.viewSequence(manifest.sequence.index);
             if (this.isFullScreen) {
                 $.publish(BaseExtension.TOGGLE_FULLSCREEN);
             }

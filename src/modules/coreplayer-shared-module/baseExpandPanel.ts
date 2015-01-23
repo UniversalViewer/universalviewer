@@ -191,7 +191,11 @@ export class BaseExpandPanel extends baseView.BaseView {
     }
 
     toggleFinish(): void {
-
+        if (this.isExpanded){
+            this.focusCollapseButton();
+        } else {
+            this.focusExpandButton();
+        }
     }
 
     expandFullStart(): void {
@@ -201,7 +205,8 @@ export class BaseExpandPanel extends baseView.BaseView {
     expandFullFinish(): void {
         this.isFullyExpanded = true;
         this.$expandFullButton.hide();
-        this.$collapseButton.focus();
+
+        this.focusCollapseButton();
     }
 
     collapseFullStart(): void {
@@ -211,6 +216,26 @@ export class BaseExpandPanel extends baseView.BaseView {
     collapseFullFinish(): void {
         this.isFullyExpanded = false;
         this.$expandFullButton.show();
+
+        this.focusExpandFullButton();
+    }
+
+    focusExpandButton(): void {
+        setTimeout(() => {
+            this.$expandButton.focus();
+        }, 1);
+    }
+
+    focusExpandFullButton(): void {
+        setTimeout(() => {
+            this.$expandFullButton.focus();
+        }, 1);
+    }
+
+    focusCollapseButton(): void {
+        setTimeout(() => {
+            this.$collapseButton.focus();
+        }, 1);
     }
 
     resize(): void {
