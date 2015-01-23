@@ -50,9 +50,9 @@ export class TreeView extends baseView.BaseView {
                                    <div class="spacer"></div>\
                                {{/if}}\
                                {^{if selected}}\
-                                   <a href="#" title="{{>label}}" class="selected">{{:~elide(text)}}</a>\
+                                   <a href="#" title="{{>label}}" class="selected" data-link="~elide(text)"></a>\
                                {{else}}\
-                                   <a href="#" title="{{>label}}">{{:~elide(text)}}</a>\
+                                   <a href="#" title="{{>label}}" data-link="~elide(text)"></a>\
                                {{/if}}\
                            </li>\
                            {^{if expanded}}\
@@ -68,6 +68,7 @@ export class TreeView extends baseView.BaseView {
 
         $.views.helpers({
             elide: function(text){
+                var anchorElement = this.linkCtx.elem;
                 return util.htmlDecode(util.ellipsis(text, 40));
                 //todo: https://github.com/BorisMoore/jsviews/issues/296
             }
