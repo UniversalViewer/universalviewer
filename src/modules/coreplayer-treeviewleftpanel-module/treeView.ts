@@ -68,9 +68,10 @@ export class TreeView extends baseView.BaseView {
 
         $.views.helpers({
             elide: function(text){
-                var anchorElement = this.linkCtx.elem;
-                return util.htmlDecode(util.ellipsis(text, 40));
-                //todo: https://github.com/BorisMoore/jsviews/issues/296
+                var $a = $(this.linkCtx.elem);
+                var elideCount = Math.floor($a.parent().width() / 7);
+                return util.htmlDecode(util.ellipsis(text, elideCount));
+                //https://github.com/BorisMoore/jsviews/issues/296
             }
         });
 
@@ -196,11 +197,7 @@ export class TreeView extends baseView.BaseView {
     resize(): void {
         super.resize();
 
-        var that = this;
-
         // elide links
-        //this.$tree.find('a').ellipsisFill();
         this.elideAll();
-
     }
 }

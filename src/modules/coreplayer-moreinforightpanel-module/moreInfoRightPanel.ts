@@ -76,7 +76,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         $header.text(name);
         $text.text(value);
 
-        //$text.toggleExpandText(trimChars);
+        $text.toggleExpandText(trimChars);
 
         return $elem;
     }
