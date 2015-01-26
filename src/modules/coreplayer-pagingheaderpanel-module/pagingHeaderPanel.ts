@@ -170,7 +170,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         // cycle focus back to start.
         // todo: design a more generic system that finds the element with the highest tabindex and attaches this listener
         this.$searchButton.blur(() => {
-            if (!this.extension.shifted){
+            if (this.extension.tabbing && !this.extension.shifted){
                 this.$nextButton.focus();
             }
         });

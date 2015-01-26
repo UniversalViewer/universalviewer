@@ -10,6 +10,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     isExpanded: boolean = false;
     isFullyExpanded: boolean = false;
     isUnopened: boolean = true;
+    autoToggled: boolean = false;
 
     $top: JQuery;
     $title: JQuery;
@@ -90,7 +91,9 @@ export class BaseExpandPanel extends baseView.BaseView {
         super.init();
     }
 
-    toggle(): void {
+    toggle(autoToggled?: boolean): void {
+
+        (autoToggled) ? this.autoToggled = true : this.autoToggled = false;
 
         // if collapsing, hide contents immediately.
         if (this.isExpanded) {
@@ -191,7 +194,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     }
 
     toggleFinish(): void {
-        if (this.isExpanded){
+        if (this.isExpanded && !this.autoToggled){
             this.focusCollapseButton();
         } else {
             this.focusExpandButton();

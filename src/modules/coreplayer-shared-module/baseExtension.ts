@@ -14,6 +14,7 @@ export class BaseExtension implements IExtension {
     canvasIndex: number;
     mouseX: number;
     mouseY: number;
+    tabbing: boolean = false;
     shifted: boolean = false;
     $element: JQuery;
     extensions: any;
@@ -96,6 +97,7 @@ export class BaseExtension implements IExtension {
 
         $(document).on('keyup keydown', (e) => {
             this.shifted = e.shiftKey;
+            this.tabbing = e.keyCode === 9;
         });
 
         this.$element.append('<a href="/" id="top"></a>');

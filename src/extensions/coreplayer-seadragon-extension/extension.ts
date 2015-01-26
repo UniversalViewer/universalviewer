@@ -190,6 +190,8 @@ export class Extension extends baseExtension.BaseExtension {
             // initial sizing
             $.publish(baseExtension.BaseExtension.RESIZE);
 
+            that.setDefaultFocus();
+
             // publish created event
             $.publish(Extension.CREATED);
         });
@@ -231,6 +233,12 @@ export class Extension extends baseExtension.BaseExtension {
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
         }
+    }
+
+    setDefaultFocus(): void {
+        setTimeout(() => {
+            $('[tabindex=1]').focus();
+        }, 1);
     }
 
     setParams(): void{
