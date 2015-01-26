@@ -6,6 +6,7 @@ interface IExtension{
     isFullScreen: boolean;
     mouseX: number;
     mouseY: number;
+    shifted: boolean;
     provider: any;
 
     getParam(key: baseProvider.params): any;

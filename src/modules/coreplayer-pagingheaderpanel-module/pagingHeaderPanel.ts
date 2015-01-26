@@ -166,6 +166,22 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         if (this.options.helpEnabled === false){
             this.$helpButton.hide();
         }
+
+        // cycle focus back to start.
+        // todo: design a more generic system that finds the element with the highest tabindex and attaches this listener
+        this.$searchButton.blur(() => {
+            if (!this.extension.shifted){
+                this.$nextButton.focus();
+            }
+        });
+
+        //this.$nextButton.blur(() => {
+        //    if (this.extension.shifted) {
+        //        setTimeout(() => {
+        //            this.$searchButton.focus();
+        //        }, 100);
+        //    }
+        //});
     }
 
     setTitles(): void {
