@@ -97,11 +97,17 @@ export class GalleryView extends baseView.BaseView {
                 return (num % 2 == 0) ? false : true;
             },
             className: function(){
-                if (this.data.url){
-                    return "thumb";
+                var className = "thumb";
+
+                if (this.data.index === 0){
+                    className += " first";
                 }
 
-                return "thumb placeholder";
+                if (!this.data.url){
+                    className += " placeholder";
+                }
+
+                return className;
             }
         });
 

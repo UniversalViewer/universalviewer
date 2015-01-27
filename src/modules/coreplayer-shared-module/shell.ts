@@ -78,7 +78,6 @@ export class Shell extends baseView.BaseView {
         Shell.$overlays.height(this.extension.height());
 
         var mainHeight = this.$element.height() - parseInt(Shell.$mainPanel.css('marginTop')) - Shell.$headerPanel.height() - Shell.$footerPanel.height();
-        //Shell.$mainPanel.actualHeight(mainHeight);
         Shell.$mainPanel.height(mainHeight);
     }
 }

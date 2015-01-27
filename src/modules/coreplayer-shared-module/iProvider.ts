@@ -52,6 +52,7 @@ interface IProvider{
     getPrevPageIndex(canvasIndex?: number): number;
     getNextPageIndex(canvasIndex?: number): number;
     getStartCanvasIndex(): number;
+    getViewingDirection(): string;
     isDeepLinkingEnabled(): boolean;
     isFirstCanvas(canvasIndex?: number): boolean;
     isLastCanvas(canvasIndex?: number): boolean;

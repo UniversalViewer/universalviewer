@@ -226,13 +226,25 @@ export class BaseProvider implements IProvider{
     getPagedIndices(canvasIndex?: number): number[]{
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
 
+        var indices = [];
+
         if (this.isFirstCanvas(canvasIndex) || this.isLastCanvas(canvasIndex)){
-            return [canvasIndex];
+            indices = [canvasIndex];
         } else if (canvasIndex % 2){
-            return [canvasIndex, canvasIndex + 1];
+            indices = [canvasIndex, canvasIndex + 1];
         } else {
-            return [canvasIndex - 1, canvasIndex];
+            indices = [canvasIndex - 1, canvasIndex];
         }
+
+        if (this.getViewingDirection() == "left-to-right"){
+            return indices;
+        } else {
+            return indices.reverse();
+        }
+    }
+
+    getViewingDirection(): string {
+        return this.sequence.viewingDirection || "left-to-right";
     }
 
     getFirstPageIndex(): number {

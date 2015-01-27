@@ -41,6 +41,12 @@ export class ThumbsView extends baseView.BaseView {
         this.$thumbs = utils.Utils.createDiv('thumbs');
         this.$element.append(this.$thumbs);
 
+        if (this.provider.getViewingDirection() === "right-to-left"){
+            this.$thumbs.addClass("rtl");
+        } else {
+            this.$thumbs.addClass("ltr");
+        }
+
         $.templates({
             thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
@@ -62,11 +68,17 @@ export class ThumbsView extends baseView.BaseView {
                 return extraHeight;
             },
             className: function(){
-                if (this.data.url){
-                    return "thumb";
+                var className = "thumb";
+
+                if (this.data.index === 0){
+                    className += " first";
                 }
 
-                return "thumb placeholder";
+                if (!this.data.url){
+                    className += " placeholder";
+                }
+
+                return className;
             }
         });
 

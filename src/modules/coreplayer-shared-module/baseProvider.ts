@@ -221,6 +221,10 @@ export class BaseProvider implements IProvider{
         }
     }
 
+    getViewingDirection(): string {
+        return this.sequence.viewingDirection || "left-to-right";
+    }
+
     getFirstPageIndex(): number {
         return 0;
     }

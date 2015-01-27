@@ -82,5 +82,4 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             }
         }
     }
-
 }
