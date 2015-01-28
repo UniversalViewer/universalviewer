@@ -62,6 +62,8 @@ export class GalleryView extends baseView.BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$main.append(this.$thumbs);
 
+        this.$thumbs.addClass(this.provider.getViewingDirection()); // defaults to "left-to-right"
+
         this.$sizeDownButton.on('click', () => {
             var val = Number(this.$sizeRange.val()) - 1;
 
@@ -93,9 +95,6 @@ export class GalleryView extends baseView.BaseView {
         });
 
         $.views.helpers({
-            isOdd: function(num){
-                return (num % 2 == 0) ? false : true;
-            },
             className: function(){
                 var className = "thumb";
 

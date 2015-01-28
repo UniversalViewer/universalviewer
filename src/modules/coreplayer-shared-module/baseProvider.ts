@@ -20,7 +20,6 @@ export class BaseProvider implements IProvider{
 
     canvasIndex: number;
     config: any;
-    configExtension: string;
     dataUri: string;
     domain: string;
     embedScriptUri: string;
@@ -359,7 +358,7 @@ export class BaseProvider implements IProvider{
         return canvas.structures.last();
     }
 
-    getCanvasOrderLabel(canvas: any): string{
+    getCanvasLabel(canvas: any): string{
         return canvas.orderLabel.trim();
     }
 
@@ -396,7 +395,7 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
-    getCanvasIndexByOrderLabel(label: string): number {
+    getCanvasIndexByLabel(label: string): number {
 
         // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
         var regExp = /(\d*)\D*(\d*)|(\d*)/;

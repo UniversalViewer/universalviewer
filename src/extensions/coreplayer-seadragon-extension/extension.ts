@@ -338,7 +338,7 @@ export class Extension extends baseExtension.BaseExtension {
             return;
         }
 
-        var index = this.provider.getCanvasIndexByOrderLabel(label);
+        var index = this.provider.getCanvasIndexByLabel(label);
 
         if (index != -1) {
             this.viewPage(index);

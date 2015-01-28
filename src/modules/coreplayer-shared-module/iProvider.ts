@@ -4,42 +4,26 @@ import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
 
 // the provider contains all methods related to
-// interacting with the data model.
+// interacting with the IIIF data model.
 interface IProvider{
-	canvasIndex: number;
-	config: any;
-	configExtension: string;
-	domain: string;
-    embedDomain: string;
-	isHomeDomain: boolean;
-	isLightbox: boolean;
-	isOnlyInstance: boolean;
-	isReload: boolean;
+    canvasIndex: number;
 	manifest: any;
 	sequence: any;
 	sequenceIndex: number;
 	treeRoot: TreeNode;
 
     addTimestamp(uri: string): string;
-    defaultToThumbsView(): boolean;
     getCanvasByIndex(index): any;
-    getCanvasIndexByOrderLabel(label: string): number; // todo: remove?
+    getCanvasIndexByLabel(label: string): number;
     getCanvasIndexById(id: string): number;
-    getCanvasOrderLabel(canvas: any): string;
+    getCanvasLabel(canvas: any): string;
     getCanvasStructure(canvas: any): any;
     getCurrentCanvas(): any;
-    getDomain(): string;
-    getEmbedDomain(): string;
-    getLastCanvasOrderLabel(): string; // todo: remove?
     getManifestSeeAlsoUri(manifest: any): string;
     getManifestType(): string;
-    getMediaUri(mediaUri: string): string;
     getMetaData(callback: (data: any) => any): void;
     getSeeAlso(): any;
     getSequenceType(): string;
-    getStructureByCanvasIndex(index: number): any; // todo: remove?
-    getStructureByIndex(structure: any, index: number): any; // todo: remove?
-    getStructureIndex(path: string): number; // todo: remove?
     getStructureByPath(path: string): any;
     getThumbs(width: number, height: number): Thumb[];
     getThumbUri(canvas: any, width: number, height: number): string;
@@ -53,7 +37,6 @@ interface IProvider{
     getNextPageIndex(canvasIndex?: number): number;
     getStartCanvasIndex(): number;
     getViewingDirection(): string;
-    isDeepLinkingEnabled(): boolean;
     isFirstCanvas(canvasIndex?: number): boolean;
     isLastCanvas(canvasIndex?: number): boolean;
     isPaged(): boolean;
@@ -61,11 +44,26 @@ interface IProvider{
     isMultiSequence(): boolean;
     isSeeAlsoEnabled(): boolean;
     load(): void;
-    paramMap: string[];
     parseManifest(): void;
     parseStructure(): void;
+
+    // these should move to extension (not generic to IIIF)
+    config: any;
+    domain: string;
+    embedDomain: string;
+    isHomeDomain: boolean;
+    isLightbox: boolean;
+    isOnlyInstance: boolean;
+    isReload: boolean;
+
+    getMediaUri(mediaUri: string): string;
+    getDomain(): string;
+    getEmbedDomain(): string;
+    defaultToThumbsView(): boolean;
+    isDeepLinkingEnabled(): boolean;
+    paramMap: string[];
     reload(callback: any): void;
-    setMediaUri(canvas: any): void; // todo: remove?
+    setMediaUri(canvas: any): void;
     getSettings(): ISettings;
     updateSettings(settings: ISettings): void;
 }

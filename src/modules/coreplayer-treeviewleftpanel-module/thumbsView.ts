@@ -38,14 +38,12 @@ export class ThumbsView extends baseView.BaseView {
             this.setLabel();
         });
 
-        this.$thumbs = utils.Utils.createDiv('thumbs');
+        this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
-        if (this.provider.getViewingDirection() === "right-to-left"){
-            this.$thumbs.addClass("rtl");
-        } else {
-            this.$thumbs.addClass("ltr");
-        }
+        this.$thumbs.addClass(this.provider.getViewingDirection()); // defaults to "left-to-right"
+
+        var that = this;
 
         $.templates({
             thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}">\
@@ -53,7 +51,7 @@ export class ThumbsView extends baseView.BaseView {
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
                              </div>\
-                             {{if ~isOdd(#index + 1)}} \
+                             {{if ~separator()}} \
                                  <div class="separator"></div> \
                              {{/if}}'
         });
@@ -61,8 +59,13 @@ export class ThumbsView extends baseView.BaseView {
         var extraHeight = this.options.thumbsExtraHeight;
 
         $.views.helpers({
-            isOdd: function(num){
-                return (num % 2 == 0) ? false : true;
+            separator: function(){
+                var viewingDirection = that.provider.getViewingDirection();
+                if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
+                    return true; // one thumb per line
+                }
+                // two thumbs per line
+                return ((this.data.index -1) % 2 == 0) ? false : true;
             },
             extraHeight: function(){
                 return extraHeight;
@@ -76,6 +79,13 @@ export class ThumbsView extends baseView.BaseView {
 
                 if (!this.data.url){
                     className += " placeholder";
+                }
+
+                var viewingDirection = that.provider.getViewingDirection();
+                if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
+                    className += " oneCol";
+                } else {
+                    className += " twoCol";
                 }
 
                 return className;

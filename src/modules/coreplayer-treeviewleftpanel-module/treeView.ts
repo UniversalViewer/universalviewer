@@ -68,7 +68,7 @@ export class TreeView extends baseView.BaseView {
 
         $.views.helpers({
             elide: function(text){
-                var $a = $(this.linkCtx.elem);
+                var $a = $((<any>this).linkCtx.elem);
                 var elideCount = Math.floor($a.parent().width() / 7);
                 return util.htmlDecode(util.ellipsis(text, elideCount));
                 //https://github.com/BorisMoore/jsviews/issues/296

@@ -20,7 +20,6 @@ export class BaseProvider implements IProvider{
 
     canvasIndex: number;
     config: any;
-    configExtension: string;
     dataUri: string;
     domain: string;
     embedScriptUri: string;
@@ -138,12 +137,12 @@ export class BaseProvider implements IProvider{
         return this.manifest.seeAlso;
     }
 
-    getCanvasOrderLabel(canvas: any): string{
+    getCanvasLabel(canvas: any): string{
         return canvas.label;
     }
 
-    getLastCanvasOrderLabel(): string {
-        // get the last orderlabel that isn't empty or '-'.
+    getLastCanvasLabel(): string {
+        // get the last label that isn't empty or '-'.
         for (var i = this.sequence.canvases.length - 1; i >= 0; i--) {
             var canvas = this.sequence.canvases[i];
 
@@ -236,10 +235,10 @@ export class BaseProvider implements IProvider{
             indices = [canvasIndex - 1, canvasIndex];
         }
 
-        if (this.getViewingDirection() == "left-to-right"){
-            return indices;
-        } else {
+        if (this.getViewingDirection() === "right-to-left"){
             return indices.reverse();
+        } else {
+            return indices;
         }
     }
 
@@ -262,7 +261,13 @@ export class BaseProvider implements IProvider{
 
         if (this.isPaged()){
             var indices = this.getPagedIndices(canvasIndex);
-            index = indices[0] - 1;
+
+            if (this.getViewingDirection() == "right-to-left"){
+                index = indices.last() - 1;
+            } else {
+                index = indices[0] - 1;
+            }
+
         } else {
             index = canvasIndex - 1;
         }
@@ -277,7 +282,13 @@ export class BaseProvider implements IProvider{
 
         if (this.isPaged()){
             var indices = this.getPagedIndices(canvasIndex);
-            index = indices.last() + 1;
+
+            if (this.getViewingDirection() == "right-to-left"){
+                index = indices[0] + 1;
+            } else {
+                index = indices.last() + 1;
+            }
+
         } else {
             index = canvasIndex + 1;
         }
@@ -434,7 +445,7 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
-    getCanvasIndexByOrderLabel(label: string): number {
+    getCanvasIndexByLabel(label: string): number {
         label = label.trim();
 
         // trim any preceding zeros.

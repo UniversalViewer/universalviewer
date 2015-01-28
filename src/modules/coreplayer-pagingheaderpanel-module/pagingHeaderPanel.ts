@@ -150,6 +150,10 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             this.search();
         });
 
+        this.$searchText.focus(function() {
+            $(this).select()
+        });
+
         this.$searchButton.onPressed(() => {
             this.search();
         });
@@ -206,7 +210,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         var of = this.content.of;
 
         if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
-            this.$total.html(String.prototype.format(of, this.provider.getLastCanvasOrderLabel()));
+            this.$total.html(String.prototype.format(of, this.provider.getLastCanvasLabel()));
         } else {
             this.$total.html(String.prototype.format(of, this.provider.getTotalCanvases()));
         }
@@ -218,7 +222,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
 
-            var orderLabel = this.provider.getCanvasOrderLabel(canvas);
+            var orderLabel = this.provider.getCanvasLabel(canvas);
 
             if (orderLabel === "-") {
                 this.$searchText.val("");

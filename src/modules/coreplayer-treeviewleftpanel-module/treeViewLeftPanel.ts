@@ -117,8 +117,17 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     dataBindThumbsView(): void{
-        var width = this.config.options.thumbWidth;
-        var height = this.config.options.thumbHeight;
+        var width, height;
+        var viewingDirection = this.provider.getViewingDirection();
+
+        if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
+            width = this.config.options.oneColThumbWidth;
+            height = this.config.options.oneColThumbHeight;
+        } else {
+            width = this.config.options.twoColThumbWidth;
+            height = this.config.options.twoColThumbHeight;
+        }
+
         this.thumbsView.thumbs = this.provider.getThumbs(width, height);
         this.thumbsView.dataBind();
     }

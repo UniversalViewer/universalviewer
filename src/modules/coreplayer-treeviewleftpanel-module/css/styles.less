@@ -114,15 +114,12 @@
                     width: 210px;
 
                     .thumb {
-                        margin: 0 7px 7px 0;
                         cursor: pointer;
 
                         .wrap {
                             border: 2px solid @panel-border-color;
                             padding: 2px;
-                            max-height: 182px;
                             overflow: hidden;
-                            width: 98px;
                             text-align: center;
                             background: none;
 
@@ -159,6 +156,22 @@
                                 background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
                             }
                         }
+
+                        &.oneCol{
+                            margin: 0 0 7px 0;
+                            .wrap{
+                                width: 208px;
+                                max-height: 373px;
+                            }
+                        }
+
+                        &.twoCol{
+                            margin: 0 7px 7px 0;
+                            .wrap{
+                                width: 98px;
+                                max-height: 182px;
+                            }
+                        }
                     }
 
                     .separator {
@@ -167,7 +180,7 @@
                         border: none;
                     }
 
-                    &.ltr{
+                    &.left-to-right{
                         .thumb{
                             &.first{
                                 float: right;
@@ -176,7 +189,7 @@
                         }
                     }
 
-                    &.rtl{
+                    &.right-to-left{
                         .thumb{
                             &.first{
                                 float: left;
@@ -218,7 +231,7 @@
                     overflow: auto;
 
                     .thumbs {
-
+                        margin-right: @margin-medium-horizontal;
                         overflow: hidden;
                         position: relative;
 
@@ -268,6 +281,18 @@
                                 .wrap {
                                     background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
                                 }
+                            }
+                        }
+
+                        &.left-to-right{
+                            .thumb{
+                                float: left;
+                            }
+                        }
+
+                        &.right-to-left{
+                            .thumb{
+                                float: right;
                             }
                         }
                     }
