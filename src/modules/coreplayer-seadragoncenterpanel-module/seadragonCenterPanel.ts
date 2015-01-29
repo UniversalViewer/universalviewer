@@ -119,11 +119,12 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         that.viewer.removeHandler('open', that.handler);
 
+        var viewingDirection = that.provider.getViewingDirection();
+
         // if there's more than one tilesource, align them next to each other.
         if (that.tileSources.length > 1) {
 
             // check if tilesources should be aligned horizontally or vertically
-            var viewingDirection = that.provider.getViewingDirection();
             if (viewingDirection == "top-to-bottom" || viewingDirection == "bottom-to-top") {
                 // vertical
                 that.tileSources[1].y = that.viewer.world.getItemAt(0).getBounds().y + that.viewer.world.getItemAt(0).getBounds().height + that.config.options.pageGap;
@@ -137,12 +138,14 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         // if the number of tilesources being displayed differs from the last number, re-center the viewer.
         if (that.tileSources.length != that.lastTilesNum){
-            if (viewingDirection == "top-to-bottom" || viewingDirection == "bottom-to-top") {
-                // vertical
-                that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, that.viewer.world.getItemAt(0).normHeight * 2));
-            } else {
-                // horizontal
-                that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, that.tileSources.length, that.viewer.world.getItemAt(0).normHeight));
+            switch (viewingDirection){
+                case "top-to-bottom" :
+                    that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, that.viewer.world.getItemAt(0).normHeight * that.tileSources.length));
+                    break;
+                case "left-to-right" :
+                case "right-to-left" :
+                    that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, that.tileSources.length, that.viewer.world.getItemAt(0).normHeight));
+                    break;
             }
         }
 

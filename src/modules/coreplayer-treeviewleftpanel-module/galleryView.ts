@@ -84,6 +84,7 @@ export class GalleryView extends baseView.BaseView {
 
         this.$sizeRange.on('change', () => {
             this.updateThumbs();
+            this.scrollToSelectedThumb();
         });
 
         $.templates({
@@ -184,9 +185,9 @@ export class GalleryView extends baseView.BaseView {
                 this.loadThumb($thumb, () => {
                     this.sizeThumbImage($thumb);
                 });
-                //$thumb.find('.wrap').css('background', 'red');
+            //    $thumb.find('.wrap').css('background', 'red');
             //} else {
-                //$thumb.find('.wrap').css('background', 'none');
+            //    $thumb.find('.wrap').css('background', 'none');
             }
         }
     }
@@ -249,6 +250,7 @@ export class GalleryView extends baseView.BaseView {
 
         setTimeout(() => {
             this.selectIndex(this.provider.canvasIndex);
+            this.scrollToSelectedThumb();
         }, 1);
     }
 
@@ -283,15 +285,12 @@ export class GalleryView extends baseView.BaseView {
 
         this.$selectedThumb.addClass('selected');
 
-        // scroll to thumb if the index change didn't originate
-        // within the thumbs view.
-        if (this.lastThumbClickedIndex != index) {
-            var scrollTop = this.$element.scrollTop() + this.$selectedThumb.position().top - (this.$selectedThumb.height() / 2);
-            this.$element.scrollTop(scrollTop);
-        }
-
         // make sure visible images are loaded.
         this.updateThumbs();
+    }
+
+    scrollToSelectedThumb(): void {
+        this.$main.scrollTop(this.$selectedThumb.position().top);
     }
 
     resize(): void {

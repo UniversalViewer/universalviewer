@@ -248,8 +248,7 @@ export class ThumbsView extends baseView.BaseView {
         // scroll to thumb if the index change didn't originate
         // within the thumbs view.
         if (this.lastThumbClickedIndex != index) {
-            var scrollTop = this.$element.scrollTop() + this.$selectedThumb.position().top - (this.$selectedThumb.height() / 2);
-            this.$element.scrollTop(scrollTop);
+            this.$element.scrollTop(this.$selectedThumb.position().top);
         }
 
         // make sure visible images are loaded.
