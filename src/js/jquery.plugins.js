@@ -126,7 +126,7 @@
 
     };
 
-    $.fn.toggleExpandText = function (chars) {
+    $.fn.toggleExpandText = function (chars, callback) {
 
         return this.each(function () {
 
@@ -163,6 +163,8 @@
                 expanded = !expanded;
 
                 $self.append($toggleButton);
+
+                if (callback) callback();
             };
 
             $self.toggle();

@@ -129,6 +129,18 @@ export class BaseProvider implements IProvider{
         return 'seadragon-iiif';
     }
 
+    getAttribution(): string {
+        return this.manifest.attribution;
+    }
+
+    getLicense(): string {
+        return this.manifest.license;
+    }
+
+    getLogo(): string {
+        return this.manifest.logo;
+    }
+
     getTitle(): string {
         return this.manifest.label;
     }

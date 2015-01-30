@@ -131,6 +131,18 @@ export class BaseProvider implements IProvider{
         return this.sequence.assetType.replace('/', '-');
     }
 
+    getAttribution(): string {
+        return this.manifest.attribution;
+    }
+
+    getLicense(): string {
+        return this.manifest.license;
+    }
+
+    getLogo(): string {
+        return this.manifest.logo;
+    }
+
     getRootStructure(): any {
         return this.sequence.rootSection;
     }

@@ -13,6 +13,9 @@ interface IProvider{
 	treeRoot: TreeNode;
 
     addTimestamp(uri: string): string;
+    getAttribution(): string;
+    getLicense(): string;
+    getLogo(): string;
     getCanvasByIndex(index): any;
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexById(id: string): number;
@@ -47,7 +50,7 @@ interface IProvider{
     parseManifest(): void;
     parseStructure(): void;
 
-    // these should move to extension (not generic to IIIF)
+    // should these move to extension? (not generic to IIIF)
     config: any;
     domain: string;
     embedDomain: string;

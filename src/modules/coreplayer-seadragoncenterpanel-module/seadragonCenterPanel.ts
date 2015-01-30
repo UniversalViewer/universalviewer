@@ -159,13 +159,6 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
     loadTileSources(): void {
         this.tileSources = this.provider.getTileSources();
 
-        // if there's no tilesource, show an 'image unavailable' error.
-        //if (this.tileSources[0].tileSource){
-        //    this.viewer.open(this.tileSources[0]);
-        //} else {
-        //    this.extension.showDialogue(this.config.content.imageUnavailable);
-        //}
-
         // todo: use compiler flag (when available)
         var imageUnavailableUri = (window.DEBUG)? '/src/extensions/coreplayer-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
 

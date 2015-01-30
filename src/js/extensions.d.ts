@@ -37,7 +37,7 @@ interface JQuery {
     horizontalMargins(): number;
     verticalPadding(): number;
     horizontalPadding(): number;
-    toggleExpandText(chars: number);
+    toggleExpandText(chars: number, callback?: () => void);
     ismouseover(): boolean;
     equaliseHeight(reset?: boolean): any;
     onPressed(callback: () => void): any;

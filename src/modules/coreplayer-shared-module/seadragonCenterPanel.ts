@@ -12,6 +12,8 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     nextButtonEnabled: boolean = false;
 
     $viewer: JQuery;
+    $rights: JQuery;
+    $closeRightsBtn: JQuery;
     viewer: any;
     title: string;
     currentBounds: any;
@@ -38,6 +40,27 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.append(this.$viewer);
+
+        this.$rights = $('<div class="rights">\
+                               <div class="header">\
+                                   <div class="title"></div>\
+                                   <div class="close"></div>\
+                               </div>\
+                               <div class="main">\
+                                   <div class="attribution"></div>\
+                                   <div class="license"></div>\
+                                   <div class="logo"></div>\
+                               </div>\
+                          </div>');
+
+        this.$rights.find('.header .title').text(this.content.acknowledgements);
+        this.$content.append(this.$rights);
+
+        this.$closeRightsBtn = this.$rights.find('.header .close');
+        this.$closeRightsBtn.on('click', (e) => {
+            e.preventDefault();
+            this.$rights.hide();
+        });
 
         this.createSeadragonViewer();
 
@@ -121,10 +144,48 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
             $('div[title="Rotate right"]').hide();
         }
+
+        this.showRights();
     }
 
     createSeadragonViewer(): void {
         // implemented in descendant.
+    }
+
+    showRights(): void {
+        var attribution = this.provider.getAttribution();
+        var license = this.provider.getLicense();
+        var logo = this.provider.getLogo();
+
+        if (!attribution && !license && !logo){
+            this.$rights.hide();
+            return;
+        }
+
+        var $attribution = this.$rights.find('.attribution');
+        var $license = this.$rights.find('.license');
+        var $logo = this.$rights.find('.logo');
+
+        if (attribution){
+            $attribution.text(attribution);
+            $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
+                this.resize();
+            });
+        } else {
+            $attribution.hide();
+        }
+
+        if (license){
+            $license.text(license);
+        } else {
+            $license.hide();
+        }
+
+        if (logo){
+            $logo.text(logo);
+        } else {
+            $logo.hide();
+        }
     }
 
     // called every time the seadragon viewer opens a new image.
@@ -258,6 +319,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         if (this.provider.isMultiCanvas()) {
             this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
             this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
+        }
+
+        if (this.$rights.is(':visible')){
+            this.$rights.css('top', this.$content.height() - this.$rights.outerHeight() - this.$rights.verticalMargins());
         }
     }
 }

@@ -75,6 +75,57 @@
             .btn-focus() !important;
         }
 
+        .content{
+            position: relative;
+
+            .rights {
+                background: @gray-dark; // ie8
+                background: fadeout(@gray-dark, 20%);
+                position: absolute;
+                width: 190px;
+                padding: @padding-medium;
+                margin: @margin-medium-horizontal 0 @margin-small-vertical @margin-large-horizontal;
+                font-size: @font-size-small;
+
+                .header{
+
+                    overflow: hidden;
+
+                    .title{
+                        font-size: @font-size-small;
+                        font-weight: bold;
+                        height: 20px;
+                        width: 150px;
+                        line-height: 18px;
+                        float: left;
+                        padding: 0;
+                    }
+
+                    .close{
+                        width: 16px;
+                        height: 16px;
+                        margin: 2px;
+                        float: right;
+                        background-image: url('@{img-path}close.png');
+                        cursor: pointer;
+                    }
+                }
+
+                .main{
+
+                    margin-top: @margin-small-vertical;
+
+                    .attribution{
+
+                    }
+
+                    .license {
+                        margin-top: @margin-small-vertical;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
     }
 }
 
