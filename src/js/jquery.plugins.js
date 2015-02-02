@@ -132,7 +132,7 @@
 
             var $self = $(this);
 
-            var expandedText = $self.text();
+            var expandedText = $self.html();
 
             if (chars > expandedText.length) return;
 
@@ -149,9 +149,11 @@
                 if (expanded) {
                     $self.html(expandedText + "&nbsp;");
                     $toggleButton.text("less");
+                    $toggleButton.toggleClass("less", "more");
                 } else {
                     $self.html(collapsedText + "&nbsp;");
                     $toggleButton.text("more");
+                    $toggleButton.toggleClass("more", "less");
                 }
 
                 $toggleButton.one('click', function(e) {

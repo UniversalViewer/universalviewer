@@ -154,10 +154,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     showRights(): void {
         var attribution = this.provider.getAttribution();
-        var license = this.provider.getLicense();
-        var logo = this.provider.getLogo();
+        //var license = this.provider.getLicense();
+        //var logo = this.provider.getLogo();
 
-        if (!attribution && !license && !logo){
+        if (!attribution){
             this.$rights.hide();
             return;
         }
@@ -167,7 +167,14 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         var $logo = this.$rights.find('.logo');
 
         if (attribution){
-            $attribution.text(attribution);
+            // todo: sanitise html
+            $attribution.html(attribution);
+            $attribution.find('img').one("load", () => {
+                this.resize();
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
+            $attribution.targetBlank();
             $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
                 this.resize();
             });
@@ -175,17 +182,17 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             $attribution.hide();
         }
 
-        if (license){
-            $license.text(license);
-        } else {
+        //if (license){
+        //    $license.append('<a href="' + license + '">' + license + '</a>');
+        //} else {
             $license.hide();
-        }
-
-        if (logo){
-            $logo.text(logo);
-        } else {
+        //}
+        //
+        //if (logo){
+        //    $logo.append('<img src="' + logo + '"/>');
+        //} else {
             $logo.hide();
-        }
+        //}
     }
 
     // called every time the seadragon viewer opens a new image.

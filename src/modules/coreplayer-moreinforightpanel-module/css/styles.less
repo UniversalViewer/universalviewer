@@ -32,26 +32,34 @@
 
             .items{
                 padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
-            }
 
-            .header{
-                color: @gray-light;
-                border-bottom: 1px solid @gray;
-                font-size: @font-size-small;
-                margin: @margin-large-vertical @margin-medium-horizontal 0 0;
-                text-transform: uppercase;
-            }
+                .item {
+                    .header{
+                        color: @gray-light;
+                        border-bottom: 1px solid @gray;
+                        font-size: @font-size-small;
+                        margin: @margin-large-vertical @margin-medium-horizontal 0 0;
+                        text-transform: uppercase;
+                    }
 
-            .text{
-                color: @text-color;
-                margin: @margin-small-vertical @margin-medium-horizontal 0 0;
+                    .text{
+                        color: @text-color;
+                        margin: @margin-small-vertical @margin-medium-horizontal 0 0;
+                        overflow: hidden;
+                        word-wrap: break-word;
 
-                a.toggle{
-                    color: @link-secondary-color;
-                    font-weight: normal;
+                        a.toggle{
+                            color: @link-secondary-color;
+                            font-weight: normal;
 
-                    &:hover{
-                        color: @link-secondary-hover-color;
+                            &:hover{
+                                color: @link-secondary-hover-color;
+                            }
+                        }
+
+                        img {
+                            max-width: 100px;
+                        }
                     }
                 }
             }

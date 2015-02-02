@@ -73,8 +73,11 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         // replace \n with <br>
         value = value.replace('\n', '<br>');
 
-        $header.text(name);
-        $text.text(value);
+        // todo: sanitise html
+
+        $header.html(name);
+        $text.html(value);
+        $text.targetBlank();
 
         $text.toggleExpandText(trimChars);
 
