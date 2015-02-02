@@ -44,7 +44,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
 
         this.provider.getMetaData((data: any) => {
             this.displayInfo(data);
-        });
+        }, true);
     }
 
     displayInfo(data: any): void {

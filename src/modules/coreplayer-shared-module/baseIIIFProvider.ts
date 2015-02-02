@@ -638,13 +638,15 @@ export class BaseProvider implements IProvider{
         return this.embedDomain;
     }
 
-    getMetaData(callback: (data: any) => any): void{
+    getMetaData(callback: (data: any) => any, includeRootProperties?: boolean): void{
         var metaData: Object[] = this.manifest.metadata;
 
-        if (this.manifest.description) metaData.push({ "label": "description", "value": this.manifest.description});
-        if (this.manifest.attribution) metaData.push({ "label": "attribution", "value": this.manifest.attribution});
-        if (this.manifest.license) metaData.push({ "label": "license", "value": this.manifest.license});
-        if (this.manifest.logo) metaData.push({ "label": "license", "value": '<img src="' + this.manifest.logo + '"/>'});
+        if (includeRootProperties){
+            if (this.manifest.description) metaData.push({ "label": "description", "value": this.manifest.description});
+            if (this.manifest.attribution) metaData.push({ "label": "attribution", "value": this.manifest.attribution});
+            if (this.manifest.license) metaData.push({ "label": "license", "value": this.manifest.license});
+            if (this.manifest.logo) metaData.push({ "label": "license", "value": '<img src="' + this.manifest.logo + '"/>'});
+        }
 
         callback(this.manifest.metadata);
     }
