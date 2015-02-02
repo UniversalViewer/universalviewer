@@ -151,9 +151,9 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         that.lastTilesNum = that.tileSources.length;
 
-        that.$viewer.find('div[title="Zoom in"]').attr('tabindex', 10);
-        that.$viewer.find('div[title="Zoom out"]').attr('tabindex', 11);
-        that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 12);
+        that.$viewer.find('div[title="Zoom in"]').attr('tabindex', 11);
+        that.$viewer.find('div[title="Zoom out"]').attr('tabindex', 12);
+        that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 13);
     }
 
     loadTileSources(): void {

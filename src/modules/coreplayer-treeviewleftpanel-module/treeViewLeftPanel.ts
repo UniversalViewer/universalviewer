@@ -98,6 +98,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         this.$expandButton.attr('tabindex', '7');
         this.$collapseButton.attr('tabindex', '7');
+        this.$expandFullButton.attr('tabindex', '8');
     }
 
     createTreeView(): void {
@@ -164,8 +165,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         }
 
         if (this.isExpanded){
-            this.$treeButton.attr('tabindex', '8');
-            this.$thumbsButton.attr('tabindex', '9');
+            this.$treeButton.attr('tabindex', '9');
+            this.$thumbsButton.attr('tabindex', '10');
         } else {
             this.$treeButton.attr('tabindex', '');
             this.$thumbsButton.attr('tabindex', '');
