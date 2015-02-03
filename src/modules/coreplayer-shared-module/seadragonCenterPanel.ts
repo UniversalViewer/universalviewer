@@ -167,8 +167,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         var $logo = this.$rights.find('.logo');
 
         if (attribution){
-            // todo: sanitise html
-            $attribution.html(attribution);
+            $attribution.html(this.provider.sanitize(attribution));
             $attribution.find('img').one("load", () => {
                 this.resize();
             }).each(function() {

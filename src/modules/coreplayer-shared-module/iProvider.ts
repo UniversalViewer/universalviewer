@@ -49,6 +49,7 @@ interface IProvider{
     load(): void;
     parseManifest(): void;
     parseStructure(): void;
+    sanitize(html: string): string;
 
     // should these move to extension? (not generic to IIIF)
     config: any;

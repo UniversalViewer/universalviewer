@@ -71,6 +71,7 @@ declare var MediaElementPlayer: any;
 declare var PDFObject: any;
 declare var yepnope: any;
 declare var PDFJS: any;
+declare var Sanitize: any;
 
 // app
 interface Window{

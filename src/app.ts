@@ -10,7 +10,8 @@ require.config({
         'jsviews': 'js/jsviews.min',
         'yepnope': 'js/yepnope.1.5.4-min',
         'yepnopecss': 'js/yepnope.css',
-        'l10n': 'js/l10n'
+        'l10n': 'js/l10n',
+        'sanitize': 'js/sanitize'
     },
     shim: {
         jquery: {
@@ -45,6 +46,7 @@ require([
         'yepnopecss',
         'bootstrapper',
         'l10n',
+        'sanitize',
         'extensions/coreplayer-seadragon-extension/extension',
         'extensions/coreplayer-seadragon-extension/iiifProvider',
         'extensions/coreplayer-seadragon-extension/provider',
@@ -62,6 +64,7 @@ require([
         yepnopecss,
         bootstrapper,
         l10n,
+        sanitize,
         seadragonExtension,
         seadragonIIIFProvider,
         seadragonProvider,
@@ -70,6 +73,7 @@ require([
         pdfExtension,
         pdfProvider) => {
 
+        // todo: use a compiler flag (when available)
         window.DEBUG = true; // this line is removed on build.
 
         var extensions = {};
