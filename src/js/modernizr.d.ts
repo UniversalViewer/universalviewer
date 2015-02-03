@@ -59,6 +59,7 @@ interface ModernizrStatic {
     opacity: boolean;
     rgba: boolean;
     textshadow: boolean;
+    cors: boolean;
     cssanimations: boolean;
     csscolumns: boolean;
     generatedcontent: boolean;

@@ -59,6 +59,7 @@ interface IProvider{
     isLightbox: boolean;
     isOnlyInstance: boolean;
     isReload: boolean;
+    jsonp: boolean;
 
     getMediaUri(mediaUri: string): string;
     getDomain(): string;

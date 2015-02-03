@@ -13,6 +13,7 @@ class BootStrapper{
     IIIF: boolean = true;
     configExtensionUri: string;
     configExtension: any;
+    jsonp: boolean;
 
     // this loads the manifest, determines what kind of extension and provider to use, and instantiates them.
     constructor(extensions: any) {
@@ -24,6 +25,7 @@ class BootStrapper{
         that.dataBaseUri = utils.Utils.getQuerystringParameter('dbu');
         that.manifestUri = utils.Utils.getQuerystringParameter('du');
         that.configExtensionUri = utils.Utils.getQuerystringParameter('c');
+        that.jsonp = utils.Utils.getBool(utils.Utils.getQuerystringParameter('jsonp'), false);
 
         if (that.dataBaseUri){
             that.manifestUri = that.dataBaseUri + that.manifestUri;
@@ -50,58 +52,69 @@ class BootStrapper{
         }
     }
 
+    corsEnabled(): boolean {
+        return Modernizr.cors && !this.jsonp
+    }
+
     loadManifest(): void{
         var that = this;
 
-        var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
-            url: that.manifestUri,
-            type: 'GET',
-            dataType: 'jsonp',
-            jsonp: 'callback',
-            jsonpCallback: 'manifestCallback'
-        };
+        if (this.corsEnabled()){
+            $.getJSON(that.manifestUri, (manifest) => {
+                that.parseManifest(manifest);
+            });
+        } else {
+            // use jsonp
+            var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
+                url: that.manifestUri,
+                type: 'GET',
+                dataType: 'jsonp',
+                jsonp: 'callback',
+                jsonpCallback: 'manifestCallback'
+            };
 
-        $.ajax(settings);
+            $.ajax(settings);
 
-        //$.getJSON(that.manifestUri, (manifest) => {
+            window.manifestCallback = (manifest: any) => {
+                that.parseManifest(manifest);
+            };
+        }
+    }
 
-        window.manifestCallback = (manifest: any) => {
+    parseManifest(manifest: any): void {
+        this.manifest = manifest;
 
-            that.manifest = manifest;
+        // if on home domain, check hash params. otherwise, use
+        // embed data attributes or default to 0.
+        var isHomeDomain = utils.Utils.getQuerystringParameter('hd') === "true";
+        var isReload = utils.Utils.getQuerystringParameter('rl') === "true";
+        var sequenceParam = 'si';
 
-            // if on home domain, check hash params. otherwise, use
-            // embed data attributes or default to 0.
-            var isHomeDomain = utils.Utils.getQuerystringParameter('hd') == "true";
-            var isReload = utils.Utils.getQuerystringParameter('rl') == "true";
-            var sequenceParam = 'si';
+        if (this.configExtension && this.configExtension.options && this.configExtension.options.IIIF) {
+            this.IIIF = this.configExtension.options.IIIF;
+        }
 
-            if (that.configExtension && that.configExtension.options && that.configExtension.options.IIIF) {
-                that.IIIF = that.configExtension.options.IIIF;
-            }
+        if (!this.IIIF) sequenceParam = 'asi';
 
-            if (!that.IIIF) sequenceParam = 'asi';
+        if (isHomeDomain && !isReload) {
+            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(sequenceParam, parent.document));
+        }
 
-            if (isHomeDomain && !isReload) {
-                that.sequenceIndex = parseInt(utils.Utils.getHashParameter(sequenceParam, parent.document));
-            }
+        if (!this.sequenceIndex) {
+            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(sequenceParam)) || 0;
+        }
 
-            if (!that.sequenceIndex) {
-                that.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(sequenceParam)) || 0;
-            }
+        if (!this.IIIF) {
+            this.sequences = this.manifest.assetSequences;
+        } else {
+            this.sequences = this.manifest.sequences;
+        }
 
-            if (!that.IIIF) {
-                that.sequences = that.manifest.assetSequences;
-            } else {
-                that.sequences = that.manifest.sequences;
-            }
+        if (!this.sequences) {
+            this.notFound();
+        }
 
-            if (!that.sequences) {
-                that.notFound();
-            }
-
-            that.loadSequence();
-        };
-        //});
+        this.loadSequence();
     }
 
     loadSequence(): void{
@@ -130,7 +143,6 @@ class BootStrapper{
                 that.loadDependencies();
             } else {
                 // load referenced sequence.
-                var baseManifestUri = that.manifestUri.substr(0, that.manifestUri.lastIndexOf('/') + 1);
                 var sequenceUri = String(that.sequences[that.sequenceIndex]['@id']);
 
                 $.getJSON(sequenceUri, (sequenceData) => {

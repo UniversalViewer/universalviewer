@@ -33,6 +33,7 @@ export class BaseProvider implements IProvider{
     sequence: any;
     sequenceIndex: number;
     treeRoot: TreeNode;
+    jsonp: boolean;
 
     // map param names to enum indices.
     paramMap: string[] = ['si', 'ci', 'z', 'r'];
@@ -60,6 +61,7 @@ export class BaseProvider implements IProvider{
         this.isReload = utils.Utils.getQuerystringParameter('rl') === "true";
         this.domain = utils.Utils.getQuerystringParameter('d');
         this.isLightbox = utils.Utils.getQuerystringParameter('lb') === "true";
+        this.jsonp = utils.Utils.getQuerystringParameter('jsonp') === "true";
 
         if (this.isHomeDomain && !this.isReload){
             this.sequenceIndex = parseInt(utils.Utils.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
@@ -91,6 +93,10 @@ export class BaseProvider implements IProvider{
         this.parseStructure();
     }
 
+    corsEnabled(): boolean {
+        return Modernizr.cors && !this.jsonp
+    }
+
     reload(callback: any): void {
 
         var manifestUri = this.dataUri;
@@ -101,21 +107,32 @@ export class BaseProvider implements IProvider{
 
         manifestUri = this.addTimestamp(manifestUri);
 
-        window.manifestCallback = (data: any) => {
-            this.manifest = data;
+        if (this.corsEnabled()){
+            $.getJSON(manifestUri, (data) => {
+                this.manifest = data;
 
-            this.load();
+                this.load();
 
-            callback();
-        };
+                callback();
+            });
+        } else {
+            // use jsonp
+            window.manifestCallback = (data: any) => {
+                this.manifest = data;
 
-        $.ajax(<JQueryAjaxSettings>{
-            url: manifestUri,
-            type: 'GET',
-            dataType: 'jsonp',
-            jsonp: 'callback',
-            jsonpCallback: 'manifestCallback'
-        });
+                this.load();
+
+                callback();
+            };
+
+            $.ajax(<JQueryAjaxSettings>{
+                url: manifestUri,
+                type: 'GET',
+                dataType: 'jsonp',
+                jsonp: 'callback',
+                jsonpCallback: 'manifestCallback'
+            });
+        }
     }
 
     // todo

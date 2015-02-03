@@ -206,7 +206,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, jsonp, isFullScreen, height, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -232,6 +232,7 @@ docReady(function() {
             canvasIndex = $app.attr('data-canvasindex') || $app.attr('data-assetindex');
             zoom = $app.attr('data-zoom');
             config = $app.attr('data-config');
+            jsonp = $app.attr('data-jsonp');
 
             isFullScreen = false;
             height = $app.height();
@@ -364,6 +365,7 @@ docReady(function() {
                 if (zoom) uri += "&z=" + zoom;
                 if (reload) uri += "&rl=true";
                 if (config) uri += "&c=" + config;
+                if (jsonp) uri += "&jsonp=" + jsonp;
 
                 socket = new easyXDM.Socket({
                     remote: uri,
