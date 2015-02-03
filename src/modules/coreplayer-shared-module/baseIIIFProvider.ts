@@ -687,4 +687,26 @@ export class BaseProvider implements IProvider{
     updateSettings(settings: ISettings): void {
         this.config.options = settings;
     }
+
+    sanitize(html: string): string {
+        var elem = document.createElement('div');
+        var $elem = $(elem);
+
+        $elem.html(html);
+
+        var s = new Sanitize({
+            elements:   ['a', 'b', 'br', 'img', 'p', 'i', 'span'],
+            attributes: {
+                a: ['href'],
+                img: ['src', 'alt']
+            },
+            protocols:  {
+                a: { href: ['http', 'https'] }
+            }
+        });
+
+        $elem.html(s.clean_node(elem));
+
+        return $elem.html();
+    }
 }
