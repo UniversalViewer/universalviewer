@@ -662,7 +662,7 @@ export class BaseProvider implements IProvider{
             if (this.manifest.description) metaData.push({ "label": "description", "value": this.manifest.description});
             if (this.manifest.attribution) metaData.push({ "label": "attribution", "value": this.manifest.attribution});
             if (this.manifest.license) metaData.push({ "label": "license", "value": this.manifest.license});
-            if (this.manifest.logo) metaData.push({ "label": "license", "value": '<img src="' + this.manifest.logo + '"/>'});
+            if (this.manifest.logo) metaData.push({ "label": "logo", "value": '<img src="' + this.manifest.logo + '"/>'});
         }
 
         callback(this.manifest.metadata);

@@ -23,6 +23,14 @@ String.prototype.toFileName = function () { return this.replace(/[^a-z0-9]/gi, '
 String.prototype.contains = function(str) { return this.indexOf(str) !== -1; };
 String.prototype.utf8_to_b64 = function(){ return window.btoa(unescape(encodeURIComponent(this))); };
 String.prototype.b64_to_utf8 = function(){ return decodeURIComponent(escape(window.atob(this))); };
+String.prototype.toCssClass = function() {
+    return this.replace(/[^a-z0-9]/g, function(s) {
+        var c = s.charCodeAt(0);
+        if (c == 32) return '-';
+        if (c >= 65 && c <= 90) return '_' + s.toLowerCase();
+        return '__' + ('000' + c.toString(16)).slice(-4);
+    });
+};
 
 //#endregion
 
