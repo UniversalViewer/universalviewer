@@ -62,7 +62,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
-            showHomeControl: false,
+            showHomeControl: true,
             showFullPageControl: false,
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
             controlsFadeDelay: this.config.options.controlsFadeDelay,
@@ -81,6 +81,12 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
                     GROUP:  'zoom_out.png',
                     HOVER:  'zoom_out.png',
                     DOWN:   'zoom_out.png'
+                },
+                home: {
+                    REST:   'home.png',
+                    GROUP:  'home.png',
+                    HOVER:  'home.png',
+                    DOWN:   'home.png'
                 },
                 rotateright: {
                     REST:   'rotate_right.png',

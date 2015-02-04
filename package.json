@@ -1,6 +1,6 @@
 {
   "name": "UniversalViewer",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Navigate sequences of images in a zoomable, extensible interface.",
   "devDependencies": {
     "grunt": "^0.4.5",
