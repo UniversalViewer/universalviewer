@@ -1,11 +1,28 @@
 ﻿
 (function ($) {
 
+    $.fn.disable = function () {
+        return this.each(function () {
+            var $this = $(this);
+            $this.addClass('disabled');
+            $this.data('tabindex', $this.attr('tabindex'));
+            $this.removeAttr('tabindex');
+        });
+    };
+
+    $.fn.enable = function () {
+        return this.each(function () {
+            var $this = $(this);
+            $this.removeClass('disabled');
+            $this.attr('tabindex', $this.data('tabindex'));
+        });
+    };
+
     $.fn.targetBlank = function () {
         return this.each(function () {
             $(this).find('a').prop('target', '_blank');
         });
-    }
+    };
 
     $.fn.swapClass = function (removeClass, addClass) {
         return this.each(function () {

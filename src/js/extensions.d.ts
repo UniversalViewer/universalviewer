@@ -43,6 +43,8 @@ interface JQuery {
     equaliseHeight(reset?: boolean): any;
     onPressed(callback: () => void): any;
     onEnter(callback: () => void): any;
+    enable(): void;
+    disable(): void;
 
     // jsviews
     link: any;

@@ -166,7 +166,8 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         that.$viewer.find('div[title="Zoom in"]').attr('tabindex', 11);
         that.$viewer.find('div[title="Zoom out"]').attr('tabindex', 12);
-        that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 13);
+        that.$viewer.find('div[title="Go home"]').attr('tabindex', 13);
+        that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 14);
     }
 
     goHome(): void {
