@@ -114,7 +114,22 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         //});
     }
 
-    openHandler() {
+    // called every time the seadragon viewer opens a new image.
+    viewerOpen() {
+
+        super.viewerOpen();
+
+        var settings: ISettings = this.provider.getSettings();
+
+        // zoom to bounds unless setting disabled
+        if (this.currentBounds && settings.preserveViewport){
+            this.fitToBounds(this.currentBounds);
+        } else {
+            this.goHome();
+        }
+    }
+
+    openTileSourcesHandler() {
         var that = this.userData;
 
         that.viewer.removeHandler('open', that.handler);
@@ -138,15 +153,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         // if the number of tilesources being displayed differs from the last number, re-center the viewer.
         if (that.tileSources.length != that.lastTilesNum){
-            switch (viewingDirection){
-                case "top-to-bottom" :
-                    that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, that.viewer.world.getItemAt(0).normHeight * that.tileSources.length));
-                    break;
-                case "left-to-right" :
-                case "right-to-left" :
-                    that.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, that.tileSources.length, that.viewer.world.getItemAt(0).normHeight));
-                    break;
-            }
+            that.goHome();
         }
 
         that.lastTilesNum = that.tileSources.length;
@@ -154,6 +161,20 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         that.$viewer.find('div[title="Zoom in"]').attr('tabindex', 11);
         that.$viewer.find('div[title="Zoom out"]').attr('tabindex', 12);
         that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 13);
+    }
+
+    goHome(): void {
+        var viewingDirection = this.provider.getViewingDirection();
+
+        switch (viewingDirection){
+            case "top-to-bottom" :
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.tileSources.length));
+                break;
+            case "left-to-right" :
+            case "right-to-left" :
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.tileSources.length, this.viewer.world.getItemAt(0).normHeight));
+                break;
+        }
     }
 
     loadTileSources(): void {
@@ -170,7 +191,7 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         this.viewer.open(this.tileSources[0]);
 
-        this.viewer.addHandler('open', this.openHandler, this);
+        this.viewer.addHandler('open', this.openTileSourcesHandler, this);
     }
 
 

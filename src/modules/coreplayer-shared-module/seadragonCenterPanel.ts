@@ -196,7 +196,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     // called every time the seadragon viewer opens a new image.
     viewerOpen() {
-
         if (this.provider.isMultiCanvas()) {
 
             $('.navigator').addClass('extraMargin');
@@ -214,12 +213,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
         }
 
-        // this.$navigator = $('.navigator', this.$element);
-        // this.$navigator.append(this.$zoomControls);
-        // this.$zoomControls.css('width', this.$navigator.width());
-        // this.$zoomControls.css('top', this.$navigator.height() - this.$zoomControls.height());
-
-
         // if there are no currentBounds check for initial zoom/rotation params.
         if (!this.currentBounds){
 
@@ -234,11 +227,8 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             if (initialBounds){
                 initialBounds = this.deserialiseBounds(initialBounds);
                 this.currentBounds = initialBounds;
+                this.fitToBounds(this.currentBounds);
             }
-        }
-
-        if (this.currentBounds){
-            this.fitToBounds(this.currentBounds);
         }
     }
 
