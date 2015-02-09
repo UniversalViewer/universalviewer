@@ -47,13 +47,13 @@ require([
         'bootstrapper',
         'l10n',
         'sanitize',
-        'extensions/coreplayer-seadragon-extension/extension',
-        'extensions/coreplayer-seadragon-extension/iiifProvider',
-        'extensions/coreplayer-seadragon-extension/provider',
-        'extensions/coreplayer-mediaelement-extension/extension',
-        'extensions/coreplayer-mediaelement-extension/provider',
-        'extensions/coreplayer-pdf-extension/extension',
-        'extensions/coreplayer-pdf-extension/provider'
+        'extensions/uv-seadragon-extension/extension',
+        'extensions/uv-seadragon-extension/iiifProvider',
+        'extensions/uv-seadragon-extension/provider',
+        'extensions/uv-mediaelement-extension/extension',
+        'extensions/uv-mediaelement-extension/provider',
+        'extensions/uv-pdf-extension/extension',
+        'extensions/uv-pdf-extension/provider'
     ], (modernizr,
         $,
         plugins,
@@ -81,37 +81,37 @@ require([
         extensions['seadragon/dzi'] = {
             type: seadragonExtension.Extension,
             provider: seadragonProvider.Provider,
-            name: 'coreplayer-seadragon-extension'
+            name: 'uv-seadragon-extension'
         };
 
         extensions['seadragon/iiif'] = {
             type: seadragonExtension.Extension,
             provider: seadragonIIIFProvider.Provider,
-            name: 'coreplayer-seadragon-extension'
+            name: 'uv-seadragon-extension'
         };
 
         extensions['video/mp4'] = {
             type: mediaelementExtension.Extension,
             provider: mediaelementProvider.Provider,
-            name: 'coreplayer-mediaelement-extension'
+            name: 'uv-mediaelement-extension'
         };
 
         extensions['video/multiple-sources'] = {
             type: mediaelementExtension.Extension,
             provider: mediaelementProvider.Provider,
-            name: 'coreplayer-mediaelement-extension'
+            name: 'uv-mediaelement-extension'
         };
 
         extensions['audio/mp3'] = {
             type: mediaelementExtension.Extension,
             provider: mediaelementProvider.Provider,
-            name: 'coreplayer-mediaelement-extension'
+            name: 'uv-mediaelement-extension'
         };
 
         extensions['application/pdf'] = {
             type: pdfExtension.Extension,
             provider: pdfProvider.Provider,
-            name: 'coreplayer-pdf-extension'
+            name: 'uv-pdf-extension'
         };
 
         new bootstrapper(extensions);

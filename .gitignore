@@ -12,7 +12,7 @@
 #################
 
 src/themes/*
-!src/themes/coreplayer-default-theme
+!src/themes/uv-default-theme
 
 #################
 ## Tests

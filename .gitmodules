@@ -1,8 +1,8 @@
 [submodule "examples"]
 	path = examples
 	url = git@github.com:britishlibrary/UniversalViewerExamples.git
-[submodule "src/themes/coreplayer-default-theme"]
-	path = src/themes/coreplayer-default-theme
+[submodule "src/themes/uv-default-theme"]
+	path = src/themes/uv-default-theme
 	url = git@github.com:britishlibrary/UniversalViewerDefaultTheme.git
 [submodule "tests"]
 	path = tests

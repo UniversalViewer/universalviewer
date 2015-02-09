@@ -20,7 +20,7 @@ module.exports = function (grunt) {
             packageDirName: packageDirName,
             packageDir: 'build/' + packageDirName,
             examplesDir: 'examples',
-            theme: 'coreplayer-default-theme',
+            theme: 'uv-default-theme',
             port: '8001'
         },
         pkg: packageJson,
