@@ -1,9 +1,9 @@
 [submodule "examples"]
 	path = examples
-	url = git@github.com:britishlibrary/UniversalViewerExamples.git
+	url = git@github.com:UniversalViewer/examples.git
 [submodule "src/themes/uv-default-theme"]
 	path = src/themes/uv-default-theme
-	url = git@github.com:britishlibrary/UniversalViewerDefaultTheme.git
+	url = git@github.com:UniversalViewer/default-theme.git
 [submodule "tests"]
 	path = tests
-	url = git@github.com:britishlibrary/UniversalViewerTests.git
+	url = git@github.com:UniversalViewer/tests.git
