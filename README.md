@@ -4,7 +4,7 @@ Navigate sequences of images in a zoomable, extensible interface.
 
 [example](http://wellcomelibrary.org/player/b18035723)
 
-[Google group](https://groups.google.com/forum/#!forum/wellcome-player)
+[Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
 ## Stable Builds
 
