@@ -1,0 +1,183 @@
+﻿
+#app{
+
+    .overlay{
+
+        color: @text-secondary-color;
+
+        &.embed{
+            width: 470px;
+            padding: 0 0 30px 8px;
+
+            .middle{
+                textarea.code {
+                    width: 100%;
+                    height: 90px;
+                    background: @gray-lighter;
+                    border: 1px solid @gray-light;
+                    font-size: @font-size-small;
+                }
+
+                .sizes{
+                    height: 105px;
+                    margin: 10px 0 0 0;
+
+                    p{
+                        margin: 5px 0 0 0;
+                        padding: 0;
+                        font-size: 12px;
+                        text-align: center;
+                    }
+                }
+
+                .size{
+                    border: 1px solid @gray-light;
+                    float: left;
+                    margin: 0 10px 0 0;
+
+                    &.selected{
+                        border: 1px solid @brand-secondary;
+                        background: lighten(@brand-secondary, 30%); // was #FFF4DD
+
+                        p{
+                            font-weight: bold;
+                        }
+                    }
+
+                    .box{
+                        background: #CCCCCC;
+                        margin: 5px 10px 10px 10px;
+                    }
+
+                    &.small{
+                        height: 80px;
+                        width: 80px;
+                        cursor: pointer;
+
+                        .box{
+                            height: 45px;
+                        }
+                    }
+
+                    &.medium{
+                        height: 90px;
+                        width: 90px;
+                        cursor: pointer;
+
+                        .box{
+                            height: 55px;
+                        }
+                    }
+
+                    &.large{
+                        height: 100px;
+                        width: 100px;
+                        cursor: pointer;
+
+                        .box{
+                            height: 65px;
+                        }
+                    }
+
+                    &.custom{
+                        width: 140px;
+                        height: 100px;
+                        margin: 0;
+
+                        p{
+                            margin: 12px 0 0 0;
+                        }
+
+                        .wrap{
+                            width: 135px;
+                            margin: 10px 0 0 15px;
+                            padding: 0;
+                            max-width: none;
+
+                            .height{
+                                margin: 5px 0 0 0;
+                            }
+                        }
+
+                        label{
+                            margin: 0;
+                            padding: 0 5px 0 0;
+                            display: inline-block;
+                            float: none;
+                            clear: none;
+                            text-align: right;
+                            line-height: 16px;
+                            font-size: @font-size-small;
+                            width: 35px;
+                        }
+
+                        input{
+                            width: 50px;
+                            line-height: 12px;
+                            height: 18px;
+                            display: inline-block;
+                            margin: 0;
+                            padding: 0;
+                            font-size: @font-size-small;
+                        }
+
+                        span{
+                            margin: 0;
+                            padding: 0 0 0 5px;
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+
+            .copyToClipboard{
+                overflow: auto;
+
+                .btn{
+                    float: right;
+                    margin: 10px 0 0 0;
+                }
+            }
+        }
+
+        &.download{
+            width: 250px;
+            padding: 0 0 30px 8px;
+
+            .middle ol.options{
+                margin: 10px 0 0 0;
+            }
+        }
+
+        &.help{
+            width: 470px;
+            height: 250px;
+
+            .scroll{
+                height: 180px;
+            }
+
+            .bottom{
+                background: none;
+            }
+        }
+
+        &.settings{
+            width: 470px;
+            height: 250px;
+
+            .scroll{
+                height: 180px;
+
+                .setting{
+                    margin-bottom: @margin-medium-vertical;
+                }
+            }
+
+            .bottom{
+                background: none;
+            }
+        }
+    }
+
+}

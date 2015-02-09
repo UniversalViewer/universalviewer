@@ -90,9 +90,9 @@ src/extensions/*/css/*.css
 #################
 
 src/extensions/*
-!src/extensions/core*
+!src/extensions/uv*
 src/modules/*
-!src/modules/core*
+!src/modules/uv*
 
 #################
 ## Eclipse
