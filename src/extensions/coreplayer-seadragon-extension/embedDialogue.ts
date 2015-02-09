@@ -1,6 +1,6 @@
 import utils = require("../../utils");
 import embed = require("../../modules/coreplayer-dialogues-module/embedDialogue");
-import baseCenter = require("../../modules/coreplayer-shared-module/seadragonCenterPanel");
+import baseCenter = require("../../modules/coreplayer-seadragoncenterpanel-module/seadragonCenterPanel");
 import ISeadragonExtension = require("./iSeadragonExtension");
 import ISeadragonProvider = require("./iSeadragonProvider");
 

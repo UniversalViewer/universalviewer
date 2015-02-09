@@ -46,8 +46,8 @@ export class HeaderPanel extends baseView.BaseView {
         //this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
         //this.$rightOptions.append(this.$helpButton);
 
-        // todo: add title content
-        this.$settingsButton = $('<a class="imageBtn settings" tabindex="3"></a>')
+        this.$settingsButton = $('<a class="imageBtn settings" tabindex="3"></a>');
+        this.$settingsButton.attr('title', this.content.settings);
         this.$rightOptions.append(this.$settingsButton);
 
         this.$messageBox = $('<div class="messageBox"> \

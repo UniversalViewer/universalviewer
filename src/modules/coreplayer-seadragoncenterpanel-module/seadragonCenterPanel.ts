@@ -4,16 +4,44 @@
 import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import baseProvider = require("../coreplayer-shared-module/baseProvider");
 import extension = require("../../extensions/coreplayer-seadragon-extension/extension");
-import baseCenter = require("../coreplayer-shared-module/seadragonCenterPanel");
+import baseCenter = require("../coreplayer-shared-module/centerPanel");
 import ISeadragonProvider = require("../../extensions/coreplayer-seadragon-extension/iSeadragonProvider");
 import utils = require("../../utils");
 
-export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
+export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
-    private lastTilesNum: number;
-    private tileSources: any[];
-    private userData: any;
-    private handler: any;
+    lastTilesNum: number;
+    tileSources: any[];
+    userData: any;
+    handler: any;
+    prevButtonEnabled: boolean = false;
+    nextButtonEnabled: boolean = false;
+    initialBounds: any;
+    initialRotation: any;
+    viewer: any;
+    title: string;
+    currentBounds: any;
+    isFirstLoad: boolean = true;
+
+    $viewer: JQuery;
+    $rights: JQuery;
+    $closeRightsBtn: JQuery;
+    $prevButton: JQuery;
+    $nextButton: JQuery;
+    $zoomInButton: JQuery;
+    $zoomOutButton: JQuery;
+    $goHomeButton: JQuery;
+    $rotateButton: JQuery;
+
+    // events
+    static SEADRAGON_OPEN: string = 'center.onOpen';
+    static SEADRAGON_RESIZE: string = 'center.onResize';
+    static SEADRAGON_ANIMATION_START: string = 'center.onAnimationStart';
+    static SEADRAGON_ANIMATION: string = 'center.onAnimation';
+    static SEADRAGON_ANIMATION_FINISH: string = 'center.onAnimationfinish';
+    static SEADRAGON_ROTATION: string = 'center.onRotation';
+    static PREV: string = 'center.onPrev';
+    static NEXT: string = 'center.onNext';
 
     constructor($element: JQuery) {
         super($element);
@@ -25,7 +53,42 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         super.create();
 
-        // events.
+        this.$viewer = $('<div id="viewer"></div>');
+        this.$content.append(this.$viewer);
+
+        this.$rights = $('<div class="rights">\
+                               <div class="header">\
+                                   <div class="title"></div>\
+                                   <div class="close"></div>\
+                               </div>\
+                               <div class="main">\
+                                   <div class="attribution"></div>\
+                                   <div class="license"></div>\
+                                   <div class="logo"></div>\
+                               </div>\
+                          </div>');
+
+        this.$rights.find('.header .title').text(this.content.acknowledgements);
+        this.$content.append(this.$rights);
+
+        this.$closeRightsBtn = this.$rights.find('.header .close');
+        this.$closeRightsBtn.on('click', (e) => {
+            e.preventDefault();
+            this.$rights.hide();
+        });
+
+        this.createSeadragonViewer();
+
+        this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
+        this.$zoomInButton.attr('tabindex', 11);
+        this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
+        this.$zoomOutButton.attr('tabindex', 12);
+        this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
+        this.$goHomeButton.attr('tabindex', 13);
+        this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
+        this.$rotateButton.attr('tabindex', 14);
+
+        // events
 
         $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
             this.loadTileSources();
@@ -35,21 +98,63 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
             this.viewer.showControls();
         });
 
-        this.$element.on('mouseout', (e) => {
-            this.viewer.hideControls();
-        });
+        //this.$element.on('mouseleave', (e) => {
+        //    this.viewer.hideControls();
+        //});
 
         // when mouse move stopped
         this.$element.on('mousemove', (e) => {
             // if over element, hide controls.
-            if (this.$element.ismouseover()){
+            if (!this.$viewer.find('.navigator').ismouseover()){
                 this.viewer.hideControls();
             }
         }, this.config.options.controlsFadeAfterInactive);
 
-        this.$element.on('click', () => {
-            this.$viewer.find('.keyboard-command-area').focus();
+        this.viewer.addHandler('open', (viewer) => {
+            this.viewerOpen();
+            $.publish(SeadragonCenterPanel.SEADRAGON_OPEN, [viewer]);
         });
+
+        this.viewer.addHandler('resize', (viewer) => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_RESIZE, [viewer]);
+            this.viewerResize(viewer);
+        });
+
+        this.viewer.addHandler('animation-start', (viewer) => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_START, [viewer]);
+        });
+
+        this.viewer.addHandler('animation', (viewer) => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION, [viewer]);
+        });
+
+        this.viewer.addHandler('animation-finish', (viewer) => {
+            this.currentBounds = this.getBounds();
+
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
+        });
+
+        this.$rotateButton.on('click', () => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
+        });
+
+        this.title = this.extension.provider.getTitle();
+
+        this.createNavigationButtons();
+
+        // if firefox, hide rotation and prev/next until this is resolved
+        var browser = window.browserDetect.browser;
+
+        if (browser == 'Firefox') {
+            if (this.provider.isMultiCanvas()){
+                this.$prevButton.hide();
+                this.$nextButton.hide();
+            }
+            this.$rotateButton.hide();
+        }
+
+        this.showRights();
+
     }
 
     createSeadragonViewer(): void {
@@ -120,22 +225,61 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         //});
     }
 
+    createNavigationButtons() {
+        if (!this.provider.isMultiCanvas()) return;
+
+        this.$prevButton = $('<div class="paging btn prev"></div>');
+        this.$prevButton.prop('title', this.content.previous);
+        this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
+
+        this.$nextButton = $('<div class="paging btn next"></div>');
+        this.$nextButton.prop('title', this.content.next);
+        this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
+
+        var that = this;
+
+        this.$prevButton.on('touchstart click', (e) => {
+            e.preventDefault();
+            OpenSeadragon.cancelEvent(e);
+
+            if (!that.prevButtonEnabled) return;
+
+            $.publish(SeadragonCenterPanel.PREV);
+        });
+
+        this.$nextButton.on('touchstart click', (e) => {
+            e.preventDefault();
+            OpenSeadragon.cancelEvent(e);
+
+            if (!that.nextButtonEnabled) return;
+
+            $.publish(SeadragonCenterPanel.NEXT);
+        });
+    }
+
     // called every time the seadragon viewer opens a new image.
     viewerOpen() {
 
-        super.viewerOpen();
+        if (this.provider.isMultiCanvas()) {
 
-        var settings: ISettings = this.provider.getSettings();
+            $('.navigator').addClass('extraMargin');
 
-        // zoom to bounds unless setting disabled
-        if (this.currentBounds && settings.preserveViewport){
-            this.fitToBounds(this.currentBounds);
-        } else {
-            this.goHome();
+            if (!this.provider.isFirstCanvas()) {
+                this.enablePrevButton();
+            } else {
+                this.disablePrevButton();
+            }
+
+            if (!this.provider.isLastCanvas()) {
+                this.enableNextButton();
+            } else {
+                this.disableNextButton();
+            }
         }
     }
 
     openTileSourcesHandler() {
+
         var that = this.userData;
 
         that.viewer.removeHandler('open', that.handler);
@@ -157,17 +301,78 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
             that.viewer.addTiledImage(that.tileSources[1]);
         }
 
-        // if the number of tilesources being displayed differs from the last number, re-center the viewer.
-        if (that.tileSources.length != that.lastTilesNum){
-            that.goHome();
+        // check for initial zoom/rotation params.
+        if (that.isFirstLoad){
+
+            that.initialRotation = that.extension.getParam(baseProvider.params.rotation);
+
+            if (that.initialRotation){
+                that.viewer.viewport.setRotation(parseInt(that.initialRotation));
+            }
+
+            that.initialBounds = that.extension.getParam(baseProvider.params.zoom);
+
+            if (that.initialBounds){
+                that.initialBounds = that.deserialiseBounds(that.initialBounds);
+                that.currentBounds = that.initialBounds;
+                that.fitToBounds(that.currentBounds);
+            }
+        } else {
+            // it's not the first load
+            var settings: ISettings = that.provider.getSettings();
+
+            // zoom to bounds unless setting disabled
+            if (settings.preserveViewport){
+                that.fitToBounds(that.currentBounds);
+            } else {
+                that.goHome();
+            }
         }
 
         that.lastTilesNum = that.tileSources.length;
+        that.isFirstLoad = false;
+    }
 
-        that.$viewer.find('div[title="Zoom in"]').attr('tabindex', 11);
-        that.$viewer.find('div[title="Zoom out"]').attr('tabindex', 12);
-        that.$viewer.find('div[title="Go home"]').attr('tabindex', 13);
-        that.$viewer.find('div[title="Rotate right"]').attr('tabindex', 14);
+    showRights(): void {
+        var attribution = this.provider.getAttribution();
+        //var license = this.provider.getLicense();
+        //var logo = this.provider.getLogo();
+
+        if (!attribution){
+            this.$rights.hide();
+            return;
+        }
+
+        var $attribution = this.$rights.find('.attribution');
+        var $license = this.$rights.find('.license');
+        var $logo = this.$rights.find('.logo');
+
+        if (attribution){
+            $attribution.html(this.provider.sanitize(attribution));
+            $attribution.find('img').one("load", () => {
+                this.resize();
+            }).each(function() {
+                if(this.complete) $(this).load();
+            });
+            $attribution.targetBlank();
+            $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
+                this.resize();
+            });
+        } else {
+            $attribution.hide();
+        }
+
+        //if (license){
+        //    $license.append('<a href="' + license + '">' + license + '</a>');
+        //} else {
+        $license.hide();
+        //}
+        //
+        //if (logo){
+        //    $logo.append('<img src="' + logo + '"/>');
+        //} else {
+        $logo.hide();
+        //}
     }
 
     goHome(): void {
@@ -175,11 +380,11 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
 
         switch (viewingDirection){
             case "top-to-bottom" :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.tileSources.length));
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.tileSources.length), true);
                 break;
             case "left-to-right" :
             case "right-to-left" :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.tileSources.length, this.viewer.world.getItemAt(0).normHeight));
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.tileSources.length, this.viewer.world.getItemAt(0).normHeight), true);
                 break;
         }
     }
@@ -201,5 +406,93 @@ export class SeadragonCenterPanel extends baseCenter.SeadragonCenterPanel {
         this.viewer.addHandler('open', this.openTileSourcesHandler, this);
     }
 
+    disablePrevButton () {
+        this.prevButtonEnabled = false;
+        this.$prevButton.addClass('disabled');
+    }
 
+    enablePrevButton () {
+        this.prevButtonEnabled = true;
+        this.$prevButton.removeClass('disabled');
+    }
+
+    disableNextButton () {
+        this.nextButtonEnabled = false;
+        this.$nextButton.addClass('disabled');
+    }
+
+    enableNextButton () {
+        this.nextButtonEnabled = true;
+        this.$nextButton.removeClass('disabled');
+    }
+
+    serialiseBounds(bounds): string{
+        return bounds.x + ',' + bounds.y + ',' + bounds.width + ',' + bounds.height;
+    }
+
+    deserialiseBounds(bounds: string): any {
+
+        var boundsArr = bounds.split(',');
+
+        return {
+            x: Number(boundsArr[0]),
+            y: Number(boundsArr[1]),
+            width: Number(boundsArr[2]),
+            height: Number(boundsArr[3])
+        };
+    }
+
+    fitToBounds(bounds): void {
+        var rect = new OpenSeadragon.Rect();
+        rect.x = bounds.x;
+        rect.y = bounds.y;
+        rect.width = bounds.width;
+        rect.height = bounds.height;
+
+        this.viewer.viewport.fitBounds(rect, true);
+    }
+
+    getBounds(): any {
+
+        if (!this.viewer.viewport) return null;
+
+        var bounds = this.viewer.viewport.getBounds(true);
+
+        return {
+            x: utils.Utils.roundNumber(bounds.x, 4),
+            y: utils.Utils.roundNumber(bounds.y, 4),
+            width: utils.Utils.roundNumber(bounds.width, 4),
+            height: utils.Utils.roundNumber(bounds.height, 4)
+        };
+    }
+
+    viewerResize(viewer: any): void {
+
+        if (!viewer.viewport) return;
+
+        var center = viewer.viewport.getCenter(true);
+        if (!center) return;
+
+        // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
+        setTimeout(function () {
+            viewer.viewport.panTo(center, true);
+        }, 1);
+    }
+
+    resize(): void {
+        super.resize();
+
+        this.$title.ellipsisFill(this.title);
+
+        this.$viewer.height(this.$content.height());
+
+        if (this.provider.isMultiCanvas()) {
+            this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
+            this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
+        }
+
+        if (this.$rights.is(':visible')){
+            this.$rights.css('top', this.$content.height() - this.$rights.outerHeight() - this.$rights.verticalMargins());
+        }
+    }
 }
