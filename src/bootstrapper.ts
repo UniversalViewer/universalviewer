@@ -1,5 +1,6 @@
 /// <reference path="js/jquery.d.ts" />
 import utils = require("utils");
+import util = utils.Utils;
 
 class BootStrapper{
 
@@ -14,6 +15,7 @@ class BootStrapper{
     configExtensionUri: string;
     configExtension: any;
     jsonp: boolean;
+    locale: string;
 
     // this loads the manifest, determines what kind of extension and provider to use, and instantiates them.
     constructor(extensions: any) {
@@ -22,10 +24,11 @@ class BootStrapper{
 
         var that = this;
 
-        that.dataBaseUri = utils.Utils.getQuerystringParameter('dbu');
-        that.manifestUri = utils.Utils.getQuerystringParameter('du');
-        that.configExtensionUri = utils.Utils.getQuerystringParameter('c');
-        that.jsonp = utils.Utils.getBool(utils.Utils.getQuerystringParameter('jsonp'), false);
+        that.dataBaseUri = util.getQuerystringParameter('dbu');
+        that.manifestUri = util.getQuerystringParameter('du');
+        that.configExtensionUri = util.getQuerystringParameter('c');
+        that.jsonp = util.getBool(util.getQuerystringParameter('jsonp'), false);
+        that.locale = util.getQuerystringParameter('lc');
 
         if (that.dataBaseUri){
             that.manifestUri = that.dataBaseUri + that.manifestUri;
@@ -86,8 +89,8 @@ class BootStrapper{
 
         // if on home domain, check hash params. otherwise, use
         // embed data attributes or default to 0.
-        var isHomeDomain = utils.Utils.getQuerystringParameter('hd') === "true";
-        var isReload = utils.Utils.getQuerystringParameter('rl') === "true";
+        var isHomeDomain = util.getQuerystringParameter('hd') === "true";
+        var isReload = util.getQuerystringParameter('rl') === "true";
         var sequenceParam = 'si';
 
         if (this.configExtension && this.configExtension.options && this.configExtension.options.IIIF) {
@@ -97,11 +100,11 @@ class BootStrapper{
         if (!this.IIIF) sequenceParam = 'asi';
 
         if (isHomeDomain && !isReload) {
-            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(sequenceParam, parent.document));
+            this.sequenceIndex = parseInt(util.getHashParameter(sequenceParam, parent.document));
         }
 
         if (!this.sequenceIndex) {
-            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(sequenceParam)) || 0;
+            this.sequenceIndex = parseInt(util.getQuerystringParameter(sequenceParam)) || 0;
         }
 
         if (!this.IIIF) {
@@ -173,7 +176,7 @@ class BootStrapper{
         }
 
         // todo: use a compiler flag when available
-        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config.js' : 'js/' + extension.name + '-config.js';
+        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.locale + '.config.js' : 'js/' + extension.name + '.' + that.locale + '.config.js';
 
         // feature detection
         yepnope({

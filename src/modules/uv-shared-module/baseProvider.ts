@@ -4,6 +4,7 @@ import utils = require("../../utils");
 import IProvider = require("./iProvider");
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
+import util = utils.Utils;
 
 export enum params {
     sequenceIndex,
@@ -34,6 +35,7 @@ export class BaseProvider implements IProvider{
     sectionsRootNode: TreeNode;
     treeRoot: TreeNode;
     jsonp: boolean;
+    locale: string;
 
     // map param names to enum indices.
     paramMap: string[] = ['asi', 'ai', 'z', 'r'];
@@ -49,26 +51,27 @@ export class BaseProvider implements IProvider{
         this.manifest = manifest;
 
         // add dataBaseUri to options so it can be overridden.
-        this.options.dataBaseUri = utils.Utils.getQuerystringParameter('dbu');
+        this.options.dataBaseUri = util.getQuerystringParameter('dbu');
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through app.getParam.
-        this.dataUri = utils.Utils.getQuerystringParameter('du');
-        this.embedDomain = utils.Utils.getQuerystringParameter('ed');
-        this.isHomeDomain = utils.Utils.getQuerystringParameter('hd') === "true";
-        this.isOnlyInstance = utils.Utils.getQuerystringParameter('oi') === "true";
-        this.embedScriptUri = utils.Utils.getQuerystringParameter('esu');
-        this.isReload = utils.Utils.getQuerystringParameter('rl') === "true";
-        this.domain = utils.Utils.getQuerystringParameter('d');
-        this.isLightbox = utils.Utils.getQuerystringParameter('lb') === "true";
-        this.jsonp = utils.Utils.getQuerystringParameter('jsonp') === "true";
+        this.dataUri = util.getQuerystringParameter('du');
+        this.embedDomain = util.getQuerystringParameter('ed');
+        this.isHomeDomain = util.getQuerystringParameter('hd') === "true";
+        this.isOnlyInstance = util.getQuerystringParameter('oi') === "true";
+        this.embedScriptUri = util.getQuerystringParameter('esu');
+        this.isReload = util.getQuerystringParameter('rl') === "true";
+        this.domain = util.getQuerystringParameter('d');
+        this.isLightbox = util.getQuerystringParameter('lb') === "true";
+        this.jsonp = util.getQuerystringParameter('jsonp') === "true";
+        this.locale = util.getQuerystringParameter('lc');
 
         if (this.isHomeDomain && !this.isReload){
-            this.sequenceIndex = parseInt(utils.Utils.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
+            this.sequenceIndex = parseInt(util.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
         }
 
         if (!this.sequenceIndex){
-            this.sequenceIndex = parseInt(utils.Utils.getQuerystringParameter(this.paramMap[params.sequenceIndex])) || 0;
+            this.sequenceIndex = parseInt(util.getQuerystringParameter(this.paramMap[params.sequenceIndex])) || 0;
         }
 
         // nothing selected yet.
@@ -466,7 +469,7 @@ export class BaseProvider implements IProvider{
     }
 
     addTimestamp(uri: string): string{
-        return uri + "?t=" + utils.Utils.getTimeStamp();
+        return uri + "?t=" + util.getTimeStamp();
     }
 
     isDeepLinkingEnabled(): boolean {
@@ -554,7 +557,7 @@ export class BaseProvider implements IProvider{
     }
 
     getDomain(): string{
-        var parts = utils.Utils.getUrlParts(this.dataUri);
+        var parts = util.getUrlParts(this.dataUri);
         return parts.host;
     }
 

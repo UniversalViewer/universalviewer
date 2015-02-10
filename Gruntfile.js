@@ -153,15 +153,17 @@ module.exports = function (grunt) {
                     // extension configuration files
                     {
                         expand: true,
-                        src: ['src/extensions/**/config.js'],
+                        src: ['src/extensions/**/config/*.config.js'],
                         dest: '<%= global.buildDir %>/js/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
                             // src/extensions/extensionname/config.js
-                            var extensionName = src.match(/extensions\/(.*)\/config.js/)[1];
+                             var reg = /extensions\/(.*)\/config\/(.*.config.js)/;
+                            var extensionName = src.match(reg)[1];
+                            var fileName = src.match(reg)[2];
 
-                            return dest + extensionName + '-config.js';
+                            return dest + extensionName + '.' + fileName;
                         }
                     },
                     // extension dependencies list
@@ -359,7 +361,7 @@ module.exports = function (grunt) {
                     deep: true,
                     defaults: {}
                 },
-                files: getExtensionsConfig()
+                files: addLocalesToConfig()
             }
         },
 
@@ -396,33 +398,83 @@ module.exports = function (grunt) {
         }
     });
 
-    function getExtensionsConfig(){
+    function addLocalesToConfig(){
 
-        // loop through all extension.config files.
-        // if found to have "extends": "..." in root
-        // add the file it extends and itself to
-        // the file list.
+        // for each extension/l10n/xx-XX.json localisation file, add it to a locales object.
+        // this is used to extend the config files so that the viewer knows what locales are available to it.
+        var locales = {
+            "options": {
+                "locales": []
+            }
+        };
+
+        var locPath = 'src/extensions/**/l10n/*.json';
+        var locRegex = /(.*)\/l10n\/(.*).json/;
+
+        grunt.file.expand({}, locPath).forEach(function(filepath) {
+            var regex = (locRegex).exec(filepath);
+
+            var locale = regex[2];
+
+            locales.options.locales.push(locale);
+        });
+
+        console.log(locales);
+
+        // for each extension/l10n/xx-XX.json localisation file, find its counterpart extension/config/xx-XX.json config file.
+        // if none is found, fall back to en-GB.json
+        // extend the config file with the localisation file.
+        // copy it to the extension root naming it xx-XX.config.js
 
         var files = {};
 
-        grunt.file.expand({}, 'src/extensions/**/extension.config').forEach(function(filepath) {
+        grunt.file.expand({}, locPath).forEach(function(filepath) {
 
-            var dest = (/(.*)extension.config/).exec(filepath)[1] + 'config.js';
+            var regex = (locRegex).exec(filepath);
 
-            // add dest and filepath. (only happens once per extension).
-            files[dest] = [filepath];
+            var parent = regex[1] + '/config';
+            var path = parent + regex[2];
+            var dest = path + '.config.js';
+            var config = path + '.js';
 
-            // check if it extends another.
-            // if it does, add it before the filepath.
-            var json = grunt.file.readJSON(filepath);
-
-            if (json.extends){
-                files[dest].unshift(json.extends);
+            // check config counterpart exists, if not fall back to en-GB.js
+            if (!grunt.file.exists(config)){
+                config = parent + 'en-GB.json';
             }
+
+            files[dest] = [config, filepath, locales];
         });
 
         return files;
     }
+
+    //function getExtensionsConfig(){
+    //
+    //    // loop through all extension.config files.
+    //    // if found to have "extends": "..." in root
+    //    // add the file it extends and itself to
+    //    // the file list.
+    //
+    //    var files = {};
+    //
+    //    grunt.file.expand({}, 'src/extensions/**/extension.config').forEach(function(filepath) {
+    //
+    //        var dest = (/(.*)extension.config/).exec(filepath)[1] + 'config.js';
+    //
+    //        // add dest and filepath. (only happens once per extension).
+    //        files[dest] = [filepath];
+    //
+    //        // check if it extends another.
+    //        // if it does, add it before the filepath.
+    //        var json = grunt.file.readJSON(filepath);
+    //
+    //        if (json.extends){
+    //            files[dest].unshift(json.extends);
+    //        }
+    //    });
+    //
+    //    return files;
+    //}
 
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-contrib-less");

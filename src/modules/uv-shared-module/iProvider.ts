@@ -60,6 +60,7 @@ interface IProvider{
     isOnlyInstance: boolean;
     isReload: boolean;
     jsonp: boolean;
+    locale: string;
 
     getMediaUri(mediaUri: string): string;
     getDomain(): string;

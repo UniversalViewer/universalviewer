@@ -206,7 +206,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, jsonp, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -233,6 +233,7 @@ docReady(function() {
             zoom = $app.attr('data-zoom');
             config = $app.attr('data-config');
             jsonp = $app.attr('data-jsonp');
+            locale = $app.attr('data-locale');
 
             isFullScreen = false;
             height = $app.height();
@@ -357,7 +358,8 @@ docReady(function() {
                     "&esu=" + absScriptUri +
                     "&ed=" + document.domain +
                     "&d=" + domain +
-                    "&lb=" + isLightbox;
+                    "&lb=" + isLightbox +
+                    "&lc=" + (locale || "en-GB");
 
                 if (sequenceIndex) uri += "&asi=" + sequenceIndex;
                 if (canvasIndex) uri += "&ai=" + canvasIndex;
