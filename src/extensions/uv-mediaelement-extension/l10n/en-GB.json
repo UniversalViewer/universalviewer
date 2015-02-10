@@ -1,0 +1,62 @@
+{
+    "modules":
+    {
+        "genericDialogue":
+        {
+            "content":
+            {
+                "ok": "OK"
+            }
+        },
+        "helpDialogue":
+        {
+            "content":
+            {
+                "title": "Help",
+                "text": "placeholder text"
+            }
+        },
+        "embedDialogue":
+        {
+            "content":
+            {
+                "title": "Embed",
+                "instructions": "To embed this item in your own website, copy and paste the code below:"
+            }
+        },
+        "headerPanel":
+        {
+            "content":
+            {
+                "help": "Help",
+                "close": "Close"
+            }
+        },
+        "treeViewLeftPanel": {
+
+        },
+        "mediaelementCenterPanel":
+        {
+            "content":
+            {
+
+            }
+        },
+        "moreInfoRightPanel":
+        {
+            "content":
+            {
+                "holdingText": "Your module goes here!"
+            }
+        },
+        "footerPanel":
+        {
+            "content":
+            {
+                "fullScreen": "Full Screen",
+                "exitFullScreen": "Exit Full Screen",
+                "embed": "Embed"
+            }
+        }
+    }
+}

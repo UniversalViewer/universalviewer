@@ -1,0 +1,50 @@
+{
+    "options":
+    {
+        "theme": "uv-default-theme"
+    },
+    "modules":
+    {
+        "genericDialogue":
+        {
+
+        },
+        "helpDialogue":
+        {
+
+        },
+        "embedDialogue":
+        {
+            "options":
+            {
+                "embedTemplate": "<div class=\"uv\" data-uri=\"{0}\" data-sequenceindex=\"{1}\" data-config=\"{2}\" style=\"width:{3}px; height:{4}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{5}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
+            }
+        },
+        "headerPanel":
+        {
+
+        },
+        "treeViewLeftPanel": {
+
+        },
+        "pdfCenterPanel":
+        {
+            "options":{
+                "titleEnabled": false
+            }
+        },
+        "moreInfoRightPanel":
+        {
+            "options":
+            {
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelAnimationDuration": 250
+            }
+        },
+        "footerPanel":
+        {
+
+        }
+    }
+}

@@ -403,8 +403,8 @@ module.exports = function (grunt) {
         // for each extension/l10n/xx-XX.json localisation file, add it to a locales object.
         // this is used to extend the config files so that the viewer knows what locales are available to it.
         var locales = {
-            "options": {
-                "locales": []
+            options: {
+                locales: []
             }
         };
 
@@ -432,8 +432,9 @@ module.exports = function (grunt) {
 
             var regex = (locRegex).exec(filepath);
 
-            var parent = regex[1] + '/config';
-            var path = parent + regex[2];
+            var parent = regex[1] + '/config/';
+            var locale = regex[2];
+            var path = parent + locale;
             var dest = path + '.config.js';
             var config = path + '.js';
 
@@ -442,7 +443,7 @@ module.exports = function (grunt) {
                 config = parent + 'en-GB.json';
             }
 
-            files[dest] = [config, filepath, locales];
+            files[dest] = [config, filepath];
         });
 
         return files;
