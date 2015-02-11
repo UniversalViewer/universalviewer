@@ -72,6 +72,7 @@ interface IProvider{
     setMediaUri(canvas: any): void;
     getSettings(): ISettings;
     updateSettings(settings: ISettings): void;
+    getLocales(): any;
 }
 
 export = IProvider;

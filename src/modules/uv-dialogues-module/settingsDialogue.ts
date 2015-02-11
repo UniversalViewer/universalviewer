@@ -10,6 +10,7 @@ export class SettingsDialogue extends dialogue.Dialogue {
     $title: JQuery;
     $scroll: JQuery;
     $version: JQuery;
+    $localeDropDown: JQuery;
     $pagingEnabled: JQuery;
     $pagingEnabledTitle: JQuery;
     $pagingEnabledCheckbox: JQuery;
@@ -48,6 +49,9 @@ export class SettingsDialogue extends dialogue.Dialogue {
         this.$version = $('<div class="version"></div>');
         this.$content.append(this.$version);
 
+        this.$localeDropDown = $('<select class="locale"></select>');
+        this.$scroll.append(this.$localeDropDown);
+
         this.$pagingEnabled = $('<div class="setting pagingEnabled"></div>');
         this.$scroll.append(this.$pagingEnabled);
 
@@ -72,6 +76,13 @@ export class SettingsDialogue extends dialogue.Dialogue {
         var that = this;
 
         this.$version.text("v" + version.Version);
+
+        var locales = this.provider.getLocales();
+
+        for (var i = 0; i < locales.length; i++){
+            var locale = locales[i];
+            this.$localeDropDown.append('<option value="' + locale.value + '">' + locale.label + '</option>');
+        }
 
         this.$pagingEnabledCheckbox.change(function() {
             var settings: ISettings = that.getSettings();

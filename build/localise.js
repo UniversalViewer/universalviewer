@@ -23,7 +23,7 @@ module.exports = function (grunt) {
 
     function localiseExtension(dir) {
 
-        var locales = getConfig(dir);
+        var locales = getLocales(dir);
 
         // for each extension/l10n/xx-XX.json localisation file, find its counterpart extension/config/xx-XX.json config file.
         // if none is found, fall back to en-GB.json
@@ -55,7 +55,7 @@ module.exports = function (grunt) {
         });
     }
 
-    function getConfig(dir) {
+    function getLocales(dir) {
         // for each extension/l10n dir, get the contained
         // l10n files and add them to a config.locales array
 
@@ -66,9 +66,18 @@ module.exports = function (grunt) {
         var jsonFiles = getL10nFiles(dir);
 
         _.each(jsonFiles, function(file) {
+
+            var localeJSON = grunt.file.readJSON(file);
+            var label = localeJSON.localeLabel;
             var baseName = path.basename(file);
-            var fileName = baseName.substring(0, baseName.lastIndexOf('.'));
-            config.locales.push(fileName);
+            var name = baseName.substring(0, baseName.lastIndexOf('.'));
+
+            var locale = {
+                name: name,
+                label: label
+            };
+
+            config.locales.push(locale);
         });
 
         return config;
