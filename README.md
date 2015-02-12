@@ -19,13 +19,16 @@ Please see the [wiki](https://github.com/britishlibrary/UniversalViewer/wiki) fo
 All command-line operations for building the Universal Viewer are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). We are using Node for this project because it provides a powerful cross-platform collection of tools with minimal setup overhead. To get set up:
 
 1. Install [Node.js](http://nodejs.org), if you haven't already
-1. Install the Grunt command line interface (if you haven't already); on the command line, run `npm install -g grunt-cli`
-1. Clone the 'UniversalViewer' repository:
-`git clone https://github.com/britishlibrary/UniversalViewer`
-1. On the command line, go in to the 'UniversalViewer' folder
-1. Run `git submodule init`
-1. Run `git submodule update`
-1. Run `npm install`
+1. Install the Grunt command line interface (if you haven't already); on the command line, run:
+
+	`npm install -g grunt-cli`
+1. Clone the 'universalviewer' repository:
+
+	`git clone git@github.com:UniversalViewer/universalviewer.git --recursive`
+1. On the command line, go in to the 'universalviewer' folder
+1. Run
+
+	`npm install`
 
 ### Debug Builds
 
