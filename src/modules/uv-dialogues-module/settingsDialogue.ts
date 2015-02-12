@@ -10,12 +10,14 @@ export class SettingsDialogue extends dialogue.Dialogue {
     $title: JQuery;
     $scroll: JQuery;
     $version: JQuery;
+    $locale: JQuery;
+    $localeLabel: JQuery;
     $localeDropDown: JQuery;
     $pagingEnabled: JQuery;
-    $pagingEnabledTitle: JQuery;
+    $pagingEnabledLabel: JQuery;
     $pagingEnabledCheckbox: JQuery;
     $preserveViewport: JQuery;
-    $preserveViewportTitle: JQuery;
+    $preserveViewportLabel: JQuery;
     $preserveViewportCheckbox: JQuery;
 
     static SHOW_SETTINGS_DIALOGUE: string = 'onShowSettingsDialogue';
@@ -49,8 +51,14 @@ export class SettingsDialogue extends dialogue.Dialogue {
         this.$version = $('<div class="version"></div>');
         this.$content.append(this.$version);
 
-        this.$localeDropDown = $('<select class="locale"></select>');
-        this.$scroll.append(this.$localeDropDown);
+        this.$locale = $('<div class="setting locale"></div>');
+        this.$scroll.append(this.$locale);
+
+            this.$localeLabel = $('<label for="locale">' + this.content.locale + '</label>');
+            this.$locale.append(this.$localeLabel);
+
+            this.$localeDropDown = $('<select id="locale"></select>');
+            this.$locale.append(this.$localeDropDown);
 
         this.$pagingEnabled = $('<div class="setting pagingEnabled"></div>');
         this.$scroll.append(this.$pagingEnabled);
@@ -58,8 +66,8 @@ export class SettingsDialogue extends dialogue.Dialogue {
             this.$pagingEnabledCheckbox = $('<input id="pagingEnabled" type="checkbox" />');
             this.$pagingEnabled.append(this.$pagingEnabledCheckbox);
 
-            this.$pagingEnabledTitle = $('<label for="pagingEnabled">' + this.content.pagingEnabled + '</label>');
-            this.$pagingEnabled.append(this.$pagingEnabledTitle);
+            this.$pagingEnabledLabel = $('<label for="pagingEnabled">' + this.content.pagingEnabled + '</label>');
+            this.$pagingEnabled.append(this.$pagingEnabledLabel);
 
         this.$preserveViewport = $('<div class="setting preserveViewport"></div>');
         this.$scroll.append(this.$preserveViewport);
@@ -67,8 +75,8 @@ export class SettingsDialogue extends dialogue.Dialogue {
             this.$preserveViewportCheckbox = $('<input id="preserveViewport" type="checkbox" />');
             this.$preserveViewport.append(this.$preserveViewportCheckbox);
 
-            this.$preserveViewportTitle = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
-            this.$preserveViewport.append(this.$preserveViewportTitle);
+            this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
+            this.$preserveViewport.append(this.$preserveViewportLabel);
 
         // initialise ui.
         this.$title.text(this.content.title);

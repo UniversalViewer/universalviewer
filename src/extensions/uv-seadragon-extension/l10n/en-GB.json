@@ -38,7 +38,8 @@
             {
                 "title": "Settings",
                 "pagingEnabled": "Two Page View",
-                "preserveViewport": "Preserve Zoom"
+                "preserveViewport": "Preserve Zoom",
+                "locale": "Locale"
             }
         },
         "embedDialogue":

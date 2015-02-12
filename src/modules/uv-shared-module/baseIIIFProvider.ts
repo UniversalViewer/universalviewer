@@ -729,4 +729,8 @@ export class BaseProvider implements IProvider{
 
         return $elem.html();
     }
+
+    getLocales(): any {
+        return this.config.locales;
+    }
 }
