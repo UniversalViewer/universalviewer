@@ -25,7 +25,7 @@ All command-line operations for building the Universal Viewer are scripted using
 1. Clone the 'UniversalViewer' repository:
 
 	`git clone git@github.com:UniversalViewer/universalviewer.git --recursive`
-1. On the command line, go in to the 'UniversalViewer' folder
+1. On the command line, go in to the 'universalviewer' folder
 1. Run
 
 	`npm install`
