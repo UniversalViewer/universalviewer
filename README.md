@@ -8,11 +8,11 @@ Navigate sequences of images in a zoomable, extensible interface.
 
 ## Stable Builds
 
-See the [GitHub releases page](https://github.com/britishlibrary/UniversalViewer/releases).
+See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
 
 ## Development
 
-Please see the [wiki](https://github.com/britishlibrary/UniversalViewer/wiki) for instructions on how to customise the viewer for your own projects.
+Please see the [wiki](https://github.com/UniversalViewer/UniversalViewer/wiki) for instructions on how to customise the viewer for your own projects.
 
 ### First Time Setup
 

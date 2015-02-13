@@ -399,7 +399,7 @@ module.exports = function (grunt) {
         },
 
         localise: {
-            dev: {
+            apply: {
                 options: {
                     default: 'en-GB.json'
                 },
@@ -408,85 +408,6 @@ module.exports = function (grunt) {
         }
     });
 
-    //function addLocalesToConfig(){
-    //
-    //    // for each extension/l10n/xx-XX.json localisation file, add it to a locales object.
-    //    // this is used to extend the config files so that the viewer knows what locales are available to it.
-    //    var locales = {
-    //        options: {
-    //            locales: []
-    //        }
-    //    };
-    //
-    //    var locPath = 'src/extensions/**/l10n/*.json';
-    //    var locRegex = /(.*)\/l10n\/(.*).json/;
-    //
-    //    grunt.file.expand({}, locPath).forEach(function(filepath) {
-    //        var regex = (locRegex).exec(filepath);
-    //
-    //        var locale = regex[2];
-    //
-    //        locales.options.locales.push(locale);
-    //    });
-    //
-    //    console.log(locales);
-    //
-    //    // for each extension/l10n/xx-XX.json localisation file, find its counterpart extension/config/xx-XX.json config file.
-    //    // if none is found, fall back to en-GB.json
-    //    // extend the config file with the localisation file.
-    //    // copy it to the extension root naming it xx-XX.config.js
-    //
-    //    var files = {};
-    //
-    //    grunt.file.expand({}, locPath).forEach(function(filepath) {
-    //
-    //        var regex = (locRegex).exec(filepath);
-    //
-    //        var parent = regex[1] + '/config/';
-    //        var locale = regex[2];
-    //        var path = parent + locale;
-    //        var dest = path + '.config.js';
-    //        var config = path + '.js';
-    //
-    //        // check config counterpart exists, if not fall back to en-GB.js
-    //        if (!grunt.file.exists(config)){
-    //            config = parent + 'en-GB.json';
-    //        }
-    //
-    //        files[dest] = [config, filepath];
-    //    });
-    //
-    //    return files;
-    //}
-
-    //function getExtensionsConfig(){
-    //
-    //    // loop through all extension.config files.
-    //    // if found to have "extends": "..." in root
-    //    // add the file it extends and itself to
-    //    // the file list.
-    //
-    //    var files = {};
-    //
-    //    grunt.file.expand({}, 'src/extensions/**/extension.config').forEach(function(filepath) {
-    //
-    //        var dest = (/(.*)extension.config/).exec(filepath)[1] + 'config.js';
-    //
-    //        // add dest and filepath. (only happens once per extension).
-    //        files[dest] = [filepath];
-    //
-    //        // check if it extends another.
-    //        // if it does, add it before the filepath.
-    //        var json = grunt.file.readJSON(filepath);
-    //
-    //        if (json.extends){
-    //            files[dest].unshift(json.extends);
-    //        }
-    //    });
-    //
-    //    return files;
-    //}
-
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -494,7 +415,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks("grunt-contrib-compress");
-    grunt.loadNpmTasks("grunt-extend");
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-protractor-runner');
 
@@ -507,17 +427,10 @@ module.exports = function (grunt) {
 
     grunt.registerTask("default", '', function(){
 
-        //grunt.task.run(
-        //    'ts:dev',
-        //    'replace:dependenciesSimplify',
-        //    'extend:config',
-        //    'less:dev'
-        //);
-
         grunt.task.run(
             'ts:dev',
             'replace:dependenciesSimplify',
-            'localise:dev',
+            'localise:apply',
             'less:dev'
         );
     });
@@ -543,7 +456,7 @@ module.exports = function (grunt) {
         grunt.task.run(
             'ts:build',
             'replace:dependenciesSimplify',
-            'extend:config',
+            'localise:apply',
             'clean:build',
             'copy:build',
             'exec:build',

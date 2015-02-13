@@ -408,6 +408,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
         });
 
+        this.viewer.cancel
         this.viewer.open(this.tileSources[0]);
 
         this.viewer.addHandler('open', this.openTileSourcesHandler, this);

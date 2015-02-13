@@ -1,6 +1,6 @@
 {
   "name": "UniversalViewer",
-  "version": "1.0.25",
+  "version": "1.0.27",
   "description": "Navigate sequences of images in a zoomable, extensible interface.",
   "devDependencies": {
     "cucumber": "^0.4.5",
@@ -12,7 +12,6 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-less": "~0.11.3",
     "grunt-exec": "~0.4.2",
-    "grunt-extend": "~0.4.2",
     "grunt-protractor-runner": "^1.1.4",
     "grunt-text-replace": "~0.3.7",
     "grunt-ts": "~1.11.5",
