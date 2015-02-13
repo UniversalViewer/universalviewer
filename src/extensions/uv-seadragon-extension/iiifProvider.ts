@@ -1,13 +1,14 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
+import BootStrapper = require("../../bootstrapper");
 import baseProvider = require("../../modules/uv-shared-module/baseIIIFProvider");
 import utils = require("../../utils");
 import ISeadragonProvider = require("./iSeadragonProvider");
 
 export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
 
-    constructor(config: any, manifest: any) {
-        super(config, manifest);
+    constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
+        super(bootstrapper, config, manifest);
 
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.

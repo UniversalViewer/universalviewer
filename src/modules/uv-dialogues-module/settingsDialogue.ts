@@ -4,6 +4,7 @@ import shell = require("../uv-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../uv-shared-module/dialogue");
 import version = require("../../_Version");
+import BootstrapParams = require("../../bootstrapParams");
 
 export class SettingsDialogue extends dialogue.Dialogue {
 
@@ -69,9 +70,9 @@ export class SettingsDialogue extends dialogue.Dialogue {
         this.$localeDropDown.val(this.provider.locale);
 
         this.$localeDropDown.change(() => {
-            var settings: ISettings = this.getSettings();
-            settings.locale = this.$localeDropDown.val();
-            this.updateSettings(settings);
+            var p = new BootstrapParams();
+            p.locale = this.$localeDropDown.val();
+            this.provider.reload(p);
         });
 
         this.$element.hide();

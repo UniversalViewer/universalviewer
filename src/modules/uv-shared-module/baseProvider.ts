@@ -4,6 +4,8 @@ import utils = require("../../utils");
 import IProvider = require("./iProvider");
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
+import BootStrapper = require("../../bootstrapper");
+import BootstrapParams = require("../../bootstrapParams");
 import util = utils.Utils;
 
 export enum params {
@@ -17,8 +19,11 @@ export enum params {
 // to factors like varying back end data provision systems.
 // they provide a consistent interface and set of data structures
 // for extensions to operate against.
+
+// todo: delete this legacy class, rename BaseIIIFProvider to BaseProvider
 export class BaseProvider implements IProvider{
 
+    bootstrapper: BootStrapper;
     canvasIndex: number;
     config: any;
     manifestUri: string;
@@ -46,22 +51,23 @@ export class BaseProvider implements IProvider{
         mediaUriTemplate: "{0}{1}"
     };
 
-    constructor(config: any, manifest: any) {
+    constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
+        this.bootstrapper = bootstrapper;
         this.config = config;
         this.manifest = manifest;
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through app.getParam.
-        this.manifestUri = util.getQuerystringParameter('manifestUri');
-        this.embedDomain = util.getQuerystringParameter('embedDomain');
-        this.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
-        this.isOnlyInstance = util.getQuerystringParameter('isOnlyInstance') === "true";
-        this.embedScriptUri = util.getQuerystringParameter('embedScriptUri');
-        this.isReload = util.getQuerystringParameter('isReload') === "true";
-        this.domain = util.getQuerystringParameter('domain');
-        this.isLightbox = util.getQuerystringParameter('isLightbox') === "true";
-        this.jsonp = util.getQuerystringParameter('jsonp') === "true";
-        this.locale = util.getQuerystringParameter('locale');
+        this.manifestUri = this.bootstrapper.params.manifestUri;
+        this.jsonp = this.bootstrapper.params.jsonp;
+        this.locale = this.bootstrapper.params.locale;
+        this.isHomeDomain = this.bootstrapper.params.isHomeDomain;
+        this.isReload = this.bootstrapper.params.isReload;
+        this.embedDomain = this.bootstrapper.params.embedDomain;
+        this.isOnlyInstance = this.bootstrapper.params.isOnlyInstance;
+        this.embedScriptUri = this.bootstrapper.params.embedScriptUri;
+        this.domain = this.bootstrapper.params.domain;
+        this.isLightbox = this.bootstrapper.params.isLightbox;
 
         if (this.isHomeDomain && !this.isReload){
             this.sequenceIndex = parseInt(util.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
@@ -96,6 +102,18 @@ export class BaseProvider implements IProvider{
         }
 
         this.parseStructure();
+    }
+
+    // re-bootstraps the application with new querystring params
+    reload(params?: BootstrapParams): void {
+        var p = new BootstrapParams();
+        p.isReload = true;
+
+        if (params){
+            p = $.extend(p, params);
+        }
+
+        this.bootstrapper.bootStrap(p);
     }
 
     corsEnabled(): boolean {

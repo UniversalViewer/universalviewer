@@ -297,7 +297,7 @@ export class Utils{
     //#region Boolean
 
     static getBool(val: any, defaultVal: boolean): boolean {
-        if (typeof (val) === 'undefined'){
+        if (val === null || typeof (val) === 'undefined'){
             return defaultVal;
         }
 

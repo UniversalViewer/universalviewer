@@ -105,7 +105,7 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(settingsDialogue.SettingsDialogue.UPDATE_SETTINGS, (e) => {
             this.provider.reloadManifest(() => {
-                $.publish(baseExtension.BaseExtension.RELOAD);
+                $.publish(baseExtension.BaseExtension.RELOAD_MANIFEST);
                 this.viewPage(this.provider.canvasIndex, true);
             });
         });

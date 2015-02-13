@@ -32,7 +32,7 @@ export class BaseExtension implements IExtension {
     static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
     static REDIRECT: string = 'onRedirect';
     static REFRESH: string = 'onRefresh';
-    static RELOAD: string = 'onReload';
+    static RELOAD_MANIFEST: string = 'onReloadManifest';
     static ESCAPE: string = 'onEscape';
     static RETURN: string = 'onReturn';
     static PAGE_UP: string = 'onPageUp';
@@ -63,17 +63,20 @@ export class BaseExtension implements IExtension {
         this.$element.width($win.width());
         this.$element.height($win.height());
 
-        // communication with parent frame.
-        this.socket = new easyXDM.Socket({
-            onMessage: (message, origin) => {
-                message = $.parseJSON(message);
-                this.handleParentFrameEvent(message);
-            }
-        });
+        if (!this.provider.isReload){
+            // communication with parent frame.
+            this.socket = new easyXDM.Socket({
+                onMessage: (message, origin) => {
+                    message = $.parseJSON(message);
+                    this.handleParentFrameEvent(message);
+                }
+            });
 
-        this.triggerSocket(BaseExtension.LOAD);
+            this.triggerSocket(BaseExtension.LOAD);
+        }
 
         // add/remove classes.
+        this.$element.empty();
         this.$element.removeClass();
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);

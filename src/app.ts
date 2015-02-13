@@ -114,5 +114,7 @@ require([
             name: 'uv-pdf-extension'
         };
 
-        new bootstrapper(extensions);
+        var bs = new bootstrapper(extensions);
+
+        bs.bootStrap();
     });

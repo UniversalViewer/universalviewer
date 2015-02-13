@@ -1,7 +1,9 @@
 /// <reference path="./iSettings.d.ts" />
 
+import BootStrapper = require("../../bootstrapper");
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
+import BootstrapParams = require("../../bootstrapParams");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
@@ -52,6 +54,7 @@ interface IProvider{
     sanitize(html: string): string;
 
     // should these move to extension? (not generic to IIIF)
+    bootstrapper: BootStrapper;
     config: any;
     domain: string;
     embedDomain: string;
@@ -69,6 +72,7 @@ interface IProvider{
     isDeepLinkingEnabled(): boolean;
     paramMap: string[];
     reloadManifest(callback: any): void;
+    reload(params?: BootstrapParams);
     setMediaUri(canvas: any): void;
     getSettings(): ISettings;
     updateSettings(settings: ISettings): void;
