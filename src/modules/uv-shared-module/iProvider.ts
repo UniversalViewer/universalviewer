@@ -68,7 +68,7 @@ interface IProvider{
     defaultToThumbsView(): boolean;
     isDeepLinkingEnabled(): boolean;
     paramMap: string[];
-    reload(callback: any): void;
+    reloadManifest(callback: any): void;
     setMediaUri(canvas: any): void;
     getSettings(): ISettings;
     updateSettings(settings: ISettings): void;

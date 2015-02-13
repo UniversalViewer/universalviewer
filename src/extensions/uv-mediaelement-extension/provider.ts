@@ -23,7 +23,7 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.dataUri, this.sequenceIndex, configUri, width, height, esu);
+        var script = String.prototype.format(template, this.manifestUri, this.sequenceIndex, configUri, width, height, esu);
 
         return script;
     }

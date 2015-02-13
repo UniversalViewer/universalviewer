@@ -206,7 +206,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, dataUri, sequenceIndex, canvasIndex, isLightbox, dataBaseUri, zoom, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, manifestUri, sequenceIndex, canvasIndex, isLightbox, zoom, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -224,10 +224,8 @@ docReady(function() {
             }
 
             // get initial params from the container's 'data-' attributes.
-            dataBaseUri = $app.attr('data-baseuri');
-            if (dataBaseUri) dataBaseUri = encodeURIComponent(dataBaseUri);
-            dataUri = $app.attr('data-uri');
-            dataUri = encodeURIComponent(dataUri);
+            manifestUri = $app.attr('data-uri');
+            manifestUri = encodeURIComponent(manifestUri);
             sequenceIndex = $app.attr('data-sequenceindex') || $app.attr('data-assetsequenceindex');
             canvasIndex = $app.attr('data-canvasindex') || $app.attr('data-assetindex');
             zoom = $app.attr('data-zoom');
@@ -352,21 +350,20 @@ docReady(function() {
             function createSocket() {
 
                 var uri = appUri +
-                    "?hd=" + isHomeDomain +
-                    "&oi=" + isOnlyInstance +
-                    "&du=" + dataUri +
-                    "&esu=" + absScriptUri +
-                    "&ed=" + document.domain +
-                    "&d=" + domain +
-                    "&lb=" + isLightbox +
-                    "&lc=" + (locale || "en-GB");
+                    "?isHomeDomain=" + isHomeDomain +
+                    "&isOnlyInstance=" + isOnlyInstance +
+                    "&manifestUri=" + manifestUri +
+                    "&embedScriptUri=" + absScriptUri +
+                    "&embedDomain=" + document.domain +
+                    "&domain=" + domain +
+                    "&isLightbox=" + isLightbox +
+                    "&locale=" + (locale || "en-GB");
 
-                if (sequenceIndex) uri += "&asi=" + sequenceIndex;
-                if (canvasIndex) uri += "&ai=" + canvasIndex;
-                if (dataBaseUri) uri += "&dbu=" + dataBaseUri;
-                if (zoom) uri += "&z=" + zoom;
-                if (reload) uri += "&rl=true";
-                if (config) uri += "&c=" + config;
+                if (sequenceIndex) uri += "&sequenceIndex=" + sequenceIndex;
+                if (canvasIndex) uri += "&canvasIndex=" + canvasIndex;
+                if (zoom) uri += "&zoom=" + zoom;
+                if (reload) uri += "&reload=true";
+                if (config) uri += "&config=" + config;
                 if (jsonp) uri += "&jsonp=" + jsonp;
 
                 socket = new easyXDM.Socket({

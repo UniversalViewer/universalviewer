@@ -21,7 +21,7 @@ export class BaseProvider implements IProvider{
 
     canvasIndex: number;
     config: any;
-    dataUri: string;
+    manifestUri: string;
     domain: string;
     embedScriptUri: string;
     embedDomain: string;
@@ -50,21 +50,18 @@ export class BaseProvider implements IProvider{
         this.config = config;
         this.manifest = manifest;
 
-        // add dataBaseUri to options so it can be overridden.
-        this.options.dataBaseUri = util.getQuerystringParameter('dbu');
-
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through app.getParam.
-        this.dataUri = util.getQuerystringParameter('du');
-        this.embedDomain = util.getQuerystringParameter('ed');
-        this.isHomeDomain = util.getQuerystringParameter('hd') === "true";
-        this.isOnlyInstance = util.getQuerystringParameter('oi') === "true";
-        this.embedScriptUri = util.getQuerystringParameter('esu');
-        this.isReload = util.getQuerystringParameter('rl') === "true";
-        this.domain = util.getQuerystringParameter('d');
-        this.isLightbox = util.getQuerystringParameter('lb') === "true";
+        this.manifestUri = util.getQuerystringParameter('manifestUri');
+        this.embedDomain = util.getQuerystringParameter('embedDomain');
+        this.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
+        this.isOnlyInstance = util.getQuerystringParameter('isOnlyInstance') === "true";
+        this.embedScriptUri = util.getQuerystringParameter('embedScriptUri');
+        this.isReload = util.getQuerystringParameter('isReload') === "true";
+        this.domain = util.getQuerystringParameter('domain');
+        this.isLightbox = util.getQuerystringParameter('isLightbox') === "true";
         this.jsonp = util.getQuerystringParameter('jsonp') === "true";
-        this.locale = util.getQuerystringParameter('lc');
+        this.locale = util.getQuerystringParameter('locale');
 
         if (this.isHomeDomain && !this.isReload){
             this.sequenceIndex = parseInt(util.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
@@ -100,13 +97,9 @@ export class BaseProvider implements IProvider{
         return Modernizr.cors && !this.jsonp
     }
 
-    reload(callback: any): void {
+    reloadManifest(callback: any): void {
 
-        var manifestUri = this.dataUri;
-
-        if (this.options.dataBaseUri){
-            manifestUri = this.options.dataBaseUri + this.dataUri;
-        }
+        var manifestUri = this.manifestUri;
 
         manifestUri = this.addTimestamp(manifestUri);
 
@@ -650,7 +643,7 @@ export class BaseProvider implements IProvider{
     }
 
     getDomain(): string{
-        var parts = util.getUrlParts(this.dataUri);
+        var parts = util.getUrlParts(this.manifestUri);
         return parts.host;
     }
 

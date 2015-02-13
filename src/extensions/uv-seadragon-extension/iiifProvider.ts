@@ -17,7 +17,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     }
 
     getImageUri(canvas: any, imageBaseUri?: string, imageUriTemplate?: string): string{
-        var baseUri = imageBaseUri ? imageBaseUri : this.options.imageBaseUri || this.options.dataBaseUri || "";
+        var baseUri = imageBaseUri ? imageBaseUri : this.options.imageBaseUri || "";
         var template = imageUriTemplate? imageUriTemplate : this.options.imageUriTemplate;
 
         var iiifUri;
@@ -59,7 +59,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.dataUri, this.sequenceIndex, canvasIndex, zoom, rotation, configUri, width, height, esu);
+        var script = String.prototype.format(template, this.manifestUri, this.sequenceIndex, canvasIndex, zoom, rotation, configUri, width, height, esu);
 
         return script;
     }

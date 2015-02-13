@@ -6,7 +6,6 @@ class BootStrapper{
 
     manifest: any;
     extensions: any;
-    dataBaseUri: string;
     manifestUri: string;
     sequenceIndex: number;
     sequences: any;
@@ -24,15 +23,10 @@ class BootStrapper{
 
         var that = this;
 
-        that.dataBaseUri = util.getQuerystringParameter('dbu');
-        that.manifestUri = util.getQuerystringParameter('du');
-        that.configExtensionUri = util.getQuerystringParameter('c');
+        that.manifestUri = util.getQuerystringParameter('manifestUri');
+        that.configExtensionUri = util.getQuerystringParameter('configExtensionUri');
         that.jsonp = util.getBool(util.getQuerystringParameter('jsonp'), false);
-        that.locale = util.getQuerystringParameter('lc');
-
-        if (that.dataBaseUri){
-            that.manifestUri = that.dataBaseUri + that.manifestUri;
-        }
+        that.locale = util.getQuerystringParameter('locale');
 
         jQuery.support.cors = true;
 
@@ -89,22 +83,22 @@ class BootStrapper{
 
         // if on home domain, check hash params. otherwise, use
         // embed data attributes or default to 0.
-        var isHomeDomain = util.getQuerystringParameter('hd') === "true";
-        var isReload = util.getQuerystringParameter('rl') === "true";
-        var sequenceParam = 'si';
+        var isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
+        var isReload = util.getQuerystringParameter('isReload') === "true";
+        //var sequenceParam = 'si';
 
-        if (this.configExtension && this.configExtension.options && this.configExtension.options.IIIF) {
-            this.IIIF = this.configExtension.options.IIIF;
-        }
+        //if (this.configExtension && this.configExtension.options && this.configExtension.options.IIIF) {
+        //    this.IIIF = this.configExtension.options.IIIF;
+        //}
 
-        if (!this.IIIF) sequenceParam = 'asi';
+        //if (!this.IIIF) sequenceParam = 'asi';
 
         if (isHomeDomain && !isReload) {
-            this.sequenceIndex = parseInt(util.getHashParameter(sequenceParam, parent.document));
+            this.sequenceIndex = parseInt(util.getHashParameter("si", parent.document));
         }
 
         if (!this.sequenceIndex) {
-            this.sequenceIndex = parseInt(util.getQuerystringParameter(sequenceParam)) || 0;
+            this.sequenceIndex = parseInt(util.getQuerystringParameter("sequenceIndex")) || 0;
         }
 
         if (!this.IIIF) {
