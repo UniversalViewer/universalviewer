@@ -1,4 +1,4 @@
 
 interface ISettings {
-
+    locale: string;
 }

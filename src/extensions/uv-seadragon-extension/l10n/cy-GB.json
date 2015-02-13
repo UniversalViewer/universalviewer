@@ -1,108 +1,87 @@
 {
-    "localeLabel": "Cymru",
+    "localeLabel": "Cymraeg",
     "options": {
-        "sectionMappings":
-        {
-            "CoverFrontOutside": "Front Cover",
-            "CoverBackOutside": "Back Cover",
-            "TitlePage": "Title Page",
-            "TableOfContents": "Table of Contents",
-            "PartOfWork": "Part of Work"
+        "sectionMappings": {
+            "CoverFrontOutside": "Clawr blaen",
+            "CoverBackOutside": "Clawr cefn",
+            "TitlePage": "Tudalen deitl",
+            "TableOfContents": "Tabl cynnwys",
+            "PartOfWork": "Rhan o waith"
         }
     },
-    "modules":
-    {
-        "genericDialogue":
-        {
-            "content":
-            {
-                "emptyValue": "please enter a value",
-                "pageNotFound": "page not found",
-                "ok": "OK",
-                "refresh": "Refresh",
-                "invalidNumber": "Please enter a valid number",
-                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'"
+    "modules": {
+        "genericDialogue": {
+            "content": {
+                "emptyValue": "rhowch rif",
+                "pageNotFound": "Nid yw'r eitem yn cynnwys tudalen gyda'r rhif a nodwyd. Ceisiwch cyfnewid y math i 'delwedd'.",
+                "ok": "Ewch",
+                "refresh": "Ailosod",
+                "invalidNumber": "Mewnosodwch rif dilys"
             }
         },
-        "helpDialogue":
-        {
-            "content":
-            {
-                "title": "Help",
-                "text": "placeholder text"
+        "helpDialogue": {
+            "content": {
+                "title": "Cymorth",
+                "text": "testun i'w osod"
             }
         },
-        "settingsDialogue":
-        {
-            "content":
-            {
-                "title": "Settings",
-                "pagingEnabled": "Two Page View",
-                "preserveViewport": "Preserve Zoom",
-                "locale": "Locale"
+        "settingsDialogue": {
+            "content": {
+                "title": "Dewisiadau",
+                "pagingEnabled": "Arddangos dwy dudalen",
+                "preserveViewport": "Cadw'r lefel o glosio",
+                "locale": "Iaith"
             }
         },
-        "embedDialogue":
-        {
-            "content":
-            {
-                "title": "Embed",
-                "instructions": "To embed this item in your own website, copy and paste the code below:"
+        "embedDialogue": {
+            "content": {
+                "title": "Ymgorffori",
+                "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:"
             }
         },
-        "pagingHeaderPanel":
-        {
-            "content":
-            {
-                "help": "Help",
-                "image": "Image",
-                "page": "dudalen",
-                "first": "yn gyntaf",
-                "previous": "blaenorol",
-                "next": "nesaf",
-                "last": "ddiwethaf",
+        "pagingHeaderPanel": {
+            "content": {
+                "help": "Cymorth",
+                "image": "Delwedd",
+                "page": "Tudalen",
+                "first": "gyntaf",
+                "previous": "Cynt",
+                "next": "Nesaf",
+                "last": "Olaf",
                 "go": "Ewch",
                 "of": "o {0}",
-                "emptyValue": "Rhowch werth",
-                "close": "agos",
-                "settings": "gosodiadau"
+                "emptyValue": "Mewnosodwch werth",
+                "close": "Cau",
+                "settings": "Dewisiadau"
             }
         },
-        "treeViewLeftPanel":
-        {
-            "content":
-            {
-                "index": "Index",
-                "thumbnails": "Thumbnails"
+        "treeViewLeftPanel": {
+            "content": {
+                "index": "Mynegai",
+                "thumbnails": "Bodluniau"
             }
         },
-        "seadragonCenterPanel":
-        {
-            "content":
-            {
-                "previous": "Previous",
-                "next": "Next",
-                "zoomIn": "Zoom In",
-                "zoomOut": "Zoom Out",
-                "imageUnavailable": "Image Unavailable",
-                "acknowledgements": "Acknowledgements"
+        "seadragonCenterPanel": {
+            "content": {
+                "previous": "gynt",
+                "next": "nesaf",
+                "zoomIn": "Closio",
+                "zoomOut": "Gwrthglosio",
+                "imageUnavailable": "Nid oes delwedd ar gael",
+                "acknowledgements": "Cydnabyddiaethau"
             }
         },
-        "moreInfoRightPanel":
-        {
-            "content":
-            {
-                "holdingText": "Your module goes here!",
-                "noData": "No data to display"
+        "moreInfoRightPanel": {
+            "content": {
+                "holdingText": "Eich modiwl fan hyn!",
+                "noData": "Nid oes data i'w arddangos"
             }
         },
-        "footerPanel":
-        {
-            "content":
-            {
-                "fullScreen": "Full Screen",
-                "exitFullScreen": "Exit Full Screen",
-                "embed": "Embed"
+        "footerPanel": {
+            "content": {
+                "fullScreen": "Sgrin llawn",
+                "exitFullScreen": "Dianc o'r sgrin lawn",
+                "embed": "Ymgorffori"
             }
         }
     }

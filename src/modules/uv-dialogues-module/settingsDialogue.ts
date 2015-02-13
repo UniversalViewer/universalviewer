@@ -13,12 +13,6 @@ export class SettingsDialogue extends dialogue.Dialogue {
     $locale: JQuery;
     $localeLabel: JQuery;
     $localeDropDown: JQuery;
-    $pagingEnabled: JQuery;
-    $pagingEnabledLabel: JQuery;
-    $pagingEnabledCheckbox: JQuery;
-    $preserveViewport: JQuery;
-    $preserveViewportLabel: JQuery;
-    $preserveViewportCheckbox: JQuery;
 
     static SHOW_SETTINGS_DIALOGUE: string = 'onShowSettingsDialogue';
     static HIDE_SETTINGS_DIALOGUE: string = 'onHideSettingsDialogue';
@@ -60,28 +54,8 @@ export class SettingsDialogue extends dialogue.Dialogue {
             this.$localeDropDown = $('<select id="locale"></select>');
             this.$locale.append(this.$localeDropDown);
 
-        this.$pagingEnabled = $('<div class="setting pagingEnabled"></div>');
-        this.$scroll.append(this.$pagingEnabled);
-
-            this.$pagingEnabledCheckbox = $('<input id="pagingEnabled" type="checkbox" />');
-            this.$pagingEnabled.append(this.$pagingEnabledCheckbox);
-
-            this.$pagingEnabledLabel = $('<label for="pagingEnabled">' + this.content.pagingEnabled + '</label>');
-            this.$pagingEnabled.append(this.$pagingEnabledLabel);
-
-        this.$preserveViewport = $('<div class="setting preserveViewport"></div>');
-        this.$scroll.append(this.$preserveViewport);
-
-            this.$preserveViewportCheckbox = $('<input id="preserveViewport" type="checkbox" />');
-            this.$preserveViewport.append(this.$preserveViewportCheckbox);
-
-            this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
-            this.$preserveViewport.append(this.$preserveViewportLabel);
-
         // initialise ui.
         this.$title.text(this.content.title);
-
-        var that = this;
 
         this.$version.text("v" + version.Version);
 
@@ -89,42 +63,16 @@ export class SettingsDialogue extends dialogue.Dialogue {
 
         for (var i = 0; i < locales.length; i++){
             var locale = locales[i];
-            this.$localeDropDown.append('<option value="' + locale.value + '">' + locale.label + '</option>');
+            this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
         }
 
-        this.$pagingEnabledCheckbox.change(function() {
-            var settings: ISettings = that.getSettings();
+        this.$localeDropDown.val(this.provider.locale);
 
-            if($(this).is(":checked")) {
-                settings.pagingEnabled = true;
-            } else {
-                settings.pagingEnabled = false;
-            }
-
-            that.updateSettings(settings);
+        this.$localeDropDown.change(() => {
+            var settings: ISettings = this.getSettings();
+            settings.locale = this.$localeDropDown.val();
+            this.updateSettings(settings);
         });
-
-        this.$preserveViewportCheckbox.change(function() {
-            var settings: ISettings = that.getSettings();
-
-            if($(this).is(":checked")) {
-                settings.preserveViewport = true;
-            } else {
-                settings.preserveViewport = false;
-            }
-
-            that.updateSettings(settings);
-        });
-
-        var settings: ISettings = this.getSettings();
-
-        if (settings.pagingEnabled){
-            this.$pagingEnabledCheckbox.attr("checked", "checked");
-        }
-
-        if (settings.preserveViewport){
-            this.$preserveViewportCheckbox.attr("checked", "checked");
-        }
 
         this.$element.hide();
     }
