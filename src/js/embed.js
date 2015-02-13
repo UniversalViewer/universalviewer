@@ -206,7 +206,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, manifestUri, sequenceIndex, canvasIndex, isLightbox, zoom, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, manifestUri, sequenceIndex, canvasIndex, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -229,6 +229,7 @@ docReady(function() {
             sequenceIndex = $app.attr('data-sequenceindex') || $app.attr('data-assetsequenceindex');
             canvasIndex = $app.attr('data-canvasindex') || $app.attr('data-assetindex');
             zoom = $app.attr('data-zoom');
+            rotation = $app.attr('data-rotation');
             config = $app.attr('data-config');
             jsonp = $app.attr('data-jsonp');
             locale = $app.attr('data-locale');
@@ -263,7 +264,7 @@ docReady(function() {
 
             function redirect(uri) {
                 // store current location in cookie.
-                createCookie('wlredirect', window.location.href);
+                createCookie('uvredirect', window.location.href);
                 window.location.replace(uri);
             }
 
@@ -359,12 +360,15 @@ docReady(function() {
                     "&isLightbox=" + isLightbox +
                     "&locale=" + (locale || "en-GB");
 
-                if (sequenceIndex) uri += "&sequenceIndex=" + sequenceIndex;
-                if (canvasIndex) uri += "&canvasIndex=" + canvasIndex;
-                if (zoom) uri += "&zoom=" + zoom;
                 if (reload) uri += "&reload=true";
                 if (config) uri += "&config=" + config;
                 if (jsonp) uri += "&jsonp=" + jsonp;
+
+                // these are values that getParam can either retrieve from hash or querystring
+                if (sequenceIndex) uri += "&si=" + sequenceIndex;
+                if (canvasIndex) uri += "&ci=" + canvasIndex;
+                if (zoom) uri += "&z=" + zoom;
+                if (rotation) uri += "&r=" + rotation;
 
                 socket = new easyXDM.Socket({
                     remote: uri,
