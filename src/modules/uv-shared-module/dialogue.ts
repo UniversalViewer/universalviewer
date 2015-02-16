@@ -21,6 +21,8 @@ export class Dialogue extends baseView.BaseView {
     }
 
     create(): void {
+        this.setConfig('dialogue');
+
         super.create();
 
         // events.
@@ -40,28 +42,19 @@ export class Dialogue extends baseView.BaseView {
             }
         });
 
-        // this causesed problems when dialogue was opened by pressing enter.
-        // instead, set the focus to .btn.default
-
-        // default behaviour on RETURN is to close.
-        // can be overridden.
-        //$.subscribe(baseExtension.BaseExtension.RETURN, (e) => {
-        //    this.returnFunc();
-        //});
-
-        this.$top = utils.Utils.createDiv('top');
+        this.$top = $('<div class="top"></div>');
         this.$element.append(this.$top);
 
-        this.$closeButton = utils.Utils.createDiv('close');
+        this.$closeButton = $('<a href="#" class="close">' + this.content.Close + '</a>');
         this.$top.append(this.$closeButton);
 
-        this.$middle = utils.Utils.createDiv('middle');
+        this.$middle = $('<div class="middle"></div>');
         this.$element.append(this.$middle);
 
-        this.$content = utils.Utils.createDiv('content');
+        this.$content = $('<div class="content"></div>');
         this.$middle.append(this.$content);
 
-        this.$bottom = utils.Utils.createDiv('bottom');
+        this.$bottom = $('<div class="bottom"></div>');
         this.$element.append(this.$bottom);
 
         this.$closeButton.on('click', (e) => {

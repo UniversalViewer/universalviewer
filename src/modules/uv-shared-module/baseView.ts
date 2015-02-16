@@ -11,6 +11,7 @@ export class BaseView extends panel.Panel{
     content: any;
     options: any;
     moduleName: string;
+    
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
         super($element, fitToParentWidth, fitToParentHeight);

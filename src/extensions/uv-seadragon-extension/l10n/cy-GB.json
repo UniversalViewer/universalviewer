@@ -10,6 +10,11 @@
         }
     },
     "modules": {
+        "dialogue": {
+            "content": {
+                "Close": "Cau"
+            }
+        },
         "genericDialogue": {
             "content": {
                 "emptyValue": "rhowch rif",

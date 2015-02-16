@@ -10,6 +10,11 @@
         }
     },
     "modules": {
+        "dialogue": {
+            "content": {
+                "Close": "Close"
+            }
+        },
         "genericDialogue": {
             "content": {
                 "emptyValue": "please enter a value",
