@@ -99,6 +99,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$expandButton.attr('tabindex', '7');
         this.$collapseButton.attr('tabindex', '7');
         this.$expandFullButton.attr('tabindex', '8');
+
+        this.$closedTitle.text(this.content.contents);
     }
 
     createTreeView(): void {

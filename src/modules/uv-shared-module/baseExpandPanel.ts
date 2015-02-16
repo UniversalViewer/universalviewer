@@ -26,9 +26,7 @@ export class BaseExpandPanel extends baseView.BaseView {
     }
 
     create(): void {
-        
-        this.setConfig('shared');
-        
+
         super.create();
 
         this.$top = $('<div class="top"></div>');
@@ -102,22 +100,10 @@ export class BaseExpandPanel extends baseView.BaseView {
             this.$closed.show();
         }
 
-        var targetWidth = this.getTargetWidth();
-        var targetLeft = this.getTargetLeft();
-
-        /*
-        if (immediate) {
-            this.$element.width(targetWidth);
-            this.$element.css('left', targetLeft);
-            this.toggled();
-            return;
-        }
-        */
-
         this.$element.stop().animate(
             {
-                width: targetWidth,
-                left: targetLeft
+                width: this.getTargetWidth(),
+                left: this.getTargetLeft()
             },
             this.options.panelAnimationDuration, () => {
                 this.toggled();

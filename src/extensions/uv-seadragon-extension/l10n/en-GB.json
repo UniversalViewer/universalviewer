@@ -58,7 +58,8 @@
         "treeViewLeftPanel": {
             "content": {
                 "index": "Index",
-                "thumbnails": "Thumbnails"
+                "thumbnails": "Thumbnails",
+                "contents": "CONTENTS"
             }
         },
         "seadragonCenterPanel": {
@@ -74,7 +75,8 @@
         "moreInfoRightPanel": {
             "content": {
                 "holdingText": "Your module goes here!",
-                "noData": "No data to display"
+                "noData": "No data to display",
+                "moreInformation": "MORE INFORMATION"
             }
         },
         "footerPanel": {

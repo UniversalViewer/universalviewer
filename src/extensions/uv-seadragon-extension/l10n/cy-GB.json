@@ -58,7 +58,8 @@
         "treeViewLeftPanel": {
             "content": {
                 "index": "Mynegai",
-                "thumbnails": "Bodluniau"
+                "thumbnails": "Bodluniau",
+                "contents": "CYNNWYS"
             }
         },
         "seadragonCenterPanel": {
@@ -74,7 +75,8 @@
         "moreInfoRightPanel": {
             "content": {
                 "holdingText": "Eich modiwl fan hyn!",
-                "noData": "Nid oes data i'w arddangos"
+                "noData": "Nid oes data i'w arddangos",
+                "moreInformation": "RHAGOR O WYBODAETH"
             }
         },
         "footerPanel": {
