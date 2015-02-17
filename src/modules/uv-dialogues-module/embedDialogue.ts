@@ -97,18 +97,18 @@ export class EmbedDialogue extends dialogue.Dialogue {
 
         this.$customSize = $('<div class="size custom"></div>');
         this.$sizes.append(this.$customSize);
-        this.$customSize.append('<p>Custom size</p>');
+        this.$customSize.append('<p>' + this.content.customSize + '</p>');
         this.$customSizeWrap = $('<div class="wrap"></div>');
         this.$customSize.append(this.$customSizeWrap);
         this.$customSizeWidthWrap = $('<div class="width"></div>');
         this.$customSizeWrap.append(this.$customSizeWidthWrap);
-        this.$customSizeWidthWrap.append('<label for="width">Width</label>');
+        this.$customSizeWidthWrap.append('<label for="width">' + this.content.width + '</label>');
         this.$customWidth = $('<input id="width" type="text" maxlength="5"></input>');
         this.$customSizeWidthWrap.append(this.$customWidth);
         this.$customSizeWidthWrap.append('<span>px</span>');
         this.$customSizeHeightWrap = $('<div class="height"></div>');
         this.$customSizeWrap.append(this.$customSizeHeightWrap);
-        this.$customSizeHeightWrap.append('<label for="height">Height</label>');
+        this.$customSizeHeightWrap.append('<label for="height">' + this.content.height + '</label>');
         this.$customHeight = $('<input id="height" type="text" maxlength="5"></input>');
         this.$customSizeHeightWrap.append(this.$customHeight);
         this.$customSizeHeightWrap.append('<span>px</span>');

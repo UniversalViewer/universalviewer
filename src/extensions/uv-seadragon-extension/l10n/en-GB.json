@@ -41,7 +41,10 @@
         "embedDialogue": {
             "content": {
                 "title": "Embed",
-                "instructions": "To embed this item in your own website, copy and paste the code below:"
+                "instructions": "To embed this item in your own website, copy and paste the code below:",
+                "width": "Width",
+                "height": "Height",
+                "customSize": "Custom Size"
             }
         },
         "pagingHeaderPanel": {

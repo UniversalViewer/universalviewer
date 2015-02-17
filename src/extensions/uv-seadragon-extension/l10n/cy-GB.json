@@ -41,7 +41,10 @@
         "embedDialogue": {
             "content": {
                 "title": "Ymgorffori",
-                "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:"
+                "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:",
+                "width": "lled",
+                "height": "uchder",
+                "customSize": "Maint Custom"
             }
         },
         "pagingHeaderPanel": {
