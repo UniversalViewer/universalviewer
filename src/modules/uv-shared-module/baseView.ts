@@ -10,25 +10,32 @@ export class BaseView extends panel.Panel{
     config: any;
     content: any;
     options: any;
-    moduleName: string;
-    
+    modules: string[];
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
+        this.modules = [];
         super($element, fitToParentWidth, fitToParentHeight);
     }
 
     create(): void {
+
         super.create();
 
         this.extension = window.extension;
         this.provider = this.extension.provider;
 
-        // config.
-        if (this.moduleName) {
-            this.config = this.provider.config.modules[this.moduleName];
-            if (!this.config) this.config = {};
-            this.content = this.config.content || {};
-            this.options = this.config.options || {};
+        this.config = {};
+        this.config.content = {};
+        this.config.options = {};
+        this.content = this.config.content;
+        this.options = this.config.options;
+
+        // build config inheritance chain
+        if (this.modules.length) {
+            this.modules = this.modules.reverse();
+            _.each(this.modules, (moduleName: string) => {
+                this.config = $.extend(true, this.config, this.provider.config.modules[moduleName]);
+            });
         }
     }
 
@@ -37,12 +44,7 @@ export class BaseView extends panel.Panel{
     }
 
     setConfig(moduleName: string): void {
-        // the top-most class in the inheritance chain of views
-        // overrides all other sub classes in that
-        // it is the first to set the module name.
-        if (!this.moduleName) {
-            this.moduleName = moduleName;
-        }
+        this.modules.push(moduleName);
     }
 
     resize(): void {

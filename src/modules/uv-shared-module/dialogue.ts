@@ -21,6 +21,7 @@ export class Dialogue extends baseView.BaseView {
     }
 
     create(): void {
+
         this.setConfig('dialogue');
 
         super.create();

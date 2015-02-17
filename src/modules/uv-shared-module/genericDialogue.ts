@@ -20,7 +20,7 @@ export class GenericDialogue extends dialogue.Dialogue {
     create(): void {
 
         this.setConfig('genericDialogue');
-        
+
         super.create();
 
         $.subscribe(GenericDialogue.SHOW_GENERIC_DIALOGUE, (e, params) => {          

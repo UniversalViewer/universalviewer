@@ -12,7 +12,7 @@
     "modules": {
         "dialogue": {
             "content": {
-                "Close": "Cau"
+                "close": "Cau"
             }
         },
         "genericDialogue": {
