@@ -1,0 +1,83 @@
+{
+    "options":
+    {
+        "theme": "nlw-theme",
+        "leftPanelEnabled": true,
+        "rightPanelEnabled": true,
+        "overrideFullScreen": false,
+        "pagingEnabled": true,
+        "preserveViewport": false
+    },
+    "modules":
+    {
+        "genericDialogue":
+        {
+        },
+        "helpDialogue":
+        {
+        },
+        "settingsDialogue":
+        {
+        },
+        "embedDialogue":
+        {
+            "options":
+            {
+                "embedTemplate": "<div class=\"uv\" data-uri=\"{0}\" data-sequenceindex=\"{1}\" data-canvasindex=\"{2}\" data-zoom=\"{3}\" data-rotation=\"{4}\" data-config=\"{5}\" style=\"width:{6}px; height:{7}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{8}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
+            }
+        },
+        "pagingHeaderPanel":
+        {
+        },
+        "treeViewLeftPanel":
+        {
+            "options":
+            {
+                "thumbsLoadRange": 15,
+                "thumbsImageFadeInDuration": 300,
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelOpen": true,
+                "panelAnimationDuration": 250,
+                "oneColThumbWidth": 200,
+                "oneColThumbHeight": 320,
+                "twoColThumbWidth": 90,
+                "twoColThumbHeight": 150,
+                "galleryThumbWidth": 200,
+                "galleryThumbHeight": 320,
+                "thumbsExtraHeight": 8,
+                "elideCount": 40
+            }
+        },
+        "seadragonCenterPanel":
+        {
+            "options":
+            {
+                "pageGap": 0.01,
+                "defaultZoomLevel": 0,
+                "controlsFadeAfterInactive": 1500,
+                "controlsFadeDelay": 250,
+                "controlsFadeLength": 250,
+                "navigatorPosition": "BOTTOM_RIGHT",
+                "trimAttributionCount": 150
+            }
+        },
+        "moreInfoRightPanel":
+        {
+            "options":
+            {
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelAnimationDuration": 250,
+                "panelOpen": false
+            }
+        },
+        "footerPanel":
+        {
+            "options":{
+                "embedEnabled": true,
+                "minimiseButtons": false
+            }
+        }
+    }
+}
