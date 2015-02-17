@@ -92,7 +92,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
 
-        this.$searchButton = $('<a class="imageBtn go" tabindex="20"></a>');
+        this.$searchButton = $('<a class="go btn btn-primary" tabindex="20">' + this.content.go + '</a>');
         this.$search.append(this.$searchButton);
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
