@@ -1,5 +1,6 @@
 var version = require('./build/version');
 var localise = require('./build/localise');
+var theme = require('./build/theme');
 
 module.exports = function (grunt) {
 
@@ -16,12 +17,10 @@ module.exports = function (grunt) {
     grunt.initConfig({
         global:
         {
-            //buildDir: 'build/uv-' + packageJson.version,
             minify: 'optimize=none',
             packageDirName: packageDirName,
             packageDir: 'build/' + packageDirName,
             examplesDir: 'examples',
-            theme: 'uv-default-theme',
             port: '8001'
         },
         pkg: packageJson,
@@ -54,36 +53,36 @@ module.exports = function (grunt) {
             }
         },
 
-        less: {
-            dev: {
-                options: {
-                    modifyVars: {
-                        theme: '"<%= global.theme %>"'
-                    }
-                },
-                files: [
-                    {
-                        expand: true,
-                        src: "src/extensions/**/*.less",
-                        ext: ".css"
-                    }
-                ]
-            },
-            build: {
-                options: {
-                    modifyVars: {
-                        theme: '"<%= global.theme %>"'
-                    }
-                },
-                files: [
-                    {
-                        expand: true,
-                        src: "src/extensions/**/*.less",
-                        ext: ".css"
-                    }
-                ]
-            }
-        },
+        //less: {
+        //    dev: {
+        //        options: {
+        //            modifyVars: {
+        //                theme: '"<%= global.theme %>"'
+        //            }
+        //        },
+        //        files: [
+        //            {
+        //                expand: true,
+        //                src: "src/extensions/**/*.less",
+        //                ext: ".css"
+        //            }
+        //        ]
+        //    },
+        //    build: {
+        //        options: {
+        //            modifyVars: {
+        //                theme: '"<%= global.theme %>"'
+        //            }
+        //        },
+        //        files: [
+        //            {
+        //                expand: true,
+        //                src: "src/extensions/**/*.less",
+        //                ext: ".css"
+        //            }
+        //        ]
+        //    }
+        //},
 
         clean: {
             build : ["build/uv-*"],
@@ -92,47 +91,6 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            theme: {
-                files: [
-                    // theme images
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: ['src/themes/<%= global.theme%>/img/*'],
-                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/'
-                    },
-                    // module images
-                    {
-                        expand: true,
-                        src: ['src/modules/**/img/*'],
-                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/',
-                        rename: function (dest, src) {
-
-                            var fileName = src.substr(src.lastIndexOf('/'));
-
-                            // get the module name from the src string.
-                            // src/modules/modulename/img
-                            var moduleName = src.match(/modules\/(.*)\/img/)[1];
-
-                            return dest + moduleName + fileName;
-                        }
-                    },
-                    // extensions css
-                    {
-                        expand: true,
-                        src: ['src/extensions/**/css/*.css'],
-                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/css/',
-                        rename: function(dest, src) {
-
-                            // get the extension name from the src string.
-                            // src/extensions/extensionname/css/styles.css
-                            var extensionName = src.match(/extensions\/(.*)\/css/)[1];
-
-                            return dest + extensionName + ".css";
-                        }
-                    }
-                ]
-            },
             build: {
                 files: [
                     // html
@@ -318,15 +276,6 @@ module.exports = function (grunt) {
                     to: '\'extensions/$1/extension\'$2../../$1-dependencies'
                 }]
             },
-            img: {
-                // replace img srcs to point to "../img/[module]/[img]"
-                src: ['<%= global.buildDir %>/themes/<%= global.theme%>/css/*.css'],
-                overwrite: true,
-                replacements: [{
-                    from: /\((?:'|"|)(?:.*modules\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
-                    to: '\(\'../img/$1/$2\'\)'
-                }]
-            },
             html: {
                 src: ['<%= global.buildDir %>/app.html'],
                 overwrite: true,
@@ -355,16 +304,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-
-        //extend: {
-        //    config: {
-        //        options: {
-        //            deep: true,
-        //            defaults: {}
-        //        },
-        //        files: addLocalesToConfig()
-        //    }
-        //},
 
         connect: {
             dev: {
@@ -405,6 +344,24 @@ module.exports = function (grunt) {
                 },
                 src: './src/extensions/**/l10n'
             }
+        },
+
+        theme: {
+            dev: {
+                options: {
+                    themes: './src/themes/*'
+                },
+                files: [
+                    {
+                        expand: true,
+                        src: "./src/extensions/*/*.less",
+                        ext: ".css"
+                    }
+                ]
+            },
+            build: {
+
+            }
         }
     });
 
@@ -420,6 +377,7 @@ module.exports = function (grunt) {
 
     version(grunt);
     localise(grunt);
+    theme(grunt);
 
     grunt.registerTask('dist:upbuild', ['version:bump', 'version:apply', 'build']);
     grunt.registerTask('dist:upminor', ['version:bump:minor', 'version:apply', 'build']);
@@ -431,7 +389,7 @@ module.exports = function (grunt) {
             'ts:dev',
             'replace:dependenciesSimplify',
             'localise:apply',
-            'less:dev'
+            'theme:dev'
         );
     });
 
@@ -464,23 +422,23 @@ module.exports = function (grunt) {
             'replace:js',
             'replace:dependenciesPaths',
             'replace:dependenciesExtension',
-            'theme'
+            'theme:build'
         );
     });
 
     // theme
-    grunt.registerTask('theme', '', function() {
-
-        // pass --name=mytheme to add to build/themes/mytheme
-        var themeName = grunt.option('name');
-        if (themeName) grunt.config.set('global.theme', themeName);
-
-        grunt.task.run(
-            'less:build',
-            'copy:theme',
-            'replace:img'
-        );
-    });
+    //grunt.registerTask('theme', '', function() {
+    //
+    //    // pass --name=mytheme to add to build/themes/mytheme
+    //    var themeName = grunt.option('name');
+    //    if (themeName) grunt.config.set('global.theme', themeName);
+    //
+    //    grunt.task.run(
+    //        'less:build',
+    //        'copy:theme',
+    //        'replace:img'
+    //    );
+    //});
 
     // copy into examples folder
     grunt.registerTask('examples', '', function() {
