@@ -8,7 +8,6 @@
 
 #################
 ## Ignore everything but the default theme.
-## Allows experimentation
 #################
 
 src/themes/*
@@ -83,7 +82,7 @@ build/uv-*
 ## Css
 #################
 
-src/extensions/*/css/*.css
+src/extensions/*/theme/*.css
 
 #################
 ## Extensions/Modules

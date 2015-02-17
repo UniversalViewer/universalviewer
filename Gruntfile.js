@@ -342,7 +342,7 @@ module.exports = function (grunt) {
                 options: {
                     default: 'en-GB.json'
                 },
-                src: './src/extensions/**/l10n'
+                src: './src/extensions/*/l10n'
             }
         },
 
@@ -354,8 +354,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src: "./src/extensions/*/*.less",
-                        ext: ".css"
+                        src: "./src/extensions/*/theme/theme.less"
                     }
                 ]
             },

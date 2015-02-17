@@ -2,6 +2,8 @@ var path = require('path');
 var _ = require('lodash');
 var glob = require('glob');
 var async = require('async');
+var less = require('less');
+var chalk = require('chalk');
 
 module.exports = function (grunt) {
 
@@ -17,7 +19,7 @@ module.exports = function (grunt) {
     function dev() {
 
         this.options = this.data.options;
-        this.files = this.data.files;
+        this.src = this.data.src;
 
         // for each theme, compile each extension's .less file passing the theme name
         var dirs = getThemeDirs(this.options.themes);
@@ -28,13 +30,13 @@ module.exports = function (grunt) {
 
             if (!grunt.file.isDir(dir)) return;
 
-            var theme = path.basename(dir);
+            that.theme = path.basename(dir);
 
             that.options.modifyVars = {
-                theme: theme
+                theme: that.theme
             }
 
-            compile.call(that);
+            getFiles.call(that);
         });
     }
 
@@ -46,11 +48,12 @@ module.exports = function (grunt) {
         return glob.sync(themeDirs);
     }
 
-    function compile() {
+    function getFiles() {
 
         var done = this.async();
 
         var options = this.options;
+        var theme = this.theme;
 
         options.banner = '';
 
@@ -59,7 +62,7 @@ module.exports = function (grunt) {
         }
 
         async.eachSeries(this.files, function(f, nextFileObj) {
-            var destFile = f.dest;
+            var destFile = path.join(path.dirname(f.dest), theme + '.css');
 
             var files = f.src.filter(function(filepath) {
                 // Warn on and remove invalid source files (if nonull was set).
