@@ -4,22 +4,23 @@ var theme = require('./build/theme');
 
 module.exports = function (grunt) {
 
-    var packageJson,
-        packageDirName;
+    var packageJson;
 
-    function loadPackage() {
+    function refresh() {
         packageJson = grunt.file.readJSON("package.json");
-        packageDirName = 'universalviewer-' + packageJson.version
+        var buildDir = 'build/uv-' + packageJson.version;
+        grunt.config.set('global.buildDir', buildDir);
+        var packageDirName = 'uv-' + packageJson.version;
+        grunt.config.set('global.packageDirName', packageDirName);
+        grunt.config.set('global.packageDir', 'build/' + packageDirName);
     }
 
-    loadPackage();
+    refresh();
 
     grunt.initConfig({
         global:
         {
             minify: 'optimize=none',
-            packageDirName: packageDirName,
-            packageDir: 'build/' + packageDirName,
             examplesDir: 'examples',
             port: '8001'
         },
@@ -53,41 +54,11 @@ module.exports = function (grunt) {
             }
         },
 
-        //less: {
-        //    dev: {
-        //        options: {
-        //            modifyVars: {
-        //                theme: '"<%= global.theme %>"'
-        //            }
-        //        },
-        //        files: [
-        //            {
-        //                expand: true,
-        //                src: "src/extensions/**/*.less",
-        //                ext: ".css"
-        //            }
-        //        ]
-        //    },
-        //    build: {
-        //        options: {
-        //            modifyVars: {
-        //                theme: '"<%= global.theme %>"'
-        //            }
-        //        },
-        //        files: [
-        //            {
-        //                expand: true,
-        //                src: "src/extensions/**/*.less",
-        //                ext: ".css"
-        //            }
-        //        ]
-        //    }
-        //},
-
         clean: {
-            build : ["build/uv-*"],
+            build : ['build/uv-*'],
             package: ['<%= global.packageDir %>'],
-            examples: ['<%= global.examplesDir %>/build/uv-*']
+            examples: ['<%= global.examplesDir %>/build/uv-*'],
+            cleanup: ['.src/extensions/*/config/*.js', '.src/extensions/*/theme/*.css']
         },
 
         copy: {
@@ -322,7 +293,6 @@ module.exports = function (grunt) {
         protractor: {
             dev: {
                 options: {
-                    //todo: port
                     configFile: "tests/protractor-conf.js"
                 }
             }
@@ -365,7 +335,6 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks("grunt-ts");
-    grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-exec");
@@ -391,12 +360,6 @@ module.exports = function (grunt) {
             'theme:dev'
         );
     });
-
-    function refresh() {
-        loadPackage();
-        var buildDir = 'build/uv-' + packageJson.version;
-        grunt.config.set('global.buildDir', buildDir);
-    }
 
     grunt.registerTask('build', '', function() {
 
@@ -425,20 +388,6 @@ module.exports = function (grunt) {
         );
     });
 
-    // theme
-    //grunt.registerTask('theme', '', function() {
-    //
-    //    // pass --name=mytheme to add to build/themes/mytheme
-    //    var themeName = grunt.option('name');
-    //    if (themeName) grunt.config.set('global.theme', themeName);
-    //
-    //    grunt.task.run(
-    //        'less:build',
-    //        'copy:theme',
-    //        'replace:img'
-    //    );
-    //});
-
     // copy into examples folder
     grunt.registerTask('examples', '', function() {
 
@@ -453,6 +402,8 @@ module.exports = function (grunt) {
 
     // compress build into .zip package
     grunt.registerTask('package', '', function() {
+
+        refresh();
 
         grunt.task.run(
             'copy:package',
@@ -472,6 +423,13 @@ module.exports = function (grunt) {
     grunt.registerTask("test", '', function(){
         grunt.task.run(
             'protractor:dev'
+        );
+    });
+
+    // delete all extension/config/[locale].js, extension/theme/[theme].css files
+    grunt.registerTask("cleanup", '', function(){
+        grunt.task.run(
+            'clean:cleanup'
         );
     });
 
