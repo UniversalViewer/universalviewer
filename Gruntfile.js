@@ -58,7 +58,7 @@ module.exports = function (grunt) {
             build : ['build/uv-*'],
             package: ['<%= global.packageDir %>'],
             examples: ['<%= global.examplesDir %>/build/uv-*'],
-            cleanup: ['.src/extensions/*/config/*.js', '.src/extensions/*/theme/*.css']
+            cleanup: ['./src/extensions/*/config/*.js', './src/extensions/*/theme/*.css']
         },
 
         copy: {
