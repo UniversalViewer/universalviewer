@@ -405,10 +405,6 @@ export class BaseProvider implements IProvider{
         return canvas.structures.last();
     }
 
-    getCanvasLabel(canvas: any): string{
-        return canvas.orderLabel.trim();
-    }
-
     getLastCanvasOrderLabel(): string {
 
         // get the last orderlabel that isn't empty or '-'.
@@ -644,6 +640,14 @@ export class BaseProvider implements IProvider{
     }
 
     getLocales(): any {
-        return this.config.locales;
+        return this.config.localisation.locales;
+    }
+
+    getLabel(resource): string {
+        return null;
+    }
+
+    getLocalisedValue(values: any[]): string {
+        return null;
     }
 }

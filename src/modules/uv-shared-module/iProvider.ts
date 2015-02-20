@@ -21,9 +21,9 @@ interface IProvider{
     getCanvasByIndex(index): any;
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexById(id: string): number;
-    getCanvasLabel(canvas: any): string;
     getCanvasStructure(canvas: any): any;
     getCurrentCanvas(): any;
+    getLocalisedValue(property: any): string;
     getManifestSeeAlsoUri(manifest: any): string;
     getManifestType(): string;
     getMetaData(callback: (data: any) => any): void;

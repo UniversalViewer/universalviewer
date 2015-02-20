@@ -62,6 +62,47 @@ module.exports = function (grunt) {
         },
 
         copy: {
+            theme: {
+                files: [
+                    // theme images
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/themes/<%= global.theme%>/img/*'],
+                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/'
+                    },
+                    // module images
+                    {
+                        expand: true,
+                        src: ['src/modules/**/img/*'],
+                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/',
+                        rename: function (dest, src) {
+
+                            var fileName = src.substr(src.lastIndexOf('/'));
+
+                            // get the module name from the src string.
+                            // src/modules/modulename/img
+                            var moduleName = src.match(/modules\/(.*)\/img/)[1];
+
+                            return dest + moduleName + fileName;
+                        }
+                    },
+                    // extensions css
+                    {
+                        expand: true,
+                        src: ['src/extensions/**/theme/*.css'],
+                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/css/',
+                        rename: function(dest, src) {
+
+                            // get the extension name from the src string.
+                            // src/extensions/[extension]/theme/styles.css
+                            var extensionName = src.match(/extensions\/(.*)\/theme/)[1];
+
+                            return dest + extensionName + ".css";
+                        }
+                    }
+                ]
+            },
             build: {
                 files: [
                     // html
@@ -329,7 +370,9 @@ module.exports = function (grunt) {
                 ]
             },
             build: {
-
+                options: {
+                    themes: './src/themes/*'
+                }
             }
         }
     });

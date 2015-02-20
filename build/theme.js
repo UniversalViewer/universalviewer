@@ -4,6 +4,7 @@ var glob = require('glob');
 var async = require('async');
 var less = require('less');
 var chalk = require('chalk');
+var preAndPostHook = require('./utils/pre-and-post-hook');
 
 module.exports = function (grunt) {
 
@@ -12,48 +13,20 @@ module.exports = function (grunt) {
         if (this.target === 'dev') {
             dev.call(this);
         } else if (this.target === 'build') {
-            //build(this.data, arguments);
+            build.call(this);
         }
     });
 
+    // for each theme, compile each extension's theme.less file passing the theme name
     function dev() {
 
         this.options = this.data.options;
-        this.src = this.data.src;
 
-        // for each theme, compile each extension's .less file passing the theme name
         var dirs = getThemeDirs(this.options.themes);
-
-        var that = this;
-
-        _.each(dirs, function(dir) {
-
-            if (!grunt.file.isDir(dir)) return;
-
-            that.theme = path.basename(dir);
-
-            that.options.modifyVars = {
-                theme: that.theme
-            }
-
-            getFiles.call(that);
-        });
-    }
-
-    function build(data, args) {
-
-    }
-
-    function getThemeDirs(themeDirs) {
-        return glob.sync(themeDirs);
-    }
-
-    function getFiles() {
 
         var done = this.async();
 
         var options = this.options;
-        var theme = this.theme;
 
         options.banner = '';
 
@@ -61,64 +34,118 @@ module.exports = function (grunt) {
             grunt.verbose.warn('Destination not written because no source files were provided.');
         }
 
-        async.eachSeries(this.files, function(f, nextFileObj) {
-            var destFile = path.join(path.dirname(f.dest), theme + '.css');
+        var that = this;
 
-            var files = f.src.filter(function(filepath) {
-                // Warn on and remove invalid source files (if nonull was set).
-                if (!grunt.file.exists(filepath)) {
-                    grunt.log.warn('Source file "' + filepath + '" not found.');
-                    return false;
-                } else {
-                    return true;
+        async.eachSeries(dirs, function(d, nextDirObj) {
+            var theme = path.basename(d);
+
+            options.modifyVars = {
+                theme: theme
+            };
+
+            async.eachSeries(that.files, function (f, nextFileObj) {
+                var destFile = path.join(path.dirname(f.dest), theme + '.css');
+
+                var files = f.src.filter(function (filepath) {
+                    // Warn on and remove invalid source files (if nonull was set).
+                    if (!grunt.file.exists(filepath)) {
+                        grunt.log.warn('Source file "' + filepath + '" not found.');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+
+                if (files.length === 0) {
+                    if (f.src.length < 1) {
+                        grunt.log.warn('Destination ' + chalk.cyan(destFile) + ' not written because no source files were found.');
+                    }
+
+                    // No src files, goto next target. Warn would have been issued above.
+                    return nextFileObj();
                 }
-            });
 
-            if (files.length === 0) {
-                if (f.src.length < 1) {
-                    grunt.log.warn('Destination ' + chalk.cyan(destFile) + ' not written because no source files were found.');
-                }
+                var compiled = [];
+                var i = 0;
 
-                // No src files, goto next target. Warn would have been issued above.
-                return nextFileObj();
-            }
+                async.concatSeries(files, function (file, next) {
+                    if (i++ > 0) {
+                        options.banner = '';
+                    }
 
-            var compiled = [];
-            var i = 0;
-
-            async.concatSeries(files, function(file, next) {
-                if (i++ > 0) {
-                    options.banner = '';
-                }
-
-                compileLess(file, destFile, options)
-                    .then(function(output) {
-                        compiled.push(output.css);
-                        if (options.sourceMap && !options.sourceMapFileInline) {
-                            var sourceMapFilename = options.sourceMapFilename;
-                            if (!sourceMapFilename) {
-                                sourceMapFilename = destFile + '.map';
+                    compileLess(file, destFile, options)
+                        .then(function (output) {
+                            compiled.push(output.css);
+                            if (options.sourceMap && !options.sourceMapFileInline) {
+                                var sourceMapFilename = options.sourceMapFilename;
+                                if (!sourceMapFilename) {
+                                    sourceMapFilename = destFile + '.map';
+                                }
+                                grunt.file.write(sourceMapFilename, output.map);
+                                grunt.log.writeln('File ' + chalk.cyan(sourceMapFilename) + ' created.');
                             }
-                            grunt.file.write(sourceMapFilename, output.map);
-                            grunt.log.writeln('File ' + chalk.cyan(sourceMapFilename) + ' created.');
-                        }
-                        process.nextTick(next);
-                    },
-                    function(err) {
-                        nextFileObj(err);
-                    });
-            }, function() {
-                if (compiled.length < 1) {
-                    grunt.log.warn('Destination ' + chalk.cyan(destFile) + ' not written because compiled files were empty.');
-                } else {
-                    var allCss = compiled.join(options.compress ? '' : grunt.util.normalizelf(grunt.util.linefeed));
-                    grunt.file.write(destFile, allCss);
-                    grunt.log.writeln('File ' + chalk.cyan(destFile) + ' created');
-                }
-                nextFileObj();
+                            process.nextTick(next);
+                        },
+                        function (err) {
+                            nextFileObj(err);
+                        });
+                }, function () {
+                    if (compiled.length < 1) {
+                        grunt.log.warn('Destination ' + chalk.cyan(destFile) + ' not written because compiled files were empty.');
+                    } else {
+                        var allCss = compiled.join(options.compress ? '' : grunt.util.normalizelf(grunt.util.linefeed));
+                        grunt.file.write(destFile, allCss);
+                        grunt.log.writeln('File ' + chalk.cyan(destFile) + ' created');
+                    }
+                    nextFileObj();
+                });
+
+            }, nextDirObj);
+        }, done);
+    }
+
+    function build() {
+        this.options = this.data.options;
+
+        // copy extension/theme/[theme].css and module images into build/uv/themes
+        //var done = this.async();
+
+        var dirs = getThemeDirs(this.options.themes);
+
+        _.each(dirs, function(dir) {
+            var theme = path.basename(dir);
+
+            var images = './src/themes/' + theme + '/img/*';
+
+            images = grunt.file.expand(images);
+
+            _.each(images, function(image) {
+                var i = image;
+                //grunt.file.copy(srcpath, destpath [, options])
             });
 
-        }, done);
+            //grunt.config.set('global.theme', theme);
+
+
+
+            //grunt.task.run('copy:theme');
+        });
+
+        //async.eachSeries(dirs, function (d, nextDirObj) {
+        //    var theme = path.basename(d);
+        //
+        //    grunt.config.set('global.theme', theme);
+        //
+        //    preAndPostHook(grunt.task.run('copy:theme'), function() {
+        //        nextDirObj();
+        //    });
+        //}, done);
+
+        // replace img paths
+    }
+
+    function getThemeDirs(themeDirs) {
+        return glob.sync(themeDirs);
     }
 
     var compileLess = function(srcFile, destFile, options) {

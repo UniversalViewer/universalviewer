@@ -68,24 +68,25 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         var $header = $elem.find('.header');
         var $text = $elem.find('.text');
 
-        item = _.values(item);
+        var label = this.provider.getLocalisedValue(item.label);
+        var value  = this.provider.getLocalisedValue(item.value);
 
-        var name = this.provider.sanitize(item[0]);
-        var value = this.provider.sanitize(item[1]);
-
-        name = name.trim();
-        name = name.toLowerCase();
-
-        $elem.addClass(name.toCssClass());
+        label = this.provider.sanitize(label);
+        value = this.provider.sanitize(value);
 
         // replace \n with <br>
         value = value.replace('\n', '<br>');
 
-        $header.html(name);
+        $header.html(label);
         $text.html(value);
         $text.targetBlank();
 
         $text.toggleExpandText(trimChars);
+
+        label = label.trim();
+        label = label.toLowerCase();
+
+        $elem.addClass(label.toCssClass());
 
         return $elem;
     }

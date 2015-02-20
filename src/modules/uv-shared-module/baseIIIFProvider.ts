@@ -180,10 +180,6 @@ export class BaseProvider implements IProvider{
         return this.manifest.seeAlso;
     }
 
-    getCanvasLabel(canvas: any): string{
-        return canvas.label;
-    }
-
     getLastCanvasLabel(): string {
         // get the last label that isn't empty or '-'.
         for (var i = this.sequence.canvases.length - 1; i >= 0; i--) {
@@ -192,7 +188,7 @@ export class BaseProvider implements IProvider{
             var regExp = /\d/;
 
             if (regExp.test(canvas.label)) {
-                return canvas.label;
+                return this.getLocalisedValue(canvas.label);
             }
         }
 
@@ -402,10 +398,41 @@ export class BaseProvider implements IProvider{
 
             var uri = this.getThumbUri(canvas, width, height);
 
-            thumbs.push(new Thumb(i, uri, canvas.label, width, height, true));
+            thumbs.push(new Thumb(i, uri, this.getLocalisedValue(canvas.label), width, height, true));
         }
 
         return thumbs;
+    }
+
+    getLocalisedValue(prop: any): string {
+
+        if (!(prop instanceof Array)){
+            return prop;
+        }
+
+        // test for exact match
+        for (var i = 0; i < prop.length; i++){
+            var value = prop[i];
+            var language = value['@language'];
+
+            if (this.locale === language){
+                return <string>value['@value'];
+            }
+        }
+
+        // test for inexact match
+        for (var i = 0; i < prop.length; i++){
+            var value = prop[i];
+            var language = value['@language'];
+
+            var match = this.locale.substr(0, this.locale.indexOf('-'));
+
+            if (language === match){
+                return <string>value['@value'];
+            }
+        }
+
+        return null;
     }
 
     parseManifest(): void{
@@ -642,7 +669,7 @@ export class BaseProvider implements IProvider{
     }
 
     parseTreeNode(node: TreeNode, structure: any): void {
-        node.label = structure.label;
+        node.label = this.getLocalisedValue(structure.label);
         node.data = structure;
         node.data.type = "structure";
         structure.treeNode = node;
@@ -742,6 +769,6 @@ export class BaseProvider implements IProvider{
     }
 
     getLocales(): any {
-        return this.config.locales;
+        return this.config.localisation.locales;
     }
 }

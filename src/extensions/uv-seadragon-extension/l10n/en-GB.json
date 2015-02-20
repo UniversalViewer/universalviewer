@@ -1,5 +1,7 @@
 {
-    "localeLabel": "English (GB)",
+    "localisation": {
+        "label": "English (GB)"
+    },
     "options": {
         "sectionMappings": {
             "CoverFrontOutside": "Front Cover",
