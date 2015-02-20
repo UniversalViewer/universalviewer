@@ -62,47 +62,6 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            theme: {
-                files: [
-                    // theme images
-                    {
-                        expand: true,
-                        flatten: true,
-                        src: ['src/themes/<%= global.theme%>/img/*'],
-                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/'
-                    },
-                    // module images
-                    {
-                        expand: true,
-                        src: ['src/modules/**/img/*'],
-                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/img/',
-                        rename: function (dest, src) {
-
-                            var fileName = src.substr(src.lastIndexOf('/'));
-
-                            // get the module name from the src string.
-                            // src/modules/modulename/img
-                            var moduleName = src.match(/modules\/(.*)\/img/)[1];
-
-                            return dest + moduleName + fileName;
-                        }
-                    },
-                    // extensions css
-                    {
-                        expand: true,
-                        src: ['src/extensions/**/theme/*.css'],
-                        dest: '<%= global.buildDir %>/themes/<%= global.theme%>/css/',
-                        rename: function(dest, src) {
-
-                            // get the extension name from the src string.
-                            // src/extensions/[extension]/theme/styles.css
-                            var extensionName = src.match(/extensions\/(.*)\/theme/)[1];
-
-                            return dest + extensionName + ".css";
-                        }
-                    }
-                ]
-            },
             build: {
                 files: [
                     // html
@@ -129,8 +88,8 @@ module.exports = function (grunt) {
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
-                            // src/extensions/extensionname/config.js
-                             var reg = /extensions\/(.*)\/config\/(.*.config.js)/;
+                            // src/extensions/[extension]/[locale].config.js
+                            var reg = /extensions\/(.*)\/config\/(.*.config.js)/;
                             var extensionName = src.match(reg)[1];
                             var fileName = src.match(reg)[2];
 
@@ -306,6 +265,30 @@ module.exports = function (grunt) {
                     to: ''
                 }]
             },
+            // ../../../modules/[module]/img/[image]
+            // becomes
+            // ../../img/[module]/[image]
+            moduleimages: {
+                // replace img srcs to point to "../../img/[module]/[img]"
+                src: ['<%= global.buildDir %>/themes/*/css/*/theme.css'],
+                overwrite: true,
+                replacements: [{
+                    from: /\((?:'|"|)(?:.*modules\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
+                    to: '\(\'../../img/$1/$2\'\)'
+                }]
+            },
+            // ../../../themes/uv-default-theme/img/[img]
+            // becomes
+            // ../../../img/[img]
+            themeimages: {
+                // replace img srcs to point to "../../img/[module]/[img]"
+                src: ['<%= global.buildDir %>/themes/*/css/*/theme.css'],
+                overwrite: true,
+                replacements: [{
+                    from: /\((?:'|"|)(?:.*themes\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
+                    to: '\(\'../../img/$2\'\)'
+                }]
+            },
             examples: {
                 // replace script paths with latest build version
                 src: ['<%= global.examplesDir %>/examples.js'],
@@ -358,10 +341,7 @@ module.exports = function (grunt) {
         },
 
         theme: {
-            dev: {
-                options: {
-                    themes: './src/themes/*'
-                },
+            create: {
                 files: [
                     {
                         expand: true,
@@ -369,10 +349,7 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            build: {
-                options: {
-                    themes: './src/themes/*'
-                }
+            dist: {
             }
         }
     });
@@ -400,7 +377,7 @@ module.exports = function (grunt) {
             'ts:dev',
             'replace:dependenciesSimplify',
             'localise:apply',
-            'theme:dev'
+            'theme:create'
         );
     });
 
@@ -427,7 +404,10 @@ module.exports = function (grunt) {
             'replace:js',
             'replace:dependenciesPaths',
             'replace:dependenciesExtension',
-            'theme:build'
+            'theme:create',
+            'theme:dist',
+            'replace:moduleimages',
+            'replace:themeimages'
         );
     });
 

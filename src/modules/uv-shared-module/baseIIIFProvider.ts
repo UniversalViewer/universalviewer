@@ -161,7 +161,7 @@ export class BaseProvider implements IProvider{
     }
 
     getAttribution(): string {
-        return this.manifest.attribution;
+        return this.getLocalisedValue(this.manifest.attribution);
     }
 
     getLicense(): string {

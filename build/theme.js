@@ -4,25 +4,24 @@ var glob = require('glob');
 var async = require('async');
 var less = require('less');
 var chalk = require('chalk');
-var preAndPostHook = require('./utils/pre-and-post-hook');
 
 module.exports = function (grunt) {
 
     grunt.registerMultiTask('theme', 'Creates themes.', function () {
 
-        if (this.target === 'dev') {
-            dev.call(this);
-        } else if (this.target === 'build') {
-            build.call(this);
+        if (this.target === 'create') {
+            create.call(this);
+        } else if (this.target === 'dist') {
+            dist.call(this);
         }
     });
 
     // for each theme, compile each extension's theme.less file passing the theme name
-    function dev() {
+    function create() {
 
-        this.options = this.data.options;
+        this.options = this.data.options || {};
 
-        var dirs = getThemeDirs(this.options.themes);
+        var dirs = getThemeDirs();
 
         var done = this.async();
 
@@ -104,31 +103,43 @@ module.exports = function (grunt) {
         }, done);
     }
 
-    function build() {
+    function dist() {
         this.options = this.data.options;
 
-        // copy extension/theme/[theme].css and module images into build/uv/themes
-        //var done = this.async();
-
-        var dirs = getThemeDirs(this.options.themes);
+        var dirs = getThemeDirs();
 
         _.each(dirs, function(dir) {
             var theme = path.basename(dir);
 
-            var images = './src/themes/' + theme + '/img/*';
+            // ./src/themes/[theme]/img/[image]
+            // goes to
+            // [global.buildDir]/themes/[theme]/img/[image]
+            copyFiles('./src/themes/' + theme + '/img/*', path.join(getThemeDest(theme), 'img'));
 
-            images = grunt.file.expand(images);
+            // ./src/extensions/*/theme/[theme].css
+            // goes to
+            // [global.buildDir]/themes/[theme]/css/[extension]/theme.css'
+            copyFiles('./src/extensions/*/theme/' + theme + '.css', path.join(getThemeDest(theme), 'css'), function(src, dest) {
 
-            _.each(images, function(image) {
-                var i = image;
-                //grunt.file.copy(srcpath, destpath [, options])
+                // get the extension name from the src string.
+                // ./src/extensions/[extension]/theme/styles.css
+                var extensionName = src.match(/extensions\/(.*)\/theme/)[1];
+
+                return path.join(dest, extensionName, 'theme.css');
             });
 
-            //grunt.config.set('global.theme', theme);
+            // ./src/modules/*/img/*
+            // goes to
+            // [global.buildDir]/themes/[theme]/img/[module]/',
+            copyFiles('./src/modules/*/img/*', path.join(getThemeDest(theme), 'img'), function(src, dest) {
+                var fileName = path.basename(src);
 
+                // get the module name from the src string.
+                // ./src/modules/[module]/img
+                var moduleName = src.match(/modules\/(.*)\/img/)[1];
 
-
-            //grunt.task.run('copy:theme');
+                return path.join(dest, moduleName, fileName);
+            });
         });
 
         //async.eachSeries(dirs, function (d, nextDirObj) {
@@ -140,12 +151,33 @@ module.exports = function (grunt) {
         //        nextDirObj();
         //    });
         //}, done);
-
-        // replace img paths
     }
 
-    function getThemeDirs(themeDirs) {
-        return glob.sync(themeDirs);
+    function getThemeDest(theme) {
+        var buildDir = grunt.config('global.buildDir');
+        return path.join(buildDir, 'themes', theme);
+    }
+
+    // todo: async, only copy if changed
+    function copyFiles(glob, dest, renameFunc) {
+        var files = grunt.file.expand(glob);
+
+        _.each(files, function(src) {
+            var fileName, fileDest;
+
+            if (renameFunc){
+                fileDest = renameFunc(src, dest);
+            } else {
+                fileName = path.basename(src);
+                fileDest = path.join(dest, fileName);
+            }
+
+            grunt.file.copy(src, fileDest);
+        });
+    }
+
+    function getThemeDirs() {
+        return glob.sync('./src/themes/*');
     }
 
     var compileLess = function(srcFile, destFile, options) {

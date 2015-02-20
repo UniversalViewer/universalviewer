@@ -211,7 +211,7 @@ class BootStrapper{
                     }
 
                     // todo: use a compiler flag when available
-                    var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/theme/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '.css';
+                    var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/theme/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
 
                     yepnope.injectCss(cssPath, function () {
                         that.createExtension(extension, config);
