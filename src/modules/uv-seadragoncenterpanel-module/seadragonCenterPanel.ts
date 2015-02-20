@@ -168,7 +168,8 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // todo: use compiler flag (when available)
         var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
-        this.viewer = OpenSeadragon({
+        // add to window object for testing automation purposes.
+        window.openSeadragonViewer = this.viewer = OpenSeadragon({
             id: "viewer",
             autoHideControls: true,
             showNavigationControl: true,
