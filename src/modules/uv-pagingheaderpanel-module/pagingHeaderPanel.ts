@@ -193,9 +193,9 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         var mode;
 
         if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
-            mode = "page";
+            mode = this.content.page;
         } else {
-            mode = "image";
+            mode = this.content.image;
         }
 
         this.$firstButton.prop('title', this.content.first + " " + mode);
@@ -222,7 +222,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
 
-            var orderLabel = this.provider.getCanvasLabel(canvas);
+            var orderLabel = this.provider.getLocalisedValue(canvas.label);
 
             if (orderLabel === "-") {
                 this.$searchText.val("");

@@ -60,7 +60,9 @@ module.exports = function (grunt) {
         // l10n files and add them to a config.locales array
 
         var config = {
-            locales: []
+            localisation:{
+                locales: []
+            }
         };
 
         var jsonFiles = getL10nFiles(dir);
@@ -68,7 +70,11 @@ module.exports = function (grunt) {
         _.each(jsonFiles, function(file) {
 
             var localeJSON = grunt.file.readJSON(file);
-            var label = localeJSON.localeLabel;
+
+            var settings = localeJSON.localisation;
+
+            var label = settings.label;
+            //var isDefault = !!settings.default;
             var baseName = path.basename(file);
             var name = baseName.substring(0, baseName.lastIndexOf('.'));
 
@@ -77,7 +83,11 @@ module.exports = function (grunt) {
                 label: label
             };
 
-            config.locales.push(locale);
+            //if (isDefault){
+            //    locale.default = true;
+            //}
+
+            config.localisation.locales.push(locale);
         });
 
         return config;

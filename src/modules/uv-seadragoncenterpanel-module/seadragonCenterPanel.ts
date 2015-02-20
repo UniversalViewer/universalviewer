@@ -160,7 +160,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             this.$rotateButton.hide();
         }
 
-        this.showRights();
+        this.showAttribution();
 
     }
 
@@ -341,7 +341,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         that.isFirstLoad = false;
     }
 
-    showRights(): void {
+    showAttribution(): void {
         var attribution = this.provider.getAttribution();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
@@ -409,7 +409,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
         });
 
-        this.viewer.cancel
         this.viewer.open(this.tileSources[0]);
 
         this.viewer.addHandler('open', this.openTileSourcesHandler, this);

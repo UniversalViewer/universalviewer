@@ -1,5 +1,7 @@
 {
-    "localeLabel": "English",
+    "localisation": {
+        "label": "English (GB)"
+    },
     "modules":
     {
         "genericDialogue":

@@ -46,6 +46,15 @@ class BootStrapper{
             that.params = $.extend(true, that.params, params);
         }
 
+        // empty app div
+        $('#app').empty();
+
+        // add loading class
+        $('#app').addClass('loading');
+
+        // remove any existing css
+        $('link[type*="text/css"]').remove();
+
         jQuery.support.cors = true;
 
         // if data-config has been set on embedding div, load the js
@@ -202,7 +211,7 @@ class BootStrapper{
                     }
 
                     // todo: use a compiler flag when available
-                    var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/css/styles.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '.css';
+                    var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/theme/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
 
                     yepnope.injectCss(cssPath, function () {
                         that.createExtension(extension, config);

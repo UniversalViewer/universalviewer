@@ -1,5 +1,7 @@
 {
-    "localeLabel": "Cymraeg",
+    "localisation": {
+        "label": "Cymraeg"
+    },
     "options": {
         "sectionMappings": {
             "CoverFrontOutside": "Clawr blaen",

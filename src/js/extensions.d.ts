@@ -19,7 +19,7 @@ interface String {
     contains(str: string): boolean;
     utf8_to_b64(str: string): string;
     b64_to_utf8(str: string): string;
-    toCssClass(str: string): string;
+    toCssClass(): string;
 }
 
 // array utils
