@@ -89,6 +89,7 @@ interface Window{
     DEBUG: boolean;
     webViewerLoad: any; // pdfjs
     IEXMLHttpRequest: any;
+    openSeadragonViewer: any;
 }
 
 // google
