@@ -60,10 +60,10 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$tabs = $('<div class="tabs"></div>');
         this.$main.append(this.$tabs);
 
-        this.$treeButton = $('<a class="tab first">' + this.content.index + '</a>');
+        this.$treeButton = $('<a class="index tab first">' + this.content.index + '</a>');
         this.$tabs.append(this.$treeButton);
 
-        this.$thumbsButton = $('<a class="tab">' + this.content.thumbnails + '</a>');
+        this.$thumbsButton = $('<a class="thumbs tab">' + this.content.thumbnails + '</a>');
         this.$tabs.append(this.$thumbsButton);
 
         this.$tabsContent = $('<div class="tabsContent"></div>');
