@@ -1,0 +1,100 @@
+{
+    "localisation": {
+        "label": "English (GB) (xx-XX)"
+    },
+    "options": {
+        "sectionMappings": {
+            "CoverFrontOutside": "Front Cover (xx-XX)",
+            "CoverBackOutside": "Back Cover (xx-XX)",
+            "TitlePage": "Title Page (xx-XX)",
+            "TableOfContents": "Table of Contents (xx-XX)",
+            "PartOfWork": "Part of Work (xx-XX)"
+        }
+    },
+    "modules": {
+        "dialogue": {
+            "content": {
+                "close": "Close (xx-XX)"
+            }
+        },
+        "genericDialogue": {
+            "content": {
+                "emptyValue": "please enter a value (xx-XX)",
+                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image' (xx-XX)",
+                "ok": "OK (xx-XX)",
+                "refresh": "Refresh (xx-XX)",
+                "invalidNumber": "Please enter a valid number (xx-XX)"
+            }
+        },
+        "helpDialogue": {
+            "content": {
+                "title": "Help (xx-XX)",
+                "text": "placeholder text (xx-XX)"
+            }
+        },
+        "settingsDialogue": {
+            "content": {
+                "title": "Settings (xx-XX)",
+                "pagingEnabled": "Two Page View (xx-XX)",
+                "preserveViewport": "Preserve Zoom (xx-XX)",
+                "locale": "Locale (xx-XX)"
+            }
+        },
+        "embedDialogue": {
+            "content": {
+                "title": "Embed (xx-XX)",
+                "instructions": "To embed this item in your own website, copy and paste the code below: (xx-XX)",
+                "width": "Width (xx-XX)",
+                "height": "Height (xx-XX)",
+                "customSize": "Custom Size (xx-XX)"
+            }
+        },
+        "pagingHeaderPanel": {
+            "content": {
+                "help": "Help (xx-XX)",
+                "image": "Image (xx-XX)",
+                "page": "Page (xx-XX)",
+                "first": "First (xx-XX)",
+                "previous": "Previous (xx-XX)",
+                "next": "Next (xx-XX)",
+                "last": "Last (xx-XX)",
+                "go": "Go (xx-XX)",
+                "of": "of {0} (xx-XX)",
+                "emptyValue": "Please enter a value (xx-XX)",
+                "close": "Close (xx-XX)",
+                "settings": "Settings (xx-XX)"
+            }
+        },
+        "treeViewLeftPanel": {
+            "content": {
+                "index": "Index (xx-XX)",
+                "thumbnails": "Thumbnails (xx-XX)",
+                "contents": "CONTENTS (xx-XX)"
+            }
+        },
+        "seadragonCenterPanel": {
+            "content": {
+                "previous": "Previous (xx-XX)",
+                "next": "Next (xx-XX)",
+                "zoomIn": "Zoom In (xx-XX)",
+                "zoomOut": "Zoom Out (xx-XX)",
+                "imageUnavailable": "Image Unavailable (xx-XX)",
+                "acknowledgements": "Acknowledgements (xx-XX)"
+            }
+        },
+        "moreInfoRightPanel": {
+            "content": {
+                "holdingText": "Your module goes here! (xx-XX)",
+                "noData": "No data to display (xx-XX)",
+                "moreInformation": "MORE INFORMATION (xx-XX)"
+            }
+        },
+        "footerPanel": {
+            "content": {
+                "fullScreen": "Full Screen (xx-XX)",
+                "exitFullScreen": "Exit Full Screen (xx-XX)",
+                "embed": "Embed (xx-XX)"
+            }
+        }
+    }
+}
