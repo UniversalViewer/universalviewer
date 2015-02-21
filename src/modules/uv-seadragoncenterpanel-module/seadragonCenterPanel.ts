@@ -77,6 +77,12 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             this.$rights.hide();
         });
 
+        // events
+
+        $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
+            this.loadTileSources();
+        });
+
         this.createSeadragonViewer();
 
         this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
@@ -96,10 +102,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$rotateButton.addClass('rotate');
 
         // events
-
-        $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
-            this.loadTileSources();
-        });
 
         this.$element.on('mousemove', (e) => {
             this.viewer.showControls();
@@ -162,6 +164,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         this.showAttribution();
 
+        this.resize();
     }
 
     createSeadragonViewer(): void {
@@ -398,6 +401,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     }
 
     loadTileSources(): void {
+
+        // viewer may not have initialised yet
+        if (!this.viewer) return;
+
         this.tileSources = this.provider.getTileSources();
 
         // todo: use compiler flag (when available)
@@ -462,7 +469,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     getBounds(): any {
 
-        if (!this.viewer.viewport) return null;
+        if (!this.viewer || !this.viewer.viewport) return null;
 
         var bounds = this.viewer.viewport.getBounds(true);
 
@@ -494,12 +501,12 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         this.$viewer.height(this.$content.height());
 
-        if (this.provider.isMultiCanvas()) {
+        if (this.provider.isMultiCanvas() && this.$prevButton && this.$nextButton) {
             this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
             this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
         }
 
-        if (this.$rights.is(':visible')){
+        if (this.$rights && this.$rights.is(':visible')){
             this.$rights.css('top', this.$content.height() - this.$rights.outerHeight() - this.$rights.verticalMargins());
         }
     }

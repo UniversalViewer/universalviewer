@@ -176,7 +176,8 @@ export class EmbedDialogue extends dialogue.Dialogue {
             this.getCustomSize();
         });
 
-        this.formatCode();
+        // this should be called from extension-specific embed dialogue
+        //this.formatCode();
 
         this.$element.hide();
     }

@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.2.1
-//! Built on 2015-02-09
-//! Git commit: v1.2.1-222-1f494b1
+//! Built on 2015-02-21
+//! Git commit: v1.2.1-243-a5394c6-dirty
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -523,17 +523,19 @@
  *     If sequenceMode is true, display this page initially.
  *
  * @property {Boolean} [preserveViewport=false]
- *     If sequenceMode is true, then normally navigating to through each image resets the
+ *     If sequenceMode is true, then normally navigating through each image resets the
  *     viewport to 'home' position.  If preserveViewport is set to true, then the viewport
  *     position is preserved when navigating between images in the sequence.
  *
  * @property {Boolean} [preserveOverlays=false]
- *     If sequenceMode is true, then normally navigating to through each image
+ *     If sequenceMode is true, then normally navigating through each image
  *     resets the overlays.
- *     If preserveOverlays is set to true, then the overlays
+ *     If preserveOverlays is set to true, then the overlays added with {@link OpenSeadragon.Viewer#addOverlay}
  *     are preserved when navigating between images in the sequence.
- *     Note: setting preserveOverlays overrides any overlays specified in the
- *     "overlays" property.
+ *     Note: setting preserveOverlays overrides any overlays specified in the global
+ *     "overlays" option for the Viewer. It's also not compatible with specifying
+ *     per-tileSource overlays via the options, as those overlays will persist
+ *     even after the tileSource is closed.
  *
  * @property {Boolean} [showReferenceStrip=false]
  *     If sequenceMode is true, then display a scrolling strip of image thumbnails for
@@ -1990,9 +1992,12 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 if ( request.readyState == 4 ) {
                     request.onreadystatechange = function(){};
 
-                    var successStatus =
-                        protocol === "http:" || protocol === "https:" ? 200 : 0;
-                    if ( request.status === successStatus ) {
+                    // With protocols other than http/https, the status is 200
+                    // on Firefox and 0 on other browsers
+                    if ( request.status === 200 ||
+                        ( request.status === 0 &&
+                        protocol !== "http:" &&
+                        protocol !== "https:" )) {
                         onSuccess( request );
                     } else {
                         $.console.log( "AJAX request returned %d: %s", request.status, url );
@@ -7138,6 +7143,8 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 return;
             }
 
+            this._opening = true;
+
             var expected = tileSources.length;
             var successes = 0;
             var failures = 0;
@@ -7166,6 +7173,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                         }
 
                         _this._drawOverlays();
+                        _this._opening = false;
 
                         /**
                          * Raised when the viewer has opened and loaded one or more TileSources.
@@ -7180,6 +7188,8 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                             // TODO: what if there are multiple sources?
                         _this.raiseEvent( 'open', { source: source } );
                     } else {
+                        _this._opening = false;
+
                         /**
                          * Raised when an error occurs loading a TileSource.
                          *
@@ -7269,12 +7279,13 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 return this;
             }
 
+            this._opening = false;
+
             if ( this.navigator ) {
                 this.navigator.close();
             }
 
-            if( ! this.preserveOverlays)
-            {
+            if( ! this.preserveOverlays) {
                 this.clearOverlays();
                 this.overlaysContainer.innerHTML = "";
             }
@@ -7318,6 +7329,9 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             }
 
             this.close();
+
+            this.clearOverlays();
+            this.overlaysContainer.innerHTML = "";
 
             //TODO: implement this...
             //this.unbindSequenceControls()
@@ -9415,6 +9429,10 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
 
         //viewer.profiler.beginUpdate();
 
+        if (viewer._opening) {
+            return;
+        }
+
         if ( viewer.autoResize ) {
             var containerSize = _getSafeElemSize( viewer.container );
             if ( !containerSize.equals( THIS[ viewer.hash ].prevContainerSize ) ) {
@@ -9991,7 +10009,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 bottomright;
 
             viewerSize = $.getElementSize( this.viewer.element );
-            if ( this._resizeWithViewer && !viewerSize.equals( this.oldViewerSize ) ) {
+            if ( this._resizeWithViewer && viewerSize.x && viewerSize.y && !viewerSize.equals( this.oldViewerSize ) ) {
                 this.oldViewerSize = viewerSize;
 
                 if ( this.maintainSizeRatio || !this.elementArea) {
@@ -13574,7 +13592,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             this.panels.push( element );
 
         }
-        loadPanels( this, this.scroll == 'vertical' ? viewerSize.y : viewerSize.y, 0 );
+        loadPanels( this, this.scroll == 'vertical' ? viewerSize.y : viewerSize.x, 0 );
         this.setFocus( 0 );
 
     };

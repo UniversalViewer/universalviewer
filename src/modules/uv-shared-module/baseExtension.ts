@@ -71,9 +71,11 @@ export class BaseExtension implements IExtension {
                     this.handleParentFrameEvent(message);
                 }
             });
-
-            this.triggerSocket(BaseExtension.LOAD);
         }
+
+        this.triggerSocket(BaseExtension.LOAD, {
+            config: this.provider.config
+        });
 
         // add/remove classes.
         this.$element.empty();
