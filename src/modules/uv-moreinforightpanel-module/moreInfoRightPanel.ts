@@ -28,7 +28,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
 
         this.$noData = $('<div class="noData">' + this.content.noData + '</div>');
         this.$main.append(this.$noData);
-        
+
         this.$expandButton.attr('tabindex', '4');
         this.$collapseButton.attr('tabindex', '4');
 

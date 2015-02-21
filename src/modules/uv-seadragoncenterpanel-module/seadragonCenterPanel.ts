@@ -24,6 +24,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     isFirstLoad: boolean = true;
 
     $viewer: JQuery;
+    $spinner: JQuery;
     $rights: JQuery;
     $closeRightsBtn: JQuery;
     $prevButton: JQuery;
@@ -55,6 +56,9 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.append(this.$viewer);
+
+        this.$spinner = $('<div class="spinner"></div>');
+        this.$content.append(this.$spinner);
 
         this.$rights = $('<div class="rights">\
                                <div class="header">\
@@ -289,6 +293,29 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         }
     }
 
+    loadTileSources(): void {
+
+        // viewer may not have initialised yet
+        if (!this.viewer) return;
+
+        this.tileSources = this.provider.getTileSources();
+
+        this.$spinner.show();
+
+        // todo: use compiler flag (when available)
+        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
+
+        _.each(this.tileSources, function(ts) {
+            if (!ts.tileSource){
+                ts.tileSource = imageUnavailableUri
+            }
+        });
+
+        this.viewer.addHandler('open', this.openTileSourcesHandler, this);
+
+        this.viewer.open(this.tileSources[0]);
+    }
+
     openTileSourcesHandler() {
 
         var that = this.userData;
@@ -342,6 +369,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
         that.lastTilesNum = that.tileSources.length;
         that.isFirstLoad = false;
+        that.$spinner.hide();
     }
 
     showAttribution(): void {
@@ -398,27 +426,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                 this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.tileSources.length, this.viewer.world.getItemAt(0).normHeight), true);
                 break;
         }
-    }
-
-    loadTileSources(): void {
-
-        // viewer may not have initialised yet
-        if (!this.viewer) return;
-
-        this.tileSources = this.provider.getTileSources();
-
-        // todo: use compiler flag (when available)
-        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
-
-        _.each(this.tileSources, function(ts) {
-            if (!ts.tileSource){
-                ts.tileSource = imageUnavailableUri
-            }
-        });
-
-        this.viewer.open(this.tileSources[0]);
-
-        this.viewer.addHandler('open', this.openTileSourcesHandler, this);
     }
 
     disablePrevButton () {
@@ -500,6 +507,9 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$title.ellipsisFill(this.title);
 
         this.$viewer.height(this.$content.height());
+
+        this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
+        this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
         if (this.provider.isMultiCanvas() && this.$prevButton && this.$nextButton) {
             this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);

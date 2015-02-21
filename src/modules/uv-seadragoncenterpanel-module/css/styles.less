@@ -5,86 +5,90 @@
 
         @img-path: '../../../modules/uv-seadragoncenterpanel-module/img/';
 
-        .displayregion {
-            border: 2px solid #fff !important;
-        }
-
-        #viewer {
-            padding: 0 8px 0 8px;
-        }
-
-        .navigator.extraMargin {
-            margin: 0 30px 0 0 !important;
-        }
-
-        .paging.btn {
-            position: absolute !important;
-            width: 30px;
-            height: 90px;
-            background-repeat: no-repeat;
-            background-color: @body-bg;
-            background-position: 0px 50%;
-            cursor: pointer;
-
-            .border-radius(0);
-
-            &.prev {
-                background-image: url('@{img-path}prev_page.png');
-                left: 0;
-                &.disabled {
-                    background-image: url('@{img-path}prev_page_disabled.png');
-                }
-            }
-
-            &.next {
-                background-image: url('@{img-path}next_page.png');
-                right: 0;
-                &.disabled {
-                    background-image: url('@{img-path}next_page_disabled.png');
-                }
-            }
-        }
-
-        //div[title="Zoom in"] {
-        .zoomIn{
-            //margin: 4px 0 0 4px !important;
-            cursor: pointer !important;
-            .btn-focus() !important;
-        }
-
-        //div[title="Zoom out"] {
-        .zoomOut{
-            //margin: 4px 0 0 0 !important;
-            cursor: pointer !important;
-            .btn-focus() !important;
-        }
-
-        //div[title="Go home"] {
-        .goHome{
-            cursor: pointer !important;
-            .btn-focus() !important;
-        }
-
-        div[title="Rotate left"] {
-            display: none !important;
-        }
-
-        //div[title="Rotate right"] {
-        .rotate{
-            cursor: pointer !important;
-            .btn-focus() !important;
-        }
-
-        div[title="Previous page"] {
-            display: none !important;
-        }
-
-        div[title="Next page"] {
-            display: none !important;
-        }
-
         .content{
             position: relative;
+
+            .displayregion {
+                border: 2px solid #fff !important;
+            }
+
+            #viewer {
+                padding: 0 8px 0 8px;
+
+                .navigator.extraMargin {
+                    margin: 0 30px 0 0 !important;
+                }
+
+                .paging.btn {
+                    position: absolute !important;
+                    width: 30px;
+                    height: 90px;
+                    background-repeat: no-repeat;
+                    background-color: @body-bg;
+                    background-position: 0px 50%;
+                    cursor: pointer;
+
+                    .border-radius(0);
+
+                    &.prev {
+                        background-image: url('@{img-path}prev_page.png');
+                        left: 0;
+                        &.disabled {
+                            background-image: url('@{img-path}prev_page_disabled.png');
+                        }
+                    }
+
+                    &.next {
+                        background-image: url('@{img-path}next_page.png');
+                        right: 0;
+                        &.disabled {
+                            background-image: url('@{img-path}next_page_disabled.png');
+                        }
+                    }
+                }
+
+                .zoomIn{
+                    cursor: pointer !important;
+                    .btn-focus() !important;
+                }
+
+                .zoomOut{
+                    cursor: pointer !important;
+                    .btn-focus() !important;
+                }
+
+                .goHome{
+                    cursor: pointer !important;
+                    .btn-focus() !important;
+                }
+
+                div[title="Rotate left"] {
+                    display: none !important;
+                }
+
+                .rotate{
+                    cursor: pointer !important;
+                    .btn-focus() !important;
+                }
+
+                div[title="Previous page"] {
+                    display: none !important;
+                }
+
+                div[title="Next page"] {
+                    display: none !important;
+                }
+            }
+
+            .spinner {
+                position: absolute;
+                background: fadeout(#000, 10%);
+                width: 34px;
+                height: 34px;
+                border-radius: 34px;
+
+                .loading(@loader-black-bg);
+            }
 
             .rights {
                 background: @gray-dark; // ie8
@@ -158,26 +162,3 @@
         }
     }
 }
-
-/*
-#app .centerPanel .zoomControls{
-    position: absolute;
-    height: 16px;
-}
-
-#app .centerPanel .zoomControls .zoomIn{
-    width: 16px;
-    height: 16px;
-    background-image: url('../../../modules/uv-seadragoncenterpanel-module/img/zoom_in.png');
-    float: left;
-    cursor: pointer;
-}
-
-#app .centerPanel .zoomControls .zoomOut{
-    width: 16px;
-    height: 16px;
-    background-image: url('../../../modules/uv-seadragoncenterpanel-module/img/zoom_out.png');
-    float: right;
-    cursor: pointer;
-}
-*/
