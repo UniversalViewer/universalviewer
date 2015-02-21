@@ -22,6 +22,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     title: string;
     currentBounds: any;
     isFirstLoad: boolean = true;
+    controlsVisible: boolean = false;
 
     $viewer: JQuery;
     $spinner: JQuery;
@@ -108,17 +109,23 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // events
 
         this.$element.on('mousemove', (e) => {
+            if (this.controlsVisible) return;
+            this.controlsVisible = true;
             this.viewer.showControls();
         });
 
-        //this.$element.on('mouseleave', (e) => {
-        //    this.viewer.hideControls();
-        //});
+        this.$element.on('mouseleave', (e) => {
+            if (!this.controlsVisible) return;
+            this.controlsVisible = false;
+            this.viewer.hideControls();
+        });
 
         // when mouse move stopped
         this.$element.on('mousemove', (e) => {
             // if over element, hide controls.
             if (!this.$viewer.find('.navigator').ismouseover()){
+                if (!this.controlsVisible) return;
+                this.controlsVisible = false;
                 this.viewer.hideControls();
             }
         }, this.config.options.controlsFadeAfterInactive);
@@ -156,15 +163,15 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.createNavigationButtons();
 
         // if firefox, hide rotation and prev/next until this is resolved
-        var browser = window.browserDetect.browser;
+        //var browser = window.browserDetect.browser;
 
-        if (browser == 'Firefox') {
-            if (this.provider.isMultiCanvas()){
-                this.$prevButton.hide();
-                this.$nextButton.hide();
-            }
-            this.$rotateButton.hide();
-        }
+        //if (browser == 'Firefox') {
+        //    if (this.provider.isMultiCanvas()){
+        //        this.$prevButton.hide();
+        //        this.$nextButton.hide();
+        //    }
+        //    this.$rotateButton.hide();
+        //}
 
         this.showAttribution();
 
@@ -178,7 +185,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
             id: "viewer",
-            autoHideControls: true,
+            //autoHideControls: true,
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
