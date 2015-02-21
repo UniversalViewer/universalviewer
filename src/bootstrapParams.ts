@@ -2,7 +2,7 @@
 
 class bootstrapParams {
     manifestUri: string;
-    configExtensionUri: string;
+    config: string;
     jsonp: boolean;
     isHomeDomain: boolean;
     isReload: boolean;

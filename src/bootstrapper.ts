@@ -22,7 +22,7 @@ class BootStrapper{
         var p = new BootstrapParams();
 
         p.manifestUri = util.getQuerystringParameter('manifestUri');
-        p.configExtensionUri = util.getQuerystringParameter('configExtensionUri');
+        p.config = util.getQuerystringParameter('config');
         p.jsonp = util.getBool(util.getQuerystringParameter('jsonp'), false);
         p.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
         p.isReload = util.getQuerystringParameter('isReload') === "true";
@@ -58,15 +58,15 @@ class BootStrapper{
         jQuery.support.cors = true;
 
         // if data-config has been set on embedding div, load the js
-        if (that.params.configExtensionUri){
+        if (that.params.config){
 
             // if "sessionstorage"
-            if (that.params.configExtensionUri.toLowerCase() === "sessionstorage"){
+            if (that.params.config.toLowerCase() === "sessionstorage"){
                 var config = sessionStorage.getItem("uv-config");
                 that.configExtension = JSON.parse(config);
                 that.loadManifest();
             } else {
-                $.getJSON(that.params.configExtensionUri, (configExtension) => {
+                $.getJSON(that.params.config, (configExtension) => {
                     that.configExtension = configExtension;
                     that.loadManifest();
                 });
@@ -205,7 +205,7 @@ class BootStrapper{
                     // if data-config has been set on embedding div, extend the existing config object.
                     if (that.configExtension){
                         // save a reference to the config extension uri.
-                        config.uri = that.params.configExtensionUri;
+                        config.uri = that.params.config;
 
                         $.extend(true, config, that.configExtension);
                     }

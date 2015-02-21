@@ -6,6 +6,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
 
     moreInfoItemTemplate: JQuery;
     $items: JQuery;
+    $noData: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -25,6 +26,9 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         this.$items = $('<div class="items"></div>');
         this.$main.append(this.$items);
 
+        this.$noData = $('<div class="noData">' + this.content.noData + '</div>');
+        this.$main.append(this.$noData);
+        
         this.$expandButton.attr('tabindex', '4');
         this.$collapseButton.attr('tabindex', '4');
 
@@ -54,9 +58,11 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         this.$main.removeClass('loading');
 
         if (!data){
-            this.$main.append(this.content.noData);
+            this.$noData.show();
             return;
         }
+
+        this.$noData.hide();
 
         _.each(data, (item: any) => {
             this.$items.append(this.buildItem(item, 130));
