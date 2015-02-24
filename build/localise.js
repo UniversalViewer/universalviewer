@@ -1,6 +1,7 @@
 var path = require('path');
 var _ = require('lodash');
 var glob = require('glob');
+var globArray = require('glob-array');
 
 module.exports = function (grunt) {
 
@@ -9,9 +10,8 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('localise', 'Creates localised config files.', function () {
 
         options = this.data.options;
-        src = this.data.src;
 
-        var dirs = glob.sync(src);
+        var dirs = glob.sync('./src/extensions/*/l10n');
 
         _.each(dirs, function(dir) {
 
@@ -94,6 +94,6 @@ module.exports = function (grunt) {
     }
 
     function getL10nFiles(dir){
-        return glob.sync(path.join(dir, '*.json'));
+        return globArray.sync([path.join(dir, '*.json'), '!' + path.join(dir, 'xx-XX.json')]);
     }
 };

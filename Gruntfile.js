@@ -335,8 +335,7 @@ module.exports = function (grunt) {
             apply: {
                 options: {
                     default: 'en-GB.json'
-                },
-                src: './src/extensions/*/l10n'
+                }
             }
         },
 
