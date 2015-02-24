@@ -111,13 +111,13 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$element.on('mousemove', (e) => {
             if (this.controlsVisible) return;
             this.controlsVisible = true;
-            this.viewer.showControls();
+            this.viewer.setControlsEnabled(true);
         });
 
         this.$element.on('mouseleave', (e) => {
             if (!this.controlsVisible) return;
             this.controlsVisible = false;
-            this.viewer.hideControls();
+            this.viewer.setControlsEnabled(false);
         });
 
         // when mouse move stopped
@@ -126,7 +126,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             if (!this.$viewer.find('.navigator').ismouseover()){
                 if (!this.controlsVisible) return;
                 this.controlsVisible = false;
-                this.viewer.hideControls();
+                this.viewer.setControlsEnabled(false);
             }
         }, this.config.options.controlsFadeAfterInactive);
 

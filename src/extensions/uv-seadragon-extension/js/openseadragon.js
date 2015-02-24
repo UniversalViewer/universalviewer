@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.2.1
-//! Built on 2015-02-21
-//! Git commit: v1.2.1-243-a5394c6-dirty
+//! Built on 2015-02-24
+//! Git commit: v1.2.1-248-de4ad6d-dirty
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -7292,6 +7292,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
 
             THIS[ this.hash ].animating = false;
             this.world.removeAll();
+            this.imageLoader.clear();
 
             /**
              * Raised when the viewer is closed (see {@link OpenSeadragon.Viewer#close}).
@@ -7452,14 +7453,6 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
              */
             this.raiseEvent( 'controls-enabled', { enabled: enabled } );
             return this;
-        },
-
-        hideControls: function() {
-            beginControlsAutoHide(this);
-        },
-
-        showControls: function() {
-            abortControlsAutoHide(this);
         },
 
         /**
@@ -18242,6 +18235,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             }
 
             item.removeHandler('bounds-change', this._delegatedFigureSizes);
+            item.destroy();
             this._items.splice( index, 1 );
             this._figureSizes();
             this._needsDraw = true;
@@ -18258,6 +18252,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             for (var i = 0; i < this._items.length; i++) {
                 item = this._items[i];
                 item.removeHandler('bounds-change', this._delegatedFigureSizes);
+                item.destroy();
             }
 
             var removedItems = this._items;
