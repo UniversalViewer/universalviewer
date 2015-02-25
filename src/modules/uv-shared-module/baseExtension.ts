@@ -135,6 +135,10 @@ export class BaseExtension implements IExtension {
             }
         });
 
+        $.subscribe(BaseExtension.CREATED, () => {
+            this.triggerSocket(BaseExtension.CREATED);
+        });
+
         // create shell and shared views.
         this.shell = new shell.Shell(this.$element);
 

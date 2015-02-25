@@ -280,7 +280,7 @@ docReady(function() {
                 isFullScreen = obj.isFullScreen;
 
                 if (obj.overrideFullScreen){
-                    jQuery(document).trigger('onToggleFullScreen', [obj.isFullScreen]);
+                    //jQuery(document).trigger('onToggleFullScreen', [obj.isFullScreen]);
                     return;
                 }
 
@@ -387,6 +387,12 @@ docReady(function() {
                     onMessage: function (message, origin) {
                         message = $.parseJSON(message);
 
+                        try{
+                            jQuery(document).trigger("uv." + message.eventName, [message.eventObject]);
+                        } catch(e) {
+                            // do nothing
+                        }
+
                         switch (message.eventName) {
                             case "onToggleFullScreen":
                                 toggleFullScreen(message.eventObject);
@@ -408,13 +414,6 @@ docReady(function() {
                             case "onTrackVariable":
                                 if ("undefined" !== typeof (trackVariable)) {
                                     trackVariable(message.eventObject.slot, message.eventObject.name, message.eventObject.value, message.eventObject.scope);
-                                }
-                                break;
-                            default:
-                                try{
-                                    jQuery(document).trigger(message.eventName, [message.eventObject]);
-                                } catch(e) {
-                                    // do nothing
                                 }
                                 break;
                         }
