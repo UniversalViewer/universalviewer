@@ -34,13 +34,13 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         if (!iiifUri){
             console.warn('no service endpoint available');
         }else if (iiifUri.endsWith('/')){
-            if (this.jsonp){
+            if (!this.corsEnabled()){
                 iiifUri += 'info.js';
             } else {
                 iiifUri += 'info.json';
             }
         } else {
-            if (this.jsonp) {
+            if (!this.corsEnabled()) {
                 iiifUri += '/info.js';
             } else {
                 iiifUri += '/info.json';

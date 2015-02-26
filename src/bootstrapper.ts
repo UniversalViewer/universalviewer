@@ -84,10 +84,12 @@ class BootStrapper{
         var that = this;
 
         if (this.corsEnabled()){
+            //console.log('CORS Enabled');
             $.getJSON(that.params.manifestUri, (manifest) => {
                 that.parseManifest(manifest);
             });
         } else {
+            //console.log('JSONP Enabled');
             // use jsonp
             var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
                 url: that.params.manifestUri,
