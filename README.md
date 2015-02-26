@@ -2,7 +2,7 @@
 
 Navigate sequences of images in a zoomable, extensible interface.
 
-[example](http://wellcomelibrary.org/player/b18035723)
+[example](http://universalviewer.azurewebsites.net/)
 
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
