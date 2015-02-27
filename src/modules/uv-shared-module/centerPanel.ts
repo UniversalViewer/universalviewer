@@ -44,5 +44,6 @@ export class CenterPanel extends baseView.BaseView {
         }
 
         this.$content.height(this.$element.height() - titleHeight);
+        this.$content.width(this.$element.width());
     }
 }

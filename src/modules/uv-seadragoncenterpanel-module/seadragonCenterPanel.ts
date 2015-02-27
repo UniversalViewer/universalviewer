@@ -179,13 +179,14 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     }
 
     createSeadragonViewer(): void {
+        //console.log("create viewer");
+
         // todo: use compiler flag (when available)
         var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
             id: "viewer",
-            //autoHideControls: true,
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
@@ -509,11 +510,16 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     }
 
     resize(): void {
+        //console.log("resize");
+
         super.resize();
 
         this.$title.ellipsisFill(this.title);
 
-        this.$viewer.height(this.$content.height());
+        this.$viewer.height(this.$content.height() - this.$viewer.verticalMargins());
+        this.$viewer.width(this.$content.width() - this.$viewer.horizontalMargins());
+
+        if (this.currentBounds) this.fitToBounds(this.currentBounds);
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
