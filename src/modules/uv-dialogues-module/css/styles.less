@@ -189,7 +189,20 @@
 
         &.externalContent{
             width: 470px;
-            height: 250px;
+            height: 300px;
+
+            .middle{
+                .content{
+                    width: 470px;
+                    height: 300px;
+                    overflow: hidden;
+
+                    iframe{
+                        overflow: auto;
+                        border: none;
+                    }
+                }
+            }
 
             .bottom{
                 background: none;

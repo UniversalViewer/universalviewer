@@ -73,8 +73,14 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getLastPageIndex());
         });
 
+        //$.subscribe(Extension.END, (e) => {
+        //    this.viewPage(this.provider.getLastPageIndex());
+        //});
+
         $.subscribe(Extension.END, (e) => {
-            this.viewPage(this.provider.getLastPageIndex());
+            $.publish(externalContentDialogue.ExternalContentDialogue.SHOW_EXTERNALCONTENT_DIALOGUE, [{
+                uri: "http://www.bl.uk/"
+            }]);
         });
 
         $.subscribe(header.PagingHeaderPanel.PREV, (e) => {
