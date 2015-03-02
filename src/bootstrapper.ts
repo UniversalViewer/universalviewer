@@ -204,6 +204,8 @@ class BootStrapper{
             complete: function () {
                 $.getJSON(configPath, (config) => {
 
+                    config.name = extension.name;
+
                     // if data-config has been set on embedding div, extend the existing config object.
                     if (that.configExtension){
                         // save a reference to the config extension uri.
