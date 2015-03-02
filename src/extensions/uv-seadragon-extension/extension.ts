@@ -23,6 +23,7 @@ import embed = require("../../extensions/uv-seadragon-extension/embedDialogue");
 import settingsDialogue = require("../../extensions/uv-seadragon-extension/settingsDialogue");
 import IProvider = require("../../modules/uv-shared-module/iProvider");
 import settings = require("../../modules/uv-shared-module/settings");
+import externalContentDialogue = require("../../modules/uv-dialogues-module/externalContentDialogue");
 import ISeadragonProvider = require("./iSeadragonProvider");
 import dependencies = require("./dependencies");
 
@@ -39,6 +40,8 @@ export class Extension extends baseExtension.BaseExtension {
     embedDialogue: embed.EmbedDialogue;
     $settingsDialogue: JQuery;
     settingsDialogue: settingsDialogue.SettingsDialogue;
+    $externalContentDialogue: JQuery;
+    externalContentDialogue: externalContentDialogue.ExternalContentDialogue;
 
     currentRotation: number = 0;
 
@@ -216,17 +219,21 @@ export class Extension extends baseExtension.BaseExtension {
 
         this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
 
-        this.$helpDialogue = utils.Utils.createDiv('overlay help');
+        this.$helpDialogue = $('<div class="overlay help"></div>');
         shell.Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new help.HelpDialogue(this.$helpDialogue);
 
-        this.$embedDialogue = utils.Utils.createDiv('overlay embed');
+        this.$embedDialogue = $('<div class="overlay embed"></div>');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
 
-        this.$settingsDialogue = utils.Utils.createDiv('overlay settings');
+        this.$settingsDialogue = $('<div class="overlay settings"></div>');
         shell.Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new settingsDialogue.SettingsDialogue(this.$settingsDialogue);
+
+        this.$externalContentDialogue = $('<div class="overlay externalContent"></div>');
+        shell.Shell.$overlays.append(this.$externalContentDialogue);
+        this.externalContentDialogue = new externalContentDialogue.ExternalContentDialogue(this.$externalContentDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
