@@ -49,6 +49,16 @@ module.exports = function (grunt) {
             var configJSON = grunt.file.readJSON(config);
             var localeJSON = grunt.file.readJSON(file);
 
+            if (configJSON.extends){
+                var extJSON = grunt.file.readJSON(configJSON.extends);
+                configJSON = _.merge(configJSON, extJSON);
+            }
+
+            if (localeJSON.extends){
+                var extJSON = grunt.file.readJSON(localeJSON.extends);
+                localeJSON = _.merge(localeJSON, extJSON);
+            }
+
             var merged = _.merge(configJSON, localeJSON, locales);
 
             grunt.file.write(dest, JSON.stringify(merged));
@@ -71,9 +81,17 @@ module.exports = function (grunt) {
 
             var localeJSON = grunt.file.readJSON(file);
 
-            var settings = localeJSON.localisation;
+            var localisation = localeJSON.localisation;
 
-            var label = settings.label;
+            if (!localisation) {
+                // if it extends another l10n file, get the localisation settings from that.
+                if (localeJSON.extends){
+                    var extJSON = grunt.file.readJSON(localeJSON.extends);
+                    localisation = extJSON.localisation;
+                }
+            }
+
+            var label = localisation.label;
             //var isDefault = !!settings.default;
             var baseName = path.basename(file);
             var name = baseName.substring(0, baseName.lastIndexOf('.'));
