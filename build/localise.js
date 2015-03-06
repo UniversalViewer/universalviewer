@@ -51,7 +51,7 @@ module.exports = function (grunt) {
 
             if (configJSON.extends){
                 var extJSON = grunt.file.readJSON(configJSON.extends);
-                configJSON = _.merge(configJSON, extJSON);
+                configJSON = _.merge(extJSON, configJSON);
             }
 
             if (localeJSON.extends){
