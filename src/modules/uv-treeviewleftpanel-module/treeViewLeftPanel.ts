@@ -44,6 +44,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         $.subscribe(extension.Extension.RELOAD_MANIFEST, () => {
             this.dataBindThumbsView();
+            this.dataBindTreeView();
             this.dataBindGalleryView();
         });
 
@@ -111,6 +112,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     dataBindTreeView(): void{
+        if (!this.treeView) return;
         this.treeView.rootNode = this.provider.getTree();
         this.treeView.dataBind();
     }
@@ -121,6 +123,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     dataBindThumbsView(): void{
+        if (!this.thumbsView) return;
         var width, height;
         var viewingDirection = this.provider.getViewingDirection();
 

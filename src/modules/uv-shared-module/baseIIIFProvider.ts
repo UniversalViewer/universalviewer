@@ -117,6 +117,7 @@ export class BaseProvider implements IProvider{
 
     reloadManifest(callback: any): void {
 
+        this.manifest = null;
         var manifestUri = this.manifestUri;
 
         manifestUri = this.addTimestamp(manifestUri);
