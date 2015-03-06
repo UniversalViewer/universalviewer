@@ -51,6 +51,10 @@ export class FooterPanel extends baseView.BaseView {
             this.$embedButton.hide();
         }
 
+        if (!utils.Utils.getBool(this.options.fullscreenEnabled, true)){
+            this.$fullScreenBtn.hide();
+        }
+
         if (this.provider.isLightbox){
             this.$fullScreenBtn.addClass('lightbox');
         }
