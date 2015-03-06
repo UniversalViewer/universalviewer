@@ -94,7 +94,7 @@ export class BaseProvider implements IProvider{
             }
         }
 
-        this.parseManifest();
+        //this.parseManifest();
 
         this.parseStructure();
     }
@@ -117,7 +117,7 @@ export class BaseProvider implements IProvider{
 
     reloadManifest(callback: any): void {
 
-        this.manifest = null;
+        this.rootStructure = null;
         var manifestUri = this.manifestUri;
 
         manifestUri = this.addTimestamp(manifestUri);
@@ -603,6 +603,8 @@ export class BaseProvider implements IProvider{
             // loop through canvases and associate with matching @id
             for (var j = 0; j < structure.canvases.length; j++){
 
+                //console.log("canvas");
+
                 var canvas = structure.canvases[j];
 
                 if (typeof(canvas) === "string"){
@@ -628,6 +630,8 @@ export class BaseProvider implements IProvider{
 
             for (var k = 0; k < structure.ranges.length; k++) {
                 var s = structure.ranges[k];
+
+                //console.log("range: ", s);
 
                 // if it's a url ref
                 if (typeof(s) === "string"){
