@@ -659,8 +659,8 @@ export class BaseProvider implements IProvider{
             if (match.length){
                 var m: any = match[0];
                 if (sortItem.label) m.label = sortItem.label;
-                result.push(m);
                 m.added = true;
+                result.push(m);
             }
         });
 
@@ -689,17 +689,41 @@ export class BaseProvider implements IProvider{
         return l;
     }
 
+    changeLocale(locale: string): void {
+        // if the current locale is "en-GB:English,cy-GB:Welsh"
+        // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
+
+        // re-order locales so the passed locale is first
+        var locales = this.locales.clone();
+
+        var index = locales.indexOfTest((l: any) => {
+            return l.name === locale;
+        });
+
+        locales.move(index, 0);
+
+        // convert to comma-separated string
+        var str = '';
+
+        for (var i = 0; i < locales.length; i++){
+            var l = locales[i];
+            if (i > 0) str += ',';
+            str += l.name;
+            if (l.label){
+                str += ':' + l.label;
+            }
+        }
+
+        var p = new BootstrapParams();
+        p.setLocale(str);
+        this.reload(p);
+    }
+
     getLabel(resource): string {
         return null;
     }
 
     getLocalisedValue(values: any[]): string {
         return null;
-    }
-
-    changeLocale(locale: string): void {
-        var p = new BootstrapParams();
-        p.setLocale(locale);
-        this.reload(p);
     }
 }
