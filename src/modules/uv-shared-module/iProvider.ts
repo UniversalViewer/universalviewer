@@ -64,6 +64,7 @@ interface IProvider{
     isReload: boolean;
     jsonp: boolean;
     locale: string;
+    locales: any[];
 
     getMediaUri(mediaUri: string): string;
     getDomain(): string;
@@ -77,6 +78,8 @@ interface IProvider{
     getSettings(): ISettings;
     updateSettings(settings: ISettings): void;
     getLocales(): any;
+    getAlternateLocale(): any;
+    changeLocale(locale: string): void;
 }
 
 export = IProvider;

@@ -41,6 +41,7 @@ export class BaseProvider implements IProvider{
     treeRoot: TreeNode;
     jsonp: boolean;
     locale: string;
+    locales: any[];
 
     // map param names to enum indices.
     paramMap: string[] = ['asi', 'ai', 'z', 'r'];
@@ -60,7 +61,7 @@ export class BaseProvider implements IProvider{
         // other data-attributes are retrieved through app.getParam.
         this.manifestUri = this.bootstrapper.params.manifestUri;
         this.jsonp = this.bootstrapper.params.jsonp;
-        this.locale = this.bootstrapper.params.locale;
+        this.locale = this.bootstrapper.params.getLocale();
         this.isHomeDomain = this.bootstrapper.params.isHomeDomain;
         this.isReload = this.bootstrapper.params.isReload;
         this.embedDomain = this.bootstrapper.params.embedDomain;
@@ -639,8 +640,53 @@ export class BaseProvider implements IProvider{
         return $elem.contents().html();
     }
 
-    getLocales(): any {
-        return this.config.localisation.locales;
+    getLocales(): any[] {
+        if (this.locales) return this.locales;
+
+        // use data-locales to prioritise
+        var items = this.config.localisation.locales.clone();
+        var sorting = this.bootstrapper.params.locales;
+        var result = [];
+
+        // loop through sorting array
+        // if items contains sort item, add it to results.
+        // if sort item has a label, substitute it
+        // mark item as added.
+        // loop through remaining items and add to results.
+
+        _.each(sorting, (sortItem: any) => {
+            var match = _.filter(items, (item: any) => { return item.name === sortItem.name; });
+            if (match.length){
+                var m: any = match[0];
+                if (sortItem.label) m.label = sortItem.label;
+                result.push(m);
+                m.added = true;
+            }
+        });
+
+        _.each(items, (item: any) => {
+            if (!item.added){
+                result.push(item);
+            }
+            delete item.added;
+        });
+
+        return this.locales = result;
+    }
+
+    getAlternateLocale(): any {
+        var locales = this.getLocales();
+
+        var alternateLocale;
+
+        for (var i = 0; i < locales.length; i++) {
+            var l = locales[i];
+            if (l.name !== this.locale) {
+                alternateLocale = l;
+            }
+        }
+
+        return l;
     }
 
     getLabel(resource): string {
@@ -649,5 +695,11 @@ export class BaseProvider implements IProvider{
 
     getLocalisedValue(values: any[]): string {
         return null;
+    }
+
+    changeLocale(locale: string): void {
+        var p = new BootstrapParams();
+        p.setLocale(locale);
+        this.reload(p);
     }
 }

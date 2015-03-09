@@ -27,6 +27,8 @@ interface Array<T>{
     clone(): Array<T>;
     last(): any;
     contains(val: any): boolean;
+    move(fromIndex: number, toIndex: number): void;
+    indexOfTest(test: (element: any) => boolean, fromIndex?: number): number;
 }
 
 interface JQuery {

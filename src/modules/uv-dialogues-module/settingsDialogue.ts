@@ -70,9 +70,7 @@ export class SettingsDialogue extends dialogue.Dialogue {
         this.$localeDropDown.val(this.provider.locale);
 
         this.$localeDropDown.change(() => {
-            var p = new BootstrapParams();
-            p.locale = this.$localeDropDown.val();
-            this.provider.reload(p);
+            this.provider.changeLocale(this.$localeDropDown.val());
         });
 
         this.$element.hide();

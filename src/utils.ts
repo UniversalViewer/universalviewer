@@ -50,6 +50,17 @@ if (!Array.prototype.indexOf) {
     };
 }
 
+Array.prototype.indexOfTest = function (test: (element: any) => boolean, fromIndex?: number) {
+    var i = (fromIndex || 0);
+    var j = this.length;
+
+    for (i; i < j; i++) {
+        if (test(this[i])) return i;
+    }
+
+    return -1;
+};
+
 if (!Array.prototype.clone) {
     Array.prototype.clone = function () {
         return this.slice(0);
@@ -67,6 +78,16 @@ if (!Array.prototype.contains) {
         return this.indexOf(val) !== -1;
     };
 }
+
+Array.prototype.move = function (fromIndex, toIndex){
+    if (fromIndex < 0 || fromIndex > this.length - 1) throw new RangeError("fromIndex out of range");
+    if (toIndex < 0 || toIndex > this.length - 1) throw new RangeError("toIndex out of range");
+    this.splice(toIndex, 0, this.splice(fromIndex, 1)[0]);
+};
+
+//#endregion
+
+//#region underscore mixins
 
 //#endregion
 

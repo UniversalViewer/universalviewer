@@ -26,7 +26,7 @@ class BootStrapper{
         p.jsonp = util.getBool(util.getQuerystringParameter('jsonp'), false);
         p.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
         p.isReload = util.getQuerystringParameter('isReload') === "true";
-        p.locale = util.getQuerystringParameter('locale');
+        p.setLocale(util.getQuerystringParameter('locale'));
         p.embedDomain = util.getQuerystringParameter('embedDomain');
         p.isOnlyInstance = util.getQuerystringParameter('isOnlyInstance') === "true";
         p.embedScriptUri = util.getQuerystringParameter('embedScriptUri');
@@ -195,7 +195,7 @@ class BootStrapper{
         //}
 
         // todo: use a compiler flag when available
-        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.locale + '.config.js' : 'js/' + extension.name + '.' + that.params.locale + '.config.js';
+        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.getLocale() + '.config.js' : 'js/' + extension.name + '.' + that.params.getLocale() + '.config.js';
 
         // feature detection
         yepnope({
