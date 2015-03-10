@@ -837,6 +837,14 @@ export class BaseProvider implements IProvider{
         locales.move(index, 0);
 
         // convert to comma-separated string
+        var str = this.serializeLocales(locales);
+
+        var p = new BootstrapParams();
+        p.setLocale(str);
+        this.reload(p);
+    }
+
+    serializeLocales(locales: any[]): string {
         var str = '';
 
         for (var i = 0; i < locales.length; i++){
@@ -848,8 +856,10 @@ export class BaseProvider implements IProvider{
             }
         }
 
-        var p = new BootstrapParams();
-        p.setLocale(str);
-        this.reload(p);
+        return str;
+    }
+
+    getSerializedLocales(): string {
+        return this.serializeLocales(this.locales);
     }
 }

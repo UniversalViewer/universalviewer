@@ -80,6 +80,8 @@ interface IProvider{
     getLocales(): any;
     getAlternateLocale(): any;
     changeLocale(locale: string): void;
+    serializeLocales(locales: any[]): string;
+    getSerializedLocales(): string;
 }
 
 export = IProvider;

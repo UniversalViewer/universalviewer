@@ -33,7 +33,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.locale, configUri, this.manifestUri, this.sequenceIndex, assetIndex, zoom, rotation, width, height, esu);
+        var script = String.prototype.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.sequenceIndex, assetIndex, zoom, rotation, width, height, esu);
 
         return script;
     }
