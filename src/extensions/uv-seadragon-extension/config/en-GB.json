@@ -28,6 +28,10 @@
         },
         "pagingHeaderPanel":
         {
+            "options":
+            {
+                "localeToggleEnabled": true
+            }
         },
         "treeViewLeftPanel":
         {

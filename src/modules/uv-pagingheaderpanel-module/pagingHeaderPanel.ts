@@ -171,6 +171,10 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             this.$helpButton.hide();
         }
 
+        if (this.options.localeToggleEnabled === false){
+            this.$localeToggleButton.hide();
+        }
+
         // cycle focus back to start.
         // todo: design a more generic system that finds the element with the highest tabindex and attaches this listener
         this.$searchButton.blur(() => {
