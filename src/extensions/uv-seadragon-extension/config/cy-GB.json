@@ -30,7 +30,8 @@
         {
             "options":
             {
-                "localeToggleEnabled": true
+                "localeToggleEnabled": true,
+                "pagingToggleEnabled": true
             }
         },
         "treeViewLeftPanel":

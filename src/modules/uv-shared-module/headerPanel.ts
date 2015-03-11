@@ -11,12 +11,15 @@ export class HeaderPanel extends baseView.BaseView {
     $options: JQuery;
     $centerOptions: JQuery;
     $rightOptions: JQuery;
+    $pagingToggleButton: JQuery;
     $localeToggleButton: JQuery;
     $helpButton: JQuery;
     $settingsButton: JQuery;
     $messageBox: JQuery;
 
     message: string;
+
+    static UPDATE_SETTINGS: string = 'header.onUpdateSettings';
 
     constructor($element: JQuery) {
         super($element, false, false);
@@ -27,6 +30,10 @@ export class HeaderPanel extends baseView.BaseView {
         this.setConfig('headerPanel');
 
         super.create();
+
+        $.subscribe(baseExtension.BaseExtension.SETTINGS_CHANGED, (e, message) => {
+            this.updatePagingToggle();
+        });
 
         $.subscribe(baseExtension.BaseExtension.SHOW_MESSAGE, (e, message) => {
             this.showMessage(message);
@@ -47,6 +54,9 @@ export class HeaderPanel extends baseView.BaseView {
 
         //this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
         //this.$rightOptions.append(this.$helpButton);
+
+        this.$pagingToggleButton = $('<a class="imageBtn pagingToggle"></a>');
+        this.$rightOptions.append(this.$pagingToggleButton);
 
         this.$localeToggleButton = $('<a class="localeToggle"></a>');
         this.$rightOptions.append(this.$localeToggleButton);
@@ -69,7 +79,15 @@ export class HeaderPanel extends baseView.BaseView {
             this.hideMessage();            
         });
 
+        this.updatePagingToggle();
+
         this.updateLocaleToggle();
+
+        this.$pagingToggleButton.on('click', () => {
+            var settings: ISettings = this.getSettings();
+            settings.pagingEnabled = !settings.pagingEnabled;
+            this.updateSettings(settings);
+        });
 
         this.$localeToggleButton.on('click', () => {
             this.provider.changeLocale(this.$localeToggleButton.data('locale'));
@@ -78,6 +96,28 @@ export class HeaderPanel extends baseView.BaseView {
         this.$settingsButton.onPressed(() => {
             $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
+
+        if (this.options.localeToggleEnabled === false){
+            this.$localeToggleButton.hide();
+        }
+
+        if (this.options.pagingToggleEnabled === false){
+            this.$pagingToggleButton.hide();
+        }
+    }
+
+    updatePagingToggle(): void {
+        var settings: ISettings = this.provider.getSettings();
+
+        if (settings.pagingEnabled){
+            this.$pagingToggleButton.removeClass('two-up');
+            this.$pagingToggleButton.addClass('one-up');
+            this.$pagingToggleButton.prop('title', this.content.oneUp);
+        } else {
+            this.$pagingToggleButton.removeClass('one-up');
+            this.$pagingToggleButton.addClass('two-up');
+            this.$pagingToggleButton.prop('title', this.content.twoUp);
+        }
     }
 
     updateLocaleToggle(): void {
@@ -103,6 +143,16 @@ export class HeaderPanel extends baseView.BaseView {
         this.extension.resize();
     }
 
+    getSettings(): ISettings {
+        return this.provider.getSettings();
+    }
+
+    updateSettings(settings: ISettings): void {
+        this.provider.updateSettings(settings);
+
+        $.publish(HeaderPanel.UPDATE_SETTINGS, [settings]);
+    }
+
     resize(): void {
         super.resize();
 
@@ -120,6 +170,15 @@ export class HeaderPanel extends baseView.BaseView {
             //$text.actualWidth(this.$element.width() - this.$messageBox.find('.close').outerWidth(true));
             $text.width(this.$element.width() - this.$messageBox.find('.close').outerWidth(true));
             $text.ellipsisFill(this.message);
+        }
+
+        // hide toggle buttons below minimum width
+        if (this.extension.width() < 610){
+            if (this.options.pagingToggleEnabled) this.$pagingToggleButton.hide();
+            if (this.options.localeToggleEnabled) this.$localeToggleButton.hide();
+        } else {
+            if (this.options.pagingToggleEnabled) this.$pagingToggleButton.show();
+            if (this.options.localeToggleEnabled) this.$localeToggleButton.show();
         }
     }
 }

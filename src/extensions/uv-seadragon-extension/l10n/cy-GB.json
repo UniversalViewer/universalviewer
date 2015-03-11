@@ -62,7 +62,9 @@
                 "of": "o {0}",
                 "emptyValue": "Mewnosodwch werth",
                 "close": "Cau",
-                "settings": "Dewisiadau"
+                "settings": "Dewisiadau",
+                "oneUp": "Single page view",
+                "twoUp": "Two page view"
             }
         },
         "treeViewLeftPanel": {

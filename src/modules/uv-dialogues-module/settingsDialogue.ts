@@ -86,6 +86,10 @@ export class SettingsDialogue extends dialogue.Dialogue {
         $.publish(SettingsDialogue.UPDATE_SETTINGS, [settings]);
     }
 
+    open(): void {
+        super.open();
+    }
+
     resize(): void {
         super.resize();
 

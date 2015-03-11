@@ -106,11 +106,12 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         });
 
+        $.subscribe(header.PagingHeaderPanel.UPDATE_SETTINGS, (e) => {
+            this.updateSettings();
+        });
+
         $.subscribe(settingsDialogue.SettingsDialogue.UPDATE_SETTINGS, (e) => {
-            this.provider.reloadManifest(() => {
-                $.publish(baseExtension.BaseExtension.RELOAD_MANIFEST);
-                this.viewPage(this.provider.canvasIndex, true);
-            });
+            this.updateSettings();
         });
 
         $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
@@ -242,6 +243,14 @@ export class Extension extends baseExtension.BaseExtension {
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
         }
+    }
+
+    updateSettings(): void {
+        this.provider.reloadManifest(() => {
+            $.publish(baseExtension.BaseExtension.RELOAD_MANIFEST);
+            this.viewPage(this.provider.canvasIndex, true);
+            $.publish(Extension.SETTINGS_CHANGED);
+        });
     }
 
     setDefaultFocus(): void {

@@ -62,7 +62,9 @@
                 "of": "of {0}",
                 "emptyValue": "Please enter a value",
                 "close": "Close",
-                "settings": "Settings"
+                "settings": "Settings",
+                "oneUp": "Single page view",
+                "twoUp": "Two page view"
             }
         },
         "treeViewLeftPanel": {

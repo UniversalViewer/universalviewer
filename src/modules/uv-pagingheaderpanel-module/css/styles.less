@@ -133,6 +133,17 @@
         }
 
         .rightOptions {
+            .pagingToggle{
+                margin: -1px 4px 0 0;
+                &.one-up{
+                    background-image: url('@{img-path}one_up.png');
+                    background-repeat: no-repeat;
+                }
+                &.two-up{
+                    background-image: url('@{img-path}two_up.png');
+                    background-repeat: no-repeat;
+                }
+            }
             .localeToggle{
                 .link-color-decoration(#fff, none);
                 font-size: @font-size-large;

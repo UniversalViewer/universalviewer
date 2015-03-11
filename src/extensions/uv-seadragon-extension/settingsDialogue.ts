@@ -59,15 +59,23 @@ export class SettingsDialogue extends baseSettings.SettingsDialogue {
 
             this.updateSettings(settings);
         });
+    }
+
+    open(): void {
+        super.open();
 
         var settings: ISettings = this.getSettings();
 
         if (settings.pagingEnabled){
             this.$pagingEnabledCheckbox.attr("checked", "checked");
+        } else {
+            this.$pagingEnabledCheckbox.removeAttr("checked");
         }
 
         if (settings.preserveViewport){
             this.$preserveViewportCheckbox.attr("checked", "checked");
+        } else {
+            this.$preserveViewportCheckbox.removeAttr("checked");
         }
     }
 }
