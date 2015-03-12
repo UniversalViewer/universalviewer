@@ -62,7 +62,9 @@
                 "of": "of {0} (xx-XX)",
                 "emptyValue": "Please enter a value (xx-XX)",
                 "close": "Close (xx-XX)",
-                "settings": "Settings (xx-XX)"
+                "settings": "Settings (xx-XX)",
+                "oneUp": "Single page view (xx-XX)",
+                "twoUp": "Two page view (xx-XX)"
             }
         },
         "treeViewLeftPanel": {
