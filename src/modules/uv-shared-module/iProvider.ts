@@ -42,6 +42,7 @@ interface IProvider{
     getNextPageIndex(canvasIndex?: number): number;
     getStartCanvasIndex(): number;
     getViewingDirection(): string;
+    isCanvasIndexOutOfRange(canvasIndex: number): boolean;
     isFirstCanvas(canvasIndex?: number): boolean;
     isLastCanvas(canvasIndex?: number): boolean;
     isPaged(): boolean;

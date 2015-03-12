@@ -191,6 +191,10 @@ export class BaseProvider implements IProvider{
         return this.sequence.seeAlso;
     }
 
+    isCanvasIndexOutOfRange(canvasIndex: number): boolean {
+        return canvasIndex > this.getTotalCanvases() - 1;
+    }
+
     isFirstCanvas(canvasIndex?: number): boolean {
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
         return canvasIndex == 0;

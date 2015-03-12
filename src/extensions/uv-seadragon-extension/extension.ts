@@ -191,6 +191,11 @@ export class Extension extends baseExtension.BaseExtension {
                 canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || that.provider.getStartCanvasIndex();
             }
 
+            if (that.provider.isCanvasIndexOutOfRange(canvasIndex)){
+                that.showDialogue(that.provider.config.content.canvasIndexOutOfRange);
+                return;
+            }
+
             that.viewPage(canvasIndex || that.provider.getStartCanvasIndex());
 
             // initial sizing

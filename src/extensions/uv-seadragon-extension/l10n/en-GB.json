@@ -11,6 +11,9 @@
             "PartOfWork": "Part of Work"
         }
     },
+    "content": {
+        "canvasIndexOutOfRange": "Canvas index out of range."
+    },
     "modules": {
         "dialogue": {
             "content": {
