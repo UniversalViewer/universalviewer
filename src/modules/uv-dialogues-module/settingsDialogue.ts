@@ -73,6 +73,10 @@ export class SettingsDialogue extends dialogue.Dialogue {
             this.provider.changeLocale(this.$localeDropDown.val());
         });
 
+        if (this.provider.getLocales().length < 2){
+            this.$locale.hide();
+        }
+
         this.$element.hide();
     }
 
