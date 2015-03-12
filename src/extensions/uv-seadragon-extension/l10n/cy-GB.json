@@ -71,7 +71,11 @@
             "content": {
                 "index": "Mynegai",
                 "thumbnails": "Bodluniau",
-                "contents": "CYNNWYS"
+                "title": "Cynnwys",
+                "expand": "Expand Cynnwys",
+                "expandFull": "Expand Gallery",
+                "collapse": "Collapse Cynnwys",
+                "collapseFull": "Collapse Gallery"
             }
         },
         "seadragonCenterPanel": {
@@ -88,7 +92,11 @@
             "content": {
                 "holdingText": "Eich modiwl fan hyn!",
                 "noData": "Nid oes data i'w arddangos",
-                "moreInformation": "RHAGOR O WYBODAETH"
+                "title": "Rhagor o wybodaeth",
+                "expand": "Expand Mwy o wybodaeth",
+                "expandFull": "",
+                "collapse": "Collapse Mwy o wybodaeth",
+                "collapseFull": ""
             }
         },
         "footerPanel": {
