@@ -9,9 +9,11 @@ export class FooterPanel extends baseView.BaseView {
 
     $options: JQuery;
     $embedButton: JQuery;
+    $downloadButton: JQuery;
     $fullScreenBtn: JQuery;
 
     static EMBED: string = 'footer.onEmbed';
+    static DOWNLOAD: string = 'footer.onDownload';
 
     constructor($element: JQuery) {
         super($element);
@@ -34,6 +36,9 @@ export class FooterPanel extends baseView.BaseView {
         this.$options.append(this.$embedButton);
         this.$embedButton.attr('tabindex', '6');
 
+        this.$downloadButton = $('<a class="download" title="' + this.content.download + '">' + this.content.download + '</a>');
+        this.$options.prepend(this.$downloadButton);
+
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
         this.$fullScreenBtn.attr('tabindex', '5');
@@ -42,6 +47,13 @@ export class FooterPanel extends baseView.BaseView {
             $.publish(FooterPanel.EMBED);
         });
 
+        this.$downloadButton.on('click', (e) => {
+            e.preventDefault();
+
+            $.publish(FooterPanel.DOWNLOAD);
+        });
+
+
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
@@ -49,6 +61,10 @@ export class FooterPanel extends baseView.BaseView {
 
         if (!utils.Utils.getBool(this.options.embedEnabled, true)){
             this.$embedButton.hide();
+        }
+
+        if (!utils.Utils.getBool(this.options.downloadEnabled, true)){
+            this.$downloadButton.hide();
         }
 
         if (!utils.Utils.getBool(this.options.fullscreenEnabled, true)){
