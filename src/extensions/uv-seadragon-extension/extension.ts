@@ -176,6 +176,11 @@ export class Extension extends baseExtension.BaseExtension {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
+        $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
+            var c = this.provider.getCanvasByIndex(this.provider.canvasIndex);
+            c = c['@id'];
+        });
+
         // dependencies
         var deps = overrideDependencies || dependencies;
         require(_.values(deps), function () {
