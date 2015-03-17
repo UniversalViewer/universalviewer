@@ -178,7 +178,8 @@ export class Extension extends baseExtension.BaseExtension {
 
         $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
             var c = this.provider.getCanvasByIndex(this.provider.canvasIndex);
-            c = c['@id'];
+            var info = (<ISeadragonProvider>this.provider).getImageUri(c);
+            window.open(info);
         });
 
         // dependencies
