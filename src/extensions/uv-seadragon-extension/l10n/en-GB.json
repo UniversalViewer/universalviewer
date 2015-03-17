@@ -106,7 +106,8 @@
             "content": {
                 "fullScreen": "Full Screen",
                 "exitFullScreen": "Exit Full Screen",
-                "embed": "Embed"
+                "embed": "Embed",
+                "download": "Download"
             }
         }
     }
