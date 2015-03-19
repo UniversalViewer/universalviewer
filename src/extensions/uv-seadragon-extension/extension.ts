@@ -5,7 +5,6 @@
 import baseExtension = require("../../modules/uv-shared-module/baseExtension");
 import utils = require("../../utils");
 import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import provider = require("./provider");
 import shell = require("../../modules/uv-shared-module/shell");
 import header = require("../../modules/uv-pagingheaderpanel-module/pagingHeaderPanel");
 import baseLeft = require("../../modules/uv-shared-module/leftPanel");
@@ -19,7 +18,8 @@ import baseRight = require("../../modules/uv-shared-module/rightPanel");
 import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/uv-shared-module/footerPanel");
 import help = require("../../modules/uv-dialogues-module/helpDialogue");
-import embed = require("../../extensions/uv-seadragon-extension/embedDialogue");
+import embed = require("./embedDialogue");
+import download = require("./downloadDialogue");
 import settingsDialogue = require("../../extensions/uv-seadragon-extension/settingsDialogue");
 import IProvider = require("../../modules/uv-shared-module/iProvider");
 import settings = require("../../modules/uv-shared-module/settings");
@@ -38,6 +38,8 @@ export class Extension extends baseExtension.BaseExtension {
     helpDialogue: help.HelpDialogue;
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
+    $downloadDialogue: JQuery;
+    downloadDialogue: download.DownloadDialogue;
     $settingsDialogue: JQuery;
     settingsDialogue: settingsDialogue.SettingsDialogue;
     $externalContentDialogue: JQuery;
@@ -46,6 +48,7 @@ export class Extension extends baseExtension.BaseExtension {
     currentRotation: number = 0;
 
     static mode: string;
+    static CURRENT_VIEW_URI: string = 'onCurrentViewUri';
 
     // modes
     static PAGE_MODE: string = "pageMode";
@@ -157,6 +160,12 @@ export class Extension extends baseExtension.BaseExtension {
             if (this.centerPanel){
                 this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
             }
+
+            this.triggerSocket(Extension.CURRENT_VIEW_URI,
+                {
+                    "cropUri": this.getCropUri(false),
+                    "fullUri": (<ISeadragonProvider>this.provider).getImage(this.provider.getCurrentCanvas(), false, false)
+                });
         });
 
         $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
@@ -177,9 +186,7 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
-            var c = this.provider.getCanvasByIndex(this.provider.canvasIndex);
-            var info = (<ISeadragonProvider>this.provider).getImageUri(c);
-            window.open(info);
+            $.publish(download.DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
         });
 
         // dependencies
@@ -238,6 +245,10 @@ export class Extension extends baseExtension.BaseExtension {
         this.$embedDialogue = $('<div class="overlay embed"></div>');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
+
+        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        shell.Shell.$overlays.append(this.$downloadDialogue);
+        this.downloadDialogue = new download.DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings"></div>');
         shell.Shell.$overlays.append(this.$settingsDialogue);
@@ -310,6 +321,16 @@ export class Extension extends baseExtension.BaseExtension {
             $.publish(Extension.OPEN_MEDIA, [uri]);
             this.setParam(baseProvider.params.canvasIndex, canvasIndex);
         });
+    }
+
+    getViewer() {
+        return this.centerPanel.viewer;
+    }
+
+    getCropUri(relative: boolean): string {
+        var page = this.provider.getCurrentCanvas();
+        var viewer = this.getViewer();
+        return (<ISeadragonProvider>this.provider).getCrop(page, viewer, false, relative);
     }
 
     getMode(): string {

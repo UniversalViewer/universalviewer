@@ -26,6 +26,12 @@
                 "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-sequenceindex=\"{3}\" data-canvasindex=\"{4}\" data-zoom=\"{5}\" data-rotation=\"{6}\" style=\"width:{7}px; height:{8}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{9}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
             }
         },
+        "downloadDialogue":
+        {
+            "options":
+            {
+            }
+        },
         "pagingHeaderPanel":
         {
             "options":
@@ -83,7 +89,7 @@
         {
             "options":{
                 "embedEnabled": true,
-                "downloadEnabled": false,
+                "downloadEnabled": true,
                 "minimiseButtons": false
             }
         }

@@ -43,6 +43,18 @@
                 "locale": "Locale"
             }
         },
+        "downloadDialogue": {
+            "content": {
+                "title": "Download",
+                "currentViewAsJpg": "Current view (jpg)",
+                "wholeImageHighResAsJpg": "Whole image high res (jpg)",
+                "wholeImageLowResAsJpg": "Whole image low res (jpg)",
+                "entireDocumentAsPdf": "Entire document (pdf)",
+                "entireFileAsOriginal": "Entire file ({0})",
+                "preview": "Preview",
+                "download": "Download"
+            }
+        },
         "embedDialogue": {
             "content": {
                 "title": "Embed",
