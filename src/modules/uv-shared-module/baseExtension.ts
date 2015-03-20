@@ -180,7 +180,7 @@ export class BaseExtension implements IExtension {
                     $.publish(BaseExtension.TOGGLE_FULLSCREEN, message.eventObject);
                     break;
             }
-        }, 100);
+        }, 1000);
     }
 
     // get hash or data-attribute params depending on whether the player is embedded.
