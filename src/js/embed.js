@@ -206,9 +206,12 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, manifestUri, sequenceIndex, canvasIndex, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, manifestUri, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
 
             $app = $(element);
+
+            // Default to fullscreen
+            defaultToFullScreen = $app.attr('data-fullscreen') === 'true';
 
             // Lightbox behaviour
             isLightbox = $app.attr('data-lightbox') === 'true';
@@ -376,6 +379,12 @@ docReady(function() {
                     props: { style: { width: "100%", height: $app.height() + "px" }, scrolling: "no" },
                     onReady: function () {
                         $appFrame = $app.find('iframe');
+                        if (defaultToFullScreen) {
+                            toggleFullScreen({
+                                isFullScreen: true
+                            });
+                            triggerSocket('onToggleFullScreen');
+                        }
                         if (isLightbox) {
                             $img.on('click', function(e){
                                 e.preventDefault();
