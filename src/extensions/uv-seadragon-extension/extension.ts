@@ -161,10 +161,12 @@ export class Extension extends baseExtension.BaseExtension {
                 this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
             }
 
+            var canvas = this.provider.getCurrentCanvas();
+
             this.triggerSocket(Extension.CURRENT_VIEW_URI,
                 {
-                    "cropUri": this.getCropUri(false),
-                    "fullUri": (<ISeadragonProvider>this.provider).getImage(this.provider.getCurrentCanvas(), false, false)
+                    "cropUri": (<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, this.getViewer(), true),
+                    "fullUri": (<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.width, canvas.height)
                 });
         });
 
@@ -325,12 +327,6 @@ export class Extension extends baseExtension.BaseExtension {
 
     getViewer() {
         return this.centerPanel.viewer;
-    }
-
-    getCropUri(relative: boolean): string {
-        var page = this.provider.getCurrentCanvas();
-        var viewer = this.getViewer();
-        return (<ISeadragonProvider>this.provider).getCrop(page, viewer, false, relative);
     }
 
     getMode(): string {

@@ -29,6 +29,10 @@ export class FooterPanel extends baseView.BaseView {
             this.toggleFullScreen();
         });
 
+        $.subscribe(baseExtension.BaseExtension.SETTINGS_CHANGED, () => {
+            this.updateDownloadButton();
+        });
+
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
@@ -53,7 +57,6 @@ export class FooterPanel extends baseView.BaseView {
             $.publish(FooterPanel.DOWNLOAD);
         });
 
-
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
@@ -63,9 +66,7 @@ export class FooterPanel extends baseView.BaseView {
             this.$embedButton.hide();
         }
 
-        if (!utils.Utils.getBool(this.options.downloadEnabled, true)){
-            this.$downloadButton.hide();
-        }
+        this.updateDownloadButton();
 
         if (!utils.Utils.getBool(this.options.fullscreenEnabled, true)){
             this.$fullScreenBtn.hide();
@@ -89,6 +90,17 @@ export class FooterPanel extends baseView.BaseView {
             this.$fullScreenBtn.swapClass('exitFullscreen', 'fullScreen');
             this.$fullScreenBtn.text(this.content.fullScreen);
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
+        }
+    }
+
+    updateDownloadButton() {
+        var configEnabled = utils.Utils.getBool(this.options.downloadEnabled, true);
+        var settings: ISettings = this.provider.getSettings();
+
+        if (configEnabled && !settings.pagingEnabled){
+            this.$downloadButton.show();
+        } else {
+            this.$downloadButton.hide();
         }
     }
 

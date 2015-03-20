@@ -14,13 +14,13 @@ export class DownloadDialogue extends dialogue.Dialogue {
     $wholeImageLowResAsJpgButton: JQuery;
     //$entireDocumentAsPdfButton: JQuery;
     $buttonsContainer: JQuery;
-    $previewButton: JQuery;
+    //$previewButton: JQuery;
     $downloadButton: JQuery;
 
     static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
     static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
     static DOWNLOAD: string = 'onDownload';
-    static PREVIEW: string = 'onPreview';
+    //static PREVIEW: string = 'onPreview';
 
     isOpened: boolean = false; // todo: use isActive?
 
@@ -70,8 +70,8 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
-        this.$previewButton = $('<a class="btn btn-primary" href="#">' + this.content.preview + '</a>');
-        this.$buttonsContainer.append(this.$previewButton);
+        //this.$previewButton = $('<a class="btn btn-primary" href="#">' + this.content.preview + '</a>');
+        //this.$buttonsContainer.append(this.$previewButton);
 
         this.$downloadButton = $('<a class="btn btn-primary" href="#">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
@@ -79,35 +79,35 @@ export class DownloadDialogue extends dialogue.Dialogue {
         var that = this;
 
         // ui event handlers.
-        this.$previewButton.on('click', (e) => {
-            e.preventDefault();
-
-            var selectedOption = this.getSelectedOption();
-
-            var id = selectedOption.attr('id');
-            var canvas = this.provider.getCurrentCanvas();
-
-            switch (id){
-                case 'currentViewAsJpg':
-                    window.open((<ISeadragonExtension>that.extension).getCropUri(false));
-                    $.publish(DownloadDialogue.PREVIEW, ['currentViewAsJpg']);
-                    break;
-                case 'wholeImageHighResAsJpg':
-                    window.open((<ISeadragonProvider>that.provider).getImage(canvas, true, false));
-                    $.publish(DownloadDialogue.PREVIEW, ['wholeImageHighResAsJpg']);
-                    break;
-                case 'wholeImageLowResAsJpg':
-                    window.open((<ISeadragonProvider>that.provider).getImage(canvas, false, false));
-                    $.publish(DownloadDialogue.PREVIEW, ['wholeImageLowResAsJpg']);
-                    break;
-                //case 'entireDocumentAsPdf':
-                //    window.open((<ISeadragonProvider>that.provider).getPDF(false));
-                //    $.publish(DownloadDialogue.PREVIEW, ['entireDocumentAsPdf']);
-                //    break;
-            }
-
-            this.close();
-        });
+        //this.$previewButton.on('click', (e) => {
+        //    e.preventDefault();
+        //
+        //    var selectedOption = this.getSelectedOption();
+        //
+        //    var id = selectedOption.attr('id');
+        //    var canvas = this.provider.getCurrentCanvas();
+        //
+        //    switch (id){
+        //        case 'currentViewAsJpg':
+        //            window.open((<ISeadragonExtension>that.extension).getCropUri(false));
+        //            $.publish(DownloadDialogue.PREVIEW, ['currentViewAsJpg']);
+        //            break;
+        //        case 'wholeImageHighResAsJpg':
+        //            window.open((<ISeadragonProvider>that.provider).getImage(canvas, true, false));
+        //            $.publish(DownloadDialogue.PREVIEW, ['wholeImageHighResAsJpg']);
+        //            break;
+        //        case 'wholeImageLowResAsJpg':
+        //            window.open((<ISeadragonProvider>that.provider).getImage(canvas, false, false));
+        //            $.publish(DownloadDialogue.PREVIEW, ['wholeImageLowResAsJpg']);
+        //            break;
+        //        //case 'entireDocumentAsPdf':
+        //        //    window.open((<ISeadragonProvider>that.provider).getPDF(false));
+        //        //    $.publish(DownloadDialogue.PREVIEW, ['entireDocumentAsPdf']);
+        //        //    break;
+        //    }
+        //
+        //    this.close();
+        //});
 
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
@@ -120,15 +120,15 @@ export class DownloadDialogue extends dialogue.Dialogue {
             switch (id){
                 case 'currentViewAsJpg':
                     var viewer = (<ISeadragonExtension>that.extension).getViewer();
-                    window.open((<ISeadragonProvider>that.provider).getCrop(canvas, viewer, true));
+                    window.open((<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, viewer, true));
                     $.publish(DownloadDialogue.DOWNLOAD, ['currentViewAsJpg']);
                     break;
                 case 'wholeImageHighResAsJpg':
-                    window.open((<ISeadragonProvider>that.provider).getImage(canvas, true, true));
+                    window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.width, canvas.height));
                     $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageHighResAsJpg']);
                     break;
                 case 'wholeImageLowResAsJpg':
-                    window.open((<ISeadragonProvider>that.provider).getImage(canvas, false, true));
+                    window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
                     $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageLowResAsJpg']);
                     break;
                 //case 'entireDocumentAsPdf':
@@ -148,9 +148,6 @@ export class DownloadDialogue extends dialogue.Dialogue {
         if (this.isOpened) return;
 
         this.isOpened = true;
-
-        var canvas = this.provider.getCanvasByIndex(this.provider.canvasIndex);
-        var info = (<ISeadragonProvider>this.provider).getImageUri(canvas);
 
         // enable download based on license code.
         if (this.isDownloadOptionAvailable("currentViewAsJpg")) {
@@ -196,9 +193,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.resize();
     }
 
-    addEntireFileDownloadOption(fileUri: string): void{
-        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.prototype.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
-    }
+    //addEntireFileDownloadOption(fileUri: string): void{
+    //    this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.prototype.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
+    //}
 
     getFileExtension(fileUri: string): string{
         return fileUri.split('.').pop();
@@ -209,8 +206,8 @@ export class DownloadDialogue extends dialogue.Dialogue {
     }
 
     isDownloadOptionAvailable(option): boolean {
+        // todo: some future IIIF support required.
         return true;
-        //return this.provider.sequence.extensions.permittedOperations.contains(option);
     }
 
     resize(): void {

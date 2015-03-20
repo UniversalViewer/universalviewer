@@ -97,7 +97,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     //    return uri;
     //}
 
-    getCrop(canvas: any, viewer: any, download?: boolean, relativeUri?: boolean): string {
+    getCroppedImageUri(canvas: any, viewer: any): string {
 
         var bounds = viewer.viewport.getBounds(true);
         var containerSize = viewer.viewport.getContainerSize();
@@ -158,40 +158,23 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var quality = 'default';
         var uri = String.prototype.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
 
-        //if (download) {
-        //    uri += "?download=true";
-        //}
-
-        if (relativeUri) {
-            // convert to relative uri.
-            uri = utils.Utils.convertToRelativeUrl(uri);
-        }
-
         return uri;
     }
 
-    getImage(canvas: any, highRes: boolean, download?: boolean): string {
-
-        var uri;
-
-        if (highRes) {
-            //uri = this.getActualImageUri(canvas);
-            //if (download) uri += "?download=true";
-        } else {
-            uri = this.getConfinedImageUri(canvas, 1000, 1000);
-            //if (download) uri += "?download=true";
-        }
-
-        return uri;
-    }
-
-    getConfinedImageUri(canvas: any, width: number, height: number): string {
+    getConfinedImageUri(canvas: any, width: number, height?: number): string {
         var baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
         var id = this.getImageId(canvas);
         var region = 'full';
-        var size = width + ',' + height;
+        var size;
+        
+        if (typeof(height) != "undefined"){
+            size = width + ',' + height;
+        } else {
+            size = width + ",";
+        }
+
         var rotation = 0;
         var quality = 'default';
         var uri = String.prototype.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
