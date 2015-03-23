@@ -91,7 +91,8 @@
             "options":{
                 "embedEnabled": true,
                 "downloadEnabled": true,
-                "minimiseButtons": false
+                "minimiseButtons": false,
+                "fullscreenEnabled": true
             }
         }
     }
