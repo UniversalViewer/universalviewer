@@ -12,7 +12,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
     $currentViewAsJpgButton: JQuery;
     $wholeImageHighResAsJpgButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
-    //$entireDocumentAsPdfButton: JQuery;
+    $entireDocumentAsPdfButton: JQuery;
     $buttonsContainer: JQuery;
     //$previewButton: JQuery;
     $downloadButton: JQuery;
@@ -51,21 +51,21 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions = $('<ol class="options"></ol>');
         this.$content.append(this.$downloadOptions);
 
-        this.$currentViewAsJpgButton = $('<li><input id="currentViewAsJpg" type="radio" name="downloadOptions"></input><label for="currentViewAsJpg">' + this.content.currentViewAsJpg + '</label></li>');
+        this.$currentViewAsJpgButton = $('<li><input id="currentViewAsJpg" type="radio" name="downloadOptions" /><label for="currentViewAsJpg">' + this.content.currentViewAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
-        this.$wholeImageHighResAsJpgButton = $('<li><input id="wholeImageHighResAsJpg" type="radio" name="downloadOptions"></input><label for="wholeImageHighResAsJpg">' + this.content.wholeImageHighResAsJpg + '</label></li>');
+        this.$wholeImageHighResAsJpgButton = $('<li><input id="wholeImageHighResAsJpg" type="radio" name="downloadOptions" /><label for="wholeImageHighResAsJpg">' + this.content.wholeImageHighResAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$wholeImageHighResAsJpgButton);
         this.$wholeImageHighResAsJpgButton.hide();
 
-        this.$wholeImageLowResAsJpgButton = $('<li><input id="wholeImageLowResAsJpg" type="radio" name="downloadOptions"></input><label for="wholeImageLowResAsJpg">' + this.content.wholeImageLowResAsJpg + '</label></li>');
+        this.$wholeImageLowResAsJpgButton = $('<li><input id="wholeImageLowResAsJpg" type="radio" name="downloadOptions" /><label for="wholeImageLowResAsJpg">' + this.content.wholeImageLowResAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
-        //this.$entireDocumentAsPdfButton = $('<li><input id="entireDocumentAsPdf" type="radio" name="downloadOptions"></input><label for="entireDocumentAsPdf">' + this.content.entireDocumentAsPdf + '</label></li>');
-        //this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
-        //this.$entireDocumentAsPdfButton.hide();
+        this.$entireDocumentAsPdfButton = $('<li><input id="entireDocumentAsPdf" type="radio" name="downloadOptions" /><label for="entireDocumentAsPdf">' + this.content.entireDocumentAsPdf + '</label></li>');
+        this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
+        this.$entireDocumentAsPdfButton.hide();
 
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
@@ -131,10 +131,10 @@ export class DownloadDialogue extends dialogue.Dialogue {
                     window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
                     $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageLowResAsJpg']);
                     break;
-                //case 'entireDocumentAsPdf':
-                //    window.open((<ISeadragonProvider>that.provider).getPDF(true));
-                //    $.publish(DownloadDialogue.DOWNLOAD, ['entireDocumentAsPdf']);
-                //    break;
+                case 'entireDocumentAsPdf':
+                    window.open((<ISeadragonProvider>that.provider).getManifestation("pdf"));
+                    $.publish(DownloadDialogue.DOWNLOAD, ['entireDocumentAsPdf']);
+                    break;
             }
 
             this.close();
@@ -162,9 +162,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
             this.$wholeImageLowResAsJpgButton.show();
         }
 
-        //if (this.isDownloadOptionAvailable("entireDocumentAsPdf")) {
-        //    this.$entireDocumentAsPdfButton.show();
-        //}
+        if (this.isDownloadOptionAvailable("entireDocumentAsPdf")) {
+            this.$entireDocumentAsPdfButton.show();
+        }
 
         //if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
         //    var canvas = this.provider.getCurrentCanvas();
@@ -206,7 +206,13 @@ export class DownloadDialogue extends dialogue.Dialogue {
     }
 
     isDownloadOptionAvailable(option): boolean {
-        // todo: some future IIIF support required.
+        if (option === "entireDocumentAsPdf"){
+            if (this.provider.getManifestation("pdf")){
+                return true;
+            }
+
+            return false;
+        }
         return true;
     }
 

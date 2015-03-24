@@ -156,6 +156,16 @@ export class BaseProvider implements IProvider{
         return 'monograph';
     }
 
+    getManifestation(type: string): string {
+        var service = this.sequence.service;
+
+        if (service && service["profile"] === "http://iiif.io/api/otherManifestations.json"){
+            if (service.format.endsWith("pdf")){
+                return service["@id"];
+            }
+        }
+    }
+
     getSequenceType(): string{
         // todo: perhaps use viewingHint attribute
         // default to 'seadragon-iiif'

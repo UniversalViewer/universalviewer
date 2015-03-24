@@ -163,6 +163,16 @@ export class BaseProvider implements IProvider{
         return this.getRootStructure().sectionType.toLowerCase();
     }
 
+    getManifestation(type: string): string {
+        var service = this.sequence.service;
+
+        if (service && service["profile"] === "http://iiif.io/api/otherManifestations.json"){
+            if (service.format.endsWith("pdf")){
+                return service["@id"];
+            }
+        }
+    }
+
     getSequenceType(): string{
         return this.sequence.assetType.replace('/', '-');
     }
