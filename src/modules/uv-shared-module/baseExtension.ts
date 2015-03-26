@@ -173,11 +173,14 @@ export class BaseExtension implements IExtension {
     }
 
     handleParentFrameEvent(message): void {
-        switch (message.eventName) {
-            case BaseExtension.TOGGLE_FULLSCREEN:
-                $.publish(BaseExtension.TOGGLE_FULLSCREEN, message.eventObject);
-            break;
-        }
+        // todo: come up with better way of postponing this until viewer is fully created
+        setTimeout(() => {
+            switch (message.eventName) {
+                case BaseExtension.TOGGLE_FULLSCREEN:
+                    $.publish(BaseExtension.TOGGLE_FULLSCREEN, message.eventObject);
+                    break;
+            }
+        }, 1000);
     }
 
     // get hash or data-attribute params depending on whether the player is embedded.

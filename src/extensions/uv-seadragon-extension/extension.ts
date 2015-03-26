@@ -5,7 +5,6 @@
 import baseExtension = require("../../modules/uv-shared-module/baseExtension");
 import utils = require("../../utils");
 import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import provider = require("./provider");
 import shell = require("../../modules/uv-shared-module/shell");
 import header = require("../../modules/uv-pagingheaderpanel-module/pagingHeaderPanel");
 import baseLeft = require("../../modules/uv-shared-module/leftPanel");
@@ -13,13 +12,13 @@ import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPan
 import thumbsView = require("../../modules/uv-treeviewleftpanel-module/thumbsView");
 import galleryView = require("../../modules/uv-treeviewleftpanel-module/galleryView");
 import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
-import baseCenter = require("../../modules/uv-seadragoncenterpanel-module/seadragonCenterPanel");
 import center = require("../../modules/uv-seadragoncenterpanel-module/seadragonCenterPanel");
 import baseRight = require("../../modules/uv-shared-module/rightPanel");
 import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/uv-shared-module/footerPanel");
 import help = require("../../modules/uv-dialogues-module/helpDialogue");
-import embed = require("../../extensions/uv-seadragon-extension/embedDialogue");
+import embed = require("./embedDialogue");
+import download = require("./downloadDialogue");
 import settingsDialogue = require("../../extensions/uv-seadragon-extension/settingsDialogue");
 import IProvider = require("../../modules/uv-shared-module/iProvider");
 import settings = require("../../modules/uv-shared-module/settings");
@@ -31,21 +30,24 @@ export class Extension extends baseExtension.BaseExtension {
 
     headerPanel: header.PagingHeaderPanel;
     leftPanel: left.TreeViewLeftPanel;
-    centerPanel: baseCenter.SeadragonCenterPanel;
+    centerPanel: center.SeadragonCenterPanel;
     rightPanel: right.MoreInfoRightPanel;
     footerPanel: footer.FooterPanel;
     $helpDialogue: JQuery;
     helpDialogue: help.HelpDialogue;
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
+    $downloadDialogue: JQuery;
+    downloadDialogue: download.DownloadDialogue;
     $settingsDialogue: JQuery;
     settingsDialogue: settingsDialogue.SettingsDialogue;
     $externalContentDialogue: JQuery;
     externalContentDialogue: externalContentDialogue.ExternalContentDialogue;
-
+    isLoading: boolean = false;
     currentRotation: number = 0;
 
     static mode: string;
+    static CURRENT_VIEW_URI: string = 'onCurrentViewUri';
 
     // modes
     static PAGE_MODE: string = "pageMode";
@@ -153,27 +155,46 @@ export class Extension extends baseExtension.BaseExtension {
             this.resize();
         });
 
-        $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
+        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             if (this.centerPanel){
                 this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
             }
+
+            var canvas = this.provider.getCurrentCanvas();
+
+            this.triggerSocket(Extension.CURRENT_VIEW_URI,
+                {
+                    "cropUri": (<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, this.getViewer(), true),
+                    "fullUri": (<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.width, canvas.height)
+                });
         });
 
-        $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
+        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_OPEN, () => {
+            // todo: stopgap until this issue is resolved: https://github.com/openseadragon/openseadragon/issues/629
+            setTimeout(() => {
+                this.isLoading = false;
+            }, 500); // only allow a page load every 500 milliseconds
+        });
+
+        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
             this.currentRotation = rotation;
             this.setParam(baseProvider.params.rotation, rotation);
         });
 
-        $.subscribe(baseCenter.SeadragonCenterPanel.PREV, (e) => {
+        $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
-        $.subscribe(baseCenter.SeadragonCenterPanel.NEXT, (e) => {
+        $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
         $.subscribe(footer.FooterPanel.EMBED, (e) => {
             $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        });
+
+        $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
+            $.publish(download.DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
         });
 
         // dependencies
@@ -191,6 +212,11 @@ export class Extension extends baseExtension.BaseExtension {
                 canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || that.provider.getStartCanvasIndex();
             }
 
+            if (that.provider.isCanvasIndexOutOfRange(canvasIndex)){
+                that.showDialogue(that.provider.config.content.canvasIndexOutOfRange);
+                return;
+            }
+
             that.viewPage(canvasIndex || that.provider.getStartCanvasIndex());
 
             // initial sizing
@@ -201,8 +227,6 @@ export class Extension extends baseExtension.BaseExtension {
             // publish created event
             $.publish(Extension.CREATED);
         });
-
-
     }
 
     createModules(): void{
@@ -227,6 +251,10 @@ export class Extension extends baseExtension.BaseExtension {
         this.$embedDialogue = $('<div class="overlay embed"></div>');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
+
+        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        shell.Shell.$overlays.append(this.$downloadDialogue);
+        this.downloadDialogue = new download.DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings"></div>');
         shell.Shell.$overlays.append(this.$settingsDialogue);
@@ -277,6 +305,13 @@ export class Extension extends baseExtension.BaseExtension {
 
     viewPage(canvasIndex: number, isReload?: boolean): void {
 
+        // todo: stopgap until this issue is resolved: https://github.com/openseadragon/openseadragon/issues/629
+        if (this.isLoading){
+            return;
+        }
+
+        this.isLoading = true;
+
         // if it's a valid canvas index.
         if (canvasIndex == -1) return;
 
@@ -291,7 +326,7 @@ export class Extension extends baseExtension.BaseExtension {
 
                 return;
             }
-        } 
+        }
 
         this.viewCanvas(canvasIndex, () => {
             var canvas = this.provider.getCanvasByIndex(canvasIndex);
@@ -299,6 +334,11 @@ export class Extension extends baseExtension.BaseExtension {
             $.publish(Extension.OPEN_MEDIA, [uri]);
             this.setParam(baseProvider.params.canvasIndex, canvasIndex);
         });
+
+    }
+
+    getViewer() {
+        return this.centerPanel.viewer;
     }
 
     getMode(): string {

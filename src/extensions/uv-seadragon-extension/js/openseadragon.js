@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.2.1
-//! Built on 2015-02-24
-//! Git commit: v1.2.1-248-de4ad6d-dirty
+//! Built on 2015-03-25
+//! Git commit: v1.2.1-269-544912d
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -180,9 +180,6 @@
  *     called '/images', eg '/images/zoomin_rest.png'.  If you need to adjust
  *     these paths, prefer setting the option.prefixUrl rather than overriding
  *     every image path directly through this setting.
- *
- * @property {Object} [tileHost=null]
- *     TODO: Implement this. Currently not used.
  *
  * @property {Boolean} [debugMode=false]
  *     TODO: provide an in-screen panel providing event detail feedback.
@@ -7028,10 +7025,10 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 width:             this.navigatorWidth,
                 height:            this.navigatorHeight,
                 autoResize:        this.navigatorAutoResize,
-                tileHost:          this.tileHost,
                 prefixUrl:         this.prefixUrl,
                 viewer:            this,
-                navigatorRotate:   this.navigatorRotate
+                navigatorRotate:   this.navigatorRotate,
+                crossOriginPolicy: this.crossOriginPolicy
             });
         }
 
@@ -7124,7 +7121,6 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                             height:      this.referenceStripHeight,
                             width:       this.referenceStripWidth,
                             tileSources: this.tileSources,
-                            tileHost:    this.tileHost,
                             prefixUrl:   this.prefixUrl,
                             viewer:      this
                         });
@@ -7815,6 +7811,9 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
          * @param {Number} [options.y=0] The Y position for the image in viewport coordinates.
          * @param {Number} [options.width=1] The width for the image in viewport coordinates.
          * @param {Number} [options.height] The height for the image in viewport coordinates.
+         * @param {OpenSeadragon.Rect} [options.clip] - An area, in image pixels, to clip to
+         * (portions of the image outside of this area will not be visible). Only works on
+         * browsers that support the HTML5 canvas.
          * @param {Function} [options.success] A function that gets called when the image is
          * successfully added. It's passed the event object which contains a single property:
          * "item", the resulting TiledImage.
@@ -7900,6 +7899,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                         y: queueItem.options.y,
                         width: queueItem.options.width,
                         height: queueItem.options.height,
+                        clip: queueItem.options.clip,
                         springStiffness: _this.springStiffness,
                         animationTime: _this.animationTime,
                         minZoomImageRatio: _this.minZoomImageRatio,
@@ -7909,6 +7909,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                         blendTime: _this.blendTime,
                         alwaysBlend: _this.alwaysBlend,
                         minPixelRatio: _this.minPixelRatio,
+                        crossOriginPolicy: _this.crossOriginPolicy,
                         debugMode: _this.debugMode
                     });
 
@@ -9545,6 +9546,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
     }
 
     function drawWorld( viewer ) {
+        viewer.imageLoader.clear();
         viewer.drawer.clear();
         viewer.world.draw();
 
@@ -14326,7 +14328,8 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 jobOptions = {
                     src: options.src,
                     crossOriginPolicy: options.crossOriginPolicy,
-                    callback: complete
+                    callback: complete,
+                    abort: options.abort
                 },
                 newJob = new ImageJob( jobOptions );
 
@@ -14344,6 +14347,13 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
          * @method
          */
         clear: function() {
+            for( var i = 0; i < this.jobQueue.length; i++ ) {
+                var job = this.jobQueue[i];
+                if ( typeof job.abort === "function" ) {
+                    job.abort();
+                }
+            }
+
             this.jobQueue = [];
         }
     };
@@ -15277,6 +15287,35 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
         },
 
         // private
+        saveContext: function() {
+            if (!this.useCanvas) {
+                return;
+            }
+
+            this.context.save();
+        },
+
+        // private
+        restoreContext: function() {
+            if (!this.useCanvas) {
+                return;
+            }
+
+            this.context.restore();
+        },
+
+        // private
+        setClip: function(rect) {
+            if (!this.useCanvas) {
+                return;
+            }
+
+            this.context.beginPath();
+            this.context.rect(rect.x, rect.y, rect.width, rect.height);
+            this.context.clip();
+        },
+
+        // private
         drawDebugInfo: function( tile, count, i ){
             if ( this.useCanvas ) {
                 this.context.save();
@@ -16012,8 +16051,8 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 return this.zoomTo(newZoom, null, true);
             }
 
-            if (Math.abs(newZoom - oldZoom) < 0.00000000001 ||
-                Math.abs(newBounds.width - oldBounds.width) < 0.00000000001) {
+            if (Math.abs(newZoom - oldZoom) < 0.00000001 ||
+                Math.abs(newBounds.width - oldBounds.width) < 0.00000001) {
                 return this.panTo( center, immediately );
             }
 
@@ -16715,6 +16754,9 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
      * @param {Number} [options.y=0] - Top position, in viewport coordinates.
      * @param {Number} [options.width=1] - Width, in viewport coordinates.
      * @param {Number} [options.height] - Height, in viewport coordinates.
+     * @param {OpenSeadragon.Rect} [options.clip] - An area, in image pixels, to clip to
+     * (portions of the image outside of this area will not be visible). Only works on
+     * browsers that support the HTML5 canvas.
      * @param {Number} [options.springStiffness] - See {@link OpenSeadragon.Options}.
      * @param {Boolean} [options.animationTime] - See {@link OpenSeadragon.Options}.
      * @param {Number} [options.minZoomImageRatio] - See {@link OpenSeadragon.Options}.
@@ -16735,6 +16777,8 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
         $.console.assert( options.viewer, "[TiledImage] options.viewer is required" );
         $.console.assert( options.imageLoader, "[TiledImage] options.imageLoader is required" );
         $.console.assert( options.source, "[TiledImage] options.source is required" );
+        $.console.assert(!options.clip || options.clip instanceof $.Rect,
+            "[TiledImage] options.clip must be an OpenSeadragon.Rect if present");
 
         $.EventSource.call( this );
 
@@ -16746,6 +16790,12 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
 
         this._imageLoader = options.imageLoader;
         delete options.imageLoader;
+
+        if (options.clip instanceof $.Rect) {
+            this._clip = options.clip.clone();
+        }
+
+        delete options.clip;
 
         var x = options.x || 0;
         delete options.x;
@@ -17104,6 +17154,36 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
          */
         setHeight: function(height, immediately) {
             this._setScale(height / this.normHeight, immediately);
+        },
+
+        /**
+         * @returns {OpenSeadragon.Rect|null} The TiledImage's current clip rectangle,
+         * in image pixels, or null if none.
+         */
+        getClip: function() {
+            if (this._clip) {
+                return this._clip.clone();
+            }
+
+            return null;
+        },
+
+        /**
+         * @param {OpenSeadragon.Rect|null} newClip - An area, in image pixels, to clip to
+         * (portions of the image outside of this area will not be visible). Only works on
+         * browsers that support the HTML5 canvas.
+         */
+        setClip: function(newClip) {
+            $.console.assert(!newClip || newClip instanceof $.Rect,
+                "[TiledImage.setClip] newClip must be an OpenSeadragon.Rect or null");
+
+            if (newClip instanceof $.Rect) {
+                this._clip = newClip.clone();
+            } else {
+                this._clip = null;
+            }
+
+            this._needsDraw = true;
         },
 
         // private
@@ -17546,6 +17626,9 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             crossOriginPolicy: tiledImage.crossOriginPolicy,
             callback: function( image ){
                 onTileLoad( tiledImage, tile, time, image );
+            },
+            abort: function() {
+                tile.loading = false;
             }
         });
     }
@@ -17776,6 +17859,20 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             position,
             tileSource;
 
+        var usedClip = false;
+        if (tiledImage._clip) {
+            tiledImage._drawer.saveContext();
+            var box = tiledImage.imageToViewportRectangle(tiledImage._clip, true);
+            var topLeft = tiledImage.viewport.pixelFromPoint(box.getTopLeft(), true);
+            var size = tiledImage.viewport.deltaPixelsFromPoints(box.getSize(), true);
+            box = new OpenSeadragon.Rect(topLeft.x * $.pixelDensityRatio,
+                topLeft.y * $.pixelDensityRatio,
+                size.x * $.pixelDensityRatio,
+                size.y * $.pixelDensityRatio);
+            tiledImage._drawer.setClip(box);
+            usedClip = true;
+        }
+
         for ( i = lastDrawn.length - 1; i >= 0; i-- ) {
             tile = lastDrawn[ i ];
             tiledImage._drawer.drawTile( tile, tiledImage._drawingHandler );
@@ -17806,6 +17903,10 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                     tile: tile
                 });
             }
+        }
+
+        if (usedClip) {
+            tiledImage._drawer.restoreContext();
         }
     }
 

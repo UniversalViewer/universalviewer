@@ -163,6 +163,16 @@ export class BaseProvider implements IProvider{
         return this.getRootStructure().sectionType.toLowerCase();
     }
 
+    getManifestation(type: string): string {
+        var service = this.sequence.service;
+
+        if (service && service["profile"] === "http://iiif.io/api/otherManifestations.json"){
+            if (service.format.endsWith("pdf")){
+                return service["@id"];
+            }
+        }
+    }
+
     getSequenceType(): string{
         return this.sequence.assetType.replace('/', '-');
     }
@@ -189,6 +199,10 @@ export class BaseProvider implements IProvider{
 
     getSeeAlso(): any {
         return this.sequence.seeAlso;
+    }
+
+    isCanvasIndexOutOfRange(canvasIndex: number): boolean {
+        return canvasIndex > this.getTotalCanvases() - 1;
     }
 
     isFirstCanvas(canvasIndex?: number): boolean {

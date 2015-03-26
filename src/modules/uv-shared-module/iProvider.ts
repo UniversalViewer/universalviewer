@@ -29,6 +29,7 @@ interface IProvider{
     getMetaData(callback: (data: any) => any): void;
     getSeeAlso(): any;
     getSequenceType(): string;
+    getManifestation(type: string): string;
     getStructureByPath(path: string): any;
     getThumbs(width: number, height: number): Thumb[];
     getThumbUri(canvas: any, width: number, height: number): string;
@@ -42,6 +43,7 @@ interface IProvider{
     getNextPageIndex(canvasIndex?: number): number;
     getStartCanvasIndex(): number;
     getViewingDirection(): string;
+    isCanvasIndexOutOfRange(canvasIndex: number): boolean;
     isFirstCanvas(canvasIndex?: number): boolean;
     isLastCanvas(canvasIndex?: number): boolean;
     isPaged(): boolean;

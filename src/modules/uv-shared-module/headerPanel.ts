@@ -121,12 +121,25 @@ export class HeaderPanel extends baseView.BaseView {
     }
 
     updateLocaleToggle(): void {
+        if (!this.localeToggleIsVisible()){
+            this.$localeToggleButton.hide();
+            return;
+        }
+
         var alternateLocale = this.provider.getAlternateLocale();
         var text = alternateLocale.name.split('-')[0].toUpperCase();
 
         this.$localeToggleButton.data('locale', alternateLocale.name);
         this.$localeToggleButton.attr('title', alternateLocale.label);
         this.$localeToggleButton.text(text);
+    }
+
+    localeToggleIsVisible(): boolean {
+        return this.provider.getLocales().length > 1 && this.options.localeToggleEnabled;
+    }
+
+    pagingToggleIsVisible(): boolean {
+        return this.options.pagingToggleEnabled;
     }
 
     showMessage(message: string): void {
@@ -174,11 +187,11 @@ export class HeaderPanel extends baseView.BaseView {
 
         // hide toggle buttons below minimum width
         if (this.extension.width() < 610){
-            if (this.options.pagingToggleEnabled) this.$pagingToggleButton.hide();
-            if (this.options.localeToggleEnabled) this.$localeToggleButton.hide();
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.hide();
+            if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
         } else {
-            if (this.options.pagingToggleEnabled) this.$pagingToggleButton.show();
-            if (this.options.localeToggleEnabled) this.$localeToggleButton.show();
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.show();
+            if (this.localeToggleIsVisible()) this.$localeToggleButton.show();
         }
     }
 }
