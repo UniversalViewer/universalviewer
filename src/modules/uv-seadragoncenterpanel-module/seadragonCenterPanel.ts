@@ -22,7 +22,9 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     title: string;
     currentBounds: any;
     isFirstLoad: boolean = true;
+    isLoading: boolean = false;
     controlsVisible: boolean = false;
+    isCreated: boolean = false;
 
     $viewer: JQuery;
     $spinner: JQuery;
@@ -58,6 +60,28 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.append(this.$viewer);
 
+        // events
+
+        $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, () => {
+            this.tryLoad();
+        });
+    }
+
+    // delay viewer creation to ensure it happens after initial resize
+    // todo: implement a listener for an onResized event
+    tryLoad(): void {
+        if (this.isLoading) return;
+        if (!this.isCreated) {
+            setTimeout(() => {
+                this.createUI();
+                this.loadTileSources();
+            }, 1000);
+        } else {
+            this.loadTileSources();
+        }
+    }
+
+    createUI(): void {
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
@@ -81,105 +105,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             e.preventDefault();
             this.$rights.hide();
         });
-
-        // events
-
-        $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, (e, uri) => {
-            this.loadTileSources();
-        });
-
-        this.createSeadragonViewer();
-
-        this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
-        this.$zoomInButton.attr('tabindex', 11);
-        this.$zoomInButton.addClass('zoomIn');
-
-        this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
-        this.$zoomOutButton.attr('tabindex', 12);
-        this.$zoomOutButton.addClass('zoomOut');
-
-        this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
-        this.$goHomeButton.attr('tabindex', 13);
-        this.$goHomeButton.addClass('goHome');
-
-        this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
-        this.$rotateButton.attr('tabindex', 14);
-        this.$rotateButton.addClass('rotate');
-
-        // events
-
-        this.$element.on('mousemove', (e) => {
-            if (this.controlsVisible) return;
-            this.controlsVisible = true;
-            this.viewer.setControlsEnabled(true);
-        });
-
-        this.$element.on('mouseleave', (e) => {
-            if (!this.controlsVisible) return;
-            this.controlsVisible = false;
-            this.viewer.setControlsEnabled(false);
-        });
-
-        // when mouse move stopped
-        this.$element.on('mousemove', (e) => {
-            // if over element, hide controls.
-            if (!this.$viewer.find('.navigator').ismouseover()){
-                if (!this.controlsVisible) return;
-                this.controlsVisible = false;
-                this.viewer.setControlsEnabled(false);
-            }
-        }, this.config.options.controlsFadeAfterInactive);
-
-        this.viewer.addHandler('open', (viewer) => {
-            this.viewerOpen();
-            $.publish(SeadragonCenterPanel.SEADRAGON_OPEN, [viewer]);
-        });
-
-        this.viewer.addHandler('resize', (viewer) => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_RESIZE, [viewer]);
-            this.viewerResize(viewer);
-        });
-
-        this.viewer.addHandler('animation-start', (viewer) => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_START, [viewer]);
-        });
-
-        this.viewer.addHandler('animation', (viewer) => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION, [viewer]);
-        });
-
-        this.viewer.addHandler('animation-finish', (viewer) => {
-            this.currentBounds = this.getBounds();
-
-            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
-        });
-
-        this.$rotateButton.on('click', () => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
-        });
-
-        this.title = this.extension.provider.getTitle();
-
-        this.createNavigationButtons();
-
-        // if firefox, hide rotation and prev/next until this is resolved
-        //var browser = window.browserDetect.browser;
-
-        //if (browser == 'Firefox') {
-        //    if (this.provider.isMultiCanvas()){
-        //        this.$prevButton.hide();
-        //        this.$nextButton.hide();
-        //    }
-        //    this.$rotateButton.hide();
-        //}
-
-        this.showAttribution();
-
-        this.resize();
-    }
-
-    createSeadragonViewer(): void {
-        //console.log("create viewer");
 
         // todo: use compiler flag (when available)
         var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
@@ -243,9 +168,97 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
         });
 
+        this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
+        this.$zoomInButton.attr('tabindex', 11);
+        this.$zoomInButton.addClass('zoomIn');
+
+        this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
+        this.$zoomOutButton.attr('tabindex', 12);
+        this.$zoomOutButton.addClass('zoomOut');
+
+        this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
+        this.$goHomeButton.attr('tabindex', 13);
+        this.$goHomeButton.addClass('goHome');
+
+        this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
+        this.$rotateButton.attr('tabindex', 14);
+        this.$rotateButton.addClass('rotate');
+
+        // events
+
+        this.$element.on('mousemove', (e) => {
+            if (this.controlsVisible) return;
+            this.controlsVisible = true;
+            this.viewer.setControlsEnabled(true);
+        });
+
+        this.$element.on('mouseleave', (e) => {
+            if (!this.controlsVisible) return;
+            this.controlsVisible = false;
+            this.viewer.setControlsEnabled(false);
+        });
+
+        // when mouse move stopped
+        this.$element.on('mousemove', (e) => {
+            // if over element, hide controls.
+            if (!this.$viewer.find('.navigator').ismouseover()){
+                if (!this.controlsVisible) return;
+                this.controlsVisible = false;
+                this.viewer.setControlsEnabled(false);
+            }
+        }, this.config.options.controlsFadeAfterInactive);
+
+        this.viewer.addHandler('open', (viewer) => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_OPEN, [viewer]);
+            this.openTileSourcesHandler();
+        });
+
         //this.viewer.addHandler("open-failed", () => {
-        //    this.viewer.open();
         //});
+
+        this.viewer.addHandler('resize', (viewer) => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_RESIZE, [viewer]);
+            this.viewerResize(viewer);
+        });
+
+        this.viewer.addHandler('animation-start', (viewer) => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_START, [viewer]);
+        });
+
+        this.viewer.addHandler('animation', (viewer) => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION, [viewer]);
+        });
+
+        this.viewer.addHandler('animation-finish', (viewer) => {
+            this.currentBounds = this.getBounds();
+
+            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
+        });
+
+        this.$rotateButton.on('click', () => {
+            $.publish(SeadragonCenterPanel.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
+        });
+
+        this.title = this.extension.provider.getTitle();
+
+        this.createNavigationButtons();
+
+        // if firefox, hide rotation and prev/next until this is resolved
+        //var browser = window.browserDetect.browser;
+
+        //if (browser == 'Firefox') {
+        //    if (this.provider.isMultiCanvas()){
+        //        this.$prevButton.hide();
+        //        this.$nextButton.hide();
+        //    }
+        //    this.$rotateButton.hide();
+        //}
+
+        this.showAttribution();
+
+        this.isCreated = true;
+
+        this.resize();
     }
 
     createNavigationButtons() {
@@ -280,8 +293,74 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         });
     }
 
-    // called every time the seadragon viewer opens a new image.
-    viewerOpen() {
+    loadTileSources(): void {
+
+        this.isLoading = true;
+
+        this.tileSources = this.provider.getTileSources();
+
+        this.$spinner.show();
+
+        // todo: use compiler flag (when available)
+        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
+
+        _.each(this.tileSources, function(ts) {
+            if (!ts.tileSource){
+                ts.tileSource = imageUnavailableUri
+            }
+        });
+
+        //this.viewer.addHandler('open', this.openTileSourcesHandler, this);
+        //this.viewer.world.resetItems();
+        this.viewer.open(this.tileSources[0]);
+    }
+
+    openTileSourcesHandler() {
+
+        var viewingDirection = this.provider.getViewingDirection();
+
+        // if there's more than one tilesource, align them next to each other.
+        if (this.tileSources.length > 1) {
+
+            // check if tilesources should be aligned horizontally or vertically
+            if (viewingDirection == "top-to-bottom" || viewingDirection == "bottom-to-top") {
+                // vertical
+                this.tileSources[1].y = this.viewer.world.getItemAt(0).getBounds().y + this.viewer.world.getItemAt(0).getBounds().height + this.config.options.pageGap;
+            } else {
+                // horizontal
+                this.tileSources[1].x = this.viewer.world.getItemAt(0).getBounds().x + this.viewer.world.getItemAt(0).getBounds().width + this.config.options.pageGap;
+            }
+
+            this.viewer.addTiledImage(this.tileSources[1]);
+        }
+
+        // check for initial zoom/rotation params.
+        if (this.isFirstLoad){
+
+            this.initialRotation = this.extension.getParam(baseProvider.params.rotation);
+
+            if (this.initialRotation){
+                this.viewer.viewport.setRotation(parseInt(this.initialRotation));
+            }
+
+            this.initialBounds = this.extension.getParam(baseProvider.params.zoom);
+
+            if (this.initialBounds){
+                this.initialBounds = this.deserialiseBounds(this.initialBounds);
+                this.currentBounds = this.initialBounds;
+                this.fitToBounds(this.currentBounds);
+            }
+        } else {
+            // it's not the first load
+            var settings: ISettings = this.provider.getSettings();
+
+            // zoom to bounds unless setting disabled
+            if (settings.preserveViewport){
+                this.fitToBounds(this.currentBounds);
+            } else {
+                this.goHome();
+            }
+        }
 
         if (this.provider.isMultiCanvas()) {
 
@@ -299,85 +378,11 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                 this.disableNextButton();
             }
         }
-    }
 
-    loadTileSources(): void {
-
-        // viewer may not have initialised yet
-        if (!this.viewer) return;
-
-        this.tileSources = this.provider.getTileSources();
-
-        this.$spinner.show();
-
-        // todo: use compiler flag (when available)
-        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
-
-        _.each(this.tileSources, function(ts) {
-            if (!ts.tileSource){
-                ts.tileSource = imageUnavailableUri
-            }
-        });
-
-        this.viewer.addHandler('open', this.openTileSourcesHandler, this);
-
-        this.viewer.open(this.tileSources[0]);
-    }
-
-    openTileSourcesHandler() {
-
-        var that = this.userData;
-
-        that.viewer.removeHandler('open', that.handler);
-
-        var viewingDirection = that.provider.getViewingDirection();
-
-        // if there's more than one tilesource, align them next to each other.
-        if (that.tileSources.length > 1) {
-
-            // check if tilesources should be aligned horizontally or vertically
-            if (viewingDirection == "top-to-bottom" || viewingDirection == "bottom-to-top") {
-                // vertical
-                that.tileSources[1].y = that.viewer.world.getItemAt(0).getBounds().y + that.viewer.world.getItemAt(0).getBounds().height + that.config.options.pageGap;
-            } else {
-                // horizontal
-                that.tileSources[1].x = that.viewer.world.getItemAt(0).getBounds().x + that.viewer.world.getItemAt(0).getBounds().width + that.config.options.pageGap;
-            }
-
-            that.viewer.addTiledImage(that.tileSources[1]);
-        }
-
-        // check for initial zoom/rotation params.
-        if (that.isFirstLoad){
-
-            that.initialRotation = that.extension.getParam(baseProvider.params.rotation);
-
-            if (that.initialRotation){
-                that.viewer.viewport.setRotation(parseInt(that.initialRotation));
-            }
-
-            that.initialBounds = that.extension.getParam(baseProvider.params.zoom);
-
-            if (that.initialBounds){
-                that.initialBounds = that.deserialiseBounds(that.initialBounds);
-                that.currentBounds = that.initialBounds;
-                that.fitToBounds(that.currentBounds);
-            }
-        } else {
-            // it's not the first load
-            var settings: ISettings = that.provider.getSettings();
-
-            // zoom to bounds unless setting disabled
-            if (settings.preserveViewport){
-                that.fitToBounds(that.currentBounds);
-            } else {
-                that.goHome();
-            }
-        }
-
-        that.lastTilesNum = that.tileSources.length;
-        that.isFirstLoad = false;
-        that.$spinner.hide();
+        this.lastTilesNum = this.tileSources.length;
+        this.isFirstLoad = false;
+        this.isLoading = false;
+        this.$spinner.hide();
     }
 
     showAttribution(): void {
@@ -510,16 +515,18 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     }
 
     resize(): void {
-        //console.log("resize");
-
         super.resize();
-
-        this.$title.ellipsisFill(this.title);
 
         this.$viewer.height(this.$content.height() - this.$viewer.verticalMargins());
         this.$viewer.width(this.$content.width() - this.$viewer.horizontalMargins());
 
-        if (this.currentBounds) this.fitToBounds(this.currentBounds);
+        if (!this.isCreated) return;
+
+        if (this.currentBounds) {
+            this.fitToBounds(this.currentBounds);
+        }
+
+        this.$title.ellipsisFill(this.title);
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
