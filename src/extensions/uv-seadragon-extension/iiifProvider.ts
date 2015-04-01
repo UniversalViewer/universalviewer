@@ -14,8 +14,15 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
             //{baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
+            autoCompleteUriTemplate: '{0}{1}',
             iiifImageUriTemplate: '{0}/{1}/{2}/{3}/{4}/{5}.jpg'
         }, config.options);
+    }
+
+    getAutoCompleteUri(): string{
+        //var baseUri = this.config.options.autoCompleteBaseUri || "";
+        //return String.prototype.format(this.config.options.autoCompleteUriTemplate, baseUri, this.sequence.autoCompletePath);
+        return ""; // todo
     }
 
     getCroppedImageUri(canvas: any, viewer: any): string {

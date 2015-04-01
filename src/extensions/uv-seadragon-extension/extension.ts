@@ -48,10 +48,12 @@ export class Extension extends baseExtension.BaseExtension {
 
     static mode: string;
     static CURRENT_VIEW_URI: string = 'onCurrentViewUri';
-
-    // modes
     static PAGE_MODE: string = "pageMode";
     static IMAGE_MODE: string = "imageMode";
+    static SEARCH_RESULTS: string = 'onSearchResults';
+    static SEARCH_RESULTS_EMPTY: string = 'onSearchResults'; // todo: should be onSearchResultsEmpty?
+
+    searchResults: any;
 
     constructor(provider: IProvider) {
         super(provider);

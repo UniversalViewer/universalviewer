@@ -7,6 +7,7 @@ interface ISeadragonProvider extends IProvider{
     getTileSources(): any[];
     getCroppedImageUri(asset: any, viewer: any, download?: boolean, relativeUri?: boolean): string;
     getConfinedImageUri(canvas: any, width: number, height?: number): string;
+    getAutoCompleteUri(): string;
 }
 
 export = ISeadragonProvider;
