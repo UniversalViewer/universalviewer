@@ -24,7 +24,6 @@ import IProvider = require("../../modules/uv-shared-module/iProvider");
 import settings = require("../../modules/uv-shared-module/settings");
 import externalContentDialogue = require("../../modules/uv-dialogues-module/externalContentDialogue");
 import ISeadragonProvider = require("./iSeadragonProvider");
-import dependencies = require("./dependencies");
 
 export class Extension extends baseExtension.BaseExtension {
 
@@ -200,9 +199,27 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         // dependencies
-        var deps = overrideDependencies || dependencies;
+        if (overrideDependencies){
+            this.loadDependencies(overrideDependencies);
+        } else {
+            this.getDependencies((deps: any) => {
+                this.loadDependencies(deps);
+            });
+        }
+    }
+
+    // todo: add to baseExtension?
+    getDependencies(callback: (deps: any) => void): any {
+        require(["./dependencies"], function (deps) {
+            callback(deps);
+        });
+    }
+
+    // todo: add to baseExtension?
+    loadDependencies(deps: any): void {
+        var that = this;
+
         require(_.values(deps), function () {
-            //var deps = _.object(_.keys(dependencies), arguments);
 
             that.createModules();
 

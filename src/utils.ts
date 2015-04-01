@@ -125,7 +125,7 @@ window.browserDetect = {
             match = /(trident)(?:.*rv:([\w.]+))?/.exec(ua) || /(msie) ([\w.]+)/.exec(ua) || ['', null, -1],
             ver;
         try {
-            ver = match[2].split('.')[0]; // version
+            ver = (<string>match[2]).split('.')[0]; // version
         }
         catch (err) {
             ver = 'unknown'; //
