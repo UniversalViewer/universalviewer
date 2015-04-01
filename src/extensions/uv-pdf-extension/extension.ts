@@ -18,7 +18,6 @@ import footer = require("../../modules/uv-shared-module/footerPanel");
 import help = require("../../modules/uv-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
 import thumbsView = require("../../modules/uv-treeviewleftpanel-module/thumbsView");
-import dependencies = require("./dependencies");
 
 export class Extension extends baseExtension.BaseExtension{
 
@@ -36,7 +35,7 @@ export class Extension extends baseExtension.BaseExtension{
         super(provider);
     }
 
-    create(): void {
+    create(overrideDependencies?: any): void {
         super.create();
 
         var that = this;
@@ -78,33 +77,26 @@ export class Extension extends baseExtension.BaseExtension{
             this.resize();
         });
 
-        // load dependencies
-
-//        // if in debug mode, map to extension's path
-//        if (window.DEBUG){
-//            _.values(dependencies)
-//        }
-//
-//        yepnope({
-//            load: ,
-//            complete: function () {
-//                that.createModules();
-//
-//                //this.setParams();
-//
-//                // initial sizing
-//                $.publish(baseExtension.BaseExtension.RESIZE);
-//
-//                that.viewMedia();
-//
-//                // publish created event
-//                $.publish(Extension.CREATED);
-//            }
-//        });
-
         // dependencies
-        require(_.values(dependencies), function () {
-            //var deps = _.object(_.keys(dependencies), arguments);
+        if (overrideDependencies){
+            this.loadDependencies(overrideDependencies);
+        } else {
+            this.getDependencies((deps: any) => {
+                this.loadDependencies(deps);
+            });
+        }
+    }
+
+    getDependencies(callback: (deps: any) => void): any {
+        require(["./dependencies"], function (deps) {
+            callback(deps);
+        });
+    }
+
+    loadDependencies(deps: any): void {
+        var that = this;
+
+        require(_.values(deps), function () {
 
             that.createModules();
 
@@ -118,7 +110,6 @@ export class Extension extends baseExtension.BaseExtension{
             // publish created event
             $.publish(Extension.CREATED);
         });
-
     }
 
     IsOldIE(): boolean {
