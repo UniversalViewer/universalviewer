@@ -70,20 +70,20 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     // delay viewer creation to ensure it happens after initial resize
     // todo: implement a listener for an onResized event
     tryLoad(): void {
-        console.log("try load");
+        //console.log("try load");
         if (this.isLoading) return;
         if (!this.isCreated) {
             setTimeout(() => {
                 this.createUI();
                 this.loadTileSources();
-            }, 1000);
+            }, 500); // allow time for panel open animations to complete.
         } else {
             this.loadTileSources();
         }
     }
 
     createUI(): void {
-        console.log("create ui");
+        //console.log("create ui");
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
@@ -297,7 +297,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     loadTileSources(): void {
 
-        console.log("load tile sources");
+        //console.log("load tile sources");
 
         this.isLoading = true;
 
@@ -520,7 +520,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     resize(): void {
 
-        console.log("resize");
+        //console.log("resize");
         
         super.resize();
 
