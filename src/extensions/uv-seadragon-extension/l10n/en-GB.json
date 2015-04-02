@@ -121,6 +121,32 @@
                 "embed": "Embed",
                 "download": "Download"
             }
+        },
+        "footerPanel": {
+            "content": {
+                "fullScreen": "Full Screen",
+                "exitFullScreen": "Exit Full Screen",
+                "embed": "Embed",
+                "download": "Download"
+            }
+        },
+        "searchFooterPanel":
+        {
+            "content":
+            {
+                "instanceFound": "1 instance of '{0}' found",
+                "instancesFound": "{0} instances of '{1}' found",
+                "resultFoundFor": "result found for",
+                "resultsFoundFor": "results found for",
+                "displaying": "Displaying {0} {1} of {2}",
+                "page": "page",
+                "image": "image",
+                "searchWithin": "Search within this item:",
+                "enterKeyword": "Enter Keyword",
+                "pageCaps": "Page",
+                "imageCaps": "Image",
+                "clearSearch": "Clear Search"
+            }
         }
     }
 }

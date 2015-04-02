@@ -8,6 +8,9 @@ interface ISeadragonProvider extends IProvider{
     getCroppedImageUri(asset: any, viewer: any, download?: boolean, relativeUri?: boolean): string;
     getConfinedImageUri(canvas: any, width: number, height?: number): string;
     getAutoCompleteUri(): string;
+    getSearchWithinService(): string;
+    isSearchWithinEnabled(): boolean;
+    searchResults: any;
 }
 
 export = ISeadragonProvider;

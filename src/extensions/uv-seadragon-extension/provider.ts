@@ -1,11 +1,14 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 import BootStrapper = require("../../bootstrapper");
-import baseProvider = require("../../modules/uv-shared-module/baseIIIFProvider");
-import utils = require("../../utils");
+import baseProvider = require("../../modules/uv-shared-module/baseProvider");
 import ISeadragonProvider = require("./iSeadragonProvider");
+import utils = require("../../utils");
+import util = utils.Utils;
 
 export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
+
+    searchResults: any;
 
     constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
         super(bootstrapper, config, manifest);
@@ -194,5 +197,27 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
                 return tileSources;
             }
         }
+    }
+
+    isSearchWithinEnabled(): boolean {
+        if (!util.getBool(this.config.options.searchWithinEnabled, false)){
+            return false;
+        }
+
+        if (!this.getSearchWithinService()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    getSearchWithinService(): string {
+        if (this.manifest.service){
+            if (this.manifest.service.profile === "http://iiif.io/api/search/1/"){
+                return this.manifest.service.profile;
+            }
+        }
+
+        return null;
     }
 }

@@ -81,7 +81,7 @@ export class FooterPanel extends footer.FooterPanel {
         this.$searchTextContainer = $('<div class="searchTextContainer"></div>');
         this.$searchOptions.append(this.$searchTextContainer);
 
-        this.$searchText = $('<input class="searchText" type="text" maxlength="100" value="' + this.content.enterKeyword + '"></input>');
+        this.$searchText = $('<input class="searchText" type="text" maxlength="100" value="' + this.content.enterKeyword + '" />');
         this.$searchTextContainer.append(this.$searchText);
 
         this.$searchButton = $('<a class="imageButton searchButton"></a>');
@@ -100,7 +100,7 @@ export class FooterPanel extends footer.FooterPanel {
         this.$searchResultsInfo = $('<div class="searchResultsInfo"><span class="number">x</span> <span class="foundFor"></span> \'<span class="terms">y</span>\'</div>');
         this.$searchPagerControls.append(this.$searchResultsInfo);
 
-        this.$clearSearchResultsButton = $('<a class="clearSearch">Clear Search</a>');
+        this.$clearSearchResultsButton = $('<a class="clearSearch">' + this.content.clearSearch + '</a>');
         this.$searchResultsInfo.append(this.$clearSearchResultsButton);
 
         this.$nextResultButton = $('<a class="imageButton nextResult"></a>');
@@ -185,8 +185,7 @@ export class FooterPanel extends footer.FooterPanel {
         });
 
         // hide search options if not enabled/supported.
-        if (this.provider.config.options.searchWithinEnabled === false ||
-            !this.provider.sequence.supportsSearch) {
+        if (!(<ISeadragonProvider>this.provider).isSearchWithinEnabled()) {
             this.$searchContainer.hide();
             this.$searchPagerContainer.hide();
             this.$searchResultsContainer.hide();
@@ -239,7 +238,7 @@ export class FooterPanel extends footer.FooterPanel {
 
     positionSearchResultPlacemarkers(): void {
 
-        var results = (<extension.Extension>this.extension).searchResults;
+        var results = this.provider.searchResults;
 
         if (!results) return;
 
@@ -320,22 +319,22 @@ export class FooterPanel extends footer.FooterPanel {
         var mode = that.extension.getMode();
 
         if (mode == extension.Extension.PAGE_MODE) {
-            var asset = that.provider.getCanvasByIndex(canvasIndex);
+            var canvas = that.provider.getCanvasByIndex(canvasIndex);
 
-            var orderLabel = asset.orderLabel;
+            var label = canvas.label;
 
-            if (orderLabel == "") {
-                orderLabel = "-";
+            if (label == "") {
+                label = "-";
             }
 
-            title = String.prototype.format(title, that.content.pageCaps, orderLabel);
+            title = String.prototype.format(title, that.content.pageCaps, label);
         } else {
             title = String.prototype.format(title, that.content.imageCaps, canvasIndex + 1);
         }
 
         that.$placemarkerDetailsTop.html(title);
 
-        var result = (<extension.Extension>that.extension).searchResults[elemIndex];
+        var result = this.provider.searchResults[elemIndex];
 
         var terms = utils.Utils.ellipsis(that.terms, 20);
 
@@ -422,7 +421,7 @@ export class FooterPanel extends footer.FooterPanel {
 
     clearSearchResults(): void {
 
-        (<extension.Extension>this.extension).searchResults = null;
+        this.provider.searchResults = null;
 
         // clear all existing placemarkers
         var placemarkers = this.getSearchResultPlacemarkers();
@@ -462,22 +461,22 @@ export class FooterPanel extends footer.FooterPanel {
 
         var mode = (<ISeadragonExtension>this.extension).getMode();
 
-        var label = this.content.displaying;
+        var displaying = this.content.displaying;
         var index = this.provider.canvasIndex;
 
         if (mode == extension.Extension.PAGE_MODE) {
-            var asset = this.provider.getCanvasByIndex(index);
+            var canvas = this.provider.getCanvasByIndex(index);
 
-            var orderLabel = asset.orderLabel;
+            var label = canvas.label;
 
-            if (orderLabel == "") {
-                orderLabel = "-";
+            if (label == "") {
+                label = "-";
             }
 
-            var lastCanvasOrderLabel = this.provider.getLastCanvasOrderLabel();
-            this.$pagePositionLabel.html(String.prototype.format(label, this.content.page, orderLabel, lastCanvasOrderLabel));
+            var lastCanvasOrderLabel = this.provider.getLastCanvasLabel();
+            this.$pagePositionLabel.html(String.prototype.format(displaying, this.content.page, label, lastCanvasOrderLabel));
         } else {
-            this.$pagePositionLabel.html(String.prototype.format(label, this.content.image, index + 1, this.provider.getTotalCanvases()));
+            this.$pagePositionLabel.html(String.prototype.format(displaying, this.content.image, index + 1, this.provider.getTotalCanvases()));
         }
     }
 
@@ -517,7 +516,7 @@ export class FooterPanel extends footer.FooterPanel {
     resize(): void {
         super.resize();
 
-        if ((<extension.Extension>this.extension).searchResults) {
+        if (this.provider.searchResults) {
             this.positionSearchResultPlacemarkers();
         }
 

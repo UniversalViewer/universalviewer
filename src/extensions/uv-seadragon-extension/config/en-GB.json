@@ -6,7 +6,8 @@
         "rightPanelEnabled": true,
         "overrideFullScreen": false,
         "pagingEnabled": true,
-        "preserveViewport": false
+        "preserveViewport": false,
+        "searchWithinEnabled": true
     },
     "modules":
     {
@@ -93,6 +94,11 @@
                 "downloadEnabled": true,
                 "minimiseButtons": false,
                 "fullscreenEnabled": true
+            }
+        },
+        "searchFooterPanel":
+        {
+            "options":{
             }
         }
     }

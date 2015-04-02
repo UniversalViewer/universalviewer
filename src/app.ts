@@ -48,7 +48,7 @@ require([
         'l10n',
         'sanitize',
         'extensions/uv-seadragon-extension/extension',
-        'extensions/uv-seadragon-extension/iiifProvider',
+        'extensions/uv-seadragon-extension/provider',
         'extensions/uv-mediaelement-extension/extension',
         'extensions/uv-mediaelement-extension/provider',
         'extensions/uv-pdf-extension/extension',
@@ -65,7 +65,7 @@ require([
         l10n,
         sanitize,
         seadragonExtension,
-        seadragonIIIFProvider,
+        seadragonProvider,
         mediaelementExtension,
         mediaelementProvider,
         pdfExtension,
@@ -78,7 +78,7 @@ require([
 
         extensions['seadragon/iiif'] = {
             type: seadragonExtension.Extension,
-            provider: seadragonIIIFProvider.Provider,
+            provider: seadragonProvider.Provider,
             name: 'uv-seadragon-extension'
         };
 

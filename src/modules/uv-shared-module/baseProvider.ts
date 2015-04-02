@@ -1,11 +1,11 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
+import BootStrapper = require("../../bootstrapper");
+import BootstrapParams = require("../../bootstrapParams");
 import utils = require("../../utils");
 import IProvider = require("./iProvider");
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
-import BootStrapper = require("../../bootstrapper");
-import BootstrapParams = require("../../bootstrapParams");
 import util = utils.Utils;
 
 export enum params {
@@ -19,8 +19,6 @@ export enum params {
 // to factors like varying back end data provision systems.
 // they provide a consistent interface and set of data structures
 // for extensions to operate against.
-
-// todo: delete this legacy class, rename BaseIIIFProvider to BaseProvider
 export class BaseProvider implements IProvider{
 
     bootstrapper: BootStrapper;
@@ -35,16 +33,16 @@ export class BaseProvider implements IProvider{
     isOnlyInstance: boolean;
     isReload: boolean;
     manifest: any;
+    rootStructure: any;
     sequence: any;
     sequenceIndex: number;
-    sectionsRootNode: TreeNode;
     treeRoot: TreeNode;
     jsonp: boolean;
     locale: string;
     locales: any[];
 
     // map param names to enum indices.
-    paramMap: string[] = ['asi', 'ai', 'z', 'r'];
+    paramMap: string[] = ['si', 'ci', 'z', 'r'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -59,6 +57,8 @@ export class BaseProvider implements IProvider{
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through app.getParam.
+
+        // todo: make these getters when ES5 target is available
         this.manifestUri = this.bootstrapper.params.manifestUri;
         this.jsonp = this.bootstrapper.params.jsonp;
         this.locale = this.bootstrapper.params.getLocale();
@@ -78,29 +78,24 @@ export class BaseProvider implements IProvider{
             this.sequenceIndex = parseInt(util.getQuerystringParameter(this.paramMap[params.sequenceIndex])) || 0;
         }
 
-        // nothing selected yet.
-        this.canvasIndex = -1;
-
         this.load();
     }
 
     load(): void{
         // we know that this sequence exists because the bootstrapper
         // will have loaded it already.
-        this.sequence = this.manifest.assetSequences[this.sequenceIndex];
+        this.sequence = this.manifest.sequences[this.sequenceIndex];
 
         // replace all ref sequences with an object that can store
         // its path and sub structures. they won't get used for anything
         // else without a reload.
-        for (var i = 0; i < this.manifest.assetSequences.length; i++) {
-            if (this.manifest.assetSequences[i].$ref) {
-                this.manifest.assetSequences[i] = {};
+        for (var i = 0; i < this.manifest.sequences.length; i++) {
+            if (!this.manifest.sequences[i].canvases) {
+                this.manifest.sequences[i] = {};
             }
         }
 
-        if (this.manifest.rootStructure) {
-            this.parseManifest();
-        }
+        //this.parseManifest();
 
         this.parseStructure();
     }
@@ -123,11 +118,8 @@ export class BaseProvider implements IProvider{
 
     reloadManifest(callback: any): void {
 
+        this.rootStructure = null;
         var manifestUri = this.manifestUri;
-
-        if (this.options.dataBaseUri){
-            manifestUri = this.options.dataBaseUri + this.manifestUri;
-        }
 
         manifestUri = this.addTimestamp(manifestUri);
 
@@ -159,8 +151,9 @@ export class BaseProvider implements IProvider{
         }
     }
 
+    // todo
     getManifestType(): string{
-        return this.getRootStructure().sectionType.toLowerCase();
+        return 'monograph';
     }
 
     getManifestation(type: string): string {
@@ -174,11 +167,13 @@ export class BaseProvider implements IProvider{
     }
 
     getSequenceType(): string{
-        return this.sequence.assetType.replace('/', '-');
+        // todo: perhaps use viewingHint attribute
+        // default to 'seadragon-iiif'
+        return 'seadragon-iiif';
     }
 
     getAttribution(): string {
-        return this.manifest.attribution;
+        return this.getLocalisedValue(this.manifest.attribution);
     }
 
     getLicense(): string {
@@ -189,16 +184,28 @@ export class BaseProvider implements IProvider{
         return this.manifest.logo;
     }
 
-    getRootStructure(): any {
-        return this.sequence.rootSection;
-    }
-
     getTitle(): string {
-        return this.getRootStructure().title;
+        return this.manifest.label;
     }
 
     getSeeAlso(): any {
-        return this.sequence.seeAlso;
+        return this.manifest.seeAlso;
+    }
+
+    getLastCanvasLabel(): string {
+        // get the last label that isn't empty or '-'.
+        for (var i = this.sequence.canvases.length - 1; i >= 0; i--) {
+            var canvas = this.sequence.canvases[i];
+
+            var regExp = /\d/;
+
+            if (regExp.test(canvas.label)) {
+                return this.getLocalisedValue(canvas.label);
+            }
+        }
+
+        // none exists, so return '-'.
+        return '-';
     }
 
     isCanvasIndexOutOfRange(canvasIndex: number): boolean {
@@ -220,33 +227,42 @@ export class BaseProvider implements IProvider{
     }
 
     getCanvasByIndex(index: number): any {
-        return this.sequence.assets[index];
+        return this.sequence.canvases[index];
     }
 
-    // todo
-    getCanvasIndexById(id: string): number {
+    getStructureByCanvasIndex(index: number): any {
+        if (index == -1) return null;
+        var canvas = this.getCanvasByIndex(index);
+        return this.getCanvasStructure(canvas);
+    }
+
+    getCanvasStructure(canvas: any): any {
+        // get the deepest structure that this asset belongs to.
+        if (canvas.structures){
+            return canvas.structures.last();
+        }
+
         return null;
     }
 
     getCurrentCanvas(): any {
-        return this.sequence.assets[this.canvasIndex];
+        return this.sequence.canvases[this.canvasIndex];
     }
 
     getTotalCanvases(): number{
-        return this.sequence.assets.length;
+        return this.sequence.canvases.length;
     }
 
     isMultiCanvas(): boolean{
-        return this.sequence.assets.length > 1;
+        return this.sequence.canvases.length > 1;
     }
 
     isMultiSequence(): boolean{
-        return this.manifest.assetSequences.length > 1;
+        return this.manifest.sequences.length > 1;
     }
 
     isPaged(): boolean{
-        // not applicable to non-iiif manifest.
-        return false;
+        return this.sequence.viewingHint && (this.sequence.viewingHint == "paged") && this.getSettings().pagingEnabled;
     }
 
     getMediaUri(mediaUri: string): string{
@@ -258,27 +274,26 @@ export class BaseProvider implements IProvider{
     }
 
     setMediaUri(canvas: any): void{
-        if (canvas.mediaUri){
-            canvas.mediaUri = this.getMediaUri(canvas.mediaUri);
-        } else {
-            canvas.mediaUri = this.getMediaUri(canvas.fileUri);
-        }
-    }
-
-    // todo
-    getThumbUri(canvas: any, width: number, height: number): string {
-        return null;
+        //canvas.mediaUri = this.getMediaUri(canvas.resources[0].resource['@id'] + '/info.json');
     }
 
     getPagedIndices(canvasIndex?: number): number[]{
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
 
-        if (this.isFirstCanvas() || this.isLastCanvas()){
-            return [canvasIndex];
+        var indices = [];
+
+        if (this.isFirstCanvas(canvasIndex) || this.isLastCanvas(canvasIndex)){
+            indices = [canvasIndex];
         } else if (canvasIndex % 2){
-            return [canvasIndex, canvasIndex + 1];
+            indices = [canvasIndex, canvasIndex + 1];
         } else {
-            return [canvasIndex - 1, canvasIndex];
+            indices = [canvasIndex - 1, canvasIndex];
+        }
+
+        if (this.getViewingDirection() === "right-to-left"){
+            return indices.reverse();
+        } else {
+            return indices;
         }
     }
 
@@ -301,7 +316,13 @@ export class BaseProvider implements IProvider{
 
         if (this.isPaged()){
             var indices = this.getPagedIndices(canvasIndex);
-            index = indices[0] - 1;
+
+            if (this.getViewingDirection() == "right-to-left"){
+                index = indices.last() - 1;
+            } else {
+                index = indices[0] - 1;
+            }
+
         } else {
             index = canvasIndex - 1;
         }
@@ -316,7 +337,13 @@ export class BaseProvider implements IProvider{
 
         if (this.isPaged()){
             var indices = this.getPagedIndices(canvasIndex);
-            index = indices.last() + 1;
+
+            if (this.getViewingDirection() == "right-to-left"){
+                index = indices[0] + 1;
+            } else {
+                index = indices.last() + 1;
+            }
+
         } else {
             index = canvasIndex + 1;
         }
@@ -329,118 +356,111 @@ export class BaseProvider implements IProvider{
     }
 
     getStartCanvasIndex(): number {
+        if (this.sequence.startCanvas) {
+            // if there's a startCanvas attribute, loop through the canvases and return the matching index.
+            for (var i = 0; i < this.sequence.canvases.length; i++) {
+                var canvas = this.sequence.canvases[i];
+
+                if (canvas["@id"] == this.sequence.startCanvas) return i;
+            }
+        }
+
+        // default to first canvas.
         return 0;
     }
 
-    parseManifest(): void{
-        this.parseManifestation(this.manifest.rootStructure, this.manifest.assetSequences, '');
+    addTimestamp(uri: string): string{
+        return uri + "?t=" + util.getTimeStamp();
     }
 
-    // manifestations are called "structures" in the legacy format.
-    parseManifestation(structure: any, sequences: any[], path: string): void {
+    isDeepLinkingEnabled(): boolean {
+        return (this.isHomeDomain && this.isOnlyInstance);
+    }
 
-        structure.path = path;
+    getThumbUri(canvas: any, width: number, height: number): string {
 
-        if (typeof(structure.assetSequence) != 'undefined') {
+        var uri;
 
-            var sequence = sequences[structure.assetSequence];
-
-            sequence.index = structure.sequence;
-            sequence.structure = structure;
-            structure.sequence = sequence;
+        if (canvas.resources){
+            uri = canvas.resources[0].resource.service['@id'];
+        } else if (canvas.images && canvas.images[0].resource.service){
+            uri = canvas.images[0].resource.service['@id'];
+        } else {
+            return "";
         }
 
-        if (structure.structures) {
-            for (var j = 0; j < structure.structures.length; j++) {
-                this.parseManifestation(structure.structures[j], sequences, path + '/' + j);
+        var tile = 'full/' + width + ',' + height + '/0/default.jpg';
+
+        if (uri.endsWith('/')){
+            uri += tile;
+        } else {
+            uri += '/' + tile;
+        }
+
+        return uri;
+    }
+
+    getThumbs(width: number, height: number): Thumb[] {
+        var thumbs: Thumb[] = [];
+
+        for (var i = 0; i < this.getTotalCanvases(); i++) {
+            var canvas = this.sequence.canvases[i];
+
+            var heightRatio = canvas.height / canvas.width;
+
+            if (heightRatio){
+                height = Math.floor(width * heightRatio);
+            }
+
+            var uri = this.getThumbUri(canvas, width, height);
+
+            thumbs.push(new Thumb(i, uri, this.getLocalisedValue(canvas.label), width, height, true));
+        }
+
+        return thumbs;
+    }
+
+    getLocalisedValue(prop: any): string {
+
+        if (!(prop instanceof Array)){
+            return prop;
+        }
+
+        // test for exact match
+        for (var i = 0; i < prop.length; i++){
+            var value = prop[i];
+            var language = value['@language'];
+
+            if (this.locale === language){
+                return <string>value['@value'];
             }
         }
-    }
 
-    parseStructure(): void{
-        this.parseStructures(this.getRootStructure(), this.sequence.assets, '');
-    }
+        // test for inexact match
+        for (var i = 0; i < prop.length; i++){
+            var value = prop[i];
+            var language = value['@language'];
 
-    // the purpose of this is to give each asset in assetSequence.assets
-    // a collection of sections it belongs to.
-    // it also builds a path string property for each section.
-    // this can then be used when a section is clicked in the tree view
-    // where getSectionIndex loops though all assets and their
-    // associated sections until it finds one with a matching path.
-    // (structures/ranges in iiif are called sections in the legacy format)
-    parseStructures(structure: any, canvases: any[], path: string): void {
+            var match = this.locale.substr(0, this.locale.indexOf('-'));
 
-        structure.path = path;
-
-        // replace structureType with config.js mapping (if exists).
-        structure.sectionType = this.replaceStructureType(structure.sectionType);
-
-        for (var i = 0; i < structure.assets.length; i++) {
-            var index = structure.assets[i];
-
-            var canvas = canvases[index];
-
-            if (!canvas.structures) canvas.structures = [];
-
-            canvas.structures.push(structure);
-        }
-
-        if (structure.sections) {
-            for (var j = 0; j < structure.sections.length; j++) {
-                this.parseStructures(structure.sections[j], canvases, path + '/' + j);
+            if (language === match){
+                return <string>value['@value'];
             }
         }
-    }
 
-    replaceStructureType(structureType: string): string {
-        if (this.config.options.sectionMappings && this.config.options.sectionMappings[structureType]) {
-            return this.config.options.sectionMappings[structureType];
-        }
-
-        return structureType;
-    }
-
-    getStructureByCanvasIndex(index: number): any {
-        if (index == -1) return null;
-        var canvas = this.getCanvasByIndex(index);
-        return this.getCanvasStructure(canvas);
-    }
-
-    getStructureByIndex(structure: any, index: number): any{
-        return structure.sections[index];
-    }
-
-    // todo
-    getStructureByPath(path: string): any{
         return null;
     }
 
-    getCanvasStructure(canvas: any): any {
-        // get the deepest structure that this file belongs to.
-        return canvas.structures.last();
-    }
+    parseManifest(): void{
 
-    getLastCanvasOrderLabel(): string {
-
-        // get the last orderlabel that isn't empty or '-'.
-        for (var i = this.sequence.assets.length - 1; i >= 0; i--) {
-            var canvas = this.sequence.assets[i];
-
-            var regExp = /\d/;
-
-            if (regExp.test(canvas.orderLabel)) {
-                return canvas.orderLabel;
-            }
-        }
-
-        // none exists, so return '-'.
-        return '-';
     }
 
     getStructureIndex(path: string): number {
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var canvas = this.sequence.canvases[i];
 
-        for (var i = 0; i < this.sequence.assets.length; i++) {
-            var canvas = this.sequence.assets[i];
+            if (!canvas.structures) continue;
+
             for (var j = 0; j < canvas.structures.length; j++) {
                 var structure = canvas.structures[j];
 
@@ -453,32 +473,98 @@ export class BaseProvider implements IProvider{
         return null;
     }
 
-    getCanvasIndexByLabel(label: string): number {
+    getStructureByPath(path: string): any{
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var canvas = this.sequence.canvases[i];
 
-        // label value may be double-page e.g. 100-101 or 100_101 or 100 101 etc
-        var regExp = /(\d*)\D*(\d*)|(\d*)/;
-        var match = regExp.exec(label);
+            if (!canvas.structures) continue;
 
-        var labelPart1 = match[1];
-        var labelPart2 = match[2];
+            for (var j = 0; j < canvas.structures.length; j++) {
+                var structure = canvas.structures[j];
 
-        if (!labelPart1) return -1;
-
-        var searchRegExp, regStr;
-
-        if (labelPart2) {
-            regStr = "^" + labelPart1 + "\\D*" + labelPart2 + "$";
-        } else {
-            regStr = "\\D*" + labelPart1 + "\\D*";
+                if (structure.path == path) {
+                    return structure;
+                }
+            }
         }
 
-        searchRegExp = new RegExp(regStr);
+        return null;
+    }
 
-        // loop through files, return first one with matching orderlabel.
-        for (var i = 0; i < this.sequence.assets.length; i++) {
-            var canvas = this.sequence.assets[i];
+    getCanvasById(id: string): any{
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var c = this.sequence.canvases[i];
 
-            if (searchRegExp.test(canvas.orderLabel)) {
+            if (c['@id'] === id){
+                return c;
+            }
+        }
+
+        return null;
+    }
+
+    getCanvasIndexById(id: string): number {
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var c = this.sequence.canvases[i];
+
+            if (c['@id'] === id){
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    getStructureByIndex(structure: any, index: number): any{
+        return structure.structures[index];
+    }
+
+    getStructureById(id: string): any {
+        for (var i = 0; i < this.manifest.structures.length; i++) {
+            var s = this.manifest.structures[i];
+
+            if (s['@id'] === id){
+                return s;
+            }
+        }
+
+        return null;
+    }
+
+    getCanvasIndexByLabel(label: string): number {
+        label = label.trim();
+
+        // trim any preceding zeros.
+        if ($.isNumeric(label)) {
+            label = parseInt(label, 10).toString();
+        }
+
+        var doublePageRegExp = /(\d*)\D+(\d*)/;
+        var match, regExp, regStr, labelPart1, labelPart2;
+
+        for (var i = 0; i < this.sequence.canvases.length; i++) {
+            var canvas = this.sequence.canvases[i];
+
+            // check if there's a literal match
+            if (canvas.label === label) {
+                return i;
+            }
+
+            // check if there's a match for double-page spreads e.g. 100-101, 100_101, 100 101
+            match = doublePageRegExp.exec(label);
+
+            if (!match) continue;
+
+            labelPart1 = match[1];
+            labelPart2 = match[2];
+
+            if (!labelPart2) continue;
+
+            regStr = "^" + labelPart1 + "\\D+" + labelPart2 + "$";
+
+            regExp = new RegExp(regStr);
+
+            if (regExp.test(canvas.label)) {
                 return i;
             }
         }
@@ -486,63 +572,127 @@ export class BaseProvider implements IProvider{
         return -1;
     }
 
+    // todo
     getManifestSeeAlsoUri(manifest: any): string{
-        if (manifest.seeAlso && manifest.seeAlso.tag && manifest.seeAlso.data){
-            if (manifest.seeAlso.tag === 'OpenExternal'){
-                return this.getMediaUri(manifest.seeAlso.data);
+        return null;
+    }
+
+    getRootStructure(): any {
+
+        // loop through structures looking for viewingHint="top"
+        if (this.manifest.structures){
+            for (var i = 0; i < this.manifest.structures.length; i++){
+                var s = this.manifest.structures[i];
+                if (s.viewingHint == "top"){
+                    this.rootStructure = s;
+                    break;
+                }
+            }
+        }
+
+        if (!this.rootStructure){
+            this.rootStructure = {
+                path: "",
+                ranges: this.manifest.structures
+            };
+        }
+
+        return this.rootStructure;
+    }
+
+    parseStructure(): void {
+        if (!this.manifest.structures || !this.manifest.structures.length) return;
+
+        this.parseStructures(this.getRootStructure(), '');
+    }
+
+    // the purpose of this is to give each canvas in sequence.canvases
+    // a collection of structures it belongs to.
+    // it also builds a path string property for each structure
+    // that can be used when a node is clicked in the tree view
+    parseStructures(structure: any, path: string): void{
+
+        structure.path = path;
+
+        if (structure.canvases){
+            // loop through canvases and associate with matching @id
+            for (var j = 0; j < structure.canvases.length; j++){
+
+                //console.log("canvas");
+
+                var canvas = structure.canvases[j];
+
+                if (typeof(canvas) === "string"){
+                    canvas = this.getCanvasById(canvas);
+                }
+
+                if (!canvas){
+                    // canvas not found - json invalid.
+                    structure.canvases[j] = null;
+                    continue;
+                }
+
+                if (!canvas.structures) canvas.structures = [];
+
+                canvas.structures.push(structure);
+                // create two-way relationship
+                structure.canvases[j] = canvas;
+            }
+        }
+
+        if (structure.ranges) {
+            structure.structures = [];
+
+            for (var k = 0; k < structure.ranges.length; k++) {
+                var s = structure.ranges[k];
+
+                //console.log("range: ", s);
+
+                // if it's a url ref
+                if (typeof(s) === "string"){
+                    s = this.getStructureById(s);
+                }
+
+                // if this structure already has a parent, continue.
+                if (s.parentStructure) continue;
+
+                s.parentStructure = structure;
+
+                structure.structures.push(s);
+
+                this.parseStructures(s, path + '/' + k);
             }
         }
     }
 
-    addTimestamp(uri: string): string{
-        return uri + "?t=" + util.getTimeStamp();
-    }
-
-    isDeepLinkingEnabled(): boolean {
-        return (this.isHomeDomain && this.isOnlyInstance);
-    }
-
     getTree(): TreeNode{
+        var rootStructure = this.getRootStructure();
+
         this.treeRoot = new TreeNode('root');
-        var rootStructure = this.manifest.rootStructure;
+        this.treeRoot.label = "root";
+        this.treeRoot.data = rootStructure;
+        this.treeRoot.data.type = "manifest";
+        rootStructure.treeNode = this.treeRoot;
 
-        if (rootStructure) {
-            this.parseTreeStructure(this.treeRoot, rootStructure);
-        }
+        if (rootStructure.structures){
+            for (var i = 0; i < rootStructure.structures.length; i++){
+                var structure = rootStructure.structures[i];
 
-        // if there aren't any structures then the sectionsRootNode won't have been created.
-        if (!this.sectionsRootNode) {
-            this.sectionsRootNode = this.treeRoot;
-            this.sectionsRootNode.data = this.sequence.rootSection;
-        }
+                var node = new TreeNode();
+                this.treeRoot.addNode(node);
 
-        if (this.sequence.rootSection.sections){
-            for (var i = 0; i < this.sequence.rootSection.sections.length; i++) {
-                var section = this.sequence.rootSection.sections[i];
-
-                var childNode = new TreeNode();
-                this.sectionsRootNode.addNode(childNode);
-
-                this.parseTreeSection(childNode, section);
+                this.parseTreeNode(node, structure);
             }
         }
 
         return this.treeRoot;
     }
 
-    // manifestations
-    parseTreeStructure(node: TreeNode, structure: any): void {
-        node.label = structure.name || "root";
+    parseTreeNode(node: TreeNode, structure: any): void {
+        node.label = this.getLocalisedValue(structure.label);
         node.data = structure;
-        node.data.type = "manifest";
-        node.data.treeNode = node;
-
-        // if this is the structure node that contains the assetSequence.
-        if (this.sequence.structure == structure) {
-            this.sectionsRootNode = node;
-            this.sectionsRootNode.selected = true;
-            this.sectionsRootNode.expanded = true;
-        }
+        node.data.type = "structure";
+        structure.treeNode = node;
 
         if (structure.structures) {
 
@@ -552,34 +702,9 @@ export class BaseProvider implements IProvider{
                 var childNode = new TreeNode();
                 node.addNode(childNode);
 
-                this.parseTreeStructure(childNode, childStructure);
+                this.parseTreeNode(childNode, childStructure);
             }
         }
-    }
-
-    // structures
-    parseTreeSection(node: TreeNode, section: any): void {
-        node.label = section.sectionType;
-        node.data = section;
-        node.data.type = "structure";
-        node.data.treeNode = node;
-
-        if (section.sections) {
-
-            for (var i = 0; i < section.sections.length; i++) {
-                var childSection = section.sections[i];
-
-                var childNode = new TreeNode();
-                node.addNode(childNode);
-
-                this.parseTreeSection(childNode, childSection);
-            }
-        }
-    }
-
-    // todo
-    getThumbs(width: number, height: number): Thumb[]{
-        return null;
     }
 
     getDomain(): string{
@@ -591,8 +716,17 @@ export class BaseProvider implements IProvider{
         return this.embedDomain;
     }
 
-    getMetaData(callback: (data: any) => any): void{
-        callback(null);
+    getMetaData(callback: (data: any) => any, includeRootProperties?: boolean): void{
+        var metaData: Object[] = this.manifest.metadata;
+
+        if (metaData && includeRootProperties){
+            if (this.manifest.description) metaData.push({ "label": "description", "value": this.manifest.description});
+            if (this.manifest.attribution) metaData.push({ "label": "attribution", "value": this.manifest.attribution});
+            if (this.manifest.license) metaData.push({ "label": "license", "value": this.manifest.license});
+            if (this.manifest.logo) metaData.push({ "label": "logo", "value": '<img src="' + this.manifest.logo + '"/>'});
+        }
+
+        callback(this.manifest.metadata);
     }
 
     defaultToThumbsView(): boolean{
@@ -633,7 +767,7 @@ export class BaseProvider implements IProvider{
     }
 
     sanitize(html: string): string {
-        var elem = document.createDocumentFragment();
+        var elem = document.createElement('div');
         var $elem = $(elem);
 
         $elem.html(html);
@@ -651,7 +785,7 @@ export class BaseProvider implements IProvider{
 
         $elem.html(s.clean_node(elem));
 
-        return $elem.contents().html();
+        return $elem.html();
     }
 
     getLocales(): any[] {
@@ -741,13 +875,5 @@ export class BaseProvider implements IProvider{
 
     getSerializedLocales(): string {
         return this.serializeLocales(this.locales);
-    }
-
-    getLabel(resource): string {
-        return null;
-    }
-
-    getLocalisedValue(values: any[]): string {
-        return null;
     }
 }

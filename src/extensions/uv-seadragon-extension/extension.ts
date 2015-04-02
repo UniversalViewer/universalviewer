@@ -15,7 +15,7 @@ import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
 import center = require("../../modules/uv-seadragoncenterpanel-module/seadragonCenterPanel");
 import baseRight = require("../../modules/uv-shared-module/rightPanel");
 import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
-import footer = require("../../modules/uv-shared-module/footerPanel");
+import footer = require("../../modules/uv-searchfooterpanel-module/footerPanel");
 import help = require("../../modules/uv-dialogues-module/helpDialogue");
 import embed = require("./embedDialogue");
 import download = require("./downloadDialogue");
@@ -51,8 +51,6 @@ export class Extension extends baseExtension.BaseExtension {
     static IMAGE_MODE: string = "imageMode";
     static SEARCH_RESULTS: string = 'onSearchResults';
     static SEARCH_RESULTS_EMPTY: string = 'onSearchResults'; // todo: should be onSearchResultsEmpty?
-
-    searchResults: any;
 
     constructor(provider: IProvider) {
         super(provider);
