@@ -225,7 +225,7 @@ export class Extension extends baseExtension.BaseExtension {
 
     // todo: add to baseExtension?
     getDependencies(callback: (deps: any) => void): any {
-        require(["./dependencies"], function (deps) {
+        require(["../../extensions/uv-seadragon-extension/dependencies"], function (deps) {
             callback(deps);
         });
     }
