@@ -16636,7 +16636,7 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
       // Simulating descriptor flags attribute
       var fontNameWoStyle = baseFontName.split('-')[0];
       return (fontNameWoStyle in serifFonts) ||
-              (fontNameWoStyle.search(/serif/gi) !== -1);
+              (fontNameWoStyle.searchWithin(/serif/gi) !== -1);
     },
 
     getBaseFontMetrics: function PartialEvaluator_getBaseFontMetrics(name) {
@@ -16833,7 +16833,7 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
           // Workaround for cases where e.g. fontNameStr = 'Arial' and
           // baseFontStr = 'Arial,Bold' (needed when no font file is embedded).
           if (fontNameStr && baseFontStr &&
-              baseFontStr.search(fontNameStr) === 0) {
+              baseFontStr.searchWithin(fontNameStr) === 0) {
             fontName = baseFont;
           }
         }
@@ -20641,13 +20641,13 @@ var Font = (function FontClosure() {
       var isStandardFont = fontName in stdFontMap;
       fontName = stdFontMap[fontName] || nonStdFontMap[fontName] || fontName;
 
-      this.bold = (fontName.search(/bold/gi) != -1);
-      this.italic = ((fontName.search(/oblique/gi) != -1) ||
-                     (fontName.search(/italic/gi) != -1));
+      this.bold = (fontName.searchWithin(/bold/gi) != -1);
+      this.italic = ((fontName.searchWithin(/oblique/gi) != -1) ||
+                     (fontName.searchWithin(/italic/gi) != -1));
 
       // Use 'name' instead of 'fontName' here because the original
       // name ArialBlack for example will be replaced by Helvetica.
-      this.black = (name.search(/Black/g) != -1);
+      this.black = (name.searchWithin(/Black/g) != -1);
 
       // if at least one width is present, remeasure all chars when exists
       this.remeasure = Object.keys(this.widths).length > 0;

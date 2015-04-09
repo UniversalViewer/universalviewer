@@ -6,7 +6,10 @@ import baseProvider = require("../uv-shared-module/baseProvider");
 import extension = require("../../extensions/uv-seadragon-extension/extension");
 import baseCenter = require("../uv-shared-module/centerPanel");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/iSeadragonProvider");
+import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
+import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 import utils = require("../../utils");
+import util = utils.Utils;
 
 export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
@@ -387,6 +390,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.isFirstLoad = false;
         this.isLoading = false;
         this.$spinner.hide();
+        this.overlaySearchResults();
     }
 
     showAttribution(): void {
@@ -498,10 +502,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         var bounds = this.viewer.viewport.getBounds(true);
 
         return {
-            x: utils.Utils.roundNumber(bounds.x, 4),
-            y: utils.Utils.roundNumber(bounds.y, 4),
-            width: utils.Utils.roundNumber(bounds.width, 4),
-            height: utils.Utils.roundNumber(bounds.height, 4)
+            x: util.roundNumber(bounds.x, 4),
+            y: util.roundNumber(bounds.y, 4),
+            width: util.roundNumber(bounds.width, 4),
+            height: util.roundNumber(bounds.height, 4)
         };
     }
 
@@ -516,6 +520,69 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         setTimeout(function () {
             viewer.viewport.panTo(center, true);
         }, 1);
+    }
+
+    overlaySearchResults(): void {
+
+        // loop through entries to get those for the current index.
+        var searchResults = this.provider.searchResults;
+
+        if (!searchResults.length) return;
+
+        var indices = this.provider.getPagedIndices();
+
+        for (var i = 0; i < indices.length; i++){
+            var canvasIndex = indices[i];
+
+            var searchResult: SearchResult;
+
+            // todo: rtl and ttb support
+            for (var j = 0; j < searchResults.length; j++) {
+                if (searchResults[j].canvasIndex === canvasIndex) {
+                    searchResult = searchResults[j];
+                    break;
+                }
+            }
+
+            if (!searchResult) continue;
+
+            var rects = this.getSearchOverlayRects(searchResult.rects, i);
+
+            for (var k = 0; k < rects.length; k++) {
+                var rect = rects[k];
+
+                var div = document.createElement("div");
+                div.className = "searchOverlay";
+
+                this.viewer.addOverlay(div, rect);
+            }
+        }
+    }
+
+    getSearchOverlayRects(rects: SearchResultRect[], index: number) {
+        var newRects = [];
+
+        this.tileSources[index]
+
+        var offsetX = this.viewer.world.getItemAt(index).getBounds().x;
+        var width = this.viewer.world.getItemAt(index).getBounds().width;
+
+        for (var i = 0; i < rects.length; i++) {
+            var searchRect: SearchResultRect = rects[i];
+
+            // normalise into seadragon points.
+            var factor = 1 / width;
+            var x = (factor * searchRect.x) + (factor * offsetX);
+            var y = factor * searchRect.y;
+            var w = factor * searchRect.width;
+            var h = factor * searchRect.height;
+
+            var rect = new OpenSeadragon.Rect(x, y, w, h);
+
+            newRects.push(rect);
+        }
+
+        return newRects;
     }
 
     resize(): void {

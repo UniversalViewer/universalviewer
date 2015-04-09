@@ -282,19 +282,23 @@ export class BaseProvider implements IProvider{
 
         var indices = [];
 
-        if (this.isFirstCanvas(canvasIndex) || this.isLastCanvas(canvasIndex)){
-            indices = [canvasIndex];
-        } else if (canvasIndex % 2){
-            indices = [canvasIndex, canvasIndex + 1];
+        if (!this.isPaged()) {
+            indices.push(this.canvasIndex);
         } else {
-            indices = [canvasIndex - 1, canvasIndex];
+            if (this.isFirstCanvas(canvasIndex) || this.isLastCanvas(canvasIndex)){
+                indices = [canvasIndex];
+            } else if (canvasIndex % 2){
+                indices = [canvasIndex, canvasIndex + 1];
+            } else {
+                indices = [canvasIndex - 1, canvasIndex];
+            }
+
+            if (this.getViewingDirection() === "right-to-left"){
+                indices = indices.reverse();
+            }
         }
 
-        if (this.getViewingDirection() === "right-to-left"){
-            return indices.reverse();
-        } else {
-            return indices;
-        }
+        return indices;
     }
 
     getViewingDirection(): string {

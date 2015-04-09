@@ -22,11 +22,12 @@
         },
         "genericDialogue": {
             "content": {
-                "emptyValue": "please enter a value",
-                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'",
+                "emptyValue": "please enter a value.",
+                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
                 "ok": "OK",
                 "refresh": "Refresh",
-                "invalidNumber": "Please enter a valid number"
+                "invalidNumber": "Please enter a valid number.",
+                "noMatches": "No matches were found."
             }
         },
         "helpDialogue": {

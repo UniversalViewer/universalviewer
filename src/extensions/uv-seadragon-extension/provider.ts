@@ -3,12 +3,14 @@
 import BootStrapper = require("../../bootstrapper");
 import baseProvider = require("../../modules/uv-shared-module/baseProvider");
 import ISeadragonProvider = require("./iSeadragonProvider");
+import SearchResult = require("./SearchResult");
+import SearchResultRect = require("./SearchResultRect");
 import utils = require("../../utils");
 import util = utils.Utils;
 
 export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
 
-    searchResults: any;
+    searchResults: SearchResult[] = [];
 
     constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
         super(bootstrapper, config, manifest);
@@ -214,10 +216,65 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     getSearchWithinService(): string {
         if (this.manifest.service){
             if (this.manifest.service.profile === "http://iiif.io/api/search/1/"){
-                return this.manifest.service.profile;
+                return this.manifest.service;
             }
         }
 
+        return null;
+    }
+
+    getSearchWithinServiceUri(): string {
+        var service = this.getSearchWithinService();
+
+        if (!service) return null;
+
+        var uri = service["@id"];
+        uri = uri.substr(0, uri.indexOf('{'));
+        uri = uri + "&q={0}";
+        return uri;
+    }
+
+    searchWithin(terms: string, callback: (results: any) => void): void {
+        var that = this;
+
+        var searchUri = this.getSearchWithinServiceUri();
+
+        searchUri = String.prototype.format(searchUri, terms);
+
+        $.getJSON(searchUri, (results: any) => {
+            if (results.resources.length) {
+                that.parseSearchWithinResults(results);
+            }
+
+            callback(results);
+        });
+    }
+
+    parseSearchWithinResults(results: any): void {
+        this.searchResults = [];
+
+        for (var i = 0; i < results.resources.length; i++) {
+            var r = results.resources[i];
+
+            var sr = new SearchResult(r);
+
+            var match = this.getSearchResultByCanvasIndex(sr.canvasIndex);
+
+            if (match){
+                match.addRect(r);
+            } else {
+                this.searchResults.push(sr);
+            }
+        }
+    }
+
+    getSearchResultByCanvasIndex(canvasIndex: number): SearchResult {
+        for (var i = 0; i < this.searchResults.length; i++) {
+            var r = this.searchResults[i];
+            if (r.canvasIndex === canvasIndex){
+                return r;
+            }
+        }
         return null;
     }
 }

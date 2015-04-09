@@ -107,6 +107,23 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(index);
         });
 
+        $.subscribe(footer.FooterPanel.SEARCH, (e, terms: string) => {
+            this.triggerSocket(footer.FooterPanel.SEARCH, terms);
+            this.searchWithin(terms);
+        });
+
+        $.subscribe(footer.FooterPanel.VIEW_PAGE, (e, index: number) => {
+            this.viewPage(index);
+        });
+
+        $.subscribe(footer.FooterPanel.NEXT_SEARCH_RESULT, () => {
+            this.nextSearchResult();
+        });
+
+        $.subscribe(footer.FooterPanel.PREV_SEARCH_RESULT, () => {
+            this.prevSearchResult();
+        });
+
         $.subscribe(header.PagingHeaderPanel.UPDATE_SETTINGS, (e) => {
             this.updateSettings();
         });
@@ -323,9 +340,9 @@ export class Extension extends baseExtension.BaseExtension {
     viewPage(canvasIndex: number, isReload?: boolean): void {
 
         // todo: stopgap until this issue is resolved: https://github.com/openseadragon/openseadragon/issues/629
-        if (this.isLoading){
-            return;
-        }
+        //if (this.isLoading){
+        //    return;
+        //}
 
         this.isLoading = true;
 
@@ -430,6 +447,57 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewManifest(data);
         } else {
             this.viewStructure(data.path);
+        }
+    }
+
+    searchWithin(terms) {
+
+        var that = this;
+
+        (<ISeadragonProvider>this.provider).searchWithin(terms, (results: any) => {
+            if (results.resources.length) {
+                $.publish(Extension.SEARCH_RESULTS, [terms, results.resources]);
+
+                // reload current index as it may contain results.
+                that.viewPage(that.provider.canvasIndex, true);
+            } else {
+                that.showDialogue(that.provider.config.modules.genericDialogue.content.noMatches, () => {
+                    $.publish(Extension.SEARCH_RESULTS_EMPTY);
+                });
+            }
+        });
+    }
+
+    clearSearch() {
+        (<ISeadragonProvider>this.provider).searchResults = [];
+
+        // reload current index as it may contain results.
+        this.viewPage(this.provider.canvasIndex);
+    }
+
+    prevSearchResult() {
+
+        // get the first result with a canvasIndex less than the current index.
+        for (var i = (<ISeadragonProvider>this.provider).searchResults.length - 1; i >= 0; i--) {
+            var result = (<ISeadragonProvider>this.provider).searchResults[i];
+
+            if (result.canvasIndex < this.provider.canvasIndex) {
+                this.viewPage(result.canvasIndex);
+                break;
+            }
+        }
+    }
+
+    nextSearchResult() {
+
+        // get the first result with an index greater than the current index.
+        for (var i = 0; i < (<ISeadragonProvider>this.provider).searchResults.length; i++) {
+            var result = (<ISeadragonProvider>this.provider).searchResults[i];
+
+            if (result.canvasIndex > this.provider.canvasIndex) {
+                this.viewPage(result.canvasIndex);
+                break;
+            }
         }
     }
 }

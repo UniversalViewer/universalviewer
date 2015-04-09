@@ -142,7 +142,7 @@ function getParameterByName(name) {
 }
 
 function addQuerystringParams(params) {
-    var qs = document.location.search;
+    var qs = document.location.searchWithin;
 
     for (var i = 0; i < params.length; i++) {
         qs = addQuerystringParam(qs, params[i]);
@@ -196,13 +196,13 @@ function getUrlParts(url) {
         pathname: a.pathname,
         protocol: a.protocol,
         hash: a.hash,
-        search: a.search
+        search: a.searchWithin
     };
 }
 
 function convertToRelativeUrl(url) {
     var parts = getUrlParts(url);
-    var relUri = parts.pathname + parts.search;
+    var relUri = parts.pathname + parts.searchWithin;
 
     if (!relUri.startsWith("/")) {
         relUri = "/" + relUri;

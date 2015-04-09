@@ -4,11 +4,12 @@
 import extension = require("../../extensions/uv-seadragon-extension/extension");
 import baseExtension = require("../uv-shared-module/baseExtension");
 import footer = require("../uv-shared-module/footerPanel");
-import utils = require("../../utils");
 import download = require("../../extensions/uv-seadragon-extension/downloadDialogue");
 import AutoComplete = require("./autocomplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/iSeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/iSeadragonProvider");
+import utils = require("../../utils");
+import util = utils.Utils;
 
 export class FooterPanel extends footer.FooterPanel {
 
@@ -57,7 +58,7 @@ export class FooterPanel extends footer.FooterPanel {
         });
 
         $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
-            this.modeChanged();
+            this.settingsChanged();
         });
 
         $.subscribe(extension.Extension.SEARCH_RESULTS, (e, terms, results) => {
@@ -193,17 +194,17 @@ export class FooterPanel extends footer.FooterPanel {
             this.$element.addClass('min');
         }
 
-        new AutoComplete(this.$searchText, (<ISeadragonProvider>this.provider).getAutoCompleteUri(), (terms) => {
-            this.search(terms);
-        });
+        //new AutoComplete(this.$searchText, (<ISeadragonProvider>this.provider).getAutoCompleteUri(), (terms) => {
+        //    this.search(terms);
+        //});
     }
 
     checkForSearchParams(): void{
         // if a h or q value is in the hash params, do a search.
         if (this.provider.isDeepLinkingEnabled()){
 
-            var terms = utils.Utils.getHashParameter('h', parent.document)
-                    || utils.Utils.getHashParameter('q', parent.document);
+            var terms = util.getHashParameter('h', parent.document)
+                    || util.getHashParameter('q', parent.document);
 
             if (terms){
                 this.terms = terms.replace(/\+/g, " ").replace(/"/g, "");
@@ -240,7 +241,7 @@ export class FooterPanel extends footer.FooterPanel {
 
         var results = this.provider.searchResults;
 
-        if (!results) return;
+        if (!results.length) return;
 
         // clear all existing placemarkers
         var placemarkers = this.getSearchResultPlacemarkers();
@@ -254,17 +255,16 @@ export class FooterPanel extends footer.FooterPanel {
 
         // for each page with a result, place a marker along the line.
         for (var i = 0; i < results.length; i++) {
-            var page = results[i];
+            var result = results[i];
 
-            var distance = page.index * pageWidth;
+            var distance = result.canvasIndex * pageWidth;
 
-            var $placemarker = $('<div class="searchResultPlacemarker" data-index="' + page.index + '"></div>');
+            var $placemarker = $('<div class="searchResultPlacemarker" data-index="' + result.canvasIndex + '"></div>');
 
             $placemarker[0].ontouchstart = function (e) { that.onPlacemarkerTouchStart.call(this, that) };
             $placemarker.click(function (e) { that.onPlacemarkerClick.call(this, that) });
             $placemarker.mouseenter(function (e) { that.onPlacemarkerMouseEnter.call(this, that) });
             $placemarker.mouseleave(function (e) { that.onPlacemarkerMouseLeave.call(this, e, that) });
-
 
             this.$searchResultsContainer.append($placemarker);
 
@@ -334,9 +334,9 @@ export class FooterPanel extends footer.FooterPanel {
 
         that.$placemarkerDetailsTop.html(title);
 
-        var result = this.provider.searchResults[elemIndex];
+        var result = that.provider.searchResults[elemIndex];
 
-        var terms = utils.Utils.ellipsis(that.terms, 20);
+        var terms = util.ellipsis(that.terms, 20);
 
         var instancesFoundText;
 
@@ -421,7 +421,7 @@ export class FooterPanel extends footer.FooterPanel {
 
     clearSearchResults(): void {
 
-        this.provider.searchResults = null;
+        this.provider.searchResults = [];
 
         // clear all existing placemarkers
         var placemarkers = this.getSearchResultPlacemarkers();
@@ -453,7 +453,7 @@ export class FooterPanel extends footer.FooterPanel {
         this.setPlacemarkerLabel();
     }
 
-    modeChanged(): void {
+    settingsChanged(): void {
         this.setPlacemarkerLabel();
     }
 
@@ -505,7 +505,7 @@ export class FooterPanel extends footer.FooterPanel {
         }
 
         var $terms = this.$searchPagerContainer.find('.terms');
-        $terms.html(utils.Utils.ellipsis(terms, 20));
+        $terms.html(util.ellipsis(terms, 20));
         $terms.prop('title', terms);
 
         this.$searchPagerContainer.show();
@@ -516,7 +516,7 @@ export class FooterPanel extends footer.FooterPanel {
     resize(): void {
         super.resize();
 
-        if (this.provider.searchResults) {
+        if (this.provider.searchResults.length) {
             this.positionSearchResultPlacemarkers();
         }
 
