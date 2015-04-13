@@ -3,13 +3,6 @@
         "label": "English (GB)"
     },
     "options": {
-        "sectionMappings": {
-            "CoverFrontOutside": "Front Cover",
-            "CoverBackOutside": "Back Cover",
-            "TitlePage": "Title Page",
-            "TableOfContents": "Table of Contents",
-            "PartOfWork": "Part of Work"
-        }
     },
     "content": {
         "canvasIndexOutOfRange": "Canvas index out of range."
@@ -123,14 +116,6 @@
                 "download": "Download"
             }
         },
-        "footerPanel": {
-            "content": {
-                "fullScreen": "Full Screen",
-                "exitFullScreen": "Exit Full Screen",
-                "embed": "Embed",
-                "download": "Download"
-            }
-        },
         "searchFooterPanel":
         {
             "content":
@@ -146,7 +131,9 @@
                 "enterKeyword": "Enter Keyword",
                 "pageCaps": "Page",
                 "imageCaps": "Image",
-                "clearSearch": "Clear Search"
+                "clearSearch": "Clear Search",
+                "previousResult": "Previous Result",
+                "nextResult": "Next Result"
             }
         }
     }

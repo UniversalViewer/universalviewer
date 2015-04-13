@@ -95,16 +95,16 @@ export class FooterPanel extends footer.FooterPanel {
         this.$searchPagerControls = $('<div class="controls"></div>');
         this.$searchPagerContainer.prepend(this.$searchPagerControls);
 
-        this.$previousResultButton = $('<a class="imageButton previousResult"></a>');
+        this.$previousResultButton = $('<a class="previousResult" title="' + this.content.previousResult + '">' + this.content.previousResult + '</a>');
         this.$searchPagerControls.append(this.$previousResultButton);
 
         this.$searchResultsInfo = $('<div class="searchResultsInfo"><span class="number">x</span> <span class="foundFor"></span> \'<span class="terms">y</span>\'</div>');
         this.$searchPagerControls.append(this.$searchResultsInfo);
 
-        this.$clearSearchResultsButton = $('<a class="clearSearch">' + this.content.clearSearch + '</a>');
+        this.$clearSearchResultsButton = $('<a class="clearSearch" title="' + this.content.clearSearch + '">' + this.content.clearSearch + '</a>');
         this.$searchResultsInfo.append(this.$clearSearchResultsButton);
 
-        this.$nextResultButton = $('<a class="imageButton nextResult"></a>');
+        this.$nextResultButton = $('<a class="nextResult" title="' + this.content.nextResult + '">' + this.content.nextResult + '</a>');
         this.$searchPagerControls.append(this.$nextResultButton);
 
         // placemarker line.
@@ -144,7 +144,7 @@ export class FooterPanel extends footer.FooterPanel {
 
         this.$searchText.on('focus', () => {
             // clear initial text.
-            if (this.$searchText.val() == this.content.enterKeyword) this.$searchText.val('');
+            if (this.$searchText.val() === this.content.enterKeyword) this.$searchText.val('');
         });
 
         this.$placemarkerDetails.on('mouseleave', function() {
@@ -182,6 +182,7 @@ export class FooterPanel extends footer.FooterPanel {
             if (e.keyCode == 13) { // return pressed
                 e.preventDefault();
                 this.$searchText.blur();
+                this.search(this.$searchText.val());
             }
         });
 
@@ -225,7 +226,7 @@ export class FooterPanel extends footer.FooterPanel {
                 });
 
             return;
-        };
+        }
 
         // blur search field
         this.$searchText.blur();

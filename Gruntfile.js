@@ -238,15 +238,6 @@ module.exports = function (grunt) {
                     to: ': \'$1\''
                 }]
             },
-            // replace "./dependencies" with "../../[extension]-dependencies"
-            //dependenciesExtension: {
-            //    src: ['<%= global.buildDir %>/js/app.js'],
-            //    overwrite: true,
-            //    replacements: [{
-            //        from: /'extensions\/(.*)\/extension'(.*)(.\/dependencies)/g,
-            //        to: '\'extensions/$1/extension\'$2../../$1-dependencies'
-            //    }]
-            //},
 
             // ../../extensions/uv-seadragon-extension/dependencies
             // becomes

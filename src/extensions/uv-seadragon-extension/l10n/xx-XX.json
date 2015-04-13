@@ -3,13 +3,6 @@
         "label": "English (GB) (xx-XX)"
     },
     "options": {
-        "sectionMappings": {
-            "CoverFrontOutside": "Front Cover (xx-XX)",
-            "CoverBackOutside": "Back Cover (xx-XX)",
-            "TitlePage": "Title Page (xx-XX)",
-            "TableOfContents": "Table of Contents (xx-XX)",
-            "PartOfWork": "Part of Work (xx-XX)"
-        }
     },
     "modules": {
         "dialogue": {
