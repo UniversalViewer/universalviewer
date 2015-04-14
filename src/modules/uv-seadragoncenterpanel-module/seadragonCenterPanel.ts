@@ -339,8 +339,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
 
             this.viewer.addTiledImage(this.tileSources[1]);
-
-            console.log(this.viewer.world.getItemAt(1));
         }
 
         // check for initial zoom/rotation params.
