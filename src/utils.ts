@@ -407,4 +407,12 @@ export class Utils{
     }
 
     //#endregion
+
+    //#region Objects
+
+    static convertToPlainObject(obj: any): any {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    //#endregion
 }

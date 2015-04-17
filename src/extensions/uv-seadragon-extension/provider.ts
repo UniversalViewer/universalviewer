@@ -5,11 +5,13 @@ import baseProvider = require("../../modules/uv-shared-module/baseProvider");
 import ISeadragonProvider = require("./iSeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
+import Page = require("./Page");
 import utils = require("../../utils");
 import util = utils.Utils;
 
 export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
 
+    pages: Page[];
     searchResults: SearchResult[] = [];
 
     constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
@@ -174,31 +176,158 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         return script;
     }
 
-    getTileSources(): any[] {
+    getPages(): JQueryDeferred<any> {
 
-        if (!this.isPaged()){
-            return [{
-                tileSource: this.getImageUri(this.getCurrentCanvas())
-            }];
+        //return [
+        //    {
+        //        "tileSource": {
+        //            "@context": "http://iiif.io/api/image/2/context.json",
+        //            "@id": "http://wellcomelibrary.org/iiif-img/b18035978-0/ae6ccfa0-251a-4b03-b037-e8666f1616f2",
+        //            "protocol": "http://iiif.io/api/image",
+        //            "width": 1959,
+        //            "height": 3188,
+        //            "tiles": [
+        //                {
+        //                    "width": 256,
+        //                    "height": 256,
+        //                    "scaleFactors": [
+        //                        1,
+        //                        2,
+        //                        4,
+        //                        8,
+        //                        16
+        //                    ]
+        //                }
+        //            ],
+        //            "profile": [
+        //                "http://iiif.io/api/image/2/level1.json",
+        //                {
+        //                    "formats": [
+        //                        "jpg"
+        //                    ],
+        //                    "qualities": [
+        //                        "native",
+        //                        "color",
+        //                        "gray"
+        //                    ],
+        //                    "supports": [
+        //                        "regionByPct",
+        //                        "sizeByForcedWh",
+        //                        "sizeByWh",
+        //                        "sizeAboveFull",
+        //                        "rotationBy90s",
+        //                        "mirroring",
+        //                        "gray"
+        //                    ]
+        //                }
+        //            ]
+        //        }
+        //    }
+        //    ,
+        //    {
+        //        "tileSource": {
+        //            "@context": "http://iiif.io/api/image/2/context.json",
+        //            "@id": "http://wellcomelibrary.org/iiif-img/b18035978-0/b13392ba-4f35-4bb5-895f-384e1a8ce5ff",
+        //            "protocol": "http://iiif.io/api/image",
+        //            "width": 1957,
+        //            "height": 3189,
+        //            "tiles": [
+        //                {
+        //                    "width": 256,
+        //                    "height": 256,
+        //                    "scaleFactors": [
+        //                        1,
+        //                        2,
+        //                        4,
+        //                        8,
+        //                        16
+        //                    ]
+        //                }
+        //            ],
+        //            "profile": [
+        //                "http://iiif.io/api/image/2/level1.json",
+        //                {
+        //                    "formats": [
+        //                        "jpg"
+        //                    ],
+        //                    "qualities": [
+        //                        "native",
+        //                        "color",
+        //                        "gray"
+        //                    ],
+        //                    "supports": [
+        //                        "regionByPct",
+        //                        "sizeByForcedWh",
+        //                        "sizeByWh",
+        //                        "sizeAboveFull",
+        //                        "rotationBy90s",
+        //                        "mirroring",
+        //                        "gray"
+        //                    ]
+        //                }
+        //            ]
+        //        }
+        //    }
+        //];
+
+        //var deferreds = [];
+        //
+        //for (var i = 0; i < this.pages.length; i++) {
+        //    var p = this.pages[i];
+        //
+        //    deferreds.push(
+        //        $.ajax({
+        //            dataType: "json",
+        //            url: p.tileSourceUri,
+        //            success: (data: any) => {
+        //                p.TileSource = data;
+        //            }
+        //        }));
+        //}
+
+        //$.when.apply($, deferreds).done(() => {
+        //    console.log("done");
+        //});
+
+        //return $.when.apply($, deferreds);
+
+        this.pages = [];
+
+        if (!this.isPaged()){ // if single-up mode
+            var p: Page = new Page();
+            p.tileSourceUri = this.getImageUri(this.getCurrentCanvas());
+            this.pages.push(p);
         } else {
             if (this.isFirstCanvas() || this.isLastCanvas()){
-                return [{
-                    tileSource: this.getImageUri(this.getCurrentCanvas())
-                }];
+                var p: Page = new Page();
+                p.tileSourceUri = this.getImageUri(this.getCurrentCanvas());
+                this.pages.push(p);
             } else {
                 var indices = this.getPagedIndices();
 
-                var tileSources: any[] = [];
-
                 _.each(indices, (index) => {
-                    tileSources.push({
-                        tileSource: this.getImageUri(this.getCanvasByIndex(index))
-                    });
+                    var p: Page = new Page();
+                    p.tileSourceUri = this.getImageUri(this.getCanvasByIndex(index));
+                    this.pages.push(p);
                 });
-
-                return tileSources;
             }
         }
+
+        // todo: use compiler flag (when available)
+        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
+
+        _.each(this.pages, (page: Page) => {
+            if (!page.tileSourceUri){
+                page.tileSourceUri = imageUnavailableUri
+            }
+        });
+
+        // get the json-ld for each page and return.
+        var promises = _.map(this.pages, (page: Page) => {
+            return page.GetTileSource();
+        });
+
+        return $.when.apply($, promises);
     }
 
     isSearchWithinEnabled(): boolean {

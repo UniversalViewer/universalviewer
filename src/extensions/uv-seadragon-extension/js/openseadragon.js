@@ -9703,7 +9703,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
     function onPrevious(){
         var previous = this._sequenceIndex - 1;
         if(this.navPrevNextWrap && previous < 0){
-            previous += this.tileSources.length;
+            previous += this.pages.length;
         }
         this.goToPage( previous );
     }
@@ -9711,7 +9711,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
 
     function onNext(){
         var next = this._sequenceIndex + 1;
-        if(this.navPrevNextWrap && next >= this.tileSources.length){
+        if(this.navPrevNextWrap && next >= this.pages.length){
             next = 0;
         }
         this.goToPage( next );
@@ -13506,8 +13506,8 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 this.element.style.width = (
                 viewerSize.x *
                 options.sizeRatio *
-                viewer.tileSources.length
-                ) + ( 12 * viewer.tileSources.length ) + 'px';
+                viewer.pages.length
+                ) + ( 12 * viewer.pages.length ) + 'px';
 
                 this.element.style.height = (
                 viewerSize.y *
@@ -13522,8 +13522,8 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                 this.element.style.height = (
                 viewerSize.y *
                 options.sizeRatio *
-                viewer.tileSources.length
-                ) + ( 12 * viewer.tileSources.length ) + 'px';
+                viewer.pages.length
+                ) + ( 12 * viewer.pages.length ) + 'px';
 
                 this.element.style.width = (
                 viewerSize.x *
@@ -13543,7 +13543,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
         this.panels = [];
 
         /*jshint loopfunc:true*/
-        for ( i = 0; i < viewer.tileSources.length; i++ ) {
+        for ( i = 0; i < viewer.pages.length; i++ ) {
 
             element = $.makeNeutralElement( 'div' );
             element.id = this.element.id + "-" + i;
@@ -13787,7 +13787,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
             if ( !element.activePanel ) {
                 miniViewer = new $.Viewer( {
                     id:                     element.id,
-                    tileSources:            [strip.viewer.tileSources[i]],
+                    tileSources:            [strip.viewer.pages[i]],
                     element:                element,
                     navigatorSizeRatio:     strip.sizeRatio,
                     showNavigator:          false,
