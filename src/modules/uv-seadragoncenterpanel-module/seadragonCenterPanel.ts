@@ -308,12 +308,14 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         var that = this;
 
         this.provider.getPages().then(() => {
+
+            this.positionPages();
+
             this.viewer.open(util.convertToPlainObject(that.provider.pages));
         });
     }
 
-    openPagesHandler() {
-
+    positionPages() {
         var viewingDirection = this.provider.getViewingDirection();
 
         // if there's more than one page, align them next to each other.
@@ -323,10 +325,11 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             if (viewingDirection == "top-to-bottom" || viewingDirection == "bottom-to-top") {
                 // vertical
                 //this.provider.pages[1].y = this.viewer.world.getItemAt(0).getBounds().y + this.viewer.world.getItemAt(0).getBounds().height + this.config.options.pageGap;
+                this.provider.pages[1].y = 1 + this.config.options.pageGap;
             } else {
                 // horizontal
-
-                //this.provider.pages[1].x = this.viewer.world.getItemAt(0).getBounds().x + this.viewer.world.getItemAt(0).getBounds().width + this.config.options.pageGap;
+                // this.viewer.world.getItemAt(0).getBounds().x + this.viewer.world.getItemAt(0).getBounds().width + this.config.options.pageGap;
+                this.provider.pages[1].x = 1 + this.config.options.pageGap;
             }
 
             // on load
@@ -337,6 +340,11 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
             //this.viewer.addTiledImage(this.provider.pages[1]);
         }
+
+        this.lastTilesNum = this.provider.pages.length;
+    }
+
+    openPagesHandler() {
 
         // check for initial zoom/rotation params.
         if (this.isFirstLoad){
@@ -383,7 +391,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             }
         }
 
-        this.lastTilesNum = this.provider.pages.length;
         this.isFirstLoad = false;
         this.isLoading = false;
         this.$spinner.hide();
