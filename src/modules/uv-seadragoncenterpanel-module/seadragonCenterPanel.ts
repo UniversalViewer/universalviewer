@@ -560,23 +560,26 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     getSearchOverlayRects(rects: SearchResultRect[], index: number) {
         var newRects = [];
 
-        //var offsetX = this.viewer.world.getItemAt(index).getBounds().x;
-        //var width = this.viewer.world.getItemAt(index).getBounds().width;
+        var width = this.viewer.world.getItemAt(index).source.dimensions.x;
+        var offsetX = 0;
 
-        //for (var i = 0; i < rects.length; i++) {
-        //    var searchRect: SearchResultRect = rects[i];
-        //
-        //    // normalise into seadragon points.
-        //    var factor = 1 / width;
-        //    var x = (factor * searchRect.x) + (factor * offsetX);
-        //    var y = factor * searchRect.y;
-        //    var w = factor * searchRect.width;
-        //    var h = factor * searchRect.height;
-        //
-        //    var rect = new OpenSeadragon.Rect(x, y, w, h);
-        //
-        //    newRects.push(rect);
-        //}
+        if (index > 0){
+            offsetX = this.viewer.world.getItemAt(index - 1).source.dimensions.x;
+        }
+
+        for (var i = 0; i < rects.length; i++) {
+            var searchRect: SearchResultRect = rects[i];
+
+            var factor = 1 / width;
+            var x = factor * (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
+            var y = factor * Number(searchRect.y);
+            var w = factor * Number(searchRect.width);
+            var h = factor * Number(searchRect.height);
+
+            var rect = new OpenSeadragon.Rect(x, y, w, h);
+
+            newRects.push(rect);
+        }
 
         return newRects;
     }
