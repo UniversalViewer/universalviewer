@@ -186,10 +186,7 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(center.SeadragonCenterPanel.SEADRAGON_OPEN, () => {
-            // todo: stopgap until this issue is resolved: https://github.com/openseadragon/openseadragon/issues/629
-            setTimeout(() => {
-                this.isLoading = false;
-            }, 500); // only allow a page load every 500 milliseconds
+            this.isLoading = false;
         });
 
         $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
@@ -340,9 +337,9 @@ export class Extension extends baseExtension.BaseExtension {
     viewPage(canvasIndex: number, isReload?: boolean): void {
 
         // todo: stopgap until this issue is resolved: https://github.com/openseadragon/openseadragon/issues/629
-        //if (this.isLoading){
-        //    return;
-        //}
+        if (this.isLoading){
+            return;
+        }
 
         this.isLoading = true;
 

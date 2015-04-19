@@ -26,7 +26,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     title: string;
     currentBounds: any;
     isFirstLoad: boolean = true;
-    isLoading: boolean = false;
     controlsVisible: boolean = false;
     isCreated: boolean = false;
 
@@ -75,7 +74,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
     // todo: implement a listener for an onResized event
     tryLoad(): void {
         //console.log("try load");
-        if (this.isLoading) return;
         if (!this.isCreated) {
             setTimeout(() => {
                 this.createUI();
@@ -301,17 +299,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     loadPages(): void {
 
-        this.isLoading = true;
-
         this.$spinner.show();
 
-        var that = this;
-
         this.provider.getPages().then(() => {
-
-            this.positionPages();
-
-            this.viewer.open(util.convertToPlainObject(that.provider.pages));
+            this.viewer.open(util.convertToPlainObject(this.provider.pages));
         });
     }
 
@@ -324,27 +315,31 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             // check if tilesources should be aligned horizontally or vertically
             if (viewingDirection == "top-to-bottom" || viewingDirection == "bottom-to-top") {
                 // vertical
-                //this.provider.pages[1].y = this.viewer.world.getItemAt(0).getBounds().y + this.viewer.world.getItemAt(0).getBounds().height + this.config.options.pageGap;
-                this.provider.pages[1].y = 1 + this.config.options.pageGap;
+                var topPage = this.viewer.world.getItemAt(0);
+                var topPageBounds = topPage.getBounds(true);
+                var y = topPageBounds.y + topPageBounds.height;
+                var bottomPage = this.viewer.world.getItemAt(1);
+                var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+                bottomPagePos.y = y + this.config.options.pageGap;
+                bottomPage.setPosition(bottomPagePos, true);
             } else {
                 // horizontal
-                // this.viewer.world.getItemAt(0).getBounds().x + this.viewer.world.getItemAt(0).getBounds().width + this.config.options.pageGap;
-                this.provider.pages[1].x = 1 + this.config.options.pageGap;
+                var leftPage = this.viewer.world.getItemAt(0);
+                var leftPageBounds = leftPage.getBounds(true);
+                var x = leftPageBounds.x + leftPageBounds.width;
+                var rightPage = this.viewer.world.getItemAt(1);
+                var rightPagePos = rightPage.getBounds(true).getTopLeft();
+                rightPagePos.x = x + this.config.options.pageGap;
+                rightPage.setPosition(rightPagePos, true);
             }
-
-            // on load
-            //this.provider.pages[1].success = (e) => {
-            //    var tiledImage = e.item;
-            //    this.provider.pages[1].dimensions = tiledImage.getContentSize();
-            //};
-
-            //this.viewer.addTiledImage(this.provider.pages[1]);
         }
 
         this.lastTilesNum = this.provider.pages.length;
     }
 
     openPagesHandler() {
+
+        this.positionPages();
 
         // check for initial zoom/rotation params.
         if (this.isFirstLoad){
@@ -392,7 +387,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         }
 
         this.isFirstLoad = false;
-        this.isLoading = false;
         this.$spinner.hide();
         this.overlaySearchResults();
     }

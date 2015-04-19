@@ -14,6 +14,7 @@ export class ThumbsView extends baseView.BaseView {
     $thumbs: JQuery;
     $selectedThumb: JQuery;
     isOpen: boolean = false;
+    isCreated: boolean = false;
     lastThumbClickedIndex: number;
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
@@ -108,6 +109,7 @@ export class ThumbsView extends baseView.BaseView {
     createThumbs(): void{
         var that = this;
 
+        if (this.isCreated) return;
         if (!this.thumbs) return;
 
         this.$thumbs.link($.templates.thumbsTemplate, this.thumbs);
@@ -128,6 +130,8 @@ export class ThumbsView extends baseView.BaseView {
 
         // do initial load to show padlocks
         this.loadThumbs(0);
+
+        this.isCreated = true;
     }
 
     scrollStop(): void {
