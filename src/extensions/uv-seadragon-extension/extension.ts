@@ -86,6 +86,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
+        $.unsubscribe(header.PagingHeaderPanel.NEXT);
         $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
@@ -197,8 +198,6 @@ export class Extension extends baseExtension.BaseExtension {
         $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
             this.viewPage(this.provider.getPrevPageIndex());
         });
-
-        $.unsubscribe(header.PagingHeaderPanel.NEXT);
         $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
