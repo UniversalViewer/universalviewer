@@ -172,7 +172,7 @@ export class Extension extends baseExtension.BaseExtension {
         });
 
         $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
-            if (this.centerPanel){
+            if (this.centerPanel && this.centerPanel.currentBounds){
                 this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
             }
 
