@@ -86,7 +86,6 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
-        $.unsubscribe(header.PagingHeaderPanel.NEXT);
         $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
