@@ -34,6 +34,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
     getCroppedImageUri(canvas: any, viewer: any): string {
 
+        if (!viewer) return null;
         if (!viewer.viewport) return null;
 
         var bounds = viewer.viewport.getBounds(true);
