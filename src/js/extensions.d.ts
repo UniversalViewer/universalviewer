@@ -60,6 +60,7 @@ interface JQueryStatic {
     // pubsub
     publish(event: string, eventObj?: any[]);
     subscribe(event: string, handler: Function);
+    unsubscribe(event: string);
     cookie(name: string);
 
     // jsviews

@@ -198,6 +198,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
+        $.unsubscribe(header.PagingHeaderPanel.NEXT);
         $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
@@ -239,9 +240,9 @@ export class Extension extends baseExtension.BaseExtension {
 
             var canvasIndex;
 
-            if (!that.provider.isReload){
+            //if (!that.provider.isReload){
                 canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || that.provider.getStartCanvasIndex();
-            }
+            //}
 
             if (that.provider.isCanvasIndexOutOfRange(canvasIndex)){
                 that.showDialogue(that.provider.config.content.canvasIndexOutOfRange);
