@@ -355,6 +355,7 @@ export class Extension extends baseExtension.BaseExtension {
                     this.setParam(baseProvider.params.canvasIndex, canvasIndex);
                 });
 
+                this.isLoading = false;
                 return;
             }
         }

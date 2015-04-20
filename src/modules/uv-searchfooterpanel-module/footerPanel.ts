@@ -319,12 +319,12 @@ export class FooterPanel extends footer.FooterPanel {
 
         var mode = that.extension.getMode();
 
-        if (mode == extension.Extension.PAGE_MODE) {
+        if (mode === extension.Extension.PAGE_MODE) {
             var canvas = that.provider.getCanvasByIndex(canvasIndex);
 
             var label = canvas.label;
 
-            if (label == "") {
+            if (label === "") {
                 label = "-";
             }
 
