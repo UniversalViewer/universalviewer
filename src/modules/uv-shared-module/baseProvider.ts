@@ -109,6 +109,8 @@ export class BaseProvider implements IProvider{
             p = $.extend(p, params);
         }
 
+        $.disposePubSub();
+
         this.bootstrapper.bootStrap(p);
     }
 
