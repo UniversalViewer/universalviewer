@@ -14,7 +14,6 @@ import util = utils.Utils;
 
 export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
-    lastTilesNum: number;
     pages: Page[];
     userData: any;
     handler: any;
@@ -333,8 +332,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
                 rightPage.setPosition(rightPagePos, true);
             }
         }
-
-        this.lastTilesNum = this.provider.pages.length;
     }
 
     openPagesHandler() {
@@ -522,7 +519,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
 
     overlaySearchResults(): void {
 
-        // loop through entries to get those for the current index.
         var searchResults = this.provider.searchResults;
 
         if (!searchResults.length) return;
@@ -532,9 +528,8 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         for (var i = 0; i < indices.length; i++){
             var canvasIndex = indices[i];
 
-            var searchResult: SearchResult;
+            var searchResult: SearchResult = null;
 
-            // todo: rtl and ttb support
             for (var j = 0; j < searchResults.length; j++) {
                 if (searchResults[j].canvasIndex === canvasIndex) {
                     searchResult = searchResults[j];

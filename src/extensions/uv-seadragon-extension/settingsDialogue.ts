@@ -1,4 +1,5 @@
 import baseSettings = require("../../modules/uv-dialogues-module/settingsDialogue");
+import baseExtension = require("../../modules/uv-shared-module/baseExtension");
 
 export class SettingsDialogue extends baseSettings.SettingsDialogue {
 
@@ -67,15 +68,16 @@ export class SettingsDialogue extends baseSettings.SettingsDialogue {
         var settings: ISettings = this.getSettings();
 
         if (settings.pagingEnabled){
-            this.$pagingEnabledCheckbox.attr("checked", "checked");
+            this.$pagingEnabledCheckbox.prop("checked", true);
         } else {
             this.$pagingEnabledCheckbox.removeAttr("checked");
         }
 
         if (settings.preserveViewport){
-            this.$preserveViewportCheckbox.attr("checked", "checked");
+            this.$preserveViewportCheckbox.prop("checked", true);
         } else {
             this.$preserveViewportCheckbox.removeAttr("checked");
         }
     }
+
 }
