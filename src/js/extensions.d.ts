@@ -84,6 +84,7 @@ declare var Sanitize: any;
 
 // app
 interface Window{
+    socket: any;
     extension: any;
     pkgCallback: any;
     manifestCallback: any;
