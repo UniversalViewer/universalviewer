@@ -100,7 +100,7 @@
         {
             "options":{
                 "elideDetailsTermsCount": 20,
-                "elideResultsTermsCount": 20
+                "elideResultsTermsCount": 10
             }
         }
     }

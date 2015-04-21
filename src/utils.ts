@@ -160,7 +160,10 @@ export class Utils{
     static ellipsis(text: string, chars: number): string {
         if (text.length <= chars) return text;
         var trimmedText = text.substr(0, chars);
-        trimmedText = trimmedText.substr(0, Math.min(trimmedText.length, trimmedText.lastIndexOf(" ")));
+        var lastSpaceIndex = trimmedText.lastIndexOf(" ");
+        if (lastSpaceIndex != -1){
+            trimmedText = trimmedText.substr(0, Math.min(trimmedText.length, lastSpaceIndex));
+        }
         return trimmedText + "&hellip;";
     }
 
