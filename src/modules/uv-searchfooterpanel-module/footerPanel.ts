@@ -337,7 +337,7 @@ export class FooterPanel extends footer.FooterPanel {
 
         var result = that.provider.searchResults[elemIndex];
 
-        var terms = util.ellipsis(that.terms, 20);
+        var terms = util.ellipsis(that.terms, that.options.elideDetailsTermsCount);
 
         var instancesFoundText;
 
@@ -506,7 +506,7 @@ export class FooterPanel extends footer.FooterPanel {
         }
 
         var $terms = this.$searchPagerContainer.find('.terms');
-        $terms.html(util.ellipsis(terms, 20));
+        $terms.html(util.ellipsis(terms, this.options.elideResultsTermsCount));
         $terms.prop('title', terms);
 
         this.$searchPagerContainer.show();

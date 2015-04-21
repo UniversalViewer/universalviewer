@@ -99,6 +99,8 @@
         "searchFooterPanel":
         {
             "options":{
+                "elideDetailsTermsCount": 20,
+                "elideResultsTermsCount": 20
             }
         }
     }
