@@ -7,13 +7,13 @@ import IPDFProvider = require("./iPDFProvider");
 
 export class Provider extends baseProvider.BaseProvider implements IPDFProvider{
 
-    constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
-        super(bootstrapper, config, manifest);
+    constructor(bootstrapper: BootStrapper) {
+        super(bootstrapper);
 
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
-        }, config.options);
+        }, bootstrapper.config.options);
     }
 
     getPDFUri(): string{

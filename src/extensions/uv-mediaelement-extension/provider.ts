@@ -7,13 +7,13 @@ import IMediaElementProvider = require("./iMediaElementProvider");
 
 export class Provider extends baseProvider.BaseProvider implements IMediaElementProvider{
 
-    constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
-        super(bootstrapper, config, manifest);
+    constructor(bootstrapper: BootStrapper) {
+        super(bootstrapper);
 
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
             // these are in turn overridden by the root options object in this extension's config.js.
-        }, config.options);
+        }, bootstrapper.config.options);
     }
 
     getEmbedScript(width: number, height: number, embedTemplate: string): string{

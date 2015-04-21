@@ -3,7 +3,6 @@ import baseProvider = require("./baseProvider");
 
 interface IExtension{
 
-    isFullScreen: boolean;
     mouseX: number;
     mouseY: number;
     shifted: boolean;

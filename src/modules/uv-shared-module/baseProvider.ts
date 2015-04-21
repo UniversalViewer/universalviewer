@@ -50,10 +50,10 @@ export class BaseProvider implements IProvider{
         mediaUriTemplate: "{0}{1}"
     };
 
-    constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
+    constructor(bootstrapper: BootStrapper) {
         this.bootstrapper = bootstrapper;
-        this.config = config;
-        this.manifest = manifest;
+        this.config = this.bootstrapper.config;
+        this.manifest = this.bootstrapper.manifest;
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through app.getParam.
@@ -77,8 +77,6 @@ export class BaseProvider implements IProvider{
         if (!this.sequenceIndex){
             this.sequenceIndex = parseInt(util.getQuerystringParameter(this.paramMap[params.sequenceIndex])) || 0;
         }
-
-        this.load();
     }
 
     load(): void{

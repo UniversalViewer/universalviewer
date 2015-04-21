@@ -1,6 +1,7 @@
 /// <reference path="../../js/jquery.d.ts" />
 /// <reference path="../../js/extensions.d.ts" />
 
+import BootStrapper = require("../../bootstrapper");
 import baseExtension = require("../../modules/uv-shared-module/baseExtension");
 import utils = require("../../utils");
 import baseProvider = require("../../modules/uv-shared-module/baseProvider");
@@ -31,8 +32,8 @@ export class Extension extends baseExtension.BaseExtension{
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
 
-    constructor(provider: IProvider) {
-        super(provider);
+    constructor(bootstrapper: BootStrapper) {
+        super(bootstrapper);
     }
 
     create(overrideDependencies?: any): void {

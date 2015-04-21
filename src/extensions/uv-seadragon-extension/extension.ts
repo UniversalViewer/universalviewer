@@ -2,6 +2,7 @@
 /// <reference path="../../js/extensions.d.ts" />
 /// <reference path="./iSettings.d.ts" />
 
+import BootStrapper = require("../../bootstrapper");
 import baseExtension = require("../../modules/uv-shared-module/baseExtension");
 import utils = require("../../utils");
 import baseProvider = require("../../modules/uv-shared-module/baseProvider");
@@ -52,8 +53,8 @@ export class Extension extends baseExtension.BaseExtension {
     static SEARCH_RESULTS: string = 'onSearchResults';
     static SEARCH_RESULTS_EMPTY: string = 'onSearchResults'; // todo: should be onSearchResultsEmpty?
 
-    constructor(provider: IProvider) {
-        super(provider);
+    constructor(bootstrapper: BootStrapper) {
+        super(bootstrapper);
     }
 
     create(overrideDependencies?: any): void {

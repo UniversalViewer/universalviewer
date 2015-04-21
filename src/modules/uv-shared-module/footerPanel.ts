@@ -82,7 +82,7 @@ export class FooterPanel extends baseView.BaseView {
     }
 
     toggleFullScreen(): void {
-        if (this.extension.isFullScreen) {
+        if (this.bootstrapper.isFullScreen) {
             this.$fullScreenBtn.swapClass('fullScreen', 'exitFullscreen');
             this.$fullScreenBtn.text(this.content.exitFullScreen);
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);

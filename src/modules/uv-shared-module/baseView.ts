@@ -1,10 +1,10 @@
 /// <reference path="../../js/jquery.d.ts" />
 import panel = require("./panel");
-//import IProvider = require("./iProvider");
-//import IExtension = require("./iExtension");
+import BootStrapper = require("../../bootstrapper");
 
 export class BaseView extends panel.Panel{
 
+    bootstrapper: BootStrapper;
     extension: any;
     provider: any;
     config: any;
@@ -14,6 +14,7 @@ export class BaseView extends panel.Panel{
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
         this.modules = [];
+        this.bootstrapper = $("body > #app").data("bootstrapper");
         super($element, fitToParentWidth, fitToParentHeight);
     }
 
@@ -21,7 +22,7 @@ export class BaseView extends panel.Panel{
 
         super.create();
 
-        this.extension = window.extension;
+        this.extension = this.bootstrapper.extension;
         this.provider = this.extension.provider;
 
         this.config = {};

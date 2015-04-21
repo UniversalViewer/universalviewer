@@ -1,5 +1,7 @@
 /// <reference path="js/jquery.d.ts" />
+/// <reference path="js/extensions.d.ts" />
 import BootstrapParams = require("bootstrapParams");
+import baseExtension = require("./modules/uv-shared-module/baseExtension");
 import utils = require("utils");
 import util = utils.Utils;
 
@@ -7,11 +9,15 @@ class BootStrapper{
 
     params: BootstrapParams;
     manifest: any;
+    config: any;
+    configExtension: any;
+    extension: baseExtension.BaseExtension;
     extensions: any;
     sequenceIndex: number;
     sequences: any;
     sequence: any;
-    configExtension: any;
+    socket: any; // maintain the same socket between reloads
+    isFullScreen: boolean = false; // persist full screen between reloads
 
     // this loads the manifest, determines what kind of extension and provider to use, and instantiates them.
     constructor(extensions: any) {
@@ -226,11 +232,15 @@ class BootStrapper{
     }
 
     createExtension(extension: any, config: any): void{
-        // create provider.
-        var provider = new extension.provider(this, config, this.manifest);
 
-        // create extension.
-        new extension.type(provider);
+        this.config = config;
+
+        var provider = new extension.provider(this);
+        provider.load();
+
+        this.extension = new extension.type(this);
+        this.extension.provider = provider;
+        this.extension.create();
     }
 }
 

@@ -14,8 +14,8 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     pages: Page[];
     searchResults: SearchResult[] = [];
 
-    constructor(bootstrapper: BootStrapper, config: any, manifest: any) {
-        super(bootstrapper, config, manifest);
+    constructor(bootstrapper: BootStrapper) {
+        super(bootstrapper);
 
         this.config.options = $.extend(true, this.options, {
             // override or extend BaseProvider options.
@@ -23,7 +23,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             //{baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
             autoCompleteUriTemplate: '{0}{1}',
             iiifImageUriTemplate: '{0}/{1}/{2}/{3}/{4}/{5}.jpg'
-        }, config.options);
+        }, bootstrapper.config.options);
     }
 
     getAutoCompleteUri(): string{

@@ -84,9 +84,6 @@ declare var Sanitize: any;
 
 // app
 interface Window{
-    socket: any;
-    extension: any;
-    pkgCallback: any;
     manifestCallback: any;
     browserDetect: any;
     trackEvent(category: string, action: string, label: string, value?: any);
@@ -96,7 +93,7 @@ interface Window{
     DEBUG: boolean;
     webViewerLoad: any; // pdfjs
     IEXMLHttpRequest: any;
-    openSeadragonViewer: any;
+    openSeadragonViewer: any; // for testing convenience
 }
 
 // google

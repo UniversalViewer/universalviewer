@@ -6,11 +6,13 @@ import shell = require("./shell");
 import genericDialogue = require("./genericDialogue");
 import IProvider = require("./iProvider");
 import IExtension = require("./iExtension");
+import BootStrapper = require("../../bootstrapper");
 
 export class BaseExtension implements IExtension {
 
+    bootstrapper: BootStrapper;
     shell: shell.Shell;
-    isFullScreen: boolean = false;
+    provider: IProvider;
     canvasIndex: number;
     mouseX: number;
     mouseY: number;
@@ -18,8 +20,6 @@ export class BaseExtension implements IExtension {
     shifted: boolean = false;
     $element: JQuery;
     extensions: any;
-    socket: any;
-    provider: IProvider;
 
     // events
     static SETTINGS_CHANGED: string = 'onSettingsChanged';
@@ -45,18 +45,14 @@ export class BaseExtension implements IExtension {
     static SHOW_MESSAGE: string = 'onShowMessage';
     static HIDE_MESSAGE: string = 'onHideMessage';
 
-    constructor(provider: IProvider) {
-
-        window.extension = this;
-
-        this.provider = provider;
-
-        this.create();
+    constructor(bootstrapper: BootStrapper) {
+        this.bootstrapper = bootstrapper;
     }
 
-    create(): void {
+    public create(): void {
 
         this.$element = $('#app');
+        this.$element.data("bootstrapper", this.bootstrapper)
 
         // initial sizing.
         var $win = $(window);
@@ -65,12 +61,12 @@ export class BaseExtension implements IExtension {
 
         if (!this.provider.isReload){
             // communication with parent frame.
-           window.socket = new easyXDM.Socket({
+           this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message, origin) => {
                     message = $.parseJSON(message);
                     this.handleParentFrameEvent(message);
                 }
-            });
+           });
         }
 
         this.triggerSocket(BaseExtension.LOAD, {
@@ -110,10 +106,10 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
             if (!this.isOverlayActive()){
                 $('#top').focus();
-                this.isFullScreen = !this.isFullScreen;
+                this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
                 this.triggerSocket(BaseExtension.TOGGLE_FULLSCREEN,
                     {
-                        isFullScreen: this.isFullScreen,
+                        isFullScreen: this.bootstrapper.isFullScreen,
                         overrideFullScreen: this.provider.config.options.overrideFullScreen
                     });
             }
@@ -130,7 +126,7 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseExtension.ESCAPE, () => {
-            if (this.isFullScreen) {
+            if (this.bootstrapper.isFullScreen) {
                 $.publish(BaseExtension.TOGGLE_FULLSCREEN);
             }
         });
@@ -155,8 +151,8 @@ export class BaseExtension implements IExtension {
     }
 
     triggerSocket(eventName: string, eventObject?: any): void {
-        if (window.socket) {
-            window.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
+        if (this.bootstrapper.socket) {
+            this.bootstrapper.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
         }
     }
 
@@ -242,7 +238,7 @@ export class BaseExtension implements IExtension {
         if (seeAlsoUri){
             window.open(seeAlsoUri, '_blank');
         } else {
-            if (this.isFullScreen) {
+            if (this.bootstrapper.isFullScreen) {
                 $.publish(BaseExtension.TOGGLE_FULLSCREEN);
             }
 
