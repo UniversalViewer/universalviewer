@@ -26,7 +26,7 @@ export class FooterPanel extends baseView.BaseView {
 
         // events.
         $.subscribe(baseExtension.BaseExtension.TOGGLE_FULLSCREEN, () => {
-            this.toggleFullScreen();
+            this.updateFullScreenButton();
         });
 
         $.subscribe(baseExtension.BaseExtension.SETTINGS_CHANGED, () => {
@@ -67,7 +67,14 @@ export class FooterPanel extends baseView.BaseView {
         }
 
         this.updateDownloadButton();
+        this.updateFullScreenButton();
 
+        if (utils.Utils.getBool(this.options.minimiseButtons, false)){
+            this.$options.addClass('minimiseButtons');
+        }
+    }
+
+    updateFullScreenButton(): void {
         if (!utils.Utils.getBool(this.options.fullscreenEnabled, true)){
             this.$fullScreenBtn.hide();
         }
@@ -76,12 +83,6 @@ export class FooterPanel extends baseView.BaseView {
             this.$fullScreenBtn.addClass('lightbox');
         }
 
-        if (utils.Utils.getBool(this.options.minimiseButtons, false)){
-            this.$options.addClass('minimiseButtons');
-        }
-    }
-
-    toggleFullScreen(): void {
         if (this.bootstrapper.isFullScreen) {
             this.$fullScreenBtn.swapClass('fullScreen', 'exitFullscreen');
             this.$fullScreenBtn.text(this.content.exitFullScreen);
