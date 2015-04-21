@@ -8,9 +8,9 @@ Navigate sequences of images in a zoomable, extensible interface.
 
 ## Contributers
 
-![http://wellcomelibrary.org/](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/wellcome_logo.png)
-![http://www.bl.uk/](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/bl_logo.png)
-![http://www.llgc.org.uk/](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/nlw_logo.png)
+![Wellcome Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/wellcome_logo.png)
+![British Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/bl_logo.png)
+![National Library of Wales](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/nlw_logo.png)
 
 ## Stable Builds
 
