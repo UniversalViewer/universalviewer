@@ -81,3 +81,7 @@ To reset the submodules to their correct commit hash for the current branch use:
 	git submodule update --init
 
 Be aware that this will leave your submodules in a "detached HEAD state" as after the initial clone. Git only deals in commit hashes for submodules, you need to check out the appropriate branch yourself.
+
+### Merging
+
+When merging an examples repo branch with another branch, to avoid conflicts, delete the contents of the `/build` directory first, run the merge and then rebuild.
