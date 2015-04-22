@@ -167,6 +167,13 @@ module.exports = function (grunt) {
                         expand: true,
                         src: ['**'],
                         dest: '<%= global.examplesDir %>/<%= global.buildDir %>'
+                    },
+                    // misc
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['favicon.ico'],
+                        dest: '<%= global.examplesDir %>/'
                     }
                 ]
             },
