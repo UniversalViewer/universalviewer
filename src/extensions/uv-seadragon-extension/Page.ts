@@ -7,6 +7,9 @@ class Page {
             url: this.tileSourceUri,
             success: (data: any) => {
                 this.tileSource = data;
+            },
+            error: (error: any, message: any) => {
+                console.error(message);
             }
         });
     }

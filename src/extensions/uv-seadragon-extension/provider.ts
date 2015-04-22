@@ -144,7 +144,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         } else if (canvas.images && canvas.images[0].resource.service){
             iiifUri = canvas.images[0].resource.service['@id'];
         } else {
-            return null;
+            return "";
         }
 
         if (!iiifUri){
@@ -204,7 +204,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         }
 
         // todo: use compiler flag (when available)
-        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.js' : 'js/imageunavailable.js';
+        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.json' : 'js/imageunavailable.json';
 
         _.each(this.pages, (page: Page) => {
             if (!page.tileSourceUri){
