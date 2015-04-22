@@ -1,8 +1,6 @@
 # Universal Viewer
 
-Navigate sequences of images in a zoomable, extensible interface.
-
-[example](http://universalviewer.azurewebsites.net/)
+[Demo](http://universalviewer.azurewebsites.net/)
 
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
