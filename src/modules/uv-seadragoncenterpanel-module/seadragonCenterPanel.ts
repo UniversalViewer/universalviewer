@@ -216,6 +216,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
             this.openPagesHandler();
         });
 
+        this.viewer.addHandler('tile-drawn', () => {
+            this.$spinner.hide();
+        });
+
         //this.viewer.addHandler("open-failed", () => {
         //});
 
@@ -384,7 +388,6 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         }
 
         this.isFirstLoad = false;
-        this.$spinner.hide();
         this.overlaySearchResults();
     }
 
