@@ -1,4 +1,5 @@
-call git checkout nlw 
+call git checkout nlw
+call git pull origin nlw
 call git submodule update --init
 cd tests
 call git pull origin master
