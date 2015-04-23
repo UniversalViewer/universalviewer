@@ -183,7 +183,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         this.pages = [];
 
-        if (!this.isPaged()){ // if single-up mode
+        if (!this.isPagingSettingEnabled()){ // if single-up mode
             var p: Page = new Page();
             p.tileSourceUri = this.getImageUri(this.getCurrentCanvas());
             this.pages.push(p);

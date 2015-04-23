@@ -46,10 +46,12 @@ interface IProvider{
     isCanvasIndexOutOfRange(canvasIndex: number): boolean;
     isFirstCanvas(canvasIndex?: number): boolean;
     isLastCanvas(canvasIndex?: number): boolean;
-    isPaged(): boolean;
+    isPagingEnabled(): boolean;
+    isPagingSettingEnabled(): boolean;
     isMultiCanvas(): boolean;
     isMultiSequence(): boolean;
     isSeeAlsoEnabled(): boolean;
+    isTotalCanvasesEven(): boolean;
     load(): void;
     parseManifest(): void;
     parseStructure(): void;

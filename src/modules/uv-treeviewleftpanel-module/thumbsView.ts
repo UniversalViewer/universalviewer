@@ -239,7 +239,7 @@ export class ThumbsView extends baseView.BaseView {
 
         this.$selectedThumb = $(this.$thumbs.find('.thumb')[index]);
 
-        if (this.provider.isPaged()){
+        if (this.provider.isPagingSettingEnabled()){
             var indices = this.provider.getPagedIndices(index);
 
             _.each(indices, (index: number) => {

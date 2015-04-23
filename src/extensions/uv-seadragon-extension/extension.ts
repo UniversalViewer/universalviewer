@@ -346,7 +346,7 @@ export class Extension extends baseExtension.BaseExtension {
         // if it's a valid canvas index.
         if (canvasIndex == -1) return;
 
-        if (this.provider.isPaged() && !isReload){
+        if (this.provider.isPagingSettingEnabled() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.

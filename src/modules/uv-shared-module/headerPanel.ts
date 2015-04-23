@@ -107,6 +107,11 @@ export class HeaderPanel extends baseView.BaseView {
     }
 
     updatePagingToggle(): void {
+        if (!this.provider.isPagingEnabled()){
+            this.$pagingToggleButton.hide();
+            return;
+        }
+
         var settings: ISettings = this.provider.getSettings();
 
         if (settings.pagingEnabled){

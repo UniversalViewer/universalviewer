@@ -212,14 +212,19 @@ export class BaseProvider implements IProvider{
         return canvasIndex > this.getTotalCanvases() - 1;
     }
 
+    // checks if the number of canvases is even - therefore has a front and back cover
+    isTotalCanvasesEven(): boolean {
+        return this.getTotalCanvases() % 2 === 0;
+    }
+
     isFirstCanvas(canvasIndex?: number): boolean {
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
-        return canvasIndex == 0;
+        return canvasIndex === 0;
     }
 
     isLastCanvas(canvasIndex?: number): boolean {
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
-        return canvasIndex == this.getTotalCanvases() - 1;
+        return canvasIndex === this.getTotalCanvases() - 1;
     }
 
     isSeeAlsoEnabled(): boolean{
@@ -261,8 +266,16 @@ export class BaseProvider implements IProvider{
         return this.manifest.sequences.length > 1;
     }
 
-    isPaged(): boolean{
-        return this.sequence.viewingHint && (this.sequence.viewingHint == "paged") && this.getSettings().pagingEnabled;
+    isPagingEnabled(): boolean{
+        return this.sequence.viewingHint && (this.sequence.viewingHint == "paged") && this.isTotalCanvasesEven();
+    }
+
+    isPagingSettingEnabled(): boolean {
+        if (this.isPagingEnabled()){
+            return this.getSettings().pagingEnabled;
+        }
+
+        return false;
     }
 
     getMediaUri(mediaUri: string): string{
@@ -282,7 +295,7 @@ export class BaseProvider implements IProvider{
 
         var indices = [];
 
-        if (!this.isPaged()) {
+        if (!this.isPagingSettingEnabled()) {
             indices.push(this.canvasIndex);
         } else {
             if (this.isFirstCanvas(canvasIndex) || this.isLastCanvas(canvasIndex)){
@@ -318,7 +331,7 @@ export class BaseProvider implements IProvider{
 
         var index;
 
-        if (this.isPaged()){
+        if (this.isPagingSettingEnabled()){
             var indices = this.getPagedIndices(canvasIndex);
 
             if (this.getViewingDirection() == "right-to-left"){
@@ -339,7 +352,7 @@ export class BaseProvider implements IProvider{
 
         var index;
 
-        if (this.isPaged()){
+        if (this.isPagingSettingEnabled()){
             var indices = this.getPagedIndices(canvasIndex);
 
             if (this.getViewingDirection() == "right-to-left"){
