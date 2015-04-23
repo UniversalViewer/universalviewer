@@ -1,4 +1,3 @@
 call git checkout master
-call git pull origin master
 call git submodule foreach git pull origin master 
 call git submodule foreach git checkout master
