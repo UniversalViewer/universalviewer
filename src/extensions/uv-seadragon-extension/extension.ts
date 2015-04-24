@@ -83,15 +83,23 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
-        $.subscribe(Extension.PAGE_UP, (e) => {
-            this.viewPage(this.provider.getPrevPageIndex());
-        });
-
         $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
+        $.subscribe(Extension.PAGE_UP, (e) => {
+            this.viewPage(this.provider.getPrevPageIndex());
+        });
+
         $.subscribe(Extension.PAGE_DOWN, (e) => {
+            this.viewPage(this.provider.getNextPageIndex());
+        });
+
+        $.subscribe(Extension.LEFT_ARROW, (e) => {
+            this.viewPage(this.provider.getPrevPageIndex());
+        });
+
+        $.subscribe(Extension.RIGHT_ARROW, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 

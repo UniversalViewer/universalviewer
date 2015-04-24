@@ -39,6 +39,10 @@ export class BaseExtension implements IExtension {
     static PAGE_DOWN: string = 'onPageDown';
     static HOME: string = 'onHome';
     static END: string = 'onEnd';
+    static LEFT_ARROW: string = 'onLeftArrow';
+    static UP_ARROW: string = 'onUpArrow';
+    static RIGHT_ARROW: string = 'onRightArrow';
+    static DOWN_ARROW: string = 'onDownArrow';
     static WINDOW_UNLOAD: string = 'onWindowUnload';
     static OPEN_MEDIA: string = 'onOpenMedia';
     static CREATED: string = 'onCreated';
@@ -96,9 +100,31 @@ export class BaseExtension implements IExtension {
             this.mouseY = e.pageY;
         });
 
+        // keyboard events.
+
         $(document).on('keyup keydown', (e) => {
             this.shifted = e.shiftKey;
             this.tabbing = e.keyCode === 9;
+        });
+
+        $(document).keyup((e) => {
+            var event: string = null;
+
+            if (e.keyCode === 13) event = BaseExtension.RETURN;
+            if (e.keyCode === 27) event = BaseExtension.ESCAPE;
+            if (e.keyCode === 33) event = BaseExtension.PAGE_UP;
+            if (e.keyCode === 34) event = BaseExtension.PAGE_DOWN;
+            if (e.keyCode === 35) event = BaseExtension.END;
+            if (e.keyCode === 36) event = BaseExtension.HOME;
+            if (e.keyCode === 37) event = BaseExtension.LEFT_ARROW;
+            if (e.keyCode === 38) event = BaseExtension.UP_ARROW;
+            if (e.keyCode === 39) event = BaseExtension.RIGHT_ARROW;
+            if (e.keyCode === 40) event = BaseExtension.DOWN_ARROW;
+
+            if (event){
+                e.preventDefault();
+                $.publish(event)
+            }
         });
 
         this.$element.append('<a href="/" id="top"></a>');
@@ -113,16 +139,6 @@ export class BaseExtension implements IExtension {
                         overrideFullScreen: this.provider.config.options.overrideFullScreen
                     });
             }
-        });
-
-        // keyboard events.
-        $(document).keyup((e) => {
-            if (e.keyCode === 13) $.publish(BaseExtension.RETURN);
-            if (e.keyCode === 27) $.publish(BaseExtension.ESCAPE);
-            if (e.keyCode === 33) $.publish(BaseExtension.PAGE_UP);
-            if (e.keyCode === 34) $.publish(BaseExtension.PAGE_DOWN);
-            if (e.keyCode === 35) $.publish(BaseExtension.END);
-            if (e.keyCode === 36) $.publish(BaseExtension.HOME);
         });
 
         $.subscribe(BaseExtension.ESCAPE, () => {
