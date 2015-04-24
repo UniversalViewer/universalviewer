@@ -65,21 +65,3 @@ To view the examples run:
 ## License
 
 The Universal Viewer is released under the MIT license. For details, see the file LICENSE.txt.
-
-## Notes
-
-### Submodules
-
-When switching between branches, the super project may have a different commit hash stored for any or all of the submodules (examples, tests, src/themes/uv-default-theme).
-
-This will show as "new commits" when doing a `git status`.
-
-To reset the submodules to their correct commit hash for the current branch use:
-
-	git submodule update --init
-
-Be aware that this will leave your submodules in a "detached HEAD state" as after the initial clone. Git only deals in commit hashes for submodules, you need to check out the appropriate branch yourself.
-
-### Merging
-
-When merging an examples repo branch with another branch, to avoid conflicts, delete the contents of the `/build` directory first, run the merge and then rebuild.
