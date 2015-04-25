@@ -7,13 +7,6 @@
 *.tmp.txt
 
 #################
-## Ignore everything but the default theme.
-#################
-
-src/themes/*
-!src/themes/en-GB-theme
-
-#################
 ## Tests
 #################
 

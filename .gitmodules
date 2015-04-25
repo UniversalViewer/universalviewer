@@ -7,3 +7,6 @@
 [submodule "src/themes/en-GB-theme"]
 	path = src/themes/en-GB-theme
 	url = git@github.com:UniversalViewer/en-GB-theme.git
+[submodule "src/themes/cy-GB-theme"]
+	path = src/themes/cy-GB-theme
+	url = git@github.com:UniversalViewer/cy-GB-theme.git
