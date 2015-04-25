@@ -377,6 +377,7 @@ module.exports = function (grunt) {
     localise(grunt);
     theme(grunt);
 
+    // to change version manually, edit package.json and _Version.ts
     grunt.registerTask('dist:upbuild', ['version:bump', 'version:apply', 'build']);
     grunt.registerTask('dist:upminor', ['version:bump:minor', 'version:apply', 'build']);
     grunt.registerTask('dist:upmajor', ['version:bump:major', 'version:apply', 'build']);
