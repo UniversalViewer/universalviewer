@@ -75,6 +75,7 @@ node_modules
 ## Build
 #################
 
+build/releases
 build/uv-*
 !build/*.js
 !build/**/*js
