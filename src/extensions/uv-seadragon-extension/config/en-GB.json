@@ -38,7 +38,7 @@
         {
             "options":
             {
-                "localeToggleEnabled": true,
+                "localeToggleEnabled": false,
                 "pagingToggleEnabled": true
             }
         },
