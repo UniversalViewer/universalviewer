@@ -6,6 +6,9 @@ call git pull origin master
 cd ../examples
 call git checkout nlw
 call git pull origin nlw
-cd ../src/themes/nlw-theme
-call git checkout master
-call git pull origin master
+cd ../src/themes/en-GB-theme
+call git checkout nlw
+call git pull origin nlw
+cd ../../../src/themes/cy-GB-theme
+call git checkout nlw
+call git pull origin nlw
