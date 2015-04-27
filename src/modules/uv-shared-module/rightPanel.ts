@@ -24,7 +24,7 @@ export class RightPanel extends baseExpandPanel.BaseExpandPanel {
     init(): void{
         super.init();
 
-        if (this.options.panelOpen && this.provider.isHomeDomain) {
+        if (this.options.panelOpen) {
             this.toggle(true);
         }
     }
