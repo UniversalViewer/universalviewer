@@ -127,37 +127,25 @@ export class EmbedDialogue extends dialogue.Dialogue {
         this.$smallSize.click((e) => {
             e.preventDefault();
 
-            this.currentWidth = this.smallWidth;
-            this.currentHeight = this.smallHeight;
-
-            this.formatCode();
+            this.selectSmall();
         });
 
         this.$mediumSize.click((e) => {
             e.preventDefault();
 
-            this.currentWidth = this.mediumWidth;
-            this.currentHeight = this.mediumHeight;
-
-            this.formatCode();
+            this.selectMedium();
         });
 
         this.$largeSize.click((e) => {
             e.preventDefault();
 
-            this.currentWidth = this.largeWidth;
-            this.currentHeight = this.largeHeight;
-
-            this.formatCode();
+            this.selectLarge();
         });
 
-        this.$smallSize.addClass('selected');
-
-        this.$sizes.find('.size').click(function(e) {
+        this.$customSize.click((e) => {
             e.preventDefault();
 
-            that.$sizes.find('.size').removeClass('selected');
-            $(this).addClass('selected');
+            this.selectCustom();
         });
 
         this.$customWidth.keydown((event) => {
@@ -176,10 +164,58 @@ export class EmbedDialogue extends dialogue.Dialogue {
             this.getCustomSize();
         });
 
-        // this should be called from extension-specific embed dialogue
-        //this.formatCode();
+        var appWidth = this.extension.width();
+        var appHeight = this.extension.height();
+
+        if (appWidth === this.smallWidth && appHeight === this.smallHeight){
+            this.selectSmall();
+        } else if (appWidth === this.mediumWidth && appHeight === this.mediumHeight){
+            this.selectMedium();
+        } else if (appWidth === this.largeWidth && appHeight === this.largeHeight){
+            this.selectLarge();
+        } else {
+            this.selectCustom();
+        }
 
         this.$element.hide();
+    }
+
+    selectSmall(): void {
+        this.currentWidth = this.smallWidth;
+        this.currentHeight = this.smallHeight;
+        this.$sizes.find('.size').removeClass('selected');
+        this.$smallSize.addClass('selected');
+        this.formatCode();
+    }
+
+    selectMedium(): void {
+        this.currentWidth = this.mediumWidth;
+        this.currentHeight = this.mediumHeight;
+        this.$sizes.find('.size').removeClass('selected');
+        this.$mediumSize.addClass('selected');
+        this.formatCode();
+    }
+
+    selectLarge(): void {
+        this.currentWidth = this.largeWidth;
+        this.currentHeight = this.largeHeight;
+        this.$sizes.find('.size').removeClass('selected');
+        this.$largeSize.addClass('selected');
+        this.formatCode();
+    }
+
+    selectCustom(): void {
+        if (!this.$customWidth.val()) {
+            this.$customWidth.val(this.extension.width());
+        }
+
+        if (!this.$customHeight.val()){
+            this.$customHeight.val(this.extension.height());
+        }
+
+        this.$sizes.find('.size').removeClass('selected');
+        this.$customSize.addClass('selected');
+        this.getCustomSize();
     }
 
     getCustomSize(): void {
