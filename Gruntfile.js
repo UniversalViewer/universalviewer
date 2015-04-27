@@ -302,7 +302,7 @@ module.exports = function (grunt) {
             },
             examples: {
                 // replace script paths with latest build version
-                src: ['<%= global.examplesDir %>/examples.js', '<%= global.examplesDir %>/uv.js'],
+                src: ['<%= global.examplesDir %>/index.html', '<%= global.examplesDir %>/noeditor.html', '<%= global.examplesDir %>/examples.js', '<%= global.examplesDir %>/uv.js'],
                 overwrite: true,
                 replacements: [{
                     from: /build\/uv.*?\//g,
