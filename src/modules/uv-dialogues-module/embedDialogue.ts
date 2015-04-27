@@ -206,11 +206,11 @@ export class EmbedDialogue extends dialogue.Dialogue {
 
     selectCustom(): void {
         if (!this.$customWidth.val()) {
-            this.$customWidth.val(this.extension.width());
+            this.$customWidth.val(this.extension.embedWidth);
         }
 
         if (!this.$customHeight.val()){
-            this.$customHeight.val(this.extension.height());
+            this.$customHeight.val(this.extension.embedHeight);
         }
 
         this.$sizes.find('.size').removeClass('selected');

@@ -20,6 +20,8 @@ export class BaseExtension implements IExtension {
     shifted: boolean = false;
     $element: JQuery;
     extensions: any;
+    embedWidth: number;
+    embedHeight: number;
 
     // events
     static SETTINGS_CHANGED: string = 'onSettingsChanged';
@@ -60,8 +62,10 @@ export class BaseExtension implements IExtension {
 
         // initial sizing.
         var $win = $(window);
-        this.$element.width($win.width());
-        this.$element.height($win.height());
+        this.embedWidth = $win.width();
+        this.embedHeight = $win.height();
+        this.$element.width(this.embedWidth);
+        this.$element.height(this.embedHeight);
 
         if (!this.provider.isReload){
             // communication with parent frame.

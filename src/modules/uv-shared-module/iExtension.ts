@@ -7,6 +7,8 @@ interface IExtension{
     mouseY: number;
     shifted: boolean;
     provider: any;
+    embedWidth: number;
+    embedHeight: number;
 
     getParam(key: baseProvider.params): any;
     height(): number;
