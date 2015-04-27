@@ -68,7 +68,7 @@ class BootStrapper{
 
             // if "sessionstorage"
             if (that.params.config.toLowerCase() === "sessionstorage"){
-                var config = sessionStorage.getItem("uv-config");
+                var config = sessionStorage.getItem("uv-config-" + that.params.localeName);
                 that.configExtension = JSON.parse(config);
                 that.loadManifest();
             } else {
@@ -201,7 +201,7 @@ class BootStrapper{
         //}
 
         // todo: use a compiler flag when available
-        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.getLocale() + '.config.js' : 'js/' + extension.name + '.' + that.params.getLocale() + '.config.js';
+        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.getLocaleName() + '.config.js' : 'js/' + extension.name + '.' + that.params.getLocaleName() + '.config.js';
 
         // feature detection
         yepnope({

@@ -61,7 +61,7 @@ export class BaseProvider implements IProvider{
         // todo: make these getters when ES5 target is available
         this.manifestUri = this.bootstrapper.params.manifestUri;
         this.jsonp = this.bootstrapper.params.jsonp;
-        this.locale = this.bootstrapper.params.getLocale();
+        this.locale = this.bootstrapper.params.getLocaleName();
         this.isHomeDomain = this.bootstrapper.params.isHomeDomain;
         this.isReload = this.bootstrapper.params.isReload;
         this.embedDomain = this.bootstrapper.params.embedDomain;

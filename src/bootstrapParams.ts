@@ -6,7 +6,8 @@ class bootstrapParams {
     jsonp: boolean;
     isHomeDomain: boolean;
     isReload: boolean;
-    private _locale: string;
+    locale: string;
+    localeName: string;
     locales: any[];
     embedDomain: string;
     isOnlyInstance: boolean;
@@ -16,8 +17,9 @@ class bootstrapParams {
 
     // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' into array
     setLocale(locale: string): void {
+        this.locale = locale;
         this.locales = [];
-        var l = locale.split(',');
+        var l = this.locale.split(',');
 
         for (var i = 0; i < l.length; i++) {
             var v = l[i].split(':');
@@ -27,11 +29,11 @@ class bootstrapParams {
             });
         }
 
-        this._locale = this.locales[0].name;
+        this.localeName = this.locales[0].name;
     }
 
-    getLocale(): string {
-        return this._locale;
+    getLocaleName(): string {
+        return this.localeName;
     }
 }
 

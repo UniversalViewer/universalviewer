@@ -235,7 +235,7 @@ docReady(function() {
             rotation = $app.attr('data-rotation');
             config = $app.attr('data-config');
             jsonp = $app.attr('data-jsonp');
-            locale = $app.attr('data-locale');
+            locale = $app.attr('data-locale') || "en-GB";
 
             isFullScreen = false;
             height = $app.height();
@@ -361,7 +361,7 @@ docReady(function() {
                     "&embedDomain=" + document.domain +
                     "&domain=" + domain +
                     "&isLightbox=" + isLightbox +
-                    "&locale=" + (locale || "en-GB");
+                    "&locale=" + locale;
 
                 if (reload) uri += "&reload=true";
                 if (config) uri += "&config=" + config;

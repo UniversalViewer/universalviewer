@@ -74,7 +74,10 @@ export class BaseExtension implements IExtension {
         }
 
         this.triggerSocket(BaseExtension.LOAD, {
-            config: this.provider.config
+            bootstrapper: {
+                config: this.provider.bootstrapper.config,
+                params: this.provider.bootstrapper.params
+            }
         });
 
         // add/remove classes.
