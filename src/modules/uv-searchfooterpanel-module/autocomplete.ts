@@ -2,22 +2,35 @@
 
 class AutoComplete{
 
-	delay: number = 300;
+    $element: JQuery;
+    autoCompleteUri: string;
+    delay: number;
+    parseResults: (results: any) => string[];
+    onSelect: (terms: string) => void;
 	selectedResultIndex: number;
 	results: any;
 
 	$searchResultsList: JQuery;
 	$searchResultTemplate: JQuery;
 	element: HTMLInputElement;
-	selectionStart: number;
 
-	constructor(public $element: JQuery, public autoCompletePath: string, public onSelect: any){
+	constructor(element: JQuery,
+                autoCompleteUri: string,
+                delay: number,
+                parseResults: (results: any) => string[],
+                onSelect: (terms: string) => void){
+
+        this.$element = element;
+        this.autoCompleteUri = autoCompleteUri;
+        this.delay = delay;
+        this.parseResults = parseResults;
+        this.onSelect = onSelect;
 
         // create ui.
-        this.$searchResultsList = $('<ul></ul>');
+        this.$searchResultsList = $('<ul class="autocomplete"></ul>');
         this.$element.parent().prepend(this.$searchResultsList);
 
-        this.$searchResultTemplate = $('<li><a href="#"></a></li>');
+        this.$searchResultTemplate = $('<li class="result"><a href="#"></a></li>');
 
         // init ui.
 
@@ -178,7 +191,7 @@ class AutoComplete{
 
         var that = this;
 
-        $.getJSON(this.autoCompletePath + '?term=' + term, function (results) {
+        $.getJSON(String.prototype.format(this.autoCompleteUri, term), function (results) {
             that.listResults(results);
         });
     }
@@ -203,7 +216,7 @@ class AutoComplete{
     }
 
     listResults(results): void {
-        this.results = results;
+        this.results = this.parseResults(results);
 
         this.clearResults();
 

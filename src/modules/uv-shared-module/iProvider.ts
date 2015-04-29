@@ -9,10 +9,10 @@ import BootstrapParams = require("../../bootstrapParams");
 // interacting with the IIIF data model.
 interface IProvider{
     canvasIndex: number;
-	manifest: any;
-	sequence: any;
-	sequenceIndex: number;
-	treeRoot: TreeNode;
+    manifest: any;
+    sequence: any;
+    sequenceIndex: number;
+    treeRoot: TreeNode;
 
     addTimestamp(uri: string): string;
     getAttribution(): string;
@@ -30,6 +30,7 @@ interface IProvider{
     getSeeAlso(): any;
     getSequenceType(): string;
     getManifestation(type: string): string;
+    getService(resource: any, profile: string): any;
     getStructureByPath(path: string): any;
     getThumbs(width: number, height: number): Thumb[];
     getThumbUri(canvas: any, width: number, height: number): string;

@@ -166,6 +166,25 @@ export class BaseProvider implements IProvider{
         }
     }
 
+    getService(resource: any, profile: string): any {
+        if (!resource.service) return null;
+
+        if ($.isArray(resource.service)){
+            for (var i = 0; i < resource.service.length; i++){
+                var service = resource.service[i];
+                if (service.profile && service.profile === profile) {
+                    return service;
+                }
+            }
+        } else {
+            if (resource.service.profile && resource.service.profile === profile){
+                return resource.service;
+            }
+        }
+
+        return null;
+    }
+
     getSequenceType(): string{
         // todo: perhaps use viewingHint attribute
         // default to 'seadragon-iiif'

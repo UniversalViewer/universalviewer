@@ -187,7 +187,7 @@ export class FooterPanel extends footer.FooterPanel {
         });
 
         // hide search options if not enabled/supported.
-        if (!(<ISeadragonProvider>this.provider).isSearchWithinEnabled()) {
+        if (!this.provider.isSearchWithinEnabled()) {
             this.$searchContainer.hide();
             this.$searchPagerContainer.hide();
             this.$searchResultsContainer.hide();
@@ -195,9 +195,14 @@ export class FooterPanel extends footer.FooterPanel {
             this.$element.addClass('min');
         }
 
-        //new AutoComplete(this.$searchText, (<ISeadragonProvider>this.provider).getAutoCompleteUri(), (terms) => {
-        //    this.search(terms);
-        //});
+        new AutoComplete(this.$searchText, this.provider.getAutoCompleteUri(), 300,
+            (results: any) => {
+                return results.resources[0].resource.suggestions;
+            },
+            (terms: string) => {
+                this.search(terms);
+            }
+        );
     }
 
     checkForSearchParams(): void{

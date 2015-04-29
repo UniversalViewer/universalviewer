@@ -14,6 +14,9 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     pages: Page[];
     searchResults: SearchResult[] = [];
 
+    AUTOCOMPLETE_PROFILE: string = "http://iiif.io/api/autocomplete/1/";
+    SEARCH_WITHIN_PROFILE: string = "http://iiif.io/api/search/1/";
+
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
 
@@ -24,12 +27,6 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
             autoCompleteUriTemplate: '{0}{1}',
             iiifImageUriTemplate: '{0}/{1}/{2}/{3}/{4}/{5}.jpg'
         }, bootstrapper.config.options);
-    }
-
-    getAutoCompleteUri(): string{
-        //var baseUri = this.config.options.autoCompleteBaseUri || "";
-        //return String.prototype.format(this.config.options.autoCompleteUriTemplate, baseUri, this.sequence.autoCompletePath);
-        return ""; // todo
     }
 
     getCroppedImageUri(canvas: any, viewer: any): string {
@@ -106,7 +103,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var id = this.getImageId(canvas);
         var region = 'full';
         var size;
-        
+
         if (typeof(height) != "undefined"){
             size = width + ',' + height;
         } else {
@@ -232,14 +229,23 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         return true;
     }
 
-    getSearchWithinService(): string {
-        if (this.manifest.service){
-            if (this.manifest.service.profile === "http://iiif.io/api/search/1/"){
-                return this.manifest.service;
-            }
-        }
+    getAutoCompleteService(): string {
+        return this.getService(this.manifest, this.AUTOCOMPLETE_PROFILE);
+    }
 
-        return null;
+    getAutoCompleteUri(): string{
+        var service = this.getAutoCompleteService();
+
+        if (!service) return null;
+
+        var uri = service["@id"];
+        uri = uri.substr(0, uri.indexOf('{'));
+        uri = uri + "&q={0}";
+        return uri;
+    }
+
+    getSearchWithinService(): string {
+        return this.getService(this.manifest, this.SEARCH_WITHIN_PROFILE);
     }
 
     getSearchWithinServiceUri(): string {
