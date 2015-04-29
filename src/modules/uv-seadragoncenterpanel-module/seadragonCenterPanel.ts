@@ -115,6 +115,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
             id: "viewer",
+            ajaxWithCredentials: true,
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
