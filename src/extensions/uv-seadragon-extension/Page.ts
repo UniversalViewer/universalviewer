@@ -5,6 +5,9 @@ class Page {
         return $.ajax({
             dataType: "json",
             url: this.tileSourceUri,
+            //xhrFields: {
+            //    withCredentials: true
+            //},
             success: (data: any) => {
                 this.tileSource = data;
             },
