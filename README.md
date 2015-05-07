@@ -1,5 +1,7 @@
 # Universal Viewer
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UniversalViewer/universalviewer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [Demo](http://universalviewer.azurewebsites.net/)
 
 [National Library of Wales Demo](http://nlw.azurewebsites.net/)
