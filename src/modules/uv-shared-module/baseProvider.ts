@@ -157,11 +157,19 @@ export class BaseProvider implements IProvider{
     }
 
     getManifestation(type: string): string {
-        var service = this.sequence.service;
+        var services = this.sequence.service;
+        if (services) {
+            if (!$.isArray(services)) {
+                services = [services];
+            }
 
-        if (service && service["profile"] === "http://iiif.io/api/otherManifestations.json"){
-            if (service.format.endsWith("pdf")){
-                return service["@id"];
+            for (var i = 0; i < services.length; i++) {
+                var service = services[i];
+                if (service && service["profile"] === "http://iiif.io/api/otherManifestations.json"){
+                    if (service.format.endsWith("pdf")){
+                        return service["@id"];
+                    }
+                }
             }
         }
     }
