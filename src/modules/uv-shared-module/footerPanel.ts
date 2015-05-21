@@ -98,7 +98,7 @@ export class FooterPanel extends baseView.BaseView {
         var configEnabled = utils.Utils.getBool(this.options.downloadEnabled, true);
         var settings: ISettings = this.provider.getSettings();
 
-        if (configEnabled && !settings.pagingEnabled){
+        if (configEnabled && (!settings.pagingEnabled || this.provider.getManifestation("pdf"))){
             this.$downloadButton.show();
         } else {
             this.$downloadButton.hide();

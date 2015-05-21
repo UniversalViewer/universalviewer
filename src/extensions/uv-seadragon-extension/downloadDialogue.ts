@@ -29,6 +29,11 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
     }
 
+    close(): void {
+        this.isOpened = false;
+        super.close();
+    }
+
     create(): void {
 
         this.setConfig('downloadDialogue');
@@ -152,18 +157,26 @@ export class DownloadDialogue extends dialogue.Dialogue {
         // enable download based on license code.
         if (this.isDownloadOptionAvailable("currentViewAsJpg")) {
             this.$currentViewAsJpgButton.show();
+        } else {
+            this.$currentViewAsJpgButton.hide();
         }
 
         if (this.isDownloadOptionAvailable("wholeImageHighResAsJpg")) {
             this.$wholeImageHighResAsJpgButton.show();
+        } else {
+            this.$wholeImageHighResAsJpgButton.hide();
         }
 
         if (this.isDownloadOptionAvailable("wholeImageLowResAsJpg")) {
             this.$wholeImageLowResAsJpgButton.show();
+        } else {
+            this.$wholeImageLowResAsJpgButton.hide();
         }
 
         if (this.isDownloadOptionAvailable("entireDocumentAsPdf")) {
             this.$entireDocumentAsPdfButton.show();
+        } else {
+            this.$entireDocumentAsPdfButton.hide();
         }
 
         //if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
@@ -213,7 +226,11 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
             return false;
         }
-        return true;
+
+        // If we got this far, options only apply in 1-up mode; if we're
+        // showing multiple pages, we have to suppress download options.
+        var settings: ISettings = this.provider.getSettings();
+        return !settings.pagingEnabled;
     }
 
     resize(): void {
