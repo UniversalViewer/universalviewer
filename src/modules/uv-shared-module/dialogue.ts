@@ -9,6 +9,7 @@ export class Dialogue extends baseView.BaseView {
     isActive: boolean = false;
     allowClose: boolean = true;
     returnFunc: any;
+    isUnopened: boolean = true;
 
     $top: JQuery;
     $closeButton: JQuery;
@@ -97,7 +98,16 @@ export class Dialogue extends baseView.BaseView {
 
         $.publish(shell.Shell.SHOW_OVERLAY);
 
+        if (this.isUnopened){
+            this.isUnopened = false;
+            this.afterFirstOpen();
+        }
+
         this.resize();
+    }
+
+    afterFirstOpen(): void {
+
     }
 
     close(): void {

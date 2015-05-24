@@ -6,6 +6,8 @@ import utils = require("../../utils");
 import IProvider = require("./iProvider");
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
+import ServiceProfile = require("./ServiceProfile");
+import RenderingFormat = require("./RenderingFormat");
 import util = utils.Utils;
 
 export enum params {
@@ -156,37 +158,38 @@ export class BaseProvider implements IProvider{
         return 'monograph';
     }
 
-    getManifestation(type: string): string {
-        var services = this.sequence.service;
-        if (services) {
-            if (!$.isArray(services)) {
-                services = [services];
-            }
-
-            for (var i = 0; i < services.length; i++) {
-                var service = services[i];
-                if (service && service["profile"] === "http://iiif.io/api/otherManifestations.json"){
-                    if (service.format.endsWith("pdf")){
-                        return service["@id"];
-                    }
-                }
-            }
-        }
-    }
-
-    getService(resource: any, profile: string): any {
+    getService(resource: any, profile: ServiceProfile): any {
         if (!resource.service) return null;
 
-        if ($.isArray(resource.service)){
-            for (var i = 0; i < resource.service.length; i++){
-                var service = resource.service[i];
-                if (service.profile && service.profile === profile) {
-                    return service;
-                }
+        var services = resource.service;
+
+        if (!$.isArray(services)){
+            services = [services];
+        }
+
+        for (var i = 0; i < services.length; i++){
+            var service = services[i];
+            if (service.profile && service.profile === profile.toString()) {
+                return service;
             }
-        } else {
-            if (resource.service.profile && resource.service.profile === profile){
-                return resource.service;
+        }
+
+        return null;
+    }
+
+    getRendering(resource: any, format: RenderingFormat): any {
+        if (!resource.rendering) return null;
+
+        var renderings = resource.rendering;
+
+        if (!$.isArray(renderings)){
+            renderings = [renderings];
+        }
+
+        for (var i = 0; i < renderings.length; i++){
+            var rendering = renderings[i];
+            if (rendering.format && rendering.format === format.toString()) {
+                return rendering;
             }
         }
 

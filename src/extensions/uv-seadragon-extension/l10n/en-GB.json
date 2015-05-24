@@ -13,127 +13,128 @@
                 "close": "Close"
             }
         },
-        "genericDialogue": {
-            "content": {
-                "emptyValue": "please enter a value.",
-                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
-                "ok": "OK",
-                "refresh": "Refresh",
-                "invalidNumber": "Please enter a valid number.",
-                "noMatches": "No matches were found."
-            }
-        },
-        "helpDialogue": {
-            "content": {
-                "title": "Help",
-                "text": "placeholder text"
-            }
-        },
-        "settingsDialogue": {
-            "content": {
-                "title": "Settings",
-                "pagingEnabled": "Two Page View",
-                "preserveViewport": "Preserve Zoom",
-                "locale": "Locale"
-            }
-        },
         "downloadDialogue": {
             "content": {
-                "title": "Download",
                 "currentViewAsJpg": "Current view (jpg)",
-                "wholeImageHighResAsJpg": "Whole image high res (jpg)",
-                "wholeImageLowResAsJpg": "Whole image low res (jpg)",
+                "download": "Download",
                 "entireDocumentAsPdf": "Entire document (pdf)",
                 "entireFileAsOriginal": "Entire file ({0})",
+                "noneAvailable": "No download options are available.",
                 "preview": "Preview",
-                "download": "Download"
+                "title": "Download",
+                "wholeImageHighResAsJpg": "Whole image high res (jpg)",
+                "wholeImageLowResAsJpg": "Whole image low res (jpg)"
             }
         },
         "embedDialogue": {
             "content": {
-                "title": "Embed",
-                "instructions": "To embed this item in your own website, copy and paste the code below:",
-                "width": "Width",
+                "customSize": "Custom Size",
                 "height": "Height",
-                "customSize": "Custom Size"
-            }
-        },
-        "pagingHeaderPanel": {
-            "content": {
-                "help": "Help",
-                "image": "Image",
-                "page": "Page",
-                "first": "First",
-                "previous": "Previous",
-                "next": "Next",
-                "last": "Last",
-                "go": "Go",
-                "of": "of {0}",
-                "emptyValue": "Please enter a value",
-                "close": "Close",
-                "settings": "Settings",
-                "oneUp": "Single page view",
-                "twoUp": "Two page view"
-            }
-        },
-        "treeViewLeftPanel": {
-            "content": {
-                "index": "Index",
-                "thumbnails": "Thumbnails",
-                "title": "Contents",
-                "expand": "Expand Contents",
-                "expandFull": "Expand Gallery",
-                "collapse": "Collapse Contents",
-                "collapseFull": "Collapse Gallery"
-            }
-        },
-        "seadragonCenterPanel": {
-            "content": {
-                "previous": "Previous",
-                "next": "Next",
-                "zoomIn": "Zoom In",
-                "zoomOut": "Zoom Out",
-                "imageUnavailable": "Image Unavailable",
-                "acknowledgements": "Acknowledgements"
-            }
-        },
-        "moreInfoRightPanel": {
-            "content": {
-                "holdingText": "Your module goes here!",
-                "noData": "No data to display",
-                "title": "More Information",
-                "expand": "Expand More Information",
-                "expandFull": "Expand Gallery",
-                "collapse": "Collapse More Information",
-                "collapseFull": "Collapse Gallery"
+                "instructions": "To embed this item in your own website, copy and paste the code below:",
+                "title": "Embed",
+                "width": "Width"
             }
         },
         "footerPanel": {
             "content": {
-                "fullScreen": "Full Screen",
-                "exitFullScreen": "Exit Full Screen",
+                "download": "Download",
                 "embed": "Embed",
-                "download": "Download"
+                "exitFullScreen": "Exit Full Screen",
+                "fullScreen": "Full Screen"
+            }
+        },
+        "genericDialogue": {
+            "content": {
+                "emptyValue": "please enter a value.",
+                "invalidNumber": "Please enter a valid number.",
+                "noMatches": "No matches were found.",
+                "ok": "OK",
+                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
+                "refresh": "Refresh"
+            }
+        },
+        "helpDialogue": {
+            "content": {
+                "text": "placeholder text",
+                "title": "Help"
+            }
+        },
+        "moreInfoRightPanel": {
+            "content": {
+                "collapse": "Collapse More Information",
+                "collapseFull": "Collapse Gallery",
+                "expand": "Expand More Information",
+                "expandFull": "Expand Gallery",
+                "holdingText": "Your module goes here!",
+                "noData": "No data to display",
+                "title": "More Information"
+            }
+        },
+        "pagingHeaderPanel": {
+            "content": {
+                "close": "Close",
+                "emptyValue": "Please enter a value",
+                "first": "First",
+                "go": "Go",
+                "help": "Help",
+                "image": "Image",
+                "last": "Last",
+                "next": "Next",
+                "of": "of {0}",
+                "oneUp": "Single page view",
+                "page": "Page",
+                "previous": "Previous",
+                "settings": "Settings",
+                "twoUp": "Two page view"
+            }
+        },
+        "seadragonCenterPanel": {
+            "content": {
+                "acknowledgements": "Acknowledgements",
+                "imageUnavailable": "Image Unavailable",
+                "next": "Next",
+                "previous": "Previous",
+                "zoomIn": "Zoom In",
+                "zoomOut": "Zoom Out"
             }
         },
         "searchFooterPanel":
         {
             "content":
             {
+                "clearSearch": "Clear Search",
+                "displaying": "Displaying {0} {1} of {2}",
+                "enterKeyword": "Enter Keyword",
+                "image": "image",
+                "imageCaps": "Image",
                 "instanceFound": "1 instance of '{0}' found",
                 "instancesFound": "{0} instances of '{1}' found",
+                "nextResult": "Next Result",
+                "page": "page",
+                "pageCaps": "Page",
+                "previousResult": "Previous Result",
                 "resultFoundFor": "result found for",
                 "resultsFoundFor": "results found for",
-                "displaying": "Displaying {0} {1} of {2}",
-                "page": "page",
-                "image": "image",
-                "searchWithin": "Search within this item:",
-                "enterKeyword": "Enter Keyword",
-                "pageCaps": "Page",
-                "imageCaps": "Image",
-                "clearSearch": "Clear Search",
-                "previousResult": "Previous Result",
-                "nextResult": "Next Result"
+                "searchWithin": "Search within this item:"
+            }
+        },
+        "settingsDialogue": {
+            "content": {
+                "locale": "Locale",
+                "pagingEnabled": "Two Page View",
+                "preserveViewport": "Preserve Zoom",
+                "title": "Settings"
+            }
+        },
+        "treeViewLeftPanel": {
+            "content": {
+                "collapse": "Collapse Contents",
+                "collapseFull": "Collapse Gallery",
+                "expand": "Expand Contents",
+                "expandFull": "Expand Gallery",
+                "index": "Index",
+                "thumbnails": "Thumbnails",
+                "title": "Contents"
             }
         }
     }

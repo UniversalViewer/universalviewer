@@ -6,6 +6,7 @@ import ISeadragonProvider = require("./iSeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
 import Page = require("./Page");
+import ServiceProfile = require("../../modules/uv-shared-module/serviceProfile");
 import utils = require("../../utils");
 import util = utils.Utils;
 
@@ -13,9 +14,6 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
     pages: Page[];
     searchResults: SearchResult[] = [];
-
-    AUTOCOMPLETE_PROFILE: string = "http://iiif.io/api/autocomplete/1/";
-    SEARCH_WITHIN_PROFILE: string = "http://iiif.io/api/search/1/";
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -230,7 +228,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     }
 
     getAutoCompleteService(): string {
-        return this.getService(this.manifest, this.AUTOCOMPLETE_PROFILE);
+        return this.getService(this.manifest, ServiceProfile.autoComplete);
     }
 
     getAutoCompleteUri(): string{
@@ -239,13 +237,12 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         if (!service) return null;
 
         var uri = service["@id"];
-        uri = uri.substr(0, uri.indexOf('{'));
-        uri = uri + "&q={0}";
+        uri = uri + "{0}";
         return uri;
     }
 
     getSearchWithinService(): string {
-        return this.getService(this.manifest, this.SEARCH_WITHIN_PROFILE);
+        return this.getService(this.manifest, ServiceProfile.searchWithin);
     }
 
     getSearchWithinServiceUri(): string {
@@ -254,8 +251,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         if (!service) return null;
 
         var uri = service["@id"];
-        uri = uri.substr(0, uri.indexOf('{'));
-        uri = uri + "&q={0}";
+        uri = uri + "{0}";
         return uri;
     }
 

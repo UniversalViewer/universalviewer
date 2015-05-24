@@ -1,137 +1,137 @@
-
 {
-  "localisation": {
-    "label": "Cymraeg"
-  },
-  "content": {
-    "canvasIndexOutOfRange": "Mynegai gynfas tu hwnt i'r amrediad"
-  },
-  "modules": {
-    "dialogue": {
-      "content": {
-        "close": "Cau"
-      }
+    "localisation": {
+        "label": "Cymraeg"
     },
-    "genericDialogue": {
-      "content": {
-        "emptyValue": "rhowch rif",
-        "pageNotFound": "Nid yw'r eitem yn cynnwys tudalen gyda'r rhif a nodwyd. Ceisiwch cyfnewid y math i 'delwedd'.",
-        "ok": "GWELD",
-        "refresh": "Ailosod",
-        "invalidNumber": "Rhowch rif dilys",
-        "noMatches": "Dim canlyniad sy'n cyfateb."
-      }
+    "content": {
+        "canvasIndexOutOfRange": "Mynegai gynfas tu hwnt i'r amrediad"
     },
-    "helpDialogue": {
-      "content": {
-        "title": "Cymorth",
-        "text": "testun i'w osod"
-      }
-    },
-    "settingsDialogue": {
-      "content": {
-        "title": "Dewisiadau",
-        "pagingEnabled": "Arddangos dwy dudalen",
-        "preserveViewport": "Cadw'r lefel o glosio",
-        "locale": "Iaith"
-      }
-    },
-    "downloadDialogue": {
-      "content": {
-        "title": "Lawrlwytho",
-        "currentViewAsJpg": "Golwg presennol (jpg)",
-        "wholeImageHighResAsJpg": "Y ddelwedd gyfan o ansawdd uchel (jpg)",
-        "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)",
-        "entireDocumentAsPdf": "Y ddogfen gyflawn (pdf)",
-        "entireFileAsOriginal": "Y ffeil gyfan ({0})",
-        "preview": "Rhagolwg",
-        "download": "Lawrlwytho"
-      }
-    },
-    "embedDialogue": {
-      "content": {
-        "title": "Ymgorffori",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:",
-        "width": "Lled",
-        "height": "Hyd",
-        "customSize": "Maint ddewisol"
-      }
-    },
-    "pagingHeaderPanel": {
-      "content": {
-        "help": "Cymorth",
-        "image": "Delwedd",
-        "page": "Tudalen",
-        "first": "gyntaf",
-        "previous": "Cynt",
-        "next": "Nesaf",
-        "last": "Olaf",
-        "go": "GWELD",
-        "of": "o {0}",
-        "emptyValue": "Mewnosodwch werth",
-        "close": "Cau",
-        "settings": "Dewisiadau",
-        "oneUp": "Gweld un dudalen ar y tro",
-        "twoUp": "Gweld dwy dudalen ar y tro"
-      }
-    },
-    "treeViewLeftPanel": {
-      "content": {
-        "index": "Mynegai",
-        "thumbnails": "Bodluniau",
-        "title": "Cynnwys",
-        "expand": "Ehangu'r Cynnwys",
-        "expandFull": "Ehangu'r Galeri",
-        "collapse": "Cuddio'r Cynnwys",
-        "collapseFull": "Cuddio'r Galeri"
-      }
-    },
-    "seadragonCenterPanel": {
-      "content": {
-        "previous": "gynt",
-        "next": "nesaf",
-        "zoomIn": "Closio",
-        "zoomOut": "Gwrthglosio",
-        "imageUnavailable": "Nid oes delwedd ar gael",
-        "acknowledgements": "Cydnabyddiaethau"
-      }
-    },
-    "moreInfoRightPanel": {
-      "content": {
-        "holdingText": "Eich modiwl fan hyn!",
-        "noData": "Nid oes data i'w arddangos",
-        "title": "Mwy o Wybodaeth",
-        "expand": "Ehangu Fwy o Wybodaeth",
-        "expandFull": "Ehangu'r Galeri",
-        "collapse": "Cuddio Mwy o Wybodaeth",
-        "collapseFull": "Cuddio'r Galeri"
-      }
-    },
-    "footerPanel": {
-      "content": {
-        "fullScreen": "Sgrin lawn",
-        "exitFullScreen": "Dianc o'r sgrin lawn",
-        "embed": "Ymgorffori",
-        "download": "Lawrlwytho"
-      }
-    },
-    "searchFooterPanel": {
-      "content": {
-        "instanceFound": "Dangos 1 canlyniad ar gyfer '{0}' ",
-        "instancesFound": "Dangos {0} canlyniad o '{1}' ",
-        "resultFoundFor": "canlyniad a geir ar gyfer",
-        "resultsFoundFor": "canlyniad ar gyfer",
-        "displaying": "Dangos {0} {1} o {2}",
-        "page": "tudalen",
-        "image": "delwedd",
-        "searchWithin": "Chwilio tu fewn i:",
-        "enterKeyword": "Mewnosodwch allweddair",
-        "pageCaps": "tudalen",
-        "imageCaps": "delwedd",
-        "clearSearch": "Clirio bob dewis",
-        "previousResult": "Canlyniad blaenorol",
-        "nextResult": "Canlyniad nesaf"
-      }
+    "modules": {
+        "dialogue": {
+            "content": {
+                "close": "Cau"
+            }
+        },
+        "downloadDialogue": {
+            "content": {
+                "currentViewAsJpg": "Golwg presennol (jpg)",
+                "download": "Lawrlwytho",
+                "entireDocumentAsPdf": "Y ddogfen gyflawn (pdf)",
+                "entireFileAsOriginal": "Y ffeil gyfan ({0})",
+                "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
+                "preview": "Rhagolwg",
+                "title": "Lawrlwytho",
+                "wholeImageHighResAsJpg": "Y ddelwedd gyfan o ansawdd uchel (jpg)",
+                "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)"
+            }
+        },
+        "embedDialogue": {
+            "content": {
+                "customSize": "Maint ddewisol",
+                "height": "Hyd",
+                "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:",
+                "title": "Ymgorffori",
+                "width": "Lled"
+            }
+        },
+        "footerPanel": {
+            "content": {
+                "download": "Lawrlwytho",
+                "embed": "Ymgorffori",
+                "exitFullScreen": "Dianc o'r sgrin lawn",
+                "fullScreen": "Sgrin lawn"
+            }
+        },
+        "genericDialogue": {
+            "content": {
+                "emptyValue": "rhowch rif",
+                "invalidNumber": "Rhowch rif dilys",
+                "noMatches": "Dim canlyniad sy'n cyfateb.",
+                "ok": "GWELD",
+                "pageNotFound": "Nid yw'r eitem yn cynnwys tudalen gyda'r rhif a nodwyd. Ceisiwch cyfnewid y math i 'delwedd'.",
+                "refresh": "Ailosod"
+            }
+        },
+        "helpDialogue": {
+            "content": {
+                "text": "testun i'w osod",
+                "title": "Cymorth"
+            }
+        },
+        "moreInfoRightPanel": {
+            "content": {
+                "collapse": "Cuddio Mwy o Wybodaeth",
+                "collapseFull": "Cuddio'r Galeri",
+                "expand": "Ehangu Fwy o Wybodaeth",
+                "expandFull": "Ehangu'r Galeri",
+                "holdingText": "Eich modiwl fan hyn!",
+                "noData": "Nid oes data i'w arddangos",
+                "title": "Mwy o Wybodaeth"
+            }
+        },
+        "pagingHeaderPanel": {
+            "content": {
+                "close": "Cau",
+                "emptyValue": "Mewnosodwch werth",
+                "first": "gyntaf",
+                "go": "GWELD",
+                "help": "Cymorth",
+                "image": "Delwedd",
+                "last": "Olaf",
+                "next": "Nesaf",
+                "of": "o {0}",
+                "oneUp": "Gweld un dudalen ar y tro",
+                "page": "Tudalen",
+                "previous": "Cynt",
+                "settings": "Dewisiadau",
+                "twoUp": "Gweld dwy dudalen ar y tro"
+            }
+        },
+        "seadragonCenterPanel": {
+            "content": {
+                "acknowledgements": "Cydnabyddiaethau",
+                "imageUnavailable": "Nid oes delwedd ar gael",
+                "next": "nesaf",
+                "previous": "gynt",
+                "zoomIn": "Closio",
+                "zoomOut": "Gwrthglosio"
+            }
+        },
+        "searchFooterPanel": {
+            "content": {
+                "clearSearch": "Clirio bob dewis",
+                "displaying": "Dangos {0} {1} o {2}",
+                "enterKeyword": "Mewnosodwch allweddair",
+                "image": "delwedd",
+                "imageCaps": "delwedd",
+                "instanceFound": "Dangos 1 canlyniad ar gyfer '{0}' ",
+                "instancesFound": "Dangos {0} canlyniad o '{1}' ",
+                "nextResult": "Canlyniad nesaf",
+                "page": "tudalen",
+                "pageCaps": "tudalen",
+                "previousResult": "Canlyniad blaenorol",
+                "resultFoundFor": "canlyniad a geir ar gyfer",
+                "resultsFoundFor": "canlyniad ar gyfer",
+                "searchWithin": "Chwilio tu fewn i:"
+            }
+        },
+        "settingsDialogue": {
+            "content": {
+                "locale": "Iaith",
+                "pagingEnabled": "Arddangos dwy dudalen",
+                "preserveViewport": "Cadw'r lefel o glosio",
+                "title": "Dewisiadau"
+            }
+        },
+        "treeViewLeftPanel": {
+            "content": {
+                "collapse": "Cuddio'r Cynnwys",
+                "collapseFull": "Cuddio'r Galeri",
+                "expand": "Ehangu'r Cynnwys",
+                "expandFull": "Ehangu'r Galeri",
+                "index": "Mynegai",
+                "thumbnails": "Bodluniau",
+                "title": "Cynnwys"
+            }
+        }
     }
-  }
 }

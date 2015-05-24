@@ -4,6 +4,7 @@ import BootStrapper = require("../../bootstrapper");
 import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
 import BootstrapParams = require("../../bootstrapParams");
+import ServiceProfile = require("./ServiceProfile");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
@@ -29,8 +30,7 @@ interface IProvider{
     getMetaData(callback: (data: any) => any): void;
     getSeeAlso(): any;
     getSequenceType(): string;
-    getManifestation(type: string): string;
-    getService(resource: any, profile: string): any;
+    getService(resource: any, profile: ServiceProfile): any;
     getStructureByPath(path: string): any;
     getThumbs(width: number, height: number): Thumb[];
     getThumbUri(canvas: any, width: number, height: number): string;

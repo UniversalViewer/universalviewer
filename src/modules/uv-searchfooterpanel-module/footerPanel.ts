@@ -196,8 +196,8 @@ export class FooterPanel extends footer.FooterPanel {
         }
 
         new AutoComplete(this.$searchText, this.provider.getAutoCompleteUri(), 300,
-            (results: any) => {
-                return results.resources[0].resource.suggestions;
+            (results: string[]) => {
+                return results;
             },
             (terms: string) => {
                 this.search(terms);

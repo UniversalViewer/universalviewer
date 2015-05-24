@@ -4,10 +4,14 @@ import utils = require("../../utils");
 import dialogue = require("../../modules/uv-shared-module/dialogue");
 import ISeadragonExtension = require("./iSeadragonExtension");
 import ISeadragonProvider = require("./iSeadragonProvider");
+import DownloadOption = require("./DownloadOption");
+import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
+import RenderingFormat = require("../../modules/uv-shared-module/RenderingFormat");
 
 export class DownloadDialogue extends dialogue.Dialogue {
 
     $title: JQuery;
+    $noneAvailable: JQuery;
     $downloadOptions: JQuery;
     $currentViewAsJpgButton: JQuery;
     $wholeImageHighResAsJpgButton: JQuery;
@@ -22,11 +26,8 @@ export class DownloadDialogue extends dialogue.Dialogue {
     static DOWNLOAD: string = 'onDownload';
     //static PREVIEW: string = 'onPreview';
 
-    isOpened: boolean = false; // todo: use isActive?
-
     constructor($element: JQuery) {
         super($element);
-
     }
 
     create(): void {
@@ -37,7 +38,6 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
         $.subscribe(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
             this.open();
-            this.opened();
         });
 
         $.subscribe(DownloadDialogue.HIDE_DOWNLOAD_DIALOGUE, (e) => {
@@ -47,6 +47,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
         // create ui.
         this.$title = $('<h1>' + this.content.title + '</h1>');
         this.$content.append(this.$title);
+
+        this.$noneAvailable = $('<div class="noneAvailable">' + this.content.noneAvailable + '</div>');
+        this.$content.append(this.$noneAvailable);
 
         this.$downloadOptions = $('<ol class="options"></ol>');
         this.$content.append(this.$downloadOptions);
@@ -132,7 +135,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
                     $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageLowResAsJpg']);
                     break;
                 case 'entireDocumentAsPdf':
-                    window.open((<ISeadragonProvider>that.provider).getManifestation("pdf"));
+                    window.open(this.getPdfUri());
                     $.publish(DownloadDialogue.DOWNLOAD, ['entireDocumentAsPdf']);
                     break;
             }
@@ -144,26 +147,31 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$element.hide();
     }
 
-    opened() {
-        if (this.isOpened) return;
+    open() {
+        super.open();
 
-        this.isOpened = true;
-
-        // enable download based on license code.
-        if (this.isDownloadOptionAvailable("currentViewAsJpg")) {
+        if (this.isDownloadOptionAvailable(DownloadOption.CurrentViewAsJpg)) {
             this.$currentViewAsJpgButton.show();
+        } else {
+            this.$currentViewAsJpgButton.hide();
         }
 
-        if (this.isDownloadOptionAvailable("wholeImageHighResAsJpg")) {
-            this.$wholeImageHighResAsJpgButton.show();
-        }
-
-        if (this.isDownloadOptionAvailable("wholeImageLowResAsJpg")) {
-            this.$wholeImageLowResAsJpgButton.show();
-        }
-
-        if (this.isDownloadOptionAvailable("entireDocumentAsPdf")) {
+        if (this.isDownloadOptionAvailable(DownloadOption.EntireDocumentAsPDF)) {
             this.$entireDocumentAsPdfButton.show();
+        } else {
+            this.$entireDocumentAsPdfButton.hide();
+        }
+
+        if (this.isDownloadOptionAvailable(DownloadOption.WholeImageHighResAsJpg)) {
+            this.$wholeImageHighResAsJpgButton.show();
+        } else {
+            this.$wholeImageHighResAsJpgButton.hide();
+        }
+
+        if (this.isDownloadOptionAvailable(DownloadOption.WholeImageLowResAsJpg)) {
+            this.$wholeImageLowResAsJpgButton.show();
+        } else {
+            this.$wholeImageLowResAsJpgButton.hide();
         }
 
         //if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
@@ -187,8 +195,15 @@ export class DownloadDialogue extends dialogue.Dialogue {
         //    }
         //}
 
-        // select first option.
-        this.$downloadOptions.find('input:first').prop("checked", true);
+        if (!this.$downloadOptions.find('input:visible').length){
+            this.$noneAvailable.show();
+            this.$downloadButton.hide();
+        } else {
+            // select first option.
+            this.$downloadOptions.find('input:visible:first').prop("checked", true);
+            this.$noneAvailable.hide();
+            this.$downloadButton.show();
+        }
 
         this.resize();
     }
@@ -205,15 +220,41 @@ export class DownloadDialogue extends dialogue.Dialogue {
         return this.$downloadOptions.find("input:checked");
     }
 
-    isDownloadOptionAvailable(option): boolean {
-        if (option === "entireDocumentAsPdf"){
-            if (this.provider.getManifestation("pdf")){
-                return true;
-            }
+    isDownloadOptionAvailable(option: DownloadOption): boolean {
+        var settings: ISettings = this.provider.getSettings();
 
-            return false;
+        switch (option){
+            case DownloadOption.CurrentViewAsJpg:
+                if (settings.pagingEnabled){
+                    return false;
+                }
+                return true;
+            case DownloadOption.EntireDocumentAsPDF:
+                if (this.getPdfUri()){
+                    return true;
+                }
+                return false;
+            case DownloadOption.WholeImageHighResAsJpg:
+                if (settings.pagingEnabled){
+                    return false;
+                }
+                return true;
+            case DownloadOption.WholeImageLowResAsJpg:
+                if (settings.pagingEnabled){
+                    return false;
+                }
+                return true;
         }
-        return true;
+    }
+
+    getPdfUri(): string {
+        var rendering = this.provider.getRendering(this.provider.sequence, RenderingFormat.pdf);
+
+        if (rendering){
+            return rendering['@id'];
+        }
+
+        return null;
     }
 
     resize(): void {

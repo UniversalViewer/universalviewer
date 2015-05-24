@@ -5,7 +5,7 @@ class AutoComplete{
     $element: JQuery;
     autoCompleteUri: string;
     delay: number;
-    parseResults: (results: any) => string[];
+    parseResults: (results: string[]) => string[];
     onSelect: (terms: string) => void;
 	selectedResultIndex: number;
 	results: any;
@@ -191,7 +191,7 @@ class AutoComplete{
 
         var that = this;
 
-        $.getJSON(String.prototype.format(this.autoCompleteUri, term), function (results) {
+        $.getJSON(String.prototype.format(this.autoCompleteUri, term), function (results: string[]) {
             that.listResults(results);
         });
     }
@@ -215,7 +215,7 @@ class AutoComplete{
         });
     }
 
-    listResults(results): void {
+    listResults(results: string[]): void {
         this.results = this.parseResults(results);
 
         this.clearResults();

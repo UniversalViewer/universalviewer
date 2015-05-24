@@ -1,24 +1,24 @@
 {
     "options":
     {
-        "theme": "en-GB-theme",
         "leftPanelEnabled": true,
-        "rightPanelEnabled": true,
         "overrideFullScreen": false,
         "pagingEnabled": true,
         "preserveViewport": false,
-        "searchWithinEnabled": true
+        "rightPanelEnabled": true,
+        "searchWithinEnabled": true,
+        "theme": "en-GB-theme"
     },
     "modules":
     {
-        "genericDialogue":
-        {
+        "dialogue": {
         },
-        "helpDialogue":
+        "downloadDialogue":
         {
-        },
-        "settingsDialogue":
-        {
+            "options":
+            {
+                "confinedImageSize": 1000
+            }
         },
         "embedDialogue":
         {
@@ -27,11 +27,29 @@
                 "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-sequenceindex=\"{3}\" data-canvasindex=\"{4}\" data-zoom=\"{5}\" data-rotation=\"{6}\" style=\"width:{7}px; height:{8}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{9}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
             }
         },
-        "downloadDialogue":
+        "footerPanel":
+        {
+            "options":{
+                "downloadEnabled": true,
+                "embedEnabled": true,
+                "fullscreenEnabled": true,
+                "minimiseButtons": false
+            }
+        },
+        "genericDialogue":
+        {
+        },
+        "helpDialogue":
+        {
+        },
+        "moreInfoRightPanel":
         {
             "options":
             {
-                "confinedImageSize": 1000
+                "panelAnimationDuration": 250,
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelOpen": false
             }
         },
         "pagingHeaderPanel":
@@ -42,58 +60,17 @@
                 "pagingToggleEnabled": true
             }
         },
-        "treeViewLeftPanel":
-        {
-            "options":
-            {
-                "thumbsLoadRange": 15,
-                "thumbsImageFadeInDuration": 300,
-                "panelCollapsedWidth": 30,
-                "panelExpandedWidth": 255,
-                "panelOpen": true,
-                "panelAnimationDuration": 250,
-                "oneColThumbWidth": 200,
-                "oneColThumbHeight": 320,
-                "twoColThumbWidth": 90,
-                "twoColThumbHeight": 150,
-                "galleryThumbWidth": 200,
-                "galleryThumbHeight": 320,
-                "thumbsExtraHeight": 8,
-                "elideCount": 40,
-                "treeEnabled": true,
-                "thumbsEnabled": true
-            }
-        },
         "seadragonCenterPanel":
         {
             "options":
             {
-                "pageGap": 0.01,
-                "defaultZoomLevel": 0,
                 "controlsFadeAfterInactive": 1500,
                 "controlsFadeDelay": 250,
                 "controlsFadeLength": 250,
+                "defaultZoomLevel": 0,
                 "navigatorPosition": "BOTTOM_RIGHT",
+                "pageGap": 0.01,
                 "trimAttributionCount": 150
-            }
-        },
-        "moreInfoRightPanel":
-        {
-            "options":
-            {
-                "panelCollapsedWidth": 30,
-                "panelExpandedWidth": 255,
-                "panelAnimationDuration": 250,
-                "panelOpen": false
-            }
-        },
-        "footerPanel":
-        {
-            "options":{
-                "embedEnabled": true,
-                "downloadEnabled": true,
-                "minimiseButtons": false,
-                "fullscreenEnabled": true
             }
         },
         "searchFooterPanel":
@@ -101,6 +78,31 @@
             "options":{
                 "elideDetailsTermsCount": 20,
                 "elideResultsTermsCount": 10
+            }
+        },
+        "settingsDialogue":
+        {
+        },
+        "treeViewLeftPanel":
+        {
+            "options":
+            {
+                "elideCount": 40,
+                "galleryThumbHeight": 320,
+                "galleryThumbWidth": 200,
+                "oneColThumbHeight": 320,
+                "oneColThumbWidth": 200,
+                "panelAnimationDuration": 250,
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelOpen": true,
+                "thumbsEnabled": true,
+                "thumbsExtraHeight": 8,
+                "thumbsImageFadeInDuration": 300,
+                "thumbsLoadRange": 15,
+                "treeEnabled": true,
+                "twoColThumbHeight": 150,
+                "twoColThumbWidth": 90
             }
         }
     }
