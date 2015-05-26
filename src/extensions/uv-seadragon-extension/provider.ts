@@ -6,7 +6,7 @@ import ISeadragonProvider = require("./iSeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
 import Page = require("./Page");
-import ServiceProfile = require("../../modules/uv-shared-module/serviceProfile");
+import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
 import utils = require("../../utils");
 import util = utils.Utils;
 
