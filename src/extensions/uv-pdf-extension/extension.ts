@@ -162,8 +162,6 @@ export class Extension extends baseExtension.BaseExtension{
 
         this.viewCanvas(0, () => {
 
-            this.provider.setMediaUri(canvas);
-
             $.publish(Extension.OPEN_MEDIA, [canvas]);
 
             this.setParam(baseProvider.params.canvasIndex, 0);

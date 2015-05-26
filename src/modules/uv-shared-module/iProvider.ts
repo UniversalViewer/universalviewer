@@ -5,6 +5,7 @@ import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
 import BootstrapParams = require("../../bootstrapParams");
 import ServiceProfile = require("./ServiceProfile");
+import CanvasType = require("./CanvasType");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
@@ -23,6 +24,7 @@ interface IProvider{
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexById(id: string): number;
     getCanvasStructure(canvas: any): any;
+    getCanvasType(canvas?: any): string;
     getCurrentCanvas(): any;
     getLocalisedValue(property: any): string;
     getManifestSeeAlsoUri(manifest: any): string;
@@ -58,7 +60,7 @@ interface IProvider{
     parseStructure(): void;
     sanitize(html: string): string;
 
-    // should these move to extension? (not generic to IIIF)
+    // todo: move these to extension
     bootstrapper: BootStrapper;
     config: any;
     domain: string;
@@ -71,7 +73,6 @@ interface IProvider{
     locale: string;
     locales: any[];
 
-    getMediaUri(mediaUri: string): string;
     getDomain(): string;
     getEmbedDomain(): string;
     defaultToThumbsView(): boolean;
@@ -79,7 +80,6 @@ interface IProvider{
     paramMap: string[];
     reloadManifest(callback: any): void;
     reload(params?: BootstrapParams);
-    setMediaUri(canvas: any): void;
     getSettings(): ISettings;
     updateSettings(settings: ISettings): void;
     getLocales(): any;

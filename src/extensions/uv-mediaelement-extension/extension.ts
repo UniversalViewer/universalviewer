@@ -16,6 +16,7 @@ import baseRight = require("../../modules/uv-shared-module/rightPanel");
 import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
 import footer = require("../../modules/uv-shared-module/footerPanel");
 import help = require("../../modules/uv-dialogues-module/helpDialogue");
+import download = require("./downloadDialogue");
 import embed = require("./embedDialogue");
 import IProvider = require("../../modules/uv-shared-module/iProvider");
 
@@ -28,6 +29,8 @@ export class Extension extends baseExtension.BaseExtension{
     footerPanel: footer.FooterPanel;
     $helpDialogue: JQuery;
     helpDialogue: help.HelpDialogue;
+    $downloadDialogue: JQuery;
+    downloadDialogue: download.DownloadDialogue;
     $embedDialogue: JQuery;
     embedDialogue: embed.EmbedDialogue;
 
@@ -44,8 +47,6 @@ export class Extension extends baseExtension.BaseExtension{
     create(overrideDependencies?: any): void {
         super.create();
 
-        var that = this;
-
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
             $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
@@ -57,6 +58,10 @@ export class Extension extends baseExtension.BaseExtension{
 
         $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
             this.viewManifest(data);
+        });
+
+        $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
+            $.publish(download.DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
         });
 
         $.subscribe(footer.FooterPanel.EMBED, (e) => {
@@ -125,11 +130,15 @@ export class Extension extends baseExtension.BaseExtension{
         this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
         this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
 
-        this.$helpDialogue = utils.Utils.createDiv('overlay help');
+        this.$helpDialogue = $('<div class="overlay help"></div>');
         shell.Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new help.HelpDialogue(this.$helpDialogue);
 
-        this.$embedDialogue = utils.Utils.createDiv('overlay embed');
+        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        shell.Shell.$overlays.append(this.$downloadDialogue);
+        this.downloadDialogue = new download.DownloadDialogue(this.$downloadDialogue);
+
+        this.$embedDialogue = $('<div class="overlay embed"></div>');
         shell.Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
 
@@ -154,8 +163,6 @@ export class Extension extends baseExtension.BaseExtension{
         var canvas = this.provider.getCanvasByIndex(0);
 
         this.viewCanvas(0, () => {
-
-            this.provider.setMediaUri(canvas);
 
             $.publish(Extension.OPEN_MEDIA, [canvas]);
 

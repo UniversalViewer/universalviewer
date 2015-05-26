@@ -82,29 +82,23 @@ require([
             name: 'uv-seadragon-extension'
         };
 
-        //extensions['video/mp4'] = {
-        //    type: mediaelementExtension.Extension,
-        //    provider: mediaelementProvider.Provider,
-        //    name: 'uv-mediaelement-extension'
-        //};
-        //
-        //extensions['video/multiple-sources'] = {
-        //    type: mediaelementExtension.Extension,
-        //    provider: mediaelementProvider.Provider,
-        //    name: 'uv-mediaelement-extension'
-        //};
-        //
-        //extensions['audio/mp3'] = {
-        //    type: mediaelementExtension.Extension,
-        //    provider: mediaelementProvider.Provider,
-        //    name: 'uv-mediaelement-extension'
-        //};
-        //
-        //extensions['application/pdf'] = {
-        //    type: pdfExtension.Extension,
-        //    provider: pdfProvider.Provider,
-        //    name: 'uv-pdf-extension'
-        //};
+        extensions['video/iiif'] = {
+            type: mediaelementExtension.Extension,
+            provider: mediaelementProvider.Provider,
+            name: 'uv-mediaelement-extension'
+        };
+
+        extensions['audio/iiif'] = {
+            type: mediaelementExtension.Extension,
+            provider: mediaelementProvider.Provider,
+            name: 'uv-mediaelement-extension'
+        };
+
+        extensions['pdf/iiif'] = {
+            type: pdfExtension.Extension,
+            provider: pdfProvider.Provider,
+            name: 'uv-pdf-extension'
+        };
 
         var bs = new bootstrapper(extensions);
 

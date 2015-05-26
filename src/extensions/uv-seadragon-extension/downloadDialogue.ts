@@ -18,13 +18,11 @@ export class DownloadDialogue extends dialogue.Dialogue {
     $wholeImageLowResAsJpgButton: JQuery;
     $entireDocumentAsPdfButton: JQuery;
     $buttonsContainer: JQuery;
-    //$previewButton: JQuery;
     $downloadButton: JQuery;
 
     static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
     static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
     static DOWNLOAD: string = 'onDownload';
-    //static PREVIEW: string = 'onPreview';
 
     constructor($element: JQuery) {
         super($element);
@@ -54,91 +52,55 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions = $('<ol class="options"></ol>');
         this.$content.append(this.$downloadOptions);
 
-        this.$currentViewAsJpgButton = $('<li><input id="currentViewAsJpg" type="radio" name="downloadOptions" /><label for="currentViewAsJpg">' + this.content.currentViewAsJpg + '</label></li>');
+        this.$currentViewAsJpgButton = $('<li><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '">' + this.content.currentViewAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
-        this.$wholeImageHighResAsJpgButton = $('<li><input id="wholeImageHighResAsJpg" type="radio" name="downloadOptions" /><label for="wholeImageHighResAsJpg">' + this.content.wholeImageHighResAsJpg + '</label></li>');
+        this.$wholeImageHighResAsJpgButton = $('<li><input id="' + DownloadOption.wholeImageHighResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageHighResAsJpg.toString() + '">' + this.content.wholeImageHighResAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$wholeImageHighResAsJpgButton);
         this.$wholeImageHighResAsJpgButton.hide();
 
-        this.$wholeImageLowResAsJpgButton = $('<li><input id="wholeImageLowResAsJpg" type="radio" name="downloadOptions" /><label for="wholeImageLowResAsJpg">' + this.content.wholeImageLowResAsJpg + '</label></li>');
+        this.$wholeImageLowResAsJpgButton = $('<li><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
-        this.$entireDocumentAsPdfButton = $('<li><input id="entireDocumentAsPdf" type="radio" name="downloadOptions" /><label for="entireDocumentAsPdf">' + this.content.entireDocumentAsPdf + '</label></li>');
+        this.$entireDocumentAsPdfButton = $('<li><input id="' + DownloadOption.entireDocumentAsPDF.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsPDF.toString() + '">' + this.content.entireDocumentAsPdf + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
         this.$entireDocumentAsPdfButton.hide();
 
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
-        //this.$previewButton = $('<a class="btn btn-primary" href="#">' + this.content.preview + '</a>');
-        //this.$buttonsContainer.append(this.$previewButton);
-
         this.$downloadButton = $('<a class="btn btn-primary" href="#">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
 
         var that = this;
-
-        // ui event handlers.
-        //this.$previewButton.on('click', (e) => {
-        //    e.preventDefault();
-        //
-        //    var selectedOption = this.getSelectedOption();
-        //
-        //    var id = selectedOption.attr('id');
-        //    var canvas = this.provider.getCurrentCanvas();
-        //
-        //    switch (id){
-        //        case 'currentViewAsJpg':
-        //            window.open((<ISeadragonExtension>that.extension).getCropUri(false));
-        //            $.publish(DownloadDialogue.PREVIEW, ['currentViewAsJpg']);
-        //            break;
-        //        case 'wholeImageHighResAsJpg':
-        //            window.open((<ISeadragonProvider>that.provider).getImage(canvas, true, false));
-        //            $.publish(DownloadDialogue.PREVIEW, ['wholeImageHighResAsJpg']);
-        //            break;
-        //        case 'wholeImageLowResAsJpg':
-        //            window.open((<ISeadragonProvider>that.provider).getImage(canvas, false, false));
-        //            $.publish(DownloadDialogue.PREVIEW, ['wholeImageLowResAsJpg']);
-        //            break;
-        //        //case 'entireDocumentAsPdf':
-        //        //    window.open((<ISeadragonProvider>that.provider).getPDF(false));
-        //        //    $.publish(DownloadDialogue.PREVIEW, ['entireDocumentAsPdf']);
-        //        //    break;
-        //    }
-        //
-        //    this.close();
-        //});
 
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
 
             var selectedOption = that.getSelectedOption();
 
-            var id = selectedOption.attr('id');
+            var id: string = selectedOption.attr('id');
             var canvas = this.provider.getCurrentCanvas();
 
             switch (id){
-                case 'currentViewAsJpg':
+                case DownloadOption.currentViewAsJpg.toString():
                     var viewer = (<ISeadragonExtension>that.extension).getViewer();
                     window.open((<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, viewer, true));
-                    $.publish(DownloadDialogue.DOWNLOAD, ['currentViewAsJpg']);
                     break;
-                case 'wholeImageHighResAsJpg':
+                case DownloadOption.wholeImageHighResAsJpg.toString():
                     window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.width, canvas.height));
-                    $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageHighResAsJpg']);
                     break;
-                case 'wholeImageLowResAsJpg':
+                case DownloadOption.wholeImageLowResAsJpg.toString():
                     window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
-                    $.publish(DownloadDialogue.DOWNLOAD, ['wholeImageLowResAsJpg']);
                     break;
-                case 'entireDocumentAsPdf':
+                case DownloadOption.entireDocumentAsPDF.toString():
                     window.open(this.getPdfUri());
-                    $.publish(DownloadDialogue.DOWNLOAD, ['entireDocumentAsPdf']);
                     break;
             }
+
+            $.publish(DownloadDialogue.DOWNLOAD, [id]);
 
             this.close();
         });
@@ -150,52 +112,31 @@ export class DownloadDialogue extends dialogue.Dialogue {
     open() {
         super.open();
 
-        if (this.isDownloadOptionAvailable(DownloadOption.CurrentViewAsJpg)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
             this.$currentViewAsJpgButton.show();
         } else {
             this.$currentViewAsJpgButton.hide();
         }
 
-        if (this.isDownloadOptionAvailable(DownloadOption.EntireDocumentAsPDF)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.entireDocumentAsPDF)) {
             this.$entireDocumentAsPdfButton.show();
         } else {
             this.$entireDocumentAsPdfButton.hide();
         }
 
-        if (this.isDownloadOptionAvailable(DownloadOption.WholeImageHighResAsJpg)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.wholeImageHighResAsJpg)) {
             this.$wholeImageHighResAsJpgButton.show();
         } else {
             this.$wholeImageHighResAsJpgButton.hide();
         }
 
-        if (this.isDownloadOptionAvailable(DownloadOption.WholeImageLowResAsJpg)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.wholeImageLowResAsJpg)) {
             this.$wholeImageLowResAsJpgButton.show();
         } else {
             this.$wholeImageLowResAsJpgButton.hide();
         }
 
-        //if (this.isDownloadOptionAvailable("entireFileAsOriginal")) {
-        //    var canvas = this.provider.getCurrentCanvas();
-        //
-        //    var fileExtension = this.getFileExtension(canvas.fileUri);
-        //
-        //    if (fileExtension !== 'jp2'){
-        //
-        //        // if no sources are available, use original (mp3 or mp4)
-        //        if (!canvas.sources){
-        //            this.addEntireFileDownloadOption(canvas.fileUri);
-        //        } else {
-        //            for (var i = 0; i < canvas.sources.length; i++){
-        //                this.addEntireFileDownloadOption(canvas.sources[i].src);
-        //            }
-        //        }
-        //
-        //        this.$downloadButton.hide();
-        //        this.$previewButton.hide();
-        //    }
-        //}
-
-        if (!this.$downloadOptions.find('input:visible').length){
+        if (!this.$downloadOptions.find('li:visible').length){
             this.$noneAvailable.show();
             this.$downloadButton.hide();
         } else {
@@ -208,14 +149,6 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.resize();
     }
 
-    //addEntireFileDownloadOption(fileUri: string): void{
-    //    this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.prototype.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
-    //}
-
-    getFileExtension(fileUri: string): string{
-        return fileUri.split('.').pop();
-    }
-
     getSelectedOption() {
         return this.$downloadOptions.find("input:checked");
     }
@@ -224,22 +157,22 @@ export class DownloadDialogue extends dialogue.Dialogue {
         var settings: ISettings = this.provider.getSettings();
 
         switch (option){
-            case DownloadOption.CurrentViewAsJpg:
+            case DownloadOption.currentViewAsJpg:
                 if (settings.pagingEnabled){
                     return false;
                 }
                 return true;
-            case DownloadOption.EntireDocumentAsPDF:
+            case DownloadOption.entireDocumentAsPDF:
                 if (this.getPdfUri()){
                     return true;
                 }
                 return false;
-            case DownloadOption.WholeImageHighResAsJpg:
+            case DownloadOption.wholeImageHighResAsJpg:
                 if (settings.pagingEnabled){
                     return false;
                 }
                 return true;
-            case DownloadOption.WholeImageLowResAsJpg:
+            case DownloadOption.wholeImageLowResAsJpg:
                 if (settings.pagingEnabled){
                     return false;
                 }

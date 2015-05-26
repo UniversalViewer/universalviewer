@@ -8,6 +8,7 @@ import TreeNode = require("./treeNode");
 import Thumb = require("./thumb");
 import ServiceProfile = require("./ServiceProfile");
 import RenderingFormat = require("./RenderingFormat");
+import CanvasType = require("./CanvasType");
 import util = utils.Utils;
 
 export enum params {
@@ -202,6 +203,11 @@ export class BaseProvider implements IProvider{
         return 'seadragon-iiif';
     }
 
+    getCanvasType(canvas?: any): string {
+        if (!canvas) canvas = this.getCurrentCanvas();
+        return canvas['@type'].toLowerCase();
+    }
+
     getAttribution(): string {
         return this.getLocalisedValue(this.manifest.attribution);
     }
@@ -314,10 +320,6 @@ export class BaseProvider implements IProvider{
         var uri = String.prototype.format(template, baseUri, mediaUri);
 
         return uri;
-    }
-
-    setMediaUri(canvas: any): void{
-        //canvas.mediaUri = this.getMediaUri(canvas.resources[0].resource['@id'] + '/info.json');
     }
 
     getPagedIndices(canvasIndex?: number): number[]{

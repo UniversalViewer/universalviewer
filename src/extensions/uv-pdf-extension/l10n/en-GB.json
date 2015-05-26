@@ -2,59 +2,59 @@
     "localisation": {
         "label": "English (GB)"
     },
-    "modules":
-    {
-        "embedDialogue":
-        {
-            "content":
-            {
-                "instructions": "To embed this item in your own website, copy and paste the code below:",
-                "title": "Embed"
+    "modules": {
+        "dialogue": {
+            "content": {
+                "close": "Close"
             }
         },
-        "footerPanel":
-        {
-            "content":
-            {
+        "embedDialogue": {
+            "content": {
+                "customSize": "Custom Size",
+                "height": "Height",
+                "instructions": "To embed this item in your own website, copy and paste the code below:",
+                "title": "Embed",
+                "width": "Width"
+            }
+        },
+        "footerPanel": {
+            "content": {
+                "download": "Download",
                 "embed": "Embed",
                 "exitFullScreen": "Exit Full Screen",
                 "fullScreen": "Full Screen"
             }
         },
-        "genericDialogue":
-        {
-            "content":
-            {
+        "genericDialogue": {
+            "content": {
                 "ok": "OK"
             }
         },
-        "headerPanel":
-        {
-            "content":
-            {
+        "headerPanel": {
+            "content": {
                 "close": "Close",
                 "help": "Help"
             }
         },
-        "helpDialogue":
-        {
-            "content":
-            {
+        "helpDialogue": {
+            "content": {
                 "text": "placeholder text",
                 "title": "Help"
             }
         },
-        "moreInfoRightPanel":
-        {
-            "content":
-            {
-                "holdingText": "Your module goes here!"
+        "moreInfoRightPanel": {
+            "content": {
+                "collapse": "Collapse More Information",
+                "collapseFull": "Collapse Gallery",
+                "expand": "Expand More Information",
+                "expandFull": "Expand Gallery",
+                "holdingText": "Your module goes here!",
+                "noData": "No data to display",
+                "title": "More Information"
             }
         },
-        "pdfCenterPanel":
-        {
-            "content":
-            {
+        "pdfCenterPanel": {
+            "content": {
 
             }
         },

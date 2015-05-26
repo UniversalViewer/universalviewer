@@ -206,7 +206,7 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     isPDF(): boolean{
-        return (this.provider.getSequenceType() === "application-pdf");
+        return (this.provider.getCanvasType().contains("pdf"));
     }
 
     setLabel(): void {

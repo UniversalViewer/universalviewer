@@ -32,7 +32,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         // events.
 
         // only full screen video
-        if (this.provider.getSequenceType().contains('video')){
+        if (this.provider.getCanvasType(this.provider.getCanvasByIndex(0)).contains('video')){
             $.subscribe(baseExtension.BaseExtension.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
@@ -68,18 +68,26 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         this.$container.width(this.mediaWidth);
 
         var id = utils.Utils.getTimeStamp();
-
         var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
+        var canvasType: string = this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
 
-        var type = this.provider.getSequenceType();
+        var sources = [];
 
-        if (type.contains('video')){
+        _.each(canvas.media, (annotation: any) => {
+            var resource = annotation.resource;
+            sources.push({
+                type: resource.format.substr(resource.format.indexOf(':') + 1),
+                src: resource['@id']
+            });
+        });
 
-            if (!canvas.sources){
-                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
-            } else {
+        if (canvasType.contains('video')){
+
+            //if (!canvas.sources){
+            //    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
+            //} else {
                 this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
-            }
+            //}
 
             this.player = new MediaElementPlayer("#" + id, {
                 type: ['video/mp4', 'video/webm', 'video/flv'],
@@ -106,9 +114,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                         $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                     });
 
-                    if (canvas.sources && canvas.sources.length){
-                        media.setSrc(canvas.sources);
-                    }
+                    media.setSrc(sources);
 
                     try {
                         media.load();
@@ -117,9 +123,9 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                     }
                 }
             });
-        } else if (type.contains('audio')){
+        } else if (canvasType.contains('audio')){
 
-            this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
+            this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + sources[0].src + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
 
             this.player = new MediaElementPlayer("#" + id, {
                 plugins: ['flash'],
@@ -147,6 +153,8 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                         $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                     });
 
+                    //media.setSrc(sources);
+
                     try {
                         media.load();
                     } catch (e) {
@@ -159,16 +167,12 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         this.resize();
     }
 
-    getPlayer() {
-        return this.player;
-    }
-
     resize() {
 
         super.resize();
 
         // if in Firefox < v13 don't resize the media container.
-        if (window.browserDetect.browser == 'Firefox' && window.browserDetect.version < 13) {
+        if (window.browserDetect.browser === 'Firefox' && window.browserDetect.version < 13) {
             this.$container.width(this.mediaWidth);
             this.$container.height(this.mediaHeight);
         } else {

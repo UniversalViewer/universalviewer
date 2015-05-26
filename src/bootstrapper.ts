@@ -116,14 +116,6 @@ class BootStrapper{
     parseManifest(manifest: any): void {
         this.manifest = manifest;
 
-        //var sequenceParam = 'si';
-
-        //if (this.configExtension && this.configExtension.options && this.configExtension.options.IIIF) {
-        //    this.IIIF = this.configExtension.options.IIIF;
-        //}
-
-        //if (!this.IIIF) sequenceParam = 'asi';
-
         if (this.params.isHomeDomain && !this.params.isReload) {
             this.sequenceIndex = parseInt(util.getHashParameter("si", parent.document));
         }
@@ -132,11 +124,20 @@ class BootStrapper{
             this.sequenceIndex = parseInt(util.getQuerystringParameter("si")) || 0;
         }
 
-        //if (!this.IIIF) {
-        //    this.sequences = this.manifest.assetSequences;
-        //} else {
-            this.sequences = this.manifest.sequences;
-        //}
+        // is it a collection?
+        if (this.manifest.manifests){
+            // for now, default to the first manifest in the collection.
+            // todo: improve collections handling - should a new "mi" param be introduced?
+            this.params.manifestUri = this.manifest.manifests[0].service['@id'];
+            this.loadManifest();
+            return;
+        }
+
+        if (this.manifest.xsequences){
+            this.manifest.sequences = this.manifest.xsequences;
+        }
+
+        this.sequences = this.manifest.sequences;
 
         if (!this.sequences) {
             this.notFound();
@@ -149,36 +150,19 @@ class BootStrapper{
 
         var that = this;
 
-        //if (!that.IIIF){
-        //    // if it's not a reference, load dependencies
-        //    if (!that.sequences[that.sequenceIndex].$ref) {
-        //        that.sequence = that.sequences[that.sequenceIndex];
-        //        that.loadDependencies();
-        //    } else {
-        //        // load referenced sequence.
-        //        var baseManifestUri = that.params.manifestUri.substr(0, that.params.manifestUri.lastIndexOf('/') + 1);
-        //        var sequenceUri = baseManifestUri + that.sequences[that.sequenceIndex].$ref;
-        //
-        //        $.getJSON(sequenceUri, (sequenceData) => {
-        //            that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
-        //            that.loadDependencies();
-        //        });
-        //    }
-        //} else {
-            // if it's not a reference, load dependencies
-            if (that.sequences[that.sequenceIndex].canvases) {
-                that.sequence = that.sequences[that.sequenceIndex];
-                that.loadDependencies();
-            } else {
-                // load referenced sequence.
-                var sequenceUri = String(that.sequences[that.sequenceIndex]['@id']);
+        // if it's not a reference, load dependencies
+        if (that.sequences[that.sequenceIndex].canvases) {
+            that.sequence = that.sequences[that.sequenceIndex];
+            that.loadDependencies();
+        } else {
+            // load referenced sequence.
+            var sequenceUri = String(that.sequences[that.sequenceIndex]['@id']);
 
-                $.getJSON(sequenceUri, (sequenceData) => {
-                    that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
-                    that.loadDependencies();
-                });
-            }
-        //}
+            $.getJSON(sequenceUri, (sequenceData) => {
+                that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
+                that.loadDependencies();
+            });
+        }
     }
 
     notFound(): void{
@@ -193,12 +177,29 @@ class BootStrapper{
         var that = this;
         var extension;
 
-        //if (!that.IIIF){
-        //    extension = that.extensions[that.sequence.assetType];
-        //} else {
-            // only seadragon extension is compatible with IIIF
-            extension = that.extensions['seadragon/iiif'];
-        //}
+        // look at the first canvas type in the sequence and use that
+        // to establish which extension to use.
+        // todo: should viewinghint="time-based" be added to the manifest/sequence?
+        // The UV should probably be able to load different extensions on a per-canvas-basis.
+
+        var canvasType = that.sequence.canvases[0]['@type'];
+
+        switch(canvasType.toLowerCase()) {
+            case 'sc:canvas':
+                extension = that.extensions['seadragon/iiif'];
+                break;
+            case 'ixif:audio':
+                extension = that.extensions['audio/iiif'];
+                break;
+            case 'ixif:video':
+                extension = that.extensions['video/iiif'];
+                break;
+            case 'ixif:pdf':
+                extension = that.extensions['pdf/iiif'];
+                break;
+        }
+
+
 
         // todo: use a compiler flag when available
         var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.getLocaleName() + '.config.js' : 'js/' + extension.name + '.' + that.params.getLocaleName() + '.config.js';
