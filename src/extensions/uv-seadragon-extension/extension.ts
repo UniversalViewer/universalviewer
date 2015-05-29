@@ -345,10 +345,10 @@ export class Extension extends baseExtension.BaseExtension {
             return;
         }
 
-        this.isLoading = true;
-
         // if it's a valid canvas index.
         if (canvasIndex == -1) return;
+
+        this.isLoading = true;
 
         if (this.provider.isPagingSettingEnabled() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
