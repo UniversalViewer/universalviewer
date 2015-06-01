@@ -104,7 +104,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$lastButton = $('<a class="imageBtn last" tabindex="2"></a>');
         this.$nextOptions.append(this.$lastButton);
 
-        if ((<ISeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if (this.inPageMode()) {
             this.$pageModeOption.attr('checked', 'checked');
             this.$pageModeOption.removeAttr('disabled');
             this.$pageModeLabel.removeClass('disabled');
@@ -137,13 +137,24 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             $.publish(PagingHeaderPanel.NEXT);
         });
 
-        this.$imageModeOption.on('click', (e) => {
-            $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.IMAGE_MODE]);
-        });
+        // If label mode is disabled, we don't need to show radio buttons since
+        // there is only one option:
+        if (!this.config.options.pageModeEnabled) {
+            this.$imageModeOption.hide();
+            this.$pageModeLabel.hide();
+            this.$pageModeOption.hide();
+        } else {
+            // Only activate click actions for mode buttons when controls are
+            // visible, since otherwise, clicking on the "Image" label can
+            // trigger unexpected/undesired side effects.
+            this.$imageModeOption.on('click', (e) => {
+                $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.IMAGE_MODE]);
+            });
 
-        this.$pageModeOption.on('click', (e) => {
-            $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.PAGE_MODE]);
-        });
+            this.$pageModeOption.on('click', (e) => {
+                $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.PAGE_MODE]);
+            });
+        }
 
         this.$searchText.onEnter(() => {
             this.$searchText.blur();
@@ -188,11 +199,16 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         //});
     }
 
+    inPageMode(): boolean {
+        return this.config.options.pageModeEnabled
+            && (<ISeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE;
+    }
+
     setTitles(): void {
 
         var mode;
 
-        if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
+        if (this.inPageMode()) {
             mode = this.content.page;
         } else {
             mode = this.content.image;
@@ -209,7 +225,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var of = this.content.of;
 
-        if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
+        if (this.inPageMode()) {
             this.$total.html(String.prototype.format(of, this.provider.getLastCanvasLabel()));
         } else {
             this.$total.html(String.prototype.format(of, this.provider.getTotalCanvases()));
@@ -220,7 +236,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var canvas = this.provider.getCanvasByIndex(index);
 
-        if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
+        if (this.inPageMode()) {
 
             var orderLabel = this.provider.getLocalisedValue(canvas.label);
 
@@ -247,7 +263,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             return;
         }
 
-        if ((<ISeadragonExtension>this.extension).getMode() === extension.Extension.PAGE_MODE) {
+        if (this.inPageMode()) {
             $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val(), 10);
