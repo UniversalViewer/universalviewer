@@ -3,6 +3,7 @@
 import baseLeft = require("../uv-shared-module/leftPanel");
 import utils = require("../../utils");
 import tree = require("./treeView");
+import TreeNode = require("../uv-shared-module/treeNode");
 import thumbs = require("./thumbsView");
 import gallery = require("./galleryView");
 import baseView = require("../uv-shared-module/baseView");
@@ -21,6 +22,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     $treeView: JQuery;
     $thumbsView: JQuery;
     $galleryView: JQuery;
+    treeData: TreeNode;
     treeView: tree.TreeView;
     thumbsView: thumbs.ThumbsView;
     galleryView: gallery.GalleryView;
@@ -93,6 +95,12 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             $.publish(TreeViewLeftPanel.OPEN_TREE_VIEW);
         });
 
+        // Don't display the "index" tab if it will be empty:
+        this.treeData = this.provider.getTree();
+        if (this.treeData.nodes.length == 0) {
+            this.$treeButton.hide();
+        }
+
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
@@ -115,7 +123,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
     dataBindTreeView(): void{
         if (!this.treeView) return;
-        this.treeView.rootNode = this.provider.getTree();
+        this.treeView.rootNode = this.treeData;
         this.treeView.dataBind();
     }
 
