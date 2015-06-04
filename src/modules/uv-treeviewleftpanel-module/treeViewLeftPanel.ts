@@ -95,12 +95,6 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
             $.publish(TreeViewLeftPanel.OPEN_TREE_VIEW);
         });
 
-        // Don't display the "index" tab if it will be empty:
-        this.treeData = this.provider.getTree();
-        if (this.treeData.nodes.length == 0) {
-            this.$treeButton.hide();
-        }
-
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
@@ -169,6 +163,12 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
             var treeEnabled = utils.Utils.getBool(this.config.options.treeEnabled, true);
             var thumbsEnabled = utils.Utils.getBool(this.config.options.thumbsEnabled, true);
+
+            this.treeData = this.provider.getTree();
+
+            if (!this.treeData.nodes.length) {
+                treeEnabled = false;
+            }
 
             // hide the tabs if either tree or thumbs are disabled.
             if (!treeEnabled || !thumbsEnabled) this.$tabs.hide();
