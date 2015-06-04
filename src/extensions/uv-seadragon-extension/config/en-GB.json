@@ -57,6 +57,7 @@
             "options":
             {
                 "localeToggleEnabled": false,
+                "pageModeEnabled": true,
                 "pagingToggleEnabled": true
             }
         },
@@ -77,7 +78,8 @@
         {
             "options":{
                 "elideDetailsTermsCount": 20,
-                "elideResultsTermsCount": 10
+                "elideResultsTermsCount": 10,
+                "pageModeEnabled": true
             }
         },
         "settingsDialogue":
@@ -92,6 +94,7 @@
                 "galleryThumbWidth": 200,
                 "oneColThumbHeight": 320,
                 "oneColThumbWidth": 200,
+                "pageModeEnabled": true,
                 "panelAnimationDuration": 250,
                 "panelCollapsedWidth": 30,
                 "panelExpandedWidth": 255,

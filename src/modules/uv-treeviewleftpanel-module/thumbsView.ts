@@ -215,7 +215,7 @@ export class ThumbsView extends baseView.BaseView {
             $(this.$thumbs).find('span.index').hide();
             $(this.$thumbs).find('span.label').hide();
         } else {
-            if (this.config.options.pageModeEnabled && (<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+            if (this.isPageModeEnabled()) {
                 $(this.$thumbs).find('span.index').hide();
                 $(this.$thumbs).find('span.label').show();
             } else {
@@ -224,6 +224,10 @@ export class ThumbsView extends baseView.BaseView {
             }
         }
 
+    }
+
+    isPageModeEnabled(): boolean {
+        return this.config.options.pageModeEnabled && this.extension.getMode() === extension.Extension.PAGE_MODE;
     }
 
     selectIndex(index): void {

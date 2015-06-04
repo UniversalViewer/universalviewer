@@ -94,6 +94,7 @@
             "content":
             {
                 "clearSearch": "Clear Search (xx-XX)",
+                "defaultLabel": "- (xx-XX)",
                 "displaying": "Displaying {0} {1} of {2} (xx-XX)",
                 "enterKeyword": "Enter Keyword (xx-XX)",
                 "image": "image (xx-XX)",

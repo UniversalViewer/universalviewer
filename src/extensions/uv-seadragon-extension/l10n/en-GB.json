@@ -103,6 +103,7 @@
             "content":
             {
                 "clearSearch": "Clear Search",
+                "defaultLabel": "-",
                 "displaying": "Displaying {0} {1} of {2}",
                 "enterKeyword": "Enter Keyword",
                 "image": "image",

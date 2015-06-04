@@ -465,18 +465,16 @@ export class FooterPanel extends footer.FooterPanel {
 
     setPlacemarkerLabel(): void {
 
-        var mode = (<ISeadragonExtension>this.extension).getMode();
-
         var displaying = this.content.displaying;
         var index = this.provider.canvasIndex;
 
-        if (this.config.options.pageModeEnabled && mode == extension.Extension.PAGE_MODE) {
+        if (this.isPageModeEnabled()) {
             var canvas = this.provider.getCanvasByIndex(index);
 
             var label = canvas.label;
 
             if (label == "") {
-                label = "-";
+                label = this.content.defaultLabel;
             }
 
             var lastCanvasOrderLabel = this.provider.getLastCanvasLabel();
@@ -484,6 +482,10 @@ export class FooterPanel extends footer.FooterPanel {
         } else {
             this.$pagePositionLabel.html(String.prototype.format(displaying, this.content.image, index + 1, this.provider.getTotalCanvases()));
         }
+    }
+
+    isPageModeEnabled(): boolean {
+        return this.config.options.pageModeEnabled && this.extension.getMode() === extension.Extension.PAGE_MODE;
     }
 
     displaySearchResults(terms, results): void {

@@ -104,7 +104,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         this.$lastButton = $('<a class="imageBtn last" tabindex="2"></a>');
         this.$nextOptions.append(this.$lastButton);
 
-        if (this.inPageMode()) {
+        if (this.isPageModeEnabled()) {
             this.$pageModeOption.attr('checked', 'checked');
             this.$pageModeOption.removeAttr('disabled');
             this.$pageModeLabel.removeClass('disabled');
@@ -137,7 +137,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             $.publish(PagingHeaderPanel.NEXT);
         });
 
-        // If label mode is disabled, we don't need to show radio buttons since
+        // If page mode is disabled, we don't need to show radio buttons since
         // there is only one option:
         if (!this.config.options.pageModeEnabled) {
             this.$imageModeOption.hide();
@@ -199,16 +199,15 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         //});
     }
 
-    inPageMode(): boolean {
-        return this.config.options.pageModeEnabled
-            && (<ISeadragonExtension>this.extension).getMode() == extension.Extension.PAGE_MODE;
+    isPageModeEnabled(): boolean {
+        return this.config.options.pageModeEnabled && this.extension.getMode() === extension.Extension.PAGE_MODE;
     }
 
     setTitles(): void {
 
         var mode;
 
-        if (this.inPageMode()) {
+        if (this.isPageModeEnabled()) {
             mode = this.content.page;
         } else {
             mode = this.content.image;
@@ -225,7 +224,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var of = this.content.of;
 
-        if (this.inPageMode()) {
+        if (this.isPageModeEnabled()) {
             this.$total.html(String.prototype.format(of, this.provider.getLastCanvasLabel()));
         } else {
             this.$total.html(String.prototype.format(of, this.provider.getTotalCanvases()));
@@ -236,7 +235,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         var canvas = this.provider.getCanvasByIndex(index);
 
-        if (this.inPageMode()) {
+        if (this.isPageModeEnabled()) {
 
             var orderLabel = this.provider.getLocalisedValue(canvas.label);
 
@@ -263,7 +262,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             return;
         }
 
-        if (this.inPageMode()) {
+        if (this.isPageModeEnabled()) {
             $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val(), 10);

@@ -99,6 +99,7 @@
         "searchFooterPanel": {
             "content": {
                 "clearSearch": "Clirio bob dewis",
+                "defaultLabel": "-",
                 "displaying": "Dangos {0} {1} o {2}",
                 "enterKeyword": "Mewnosodwch allweddair",
                 "image": "delwedd",
