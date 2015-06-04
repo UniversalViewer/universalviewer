@@ -470,7 +470,7 @@ export class FooterPanel extends footer.FooterPanel {
         var displaying = this.content.displaying;
         var index = this.provider.canvasIndex;
 
-        if (mode == extension.Extension.PAGE_MODE) {
+        if (this.config.options.pageModeEnabled && mode == extension.Extension.PAGE_MODE) {
             var canvas = this.provider.getCanvasByIndex(index);
 
             var label = canvas.label;

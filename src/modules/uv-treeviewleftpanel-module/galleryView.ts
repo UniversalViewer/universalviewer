@@ -261,7 +261,7 @@ export class GalleryView extends baseView.BaseView {
 
     setLabel(): void {
 
-        if((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+        if (this.config.options.pageModeEnabled && (<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
             $(this.$thumbs).find('span.index').hide();
             $(this.$thumbs).find('span.label').show();
         } else {

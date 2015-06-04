@@ -215,7 +215,7 @@ export class ThumbsView extends baseView.BaseView {
             $(this.$thumbs).find('span.index').hide();
             $(this.$thumbs).find('span.label').hide();
         } else {
-            if((<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
+            if (this.config.options.pageModeEnabled && (<extension.Extension>this.extension).getMode() == extension.Extension.PAGE_MODE) {
                 $(this.$thumbs).find('span.index').hide();
                 $(this.$thumbs).find('span.label').show();
             } else {
