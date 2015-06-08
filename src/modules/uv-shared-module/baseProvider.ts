@@ -303,7 +303,7 @@ export class BaseProvider implements IProvider{
     }
 
     isPagingEnabled(): boolean{
-        return this.sequence.viewingHint && (this.sequence.viewingHint == "paged") && this.isTotalCanvasesEven();
+        return this.sequence.viewingHint && (this.sequence.viewingHint == "paged");
     }
 
     isPagingSettingEnabled(): boolean {
