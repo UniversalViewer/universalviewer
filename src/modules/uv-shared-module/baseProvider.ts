@@ -116,7 +116,8 @@ export class BaseProvider implements IProvider{
     }
 
     corsEnabled(): boolean {
-        return Modernizr.cors && !this.jsonp
+        // No jsonp setting? Then use autodetection. Otherwise, use explicit setting.
+        return (null === this.jsonp) ? Modernizr.cors : !this.jsonp;
     }
 
     reloadManifest(callback: any): void {
