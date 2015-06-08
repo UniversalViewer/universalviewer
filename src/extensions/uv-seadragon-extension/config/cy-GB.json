@@ -1,13 +1,13 @@
 {
     "options":
     {
-        "theme": "cy-GB-theme",
         "leftPanelEnabled": true,
-        "rightPanelEnabled": true,
         "overrideFullScreen": false,
         "pagingEnabled": true,
         "preserveViewport": false,
-        "searchWithinEnabled": true
+        "rightPanelEnabled": true,
+        "searchWithinEnabled": true,
+        "theme": "cy-GB-theme"
     },
     "modules":
     {
