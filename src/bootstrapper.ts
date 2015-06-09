@@ -29,7 +29,8 @@ class BootStrapper{
 
         p.manifestUri = util.getQuerystringParameter('manifestUri');
         p.config = util.getQuerystringParameter('config');
-        p.jsonp = util.getBool(util.getQuerystringParameter('jsonp'), false);
+        var jsonpParam = util.getQuerystringParameter('jsonp');
+        p.jsonp = jsonpParam === null ? null : !(jsonpParam === "false" || jsonpParam === "0");
         p.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
         p.isReload = util.getQuerystringParameter('isReload') === "true";
         p.setLocale(util.getQuerystringParameter('locale'));
