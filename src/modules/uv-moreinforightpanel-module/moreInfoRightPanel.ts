@@ -64,12 +64,29 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
 
         this.$noData.hide();
 
+        var limitType = "lines";
+        if (this.config.options.textLimitType) {
+            limitType = this.config.options.textLimitType;
+        }
+        var limit;
+        if (limitType === "lines") {
+            limit = this.config.options.textLimit ? this.config.options.textLimit : 4;
+        } else if (limitType === "chars") {
+            limit = this.config.options.textLimit ? this.config.options.textLimit : 130;
+        }
+
         _.each(data, (item: any) => {
-            this.$items.append(this.buildItem(item, 130));
+            var built = this.buildItem(item);
+            this.$items.append(built);
+            if (limitType === "lines") {
+                built.find('.text').toggleExpandTextByLines(limit, null);
+            } else if (limitType === "chars") {
+                built.find('.text').ellipsisHtmlFixed(limit, null);
+            }
         });
     }
 
-    buildItem(item: any, trimChars: number): any {
+    buildItem(item: any): any {
         var $elem = this.moreInfoItemTemplate.clone();
         var $header = $elem.find('.header');
         var $text = $elem.find('.text');
@@ -86,8 +103,6 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         $header.html(label);
         $text.html(value);
         $text.targetBlank();
-
-        $text.toggleExpandText(trimChars);
 
         label = label.trim();
         label = label.toLowerCase();

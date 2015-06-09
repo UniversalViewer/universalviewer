@@ -231,6 +231,190 @@
         return this;
     };
 
+    // Recursively removes the last empty element (img, audio, etc) or word in an element
+    $.fn.removeLastWord = function (chars) {
+
+        if ('undefined' === typeof chars) chars = 8;
+
+        return this.each(function () {
+
+            var $self = $(this);
+
+            if ($self.contents().length > 0) {
+                var $lastElement = $self.contents().last();
+                if ($lastElement[0].nodeType === 3) { // Text node
+                    var words = $lastElement.text().trim().split(' ');
+
+                    if (words.length > 1) {
+                        words.splice(words.length-1, 1);
+                        $lastElement[0].data = words.join(' '); // textnode.data
+                        return;
+                    } else if ('undefined' !== typeof chars && words.length === 1 && words[0].length > chars) {
+                        $lastElement[0].data = words.join(' ').substring(0, chars);
+                        return;
+                    }
+                }
+
+                $lastElement.removeLastWord(chars); // Element
+            } else {
+                // Empty element
+                $self.remove();
+            }
+        });
+    };
+
+    // Truncates to a certain number of letters, while ignoring and preserving HTML
+    $.fn.ellipsisHtmlFixed = function (chars, callback) {
+
+        return this.each(function () {
+
+            var $self = $(this);
+
+            var expandedText = $self.html();
+
+            $trunc = $('<span></span>');
+            $trunc.html($self.html().replace(/\s[\s]*/g, ' ').trim());
+
+            while ($trunc.text().trim().length > chars) {
+                $trunc.removeLastWord(chars);
+            }
+
+            var collapsedText = $trunc.html();
+
+            // Toggle function
+            var expanded = false;
+
+            $self.toggle = function() {
+                $self.empty();
+
+                var $toggleButton = $('<a href="#" class="toggle"></a>');
+
+                if (expanded) {
+                    $self.html(expandedText + " ");
+                    $toggleButton.text("less");
+                    $toggleButton.toggleClass("less", "more");
+                } else {
+                    $self.html(collapsedText + "&hellip; ");
+                    $toggleButton.text("more");
+                    $toggleButton.toggleClass("more", "less");
+                }
+
+                $toggleButton.one('click', function(e) {
+                    e.preventDefault();
+
+                    $self.toggle();
+                });
+
+                expanded = !expanded;
+
+                $self.append($toggleButton);
+
+                if (callback) callback();
+            };
+
+            $self.toggle();
+        });
+    };
+
+    // Toggle expansion by number of lines
+    $.fn.toggleExpandTextByLines = function (lines, callback) {
+
+        return this.each(function () {
+
+            var $self = $(this);
+
+            // Calculate line height to get target height
+            var lineHeight = parseFloat($self.css('line-height'));
+            var cssunit = $self.css('line-height').replace(/[\d\.]/g, '');
+            var fontSize = parseFloat($self.css('font-size'));
+            if(!lineHeight) {
+                cssunit = $self.css('font-size').replace(/[\d\.]/g, '');
+            }
+
+            if (!lineHeight) {
+                var $current = $self.parent();
+
+                // See if we have a set line height or font size
+                while (!lineHeight && $current.prop('tagName') !== "BODY") {
+                    $current = $current.parent();
+
+                    lineHeight = parseFloat($current.css('line-height'));
+                    cssunit = $current.css('line-height').replace(/[\d\.]/g, '');
+                    if (!(lineHeight && fontSize)) {
+                        fontSize = parseFloat($self.css('font-size'));
+                        cssunit = $current.css('font-size').replace(/[\d\.]/g, '');
+                    }
+                }
+            }
+
+            // Default line-height is 'normal' (1.2 * font size)
+            if (!lineHeight) {
+                if (!fontSize) {
+                    lineHeight = 16 * 1.2; // CSS default font size
+                    cssunit = 'px';
+                } else {
+                    lineHeight = fontSize * 1.2;
+                }
+            }
+
+            var targetHeight = Length.toPx(this, ((lineHeight + 1) * lines) + cssunit);
+
+            // Collapse
+            if ($self.outerHeight() <= targetHeight) return;
+
+            var expandedText = $self.html();
+
+            // add 'pad' to account for the right margin in the sidebar
+            var $buttonPad = $('<span>&hellip; <a href="#" class="toggle more">morepad</a></span>');
+
+            $self.append($buttonPad);
+
+            while ($self.height() > targetHeight) {
+                $buttonPad.remove();
+
+                $self.removeLastWord();
+
+                $self.append($buttonPad);
+            }
+            $buttonPad.remove();
+
+            var collapsedText = $self.html();
+
+            // Toggle function
+            var expanded = false;
+
+            $self.toggle = function() {
+                $self.empty();
+
+                var $toggleButton = $('<a href="#" class="toggle"></a>');
+
+                if (expanded) {
+                    $self.html(expandedText + " ");
+                    $toggleButton.text("less");
+                    $toggleButton.toggleClass("less", "more");
+                } else {
+                    $self.html(collapsedText + "&hellip; ");
+                    $toggleButton.text("more");
+                    $toggleButton.toggleClass("more", "less");
+                }
+
+                $toggleButton.one('click', function(e) {
+                    e.preventDefault();
+
+                    $self.toggle();
+                });
+
+                expanded = !expanded;
+
+                $self.append($toggleButton);
+
+                if (callback) callback();
+            };
+
+            $self.toggle();
+        });
+    };
+
     $.fn.horizontalMargins = function () {
         var $self = $(this);
         return parseInt($self.css('marginLeft')) + parseInt($self.css('marginRight'));

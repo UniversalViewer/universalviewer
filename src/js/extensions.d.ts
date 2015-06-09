@@ -43,6 +43,9 @@ interface JQuery {
     toggleExpandText(chars: number, callback?: () => void);
     ismouseover(): boolean;
     equaliseHeight(reset?: boolean): any;
+    removeLastWord(chars: number): any;
+    ellipsisHtmlFixed(chars: number, callback: () => void): any;
+    toggleExpandTextByLines(lines: number, callback: () => void): any;
     onPressed(callback: () => void): any;
     onEnter(callback: () => void): any;
     enable(): void;
