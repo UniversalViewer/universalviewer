@@ -11,7 +11,8 @@ require.config({
         'yepnope': 'js/yepnope.1.5.4-min',
         'yepnopecss': 'js/yepnope.css',
         'l10n': 'js/l10n',
-        'sanitize': 'js/sanitize'
+        'sanitize': 'js/sanitize',
+        'length': 'js/Length.min'
     },
     shim: {
         jquery: {
@@ -52,7 +53,8 @@ require([
         'extensions/uv-mediaelement-extension/extension',
         'extensions/uv-mediaelement-extension/provider',
         'extensions/uv-pdf-extension/extension',
-        'extensions/uv-pdf-extension/provider'
+        'extensions/uv-pdf-extension/provider',
+        'length'
     ], (modernizr,
         $,
         plugins,
@@ -69,7 +71,8 @@ require([
         mediaelementExtension,
         mediaelementProvider,
         pdfExtension,
-        pdfProvider) => {
+        pdfProvider,
+        Length) => {
 
         // todo: use a compiler flag (when available)
         window.DEBUG = true; // this line is removed on build.
