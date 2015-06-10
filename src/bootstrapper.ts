@@ -84,7 +84,8 @@ class BootStrapper{
     }
 
     corsEnabled(): boolean {
-        return Modernizr.cors && !this.params.jsonp
+        // No jsonp setting? Then use autodetection. Otherwise, use explicit setting.
+        return (null === this.params.jsonp) ? Modernizr.cors : !this.params.jsonp;
     }
 
     loadManifest(): void{
