@@ -16,6 +16,8 @@ export class DownloadDialogue extends dialogue.Dialogue {
     $currentViewAsJpgButton: JQuery;
     $wholeImageHighResAsJpgButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
+    $entireDocumentAsDocButton: JQuery;
+    $entireDocumentAsDocxButton: JQuery;
     $entireDocumentAsPdfButton: JQuery;
     $buttonsContainer: JQuery;
     $downloadButton: JQuery;
@@ -64,6 +66,14 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
+        this.$entireDocumentAsDocButton = $('<li><input id="' + DownloadOption.entireDocumentAsDoc.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDoc.toString() + '">' + this.content.entireDocumentAsDoc + '</label></li>');
+        this.$downloadOptions.append(this.$entireDocumentAsDocButton);
+        this.$entireDocumentAsDocButton.hide();
+
+        this.$entireDocumentAsDocxButton = $('<li><input id="' + DownloadOption.entireDocumentAsDocx.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDocx.toString() + '">' + this.content.entireDocumentAsDocx + '</label></li>');
+        this.$downloadOptions.append(this.$entireDocumentAsDocxButton);
+        this.$entireDocumentAsDocxButton.hide();
+
         this.$entireDocumentAsPdfButton = $('<li><input id="' + DownloadOption.entireDocumentAsPDF.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsPDF.toString() + '">' + this.content.entireDocumentAsPdf + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
         this.$entireDocumentAsPdfButton.hide();
@@ -95,6 +105,12 @@ export class DownloadDialogue extends dialogue.Dialogue {
                 case DownloadOption.wholeImageLowResAsJpg.toString():
                     window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
                     break;
+                case DownloadOption.entireDocumentAsDoc.toString():
+                    window.open(this.getDocUri());
+                    break;
+                case DownloadOption.entireDocumentAsDocx.toString():
+                    window.open(this.getDocxUri());
+                    break;
                 case DownloadOption.entireDocumentAsPDF.toString():
                     window.open(this.getPdfUri());
                     break;
@@ -116,6 +132,18 @@ export class DownloadDialogue extends dialogue.Dialogue {
             this.$currentViewAsJpgButton.show();
         } else {
             this.$currentViewAsJpgButton.hide();
+        }
+
+        if (this.isDownloadOptionAvailable(DownloadOption.entireDocumentAsDoc)) {
+            this.$entireDocumentAsDocButton.show();
+        } else {
+            this.$entireDocumentAsDocButton.hide();
+        }
+
+        if (this.isDownloadOptionAvailable(DownloadOption.entireDocumentAsDocx)) {
+            this.$entireDocumentAsDocxButton.show();
+        } else {
+            this.$entireDocumentAsDocxButton.hide();
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.entireDocumentAsPDF)) {
@@ -162,6 +190,16 @@ export class DownloadDialogue extends dialogue.Dialogue {
                     return false;
                 }
                 return true;
+            case DownloadOption.entireDocumentAsDoc:
+                if (this.getDocUri()){
+                    return true;
+                }
+                return false;
+            case DownloadOption.entireDocumentAsDocx:
+                if (this.getDocxUri()){
+                    return true;
+                }
+                return false;
             case DownloadOption.entireDocumentAsPDF:
                 if (this.getPdfUri()){
                     return true;
@@ -180,14 +218,26 @@ export class DownloadDialogue extends dialogue.Dialogue {
         }
     }
 
-    getPdfUri(): string {
-        var rendering = this.provider.getRendering(this.provider.sequence, RenderingFormat.pdf);
+    getUriByRenderingFormat(format: RenderingFormat): string {
+        var rendering = this.provider.getRendering(this.provider.sequence, format);
 
         if (rendering){
             return rendering['@id'];
         }
 
         return null;
+    }
+
+    getDocUri(): string {
+        return this.getUriByRenderingFormat(RenderingFormat.doc);
+    }
+
+    getDocxUri(): string {
+        return this.getUriByRenderingFormat(RenderingFormat.docx);
+    }
+
+    getPdfUri(): string {
+        return this.getUriByRenderingFormat(RenderingFormat.pdf);
     }
 
     resize(): void {

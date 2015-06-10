@@ -14,6 +14,8 @@
             "content": {
                 "currentViewAsJpg": "Current view (jpg) (xx-XX)",
                 "download": "Download (xx-XX)",
+                "entireDocumentAsDoc": "Entire document (doc) (xx-XX)",
+                "entireDocumentAsDocx": "Entire document (docx) (xx-XX)",
                 "entireDocumentAsPdf": "Entire document (pdf) (xx-XX)",
                 "entireFileAsOriginal": "Entire file ({0}) (xx-XX)",
                 "noneAvailable": "No download options are available. (xx-XX)",

@@ -15,6 +15,8 @@
             "content": {
                 "currentViewAsJpg": "Golwg presennol (jpg)",
                 "download": "Lawrlwytho",
+                "entireDocumentAsDoc": "Y ddogfen gyflawn (doc)",
+                "entireDocumentAsDocx": "Y ddogfen gyflawn (docx)",
                 "entireDocumentAsPdf": "Y ddogfen gyflawn (pdf)",
                 "entireFileAsOriginal": "Y ffeil gyfan ({0})",
                 "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
