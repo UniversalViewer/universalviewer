@@ -120,41 +120,6 @@ export class BaseProvider implements IProvider{
         return (null === this.jsonp) ? Modernizr.cors : !this.jsonp;
     }
 
-    reloadManifest(callback: any): void {
-
-        this.rootStructure = null;
-        var manifestUri = this.manifestUri;
-
-        manifestUri = this.addTimestamp(manifestUri);
-
-        if (this.corsEnabled()){
-            $.getJSON(manifestUri, (data) => {
-                this.manifest = data;
-
-                this.load();
-
-                callback();
-            });
-        } else {
-            // use jsonp
-            window.manifestCallback = (data: any) => {
-                this.manifest = data;
-
-                this.load();
-
-                callback();
-            };
-
-            $.ajax(<JQueryAjaxSettings>{
-                url: manifestUri,
-                type: 'GET',
-                dataType: 'jsonp',
-                jsonp: 'callback',
-                jsonpCallback: 'manifestCallback'
-            });
-        }
-    }
-
     // todo
     getManifestType(): string{
         return 'monograph';

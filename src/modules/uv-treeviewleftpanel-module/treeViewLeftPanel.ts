@@ -44,7 +44,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         super.create();
 
-        $.subscribe(extension.Extension.RELOAD_MANIFEST, () => {
+        $.subscribe(extension.Extension.SETTINGS_CHANGED, () => {
             this.dataBindThumbsView();
             this.dataBindTreeView();
             this.dataBindGalleryView();

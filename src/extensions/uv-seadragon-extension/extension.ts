@@ -309,11 +309,8 @@ export class Extension extends baseExtension.BaseExtension {
     }
 
     updateSettings(): void {
-        this.provider.reloadManifest(() => {
-            $.publish(baseExtension.BaseExtension.RELOAD_MANIFEST);
-            this.viewPage(this.provider.canvasIndex, true);
-            $.publish(Extension.SETTINGS_CHANGED);
-        });
+        this.viewPage(this.provider.canvasIndex, true);
+        $.publish(Extension.SETTINGS_CHANGED);
     }
 
     setDefaultFocus(): void {

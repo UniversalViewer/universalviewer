@@ -78,7 +78,6 @@ interface IProvider{
     defaultToThumbsView(): boolean;
     isDeepLinkingEnabled(): boolean;
     paramMap: string[];
-    reloadManifest(callback: any): void;
     reload(params?: BootstrapParams);
     getSettings(): ISettings;
     updateSettings(settings: ISettings): void;

@@ -34,7 +34,6 @@ export class BaseExtension implements IExtension {
     static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
     static REDIRECT: string = 'onRedirect';
     static REFRESH: string = 'onRefresh';
-    static RELOAD_MANIFEST: string = 'onReloadManifest';
     static ESCAPE: string = 'onEscape';
     static RETURN: string = 'onReturn';
     static PAGE_UP: string = 'onPageUp';
