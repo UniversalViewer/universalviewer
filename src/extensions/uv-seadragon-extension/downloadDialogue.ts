@@ -12,6 +12,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
     $title: JQuery;
     $noneAvailable: JQuery;
+    $pagingNote: JQuery;
     $downloadOptions: JQuery;
     $currentViewAsJpgButton: JQuery;
     $wholeImageHighResAsJpgButton: JQuery;
@@ -50,6 +51,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
         this.$noneAvailable = $('<div class="noneAvailable">' + this.content.noneAvailable + '</div>');
         this.$content.append(this.$noneAvailable);
+
+        this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + '</div>');
+        this.$content.append(this.$pagingNote);
 
         this.$downloadOptions = $('<ol class="options"></ol>');
         this.$content.append(this.$downloadOptions);
@@ -172,6 +176,13 @@ export class DownloadDialogue extends dialogue.Dialogue {
             this.$downloadOptions.find('input:visible:first').prop("checked", true);
             this.$noneAvailable.hide();
             this.$downloadButton.show();
+        }
+
+        var settings: ISettings = this.provider.getSettings();
+        if (settings.pagingEnabled) {
+            this.$pagingNote.show();
+        } else {
+            this.$pagingNote.hide();
         }
 
         this.resize();

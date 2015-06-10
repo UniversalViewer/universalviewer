@@ -19,6 +19,7 @@
                 "entireDocumentAsPdf": "Entire document (pdf) (xx-XX)",
                 "entireFileAsOriginal": "Entire file ({0}) (xx-XX)",
                 "noneAvailable": "No download options are available. (xx-XX)",
+                "pagingNote": "Please switch to single page mode for additional options. (xx-XX)",
                 "preview": "Preview (xx-XX)",
                 "title": "Download (xx-XX)",
                 "wholeImageHighResAsJpg": "Whole image high res (jpg) (xx-XX)",
