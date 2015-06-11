@@ -24,7 +24,8 @@
                 "preview": "Preview (xx-XX)",
                 "title": "Download (xx-XX)",
                 "wholeImageHighResAsJpg": "Whole image high res (jpg) (xx-XX)",
-                "wholeImageLowResAsJpg": "Whole image low res (jpg) (xx-XX)"
+                "wholeImageLowResAsJpg": "Whole image low res (jpg) (xx-XX)",
+                "wholeImageOriginal": "Whole original image (xx-XX)"
             }
         },
         "embedDialogue": {
