@@ -15,6 +15,6 @@ module.exports = function copyFiles(glob, dest, renameFunc) {
             fileDest = path.join(dest, fileName);
         }
 
-        grunt.run.copy(src, fileDest);
+        grunt.file.copy(src, fileDest);
     });
 }
