@@ -5,6 +5,7 @@ class DownloadOption {
     static entireDocumentAsPDF = new DownloadOption("entireDocumentAsPDF");
     static wholeImageHighResAsJpg = new DownloadOption("wholeImageHighResAsJpg");
     static wholeImageLowResAsJpg = new DownloadOption("wholeImageLowResAsJpg");
+    static wholeImageOriginal = new DownloadOption("wholeImageOriginal");
 
     constructor(public value: string) {
     }

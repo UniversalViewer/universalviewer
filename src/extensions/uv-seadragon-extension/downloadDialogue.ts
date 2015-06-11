@@ -19,6 +19,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
     $currentViewAsJpgButton: JQuery;
     $wholeImageHighResAsJpgButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
+    $wholeImageOriginalButton: JQuery;
     $entireDocumentAsDocButton: JQuery;
     $entireDocumentAsDocxButton: JQuery;
     $entireDocumentAsPdfButton: JQuery;
@@ -66,6 +67,10 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
+        this.$wholeImageOriginalButton = $('<li><input id="' + DownloadOption.wholeImageOriginal.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageOriginal.toString() + '">' + this.content.wholeImageOriginal + '<span class="mime"></span></label></li>');
+        this.$downloadOptions.append(this.$wholeImageOriginalButton);
+        this.$wholeImageOriginalButton.hide();
+
         this.$wholeImageHighResAsJpgButton = $('<li><input id="' + DownloadOption.wholeImageHighResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageHighResAsJpg.toString() + '">' + this.content.wholeImageHighResAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$wholeImageHighResAsJpgButton);
         this.$wholeImageHighResAsJpgButton.hide();
@@ -112,6 +117,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
                     break;
                 case DownloadOption.wholeImageLowResAsJpg.toString():
                     window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
+                    break;
+                case DownloadOption.wholeImageOriginal.toString():
+                    window.open(this.getOriginalImageForCurrentCanvas());
                     break;
                 case DownloadOption.entireDocumentAsDoc.toString():
                     window.open(this.getDocUri());
@@ -177,6 +185,18 @@ export class DownloadDialogue extends dialogue.Dialogue {
             this.$wholeImageLowResAsJpgButton.hide();
         }
 
+        if (this.isDownloadOptionAvailable(DownloadOption.wholeImageOriginal)) {
+            var mime = this.getMimeTypeForCurrentCanvas();
+            var mimeLabel = this.$wholeImageOriginalButton.find('.mime');
+            mimeLabel.empty();
+            if (mime) {
+                mimeLabel.text(' (' + mime + ')');
+            }
+            this.$wholeImageOriginalButton.show();
+        } else {
+            this.$wholeImageOriginalButton.hide();
+        }
+
         if (!this.$downloadOptions.find('li:visible').length){
             this.$noneAvailable.show();
             this.$downloadButton.hide();
@@ -199,6 +219,22 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
     getSelectedOption() {
         return this.$downloadOptions.find("input:checked");
+    }
+
+    getOriginalImageForCurrentCanvas() {
+        var canvas = this.provider.getCurrentCanvas();
+        if (canvas['images'][0]['resource']['@id']) {
+            return canvas['images'][0]['resource']['@id'];
+        }
+        return false;
+    }
+
+    getMimeTypeForCurrentCanvas() {
+        var canvas = this.provider.getCurrentCanvas();
+        if (canvas['images'][0]['resource']['format']) {
+            return canvas['images'][0]['resource']['format'];
+        }
+        return false;
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
@@ -235,6 +271,8 @@ export class DownloadDialogue extends dialogue.Dialogue {
                     return false;
                 }
                 return true;
+            case DownloadOption.wholeImageOriginal:
+                return (!settings.pagingEnabled && this.getOriginalImageForCurrentCanvas());
         }
     }
 

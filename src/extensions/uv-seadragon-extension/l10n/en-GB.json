@@ -27,7 +27,8 @@
                 "preview": "Preview",
                 "title": "Download",
                 "wholeImageHighResAsJpg": "Whole image high res (jpg)",
-                "wholeImageLowResAsJpg": "Whole image low res (jpg)"
+                "wholeImageLowResAsJpg": "Whole image low res (jpg)",
+                "wholeImageOriginal": "Whole original image"
             }
         },
         "embedDialogue": {

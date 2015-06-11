@@ -25,7 +25,8 @@
                 "preview": "Rhagolwg",
                 "title": "Lawrlwytho",
                 "wholeImageHighResAsJpg": "Y ddelwedd gyfan o ansawdd uchel (jpg)",
-                "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)"
+                "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)",
+                "wholeImageOriginal": "Ddelwedd wreiddiol Cyfan"
             }
         },
         "embedDialogue": {
