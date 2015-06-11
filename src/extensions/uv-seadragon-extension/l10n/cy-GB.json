@@ -20,6 +20,7 @@
                 "entireDocumentAsPdf": "Y ddogfen gyflawn (pdf)",
                 "entireFileAsOriginal": "Y ffeil gyfan ({0})",
                 "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
+                "pagingNote": "Os gwelwch yn dda newid i ddelw dudalen sengl ar gyfer dewisiadau ychwanegol.",
                 "preview": "Rhagolwg",
                 "title": "Lawrlwytho",
                 "wholeImageHighResAsJpg": "Y ddelwedd gyfan o ansawdd uchel (jpg)",
