@@ -2,6 +2,7 @@ import baseExtension = require("../../modules/uv-shared-module/baseExtension");
 import shell = require("../../modules/uv-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../../modules/uv-shared-module/dialogue");
+import settings = require("../../modules/uv-dialogues-module/settingsDialogue");
 import ISeadragonExtension = require("./iSeadragonExtension");
 import ISeadragonProvider = require("./iSeadragonProvider");
 import DownloadOption = require("./DownloadOption");
@@ -12,6 +13,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
     $title: JQuery;
     $noneAvailable: JQuery;
+    $settingsButton: JQuery;
     $pagingNote: JQuery;
     $downloadOptions: JQuery;
     $currentViewAsJpgButton: JQuery;
@@ -52,7 +54,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$noneAvailable = $('<div class="noneAvailable">' + this.content.noneAvailable + '</div>');
         this.$content.append(this.$noneAvailable);
 
-        this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + '</div>');
+        this.$settingsButton = $('<a class="settings" href="#">' + this.content.editSettings + '</a>');
+        this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + ' </div>');
+        this.$pagingNote.append(this.$settingsButton);
         this.$content.append(this.$pagingNote);
 
         this.$downloadOptions = $('<ol class="options"></ol>');
@@ -123,6 +127,11 @@ export class DownloadDialogue extends dialogue.Dialogue {
             $.publish(DownloadDialogue.DOWNLOAD, [id]);
 
             this.close();
+        });
+
+        this.$settingsButton.onPressed(() => {
+            this.close();
+            $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
 
         // hide
