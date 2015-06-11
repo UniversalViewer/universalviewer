@@ -1,18 +1,23 @@
 {
-  "name": "Universal Viewer",
-  "version": "1.2.2",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/BritishLibrary/UniversalViewer"
-  },
-  "authors": [
-    "edsilv <e.silverton@gmail.com>"
-  ],
-  "ignore": [
-    "build",
-    "tests",
-    "Gruntfile.js"
-  ],
-  "dependencies": {},
-  "devDependencies": {}
+    "name": "Universal Viewer",
+    "version": "1.2.2",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/UniversalViewer/universalviewer"
+    },
+    "authors": [
+        "edsilv <e.silverton@gmail.com>"
+    ],
+    "ignore": [
+        "build",
+        "tests",
+        "Gruntfile.js",
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "uv-filelinkcenterpanel-module": "UniversalViewer/uv-filelinkcenterpanel-module"
+    },
+    "devDependencies": {}
 }

@@ -1,0 +1,6 @@
+{
+    "directory": "bower_components",
+    "scripts": {
+        "postinstall": "grunt copyBowerComponents"
+    }
+}

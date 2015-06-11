@@ -1,6 +1,7 @@
 var version = require('./build/version');
 var localise = require('./build/localise');
 var theme = require('./build/theme');
+var copyBowerComponents = require('./build/copyBowerComponents');
 
 module.exports = function (grunt) {
 
@@ -20,9 +21,13 @@ module.exports = function (grunt) {
     grunt.initConfig({
         global:
         {
-            minify: 'optimize=none',
+            bowerDir: './bower_components',
             examplesDir: 'examples',
-            port: '8001'
+            extensionsDir: './src/extensions',
+            minify: 'optimize=none',
+            modulesDir: './src/modules',
+            port: '8001',
+            themesDir: './src/themes'
         },
         pkg: packageJson,
         ts: {
@@ -187,7 +192,27 @@ module.exports = function (grunt) {
                         dest: '<%= global.packageDir %>'
                     }
                 ]
-            }
+            }//,
+            //bowerComponents: {
+            //    files: [
+            //        {
+            //            cwd: '<%= global.bowerDir %>',
+            //            expand: true,
+            //            src: ['uv-*-module'],
+            //            dest: '<%= global.modulesDir %>',
+            //            rename: function(dest, src) {
+            //
+            //                var fileName = src.substr(src.lastIndexOf('/'));
+            //
+            //                // get the module name from the src string.
+            //                // src/modules/modulename/img
+            //                var moduleName = src.match(/modules\/(.*)\/html/)[1];
+            //
+            //                return dest + moduleName + fileName;
+            //            }
+            //        }
+            //    ]
+            //}
         },
 
         compress: {
@@ -361,6 +386,17 @@ module.exports = function (grunt) {
             },
             dist: {
             }
+        },
+
+        copyBowerComponents: {
+            apply: {
+                options: {
+                    directory: "./bower_components",
+                    extensions: "./src/extensions",
+                    modules: "./src/modules",
+                    themes: "./src/themes"
+                }
+            }
         }
     });
 
@@ -376,13 +412,14 @@ module.exports = function (grunt) {
     version(grunt);
     localise(grunt);
     theme(grunt);
+    copyBowerComponents(grunt);
 
     // to change version manually, edit package.json and _Version.ts
     grunt.registerTask('dist:upbuild', ['version:bump', 'version:apply', 'build']);
     grunt.registerTask('dist:upminor', ['version:bump:minor', 'version:apply', 'build']);
     grunt.registerTask('dist:upmajor', ['version:bump:major', 'version:apply', 'build']);
 
-    grunt.registerTask("default", '', function(){
+    grunt.registerTask('default', '', function(){
 
         grunt.task.run(
             'ts:dev',

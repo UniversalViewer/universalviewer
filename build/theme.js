@@ -4,6 +4,7 @@ var glob = require('glob');
 var async = require('async');
 var less = require('less');
 var chalk = require('chalk');
+var copyFiles = require('./utils/copyFiles');
 
 module.exports = function (grunt) {
 
@@ -158,23 +159,23 @@ module.exports = function (grunt) {
         return path.join(buildDir, 'themes', theme);
     }
 
-    // todo: async, only copy if changed
-    function copyFiles(glob, dest, renameFunc) {
-        var files = grunt.file.expand(glob);
-
-        _.each(files, function(src) {
-            var fileName, fileDest;
-
-            if (renameFunc){
-                fileDest = renameFunc(src, dest);
-            } else {
-                fileName = path.basename(src);
-                fileDest = path.join(dest, fileName);
-            }
-
-            grunt.file.copy(src, fileDest);
-        });
-    }
+    //// todo: async, only copy if changed
+    //function copyFiles(glob, dest, renameFunc) {
+    //    var files = grunt.file.expand(glob);
+    //
+    //    _.each(files, function(src) {
+    //        var fileName, fileDest;
+    //
+    //        if (renameFunc){
+    //            fileDest = renameFunc(src, dest);
+    //        } else {
+    //            fileName = path.basename(src);
+    //            fileDest = path.join(dest, fileName);
+    //        }
+    //
+    //        grunt.file.copy(src, fileDest);
+    //    });
+    //}
 
     function getThemeDirs() {
         return glob.sync('./src/themes/*');
