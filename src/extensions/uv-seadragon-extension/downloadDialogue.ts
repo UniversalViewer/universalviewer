@@ -2,6 +2,7 @@ import baseExtension = require("../../modules/uv-shared-module/baseExtension");
 import shell = require("../../modules/uv-shared-module/shell");
 import utils = require("../../utils");
 import dialogue = require("../../modules/uv-shared-module/dialogue");
+import settings = require("../../modules/uv-dialogues-module/settingsDialogue");
 import ISeadragonExtension = require("./iSeadragonExtension");
 import ISeadragonProvider = require("./iSeadragonProvider");
 import DownloadOption = require("./DownloadOption");
@@ -12,11 +13,13 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
     $title: JQuery;
     $noneAvailable: JQuery;
+    $settingsButton: JQuery;
     $pagingNote: JQuery;
     $downloadOptions: JQuery;
     $currentViewAsJpgButton: JQuery;
     $wholeImageHighResAsJpgButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
+    $wholeImageOriginalButton: JQuery;
     $entireDocumentAsDocButton: JQuery;
     $entireDocumentAsDocxButton: JQuery;
     $entireDocumentAsPdfButton: JQuery;
@@ -52,7 +55,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$noneAvailable = $('<div class="noneAvailable">' + this.content.noneAvailable + '</div>');
         this.$content.append(this.$noneAvailable);
 
-        this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + '</div>');
+        this.$settingsButton = $('<a class="settings" href="#">' + this.content.editSettings + '</a>');
+        this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + ' </div>');
+        this.$pagingNote.append(this.$settingsButton);
         this.$content.append(this.$pagingNote);
 
         this.$downloadOptions = $('<ol class="options"></ol>');
@@ -62,6 +67,10 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
+        this.$wholeImageOriginalButton = $('<li><input id="' + DownloadOption.wholeImageOriginal.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageOriginal.toString() + '">' + this.content.wholeImageOriginal + '<span class="mime"></span></label></li>');
+        this.$downloadOptions.append(this.$wholeImageOriginalButton);
+        this.$wholeImageOriginalButton.hide();
+
         this.$wholeImageHighResAsJpgButton = $('<li><input id="' + DownloadOption.wholeImageHighResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageHighResAsJpg.toString() + '">' + this.content.wholeImageHighResAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$wholeImageHighResAsJpgButton);
         this.$wholeImageHighResAsJpgButton.hide();
@@ -70,15 +79,21 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
-        this.$entireDocumentAsDocButton = $('<li><input id="' + DownloadOption.entireDocumentAsDoc.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDoc.toString() + '">' + this.content.entireDocumentAsDoc + '</label></li>');
+        var docText = this.getLabelByRenderingFormat(RenderingFormat.doc);
+        docText = docText ? docText + " (doc)" : this.content.entireDocumentAsDoc;
+        this.$entireDocumentAsDocButton = $('<li><input id="' + DownloadOption.entireDocumentAsDoc.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDoc.toString() + '">' + docText + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsDocButton);
         this.$entireDocumentAsDocButton.hide();
 
-        this.$entireDocumentAsDocxButton = $('<li><input id="' + DownloadOption.entireDocumentAsDocx.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDocx.toString() + '">' + this.content.entireDocumentAsDocx + '</label></li>');
+        var docxText = this.getLabelByRenderingFormat(RenderingFormat.docx);
+        docxText = docxText ? docxText + " (docx)" : this.content.entireDocumentAsDocx;
+        this.$entireDocumentAsDocxButton = $('<li><input id="' + DownloadOption.entireDocumentAsDocx.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDocx.toString() + '">' + docxText + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsDocxButton);
         this.$entireDocumentAsDocxButton.hide();
 
-        this.$entireDocumentAsPdfButton = $('<li><input id="' + DownloadOption.entireDocumentAsPDF.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsPDF.toString() + '">' + this.content.entireDocumentAsPdf + '</label></li>');
+        var pdfText = this.getLabelByRenderingFormat(RenderingFormat.pdf);
+        pdfText = pdfText ? pdfText + " (pdf)" : this.content.entireDocumentAsPdf;
+        this.$entireDocumentAsPdfButton = $('<li><input id="' + DownloadOption.entireDocumentAsPDF.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsPDF.toString() + '">' + pdfText + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
         this.$entireDocumentAsPdfButton.hide();
 
@@ -109,6 +124,9 @@ export class DownloadDialogue extends dialogue.Dialogue {
                 case DownloadOption.wholeImageLowResAsJpg.toString():
                     window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
                     break;
+                case DownloadOption.wholeImageOriginal.toString():
+                    window.open(this.getOriginalImageForCurrentCanvas());
+                    break;
                 case DownloadOption.entireDocumentAsDoc.toString():
                     window.open(this.getDocUri());
                     break;
@@ -123,6 +141,11 @@ export class DownloadDialogue extends dialogue.Dialogue {
             $.publish(DownloadDialogue.DOWNLOAD, [id]);
 
             this.close();
+        });
+
+        this.$settingsButton.onPressed(() => {
+            this.close();
+            $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
 
         // hide
@@ -168,6 +191,18 @@ export class DownloadDialogue extends dialogue.Dialogue {
             this.$wholeImageLowResAsJpgButton.hide();
         }
 
+        if (this.isDownloadOptionAvailable(DownloadOption.wholeImageOriginal)) {
+            var mime = this.getMimeTypeForCurrentCanvas();
+            var mimeLabel = this.$wholeImageOriginalButton.find('.mime');
+            mimeLabel.empty();
+            if (mime) {
+                mimeLabel.text(' (' + mime + ')');
+            }
+            this.$wholeImageOriginalButton.show();
+        } else {
+            this.$wholeImageOriginalButton.hide();
+        }
+
         if (!this.$downloadOptions.find('li:visible').length){
             this.$noneAvailable.show();
             this.$downloadButton.hide();
@@ -190,6 +225,22 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
     getSelectedOption() {
         return this.$downloadOptions.find("input:checked");
+    }
+
+    getOriginalImageForCurrentCanvas() {
+        var canvas = this.provider.getCurrentCanvas();
+        if (canvas['images'][0]['resource']['@id']) {
+            return canvas['images'][0]['resource']['@id'];
+        }
+        return false;
+    }
+
+    getMimeTypeForCurrentCanvas() {
+        var canvas = this.provider.getCurrentCanvas();
+        if (canvas['images'][0]['resource']['format']) {
+            return canvas['images'][0]['resource']['format'];
+        }
+        return false;
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
@@ -226,7 +277,19 @@ export class DownloadDialogue extends dialogue.Dialogue {
                     return false;
                 }
                 return true;
+            case DownloadOption.wholeImageOriginal:
+                return (!settings.pagingEnabled && this.getOriginalImageForCurrentCanvas());
         }
+    }
+
+    getLabelByRenderingFormat(format: RenderingFormat): string {
+        var rendering = this.provider.getRendering(this.provider.sequence, format);
+
+        if (rendering){
+            return this.provider.getLocalisedValue(rendering['label']);
+        }
+
+        return null;
     }
 
     getUriByRenderingFormat(format: RenderingFormat): string {

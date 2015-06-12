@@ -17,16 +17,18 @@
             "content": {
                 "currentViewAsJpg": "Current view (jpg)",
                 "download": "Download",
+                "editSettings": "Edit Settings",
                 "entireDocumentAsDoc": "Entire document (doc)",
                 "entireDocumentAsDocx": "Entire document (docx)",
                 "entireDocumentAsPdf": "Entire document (pdf)",
                 "entireFileAsOriginal": "Entire file ({0})",
                 "noneAvailable": "No download options are available.",
-                "pagingNote": "Please switch to single page mode for additional options.",
+                "pagingNote": "Please turn off Two Page View for additional options.",
                 "preview": "Preview",
                 "title": "Download",
                 "wholeImageHighResAsJpg": "Whole image high res (jpg)",
-                "wholeImageLowResAsJpg": "Whole image low res (jpg)"
+                "wholeImageLowResAsJpg": "Whole image low res (jpg)",
+                "wholeImageOriginal": "Whole original image"
             }
         },
         "embedDialogue": {
