@@ -1,0 +1,145 @@
+{
+    "localisation": {
+        "label": "English (GB)"
+    },
+    "options": {
+    },
+    "content": {
+        "canvasIndexOutOfRange": "Canvas index out of range."
+    },
+    "modules": {
+        "dialogue": {
+            "content": {
+                "close": "Close"
+            }
+        },
+        "downloadDialogue": {
+            "content": {
+                "currentViewAsJpg": "Current view (jpg)",
+                "download": "Download",
+                "entireDocumentAsDoc": "Entire document (doc)",
+                "entireDocumentAsDocx": "Entire document (docx)",
+                "entireDocumentAsPdf": "Entire document (pdf)",
+                "entireFileAsOriginal": "Entire file ({0})",
+                "noneAvailable": "No download options are available.",
+                "pagingNote": "Please switch to single page mode for additional options.",
+                "preview": "Preview",
+                "title": "Download",
+                "wholeImageHighResAsJpg": "Whole image high res (jpg)",
+                "wholeImageLowResAsJpg": "Whole image low res (jpg)"
+            }
+        },
+        "embedDialogue": {
+            "content": {
+                "customSize": "Custom Size",
+                "height": "Height",
+                "instructions": "To embed this item in your own website, copy and paste the code below:",
+                "title": "Embed",
+                "width": "Width"
+            }
+        },
+        "footerPanel": {
+            "content": {
+                "download": "Download",
+                "embed": "Embed",
+                "exitFullScreen": "Exit Full Screen",
+                "fullScreen": "Full Screen"
+            }
+        },
+        "genericDialogue": {
+            "content": {
+                "emptyValue": "please enter a value.",
+                "invalidNumber": "Please enter a valid number.",
+                "noMatches": "No matches were found.",
+                "ok": "OK",
+                "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
+                "refresh": "Refresh"
+            }
+        },
+        "helpDialogue": {
+            "content": {
+                "text": "placeholder text",
+                "title": "Help"
+            }
+        },
+        "moreInfoRightPanel": {
+            "content": {
+                "collapse": "Collapse More Information",
+                "collapseFull": "Collapse Gallery",
+                "expand": "Expand More Information",
+                "expandFull": "Expand Gallery",
+                "holdingText": "Your module goes here!",
+                "noData": "No data to display",
+                "title": "More Information"
+            }
+        },
+        "pagingHeaderPanel": {
+            "content": {
+                "close": "Close",
+                "emptyValue": "Please enter a value",
+                "first": "First",
+                "go": "Go",
+                "help": "Help",
+                "image": "Image",
+                "last": "Last",
+                "next": "Next",
+                "of": "of {0}",
+                "oneUp": "Single page view",
+                "page": "Page",
+                "previous": "Previous",
+                "settings": "Settings",
+                "twoUp": "Two page view"
+            }
+        },
+        "seadragonCenterPanel": {
+            "content": {
+                "acknowledgements": "Acknowledgements",
+                "imageUnavailable": "Image Unavailable",
+                "next": "Next",
+                "previous": "Previous",
+                "zoomIn": "Zoom In",
+                "zoomOut": "Zoom Out"
+            }
+        },
+        "searchFooterPanel":
+        {
+            "content":
+            {
+                "clearSearch": "Clear Search",
+                "defaultLabel": "-",
+                "displaying": "Displaying {0} {1} of {2}",
+                "enterKeyword": "Enter Keyword",
+                "image": "image",
+                "imageCaps": "Image",
+                "instanceFound": "1 instance of '{0}' found",
+                "instancesFound": "{0} instances of '{1}' found",
+                "nextResult": "Next Result",
+                "page": "page",
+                "pageCaps": "Page",
+                "previousResult": "Previous Result",
+                "resultFoundFor": "result found for",
+                "resultsFoundFor": "results found for",
+                "searchWithin": "Search within this item:"
+            }
+        },
+        "settingsDialogue": {
+            "content": {
+                "locale": "Locale",
+                "pagingEnabled": "Two Page View",
+                "preserveViewport": "Preserve Zoom",
+                "title": "Settings"
+            }
+        },
+        "treeViewLeftPanel": {
+            "content": {
+                "collapse": "Collapse Contents",
+                "collapseFull": "Collapse Gallery",
+                "expand": "Expand Contents",
+                "expandFull": "Expand Gallery",
+                "index": "Index",
+                "thumbnails": "Thumbnails",
+                "title": "Contents"
+            }
+        }
+    }
+}

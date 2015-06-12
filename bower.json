@@ -18,19 +18,7 @@
     ],
     "dependencies": {
         "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
-        "uv-dialogues-module": "UniversalViewer/uv-dialogues-module",
-        "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme",
-        "uv-mediaelement-extension": "UniversalViewer/uv-mediaelement-extension",
-        "uv-mediaelementcenterpanel-module": "UniversalViewer/uv-mediaelementcenterpanel-module",
-        "uv-moreinforightpanel-module": "UniversalViewer/uv-moreinforightpanel-module",
-        "uv-pagingheaderpanel-module": "UniversalViewer/uv-pagingheaderpanel-module",
-        "uv-pdf-extension": "UniversalViewer/uv-pdf-extension",
-        "uv-pdfcenterpanel-module": "UniversalViewer/uv-pdfcenterpanel-module",
-        "uv-seadragon-extension": "UniversalViewer/uv-seadragon-extension",
-        "uv-seadragoncenterpanel-module": "UniversalViewer/uv-seadragoncenterpanel-module",
-        "uv-searchfooterpanel-module": "UniversalViewer/uv-searchfooterpanel-module",
-        "uv-shared-module": "UniversalViewer/uv-shared-module",
-        "uv-treeviewleftpanel-module": "UniversalViewer/uv-treeviewleftpanel-module"
+        "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme"
     },
     "devDependencies": {}
 }

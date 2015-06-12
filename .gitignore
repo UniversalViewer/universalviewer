@@ -1,8 +1,4 @@
 
-src/extensions
-src/modules
-src/themes
-
 #################
 ## Bower
 #################
@@ -69,15 +65,6 @@ build/uv-*
 #################
 
 src/extensions/*/theme/*.css
-
-#################
-## Extensions/Modules
-#################
-
-src/extensions/*
-!src/extensions/uv*
-src/modules/*
-!src/modules/uv*
 
 #################
 ## Misc
