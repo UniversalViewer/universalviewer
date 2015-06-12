@@ -15,6 +15,7 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-exec": "~0.4.2",
     "grunt-protractor-runner": "^1.1.4",
+    "grunt-sync": "^0.2.3",
     "grunt-text-replace": "~0.3.7",
     "grunt-ts": "~4.0.1",
     "hooker": "^0.2.3",

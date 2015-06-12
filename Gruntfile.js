@@ -1,7 +1,6 @@
 var version = require('./build/version');
 var localise = require('./build/localise');
 var theme = require('./build/theme');
-//var copyBowerComponents = require('./build/copyBowerComponents');
 
 module.exports = function (grunt) {
 
@@ -192,7 +191,10 @@ module.exports = function (grunt) {
                         dest: '<%= global.packageDir %>'
                     }
                 ]
-            },
+            }
+        },
+
+        sync: {
             bowerComponents: {
                 files: [
                     {
@@ -391,33 +393,22 @@ module.exports = function (grunt) {
             },
             dist: {
             }
-        }//,
-
-        //copyBowerComponents: {
-        //    apply: {
-        //        options: {
-        //            directory: "./bower_components",
-        //            extensions: "./src/extensions",
-        //            modules: "./src/modules",
-        //            themes: "./src/themes"
-        //        }
-        //    }
-        //}
+        }
     });
 
-    grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-exec");
-    grunt.loadNpmTasks('grunt-text-replace');
-    grunt.loadNpmTasks("grunt-contrib-compress");
+    grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-protractor-runner');
+    grunt.loadNpmTasks('grunt-sync');
+    grunt.loadNpmTasks('grunt-text-replace');
 
     version(grunt);
     localise(grunt);
     theme(grunt);
-    copyBowerComponents(grunt);
 
     // to change version manually, edit package.json and _Version.ts
     grunt.registerTask('dist:upbuild', ['version:bump', 'version:apply', 'build']);
