@@ -1,1 +1,0 @@
-# uv-cy-GB-theme

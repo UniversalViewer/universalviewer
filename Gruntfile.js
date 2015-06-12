@@ -198,20 +198,6 @@ module.exports = function (grunt) {
             bowerComponents: {
                 files: [
                     {
-                        // extensions
-                        cwd: '<%= global.bowerDir %>',
-                        expand: true,
-                        src: ['uv-*-extension/**'],
-                        dest: '<%= global.extensionsDir %>'
-                    },
-                    {
-                        // modules
-                        cwd: '<%= global.bowerDir %>',
-                        expand: true,
-                        src: ['uv-*-module/**'],
-                        dest: '<%= global.modulesDir %>'
-                    },
-                    {
                         // themes
                         cwd: '<%= global.bowerDir %>',
                         expand: true,
