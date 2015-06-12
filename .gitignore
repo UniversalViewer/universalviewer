@@ -1,10 +1,7 @@
 
-##src/extensions
-##src/modules
-##src/themes
-
-src/extensions/_old
-src/modules/_old
+src/extensions
+src/modules
+src/themes
 
 #################
 ## Bower

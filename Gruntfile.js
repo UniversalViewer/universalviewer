@@ -215,7 +215,7 @@ module.exports = function (grunt) {
                         // themes
                         cwd: '<%= global.bowerDir %>',
                         expand: true,
-                        src: ['uv-*-module/**'],
+                        src: ['uv-*-theme/**'],
                         dest: '<%= global.themesDir %>'
                     }
                 ]

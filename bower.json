@@ -17,11 +17,10 @@
         "bower_components"
     ],
     "dependencies": {
-        "cy-GB-theme": "UniversalViewer/cy-GB-theme",
-        "en-GB-theme": "UniversalViewer/en-GB-theme",
         "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
         "uv-dialogues-module": "UniversalViewer/uv-dialogues-module",
         "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme",
+        "uv-mediaelement-extension": "UniversalViewer/uv-mediaelement-extension",
         "uv-mediaelementcenterpanel-module": "UniversalViewer/uv-mediaelementcenterpanel-module",
         "uv-moreinforightpanel-module": "UniversalViewer/uv-moreinforightpanel-module",
         "uv-pagingheaderpanel-module": "UniversalViewer/uv-pagingheaderpanel-module",
