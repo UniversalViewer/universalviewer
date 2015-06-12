@@ -61,9 +61,10 @@ build/uv-*
 !build/**/*js
 
 #################
-## Css
+## Themes
 #################
 
+src/themes
 src/extensions/*/theme/*.css
 
 #################
