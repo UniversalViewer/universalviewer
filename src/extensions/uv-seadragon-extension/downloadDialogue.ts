@@ -79,15 +79,21 @@ export class DownloadDialogue extends dialogue.Dialogue {
         this.$downloadOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
-        this.$entireDocumentAsDocButton = $('<li><input id="' + DownloadOption.entireDocumentAsDoc.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDoc.toString() + '">' + this.content.entireDocumentAsDoc + '</label></li>');
+        var docText = this.getLabelByRenderingFormat(RenderingFormat.doc);
+        docText = docText ? docText + " (doc)" : this.content.entireDocumentAsDoc;
+        this.$entireDocumentAsDocButton = $('<li><input id="' + DownloadOption.entireDocumentAsDoc.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDoc.toString() + '">' + docText + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsDocButton);
         this.$entireDocumentAsDocButton.hide();
 
-        this.$entireDocumentAsDocxButton = $('<li><input id="' + DownloadOption.entireDocumentAsDocx.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDocx.toString() + '">' + this.content.entireDocumentAsDocx + '</label></li>');
+        var docxText = this.getLabelByRenderingFormat(RenderingFormat.docx);
+        docxText = docxText ? docxText + " (docx)" : this.content.entireDocumentAsDocx;
+        this.$entireDocumentAsDocxButton = $('<li><input id="' + DownloadOption.entireDocumentAsDocx.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsDocx.toString() + '">' + docxText + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsDocxButton);
         this.$entireDocumentAsDocxButton.hide();
 
-        this.$entireDocumentAsPdfButton = $('<li><input id="' + DownloadOption.entireDocumentAsPDF.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsPDF.toString() + '">' + this.content.entireDocumentAsPdf + '</label></li>');
+        var pdfText = this.getLabelByRenderingFormat(RenderingFormat.pdf);
+        pdfText = pdfText ? pdfText + " (pdf)" : this.content.entireDocumentAsPdf;
+        this.$entireDocumentAsPdfButton = $('<li><input id="' + DownloadOption.entireDocumentAsPDF.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.entireDocumentAsPDF.toString() + '">' + pdfText + '</label></li>');
         this.$downloadOptions.append(this.$entireDocumentAsPdfButton);
         this.$entireDocumentAsPdfButton.hide();
 
@@ -274,6 +280,16 @@ export class DownloadDialogue extends dialogue.Dialogue {
             case DownloadOption.wholeImageOriginal:
                 return (!settings.pagingEnabled && this.getOriginalImageForCurrentCanvas());
         }
+    }
+
+    getLabelByRenderingFormat(format: RenderingFormat): string {
+        var rendering = this.provider.getRendering(this.provider.sequence, format);
+
+        if (rendering){
+            return this.provider.getLocalisedValue(rendering['label']);
+        }
+
+        return null;
     }
 
     getUriByRenderingFormat(format: RenderingFormat): string {
