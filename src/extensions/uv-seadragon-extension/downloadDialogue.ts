@@ -248,6 +248,14 @@ export class DownloadDialogue extends dialogue.Dialogue {
         return false;
     }
 
+    getDimensionsForCurrentCanvas() {
+        var canvas = this.provider.getCurrentCanvas();
+        if (canvas['images'][0]['resource']['width'] && canvas['images'][0]['resource']['height']) {
+            return [canvas['images'][0]['resource']['width'], canvas['images'][0]['resource']['height']];
+        }
+        return [0, 0];
+    }
+
     isDownloadOptionAvailable(option: DownloadOption): boolean {
         var settings: ISettings = this.provider.getSettings();
 
@@ -256,8 +264,11 @@ export class DownloadDialogue extends dialogue.Dialogue {
             case DownloadOption.dynamicCanvasRenderings:
             case DownloadOption.dynamicImageRenderings:
             case DownloadOption.wholeImageHighRes:
-            case DownloadOption.wholeImageLowResAsJpg:
                 return settings.pagingEnabled ? false : true;
+            case DownloadOption.wholeImageLowResAsJpg:
+                // hide low-res option if hi-res width is smaller than constraint
+                var dimensions = this.getDimensionsForCurrentCanvas();
+                return (!settings.pagingEnabled && (dimensions[0] > this.options.confinedImageSize))
             default:
                 return true;
         }
