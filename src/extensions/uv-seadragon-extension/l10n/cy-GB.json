@@ -16,17 +16,14 @@
                 "currentViewAsJpg": "Golwg presennol (jpg)",
                 "download": "Lawrlwytho",
                 "editSettings": "ffurfweddu gosodiadau",
-                "entireDocumentAsDoc": "Y ddogfen gyflawn (doc)",
-                "entireDocumentAsDocx": "Y ddogfen gyflawn (docx)",
-                "entireDocumentAsPdf": "Y ddogfen gyflawn (pdf)",
+                "entireDocument": "Y ddogfen gyflawn ({0})",
                 "entireFileAsOriginal": "Y ffeil gyfan ({0})",
                 "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
                 "pagingNote": "Os gwelwch yn dda trowch oddi Gweld dwy dudalen ar y tro ar gyfer opsiynau ychwanegol.",
                 "preview": "Rhagolwg",
                 "title": "Lawrlwytho",
-                "wholeImageHighResAsJpg": "Y ddelwedd gyfan o ansawdd uchel (jpg)",
-                "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)",
-                "wholeImageOriginal": "Ddelwedd wreiddiol Cyfan"
+                "wholeImageHighRes": "Y ddelwedd gyfan o ansawdd uchel ({0})",
+                "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)"
             }
         },
         "embedDialogue": {

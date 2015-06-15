@@ -1,11 +1,10 @@
 class DownloadOption {
     static currentViewAsJpg = new DownloadOption("currentViewAsJpg");
-    static entireDocumentAsDoc = new DownloadOption("entireDocumentAsDoc");
-    static entireDocumentAsDocx = new DownloadOption("entireDocumentAsDocx");
-    static entireDocumentAsPDF = new DownloadOption("entireDocumentAsPDF");
-    static wholeImageHighResAsJpg = new DownloadOption("wholeImageHighResAsJpg");
+    static dynamicCanvasRenderings = new DownloadOption("dynamicCanvasRenderings");
+    static dynamicImageRenderings = new DownloadOption("dynamicImageRenderings");
+    static dynamicSequenceRenderings = new DownloadOption("dynamicSequenceRenderings");
+    static wholeImageHighRes = new DownloadOption("wholeImageHighRes");
     static wholeImageLowResAsJpg = new DownloadOption("wholeImageLowResAsJpg");
-    static wholeImageOriginal = new DownloadOption("wholeImageOriginal");
 
     constructor(public value: string) {
     }
