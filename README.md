@@ -26,11 +26,15 @@ All command-line operations for building the Universal Viewer are scripted using
 
 1. Install [Node.js](http://nodejs.org), if you haven't already
 
-1. Install the Grunt command line interface (if you haven't already); on the command line, run:
+1. Install the grunt command line interface (if you haven't already); on the command line, run:
 
 	    npm install -g grunt-cli
 
-1. Clone the 'universalviewer' repository and submodules:
+1. Install bower (if you haven't already)
+
+        npm install -g bower
+
+1. Clone the 'universalviewer' repository and sub modules:
 
 	    git clone git@github.com:UniversalViewer/universalviewer.git --recursive
 
