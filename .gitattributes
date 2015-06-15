@@ -1,1 +1,2 @@
+$ cat .gitattributes
 *.ts linguist-language=TypeScript
