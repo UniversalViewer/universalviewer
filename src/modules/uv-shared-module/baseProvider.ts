@@ -1,5 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
 import BootStrapper = require("../../bootstrapper");
 import BootstrapParams = require("../../bootstrapParams");
 import utils = require("../../utils");

@@ -1,5 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-
 export class Panel {
     $element: JQuery;
     fitToParentWidth: boolean;

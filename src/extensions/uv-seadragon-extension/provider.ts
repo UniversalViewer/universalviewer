@@ -1,5 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
 import BootStrapper = require("../../bootstrapper");
 import baseProvider = require("../../modules/uv-shared-module/baseProvider");
 import ISeadragonProvider = require("./iSeadragonProvider");
@@ -192,7 +190,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         }
 
         // todo: use compiler flag (when available)
-        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/js/imageunavailable.json' : 'js/imageunavailable.json';
+        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'js/imageunavailable.json';
 
         _.each(this.pages, (page: Page) => {
             if (!page.tileSourceUri){

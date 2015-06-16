@@ -1,55 +1,51 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
-/// <reference path="./iSettings.d.ts" />
-
-import BootStrapper = require("../../bootstrapper");
 import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import utils = require("../../utils");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import shell = require("../../modules/uv-shared-module/shell");
-import header = require("../../modules/uv-pagingheaderpanel-module/pagingHeaderPanel");
 import baseLeft = require("../../modules/uv-shared-module/leftPanel");
-import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
-import thumbsView = require("../../modules/uv-treeviewleftpanel-module/thumbsView");
-import galleryView = require("../../modules/uv-treeviewleftpanel-module/galleryView");
-import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
-import center = require("../../modules/uv-seadragoncenterpanel-module/seadragonCenterPanel");
+import baseProvider = require("../../modules/uv-shared-module/baseProvider");
 import baseRight = require("../../modules/uv-shared-module/rightPanel");
-import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
-import footer = require("../../modules/uv-searchfooterpanel-module/footerPanel");
-import help = require("../../modules/uv-dialogues-module/helpDialogue");
-import embed = require("./embedDialogue");
+import BootStrapper = require("../../bootstrapper");
+import center = require("../../modules/uv-seadragoncenterpanel-module/seadragonCenterPanel");
 import download = require("./downloadDialogue");
-import settingsDialogue = require("../../extensions/uv-seadragon-extension/settingsDialogue");
-import IProvider = require("../../modules/uv-shared-module/iProvider");
-import settings = require("../../modules/uv-shared-module/settings");
+import embed = require("./embedDialogue");
 import externalContentDialogue = require("../../modules/uv-dialogues-module/externalContentDialogue");
+import footer = require("../../modules/uv-searchfooterpanel-module/footerPanel");
+import galleryView = require("../../modules/uv-treeviewleftpanel-module/galleryView");
+import header = require("../../modules/uv-pagingheaderpanel-module/pagingHeaderPanel");
+import help = require("../../modules/uv-dialogues-module/helpDialogue");
+import IProvider = require("../../modules/uv-shared-module/iProvider");
 import ISeadragonProvider = require("./iSeadragonProvider");
+import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
+import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
+import settings = require("../../modules/uv-shared-module/settings");
+import settingsDialogue = require("../../extensions/uv-seadragon-extension/settingsDialogue");
+import shell = require("../../modules/uv-shared-module/shell");
+import thumbsView = require("../../modules/uv-treeviewleftpanel-module/thumbsView");
+import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
+import utils = require("../../utils");
 
 export class Extension extends baseExtension.BaseExtension {
 
-    headerPanel: header.PagingHeaderPanel;
-    leftPanel: left.TreeViewLeftPanel;
-    centerPanel: center.SeadragonCenterPanel;
-    rightPanel: right.MoreInfoRightPanel;
-    footerPanel: footer.FooterPanel;
-    $helpDialogue: JQuery;
-    helpDialogue: help.HelpDialogue;
-    $embedDialogue: JQuery;
-    embedDialogue: embed.EmbedDialogue;
     $downloadDialogue: JQuery;
-    downloadDialogue: download.DownloadDialogue;
-    $settingsDialogue: JQuery;
-    settingsDialogue: settingsDialogue.SettingsDialogue;
+    $embedDialogue: JQuery;
     $externalContentDialogue: JQuery;
-    externalContentDialogue: externalContentDialogue.ExternalContentDialogue;
-    isLoading: boolean = false;
+    $helpDialogue: JQuery;
+    $settingsDialogue: JQuery;
+    centerPanel: center.SeadragonCenterPanel;
     currentRotation: number = 0;
+    downloadDialogue: download.DownloadDialogue;
+    embedDialogue: embed.EmbedDialogue;
+    externalContentDialogue: externalContentDialogue.ExternalContentDialogue;
+    footerPanel: footer.FooterPanel;
+    headerPanel: header.PagingHeaderPanel;
+    helpDialogue: help.HelpDialogue;
+    isLoading: boolean = false;
+    leftPanel: left.TreeViewLeftPanel;
+    rightPanel: right.MoreInfoRightPanel;
+    settingsDialogue: settingsDialogue.SettingsDialogue;
 
-    static mode: string;
     static CURRENT_VIEW_URI: string = 'onCurrentViewUri';
-    static PAGE_MODE: string = "pageMode";
     static IMAGE_MODE: string = "imageMode";
+    static mode: string;
+    static PAGE_MODE: string = "pageMode";
     static SEARCH_RESULTS: string = 'onSearchResults';
     static SEARCH_RESULTS_EMPTY: string = 'onSearchResults'; // todo: should be onSearchResultsEmpty?
 
@@ -58,7 +54,7 @@ export class Extension extends baseExtension.BaseExtension {
     }
 
     create(overrideDependencies?: any): void {
-        super.create();
+        super.create(overrideDependencies);
 
         var that = this;
 
@@ -217,51 +213,6 @@ export class Extension extends baseExtension.BaseExtension {
         $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
             $.publish(download.DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
         });
-
-        // dependencies
-        if (overrideDependencies){
-            this.loadDependencies(overrideDependencies);
-        } else {
-            this.getDependencies((deps: any) => {
-                this.loadDependencies(deps);
-            });
-        }
-    }
-
-    // todo: add to baseExtension?
-    getDependencies(callback: (deps: any) => void): any {
-        require(["../../extensions/uv-seadragon-extension/dependencies"], function (deps) {
-            callback(deps);
-        });
-    }
-
-    // todo: add to baseExtension?
-    loadDependencies(deps: any): void {
-        var that = this;
-
-        require(_.values(deps), function () {
-
-            that.createModules();
-
-            that.setParams();
-
-            var canvasIndex = parseInt(that.getParam(baseProvider.params.canvasIndex)) || that.provider.getStartCanvasIndex();
-
-            if (that.provider.isCanvasIndexOutOfRange(canvasIndex)){
-                that.showDialogue(that.provider.config.content.canvasIndexOutOfRange);
-                return;
-            }
-
-            that.viewPage(canvasIndex || that.provider.getStartCanvasIndex());
-
-            // initial sizing
-            $.publish(baseExtension.BaseExtension.RESIZE);
-
-            that.setDefaultFocus();
-
-            // publish created event
-            $.publish(Extension.CREATED);
-        });
     }
 
     createModules(): void{
@@ -308,31 +259,20 @@ export class Extension extends baseExtension.BaseExtension {
         }
     }
 
+    viewMedia(): void {
+        var canvasIndex = parseInt(this.getParam(baseProvider.params.canvasIndex)) || this.provider.getStartCanvasIndex();
+
+        if (this.provider.isCanvasIndexOutOfRange(canvasIndex)){
+            this.showDialogue(this.provider.config.content.canvasIndexOutOfRange);
+            return;
+        }
+
+        this.viewPage(canvasIndex || this.provider.getStartCanvasIndex());
+    }
+
     updateSettings(): void {
         this.viewPage(this.provider.canvasIndex, true);
         $.publish(Extension.SETTINGS_CHANGED);
-    }
-
-    setDefaultFocus(): void {
-        setTimeout(() => {
-            $('[tabindex=1]').focus();
-        }, 1);
-    }
-
-    setParams(): void{
-        if (!this.provider.isHomeDomain) return;
-
-        // set sequenceIndex hash param.
-        this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
-    }
-
-    isLeftPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
-                && this.provider.isMultiCanvas();
-    }
-
-    isRightPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
     viewPage(canvasIndex: number, isReload?: boolean): void {
@@ -392,7 +332,7 @@ export class Extension extends baseExtension.BaseExtension {
 
     getViewerBounds(): string{
 
-        if (!this.centerPanel) return;
+        if (!this.centerPanel) return null;
 
         var bounds = this.centerPanel.getBounds();
 
@@ -403,7 +343,7 @@ export class Extension extends baseExtension.BaseExtension {
 
     getViewerRotation(): number{
 
-        if (!this.centerPanel) return;
+        if (!this.centerPanel) return null;
 
         return this.currentRotation;
     }

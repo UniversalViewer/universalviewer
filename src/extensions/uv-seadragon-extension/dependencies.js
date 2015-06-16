@@ -1,5 +1,5 @@
 define(function() {
     return {
-        'openseadragon': './js/openseadragon'
+        dependencies: ['openseadragon']
     };
 });

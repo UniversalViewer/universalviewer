@@ -1,5 +1,3 @@
-/// <reference path="js/jquery.d.ts" />
-/// <reference path="js/extensions.d.ts" />
 import BootstrapParams = require("bootstrapParams");
 import baseExtension = require("./modules/uv-shared-module/baseExtension");
 import utils = require("utils");
@@ -7,17 +5,17 @@ import util = utils.Utils;
 
 class BootStrapper{
 
-    params: BootstrapParams;
-    manifest: any;
     config: any;
     configExtension: any;
     extension: baseExtension.BaseExtension;
     extensions: any;
+    isFullScreen: boolean = false; // persist full screen between reloads
+    manifest: any;
+    params: BootstrapParams;
+    sequence: any;
     sequenceIndex: number;
     sequences: any;
-    sequence: any;
     socket: any; // maintain the same socket between reloads
-    isFullScreen: boolean = false; // persist full screen between reloads
 
     // this loads the manifest, determines what kind of extension and provider to use, and instantiates them.
     constructor(extensions: any) {
@@ -26,19 +24,19 @@ class BootStrapper{
 
     getBootstrapParams(): BootstrapParams {
         var p = new BootstrapParams();
-
-        p.manifestUri = util.getQuerystringParameter('manifestUri');
-        p.config = util.getQuerystringParameter('config');
         var jsonpParam = util.getQuerystringParameter('jsonp');
-        p.jsonp = jsonpParam === null ? null : !(jsonpParam === "false" || jsonpParam === "0");
-        p.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
-        p.isReload = util.getQuerystringParameter('isReload') === "true";
-        p.setLocale(util.getQuerystringParameter('locale'));
-        p.embedDomain = util.getQuerystringParameter('embedDomain');
-        p.isOnlyInstance = util.getQuerystringParameter('isOnlyInstance') === "true";
-        p.embedScriptUri = util.getQuerystringParameter('embedScriptUri');
+
+        p.config = util.getQuerystringParameter('config');
         p.domain = util.getQuerystringParameter('domain');
+        p.embedDomain = util.getQuerystringParameter('embedDomain');
+        p.embedScriptUri = util.getQuerystringParameter('embedScriptUri');
+        p.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
         p.isLightbox = util.getQuerystringParameter('isLightbox') === "true";
+        p.isOnlyInstance = util.getQuerystringParameter('isOnlyInstance') === "true";
+        p.isReload = util.getQuerystringParameter('isReload') === "true";
+        p.jsonp = jsonpParam === null ? null : !(jsonpParam === "false" || jsonpParam === "0");
+        p.manifestUri = util.getQuerystringParameter('manifestUri');
+        p.setLocale(util.getQuerystringParameter('locale'));
 
         return p;
     }
@@ -201,15 +199,13 @@ class BootStrapper{
                 break;
         }
 
-
-
         // todo: use a compiler flag when available
-        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.getLocaleName() + '.config.js' : 'js/' + extension.name + '.' + that.params.getLocaleName() + '.config.js';
+        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.getLocaleName() + '.config.js' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.js';
 
         // feature detection
         yepnope({
             test: window.btoa && window.atob,
-            nope: 'js/base64.min.js',
+            nope: 'lib/base64.min.js',
             complete: function () {
                 $.getJSON(configPath, (config) => {
 
@@ -242,6 +238,7 @@ class BootStrapper{
         provider.load();
 
         this.extension = new extension.type(this);
+        this.extension.name = extension.name;
         this.extension.provider = provider;
         this.extension.create();
     }

@@ -1,6 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
-
 import extension = require("../../extensions/uv-seadragon-extension/extension");
 import baseExtension = require("../uv-shared-module/baseExtension");
 import footer = require("../uv-shared-module/footerPanel");

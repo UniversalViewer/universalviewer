@@ -1,6 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
-
 import utils = require("../../utils");
 import shell = require("../uv-shared-module/shell");
 import baseView = require("../uv-shared-module/baseView");

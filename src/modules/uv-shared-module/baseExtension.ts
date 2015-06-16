@@ -1,5 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
 import utils = require("../../utils");
 import baseProvider = require("./baseProvider");
 import shell = require("./shell");
@@ -10,51 +8,52 @@ import BootStrapper = require("../../bootstrapper");
 
 export class BaseExtension implements IExtension {
 
+    $element: JQuery;
     bootstrapper: BootStrapper;
-    shell: shell.Shell;
-    provider: IProvider;
     canvasIndex: number;
+    embedHeight: number;
+    embedWidth: number;
+    extensions: any;
     mouseX: number;
     mouseY: number;
-    tabbing: boolean = false;
+    name: string;
+    provider: IProvider;
+    shell: shell.Shell;
     shifted: boolean = false;
-    $element: JQuery;
-    extensions: any;
-    embedWidth: number;
-    embedHeight: number;
+    tabbing: boolean = false;
 
     // events
-    static SETTINGS_CHANGED: string = 'onSettingsChanged';
-    static LOAD: string = 'onLoad';
-    static RESIZE: string = 'onResize';
-    static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
-    static CANVAS_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static CANVAS_INDEX_CHANGE_FAILED: string = 'onAssetIndexChangeFailed';
+    static CANVAS_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
-    static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
+    static CREATED: string = 'onCreated';
+    static DOWN_ARROW: string = 'onDownArrow';
+    static END: string = 'onEnd';
+    static ESCAPE: string = 'onEscape';
+    static HIDE_MESSAGE: string = 'onHideMessage';
+    static HOME: string = 'onHome';
+    static LEFT_ARROW: string = 'onLeftArrow';
+    static LOAD: string = 'onLoad';
+    static OPEN_MEDIA: string = 'onOpenMedia';
+    static PAGE_DOWN: string = 'onPageDown';
+    static PAGE_UP: string = 'onPageUp';
     static REDIRECT: string = 'onRedirect';
     static REFRESH: string = 'onRefresh';
-    static ESCAPE: string = 'onEscape';
+    static RESIZE: string = 'onResize';
     static RETURN: string = 'onReturn';
-    static PAGE_UP: string = 'onPageUp';
-    static PAGE_DOWN: string = 'onPageDown';
-    static HOME: string = 'onHome';
-    static END: string = 'onEnd';
-    static LEFT_ARROW: string = 'onLeftArrow';
-    static UP_ARROW: string = 'onUpArrow';
     static RIGHT_ARROW: string = 'onRightArrow';
-    static DOWN_ARROW: string = 'onDownArrow';
-    static WINDOW_UNLOAD: string = 'onWindowUnload';
-    static OPEN_MEDIA: string = 'onOpenMedia';
-    static CREATED: string = 'onCreated';
+    static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
+    static SETTINGS_CHANGED: string = 'onSettingsChanged';
     static SHOW_MESSAGE: string = 'onShowMessage';
-    static HIDE_MESSAGE: string = 'onHideMessage';
+    static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
+    static UP_ARROW: string = 'onUpArrow';
+    static WINDOW_UNLOAD: string = 'onWindowUnload';
 
     constructor(bootstrapper: BootStrapper) {
         this.bootstrapper = bootstrapper;
     }
 
-    public create(): void {
+    public create(overrideDependencies?: any): void {
 
         this.$element = $('#app');
         this.$element.data("bootstrapper", this.bootstrapper)
@@ -90,7 +89,7 @@ export class BaseExtension implements IExtension {
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
-        //this.$element.addClass(this.provider.getSequenceType());
+        //this.$element.addClass(this.provider.getSequenceType()); // todo: add media mime type class?
 
         // events.
         window.onresize = () => {
@@ -162,6 +161,90 @@ export class BaseExtension implements IExtension {
 
         // set canvasIndex to -1 (nothing selected yet).
         this.canvasIndex = -1;
+
+        // dependencies
+        if (overrideDependencies){
+            this.loadDependencies(overrideDependencies);
+        } else {
+            this.getDependencies((deps: any) => {
+                this.loadDependencies(deps);
+            });
+        }
+    }
+
+    createModules(): void {
+
+    }
+
+    modulesCreated(): void {
+
+    }
+
+    getDependencies(cb: (deps: any) => void): any {
+        var that = this;
+
+        // todo: use compiler flag (when available)
+        var depsUri = (window.DEBUG) ? '../../extensions/' + this.name + '/dependencies' : this.name + '-dependencies';
+
+        require([depsUri], function (deps) {
+            // if debugging, set the base uri to the extension's directory.
+            // otherwise set it to the current directory (where app.js is hosted).
+
+            if (!that.provider.isReload){
+                // todo: use compiler flag (when available)
+                var baseUri = (window.DEBUG) ? '../../extensions/' + that.name + '/lib/' : '';
+
+                // for each dependency, prepend baseUri.
+                for (var i = 0; i < deps.dependencies.length; i++) {
+                    // todo: would be nice to use path.join. use browserify?
+                    deps.dependencies[i] = baseUri + deps.dependencies[i];
+                }
+            }
+
+            cb(deps);
+        });
+    }
+
+    loadDependencies(deps: any): void {
+        var that = this;
+
+        require(deps.dependencies, function () {
+            that.dependenciesLoaded();
+        });
+    }
+
+    dependenciesLoaded(): void {
+        this.createModules();
+        this.modulesCreated();
+        $.publish(BaseExtension.RESIZE); // initial sizing
+        $.publish(BaseExtension.CREATED);
+        this.setParams();
+        this.setDefaultFocus();
+        this.viewMedia();
+    }
+
+    setParams(): void{
+        if (!this.provider.isHomeDomain) return;
+
+        // set sequenceIndex hash param.
+        this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
+    }
+
+    setDefaultFocus(): void {
+        setTimeout(() => {
+            $('[tabindex=1]').focus();
+        }, 1);
+    }
+
+    viewMedia(): void {
+        var canvas = this.provider.getCanvasByIndex(0);
+
+        this.viewCanvas(0, () => {
+
+            $.publish(BaseExtension.OPEN_MEDIA, [canvas]);
+
+            this.setParam(baseProvider.params.canvasIndex, 0);
+        });
     }
 
     width(): number {
@@ -201,7 +284,7 @@ export class BaseExtension implements IExtension {
         }, 1000);
     }
 
-    // get hash or data-attribute params depending on whether the player is embedded.
+    // get hash or data-attribute params depending on whether the UV is embedded.
     getParam(key: baseProvider.params): any{
         var value;
 
@@ -217,7 +300,7 @@ export class BaseExtension implements IExtension {
         return value;
     }
 
-    // set hash params depending on whether the player is embedded.
+    // set hash params depending on whether the UV is embedded.
     setParam(key: baseProvider.params, value: any): void{
 
         if (this.provider.isDeepLinkingEnabled()){
@@ -264,6 +347,7 @@ export class BaseExtension implements IExtension {
                 $.publish(BaseExtension.TOGGLE_FULLSCREEN);
             }
 
+            // todo: manifest.assetSequence doesn't exist in IIIF
             this.triggerSocket(BaseExtension.SEQUENCE_INDEX_CHANGED, manifest.assetSequence);
         }
     }
@@ -275,5 +359,14 @@ export class BaseExtension implements IExtension {
         } catch (e) {
             return true;
         }
+    }
+
+    isLeftPanelEnabled(): boolean{
+        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
+            && this.provider.isMultiCanvas();
+    }
+
+    isRightPanelEnabled(): boolean{
+        return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 }

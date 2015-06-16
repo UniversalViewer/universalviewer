@@ -18,17 +18,20 @@ module.exports = function (grunt) {
     refresh();
 
     grunt.initConfig({
+
         global:
         {
-            bowerDir: './bower_components',
-            examplesDir: 'examples',
+            bowerDir: './lib',
+            examplesDir: './examples',
             extensionsDir: './src/extensions',
             minify: 'optimize=none',
             modulesDir: './src/modules',
             port: '8001',
             themesDir: './src/themes'
         },
+
         pkg: packageJson,
+
         ts: {
             dev: {
                 src: [
@@ -80,15 +83,15 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        cwd: 'src/js',
+                        cwd: 'src/lib',
                         src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js', 'l10n.js', 'base64.min.js'],
-                        dest: '<%= global.buildDir %>/js/'
+                        dest: '<%= global.buildDir %>/lib/'
                     },
                     // extension configuration files
                     {
                         expand: true,
                         src: ['src/extensions/**/config/*.config.js'],
-                        dest: '<%= global.buildDir %>/js/',
+                        dest: '<%= global.buildDir %>/lib/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -100,11 +103,11 @@ module.exports = function (grunt) {
                             return dest + extensionName + '.' + fileName;
                         }
                     },
-                    // extension dependencies list
+                    // extension dependencies
                     {
                         expand: true,
                         src: ['src/extensions/**/dependencies.js'],
-                        dest: '<%= global.buildDir %>/js/',
+                        dest: '<%= global.buildDir %>/lib/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -118,19 +121,19 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['src/extensions/**/js/*'],
-                        dest: '<%= global.buildDir %>/js/'
+                        src: ['src/extensions/**/lib/*'],
+                        dest: '<%= global.buildDir %>/lib/'
                     },
                     // anything in the module/js folders that isn't
                     // a js file. could be swfs or supporting files
-                    // for a 3rd party library.
+                    // for a 3rd party library
                     {
                         expand: true,
                         flatten: true,
-                        src: ['src/modules/**/js/*.*', '!src/modules/**/js/*.js'],
-                        dest: '<%= global.buildDir %>/js/'
+                        src: ['src/modules/**/lib/*.*', '!src/modules/**/lib/*.js'],
+                        dest: '<%= global.buildDir %>/lib/'
                     },
-                    // l10n localisation files.
+                    // l10n localisation files
                     {
                         expand: true,
                         flatten: false,
@@ -145,7 +148,7 @@ module.exports = function (grunt) {
                             return path;
                         }
                     },
-                    // module html.
+                    // module html
                     {
                         expand: true,
                         src: ['src/modules/**/html/*'],
@@ -254,54 +257,24 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node lib/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= global.minify %> out=<%= global.buildDir %>/js/app.js'
+                cmd: 'node lib/r.js/dist/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= global.minify %> out=<%= global.buildDir %>/lib/app.js'
             }
         },
 
         replace: {
-            // convert dependency files to use simplified commonjs wrapper.
-            dependenciesSimplify: {
-                src: ['src/extensions/**/dependencies.js'],
-                overwrite: true,
-                replacements: [{
-                    from: 'define(["require", "exports"], function(require, exports)',
-                    to: 'define(function()'
-                }]
-            },
-            // replace dependency paths to point to same /js directory.
-            dependenciesPaths: {
-                src: ['<%= global.buildDir %>/js/*dependencies.js'],
-                overwrite: true,
-                replacements: [{
-                    from: /:.*(?:'|").*\/(.*)(?:'|")/g,
-                    to: ': \'$1\''
-                }]
-            },
-
-            // ../../extensions/uv-seadragon-extension/dependencies
-            // becomes
-            // uv-seadragon-extension-dependencies
-            dependenciesExtension: {
-                src: ['<%= global.buildDir %>/js/app.js'],
-                overwrite: true,
-                replacements: [{
-                    from: /..\/..\/extensions\/(.*)\/dependencies/g,
-                    to: '$1-dependencies'
-                }]
-            },
 
             html: {
                 src: ['<%= global.buildDir %>/app.html'],
                 overwrite: true,
                 replacements: [{
                     from: 'data-main="app"',
-                    to: 'data-main="js/app"'
+                    to: 'data-main="lib/app"'
                 }]
             },
             js: {
                 // replace window.DEBUG=true
                 // todo: use a compiler flag when available
-                src: ['<%= global.buildDir %>/js/app.js'],
+                src: ['<%= global.buildDir %>/lib/app.js'],
                 overwrite: true,
                 replacements: [{
                     from: /window.DEBUG.*=.*true;/g,
@@ -419,7 +392,6 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:dev',
-            'replace:dependenciesSimplify',
             'localise:apply',
             'theme:create'
         );
@@ -439,28 +411,16 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:build',
-            'replace:dependenciesSimplify',
             'localise:apply',
             'clean:build',
             'copy:build',
             'exec:build',
             'replace:html',
             'replace:js',
-            'replace:dependenciesPaths',
-            'replace:dependenciesExtension',
             'theme:create',
             'theme:dist',
             'replace:moduleimages',
-            'replace:themeimages'
-        );
-    });
-
-    // copy into examples folder
-    grunt.registerTask('examples', '', function() {
-
-        refresh();
-
-        grunt.task.run(
+            'replace:themeimages',
             'replace:examples',
             'clean:examples',
             'copy:examples'

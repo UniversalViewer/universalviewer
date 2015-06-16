@@ -1,24 +1,26 @@
 {
-    "name": "Universal Viewer",
-    "version": "1.2.2",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/UniversalViewer/universalviewer"
-    },
-    "authors": [
-        "edsilv <e.silverton@gmail.com>"
-    ],
-    "ignore": [
-        "build",
-        "tests",
-        "Gruntfile.js",
-        "**/.*",
-        "node_modules",
-        "bower_components"
-    ],
-    "dependencies": {
-        "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
-        "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme"
-    },
-    "devDependencies": {}
+  "name": "Universal Viewer",
+  "version": "1.2.3",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/UniversalViewer/universalviewer"
+  },
+  "authors": [
+    "edsilv <e.silverton@gmail.com>"
+  ],
+  "ignore": [
+    "build",
+    "tests",
+    "Gruntfile.js",
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
+    "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme"
+  },
+  "devDependencies": {
+    "r.js": "~2.1.18"
+  }
 }

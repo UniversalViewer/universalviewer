@@ -1,5 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-
 import baseRight = require("../uv-shared-module/rightPanel");
 
 export class MoreInfoRightPanel extends baseRight.RightPanel {

@@ -1,4 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
 import baseExtension = require("./baseExtension");
 import utils = require("../../utils");
 import baseView = require("./baseView");

@@ -1,18 +1,16 @@
-/// <reference path="js/require.d.ts" />
-
 require.config({
     paths: {
-        'modernizr': 'js/modernizr',
-        'jquery': 'js/jquery-1.10.2.min',
-        'plugins': 'js/jquery.plugins',
-        'underscore': 'js/underscore-min',
-        'pubsub': 'js/pubsub',
-        'jsviews': 'js/jsviews.min',
-        'yepnope': 'js/yepnope.1.5.4-min',
-        'yepnopecss': 'js/yepnope.css',
-        'l10n': 'js/l10n',
-        'sanitize': 'js/sanitize',
-        'length': 'js/Length.min'
+        'modernizr': 'lib/modernizr',
+        'jquery': 'lib/jquery-1.10.2.min',
+        'plugins': 'lib/jquery.plugins',
+        'underscore': 'lib/underscore-min',
+        'pubsub': 'lib/pubsub',
+        'jsviews': 'lib/jsviews.min',
+        'yepnope': 'lib/yepnope.1.5.4-min',
+        'yepnopecss': 'lib/yepnope.css',
+        'l10n': 'lib/l10n',
+        'sanitize': 'lib/sanitize',
+        'length': 'lib/Length.min'
     },
     shim: {
         jquery: {

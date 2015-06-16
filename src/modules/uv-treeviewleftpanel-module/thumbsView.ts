@@ -1,5 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-
 import utils = require("../../utils");
 import baseExtension = require("../uv-shared-module/baseExtension");
 import extension = require("../../extensions/uv-seadragon-extension/extension");

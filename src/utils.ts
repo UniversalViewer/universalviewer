@@ -1,6 +1,3 @@
-/// <reference path="js/jquery.d.ts" />
-/// <reference path="js/extensions.d.ts" />
-
 //#region String
 
 String.prototype.format = function () {

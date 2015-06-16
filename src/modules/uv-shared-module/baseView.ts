@@ -1,4 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
 import panel = require("./panel");
 import BootStrapper = require("../../bootstrapper");
 

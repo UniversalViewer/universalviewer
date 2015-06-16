@@ -1,6 +1,5 @@
 define(function() {
     return {
-        'pdf': './js/pdf_combined',
-        'pdfobject': './js/pdfobject'
+        dependencies: ['pdf_combined', 'pdfobject']
     };
 });

@@ -1,36 +1,33 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
-
-import BootStrapper = require("../../bootstrapper");
 import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import utils = require("../../utils");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import provider = require("./provider");
-import IProvider = require("../../modules/uv-shared-module/iProvider");
-import IPDFProvider = require("./iPDFProvider");
-import shell = require("../../modules/uv-shared-module/shell");
-import header = require("../../modules/uv-shared-module/headerPanel");
 import baseLeft = require("../../modules/uv-shared-module/leftPanel");
-import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
-import center = require("../../modules/uv-pdfcenterpanel-module/pdfCenterPanel");
+import baseProvider = require("../../modules/uv-shared-module/baseProvider");
 import baseRight = require("../../modules/uv-shared-module/rightPanel");
-import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
-import footer = require("../../modules/uv-shared-module/footerPanel");
-import help = require("../../modules/uv-dialogues-module/helpDialogue");
+import BootStrapper = require("../../bootstrapper");
+import center = require("../../modules/uv-pdfcenterpanel-module/pdfCenterPanel");
 import embed = require("./embedDialogue");
+import footer = require("../../modules/uv-shared-module/footerPanel");
+import header = require("../../modules/uv-shared-module/headerPanel");
+import help = require("../../modules/uv-dialogues-module/helpDialogue");
+import IPDFProvider = require("./iPDFProvider");
+import IProvider = require("../../modules/uv-shared-module/iProvider");
+import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
+import provider = require("./provider");
+import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
+import shell = require("../../modules/uv-shared-module/shell");
 import thumbsView = require("../../modules/uv-treeviewleftpanel-module/thumbsView");
+import utils = require("../../utils");
 
 export class Extension extends baseExtension.BaseExtension{
 
-    headerPanel: header.HeaderPanel;
-    leftPanel: left.TreeViewLeftPanel;
-    centerPanel: center.PDFCenterPanel;
-    rightPanel: right.MoreInfoRightPanel;
-    footerPanel: footer.FooterPanel;
-    $helpDialogue: JQuery;
-    helpDialogue: help.HelpDialogue;
     $embedDialogue: JQuery;
+    $helpDialogue: JQuery;
+    centerPanel: center.PDFCenterPanel;
     embedDialogue: embed.EmbedDialogue;
+    footerPanel: footer.FooterPanel;
+    headerPanel: header.HeaderPanel;
+    helpDialogue: help.HelpDialogue;
+    leftPanel: left.TreeViewLeftPanel;
+    rightPanel: right.MoreInfoRightPanel;
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -41,7 +38,6 @@ export class Extension extends baseExtension.BaseExtension{
 
         var that = this;
 
-        // events
         $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
             window.open((<IPDFProvider>that.provider).getPDFUri());
         });
@@ -76,40 +72,6 @@ export class Extension extends baseExtension.BaseExtension{
 
         $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
             this.resize();
-        });
-
-        // dependencies
-        if (overrideDependencies){
-            this.loadDependencies(overrideDependencies);
-        } else {
-            this.getDependencies((deps: any) => {
-                this.loadDependencies(deps);
-            });
-        }
-    }
-
-    getDependencies(callback: (deps: any) => void): any {
-        require(["../../extensions/uv-pdf-extension/dependencies"], function (deps) {
-            callback(deps);
-        });
-    }
-
-    loadDependencies(deps: any): void {
-        var that = this;
-
-        require(_.values(deps), function () {
-
-            that.createModules();
-
-            //this.setParams();
-
-            // initial sizing
-            $.publish(baseExtension.BaseExtension.RESIZE);
-
-            that.viewMedia();
-
-            // publish created event
-            $.publish(Extension.CREATED);
         });
     }
 
@@ -148,24 +110,4 @@ export class Extension extends baseExtension.BaseExtension{
             this.leftPanel.init();
         }
     }
-
-    isLeftPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true);
-    }
-
-    isRightPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
-    }
-
-    viewMedia(): void {
-        var canvas = this.provider.getCanvasByIndex(0);
-
-        this.viewCanvas(0, () => {
-
-            $.publish(Extension.OPEN_MEDIA, [canvas]);
-
-            this.setParam(baseProvider.params.canvasIndex, 0);
-        });
-    }
-
 }

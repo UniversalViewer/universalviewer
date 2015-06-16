@@ -1,5 +1,3 @@
-/// <reference path="../../js/jquery.d.ts" />
-
 import baseLeft = require("../uv-shared-module/leftPanel");
 import utils = require("../../utils");
 import tree = require("./treeView");

@@ -1,5 +1,5 @@
 define(function() {
     return {
-        'mediaelement': './js/mediaelement-and-player'
+        dependencies: ['mediaelement-and-player']
     };
 });

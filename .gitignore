@@ -2,7 +2,7 @@
 ## Bower Components
 #################
 
-bower_components
+lib
 
 #################
 ## Bower
@@ -50,9 +50,8 @@ node_modules
 *.js.map
 *.min.map
 !Gruntfile.js
-!lib/*.js
-!src/js/*.js
-!src/*/*/js/*.js
+!src/lib/*.js
+!src/*/*/lib/*.js
 !src/examples/*.js
 !src/extensions/*/dependencies.js
 

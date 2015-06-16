@@ -1,51 +1,46 @@
-/// <reference path="../../js/jquery.d.ts" />
-/// <reference path="../../js/extensions.d.ts" />
-
-import BootStrapper = require("../../bootstrapper");
 import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import utils = require("../../utils");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import provider = require("./provider");
-import shell = require("../../modules/uv-shared-module/shell");
-import header = require("../../modules/uv-shared-module/headerPanel");
 import baseLeft = require("../../modules/uv-shared-module/leftPanel");
-import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
-import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
-import center = require("../../modules/uv-mediaelementcenterpanel-module/mediaelementCenterPanel");
+import baseProvider = require("../../modules/uv-shared-module/baseProvider");
 import baseRight = require("../../modules/uv-shared-module/rightPanel");
-import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
-import footer = require("../../modules/uv-shared-module/footerPanel");
-import help = require("../../modules/uv-dialogues-module/helpDialogue");
+import BootStrapper = require("../../bootstrapper");
+import center = require("../../modules/uv-mediaelementcenterpanel-module/mediaelementCenterPanel");
 import download = require("./downloadDialogue");
 import embed = require("./embedDialogue");
+import footer = require("../../modules/uv-shared-module/footerPanel");
+import header = require("../../modules/uv-shared-module/headerPanel");
+import help = require("../../modules/uv-dialogues-module/helpDialogue");
 import IProvider = require("../../modules/uv-shared-module/iProvider");
+import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
+import provider = require("./provider");
+import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
+import shell = require("../../modules/uv-shared-module/shell");
+import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
+import utils = require("../../utils");
 
 export class Extension extends baseExtension.BaseExtension{
 
-    headerPanel: header.HeaderPanel;
-    leftPanel: left.TreeViewLeftPanel;
-    centerPanel: center.MediaElementCenterPanel;
-    rightPanel: right.MoreInfoRightPanel;
-    footerPanel: footer.FooterPanel;
-    $helpDialogue: JQuery;
-    helpDialogue: help.HelpDialogue;
     $downloadDialogue: JQuery;
-    downloadDialogue: download.DownloadDialogue;
     $embedDialogue: JQuery;
+    $helpDialogue: JQuery;
+    centerPanel: center.MediaElementCenterPanel;
+    downloadDialogue: download.DownloadDialogue;
     embedDialogue: embed.EmbedDialogue;
+    footerPanel: footer.FooterPanel;
+    headerPanel: header.HeaderPanel;
+    helpDialogue: help.HelpDialogue;
+    leftPanel: left.TreeViewLeftPanel;
+    rightPanel: right.MoreInfoRightPanel;
 
-    // events
-    static OPEN_MEDIA: string = 'onMediaOpened';
-    static MEDIA_PLAYED: string = 'onMediaPlayed';
-    static MEDIA_PAUSED: string = 'onMediaPaused';
     static MEDIA_ENDED: string = 'onMediaEnded';
+    static MEDIA_PAUSED: string = 'onMediaPaused';
+    static MEDIA_PLAYED: string = 'onMediaPlayed';
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
     }
 
     create(overrideDependencies?: any): void {
-        super.create();
+        super.create(overrideDependencies);
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
@@ -83,40 +78,6 @@ export class Extension extends baseExtension.BaseExtension{
         $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
             this.resize();
         });
-
-        // dependencies
-        if (overrideDependencies){
-            this.loadDependencies(overrideDependencies);
-        } else {
-            this.getDependencies((deps: any) => {
-                this.loadDependencies(deps);
-            });
-        }
-    }
-
-    getDependencies(callback: (deps: any) => void): any {
-        require(["../../extensions/uv-mediaelement-extension/dependencies"], function (deps) {
-            callback(deps);
-        });
-    }
-
-    loadDependencies(deps: any): void {
-        var that = this;
-
-        require(_.values(deps), function () {
-
-            that.createModules();
-
-            that.setParams();
-
-            // initial sizing
-            $.publish(baseExtension.BaseExtension.RESIZE);
-
-            that.viewMedia();
-
-            // publish created event
-            $.publish(Extension.CREATED);
-        });
     }
 
     createModules(): void{
@@ -147,26 +108,8 @@ export class Extension extends baseExtension.BaseExtension{
         }
     }
 
-    setParams(): void{
-        if (!this.provider.isHomeDomain) return;
-
-        // set sequenceIndex hash param.
-        this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
-    }
-
     isLeftPanelEnabled(): boolean{
         return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
                 && this.provider.isMultiSequence();
-    }
-
-    viewMedia(): void {
-        var canvas = this.provider.getCanvasByIndex(0);
-
-        this.viewCanvas(0, () => {
-
-            $.publish(Extension.OPEN_MEDIA, [canvas]);
-
-            this.setParam(baseProvider.params.canvasIndex, 0);
-        });
     }
 }
