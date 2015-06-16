@@ -6,8 +6,6 @@
 
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
-[Wiki](https://github.com/UniversalViewer/universalviewer/wiki)
-
 ## Contributors
 
 ![Wellcome Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/wellcome_logo.png "Wellcome Library")
@@ -81,4 +79,4 @@ To view the examples run:
 
 ## License
 
-The Universal Viewer is released under the MIT license. For details, see the file LICENSE.txt.
+The Universal Viewer is released under the [MIT license](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt).
