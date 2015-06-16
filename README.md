@@ -6,6 +6,8 @@
 
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
+[Wiki](https://github.com/UniversalViewer/universalviewer/wiki)
+
 ## Contributors
 
 ![Wellcome Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/wellcome_logo.png "Wellcome Library")
