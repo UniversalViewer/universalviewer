@@ -4,6 +4,8 @@
 
 lib
 !src/lib
+!src/extensions/**/lib
+!src/modules/**/lib
 
 #################
 ## Bower
