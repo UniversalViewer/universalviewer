@@ -267,7 +267,7 @@ class GalleryView extends BaseView {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === Mode.page;
+        return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
     }
 
     selectIndex(index): void {

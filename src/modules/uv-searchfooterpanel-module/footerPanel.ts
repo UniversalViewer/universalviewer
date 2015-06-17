@@ -48,7 +48,8 @@ class FooterPanel extends BaseFooterPanel {
             this.canvasIndexChanged();
         });
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, mode) => {
+        // todo: this should be a setting
+        $.subscribe(Commands.MODE_CHANGED, (e, mode) => {
             this.settingsChanged();
         });
 
@@ -315,7 +316,7 @@ class FooterPanel extends BaseFooterPanel {
 
         var mode = that.extension.getMode();
 
-        if (mode === Mode.page) {
+        if (mode.toString() === Mode.page.toString()) {
             var canvas = that.provider.getCanvasByIndex(canvasIndex);
 
             var label = canvas.label;
@@ -476,7 +477,7 @@ class FooterPanel extends BaseFooterPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === Mode.page;
+        return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
     }
 
     displaySearchResults(terms, results): void {

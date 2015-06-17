@@ -32,7 +32,8 @@ class ThumbsView extends BaseView {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, mode) => {
+        // todo: this should be a setting
+        $.subscribe(Commands.MODE_CHANGED, (e, mode) => {
             this.setLabel();
         });
 
@@ -220,11 +221,10 @@ class ThumbsView extends BaseView {
                 $(this.$thumbs).find('span.label').hide();
             }
         }
-
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === Mode.page;
+        return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
     }
 
     selectIndex(index): void {

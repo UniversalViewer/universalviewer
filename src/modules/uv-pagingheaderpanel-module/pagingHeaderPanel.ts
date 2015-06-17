@@ -190,7 +190,7 @@ class PagingHeaderPanel extends HeaderPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === Mode.page.toString();
+        return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
     }
 
     setTitles(): void {
