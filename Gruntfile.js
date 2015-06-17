@@ -185,17 +185,6 @@ module.exports = function (grunt) {
                         dest: '<%= dirs.examples %>/'
                     }
                 ]
-            },
-            dist: {
-                // copy contents of /build to /dist.
-                files: [
-                    {
-                        cwd: '<%= dirs.build %>',
-                        expand: true,
-                        src: ['**'],
-                        dest: '<%= dirs.dist %>'
-                    }
-                ]
             }
         },
 
@@ -238,27 +227,15 @@ module.exports = function (grunt) {
         compress: {
             zip: {
                 options: {
-                    archive: "<%= dirs.dist %>/<%= dirs.zip %>.zip",
+                    mode: 'zip',
+                    archive: '<%= dirs.dist %>/<%= dirs.uv %>.zip',
                     level: 9
                 },
                 files: [
                     {
                         expand: true,
-                        cwd: "build/",
-                        src: ["<%= dirs.dist %>/**"]
-                    }
-                ]
-            },
-            tar: {
-                options: {
-                    archive: "build/releases/<%= dirs.dist %>.tar.gz",
-                    level: 9
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: "build/",
-                        src: ["<%= dirs.dist %>/**" ]
+                        cwd: '<%= dirs.build %>/',
+                        src: ['**']
                     }
                 ]
             }
@@ -443,9 +420,8 @@ module.exports = function (grunt) {
         refresh();
 
         grunt.task.run(
-            'copy:dist',
-            'compress',
-            'clean:dist'
+            'clean:dist',
+            'compress'
         );
     });
 
