@@ -1,6 +1,6 @@
-var version = require('./version');
-var localise = require('./localise');
-var theme = require('./theme');
+var bump = require('./utils/bump');
+var localise = require('./utils/localise');
+var theme = require('./utils/theme');
 
 module.exports = function (grunt) {
 
@@ -348,7 +348,7 @@ module.exports = function (grunt) {
             }
         },
 
-        version: {
+        bump: {
             bump: {
             },
             apply: {
