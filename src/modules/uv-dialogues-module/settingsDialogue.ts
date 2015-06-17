@@ -53,7 +53,7 @@ class SettingsDialogue extends Dialogue {
         // initialise ui.
         this.$title.text(this.content.title);
 
-        this.$version.text("v" + Version);
+        this.$version.text("v" + Version.Version);
 
         var locales = this.provider.getLocales();
 
