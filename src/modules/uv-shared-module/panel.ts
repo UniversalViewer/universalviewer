@@ -1,3 +1,5 @@
+import BaseCommands = require("./Commands");
+
 class Panel {
 
     $element: JQuery;
@@ -13,9 +15,7 @@ class Panel {
     }
 
     create(): void {
-        // todo: can't use static baseExtension.RESIZE property here without breaking inheritance.
-        // possible bug with TS 0.9
-        $.subscribe('onResize', () => {
+        $.subscribe(BaseCommands.RESIZE, () => {
             this.resize();
         });
     }

@@ -1,6 +1,6 @@
+import BaseCommands = require("./Commands");
 import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
 import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
@@ -49,7 +49,7 @@ class BaseExtension implements IExtension {
            });
         }
 
-        this.triggerSocket(Commands.LOAD, {
+        this.triggerSocket(BaseCommands.LOAD, {
             bootstrapper: {
                 config: this.provider.bootstrapper.config,
                 params: this.provider.bootstrapper.params
@@ -89,16 +89,16 @@ class BaseExtension implements IExtension {
         $(document).keyup((e) => {
             var event: string = null;
 
-            if (e.keyCode === 13) event = Commands.RETURN;
-            if (e.keyCode === 27) event = Commands.ESCAPE;
-            if (e.keyCode === 33) event = Commands.PAGE_UP;
-            if (e.keyCode === 34) event = Commands.PAGE_DOWN;
-            if (e.keyCode === 35) event = Commands.END;
-            if (e.keyCode === 36) event = Commands.HOME;
-            if (e.keyCode === 37) event = Commands.LEFT_ARROW;
-            if (e.keyCode === 38) event = Commands.UP_ARROW;
-            if (e.keyCode === 39) event = Commands.RIGHT_ARROW;
-            if (e.keyCode === 40) event = Commands.DOWN_ARROW;
+            if (e.keyCode === 13) event = BaseCommands.RETURN;
+            if (e.keyCode === 27) event = BaseCommands.ESCAPE;
+            if (e.keyCode === 33) event = BaseCommands.PAGE_UP;
+            if (e.keyCode === 34) event = BaseCommands.PAGE_DOWN;
+            if (e.keyCode === 35) event = BaseCommands.END;
+            if (e.keyCode === 36) event = BaseCommands.HOME;
+            if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
+            if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
+            if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
+            if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
 
             if (event){
                 e.preventDefault();
@@ -108,11 +108,11 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
-        $.subscribe(Commands.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
             if (!this.isOverlayActive()){
                 $('#top').focus();
                 this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
-                this.triggerSocket(Commands.TOGGLE_FULLSCREEN,
+                this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
                     {
                         isFullScreen: this.bootstrapper.isFullScreen,
                         overrideFullScreen: this.provider.config.options.overrideFullScreen
@@ -120,14 +120,14 @@ class BaseExtension implements IExtension {
             }
         });
 
-        $.subscribe(Commands.ESCAPE, () => {
+        $.subscribe(BaseCommands.ESCAPE, () => {
             if (this.bootstrapper.isFullScreen) {
-                $.publish(Commands.TOGGLE_FULLSCREEN);
+                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
             }
         });
 
-        $.subscribe(Commands.CREATED, () => {
-            this.triggerSocket(Commands.CREATED);
+        $.subscribe(BaseCommands.CREATED, () => {
+            this.triggerSocket(BaseCommands.CREATED);
         });
 
         // create shell and shared views.
@@ -190,8 +190,8 @@ class BaseExtension implements IExtension {
     dependenciesLoaded(): void {
         this.createModules();
         this.modulesCreated();
-        $.publish(Commands.RESIZE); // initial sizing
-        $.publish(Commands.CREATED);
+        $.publish(BaseCommands.RESIZE); // initial sizing
+        $.publish(BaseCommands.CREATED);
         this.setParams();
         this.setDefaultFocus();
         this.viewMedia();
@@ -215,7 +215,7 @@ class BaseExtension implements IExtension {
 
         this.viewCanvas(0, () => {
 
-            $.publish(Commands.OPEN_MEDIA, [canvas]);
+            $.publish(BaseCommands.OPEN_MEDIA, [canvas]);
 
             this.setParam(Params.canvasIndex, 0);
         });
@@ -236,23 +236,23 @@ class BaseExtension implements IExtension {
     }
 
     redirect(uri: string): void {
-        this.triggerSocket(Commands.REDIRECT, uri);
+        this.triggerSocket(BaseCommands.REDIRECT, uri);
     }
 
     refresh(): void {
-        this.triggerSocket(Commands.REFRESH, null);
+        this.triggerSocket(BaseCommands.REFRESH, null);
     }
 
     resize(): void {
-        $.publish(Commands.RESIZE);
+        $.publish(BaseCommands.RESIZE);
     }
 
     handleParentFrameEvent(message): void {
         // todo: come up with better way of postponing this until viewer is fully created
         setTimeout(() => {
             switch (message.eventName) {
-                case Commands.TOGGLE_FULLSCREEN:
-                    $.publish(Commands.TOGGLE_FULLSCREEN, message.eventObject);
+                case BaseCommands.TOGGLE_FULLSCREEN:
+                    $.publish(BaseCommands.TOGGLE_FULLSCREEN, message.eventObject);
                     break;
             }
         }, 1000);
@@ -286,7 +286,7 @@ class BaseExtension implements IExtension {
 
         this.provider.canvasIndex = canvasIndex;
 
-        $.publish(Commands.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
 
         if (callback) callback(canvasIndex);
     }
@@ -295,7 +295,7 @@ class BaseExtension implements IExtension {
 
         this.closeActiveDialogue();
 
-        $.publish(Commands.SHOW_GENERIC_DIALOGUE, [
+        $.publish(BaseCommands.SHOW_GENERIC_DIALOGUE, [
             {
                 message: message,
                 acceptCallback: acceptCallback,
@@ -305,7 +305,7 @@ class BaseExtension implements IExtension {
     }
 
     closeActiveDialogue(): void{
-        $.publish(Commands.CLOSE_ACTIVE_DIALOGUE);
+        $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
     }
 
     isOverlayActive(): boolean{
@@ -318,11 +318,11 @@ class BaseExtension implements IExtension {
             window.open(seeAlsoUri, '_blank');
         } else {
             if (this.bootstrapper.isFullScreen) {
-                $.publish(Commands.TOGGLE_FULLSCREEN);
+                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
             }
 
             // todo: manifest.assetSequence doesn't exist in IIIF
-            this.triggerSocket(Commands.SEQUENCE_INDEX_CHANGED, manifest.assetSequence);
+            this.triggerSocket(BaseCommands.SEQUENCE_INDEX_CHANGED, manifest.assetSequence);
         }
     }
 

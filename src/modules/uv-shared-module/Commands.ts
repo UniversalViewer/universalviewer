@@ -1,5 +1,5 @@
 class Commands {
-    static namespace: string = 'baseExtension';
+    static namespace: string = 'uv';
 
     static CANVAS_INDEX_CHANGE_FAILED: string       = Commands.namespace + '.onAssetIndexChangeFailed';
     static CANVAS_INDEX_CHANGED: string             = Commands.namespace + '.onAssetIndexChanged';

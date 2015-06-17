@@ -283,7 +283,6 @@ docReady(function() {
                 isFullScreen = obj.isFullScreen;
 
                 if (obj.overrideFullScreen){
-                    //jQuery(document).trigger('onToggleFullScreen', [obj.isFullScreen]);
                     return;
                 }
 
@@ -336,14 +335,14 @@ docReady(function() {
                 createSocket();
 
                 if (isFullScreen){
-                    triggerSocket('onToggleFullScreen');
+                    triggerSocket('uv.onToggleFullScreen');
                 }
             }
 
             function showLightbox(){
                 $img.hide();
                 $appFrame.show();
-                triggerSocket('onToggleFullScreen');
+                triggerSocket('uv.onToggleFullScreen');
             }
 
             function hideLightbox(){
@@ -367,7 +366,7 @@ docReady(function() {
                 if (config) uri += "&config=" + config;
                 if (jsonp) uri += "&jsonp=" + jsonp;
 
-                // these are values that getParam can either retrieve from hash or querystring
+                // these are values that getParam can either retrieve from hash or query string
                 if (sequenceIndex) uri += "&si=" + sequenceIndex;
                 if (canvasIndex) uri += "&ci=" + canvasIndex;
                 if (zoom) uri += "&z=" + zoom;
@@ -383,7 +382,7 @@ docReady(function() {
                             toggleFullScreen({
                                 isFullScreen: true
                             });
-                            triggerSocket('onToggleFullScreen');
+                            triggerSocket('uv.onToggleFullScreen');
                         }
                         if (isLightbox) {
                             $img.on('click', function(e){
@@ -397,30 +396,30 @@ docReady(function() {
                         message = $.parseJSON(message);
 
                         try{
-                            jQuery(document).trigger("uv." + message.eventName, [message.eventObject]);
+                            jQuery(document).trigger(message.eventName, [message.eventObject]);
                         } catch(e) {
                             // do nothing
                         }
 
                         switch (message.eventName) {
-                            case "onToggleFullScreen":
+                            case "uv.onToggleFullScreen":
                                 toggleFullScreen(message.eventObject);
                                 break;
-                            case "onSequenceIndexChanged":
+                            case "uv.onSequenceIndexChanged":
                                 viewSequence(message.eventObject);
                                 break;
-                            case "onRedirect":
+                            case "uv.onRedirect":
                                 redirect(message.eventObject);
                                 break;
-                            case "onRefresh":
+                            case "uv.onRefresh":
                                 refresh();
                                 break;
-                            case "onTrackEvent":
+                            case "uv.onTrackEvent":
                                 if ("undefined" !== typeof (trackEvent)) {
                                     trackEvent(message.eventObject.category, message.eventObject.action, message.eventObject.label, message.eventObject.value);
                                 }
                                 break;
-                            case "onTrackVariable":
+                            case "uv.onTrackVariable":
                                 if ("undefined" !== typeof (trackVariable)) {
                                     trackVariable(message.eventObject.slot, message.eventObject.name, message.eventObject.value, message.eventObject.scope);
                                 }
