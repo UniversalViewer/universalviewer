@@ -1,6 +1,5 @@
 import Utils = require("../../Utils");
 import BaseExtension = require("./BaseExtension");
-import Shell = require("./Shell");
 import BaseView = require("./BaseView");
 
 class FooterPanel extends BaseView {

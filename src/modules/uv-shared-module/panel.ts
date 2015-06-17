@@ -1,4 +1,5 @@
 class Panel {
+
     $element: JQuery;
     fitToParentWidth: boolean;
     fitToParentHeight: boolean;

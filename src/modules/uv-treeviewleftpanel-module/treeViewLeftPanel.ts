@@ -1,13 +1,11 @@
-import LeftPanel = require("../uv-shared-module/LeftPanel");
-import Utils = require("../../Utils");
-import TreeView = require("./TreeView");
-import TreeNode = require("../uv-shared-module/TreeNode");
-import ThumbsView = require("./ThumbsView");
-import GalleryView = require("./GalleryView");
-import BaseView = require("../uv-shared-module/BaseView");
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
 import BaseExtension = require("../uv-shared-module/BaseExtension");
+import GalleryView = require("./GalleryView");
 import IProvider = require("../uv-shared-module/IProvider");
+import LeftPanel = require("../uv-shared-module/LeftPanel");
+import ThumbsView = require("./ThumbsView");
+import TreeNode = require("../uv-shared-module/TreeNode");
+import TreeView = require("./TreeView");
+import Utils = require("../../Utils");
 
 class TreeViewLeftPanel extends LeftPanel {
 
@@ -42,7 +40,7 @@ class TreeViewLeftPanel extends LeftPanel {
 
         super.create();
 
-        $.subscribe(Extension.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseExtension.SETTINGS_CHANGED, () => {
             this.dataBindThumbsView();
             this.dataBindTreeView();
             this.dataBindGalleryView();

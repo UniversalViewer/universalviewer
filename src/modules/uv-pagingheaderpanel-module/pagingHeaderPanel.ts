@@ -1,8 +1,8 @@
 import BaseExtension = require("../uv-shared-module/BaseExtension");
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
 import HeaderPanel = require("../uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
+import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Utils = require("../../Utils");
 
 class PagingHeaderPanel extends HeaderPanel {
@@ -50,7 +50,7 @@ class PagingHeaderPanel extends HeaderPanel {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(Extension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(BaseExtension.SETTINGS_CHANGED, (e, mode) => {
             this.modeChanged(mode);
         });
 
@@ -72,18 +72,18 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.$imageModeLabel = $('<label for="image">' + this.content.image + '</label>');
         this.$modeOptions.append(this.$imageModeLabel);
-        this.$imageModeOption = $('<input type="radio" id="image" name="mode" tabindex="17"></input>');
+        this.$imageModeOption = $('<input type="radio" id="image" name="mode" tabindex="17"/>');
         this.$modeOptions.append(this.$imageModeOption);
 
         this.$pageModeLabel = $('<label for="page">' + this.content.page + '</label>');
         this.$modeOptions.append(this.$pageModeLabel);
-        this.$pageModeOption = $('<input type="radio" id="page" name="mode" tabindex="18"></input>');
+        this.$pageModeOption = $('<input type="radio" id="page" name="mode" tabindex="18"/>');
         this.$modeOptions.append(this.$pageModeOption);
 
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
 
-        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"></input>');
+        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"/>');
         this.$search.append(this.$searchText);
 
         this.$total = $('<span class="total"></span>');
@@ -145,11 +145,11 @@ class PagingHeaderPanel extends HeaderPanel {
             // visible, since otherwise, clicking on the "Image" label can
             // trigger unexpected/undesired side effects.
             this.$imageModeOption.on('click', (e) => {
-                $.publish(PagingHeaderPanel.MODE_CHANGED, [Extension.IMAGE_MODE]);
+                $.publish(PagingHeaderPanel.MODE_CHANGED, [Mode.image.toString()]);
             });
 
             this.$pageModeOption.on('click', (e) => {
-                $.publish(PagingHeaderPanel.MODE_CHANGED, [Extension.PAGE_MODE]);
+                $.publish(PagingHeaderPanel.MODE_CHANGED, [Mode.page.toString()]);
             });
         }
 
@@ -197,7 +197,7 @@ class PagingHeaderPanel extends HeaderPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === Extension.PAGE_MODE;
+        return this.config.options.pageModeEnabled && this.extension.getMode() === Mode.page.toString();
     }
 
     setTitles(): void {

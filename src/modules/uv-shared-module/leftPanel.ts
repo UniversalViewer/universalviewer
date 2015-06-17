@@ -1,6 +1,4 @@
 import BaseExpandPanel = require("./BaseExpandPanel");
-import BaseExtension = require("./BaseExtension");
-import Shell = require("./Shell");
 import Utils = require("../../Utils");
 
 class LeftPanel extends BaseExpandPanel {

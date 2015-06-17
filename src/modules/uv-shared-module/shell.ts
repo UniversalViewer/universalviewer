@@ -2,7 +2,6 @@ import BaseExtension = require("./BaseExtension");
 import BaseView = require("./BaseView");
 import GenericDialogue = require("./GenericDialogue");
 import Utils = require("../../Utils");
-import TestDialogue = require("./TestDialogue");
 
 class Shell extends BaseView {
     static $centerPanel: JQuery;
@@ -65,8 +64,6 @@ class Shell extends BaseView {
                 $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
             }
         });
-
-        //var test = new TestDialogue(Shell.$genericDialogue);
 
         // create shared views.
         new GenericDialogue(Shell.$genericDialogue);

@@ -1,7 +1,5 @@
 import BaseExtension = require("./BaseExtension");
 import Dialogue = require("./Dialogue");
-import Shell = require("./Shell");
-import Utils = require("../../Utils");
 
 class GenericDialogue extends Dialogue {
 
@@ -11,7 +9,7 @@ class GenericDialogue extends Dialogue {
     $message: JQuery;
 
     static HIDE_GENERIC_DIALOGUE: string = 'onHideGenericDialogue';
-    static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
+    static SHOW_GENERIC_DIALOGUE: string = BaseExtension.SHOW_GENERIC_DIALOGUE;
 
     constructor($element: JQuery) {
         super($element);

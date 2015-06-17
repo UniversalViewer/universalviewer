@@ -66,7 +66,7 @@ module.exports = function (grunt) {
         clean: {
             build : ['<%= dirs.build %>'],
             dist: ['<%= dirs.dist %>'],
-            examples: ['<%= dirs.examples %>/build/'],
+            examples: ['<%= dirs.examples %>/uv-*'],
             cleanup: ['./src/extensions/*/config/*.js', './src/extensions/*/theme/*.css']
         },
 
@@ -175,7 +175,7 @@ module.exports = function (grunt) {
                         cwd: '<%= dirs.build %>',
                         expand: true,
                         src: ['**'],
-                        dest: '<%= dirs.examples %>/build/'
+                        dest: '<%= dirs.examples %>/<%= dirs.uv %>/'
                     },
                     // misc
                     {
@@ -316,12 +316,12 @@ module.exports = function (grunt) {
                 }]
             },
             examples: {
-                // replace script paths with latest build version
-                src: ['<%= dirs.examples %>/index.html', '<%= dirs.examples %>/noeditor.html', '<%= dirs.examples %>/examples.js', '<%= dirs.examples %>/uv.js'],
+                // replace uv version
+                src: ['<%= dirs.examples %>/index.html', '<%= dirs.examples %>/examples.js', '<%= dirs.examples %>/uv.js'],
                 overwrite: true,
                 replacements: [{
-                    from: /build\/uv.*?\//g,
-                    to: '<%= dirs.build %>/'
+                    from: /uv-\d+\.\d+\.\d+/g,
+                    to: '<%= dirs.uv %>'
                 }]
             }
         },

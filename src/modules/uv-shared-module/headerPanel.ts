@@ -1,7 +1,6 @@
 import BaseExtension = require("./BaseExtension");
 import BaseView = require("./BaseView");
 import BootstrapParams = require("../../BootstrapParams");
-import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
 import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
 import Utils = require("../../Utils");
 

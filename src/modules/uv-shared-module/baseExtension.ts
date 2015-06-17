@@ -1,6 +1,5 @@
 import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
-import GenericDialogue = require("./GenericDialogue");
 import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
@@ -23,7 +22,6 @@ class BaseExtension implements IExtension {
     shifted: boolean = false;
     tabbing: boolean = false;
 
-    // events
     static CANVAS_INDEX_CHANGE_FAILED: string = 'onAssetIndexChangeFailed';
     static CANVAS_INDEX_CHANGED: string = 'onAssetIndexChanged';
     static CLOSE_ACTIVE_DIALOGUE: string = 'onCloseActiveDialogue';
@@ -46,6 +44,7 @@ class BaseExtension implements IExtension {
     static SEQUENCE_INDEX_CHANGED: string = 'onSequenceIndexChanged';
     static SETTINGS_CHANGED: string = 'onSettingsChanged';
     static SHOW_MESSAGE: string = 'onShowMessage';
+    static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
     static TOGGLE_FULLSCREEN: string = 'onToggleFullScreen';
     static UP_ARROW: string = 'onUpArrow';
     static WINDOW_UNLOAD: string = 'onWindowUnload';
@@ -322,7 +321,7 @@ class BaseExtension implements IExtension {
 
         this.closeActiveDialogue();
 
-        $.publish(GenericDialogue.SHOW_GENERIC_DIALOGUE, [
+        $.publish(BaseExtension.SHOW_GENERIC_DIALOGUE, [
             {
                 message: message,
                 acceptCallback: acceptCallback,

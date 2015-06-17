@@ -5,6 +5,7 @@ import DownloadDialogue = require("../../extensions/uv-seadragon-extension/Downl
 import AutoComplete = require("./Autocomplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
+import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Utils = require("../../Utils");
 
 class FooterPanel extends BaseFooterPanel {
@@ -53,7 +54,7 @@ class FooterPanel extends BaseFooterPanel {
             this.canvasIndexChanged();
         });
 
-        $.subscribe(Extension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(BaseExtension.SETTINGS_CHANGED, (e, mode) => {
             this.settingsChanged();
         });
 
@@ -61,7 +62,7 @@ class FooterPanel extends BaseFooterPanel {
             this.displaySearchResults(terms, results);
         });
 
-        $.subscribe(Extension.CREATED, (e) => {
+        $.subscribe(BaseExtension.CREATED, (e) => {
             this.checkForSearchParams();
         });
 
@@ -320,7 +321,7 @@ class FooterPanel extends BaseFooterPanel {
 
         var mode = that.extension.getMode();
 
-        if (mode === Extension.PAGE_MODE) {
+        if (mode === Mode.page) {
             var canvas = that.provider.getCanvasByIndex(canvasIndex);
 
             var label = canvas.label;
@@ -481,7 +482,7 @@ class FooterPanel extends BaseFooterPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === Extension.PAGE_MODE;
+        return this.config.options.pageModeEnabled && this.extension.getMode() === Mode.page;
     }
 
     displaySearchResults(terms, results): void {

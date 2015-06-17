@@ -10,6 +10,7 @@ import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
+import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../modules/uv-shared-module/Params");
@@ -44,9 +45,7 @@ class Extension extends BaseExtension {
     settingsDialogue: SettingsDialogue;
 
     static CURRENT_VIEW_URI: string = 'onCurrentViewUri';
-    static IMAGE_MODE: string = "imageMode";
-    static mode: string;
-    static PAGE_MODE: string = "pageMode";
+    static mode: Mode;
     static SEARCH_RESULTS: string = 'onSearchResults';
     static SEARCH_RESULTS_EMPTY: string = 'onSearchResults'; // todo: should be onSearchResultsEmpty?
 
@@ -101,7 +100,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
-            Extension.mode = mode;
+            Extension.mode = new Mode(mode);
             $.publish(Extension.SETTINGS_CHANGED, [mode]);
         });
 
@@ -316,19 +315,19 @@ class Extension extends BaseExtension {
         return this.centerPanel.viewer;
     }
 
-    getMode(): string {
+    getMode(): Mode {
         if (Extension.mode) return Extension.mode;
 
         switch (this.provider.getManifestType()) {
             case 'monograph':
-                return Extension.PAGE_MODE;
+                return Mode.page;
                 break;
             case 'archive',
                  'boundmanuscript':
-                return Extension.IMAGE_MODE;
+                return Mode.image;
                 break;
             default:
-                return Extension.IMAGE_MODE;
+                return Mode.image;
         }
     }
 
