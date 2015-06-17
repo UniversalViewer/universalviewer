@@ -4,7 +4,7 @@ var glob = require('glob');
 var async = require('async');
 var less = require('less');
 var chalk = require('chalk');
-var copyFiles = require('./utils/copyFiles');
+var copyFiles = require('./copyFiles');
 
 module.exports = function (grunt) {
 

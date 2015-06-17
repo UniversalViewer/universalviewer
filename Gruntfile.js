@@ -1,4 +1,4 @@
-var bump = require('./utils/bump');
+var version = require('./utils/version');
 var localise = require('./utils/localise');
 var theme = require('./utils/theme');
 
@@ -348,7 +348,7 @@ module.exports = function (grunt) {
             }
         },
 
-        bump: {
+        version: {
             bump: {
             },
             apply: {
@@ -394,7 +394,7 @@ module.exports = function (grunt) {
     theme(grunt);
 
     // to change version manually, edit package.json
-    grunt.registerTask('bump:build', ['version:bump', 'version:apply']);
+    grunt.registerTask('bump:patch', ['version:bump', 'version:apply']);
     grunt.registerTask('bump:minor', ['version:bump:minor', 'version:apply']);
     grunt.registerTask('bump:major', ['version:bump:major', 'version:apply']);
 
