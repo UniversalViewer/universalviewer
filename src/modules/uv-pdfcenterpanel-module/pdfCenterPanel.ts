@@ -1,11 +1,11 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import baseProvider = require("../uv-shared-module/baseProvider");
-import IPDFProvider = require("../../extensions/uv-pdf-extension/iPDFProvider");
-import extension = require("../../extensions/uv-pdf-extension/extension");
-import baseCenter = require("../uv-shared-module/centerPanel");
-import utils = require("../../utils");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseProvider = require("../uv-shared-module/BaseProvider");
+import CenterPanel = require("../uv-shared-module/CenterPanel");
+import Extension = require("../../extensions/uv-pdf-extension/Extension");
+import IPDFProvider = require("../../extensions/uv-pdf-extension/IPDFProvider");
+import Utils = require("../../Utils");
 
-export class PDFCenterPanel extends baseCenter.CenterPanel {
+class PDFCenterPanel extends CenterPanel {
 
     constructor($element: JQuery) {
         super($element);
@@ -18,7 +18,7 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         super.create();
 
         // events.
-        $.subscribe(extension.Extension.OPEN_MEDIA, (e, canvas) => {
+        $.subscribe(Extension.OPEN_MEDIA, (e, canvas) => {
             this.viewMedia(canvas);
         });
     }
@@ -68,3 +68,5 @@ export class PDFCenterPanel extends baseCenter.CenterPanel {
         super.resize();
     }
 }
+
+export = PDFCenterPanel;

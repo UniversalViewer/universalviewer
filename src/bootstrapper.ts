@@ -1,13 +1,12 @@
-import BootstrapParams = require("bootstrapParams");
-import baseExtension = require("./modules/uv-shared-module/baseExtension");
-import utils = require("utils");
-import util = utils.Utils;
+import BootstrapParams = require("BootstrapParams");
+import BaseExtension = require("./modules/uv-shared-module/BaseExtension");
+import Utils = require("Utils");
 
-class BootStrapper{
+class Bootstrapper{
 
     config: any;
     configExtension: any;
-    extension: baseExtension.BaseExtension;
+    extension: BaseExtension;
     extensions: any;
     isFullScreen: boolean = false; // persist full screen between reloads
     manifest: any;
@@ -24,19 +23,19 @@ class BootStrapper{
 
     getBootstrapParams(): BootstrapParams {
         var p = new BootstrapParams();
-        var jsonpParam = util.getQuerystringParameter('jsonp');
+        var jsonpParam = Utils.Urls.getQuerystringParameter('jsonp');
 
-        p.config = util.getQuerystringParameter('config');
-        p.domain = util.getQuerystringParameter('domain');
-        p.embedDomain = util.getQuerystringParameter('embedDomain');
-        p.embedScriptUri = util.getQuerystringParameter('embedScriptUri');
-        p.isHomeDomain = util.getQuerystringParameter('isHomeDomain') === "true";
-        p.isLightbox = util.getQuerystringParameter('isLightbox') === "true";
-        p.isOnlyInstance = util.getQuerystringParameter('isOnlyInstance') === "true";
-        p.isReload = util.getQuerystringParameter('isReload') === "true";
+        p.config = Utils.Urls.getQuerystringParameter('config');
+        p.domain = Utils.Urls.getQuerystringParameter('domain');
+        p.embedDomain = Utils.Urls.getQuerystringParameter('embedDomain');
+        p.embedScriptUri = Utils.Urls.getQuerystringParameter('embedScriptUri');
+        p.isHomeDomain = Utils.Urls.getQuerystringParameter('isHomeDomain') === "true";
+        p.isLightbox = Utils.Urls.getQuerystringParameter('isLightbox') === "true";
+        p.isOnlyInstance = Utils.Urls.getQuerystringParameter('isOnlyInstance') === "true";
+        p.isReload = Utils.Urls.getQuerystringParameter('isReload') === "true";
         p.jsonp = jsonpParam === null ? null : !(jsonpParam === "false" || jsonpParam === "0");
-        p.manifestUri = util.getQuerystringParameter('manifestUri');
-        p.setLocale(util.getQuerystringParameter('locale'));
+        p.manifestUri = Utils.Urls.getQuerystringParameter('manifestUri');
+        p.setLocale(Utils.Urls.getQuerystringParameter('locale'));
 
         return p;
     }
@@ -117,11 +116,11 @@ class BootStrapper{
         this.manifest = manifest;
 
         if (this.params.isHomeDomain && !this.params.isReload) {
-            this.sequenceIndex = parseInt(util.getHashParameter("si", parent.document));
+            this.sequenceIndex = parseInt(Utils.Urls.getHashParameter("si", parent.document));
         }
 
         if (!this.sequenceIndex) {
-            this.sequenceIndex = parseInt(util.getQuerystringParameter("si")) || 0;
+            this.sequenceIndex = parseInt(Utils.Urls.getQuerystringParameter("si")) || 0;
         }
 
         // is it a collection?
@@ -244,4 +243,4 @@ class BootStrapper{
     }
 }
 
-export = BootStrapper;
+export = Bootstrapper;

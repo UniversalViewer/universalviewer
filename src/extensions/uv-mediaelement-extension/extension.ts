@@ -1,35 +1,35 @@
-import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import baseLeft = require("../../modules/uv-shared-module/leftPanel");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import baseRight = require("../../modules/uv-shared-module/rightPanel");
-import BootStrapper = require("../../bootstrapper");
-import center = require("../../modules/uv-mediaelementcenterpanel-module/mediaelementCenterPanel");
-import download = require("./downloadDialogue");
-import embed = require("./embedDialogue");
-import footer = require("../../modules/uv-shared-module/footerPanel");
-import header = require("../../modules/uv-shared-module/headerPanel");
-import help = require("../../modules/uv-dialogues-module/helpDialogue");
-import IProvider = require("../../modules/uv-shared-module/iProvider");
-import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
-import provider = require("./provider");
-import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
-import shell = require("../../modules/uv-shared-module/shell");
-import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
-import utils = require("../../utils");
+import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
+import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import RightPanel = require("../../modules/uv-shared-module/RightPanel");
+import BootStrapper = require("../../Bootstrapper");
+import MediaElementCenterPanel = require("../../modules/uv-mediaelementcenterpanel-module/MediaelementCenterPanel");
+import DownloadDialogue = require("./DownloadDialogue");
+import EmbedDialogue = require("./EmbedDialogue");
+import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
+import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
+import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
+import IProvider = require("../../modules/uv-shared-module/IProvider");
+import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
+import Provider = require("./Provider");
+import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
+import Shell = require("../../modules/uv-shared-module/Shell");
+import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
+import Utils = require("../../Utils");
 
-export class Extension extends baseExtension.BaseExtension{
+class Extension extends BaseExtension{
 
     $downloadDialogue: JQuery;
     $embedDialogue: JQuery;
     $helpDialogue: JQuery;
-    centerPanel: center.MediaElementCenterPanel;
-    downloadDialogue: download.DownloadDialogue;
-    embedDialogue: embed.EmbedDialogue;
-    footerPanel: footer.FooterPanel;
-    headerPanel: header.HeaderPanel;
-    helpDialogue: help.HelpDialogue;
-    leftPanel: left.TreeViewLeftPanel;
-    rightPanel: right.MoreInfoRightPanel;
+    centerPanel: MediaElementCenterPanel;
+    downloadDialogue: DownloadDialogue;
+    embedDialogue: EmbedDialogue;
+    footerPanel: FooterPanel;
+    headerPanel: HeaderPanel;
+    helpDialogue: HelpDialogue;
+    leftPanel: TreeViewLeftPanel;
+    rightPanel: MoreInfoRightPanel;
 
     static MEDIA_ENDED: string = 'onMediaEnded';
     static MEDIA_PAUSED: string = 'onMediaPaused';
@@ -44,64 +44,64 @@ export class Extension extends baseExtension.BaseExtension{
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
-            $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
+            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
         });
 
         $(window).bind('exitfullscreen', () => {
-            $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
+            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
+        $.subscribe(TreeView.NODE_SELECTED, (e, data: any) => {
             this.viewManifest(data);
         });
 
-        $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
-            $.publish(download.DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
+        $.subscribe(FooterPanel.DOWNLOAD, (e) => {
+            $.publish(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(footer.FooterPanel.EMBED, (e) => {
-            $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        $.subscribe(FooterPanel.EMBED, (e) => {
+            $.publish(EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(baseLeft.LeftPanel.OPEN_LEFT_PANEL, (e) => {
+        $.subscribe(LeftPanel.OPEN_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(baseLeft.LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+        $.subscribe(LeftPanel.CLOSE_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(baseRight.RightPanel.OPEN_RIGHT_PANEL, (e) => {
+        $.subscribe(RightPanel.OPEN_RIGHT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+        $.subscribe(RightPanel.CLOSE_RIGHT_PANEL, (e) => {
             this.resize();
         });
     }
 
     createModules(): void{
-        this.headerPanel = new header.HeaderPanel(shell.Shell.$headerPanel);
+        this.headerPanel = new HeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
-            this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
+            this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
         }
 
-        this.centerPanel = new center.MediaElementCenterPanel(shell.Shell.$centerPanel);
-        this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
-        this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
+        this.centerPanel = new MediaElementCenterPanel(Shell.$centerPanel);
+        this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+        this.footerPanel = new FooterPanel(Shell.$footerPanel);
 
         this.$helpDialogue = $('<div class="overlay help"></div>');
-        shell.Shell.$overlays.append(this.$helpDialogue);
-        this.helpDialogue = new help.HelpDialogue(this.$helpDialogue);
+        Shell.$overlays.append(this.$helpDialogue);
+        this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download"></div>');
-        shell.Shell.$overlays.append(this.$downloadDialogue);
-        this.downloadDialogue = new download.DownloadDialogue(this.$downloadDialogue);
+        Shell.$overlays.append(this.$downloadDialogue);
+        this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$embedDialogue = $('<div class="overlay embed"></div>');
-        shell.Shell.$overlays.append(this.$embedDialogue);
-        this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
+        Shell.$overlays.append(this.$embedDialogue);
+        this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
@@ -109,7 +109,9 @@ export class Extension extends baseExtension.BaseExtension{
     }
 
     isLeftPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
+        return  Utils.Bools.getBool(this.provider.config.options.leftPanelEnabled, true)
                 && this.provider.isMultiSequence();
     }
 }
+
+export = Extension;

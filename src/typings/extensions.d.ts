@@ -1,103 +1,51 @@
-
-// not included in lib.d.ts
 declare function escape(s: string): any;
 declare function unescape(s: string): any;
 
-interface HTMLElement{
-    ontouchstart: any;
+interface Array<T>{
+    clone(): Array<T>;
+    contains(val: any): boolean;
+    indexOf(searchElement: any, fromIndex?: number): number;
+    indexOfTest(test: (item: any) => boolean, fromIndex?: number): number;
+    insert(item: any, index: number): void;
+    last(): any;
+    move(fromIndex: number, toIndex: number): void;
+    remove(item: any): void;
+    removeAt(index: number): void;
 }
 
-// string utils
+interface Math {
+    clamp(value: number, min: number, max: number): number;
+    constrain(value: number, low: number, high: number): number;
+    degreesToRadians(degrees: number): number;
+    distanceBetween(x1: number, y1: number, x2: number, y2: number): number;
+    lerp(start: number, stop: number, amount: number): number;
+    mag(a: number, b: number, c: number): number;
+    map(value: number, start1: number, stop1: number, start2: number, stop2: number): number;
+    randomBetween(low: number, high?: number): number;
+    roundToDecimalPlace(num: number, dec: number): number;
+    radiansToDegrees(radians: number): number;
+    normalise(num: number, min: number, max: number): number;
+    sq(n: number): number;
+    TAU: number;
+}
+
+interface Number {
+    isInt(): boolean;
+}
+
 interface String {
-    format(template: string, ...args: any[]): string;
-    startsWith(text: string): boolean;
+    b64_to_utf8(str: string): string;
+    contains(str: string): boolean;
     endsWith(text: string): boolean;
     ltrim(): string;
     rtrim(): string;
-    fulltrim(): string;
-    toFileName(): string;
-    contains(str: string): boolean;
-    utf8_to_b64(str: string): string;
-    b64_to_utf8(str: string): string;
+    startsWith(text: string): boolean;
     toCssClass(): string;
+    toFileName(): string;
+    trim(): string;
+    utf8_to_b64(str: string): string;
 }
 
-// array utils
-interface Array<T>{
-    clone(): Array<T>;
-    last(): any;
-    contains(val: any): boolean;
-    move(fromIndex: number, toIndex: number): void;
-    indexOfTest(test: (element: any) => boolean, fromIndex?: number): number;
+interface StringConstructor {
+    format(template: string, ...args: any[]): string;
 }
-
-interface JQuery {
-    // plugins
-    ellipsisFill(text?: string): any;
-    swapClass(removeClass: string, addClass: string): void;
-    targetBlank(): void;  
-    verticalMargins(): number;
-    horizontalMargins(): number;
-    verticalPadding(): number;
-    horizontalPadding(): number;
-    toggleExpandText(chars: number, callback?: () => void);
-    ismouseover(): boolean;
-    equaliseHeight(reset?: boolean): any;
-    removeLastWord(chars: number): any;
-    ellipsisHtmlFixed(chars: number, callback: () => void): any;
-    toggleExpandTextByLines(lines: number, callback: () => void): any;
-    onPressed(callback: () => void): any;
-    onEnter(callback: () => void): any;
-    enable(): void;
-    disable(): void;
-
-    // jsviews
-    link: any;
-    render: any;
-
-    // unevent
-    on(events: string, handler: (eventObject: JQueryEventObject, ...args: any[]) => any, wait: Number): JQuery;
-}
-
-interface JQueryStatic {
-    // pubsub
-    publish(event: string, eventObj?: any[]);
-    subscribe(event: string, handler: Function);
-    unsubscribe(event: string);
-    initPubSub();
-    disposePubSub();
-
-    cookie(name: string);
-
-    // jsviews
-    observable: any;
-    templates: any;
-    views: any;
-    view: any;
-}
-
-// libs
-declare var easyXDM: any;
-declare var OpenSeadragon: any;
-declare var MediaElementPlayer: any;
-declare var PDFObject: any;
-declare var yepnope: any;
-declare var PDFJS: any;
-declare var Sanitize: any;
-
-// app
-interface Window{
-    manifestCallback: any;
-    browserDetect: any;
-    trackEvent(category: string, action: string, label: string, value?: any);
-    trackVariable(slot: number, name: string, value: string, scope: number);
-    $: any;
-    _: any;
-    DEBUG: boolean;
-    webViewerLoad: any; // pdfjs
-    IEXMLHttpRequest: any;
-    openSeadragonViewer: any; // for testing convenience
-}
-
-// google
-declare function trackEvent(category: string, action: string, label: string, value?: any): void;

@@ -1,12 +1,13 @@
-import utils = require("../../utils");
-import baseProvider = require("./baseProvider");
-import shell = require("./shell");
-import genericDialogue = require("./genericDialogue");
-import IProvider = require("./iProvider");
-import IExtension = require("./iExtension");
-import BootStrapper = require("../../bootstrapper");
+import BaseProvider = require("./BaseProvider");
+import BootStrapper = require("../../Bootstrapper");
+import GenericDialogue = require("./GenericDialogue");
+import IExtension = require("./IExtension");
+import IProvider = require("./IProvider");
+import Params = require("./Params");
+import Shell = require("./Shell");
+import Utils = require("../../Utils");
 
-export class BaseExtension implements IExtension {
+class BaseExtension implements IExtension {
 
     $element: JQuery;
     bootstrapper: BootStrapper;
@@ -18,7 +19,7 @@ export class BaseExtension implements IExtension {
     mouseY: number;
     name: string;
     provider: IProvider;
-    shell: shell.Shell;
+    shell: Shell;
     shifted: boolean = false;
     tabbing: boolean = false;
 
@@ -157,7 +158,7 @@ export class BaseExtension implements IExtension {
         });
 
         // create shell and shared views.
-        this.shell = new shell.Shell(this.$element);
+        this.shell = new Shell(this.$element);
 
         // set canvasIndex to -1 (nothing selected yet).
         this.canvasIndex = -1;
@@ -227,7 +228,7 @@ export class BaseExtension implements IExtension {
         if (!this.provider.isHomeDomain) return;
 
         // set sequenceIndex hash param.
-        this.setParam(baseProvider.params.sequenceIndex, this.provider.sequenceIndex);
+        this.setParam(Params.sequenceIndex, this.provider.sequenceIndex);
     }
 
     setDefaultFocus(): void {
@@ -243,7 +244,7 @@ export class BaseExtension implements IExtension {
 
             $.publish(BaseExtension.OPEN_MEDIA, [canvas]);
 
-            this.setParam(baseProvider.params.canvasIndex, 0);
+            this.setParam(Params.canvasIndex, 0);
         });
     }
 
@@ -285,26 +286,26 @@ export class BaseExtension implements IExtension {
     }
 
     // get hash or data-attribute params depending on whether the UV is embedded.
-    getParam(key: baseProvider.params): any{
+    getParam(key: Params): any{
         var value;
 
         // deep linking is only allowed when hosted on home domain.
         if (this.provider.isDeepLinkingEnabled()){
-            value = utils.Utils.getHashParameter(this.provider.paramMap[key], parent.document);
+            value = Utils.Urls.getHashParameter(this.provider.paramMap[key], parent.document);
         }
 
         if (!value){
-            value = utils.Utils.getQuerystringParameter(this.provider.paramMap[key]);
+            value = Utils.Urls.getQuerystringParameter(this.provider.paramMap[key]);
         }
 
         return value;
     }
 
     // set hash params depending on whether the UV is embedded.
-    setParam(key: baseProvider.params, value: any): void{
+    setParam(key: Params, value: any): void{
 
         if (this.provider.isDeepLinkingEnabled()){
-            utils.Utils.setHashParameter(this.provider.paramMap[key], value, parent.document);
+            Utils.Urls.setHashParameter(this.provider.paramMap[key], value, parent.document);
         }
     }
 
@@ -321,7 +322,7 @@ export class BaseExtension implements IExtension {
 
         this.closeActiveDialogue();
 
-        $.publish(genericDialogue.GenericDialogue.SHOW_GENERIC_DIALOGUE, [
+        $.publish(GenericDialogue.SHOW_GENERIC_DIALOGUE, [
             {
                 message: message,
                 acceptCallback: acceptCallback,
@@ -335,7 +336,7 @@ export class BaseExtension implements IExtension {
     }
 
     isOverlayActive(): boolean{
-        return shell.Shell.$overlays.is(':visible');
+        return Shell.$overlays.is(':visible');
     }
 
     viewManifest(manifest: any): void{
@@ -362,11 +363,13 @@ export class BaseExtension implements IExtension {
     }
 
     isLeftPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.leftPanelEnabled, true)
+        return  Utils.Bools.getBool(this.provider.config.options.leftPanelEnabled, true)
             && this.provider.isMultiCanvas();
     }
 
     isRightPanelEnabled(): boolean{
-        return  utils.Utils.getBool(this.provider.config.options.rightPanelEnabled, true);
+        return  Utils.Bools.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 }
+
+export = BaseExtension;

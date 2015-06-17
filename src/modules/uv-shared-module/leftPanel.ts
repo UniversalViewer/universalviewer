@@ -1,12 +1,12 @@
-import baseExtension = require("./baseExtension");
-import shell = require("./shell");
-import utils = require("../../utils");
-import baseExpandPanel = require("./baseExpandPanel");
+import BaseExpandPanel = require("./BaseExpandPanel");
+import BaseExtension = require("./BaseExtension");
+import Shell = require("./Shell");
+import Utils = require("../../Utils");
 
-export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
+class LeftPanel extends BaseExpandPanel {
 
-    static OPEN_LEFT_PANEL: string = 'onOpenLeftPanel';
     static CLOSE_LEFT_PANEL: string = 'onCloseLeftPanel';
+    static OPEN_LEFT_PANEL: string = 'onOpenLeftPanel';
 
     constructor($element: JQuery) {
         super($element);
@@ -58,3 +58,5 @@ export class LeftPanel extends baseExpandPanel.BaseExpandPanel {
         }
     }
 }
+
+export = LeftPanel;

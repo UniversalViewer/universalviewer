@@ -1,40 +1,40 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import baseHeader = require("../uv-shared-module/headerPanel");
-import utils = require("../../utils");
-import help = require("../uv-dialogues-module/helpDialogue");
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/iSeadragonExtension");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import HeaderPanel = require("../uv-shared-module/HeaderPanel");
+import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
+import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
+import Utils = require("../../Utils");
 
-export class PagingHeaderPanel extends baseHeader.HeaderPanel {
+class PagingHeaderPanel extends HeaderPanel {
 
-    $prevOptions: JQuery;
     $firstButton: JQuery;
-    $prevButton: JQuery;
-    $modeOptions: JQuery;
     $imageModeLabel: JQuery;
     $imageModeOption: JQuery;
+    $lastButton: JQuery;
+    $modeOptions: JQuery;
+    $nextButton: JQuery;
+    $nextOptions: JQuery;
     $pageModeLabel: JQuery;
     $pageModeOption: JQuery;
+    $prevButton: JQuery;
+    $prevOptions: JQuery;
     $search: JQuery;
+    $searchButton: JQuery;
     $searchText: JQuery;
     $total: JQuery;
-    $searchButton: JQuery;
-    $nextOptions: JQuery;
-    $nextButton: JQuery;
-    $lastButton: JQuery;
 
     firstButtonEnabled: boolean = false;
     lastButtonEnabled: boolean = false;
-    prevButtonEnabled: boolean = false;
     nextButtonEnabled: boolean = false;
+    prevButtonEnabled: boolean = false;
 
     static FIRST: string = 'header.onFirst';
+    static IMAGE_SEARCH: string = 'header.onImageSearch';
     static LAST: string = 'header.onLast';
-    static PREV: string = 'header.onPrev';
+    static MODE_CHANGED: string = 'header.onModeChanged';
     static NEXT: string = 'header.onNext';
     static PAGE_SEARCH: string = 'header.onPageSearch';
-    static IMAGE_SEARCH: string = 'header.onImageSearch';
-    static MODE_CHANGED: string = 'header.onModeChanged';
+    static PREV: string = 'header.onPrev';
 
     constructor($element: JQuery) {
         super($element);
@@ -46,15 +46,15 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(Extension.SETTINGS_CHANGED, (e, mode) => {
             this.modeChanged(mode);
         });
 
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED, (e) => {
+        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGE_FAILED, (e) => {
             this.setSearchFieldValue(this.provider.canvasIndex);
         });
 
@@ -145,11 +145,11 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
             // visible, since otherwise, clicking on the "Image" label can
             // trigger unexpected/undesired side effects.
             this.$imageModeOption.on('click', (e) => {
-                $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.IMAGE_MODE]);
+                $.publish(PagingHeaderPanel.MODE_CHANGED, [Extension.IMAGE_MODE]);
             });
 
             this.$pageModeOption.on('click', (e) => {
-                $.publish(PagingHeaderPanel.MODE_CHANGED, [extension.Extension.PAGE_MODE]);
+                $.publish(PagingHeaderPanel.MODE_CHANGED, [Extension.PAGE_MODE]);
             });
         }
 
@@ -197,7 +197,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === extension.Extension.PAGE_MODE;
+        return this.config.options.pageModeEnabled && this.extension.getMode() === Extension.PAGE_MODE;
     }
 
     setTitles(): void {
@@ -222,9 +222,9 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         var of = this.content.of;
 
         if (this.isPageModeEnabled()) {
-            this.$total.html(String.prototype.format(of, this.provider.getLastCanvasLabel()));
+            this.$total.html(String.format(of, this.provider.getLastCanvasLabel()));
         } else {
-            this.$total.html(String.prototype.format(of, this.provider.getTotalCanvases()));
+            this.$total.html(String.format(of, this.provider.getTotalCanvases()));
         }
     }
 
@@ -254,7 +254,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         if (!value) {
 
             this.extension.showDialogue(this.content.emptyValue);
-            $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
+            $.publish(BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
 
             return;
         }
@@ -268,7 +268,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
             if (isNaN(index)){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.invalidNumber);
-                $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
+                $.publish(BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
@@ -276,7 +276,7 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
 
             if (!asset){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
-                $.publish(baseExtension.BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
+                $.publish(BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
@@ -354,3 +354,5 @@ export class PagingHeaderPanel extends baseHeader.HeaderPanel {
         super.resize();
     }
 }
+
+export = PagingHeaderPanel;

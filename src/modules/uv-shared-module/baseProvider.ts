@@ -1,26 +1,19 @@
-import BootStrapper = require("../../bootstrapper");
-import BootstrapParams = require("../../bootstrapParams");
-import utils = require("../../utils");
-import IProvider = require("./iProvider");
-import TreeNode = require("./treeNode");
-import Thumb = require("./thumb");
-import ServiceProfile = require("./ServiceProfile");
-import RenderingFormat = require("./RenderingFormat");
+import BootstrapParams = require("../../BootstrapParams");
+import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
-import util = utils.Utils;
-
-export enum params {
-    sequenceIndex,
-    canvasIndex,
-    zoom,
-    rotation
-}
+import IProvider = require("./IProvider");
+import Params = require("./Params");
+import RenderingFormat = require("./RenderingFormat");
+import ServiceProfile = require("./ServiceProfile");
+import Thumb = require("./Thumb");
+import TreeNode = require("./TreeNode");
+import Utils = require("../../Utils");
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provision systems.
 // they provide a consistent interface and set of data structures
 // for extensions to operate against.
-export class BaseProvider implements IProvider{
+class BaseProvider implements IProvider{
 
     bootstrapper: BootStrapper;
     canvasIndex: number;
@@ -72,11 +65,11 @@ export class BaseProvider implements IProvider{
         this.isLightbox = this.bootstrapper.params.isLightbox;
 
         if (this.isHomeDomain && !this.isReload){
-            this.sequenceIndex = parseInt(util.getHashParameter(this.paramMap[params.sequenceIndex], parent.document));
+            this.sequenceIndex = parseInt(Utils.Urls.getHashParameter(this.paramMap[Params.sequenceIndex], parent.document));
         }
 
         if (!this.sequenceIndex){
-            this.sequenceIndex = parseInt(util.getQuerystringParameter(this.paramMap[params.sequenceIndex])) || 0;
+            this.sequenceIndex = parseInt(Utils.Urls.getQuerystringParameter(this.paramMap[Params.sequenceIndex])) || 0;
         }
     }
 
@@ -281,7 +274,7 @@ export class BaseProvider implements IProvider{
     getMediaUri(mediaUri: string): string{
         var baseUri = this.options.mediaBaseUri || "";
         var template = this.options.mediaUriTemplate;
-        var uri = String.prototype.format(template, baseUri, mediaUri);
+        var uri = String.format(template, baseUri, mediaUri);
 
         return uri;
     }
@@ -383,7 +376,7 @@ export class BaseProvider implements IProvider{
     }
 
     addTimestamp(uri: string): string{
-        return uri + "?t=" + util.getTimeStamp();
+        return uri + "?t=" + Utils.Dates.getTimeStamp();
     }
 
     isDeepLinkingEnabled(): boolean {
@@ -721,7 +714,7 @@ export class BaseProvider implements IProvider{
     }
 
     getDomain(): string{
-        var parts = util.getUrlParts(this.manifestUri);
+        var parts = Utils.Urls.getUrlParts(this.manifestUri);
         return parts.host;
     }
 
@@ -890,3 +883,5 @@ export class BaseProvider implements IProvider{
         return this.serializeLocales(this.locales);
     }
 }
+
+export = BaseProvider;

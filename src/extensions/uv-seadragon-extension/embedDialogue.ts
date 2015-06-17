@@ -1,19 +1,19 @@
-import utils = require("../../utils");
-import embed = require("../../modules/uv-dialogues-module/embedDialogue");
-import baseCenter = require("../../modules/uv-seadragoncenterpanel-module/seadragonCenterPanel");
-import ISeadragonExtension = require("./iSeadragonExtension");
-import ISeadragonProvider = require("./iSeadragonProvider");
+import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
+import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
+import ISeadragonExtension = require("./ISeadragonExtension");
+import ISeadragonProvider = require("./ISeadragonProvider");
+import Utils = require("../../Utils");
 
-export class EmbedDialogue extends embed.EmbedDialogue {
+class EmbedDialogue extends BaseEmbedDialogue {
 
     constructor($element: JQuery) {
         super($element);
 
-        $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_OPEN, (viewer) => {
+        $.subscribe(SeadragonCenterPanel.SEADRAGON_OPEN, (viewer) => {
             this.formatCode();
         });
 
-        $.subscribe(baseCenter.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (viewer) => {
+        $.subscribe(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (viewer) => {
             this.formatCode();
         });
     }
@@ -47,3 +47,5 @@ export class EmbedDialogue extends embed.EmbedDialogue {
 
     }
 }
+
+export = EmbedDialogue;

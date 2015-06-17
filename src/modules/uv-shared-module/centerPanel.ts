@@ -1,11 +1,11 @@
-import shell = require("./shell");
-import baseView = require("./baseView");
-import utils = require("../../utils");
+import Shell = require("./Shell");
+import BaseView = require("./BaseView");
+import Utils = require("../../Utils");
 
-export class CenterPanel extends baseView.BaseView {
+class CenterPanel extends BaseView {
 
-    $title: JQuery;
     $content: JQuery;
+    $title: JQuery;
 
     constructor($element: JQuery) {
         super($element, false, true);
@@ -29,8 +29,8 @@ export class CenterPanel extends baseView.BaseView {
         super.resize();
 
         this.$element.css({
-            'left': shell.Shell.$leftPanel.width(),
-            'width': this.$element.parent().width() - shell.Shell.$leftPanel.width() - shell.Shell.$rightPanel.width()
+            'left': Shell.$leftPanel.width(),
+            'width': this.$element.parent().width() - Shell.$leftPanel.width() - Shell.$rightPanel.width()
         });
 
         var titleHeight;
@@ -45,3 +45,5 @@ export class CenterPanel extends baseView.BaseView {
         this.$content.width(this.$element.width());
     }
 }
+
+export = CenterPanel;

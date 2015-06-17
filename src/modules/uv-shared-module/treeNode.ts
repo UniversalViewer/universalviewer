@@ -1,9 +1,9 @@
 class TreeNode {
 
-    nodes: Array<TreeNode>;
-    selected: boolean;
     expanded: boolean;
+    nodes: Array<TreeNode>;
     parentNode: TreeNode;
+    selected: boolean;
 
     constructor(public label?: string, public data?: any) {
         this.nodes = [];

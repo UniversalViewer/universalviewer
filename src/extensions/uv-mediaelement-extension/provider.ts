@@ -1,9 +1,9 @@
-import BootStrapper = require("../../bootstrapper");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import utils = require("../../utils");
-import IMediaElementProvider = require("./iMediaElementProvider");
+import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import BootStrapper = require("../../Bootstrapper");
+import IMediaElementProvider = require("./IMediaElementProvider");
+import Utils = require("../../Utils");
 
-export class Provider extends baseProvider.BaseProvider implements IMediaElementProvider{
+class Provider extends BaseProvider implements IMediaElementProvider{
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -22,7 +22,7 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.manifestUri, this.sequenceIndex, configUri, width, height, esu);
+        var script = String.format(template, this.manifestUri, this.sequenceIndex, configUri, width, height, esu);
 
         return script;
     }
@@ -37,3 +37,5 @@ export class Provider extends baseProvider.BaseProvider implements IMediaElement
         //return uri;
     }
 }
+
+export = Provider;

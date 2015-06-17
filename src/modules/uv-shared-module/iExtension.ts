@@ -1,5 +1,5 @@
-
-import baseProvider = require("./baseProvider");
+import BaseProvider = require("./BaseProvider");
+import Params = require("./Params");
 
 interface IExtension{
 
@@ -15,7 +15,7 @@ interface IExtension{
     createModules(): void;
     dependenciesLoaded(): void;
     getDependencies(callback: (deps: any) => void): any;
-    getParam(key: baseProvider.params): any;
+    getParam(key: Params): any;
     height(): number;
     isOverlayActive(): boolean;
     loadDependencies(deps: any): void;

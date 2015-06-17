@@ -1,18 +1,18 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import baseProvider = require("../uv-shared-module/baseProvider");
-import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/iMediaElementProvider");
-import extension = require("../../extensions/uv-mediaelement-extension/extension");
-import baseCenter = require("../uv-shared-module/centerPanel");
-import utils = require("../../utils");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseProvider = require("../uv-shared-module/BaseProvider");
+import CenterPanel = require("../uv-shared-module/CenterPanel");
+import Extension = require("../../extensions/uv-mediaelement-extension/Extension");
+import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
+import Utils = require("../../Utils");
 
-export class MediaElementCenterPanel extends baseCenter.CenterPanel {
+class MediaElementCenterPanel extends CenterPanel {
 
-    title: string;
     $container: JQuery;
-    player: any;
     media: any;
     mediaHeight: number;
     mediaWidth: number;
+    player: any;
+    title: string;
 
     constructor($element: JQuery) {
         super($element);
@@ -30,7 +30,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
 
         // only full screen video
         if (this.provider.getCanvasType(this.provider.getCanvasByIndex(0)).contains('video')){
-            $.subscribe(baseExtension.BaseExtension.TOGGLE_FULLSCREEN, (e) => {
+            $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
                     that.player.enterFullScreen(false);
@@ -41,7 +41,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             });
         }
 
-        $.subscribe(extension.Extension.OPEN_MEDIA, (e, canvas) => {
+        $.subscribe(Extension.OPEN_MEDIA, (e, canvas) => {
             that.viewMedia(canvas);
         });
 
@@ -64,7 +64,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         this.$container.height(this.mediaHeight);
         this.$container.width(this.mediaWidth);
 
-        var id = utils.Utils.getTimeStamp();
+        var id = Utils.Dates.getTimeStamp();
         var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
         var canvasType: string = this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
 
@@ -97,18 +97,18 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                     });
 
                     media.addEventListener('play', (e) => {
-                        $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
+                        $.publish(Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                     });
 
                     media.addEventListener('pause', (e) => {
                         // mediaelement creates a pause event before the ended event. ignore this.
                         if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                            $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
+                            $.publish(Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                         }
                     });
 
                     media.addEventListener('ended', (e) => {
-                        $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
+                        $.publish(Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                     });
 
                     media.setSrc(sources);
@@ -136,18 +136,18 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
                     });
 
                     media.addEventListener('play', (e) => {
-                        $.publish(extension.Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
+                        $.publish(Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                     });
 
                     media.addEventListener('pause', (e) => {
                         // mediaelement creates a pause event before the ended event. ignore this.
                         if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                            $.publish(extension.Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
+                            $.publish(Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                         }
                     });
 
                     media.addEventListener('ended', (e) => {
-                        $.publish(extension.Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
+                        $.publish(Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                     });
 
                     //media.setSrc(sources);
@@ -174,7 +174,7 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
             this.$container.height(this.mediaHeight);
         } else {
             // fit media to available space.
-            var size: utils.Size = utils.Utils.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+            var size: Utils.Size = Utils.Measurement.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
 
             this.$container.height(size.height);
             this.$container.width(size.width);
@@ -195,3 +195,5 @@ export class MediaElementCenterPanel extends baseCenter.CenterPanel {
         this.$title.ellipsisFill(this.title);
     }
 }
+
+export = MediaElementCenterPanel;

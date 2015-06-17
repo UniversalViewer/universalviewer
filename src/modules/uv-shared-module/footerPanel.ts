@@ -1,17 +1,17 @@
-import utils = require("../../utils");
-import baseExtension = require("./baseExtension");
-import shell = require("./shell");
-import baseView = require("./baseView");
+import Utils = require("../../Utils");
+import BaseExtension = require("./BaseExtension");
+import Shell = require("./Shell");
+import BaseView = require("./BaseView");
 
-export class FooterPanel extends baseView.BaseView {
+class FooterPanel extends BaseView {
 
-    $options: JQuery;
-    $embedButton: JQuery;
     $downloadButton: JQuery;
+    $embedButton: JQuery;
     $fullScreenBtn: JQuery;
+    $options: JQuery;
 
-    static EMBED: string = 'footer.onEmbed';
     static DOWNLOAD: string = 'footer.onDownload';
+    static EMBED: string = 'footer.onEmbed';
 
     constructor($element: JQuery) {
         super($element);
@@ -22,12 +22,11 @@ export class FooterPanel extends baseView.BaseView {
 
         super.create();
 
-        // events.
-        $.subscribe(baseExtension.BaseExtension.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
             this.updateFullScreenButton();
         });
 
-        $.subscribe(baseExtension.BaseExtension.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseExtension.SETTINGS_CHANGED, () => {
             this.updateDownloadButton();
         });
 
@@ -57,23 +56,23 @@ export class FooterPanel extends baseView.BaseView {
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
-            $.publish(baseExtension.BaseExtension.TOGGLE_FULLSCREEN);
+            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
         });
 
-        if (!utils.Utils.getBool(this.options.embedEnabled, true)){
+        if (!Utils.Bools.getBool(this.options.embedEnabled, true)){
             this.$embedButton.hide();
         }
 
         this.updateDownloadButton();
         this.updateFullScreenButton();
 
-        if (utils.Utils.getBool(this.options.minimiseButtons, false)){
+        if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
         }
     }
 
     updateFullScreenButton(): void {
-        if (!utils.Utils.getBool(this.options.fullscreenEnabled, true)){
+        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true)){
             this.$fullScreenBtn.hide();
         }
 
@@ -93,7 +92,7 @@ export class FooterPanel extends baseView.BaseView {
     }
 
     updateDownloadButton() {
-        var configEnabled = utils.Utils.getBool(this.options.downloadEnabled, true);
+        var configEnabled = Utils.Bools.getBool(this.options.downloadEnabled, true);
 
         if (configEnabled){
             this.$downloadButton.show();
@@ -106,3 +105,5 @@ export class FooterPanel extends baseView.BaseView {
         super.resize();
     }
 }
+
+export = FooterPanel;

@@ -1,11 +1,9 @@
-/// <reference path="./iSettings.d.ts" />
-
-import BootStrapper = require("../../bootstrapper");
-import TreeNode = require("./treeNode");
-import Thumb = require("./thumb");
-import BootstrapParams = require("../../bootstrapParams");
-import ServiceProfile = require("./ServiceProfile");
+import BootstrapParams = require("../../BootstrapParams");
+import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
+import ServiceProfile = require("./ServiceProfile");
+import Thumb = require("./Thumb");
+import TreeNode = require("./TreeNode");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
@@ -73,19 +71,19 @@ interface IProvider{
     locale: string;
     locales: any[];
 
+    changeLocale(locale: string): void;
+    defaultToThumbsView(): boolean;
+    getAlternateLocale(): any;
     getDomain(): string;
     getEmbedDomain(): string;
-    defaultToThumbsView(): boolean;
+    getLocales(): any;
+    getSerializedLocales(): string;
+    getSettings(): ISettings;
     isDeepLinkingEnabled(): boolean;
     paramMap: string[];
     reload(params?: BootstrapParams);
-    getSettings(): ISettings;
-    updateSettings(settings: ISettings): void;
-    getLocales(): any;
-    getAlternateLocale(): any;
-    changeLocale(locale: string): void;
     serializeLocales(locales: any[]): string;
-    getSerializedLocales(): string;
+    updateSettings(settings: ISettings): void;
 }
 
 export = IProvider;

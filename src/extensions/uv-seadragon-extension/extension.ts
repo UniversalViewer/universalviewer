@@ -1,46 +1,47 @@
-import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import baseLeft = require("../../modules/uv-shared-module/leftPanel");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import baseRight = require("../../modules/uv-shared-module/rightPanel");
-import BootStrapper = require("../../bootstrapper");
-import center = require("../../modules/uv-seadragoncenterpanel-module/seadragonCenterPanel");
-import download = require("./downloadDialogue");
-import embed = require("./embedDialogue");
-import externalContentDialogue = require("../../modules/uv-dialogues-module/externalContentDialogue");
-import footer = require("../../modules/uv-searchfooterpanel-module/footerPanel");
-import galleryView = require("../../modules/uv-treeviewleftpanel-module/galleryView");
-import header = require("../../modules/uv-pagingheaderpanel-module/pagingHeaderPanel");
-import help = require("../../modules/uv-dialogues-module/helpDialogue");
-import IProvider = require("../../modules/uv-shared-module/iProvider");
-import ISeadragonProvider = require("./iSeadragonProvider");
-import left = require("../../modules/uv-treeviewleftpanel-module/treeViewLeftPanel");
-import right = require("../../modules/uv-moreinforightpanel-module/moreInfoRightPanel");
-import settings = require("../../modules/uv-shared-module/settings");
-import settingsDialogue = require("../../extensions/uv-seadragon-extension/settingsDialogue");
-import shell = require("../../modules/uv-shared-module/shell");
-import thumbsView = require("../../modules/uv-treeviewleftpanel-module/thumbsView");
-import treeView = require("../../modules/uv-treeviewleftpanel-module/treeView");
-import utils = require("../../utils");
+import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import BootStrapper = require("../../Bootstrapper");
+import DownloadDialogue = require("./DownloadDialogue");
+import EmbedDialogue = require("./EmbedDialogue");
+import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
+import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
+import GalleryView = require("../../modules/uv-treeviewleftpanel-module/GalleryView");
+import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
+import IProvider = require("../../modules/uv-shared-module/IProvider");
+import ISeadragonProvider = require("./ISeadragonProvider");
+import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
+import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
+import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
+import Params = require("../../modules/uv-shared-module/Params");
+import RightPanel = require("../../modules/uv-shared-module/RightPanel");
+import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
+import Settings = require("../../modules/uv-shared-module/Settings");
+import SettingsDialogue = require("../../extensions/uv-seadragon-extension/SettingsDialogue");
+import Shell = require("../../modules/uv-shared-module/Shell");
+import ThumbsView = require("../../modules/uv-treeviewleftpanel-module/ThumbsView");
+import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
+import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
+import Utils = require("../../Utils");
 
-export class Extension extends baseExtension.BaseExtension {
+class Extension extends BaseExtension {
 
     $downloadDialogue: JQuery;
     $embedDialogue: JQuery;
     $externalContentDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
-    centerPanel: center.SeadragonCenterPanel;
+    centerPanel: SeadragonCenterPanel;
     currentRotation: number = 0;
-    downloadDialogue: download.DownloadDialogue;
-    embedDialogue: embed.EmbedDialogue;
-    externalContentDialogue: externalContentDialogue.ExternalContentDialogue;
-    footerPanel: footer.FooterPanel;
-    headerPanel: header.PagingHeaderPanel;
-    helpDialogue: help.HelpDialogue;
+    downloadDialogue: DownloadDialogue;
+    embedDialogue: EmbedDialogue;
+    externalContentDialogue: ExternalContentDialogue;
+    footerPanel: FooterPanel;
+    headerPanel: PagingHeaderPanel;
+    helpDialogue: HelpDialogue;
     isLoading: boolean = false;
-    leftPanel: left.TreeViewLeftPanel;
-    rightPanel: right.MoreInfoRightPanel;
-    settingsDialogue: settingsDialogue.SettingsDialogue;
+    leftPanel: TreeViewLeftPanel;
+    rightPanel: MoreInfoRightPanel;
+    settingsDialogue: SettingsDialogue;
 
     static CURRENT_VIEW_URI: string = 'onCurrentViewUri';
     static IMAGE_MODE: string = "imageMode";
@@ -59,7 +60,7 @@ export class Extension extends baseExtension.BaseExtension {
         var that = this;
 
         // events.
-        $.subscribe(header.PagingHeaderPanel.FIRST, (e) => {
+        $.subscribe(PagingHeaderPanel.FIRST, (e) => {
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
@@ -67,7 +68,7 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
-        $.subscribe(header.PagingHeaderPanel.LAST, (e) => {
+        $.subscribe(PagingHeaderPanel.LAST, (e) => {
             this.viewPage(this.provider.getLastPageIndex());
         });
 
@@ -75,11 +76,11 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getLastPageIndex());
         });
 
-        $.subscribe(header.PagingHeaderPanel.PREV, (e) => {
+        $.subscribe(PagingHeaderPanel.PREV, (e) => {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
-        $.subscribe(header.PagingHeaderPanel.NEXT, (e) => {
+        $.subscribe(PagingHeaderPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
@@ -99,86 +100,86 @@ export class Extension extends baseExtension.BaseExtension {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
-        $.subscribe(header.PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
+        $.subscribe(PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
             Extension.mode = mode;
             $.publish(Extension.SETTINGS_CHANGED, [mode]);
         });
 
-        $.subscribe(header.PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
+        $.subscribe(PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
             this.viewLabel(value);
         });
 
-        $.subscribe(header.PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
+        $.subscribe(PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
         });
 
-        $.subscribe(footer.FooterPanel.SEARCH, (e, terms: string) => {
-            this.triggerSocket(footer.FooterPanel.SEARCH, terms);
+        $.subscribe(FooterPanel.SEARCH, (e, terms: string) => {
+            this.triggerSocket(FooterPanel.SEARCH, terms);
             this.searchWithin(terms);
         });
 
-        $.subscribe(footer.FooterPanel.VIEW_PAGE, (e, index: number) => {
+        $.subscribe(FooterPanel.VIEW_PAGE, (e, index: number) => {
             this.viewPage(index);
         });
 
-        $.subscribe(footer.FooterPanel.NEXT_SEARCH_RESULT, () => {
+        $.subscribe(FooterPanel.NEXT_SEARCH_RESULT, () => {
             this.nextSearchResult();
         });
 
-        $.subscribe(footer.FooterPanel.PREV_SEARCH_RESULT, () => {
+        $.subscribe(FooterPanel.PREV_SEARCH_RESULT, () => {
             this.prevSearchResult();
         });
 
-        $.subscribe(header.PagingHeaderPanel.UPDATE_SETTINGS, (e) => {
+        $.subscribe(PagingHeaderPanel.UPDATE_SETTINGS, (e) => {
             this.updateSettings();
         });
 
-        $.subscribe(settingsDialogue.SettingsDialogue.UPDATE_SETTINGS, (e) => {
+        $.subscribe(SettingsDialogue.UPDATE_SETTINGS, (e) => {
             this.updateSettings();
         });
 
-        $.subscribe(treeView.TreeView.NODE_SELECTED, (e, data: any) => {
+        $.subscribe(TreeView.NODE_SELECTED, (e, data: any) => {
             this.treeNodeSelected(data);
         });
 
-        $.subscribe(thumbsView.ThumbsView.THUMB_SELECTED, (e, index: number) => {
+        $.subscribe(ThumbsView.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
         });
 
-        $.subscribe(galleryView.GalleryView.THUMB_SELECTED, (e, index: number) => {
+        $.subscribe(GalleryView.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
         });
 
-        $.subscribe(baseLeft.LeftPanel.OPEN_LEFT_PANEL, (e) => {
+        $.subscribe(LeftPanel.OPEN_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(baseLeft.LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+        $.subscribe(LeftPanel.CLOSE_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(baseRight.RightPanel.OPEN_RIGHT_PANEL, (e) => {
+        $.subscribe(RightPanel.OPEN_RIGHT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(baseRight.RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+        $.subscribe(RightPanel.CLOSE_RIGHT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(left.TreeViewLeftPanel.EXPAND_FULL_START, (e) => {
-            shell.Shell.$centerPanel.hide();
-            shell.Shell.$rightPanel.hide();
+        $.subscribe(TreeViewLeftPanel.EXPAND_FULL_START, (e) => {
+            Shell.$centerPanel.hide();
+            Shell.$rightPanel.hide();
         });
 
-        $.subscribe(left.TreeViewLeftPanel.COLLAPSE_FULL_FINISH, (e) => {
-            shell.Shell.$centerPanel.show();
-            shell.Shell.$rightPanel.show();
+        $.subscribe(TreeViewLeftPanel.COLLAPSE_FULL_FINISH, (e) => {
+            Shell.$centerPanel.show();
+            Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
+        $.subscribe(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             if (this.centerPanel && this.centerPanel.currentBounds){
-                this.setParam(baseProvider.params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
+                this.setParam(Params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
             }
 
             var canvas = this.provider.getCurrentCanvas();
@@ -190,65 +191,66 @@ export class Extension extends baseExtension.BaseExtension {
                 });
         });
 
-        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_OPEN, () => {
+        $.subscribe(SeadragonCenterPanel.SEADRAGON_OPEN, () => {
             this.isLoading = false;
         });
 
-        $.subscribe(center.SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
+        $.subscribe(SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
             this.currentRotation = rotation;
-            this.setParam(baseProvider.params.rotation, rotation);
+            this.setParam(Params.rotation, rotation);
         });
 
-        $.subscribe(center.SeadragonCenterPanel.PREV, (e) => {
+        $.subscribe(SeadragonCenterPanel.PREV, (e) => {
             this.viewPage(this.provider.getPrevPageIndex());
         });
-        $.subscribe(center.SeadragonCenterPanel.NEXT, (e) => {
+
+        $.subscribe(SeadragonCenterPanel.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
-        $.subscribe(footer.FooterPanel.EMBED, (e) => {
-            $.publish(embed.EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        $.subscribe(FooterPanel.EMBED, (e) => {
+            $.publish(EmbedDialogue.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(footer.FooterPanel.DOWNLOAD, (e) => {
-            $.publish(download.DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
+        $.subscribe(FooterPanel.DOWNLOAD, (e) => {
+            $.publish(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
         });
     }
 
     createModules(): void{
-        this.headerPanel = new header.PagingHeaderPanel(shell.Shell.$headerPanel);
+        this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
-            this.leftPanel = new left.TreeViewLeftPanel(shell.Shell.$leftPanel);
+            this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
         }
 
-        this.centerPanel = new center.SeadragonCenterPanel(shell.Shell.$centerPanel);
+        this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
 
         if (this.isRightPanelEnabled()){
-            this.rightPanel = new right.MoreInfoRightPanel(shell.Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        this.footerPanel = new footer.FooterPanel(shell.Shell.$footerPanel);
+        this.footerPanel = new FooterPanel(Shell.$footerPanel);
 
         this.$helpDialogue = $('<div class="overlay help"></div>');
-        shell.Shell.$overlays.append(this.$helpDialogue);
-        this.helpDialogue = new help.HelpDialogue(this.$helpDialogue);
+        Shell.$overlays.append(this.$helpDialogue);
+        this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
         this.$embedDialogue = $('<div class="overlay embed"></div>');
-        shell.Shell.$overlays.append(this.$embedDialogue);
-        this.embedDialogue = new embed.EmbedDialogue(this.$embedDialogue);
+        Shell.$overlays.append(this.$embedDialogue);
+        this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download"></div>');
-        shell.Shell.$overlays.append(this.$downloadDialogue);
-        this.downloadDialogue = new download.DownloadDialogue(this.$downloadDialogue);
+        Shell.$overlays.append(this.$downloadDialogue);
+        this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings"></div>');
-        shell.Shell.$overlays.append(this.$settingsDialogue);
-        this.settingsDialogue = new settingsDialogue.SettingsDialogue(this.$settingsDialogue);
+        Shell.$overlays.append(this.$settingsDialogue);
+        this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         this.$externalContentDialogue = $('<div class="overlay externalContent"></div>');
-        shell.Shell.$overlays.append(this.$externalContentDialogue);
-        this.externalContentDialogue = new externalContentDialogue.ExternalContentDialogue(this.$externalContentDialogue);
+        Shell.$overlays.append(this.$externalContentDialogue);
+        this.externalContentDialogue = new ExternalContentDialogue(this.$externalContentDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
@@ -260,7 +262,7 @@ export class Extension extends baseExtension.BaseExtension {
     }
 
     viewMedia(): void {
-        var canvasIndex = parseInt(this.getParam(baseProvider.params.canvasIndex)) || this.provider.getStartCanvasIndex();
+        var canvasIndex = parseInt(this.getParam(Params.canvasIndex)) || this.provider.getStartCanvasIndex();
 
         if (this.provider.isCanvasIndexOutOfRange(canvasIndex)){
             this.showDialogue(this.provider.config.content.canvasIndexOutOfRange);
@@ -293,7 +295,7 @@ export class Extension extends baseExtension.BaseExtension {
             // if the page is already displayed, only advance canvasIndex.
             if (indices.contains(this.provider.canvasIndex)) {
                 this.viewCanvas(canvasIndex, () => {
-                    this.setParam(baseProvider.params.canvasIndex, canvasIndex);
+                    this.setParam(Params.canvasIndex, canvasIndex);
                 });
 
                 this.isLoading = false;
@@ -305,7 +307,7 @@ export class Extension extends baseExtension.BaseExtension {
             var canvas = this.provider.getCanvasByIndex(canvasIndex);
             var uri = (<ISeadragonProvider>this.provider).getImageUri(canvas);
             $.publish(Extension.OPEN_MEDIA, [uri]);
-            this.setParam(baseProvider.params.canvasIndex, canvasIndex);
+            this.setParam(Params.canvasIndex, canvasIndex);
         });
 
     }
@@ -440,3 +442,5 @@ export class Extension extends baseExtension.BaseExtension {
         }
     }
 }
+
+export = Extension;

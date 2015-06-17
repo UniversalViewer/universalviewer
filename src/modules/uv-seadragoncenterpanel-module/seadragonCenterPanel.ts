@@ -1,50 +1,49 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import baseProvider = require("../uv-shared-module/baseProvider");
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import baseCenter = require("../uv-shared-module/centerPanel");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/iSeadragonProvider");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseProvider = require("../uv-shared-module/BaseProvider");
+import CenterPanel = require("../uv-shared-module/CenterPanel");
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
+import Page = require("../../extensions/uv-seadragon-extension/Page");
+import Params = require("../uv-shared-module/Params");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
-import Page = require("../../extensions/uv-seadragon-extension/Page");
-import utils = require("../../utils");
-import util = utils.Utils;
+import Utils = require("../../Utils");
 
-export class SeadragonCenterPanel extends baseCenter.CenterPanel {
+class SeadragonCenterPanel extends CenterPanel {
 
-    pages: Page[];
-    userData: any;
+    controlsVisible: boolean = false;
+    currentBounds: any;
     handler: any;
-    prevButtonEnabled: boolean = false;
-    nextButtonEnabled: boolean = false;
     initialBounds: any;
     initialRotation: any;
-    viewer: any;
-    title: string;
-    currentBounds: any;
-    isFirstLoad: boolean = true;
-    controlsVisible: boolean = false;
     isCreated: boolean = false;
+    isFirstLoad: boolean = true;
+    nextButtonEnabled: boolean = false;
+    pages: Page[];
+    prevButtonEnabled: boolean = false;
+    title: string;
+    userData: any;
+    viewer: any;
 
-    $viewer: JQuery;
-    $spinner: JQuery;
-    $rights: JQuery;
     $closeRightsBtn: JQuery;
-    $prevButton: JQuery;
+    $goHomeButton: JQuery;
     $nextButton: JQuery;
+    $prevButton: JQuery;
+    $rights: JQuery;
+    $rotateButton: JQuery;
+    $spinner: JQuery;
+    $viewer: JQuery;
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
-    $goHomeButton: JQuery;
-    $rotateButton: JQuery;
 
-    // events
-    static SEADRAGON_OPEN: string = 'center.onOpen';
-    static SEADRAGON_RESIZE: string = 'center.onResize';
-    static SEADRAGON_ANIMATION_START: string = 'center.onAnimationStart';
+    static NEXT: string = 'center.onNext';
+    static PREV: string = 'center.onPrev';
     static SEADRAGON_ANIMATION: string = 'center.onAnimation';
     static SEADRAGON_ANIMATION_FINISH: string = 'center.onAnimationfinish';
+    static SEADRAGON_ANIMATION_START: string = 'center.onAnimationStart';
+    static SEADRAGON_OPEN: string = 'center.onOpen';
+    static SEADRAGON_RESIZE: string = 'center.onResize';
     static SEADRAGON_ROTATION: string = 'center.onRotation';
-    static PREV: string = 'center.onPrev';
-    static NEXT: string = 'center.onNext';
 
     constructor($element: JQuery) {
         super($element);
@@ -59,9 +58,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.append(this.$viewer);
 
-        // events
-
-        $.subscribe(baseExtension.BaseExtension.OPEN_MEDIA, () => {
+        $.subscribe(BaseExtension.OPEN_MEDIA, () => {
             this.tryLoad();
         });
     }
@@ -303,7 +300,7 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         this.$spinner.show();
 
         this.provider.getPages().then(() => {
-            this.viewer.open(util.convertToPlainObject(this.provider.pages));
+            this.viewer.open(Utils.Objects.convertToPlainObject(this.provider.pages));
         });
     }
 
@@ -343,13 +340,13 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         // check for initial zoom/rotation params.
         if (this.isFirstLoad){
 
-            this.initialRotation = this.extension.getParam(baseProvider.params.rotation);
+            this.initialRotation = this.extension.getParam(Params.rotation);
 
             if (this.initialRotation){
                 this.viewer.viewport.setRotation(parseInt(this.initialRotation));
             }
 
-            this.initialBounds = this.extension.getParam(baseProvider.params.zoom);
+            this.initialBounds = this.extension.getParam(Params.zoom);
 
             if (this.initialBounds){
                 this.initialBounds = this.deserialiseBounds(this.initialBounds);
@@ -498,10 +495,10 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         var bounds = this.viewer.viewport.getBounds(true);
 
         return {
-            x: util.roundNumber(bounds.x, 4),
-            y: util.roundNumber(bounds.y, 4),
-            width: util.roundNumber(bounds.width, 4),
-            height: util.roundNumber(bounds.height, 4)
+            x: Math.roundToDecimalPlace(bounds.x, 4),
+            y: Math.roundToDecimalPlace(bounds.y, 4),
+            width: Math.roundToDecimalPlace(bounds.width, 4),
+            height: Math.roundToDecimalPlace(bounds.height, 4)
         };
     }
 
@@ -610,3 +607,4 @@ export class SeadragonCenterPanel extends baseCenter.CenterPanel {
         }
     }
 }
+export = SeadragonCenterPanel;

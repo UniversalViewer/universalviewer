@@ -1,9 +1,9 @@
-import baseExtension = require("./baseExtension");
-import shell = require("./shell");
-import utils = require("../../utils");
-import baseView = require("./baseView");
+import BaseExtension = require("./BaseExtension");
+import Shell = require("./Shell");
+import Utils = require("../../Utils");
+import BaseView = require("./BaseView");
 
-export class BaseExpandPanel extends baseView.BaseView {
+class BaseExpandPanel extends BaseView {
 
     isExpanded: boolean = false;
     isFullyExpanded: boolean = false;
@@ -236,3 +236,5 @@ export class BaseExpandPanel extends baseView.BaseView {
         this.$main.height(this.$element.parent().height() - this.$top.outerHeight(true));
     }
 }
+
+export = BaseExpandPanel;

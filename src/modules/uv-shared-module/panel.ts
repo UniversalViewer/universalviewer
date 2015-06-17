@@ -1,4 +1,4 @@
-export class Panel {
+class Panel {
     $element: JQuery;
     fitToParentWidth: boolean;
     fitToParentHeight: boolean;
@@ -31,3 +31,5 @@ export class Panel {
         }
     }
 }
+
+export = Panel;

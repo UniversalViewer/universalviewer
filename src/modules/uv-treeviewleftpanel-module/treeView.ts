@@ -1,16 +1,15 @@
-import utils = require("../../utils");
-import shell = require("../uv-shared-module/shell");
-import baseView = require("../uv-shared-module/baseView");
-import TreeNode = require("../uv-shared-module/treeNode");
-import baseExtension = require("../uv-shared-module/baseExtension");
-import util = utils.Utils;
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseView = require("../uv-shared-module/BaseView");
+import Shell = require("../uv-shared-module/Shell");
+import TreeNode = require("../uv-shared-module/TreeNode");
+import Utils = require("../../Utils");
 
-export class TreeView extends baseView.BaseView {
+class TreeView extends BaseView {
 
     $tree: JQuery;
-    selectedNode: any;
-    isOpen: boolean = false;
     elideCount: number;
+    isOpen: boolean = false;
+    selectedNode: any;
 
     public rootNode: TreeNode;
 
@@ -23,9 +22,7 @@ export class TreeView extends baseView.BaseView {
     create(): void {
         super.create();
 
-        var that = this;
-
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.selectTreeNodeFromCanvasIndex(canvasIndex);
         });
 
@@ -67,7 +64,7 @@ export class TreeView extends baseView.BaseView {
             elide: function(text){
                 var $a = $((<any>this).linkCtx.elem);
                 var elideCount = Math.floor($a.parent().width() / 7);
-                return util.htmlDecode(util.ellipsis(text, elideCount));
+                return Utils.Strings.htmlDecode(Utils.Strings.ellipsis(text, elideCount));
                 //https://github.com/BorisMoore/jsviews/issues/296
             }
         });
@@ -82,7 +79,7 @@ export class TreeView extends baseView.BaseView {
                 },
                 init: function (tagCtx, linkCtx, ctx) {
                     var data = tagCtx.view.data;
-                    data.text = data.label;//util.htmlDecode(util.ellipsis(data.label, that.elideCount));
+                    data.text = data.label;//Utils.Strings.htmlDecode(Utils.Strings.ellipsis(data.label, that.elideCount));
                     this.data = tagCtx.view.data;
                 },
                 onAfterLink: function () {
@@ -179,7 +176,7 @@ export class TreeView extends baseView.BaseView {
     private elide($a: JQuery): void {
         if (!$a.is(':visible')) return;
         var elideCount = Math.floor($a.parent().width() / 7);
-        $a.text(util.htmlDecode(util.ellipsis($a.attr('title'), elideCount)));
+        $a.text(Utils.Strings.htmlDecode(Utils.Strings.ellipsis($a.attr('title'), elideCount)));
     }
 
     private elideAll(): void {
@@ -198,3 +195,5 @@ export class TreeView extends baseView.BaseView {
         this.elideAll();
     }
 }
+
+export = TreeView;

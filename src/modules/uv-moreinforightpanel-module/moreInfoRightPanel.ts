@@ -1,10 +1,10 @@
-import baseRight = require("../uv-shared-module/rightPanel");
+import RightPanel = require("../uv-shared-module/RightPanel");
 
-export class MoreInfoRightPanel extends baseRight.RightPanel {
+class MoreInfoRightPanel extends RightPanel {
 
-    moreInfoItemTemplate: JQuery;
     $items: JQuery;
     $noData: JQuery;
+    moreInfoItemTemplate: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -116,3 +116,5 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         this.$main.height(this.$element.height() - this.$top.height() - this.$main.verticalMargins());
     }
 }
+
+export = MoreInfoRightPanel;

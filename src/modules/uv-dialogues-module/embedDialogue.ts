@@ -1,38 +1,35 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import shell = require("../uv-shared-module/shell");
-import utils = require("../../utils");
-import dialogue = require("../uv-shared-module/dialogue");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import Dialogue = require("../uv-shared-module/Dialogue");
+import Shell = require("../uv-shared-module/Shell");
+import Utils = require("../../Utils");
 
-export class EmbedDialogue extends dialogue.Dialogue {
+class EmbedDialogue extends Dialogue {
 
-    smallWidth: number;
-    smallHeight: number;
-    mediumWidth: number;
-    mediumHeight: number;
-    largeWidth: number;
-    largeHeight: number;
-
-    currentWidth: number;
-    currentHeight: number;
-
-    code: string;
-
-    $title: JQuery;
-    $intro: JQuery;
     $code: JQuery;
+    $customHeight: JQuery;
+    $customSize: JQuery;
+    $customSizeHeightWrap: JQuery;
+    $customSizeWidthWrap: JQuery;
+    $customSizeWrap: JQuery;
+    $customWidth: JQuery;
+    $intro: JQuery;
+    $largeSize: JQuery;
+    $mediumSize: JQuery;
     $sizes: JQuery;
     $smallSize: JQuery;
-    $mediumSize: JQuery;
-    $largeSize: JQuery;
-    $customSize: JQuery;
-    $customSizeWrap: JQuery;
-    $customSizeWidthWrap: JQuery;
-    $customWidth: JQuery;
-    $customSizeHeightWrap: JQuery;
-    $customHeight: JQuery;
+    $title: JQuery;
+    code: string;
+    currentHeight: number;
+    currentWidth: number;
+    largeHeight: number;
+    largeWidth: number;
+    mediumHeight: number;
+    mediumWidth: number;
+    smallHeight: number;
+    smallWidth: number;
 
-    static SHOW_EMBED_DIALOGUE: string = 'onShowEmbedDialogue';
     static HIDE_EMBED_DIALOGUE: string = 'onHideEmbedDialogue';
+    static SHOW_EMBED_DIALOGUE: string = 'onShowEmbedDialogue';
 
     constructor($element: JQuery) {
         super($element);
@@ -43,8 +40,6 @@ export class EmbedDialogue extends dialogue.Dialogue {
         this.setConfig('embedDialogue');
         
         super.create();
-
-        var that = this;
 
         $.subscribe(EmbedDialogue.SHOW_EMBED_DIALOGUE, (e, params) => {
             this.open();
@@ -149,7 +144,7 @@ export class EmbedDialogue extends dialogue.Dialogue {
         });
 
         this.$customWidth.keydown((event) => {
-            utils.Utils.numericalInput(event);
+            Utils.Numbers.numericalInput(event);
         });
 
         this.$customWidth.keyup((event) => {
@@ -157,7 +152,7 @@ export class EmbedDialogue extends dialogue.Dialogue {
         });
 
         this.$customHeight.keydown((event) => {
-            utils.Utils.numericalInput(event);
+            Utils.Numbers.numericalInput(event);
         });
 
         this.$customHeight.keyup((event) => {
@@ -237,3 +232,5 @@ export class EmbedDialogue extends dialogue.Dialogue {
         });
     }
 }
+
+export = EmbedDialogue;

@@ -1,13 +1,13 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import shell = require("../uv-shared-module/shell");
-import utils = require("../../utils");
-import dialogue = require("../uv-shared-module/dialogue");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import Dialogue = require("../uv-shared-module/Dialogue");
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import Shell = require("../uv-shared-module/Shell");
+import Utils = require("../../Utils");
 
-export class ExternalContentDialogue extends dialogue.Dialogue {
+class ExternalContentDialogue extends Dialogue {
 
-    static SHOW_EXTERNALCONTENT_DIALOGUE: string = 'onShowExternalContentDialogue';
     static HIDE_EXTERNALCONTENT_DIALOGUE: string = 'onHideExternalContentDialogue';
+    static SHOW_EXTERNALCONTENT_DIALOGUE: string = 'onShowExternalContentDialogue';
 
     $iframe: JQuery;
 
@@ -43,3 +43,5 @@ export class ExternalContentDialogue extends dialogue.Dialogue {
         this.$iframe.height(this.$content.height());
     }
 }
+
+export = ExternalContentDialogue;

@@ -1,21 +1,19 @@
-import baseExtension = require("./baseExtension");
-import shell = require("./shell");
-import utils = require("../../utils");
-import baseExpandPanel = require("./baseExpandPanel");
+import BaseExpandPanel = require("./BaseExpandPanel");
+import BaseExtension = require("./BaseExtension");
+import Shell = require("./Shell");
+import Utils = require("../../Utils");
 
-export class RightPanel extends baseExpandPanel.BaseExpandPanel {
+class RightPanel extends BaseExpandPanel {
 
-    static OPEN_RIGHT_PANEL: string = 'onOpenRightPanel';
     static CLOSE_RIGHT_PANEL: string = 'onCloseRightPanel';
+    static OPEN_RIGHT_PANEL: string = 'onOpenRightPanel';
 
     constructor($element: JQuery) {
         super($element);
     }
 
     create(): void {
-
         super.create();
-
         this.$element.width(this.options.panelCollapsedWidth);
     }
 
@@ -53,3 +51,5 @@ export class RightPanel extends baseExpandPanel.BaseExpandPanel {
         });
     }
 }
+
+export = RightPanel;

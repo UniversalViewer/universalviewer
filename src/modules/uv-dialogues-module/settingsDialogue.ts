@@ -1,22 +1,22 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import shell = require("../uv-shared-module/shell");
-import utils = require("../../utils");
-import dialogue = require("../uv-shared-module/dialogue");
-import version = require("../../_Version");
-import BootstrapParams = require("../../bootstrapParams");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BootstrapParams = require("../../BootstrapParams");
+import Dialogue = require("../uv-shared-module/Dialogue");
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import Shell = require("../uv-shared-module/Shell");
+import Utils = require("../../Utils");
+import Version = require("../../_Version");
 
-export class SettingsDialogue extends dialogue.Dialogue {
+class SettingsDialogue extends Dialogue {
 
-    $title: JQuery;
-    $scroll: JQuery;
-    $version: JQuery;
     $locale: JQuery;
-    $localeLabel: JQuery;
     $localeDropDown: JQuery;
+    $localeLabel: JQuery;
+    $scroll: JQuery;
+    $title: JQuery;
+    $version: JQuery;
 
-    static SHOW_SETTINGS_DIALOGUE: string = 'onShowSettingsDialogue';
     static HIDE_SETTINGS_DIALOGUE: string = 'onHideSettingsDialogue';
+    static SHOW_SETTINGS_DIALOGUE: string = 'onShowSettingsDialogue';
     static UPDATE_SETTINGS: string = 'onUpdateSettings';
 
     constructor($element: JQuery) {
@@ -58,7 +58,7 @@ export class SettingsDialogue extends dialogue.Dialogue {
         // initialise ui.
         this.$title.text(this.content.title);
 
-        this.$version.text("v" + version.Version);
+        this.$version.text("v" + Version);
 
         var locales = this.provider.getLocales();
 
@@ -99,3 +99,5 @@ export class SettingsDialogue extends dialogue.Dialogue {
 
     }
 }
+
+export = SettingsDialogue;

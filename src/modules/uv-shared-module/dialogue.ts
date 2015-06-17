@@ -1,20 +1,20 @@
-import baseExtension = require("./baseExtension");
-import shell = require("./shell");
-import utils = require("../../utils");
-import baseView = require("./baseView");
+import BaseExtension = require("./BaseExtension");
+import Shell = require("./Shell");
+import Utils = require("../../Utils");
+import BaseView = require("./BaseView");
 
-export class Dialogue extends baseView.BaseView {
+class Dialogue extends BaseView {
 
-    isActive: boolean = false;
     allowClose: boolean = true;
-    returnFunc: any;
+    isActive: boolean = false;
     isUnopened: boolean = true;
+    returnFunc: any;
 
-    $top: JQuery;
-    $closeButton: JQuery;
-    $middle: JQuery;
-    $content: JQuery;
     $bottom: JQuery;
+    $closeButton: JQuery;
+    $content: JQuery;
+    $middle: JQuery;
+    $top: JQuery;
 
     constructor($element: JQuery) {
         super($element, false, false);
@@ -27,7 +27,7 @@ export class Dialogue extends baseView.BaseView {
         super.create();
 
         // events.
-        $.subscribe(baseExtension.BaseExtension.CLOSE_ACTIVE_DIALOGUE, () => {
+        $.subscribe(BaseExtension.CLOSE_ACTIVE_DIALOGUE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -35,7 +35,7 @@ export class Dialogue extends baseView.BaseView {
             }
         });
 
-        $.subscribe(baseExtension.BaseExtension.ESCAPE, () => {
+        $.subscribe(BaseExtension.ESCAPE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -95,7 +95,7 @@ export class Dialogue extends baseView.BaseView {
             this.$element.find('.btn.default').focus();
         }, 1);
 
-        $.publish(shell.Shell.SHOW_OVERLAY);
+        $.publish(Shell.SHOW_OVERLAY);
 
         if (this.isUnopened){
             this.isUnopened = false;
@@ -114,7 +114,7 @@ export class Dialogue extends baseView.BaseView {
             this.$element.hide();
             this.isActive = false;
 
-            $.publish(shell.Shell.HIDE_OVERLAY);
+            $.publish(Shell.HIDE_OVERLAY);
         }
     }
 
@@ -127,3 +127,5 @@ export class Dialogue extends baseView.BaseView {
         });
     }
 }
+
+export = Dialogue;

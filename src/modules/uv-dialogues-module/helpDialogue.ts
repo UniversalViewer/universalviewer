@@ -1,17 +1,17 @@
-import baseExtension = require("../uv-shared-module/baseExtension");
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import shell = require("../uv-shared-module/shell");
-import utils = require("../../utils");
-import dialogue = require("../uv-shared-module/dialogue");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import Dialogue = require("../uv-shared-module/Dialogue");
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import Shell = require("../uv-shared-module/Shell");
+import Utils = require("../../Utils");
 
-export class HelpDialogue extends dialogue.Dialogue {
+class HelpDialogue extends Dialogue {
 
-    $title: JQuery;
-    $scroll: JQuery;
     $message: JQuery;
+    $scroll: JQuery;
+    $title: JQuery;
 
-    static SHOW_HELP_DIALOGUE: string = 'onShowHelpDialogue';
     static HIDE_HELP_DIALOGUE: string = 'onHideHelpDialogue';
+    static SHOW_HELP_DIALOGUE: string = 'onShowHelpDialogue';
 
     constructor($element: JQuery) {
         super($element);
@@ -55,3 +55,5 @@ export class HelpDialogue extends dialogue.Dialogue {
 
     }
 }
+
+export = HelpDialogue;

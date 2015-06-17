@@ -1,11 +1,11 @@
-import baseExtension = require("./baseExtension");
-import baseView = require("./baseView");
-import utils = require("../../utils");
-import help = require("../uv-dialogues-module/helpDialogue");
-import settings = require("../uv-dialogues-module/settingsDialogue");
-import BootstrapParams = require("../../bootstrapParams");
+import BaseExtension = require("./BaseExtension");
+import BaseView = require("./BaseView");
+import BootstrapParams = require("../../BootstrapParams");
+import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
+import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
+import Utils = require("../../Utils");
 
-export class HeaderPanel extends baseView.BaseView {
+class HeaderPanel extends BaseView {
 
     $options: JQuery;
     $centerOptions: JQuery;
@@ -30,15 +30,15 @@ export class HeaderPanel extends baseView.BaseView {
 
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.SETTINGS_CHANGED, (e, message) => {
+        $.subscribe(BaseExtension.SETTINGS_CHANGED, (e, message) => {
             this.updatePagingToggle();
         });
 
-        $.subscribe(baseExtension.BaseExtension.SHOW_MESSAGE, (e, message) => {
+        $.subscribe(BaseExtension.SHOW_MESSAGE, (e, message) => {
             this.showMessage(message);
         });
 
-        $.subscribe(baseExtension.BaseExtension.HIDE_MESSAGE, () => {
+        $.subscribe(BaseExtension.HIDE_MESSAGE, () => {
             this.hideMessage();
         });
 
@@ -93,7 +93,7 @@ export class HeaderPanel extends baseView.BaseView {
         });
 
         this.$settingsButton.onPressed(() => {
-            $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
+            $.publish(SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
 
         if (this.options.localeToggleEnabled === false){
@@ -199,3 +199,5 @@ export class HeaderPanel extends baseView.BaseView {
         }
     }
 }
+
+export = HeaderPanel;

@@ -1,14 +1,13 @@
-import BootStrapper = require("../../bootstrapper");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import ISeadragonProvider = require("./iSeadragonProvider");
+import BootStrapper = require("../../Bootstrapper");
+import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
 import Page = require("./Page");
 import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
-import utils = require("../../utils");
-import util = utils.Utils;
+import Utils = require("../../Utils");
 
-export class Provider extends baseProvider.BaseProvider implements ISeadragonProvider{
+class Provider extends BaseProvider implements ISeadragonProvider{
 
     pages: Page[];
     searchResults: SearchResult[] = [];
@@ -87,7 +86,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         var size = cropWidth + ',' + cropHeight;
         var rotation = 0;
         var quality = 'default';
-        var uri = String.prototype.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
+        var uri = String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
 
         return uri;
     }
@@ -108,7 +107,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var rotation = 0;
         var quality = 'default';
-        var uri = String.prototype.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
+        var uri = String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
         return uri;
     }
 
@@ -160,7 +159,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.sequenceIndex, canvasIndex, zoom, rotation, width, height, esu);
+        var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.sequenceIndex, canvasIndex, zoom, rotation, width, height, esu);
 
         return script;
     }
@@ -207,7 +206,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
     }
 
     isSearchWithinEnabled(): boolean {
-        if (!util.getBool(this.config.options.searchWithinEnabled, false)){
+        if (!Utils.Bools.getBool(this.config.options.searchWithinEnabled, false)){
             return false;
         }
 
@@ -251,7 +250,7 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
 
         var searchUri = this.getSearchWithinServiceUri();
 
-        searchUri = String.prototype.format(searchUri, terms);
+        searchUri = String.format(searchUri, terms);
 
         $.getJSON(searchUri, (results: any) => {
             if (results.resources.length) {
@@ -290,3 +289,5 @@ export class Provider extends baseProvider.BaseProvider implements ISeadragonPro
         return null;
     }
 }
+
+export = Provider;

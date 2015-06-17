@@ -1,9 +1,9 @@
-import BootStrapper = require("../../bootstrapper");
-import baseProvider = require("../../modules/uv-shared-module/baseProvider");
-import utils = require("../../utils");
-import IPDFProvider = require("./iPDFProvider");
+import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import BootStrapper = require("../../Bootstrapper");
+import IPDFProvider = require("./IPDFProvider");
+import Utils = require("../../Utils");
 
-export class Provider extends baseProvider.BaseProvider implements IPDFProvider{
+class Provider extends BaseProvider implements IPDFProvider{
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -27,8 +27,10 @@ export class Provider extends baseProvider.BaseProvider implements IPDFProvider{
 
         var configUri = this.config.uri || '';
 
-        var script = String.prototype.format(template, this.manifestUri, this.sequenceIndex, configUri, width, height, esu);
+        var script = String.format(template, this.manifestUri, this.sequenceIndex, configUri, width, height, esu);
 
         return script;
     }
 }
+
+export = Provider;

@@ -1,14 +1,14 @@
-import baseSettings = require("../../modules/uv-dialogues-module/settingsDialogue");
-import baseExtension = require("../../modules/uv-shared-module/baseExtension");
+import BaseSettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
+import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 
-export class SettingsDialogue extends baseSettings.SettingsDialogue {
+class SettingsDialogue extends BaseSettingsDialogue {
 
     $pagingEnabled: JQuery;
-    $pagingEnabledLabel: JQuery;
     $pagingEnabledCheckbox: JQuery;
+    $pagingEnabledLabel: JQuery;
     $preserveViewport: JQuery;
-    $preserveViewportLabel: JQuery;
     $preserveViewportCheckbox: JQuery;
+    $preserveViewportLabel: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -81,3 +81,5 @@ export class SettingsDialogue extends baseSettings.SettingsDialogue {
     }
 
 }
+
+export = SettingsDialogue;

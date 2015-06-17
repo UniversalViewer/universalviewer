@@ -1,17 +1,17 @@
-import baseExtension = require("./baseExtension");
-import shell = require("./shell");
-import utils = require("../../utils");
-import dialogue = require("./dialogue");
+import BaseExtension = require("./BaseExtension");
+import Dialogue = require("./Dialogue");
+import Shell = require("./Shell");
+import Utils = require("../../Utils");
 
-export class GenericDialogue extends dialogue.Dialogue {
+class GenericDialogue extends Dialogue {
 
     acceptCallback: any;
 
-    $message: JQuery;
     $acceptButton: JQuery;
+    $message: JQuery;
 
-    static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
     static HIDE_GENERIC_DIALOGUE: string = 'onHideGenericDialogue';
+    static SHOW_GENERIC_DIALOGUE: string = 'onShowGenericDialogue';
 
     constructor($element: JQuery) {
         super($element);
@@ -53,7 +53,7 @@ export class GenericDialogue extends dialogue.Dialogue {
 
     accept(): void {
 
-        $.publish(baseExtension.BaseExtension.CLOSE_ACTIVE_DIALOGUE);
+        $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
 
         if (this.acceptCallback) this.acceptCallback();
     }
@@ -79,6 +79,7 @@ export class GenericDialogue extends dialogue.Dialogue {
 
     resize(): void {
         super.resize();
-
     }
 }
+
+export = GenericDialogue;

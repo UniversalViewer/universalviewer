@@ -1,21 +1,22 @@
-import baseExtension = require("./baseExtension");
-import utils = require("../../utils");
-import baseView = require("./baseView");
-import genericDialogue = require("./genericDialogue");
+import BaseExtension = require("./BaseExtension");
+import BaseView = require("./BaseView");
+import GenericDialogue = require("./GenericDialogue");
+import Utils = require("../../Utils");
+import TestDialogue = require("./TestDialogue");
 
-export class Shell extends baseView.BaseView {
-    static $element: JQuery;
-    static $headerPanel: JQuery;
-    static $mainPanel: JQuery;
+class Shell extends BaseView {
     static $centerPanel: JQuery;
-    static $leftPanel: JQuery;
-    static $rightPanel: JQuery;
+    static $element: JQuery;
     static $footerPanel: JQuery;
-    static $overlays: JQuery;
     static $genericDialogue: JQuery;
+    static $headerPanel: JQuery;
+    static $leftPanel: JQuery;
+    static $mainPanel: JQuery;
+    static $overlays: JQuery;
+    static $rightPanel: JQuery;
 
-    static SHOW_OVERLAY: string = 'onShowOverlay';
     static HIDE_OVERLAY: string = 'onHideOverlay';
+    static SHOW_OVERLAY: string = 'onShowOverlay';
 
     constructor($element: JQuery) {
         Shell.$element = $element;
@@ -25,7 +26,6 @@ export class Shell extends baseView.BaseView {
     create(): void {
         super.create();
 
-        // events.
         $.subscribe(Shell.SHOW_OVERLAY, () => {
             Shell.$overlays.show();
         });
@@ -35,10 +35,10 @@ export class Shell extends baseView.BaseView {
         });
 
         Shell.$headerPanel = $('<div class="headerPanel"></div>');
-        this.$element.append(Shell.$headerPanel);
+        Shell.$element.append(Shell.$headerPanel);
 
         Shell.$mainPanel = $('<div class="mainPanel"></div>');
-        this.$element.append(Shell.$mainPanel);
+        Shell.$element.append(Shell.$mainPanel);
 
         Shell.$centerPanel = $('<div class="centerPanel"></div>');
         Shell.$mainPanel.append(Shell.$centerPanel);
@@ -53,7 +53,7 @@ export class Shell extends baseView.BaseView {
         Shell.$element.append(Shell.$footerPanel);
 
         Shell.$overlays = $('<div class="overlays"></div>');
-        this.$element.append(Shell.$overlays);
+        Shell.$element.append(Shell.$overlays);
 
         Shell.$genericDialogue = $('<div class="overlay genericDialogue"></div>');
         Shell.$overlays.append(Shell.$genericDialogue);
@@ -62,12 +62,14 @@ export class Shell extends baseView.BaseView {
 
             if ($(e.target).hasClass('overlays')) {
                 e.preventDefault();
-                $.publish(baseExtension.BaseExtension.CLOSE_ACTIVE_DIALOGUE);
+                $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
             }
         });
 
+        //var test = new TestDialogue(Shell.$genericDialogue);
+
         // create shared views.
-        new genericDialogue.GenericDialogue(Shell.$genericDialogue);
+        new GenericDialogue(Shell.$genericDialogue);
     }
     
     resize(): void{
@@ -80,3 +82,5 @@ export class Shell extends baseView.BaseView {
         Shell.$mainPanel.height(mainHeight);
     }
 }
+
+export = Shell;

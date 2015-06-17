@@ -17,6 +17,7 @@
     "bower_components"
   ],
   "dependencies": {
+    "extensions": "edsilv/extensions",
     "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme"
   },

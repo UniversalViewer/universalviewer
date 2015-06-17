@@ -1,32 +1,32 @@
-import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import shell = require("../../modules/uv-shared-module/shell");
-import utils = require("../../utils");
-import dialogue = require("../../modules/uv-shared-module/dialogue");
-import settings = require("../../modules/uv-dialogues-module/settingsDialogue");
-import ISeadragonExtension = require("./iSeadragonExtension");
-import ISeadragonProvider = require("./iSeadragonProvider");
+import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import Dialogue = require("../../modules/uv-shared-module/Dialogue");
 import DownloadOption = require("./DownloadOption");
-import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
+import ISeadragonExtension = require("./ISeadragonExtension");
+import ISeadragonProvider = require("./ISeadragonProvider");
 import RenderingFormat = require("../../modules/uv-shared-module/RenderingFormat");
+import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
+import SettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
+import Shell = require("../../modules/uv-shared-module/Shell");
+import Utils = require("../../Utils");
 
-export class DownloadDialogue extends dialogue.Dialogue {
+class DownloadDialogue extends Dialogue {
 
-    $title: JQuery;
-    $noneAvailable: JQuery;
-    $settingsButton: JQuery;
-    $pagingNote: JQuery;
-    $downloadOptions: JQuery;
+    $buttonsContainer: JQuery;
     $currentViewAsJpgButton: JQuery;
+    $downloadButton: JQuery;
+    $downloadOptions: JQuery;
+    $noneAvailable: JQuery;
+    $pagingNote: JQuery;
+    $settingsButton: JQuery;
+    $title: JQuery;
     $wholeImageHighResButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
-    $buttonsContainer: JQuery;
-    $downloadButton: JQuery;
     renderingUrls: string[];
     renderingUrlsCount: number;
 
-    static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
-    static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
     static DOWNLOAD: string = 'onDownload';
+    static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
+    static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
 
     constructor($element: JQuery) {
         super($element);
@@ -113,7 +113,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
         this.$settingsButton.onPressed(() => {
             this.close();
-            $.publish(settings.SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
+            $.publish(SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
         });
 
         // hide
@@ -131,7 +131,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
 
         if (this.isDownloadOptionAvailable(DownloadOption.wholeImageHighRes)) {
             var mime = this.getMimeTypeForCurrentCanvas();
-            var label = String.prototype.format(this.content.wholeImageHighRes, this.simplifyMimeType(mime));
+            var label = String.format(this.content.wholeImageHighRes, this.simplifyMimeType(mime));
             $('#' + DownloadOption.wholeImageHighRes.toString() + 'label').text(label);
             this.$wholeImageHighResButton.show();
         } else {
@@ -219,7 +219,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
                 } else {
                     label = defaultLabel;
                 }
-                label = String.prototype.format(label, this.simplifyMimeType(rendering.format));
+                label = String.format(label, this.simplifyMimeType(rendering.format));
                 var currentId = "dynamic_download_" + ++this.renderingUrlsCount;
                 this.renderingUrls[currentId] = rendering['@id'];
                 var newButton = $('<li class="dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
@@ -281,3 +281,5 @@ export class DownloadDialogue extends dialogue.Dialogue {
         });
     }
 }
+
+export = DownloadDialogue;

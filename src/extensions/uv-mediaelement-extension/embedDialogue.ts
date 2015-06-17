@@ -1,10 +1,10 @@
-import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import extension = require("./extension");
-import utils = require("../../utils");
-import embed = require("../../modules/uv-dialogues-module/embedDialogue");
-import IMediaElementProvider = require("./iMediaElementProvider");
+import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
+import Extension = require("./Extension");
+import IMediaElementProvider = require("./IMediaElementProvider");
+import Utils = require("../../Utils");
 
-export class EmbedDialogue extends embed.EmbedDialogue {
+class EmbedDialogue extends BaseEmbedDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -32,3 +32,5 @@ export class EmbedDialogue extends embed.EmbedDialogue {
 
     }
 }
+
+export = EmbedDialogue;

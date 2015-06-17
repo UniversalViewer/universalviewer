@@ -1,5 +1,5 @@
 
-import IExtension = require("../../modules/uv-shared-module/iExtension");
+import IExtension = require("../../modules/uv-shared-module/IExtension");
 
 interface IPDFExtension extends IExtension{
 

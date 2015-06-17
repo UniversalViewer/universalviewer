@@ -1,22 +1,22 @@
-import baseExtension = require("../../modules/uv-shared-module/baseExtension");
-import shell = require("../../modules/uv-shared-module/shell");
-import utils = require("../../utils");
-import dialogue = require("../../modules/uv-shared-module/dialogue");
-import IMediaElementExtension = require("./iMediaElementExtension");
-import IMediaElementProvider = require("./iMediaElementProvider");
+import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import Dialogue = require("../../modules/uv-shared-module/Dialogue");
 import DownloadOption = require("./DownloadOption");
-import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
+import IMediaElementExtension = require("./IMediaElementExtension");
+import IMediaElementProvider = require("./IMediaElementProvider");
 import RenderingFormat = require("../../modules/uv-shared-module/RenderingFormat");
+import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
+import Shell = require("../../modules/uv-shared-module/Shell");
+import Utils = require("../../Utils");
 
-export class DownloadDialogue extends dialogue.Dialogue {
+class DownloadDialogue extends Dialogue {
 
-    $title: JQuery;
-    $noneAvailable: JQuery;
     $downloadOptions: JQuery;
+    $noneAvailable: JQuery;
+    $title: JQuery;
 
-    static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
-    static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
     static DOWNLOAD: string = 'onDownload';
+    static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
+    static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
 
     constructor($element: JQuery) {
         super($element);
@@ -76,7 +76,7 @@ export class DownloadDialogue extends dialogue.Dialogue {
     }
 
     addEntireFileDownloadOption(fileUri: string): void{
-        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.prototype.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
+        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
     }
 
     getFileExtension(fileUri: string): string{
@@ -97,3 +97,5 @@ export class DownloadDialogue extends dialogue.Dialogue {
         });
     }
 }
+
+export = DownloadDialogue;

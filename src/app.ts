@@ -1,32 +1,34 @@
 require.config({
     paths: {
-        'modernizr': 'lib/modernizr',
+        'browserdetect': 'lib/browserdetect',
+        'ext': 'lib/extensions',
         'jquery': 'lib/jquery-1.10.2.min',
-        'plugins': 'lib/jquery.plugins',
-        'underscore': 'lib/underscore-min',
-        'pubsub': 'lib/pubsub',
         'jsviews': 'lib/jsviews.min',
-        'yepnope': 'lib/yepnope.1.5.4-min',
-        'yepnopecss': 'lib/yepnope.css',
         'l10n': 'lib/l10n',
+        'length': 'lib/Length.min',
+        'modernizr': 'lib/modernizr',
+        'plugins': 'lib/jquery.plugins',
+        'pubsub': 'lib/pubsub',
         'sanitize': 'lib/sanitize',
-        'length': 'lib/Length.min'
+        'underscore': 'lib/underscore-min',
+        'yepnope': 'lib/yepnope.1.5.4-min',
+        'yepnopecss': 'lib/yepnope.css'
     },
     shim: {
         jquery: {
             exports: '$'
         },
-        plugins: {
+        jsviews: {
             deps: ['jquery']
         },
-        underscore: {
-            exports: '_'
+        plugins: {
+            deps: ['jquery']
         },
         pubsub: {
             deps: ['jquery']
         },
-        jsviews: {
-            deps: ['jquery']
+        underscore: {
+            exports: '_'
         },
         yepnopecss: {
             deps: ['yepnope']
@@ -35,42 +37,48 @@ require.config({
 });
 
 require([
-        'modernizr',
+        'bootstrapper',
+        'browserdetect',
+        'ext',
+        'extensions/uv-mediaelement-extension/Extension',
+        'extensions/uv-mediaelement-extension/Provider',
+        'extensions/uv-pdf-extension/Extension',
+        'extensions/uv-pdf-extension/Provider',
+        'extensions/uv-seadragon-extension/Extension',
+        'extensions/uv-seadragon-extension/Provider',
         'jquery',
-        'plugins',
-        'underscore',
-        'pubsub',
         'jsviews',
+        'l10n',
+        'length',
+        'modernizr',
+        'plugins',
+        'pubsub',
+        'sanitize',
+        'underscore',
         'yepnope',
         'yepnopecss',
-        'bootstrapper',
-        'l10n',
-        'sanitize',
-        'extensions/uv-seadragon-extension/extension',
-        'extensions/uv-seadragon-extension/provider',
-        'extensions/uv-mediaelement-extension/extension',
-        'extensions/uv-mediaelement-extension/provider',
-        'extensions/uv-pdf-extension/extension',
-        'extensions/uv-pdf-extension/provider',
-        'length'
-    ], (modernizr,
-        $,
-        plugins,
-        _,
-        pubsub,
-        jsviews,
-        yepnope,
-        yepnopecss,
+    ], (
         bootstrapper,
-        l10n,
-        sanitize,
-        seadragonExtension,
-        seadragonProvider,
+        browserdetect,
+        ext,
         mediaelementExtension,
         mediaelementProvider,
         pdfExtension,
         pdfProvider,
-        Length) => {
+        seadragonExtension,
+        seadragonProvider,
+        $,
+        jsviews,
+        l10n,
+        length,
+        modernizr,
+        plugins,
+        pubsub,
+        sanitize,
+        _,
+        yepnope,
+        yepnopecss
+    ) => {
 
         // todo: use a compiler flag (when available)
         window.DEBUG = true; // this line is removed on build.
@@ -78,26 +86,26 @@ require([
         var extensions = {};
 
         extensions['seadragon/iiif'] = {
-            type: seadragonExtension.Extension,
-            provider: seadragonProvider.Provider,
+            type: seadragonExtension,
+            provider: seadragonProvider,
             name: 'uv-seadragon-extension'
         };
 
         extensions['video/iiif'] = {
-            type: mediaelementExtension.Extension,
-            provider: mediaelementProvider.Provider,
+            type: mediaelementExtension,
+            provider: mediaelementProvider,
             name: 'uv-mediaelement-extension'
         };
 
         extensions['audio/iiif'] = {
-            type: mediaelementExtension.Extension,
-            provider: mediaelementProvider.Provider,
+            type: mediaelementExtension,
+            provider: mediaelementProvider,
             name: 'uv-mediaelement-extension'
         };
 
         extensions['pdf/iiif'] = {
-            type: pdfExtension.Extension,
-            provider: pdfProvider.Provider,
+            type: pdfExtension,
+            provider: pdfProvider,
             name: 'uv-pdf-extension'
         };
 

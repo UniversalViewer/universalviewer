@@ -1,15 +1,15 @@
-import panel = require("./panel");
-import BootStrapper = require("../../bootstrapper");
+import Panel = require("./Panel");
+import BootStrapper = require("../../Bootstrapper");
 
-export class BaseView extends panel.Panel{
+class BaseView extends Panel{
 
     bootstrapper: BootStrapper;
-    extension: any;
-    provider: any;
     config: any;
     content: any;
-    options: any;
+    extension: any;
     modules: string[];
+    options: any;
+    provider: any;
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
         this.modules = [];
@@ -51,3 +51,5 @@ export class BaseView extends panel.Panel{
         super.resize();
     }
 }
+
+export = BaseView;

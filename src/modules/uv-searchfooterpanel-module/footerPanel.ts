@@ -1,38 +1,37 @@
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import baseExtension = require("../uv-shared-module/baseExtension");
-import footer = require("../uv-shared-module/footerPanel");
-import download = require("../../extensions/uv-seadragon-extension/downloadDialogue");
-import AutoComplete = require("./autocomplete");
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/iSeadragonExtension");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/iSeadragonProvider");
-import utils = require("../../utils");
-import util = utils.Utils;
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseFooterPanel = require("../uv-shared-module/FooterPanel");
+import DownloadDialogue = require("../../extensions/uv-seadragon-extension/DownloadDialogue");
+import AutoComplete = require("./Autocomplete");
+import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
+import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
+import Utils = require("../../Utils");
 
-export class FooterPanel extends footer.FooterPanel {
+class FooterPanel extends BaseFooterPanel {
 
-    $searchContainer: JQuery;
-    $searchOptions: JQuery;
-    $searchLabel: JQuery;
-    $searchTextContainer: JQuery;
-    $searchText: JQuery;
+    $clearSearchResultsButton: JQuery;
+    $line: JQuery;
+    $nextResultButton: JQuery;
+    $pagePositionLabel: JQuery;
+    $pagePositionMarker: JQuery;
+    $placemarkerDetails: JQuery;
+    $placemarkerDetailsBottom: JQuery;
+    $placemarkerDetailsTop: JQuery;
+    $previousResultButton: JQuery;
     $searchButton: JQuery;
+    $searchContainer: JQuery;
+    $searchLabel: JQuery;
+    $searchOptions: JQuery;
     $searchPagerContainer: JQuery;
     $searchPagerControls: JQuery;
-    $previousResultButton: JQuery;
-    $searchResultsInfo: JQuery;
-    $clearSearchResultsButton: JQuery;
-    $nextResultButton: JQuery;
     $searchResultsContainer: JQuery;
-    $line: JQuery;
-    $pagePositionMarker: JQuery;
-    $pagePositionLabel: JQuery;
-    $placemarkerDetails: JQuery;
-    $placemarkerDetailsTop: JQuery;
-    $placemarkerDetailsBottom: JQuery;
+    $searchResultsInfo: JQuery;
+    $searchText: JQuery;
+    $searchTextContainer: JQuery;
 
-    static PREV_SEARCH_RESULT: string = 'footer.onPrevSearchResult';
-    static NEXT_SEARCH_RESULT: string = 'footer.onNextSearchResult';
     static CLEAR_SEARCH: string = 'footer.onClearSearch';
+    static NEXT_SEARCH_RESULT: string = 'footer.onNextSearchResult';
+    static PREV_SEARCH_RESULT: string = 'footer.onPrevSearchResult';
     static SEARCH: string = 'footer.onSearch';
     static VIEW_PAGE: string = 'footer.onViewPage';
 
@@ -50,19 +49,19 @@ export class FooterPanel extends footer.FooterPanel {
 
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged();
         });
 
-        $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(Extension.SETTINGS_CHANGED, (e, mode) => {
             this.settingsChanged();
         });
 
-        $.subscribe(extension.Extension.SEARCH_RESULTS, (e, terms, results) => {
+        $.subscribe(Extension.SEARCH_RESULTS, (e, terms, results) => {
             this.displaySearchResults(terms, results);
         });
 
-        $.subscribe(extension.Extension.CREATED, (e) => {
+        $.subscribe(Extension.CREATED, (e) => {
             this.checkForSearchParams();
         });
 
@@ -206,8 +205,8 @@ export class FooterPanel extends footer.FooterPanel {
         // if a h or q value is in the hash params, do a search.
         if (this.provider.isDeepLinkingEnabled()){
 
-            var terms = util.getHashParameter('h', parent.document)
-                    || util.getHashParameter('q', parent.document);
+            var terms = Utils.Urls.getHashParameter('h', parent.document)
+                    || Utils.Urls.getHashParameter('q', parent.document);
 
             if (terms){
                 this.terms = terms.replace(/\+/g, " ").replace(/"/g, "");
@@ -321,7 +320,7 @@ export class FooterPanel extends footer.FooterPanel {
 
         var mode = that.extension.getMode();
 
-        if (mode === extension.Extension.PAGE_MODE) {
+        if (mode === Extension.PAGE_MODE) {
             var canvas = that.provider.getCanvasByIndex(canvasIndex);
 
             var label = canvas.label;
@@ -330,25 +329,25 @@ export class FooterPanel extends footer.FooterPanel {
                 label = "-";
             }
 
-            title = String.prototype.format(title, that.content.pageCaps, label);
+            title = String.format(title, that.content.pageCaps, label);
         } else {
-            title = String.prototype.format(title, that.content.imageCaps, canvasIndex + 1);
+            title = String.format(title, that.content.imageCaps, canvasIndex + 1);
         }
 
         that.$placemarkerDetailsTop.html(title);
 
         var result = that.provider.searchResults[elemIndex];
 
-        var terms = util.ellipsis(that.terms, that.options.elideDetailsTermsCount);
+        var terms = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
 
         var instancesFoundText;
 
         if (result.rects.length == 1) {
             instancesFoundText = that.content.instanceFound;
-            instancesFoundText = String.prototype.format(instancesFoundText, terms);
+            instancesFoundText = String.format(instancesFoundText, terms);
         } else {
             instancesFoundText = that.content.instancesFound;
-            instancesFoundText = String.prototype.format(instancesFoundText, result.rects.length, terms);
+            instancesFoundText = String.format(instancesFoundText, result.rects.length, terms);
         }
 
         that.$placemarkerDetailsBottom.html(instancesFoundText);
@@ -475,14 +474,14 @@ export class FooterPanel extends footer.FooterPanel {
             }
 
             var lastCanvasOrderLabel = this.provider.getLastCanvasLabel();
-            this.$pagePositionLabel.html(String.prototype.format(displaying, this.content.page, label, lastCanvasOrderLabel));
+            this.$pagePositionLabel.html(String.format(displaying, this.content.page, label, lastCanvasOrderLabel));
         } else {
-            this.$pagePositionLabel.html(String.prototype.format(displaying, this.content.image, index + 1, this.provider.getTotalCanvases()));
+            this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.provider.getTotalCanvases()));
         }
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === extension.Extension.PAGE_MODE;
+        return this.config.options.pageModeEnabled && this.extension.getMode() === Extension.PAGE_MODE;
     }
 
     displaySearchResults(terms, results): void {
@@ -510,7 +509,7 @@ export class FooterPanel extends footer.FooterPanel {
         }
 
         var $terms = this.$searchPagerContainer.find('.terms');
-        $terms.html(util.ellipsis(terms, this.options.elideResultsTermsCount));
+        $terms.html(Utils.Strings.ellipsis(terms, this.options.elideResultsTermsCount));
         $terms.prop('title', terms);
 
         this.$searchPagerContainer.show();
@@ -542,3 +541,5 @@ export class FooterPanel extends footer.FooterPanel {
         });
     }
 }
+
+export = FooterPanel;

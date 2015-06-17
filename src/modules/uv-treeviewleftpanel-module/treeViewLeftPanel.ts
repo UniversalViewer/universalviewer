@@ -1,36 +1,36 @@
-import baseLeft = require("../uv-shared-module/leftPanel");
-import utils = require("../../utils");
-import tree = require("./treeView");
-import TreeNode = require("../uv-shared-module/treeNode");
-import thumbs = require("./thumbsView");
-import gallery = require("./galleryView");
-import baseView = require("../uv-shared-module/baseView");
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import baseExtension = require("../uv-shared-module/baseExtension");
-import IProvider = require("../uv-shared-module/iProvider");
+import LeftPanel = require("../uv-shared-module/LeftPanel");
+import Utils = require("../../Utils");
+import TreeView = require("./TreeView");
+import TreeNode = require("../uv-shared-module/TreeNode");
+import ThumbsView = require("./ThumbsView");
+import GalleryView = require("./GalleryView");
+import BaseView = require("../uv-shared-module/BaseView");
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import IProvider = require("../uv-shared-module/IProvider");
 
-export class TreeViewLeftPanel extends baseLeft.LeftPanel {
+class TreeViewLeftPanel extends LeftPanel {
 
-    $tabs: JQuery;
-    $treeButton: JQuery;
-    $thumbsButton: JQuery;
-    $tabsContent: JQuery;
-    $options: JQuery;
-    $views: JQuery;
-    $treeView: JQuery;
-    $thumbsView: JQuery;
     $galleryView: JQuery;
+    $options: JQuery;
+    $tabs: JQuery;
+    $tabsContent: JQuery;
+    $thumbsButton: JQuery;
+    $thumbsView: JQuery;
+    $treeButton: JQuery;
+    $treeView: JQuery;
+    $views: JQuery;
+    galleryView: GalleryView;
+    thumbsView: ThumbsView;
     treeData: TreeNode;
-    treeView: tree.TreeView;
-    thumbsView: thumbs.ThumbsView;
-    galleryView: gallery.GalleryView;
+    treeView: TreeView;
 
-    static OPEN_TREE_VIEW: string = 'leftPanel.onOpenTreeView';
-    static OPEN_THUMBS_VIEW: string = 'leftPanel.onOpenThumbsView';
-    static EXPAND_FULL_START: string = 'leftPanel.onExpandFullStart';
-    static EXPAND_FULL_FINISH: string = 'leftPanel.onExpandFullFinish';
-    static COLLAPSE_FULL_START: string = 'leftPanel.onCollapseFullStart';
     static COLLAPSE_FULL_FINISH: string = 'leftPanel.onCollapseFullFinish';
+    static COLLAPSE_FULL_START: string = 'leftPanel.onCollapseFullStart';
+    static EXPAND_FULL_FINISH: string = 'leftPanel.onExpandFullFinish';
+    static EXPAND_FULL_START: string = 'leftPanel.onExpandFullStart';
+    static OPEN_THUMBS_VIEW: string = 'leftPanel.onOpenThumbsView';
+    static OPEN_TREE_VIEW: string = 'leftPanel.onOpenTreeView';
 
     constructor($element: JQuery) {
         super($element);
@@ -42,17 +42,17 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         super.create();
 
-        $.subscribe(extension.Extension.SETTINGS_CHANGED, () => {
+        $.subscribe(Extension.SETTINGS_CHANGED, () => {
             this.dataBindThumbsView();
             this.dataBindTreeView();
             this.dataBindGalleryView();
         });
 
-        $.subscribe(gallery.GalleryView.THUMB_SELECTED, () => {
+        $.subscribe(GalleryView.THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
+        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
             if (this.isFullyExpanded){
                 this.collapseFull();
             }
@@ -108,7 +108,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     createTreeView(): void {
-        this.treeView = new tree.TreeView(this.$treeView);
+        this.treeView = new TreeView(this.$treeView);
         this.treeView.elideCount = this.config.options.elideCount;
         this.dataBindTreeView();
     }
@@ -120,7 +120,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     createThumbsView(): void {
-        this.thumbsView = new thumbs.ThumbsView(this.$thumbsView);
+        this.thumbsView = new ThumbsView(this.$thumbsView);
         this.dataBindThumbsView();
     }
 
@@ -142,7 +142,7 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
     }
 
     createGalleryView(): void {
-        this.galleryView = new gallery.GalleryView(this.$galleryView);
+        this.galleryView = new GalleryView(this.$galleryView);
         this.dataBindGalleryView();
     }
 
@@ -159,8 +159,8 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
 
         if (this.isUnopened) {
 
-            var treeEnabled = utils.Utils.getBool(this.config.options.treeEnabled, true);
-            var thumbsEnabled = utils.Utils.getBool(this.config.options.thumbsEnabled, true);
+            var treeEnabled = Utils.Bools.getBool(this.config.options.treeEnabled, true);
+            var thumbsEnabled = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
             this.treeData = this.provider.getTree();
 
@@ -276,3 +276,5 @@ export class TreeViewLeftPanel extends baseLeft.LeftPanel {
         this.$views.height(this.$tabsContent.height() - this.$options.height());
     }
 }
+
+export = TreeViewLeftPanel;

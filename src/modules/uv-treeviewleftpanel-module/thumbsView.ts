@@ -1,18 +1,18 @@
-import utils = require("../../utils");
-import baseExtension = require("../uv-shared-module/baseExtension");
-import extension = require("../../extensions/uv-seadragon-extension/extension");
-import shell = require("../uv-shared-module/shell");
-import baseView = require("../uv-shared-module/baseView");
-import IProvider = require("../uv-shared-module/iProvider");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/iSeadragonProvider");
-import Thumb = require("../uv-shared-module/thumb");
+import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseView = require("../uv-shared-module/BaseView");
+import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import IProvider = require("../uv-shared-module/IProvider");
+import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
+import Shell = require("../uv-shared-module/Shell");
+import Thumb = require("../uv-shared-module/Thumb");
+import Utils = require("../../Utils");
 
-export class ThumbsView extends baseView.BaseView {
+class ThumbsView extends BaseView {
 
-    $thumbs: JQuery;
     $selectedThumb: JQuery;
-    isOpen: boolean = false;
+    $thumbs: JQuery;
     isCreated: boolean = false;
+    isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
     static THUMB_SELECTED: string = 'thumbsView.onThumbSelected';
@@ -29,11 +29,11 @@ export class ThumbsView extends baseView.BaseView {
 
         super.create();
 
-        $.subscribe(baseExtension.BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
+        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(extension.Extension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(Extension.SETTINGS_CHANGED, (e, mode) => {
             this.setLabel();
         });
 
@@ -225,7 +225,7 @@ export class ThumbsView extends baseView.BaseView {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode() === extension.Extension.PAGE_MODE;
+        return this.config.options.pageModeEnabled && this.extension.getMode() === Extension.PAGE_MODE;
     }
 
     selectIndex(index): void {
@@ -266,3 +266,5 @@ export class ThumbsView extends baseView.BaseView {
 
     }
 }
+
+export = ThumbsView;

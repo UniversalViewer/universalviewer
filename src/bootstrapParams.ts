@@ -1,19 +1,17 @@
-
-
-class bootstrapParams {
-    manifestUri: string;
+class BootstrapParams {
     config: string;
-    jsonp: boolean;
+    domain: string;
+    embedDomain: string;
+    embedScriptUri: string;
     isHomeDomain: boolean;
+    isLightbox: boolean;
+    isOnlyInstance: boolean;
     isReload: boolean;
+    jsonp: boolean;
     locale: string;
     localeName: string;
     locales: any[];
-    embedDomain: string;
-    isOnlyInstance: boolean;
-    embedScriptUri: string;
-    domain: string;
-    isLightbox: boolean;
+    manifestUri: string;
 
     // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' into array
     setLocale(locale: string): void {
@@ -37,4 +35,4 @@ class bootstrapParams {
     }
 }
 
-export = bootstrapParams;
+export = BootstrapParams;

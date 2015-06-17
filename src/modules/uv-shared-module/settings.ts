@@ -1,4 +1,4 @@
-export enum viewingHint{
+export enum ViewingHint{
     individuals,
     paged
 }
