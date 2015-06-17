@@ -85,7 +85,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        cwd: 'src/lib',
+                        cwd: '<%= dirs.lib %>',
                         src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js', 'l10n.js', 'base64.min.js'],
                         dest: '<%= dirs.build %>/lib/'
                     },
@@ -175,7 +175,7 @@ module.exports = function (grunt) {
                         cwd: '<%= dirs.build %>',
                         expand: true,
                         src: ['**'],
-                        dest: '<%= dirs.examples %>/build'
+                        dest: '<%= dirs.examples %>/build/'
                     },
                     // misc
                     {
@@ -226,6 +226,8 @@ module.exports = function (grunt) {
                     {
                         // all files that need to be copied from /lib to /src/lib post bower install
                         cwd: '<%= dirs.bower %>',
+                        expand: true,
+                        flatten: true,
                         src: ['extensions/dist/extensions.js'],
                         dest: '<%= dirs.lib %>'
                     }
