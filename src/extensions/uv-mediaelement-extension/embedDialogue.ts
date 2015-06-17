@@ -1,6 +1,4 @@
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
-import Extension = require("./Extension");
 import IMediaElementProvider = require("./IMediaElementProvider");
 import Utils = require("../../Utils");
 

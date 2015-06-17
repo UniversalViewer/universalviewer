@@ -1,5 +1,3 @@
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Extension = require("./Extension");
 import Utils = require("../../Utils");
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
 import IPDFProvider = require("./IPDFProvider");

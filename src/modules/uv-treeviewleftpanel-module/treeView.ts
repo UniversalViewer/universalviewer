@@ -1,5 +1,6 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import BaseView = require("../uv-shared-module/BaseView");
+import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import Shell = require("../uv-shared-module/Shell");
 import TreeNode = require("../uv-shared-module/TreeNode");
 import Utils = require("../../Utils");
@@ -13,8 +14,6 @@ class TreeView extends BaseView {
 
     public rootNode: TreeNode;
 
-    static NODE_SELECTED: string = 'treeView.onNodeSelected';
-
     constructor($element: JQuery) {
         super($element, true, true);
     }
@@ -22,7 +21,7 @@ class TreeView extends BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.selectTreeNodeFromCanvasIndex(canvasIndex);
         });
 
@@ -95,7 +94,7 @@ class TreeView extends BaseView {
                                 self.toggle();
                             }
 
-                            $.publish(TreeView.NODE_SELECTED, [self.data.data]);
+                            $.publish(Commands.TREE_NODE_SELECTED, [self.data.data]);
                         });
                 },
                 template: $.templates.treeTemplate

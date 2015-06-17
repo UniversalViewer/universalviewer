@@ -1,19 +1,21 @@
+import BaseCommands = require("../../modules/uv-shared-module/Commands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import BootStrapper = require("../../Bootstrapper");
-import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
+import Commands = require("./Commands");
 import EmbedDialogue = require("./EmbedDialogue");
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
 import IPDFProvider = require("./IPDFProvider");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
-import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
-import Provider = require("./Provider");
+import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
+import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
+import Provider = require("./Provider");
+import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import ThumbsView = require("../../modules/uv-treeviewleftpanel-module/ThumbsView");
+import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
 import Utils = require("../../Utils");
 
 class Extension extends BaseExtension{
@@ -36,39 +38,39 @@ class Extension extends BaseExtension{
 
         var that = this;
 
-        $.subscribe(ThumbsView.THUMB_SELECTED, (e, index: number) => {
+        $.subscribe(Commands.THUMB_SELECTED, (e, index: number) => {
             window.open((<IPDFProvider>that.provider).getPDFUri());
         });
 
-        $.subscribe(FooterPanel.EMBED, (e) => {
-            $.publish(EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        $.subscribe(BaseCommands.EMBED, (e) => {
+            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(Shell.SHOW_OVERLAY, (e, params) => {
+        $.subscribe(BaseCommands.SHOW_OVERLAY, (e, params) => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.hide();
             }
         });
 
-        $.subscribe(Shell.HIDE_OVERLAY, (e, params) => {
+        $.subscribe(BaseCommands.HIDE_OVERLAY, (e, params) => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
             }
         });
 
-        $.subscribe(LeftPanel.OPEN_LEFT_PANEL, (e) => {
+        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(RightPanel.OPEN_RIGHT_PANEL, (e) => {
+        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
             this.resize();
         });
     }

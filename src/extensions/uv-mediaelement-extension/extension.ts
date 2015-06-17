@@ -1,4 +1,6 @@
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import BaseCommands = require("../../modules/uv-shared-module/Commands");
+import Commands = require("./Commands");
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
@@ -31,10 +33,6 @@ class Extension extends BaseExtension{
     leftPanel: TreeViewLeftPanel;
     rightPanel: MoreInfoRightPanel;
 
-    static MEDIA_ENDED: string = 'onMediaEnded';
-    static MEDIA_PAUSED: string = 'onMediaPaused';
-    static MEDIA_PLAYED: string = 'onMediaPlayed';
-
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
     }
@@ -44,38 +42,38 @@ class Extension extends BaseExtension{
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
-            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
+            $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
         $(window).bind('exitfullscreen', () => {
-            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
+            $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(TreeView.NODE_SELECTED, (e, data: any) => {
+        $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
             this.viewManifest(data);
         });
 
-        $.subscribe(FooterPanel.DOWNLOAD, (e) => {
-            $.publish(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
+        $.subscribe(BaseCommands.DOWNLOAD, (e) => {
+            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(FooterPanel.EMBED, (e) => {
-            $.publish(EmbedDialogue.SHOW_EMBED_DIALOGUE);
+        $.subscribe(BaseCommands.EMBED, (e) => {
+            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(LeftPanel.OPEN_LEFT_PANEL, (e) => {
+        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(RightPanel.OPEN_RIGHT_PANEL, (e) => {
+        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
             this.resize();
         });
     }

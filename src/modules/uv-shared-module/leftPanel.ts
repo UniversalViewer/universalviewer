@@ -1,10 +1,8 @@
+import BaseCommands = require("./Commands");
 import BaseExpandPanel = require("./BaseExpandPanel");
 import Utils = require("../../Utils");
 
 class LeftPanel extends BaseExpandPanel {
-
-    static CLOSE_LEFT_PANEL: string = 'onCloseLeftPanel';
-    static OPEN_LEFT_PANEL: string = 'onOpenLeftPanel';
 
     constructor($element: JQuery) {
         super($element);
@@ -42,9 +40,9 @@ class LeftPanel extends BaseExpandPanel {
         super.toggleFinish();
 
         if (this.isExpanded){
-            $.publish(LeftPanel.OPEN_LEFT_PANEL);
+            $.publish(BaseCommands.OPEN_LEFT_PANEL);
         } else {
-            $.publish(LeftPanel.CLOSE_LEFT_PANEL);
+            $.publish(BaseCommands.CLOSE_LEFT_PANEL);
         }
     }
 

@@ -1,10 +1,9 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import BaseView = require("../uv-shared-module/BaseView");
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
+import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import Shell = require("../uv-shared-module/Shell");
 import Thumb = require("../uv-shared-module/Thumb");
 import Utils = require("../../Utils");
 
@@ -21,8 +20,6 @@ class GalleryView extends BaseView {
     lastThumbClickedIndex: number;
     range: number;
 
-    static THUMB_SELECTED: string = 'galleryView.onThumbSelected';
-
     public thumbs: Thumb[];
 
     constructor($element: JQuery) {
@@ -35,11 +32,11 @@ class GalleryView extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(BaseExtension.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
             this.setLabel();
         });
 
@@ -141,7 +138,7 @@ class GalleryView extends BaseView {
 
             that.lastThumbClickedIndex = data.index;
 
-            $.publish(GalleryView.THUMB_SELECTED, [data.index]);
+            $.publish(Commands.THUMB_SELECTED, [data.index]);
         });
 
         this.selectIndex(this.provider.canvasIndex);

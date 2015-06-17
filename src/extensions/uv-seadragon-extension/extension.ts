@@ -1,6 +1,8 @@
+import BaseCommands = require("../../modules/uv-shared-module/Commands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
+import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
@@ -41,13 +43,9 @@ class Extension extends BaseExtension {
     helpDialogue: HelpDialogue;
     isLoading: boolean = false;
     leftPanel: TreeViewLeftPanel;
+    mode: Mode;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
-
-    static CURRENT_VIEW_URI: string = 'onCurrentViewUri';
-    static mode: Mode;
-    static SEARCH_RESULTS: string = 'onSearchResults';
-    static SEARCH_RESULTS_EMPTY: string = 'onSearchResults'; // todo: should be onSearchResultsEmpty?
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -59,160 +57,148 @@ class Extension extends BaseExtension {
         var that = this;
 
         // events.
-        $.subscribe(PagingHeaderPanel.FIRST, (e) => {
+        $.subscribe(Commands.FIRST, (e) => {
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
-        $.subscribe(Extension.HOME, (e) => {
+        $.subscribe(BaseCommands.HOME, (e) => {
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
-        $.subscribe(PagingHeaderPanel.LAST, (e) => {
+        $.subscribe(Commands.LAST, (e) => {
             this.viewPage(this.provider.getLastPageIndex());
         });
 
-        $.subscribe(Extension.END, (e) => {
+        $.subscribe(BaseCommands.END, (e) => {
             this.viewPage(this.provider.getLastPageIndex());
         });
 
-        $.subscribe(PagingHeaderPanel.PREV, (e) => {
+        $.subscribe(Commands.PREV, (e) => {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
-        $.subscribe(PagingHeaderPanel.NEXT, (e) => {
+        $.subscribe(Commands.NEXT, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
-        $.subscribe(Extension.PAGE_UP, (e) => {
+        $.subscribe(BaseCommands.PAGE_UP, (e) => {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
-        $.subscribe(Extension.PAGE_DOWN, (e) => {
+        $.subscribe(BaseCommands.PAGE_DOWN, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
-        $.subscribe(Extension.LEFT_ARROW, (e) => {
+        $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
-        $.subscribe(Extension.RIGHT_ARROW, (e) => {
+        $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
-        $.subscribe(PagingHeaderPanel.MODE_CHANGED, (e, mode: string) => {
-            Extension.mode = new Mode(mode);
-            $.publish(Extension.SETTINGS_CHANGED, [mode]);
+        $.subscribe(Commands.MODE_CHANGED, (e, mode: string) => {
+            this.mode = new Mode(mode);
+            $.publish(BaseCommands.SETTINGS_CHANGED, [mode]);
         });
 
-        $.subscribe(PagingHeaderPanel.PAGE_SEARCH, (e, value: string) => {
+        $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
             this.viewLabel(value);
         });
 
-        $.subscribe(PagingHeaderPanel.IMAGE_SEARCH, (e, index: number) => {
+        $.subscribe(Commands.IMAGE_SEARCH, (e, index: number) => {
             this.viewPage(index);
         });
 
-        $.subscribe(FooterPanel.SEARCH, (e, terms: string) => {
-            this.triggerSocket(FooterPanel.SEARCH, terms);
+        $.subscribe(Commands.SEARCH, (e, terms: string) => {
+            this.triggerSocket(Commands.SEARCH, terms);
             this.searchWithin(terms);
         });
 
-        $.subscribe(FooterPanel.VIEW_PAGE, (e, index: number) => {
+        $.subscribe(Commands.VIEW_PAGE, (e, index: number) => {
             this.viewPage(index);
         });
 
-        $.subscribe(FooterPanel.NEXT_SEARCH_RESULT, () => {
+        $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
             this.nextSearchResult();
         });
 
-        $.subscribe(FooterPanel.PREV_SEARCH_RESULT, () => {
+        $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
             this.prevSearchResult();
         });
 
-        $.subscribe(PagingHeaderPanel.UPDATE_SETTINGS, (e) => {
+        $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
             this.updateSettings();
         });
 
-        $.subscribe(SettingsDialogue.UPDATE_SETTINGS, (e) => {
+        $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
             this.updateSettings();
         });
 
-        $.subscribe(TreeView.NODE_SELECTED, (e, data: any) => {
+        $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
             this.treeNodeSelected(data);
         });
 
-        $.subscribe(ThumbsView.THUMB_SELECTED, (e, index: number) => {
+        $.subscribe(Commands.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
         });
 
-        $.subscribe(GalleryView.THUMB_SELECTED, (e, index: number) => {
-            this.viewPage(index);
-        });
-
-        $.subscribe(LeftPanel.OPEN_LEFT_PANEL, (e) => {
+        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(LeftPanel.CLOSE_LEFT_PANEL, (e) => {
+        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(RightPanel.OPEN_RIGHT_PANEL, (e) => {
+        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(RightPanel.CLOSE_RIGHT_PANEL, (e) => {
+        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
             this.resize();
         });
 
-        $.subscribe(TreeViewLeftPanel.EXPAND_FULL_START, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(TreeViewLeftPanel.COLLAPSE_FULL_FINISH, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
+        $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             if (this.centerPanel && this.centerPanel.currentBounds){
                 this.setParam(Params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
             }
 
             var canvas = this.provider.getCurrentCanvas();
 
-            this.triggerSocket(Extension.CURRENT_VIEW_URI,
+            this.triggerSocket(Commands.CURRENT_VIEW_URI,
                 {
                     "cropUri": (<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, this.getViewer(), true),
                     "fullUri": (<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.width, canvas.height)
                 });
         });
 
-        $.subscribe(SeadragonCenterPanel.SEADRAGON_OPEN, () => {
+        $.subscribe(Commands.SEADRAGON_OPEN, () => {
             this.isLoading = false;
         });
 
-        $.subscribe(SeadragonCenterPanel.SEADRAGON_ROTATION, (e, rotation) => {
+        $.subscribe(Commands.SEADRAGON_ROTATION, (e, rotation) => {
             this.currentRotation = rotation;
             this.setParam(Params.rotation, rotation);
         });
 
-        $.subscribe(SeadragonCenterPanel.PREV, (e) => {
-            this.viewPage(this.provider.getPrevPageIndex());
+        $.subscribe(BaseCommands.EMBED, (e) => {
+            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(SeadragonCenterPanel.NEXT, (e) => {
-            this.viewPage(this.provider.getNextPageIndex());
-        });
-
-        $.subscribe(FooterPanel.EMBED, (e) => {
-            $.publish(EmbedDialogue.SHOW_EMBED_DIALOGUE);
-        });
-
-        $.subscribe(FooterPanel.DOWNLOAD, (e) => {
-            $.publish(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE);
+        $.subscribe(BaseCommands.DOWNLOAD, (e) => {
+            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
     }
 
@@ -273,7 +259,7 @@ class Extension extends BaseExtension {
 
     updateSettings(): void {
         this.viewPage(this.provider.canvasIndex, true);
-        $.publish(Extension.SETTINGS_CHANGED);
+        $.publish(BaseCommands.SETTINGS_CHANGED);
     }
 
     viewPage(canvasIndex: number, isReload?: boolean): void {
@@ -305,7 +291,7 @@ class Extension extends BaseExtension {
         this.viewCanvas(canvasIndex, () => {
             var canvas = this.provider.getCanvasByIndex(canvasIndex);
             var uri = (<ISeadragonProvider>this.provider).getImageUri(canvas);
-            $.publish(Extension.OPEN_MEDIA, [uri]);
+            $.publish(BaseCommands.OPEN_MEDIA, [uri]);
             this.setParam(Params.canvasIndex, canvasIndex);
         });
 
@@ -316,7 +302,7 @@ class Extension extends BaseExtension {
     }
 
     getMode(): Mode {
-        if (Extension.mode) return Extension.mode;
+        if (this.mode) return this.mode;
 
         switch (this.provider.getManifestType()) {
             case 'monograph':
@@ -366,7 +352,7 @@ class Extension extends BaseExtension {
 
         if (!label) {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.emptyValue);
-            $.publish(Extension.CANVAS_INDEX_CHANGE_FAILED);
+            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
 
@@ -376,7 +362,7 @@ class Extension extends BaseExtension {
             this.viewPage(index);
         } else {
             this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
-            $.publish(Extension.CANVAS_INDEX_CHANGE_FAILED);
+            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
         }
     }
 
@@ -396,13 +382,13 @@ class Extension extends BaseExtension {
 
         (<ISeadragonProvider>this.provider).searchWithin(terms, (results: any) => {
             if (results.resources.length) {
-                $.publish(Extension.SEARCH_RESULTS, [terms, results.resources]);
+                $.publish(Commands.SEARCH_RESULTS, [terms, results.resources]);
 
                 // reload current index as it may contain results.
                 that.viewPage(that.provider.canvasIndex, true);
             } else {
                 that.showDialogue(that.provider.config.modules.genericDialogue.content.noMatches, () => {
-                    $.publish(Extension.SEARCH_RESULTS_EMPTY);
+                    $.publish(Commands.SEARCH_RESULTS_EMPTY);
                 });
             }
         });

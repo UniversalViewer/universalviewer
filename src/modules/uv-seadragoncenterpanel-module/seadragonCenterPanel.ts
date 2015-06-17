@@ -1,7 +1,7 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import BaseProvider = require("../uv-shared-module/BaseProvider");
+import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Page = require("../../extensions/uv-seadragon-extension/Page");
 import Params = require("../uv-shared-module/Params");
@@ -36,15 +36,6 @@ class SeadragonCenterPanel extends CenterPanel {
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
 
-    static NEXT: string = 'center.onNext';
-    static PREV: string = 'center.onPrev';
-    static SEADRAGON_ANIMATION: string = 'center.onAnimation';
-    static SEADRAGON_ANIMATION_FINISH: string = 'center.onAnimationfinish';
-    static SEADRAGON_ANIMATION_START: string = 'center.onAnimationStart';
-    static SEADRAGON_OPEN: string = 'center.onOpen';
-    static SEADRAGON_RESIZE: string = 'center.onResize';
-    static SEADRAGON_ROTATION: string = 'center.onRotation';
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -58,7 +49,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.append(this.$viewer);
 
-        $.subscribe(BaseExtension.OPEN_MEDIA, () => {
+        $.subscribe(BaseCommands.OPEN_MEDIA, () => {
             this.tryLoad();
         });
     }
@@ -207,7 +198,7 @@ class SeadragonCenterPanel extends CenterPanel {
         }, this.config.options.controlsFadeAfterInactive);
 
         this.viewer.addHandler('open', (viewer) => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_OPEN, [viewer]);
+            $.publish(Commands.SEADRAGON_OPEN, [viewer]);
             this.openPagesHandler();
         });
 
@@ -219,26 +210,26 @@ class SeadragonCenterPanel extends CenterPanel {
         //});
 
         this.viewer.addHandler('resize', (viewer) => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_RESIZE, [viewer]);
+            $.publish(Commands.SEADRAGON_RESIZE, [viewer]);
             this.viewerResize(viewer);
         });
 
         this.viewer.addHandler('animation-start', (viewer) => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_START, [viewer]);
+            $.publish(Commands.SEADRAGON_ANIMATION_START, [viewer]);
         });
 
         this.viewer.addHandler('animation', (viewer) => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION, [viewer]);
+            $.publish(Commands.SEADRAGON_ANIMATION, [viewer]);
         });
 
         this.viewer.addHandler('animation-finish', (viewer) => {
             this.currentBounds = this.getBounds();
 
-            $.publish(SeadragonCenterPanel.SEADRAGON_ANIMATION_FINISH, [viewer]);
+            $.publish(Commands.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
 
         this.$rotateButton.on('click', () => {
-            $.publish(SeadragonCenterPanel.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
+            $.publish(Commands.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
         });
 
         this.title = this.extension.provider.getTitle();
@@ -282,7 +273,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.prevButtonEnabled) return;
 
-            $.publish(SeadragonCenterPanel.PREV);
+            $.publish(Commands.PREV);
         });
 
         this.$nextButton.on('touchstart click', (e) => {
@@ -291,7 +282,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.nextButtonEnabled) return;
 
-            $.publish(SeadragonCenterPanel.NEXT);
+            $.publish(Commands.NEXT);
         });
     }
 

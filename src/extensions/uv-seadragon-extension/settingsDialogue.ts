@@ -1,5 +1,4 @@
 import BaseSettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 
 class SettingsDialogue extends BaseSettingsDialogue {
 

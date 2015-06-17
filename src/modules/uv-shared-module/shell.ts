@@ -1,4 +1,4 @@
-import BaseExtension = require("./BaseExtension");
+import BaseCommands = require("./Commands");
 import BaseView = require("./BaseView");
 import GenericDialogue = require("./GenericDialogue");
 import Utils = require("../../Utils");
@@ -14,9 +14,6 @@ class Shell extends BaseView {
     static $overlays: JQuery;
     static $rightPanel: JQuery;
 
-    static HIDE_OVERLAY: string = 'onHideOverlay';
-    static SHOW_OVERLAY: string = 'onShowOverlay';
-
     constructor($element: JQuery) {
         Shell.$element = $element;
         super(Shell.$element, true, true);
@@ -25,11 +22,11 @@ class Shell extends BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(Shell.SHOW_OVERLAY, () => {
+        $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
             Shell.$overlays.show();
         });
 
-        $.subscribe(Shell.HIDE_OVERLAY, () => {
+        $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
             Shell.$overlays.hide();
         });
 
@@ -61,7 +58,7 @@ class Shell extends BaseView {
 
             if ($(e.target).hasClass('overlays')) {
                 e.preventDefault();
-                $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
+                $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
             }
         });
 

@@ -120,7 +120,7 @@ class AutoComplete{
     }
 
     getTerms(): string {
-        return this.$element.val().fulltrim();
+        return this.$element.val().trim();
     }
 
     setSelectedResultIndex(direction): void {

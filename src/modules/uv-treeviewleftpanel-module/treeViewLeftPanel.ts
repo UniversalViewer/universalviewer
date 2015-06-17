@@ -1,4 +1,5 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
+import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import GalleryView = require("./GalleryView");
 import IProvider = require("../uv-shared-module/IProvider");
 import LeftPanel = require("../uv-shared-module/LeftPanel");
@@ -23,13 +24,6 @@ class TreeViewLeftPanel extends LeftPanel {
     treeData: TreeNode;
     treeView: TreeView;
 
-    static COLLAPSE_FULL_FINISH: string = 'leftPanel.onCollapseFullFinish';
-    static COLLAPSE_FULL_START: string = 'leftPanel.onCollapseFullStart';
-    static EXPAND_FULL_FINISH: string = 'leftPanel.onExpandFullFinish';
-    static EXPAND_FULL_START: string = 'leftPanel.onExpandFullStart';
-    static OPEN_THUMBS_VIEW: string = 'leftPanel.onOpenThumbsView';
-    static OPEN_TREE_VIEW: string = 'leftPanel.onOpenTreeView';
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -40,17 +34,17 @@ class TreeViewLeftPanel extends LeftPanel {
 
         super.create();
 
-        $.subscribe(BaseExtension.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
             this.dataBindThumbsView();
             this.dataBindTreeView();
             this.dataBindGalleryView();
         });
 
-        $.subscribe(GalleryView.THUMB_SELECTED, () => {
+        $.subscribe(Commands.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
-        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, index) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
             if (this.isFullyExpanded){
                 this.collapseFull();
             }
@@ -88,13 +82,13 @@ class TreeViewLeftPanel extends LeftPanel {
         this.$treeButton.onPressed(() => {
             this.openTreeView();
 
-            $.publish(TreeViewLeftPanel.OPEN_TREE_VIEW);
+            $.publish(Commands.OPEN_TREE_VIEW);
         });
 
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
-            $.publish(TreeViewLeftPanel.OPEN_THUMBS_VIEW);
+            $.publish(Commands.OPEN_THUMBS_VIEW);
         });
 
         this.$expandButton.attr('tabindex', '7');
@@ -187,7 +181,7 @@ class TreeViewLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(TreeViewLeftPanel.EXPAND_FULL_START);
+        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
@@ -199,13 +193,13 @@ class TreeViewLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(TreeViewLeftPanel.EXPAND_FULL_FINISH);
+        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(TreeViewLeftPanel.COLLAPSE_FULL_START);
+        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
@@ -218,7 +212,7 @@ class TreeViewLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(TreeViewLeftPanel.COLLAPSE_FULL_FINISH);
+        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     openTreeView(): void {

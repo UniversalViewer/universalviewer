@@ -1,4 +1,4 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import Dialogue = require("../uv-shared-module/Dialogue");
 import Shell = require("../uv-shared-module/Shell");
 import Utils = require("../../Utils");
@@ -28,9 +28,6 @@ class EmbedDialogue extends Dialogue {
     smallHeight: number;
     smallWidth: number;
 
-    static HIDE_EMBED_DIALOGUE: string = 'onHideEmbedDialogue';
-    static SHOW_EMBED_DIALOGUE: string = 'onShowEmbedDialogue';
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -41,12 +38,12 @@ class EmbedDialogue extends Dialogue {
         
         super.create();
 
-        $.subscribe(EmbedDialogue.SHOW_EMBED_DIALOGUE, (e, params) => {
+        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, (e, params) => {
             this.open();
             this.formatCode();
         });
 
-        $.subscribe(EmbedDialogue.HIDE_EMBED_DIALOGUE, (e) => {
+        $.subscribe(BaseCommands.HIDE_EMBED_DIALOGUE, (e) => {
             this.close();
         });
 

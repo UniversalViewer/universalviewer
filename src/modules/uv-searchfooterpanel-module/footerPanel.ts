@@ -1,6 +1,6 @@
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import BaseFooterPanel = require("../uv-shared-module/FooterPanel");
+import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import DownloadDialogue = require("../../extensions/uv-seadragon-extension/DownloadDialogue");
 import AutoComplete = require("./Autocomplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
@@ -30,12 +30,6 @@ class FooterPanel extends BaseFooterPanel {
     $searchText: JQuery;
     $searchTextContainer: JQuery;
 
-    static CLEAR_SEARCH: string = 'footer.onClearSearch';
-    static NEXT_SEARCH_RESULT: string = 'footer.onNextSearchResult';
-    static PREV_SEARCH_RESULT: string = 'footer.onPrevSearchResult';
-    static SEARCH: string = 'footer.onSearch';
-    static VIEW_PAGE: string = 'footer.onViewPage';
-
     currentPlacemarkerIndex: number;
     placemarkerTouched: boolean = false;
     terms: string;
@@ -50,19 +44,19 @@ class FooterPanel extends BaseFooterPanel {
 
         super.create();
 
-        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged();
         });
 
-        $.subscribe(BaseExtension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, mode) => {
             this.settingsChanged();
         });
 
-        $.subscribe(Extension.SEARCH_RESULTS, (e, terms, results) => {
+        $.subscribe(Commands.SEARCH_RESULTS, (e, terms, results) => {
             this.displaySearchResults(terms, results);
         });
 
-        $.subscribe(BaseExtension.CREATED, (e) => {
+        $.subscribe(BaseCommands.CREATED, (e) => {
             this.checkForSearchParams();
         });
 
@@ -153,25 +147,25 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         this.$placemarkerDetails.on('click', (e) => {
-            $.publish(FooterPanel.VIEW_PAGE, [this.currentPlacemarkerIndex]);
+            $.publish(Commands.VIEW_PAGE, [this.currentPlacemarkerIndex]);
         });
 
         this.$previousResultButton.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(FooterPanel.PREV_SEARCH_RESULT);
+            $.publish(Commands.PREV_SEARCH_RESULT);
         });
 
         this.$nextResultButton.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(FooterPanel.NEXT_SEARCH_RESULT);
+            $.publish(Commands.NEXT_SEARCH_RESULT);
         });
 
         this.$clearSearchResultsButton.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(FooterPanel.CLEAR_SEARCH);
+            $.publish(Commands.CLEAR_SEARCH);
             this.clearSearchResults();
         });
 
@@ -213,7 +207,7 @@ class FooterPanel extends BaseFooterPanel {
                 this.terms = terms.replace(/\+/g, " ").replace(/"/g, "");
                 // blur search field
                 this.$searchText.blur();
-                $.publish(FooterPanel.SEARCH, [this.terms]);
+                $.publish(Commands.SEARCH, [this.terms]);
             }
         }
     }
@@ -233,7 +227,7 @@ class FooterPanel extends BaseFooterPanel {
         // blur search field
         this.$searchText.blur();
 
-        $.publish(FooterPanel.SEARCH, [this.terms]);
+        $.publish(Commands.SEARCH, [this.terms]);
     }
 
     getSearchResultPlacemarkers(): JQuery {
@@ -287,7 +281,7 @@ class FooterPanel extends BaseFooterPanel {
         var $placemarker = $(this);
         var index = parseInt($placemarker.attr('data-index'));
 
-        $.publish(FooterPanel.VIEW_PAGE, [index]);
+        $.publish(Commands.VIEW_PAGE, [index]);
     }
 
     onPlacemarkerClick(that): void {
@@ -298,7 +292,7 @@ class FooterPanel extends BaseFooterPanel {
         var $placemarker = $(this);
         var index = parseInt($placemarker.attr('data-index'));
 
-        $.publish(FooterPanel.VIEW_PAGE, [index]);
+        $.publish(Commands.VIEW_PAGE, [index]);
     }
 
     onPlacemarkerMouseEnter(that): void {

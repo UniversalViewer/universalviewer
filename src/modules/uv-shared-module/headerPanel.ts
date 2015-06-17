@@ -1,4 +1,4 @@
-import BaseExtension = require("./BaseExtension");
+import BaseCommands = require("./Commands");
 import BaseView = require("./BaseView");
 import BootstrapParams = require("../../BootstrapParams");
 import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
@@ -17,8 +17,6 @@ class HeaderPanel extends BaseView {
 
     message: string;
 
-    static UPDATE_SETTINGS: string = 'header.onUpdateSettings';
-
     constructor($element: JQuery) {
         super($element, false, false);
     }
@@ -29,15 +27,15 @@ class HeaderPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseExtension.SETTINGS_CHANGED, (e, message) => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, message) => {
             this.updatePagingToggle();
         });
 
-        $.subscribe(BaseExtension.SHOW_MESSAGE, (e, message) => {
+        $.subscribe(BaseCommands.SHOW_MESSAGE, (e, message) => {
             this.showMessage(message);
         });
 
-        $.subscribe(BaseExtension.HIDE_MESSAGE, () => {
+        $.subscribe(BaseCommands.HIDE_MESSAGE, () => {
             this.hideMessage();
         });
 
@@ -92,7 +90,7 @@ class HeaderPanel extends BaseView {
         });
 
         this.$settingsButton.onPressed(() => {
-            $.publish(SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
+            $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
 
         if (this.options.localeToggleEnabled === false){
@@ -166,7 +164,7 @@ class HeaderPanel extends BaseView {
     updateSettings(settings: ISettings): void {
         this.provider.updateSettings(settings);
 
-        $.publish(HeaderPanel.UPDATE_SETTINGS, [settings]);
+        $.publish(BaseCommands.UPDATE_SETTINGS, [settings]);
     }
 
     resize(): void {

@@ -1,4 +1,4 @@
-import BaseExtension = require("./BaseExtension");
+import BaseCommands = require("./Commands");
 import Dialogue = require("./Dialogue");
 
 class GenericDialogue extends Dialogue {
@@ -7,9 +7,6 @@ class GenericDialogue extends Dialogue {
 
     $acceptButton: JQuery;
     $message: JQuery;
-
-    static HIDE_GENERIC_DIALOGUE: string = 'onHideGenericDialogue';
-    static SHOW_GENERIC_DIALOGUE: string = BaseExtension.SHOW_GENERIC_DIALOGUE;
 
     constructor($element: JQuery) {
         super($element);
@@ -21,11 +18,11 @@ class GenericDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(GenericDialogue.SHOW_GENERIC_DIALOGUE, (e, params) => {          
+        $.subscribe(BaseCommands.SHOW_GENERIC_DIALOGUE, (e, params) => {
             this.showMessage(params);
         });
 
-        $.subscribe(GenericDialogue.HIDE_GENERIC_DIALOGUE, (e) => {
+        $.subscribe(BaseCommands.HIDE_GENERIC_DIALOGUE, (e) => {
             this.close();
         });
 
@@ -51,7 +48,7 @@ class GenericDialogue extends Dialogue {
 
     accept(): void {
 
-        $.publish(BaseExtension.CLOSE_ACTIVE_DIALOGUE);
+        $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
 
         if (this.acceptCallback) this.acceptCallback();
     }

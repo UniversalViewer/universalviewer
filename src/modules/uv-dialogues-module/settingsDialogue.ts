@@ -1,10 +1,9 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
 import BootstrapParams = require("../../BootstrapParams");
 import Dialogue = require("../uv-shared-module/Dialogue");
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
 import Shell = require("../uv-shared-module/Shell");
 import Utils = require("../../Utils");
 import Version = require("../../_Version");
+import Commands = require("../uv-shared-module/Commands");
 
 class SettingsDialogue extends Dialogue {
 
@@ -14,10 +13,6 @@ class SettingsDialogue extends Dialogue {
     $scroll: JQuery;
     $title: JQuery;
     $version: JQuery;
-
-    static HIDE_SETTINGS_DIALOGUE: string = 'onHideSettingsDialogue';
-    static SHOW_SETTINGS_DIALOGUE: string = 'onShowSettingsDialogue';
-    static UPDATE_SETTINGS: string = 'onUpdateSettings';
 
     constructor($element: JQuery) {
         super($element);
@@ -29,11 +24,11 @@ class SettingsDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(SettingsDialogue.SHOW_SETTINGS_DIALOGUE, (e, params) => {
+        $.subscribe(Commands.SHOW_SETTINGS_DIALOGUE, (e, params) => {
             this.open();
         });
 
-        $.subscribe(SettingsDialogue.HIDE_SETTINGS_DIALOGUE, (e) => {
+        $.subscribe(Commands.HIDE_SETTINGS_DIALOGUE, (e) => {
             this.close();
         });
 
@@ -87,7 +82,7 @@ class SettingsDialogue extends Dialogue {
     updateSettings(settings: ISettings): void {
         this.provider.updateSettings(settings);
 
-        $.publish(SettingsDialogue.UPDATE_SETTINGS, [settings]);
+        $.publish(Commands.UPDATE_SETTINGS, [settings]);
     }
 
     open(): void {

@@ -1,4 +1,4 @@
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import BaseCommands = require("../../modules/uv-shared-module/Commands");
 import Dialogue = require("../../modules/uv-shared-module/Dialogue");
 import DownloadOption = require("./DownloadOption");
 import IMediaElementExtension = require("./IMediaElementExtension");
@@ -14,10 +14,6 @@ class DownloadDialogue extends Dialogue {
     $noneAvailable: JQuery;
     $title: JQuery;
 
-    static DOWNLOAD: string = 'onDownload';
-    static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
-    static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -28,11 +24,11 @@ class DownloadDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
+        $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
             this.open();
         });
 
-        $.subscribe(DownloadDialogue.HIDE_DOWNLOAD_DIALOGUE, (e) => {
+        $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, (e) => {
             this.close();
         });
 

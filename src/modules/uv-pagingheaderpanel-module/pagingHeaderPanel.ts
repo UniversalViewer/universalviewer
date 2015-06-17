@@ -1,4 +1,5 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
+import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import HeaderPanel = require("../uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
@@ -28,14 +29,6 @@ class PagingHeaderPanel extends HeaderPanel {
     nextButtonEnabled: boolean = false;
     prevButtonEnabled: boolean = false;
 
-    static FIRST: string = 'header.onFirst';
-    static IMAGE_SEARCH: string = 'header.onImageSearch';
-    static LAST: string = 'header.onLast';
-    static MODE_CHANGED: string = 'header.onModeChanged';
-    static NEXT: string = 'header.onNext';
-    static PAGE_SEARCH: string = 'header.onPageSearch';
-    static PREV: string = 'header.onPrev';
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -46,15 +39,15 @@ class PagingHeaderPanel extends HeaderPanel {
 
         super.create();
 
-        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(BaseExtension.SETTINGS_CHANGED, (e, mode) => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, mode) => {
             this.modeChanged(mode);
         });
 
-        $.subscribe(BaseExtension.CANVAS_INDEX_CHANGE_FAILED, (e) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, (e) => {
             this.setSearchFieldValue(this.provider.canvasIndex);
         });
 
@@ -123,15 +116,15 @@ class PagingHeaderPanel extends HeaderPanel {
 
         // ui event handlers.
         this.$firstButton.onPressed(() => {
-            $.publish(PagingHeaderPanel.FIRST);
+            $.publish(Commands.FIRST);
         });
 
         this.$prevButton.onPressed(() => {
-            $.publish(PagingHeaderPanel.PREV);
+            $.publish(Commands.PREV);
         });
 
         this.$nextButton.onPressed(() => {
-            $.publish(PagingHeaderPanel.NEXT);
+            $.publish(Commands.NEXT);
         });
 
         // If page mode is disabled, we don't need to show radio buttons since
@@ -145,11 +138,11 @@ class PagingHeaderPanel extends HeaderPanel {
             // visible, since otherwise, clicking on the "Image" label can
             // trigger unexpected/undesired side effects.
             this.$imageModeOption.on('click', (e) => {
-                $.publish(PagingHeaderPanel.MODE_CHANGED, [Mode.image.toString()]);
+                $.publish(Commands.MODE_CHANGED, [Mode.image.toString()]);
             });
 
             this.$pageModeOption.on('click', (e) => {
-                $.publish(PagingHeaderPanel.MODE_CHANGED, [Mode.page.toString()]);
+                $.publish(Commands.MODE_CHANGED, [Mode.page.toString()]);
             });
         }
 
@@ -167,7 +160,7 @@ class PagingHeaderPanel extends HeaderPanel {
         });
 
         this.$lastButton.onPressed(() => {
-            $.publish(PagingHeaderPanel.LAST);
+            $.publish(Commands.LAST);
         });
 
         if (this.options.modeOptionsEnabled === false){
@@ -254,13 +247,13 @@ class PagingHeaderPanel extends HeaderPanel {
         if (!value) {
 
             this.extension.showDialogue(this.content.emptyValue);
-            $.publish(BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
+            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
 
             return;
         }
 
         if (this.isPageModeEnabled()) {
-            $.publish(PagingHeaderPanel.PAGE_SEARCH, [value]);
+            $.publish(Commands.PAGE_SEARCH, [value]);
         } else {
             var index = parseInt(this.$searchText.val(), 10);
 
@@ -268,7 +261,7 @@ class PagingHeaderPanel extends HeaderPanel {
 
             if (isNaN(index)){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.invalidNumber);
-                $.publish(BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
+                $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
@@ -276,11 +269,11 @@ class PagingHeaderPanel extends HeaderPanel {
 
             if (!asset){
                 this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
-                $.publish(BaseExtension.CANVAS_INDEX_CHANGE_FAILED);
+                $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            $.publish(PagingHeaderPanel.IMAGE_SEARCH, [index]);
+            $.publish(Commands.IMAGE_SEARCH, [index]);
         }
     }
 

@@ -1,10 +1,8 @@
+import BaseCommands = require("./Commands");
 import BaseExpandPanel = require("./BaseExpandPanel");
 import Utils = require("../../Utils");
 
 class RightPanel extends BaseExpandPanel {
-
-    static CLOSE_RIGHT_PANEL: string = 'onCloseRightPanel';
-    static OPEN_RIGHT_PANEL: string = 'onOpenRightPanel';
 
     constructor($element: JQuery) {
         super($element);
@@ -35,9 +33,9 @@ class RightPanel extends BaseExpandPanel {
         super.toggleFinish();
 
         if (this.isExpanded){
-            $.publish(RightPanel.OPEN_RIGHT_PANEL);
+            $.publish(BaseCommands.OPEN_RIGHT_PANEL);
         } else {
-            $.publish(RightPanel.CLOSE_RIGHT_PANEL);
+            $.publish(BaseCommands.CLOSE_RIGHT_PANEL);
         }
     }
 

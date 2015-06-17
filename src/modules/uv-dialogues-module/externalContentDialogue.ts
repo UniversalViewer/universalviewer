@@ -1,13 +1,8 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import Dialogue = require("../uv-shared-module/Dialogue");
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
-import Shell = require("../uv-shared-module/Shell");
 import Utils = require("../../Utils");
 
 class ExternalContentDialogue extends Dialogue {
-
-    static HIDE_EXTERNALCONTENT_DIALOGUE: string = 'onHideExternalContentDialogue';
-    static SHOW_EXTERNALCONTENT_DIALOGUE: string = 'onShowExternalContentDialogue';
 
     $iframe: JQuery;
 
@@ -21,12 +16,12 @@ class ExternalContentDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(ExternalContentDialogue.SHOW_EXTERNALCONTENT_DIALOGUE, (e, params) => {
+        $.subscribe(BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE, (e, params) => {
             this.open();
             this.$iframe.prop('src', params.uri);
         });
 
-        $.subscribe(ExternalContentDialogue.HIDE_EXTERNALCONTENT_DIALOGUE, (e) => {
+        $.subscribe(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE, (e) => {
             this.close();
         });
 

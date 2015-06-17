@@ -1,4 +1,5 @@
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
+import BaseCommands = require("../../modules/uv-shared-module/Commands");
+import Commands = require("./Commands");
 import Dialogue = require("../../modules/uv-shared-module/Dialogue");
 import DownloadOption = require("./DownloadOption");
 import ISeadragonExtension = require("./ISeadragonExtension");
@@ -24,10 +25,6 @@ class DownloadDialogue extends Dialogue {
     renderingUrls: string[];
     renderingUrlsCount: number;
 
-    static DOWNLOAD: string = 'onDownload';
-    static HIDE_DOWNLOAD_DIALOGUE: string = 'onHideDownloadDialogue';
-    static SHOW_DOWNLOAD_DIALOGUE: string = 'onShowDownloadDialogue';
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -38,11 +35,11 @@ class DownloadDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(DownloadDialogue.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
+        $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
             this.open();
         });
 
-        $.subscribe(DownloadDialogue.HIDE_DOWNLOAD_DIALOGUE, (e) => {
+        $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, (e) => {
             this.close();
         });
 
@@ -106,14 +103,14 @@ class DownloadDialogue extends Dialogue {
                 }
             }
 
-            $.publish(DownloadDialogue.DOWNLOAD, [id]);
+            $.publish(BaseCommands.DOWNLOAD, [id]);
 
             this.close();
         });
 
         this.$settingsButton.onPressed(() => {
             this.close();
-            $.publish(SettingsDialogue.SHOW_SETTINGS_DIALOGUE);
+            $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
 
         // hide

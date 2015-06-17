@@ -1,6 +1,5 @@
-import BaseExtension = require("./BaseExtension");
-import Shell = require("./Shell");
 import BaseView = require("./BaseView");
+import Commands = require("./Commands");
 
 class Dialogue extends BaseView {
 
@@ -26,7 +25,7 @@ class Dialogue extends BaseView {
         super.create();
 
         // events.
-        $.subscribe(BaseExtension.CLOSE_ACTIVE_DIALOGUE, () => {
+        $.subscribe(Commands.CLOSE_ACTIVE_DIALOGUE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -34,7 +33,7 @@ class Dialogue extends BaseView {
             }
         });
 
-        $.subscribe(BaseExtension.ESCAPE, () => {
+        $.subscribe(Commands.ESCAPE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -94,7 +93,7 @@ class Dialogue extends BaseView {
             this.$element.find('.btn.default').focus();
         }, 1);
 
-        $.publish(Shell.SHOW_OVERLAY);
+        $.publish(Commands.SHOW_OVERLAY);
 
         if (this.isUnopened){
             this.isUnopened = false;
@@ -113,7 +112,7 @@ class Dialogue extends BaseView {
             this.$element.hide();
             this.isActive = false;
 
-            $.publish(Shell.HIDE_OVERLAY);
+            $.publish(Commands.HIDE_OVERLAY);
         }
     }
 

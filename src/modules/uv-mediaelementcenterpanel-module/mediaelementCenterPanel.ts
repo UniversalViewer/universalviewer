@@ -1,7 +1,7 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import BaseProvider = require("../uv-shared-module/BaseProvider");
+import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
-import Extension = require("../../extensions/uv-mediaelement-extension/Extension");
 import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
 import Utils = require("../../Utils");
 
@@ -30,7 +30,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
         // only full screen video
         if (this.provider.getCanvasType(this.provider.getCanvasByIndex(0)).contains('video')){
-            $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, (e) => {
+            $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
                     that.player.enterFullScreen(false);
@@ -41,7 +41,7 @@ class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        $.subscribe(Extension.OPEN_MEDIA, (e, canvas) => {
+        $.subscribe(BaseCommands.OPEN_MEDIA, (e, canvas) => {
             that.viewMedia(canvas);
         });
 
@@ -97,18 +97,18 @@ class MediaElementCenterPanel extends CenterPanel {
                     });
 
                     media.addEventListener('play', (e) => {
-                        $.publish(Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
+                        $.publish(Commands.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                     });
 
                     media.addEventListener('pause', (e) => {
                         // mediaelement creates a pause event before the ended event. ignore this.
                         if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                            $.publish(Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
+                            $.publish(Commands.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                         }
                     });
 
                     media.addEventListener('ended', (e) => {
-                        $.publish(Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
+                        $.publish(Commands.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                     });
 
                     media.setSrc(sources);
@@ -136,18 +136,18 @@ class MediaElementCenterPanel extends CenterPanel {
                     });
 
                     media.addEventListener('play', (e) => {
-                        $.publish(Extension.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
+                        $.publish(Commands.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                     });
 
                     media.addEventListener('pause', (e) => {
                         // mediaelement creates a pause event before the ended event. ignore this.
                         if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
-                            $.publish(Extension.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
+                            $.publish(Commands.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                         }
                     });
 
                     media.addEventListener('ended', (e) => {
-                        $.publish(Extension.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
+                        $.publish(Commands.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                     });
 
                     //media.setSrc(sources);

@@ -1,6 +1,6 @@
-import Utils = require("../../Utils");
-import BaseExtension = require("./BaseExtension");
+import BaseCommands = require("./Commands");
 import BaseView = require("./BaseView");
+import Utils = require("../../Utils");
 
 class FooterPanel extends BaseView {
 
@@ -8,9 +8,6 @@ class FooterPanel extends BaseView {
     $embedButton: JQuery;
     $fullScreenBtn: JQuery;
     $options: JQuery;
-
-    static DOWNLOAD: string = 'footer.onDownload';
-    static EMBED: string = 'footer.onEmbed';
 
     constructor($element: JQuery) {
         super($element);
@@ -21,11 +18,11 @@ class FooterPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseExtension.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
             this.updateFullScreenButton();
         });
 
-        $.subscribe(BaseExtension.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
             this.updateDownloadButton();
         });
 
@@ -44,18 +41,18 @@ class FooterPanel extends BaseView {
         this.$fullScreenBtn.attr('tabindex', '5');
 
         this.$embedButton.onPressed(() => {
-            $.publish(FooterPanel.EMBED);
+            $.publish(BaseCommands.EMBED);
         });
 
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
 
-            $.publish(FooterPanel.DOWNLOAD);
+            $.publish(BaseCommands.DOWNLOAD);
         });
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
-            $.publish(BaseExtension.TOGGLE_FULLSCREEN);
+            $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
         if (!Utils.Bools.getBool(this.options.embedEnabled, true)){

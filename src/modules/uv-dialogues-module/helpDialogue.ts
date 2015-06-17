@@ -1,7 +1,5 @@
-import BaseExtension = require("../uv-shared-module/BaseExtension");
+import BaseCommands = require("../uv-shared-module/Commands");
 import Dialogue = require("../uv-shared-module/Dialogue");
-import Extension = require("../../extensions/uv-seadragon-extension/Extension");
-import Shell = require("../uv-shared-module/Shell");
 import Utils = require("../../Utils");
 
 class HelpDialogue extends Dialogue {
@@ -9,9 +7,6 @@ class HelpDialogue extends Dialogue {
     $message: JQuery;
     $scroll: JQuery;
     $title: JQuery;
-
-    static HIDE_HELP_DIALOGUE: string = 'onHideHelpDialogue';
-    static SHOW_HELP_DIALOGUE: string = 'onShowHelpDialogue';
 
     constructor($element: JQuery) {
         super($element);
@@ -23,11 +18,11 @@ class HelpDialogue extends Dialogue {
         
         super.create();
 
-        $.subscribe(HelpDialogue.SHOW_HELP_DIALOGUE, (e, params) => {
+        $.subscribe(BaseCommands.SHOW_HELP_DIALOGUE, (e, params) => {
             this.open();
         });
 
-        $.subscribe(HelpDialogue.HIDE_HELP_DIALOGUE, (e) => {
+        $.subscribe(BaseCommands.HIDE_HELP_DIALOGUE, (e) => {
             this.close();
         });
 
