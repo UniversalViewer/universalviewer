@@ -108,6 +108,22 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
+        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
+        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
+            this.resize();
+        });
+
         $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
             if (!this.isOverlayActive()){
                 $('#top').focus();

@@ -60,22 +60,6 @@ class Extension extends BaseExtension{
         $.subscribe(BaseCommands.EMBED, (e) => {
             $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
         });
-
-        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
     }
 
     createModules(): void{

@@ -143,22 +143,6 @@ class Extension extends BaseExtension {
             this.viewPage(index);
         });
 
-        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
-
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();

@@ -57,22 +57,6 @@ class Extension extends BaseExtension{
                 this.centerPanel.$element.show();
             }
         });
-
-        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
     }
 
     IsOldIE(): boolean {
