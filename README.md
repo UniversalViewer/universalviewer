@@ -65,9 +65,9 @@ To build the release version of the viewer, just run (on the command line, in th
 
 The built files appear in the 'build' folder.
 
-If you want to build tar and zip files for distribution (they will also appear in the 'build' folder), use:
+If you want to create a zip file for distribution (this will appear in the 'dist' folder), use:
 
-	grunt package
+	grunt dist
 
 Note that the 'build' folder is masked with .gitignore; it's just for your local use, and won't be checked in to the repository.
 
