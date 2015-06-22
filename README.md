@@ -22,7 +22,7 @@ Please see the [wiki](https://github.com/UniversalViewer/UniversalViewer/wiki) f
 
 ### First Time Setup
 
-All command-line operations for building the Universal Viewer are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). We are using Node for this project because it provides a powerful cross-platform collection of tools with minimal setup overhead. To get set up:
+All command-line operations for building the UV are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). To get set up:
 
 1. Install [Node.js](http://nodejs.org), if you haven't already
 
@@ -51,25 +51,25 @@ All command-line operations for building the Universal Viewer are scripted using
 
 ### Debug Builds
 
-To build the debug version of the viewer, just run (on the command line, in the 'UniversalViewer' folder):
+To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
 
 	grunt
 
-This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with sourcemaps to aid in debugging.
+This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with source maps to aid in debugging.
 
 ### Release Builds
 
-To build the release version of the viewer, just run (on the command line, in the 'UniversalViewer' folder):
+To build the release version of the viewer, just run (on the command line, in the `universalviewer` folder):
 
 	grunt build
 
 The built files appear in the `build` folder and are copied to `examples/uv-[build]`.
 
-If you want to create a zip file for distribution (this will appear in the 'dist' folder), use:
+If you want to create a zip file for distribution (this will appear in the `dist` folder), use:
 
 	grunt dist
 
-Note that the 'build' folder is masked with .gitignore; it's just for your local use, and won't be checked in to the repository.
+Note that the `build` folder is masked with `.gitignore`; it's just for your local use, and won't be checked in to the repository.
 
 ### Examples
 
