@@ -63,7 +63,7 @@ To build the release version of the viewer, just run (on the command line, in th
 
 	grunt build
 
-The built files appear in the 'build' folder.
+The built files appear in the `build` folder and are copied to `examples/uv-[build]`.
 
 If you want to create a zip file for distribution (this will appear in the 'dist' folder), use:
 
