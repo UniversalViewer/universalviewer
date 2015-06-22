@@ -34,11 +34,11 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
         npm install -g bower
 
-1. Clone the 'universalviewer' repository and sub modules:
+1. Clone the `universalviewer` repository and sub modules:
 
 	    git clone git@github.com:UniversalViewer/universalviewer.git --recursive
 
-1. On the command line, go in to the 'universalviewer' folder
+1. On the command line, go in to the `universalviewer` folder
 
 1. Run
 
