@@ -47,10 +47,10 @@ class AutoComplete{
         // validate
 
         // prevent invalid characters being entered
-        this.$element.on("keydown", function(event) {
+        this.$element.on("keydown", function(e) {
 
-            if (!that.isValidKey(event.keyCode)) {
-                event.preventDefault();
+            if (!that.isValidKey(e.keyCode)) {
+                e.preventDefault();
                 return false;
             }
 
@@ -58,25 +58,25 @@ class AutoComplete{
         });
 
         // auto complete
-        this.$element.on("keyup", function(event) {
+        this.$element.on("keyup", function(e) {
 
-        	event.preventDefault();
+        	e.preventDefault();
 
-        	// if a list item is selected and pressing enter
-            if (!that.getSelectedListItem().length && event.keyCode == 13) { // enter
+            // if pressing enter without a list item selected
+            if (!that.getSelectedListItem().length && e.keyCode === 13) { // enter
                 that.onSelect(that.getTerms());
                 return;
             }
 
             // If there are search results
             if (that.$searchResultsList.is(':visible') && that.results.length) {
-                if (event.keyCode == 13) {
+                if (e.keyCode === 13) {
                     // enter
                     that.searchForItem(that.getSelectedListItem());
-                } else if (event.keyCode == 40) {
+                } else if (e.keyCode === 40) {
                     that.setSelectedResultIndex(1);
                     return;
-                } else if (event.keyCode == 38) {
+                } else if (e.keyCode === 38) {
                     that.setSelectedResultIndex(-1);
                     return;
                 }
@@ -86,8 +86,8 @@ class AutoComplete{
             typewatch(() => {
                 
             	// don't do anything if not a valid key.
-                if (!that.isValidKey(event.keyCode)) {
-                    event.preventDefault();
+                if (!that.isValidKey(e.keyCode)) {
+                    e.preventDefault();
                     return false;
                 }
 
@@ -159,7 +159,7 @@ class AutoComplete{
 
     	// up and down are invalid. otherwise get converted to
     	// '&'' and '(' respectively.
-    	if (keyCode == 38 || keyCode == 40) return false;
+    	if (keyCode === 38 || keyCode === 40) return false;
 
         // ignore if it's a backspace or space.
         if (keyCode != 8 && keyCode != 32) {

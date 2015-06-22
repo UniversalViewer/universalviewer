@@ -68,18 +68,7 @@ require([
         pdfExtension,
         pdfProvider,
         seadragonExtension,
-        seadragonProvider,
-        $,
-        jsviews,
-        l10n,
-        length,
-        modernizr,
-        plugins,
-        pubsub,
-        sanitize,
-        _,
-        yepnope,
-        yepnopecss
+        seadragonProvider
     ) => {
 
         // todo: use a compiler flag (when available)

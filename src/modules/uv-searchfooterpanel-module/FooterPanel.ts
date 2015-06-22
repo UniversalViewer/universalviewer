@@ -169,14 +169,6 @@ class FooterPanel extends BaseFooterPanel {
             this.clearSearchResults();
         });
 
-        this.$searchText.on('keyup', (e) => {
-            if (e.keyCode == 13) { // return pressed
-                e.preventDefault();
-                this.$searchText.blur();
-                this.search(this.$searchText.val());
-            }
-        });
-
         // hide search options if not enabled/supported.
         if (!this.provider.isSearchWithinEnabled()) {
             this.$searchContainer.hide();
@@ -216,7 +208,7 @@ class FooterPanel extends BaseFooterPanel {
 
         this.terms = terms;
 
-        if (this.terms == '' || this.terms == this.content.enterKeyword) {
+        if (this.terms === '' || this.terms === this.content.enterKeyword) {
             this.extension.showDialogue(this.config.modules.genericDialogue.content.emptyValue, function(){
                     this.$searchText.focus();
                 });
