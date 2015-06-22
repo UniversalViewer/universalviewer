@@ -38,7 +38,7 @@ require.config({
 });
 
 require([
-        'bootstrapper',
+        'Bootstrapper',
         'browserdetect',
         'ext',
         'extensions/uv-mediaelement-extension/Extension',

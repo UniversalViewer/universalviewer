@@ -1,4 +1,4 @@
-import IExtension = require("../../modules/uv-shared-module/iExtension");
+import IExtension = require("../../modules/uv-shared-module/IExtension");
 import Mode = require("./Mode");
 
 interface ISeadragonExtension extends IExtension{
