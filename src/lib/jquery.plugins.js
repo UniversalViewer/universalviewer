@@ -275,6 +275,10 @@
             $trunc = $('<span></span>');
             $trunc.html($self.html().replace(/\s[\s]*/g, ' ').trim());
 
+            if ($trunc.text().trim().length <= chars) {
+                return; // do nothing if we're under the limit!
+            }
+
             while ($trunc.text().trim().length > chars) {
                 $trunc.removeLastWord(chars);
             }
