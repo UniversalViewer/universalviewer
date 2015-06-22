@@ -8,6 +8,15 @@
                 "close": "Close"
             }
         },
+        "downloadDialogue": {
+            "content": {
+                "download": "Download",
+                "entireFileAsOriginal": "Entire file ({0})",
+                "noneAvailable": "No download options are available.",
+                "preview": "Preview",
+                "title": "Download"
+            }
+        },
         "embedDialogue": {
             "content": {
                 "customSize": "Custom Size",

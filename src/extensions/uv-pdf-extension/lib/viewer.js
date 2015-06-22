@@ -5157,7 +5157,7 @@ function webViewerLoad(evt) {
 function webViewerInitialized() {
   $('#viewerContainer').targetBlank();
 
-    var params = PDFView.parseQueryString(document.location.searchWithin.substring(1));
+    var params = PDFView.parseQueryString(document.location.search.substring(1));
   var file = 'file' in params ? params.file : PDFJS.DEFAULT_URL;
 
   var fileInput = document.createElement('input');

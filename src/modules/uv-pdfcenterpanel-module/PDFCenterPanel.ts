@@ -47,12 +47,12 @@ class PDFCenterPanel extends CenterPanel {
             // load viewer.html
             this.$content.load(viewerPath, () => {
                 if (window.DEBUG){
-                    PDFJS.workerSrc = 'extensions/uv-pdf-extension/js/pdf.worker.min.js';
+                    PDFJS.workerSrc = 'extensions/uv-pdf-extension/lib/pdf.worker.min.js';
                 } else {
-                    PDFJS.workerSrc = 'js/pdf.worker.min.js';
+                    PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                 }
 
-                PDFJS.DEFAULT_URL = canvas.mediaUri;
+                PDFJS.DEFAULT_URL = canvas.media[0].resource['@id'];
 
                 window.webViewerLoad();
 

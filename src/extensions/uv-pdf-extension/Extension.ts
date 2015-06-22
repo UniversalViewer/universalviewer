@@ -3,6 +3,7 @@ import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
+import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
@@ -19,9 +20,11 @@ import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/Tr
 
 class Extension extends BaseExtension{
 
+    $downloadDialogue: JQuery;
     $embedDialogue: JQuery;
     $helpDialogue: JQuery;
     centerPanel: PDFCenterPanel;
+    downloadDialogue: DownloadDialogue;
     embedDialogue: EmbedDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
@@ -39,6 +42,10 @@ class Extension extends BaseExtension{
 
         $.subscribe(Commands.THUMB_SELECTED, (e, index: number) => {
             window.open((<IPDFProvider>that.provider).getPDFUri());
+        });
+
+        $.subscribe(BaseCommands.DOWNLOAD, (e) => {
+            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
 
         $.subscribe(BaseCommands.EMBED, (e) => {
@@ -80,6 +87,10 @@ class Extension extends BaseExtension{
         }
 
         this.footerPanel = new FooterPanel(Shell.$footerPanel);
+
+        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        Shell.$overlays.append(this.$downloadDialogue);
+        this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$embedDialogue = $('<div class="overlay embed"></div>');
         Shell.$overlays.append(this.$embedDialogue);

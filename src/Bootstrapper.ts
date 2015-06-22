@@ -192,7 +192,7 @@ class Bootstrapper{
             case 'ixif:video':
                 extension = that.extensions['video/iiif'];
                 break;
-            case 'ixif:pdf':
+            case 'ixif:borndigital':
                 extension = that.extensions['pdf/iiif'];
                 break;
         }
