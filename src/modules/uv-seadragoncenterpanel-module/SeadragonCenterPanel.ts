@@ -7,7 +7,6 @@ import Page = require("../../extensions/uv-seadragon-extension/Page");
 import Params = require("../uv-shared-module/Params");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
-import Utils = require("../../Utils");
 
 class SeadragonCenterPanel extends CenterPanel {
 
@@ -291,7 +290,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$spinner.show();
 
         this.provider.getPages().then(() => {
-            this.viewer.open(Utils.Objects.convertToPlainObject(this.provider.pages));
+            this.viewer.open(Utils.Objects.ConvertToPlainObject(this.provider.pages));
         });
     }
 

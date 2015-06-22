@@ -8,7 +8,6 @@ import RenderingFormat = require("../../modules/uv-shared-module/RenderingFormat
 import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
 import SettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
-import Utils = require("../../Utils");
 
 class DownloadDialogue extends Dialogue {
 

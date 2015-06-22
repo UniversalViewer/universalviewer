@@ -4,7 +4,6 @@ import HeaderPanel = require("../uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import Utils = require("../../Utils");
 
 class PagingHeaderPanel extends HeaderPanel {
 

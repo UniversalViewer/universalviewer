@@ -2,7 +2,6 @@ import BaseCommands = require("./Commands");
 import BaseView = require("./BaseView");
 import BootstrapParams = require("../../BootstrapParams");
 import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
-import Utils = require("../../Utils");
 
 class HeaderPanel extends BaseView {
 

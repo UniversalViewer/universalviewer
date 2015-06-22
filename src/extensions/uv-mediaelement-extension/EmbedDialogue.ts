@@ -1,6 +1,5 @@
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
 import IMediaElementProvider = require("./IMediaElementProvider");
-import Utils = require("../../Utils");
 
 class EmbedDialogue extends BaseEmbedDialogue {
 

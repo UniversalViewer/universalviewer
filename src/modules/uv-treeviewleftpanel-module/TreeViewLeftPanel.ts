@@ -6,7 +6,6 @@ import LeftPanel = require("../uv-shared-module/LeftPanel");
 import ThumbsView = require("./ThumbsView");
 import TreeNode = require("../uv-shared-module/TreeNode");
 import TreeView = require("./TreeView");
-import Utils = require("../../Utils");
 
 class TreeViewLeftPanel extends LeftPanel {
 
@@ -151,8 +150,8 @@ class TreeViewLeftPanel extends LeftPanel {
 
         if (this.isUnopened) {
 
-            var treeEnabled = Utils.Bools.getBool(this.config.options.treeEnabled, true);
-            var thumbsEnabled = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
+            var treeEnabled = Utils.Bools.GetBool(this.config.options.treeEnabled, true);
+            var thumbsEnabled = Utils.Bools.GetBool(this.config.options.thumbsEnabled, true);
 
             this.treeData = this.provider.getTree();
 

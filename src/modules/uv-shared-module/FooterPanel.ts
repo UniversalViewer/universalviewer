@@ -1,6 +1,5 @@
 import BaseCommands = require("./Commands");
 import BaseView = require("./BaseView");
-import Utils = require("../../Utils");
 
 class FooterPanel extends BaseView {
 
@@ -55,20 +54,20 @@ class FooterPanel extends BaseView {
             $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
-        if (!Utils.Bools.getBool(this.options.embedEnabled, true)){
+        if (!Utils.Bools.GetBool(this.options.embedEnabled, true)){
             this.$embedButton.hide();
         }
 
         this.updateDownloadButton();
         this.updateFullScreenButton();
 
-        if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
+        if (Utils.Bools.GetBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
         }
     }
 
     updateFullScreenButton(): void {
-        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true)){
+        if (!Utils.Bools.GetBool(this.options.fullscreenEnabled, true)){
             this.$fullScreenBtn.hide();
         }
 
@@ -88,7 +87,7 @@ class FooterPanel extends BaseView {
     }
 
     updateDownloadButton() {
-        var configEnabled = Utils.Bools.getBool(this.options.downloadEnabled, true);
+        var configEnabled = Utils.Bools.GetBool(this.options.downloadEnabled, true);
 
         if (configEnabled){
             this.$downloadButton.show();

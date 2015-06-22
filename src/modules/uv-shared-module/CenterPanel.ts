@@ -1,6 +1,5 @@
 import Shell = require("./Shell");
 import BaseView = require("./BaseView");
-import Utils = require("../../Utils");
 
 class CenterPanel extends BaseView {
 

@@ -1,7 +1,6 @@
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import IMediaElementProvider = require("./IMediaElementProvider");
-import Utils = require("../../Utils");
 
 class Provider extends BaseProvider implements IMediaElementProvider{
 

@@ -11,6 +11,7 @@ require.config({
         'pubsub': 'lib/pubsub',
         'sanitize': 'lib/sanitize',
         'underscore': 'lib/underscore-min',
+        'utils': 'lib/utils',
         'yepnope': 'lib/yepnope.1.5.4-min',
         'yepnopecss': 'lib/yepnope.css'
     },
@@ -55,6 +56,7 @@ require([
         'pubsub',
         'sanitize',
         'underscore',
+        'utils',
         'yepnope',
         'yepnopecss',
     ], (

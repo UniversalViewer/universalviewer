@@ -5,7 +5,6 @@ import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Thumb = require("../uv-shared-module/Thumb");
-import Utils = require("../../Utils");
 
 class GalleryView extends BaseView {
 

@@ -1,6 +1,5 @@
-import Shell = require("./Shell");
-import Utils = require("../../Utils");
 import BaseView = require("./BaseView");
+import Shell = require("./Shell");
 
 class BaseExpandPanel extends BaseView {
 

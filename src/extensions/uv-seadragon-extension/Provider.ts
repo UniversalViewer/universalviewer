@@ -5,7 +5,6 @@ import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
 import Page = require("./Page");
 import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
-import Utils = require("../../Utils");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
@@ -206,7 +205,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     isSearchWithinEnabled(): boolean {
-        if (!Utils.Bools.getBool(this.config.options.searchWithinEnabled, false)){
+        if (!Utils.Bools.GetBool(this.config.options.searchWithinEnabled, false)){
             return false;
         }
 

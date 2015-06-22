@@ -3,7 +3,6 @@ import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
-import Utils = require("../../Utils");
 
 class MediaElementCenterPanel extends CenterPanel {
 
@@ -64,7 +63,7 @@ class MediaElementCenterPanel extends CenterPanel {
         this.$container.height(this.mediaHeight);
         this.$container.width(this.mediaWidth);
 
-        var id = Utils.Dates.getTimeStamp();
+        var id = Utils.Dates.GetTimeStamp();
         var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
         var canvasType: string = this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
 
@@ -174,7 +173,7 @@ class MediaElementCenterPanel extends CenterPanel {
             this.$container.height(this.mediaHeight);
         } else {
             // fit media to available space.
-            var size: Utils.Size = Utils.Measurement.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+            var size: Utils.Measurement.Size = Utils.Measurement.Dimensions.FitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
 
             this.$container.height(size.height);
             this.$container.width(size.width);

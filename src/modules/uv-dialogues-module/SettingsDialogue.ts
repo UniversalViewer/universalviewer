@@ -1,9 +1,8 @@
 import BootstrapParams = require("../../BootstrapParams");
+import Commands = require("../uv-shared-module/Commands");
 import Dialogue = require("../uv-shared-module/Dialogue");
 import Shell = require("../uv-shared-module/Shell");
-import Utils = require("../../Utils");
 import Version = require("../../_Version");
-import Commands = require("../uv-shared-module/Commands");
 
 class SettingsDialogue extends Dialogue {
 

@@ -7,7 +7,6 @@ import RenderingFormat = require("./RenderingFormat");
 import ServiceProfile = require("./ServiceProfile");
 import Thumb = require("./Thumb");
 import TreeNode = require("./TreeNode");
-import Utils = require("../../Utils");
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provision systems.
@@ -65,11 +64,11 @@ class BaseProvider implements IProvider{
         this.isLightbox = this.bootstrapper.params.isLightbox;
 
         if (this.isHomeDomain && !this.isReload){
-            this.sequenceIndex = parseInt(Utils.Urls.getHashParameter(this.paramMap[Params.sequenceIndex], parent.document));
+            this.sequenceIndex = parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex], parent.document));
         }
 
         if (!this.sequenceIndex){
-            this.sequenceIndex = parseInt(Utils.Urls.getQuerystringParameter(this.paramMap[Params.sequenceIndex])) || 0;
+            this.sequenceIndex = parseInt(Utils.Urls.GetQuerystringParameter(this.paramMap[Params.sequenceIndex])) || 0;
         }
     }
 
@@ -376,7 +375,7 @@ class BaseProvider implements IProvider{
     }
 
     addTimestamp(uri: string): string{
-        return uri + "?t=" + Utils.Dates.getTimeStamp();
+        return uri + "?t=" + Utils.Dates.GetTimeStamp();
     }
 
     isDeepLinkingEnabled(): boolean {
@@ -714,7 +713,7 @@ class BaseProvider implements IProvider{
     }
 
     getDomain(): string{
-        var parts = Utils.Urls.getUrlParts(this.manifestUri);
+        var parts = Utils.Urls.GetUrlParts(this.manifestUri);
         return parts.host;
     }
 

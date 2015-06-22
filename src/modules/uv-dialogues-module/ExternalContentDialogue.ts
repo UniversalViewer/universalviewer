@@ -1,6 +1,5 @@
 import BaseCommands = require("../uv-shared-module/Commands");
 import Dialogue = require("../uv-shared-module/Dialogue");
-import Utils = require("../../Utils");
 
 class ExternalContentDialogue extends Dialogue {
 

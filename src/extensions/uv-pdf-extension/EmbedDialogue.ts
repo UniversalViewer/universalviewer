@@ -1,4 +1,3 @@
-import Utils = require("../../Utils");
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
 import IPDFProvider = require("./IPDFProvider");
 

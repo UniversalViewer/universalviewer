@@ -2,7 +2,6 @@ import BaseCommands = require("../uv-shared-module/Commands");
 import BaseProvider = require("../uv-shared-module/BaseProvider");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import IPDFProvider = require("../../extensions/uv-pdf-extension/IPDFProvider");
-import Utils = require("../../Utils");
 
 class PDFCenterPanel extends CenterPanel {
 

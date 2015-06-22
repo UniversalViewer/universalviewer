@@ -1,7 +1,6 @@
 import BaseCommands = require("../uv-shared-module/Commands");
 import Dialogue = require("../uv-shared-module/Dialogue");
 import Shell = require("../uv-shared-module/Shell");
-import Utils = require("../../Utils");
 
 class EmbedDialogue extends Dialogue {
 
@@ -141,7 +140,7 @@ class EmbedDialogue extends Dialogue {
         });
 
         this.$customWidth.keydown((event) => {
-            Utils.Numbers.numericalInput(event);
+            Utils.Numbers.NumericalInput(event);
         });
 
         this.$customWidth.keyup((event) => {
@@ -149,7 +148,7 @@ class EmbedDialogue extends Dialogue {
         });
 
         this.$customHeight.keydown((event) => {
-            Utils.Numbers.numericalInput(event);
+            Utils.Numbers.NumericalInput(event);
         });
 
         this.$customHeight.keyup((event) => {

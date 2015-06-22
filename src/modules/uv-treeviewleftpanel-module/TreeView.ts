@@ -3,7 +3,6 @@ import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import Shell = require("../uv-shared-module/Shell");
 import TreeNode = require("../uv-shared-module/TreeNode");
-import Utils = require("../../Utils");
 
 class TreeView extends BaseView {
 
@@ -63,7 +62,7 @@ class TreeView extends BaseView {
             elide: function(text){
                 var $a = $((<any>this).linkCtx.elem);
                 var elideCount = Math.floor($a.parent().width() / 7);
-                return Utils.Strings.htmlDecode(Utils.Strings.ellipsis(text, elideCount));
+                return Utils.Strings.HtmlDecode(Utils.Strings.Ellipsis(text, elideCount));
                 //https://github.com/BorisMoore/jsviews/issues/296
             }
         });
@@ -175,7 +174,7 @@ class TreeView extends BaseView {
     private elide($a: JQuery): void {
         if (!$a.is(':visible')) return;
         var elideCount = Math.floor($a.parent().width() / 7);
-        $a.text(Utils.Strings.htmlDecode(Utils.Strings.ellipsis($a.attr('title'), elideCount)));
+        $a.text(Utils.Strings.HtmlDecode(Utils.Strings.Ellipsis($a.attr('title'), elideCount)));
     }
 
     private elideAll(): void {

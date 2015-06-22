@@ -1,7 +1,6 @@
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import IPDFProvider = require("./IPDFProvider");
-import Utils = require("../../Utils");
 
 class Provider extends BaseProvider implements IPDFProvider{
 

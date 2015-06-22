@@ -1,7 +1,6 @@
 import BaseCommands = require("./Commands");
 import BaseView = require("./BaseView");
 import GenericDialogue = require("./GenericDialogue");
-import Utils = require("../../Utils");
 
 class Shell extends BaseView {
     static $centerPanel: JQuery;

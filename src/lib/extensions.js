@@ -1,6 +1,3 @@
-//######################################################
-// Array
-//######################################################
 if (!Array.prototype.clone) {
     Array.prototype.clone = function () {
         return this.slice(0);
@@ -52,9 +49,6 @@ Array.prototype.remove = function (item) {
 Array.prototype.removeAt = function (index) {
     this.splice(index, 1);
 };
-//######################################################
-// Math
-//######################################################
 Math.clamp = function (value, min, max) {
     return Math.min(Math.max(value, min), max);
 };
@@ -104,15 +98,9 @@ Math.sq = function (n) {
     return n * n;
 };
 Math.TAU = Math.PI * 2;
-//######################################################
-// Number
-//######################################################
 Number.prototype.isInt = function () {
     return this % 1 === 0;
 };
-//######################################################
-// String
-//######################################################
 String.prototype.b64_to_utf8 = function () {
     return decodeURIComponent(escape(window.atob(this)));
 };

@@ -23,7 +23,8 @@ module.exports = function (grunt) {
             extensions: './src/extensions',
             lib: './src/lib',
             modules: './src/modules',
-            themes: './src/themes'
+            themes: './src/themes',
+            typings: './src/typings'
         },
 
         global:
@@ -217,8 +218,16 @@ module.exports = function (grunt) {
                         cwd: '<%= dirs.bower %>',
                         expand: true,
                         flatten: true,
-                        src: ['extensions/dist/extensions.js'],
+                        src: ['extensions/dist/extensions.js', 'utils/dist/utils.js'],
                         dest: '<%= dirs.lib %>'
+                    },
+                    {
+                        // all files that need to be copied from /lib to /src/typings post bower install
+                        cwd: '<%= dirs.bower %>',
+                        expand: true,
+                        flatten: true,
+                        src: ['extensions/typings/extensions.d.ts', 'utils/dist/utils.d.ts'],
+                        dest: '<%= dirs.typings %>'
                     }
                 ]
             }

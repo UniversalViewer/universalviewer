@@ -6,7 +6,6 @@ import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISe
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Shell = require("../uv-shared-module/Shell");
 import Thumb = require("../uv-shared-module/Thumb");
-import Utils = require("../../Utils");
 
 class ThumbsView extends BaseView {
 

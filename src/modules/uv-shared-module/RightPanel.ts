@@ -1,6 +1,5 @@
 import BaseCommands = require("./Commands");
 import BaseExpandPanel = require("./BaseExpandPanel");
-import Utils = require("../../Utils");
 
 class RightPanel extends BaseExpandPanel {
 

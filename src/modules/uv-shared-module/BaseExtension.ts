@@ -5,7 +5,6 @@ import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
 import Shell = require("./Shell");
-import Utils = require("../../Utils");
 
 class BaseExtension implements IExtension {
 
@@ -280,11 +279,11 @@ class BaseExtension implements IExtension {
 
         // deep linking is only allowed when hosted on home domain.
         if (this.provider.isDeepLinkingEnabled()){
-            value = Utils.Urls.getHashParameter(this.provider.paramMap[key], parent.document);
+            value = Utils.Urls.GetHashParameter(this.provider.paramMap[key], parent.document);
         }
 
         if (!value){
-            value = Utils.Urls.getQuerystringParameter(this.provider.paramMap[key]);
+            value = Utils.Urls.GetQuerystringParameter(this.provider.paramMap[key]);
         }
 
         return value;
@@ -294,7 +293,7 @@ class BaseExtension implements IExtension {
     setParam(key: Params, value: any): void{
 
         if (this.provider.isDeepLinkingEnabled()){
-            Utils.Urls.setHashParameter(this.provider.paramMap[key], value, parent.document);
+            Utils.Urls.SetHashParameter(this.provider.paramMap[key], value, parent.document);
         }
     }
 
@@ -352,12 +351,12 @@ class BaseExtension implements IExtension {
     }
 
     isLeftPanelEnabled(): boolean{
-        return  Utils.Bools.getBool(this.provider.config.options.leftPanelEnabled, true)
+        return  Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
             && this.provider.isMultiCanvas();
     }
 
     isRightPanelEnabled(): boolean{
-        return  Utils.Bools.getBool(this.provider.config.options.rightPanelEnabled, true);
+        return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
     }
 }
 

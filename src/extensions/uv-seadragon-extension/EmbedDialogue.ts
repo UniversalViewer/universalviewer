@@ -3,7 +3,6 @@ import Commands = require("./Commands");
 import ISeadragonExtension = require("./ISeadragonExtension");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
-import Utils = require("../../Utils");
 
 class EmbedDialogue extends BaseEmbedDialogue {
 

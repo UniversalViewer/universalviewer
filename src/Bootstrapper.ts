@@ -1,6 +1,5 @@
 import BootstrapParams = require("BootstrapParams");
 import BaseExtension = require("./modules/uv-shared-module/BaseExtension");
-import Utils = require("Utils");
 
 class Bootstrapper{
 
@@ -23,19 +22,19 @@ class Bootstrapper{
 
     getBootstrapParams(): BootstrapParams {
         var p = new BootstrapParams();
-        var jsonpParam = Utils.Urls.getQuerystringParameter('jsonp');
+        var jsonpParam = Utils.Urls.GetQuerystringParameter('jsonp');
 
-        p.config = Utils.Urls.getQuerystringParameter('config');
-        p.domain = Utils.Urls.getQuerystringParameter('domain');
-        p.embedDomain = Utils.Urls.getQuerystringParameter('embedDomain');
-        p.embedScriptUri = Utils.Urls.getQuerystringParameter('embedScriptUri');
-        p.isHomeDomain = Utils.Urls.getQuerystringParameter('isHomeDomain') === "true";
-        p.isLightbox = Utils.Urls.getQuerystringParameter('isLightbox') === "true";
-        p.isOnlyInstance = Utils.Urls.getQuerystringParameter('isOnlyInstance') === "true";
-        p.isReload = Utils.Urls.getQuerystringParameter('isReload') === "true";
+        p.config = Utils.Urls.GetQuerystringParameter('config');
+        p.domain = Utils.Urls.GetQuerystringParameter('domain');
+        p.embedDomain = Utils.Urls.GetQuerystringParameter('embedDomain');
+        p.embedScriptUri = Utils.Urls.GetQuerystringParameter('embedScriptUri');
+        p.isHomeDomain = Utils.Urls.GetQuerystringParameter('isHomeDomain') === "true";
+        p.isLightbox = Utils.Urls.GetQuerystringParameter('isLightbox') === "true";
+        p.isOnlyInstance = Utils.Urls.GetQuerystringParameter('isOnlyInstance') === "true";
+        p.isReload = Utils.Urls.GetQuerystringParameter('isReload') === "true";
         p.jsonp = jsonpParam === null ? null : !(jsonpParam === "false" || jsonpParam === "0");
-        p.manifestUri = Utils.Urls.getQuerystringParameter('manifestUri');
-        p.setLocale(Utils.Urls.getQuerystringParameter('locale'));
+        p.manifestUri = Utils.Urls.GetQuerystringParameter('manifestUri');
+        p.setLocale(Utils.Urls.GetQuerystringParameter('locale'));
 
         return p;
     }
@@ -116,11 +115,11 @@ class Bootstrapper{
         this.manifest = manifest;
 
         if (this.params.isHomeDomain && !this.params.isReload) {
-            this.sequenceIndex = parseInt(Utils.Urls.getHashParameter("si", parent.document));
+            this.sequenceIndex = parseInt(Utils.Urls.GetHashParameter("si", parent.document));
         }
 
         if (!this.sequenceIndex) {
-            this.sequenceIndex = parseInt(Utils.Urls.getQuerystringParameter("si")) || 0;
+            this.sequenceIndex = parseInt(Utils.Urls.GetQuerystringParameter("si")) || 0;
         }
 
         // is it a collection?

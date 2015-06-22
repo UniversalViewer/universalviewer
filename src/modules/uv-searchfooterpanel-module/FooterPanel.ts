@@ -6,7 +6,6 @@ import AutoComplete = require("./Autocomplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import Utils = require("../../Utils");
 
 class FooterPanel extends BaseFooterPanel {
 
@@ -201,8 +200,8 @@ class FooterPanel extends BaseFooterPanel {
         // if a h or q value is in the hash params, do a search.
         if (this.provider.isDeepLinkingEnabled()){
 
-            var terms = Utils.Urls.getHashParameter('h', parent.document)
-                    || Utils.Urls.getHashParameter('q', parent.document);
+            var terms = Utils.Urls.GetHashParameter('h', parent.document)
+                    || Utils.Urls.GetHashParameter('q', parent.document);
 
             if (terms){
                 this.terms = terms.replace(/\+/g, " ").replace(/"/g, "");
@@ -334,7 +333,7 @@ class FooterPanel extends BaseFooterPanel {
 
         var result = that.provider.searchResults[elemIndex];
 
-        var terms = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
+        var terms = Utils.Strings.Ellipsis(that.terms, that.options.elideDetailsTermsCount);
 
         var instancesFoundText;
 
@@ -505,7 +504,7 @@ class FooterPanel extends BaseFooterPanel {
         }
 
         var $terms = this.$searchPagerContainer.find('.terms');
-        $terms.html(Utils.Strings.ellipsis(terms, this.options.elideResultsTermsCount));
+        $terms.html(Utils.Strings.Ellipsis(terms, this.options.elideResultsTermsCount));
         $terms.prop('title', terms);
 
         this.$searchPagerContainer.show();

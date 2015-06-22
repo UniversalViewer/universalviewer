@@ -17,7 +17,6 @@ import Provider = require("./Provider");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
-import Utils = require("../../Utils");
 
 class Extension extends BaseExtension{
 
@@ -91,7 +90,7 @@ class Extension extends BaseExtension{
     }
 
     isLeftPanelEnabled(): boolean{
-        return  Utils.Bools.getBool(this.provider.config.options.leftPanelEnabled, true)
+        return  Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
                 && this.provider.isMultiSequence();
     }
 }
