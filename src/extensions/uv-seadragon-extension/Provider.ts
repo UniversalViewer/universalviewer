@@ -172,7 +172,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
             p.tileSourceUri = this.getImageUri(this.getCurrentCanvas());
             this.pages.push(p);
         } else {
-            if (this.isFirstCanvas() || this.isLastCanvas()){
+            if (this.isFirstCanvas() || (this.isLastCanvas() && this.getTotalCanvases() % 2 == 0)){
                 var p: Page = new Page();
                 p.tileSourceUri = this.getImageUri(this.getCurrentCanvas());
                 this.pages.push(p);
