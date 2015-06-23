@@ -67,6 +67,14 @@
                 "title": "More Information"
             }
         },
+        "settingsDialogue": {
+            "content": {
+                "locale": "Locale",
+                "pagingEnabled": "Two Page View",
+                "preserveViewport": "Preserve Zoom",
+                "title": "Settings"
+            }
+        },
         "treeViewLeftPanel": {
 
         }

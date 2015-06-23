@@ -1,0 +1,82 @@
+{
+    "localisation": {
+        "label": "Cymraeg"
+    },
+    "modules": {
+        "dialogue": {
+            "content": {
+                "close": "Cau"
+            }
+        },
+        "downloadDialogue": {
+            "content": {
+                "download": "Lawrlwytho",
+                "entireFileAsOriginal": "Y ffeil gyfan ({0})",
+                "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
+                "preview": "Rhagolwg",
+                "title": "Lawrlwytho"
+            }
+        },
+        "embedDialogue": {
+            "content": {
+                "customSize": "Maint ddewisol",
+                "height": "Hyd",
+                "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:",
+                "title": "Ymgorffori",
+                "width": "Lled"
+            }
+        },
+        "footerPanel": {
+            "content": {
+                "download": "Lawrlwytho",
+                "embed": "Ymgorffori",
+                "exitFullScreen": "Dianc o'r sgrin lawn",
+                "fullScreen": "Sgrin lawn"
+            }
+        },
+        "genericDialogue": {
+            "content": {
+                "ok": "GWELD"
+            }
+        },
+        "headerPanel": {
+            "content": {
+                "close": "Cau",
+                "help": "Cymorth"
+            }
+        },
+        "helpDialogue": {
+            "content": {
+                "text": "testun i'w osod",
+                "title": "Cymorth"
+            }
+        },
+        "mediaelementCenterPanel": {
+            "content": {
+
+            }
+        },
+        "moreInfoRightPanel": {
+            "content": {
+                "collapse": "Cuddio Mwy o Wybodaeth",
+                "collapseFull": "Cuddio'r Galeri",
+                "expand": "Ehangu Fwy o Wybodaeth",
+                "expandFull": "Ehangu'r Galeri",
+                "holdingText": "Eich modiwl fan hyn!",
+                "noData": "Nid oes data i'w arddangos",
+                "title": "Mwy o Wybodaeth"
+            }
+        },
+        "settingsDialogue": {
+            "content": {
+                "locale": "Iaith",
+                "pagingEnabled": "Arddangos dwy dudalen",
+                "preserveViewport": "Cadw'r lefel o glosio",
+                "title": "Dewisiadau"
+            }
+        },
+        "treeViewLeftPanel": {
+
+        }
+    }
+}

@@ -14,6 +14,7 @@ import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/
 import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
 import Provider = require("./Provider");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
+import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import ThumbsView = require("../../modules/uv-treeviewleftpanel-module/ThumbsView");
 import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
@@ -23,6 +24,7 @@ class Extension extends BaseExtension{
     $downloadDialogue: JQuery;
     $embedDialogue: JQuery;
     $helpDialogue: JQuery;
+    $settingsDialogue: JQuery;
     centerPanel: PDFCenterPanel;
     downloadDialogue: DownloadDialogue;
     embedDialogue: EmbedDialogue;
@@ -30,6 +32,7 @@ class Extension extends BaseExtension{
     headerPanel: HeaderPanel;
     leftPanel: TreeViewLeftPanel;
     rightPanel: MoreInfoRightPanel;
+    settingsDialogue: SettingsDialogue;
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -95,6 +98,10 @@ class Extension extends BaseExtension{
         this.$embedDialogue = $('<div class="overlay embed"></div>');
         Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+
+        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        Shell.$overlays.append(this.$settingsDialogue);
+        this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();

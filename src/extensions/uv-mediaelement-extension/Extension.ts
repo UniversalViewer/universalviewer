@@ -15,6 +15,7 @@ import IProvider = require("../../modules/uv-shared-module/IProvider");
 import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
 import Provider = require("./Provider");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
+import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
 
@@ -23,6 +24,7 @@ class Extension extends BaseExtension{
     $downloadDialogue: JQuery;
     $embedDialogue: JQuery;
     $helpDialogue: JQuery;
+    $settingsDialogue: JQuery;
     centerPanel: MediaElementCenterPanel;
     downloadDialogue: DownloadDialogue;
     embedDialogue: EmbedDialogue;
@@ -31,6 +33,7 @@ class Extension extends BaseExtension{
     helpDialogue: HelpDialogue;
     leftPanel: TreeViewLeftPanel;
     rightPanel: MoreInfoRightPanel;
+    settingsDialogue: SettingsDialogue;
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -83,6 +86,10 @@ class Extension extends BaseExtension{
         this.$embedDialogue = $('<div class="overlay embed"></div>');
         Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+
+        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        Shell.$overlays.append(this.$settingsDialogue);
+        this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
