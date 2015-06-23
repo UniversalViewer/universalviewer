@@ -1,6 +1,6 @@
-var version = require('./utils/version');
-var localise = require('./utils/localise');
-var theme = require('./utils/theme');
+var version = require('./tasks/version');
+var localise = require('./tasks/localise');
+var theme = require('./tasks/theme');
 
 module.exports = function (grunt) {
 
