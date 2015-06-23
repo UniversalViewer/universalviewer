@@ -44,7 +44,11 @@ module.exports = function (grunt) {
             };
 
             async.eachSeries(that.files, function (f, nextFileObj) {
-                var destFile = path.join(path.dirname(f.dest), theme + '.css');
+                var parent = path.dirname(f.dest);
+                parent = parent.substring(0, parent.lastIndexOf('/'));
+                parent = path.join(parent, 'build/');
+
+                var destFile = path.join(parent, theme + '.css');
 
                 var files = f.src.filter(function (filepath) {
                     // Warn on and remove invalid source files (if nonull was set).
@@ -117,14 +121,14 @@ module.exports = function (grunt) {
             // [global.buildDir]/themes/[theme]/img/[image]
             copyFiles('./src/themes/' + theme + '/img/*', path.join(getThemeDest(theme), 'img'));
 
-            // ./src/extensions/*/theme/[theme].css
+            // ./src/extensions/*/build/[theme].css
             // goes to
             // [global.buildDir]/themes/[theme]/css/[extension]/theme.css'
-            copyFiles('./src/extensions/*/theme/' + theme + '.css', path.join(getThemeDest(theme), 'css'), function(src, dest) {
+            copyFiles('./src/extensions/*/build/' + theme + '.css', path.join(getThemeDest(theme), 'css'), function(src, dest) {
 
                 // get the extension name from the src string.
-                // ./src/extensions/[extension]/theme/styles.css
-                var extensionName = src.match(/extensions\/(.*)\/theme/)[1];
+                // ./src/extensions/[extension]/build/[theme].css
+                var extensionName = src.match(/extensions\/(.*)\/build/)[1];
 
                 return path.join(dest, extensionName, 'theme.css');
             });

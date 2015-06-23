@@ -1,5 +1,5 @@
 var version = require('./tasks/version');
-var localise = require('./tasks/localise');
+var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 
 module.exports = function (grunt) {
@@ -68,10 +68,31 @@ module.exports = function (grunt) {
             build : ['<%= dirs.build %>'],
             dist: ['<%= dirs.dist %>'],
             examples: ['<%= dirs.examples %>/uv-*'],
-            cleanup: ['./src/extensions/*/config/*.js', './src/extensions/*/theme/*.css']
+            cleanup: ['./src/extensions/*/build/*']
         },
 
         copy: {
+            schema: {
+                files: [
+                    // extension schema files
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/extensions/**/build/*.schema.json'],
+                        dest: '<%= dirs.examples %>/schema/',
+                        rename: function(dest, src) {
+
+                            // get the extension name from the src string.
+                            // src/extensions/[extension]/build/[locale].schema.json
+                            var reg = /extensions\/(.*)\/build\/(.*.schema.json)/;
+                            var extensionName = src.match(reg)[1];
+                            var fileName = src.match(reg)[2];
+
+                            return dest + extensionName + '.' + fileName;
+                        }
+                    }
+                ]
+            },
             build: {
                 files: [
                     // html
@@ -93,13 +114,13 @@ module.exports = function (grunt) {
                     // extension configuration files
                     {
                         expand: true,
-                        src: ['src/extensions/**/config/*.config.js'],
+                        src: ['src/extensions/**/build/*.config.json'],
                         dest: '<%= dirs.build %>/lib/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
-                            // src/extensions/[extension]/[locale].config.js
-                            var reg = /extensions\/(.*)\/config\/(.*.config.js)/;
+                            // src/extensions/[extension]/[locale].config.json
+                            var reg = /extensions\/(.*)\/build\/(.*.config.json)/;
                             var extensionName = src.match(reg)[1];
                             var fileName = src.match(reg)[2];
 
@@ -127,15 +148,6 @@ module.exports = function (grunt) {
                         src: ['src/extensions/**/lib/*'],
                         dest: '<%= dirs.build %>/lib/'
                     },
-                    // anything in the module/js folders that isn't
-                    // a js file. could be swfs or supporting files
-                    // for a 3rd party library
-                    //{
-                    //    expand: true,
-                    //    flatten: true,
-                    //    src: ['src/modules/**/lib/*.*', '!src/modules/**/lib/*.js'],
-                    //    dest: '<%= dirs.build %>/lib/'
-                    //},
                     // l10n localisation files
                     {
                         expand: true,
@@ -343,7 +355,7 @@ module.exports = function (grunt) {
             }
         },
 
-        localise: {
+        configure: {
             apply: {
                 options: {
                     default: 'en-GB.json'
@@ -376,7 +388,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
 
     version(grunt);
-    localise(grunt);
+    configure(grunt);
     theme(grunt);
 
     // to change version manually, edit package.json
@@ -388,7 +400,8 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:dev',
-            'localise:apply',
+            'configure:apply',
+            'copy:schema',
             'theme:create'
         );
     });
@@ -407,7 +420,8 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:build',
-            'localise:apply',
+            'configure:apply',
+            'copy:schema',
             'clean:build',
             'copy:build',
             'exec:build',
@@ -448,7 +462,7 @@ module.exports = function (grunt) {
         );
     });
 
-    // delete all extension/config/[locale].js, extension/theme/[theme].css files
+    // delete all extension/build files
     grunt.registerTask("cleanup", '', function(){
         grunt.task.run(
             'clean:cleanup'
