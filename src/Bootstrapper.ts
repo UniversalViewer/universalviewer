@@ -198,7 +198,7 @@ class Bootstrapper{
         }
 
         // todo: use a compiler flag when available
-        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/config/' + that.params.getLocaleName() + '.config.js' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.js';
+        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + that.params.getLocaleName() + '.config.json' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.json';
 
         // feature detection
         yepnope({
@@ -218,7 +218,7 @@ class Bootstrapper{
                     }
 
                     // todo: use a compiler flag when available
-                    var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/theme/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
+                    var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
 
                     yepnope.injectCss(cssPath, function () {
                         that.createExtension(extension, config);

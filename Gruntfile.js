@@ -68,7 +68,7 @@ module.exports = function (grunt) {
             build : ['<%= dirs.build %>'],
             dist: ['<%= dirs.dist %>'],
             examples: ['<%= dirs.examples %>/uv-*'],
-            cleanup: ['./src/extensions/*/build/*']
+            extension: ['./src/extensions/*/build/*']
         },
 
         copy: {
@@ -77,11 +77,9 @@ module.exports = function (grunt) {
                     // extension schema files
                     {
                         expand: true,
-                        flatten: true,
-                        src: ['src/extensions/**/build/*.schema.json'],
+                        src: ['src/extensions/*/build/*.schema.json'],
                         dest: '<%= dirs.examples %>/schema/',
                         rename: function(dest, src) {
-
                             // get the extension name from the src string.
                             // src/extensions/[extension]/build/[locale].schema.json
                             var reg = /extensions\/(.*)\/build\/(.*.schema.json)/;
@@ -400,6 +398,7 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:dev',
+            'clean:extension',
             'configure:apply',
             'copy:schema',
             'theme:create'
@@ -420,6 +419,7 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'ts:build',
+            'clean:extension',
             'configure:apply',
             'copy:schema',
             'clean:build',
@@ -461,12 +461,4 @@ module.exports = function (grunt) {
             'protractor:dev'
         );
     });
-
-    // delete all extension/build files
-    grunt.registerTask("cleanup", '', function(){
-        grunt.task.run(
-            'clean:cleanup'
-        );
-    });
-
 };
