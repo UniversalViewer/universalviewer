@@ -79,7 +79,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         cwd: 'src',
-                        src: ['index.html', 'app.html'],
+                        src: ['app.html'],
                         dest: '<%= dirs.build %>'
                     },
                     // js
