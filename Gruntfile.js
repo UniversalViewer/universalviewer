@@ -127,15 +127,6 @@ module.exports = function (grunt) {
                         src: ['src/extensions/**/lib/*'],
                         dest: '<%= dirs.build %>/lib/'
                     },
-                    // anything in the module/js folders that isn't
-                    // a js file. could be swfs or supporting files
-                    // for a 3rd party library
-                    //{
-                    //    expand: true,
-                    //    flatten: true,
-                    //    src: ['src/modules/**/lib/*.*', '!src/modules/**/lib/*.js'],
-                    //    dest: '<%= dirs.build %>/lib/'
-                    //},
                     // l10n localisation files
                     {
                         expand: true,
