@@ -5,13 +5,6 @@
 lib
 !src/lib
 !src/extensions/**/lib
-!src/modules/**/lib
-
-#################
-## Bower
-#################
-
-bower_components
 
 #################
 ## TypeScript
