@@ -263,7 +263,7 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node lib/r.js/dist/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= global.minify %> out=<%= dirs.build %>/lib/app.js'
+                cmd: 'node lib/r.js/dist/r.js -o baseUrl=src/ mainConfigFile=src/App.js name=App <%= global.minify %> out=<%= dirs.build %>/lib/app.js'
             }
         },
 
