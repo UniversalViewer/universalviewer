@@ -1,7 +1,8 @@
 {
     "options":
     {
-        "theme": "uv-en-GB-theme"
+        "theme": "uv-en-GB-theme",
+        "rightPanelEnabled": true
     },
     "modules":
     {

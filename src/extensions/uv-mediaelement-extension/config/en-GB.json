@@ -2,7 +2,7 @@
     "options":
     {
         "theme": "uv-en-GB-theme",
-        "leftPanelEnabled": true
+        "rightPanelEnabled": true
     },
     "modules":
     {

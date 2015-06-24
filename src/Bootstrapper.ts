@@ -224,18 +224,19 @@ class Bootstrapper{
     }
 
     getConfigExtension(extension: any, cb: (configExtension: any) => void): void {
-        // if data-config has been set
-        if (this.params.config){
 
-            // if "sessionstorage"
-            if (this.params.config.toLowerCase() === 'sessionstorage'){
-                var config = sessionStorage.getItem(extension.name + '.' + this.params.localeName);
-                cb(JSON.parse(config));
-            } else {
-                $.getJSON(this.params.config, (configExtension) => {
-                    cb(configExtension);
-                });
-            }
+        var sessionConfig = sessionStorage.getItem(extension.name + '.' + this.params.localeName);
+
+        if (sessionConfig) { // if config is stored in sessionstorage
+
+            cb(JSON.parse(sessionConfig));
+
+        } else if (this.params.config){ // if data-config has been set
+
+            $.getJSON(this.params.config, (configExtension) => {
+                cb(configExtension);
+            });
+
         } else {
             cb(null);
         }

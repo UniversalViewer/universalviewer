@@ -72,7 +72,11 @@ class Extension extends BaseExtension{
         }
 
         this.centerPanel = new MediaElementCenterPanel(Shell.$centerPanel);
-        this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+        }
+
         this.footerPanel = new FooterPanel(Shell.$footerPanel);
 
         this.$helpDialogue = $('<div class="overlay help"></div>');
@@ -93,6 +97,10 @@ class Extension extends BaseExtension{
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
+        }
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel.init();
         }
     }
 

@@ -72,7 +72,7 @@ class Extension extends BaseExtension{
         var browser = window.browserDetect.browser;
         var version = window.browserDetect.version;
 
-        if (browser == 'Explorer' && version <= 9) return true;
+        if (browser === 'Explorer' && version <= 9) return true;
         return false;
     }
 
@@ -105,6 +105,10 @@ class Extension extends BaseExtension{
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
+        }
+
+        if (this.isRightPanelEnabled()){
+            this.rightPanel.init();
         }
     }
 }
