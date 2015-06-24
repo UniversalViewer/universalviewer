@@ -167,26 +167,14 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
         this.pages = [];
 
-        if (!this.isPagingSettingEnabled()){ // if single-up mode
+        var indices = this.getPagedIndices();
+
+        _.each(indices, (index) => {
             var p: Page = new Page();
-            p.tileSourceUri = this.getImageUri(this.getCurrentCanvas());
+            p.tileSourceUri = this.getImageUri(this.getCanvasByIndex(index));
             this.pages.push(p);
-        } else {
-            if (this.isFirstCanvas() || (this.isLastCanvas() && this.isTotalCanvasesEven())){
-                var p: Page = new Page();
-                p.tileSourceUri = this.getImageUri(this.getCurrentCanvas());
-                this.pages.push(p);
-            } else {
-                var indices = this.getPagedIndices();
-
-                _.each(indices, (index) => {
-                    var p: Page = new Page();
-                    p.tileSourceUri = this.getImageUri(this.getCanvasByIndex(index));
-                    this.pages.push(p);
-                });
-            }
-        }
-
+        });
+        
         // todo: use compiler flag (when available)
         var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'js/imageunavailable.json';
 
