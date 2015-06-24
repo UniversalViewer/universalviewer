@@ -174,7 +174,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
             p.tileSourceUri = this.getImageUri(this.getCanvasByIndex(index));
             this.pages.push(p);
         });
-        
+
         // todo: use compiler flag (when available)
         var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'js/imageunavailable.json';
 
