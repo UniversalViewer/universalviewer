@@ -4,7 +4,6 @@ import BaseExtension = require("./modules/uv-shared-module/BaseExtension");
 class Bootstrapper{
 
     config: any;
-    configExtension: any;
     extension: BaseExtension;
     extensions: any;
     isFullScreen: boolean = false; // persist full screen between reloads
@@ -60,23 +59,7 @@ class Bootstrapper{
 
         jQuery.support.cors = true;
 
-        // if data-config has been set on embedding div, load the js
-        if (that.params.config){
-
-            // if "sessionstorage"
-            if (that.params.config.toLowerCase() === "sessionstorage"){
-                var config = sessionStorage.getItem("uv-config-" + that.params.localeName);
-                that.configExtension = JSON.parse(config);
-                that.loadManifest();
-            } else {
-                $.getJSON(that.params.config, (configExtension) => {
-                    that.configExtension = configExtension;
-                    that.loadManifest();
-                });
-            }
-        } else {
-            that.loadManifest();
-        }
+        that.loadManifest();
     }
 
     corsEnabled(): boolean {
@@ -151,14 +134,14 @@ class Bootstrapper{
         // if it's not a reference, load dependencies
         if (that.sequences[that.sequenceIndex].canvases) {
             that.sequence = that.sequences[that.sequenceIndex];
-            that.loadDependencies();
+            that.parseExtension();
         } else {
             // load referenced sequence.
             var sequenceUri = String(that.sequences[that.sequenceIndex]['@id']);
 
             $.getJSON(sequenceUri, (sequenceData) => {
                 that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
-                that.loadDependencies();
+                that.parseExtension();
             });
         }
     }
@@ -170,7 +153,7 @@ class Bootstrapper{
         } catch (e) {}
     }
 
-    loadDependencies(): void {
+    parseExtension(): void {
 
         var that = this;
         var extension;
@@ -197,34 +180,73 @@ class Bootstrapper{
                 break;
         }
 
-        // todo: use a compiler flag when available
-        var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + that.params.getLocaleName() + '.config.json' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.json';
+        that.featureDetect(() => {
+            that.configure(extension, (config) => {
+                that.injectCss(extension, config, () => {
+                    that.createExtension(extension, config);
+                });
+            });
+        });
+    }
 
-        // feature detection
+    featureDetect(cb: () => void): void {
         yepnope({
             test: window.btoa && window.atob,
             nope: 'lib/base64.min.js',
             complete: function () {
-                $.getJSON(configPath, (config) => {
+                cb();
+            }
+        });
+    }
 
-                    config.name = extension.name;
+    configure(extension, cb: (config: any) => void): void {
+        var that = this;
 
-                    // if data-config has been set on embedding div, extend the existing config object.
-                    if (that.configExtension){
-                        // save a reference to the config extension uri.
-                        config.uri = that.params.config;
+        this.getConfigExtension(extension, (configExtension: any) => {
+            // todo: use a compiler flag when available
+            var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + that.params.getLocaleName() + '.config.json' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.json';
 
-                        $.extend(true, config, that.configExtension);
-                    }
+            $.getJSON(configPath, (config) => {
 
-                    // todo: use a compiler flag when available
-                    var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
+                config.name = extension.name;
 
-                    yepnope.injectCss(cssPath, function () {
-                        that.createExtension(extension, config);
-                    });
+                // if data-config has been set, extend the existing config object.
+                if (configExtension){
+                    // save a reference to the config extension uri.
+                    config.uri = that.params.config;
+
+                    $.extend(true, config, configExtension);
+                }
+
+                cb(config);
+            });
+        });
+    }
+
+    getConfigExtension(extension: any, cb: (configExtension: any) => void): void {
+        // if data-config has been set
+        if (this.params.config){
+
+            // if "sessionstorage"
+            if (this.params.config.toLowerCase() === 'sessionstorage'){
+                var config = sessionStorage.getItem(extension.name + '.' + this.params.localeName);
+                cb(JSON.parse(config));
+            } else {
+                $.getJSON(this.params.config, (configExtension) => {
+                    cb(configExtension);
                 });
             }
+        } else {
+            cb(null);
+        }
+    }
+
+    injectCss(extension: any, config: any, cb: () => void): void {
+        // todo: use a compiler flag when available
+        var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
+
+        yepnope.injectCss(cssPath, function () {
+            cb();
         });
     }
 
