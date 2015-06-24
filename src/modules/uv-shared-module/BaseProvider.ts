@@ -286,7 +286,7 @@ class BaseProvider implements IProvider{
         if (!this.isPagingSettingEnabled()) {
             indices.push(this.canvasIndex);
         } else {
-            if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.getTotalCanvases() % 2 == 0)){
+            if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.isTotalCanvasesEven())){
                 indices = [canvasIndex];
             } else if (canvasIndex % 2){
                 indices = [canvasIndex, canvasIndex + 1];
