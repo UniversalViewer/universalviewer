@@ -1,111 +1,15 @@
 {
+    "extends": "en-GB",
     "options":
     {
-        "leftPanelEnabled": true,
-        "overrideFullScreen": false,
-        "pagingEnabled": true,
-        "preserveViewport": false,
-        "rightPanelEnabled": true,
-        "searchWithinEnabled": true,
         "theme": "uv-cy-GB-theme"
     },
     "modules":
     {
-        "dialogue": {
-        },
-        "downloadDialogue":
-        {
-            "options":
-            {
-                "confinedImageSize": 1000
-            }
-        },
-        "embedDialogue":
-        {
-            "options":
-            {
-                "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-sequenceindex=\"{3}\" data-canvasindex=\"{4}\" data-zoom=\"{5}\" data-rotation=\"{6}\" style=\"width:{7}px; height:{8}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{9}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
-            }
-        },
-        "footerPanel":
-        {
-            "options":{
-                "downloadEnabled": true,
-                "embedEnabled": true,
-                "fullscreenEnabled": true,
-                "minimiseButtons": false
-            }
-        },
-        "genericDialogue":
-        {
-        },
-        "helpDialogue":
-        {
-        },
-        "moreInfoRightPanel":
-        {
-            "options":
-            {
-                "panelAnimationDuration": 250,
-                "panelCollapsedWidth": 30,
-                "panelExpandedWidth": 255,
-                "panelOpen": false
-            }
-        },
-        "pagingHeaderPanel":
-        {
-            "options":
-            {
-                "localeToggleEnabled": false,
-                "pageModeEnabled": true,
-                "pagingToggleEnabled": true
-            }
-        },
-        "seadragonCenterPanel":
-        {
-            "options":
-            {
-                "controlsFadeAfterInactive": 1500,
-                "controlsFadeDelay": 250,
-                "controlsFadeLength": 250,
-                "defaultZoomLevel": 0,
-                "navigatorPosition": "BOTTOM_RIGHT",
-                "pageGap": 0.01,
-                "trimAttributionCount": 150
-            }
-        },
         "searchFooterPanel":
         {
             "options":{
-                "elideDetailsTermsCount": 20,
-                "elideResultsTermsCount": 5,
-                "pageModeEnabled": true
-            }
-        },
-        "settingsDialogue":
-        {
-        },
-        "treeViewLeftPanel":
-        {
-            "options":
-            {
-                "elideCount": 40,
-                "galleryThumbHeight": 320,
-                "galleryThumbWidth": 200,
-                "oneColThumbHeight": 320,
-                "oneColThumbWidth": 200,
-                "pageModeEnabled": true,
-                "panelAnimationDuration": 250,
-                "panelCollapsedWidth": 30,
-                "panelExpandedWidth": 255,
-                "panelOpen": true,
-                "thumbsEnabled": true,
-                "thumbsExtraHeight": 8,
-                "thumbsImageFadeInDuration": 300,
-                "thumbsLoadRange": 15,
-                "treeEnabled": true,
-                "twoColThumbHeight": 150,
-                "twoColThumbWidth": 90
+                "elideResultsTermsCount": 5
             }
         }
     }

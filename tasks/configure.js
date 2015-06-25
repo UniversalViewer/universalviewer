@@ -35,35 +35,38 @@ module.exports = function (grunt) {
 
         var l10nFiles = getL10nFiles(dir);
 
-        _.each(l10nFiles, function(file) {
-            var regex = (/(.*)\/l10n\/(.*).json/).exec(file);
+        _.each(l10nFiles, function(localeFile) {
+            var regex = (/(.*)\/l10n\/(.*).json/).exec(localeFile);
 
-            var extension = regex[1];
-            var build = extension + '/build/';
-            var parent = extension + '/config/';
+            var extensionDir = regex[1];
+            var buildDir = path.join(extensionDir, '/build/');
+            var configDir = path.join(extensionDir, '/config/');
             var locale = regex[2];
-            var path = parent + locale;
-            var config = path + '.json';
-            var configDest = build + locale + '.config.json';
-            var schemaDest = build + locale + '.schema.json';
+            var configFile = path.join(configDir, locale + '.json');
+            var configDest = path.join(buildDir, locale + '.config.json');
+            var schemaDest = path.join(buildDir, locale + '.schema.json');
 
-            // check config counterpart exists, if not fall back to en-GB.json
-            if (!grunt.file.exists(config)){
-                config = parent + options.default;
+            // check config counterpart exists, if not fall back to en-GB
+            if (!grunt.file.exists(configFile)){
+                configFile = path.join(configDir, options.default + '.json');
             }
 
-            var configJSON = grunt.file.readJSON(config);
-            var localeJSON = grunt.file.readJSON(file);
+            var configJSON = grunt.file.readJSON(configFile);
+            var localeJSON = grunt.file.readJSON(localeFile);
 
             if (configJSON.extends){
-                var extJSON = grunt.file.readJSON(configJSON.extends);
+                var extFile = path.join(configDir, configJSON.extends + '.json');
+                var extJSON = grunt.file.readJSON(extFile);
                 configJSON = _.merge(extJSON, configJSON);
+                delete configJSON.extends;
             }
 
-            if (localeJSON.extends){
-                var extJSON = grunt.file.readJSON(localeJSON.extends);
-                localeJSON = _.merge(localeJSON, extJSON);
-            }
+            //if (localeJSON.extends){
+            //    grunt.file.setBase(localeDir);
+            //    var extJSON = grunt.file.readJSON(localeJSON.extends);
+            //    grunt.file.setBase('./');
+            //    localeJSON = _.merge(localeJSON, extJSON);
+            //}
 
             var merged = _.merge(configJSON, localeJSON, locales);
 

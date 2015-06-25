@@ -356,7 +356,7 @@ module.exports = function (grunt) {
         configure: {
             apply: {
                 options: {
-                    default: 'en-GB.json'
+                    default: 'en-GB'
                 }
             }
         },
