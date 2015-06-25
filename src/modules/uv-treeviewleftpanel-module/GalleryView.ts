@@ -152,14 +152,13 @@ class GalleryView extends BaseView {
         if (!this.thumbs || !this.thumbs.length) return;
 
         // cache range size
-        this.range = Math.normalise(Number(this.$sizeRange.val()), 0, 10);
-        this.range = Math.clamp(this.range, 0.05, 1);
+        var norm = Math.normalise(Number(this.$sizeRange.val()), 0, 10);
+        this.range = Math.clamp(norm, 0.05, 1);
 
         // test which thumbs are scrolled into view
         var thumbs = this.$thumbs.find('.thumb');
 
         for (var i = 0; i < thumbs.length; i++) {
-
             var $thumb = $(thumbs[i]);
             this.sizeThumb($thumb);
             this.sizeThumbImage($thumb);
@@ -188,7 +187,7 @@ class GalleryView extends BaseView {
     }
 
     equaliseHeights(): void {
-        this.$thumbs.find('.thumb .wrap').equaliseHeight();
+        //this.$thumbs.find('.thumb .wrap').equaliseHeight();
     }
 
     sizeThumb($thumb: JQuery) : void {
