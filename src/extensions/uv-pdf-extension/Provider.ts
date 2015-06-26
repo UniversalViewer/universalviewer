@@ -13,11 +13,6 @@ class Provider extends BaseProvider implements IPDFProvider{
         }, bootstrapper.config.options);
     }
 
-    getPDFUri(): string{
-        var canvas = this.getCanvasByIndex(0);
-        return canvas.mediaUri;
-    }
-
     getEmbedScript(width: number, height: number, embedTemplate: string): string{
 
         var esu = this.options.embedScriptUri || this.embedScriptUri;
