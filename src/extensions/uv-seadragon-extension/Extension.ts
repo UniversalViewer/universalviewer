@@ -138,7 +138,7 @@ class Extension extends BaseExtension {
             this.treeNodeSelected(data);
         });
 
-        $.subscribe(Commands.THUMB_SELECTED, (e, index: number) => {
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
             this.viewPage(index);
         });
 

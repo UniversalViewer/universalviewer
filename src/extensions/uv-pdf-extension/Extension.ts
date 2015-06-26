@@ -43,7 +43,7 @@ class Extension extends BaseExtension{
 
         var that = this;
 
-        $.subscribe(Commands.THUMB_SELECTED, (e, index: number) => {
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
             window.open((<IPDFProvider>that.provider).getPDFUri());
         });
 
