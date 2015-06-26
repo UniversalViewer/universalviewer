@@ -21,7 +21,7 @@ class PDFCenterPanel extends CenterPanel {
     }
 
     viewMedia(canvas) {
-
+        var pdfUri = canvas.media[0].resource['@id'];
         var browser = window.browserDetect.browser;
         var version = window.browserDetect.version;
 
@@ -29,7 +29,7 @@ class PDFCenterPanel extends CenterPanel {
 
             // create pdf object
             var myPDF = new PDFObject({
-                url: canvas.mediaUri,
+                url: pdfUri,
                 id: "PDF"
             }).embed('content');
 
@@ -52,7 +52,7 @@ class PDFCenterPanel extends CenterPanel {
                     PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                 }
 
-                PDFJS.DEFAULT_URL = canvas.media[0].resource['@id'];
+                PDFJS.DEFAULT_URL = pdfUri;
 
                 window.webViewerLoad();
 

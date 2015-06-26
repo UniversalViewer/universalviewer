@@ -44,8 +44,10 @@
                 "titleEnabled": false
             }
         },
-        "treeViewLeftPanel": {
-
+        "treeViewLeftPanel":{
+            "options":{
+                "pageModeEnabled": true
+            }
         }
     }
 }
