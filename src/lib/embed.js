@@ -239,9 +239,12 @@ docReady(function() {
 
             isFullScreen = false;
             height = $app.height();
-            var position = $app.position();
-            top = position.top;
-            left = position.left;
+            //var position = $app.position();
+            //top = position.top;
+            //left = position.left;
+            var offset = $app.offset();
+            top = offset.top;
+            left = offset.left;
 
             $(window).resize(function () {
                 resize();

@@ -313,7 +313,12 @@ module.exports = function (grunt) {
             },
             examples: {
                 // replace uv version
-                src: ['<%= dirs.examples %>/index.html', '<%= dirs.examples %>/examples.js', '<%= dirs.examples %>/uv.js'],
+                src: [
+                    '<%= dirs.examples %>/index.html',
+                    '<%= dirs.examples %>/examples.js',
+                    '<%= dirs.examples %>/uv.js',
+                    '<%= dirs.examples %>/web.config'
+                ],
                 overwrite: true,
                 replacements: [{
                     from: /uv-\d+\.\d+\.\d+/g,
