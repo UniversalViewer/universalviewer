@@ -239,9 +239,12 @@ docReady(function() {
 
             isFullScreen = false;
             height = $app.height();
-            var position = $app.position();
-            top = position.top;
-            left = position.left;
+            //var position = $app.position();
+            //top = position.top;
+            //left = position.left;
+            var offset = $app.offset();
+            top = offset.top;
+            left = offset.left;
 
             $(window).resize(function () {
                 resize();
@@ -257,8 +260,10 @@ docReady(function() {
                 if (!$appFrame) return;
 
                 if (isFullScreen) {
-                    $appFrame.width($(this).width());
-                    $appFrame.height($(this).height());
+                    var viewport = getViewport();
+
+                    $appFrame.width(viewport.width);
+                    $appFrame.height(viewport.height);
                 } else {
                     $appFrame.width($app.width());
                     $appFrame.height($app.height());
@@ -294,13 +299,13 @@ docReady(function() {
                     $("html").css("overflow", "hidden");
                     window.scrollTo(0, 0);
 
+                    var offset = getOffset();
+
                     $appFrame.css({
                         'position': 'absolute',
                         'z-index': 9999,
-                        'height': $(window).height(),
-                        'width': $(window).width(),
-                        'top': ($app[0].offsetParent.offsetTop * -1) || 0,
-                        'left': ($app[0].offsetParent.offsetLeft * -1) || 0
+                        'top': offset.top,
+                        'left': offset.left
                     });
                 } else {
                     $("html").css("overflow", "auto");
@@ -322,6 +327,47 @@ docReady(function() {
                 }
 
                 resize();
+            }
+
+            function getOffset() {
+
+                var offset = {
+                    top: 0,
+                    left: 0
+                };
+
+                // if $app has an offsetParent that isn't the root
+                if (!$app.offsetParent().is(':root')){
+                    offset.top = $($app[0]).offset().top * -1;
+                    offset.left = $($app[0]).offset().left * -1;
+                }
+
+                return offset;
+            }
+
+            function getViewport() {
+
+                var viewPortWidth;
+                var viewPortHeight;
+
+                // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+                if (typeof window.innerWidth != 'undefined') {
+                    viewPortWidth = window.innerWidth,
+                        viewPortHeight = window.innerHeight
+                }
+                // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+                else if (typeof document.documentElement != 'undefined'
+                    && typeof document.documentElement.clientWidth !=
+                    'undefined' && document.documentElement.clientWidth != 0) {
+                    viewPortWidth = document.documentElement.clientWidth,
+                        viewPortHeight = document.documentElement.clientHeight
+                }
+                // older versions of IE
+                else {
+                    viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
+                        viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
+                }
+                return {width: viewPortWidth, height: viewPortHeight};
             }
 
             function viewSequence(index) {
