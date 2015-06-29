@@ -337,7 +337,8 @@ docReady(function() {
                 };
 
                 // if $app has an offsetParent that isn't the root
-                if (!$app.offsetParent().is(':root')){
+                if (!$app.offsetParent().is(':root') &&
+                    !$app.offsetParent().is('body')){
                     offset.top = $($app[0]).offset().top * -1;
                     offset.left = $($app[0]).offset().left * -1;
                 }
