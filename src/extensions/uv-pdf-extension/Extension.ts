@@ -48,6 +48,17 @@ class Extension extends BaseExtension{
             this.viewFile(index);
         });
 
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+            Shell.$centerPanel.hide();
+            Shell.$rightPanel.hide();
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
+            Shell.$centerPanel.show();
+            Shell.$rightPanel.show();
+            this.resize();
+        });
+
         $.subscribe(BaseCommands.DOWNLOAD, (e) => {
             $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
