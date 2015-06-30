@@ -260,6 +260,13 @@ docReady(function() {
                 if (!$appFrame) return;
 
                 if (isFullScreen) {
+                    var offset = getOffset();
+
+                    $appFrame.css({
+                        'top': offset.top,
+                        'left': offset.left
+                    });
+
                     var viewport = getViewport();
 
                     $appFrame.width(viewport.width);
