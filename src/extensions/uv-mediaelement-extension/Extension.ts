@@ -13,6 +13,7 @@ import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
 import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
+import Params = require("../../modules/uv-shared-module/Params");
 import Provider = require("./Provider");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
@@ -62,6 +63,21 @@ class Extension extends BaseExtension{
         $.subscribe(BaseCommands.EMBED, (e) => {
             $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
         });
+
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
+            this.viewFile(index);
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+            Shell.$centerPanel.hide();
+            Shell.$rightPanel.hide();
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
+            Shell.$centerPanel.show();
+            Shell.$rightPanel.show();
+            this.resize();
+        });
     }
 
     createModules(): void{
@@ -106,7 +122,20 @@ class Extension extends BaseExtension{
 
     isLeftPanelEnabled(): boolean{
         return  Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
-                && this.provider.isMultiSequence();
+                && (this.provider.isMultiCanvas() || this.provider.isMultiSequence());
+    }
+
+    viewFile(canvasIndex: number): void {
+
+        // if it's a valid canvas index.
+        if (canvasIndex == -1) return;
+
+        this.viewCanvas(canvasIndex, () => {
+            var canvas = this.provider.getCanvasByIndex(canvasIndex);
+            $.publish(BaseCommands.OPEN_MEDIA, [canvas]);
+            this.setParam(Params.canvasIndex, canvasIndex);
+        });
+
     }
 }
 
