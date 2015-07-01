@@ -308,6 +308,8 @@ docReady(function() {
 
                     var offset = getOffset();
 
+                    // todo: prevent parent from having overflow:hidden?
+
                     $appFrame.css({
                         'position': 'absolute',
                         'z-index': 9999,
