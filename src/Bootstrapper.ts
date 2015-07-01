@@ -114,8 +114,13 @@ class Bootstrapper{
             return;
         }
 
-        if (this.manifest.xsequences){
-            this.manifest.sequences = this.manifest.xsequences;
+        // normalise IxIF to sequence and canvas objects
+        if (this.manifest.mediaSequences){
+            this.manifest.sequences = this.manifest.mediaSequences;
+
+            _.each(this.manifest.sequences, (sequence: any) => {
+                sequence.canvases = sequence.elements;
+            });
         }
 
         this.sequences = this.manifest.sequences;
@@ -131,11 +136,8 @@ class Bootstrapper{
 
         var that = this;
 
-        // if it's not a reference, load dependencies
-        if (that.sequences[that.sequenceIndex].canvases) {
-            that.sequence = that.sequences[that.sequenceIndex];
-            that.parseExtension();
-        } else {
+        // if it's a reference
+        if (_.isUndefined(that.sequences[that.sequenceIndex].canvases)) {
             // load referenced sequence.
             var sequenceUri = String(that.sequences[that.sequenceIndex]['@id']);
 
@@ -143,6 +145,9 @@ class Bootstrapper{
                 that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
                 that.parseExtension();
             });
+        } else {
+            that.sequence = that.sequences[that.sequenceIndex];
+            that.parseExtension();
         }
     }
 
@@ -164,19 +169,24 @@ class Bootstrapper{
         // The UV should probably be able to load different extensions on a per-canvas-basis.
 
         var canvasType = that.sequence.canvases[0]['@type'];
+        var format = that.sequence.canvases[0].format;
 
         switch(canvasType.toLowerCase()) {
             case 'sc:canvas':
                 extension = that.extensions['seadragon/iiif'];
                 break;
-            case 'ixif:audio':
-                extension = that.extensions['audio/iiif'];
+            case 'dctypes:sound':
+                extension = that.extensions['audio/ixif'];
                 break;
-            case 'ixif:video':
-                extension = that.extensions['video/iiif'];
+            case 'dctypes:movingimage':
+                extension = that.extensions['video/ixif'];
                 break;
-            case 'ixif:borndigital':
-                extension = that.extensions['pdf/iiif'];
+            case 'foaf:document':
+                switch(format.toLowerCase()) {
+                    case 'application/pdf' :
+                        extension = that.extensions['pdf/ixif'];
+                        break;
+                }
                 break;
         }
 

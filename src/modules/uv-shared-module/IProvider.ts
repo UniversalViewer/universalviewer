@@ -1,6 +1,7 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
+import RenderingFormat = require("./RenderingFormat");
 import ServiceProfile = require("./ServiceProfile");
 import Thumb = require("./Thumb");
 import TreeNode = require("./TreeNode");
@@ -28,6 +29,8 @@ interface IProvider{
     getManifestSeeAlsoUri(manifest: any): string;
     getManifestType(): string;
     getMetaData(callback: (data: any) => any): void;
+    getRendering(resource: any, format: RenderingFormat): any
+    getRenderings(element: any): any[];
     getSeeAlso(): any;
     getSequenceType(): string;
     getService(resource: any, profile: ServiceProfile): any;

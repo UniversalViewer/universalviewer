@@ -27,13 +27,7 @@ class Provider extends BaseProvider implements IMediaElementProvider{
     }
 
     getPosterImageUri(): string{
-        // todo: decide how to include poster image in ixif
-        return "";
-        //var baseUri = this.options.mediaBaseUri || "";
-        //var template = this.options.mediaUriTemplate;
-        //var uri = String.prototype.format(template, baseUri, this.sequence.extensions.posterImage);
-        //
-        //return uri;
+        return this.getCurrentCanvas().thumbnail;
     }
 }
 

@@ -82,19 +82,19 @@ require([
             name: 'uv-seadragon-extension'
         };
 
-        extensions['video/iiif'] = {
+        extensions['video/ixif'] = {
             type: mediaelementExtension,
             provider: mediaelementProvider,
             name: 'uv-mediaelement-extension'
         };
 
-        extensions['audio/iiif'] = {
+        extensions['audio/ixif'] = {
             type: mediaelementExtension,
             provider: mediaelementProvider,
             name: 'uv-mediaelement-extension'
         };
 
-        extensions['pdf/iiif'] = {
+        extensions['pdf/ixif'] = {
             type: pdfExtension,
             provider: pdfProvider,
             name: 'uv-pdf-extension'

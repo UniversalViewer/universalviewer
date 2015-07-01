@@ -69,15 +69,14 @@ class MediaElementCenterPanel extends CenterPanel {
 
         var sources = [];
 
-        _.each(canvas.media, (annotation: any) => {
-            var resource = annotation.resource;
+        _.each(this.provider.getRenderings(canvas), (rendering: any) => {
             sources.push({
-                type: resource.format.substr(resource.format.indexOf(':') + 1),
-                src: resource['@id']
+                type: rendering.format,
+                src: rendering['@id']
             });
         });
 
-        if (canvasType.contains('video')){
+        if (canvasType.contains('movingimage')){
 
             //if (!canvas.sources){
             //    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
@@ -119,7 +118,7 @@ class MediaElementCenterPanel extends CenterPanel {
                     }
                 }
             });
-        } else if (canvasType.contains('audio')){
+        } else if (canvasType.contains('sound')){
 
             this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + sources[0].src + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
 

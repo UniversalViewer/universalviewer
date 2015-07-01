@@ -153,6 +153,18 @@ class BaseProvider implements IProvider{
         return null;
     }
 
+    getRenderings(element: any): any[] {
+        if (!element.rendering) return null;
+
+        var renderings = element.rendering;
+
+        if (!$.isArray(renderings)){
+            renderings = [renderings];
+        }
+
+        return renderings;
+    }
+
     getSequenceType(): string{
         // todo: perhaps use viewingHint attribute
         // default to 'seadragon-iiif'
