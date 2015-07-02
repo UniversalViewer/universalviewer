@@ -154,15 +154,18 @@ class BaseProvider implements IProvider{
     }
 
     getRenderings(element: any): any[] {
-        if (!element.rendering) return null;
+        if (element.rendering){
+            var renderings = element.rendering;
 
-        var renderings = element.rendering;
+            if (!$.isArray(renderings)){
+                renderings = [renderings];
+            }
 
-        if (!$.isArray(renderings)){
-            renderings = [renderings];
+            return renderings;
         }
 
-        return renderings;
+        // no renderings provided, default to element.
+        return [element];
     }
 
     getSequenceType(): string{
