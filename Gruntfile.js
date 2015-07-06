@@ -78,7 +78,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/extensions/*/build/*.schema.json'],
-                        dest: '<%= dirs.examples %>/schema/',
+                        dest: '<%= dirs.build %>/schema/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
                             // src/extensions/[extension]/build/[locale].schema.json
@@ -414,7 +414,6 @@ module.exports = function (grunt) {
             'ts:dev',
             'clean:extension',
             'configure:apply',
-            'copy:schema',
             'theme:create'
         );
     });
@@ -435,8 +434,8 @@ module.exports = function (grunt) {
             'ts:build',
             'clean:extension',
             'configure:apply',
-            'copy:schema',
             'clean:build',
+            'copy:schema',
             'copy:build',
             'exec:build',
             'replace:html',

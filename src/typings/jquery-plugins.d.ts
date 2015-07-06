@@ -1,3 +1,7 @@
+interface JQueryStatic {
+    mlp: any;
+}
+
 interface JQuery {
     disable(): void;
     ellipsisFill(text?: string): any;
