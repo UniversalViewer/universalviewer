@@ -187,7 +187,7 @@ class GalleryView extends BaseView {
     }
 
     equaliseHeights(): void {
-        //this.$thumbs.find('.thumb .wrap').equaliseHeight();
+        this.$thumbs.find('.thumb .wrap').equaliseHeight(false, true);
     }
 
     sizeThumb($thumb: JQuery) : void {

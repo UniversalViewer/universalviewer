@@ -21,6 +21,7 @@ interface Math {
     lerp(start: number, stop: number, amount: number): number;
     mag(a: number, b: number, c: number): number;
     map(value: number, start1: number, stop1: number, start2: number, stop2: number): number;
+    median(values: number[]): number;
     randomBetween(low: number, high?: number): number;
     roundToDecimalPlace(num: number, dec: number): number;
     radiansToDegrees(radians: number): number;

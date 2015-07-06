@@ -70,6 +70,18 @@ Math.mag = function (a, b, c) {
 Math.map = function (value, start1, stop1, start2, stop2) {
     return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 };
+Math.median = function (values) {
+    values.sort(function (a, b) {
+        return a - b;
+    });
+    var half = Math.floor(values.length / 2);
+    if (values.length % 2) {
+        return values[half];
+    }
+    else {
+        return (values[half - 1] + values[half]) / 2.0;
+    }
+};
 Math.normalise = function (num, min, max) {
     return (num - min) / (max - min);
 };

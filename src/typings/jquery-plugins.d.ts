@@ -7,7 +7,7 @@ interface JQuery {
     ellipsisFill(text?: string): any;
     ellipsisHtmlFixed(chars: number, callback: () => void): any;
     enable(): void;
-    equaliseHeight(reset?: boolean): any;
+    equaliseHeight(reset?: boolean, average?: boolean): any;
     horizontalMargins(): number;
     horizontalPadding(): number;
     ismouseover(): boolean;
