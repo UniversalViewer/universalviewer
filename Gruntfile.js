@@ -228,7 +228,12 @@ module.exports = function (grunt) {
                         cwd: '<%= dirs.bower %>',
                         expand: true,
                         flatten: true,
-                        src: ['extensions/dist/extensions.js', 'utils/dist/utils.js'],
+                        src: [
+                            'extensions/dist/extensions.js',
+                            'utils/dist/utils.js',
+                            'jquery-plugins/dist/jquery-plugins.js',
+                            'Units/Length.min.js'
+                        ],
                         dest: '<%= dirs.lib %>'
                     },
                     {
@@ -236,7 +241,11 @@ module.exports = function (grunt) {
                         cwd: '<%= dirs.bower %>',
                         expand: true,
                         flatten: true,
-                        src: ['extensions/typings/extensions.d.ts', 'utils/dist/utils.d.ts'],
+                        src: [
+                            'extensions/typings/extensions.d.ts',
+                            'utils/dist/utils.d.ts',
+                            'jquery-plugins/typings/jquery-plugins.d.ts'
+                        ],
                         dest: '<%= dirs.typings %>'
                     }
                 ]

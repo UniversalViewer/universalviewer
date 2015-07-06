@@ -3,31 +3,9 @@ interface HTMLElement{
 }
 
 interface JQuery {
-    // plugins
-    ellipsisFill(text?: string): any;
-    swapClass(removeClass: string, addClass: string): void;
-    targetBlank(): void;  
-    verticalMargins(): number;
-    horizontalMargins(): number;
-    verticalPadding(): number;
-    horizontalPadding(): number;
-    toggleExpandText(chars: number, callback?: () => void);
-    ismouseover(): boolean;
-    equaliseHeight(reset?: boolean): any;
-    removeLastWord(chars: number): any;
-    ellipsisHtmlFixed(chars: number, callback: () => void): any;
-    toggleExpandTextByLines(lines: number, callback: () => void): any;
-    onPressed(callback: () => void): any;
-    onEnter(callback: () => void): any;
-    enable(): void;
-    disable(): void;
-
     // jsviews
     link: any;
     render: any;
-
-    // unevent
-    on(events: string, handler: (eventObject: JQueryEventObject, ...args: any[]) => any, wait: Number): JQuery;
 }
 
 interface JQueryStatic {
@@ -38,7 +16,7 @@ interface JQueryStatic {
     initPubSub();
     disposePubSub();
 
-    cookie(name: string);
+    //cookie(name: string);
 
     // jsviews
     observable: any;

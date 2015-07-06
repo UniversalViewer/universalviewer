@@ -7,7 +7,7 @@ require.config({
         'l10n': 'lib/l10n',
         'length': 'lib/Length.min',
         'modernizr': 'lib/modernizr',
-        'plugins': 'lib/jquery.plugins',
+        'plugins': 'lib/jquery-plugins',
         'pubsub': 'lib/pubsub',
         'sanitize': 'lib/sanitize',
         'underscore': 'lib/underscore-min',
