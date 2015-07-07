@@ -194,18 +194,18 @@ class PagingHeaderPanel extends HeaderPanel {
 
     setTitles(): void {
 
-        var mode;
-
-        if (this.isPageModeEnabled()) {
-            mode = this.content.page;
+        if (this.isPageModeEnabled()){
+            this.$firstButton.prop('title', this.content.firstPage);
+            this.$prevButton.prop('title', this.content.previousPage);
+            this.$nextButton.prop('title', this.content.nextPage);
+            this.$lastButton.prop('title', this.content.lastPage);
         } else {
-            mode = this.content.image;
+            this.$firstButton.prop('title', this.content.firstImage);
+            this.$prevButton.prop('title', this.content.previousImage);
+            this.$nextButton.prop('title', this.content.nextImage);
+            this.$lastButton.prop('title', this.content.lastImage);
         }
 
-        this.$firstButton.prop('title', this.content.first + " " + mode);
-        this.$prevButton.prop('title', this.content.previous + " " + mode);
-        this.$nextButton.prop('title', this.content.next + " " + mode);
-        this.$lastButton.prop('title', this.content.last + " " + mode);
         this.$searchButton.prop('title', this.content.go);
     }
 
