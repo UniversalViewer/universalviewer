@@ -35,7 +35,7 @@ module.exports = function (grunt) {
 
         pkg: packageJson,
 
-        ts: {
+        typescript: {
             dev: {
                 src: [
                     //'./src/_Version.ts',
@@ -45,7 +45,7 @@ module.exports = function (grunt) {
                 options: {
                     target: 'es3',
                     module: 'amd',
-                    sourcemap: true,
+                    sourceMap: true,
                     declarations: false,
                     nolib: false,
                     comments: true
@@ -393,7 +393,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-exec");
-    grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks("grunt-typescript");
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-sync');
@@ -411,7 +411,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', '', function(){
 
         grunt.task.run(
-            'ts:dev',
+            'typescript:dev',
             'clean:extension',
             'configure:apply',
             'theme:create'
@@ -431,7 +431,7 @@ module.exports = function (grunt) {
         if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
-            'ts:build',
+            'typescript:build',
             'clean:extension',
             'configure:apply',
             'clean:build',
