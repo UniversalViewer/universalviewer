@@ -128,26 +128,27 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
     getImageUri(canvas: any): string{
 
-        var iiifUri;
+        var imageUri;
 
         if (canvas.resources){
-            iiifUri = canvas.resources[0].resource.service['@id'];
+            imageUri = canvas.resources[0].resource.service['@id'];
         } else if (canvas.images && canvas.images[0].resource.service){
-            iiifUri = canvas.images[0].resource.service['@id'];
-        } else {
-            return "";
+            imageUri = canvas.images[0].resource.service['@id'];
         }
 
-        if (!iiifUri){
-            console.warn('no service endpoint available');
+        if (!imageUri){
+            // todo: use compiler flag (when available)
+            imageUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'lib/imageunavailable.json';
         } else {
-            if (!iiifUri.endsWith('/')) {
-                iiifUri += '/';
+            if (!imageUri.endsWith('/')) {
+                imageUri += '/';
             }
-            iiifUri += this.corsEnabled() ? 'info.json' : 'info.js';
+            // no longer necessary as OSD isn't handling info.json requests
+            //imageUri += this.corsEnabled() ? 'info.json' : 'info.js';
+            imageUri += 'info.json';
         }
 
-        return iiifUri;
+        return imageUri;
     }
 
     getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string{
