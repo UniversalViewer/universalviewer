@@ -4,12 +4,13 @@ import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile")
 import Session = require("./Session");
 
 class Resource {
+    public data: any;
+    public dataUri: string;
+    public error: any;
     public loginService: string;
     public logoutService: string;
     public provider: IProvider;
     public status: number;
-    public data: any;
-    public dataUri: string;
     public tokenService: string;
 
     constructor(provider: IProvider) {
@@ -41,9 +42,12 @@ class Resource {
                 resolve(that);
             }).fail((error) => {
                 that.status = error.status;
-                that.loginService = that.provider.getService(error.responseJSON, ServiceProfile.login)['@id'];
-                that.logoutService = that.provider.getService(error.responseJSON, ServiceProfile.logout)['@id'];
-                that.tokenService = that.provider.getService(error.responseJSON, ServiceProfile.token)['@id'];
+                that.error = error;
+                if (error.responseJSON){
+                    that.loginService = that.provider.getService(error.responseJSON, ServiceProfile.login)['@id'];
+                    that.logoutService = that.provider.getService(error.responseJSON, ServiceProfile.logout)['@id'];
+                    that.tokenService = that.provider.getService(error.responseJSON, ServiceProfile.token)['@id'];
+                }
                 resolve(that);
             });
         });

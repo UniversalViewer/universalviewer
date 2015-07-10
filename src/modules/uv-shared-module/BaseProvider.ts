@@ -909,7 +909,10 @@ class BaseProvider implements IProvider{
                 } else if (resource.status === 401){ // unauthorized
                     Promise.resolve(this.authorize(resource));
                 } else if (resource.status === 403){ // forbidden
+                    // todo: use config content
                     reject("You do not have permission to view this item.");
+                } else {
+                    reject(resource.error.statusText);
                 }
             });
         });
@@ -923,7 +926,8 @@ class BaseProvider implements IProvider{
                         Session.set(resource.tokenService, token, token.expiresIn);
                         // fetch the info.json again
                         Promise.resolve(this.loadResource(resource));
-                    }).catch(() => {
+                    })['catch'](() => {
+                        // todo: use config content
                         reject("Failed to get access token.");
                     });
                 });

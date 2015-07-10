@@ -134,12 +134,14 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
         if (!imageUri){
             // todo: use compiler flag (when available)
-            imageUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'js/imageunavailable.json';
+            imageUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'lib/imageunavailable.json';
         } else {
             if (!imageUri.endsWith('/')) {
                 imageUri += '/';
             }
-            imageUri += this.corsEnabled() ? 'info.json' : 'info.js';
+            // no longer necessary as OSD isn't handling info.json requests
+            //imageUri += this.corsEnabled() ? 'info.json' : 'info.js';
+            imageUri += 'info.json';
         }
 
         return imageUri;

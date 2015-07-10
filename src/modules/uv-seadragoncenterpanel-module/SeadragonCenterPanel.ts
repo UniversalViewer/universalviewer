@@ -291,7 +291,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.provider.getPages().then((pages: any) => {
             this.viewer.open(Utils.Objects.ConvertToPlainObject(pages));
-        }).catch((errorMessage) => {
+        })['catch']((errorMessage) => {
             this.extension.showMessage(errorMessage);
         });
     }
@@ -303,7 +303,7 @@ class SeadragonCenterPanel extends CenterPanel {
         if (this.provider.pages.length > 1) {
 
             // check if tilesources should be aligned horizontally or vertically
-            if (viewingDirection == "top-to-bottom" || viewingDirection == "bottom-to-top") {
+            if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top") {
                 // vertical
                 var topPage = this.viewer.world.getItemAt(0);
                 var topPageBounds = topPage.getBounds(true);

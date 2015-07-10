@@ -1,7 +1,7 @@
 require.config({
     paths: {
-        'bluebird': 'lib/bluebird',
         'browserdetect': 'lib/browserdetect',
+        'promise': 'lib/promise.min',
         'ext': 'lib/extensions',
         'jquery': 'lib/jquery-1.10.2.min',
         'jsviews': 'lib/jsviews.min',
@@ -46,7 +46,6 @@ require([
     'extensions/uv-pdf-extension/Provider',
     'extensions/uv-seadragon-extension/Extension',
     'extensions/uv-seadragon-extension/Provider',
-    'bluebird',
     'browserdetect',
     'ext',
     'jquery',
@@ -55,6 +54,7 @@ require([
     'length',
     'modernizr',
     'plugins',
+    'promise',
     'pubsub',
     'sanitize',
     'underscore',

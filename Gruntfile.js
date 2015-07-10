@@ -229,11 +229,11 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
+                            'es6-promise/promise.min.js',
                             'extensions/dist/extensions.js',
                             'utils/dist/utils.js',
                             'jquery-plugins/dist/jquery-plugins.js',
-                            'Units/Length.min.js',
-                            'bluebird/js/browser/bluebird.js'
+                            'Units/Length.min.js'
                         ],
                         dest: '<%= dirs.lib %>'
                     },
@@ -325,6 +325,7 @@ module.exports = function (grunt) {
                 // replace uv version
                 src: [
                     '<%= dirs.examples %>/index.html',
+                    '<%= dirs.examples %>/noeditor.html',
                     '<%= dirs.examples %>/examples.js',
                     '<%= dirs.examples %>/uv.js',
                     '<%= dirs.examples %>/web.config'

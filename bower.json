@@ -1,6 +1,6 @@
 {
   "name": "Universal Viewer",
-  "version": "1.2.15",
+  "version": "1.2.16",
   "repository": {
     "type": "git",
     "url": "git://github.com/UniversalViewer/universalviewer"
@@ -17,6 +17,7 @@
     "bower_components"
   ],
   "dependencies": {
+    "es6-promise": "~2.2.0",
     "extensions": "edsilv/extensions#~0.1.3",
     "jquery-plugins": "edsilv/jquery-plugins#~0.0.10",
     "utils": "edsilv/utils#~0.0.14",
@@ -24,7 +25,6 @@
     "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme"
   },
   "devDependencies": {
-    "r.js": "~2.1.18",
-    "bluebird": "~2.9.32"
+    "r.js": "~2.1.18"
   }
 }
