@@ -3,12 +3,12 @@ import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
-import Page = require("./Page");
+import Resource = require("../../modules/uv-shared-module/Resource");
 import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
-    pages: Page[];
+    pages: Resource[];
     searchResults: SearchResult[] = [];
 
     constructor(bootstrapper: BootStrapper) {
@@ -117,37 +117,32 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getImageBaseUri(canvas: any): string {
-        if (this.config.options.iiifImageBaseUri){
-            return this.config.options.iiifImageBaseUri;
-        }
         var uri = this.getImageUri(canvas);
-        uri = uri.substr(0, uri.lastIndexOf("/"));
         uri = uri.substr(0, uri.lastIndexOf("/"));
         return uri;
     }
 
     getImageUri(canvas: any): string{
 
-        var iiifUri;
+        var imageUri;
 
         if (canvas.resources){
-            iiifUri = canvas.resources[0].resource.service['@id'];
+            imageUri = canvas.resources[0].resource.service['@id'];
         } else if (canvas.images && canvas.images[0].resource.service){
-            iiifUri = canvas.images[0].resource.service['@id'];
-        } else {
-            return "";
+            imageUri = canvas.images[0].resource.service['@id'];
         }
 
-        if (!iiifUri){
-            console.warn('no service endpoint available');
+        if (!imageUri){
+            // todo: use compiler flag (when available)
+            imageUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'js/imageunavailable.json';
         } else {
-            if (!iiifUri.endsWith('/')) {
-                iiifUri += '/';
+            if (!imageUri.endsWith('/')) {
+                imageUri += '/';
             }
-            iiifUri += this.corsEnabled() ? 'info.json' : 'info.js';
+            imageUri += this.corsEnabled() ? 'info.json' : 'info.js';
         }
 
-        return iiifUri;
+        return imageUri;
     }
 
     getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string{
@@ -163,33 +158,26 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
-    getPages(): JQueryDeferred<any> {
-
-        this.pages = [];
+    getPages(): Promise<Resource[]> {
 
         var indices = this.getPagedIndices();
+        var pages = [];
 
         _.each(indices, (index) => {
-            var p: Page = new Page();
-            p.tileSourceUri = this.getImageUri(this.getCanvasByIndex(index));
-            this.pages.push(p);
+            var r: Resource = new Resource(this);
+            r.dataUri = this.getImageUri(this.getCanvasByIndex(index));
+            pages.push(r);
         });
 
-        // todo: use compiler flag (when available)
-        var imageUnavailableUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'js/imageunavailable.json';
+        return new Promise<any[]>((resolve) => {
+            this.loadResources(pages).then((resources: Resource[]) => {
+                this.pages = _.map(resources, (resource) => {
+                    return resource.data;
+                });
 
-        _.each(this.pages, (page: Page) => {
-            if (!page.tileSourceUri){
-                page.tileSourceUri = imageUnavailableUri
-            }
+                resolve(this.pages);
+            });
         });
-
-        // get the json-ld for each page and return.
-        var promises = _.map(this.pages, (page: Page) => {
-            return page.GetTileSource();
-        });
-
-        return $.when.apply($, promises);
     }
 
     isSearchWithinEnabled(): boolean {

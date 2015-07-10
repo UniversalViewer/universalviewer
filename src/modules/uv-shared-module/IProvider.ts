@@ -2,6 +2,7 @@ import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
 import RenderingFormat = require("./RenderingFormat");
+import Resource = require("./Resource");
 import ServiceProfile = require("./ServiceProfile");
 import Thumb = require("./Thumb");
 import TreeNode = require("./TreeNode");
@@ -57,6 +58,8 @@ interface IProvider{
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
     load(): void;
+    loadResource(resource: Resource): Promise<Resource>;
+    loadResources(resources: Resource[]): Promise<Resource[]>;
     parseManifest(): void;
     parseStructure(): void;
     sanitize(html: string): string;

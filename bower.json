@@ -24,6 +24,7 @@
     "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme"
   },
   "devDependencies": {
-    "r.js": "~2.1.18"
+    "r.js": "~2.1.18",
+    "bluebird": "~2.9.32"
   }
 }

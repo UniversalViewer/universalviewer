@@ -259,7 +259,7 @@ class PagingHeaderPanel extends HeaderPanel {
             index -= 1;
 
             if (isNaN(index)){
-                this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.invalidNumber);
+                this.extension.showMessage(this.provider.config.modules.genericDialogue.content.invalidNumber);
                 $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
@@ -267,7 +267,7 @@ class PagingHeaderPanel extends HeaderPanel {
             var asset = this.provider.getCanvasByIndex(index);
 
             if (!asset){
-                this.extension.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+                this.extension.showMessage(this.provider.config.modules.genericDialogue.content.pageNotFound);
                 $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }

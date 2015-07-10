@@ -233,7 +233,7 @@ class Extension extends BaseExtension {
         var canvasIndex = parseInt(this.getParam(Params.canvasIndex)) || this.provider.getStartCanvasIndex();
 
         if (this.provider.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showDialogue(this.provider.config.content.canvasIndexOutOfRange);
+            this.showMessage(this.provider.config.content.canvasIndexOutOfRange);
             return;
         }
 
@@ -334,7 +334,7 @@ class Extension extends BaseExtension {
     viewLabel(label: string): void {
 
         if (!label) {
-            this.showDialogue(this.provider.config.modules.genericDialogue.content.emptyValue);
+            this.showMessage(this.provider.config.modules.genericDialogue.content.emptyValue);
             $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
@@ -344,7 +344,7 @@ class Extension extends BaseExtension {
         if (index != -1) {
             this.viewPage(index);
         } else {
-            this.showDialogue(this.provider.config.modules.genericDialogue.content.pageNotFound);
+            this.showMessage(this.provider.config.modules.genericDialogue.content.pageNotFound);
             $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
         }
     }
@@ -370,7 +370,7 @@ class Extension extends BaseExtension {
                 // reload current index as it may contain results.
                 that.viewPage(that.provider.canvasIndex, true);
             } else {
-                that.showDialogue(that.provider.config.modules.genericDialogue.content.noMatches, () => {
+                that.showMessage(that.provider.config.modules.genericDialogue.content.noMatches, () => {
                     $.publish(Commands.SEARCH_RESULTS_EMPTY);
                 });
             }

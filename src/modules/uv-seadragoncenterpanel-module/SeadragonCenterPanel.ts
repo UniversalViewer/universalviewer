@@ -3,7 +3,7 @@ import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
-import Page = require("../../extensions/uv-seadragon-extension/Page");
+import Resource = require("../../modules/uv-shared-module/Resource");
 import Params = require("../uv-shared-module/Params");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
@@ -18,7 +18,7 @@ class SeadragonCenterPanel extends CenterPanel {
     isCreated: boolean = false;
     isFirstLoad: boolean = true;
     nextButtonEnabled: boolean = false;
-    pages: Page[];
+    pages: Resource[];
     prevButtonEnabled: boolean = false;
     title: string;
     userData: any;
@@ -289,8 +289,10 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.$spinner.show();
 
-        this.provider.getPages().then(() => {
-            this.viewer.open(Utils.Objects.ConvertToPlainObject(this.provider.pages));
+        this.provider.getPages().then((pages: any) => {
+            this.viewer.open(Utils.Objects.ConvertToPlainObject(pages));
+        }).catch((errorMessage) => {
+            this.extension.showMessage(errorMessage);
         });
     }
 
