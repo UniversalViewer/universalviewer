@@ -900,14 +900,13 @@ class BaseProvider implements IProvider{
         return this.serializeLocales(this.locales);
     }
 
-    // http://image-auth.iiif.io/api/image/2.1/authentication.html
-    loadResource(resource: Resource): Promise<Resource> {
-        return new Promise<Resource>((resolve, reject) => {
+    loadResource(resource: Resource): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
             resource.getData().then(() => {
                 if (resource.status === 200){ // ok
                     resolve(resource);
                 } else if (resource.status === 401){ // unauthorized
-                    Promise.resolve(this.authorize(resource));
+                    resolve(this.authorize(resource));
                 } else if (resource.status === 403){ // forbidden
                     // todo: use config content
                     reject("You do not have permission to view this item.");
@@ -918,22 +917,19 @@ class BaseProvider implements IProvider{
         });
     }
 
-    authorize(resource: Resource): Promise<Resource> {
-        return new Promise<Resource>((resolve, reject) => {
+    // http://image-auth.iiif.io/api/image/2.1/authentication.html
+    authorize(resource: Resource): Promise<any> {
+        return new Promise<any>((resolve) => {
             if (!resource.getAccessToken()){
                 this.login(resource.loginService).then(() => {
                     this.getAuthToken(resource.tokenService).then((token) => {
                         Session.set(resource.tokenService, token, token.expiresIn);
-                        // fetch the info.json again
-                        Promise.resolve(this.loadResource(resource));
-                    })['catch'](() => {
-                        // todo: use config content
-                        reject("Failed to get access token.");
+                        resolve(this.loadResource(resource));
                     });
                 });
             } else {
                 // the resource already has an access token
-                resolve(resource);
+                resolve(this.loadResource(resource));
             }
         });
     }

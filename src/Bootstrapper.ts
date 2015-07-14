@@ -238,15 +238,11 @@ class Bootstrapper{
         var sessionConfig = sessionStorage.getItem(extension.name + '.' + this.params.localeName);
 
         if (sessionConfig) { // if config is stored in sessionstorage
-
             cb(JSON.parse(sessionConfig));
-
         } else if (this.params.config){ // if data-config has been set
-
             $.getJSON(this.params.config, (configExtension) => {
                 cb(configExtension);
             });
-
         } else {
             cb(null);
         }

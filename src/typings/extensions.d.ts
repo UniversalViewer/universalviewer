@@ -31,7 +31,7 @@ interface Math {
 }
 
 interface Number {
-    isInt(): boolean;
+    isInteger(): boolean;
 }
 
 interface String {

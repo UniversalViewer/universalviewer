@@ -1,1 +1,1 @@
-export var Version = '1.2.16';
+export var Version = '1.3.0';
