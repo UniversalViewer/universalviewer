@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                 options: {
                     target: 'es3',
                     module: 'amd',
-                    sourcemap: false,
+                    sourceMap: false,
                     declarations: false,
                     nolib: false,
                     comments: false
@@ -229,6 +229,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
+                            'es6-promise/promise.min.js',
                             'extensions/dist/extensions.js',
                             'utils/dist/utils.js',
                             'jquery-plugins/dist/jquery-plugins.js',
@@ -324,6 +325,7 @@ module.exports = function (grunt) {
                 // replace uv version
                 src: [
                     '<%= dirs.examples %>/index.html',
+                    '<%= dirs.examples %>/noeditor.html',
                     '<%= dirs.examples %>/examples.js',
                     '<%= dirs.examples %>/uv.js',
                     '<%= dirs.examples %>/web.config'

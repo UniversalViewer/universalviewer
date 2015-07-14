@@ -209,7 +209,7 @@ class FooterPanel extends BaseFooterPanel {
         this.terms = terms;
 
         if (this.terms === '' || this.terms === this.content.enterKeyword) {
-            this.extension.showDialogue(this.config.modules.genericDialogue.content.emptyValue, function(){
+            this.extension.showMessage(this.config.modules.genericDialogue.content.emptyValue, function(){
                     this.$searchText.focus();
                 });
 

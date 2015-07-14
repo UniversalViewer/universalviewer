@@ -306,7 +306,7 @@ class BaseExtension implements IExtension {
         if (callback) callback(canvasIndex);
     }
 
-    showDialogue(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
+    showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
 
         this.closeActiveDialogue();
 
