@@ -8,7 +8,7 @@ import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile")
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
-    pages: Resource[];
+    images: Resource[];
     searchResults: SearchResult[] = [];
 
     constructor(bootstrapper: BootStrapper) {
@@ -160,24 +160,26 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
-    getPages(): Promise<Resource[]> {
+    getImages(): Promise<Resource[]> {
 
         var indices = this.getPagedIndices();
-        var pages = [];
+        var images = [];
 
         _.each(indices, (index) => {
             var r: Resource = new Resource(this);
             r.dataUri = this.getImageUri(this.getCanvasByIndex(index));
-            pages.push(r);
+            images.push(r);
         });
 
         return new Promise<any[]>((resolve) => {
-            this.loadResources(pages).then((resources: Resource[]) => {
-                this.pages = _.map(resources, (resource) => {
+            this.loadResources(images).then((resources: Resource[]) => {
+                this.images = _.map(resources, (resource: Resource) => {
+                    // todo: should authorization be removed from loadResources?
+                    resource.data.authorizationRequired = resource.authorizationRequired;
                     return resource.data;
                 });
 
-                resolve(this.pages);
+                resolve(Utils.Objects.ConvertToPlainObject(this.images));
             });
         });
     }

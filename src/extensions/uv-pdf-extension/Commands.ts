@@ -1,5 +1,5 @@
 class Commands {
-    static namespace: string = 'pdfExtension';
+    static namespace: string = 'pdfExtension.';
 }
 
 export = Commands;

@@ -289,18 +289,16 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.$spinner.show();
 
-        this.provider.getPages().then((pages: any) => {
-            this.viewer.open(Utils.Objects.ConvertToPlainObject(pages));
-        })['catch']((errorMessage) => {
-            this.extension.showMessage(errorMessage);
+        this.extension.getImages().then((images: any) => {
+            this.viewer.open(images);
         });
     }
 
     positionPages() {
         var viewingDirection = this.provider.getViewingDirection();
 
-        // if there's more than one page, align them next to each other.
-        if (this.provider.pages.length > 1) {
+        // if there's more than one image, align them next to each other.
+        if (this.provider.images.length > 1) {
 
             // check if tilesources should be aligned horizontally or vertically
             if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top") {
@@ -425,11 +423,11 @@ class SeadragonCenterPanel extends CenterPanel {
 
         switch (viewingDirection){
             case "top-to-bottom" :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.provider.pages.length), true);
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.provider.images.length), true);
                 break;
             case "left-to-right" :
             case "right-to-left" :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.provider.pages.length, this.viewer.world.getItemAt(0).normHeight), true);
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.provider.images.length, this.viewer.world.getItemAt(0).normHeight), true);
                 break;
         }
     }

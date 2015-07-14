@@ -4,6 +4,7 @@ import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile")
 import Session = require("./Session");
 
 class Resource {
+    public authorizationRequired: boolean = false;
     public data: any;
     public dataUri: string;
     public error: any;
@@ -43,7 +44,8 @@ class Resource {
             }).fail((error) => {
                 that.status = error.status;
                 that.error = error;
-                if (error.responseJSON){
+                if (that.status === 401 && error.responseJSON){
+                    that.authorizationRequired = true;
                     that.loginService = that.provider.getService(error.responseJSON, ServiceProfile.login)['@id'];
                     that.logoutService = that.provider.getService(error.responseJSON, ServiceProfile.logout)['@id'];
                     that.tokenService = that.provider.getService(error.responseJSON, ServiceProfile.token)['@id'];

@@ -36,6 +36,10 @@ class ThumbsView extends BaseView {
             this.setLabel();
         });
 
+        $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
+            this.loadThumbs();
+        });
+
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
@@ -142,11 +146,13 @@ class ThumbsView extends BaseView {
         this.loadThumbs(thumbRangeMid);
     }
 
-    loadThumbs(index): void {
+    loadThumbs(index?: number): void {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
-        index = parseInt(index);
+        if (_.isUndefined(index)){
+            index = this.provider.canvasIndex;
+        }
 
         var thumbRangeMid = index;
         var thumbLoadRange = this.options.thumbsLoadRange;
@@ -162,16 +168,17 @@ class ThumbsView extends BaseView {
 
         for (var i = thumbRange.start; i <= thumbRange.end; i++) {
 
-            var thumbElem = $(this.$thumbs.find('.thumb')[i]);
-            var imgCont = thumbElem.find('.wrap');
+            var $thumb = $(this.$thumbs.find('.thumb')[i]);
+            var $wrap = $thumb.find('.wrap');
 
             // if no img has been added yet
-            if (!imgCont.hasClass('loading') && !imgCont.hasClass('loaded')) {
-                var visible = thumbElem.attr('data-visible');
+            if (!$wrap.hasClass('loading') && !$wrap.hasClass('loaded')) {
+                var visible = $thumb.attr('data-visible');
 
                 if (visible !== "false") {
-                    imgCont.addClass('loading');
-                    var src = thumbElem.attr('data-src');
+                    $wrap.removeClass('loadingFailed');
+                    $wrap.addClass('loading');
+                    var src = $thumb.attr('data-src');
                     //console.log(i, src);
                     var img = $('<img src="' + src + '" />');
                     // fade in on load.
@@ -179,10 +186,12 @@ class ThumbsView extends BaseView {
                         $(this).fadeIn(fadeDuration, function () {
                             $(this).parent().swapClass('loading', 'loaded');
                         });
+                    }).error(function() {
+                        $(this).parent().swapClass('loading', 'loadingFailed');
                     });
-                    imgCont.append(img);
+                    $wrap.append(img);
                 } else {
-                    imgCont.addClass('hidden');
+                    $wrap.addClass('hidden');
                 }
             }
         }
@@ -229,14 +238,12 @@ class ThumbsView extends BaseView {
         return this.config.options.pageModeEnabled;
     }
 
-    selectIndex(index): void {
+    selectIndex(index: number): void {
 
         // may be authenticating
         if (index == -1) return;
 
         if (!this.thumbs || !this.thumbs.length) return;
-
-        index = parseInt(index);
 
         this.$thumbs.find('.thumb').removeClass('selected');
 

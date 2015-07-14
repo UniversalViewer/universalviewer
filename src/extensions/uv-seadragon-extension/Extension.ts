@@ -16,6 +16,7 @@ import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../modules/uv-shared-module/Params");
+import Resource = require("../../modules/uv-shared-module/Resource");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 import Settings = require("../../modules/uv-shared-module/Settings");
@@ -253,7 +254,7 @@ class Extension extends BaseExtension {
         }
 
         // if it's a valid canvas index.
-        if (canvasIndex == -1) return;
+        if (canvasIndex === -1) return;
 
         this.isLoading = true;
 
@@ -278,6 +279,26 @@ class Extension extends BaseExtension {
             this.setParam(Params.canvasIndex, canvasIndex);
         });
 
+    }
+
+    getImages(): Promise<Resource[]> {
+        return new Promise<any[]>((resolve) => {
+            (<ISeadragonProvider>this.provider).getImages().then((images: Resource[]) => {
+
+                // check if any images required authorization
+                for (var i = 0; i < images.length; i++) {
+                    var image = images[i];
+                    if (image.authorizationRequired){
+                        $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
+                        break;
+                    }
+                }
+
+                resolve(images);
+            })['catch']((errorMessage) => {
+                this.showMessage(errorMessage);
+            });
+        });
     }
 
     getViewer() {
