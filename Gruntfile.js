@@ -267,6 +267,19 @@ module.exports = function (grunt) {
                         src: ['**']
                     }
                 ]
+            },
+            tar: {
+                options: {
+                    mode: 'tar',
+                    archive: '<%= dirs.dist %>/<%= dirs.uv %>.tar'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= dirs.build %>/',
+                        src: ['**']
+                    }
+                ]
             }
         },
 
@@ -452,14 +465,15 @@ module.exports = function (grunt) {
         );
     });
 
-    // compress build into .zip
+    // compress build into .zip and .tar
     grunt.registerTask('dist', '', function() {
 
         refresh();
 
         grunt.task.run(
             'clean:dist',
-            'compress'
+            'compress:zip',
+            'compress:tar'
         );
     });
 
