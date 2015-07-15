@@ -49,7 +49,9 @@
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
-        "panelOpen": false
+        "panelOpen": false,
+        "textLimit": 4,
+        "textLimitType": "lines"
       }
     },
     "pagingHeaderPanel":
