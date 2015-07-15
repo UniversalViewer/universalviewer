@@ -112,14 +112,16 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
     getImageId(canvas: any): string {
         var id = this.getImageUri(canvas);
+        // First trim off info.json, then extract ID:
         id = id.substr(0, id.lastIndexOf("/"));
         return id.substr(id.lastIndexOf("/") + 1);
     }
 
     getImageBaseUri(canvas: any): string {
         var uri = this.getImageUri(canvas);
+        // First trim off info.json, then trim off ID....
         uri = uri.substr(0, uri.lastIndexOf("/"));
-        return uri;
+        return uri.substr(0, uri.lastIndexOf("/"));
     }
 
     getImageUri(canvas: any): string{
