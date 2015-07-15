@@ -303,6 +303,8 @@ class BaseExtension implements IExtension {
 
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
 
+        this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
+
         if (callback) callback(canvasIndex);
     }
 

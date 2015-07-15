@@ -2,8 +2,8 @@ class Commands {
     static namespace: string = 'uv.';
 
     static AUTHORIZATION_OCCURRED: string           = Commands.namespace + 'onAuthorizationOccurred';
-    static CANVAS_INDEX_CHANGE_FAILED: string       = Commands.namespace + 'onAssetIndexChangeFailed';
-    static CANVAS_INDEX_CHANGED: string             = Commands.namespace + 'onAssetIndexChanged';
+    static CANVAS_INDEX_CHANGE_FAILED: string       = Commands.namespace + 'onCanvasIndexChangeFailed';
+    static CANVAS_INDEX_CHANGED: string             = Commands.namespace + 'onCanvasIndexChanged';
     static CLOSE_ACTIVE_DIALOGUE: string            = Commands.namespace + 'onCloseActiveDialogue';
     static CLOSE_LEFT_PANEL: string                 = Commands.namespace + 'onCloseLeftPanel';
     static CLOSE_RIGHT_PANEL: string                = Commands.namespace + 'onCloseRightPanel';
