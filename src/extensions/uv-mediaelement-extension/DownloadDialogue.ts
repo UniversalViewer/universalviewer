@@ -55,7 +55,7 @@ class DownloadDialogue extends Dialogue {
             var canvas = this.provider.getCurrentCanvas();
 
             _.each(this.provider.getRenderings(canvas), (rendering: any) => {
-                this.addEntireFileDownloadOption(rendering['@id']);
+                this.addEntireFileDownloadOption(rendering);
             });
         }
 
@@ -69,8 +69,38 @@ class DownloadDialogue extends Dialogue {
         this.resize();
     }
 
-    addEntireFileDownloadOption(fileUri: string): void{
-        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.format(this.content.entireFileAsOriginal, this.getFileExtension(fileUri)) + '</li>');
+    simplifyMimeType(mime: string)
+    {
+        switch (mime) {
+        case 'text/plain':
+            return 'txt';
+        case 'image/jpeg':
+            return 'jpg';
+        case 'application/msword':
+            return 'doc';
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            return 'docx';
+        default:
+            var parts = mime.split('/');
+            return parts[parts.length - 1];
+        }
+    }
+
+    addEntireFileDownloadOption(rendering: any): void{
+        var fileUri = rendering['@id'];
+        var label = this.provider.getLocalisedValue(rendering['label']);
+        if (label) {
+            label += " ({0})";
+        } else {
+            label = this.content.entireFileAsOriginal;
+        }
+        var fileType;
+        if (rendering.format) {
+            fileType = this.simplifyMimeType(rendering.format);
+        } else {
+            fileType = this.getFileExtension(fileUri);
+        }
+        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.format(label, fileType) + '</li>');
     }
 
     getFileExtension(fileUri: string): string{
