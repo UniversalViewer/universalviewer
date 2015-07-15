@@ -205,9 +205,6 @@ class GalleryView extends BaseView {
         var height = $thumb.data('height');
 
         var $img = $thumb.find('img');
-
-        $img.width(width * this.range);
-        $img.height(height * this.range);
     }
 
     loadThumb($thumb: JQuery, callback?: (img: JQuery) => void): void {
