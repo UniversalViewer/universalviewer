@@ -221,9 +221,13 @@
         });
     };
     // Recursively removes the last empty element (img, audio, etc) or word in an element
-    $.fn.removeLastWord = function (chars) {
+    $.fn.removeLastWord = function (chars, depth) {
+
         if ('undefined' === typeof chars)
             chars = 8;
+        if ('undefined' === typeof depth)
+            depth = 0;
+
         return this.each(function () {
             var $self = $(this);
             if ($self.contents().length > 0) {
@@ -240,9 +244,10 @@
                         return;
                     }
                 }
-                $lastElement.removeLastWord(chars); // Element
+
+                $lastElement.removeLastWord(chars, depth+1); // Element
             }
-            else {
+            else if(depth > 0) {
                 // Empty element
                 $self.remove();
             }
@@ -307,50 +312,33 @@
     $.fn.toggleExpandTextByLines = function (lines, callback) {
         return this.each(function () {
             var $self = $(this);
-            // Calculate line height to get target height
-            var lineHeight = parseFloat($self.css('line-height'));
-            var cssunit = $self.css('line-height').replace(/[\d\.]/g, '');
-            var fontSize = parseFloat($self.css('font-size'));
-            if (!lineHeight) {
-                cssunit = $self.css('font-size').replace(/[\d\.]/g, '');
-            }
-            if (!lineHeight) {
-                var $current = $self.parent();
-                while (!lineHeight && $current.prop('tagName') !== "BODY") {
-                    $current = $current.parent();
-                    lineHeight = parseFloat($current.css('line-height'));
-                    cssunit = $current.css('line-height').replace(/[\d\.]/g, '');
-                    if (!(lineHeight && fontSize)) {
-                        fontSize = parseFloat($self.css('font-size'));
-                        cssunit = $current.css('font-size').replace(/[\d\.]/g, '');
-                    }
-                }
-            }
-            // Default line-height is 'normal' (1.2 * font size)
-            if (!lineHeight) {
-                if (!fontSize) {
-                    lineHeight = 16 * 1.2; // CSS default font size
-                    cssunit = 'px';
-                }
-                else {
-                    lineHeight = fontSize * 1.2;
-                }
-            }
-            var targetHeight = Length.toPx(this, ((lineHeight + 1) * lines) + cssunit);
-            // Collapse
-            if ($self.outerHeight() <= targetHeight)
-                return;
             var expandedText = $self.html();
             // add 'pad' to account for the right margin in the sidebar
             var $buttonPad = $('<span>&hellip; <a href="#" class="toggle more">morepad</a></span>');
-            $self.append($buttonPad);
-            while ($self.height() > targetHeight) {
-                $buttonPad.remove();
+            // when height changes, store string, then pick from line counts
+            var stringsByLine = [expandedText];
+            var lastHeight = $self.height();
+            // Until empty
+            while ($self.text().length > 0) {
                 $self.removeLastWord();
+
+                var html = $self.html();
+
                 $self.append($buttonPad);
+                if (lastHeight > $self.height()) {
+                    stringsByLine.unshift(html);
+                    lastHeight = $self.height();
+                }
+                $buttonPad.remove();
             }
-            $buttonPad.remove();
-            var collapsedText = $self.html();
+
+            if (stringsByLine.length <= lines) {
+                $self.html(expandedText);
+                return;
+            }
+
+            var collapsedText = stringsByLine[lines - 1];
+
             // Toggle function
             var expanded = false;
             $self.toggle = function () {
