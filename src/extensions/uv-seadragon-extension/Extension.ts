@@ -282,22 +282,27 @@ class Extension extends BaseExtension {
     }
 
     getImages(): Promise<Resource[]> {
-        return new Promise<any[]>((resolve) => {
-            (<ISeadragonProvider>this.provider).getImages().then((images: Resource[]) => {
-
-                // check if any images required authorization
-                for (var i = 0; i < images.length; i++) {
-                    var image = images[i];
-                    if (image.authorizationRequired){
-                        $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
-                        break;
-                    }
-                }
-
+        return new Promise<Resource[]>((resolve) => {
+            (<ISeadragonProvider>this.provider).getImages(this.login).then((images: Resource[]) => {
                 resolve(images);
             })['catch']((errorMessage) => {
                 this.showMessage(errorMessage);
             });
+        });
+    }
+
+    login(loginServiceUrl: string): Promise<void> {
+        return new Promise<void>((resolve) => {
+
+            var win = window.open(loginServiceUrl, 'loginwindow', 'height=600,width=600');
+
+            var pollTimer = window.setInterval(() => {
+                if (win.closed) {
+                    window.clearInterval(pollTimer);
+                    $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
+                    resolve();
+                }
+            }, 500);
         });
     }
 

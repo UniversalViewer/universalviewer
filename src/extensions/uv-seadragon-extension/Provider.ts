@@ -160,7 +160,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
-    getImages(): Promise<Resource[]> {
+    getImages(loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]> {
 
         var indices = this.getPagedIndices();
         var images = [];
@@ -172,14 +172,10 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         });
 
         return new Promise<any[]>((resolve) => {
-            this.loadResources(images).then((resources: Resource[]) => {
+            this.loadResources(images, loginMethod).then((resources: Resource[]) => {
                 this.images = _.map(resources, (resource: Resource) => {
-                    // todo: pass loginMethod promise to loadResources from extension
-                    // this governs how the login box is shown and when the AUTHORIZATION_OCCURRED event is fired.
-                    resource.data.authorizationRequired = resource.authorizationRequired;
                     return resource.data;
                 });
-
                 resolve(Utils.Objects.ConvertToPlainObject(this.images));
             });
         });

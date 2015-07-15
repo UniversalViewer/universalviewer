@@ -900,13 +900,13 @@ class BaseProvider implements IProvider{
         return this.serializeLocales(this.locales);
     }
 
-    loadResource(resource: Resource): Promise<any> {
+    loadResource(resource: Resource, loginMethod: (loginService: string) => Promise<void>): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             resource.getData().then(() => {
                 if (resource.status === 200){ // ok
                     resolve(resource);
                 } else if (resource.status === 401){ // unauthorized
-                    resolve(this.authorize(resource));
+                    resolve(this.authorize(resource, loginMethod));
                 } else if (resource.status === 403){ // forbidden
                     // todo: use config content
                     reject("You do not have permission to view this item.");
@@ -918,33 +918,19 @@ class BaseProvider implements IProvider{
     }
 
     // http://image-auth.iiif.io/api/image/2.1/authentication.html
-    authorize(resource: Resource): Promise<any> {
+    authorize(resource: Resource, loginMethod: (loginService: string) => Promise<void>): Promise<any> {
         return new Promise<any>((resolve) => {
             if (!resource.getAccessToken()){
-                this.login(resource.loginService).then(() => {
+                loginMethod(resource.loginService).then(() => {
                     this.getAuthToken(resource.tokenService).then((token) => {
                         Session.set(resource.tokenService, token, token.expiresIn);
-                        resolve(this.loadResource(resource));
+                        resolve(this.loadResource(resource, loginMethod));
                     });
                 });
             } else {
                 // the resource already has an access token
-                resolve(this.loadResource(resource));
+                resolve(this.loadResource(resource, loginMethod));
             }
-        });
-    }
-
-    login(loginServiceUrl: string): Promise<void> {
-        return new Promise<void>((resolve) => {
-
-            var win = window.open(loginServiceUrl, 'loginwindow', "height=600,width=600");
-
-            var pollTimer = window.setInterval(() => {
-                if (win.closed) {
-                    window.clearInterval(pollTimer);
-                    resolve();
-                }
-            }, 500);
         });
     }
 
@@ -958,14 +944,14 @@ class BaseProvider implements IProvider{
         });
     }
 
-    loadResources(resources: Resource[]): Promise<Resource[]> {
+    loadResources(resources: Resource[], loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]> {
 
         var that = this;
 
         return new Promise<Resource[]>((resolve) => {
 
             var promises = _.map(resources, (resource: Resource) => {
-                return that.loadResource(resource);
+                return that.loadResource(resource, loginMethod);
             });
 
             Promise.all(promises)

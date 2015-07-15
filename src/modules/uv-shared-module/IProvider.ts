@@ -58,8 +58,8 @@ interface IProvider{
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
     load(): void;
-    loadResource(resource: Resource): Promise<Resource>;
-    loadResources(resources: Resource[]): Promise<Resource[]>;
+    loadResource(resource: Resource, loginMethod: (loginService: string) => Promise<void>): Promise<Resource>;
+    loadResources(resources: Resource[], loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]>;
     parseManifest(): void;
     parseStructure(): void;
     sanitize(html: string): string;

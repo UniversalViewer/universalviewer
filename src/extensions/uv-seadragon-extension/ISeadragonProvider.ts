@@ -8,7 +8,7 @@ interface ISeadragonProvider extends IProvider{
     getConfinedImageUri(canvas: any, width: number, height?: number): string;
     getCroppedImageUri(asset: any, viewer: any, download?: boolean, relativeUri?: boolean): string;
     getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string;
-    getImages(): Promise<Resource[]>;
+    getImages(loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]>;
     getImageUri(canvas: any): string;
     getSearchResultByCanvasIndex(canvasIndex: number): SearchResult;
     getSearchWithinService(): string;
