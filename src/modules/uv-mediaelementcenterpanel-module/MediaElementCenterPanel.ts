@@ -120,7 +120,16 @@ class MediaElementCenterPanel extends CenterPanel {
             });
         } else if (canvasType.contains('sound')){
 
-            this.media = this.$container.append('<audio id="' + id + '" type="audio/mp3" src="' + sources[0].src + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
+            // Try to find an MP3, since this is most likely to work:
+            var preferredSource = 0;
+            for (var i in sources) {
+                if (sources[i].type == "audio/mp3") {
+                    preferredSource = i;
+                    break;
+                }
+            }
+
+            this.media = this.$container.append('<audio id="' + id + '" type="' + sources[preferredSource].type + '" src="' + sources[preferredSource].src + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
 
             this.player = new MediaElementPlayer("#" + id, {
                 plugins: ['flash'],
