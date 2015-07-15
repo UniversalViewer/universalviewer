@@ -158,18 +158,22 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.$zoomInButton = this.$viewer.find('div[title="Zoom in"]');
         this.$zoomInButton.attr('tabindex', 11);
+        this.$zoomInButton.prop('title', this.content.zoomIn);
         this.$zoomInButton.addClass('zoomIn');
 
         this.$zoomOutButton = this.$viewer.find('div[title="Zoom out"]');
         this.$zoomOutButton.attr('tabindex', 12);
+        this.$zoomOutButton.prop('title', this.content.zoomOut);
         this.$zoomOutButton.addClass('zoomOut');
 
         this.$goHomeButton = this.$viewer.find('div[title="Go home"]');
         this.$goHomeButton.attr('tabindex', 13);
+        this.$goHomeButton.prop('title', this.content.goHome);
         this.$goHomeButton.addClass('goHome');
 
         this.$rotateButton = this.$viewer.find('div[title="Rotate right"]');
         this.$rotateButton.attr('tabindex', 14);
+        this.$rotateButton.prop('title', this.content.rotateRight);
         this.$rotateButton.addClass('rotate');
 
         // events

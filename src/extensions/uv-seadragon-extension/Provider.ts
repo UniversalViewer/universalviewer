@@ -174,7 +174,8 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return new Promise<any[]>((resolve) => {
             this.loadResources(images).then((resources: Resource[]) => {
                 this.images = _.map(resources, (resource: Resource) => {
-                    // todo: should authorization be removed from loadResources?
+                    // todo: pass loginMethod promise to loadResources from extension
+                    // this governs how the login box is shown and when the AUTHORIZATION_OCCURRED event is fired.
                     resource.data.authorizationRequired = resource.authorizationRequired;
                     return resource.data;
                 });

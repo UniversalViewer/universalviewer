@@ -1,68 +1,68 @@
 {
-    "options":
+  "options":
+  {
+    "theme": "uv-en-GB-theme",
+    "leftPanelEnabled": true,
+    "rightPanelEnabled": true
+  },
+  "modules":
+  {
+    "embedDialogue":
     {
-        "theme": "uv-en-GB-theme",
-        "leftPanelEnabled": true,
-        "rightPanelEnabled": true
+      "options":
+      {
+        "embedTemplate": "<div class=\"uv\" data-uri=\"{0}\" data-sequenceindex=\"{1}\" data-config=\"{2}\" style=\"width:{3}px; height:{4}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{5}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
+      }
     },
-    "modules":
+    "footerPanel":
     {
-        "embedDialogue":
-        {
-            "options":
-            {
-                "embedTemplate": "<div class=\"uv\" data-uri=\"{0}\" data-sequenceindex=\"{1}\" data-config=\"{2}\" style=\"width:{3}px; height:{4}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{5}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
-            }
-        },
-        "footerPanel":
-        {
 
-        },
-        "genericDialogue":
-        {
+    },
+    "genericDialogue":
+    {
 
-        },
-        "headerPanel":
-        {
+    },
+    "headerPanel":
+    {
 
-        },
-        "helpDialogue":
-        {
+    },
+    "helpDialogue":
+    {
 
-        },
-        "mediaelementCenterPanel":
-        {
+    },
+    "mediaelementCenterPanel":
+    {
 
-        },
-        "moreInfoRightPanel":
-        {
-            "options":
-            {
-                "panelAnimationDuration": 250,
-                "panelCollapsedWidth": 30,
-                "panelExpandedWidth": 255
-            }
-        },
-        "treeViewLeftPanel": {
-            "options": {
-                "elideCount": 40,
-                "galleryThumbHeight": 320,
-                "galleryThumbWidth": 200,
-                "oneColThumbHeight": 320,
-                "oneColThumbWidth": 200,
-                "pageModeEnabled": true,
-                "panelAnimationDuration": 250,
-                "panelCollapsedWidth": 30,
-                "panelExpandedWidth": 255,
-                "panelOpen": true,
-                "thumbsEnabled": true,
-                "thumbsExtraHeight": 8,
-                "thumbsImageFadeInDuration": 300,
-                "thumbsLoadRange": 15,
-                "treeEnabled": true,
-                "twoColThumbHeight": 150,
-                "twoColThumbWidth": 90
-            }
-        }
+    },
+    "moreInfoRightPanel":
+    {
+      "options":
+      {
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255
+      }
+    },
+    "treeViewLeftPanel": {
+      "options": {
+        "elideCount": 40,
+        "galleryThumbHeight": 320,
+        "galleryThumbWidth": 200,
+        "oneColThumbHeight": 320,
+        "oneColThumbWidth": 200,
+        "pageModeEnabled": true,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": true,
+        "thumbsEnabled": true,
+        "thumbsExtraHeight": 8,
+        "thumbsImageFadeInDuration": 300,
+        "thumbsLoadRange": 15,
+        "treeEnabled": true,
+        "twoColThumbHeight": 150,
+        "twoColThumbWidth": 90
+      }
     }
+  }
 }
