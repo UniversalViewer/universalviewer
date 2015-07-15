@@ -408,6 +408,8 @@ class BaseProvider implements IProvider{
             uri = canvas.resources[0].resource.service['@id'];
         } else if (canvas.images && canvas.images[0].resource.service){
             uri = canvas.images[0].resource.service['@id'];
+        } else if (canvas.thumbnail) {
+            return canvas.thumbnail;
         } else {
             return "";
         }
