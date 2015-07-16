@@ -1,24 +1,16 @@
 import BaseCommands = require("../../modules/uv-shared-module/Commands");
-import Commands = require("./Commands");
-import Dialogue = require("../../modules/uv-shared-module/Dialogue");
-import DownloadOption = require("./DownloadOption");
+import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
+import DownloadOption = require("../../modules/uv-dialogues-module/DownloadOption");
 import ISeadragonExtension = require("./ISeadragonExtension");
 import ISeadragonProvider = require("./ISeadragonProvider");
-import RenderingFormat = require("../../modules/uv-shared-module/RenderingFormat");
-import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
-import SettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
 
-class DownloadDialogue extends Dialogue {
+class DownloadDialogue extends BaseDownloadDialogue {
 
     $buttonsContainer: JQuery;
     $currentViewAsJpgButton: JQuery;
     $downloadButton: JQuery;
-    $downloadOptions: JQuery;
-    $noneAvailable: JQuery;
     $pagingNote: JQuery;
     $settingsButton: JQuery;
-    $title: JQuery;
     $wholeImageHighResButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
     renderingUrls: string[];
@@ -34,28 +26,11 @@ class DownloadDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, (e, params) => {
-            this.open();
-        });
-
-        $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, (e) => {
-            this.close();
-        });
-
         // create ui.
-        this.$title = $('<h1>' + this.content.title + '</h1>');
-        this.$content.append(this.$title);
-
-        this.$noneAvailable = $('<div class="noneAvailable">' + this.content.noneAvailable + '</div>');
-        this.$content.append(this.$noneAvailable);
-
         this.$settingsButton = $('<a class="settings" href="#">' + this.content.editSettings + '</a>');
         this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + ' </div>');
         this.$pagingNote.append(this.$settingsButton);
         this.$content.append(this.$pagingNote);
-
-        this.$downloadOptions = $('<ol class="options"></ol>');
-        this.$content.append(this.$downloadOptions);
 
         this.$currentViewAsJpgButton = $('<li><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '">' + this.content.currentViewAsJpg + '</label></li>');
         this.$downloadOptions.append(this.$currentViewAsJpgButton);
@@ -111,9 +86,6 @@ class DownloadDialogue extends Dialogue {
             this.close();
             $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
-
-        // hide
-        this.$element.hide();
     }
 
     open() {
@@ -179,23 +151,6 @@ class DownloadDialogue extends Dialogue {
         this.renderingUrls = [];
         this.renderingUrlsCount = 0;
         this.$downloadOptions.find('.dynamic').remove();
-    }
-
-    simplifyMimeType(mime: string)
-    {
-        switch (mime) {
-        case 'text/plain':
-            return 'txt';
-        case 'image/jpeg':
-            return 'jpg';
-        case 'application/msword':
-            return 'doc';
-        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            return 'docx';
-        default:
-            var parts = mime.split('/');
-            return parts[parts.length - 1];
-        }
     }
 
     addDownloadOptionsForRenderings(resource: any, defaultLabel: string)
@@ -268,13 +223,6 @@ class DownloadDialogue extends Dialogue {
             default:
                 return true;
         }
-    }
-
-    resize(): void {
-
-        this.$element.css({
-            'top': this.extension.height() - this.$element.outerHeight(true)
-        });
     }
 }
 
