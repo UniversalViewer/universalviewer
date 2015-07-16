@@ -11,6 +11,7 @@
 ![Wellcome Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/wellcome_logo.png "Wellcome Library")
 ![British Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/bl_logo.png "British Library")
 ![National Library of Wales](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/nlw_logo.png "National Library of Wales")
+![Villanova University, Falvey Memorial Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/vufalvey_logo.png "Villanova University, Falvey Memorial Library")
 
 ## Stable Builds
 
