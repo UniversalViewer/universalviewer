@@ -161,7 +161,7 @@ class GalleryView extends BaseView {
         for (var i = 0; i < thumbs.length; i++) {
             var $thumb = $(thumbs[i]);
             this.sizeThumb($thumb);
-            this.sizeThumbImage($thumb);
+            //this.sizeThumbImage($thumb);
         }
 
         this.equaliseHeights();
@@ -177,7 +177,7 @@ class GalleryView extends BaseView {
 
             if (thumbBottom >= scrollTop && thumbTop <= scrollTop + scrollHeight){
                 this.loadThumb($thumb, () => {
-                    this.sizeThumbImage($thumb);
+                    //this.sizeThumbImage($thumb);
                 });
             //    $thumb.find('.wrap').css('background', 'red');
             //} else {
@@ -200,12 +200,12 @@ class GalleryView extends BaseView {
         $wrap.height(height * this.range);
     }
 
-    sizeThumbImage($thumb: JQuery) : void {
-        var width = $thumb.data('width');
-        var height = $thumb.data('height');
-
-        var $img = $thumb.find('img');
-    }
+    //sizeThumbImage($thumb: JQuery) : void {
+    //    var width = $thumb.data('width');
+    //    var height = $thumb.data('height');
+    //
+    //    var $img = $thumb.find('img');
+    //}
 
     loadThumb($thumb: JQuery, callback?: (img: JQuery) => void): void {
         var $wrap = $thumb.find('.wrap');
