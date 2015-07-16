@@ -1,5 +1,5 @@
 import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
-import DownloadOption = require("../../modules/uv-dialogues-module/DownloadOption");
+import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
 
 class DownloadDialogue extends BaseDownloadDialogue {
 

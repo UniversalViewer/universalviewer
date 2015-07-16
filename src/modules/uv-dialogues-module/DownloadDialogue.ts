@@ -1,6 +1,6 @@
 import BaseCommands = require("../uv-shared-module/Commands");
 import Dialogue = require("../uv-shared-module/Dialogue");
-import DownloadOption = require("./DownloadOption");
+import DownloadOption = require("../uv-shared-module/DownloadOption");
 
 class DownloadDialogue extends Dialogue {
 
