@@ -4,7 +4,6 @@ import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
 import Resource = require("../../modules/uv-shared-module/Resource");
-import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
@@ -196,7 +195,13 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getAutoCompleteService(): string {
-        return this.getService(this.manifest, ServiceProfile.autoComplete);
+        var service = this.getService(this.manifest, "autoComplete");
+
+        if(service) {
+            return service.toString()
+        } else {
+            return "";
+        }
     }
 
     getAutoCompleteUri(): string{
@@ -210,7 +215,12 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getSearchWithinService(): string {
-        return this.getService(this.manifest, ServiceProfile.searchWithin);
+        var service = this.getService(this.manifest, "searchWithin");
+        if(service) {
+            return service.toString()
+        } else {
+            return "";
+        }
     }
 
     getSearchWithinServiceUri(): string {

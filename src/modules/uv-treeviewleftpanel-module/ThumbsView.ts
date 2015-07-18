@@ -5,7 +5,6 @@ import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Shell = require("../uv-shared-module/Shell");
-import Thumb = require("../uv-shared-module/Thumb");
 
 class ThumbsView extends BaseView {
 
@@ -15,7 +14,7 @@ class ThumbsView extends BaseView {
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
-    public thumbs: Thumb[];
+    public thumbs: Manifesto.Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);

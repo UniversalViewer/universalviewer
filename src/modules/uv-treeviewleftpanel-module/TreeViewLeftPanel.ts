@@ -4,7 +4,6 @@ import GalleryView = require("./GalleryView");
 import IProvider = require("../uv-shared-module/IProvider");
 import LeftPanel = require("../uv-shared-module/LeftPanel");
 import ThumbsView = require("./ThumbsView");
-import TreeNode = require("../uv-shared-module/TreeNode");
 import TreeView = require("./TreeView");
 
 class TreeViewLeftPanel extends LeftPanel {
@@ -20,7 +19,7 @@ class TreeViewLeftPanel extends LeftPanel {
     $views: JQuery;
     galleryView: GalleryView;
     thumbsView: ThumbsView;
-    treeData: TreeNode;
+    treeData: Manifesto.TreeNode;
     treeView: TreeView;
 
     constructor($element: JQuery) {

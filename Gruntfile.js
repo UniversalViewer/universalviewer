@@ -231,9 +231,10 @@ module.exports = function (grunt) {
                         src: [
                             'es6-promise/promise.min.js',
                             'extensions/dist/extensions.js',
-                            'utils/dist/utils.js',
                             'jquery-plugins/dist/jquery-plugins.js',
-                            'Units/Length.min.js'
+                            'manifesto/dist/client/manifesto.js',
+                            'Units/Length.min.js',
+                            'utils/dist/utils.js'
                         ],
                         dest: '<%= dirs.lib %>'
                     },
@@ -244,8 +245,9 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: [
                             'extensions/typings/extensions.d.ts',
-                            'utils/dist/utils.d.ts',
-                            'jquery-plugins/typings/jquery-plugins.d.ts'
+                            'jquery-plugins/typings/jquery-plugins.d.ts',
+                            'manifesto/dist/manifesto.d.ts',
+                            'utils/dist/utils.d.ts'
                         ],
                         dest: '<%= dirs.typings %>'
                     }

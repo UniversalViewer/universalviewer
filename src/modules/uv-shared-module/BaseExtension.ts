@@ -330,17 +330,16 @@ class BaseExtension implements IExtension {
     }
 
     viewManifest(manifest: any): void{
-        var seeAlsoUri = this.provider.getManifestSeeAlsoUri(manifest);
-        if (seeAlsoUri){
-            window.open(seeAlsoUri, '_blank');
-        } else {
+        //var seeAlsoUri = this.provider.getManifestSeeAlsoUri(manifest);
+        //if (seeAlsoUri){
+        //    window.open(seeAlsoUri, '_blank');
+        //} else {
             if (this.bootstrapper.isFullScreen) {
                 $.publish(BaseCommands.TOGGLE_FULLSCREEN);
             }
 
-            // todo: manifest.assetSequence doesn't exist in IIIF
-            this.triggerSocket(BaseCommands.SEQUENCE_INDEX_CHANGED, manifest.assetSequence);
-        }
+            //this.triggerSocket(BaseCommands.SEQUENCE_INDEX_CHANGED, manifest.assetSequence);
+        //}
     }
 
     inIframe(): boolean {

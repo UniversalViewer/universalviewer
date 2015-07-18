@@ -1,6 +1,5 @@
 import IAccessToken = require("./IAccessToken");
 import IProvider = require("./IProvider");
-import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
 import Session = require("./Session");
 
 class Resource {
@@ -46,9 +45,9 @@ class Resource {
                 that.error = error;
                 if (that.status === 401 && error.responseJSON){
                     that.authorizationRequired = true;
-                    that.loginService = that.provider.getService(error.responseJSON, ServiceProfile.login)['@id'];
-                    that.logoutService = that.provider.getService(error.responseJSON, ServiceProfile.logout)['@id'];
-                    that.tokenService = that.provider.getService(error.responseJSON, ServiceProfile.token)['@id'];
+                    that.loginService = that.provider.getService(error.responseJSON, Manifesto.ServiceProfile.login)['@id'];
+                    that.logoutService = that.provider.getService(error.responseJSON, Manifesto.ServiceProfile.logout)['@id'];
+                    that.tokenService = that.provider.getService(error.responseJSON, Manifesto.ServiceProfile.token)['@id'];
                 }
                 resolve(that);
             });

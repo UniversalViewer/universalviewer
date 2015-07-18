@@ -4,7 +4,6 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import Thumb = require("../uv-shared-module/Thumb");
 
 class GalleryView extends BaseView {
 
@@ -19,7 +18,7 @@ class GalleryView extends BaseView {
     lastThumbClickedIndex: number;
     range: number;
 
-    public thumbs: Thumb[];
+    public thumbs: Manifesto.Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);

@@ -1,56 +1,49 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
-import RenderingFormat = require("./RenderingFormat");
 import Resource = require("./Resource");
-import ServiceProfile = require("./ServiceProfile");
-import Thumb = require("./Thumb");
-import TreeNode = require("./TreeNode");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
 interface IProvider{
     canvasIndex: number;
-    manifest: any;
+    manifest: Manifesto.IManifest;
     sequence: any;
     sequenceIndex: number;
-    treeRoot: TreeNode;
 
     addTimestamp(uri: string): string;
     getAttribution(): string;
     getLicense(): string;
     getLogo(): string;
-    getCanvasByIndex(index): any;
+    getCanvasByIndex(index: number): any;
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexById(id: string): number;
-    getCanvasStructure(canvas: any): any;
-    getCanvasType(canvas?: any): string;
+    getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
     getCurrentCanvas(): any;
-    getLocalisedValue(property: any): string;
-    getManifestSeeAlsoUri(manifest: any): string;
+    getLocalisedValue(resource: any): string;
     getManifestType(): string;
-    getMetaData(callback: (data: any) => any): void;
-    getRendering(resource: any, format: RenderingFormat): any
-    getRenderings(element: any): any[];
+    getMetadata(includeRootProperties?: boolean): any;
+    getRendering(resource: any, format: Manifesto.RenderingFormat): Manifesto.IRendering;
+    getRenderings(element: any): Manifesto.IRendering[];
     getSeeAlso(): any;
     getSequenceType(): string;
-    getService(resource: any, profile: ServiceProfile): any;
-    getStructureByPath(path: string): any;
-    getThumbs(width: number, height: number): Thumb[];
+    getService(resource: any, profile: Manifesto.ServiceProfile): Manifesto.IService;
+    getRangeByPath(path: string): Manifesto.IRange;
+    getThumbs(width: number, height: number): Manifesto.Thumb[];
     getThumbUri(canvas: any, width: number, height: number): string;
     getTitle(): string;
     getTotalCanvases(): number;
-    getTree(): TreeNode;
-    getPagedIndices(canvasIndex?: number): number[];
+    getTree(): Manifesto.TreeNode;
+    getPagedIndices(index?: number): number[];
     getFirstPageIndex(): number;
     getLastPageIndex(): number;
-    getPrevPageIndex(canvasIndex?: number): number;
-    getNextPageIndex(canvasIndex?: number): number;
+    getPrevPageIndex(index?: number): number;
+    getNextPageIndex(index?: number): number;
     getStartCanvasIndex(): number;
-    getViewingDirection(): string;
-    isCanvasIndexOutOfRange(canvasIndex: number): boolean;
-    isFirstCanvas(canvasIndex?: number): boolean;
-    isLastCanvas(canvasIndex?: number): boolean;
+    getViewingDirection(): Manifesto.ViewingDirection;
+    isCanvasIndexOutOfRange(index: number): boolean;
+    isFirstCanvas(index?: number): boolean;
+    isLastCanvas(index?: number): boolean;
     isPagingEnabled(): boolean;
     isPagingSettingEnabled(): boolean;
     isMultiCanvas(): boolean;
@@ -60,9 +53,6 @@ interface IProvider{
     load(): void;
     loadResource(resource: Resource, loginMethod: (loginService: string) => Promise<void>): Promise<Resource>;
     loadResources(resources: Resource[], loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]>;
-    parseManifest(): void;
-    parseStructure(): void;
-    sanitize(html: string): string;
 
     // todo: move these to extension
     bootstrapper: BootStrapper;
@@ -88,6 +78,7 @@ interface IProvider{
     isDeepLinkingEnabled(): boolean;
     paramMap: string[];
     reload(params?: BootstrapParams);
+    sanitize(html: string): string;
     serializeLocales(locales: any[]): string;
     updateSettings(settings: ISettings): void;
 }

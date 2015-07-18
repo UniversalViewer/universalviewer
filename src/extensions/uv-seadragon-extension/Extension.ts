@@ -344,15 +344,15 @@ class Extension extends BaseExtension {
         return this.currentRotation;
     }
 
-    viewStructure(path: string): void {
+    viewRange(path: string): void {
 
-        var structure = this.provider.getStructureByPath(path);
+        var range = this.provider.getRangeByPath(path);
 
-        if (!structure) return;
+        if (!range) return;
 
-        var canvas = structure.canvases[0];
+        var canvas = range.canvases[0];
 
-        var index = this.provider.getCanvasIndexById(canvas['@id']);
+        var index = this.provider.getCanvasIndexById(canvas.id);
 
         this.viewPage(index);
     }
@@ -378,10 +378,10 @@ class Extension extends BaseExtension {
     treeNodeSelected(data: any): void{
         if (!data.type) return;
 
-        if (data.type == 'manifest') {
+        if (data.type === 'manifest') {
             this.viewManifest(data);
         } else {
-            this.viewStructure(data.path);
+            this.viewRange(data.path);
         }
     }
 
