@@ -22,9 +22,35 @@ class Resource {
         return <IAccessToken>Session.get(this.tokenService);
     }
 
+    private _getAccessTokenForDomain(url: string): IAccessToken {
+        var domain = Utils.Urls.GetUrlParts(url).hostname;
+
+        for(var i = 0; i < sessionStorage.length; i++) {
+
+            var key: string = sessionStorage.key(i);
+
+            if(key.contains(domain)) {
+                return <IAccessToken>Session.get(key);
+            }
+        }
+
+        return null;
+    }
+
+    private _removeAccessToken(): void {
+        Session.remove(this.tokenService);
+    }
+
     public getData(): Promise<Resource> {
         var that = this;
-        var accessToken = that.getAccessToken();
+
+        // check if an access token already exists for the info.json domain
+        // if so, try using that first.
+        var accessToken = this._getAccessTokenForDomain(that.dataUri);
+
+        if (!accessToken){
+            accessToken = that.getAccessToken();
+        }
 
         return new Promise<Resource>((resolve, reject) => {
 
@@ -44,7 +70,7 @@ class Resource {
             }).fail((error) => {
                 that.status = error.status;
                 that.error = error;
-                if (that.status === 401 && error.responseJSON){
+                if (error.responseJSON){
                     that.authorizationRequired = true;
                     that.loginService = that.provider.getService(error.responseJSON, ServiceProfile.login)['@id'];
                     that.logoutService = that.provider.getService(error.responseJSON, ServiceProfile.logout)['@id'];

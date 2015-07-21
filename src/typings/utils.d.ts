@@ -1404,6 +1404,11 @@ declare module Utils {
         static GetTimeStamp(): number;
     }
 }
+declare module Utils {
+    class Events {
+        static Debounce(fn: any, debounceDuration: number): () => any;
+    }
+}
 declare module Utils.Maths {
     class Vector {
         X: number;

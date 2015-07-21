@@ -2575,6 +2575,38 @@ var Utils;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
+    var Events = (function () {
+        function Events() {
+        }
+        Events.Debounce = function (fn, debounceDuration) {
+            // summary:
+            //      Returns a debounced function that will make sure the given
+            //      function is not triggered too much.
+            // fn: Function
+            //      Function to debounce.
+            // debounceDuration: Number
+            //      OPTIONAL. The amount of time in milliseconds for which we
+            //      will debounce the function. (defaults to 100ms)
+            debounceDuration = debounceDuration || 100;
+            return function () {
+                if (!fn.debouncing) {
+                    var args = Array.prototype.slice.apply(arguments);
+                    fn.lastReturnVal = fn.apply(window, args);
+                    fn.debouncing = true;
+                }
+                clearTimeout(fn.debounceTimeout);
+                fn.debounceTimeout = setTimeout(function () {
+                    fn.debouncing = false;
+                }, debounceDuration);
+                return fn.lastReturnVal;
+            };
+        };
+        return Events;
+    })();
+    Utils.Events = Events;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
     var Maths;
     (function (Maths) {
         var Vector = (function () {

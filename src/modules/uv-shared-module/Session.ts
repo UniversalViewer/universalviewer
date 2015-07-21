@@ -25,6 +25,10 @@ class Session {
 
         return (new Date().getTime() < data.timestamp && JSON.parse(data.value));
     }
+
+    static remove(key: string){
+        sessionStorage.removeItem(key);
+    }
 }
 
 export = Session;

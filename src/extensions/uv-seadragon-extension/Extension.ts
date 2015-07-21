@@ -131,10 +131,6 @@ class Extension extends BaseExtension {
             this.updateSettings();
         });
 
-        $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
-            this.updateSettings();
-        });
-
         $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
             this.treeNodeSelected(data);
         });

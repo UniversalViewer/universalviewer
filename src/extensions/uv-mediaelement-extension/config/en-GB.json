@@ -1,9 +1,10 @@
 {
   "options":
   {
-    "theme": "uv-en-GB-theme",
     "leftPanelEnabled": true,
-    "rightPanelEnabled": true
+    "minWidthBreakPoint": 610,
+    "rightPanelEnabled": true,
+    "theme": "uv-en-GB-theme"
   },
   "modules":
   {

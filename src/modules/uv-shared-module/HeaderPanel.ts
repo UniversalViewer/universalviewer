@@ -186,7 +186,7 @@ class HeaderPanel extends BaseView {
         }
 
         // hide toggle buttons below minimum width
-        if (this.extension.width() < 610){
+        if (this.extension.width() < this.provider.options.minWidthBreakPoint){
             if (this.pagingToggleIsVisible()) this.$pagingToggleButton.hide();
             if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
         } else {

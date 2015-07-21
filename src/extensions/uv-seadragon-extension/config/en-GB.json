@@ -2,6 +2,7 @@
   "options":
   {
     "leftPanelEnabled": true,
+    "minWidthBreakPoint": 610,
     "overrideFullScreen": false,
     "pagingEnabled": true,
     "preserveViewport": false,

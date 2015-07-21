@@ -66,10 +66,14 @@ class SettingsDialogue extends BaseSettingsDialogue {
 
         var settings: ISettings = this.getSettings();
 
-        if (settings.pagingEnabled){
-            this.$pagingEnabledCheckbox.prop("checked", true);
+        if (!this.provider.isPagingEnabled()){
+            this.$pagingEnabled.hide();
         } else {
-            this.$pagingEnabledCheckbox.removeAttr("checked");
+            if (settings.pagingEnabled){
+                this.$pagingEnabledCheckbox.prop("checked", true);
+            } else {
+                this.$pagingEnabledCheckbox.removeAttr("checked");
+            }
         }
 
         if (settings.preserveViewport){
