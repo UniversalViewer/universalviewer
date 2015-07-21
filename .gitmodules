@@ -1,6 +1,6 @@
 [submodule "examples"]
 	path = examples
-	url = git@github.com:UniversalViewer/examples.git
+	url = https://github.com/UniversalViewer/examples.git
 [submodule "tests"]
 	path = tests
-	url = git@github.com:UniversalViewer/tests.git
+	url = https://github.com/UniversalViewer/tests.git
