@@ -29,7 +29,7 @@ class BaseExtension implements IExtension {
     public create(overrideDependencies?: any): void {
 
         this.$element = $('#app');
-        this.$element.data("bootstrapper", this.bootstrapper)
+        this.$element.data("bootstrapper", this.bootstrapper);
 
         // initial sizing.
         var $win = $(window);
@@ -40,12 +40,12 @@ class BaseExtension implements IExtension {
 
         if (!this.provider.isReload && this.inIframe()){
             // communication with parent frame (if it exists).
-           this.bootstrapper.socket = new easyXDM.Socket({
+            this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message, origin) => {
                     message = $.parseJSON(message);
                     this.handleParentFrameEvent(message);
                 }
-           });
+            });
         }
 
         this.triggerSocket(BaseCommands.LOAD, {
@@ -71,7 +71,7 @@ class BaseExtension implements IExtension {
             $('body').height($win.height());
 
             this.resize();
-        }
+        };
 
         $(document).on('mousemove', (e) => {
             this.mouseX = e.pageX;

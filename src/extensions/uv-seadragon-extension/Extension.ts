@@ -9,6 +9,7 @@ import ExternalContentDialogue = require("../../modules/uv-dialogues-module/Exte
 import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
 import GalleryView = require("../../modules/uv-treeviewleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
+import IAccessToken = require("../../modules/uv-shared-module/IAccessToken");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
@@ -22,6 +23,8 @@ import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-mod
 import Settings = require("../../modules/uv-shared-module/Settings");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
+import Storage = require("../../modules/uv-shared-module/Storage");
+import StorageItem = require("../../modules/uv-shared-module/StorageItem");
 import ThumbsView = require("../../modules/uv-treeviewleftpanel-module/ThumbsView");
 import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
 import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
@@ -125,10 +128,6 @@ class Extension extends BaseExtension {
 
         $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
             this.prevSearchResult();
-        });
-
-        $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
-            this.updateSettings();
         });
 
         $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
@@ -283,7 +282,12 @@ class Extension extends BaseExtension {
 
     getImages(): Promise<Resource[]> {
         return new Promise<Resource[]>((resolve) => {
-            (<ISeadragonProvider>this.provider).getImages(this.login).then((images: Resource[]) => {
+            (<ISeadragonProvider>this.provider).getImages(
+                this.login,
+                this.getAccessToken,
+                this.storeAccessToken,
+                this.getStoredAccessToken,
+                this.handleResourceResponse).then((images: Resource[]) => {
                 resolve(images);
             })['catch']((errorMessage) => {
                 this.showMessage(errorMessage);
@@ -303,6 +307,62 @@ class Extension extends BaseExtension {
                     resolve();
                 }
             }, 500);
+        });
+    }
+
+    getAccessToken(tokenServiceUrl: string): Promise<IAccessToken> {
+        return new Promise<IAccessToken>((resolve, reject) => {
+            $.getJSON(tokenServiceUrl + "?callback=?", (token: IAccessToken) => {
+                resolve(token);
+            }).fail((error) => {
+                reject(error);
+            });
+        });
+    }
+
+    storeAccessToken(resource: Resource, token: IAccessToken): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            Storage.set(resource.tokenService, token, token.expiresIn);
+            resolve();
+        });
+    }
+
+    getStoredAccessToken(url: string): Promise<IAccessToken> {
+
+        return new Promise<IAccessToken>((resolve, reject) => {
+
+            // first try an exact match of the url
+            var item: StorageItem = Storage.get(url);
+
+            if (item){
+                resolve(<IAccessToken>item.value);
+            }
+
+            // find an access token for the domain
+            var domain = Utils.Urls.GetUrlParts(url).hostname;
+
+            var items: StorageItem[] = Storage.getItems();
+
+            for(var i = 0; i < items.length; i++) {
+                item = items[i];
+
+                if(item.key.contains(domain)) {
+                    resolve(<IAccessToken>item.value);
+                }
+            }
+
+            resolve(null);
+        });
+    }
+
+    handleResourceResponse(resource: Resource) : Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            if (resource.status === 200) {
+                resolve(resource);
+            } else {
+                // access denied
+                reject(resource.error.statusText);
+            }
         });
     }
 

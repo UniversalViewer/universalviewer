@@ -1,12 +1,12 @@
 import IAccessToken = require("./IAccessToken");
 import IProvider = require("./IProvider");
-import Session = require("./Session");
+import Storage = require("./Storage");
 
 class Resource {
-    public authorizationRequired: boolean = false;
     public data: any;
     public dataUri: string;
     public error: any;
+    public isAccessControlled: boolean = false;
     public loginService: string;
     public logoutService: string;
     public provider: IProvider;
@@ -17,13 +17,21 @@ class Resource {
         this.provider = provider;
     }
 
-    public getAccessToken(): IAccessToken {
-        return <IAccessToken>Session.get(this.tokenService);
+    private _parseAuthServices(resource: any): void {
+        var loginService = this.provider.getService(resource, ServiceProfile.login);
+        if (loginService) this.loginService = loginService['@id'];
+
+        var logoutService = this.provider.getService(resource, ServiceProfile.logout);
+        if (logoutService) this.logoutService = logoutService['@id'];
+
+        var tokenService = this.provider.getService(resource, ServiceProfile.token);
+        if (tokenService) this.tokenService = tokenService['@id'];
+
+        if (this.loginService) this.isAccessControlled = true;
     }
 
-    public getData(): Promise<Resource> {
+    public getData(accessToken?: IAccessToken): Promise<Resource> {
         var that = this;
-        var accessToken = that.getAccessToken();
 
         return new Promise<Resource>((resolve, reject) => {
 
@@ -39,15 +47,13 @@ class Resource {
             }).done((data) => {
                 that.status = 200;
                 that.data = data;
+                that._parseAuthServices(that.data);
                 resolve(that);
             }).fail((error) => {
                 that.status = error.status;
                 that.error = error;
-                if (that.status === 401 && error.responseJSON){
-                    that.authorizationRequired = true;
-                    that.loginService = that.provider.getService(error.responseJSON, Manifesto.ServiceProfile.login)['@id'];
-                    that.logoutService = that.provider.getService(error.responseJSON, Manifesto.ServiceProfile.logout)['@id'];
-                    that.tokenService = that.provider.getService(error.responseJSON, Manifesto.ServiceProfile.token)['@id'];
+                if (error.responseJSON){
+                    that._parseAuthServices(error.responseJSON);
                 }
                 resolve(that);
             });

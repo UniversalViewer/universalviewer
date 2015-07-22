@@ -1,6 +1,7 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
+import IAccessToken = require("./IAccessToken");
 import Resource = require("./Resource");
 
 // the provider contains all methods related to
@@ -51,8 +52,18 @@ interface IProvider{
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
     load(): void;
-    loadResource(resource: Resource, loginMethod: (loginService: string) => Promise<void>): Promise<Resource>;
-    loadResources(resources: Resource[], loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]>;
+    loadResource(resource: Resource,
+                 login: (loginService: string) => Promise<void>,
+                 getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
+                 storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
+                 getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
+                 handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource>;
+    loadResources(resources: Resource[],
+                  login: (loginService: string) => Promise<void>,
+                  getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
+                  storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
+                  getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
+                  handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]>;
 
     // todo: move these to extension
     bootstrapper: BootStrapper;
