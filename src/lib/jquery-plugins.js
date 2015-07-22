@@ -222,12 +222,10 @@
     };
     // Recursively removes the last empty element (img, audio, etc) or word in an element
     $.fn.removeLastWord = function (chars, depth) {
-
         if ('undefined' === typeof chars)
             chars = 8;
         if ('undefined' === typeof depth)
             depth = 0;
-
         return this.each(function () {
             var $self = $(this);
             if ($self.contents().length > 0) {
@@ -244,10 +242,9 @@
                         return;
                     }
                 }
-
-                $lastElement.removeLastWord(chars, depth+1); // Element
+                $lastElement.removeLastWord(chars, depth + 1); // Element
             }
-            else if(depth > 0) {
+            else if (depth > 0) {
                 // Empty element
                 $self.remove();
             }
@@ -318,12 +315,9 @@
             // when height changes, store string, then pick from line counts
             var stringsByLine = [expandedText];
             var lastHeight = $self.height();
-            // Until empty
             while ($self.text().length > 0) {
                 $self.removeLastWord();
-
                 var html = $self.html();
-
                 $self.append($buttonPad);
                 if (lastHeight > $self.height()) {
                     stringsByLine.unshift(html);
@@ -331,14 +325,11 @@
                 }
                 $buttonPad.remove();
             }
-
             if (stringsByLine.length <= lines) {
                 $self.html(expandedText);
                 return;
             }
-
             var collapsedText = stringsByLine[lines - 1];
-
             // Toggle function
             var expanded = false;
             $self.toggle = function () {
