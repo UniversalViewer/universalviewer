@@ -1,5 +1,6 @@
 import BootStrapper = require("../../Bootstrapper");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import IAccessToken = require("../../modules/uv-shared-module/IAccessToken");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
@@ -162,7 +163,11 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
-    getImages(loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]> {
+    getImages(loginMethod: (loginService: string) => Promise<void>,
+              getAccessTokenMethod: (tokenServiceUrl: string) => Promise<IAccessToken>,
+              storeAccessTokenMethod: (resource: Resource, token: IAccessToken) => Promise<void>,
+              getStoredAccessTokenMethod: (tokenService: string) => Promise<IAccessToken>,
+              handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]> {
 
         var indices = this.getPagedIndices();
         var images = [];
@@ -174,7 +179,13 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         });
 
         return new Promise<any[]>((resolve) => {
-            this.loadResources(images, loginMethod).then((resources: Resource[]) => {
+            this.loadResources(
+                images,
+                loginMethod,
+                getAccessTokenMethod,
+                storeAccessTokenMethod,
+                getStoredAccessTokenMethod,
+                handleResourceResponse).then((resources: Resource[]) => {
                 this.images = _.map(resources, (resource: Resource) => {
                     return resource.data;
                 });

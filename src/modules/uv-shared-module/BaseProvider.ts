@@ -7,7 +7,6 @@ import Params = require("./Params");
 import RenderingFormat = require("./RenderingFormat");
 import Resource = require("./Resource");
 import ServiceProfile = require("./ServiceProfile");
-import Session = require("./Session");
 import Thumb = require("./Thumb");
 import TreeNode = require("./TreeNode");
 
@@ -20,22 +19,22 @@ class BaseProvider implements IProvider{
     bootstrapper: BootStrapper;
     canvasIndex: number;
     config: any;
-    manifestUri: string;
     domain: string;
-    embedScriptUri: string;
     embedDomain: string;
+    embedScriptUri: string;
     isHomeDomain: boolean;
     isLightbox: boolean;
     isOnlyInstance: boolean;
     isReload: boolean;
+    jsonp: boolean;
+    locale: string;
+    locales: any[];
     manifest: any;
+    manifestUri: string;
     rootStructure: any;
     sequence: any;
     sequenceIndex: number;
     treeRoot: TreeNode;
-    jsonp: boolean;
-    locale: string;
-    locales: any[];
 
     // map param names to enum indices.
     paramMap: string[] = ['si', 'ci', 'z', 'r'];
@@ -902,58 +901,137 @@ class BaseProvider implements IProvider{
         return this.serializeLocales(this.locales);
     }
 
-    loadResource(resource: Resource, loginMethod: (loginService: string) => Promise<void>): Promise<any> {
+    loadResource(resource: Resource,
+                 login: (loginService: string) => Promise<void>,
+                 getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
+                 storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
+                 getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
+                 handleResourceResponse: (resource: Resource) => Promise<any>): Promise<any> {
+
+        var that = this;
+
         return new Promise<any>((resolve, reject) => {
+
+            if (that.config.options.pessimisticAccessControl){
+
+                // pessimistic: access control cookies may have been deleted.
+                // always request the access token for every access controlled info.json request
+                // returned access tokens are not stored, therefore the login window flashes for every request.
+
+                resource.getData().then(() => {
+
+                    if (resource.isAccessControlled){
+                        login(resource.loginService).then(() => {
+                            getAccessToken(resource.tokenService).then((token: IAccessToken) => {
+                                resource.getData(token).then(() => {
+                                    resolve(handleResourceResponse(resource));
+                                });
+                            });
+                        });
+                    } else {
+                        // this info.json isn't access controlled, therefore no need to request an access token
+                        resolve(resource);
+                    }
+                });
+            } else {
+
+                // optimistic: access control cookies may not have been deleted.
+                // store access tokens to avoid login window flashes.
+                // if cookies are deleted a page refresh is required.
+
+                // try loading the resource using an access token that matches the info.json domain.
+                // if an access token is found, request the resource using it regardless of whether it is access controlled.
+                getStoredAccessToken(resource.dataUri).then((storedAccessToken: IAccessToken) => {
+                    if (storedAccessToken) {
+                        // try using the stored access token
+                        resource.getData(storedAccessToken).then(() => {
+                            // if the info.json loaded using the stored access token
+                            if (resource.status === 200){
+                                resolve(handleResourceResponse(resource));
+                            } else {
+                                // otherwise, load the resource data to determine the correct access control services.
+                                // if access controlled, do login.
+                                this.authorize(
+                                    resource,
+                                    login,
+                                    getAccessToken,
+                                    storeAccessToken,
+                                    getStoredAccessToken).then(() => {
+                                        resolve(handleResourceResponse(resource));
+                                    });
+                            }
+                        });
+                    } else {
+                        this.authorize(
+                            resource,
+                            login,
+                            getAccessToken,
+                            storeAccessToken,
+                            getStoredAccessToken).then(() => {
+                                resolve(handleResourceResponse(resource));
+                            });
+                    }
+                });
+            }
+        });
+    }
+
+    authorize(resource: Resource,
+              login: (loginService: string) => Promise<void>,
+              getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
+              storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
+              getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>): Promise<Resource> {
+
+        return new Promise<Resource>((resolve, reject) => {
+
             resource.getData().then(() => {
-                if (resource.status === 200){ // ok
-                    resolve(resource);
-                } else if (resource.status === 401){ // unauthorized
-                    resolve(this.authorize(resource, loginMethod));
-                } else if (resource.status === 403){ // forbidden
-                    // todo: use config content
-                    reject("You do not have permission to view this item.");
+                if (resource.isAccessControlled) {
+                    getStoredAccessToken(resource.tokenService).then((storedAccessToken: IAccessToken) => {
+                        if (storedAccessToken) {
+                            // try using the stored access token
+                            resource.getData(storedAccessToken).then(() => {
+                                resolve(resource);
+                            });
+                        } else {
+                            // get an access token
+                            login(resource.loginService).then(() => {
+                                getAccessToken(resource.tokenService).then((accessToken) => {
+                                    storeAccessToken(resource, accessToken).then(() => {
+                                        resource.getData(accessToken).then(() => {
+                                            resolve(resource);
+                                        });
+                                    });
+                                });
+                            });
+                        }
+                    });
                 } else {
-                    reject(resource.error.statusText);
+                    // this info.json isn't access controlled, therefore there's no need to request an access token
+                    resolve(resource);
                 }
             });
         });
     }
 
-    // http://image-auth.iiif.io/api/image/2.1/authentication.html
-    authorize(resource: Resource, loginMethod: (loginService: string) => Promise<void>): Promise<any> {
-        return new Promise<any>((resolve) => {
-            if (!resource.getAccessToken()){
-                loginMethod(resource.loginService).then(() => {
-                    this.getAuthToken(resource.tokenService).then((token) => {
-                        Session.set(resource.tokenService, token, token.expiresIn);
-                        resolve(this.loadResource(resource, loginMethod));
-                    });
-                });
-            } else {
-                // the resource already has an access token
-                resolve(this.loadResource(resource, loginMethod));
-            }
-        });
-    }
-
-    getAuthToken(tokenServiceUrl: string): Promise<IAccessToken> {
-        return new Promise<IAccessToken>((resolve, reject) => {
-            $.getJSON(tokenServiceUrl + "?callback=?", (token: IAccessToken) => {
-                resolve(token);
-            }).fail((error) => {
-                reject(error);
-            });
-        });
-    }
-
-    loadResources(resources: Resource[], loginMethod: (loginService: string) => Promise<void>): Promise<Resource[]> {
+    loadResources(resources: Resource[],
+                  login: (loginService: string) => Promise<void>,
+                  getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
+                  storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
+                  getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
+                  handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]> {
 
         var that = this;
 
         return new Promise<Resource[]>((resolve) => {
 
             var promises = _.map(resources, (resource: Resource) => {
-                return that.loadResource(resource, loginMethod);
+                return that.loadResource(
+                    resource,
+                    login,
+                    getAccessToken,
+                    storeAccessToken,
+                    getStoredAccessToken,
+                    handleResourceResponse);
             });
 
             Promise.all(promises)

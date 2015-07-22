@@ -5,6 +5,7 @@
     "minWidthBreakPoint": 610,
     "overrideFullScreen": false,
     "pagingEnabled": true,
+    "pessimisticAccessControl": false,
     "preserveViewport": false,
     "rightPanelEnabled": true,
     "searchWithinEnabled": true,

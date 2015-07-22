@@ -3,6 +3,7 @@
   {
     "leftPanelEnabled": true,
     "minWidthBreakPoint": 610,
+    "pessimisticAccessControl": false,
     "rightPanelEnabled": true,
     "theme": "uv-en-GB-theme"
   },
