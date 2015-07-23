@@ -5,7 +5,7 @@ import IAccessToken = require("./IAccessToken");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
 import Resource = require("./Resource");
-import Session = require("./Session");
+import Storage = require("./Storage");
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provision systems.
@@ -132,6 +132,9 @@ class BaseProvider implements IProvider{
     }
 
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType {
+        if (!canvas){
+            canvas = this.getCurrentCanvas();
+        }
         return canvas.type;
     }
 

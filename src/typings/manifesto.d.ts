@@ -1,3 +1,4 @@
+declare var path: any;
 declare module Manifesto {
     class Canvas implements ICanvas {
         id: string;
@@ -20,7 +21,7 @@ declare module Manifesto {
         toString(): string;
     }
 }
-declare var isArray: any;
+declare var _isArray: any;
 declare module Manifesto {
     class Element implements IElement {
         id: string;
@@ -67,7 +68,6 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface IManifest extends IJSONLDResource {
-        defaultLabel: string;
         getAttribution(): string;
         getLocalisedValue(resource: any, locale?: string): string;
         getLabel(): string;
@@ -85,6 +85,7 @@ declare module Manifesto {
         getTotalSequences(): number;
         getTree(): TreeNode;
         isMultiSequence(): boolean;
+        options: IManifestoOptions;
         rootRange: IRange;
         treeRoot: TreeNode;
     }
@@ -97,6 +98,11 @@ declare module Manifesto {
 interface IManifesto {
     load: (manifestUri: string, callback: (manifest: string) => void) => void;
     parse: (manifest: string) => Manifesto.Manifest;
+}
+interface IManifestoOptions {
+    defaultLabel: string;
+    locale: string;
+    pessimisticAccessControl: boolean;
 }
 declare module Manifesto {
     interface IRange extends IManifestResource {
@@ -143,18 +149,18 @@ declare module Manifesto {
     interface IService extends IManifestResource {
     }
 }
-declare var isArray: any;
+declare var _assign: any;
+declare var _isArray: any;
 declare module Manifesto {
     class Manifest implements IManifest {
-        defaultLabel: string;
         id: string;
+        options: IManifestoOptions;
         jsonld: any;
-        locale: string;
         manifest: IManifest;
         rootRange: IRange;
         sequences: Sequence[];
         treeRoot: TreeNode;
-        constructor(jsonld: any);
+        constructor(jsonld: any, options?: IManifestoOptions);
         getAttribution(): string;
         getLabel(): string;
         getLocalisedValue(resource: any, locale?: string): string;
@@ -210,7 +216,7 @@ declare module Manifesto {
         toString(): string;
     }
 }
-declare var isNumber: any;
+declare var _isNumber: any;
 declare module Manifesto {
     class Sequence implements ISequence {
         canvases: Canvas[];
@@ -321,4 +327,3 @@ declare module Manifesto {
 }
 declare var http: any;
 declare var url: any;
-declare var path: any;
