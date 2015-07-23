@@ -5,10 +5,9 @@ var Manifesto;
     var Canvas = (function () {
         function Canvas() {
             this.ranges = [];
+            this.width = 0;
+            this.height = 0;
         }
-        Canvas.prototype.getHeight = function () {
-            return this.jsonld.height;
-        };
         Canvas.prototype.getLabel = function () {
             var regExp = /\d/;
             if (regExp.test(this.jsonld.label)) {
@@ -43,9 +42,6 @@ var Manifesto;
             // todo: allow region, rotation, quality, and format as parameters?
             var tile = 'full/' + width + ',' + height + '/0/default.jpg';
             return path.join(uri, tile);
-        };
-        Canvas.prototype.getWidth = function () {
-            return this.jsonld.width;
         };
         return Canvas;
     })();
@@ -580,6 +576,9 @@ var Manifesto;
                 canvas.id = c['@id'];
                 canvas.jsonld = c;
                 canvas.manifest = this.manifest;
+                canvas.type = new Manifesto.CanvasType(c['@type'].toLowerCase());
+                canvas.width = c.width;
+                canvas.height = c.height;
                 canvases.push(canvas);
             }
             return canvases;

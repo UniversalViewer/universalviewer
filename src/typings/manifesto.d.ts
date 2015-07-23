@@ -6,11 +6,11 @@ declare module Manifesto {
         manifest: IManifest;
         ranges: IRange[];
         type: CanvasType;
-        getHeight(): number;
+        width: number;
+        height: number;
         getLabel(): string;
         getRange(): IRange;
         getThumbUri(width: number, height: number): string;
-        getWidth(): number;
     }
 }
 declare module Manifesto {
@@ -46,11 +46,11 @@ declare module Manifesto {
     interface ICanvas extends IManifestResource {
         ranges: IRange[];
         type: CanvasType;
-        getHeight(): number;
         getLabel(): string;
         getRange(): IRange;
         getThumbUri(width: number, height: number): string;
-        getWidth(): number;
+        width: number;
+        height: number;
     }
 }
 declare module Manifesto {
