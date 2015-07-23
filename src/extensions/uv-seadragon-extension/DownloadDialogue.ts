@@ -137,7 +137,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         var settings: ISettings = this.provider.getSettings();
-        if (settings.pagingEnabled) {
+
+        if (this.provider.isPagingEnabled() && settings.pagingEnabled) {
             this.$pagingNote.show();
         } else {
             this.$pagingNote.hide();
