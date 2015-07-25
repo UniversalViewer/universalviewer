@@ -57,9 +57,9 @@ class DownloadDialogue extends Dialogue {
         }
     }
 
-    addEntireFileDownloadOption(rendering: any): void{
-        var fileUri = rendering['@id'];
-        var label = this.provider.getLocalisedValue(rendering['label']);
+    addEntireFileDownloadOption(rendering: Manifesto.IRendering): void{
+        var fileUri = rendering.id;
+        var label = rendering.getLabel();
         if (label) {
             label += " ({0})";
         } else {

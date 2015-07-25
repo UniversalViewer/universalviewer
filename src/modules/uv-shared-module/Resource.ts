@@ -18,14 +18,18 @@ class Resource {
     }
 
     private _parseAuthServices(resource: any): void {
-        var loginService = this.provider.getService(resource, Manifesto.ServiceProfile.login);
-        if (loginService) this.loginService = loginService['@id'];
 
-        var logoutService = this.provider.getService(resource, Manifesto.ServiceProfile.logout);
-        if (logoutService) this.logoutService = logoutService['@id'];
+        // todo: use constants
+        var loginService: Manifesto.IService = this.provider.getService(resource, "login");
+        if (loginService) this.loginService = loginService.id;
 
-        var tokenService = this.provider.getService(resource, Manifesto.ServiceProfile.token);
-        if (tokenService) this.tokenService = tokenService['@id'];
+        // todo: use constants
+        var logoutService: Manifesto.IService = this.provider.getService(resource, "logout");
+        if (logoutService) this.logoutService = logoutService.id;
+
+        // todo: use constants
+        var tokenService: Manifesto.IService = this.provider.getService(resource, "token");
+        if (tokenService) this.tokenService = tokenService.id;
 
         if (this.loginService) this.isAccessControlled = true;
     }

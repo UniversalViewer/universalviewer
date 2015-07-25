@@ -51,7 +51,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
     }
 
-    viewMedia(canvas) {
+    viewMedia(canvas: Manifesto.ICanvas) {
 
         var that = this;
 
@@ -69,10 +69,10 @@ class MediaElementCenterPanel extends CenterPanel {
 
         var sources = [];
 
-        _.each(this.provider.getRenderings(canvas), (rendering: any) => {
+        _.each(this.provider.getRenderings(canvas), (rendering: Manifesto.IRendering) => {
             sources.push({
                 type: rendering.format,
-                src: rendering['@id']
+                src: rendering.id
             });
         });
 

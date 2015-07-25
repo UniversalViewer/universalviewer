@@ -8,7 +8,7 @@ class TreeView extends BaseView {
     $tree: JQuery;
     elideCount: number;
     isOpen: boolean = false;
-    selectedNode: any;
+    selectedNode: Manifesto.TreeNode;
 
     public rootNode: Manifesto.TreeNode;
 

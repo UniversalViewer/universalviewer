@@ -47,9 +47,8 @@ class MoreInfoRightPanel extends RightPanel {
         // show loading icon.
         this.$main.addClass('loading');
 
-        this.provider.getMetaData((data: any) => {
-            this.displayInfo(data);
-        }, true);
+        var data = this.provider.getMetadata(true);
+        this.displayInfo(data);
     }
 
     displayInfo(data: any): void {
@@ -89,23 +88,20 @@ class MoreInfoRightPanel extends RightPanel {
         var $header = $elem.find('.header');
         var $text = $elem.find('.text');
 
-        var label = this.provider.getLocalisedValue(item.label);
-        var value  = this.provider.getLocalisedValue(item.value);
-
-        label = this.provider.sanitize(label);
-        value = this.provider.sanitize(value);
+        item.label = this.provider.sanitize(item.label);
+        item.value = this.provider.sanitize(item.value);
 
         // replace \n with <br>
-        value = value.replace('\n', '<br>');
+        item.value = item.value.replace('\n', '<br>');
 
-        $header.html(label);
-        $text.html(value);
+        $header.html(item.label);
+        $text.html(item.value);
         $text.targetBlank();
 
-        label = label.trim();
-        label = label.toLowerCase();
+        item.label = item.label.trim();
+        item.label = item.label.toLowerCase();
 
-        $elem.addClass(label.toCssClass());
+        $elem.addClass(item.label.toCssClass());
 
         return $elem;
     }

@@ -1,19 +1,60 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.manifesto=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-var path = _dereq_("path");
 var Manifesto;
 (function (Manifesto) {
-    var Canvas = (function () {
-        function Canvas() {
-            this.ranges = [];
-            this.width = 0;
-            this.height = 0;
+    var JSONLDResource = (function () {
+        function JSONLDResource(jsonld) {
+            this.__jsonld = jsonld;
+            this.context = this.__jsonld['@context'];
+            this.id = this.__jsonld['@id'];
+            this._label = this.__jsonld.label;
+            // the serializer stores a reference to the manifest on the jsonld resource for convenience
+            this._manifest = this.__jsonld.manifest;
+            // store a reference to the parsed object in the jsonld for convenience.
+            this.__jsonld.__parsed = this;
         }
-        Canvas.prototype.getLabel = function () {
-            var regExp = /\d/;
-            if (regExp.test(this.jsonld.label)) {
-                return this.manifest.getLocalisedValue(this.jsonld.label);
+        JSONLDResource.prototype.getManifest = function () {
+            return this._manifest;
+        };
+        JSONLDResource.prototype.getLabel = function () {
+            // todo: why test if it's a digit?
+            //var regExp = /\d/;
+            //if (regExp.test(this._label)) {
+            return this.getManifest().getLocalisedValue(this._label);
+            //}
+            //return null;
+        };
+        return JSONLDResource;
+    })();
+    Manifesto.JSONLDResource = JSONLDResource;
+})(Manifesto || (Manifesto = {}));
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Manifesto;
+(function (Manifesto) {
+    var Canvas = (function (_super) {
+        __extends(Canvas, _super);
+        function Canvas(jsonld) {
+            _super.call(this, jsonld);
+            this.ranges = [];
+        }
+        // todo: add support for default images and multiple images.
+        Canvas.prototype.getImageUri = function () {
+            var imageUri;
+            if (this.__jsonld.resources) {
+                imageUri = this.__jsonld.resources[0].resource.service['@id'];
             }
-            return null;
+            else if (this.__jsonld.images && this.__jsonld.images[0].resource.service) {
+                imageUri = this.__jsonld.images[0].resource.service['@id'];
+            }
+            if (!imageUri.endsWith('/')) {
+                imageUri += '/';
+            }
+            imageUri += 'info.json';
+            return imageUri;
         };
         Canvas.prototype.getRange = function () {
             // get the deepest Range that this Canvas belongs to.
@@ -24,27 +65,38 @@ var Manifesto;
         // the thumbnail service can provide a satisfactory size +/- x pixels.
         Canvas.prototype.getThumbUri = function (width, height) {
             var uri;
-            if (this.jsonld.thumbnail) {
-                return this.jsonld.thumbnail;
-            }
-            else if (this.jsonld.resources) {
+            //if(this.__jsonld.thumbnail){
+            //    return this.__jsonld.thumbnail;
+            //} else if (this.__jsonld.resources){
+            if (this.__jsonld.resources) {
                 // todo: create thumbnail serviceprofile and use manifest.getService
-                uri = this.manifest.getService();
-                this.jsonld.resources[0].resource.service['@id'];
+                uri = this.__jsonld.resources[0].resource.service['@id'];
             }
-            else if (this.jsonld.images && this.jsonld.images[0].resource.service) {
+            else if (this.__jsonld.images && this.__jsonld.images[0].resource.service) {
                 // todo: create thumbnail serviceprofile and use manifest.getService
-                uri = this.jsonld.images[0].resource.service['@id'];
+                uri = this.__jsonld.images[0].resource.service['@id'];
             }
             else {
                 return null;
             }
+            if (!uri.endsWith('/')) {
+                uri += '/';
+            }
             // todo: allow region, rotation, quality, and format as parameters?
             var tile = 'full/' + width + ',' + height + '/0/default.jpg';
-            return path.join(uri, tile);
+            return uri + tile;
+        };
+        Canvas.prototype.getType = function () {
+            return new Manifesto.CanvasType(this.__jsonld['@type'].toLowerCase());
+        };
+        Canvas.prototype.getWidth = function () {
+            return this.__jsonld.width;
+        };
+        Canvas.prototype.getHeight = function () {
+            return this.__jsonld.height;
         };
         return Canvas;
-    })();
+    })(Manifesto.JSONLDResource);
     Manifesto.Canvas = Canvas;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
@@ -64,40 +116,36 @@ var Manifesto;
 var _isArray = _dereq_("lodash.isarray");
 var Manifesto;
 (function (Manifesto) {
-    var Element = (function () {
-        function Element() {
+    var Element = (function (_super) {
+        __extends(Element, _super);
+        function Element(jsonld) {
+            _super.call(this, jsonld);
         }
-        Element.prototype.getLabel = function () {
-            var regExp = /\d/;
-            if (regExp.test(this.jsonld.label)) {
-                return this.manifest.getLocalisedValue(this.jsonld.label);
-            }
-            return null;
-        };
         Element.prototype.getRenderings = function () {
             var renderings = [];
-            if (this.jsonld.rendering) {
-                var rendering = this.jsonld.rendering;
+            if (this.__jsonld.rendering) {
+                var rendering = this.__jsonld.rendering;
                 if (!_isArray(rendering)) {
                     rendering = [rendering];
                 }
                 for (var i = 0; i < rendering.length; i++) {
                     var r = rendering[i];
-                    var rend = new Manifesto.Rendering();
-                    rend.id = r['@id'];
+                    var rend = new Manifesto.Rendering(r);
                     rend.format = r.format;
                     renderings.push(rend);
                 }
                 return renderings;
             }
             // no renderings provided, default to element.
-            var rend = new Manifesto.Rendering();
-            rend.id = this.jsonld['@id'];
-            rend.format = this.jsonld.format;
+            var rend = new Manifesto.Rendering(this.__jsonld);
+            rend.format = this.__jsonld.format;
             return [rend];
         };
+        Element.prototype.getType = function () {
+            return new Manifesto.ElementType(this.__jsonld['@type']);
+        };
         return Element;
-    })();
+    })(Manifesto.JSONLDResource);
     Manifesto.Element = Element;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
@@ -120,17 +168,15 @@ var _assign = _dereq_("lodash.assign");
 var _isArray = _dereq_("lodash.isarray");
 var Manifesto;
 (function (Manifesto) {
-    var Manifest = (function () {
+    var Manifest = (function (_super) {
+        __extends(Manifest, _super);
         function Manifest(jsonld, options) {
+            _super.call(this, jsonld);
             this.sequences = [];
-            this.jsonld = jsonld;
             this.options = _assign({ defaultLabel: '-', locale: 'en-GB' }, options);
         }
         Manifest.prototype.getAttribution = function () {
-            return this.getLocalisedValue(this.jsonld.attribution);
-        };
-        Manifest.prototype.getLabel = function () {
-            return this.getLocalisedValue(this.jsonld.label);
+            return this.getLocalisedValue(this.__jsonld.attribution);
         };
         Manifest.prototype.getLocalisedValue = function (resource, locale) {
             if (!_isArray(resource)) {
@@ -158,48 +204,49 @@ var Manifesto;
             return null;
         };
         Manifest.prototype.getLogo = function () {
-            return this.jsonld.logo;
+            return this.__jsonld.logo;
         };
         Manifest.prototype.getLicense = function () {
-            return this.getLocalisedValue(this.jsonld.license);
+            return this.getLocalisedValue(this.__jsonld.license);
         };
         Manifest.prototype.getMetadata = function (includeRootProperties) {
-            var metadata = this.manifest.jsonld.metadata;
+            var metadata = this.__jsonld.metadata;
             if (metadata && includeRootProperties) {
-                if (this.manifest.jsonld.description) {
+                if (this.__jsonld.description) {
                     metadata.push({
                         "label": "description",
-                        "value": this.getLocalisedValue(this.manifest.jsonld.description)
+                        "value": this.getLocalisedValue(this.__jsonld.description)
                     });
                 }
-                if (this.manifest.jsonld.attribution) {
+                if (this.__jsonld.attribution) {
                     metadata.push({
                         "label": "attribution",
-                        "value": this.getLocalisedValue(this.manifest.jsonld.attribution)
+                        "value": this.getLocalisedValue(this.__jsonld.attribution)
                     });
                 }
-                if (this.manifest.jsonld.license) {
+                if (this.__jsonld.license) {
                     metadata.push({
                         "label": "license",
-                        "value": this.getLocalisedValue(this.manifest.jsonld.license)
+                        "value": this.getLocalisedValue(this.__jsonld.license)
                     });
                 }
-                if (this.manifest.jsonld.logo) {
+                if (this.__jsonld.logo) {
                     metadata.push({
                         "label": "logo",
-                        "value": '<img src="' + this.manifest.jsonld.logo + '"/>' });
+                        "value": '<img src="' + this.__jsonld.logo + '"/>' });
                 }
             }
             return metadata;
         };
         // todo: use jmespath to flatten tree?
+        // https://github.com/jmespath/jmespath.js/issues/6
         Manifest.prototype.getRanges = function () {
             var ranges = [];
-            if (!this.jsonld.structures && !this.jsonld.structures.length)
+            if (!this.__jsonld.structures && !this.__jsonld.structures.length)
                 return ranges;
-            for (var i = 0; i < this.jsonld.structures.length; i++) {
-                var range = this.jsonld.structures[i];
-                ranges.push(range.parsed);
+            for (var i = 0; i < this.__jsonld.structures.length; i++) {
+                var r = this.__jsonld.structures[i];
+                ranges.push(r.__parsed);
             }
             return ranges;
         };
@@ -224,23 +271,22 @@ var Manifesto;
             return null;
         };
         Manifest.prototype.getRendering = function (resource, format) {
-            if (!resource.rendering)
-                return null;
-            var renderings = resource.rendering;
-            if (!_isArray(renderings)) {
-                renderings = [renderings];
+            var renderings = this.getRenderings(resource);
+            // normalise format to string
+            if (typeof format !== 'string') {
+                format = format.toString();
             }
             for (var i = 0; i < renderings.length; i++) {
                 var rendering = renderings[i];
-                if (rendering.format && rendering.format === format.toString()) {
+                if (rendering.format && rendering.format.toString() === format) {
                     return rendering;
                 }
             }
             return null;
         };
         Manifest.prototype.getRenderings = function (resource) {
-            if (resource.rendering) {
-                var renderings = resource.rendering;
+            var renderings = resource.__jsonld.rendering;
+            if (renderings) {
                 if (!_isArray(renderings)) {
                     renderings = [renderings];
                 }
@@ -250,22 +296,35 @@ var Manifesto;
             return [resource];
         };
         Manifest.prototype.getSeeAlso = function () {
-            return this.getLocalisedValue(this.jsonld.seeAlso);
+            return this.getLocalisedValue(this.__jsonld.seeAlso);
         };
         Manifest.prototype.getService = function (resource, profile) {
-            if (!resource.service)
+            var service;
+            // if passing a parsed object, use the jsonld.service property,
+            // otherwise look for a service property
+            if (resource.__jsonld) {
+                service = resource.__jsonld.service;
+            }
+            else {
+                service = resource.service;
+            }
+            if (!service)
                 return null;
-            if (_isArray(resource.service)) {
-                for (var i = 0; i < resource.service.length; i++) {
-                    var service = resource.service[i];
-                    if (service.profile && service.profile === profile) {
-                        return service;
+            // normalise profile to string
+            if (typeof profile !== 'string') {
+                profile = profile.toString();
+            }
+            if (_isArray(service)) {
+                for (var i = 0; i < service.length; i++) {
+                    var s = service[i];
+                    if (s.profile && s.profile === profile) {
+                        return new Manifesto.Service(s);
                     }
                 }
             }
             else {
-                if (resource.service.profile && resource.service.profile === profile) {
-                    return resource.service;
+                if (service.profile && service.profile === profile) {
+                    return new Manifesto.Service(service);
                 }
             }
             return null;
@@ -274,7 +333,7 @@ var Manifesto;
             return this.sequences[sequenceIndex];
         };
         Manifest.prototype.getTitle = function () {
-            return this.getLocalisedValue(this.jsonld.label);
+            return this.getLocalisedValue(this.__jsonld.label);
         };
         Manifest.prototype.getTotalSequences = function () {
             return this.sequences.length;
@@ -296,7 +355,7 @@ var Manifesto;
             return this.treeRoot;
         };
         Manifest.prototype._parseTreeNode = function (node, range) {
-            node.label = this.getLocalisedValue(range.label);
+            node.label = range.getLabel();
             node.data = range;
             node.data.type = "range";
             range.treeNode = node;
@@ -313,34 +372,52 @@ var Manifesto;
             return this.getTotalSequences() > 1;
         };
         return Manifest;
-    })();
+    })(Manifesto.JSONLDResource);
     Manifesto.Manifest = Manifest;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
 (function (Manifesto) {
-    var Range = (function () {
-        function Range() {
+    var Range = (function (_super) {
+        __extends(Range, _super);
+        function Range(jsonld) {
+            _super.call(this, jsonld);
             this.canvases = [];
             this.ranges = [];
         }
-        Range.prototype.getLabel = function () {
-            var regExp = /\d/;
-            if (regExp.test(this.jsonld.label)) {
-                return this.manifest.getLocalisedValue(this.jsonld.label);
+        //getLabel(): string {
+        //    var regExp = /\d/;
+        //
+        //    if (regExp.test(this.__jsonld.label)) {
+        //        return this.manifest.getLocalisedValue(this.__jsonld.label);
+        //    }
+        //
+        //    return null;
+        //}
+        Range.prototype.getViewingDirection = function () {
+            if (this.__jsonld.viewingDirection) {
+                return new Manifesto.ViewingDirection(this.__jsonld.viewingDirection);
+            }
+            return null;
+        };
+        Range.prototype.getViewingHint = function () {
+            if (this.__jsonld.viewingHint) {
+                return new Manifesto.ViewingHint(this.__jsonld.viewingHint);
             }
             return null;
         };
         return Range;
-    })();
+    })(Manifesto.JSONLDResource);
     Manifesto.Range = Range;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
 (function (Manifesto) {
-    var Rendering = (function () {
-        function Rendering() {
+    var Rendering = (function (_super) {
+        __extends(Rendering, _super);
+        function Rendering(jsonld) {
+            _super.call(this, jsonld);
         }
         return Rendering;
-    })();
+    })(Manifesto.JSONLDResource);
     Manifesto.Rendering = Rendering;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
@@ -362,8 +439,10 @@ var Manifesto;
 var _isNumber = _dereq_("lodash.isnumber");
 var Manifesto;
 (function (Manifesto) {
-    var Sequence = (function () {
-        function Sequence() {
+    var Sequence = (function (_super) {
+        __extends(Sequence, _super);
+        function Sequence(jsonld) {
+            _super.call(this, jsonld);
             this.canvases = [];
         }
         Sequence.prototype.getCanvasById = function (id) {
@@ -424,7 +503,7 @@ var Manifesto;
                 return canvas.getLabel();
             }
             // none exists, so return '-'.
-            return this.manifest.options.defaultLabel;
+            return this.getManifest().options.defaultLabel;
         };
         Sequence.prototype.getLastPageIndex = function () {
             return this.getTotalCanvases() - 1;
@@ -433,7 +512,7 @@ var Manifesto;
             var index;
             if (pagingEnabled) {
                 var indices = this.getPagedIndices(canvasIndex);
-                if (this.getViewingDirection() === Manifesto.ViewingDirection.rightToLeft) {
+                if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.rightToLeft.toString()) {
                     index = indices[0] + 1;
                 }
                 else {
@@ -463,7 +542,7 @@ var Manifesto;
                 else {
                     indices = [canvasIndex - 1, canvasIndex];
                 }
-                if (this.getViewingDirection() === Manifesto.ViewingDirection.rightToLeft) {
+                if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.rightToLeft.toString()) {
                     indices = indices.reverse();
                 }
             }
@@ -473,7 +552,7 @@ var Manifesto;
             var index;
             if (pagingEnabled) {
                 var indices = this.getPagedIndices(canvasIndex);
-                if (this.getViewingDirection() === Manifesto.ViewingDirection.rightToLeft) {
+                if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.rightToLeft.toString()) {
                     index = indices.last() - 1;
                 }
                 else {
@@ -486,11 +565,12 @@ var Manifesto;
             return index;
         };
         Sequence.prototype.getStartCanvasIndex = function () {
-            if (this.startCanvas) {
+            var startCanvas = this.getStartCanvas();
+            if (startCanvas) {
                 // if there's a startCanvas attribute, loop through the canvases and return the matching index.
                 for (var i = 0; i < this.getTotalCanvases(); i++) {
                     var canvas = this.getCanvasByIndex(i);
-                    if (canvas.id === this.startCanvas)
+                    if (canvas.id === startCanvas)
                         return i;
                 }
             }
@@ -501,22 +581,35 @@ var Manifesto;
             var thumbs = [];
             for (var i = 0; i < this.getTotalCanvases(); i++) {
                 var canvas = this.getCanvasByIndex(i);
-                if (!_isNumber(height)) {
-                    var heightRatio = canvas.getHeight() / canvas.getWidth();
-                    if (heightRatio) {
-                        height = Math.floor(width * heightRatio);
-                    }
+                //if (!_isNumber(height)) {
+                var heightRatio = canvas.getHeight() / canvas.getWidth();
+                if (heightRatio) {
+                    height = Math.floor(width * heightRatio);
                 }
+                //}
                 var uri = canvas.getThumbUri(width, height);
-                thumbs.push(new Manifesto.Thumb(i, uri, this.manifest.getLocalisedValue(canvas.getLabel()), width, height, true));
+                var label = canvas.getLabel();
+                thumbs.push(new Manifesto.Thumb(i, uri, label, width, height, true));
             }
             return thumbs;
+        };
+        Sequence.prototype.getStartCanvas = function () {
+            return this.__jsonld.startCanvas;
         };
         Sequence.prototype.getTotalCanvases = function () {
             return this.canvases.length;
         };
         Sequence.prototype.getViewingDirection = function () {
-            return this.viewingDirection || Manifesto.ViewingDirection.leftToRight;
+            if (this.__jsonld.viewingDirection) {
+                return new Manifesto.ViewingDirection(this.__jsonld.viewingDirection);
+            }
+            return Manifesto.ViewingDirection.leftToRight;
+        };
+        Sequence.prototype.getViewingHint = function () {
+            if (this.__jsonld.viewingHint) {
+                return new Manifesto.ViewingHint(this.__jsonld.viewingHint);
+            }
+            return null;
         };
         Sequence.prototype.isCanvasIndexOutOfRange = function (canvasIndex) {
             return canvasIndex > this.getTotalCanvases() - 1;
@@ -531,14 +624,14 @@ var Manifesto;
             return this.getTotalCanvases() > 1;
         };
         Sequence.prototype.isPagingEnabled = function () {
-            return this.viewingHint && (this.viewingHint.toString() === "paged");
+            return this.getViewingHint().toString() === Manifesto.ViewingHint.paged.toString();
         };
         // checks if the number of canvases is even - therefore has a front and back cover
         Sequence.prototype.isTotalCanvasesEven = function () {
             return this.getTotalCanvases() % 2 === 0;
         };
         return Sequence;
-    })();
+    })(Manifesto.JSONLDResource);
     Manifesto.Sequence = Sequence;
 })(Manifesto || (Manifesto = {}));
 var jmespath = _dereq_('jmespath');
@@ -550,20 +643,16 @@ var Manifesto;
         Deserialiser.parse = function (manifest) {
             this.manifest = new Manifesto.Manifest(JSON.parse(manifest));
             this.parseSequences();
-            if (this.manifest.jsonld.structures && this.manifest.jsonld.structures.length) {
-                this.parseRanges(JsonUtils.getRootRange(this.manifest.jsonld), '');
+            if (this.manifest.__jsonld.structures && this.manifest.__jsonld.structures.length) {
+                this.parseRanges(JsonUtils.getRootRange(this.manifest.__jsonld), '');
             }
             return this.manifest;
         };
         Deserialiser.parseSequences = function () {
-            for (var i = 0; i < this.manifest.jsonld.sequences.length; i++) {
-                var s = this.manifest.jsonld.sequences[i];
-                var sequence = new Manifesto.Sequence();
-                sequence.id = s['@id'];
-                sequence.jsonld = s;
-                sequence.manifest = this.manifest;
-                sequence.viewingDirection = new Manifesto.ViewingDirection(s.viewingDirection);
-                sequence.viewingHint = new Manifesto.ViewingHint(s.viewingHint);
+            for (var i = 0; i < this.manifest.__jsonld.sequences.length; i++) {
+                var s = this.manifest.__jsonld.sequences[i];
+                s.manifest = this.manifest;
+                var sequence = new Manifesto.Sequence(s);
                 sequence.canvases = this.parseCanvases(s);
                 this.manifest.sequences.push(sequence);
             }
@@ -572,19 +661,15 @@ var Manifesto;
             var canvases = [];
             for (var i = 0; i < sequence.canvases.length; i++) {
                 var c = sequence.canvases[i];
-                var canvas = new Manifesto.Canvas();
-                canvas.id = c['@id'];
-                canvas.jsonld = c;
-                canvas.manifest = this.manifest;
-                canvas.type = new Manifesto.CanvasType(c['@type'].toLowerCase());
-                canvas.width = c.width;
-                canvas.height = c.height;
+                c.manifest = this.manifest;
+                var canvas = new Manifesto.Canvas(c);
                 canvases.push(canvas);
             }
             return canvases;
         };
         Deserialiser.parseRanges = function (r, path, parentRange) {
-            var range = new Manifesto.Range();
+            r.manifest = this.manifest;
+            var range = new Manifesto.Range(r);
             // if no parent range is passed, assign the new range to manifest.rootRange
             if (!parentRange) {
                 this.manifest.rootRange = range;
@@ -593,11 +678,6 @@ var Manifesto;
                 range.parentRange = parentRange;
                 parentRange.ranges.push(range);
             }
-            range.id = r['@id'];
-            range.jsonld = r;
-            r.parsed = range;
-            range.label = r.label;
-            range.manifest = this.manifest;
             range.path = path;
             if (r.canvases) {
                 // create two-way relationship
@@ -666,11 +746,13 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
 (function (Manifesto) {
-    var Service = (function () {
-        function Service() {
+    var Service = (function (_super) {
+        __extends(Service, _super);
+        function Service(resource) {
+            _super.call(this, resource);
         }
         return Service;
-    })();
+    })(Manifesto.JSONLDResource);
     Manifesto.Service = Service;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
@@ -760,34 +842,6 @@ var Manifesto;
     })();
     Manifesto.ViewingHint = ViewingHint;
 })(Manifesto || (Manifesto = {}));
-/// <reference path="./Canvas.ts" />
-/// <reference path="./CanvasType.ts" />
-/// <reference path="./Element.ts" />
-/// <reference path="./ElementType.ts" />
-/// <reference path="./ICanvas.ts" />
-/// <reference path="./IElement.ts" />
-/// <reference path="./IJSONLDResource.ts" />
-/// <reference path="./IManifest.ts" />
-/// <reference path="./IManifesto.ts" />
-/// <reference path="./IManifestResource.ts" />
-/// <reference path="./IRange.ts" />
-/// <reference path="./IRendering.ts" />
-/// <reference path="./ISequence.ts" />
-/// <reference path="./IService.ts" />
-/// <reference path="./Manifest.ts" />
-/// <reference path="./Range.ts" />
-/// <reference path="./Rendering.ts" />
-/// <reference path="./RenderingFormat.ts" />
-/// <reference path="./Sequence.ts" />
-/// <reference path="./Serialisation.ts" />
-/// <reference path="./Service.ts" />
-/// <reference path="./ServiceProfile.ts" />
-/// <reference path="./Thumb.ts" />
-/// <reference path="./TreeNode.ts" />
-/// <reference path="./ViewingDirection.ts" />
-/// <reference path="./ViewingHint.ts" />
-/// <reference path="./Manifesto.ts" /> 
-/// <reference path="./_references.ts" />
 var http = _dereq_("http");
 var url = _dereq_("url");
 module.exports = {
@@ -820,8 +874,36 @@ module.exports = {
         return Manifesto.Deserialiser.parse(manifest);
     }
 };
+/// <reference path="./IJSONLDResource.ts" />
+/// <reference path="./JSONLDResource.ts" />
+/// <reference path="./Canvas.ts" />
+/// <reference path="./CanvasType.ts" />
+/// <reference path="./Element.ts" />
+/// <reference path="./ElementType.ts" />
+/// <reference path="./ICanvas.ts" />
+/// <reference path="./IElement.ts" />
+/// <reference path="./IManifest.ts" />
+/// <reference path="./IManifesto.ts" />
+/// <reference path="./IManifestoOptions.ts" />
+/// <reference path="./IRange.ts" />
+/// <reference path="./IRendering.ts" />
+/// <reference path="./ISequence.ts" />
+/// <reference path="./IService.ts" />
+/// <reference path="./Manifest.ts" />
+/// <reference path="./Range.ts" />
+/// <reference path="./Rendering.ts" />
+/// <reference path="./RenderingFormat.ts" />
+/// <reference path="./Sequence.ts" />
+/// <reference path="./Serialisation.ts" />
+/// <reference path="./Service.ts" />
+/// <reference path="./ServiceProfile.ts" />
+/// <reference path="./Thumb.ts" />
+/// <reference path="./TreeNode.ts" />
+/// <reference path="./ViewingDirection.ts" />
+/// <reference path="./ViewingHint.ts" />
+/// <reference path="./Manifesto.ts" /> 
 
-},{"http":6,"jmespath":28,"lodash.assign":41,"lodash.isarray":51,"lodash.isnumber":52,"path":11,"url":25}],2:[function(_dereq_,module,exports){
+},{"http":6,"jmespath":27,"lodash.assign":40,"lodash.isarray":50,"lodash.isnumber":51,"url":24}],2:[function(_dereq_,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -2586,7 +2668,7 @@ http.STATUS_CODES = {
     510 : 'Not Extended',               // RFC 2774
     511 : 'Network Authentication Required' // RFC 6585
 };
-},{"./lib/request":7,"events":5,"url":25}],7:[function(_dereq_,module,exports){
+},{"./lib/request":7,"events":5,"url":24}],7:[function(_dereq_,module,exports){
 var Stream = _dereq_('stream');
 var Response = _dereq_('./response');
 var Base64 = _dereq_('Base64');
@@ -2777,7 +2859,7 @@ var indexOf = function (xs, x) {
     return -1;
 };
 
-},{"./response":8,"Base64":9,"inherits":10,"stream":18}],8:[function(_dereq_,module,exports){
+},{"./response":8,"Base64":9,"inherits":10,"stream":17}],8:[function(_dereq_,module,exports){
 var Stream = _dereq_('stream');
 var util = _dereq_('util');
 
@@ -2899,7 +2981,7 @@ var isArray = Array.isArray || function (xs) {
     return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{"stream":18,"util":27}],9:[function(_dereq_,module,exports){
+},{"stream":17,"util":26}],9:[function(_dereq_,module,exports){
 ;(function () {
 
   var object = typeof exports != 'undefined' ? exports : this; // #8: web workers
@@ -2987,234 +3069,6 @@ if (typeof Object.create === 'function') {
 }
 
 },{}],11:[function(_dereq_,module,exports){
-(function (process){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// resolves . and .. elements in a path array with directory names there
-// must be no slashes, empty elements, or device names (c:\) in the array
-// (so also no leading and trailing slashes - it does not distinguish
-// relative and absolute paths)
-function normalizeArray(parts, allowAboveRoot) {
-  // if the path tries to go above the root, `up` ends up > 0
-  var up = 0;
-  for (var i = parts.length - 1; i >= 0; i--) {
-    var last = parts[i];
-    if (last === '.') {
-      parts.splice(i, 1);
-    } else if (last === '..') {
-      parts.splice(i, 1);
-      up++;
-    } else if (up) {
-      parts.splice(i, 1);
-      up--;
-    }
-  }
-
-  // if the path is allowed to go above the root, restore leading ..s
-  if (allowAboveRoot) {
-    for (; up--; up) {
-      parts.unshift('..');
-    }
-  }
-
-  return parts;
-}
-
-// Split a filename into [root, dir, basename, ext], unix version
-// 'root' is just a slash, or nothing.
-var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
-var splitPath = function(filename) {
-  return splitPathRe.exec(filename).slice(1);
-};
-
-// path.resolve([from ...], to)
-// posix version
-exports.resolve = function() {
-  var resolvedPath = '',
-      resolvedAbsolute = false;
-
-  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    var path = (i >= 0) ? arguments[i] : process.cwd();
-
-    // Skip empty and invalid entries
-    if (typeof path !== 'string') {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
-      continue;
-    }
-
-    resolvedPath = path + '/' + resolvedPath;
-    resolvedAbsolute = path.charAt(0) === '/';
-  }
-
-  // At this point the path should be resolved to a full absolute path, but
-  // handle relative paths to be safe (might happen when process.cwd() fails)
-
-  // Normalize the path
-  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
-    return !!p;
-  }), !resolvedAbsolute).join('/');
-
-  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-};
-
-// path.normalize(path)
-// posix version
-exports.normalize = function(path) {
-  var isAbsolute = exports.isAbsolute(path),
-      trailingSlash = substr(path, -1) === '/';
-
-  // Normalize the path
-  path = normalizeArray(filter(path.split('/'), function(p) {
-    return !!p;
-  }), !isAbsolute).join('/');
-
-  if (!path && !isAbsolute) {
-    path = '.';
-  }
-  if (path && trailingSlash) {
-    path += '/';
-  }
-
-  return (isAbsolute ? '/' : '') + path;
-};
-
-// posix version
-exports.isAbsolute = function(path) {
-  return path.charAt(0) === '/';
-};
-
-// posix version
-exports.join = function() {
-  var paths = Array.prototype.slice.call(arguments, 0);
-  return exports.normalize(filter(paths, function(p, index) {
-    if (typeof p !== 'string') {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
-    return p;
-  }).join('/'));
-};
-
-
-// path.relative(from, to)
-// posix version
-exports.relative = function(from, to) {
-  from = exports.resolve(from).substr(1);
-  to = exports.resolve(to).substr(1);
-
-  function trim(arr) {
-    var start = 0;
-    for (; start < arr.length; start++) {
-      if (arr[start] !== '') break;
-    }
-
-    var end = arr.length - 1;
-    for (; end >= 0; end--) {
-      if (arr[end] !== '') break;
-    }
-
-    if (start > end) return [];
-    return arr.slice(start, end - start + 1);
-  }
-
-  var fromParts = trim(from.split('/'));
-  var toParts = trim(to.split('/'));
-
-  var length = Math.min(fromParts.length, toParts.length);
-  var samePartsLength = length;
-  for (var i = 0; i < length; i++) {
-    if (fromParts[i] !== toParts[i]) {
-      samePartsLength = i;
-      break;
-    }
-  }
-
-  var outputParts = [];
-  for (var i = samePartsLength; i < fromParts.length; i++) {
-    outputParts.push('..');
-  }
-
-  outputParts = outputParts.concat(toParts.slice(samePartsLength));
-
-  return outputParts.join('/');
-};
-
-exports.sep = '/';
-exports.delimiter = ':';
-
-exports.dirname = function(path) {
-  var result = splitPath(path),
-      root = result[0],
-      dir = result[1];
-
-  if (!root && !dir) {
-    // No dirname whatsoever
-    return '.';
-  }
-
-  if (dir) {
-    // It has a dirname, strip trailing slash
-    dir = dir.substr(0, dir.length - 1);
-  }
-
-  return root + dir;
-};
-
-
-exports.basename = function(path, ext) {
-  var f = splitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
-  if (ext && f.substr(-1 * ext.length) === ext) {
-    f = f.substr(0, f.length - ext.length);
-  }
-  return f;
-};
-
-
-exports.extname = function(path) {
-  return splitPath(path)[3];
-};
-
-function filter (xs, f) {
-    if (xs.filter) return xs.filter(f);
-    var res = [];
-    for (var i = 0; i < xs.length; i++) {
-        if (f(xs[i], i, xs)) res.push(xs[i]);
-    }
-    return res;
-}
-
-// String.prototype.substr - negative index don't work in IE8
-var substr = 'ab'.substr(-1) === 'b'
-    ? function (str, start, len) { return str.substr(start, len) }
-    : function (str, start, len) {
-        if (start < 0) start = str.length + start;
-        return str.substr(start, len);
-    }
-;
-
-}).call(this,_dereq_("ngpmcQ"))
-},{"ngpmcQ":12}],12:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3279,7 +3133,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],13:[function(_dereq_,module,exports){
+},{}],12:[function(_dereq_,module,exports){
 (function (global){
 /*! http://mths.be/punycode v1.2.4 by @mathias */
 ;(function(root) {
@@ -3790,7 +3644,7 @@ process.chdir = function (dir) {
 }(this));
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],14:[function(_dereq_,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -3876,7 +3730,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],15:[function(_dereq_,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -3963,13 +3817,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],16:[function(_dereq_,module,exports){
+},{}],15:[function(_dereq_,module,exports){
 'use strict';
 
 exports.decode = exports.parse = _dereq_('./decode');
 exports.encode = exports.stringify = _dereq_('./encode');
 
-},{"./decode":14,"./encode":15}],17:[function(_dereq_,module,exports){
+},{"./decode":13,"./encode":14}],16:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4043,7 +3897,7 @@ function onend() {
   });
 }
 
-},{"./readable.js":21,"./writable.js":23,"inherits":10,"process/browser.js":19}],18:[function(_dereq_,module,exports){
+},{"./readable.js":20,"./writable.js":22,"inherits":10,"process/browser.js":18}],17:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4172,7 +4026,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"./duplex.js":17,"./passthrough.js":20,"./readable.js":21,"./transform.js":22,"./writable.js":23,"events":5,"inherits":10}],19:[function(_dereq_,module,exports){
+},{"./duplex.js":16,"./passthrough.js":19,"./readable.js":20,"./transform.js":21,"./writable.js":22,"events":5,"inherits":10}],18:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4227,7 +4081,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],20:[function(_dereq_,module,exports){
+},{}],19:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4270,7 +4124,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./transform.js":22,"inherits":10}],21:[function(_dereq_,module,exports){
+},{"./transform.js":21,"inherits":10}],20:[function(_dereq_,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5207,7 +5061,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,_dereq_("ngpmcQ"))
-},{"./index.js":18,"buffer":2,"events":5,"inherits":10,"ngpmcQ":12,"process/browser.js":19,"string_decoder":24}],22:[function(_dereq_,module,exports){
+},{"./index.js":17,"buffer":2,"events":5,"inherits":10,"ngpmcQ":11,"process/browser.js":18,"string_decoder":23}],21:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5413,7 +5267,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./duplex.js":17,"inherits":10}],23:[function(_dereq_,module,exports){
+},{"./duplex.js":16,"inherits":10}],22:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5801,7 +5655,7 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./index.js":18,"buffer":2,"inherits":10,"process/browser.js":19}],24:[function(_dereq_,module,exports){
+},{"./index.js":17,"buffer":2,"inherits":10,"process/browser.js":18}],23:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5994,7 +5848,7 @@ function base64DetectIncompleteChar(buffer) {
   return incomplete;
 }
 
-},{"buffer":2}],25:[function(_dereq_,module,exports){
+},{"buffer":2}],24:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6703,14 +6557,14 @@ function isNullOrUndefined(arg) {
   return  arg == null;
 }
 
-},{"punycode":13,"querystring":16}],26:[function(_dereq_,module,exports){
+},{"punycode":12,"querystring":15}],25:[function(_dereq_,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],27:[function(_dereq_,module,exports){
+},{}],26:[function(_dereq_,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -7300,7 +7154,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,_dereq_("ngpmcQ"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":26,"inherits":10,"ngpmcQ":12}],28:[function(_dereq_,module,exports){
+},{"./support/isBuffer":25,"inherits":10,"ngpmcQ":11}],27:[function(_dereq_,module,exports){
 var _indexOf = _dereq_("lodash.indexof");
 var _isArray = _dereq_("lodash.isarray");
 var _isObject = _dereq_("lodash.isobject");
@@ -8918,7 +8772,7 @@ var _toString = _dereq_("lodash._basetostring");
   exports.strictDeepEqual = strictDeepEqual;
 })(typeof exports === "undefined" ? this.jmespath = {} : exports);
 
-},{"lodash._basetostring":29,"lodash.indexof":30,"lodash.isarray":51,"lodash.isobject":34,"lodash.keys":35,"lodash.lastindexof":38}],29:[function(_dereq_,module,exports){
+},{"lodash._basetostring":28,"lodash.indexof":29,"lodash.isarray":50,"lodash.isobject":33,"lodash.keys":34,"lodash.lastindexof":37}],28:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -8942,7 +8796,7 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{}],30:[function(_dereq_,module,exports){
+},{}],29:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.3 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9005,7 +8859,7 @@ function indexOf(array, value, fromIndex) {
 
 module.exports = indexOf;
 
-},{"lodash._baseindexof":31,"lodash._binaryindex":32}],31:[function(_dereq_,module,exports){
+},{"lodash._baseindexof":30,"lodash._binaryindex":31}],30:[function(_dereq_,module,exports){
 /**
  * lodash 3.1.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9064,7 +8918,7 @@ function indexOfNaN(array, fromIndex, fromRight) {
 
 module.exports = baseIndexOf;
 
-},{}],32:[function(_dereq_,module,exports){
+},{}],31:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9131,7 +8985,7 @@ function identity(value) {
 
 module.exports = binaryIndex;
 
-},{"lodash._binaryindexby":33}],33:[function(_dereq_,module,exports){
+},{"lodash._binaryindexby":32}],32:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.3 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9199,7 +9053,7 @@ function binaryIndexBy(array, value, iteratee, retHighest) {
 
 module.exports = binaryIndexBy;
 
-},{}],34:[function(_dereq_,module,exports){
+},{}],33:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9238,7 +9092,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],35:[function(_dereq_,module,exports){
+},{}],34:[function(_dereq_,module,exports){
 /**
  * lodash 3.1.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9476,7 +9330,7 @@ function keysIn(object) {
 
 module.exports = keys;
 
-},{"lodash._getnative":36,"lodash.isarguments":37,"lodash.isarray":51}],36:[function(_dereq_,module,exports){
+},{"lodash._getnative":35,"lodash.isarguments":36,"lodash.isarray":50}],35:[function(_dereq_,module,exports){
 /**
  * lodash 3.9.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9615,7 +9469,7 @@ function isNative(value) {
 
 module.exports = getNative;
 
-},{}],37:[function(_dereq_,module,exports){
+},{}],36:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9723,7 +9577,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{}],38:[function(_dereq_,module,exports){
+},{}],37:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9815,11 +9669,11 @@ function lastIndexOf(array, value, fromIndex) {
 
 module.exports = lastIndexOf;
 
-},{"lodash._binaryindex":39}],39:[function(_dereq_,module,exports){
+},{"lodash._binaryindex":38}],38:[function(_dereq_,module,exports){
+module.exports=_dereq_(31)
+},{"lodash._binaryindexby":39}],39:[function(_dereq_,module,exports){
 module.exports=_dereq_(32)
-},{"lodash._binaryindexby":40}],40:[function(_dereq_,module,exports){
-module.exports=_dereq_(33)
-},{}],41:[function(_dereq_,module,exports){
+},{}],40:[function(_dereq_,module,exports){
 /**
  * lodash 3.2.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9901,7 +9755,7 @@ var assign = createAssigner(function(object, source, customizer) {
 
 module.exports = assign;
 
-},{"lodash._baseassign":42,"lodash._createassigner":44,"lodash.keys":48}],42:[function(_dereq_,module,exports){
+},{"lodash._baseassign":41,"lodash._createassigner":43,"lodash.keys":47}],41:[function(_dereq_,module,exports){
 /**
  * lodash 3.2.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9930,7 +9784,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"lodash._basecopy":43,"lodash.keys":48}],43:[function(_dereq_,module,exports){
+},{"lodash._basecopy":42,"lodash.keys":47}],42:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9964,7 +9818,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],44:[function(_dereq_,module,exports){
+},{}],43:[function(_dereq_,module,exports){
 /**
  * lodash 3.1.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10018,7 +9872,7 @@ function createAssigner(assigner) {
 
 module.exports = createAssigner;
 
-},{"lodash._bindcallback":45,"lodash._isiterateecall":46,"lodash.restparam":47}],45:[function(_dereq_,module,exports){
+},{"lodash._bindcallback":44,"lodash._isiterateecall":45,"lodash.restparam":46}],44:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10085,7 +9939,7 @@ function identity(value) {
 
 module.exports = bindCallback;
 
-},{}],46:[function(_dereq_,module,exports){
+},{}],45:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.9 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10219,7 +10073,7 @@ function isObject(value) {
 
 module.exports = isIterateeCall;
 
-},{}],47:[function(_dereq_,module,exports){
+},{}],46:[function(_dereq_,module,exports){
 /**
  * lodash 3.6.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10288,13 +10142,13 @@ function restParam(func, start) {
 
 module.exports = restParam;
 
-},{}],48:[function(_dereq_,module,exports){
+},{}],47:[function(_dereq_,module,exports){
+module.exports=_dereq_(34)
+},{"lodash._getnative":48,"lodash.isarguments":49,"lodash.isarray":50}],48:[function(_dereq_,module,exports){
 module.exports=_dereq_(35)
-},{"lodash._getnative":49,"lodash.isarguments":50,"lodash.isarray":51}],49:[function(_dereq_,module,exports){
+},{}],49:[function(_dereq_,module,exports){
 module.exports=_dereq_(36)
 },{}],50:[function(_dereq_,module,exports){
-module.exports=_dereq_(37)
-},{}],51:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10476,7 +10330,7 @@ function isNative(value) {
 
 module.exports = isArray;
 
-},{}],52:[function(_dereq_,module,exports){
+},{}],51:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`

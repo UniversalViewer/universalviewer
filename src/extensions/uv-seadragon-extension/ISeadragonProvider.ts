@@ -4,7 +4,7 @@ import Resource = require("../../modules/uv-shared-module/Resource");
 import SearchResult = require("./SearchResult");
 
 interface ISeadragonProvider extends IProvider{
-    getAutoCompleteService(): string;
+    getAutoCompleteService(): Manifesto.IService;
     getAutoCompleteUri(): string;
     getConfinedImageUri(canvas: any, width: number, height?: number): string;
     getCroppedImageUri(asset: any, viewer: any, download?: boolean, relativeUri?: boolean): string;
@@ -16,7 +16,7 @@ interface ISeadragonProvider extends IProvider{
               handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]>;
     getImageUri(canvas: any): string;
     getSearchResultByCanvasIndex(canvasIndex: number): SearchResult;
-    getSearchWithinService(): string;
+    getSearchWithinService(): Manifesto.IService;
     getSearchWithinServiceUri(): string;
     images: Resource[];
     isSearchWithinEnabled(): boolean;

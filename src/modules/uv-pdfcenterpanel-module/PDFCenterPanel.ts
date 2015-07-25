@@ -21,14 +21,14 @@ class PDFCenterPanel extends CenterPanel {
     }
 
     viewMedia(canvas) {
-        var pdfUri = this.provider.getRenderings(canvas)[0]['@id'];
+        var pdfUri = this.provider.getRenderings(canvas)[0].id;
         var browser = window.browserDetect.browser;
         var version = window.browserDetect.version;
 
         if (browser === 'Explorer' && version < 10) {
 
             // create pdf object
-            var myPDF = new PDFObject({
+            new PDFObject({
                 url: pdfUri,
                 id: "PDF"
             }).embed('content');

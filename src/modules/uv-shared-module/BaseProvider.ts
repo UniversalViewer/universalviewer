@@ -135,7 +135,7 @@ class BaseProvider implements IProvider{
         if (!canvas){
             canvas = this.getCurrentCanvas();
         }
-        return canvas.type;
+        return canvas.getType();
     }
 
     getAttribution(): string {
@@ -186,7 +186,7 @@ class BaseProvider implements IProvider{
         return this.config.options.seeAlsoEnabled !== false;
     }
 
-    getCanvasByIndex(index: number): Manifesto.Canvas {
+    getCanvasByIndex(index: number): Manifesto.ICanvas {
         return this.sequence.getCanvasByIndex(index);
     }
 
@@ -195,11 +195,6 @@ class BaseProvider implements IProvider{
         var canvas: Manifesto.ICanvas = this.getCanvasByIndex(index);
         return canvas.getRange();
     }
-
-    // todo: call directly
-    //getCanvasRange(canvas: any): any {
-    //    return canvas.getRange();
-    //}
 
     getCurrentCanvas(): any {
         return this.sequence.getCanvasByIndex(this.canvasIndex);
@@ -225,14 +220,6 @@ class BaseProvider implements IProvider{
         return false;
     }
 
-    //getMediaUri(mediaUri: string): string{
-    //    var baseUri = this.options.mediaBaseUri || "";
-    //    var template = this.options.mediaUriTemplate;
-    //    var uri = String.format(template, baseUri, mediaUri);
-    //
-    //    return uri;
-    //}
-
     getPagedIndices(canvasIndex?: number): number[]{
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
 
@@ -249,7 +236,7 @@ class BaseProvider implements IProvider{
                 indices = [canvasIndex - 1, canvasIndex];
             }
 
-            // todo: use manifesto.ViewingDirection.rightToLeft.toString()
+            // todo: use constants
             if (this.getViewingDirection().toString() === "right-to-left"){
                 indices = indices.reverse();
             }
@@ -278,7 +265,8 @@ class BaseProvider implements IProvider{
         if (this.isPagingSettingEnabled()){
             var indices = this.getPagedIndices(canvasIndex);
 
-            if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.rightToLeft.toString()){
+            // todo: use constants
+            if (this.getViewingDirection().toString() === "right-to-left"){
                 index = indices.last() - 1;
             } else {
                 index = indices[0] - 1;
@@ -299,7 +287,8 @@ class BaseProvider implements IProvider{
         if (this.isPagingSettingEnabled()){
             var indices = this.getPagedIndices(canvasIndex);
 
-            if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.rightToLeft.toString()){
+            // todo: use constants
+            if (this.getViewingDirection().toString() === "right-to-left"){
                 index = indices[0] + 1;
             } else {
                 index = indices.last() + 1;
@@ -328,17 +317,12 @@ class BaseProvider implements IProvider{
         return (this.isHomeDomain && this.isOnlyInstance);
     }
 
-    // todo: call directly
-    getThumbUri(canvas: Manifesto.ICanvas, width: number, height: number): string {
-        return canvas.getThumbUri(width, height);
-    }
-
     getThumbs(width: number, height: number): Manifesto.Thumb[] {
         return this.sequence.getThumbs(width, height);
     }
 
-    getLocalisedValue(prop: any): string {
-        return this.manifest.getLocalisedValue(prop, this.locale);
+    getLocalisedValue(resource: any): string {
+        return this.manifest.getLocalisedValue(resource, this.locale);
     }
 
     getRangeByPath(path: string): any{

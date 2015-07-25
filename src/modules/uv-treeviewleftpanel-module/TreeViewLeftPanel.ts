@@ -117,8 +117,10 @@ class TreeViewLeftPanel extends LeftPanel {
     dataBindThumbsView(): void{
         if (!this.thumbsView) return;
         var width, height;
-        var viewingDirection = this.provider.getViewingDirection();
 
+        var viewingDirection = this.provider.getViewingDirection().toString();
+
+        // todo: use constants
         if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
             width = this.config.options.oneColThumbWidth;
             height = this.config.options.oneColThumbHeight;
@@ -224,8 +226,9 @@ class TreeViewLeftPanel extends LeftPanel {
         this.treeView.show();
 
         setTimeout(() => {
-            var structure = this.provider.getStructureByCanvasIndex(this.provider.canvasIndex);
-            if (this.treeView && structure && structure.treeNode) this.treeView.selectNode(structure.treeNode);
+            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+            var range: Manifesto.IRange = canvas.getRange();
+            if (this.treeView && range && range.treeNode) this.treeView.selectNode(range.treeNode);
         }, 1);
 
         if (this.thumbsView) this.thumbsView.hide();

@@ -42,12 +42,12 @@ class ThumbsView extends BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
-        this.$thumbs.addClass(this.provider.getViewingDirection()); // defaults to "left-to-right"
+        this.$thumbs.addClass(this.provider.getViewingDirection().toString()); // defaults to "left-to-right"
 
         var that = this;
 
         $.templates({
-            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}">\
+            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
@@ -61,7 +61,8 @@ class ThumbsView extends BaseView {
 
         $.views.helpers({
             separator: function(){
-                var viewingDirection = that.provider.getViewingDirection();
+                // todo: use constants
+                var viewingDirection = that.provider.getViewingDirection().toString();
                 if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
                     return true; // one thumb per line
                 }
@@ -78,11 +79,13 @@ class ThumbsView extends BaseView {
                     className += " first";
                 }
 
-                if (!this.data.url){
+                if (!this.data.uri){
                     className += " placeholder";
                 }
 
-                var viewingDirection = that.provider.getViewingDirection();
+                // todo: use constants
+                var viewingDirection = that.provider.getViewingDirection().toString();
+
                 if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
                     className += " oneCol";
                 } else {
@@ -211,6 +214,7 @@ class ThumbsView extends BaseView {
     }
 
     isPDF(): boolean{
+        // todo: use constants
         return (this.provider.getCanvasType().toString().contains("pdf"));
     }
 

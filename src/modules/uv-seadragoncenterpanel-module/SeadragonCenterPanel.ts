@@ -299,7 +299,8 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     positionPages() {
-        var viewingDirection = this.provider.getViewingDirection();
+        // todo: use constants
+        var viewingDirection = this.provider.getViewingDirection().toString();
 
         // if there's more than one image, align them next to each other.
         if (this.provider.images.length > 1) {
@@ -423,7 +424,8 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     goHome(): void {
-        var viewingDirection = this.provider.getViewingDirection();
+        // todo: use constants
+        var viewingDirection = this.provider.getViewingDirection().toString();
 
         switch (viewingDirection){
             case "top-to-bottom" :

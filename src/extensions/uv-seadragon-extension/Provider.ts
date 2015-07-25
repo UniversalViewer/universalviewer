@@ -125,25 +125,11 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getImageUri(canvas: any): string{
-
-        var imageUri;
-
-        if (canvas.resources){
-            imageUri = canvas.resources[0].resource.service['@id'];
-        } else if (canvas.images && canvas.images[0].resource.service){
-            imageUri = canvas.images[0].resource.service['@id'];
-        }
+        var imageUri = canvas.getImageUri();
 
         if (!imageUri){
             // todo: use compiler flag (when available)
             imageUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'lib/imageunavailable.json';
-        } else {
-            if (!imageUri.endsWith('/')) {
-                imageUri += '/';
-            }
-            // no longer necessary as OSD isn't handling info.json requests
-            //imageUri += this.corsEnabled() ? 'info.json' : 'info.js';
-            imageUri += 'info.json';
         }
 
         return imageUri;
@@ -205,14 +191,9 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return true;
     }
 
-    getAutoCompleteService(): string {
-        var service = this.getService(this.manifest, "autoComplete");
-
-        if(service) {
-            return service.toString()
-        } else {
-            return "";
-        }
+    getAutoCompleteService(): Manifesto.IService {
+        // todo: use constants
+        return this.getService(this.manifest, "autoComplete");
     }
 
     getAutoCompleteUri(): string{
@@ -225,21 +206,17 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return uri;
     }
 
-    getSearchWithinService(): string {
-        var service = this.getService(this.manifest, "searchWithin");
-        if(service) {
-            return service.toString()
-        } else {
-            return "";
-        }
+    getSearchWithinService(): Manifesto.IService {
+        // todo: use constants
+        return this.getService(this.manifest, "searchWithin");
     }
 
     getSearchWithinServiceUri(): string {
-        var service = this.getSearchWithinService();
+        var service: Manifesto.IService = this.getSearchWithinService();
 
         if (!service) return null;
 
-        var uri = service["@id"];
+        var uri = service.id;
         uri = uri + "{0}";
         return uri;
     }

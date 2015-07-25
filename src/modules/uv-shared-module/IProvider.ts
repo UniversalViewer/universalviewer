@@ -25,13 +25,12 @@ interface IProvider{
     getManifestType(): string;
     getMetadata(includeRootProperties?: boolean): any;
     getRendering(resource: any, format: Manifesto.RenderingFormat): Manifesto.IRendering;
-    getRenderings(element: any): Manifesto.IRendering[];
+    getRenderings(resource: any): Manifesto.IRendering[];
     getSeeAlso(): any;
     getSequenceType(): string;
-    getService(resource: any, profile: Manifesto.ServiceProfile): Manifesto.IService;
+    getService(resource: any, profile: Manifesto.ServiceProfile | string): Manifesto.IService;
     getRangeByPath(path: string): Manifesto.IRange;
     getThumbs(width: number, height: number): Manifesto.Thumb[];
-    getThumbUri(canvas: any, width: number, height: number): string;
     getTitle(): string;
     getTotalCanvases(): number;
     getTree(): Manifesto.TreeNode;
