@@ -1,4 +1,68 @@
 declare module Manifesto {
+    class CanvasType {
+        value: string;
+        static canvas: CanvasType;
+        constructor(value: string);
+        toString(): string;
+    }
+}
+declare module Manifesto {
+    class ElementType {
+        value: string;
+        static document: CanvasType;
+        static movingimage: CanvasType;
+        static sound: CanvasType;
+        constructor(value: string);
+        toString(): string;
+    }
+}
+declare module Manifesto {
+    class RenderingFormat {
+        value: string;
+        static pdf: RenderingFormat;
+        static doc: RenderingFormat;
+        static docx: RenderingFormat;
+        constructor(value: string);
+        toString(): string;
+    }
+}
+declare module Manifesto {
+    class ServiceProfile {
+        value: string;
+        static autoComplete: ServiceProfile;
+        static login: ServiceProfile;
+        static logout: ServiceProfile;
+        static otherManifestations: ServiceProfile;
+        static searchWithin: ServiceProfile;
+        static token: ServiceProfile;
+        constructor(value: string);
+        toString(): string;
+    }
+}
+declare module Manifesto {
+    class ViewingDirection {
+        value: string;
+        static leftToRight: ViewingDirection;
+        static rightToLeft: ViewingDirection;
+        static topToBottom: ViewingDirection;
+        static bottomToTop: ViewingDirection;
+        constructor(value: string);
+        toString(): string;
+    }
+}
+declare module Manifesto {
+    class ViewingHint {
+        value: string;
+        static individuals: ViewingHint;
+        static paged: ViewingHint;
+        static continuous: ViewingHint;
+        static nonPaged: ViewingHint;
+        static top: ViewingHint;
+        constructor(value: string);
+        toString(): string;
+    }
+}
+declare module Manifesto {
     interface IJSONLDResource {
         context: string;
         id: string;
@@ -30,14 +94,6 @@ declare module Manifesto {
         getHeight(): number;
     }
 }
-declare module Manifesto {
-    class CanvasType {
-        value: string;
-        static canvas: CanvasType;
-        constructor(value: string);
-        toString(): string;
-    }
-}
 declare var _isArray: any;
 declare module Manifesto {
     class Element extends JSONLDResource implements IElement {
@@ -45,16 +101,6 @@ declare module Manifesto {
         constructor(jsonld: any);
         getRenderings(): IRendering[];
         getType(): ElementType;
-    }
-}
-declare module Manifesto {
-    class ElementType {
-        value: string;
-        static document: CanvasType;
-        static movingimage: CanvasType;
-        static sound: CanvasType;
-        constructor(value: string);
-        toString(): string;
     }
 }
 declare module Manifesto {
@@ -200,16 +246,6 @@ declare module Manifesto {
         constructor(jsonld: any);
     }
 }
-declare module Manifesto {
-    class RenderingFormat {
-        value: string;
-        static pdf: RenderingFormat;
-        static doc: RenderingFormat;
-        static docx: RenderingFormat;
-        constructor(value: string);
-        toString(): string;
-    }
-}
 declare var _isNumber: any;
 declare module Manifesto {
     class Sequence extends JSONLDResource implements ISequence {
@@ -258,19 +294,6 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    class ServiceProfile {
-        value: string;
-        static autoComplete: ServiceProfile;
-        static login: ServiceProfile;
-        static logout: ServiceProfile;
-        static otherManifestations: ServiceProfile;
-        static searchWithin: ServiceProfile;
-        static token: ServiceProfile;
-        constructor(value: string);
-        toString(): string;
-    }
-}
-declare module Manifesto {
     class Thumb {
         index: number;
         uri: string;
@@ -291,29 +314,6 @@ declare module Manifesto {
         parentNode: TreeNode;
         constructor(label?: string, data?: any);
         addNode(node: TreeNode): void;
-    }
-}
-declare module Manifesto {
-    class ViewingDirection {
-        value: string;
-        static leftToRight: ViewingDirection;
-        static rightToLeft: ViewingDirection;
-        static topToBottom: ViewingDirection;
-        static bottomToTop: ViewingDirection;
-        constructor(value: string);
-        toString(): string;
-    }
-}
-declare module Manifesto {
-    class ViewingHint {
-        value: string;
-        static individuals: ViewingHint;
-        static paged: ViewingHint;
-        static continuous: ViewingHint;
-        static nonPaged: ViewingHint;
-        static top: ViewingHint;
-        constructor(value: string);
-        toString(): string;
     }
 }
 declare var http: any;
