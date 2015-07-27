@@ -25,7 +25,7 @@ class PDFCenterPanel extends CenterPanel {
         var browser = window.browserDetect.browser;
         var version = window.browserDetect.version;
 
-        if (browser === 'Explorer' && version < 10) {
+        if ((browser === 'Explorer' && version < 10) || !this.config.options.usePdfJs) {
 
             // create pdf object
             var myPDF = new PDFObject({
