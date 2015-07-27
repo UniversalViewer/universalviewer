@@ -77,7 +77,7 @@ class MoreInfoRightPanel extends RightPanel {
             var built = this.buildItem(item);
             this.$items.append(built);
             if (limitType === "lines") {
-                built.find('.text').toggleExpandTextByLines(limit, null);
+                built.find('.text').toggleExpandTextByLines(limit, this.content.less, this.content.more);
             } else if (limitType === "chars") {
                 built.find('.text').ellipsisHtmlFixed(limit, null);
             }

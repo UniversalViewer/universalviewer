@@ -19,7 +19,7 @@
   "dependencies": {
     "es6-promise": "~2.2.0",
     "extensions": "edsilv/extensions#~0.1.5",
-    "jquery-plugins": "edsilv/jquery-plugins#~0.0.11",
+    "jquery-plugins": "edsilv/jquery-plugins#~0.0.14",
     "utils": "edsilv/utils#~0.0.14",
     "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme"

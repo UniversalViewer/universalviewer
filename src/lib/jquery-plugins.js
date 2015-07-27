@@ -271,7 +271,7 @@
             }
         });
     };
-    $.fn.toggleExpandText = function (chars, callback) {
+    $.fn.toggleExpandText = function (chars, lessText, moreText, callback) {
         return this.each(function () {
             var $self = $(this);
             var expandedText = $self.html();
@@ -285,12 +285,12 @@
                 var $toggleButton = $('<a href="#" class="toggle"></a>');
                 if (expanded) {
                     $self.html(expandedText + "&nbsp;");
-                    $toggleButton.text("less");
+                    $toggleButton.text(lessText);
                     $toggleButton.toggleClass("less", "more");
                 }
                 else {
                     $self.html(collapsedText + "&nbsp;");
-                    $toggleButton.text("more");
+                    $toggleButton.text(moreText);
                     $toggleButton.toggleClass("more", "less");
                 }
                 $toggleButton.one('click', function (e) {
@@ -306,7 +306,7 @@
         });
     };
     // Toggle expansion by number of lines
-    $.fn.toggleExpandTextByLines = function (lines, callback) {
+    $.fn.toggleExpandTextByLines = function (lines, lessText, moreText, callback) {
         return this.each(function () {
             var $self = $(this);
             var expandedText = $self.html();
@@ -337,12 +337,12 @@
                 var $toggleButton = $('<a href="#" class="toggle"></a>');
                 if (expanded) {
                     $self.html(expandedText + " ");
-                    $toggleButton.text("less");
+                    $toggleButton.text(lessText);
                     $toggleButton.toggleClass("less", "more");
                 }
                 else {
                     $self.html(collapsedText + "&hellip; ");
-                    $toggleButton.text("more");
+                    $toggleButton.text(moreText);
                     $toggleButton.toggleClass("more", "less");
                 }
                 $toggleButton.one('click', function (e) {

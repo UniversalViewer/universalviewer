@@ -16,12 +16,12 @@ interface JQuery {
     on(events: string, handler: (eventObject: JQueryEventObject, ...args: any[]) => any, wait: Number): JQuery;
     onEnter(callback: () => void): any;
     onPressed(callback: () => void): any;
-    removeLastWord(chars: number): any;
+    removeLastWord(chars?: number, depth?: number): any;
     swapClass(removeClass: string, addClass: string): void;
     targetBlank(): void;
     toggleClass(class1: string, class2: string): any;
     toggleExpandText(chars: number, callback?: () => void);
-    toggleExpandTextByLines(lines: number, callback: () => void): any;
+    toggleExpandTextByLines(lines: number, lessText: string, moreText: string, callback: () => void): any;
     toggleText(text1: string, text2: string): any;
     updateAttr(attrName: string, oldVal: string, newVal: string): void;
     verticalMargins(): number;
