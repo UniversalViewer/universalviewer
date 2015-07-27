@@ -59,8 +59,10 @@
     "moreInfoRightPanel": {
       "content": {
         "holdingText": "Your module goes here! (xx-XX)",
-        "moreInformation": "MORE INFORMATION (xx-XX)",
-        "noData": "No data to display (xx-XX)"
+        "less": "less (xx-XX)",
+        "more": "more (xx-XX)",
+        "noData": "No data to display (xx-XX)",
+        "title": "MORE INFORMATION (xx-XX)"
       }
     },
     "pagingHeaderPanel": {
