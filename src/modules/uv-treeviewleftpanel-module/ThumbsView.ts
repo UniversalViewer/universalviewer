@@ -5,7 +5,6 @@ import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Shell = require("../uv-shared-module/Shell");
-import Thumb = require("../uv-shared-module/Thumb");
 
 class ThumbsView extends BaseView {
 
@@ -15,7 +14,7 @@ class ThumbsView extends BaseView {
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
-    public thumbs: Thumb[];
+    public thumbs: Manifesto.Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -43,12 +42,12 @@ class ThumbsView extends BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
-        this.$thumbs.addClass(this.provider.getViewingDirection()); // defaults to "left-to-right"
+        this.$thumbs.addClass(this.provider.getViewingDirection().toString()); // defaults to "left-to-right"
 
         var that = this;
 
         $.templates({
-            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}">\
+            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
@@ -62,7 +61,8 @@ class ThumbsView extends BaseView {
 
         $.views.helpers({
             separator: function(){
-                var viewingDirection = that.provider.getViewingDirection();
+                // todo: use constants
+                var viewingDirection = that.provider.getViewingDirection().toString();
                 if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
                     return true; // one thumb per line
                 }
@@ -79,11 +79,13 @@ class ThumbsView extends BaseView {
                     className += " first";
                 }
 
-                if (!this.data.url){
+                if (!this.data.uri){
                     className += " placeholder";
                 }
 
-                var viewingDirection = that.provider.getViewingDirection();
+                // todo: use constants
+                var viewingDirection = that.provider.getViewingDirection().toString();
+
                 if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
                     className += " oneCol";
                 } else {
@@ -212,7 +214,8 @@ class ThumbsView extends BaseView {
     }
 
     isPDF(): boolean{
-        return (this.provider.getCanvasType().contains("pdf"));
+        // todo: use constants
+        return (this.provider.getCanvasType().toString().contains("pdf"));
     }
 
     setLabel(): void {

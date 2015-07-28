@@ -4,7 +4,6 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import Thumb = require("../uv-shared-module/Thumb");
 
 class GalleryView extends BaseView {
 
@@ -19,7 +18,7 @@ class GalleryView extends BaseView {
     lastThumbClickedIndex: number;
     range: number;
 
-    public thumbs: Thumb[];
+    public thumbs: Manifesto.Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -57,7 +56,7 @@ class GalleryView extends BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$main.append(this.$thumbs);
 
-        this.$thumbs.addClass(this.provider.getViewingDirection()); // defaults to "left-to-right"
+        this.$thumbs.addClass(this.provider.getViewingDirection().toString()); // defaults to "left-to-right"
 
         this.$sizeDownButton.on('click', () => {
             var val = Number(this.$sizeRange.val()) - 1;
@@ -83,7 +82,7 @@ class GalleryView extends BaseView {
         });
 
         $.templates({
-            galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>url}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
+            galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
                                 <div class="wrap"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label">{{>label}}&nbsp;</span>\
@@ -98,7 +97,7 @@ class GalleryView extends BaseView {
                     className += " first";
                 }
 
-                if (!this.data.url){
+                if (!this.data.uri){
                     className += " placeholder";
                 }
 

@@ -4,7 +4,6 @@ import GalleryView = require("./GalleryView");
 import IProvider = require("../uv-shared-module/IProvider");
 import LeftPanel = require("../uv-shared-module/LeftPanel");
 import ThumbsView = require("./ThumbsView");
-import TreeNode = require("../uv-shared-module/TreeNode");
 import TreeView = require("./TreeView");
 
 class TreeViewLeftPanel extends LeftPanel {
@@ -20,7 +19,7 @@ class TreeViewLeftPanel extends LeftPanel {
     $views: JQuery;
     galleryView: GalleryView;
     thumbsView: ThumbsView;
-    treeData: TreeNode;
+    treeData: Manifesto.TreeNode;
     treeView: TreeView;
 
     constructor($element: JQuery) {
@@ -118,8 +117,10 @@ class TreeViewLeftPanel extends LeftPanel {
     dataBindThumbsView(): void{
         if (!this.thumbsView) return;
         var width, height;
-        var viewingDirection = this.provider.getViewingDirection();
 
+        var viewingDirection = this.provider.getViewingDirection().toString();
+
+        // todo: use constants
         if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
             width = this.config.options.oneColThumbWidth;
             height = this.config.options.oneColThumbHeight;
@@ -225,8 +226,9 @@ class TreeViewLeftPanel extends LeftPanel {
         this.treeView.show();
 
         setTimeout(() => {
-            var structure = this.provider.getStructureByCanvasIndex(this.provider.canvasIndex);
-            if (this.treeView && structure && structure.treeNode) this.treeView.selectNode(structure.treeNode);
+            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+            var range: Manifesto.IRange = canvas.getRange();
+            if (this.treeView && range && range.treeNode) this.treeView.selectNode(range.treeNode);
         }, 1);
 
         if (this.thumbsView) this.thumbsView.hide();

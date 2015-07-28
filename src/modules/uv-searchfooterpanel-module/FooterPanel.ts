@@ -308,9 +308,9 @@ class FooterPanel extends BaseFooterPanel {
         var mode = that.extension.getMode();
 
         if (mode.toString() === Mode.page.toString()) {
-            var canvas = that.provider.getCanvasByIndex(canvasIndex);
+            var canvas: Manifesto.ICanvas = that.provider.getCanvasByIndex(canvasIndex);
 
-            var label = canvas.label;
+            var label = canvas.getLabel();
 
             if (label === "") {
                 label = "-";
@@ -452,11 +452,11 @@ class FooterPanel extends BaseFooterPanel {
         var index = this.provider.canvasIndex;
 
         if (this.isPageModeEnabled()) {
-            var canvas = this.provider.getCanvasByIndex(index);
+            var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
 
-            var label = canvas.label;
+            var label = canvas.getLabel();
 
-            if (label == "") {
+            if (label === "") {
                 label = this.content.defaultLabel;
             }
 

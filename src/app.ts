@@ -7,6 +7,7 @@ require.config({
         'jsviews': 'lib/jsviews.min',
         'l10n': 'lib/l10n',
         'length': 'lib/Length.min',
+        'manifesto': 'lib/manifesto',
         'modernizr': 'lib/modernizr',
         'plugins': 'lib/jquery-plugins',
         'pubsub': 'lib/pubsub',
@@ -46,6 +47,7 @@ require([
     'extensions/uv-pdf-extension/Provider',
     'extensions/uv-seadragon-extension/Extension',
     'extensions/uv-seadragon-extension/Provider',
+    'manifesto',
     'browserdetect',
     'ext',
     'jquery',
@@ -68,11 +70,14 @@ require([
     pdfExtension,
     pdfProvider,
     seadragonExtension,
-    seadragonProvider
+    seadragonProvider,
+    manifesto
     ) => {
 
         // todo: use a compiler flag (when available)
         window.DEBUG = true; // this line is removed on build.
+
+        window.manifesto = manifesto;
 
         var extensions = {};
 

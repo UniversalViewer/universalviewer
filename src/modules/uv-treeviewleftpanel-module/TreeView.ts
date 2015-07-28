@@ -2,16 +2,15 @@ import BaseCommands = require("../uv-shared-module/Commands");
 import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import Shell = require("../uv-shared-module/Shell");
-import TreeNode = require("../uv-shared-module/TreeNode");
 
 class TreeView extends BaseView {
 
     $tree: JQuery;
     elideCount: number;
     isOpen: boolean = false;
-    selectedNode: any;
+    selectedNode: Manifesto.TreeNode;
 
-    public rootNode: TreeNode;
+    public rootNode: Manifesto.TreeNode;
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -124,18 +123,18 @@ class TreeView extends BaseView {
 
         this.deselectCurrentNode();
 
-        var structure = this.provider.getStructureByCanvasIndex(index);
+        var range = this.provider.getRangeByCanvasIndex(index);
 
-        if (!structure) return;
+        if (!range) return;
 
-        if (structure.treeNode) this.selectNode(structure.treeNode);
+        if (range.treeNode) this.selectNode(range.treeNode);
     }
 
     deselectCurrentNode(): void {
         if (this.selectedNode) $.observable(this.selectedNode).setProperty("selected", false);
     }
 
-    selectNode(node: TreeNode): void{
+    selectNode(node: Manifesto.TreeNode): void{
         if (!this.rootNode) return;
 
         this.selectedNode = node;
@@ -145,7 +144,7 @@ class TreeView extends BaseView {
     }
 
     // walk up the tree expanding parent nodes.
-    expandParents(node: TreeNode): void{
+    expandParents(node: Manifesto.TreeNode): void{
         if (!node.parentNode) return;
 
         $.observable(node.parentNode).setProperty("expanded", true);
@@ -153,7 +152,7 @@ class TreeView extends BaseView {
     }
 
     // walks down the tree using the specified path e.g. [2,2,0]
-    getNodeByPath(parentNode: TreeNode, path: string[]): TreeNode {
+    getNodeByPath(parentNode: Manifesto.TreeNode, path: string[]): Manifesto.TreeNode {
 
         if (path.length == 0) return parentNode;
         var index = path.shift();

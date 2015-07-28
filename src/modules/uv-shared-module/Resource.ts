@@ -1,9 +1,7 @@
-import IAccessToken = require("./IAccessToken");
 import IProvider = require("./IProvider");
-import ServiceProfile = require("../../modules/uv-shared-module/ServiceProfile");
 import Storage = require("./Storage");
 
-class Resource {
+class Resource implements Manifesto.IResource {
     public data: any;
     public dataUri: string;
     public error: any;
@@ -19,19 +17,20 @@ class Resource {
     }
 
     private _parseAuthServices(resource: any): void {
-        var loginService = this.provider.getService(resource, ServiceProfile.login);
-        if (loginService) this.loginService = loginService['@id'];
 
-        var logoutService = this.provider.getService(resource, ServiceProfile.logout);
-        if (logoutService) this.logoutService = logoutService['@id'];
+        var loginService: Manifesto.IService = this.provider.getService(resource, manifesto.ServiceProfile.login().toString());
+        if (loginService) this.loginService = loginService.id;
 
-        var tokenService = this.provider.getService(resource, ServiceProfile.token);
-        if (tokenService) this.tokenService = tokenService['@id'];
+        var logoutService: Manifesto.IService = this.provider.getService(resource, manifesto.ServiceProfile.logout().toString());
+        if (logoutService) this.logoutService = logoutService.id;
+
+        var tokenService: Manifesto.IService = this.provider.getService(resource, manifesto.ServiceProfile.token().toString());
+        if (tokenService) this.tokenService = tokenService.id;
 
         if (this.loginService) this.isAccessControlled = true;
     }
 
-    public getData(accessToken?: IAccessToken): Promise<Resource> {
+    public getData(accessToken?: Manifesto.IAccessToken): Promise<Resource> {
         var that = this;
 
         return new Promise<Resource>((resolve, reject) => {

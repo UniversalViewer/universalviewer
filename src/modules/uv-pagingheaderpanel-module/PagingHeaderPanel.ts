@@ -226,7 +226,7 @@ class PagingHeaderPanel extends HeaderPanel {
 
         if (this.isPageModeEnabled()) {
 
-            var orderLabel = this.provider.getLocalisedValue(canvas.label);
+            var orderLabel = canvas.getLabel();
 
             if (orderLabel === "-") {
                 this.$searchText.val("");

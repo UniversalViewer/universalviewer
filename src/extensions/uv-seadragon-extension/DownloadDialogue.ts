@@ -113,10 +113,11 @@ class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         this.resetDynamicDownloadOptions();
-        var currentCanvas = this.provider.getCurrentCanvas();
+        var currentCanvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
-            for (var i = 0; i < currentCanvas.images.length; i++) {
-                this.addDownloadOptionsForRenderings(currentCanvas.images[i], this.content.entireFileAsOriginal);
+            // todo: use canvas.getImages() when available
+            for (var i = 0; i < currentCanvas.__jsonld.images.length; i++) {
+                this.addDownloadOptionsForRenderings(currentCanvas.__jsonld.images[i], this.content.entireFileAsOriginal);
             }
         }
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicCanvasRenderings)) {
@@ -156,24 +157,20 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
     addDownloadOptionsForRenderings(resource: any, defaultLabel: string)
     {
-        var renderings = resource.rendering;
-
-        if (!$.isArray(renderings)){
-            renderings = [renderings];
-        }
+        var renderings: Manifesto.IRendering[] = this.provider.getRenderings(resource);
 
         for (var i = 0; i < renderings.length; i++) {
-            var rendering = renderings[i];
+            var rendering: Manifesto.IRendering = renderings[i];
             if (rendering) {
-                var label = this.provider.getLocalisedValue(rendering['label']);
+                var label = rendering.getLabel();
                 if (label) {
                     label += " ({0})";
                 } else {
                     label = defaultLabel;
                 }
-                label = String.format(label, this.simplifyMimeType(rendering.format));
+                label = String.format(label, this.simplifyMimeType(rendering.getFormat().toString()));
                 var currentId = "dynamic_download_" + ++this.renderingUrlsCount;
-                this.renderingUrls[currentId] = rendering['@id'];
+                this.renderingUrls[currentId] = rendering.id;
                 var newButton = $('<li class="dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
                 this.$downloadOptions.append(newButton);
             }
@@ -185,25 +182,28 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getOriginalImageForCurrentCanvas() {
-        var canvas = this.provider.getCurrentCanvas();
-        if (canvas['images'][0]['resource']['@id']) {
-            return canvas['images'][0]['resource']['@id'];
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        // todo: use canvas.getImages() when available
+        if (canvas.__jsonld['images'][0]['resource']['@id']) {
+            return canvas.__jsonld['images'][0]['resource']['@id'];
         }
         return false;
     }
 
     getMimeTypeForCurrentCanvas() {
-        var canvas = this.provider.getCurrentCanvas();
-        if (canvas['images'][0]['resource']['format']) {
-            return canvas['images'][0]['resource']['format'];
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        // todo: use canvas.getImages() when available
+        if (canvas.__jsonld['images'][0]['resource']['format']) {
+            return canvas.__jsonld['images'][0]['resource']['format'];
         }
         return false;
     }
 
     getDimensionsForCurrentCanvas() {
-        var canvas = this.provider.getCurrentCanvas();
-        if (canvas['images'][0]['resource']['width'] && canvas['images'][0]['resource']['height']) {
-            return [canvas['images'][0]['resource']['width'], canvas['images'][0]['resource']['height']];
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        // todo: use canvas.getImages() when available
+        if (canvas.__jsonld['images'][0]['resource']['width'] && canvas.__jsonld['images'][0]['resource']['height']) {
+            return [canvas.__jsonld['images'][0]['resource']['width'], canvas.__jsonld['images'][0]['resource']['height']];
         }
         return [0, 0];
     }
