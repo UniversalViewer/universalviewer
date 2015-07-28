@@ -62,7 +62,6 @@ class BaseExtension implements IExtension {
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
-        //this.$element.addClass(this.provider.getSequenceType()); // todo: add media mime type class?
 
         // events.
         window.onresize = () => {
@@ -185,7 +184,6 @@ class BaseExtension implements IExtension {
 
                 // for each dependency, prepend baseUri.
                 for (var i = 0; i < deps.dependencies.length; i++) {
-                    // todo: would be nice to use path.join. use browserify?
                     deps.dependencies[i] = baseUri + deps.dependencies[i];
                 }
             }

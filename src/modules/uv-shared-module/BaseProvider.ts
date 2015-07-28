@@ -1,7 +1,6 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
-import IAccessToken = require("./IAccessToken");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
 import Resource = require("./Resource");
@@ -44,7 +43,9 @@ class BaseProvider implements IProvider{
     constructor(bootstrapper: BootStrapper) {
         this.bootstrapper = bootstrapper;
         this.config = this.bootstrapper.config;
-        this.manifest = manifesto.parse(JSON.stringify(this.bootstrapper.manifest));
+        this.manifest = manifesto.create(
+            JSON.stringify(this.bootstrapper.manifest),
+            <Manifesto.IManifestoOptions>{ locale: this.bootstrapper.params.localeName});
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through app.getParam.
@@ -236,8 +237,7 @@ class BaseProvider implements IProvider{
                 indices = [canvasIndex - 1, canvasIndex];
             }
 
-            // todo: use constants
-            if (this.getViewingDirection().toString() === "right-to-left"){
+            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
                 indices = indices.reverse();
             }
         }
@@ -287,8 +287,7 @@ class BaseProvider implements IProvider{
         if (this.isPagingSettingEnabled()){
             var indices = this.getPagedIndices(canvasIndex);
 
-            // todo: use constants
-            if (this.getViewingDirection().toString() === "right-to-left"){
+            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
                 index = indices[0] + 1;
             } else {
                 index = indices.last() + 1;
@@ -321,9 +320,9 @@ class BaseProvider implements IProvider{
         return this.sequence.getThumbs(width, height);
     }
 
-    getLocalisedValue(resource: any): string {
-        return this.manifest.getLocalisedValue(resource, this.locale);
-    }
+    //getLocalisedValue(resource: any): string {
+    //    return this.manifest.getLocalisedValue(resource, this.locale);
+    //}
 
     getRangeByPath(path: string): any{
         return this.manifest.getRangeByPath(path);
@@ -504,146 +503,6 @@ class BaseProvider implements IProvider{
 
     getSerializedLocales(): string {
         return this.serializeLocales(this.locales);
-    }
-
-    loadResource(resource: Resource,
-                 login: (loginService: string) => Promise<void>,
-                 getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
-                 storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
-                 getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
-                 handleResourceResponse: (resource: Resource) => Promise<any>): Promise<any> {
-
-        var that = this;
-
-        return new Promise<any>((resolve, reject) => {
-
-            if (that.config.options.pessimisticAccessControl){
-
-                // pessimistic: access control cookies may have been deleted.
-                // always request the access token for every access controlled info.json request
-                // returned access tokens are not stored, therefore the login window flashes for every request.
-
-                resource.getData().then(() => {
-
-                    if (resource.isAccessControlled){
-                        login(resource.loginService).then(() => {
-                            getAccessToken(resource.tokenService).then((token: IAccessToken) => {
-                                resource.getData(token).then(() => {
-                                    resolve(handleResourceResponse(resource));
-                                });
-                            });
-                        });
-                    } else {
-                        // this info.json isn't access controlled, therefore no need to request an access token
-                        resolve(resource);
-                    }
-                });
-            } else {
-
-                // optimistic: access control cookies may not have been deleted.
-                // store access tokens to avoid login window flashes.
-                // if cookies are deleted a page refresh is required.
-
-                // try loading the resource using an access token that matches the info.json domain.
-                // if an access token is found, request the resource using it regardless of whether it is access controlled.
-                getStoredAccessToken(resource.dataUri).then((storedAccessToken: IAccessToken) => {
-                    if (storedAccessToken) {
-                        // try using the stored access token
-                        resource.getData(storedAccessToken).then(() => {
-                            // if the info.json loaded using the stored access token
-                            if (resource.status === 200){
-                                resolve(handleResourceResponse(resource));
-                            } else {
-                                // otherwise, load the resource data to determine the correct access control services.
-                                // if access controlled, do login.
-                                this.authorize(
-                                    resource,
-                                    login,
-                                    getAccessToken,
-                                    storeAccessToken,
-                                    getStoredAccessToken).then(() => {
-                                        resolve(handleResourceResponse(resource));
-                                    });
-                            }
-                        });
-                    } else {
-                        this.authorize(
-                            resource,
-                            login,
-                            getAccessToken,
-                            storeAccessToken,
-                            getStoredAccessToken).then(() => {
-                                resolve(handleResourceResponse(resource));
-                            });
-                    }
-                });
-            }
-        });
-    }
-
-    authorize(resource: Resource,
-              login: (loginService: string) => Promise<void>,
-              getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
-              storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
-              getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>): Promise<Resource> {
-
-        return new Promise<Resource>((resolve, reject) => {
-
-            resource.getData().then(() => {
-                if (resource.isAccessControlled) {
-                    getStoredAccessToken(resource.tokenService).then((storedAccessToken: IAccessToken) => {
-                        if (storedAccessToken) {
-                            // try using the stored access token
-                            resource.getData(storedAccessToken).then(() => {
-                                resolve(resource);
-                            });
-                        } else {
-                            // get an access token
-                            login(resource.loginService).then(() => {
-                                getAccessToken(resource.tokenService).then((accessToken) => {
-                                    storeAccessToken(resource, accessToken).then(() => {
-                                        resource.getData(accessToken).then(() => {
-                                            resolve(resource);
-                                        });
-                                    });
-                                });
-                            });
-                        }
-                    });
-                } else {
-                    // this info.json isn't access controlled, therefore there's no need to request an access token
-                    resolve(resource);
-                }
-            });
-        });
-    }
-
-    loadResources(resources: Resource[],
-                  login: (loginService: string) => Promise<void>,
-                  getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
-                  storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
-                  getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
-                  handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]> {
-
-        var that = this;
-
-        return new Promise<Resource[]>((resolve) => {
-
-            var promises = _.map(resources, (resource: Resource) => {
-                return that.loadResource(
-                    resource,
-                    login,
-                    getAccessToken,
-                    storeAccessToken,
-                    getStoredAccessToken,
-                    handleResourceResponse);
-            });
-
-            Promise.all(promises)
-                .then(() => {
-                    resolve(resources)
-                });
-        });
     }
 }
 

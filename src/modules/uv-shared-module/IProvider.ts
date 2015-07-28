@@ -1,7 +1,6 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
-import IAccessToken = require("./IAccessToken");
 import Resource = require("./Resource");
 
 // the provider contains all methods related to
@@ -21,7 +20,6 @@ interface IProvider{
     getCanvasIndexById(id: string): number;
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
     getCurrentCanvas(): any;
-    getLocalisedValue(resource: any): string;
     getManifestType(): string;
     getMetadata(includeRootProperties?: boolean): any;
     getRendering(resource: any, format: Manifesto.RenderingFormat): Manifesto.IRendering;
@@ -51,18 +49,6 @@ interface IProvider{
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
     load(): void;
-    loadResource(resource: Resource,
-                 login: (loginService: string) => Promise<void>,
-                 getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
-                 storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
-                 getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
-                 handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource>;
-    loadResources(resources: Resource[],
-                  login: (loginService: string) => Promise<void>,
-                  getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>,
-                  storeAccessToken: (resource: Resource, token: IAccessToken) => Promise<void>,
-                  getStoredAccessToken: (tokenService: string) => Promise<IAccessToken>,
-                  handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]>;
 
     // todo: move these to extension
     bootstrapper: BootStrapper;

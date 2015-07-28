@@ -1,6 +1,5 @@
 import BootStrapper = require("../../Bootstrapper");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
-import IAccessToken = require("../../modules/uv-shared-module/IAccessToken");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
@@ -23,7 +22,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         }, bootstrapper.config.options);
     }
 
-    getCroppedImageUri(canvas: any, viewer: any): string {
+    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string {
 
         if (!viewer) return null;
         if (!viewer.viewport) return null;
@@ -36,7 +35,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         var left = Math.max(0, bounds.x);
 
         // change top to be normalised value proportional to height of image, not width (as per OSD).
-        top = 1 / (canvas.height / parseInt(String(canvas.width * top)));
+        top = 1 / (canvas.getHeight() / parseInt(String(canvas.getWidth() * top)));
 
         // get on-screen pixel sizes.
 
@@ -44,8 +43,8 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         var viewportHeightPx = containerSize.y;
 
         var imageWidthPx = parseInt(String(viewportWidthPx * zoom));
-        var ratio = canvas.width / imageWidthPx;
-        var imageHeightPx = parseInt(String(canvas.height / ratio));
+        var ratio = canvas.getWidth() / imageWidthPx;
+        var imageHeightPx = parseInt(String(canvas.getHeight() / ratio));
 
         var viewportLeftPx = parseInt(String(left * imageWidthPx));
         var viewportTopPx = parseInt(String(top * imageHeightPx));
@@ -65,13 +64,13 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
         // get original image pixel sizes.
 
-        var ratio2 = canvas.width / imageWidthPx;
+        var ratio2 = canvas.getWidth() / imageWidthPx;
 
         var widthPx = parseInt(String(cropWidth * ratio2));
         var heightPx = parseInt(String(cropHeight * ratio2));
 
-        var topPx = parseInt(String(canvas.height * top));
-        var leftPx = parseInt(String(canvas.width * left));
+        var topPx = parseInt(String(canvas.getHeight() * top));
+        var leftPx = parseInt(String(canvas.getWidth() * left));
 
         if (topPx < 0) topPx = 0;
         if (leftPx < 0) leftPx = 0;
@@ -149,9 +148,9 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getImages(loginMethod: (loginService: string) => Promise<void>,
-              getAccessTokenMethod: (tokenServiceUrl: string) => Promise<IAccessToken>,
-              storeAccessTokenMethod: (resource: Resource, token: IAccessToken) => Promise<void>,
-              getStoredAccessTokenMethod: (tokenService: string) => Promise<IAccessToken>,
+              getAccessTokenMethod: (tokenServiceUrl: string) => Promise<Manifesto.IAccessToken>,
+              storeAccessTokenMethod: (resource: Resource, token: Manifesto.IAccessToken) => Promise<void>,
+              getStoredAccessTokenMethod: (tokenService: string) => Promise<Manifesto.IAccessToken>,
               handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]> {
 
         var indices = this.getPagedIndices();
@@ -164,7 +163,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         });
 
         return new Promise<any[]>((resolve) => {
-            this.loadResources(
+            this.manifest.loadResources(
                 images,
                 loginMethod,
                 getAccessTokenMethod,
@@ -192,8 +191,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getAutoCompleteService(): Manifesto.IService {
-        // todo: use constants
-        return this.getService(this.manifest, "autoComplete");
+        return this.getService(this.manifest, manifesto.ServiceProfile.autoComplete());
     }
 
     getAutoCompleteUri(): string{
@@ -201,14 +199,11 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
         if (!service) return null;
 
-        var uri = service["@id"];
-        uri = uri + "{0}";
-        return uri;
+        return service.id + '{0}';
     }
 
     getSearchWithinService(): Manifesto.IService {
-        // todo: use constants
-        return this.getService(this.manifest, "searchWithin");
+        return this.getService(this.manifest, manifesto.ServiceProfile.searchWithin());
     }
 
     getSearchWithinServiceUri(): string {

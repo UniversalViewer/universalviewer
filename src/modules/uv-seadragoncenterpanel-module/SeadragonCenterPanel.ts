@@ -299,14 +299,14 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     positionPages() {
-        // todo: use constants
+
         var viewingDirection = this.provider.getViewingDirection().toString();
 
         // if there's more than one image, align them next to each other.
         if (this.provider.images.length > 1) {
 
             // check if tilesources should be aligned horizontally or vertically
-            if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top") {
+            if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
                 // vertical
                 var topPage = this.viewer.world.getItemAt(0);
                 var topPageBounds = topPage.getBounds(true);
@@ -424,15 +424,14 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     goHome(): void {
-        // todo: use constants
         var viewingDirection = this.provider.getViewingDirection().toString();
 
-        switch (viewingDirection){
-            case "top-to-bottom" :
+        switch (viewingDirection.toString()){
+            case manifesto.ViewingDirection.topToBottom().toString() :
                 this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.provider.images.length), true);
                 break;
-            case "left-to-right" :
-            case "right-to-left" :
+            case manifesto.ViewingDirection.leftToRight().toString():
+            case manifesto.ViewingDirection.rightToLeft().toString() :
                 this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.provider.images.length, this.viewer.world.getItemAt(0).normHeight), true);
                 break;
         }

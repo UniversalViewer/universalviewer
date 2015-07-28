@@ -9,7 +9,6 @@ import ExternalContentDialogue = require("../../modules/uv-dialogues-module/Exte
 import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
 import GalleryView = require("../../modules/uv-treeviewleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
-import IAccessToken = require("../../modules/uv-shared-module/IAccessToken");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
@@ -158,12 +157,12 @@ class Extension extends BaseExtension {
                 this.setParam(Params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
             }
 
-            var canvas = this.provider.getCurrentCanvas();
+            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
             this.triggerSocket(Commands.CURRENT_VIEW_URI,
                 {
                     "cropUri": (<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, this.getViewer(), true),
-                    "fullUri": (<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.width, canvas.height)
+                    "fullUri": (<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.getWidth(), canvas.getHeight())
                 });
         });
 
@@ -310,9 +309,9 @@ class Extension extends BaseExtension {
         });
     }
 
-    getAccessToken(tokenServiceUrl: string): Promise<IAccessToken> {
-        return new Promise<IAccessToken>((resolve, reject) => {
-            $.getJSON(tokenServiceUrl + "?callback=?", (token: IAccessToken) => {
+    getAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
+        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
+            $.getJSON(tokenServiceUrl + "?callback=?", (token: Manifesto.IAccessToken) => {
                 resolve(token);
             }).fail((error) => {
                 reject(error);
@@ -320,22 +319,22 @@ class Extension extends BaseExtension {
         });
     }
 
-    storeAccessToken(resource: Resource, token: IAccessToken): Promise<void> {
+    storeAccessToken(resource: Resource, token: Manifesto.IAccessToken): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             Storage.set(resource.tokenService, token, token.expiresIn);
             resolve();
         });
     }
 
-    getStoredAccessToken(url: string): Promise<IAccessToken> {
+    getStoredAccessToken(url: string): Promise<Manifesto.IAccessToken> {
 
-        return new Promise<IAccessToken>((resolve, reject) => {
+        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
             // first try an exact match of the url
             var item: StorageItem = Storage.get(url);
 
             if (item){
-                resolve(<IAccessToken>item.value);
+                resolve(<Manifesto.IAccessToken>item.value);
             }
 
             // find an access token for the domain
@@ -347,7 +346,7 @@ class Extension extends BaseExtension {
                 item = items[i];
 
                 if(item.key.contains(domain)) {
-                    resolve(<IAccessToken>item.value);
+                    resolve(<Manifesto.IAccessToken>item.value);
                 }
             }
 

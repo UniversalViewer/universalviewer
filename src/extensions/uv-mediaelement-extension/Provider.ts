@@ -26,8 +26,9 @@ class Provider extends BaseProvider implements IMediaElementProvider{
         return script;
     }
 
+    // todo: use canvas.getThumbnail
     getPosterImageUri(): string{
-        return this.getCurrentCanvas().thumbnail;
+        return this.getCurrentCanvas().getProperty('thumbnail');
     }
 }
 

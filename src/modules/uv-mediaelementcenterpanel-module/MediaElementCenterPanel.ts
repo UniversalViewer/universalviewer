@@ -28,7 +28,7 @@ class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if (this.provider.getCanvasType(this.provider.getCanvasByIndex(0)).contains('video')){
+        if (this.isVideo()){
             $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
@@ -51,6 +51,11 @@ class MediaElementCenterPanel extends CenterPanel {
 
     }
 
+    isVideo(): boolean {
+        var elementType = this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
+        return elementType.toString() === manifesto.ElementType.movingimage().toString();
+    }
+
     viewMedia(canvas: Manifesto.ICanvas) {
 
         var that = this;
@@ -65,18 +70,17 @@ class MediaElementCenterPanel extends CenterPanel {
 
         var id = Utils.Dates.GetTimeStamp();
         var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
-        var canvasType: string = this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
 
         var sources = [];
 
         _.each(this.provider.getRenderings(canvas), (rendering: Manifesto.IRendering) => {
             sources.push({
-                type: rendering.format,
+                type: rendering.getFormat().toString(),
                 src: rendering.id
             });
         });
 
-        if (canvasType.contains('movingimage')){
+        if (this.isVideo()){
 
             //if (!canvas.sources){
             //    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
@@ -118,7 +122,7 @@ class MediaElementCenterPanel extends CenterPanel {
                     }
                 }
             });
-        } else if (canvasType.contains('sound')){
+        } else {
 
             // Try to find an MP3, since this is most likely to work:
             var preferredSource = 0;

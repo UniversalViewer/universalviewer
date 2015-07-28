@@ -66,8 +66,8 @@ class DownloadDialogue extends Dialogue {
             label = this.content.entireFileAsOriginal;
         }
         var fileType;
-        if (rendering.format) {
-            fileType = this.simplifyMimeType(rendering.format);
+        if (rendering.getFormat()) {
+            fileType = this.simplifyMimeType(rendering.getFormat().toString());
         } else {
             fileType = this.getFileExtension(fileUri);
         }

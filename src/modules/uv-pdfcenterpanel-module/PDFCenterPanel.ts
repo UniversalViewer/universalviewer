@@ -21,7 +21,7 @@ class PDFCenterPanel extends CenterPanel {
     }
 
     viewMedia(canvas) {
-        var pdfUri = this.provider.getRenderings(canvas)[0].id;
+        var pdfUri = canvas.id;
         var browser = window.browserDetect.browser;
         var version = window.browserDetect.version;
 
