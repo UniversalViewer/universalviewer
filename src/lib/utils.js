@@ -2770,18 +2770,6 @@ var Utils;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
-    var Objects = (function () {
-        function Objects() {
-        }
-        Objects.ConvertToPlainObject = function (obj) {
-            return JSON.parse(JSON.stringify(obj));
-        };
-        return Objects;
-    })();
-    Utils.Objects = Objects;
-})(Utils || (Utils = {}));
-var Utils;
-(function (Utils) {
     var Strings = (function () {
         function Strings() {
         }

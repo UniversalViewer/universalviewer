@@ -1452,9 +1452,6 @@ declare module Utils {
     }
 }
 declare module Utils {
-    class Objects {
-        static ConvertToPlainObject(obj: any): any;
-    }
 }
 declare module Utils {
     class Strings {
