@@ -232,6 +232,7 @@ module.exports = function (grunt) {
                             'es6-promise/promise.min.js',
                             'extensions/dist/extensions.js',
                             'jquery-plugins/dist/jquery-plugins.js',
+                            'lodash-compat/lodash.min.js',
                             'manifesto/dist/client/manifesto.js',
                             'Units/Length.min.js',
                             'utils/dist/utils.js'

@@ -23,7 +23,8 @@
     "utils": "edsilv/utils#~0.0.14",
     "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme",
-    "manifesto": "~0.1.0"
+    "manifesto": "~0.1.2",
+    "lodash-compat": "~3.10.0"
   },
   "devDependencies": {
     "r.js": "~2.1.18"

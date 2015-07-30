@@ -171,9 +171,9 @@ class Provider extends BaseProvider implements ISeadragonProvider{
                 getStoredAccessTokenMethod,
                 handleResourceResponse).then((resources: Resource[]) => {
                 this.images = _.map(resources, (resource: Resource) => {
-                    return resource.data;
+                    return <Resource>_.toPlainObject(resource.data);
                 });
-                resolve(Utils.Objects.ConvertToPlainObject(this.images));
+                resolve(this.images);
             });
         });
     }
