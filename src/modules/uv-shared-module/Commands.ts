@@ -44,6 +44,7 @@ class Commands {
     static RIGHTPANEL_EXPAND_FULL_START: string     = Commands.namespace + 'onRightPanelExpandFullStart';
     static SEQUENCE_INDEX_CHANGED: string           = Commands.namespace + 'onSequenceIndexChanged';
     static SETTINGS_CHANGED: string                 = Commands.namespace + 'onSettingsChanged';
+    static SHOW_CLICKTHROUGH_DIALOGUE: string       = Commands.namespace + 'onShowClickThroughDialogue';
     static SHOW_DOWNLOAD_DIALOGUE: string           = Commands.namespace + 'onShowDownloadDialogue';
     static SHOW_EMBED_DIALOGUE: string              = Commands.namespace + 'onShowEmbedDialogue';
     static SHOW_EXTERNALCONTENT_DIALOGUE: string    = Commands.namespace + 'onShowExternalContentDialogue';
@@ -56,6 +57,7 @@ class Commands {
     static TOGGLE_FULLSCREEN: string                = Commands.namespace + 'onToggleFullScreen';
     static UP_ARROW: string                         = Commands.namespace + 'onUpArrow';
     static UPDATE_SETTINGS: string                  = Commands.namespace + 'onUpdateSettings';
+    static VIEW_FULL_TERMS: string                  = Commands.namespace + 'onViewFullTerms';
     static WINDOW_UNLOAD: string                    = Commands.namespace + 'onWindowUnload';
 }
 

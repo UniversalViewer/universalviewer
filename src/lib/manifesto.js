@@ -90,6 +90,9 @@ var Manifesto;
         ServiceProfile.prototype.autoComplete = function () {
             return new ServiceProfile(ServiceProfile.AUTOCOMPLETE.toString());
         };
+        ServiceProfile.prototype.clickThrough = function () {
+            return new ServiceProfile(ServiceProfile.CLICKTHROUGH.toString());
+        };
         ServiceProfile.prototype.login = function () {
             return new ServiceProfile(ServiceProfile.LOGIN.toString());
         };
@@ -106,6 +109,7 @@ var Manifesto;
             return new ServiceProfile(ServiceProfile.TOKEN.toString());
         };
         ServiceProfile.AUTOCOMPLETE = new ServiceProfile("http://iiif.io/api/autocomplete/1/");
+        ServiceProfile.CLICKTHROUGH = new ServiceProfile("http://wellcomelibrary.org/ld/iiif-ext/0/accept-terms-click-through");
         ServiceProfile.LOGIN = new ServiceProfile("http://iiif.io/api/image/2/auth/login");
         ServiceProfile.LOGOUT = new ServiceProfile("http://iiif.io/api/image/2/auth/logout");
         ServiceProfile.OTHERMANIFESTATIONS = new ServiceProfile("http://iiif.io/api/otherManifestations.json");
@@ -280,13 +284,13 @@ var Manifesto;
             return uri + tile;
         };
         Canvas.prototype.getType = function () {
-            return new Manifesto.CanvasType(this.__jsonld['@type'].toLowerCase());
+            return new Manifesto.CanvasType(this.getProperty('@type').toLowerCase());
         };
         Canvas.prototype.getWidth = function () {
-            return this.__jsonld.width;
+            return this.getProperty('width');
         };
         Canvas.prototype.getHeight = function () {
-            return this.__jsonld.height;
+            return this.getProperty('height');
         };
         return Canvas;
     })(Manifesto.JSONLDResource);
@@ -300,7 +304,7 @@ var Manifesto;
             _super.call(this, jsonld);
         }
         Element.prototype.getType = function () {
-            return new Manifesto.ElementType(this.__jsonld['@type']);
+            return new Manifesto.ElementType(this.getProperty('@type'));
         };
         return Element;
     })(Manifesto.JSONLDResource);
@@ -324,7 +328,7 @@ var Manifesto;
             this.options = _assign(defaultOptions, options);
         }
         Manifest.prototype.getAttribution = function () {
-            return this.getLocalisedValue(this.__jsonld.attribution);
+            return this.getLocalisedValue(this.getProperty('attribution'));
         };
         Manifest.prototype.getLocalisedValue = function (resource, locale) {
             // if the resource is not an array of translations, return the string.
@@ -353,15 +357,15 @@ var Manifesto;
             return null;
         };
         Manifest.prototype.getLogo = function () {
-            return this.__jsonld.logo;
+            return this.getProperty('logo');
         };
         Manifest.prototype.getLicense = function () {
-            return this.getLocalisedValue(this.__jsonld.license);
+            return this.getLocalisedValue(this.getProperty('license'));
         };
         // todo: remove includeRootProperties
         // todo: any resource may have metadata, add resource param
         Manifest.prototype.getMetadata = function (includeRootProperties) {
-            var metadata = this.__jsonld.metadata;
+            var metadata = this.getProperty('metadata');
             // get localised value for each metadata item.
             for (var i = 0; i < metadata.length; i++) {
                 var item = metadata[i];
@@ -369,40 +373,42 @@ var Manifesto;
                 item.value = this.getLocalisedValue(item.value);
             }
             if (metadata && includeRootProperties) {
-                if (this.__jsonld.description) {
+                if (this.getProperty('description')) {
                     metadata.push({
                         "label": "description",
-                        "value": this.getLocalisedValue(this.__jsonld.description)
+                        "value": this.getLocalisedValue(this.getProperty('description'))
                     });
                 }
-                if (this.__jsonld.attribution) {
+                if (this.getProperty('attribution')) {
                     metadata.push({
                         "label": "attribution",
-                        "value": this.getLocalisedValue(this.__jsonld.attribution)
+                        "value": this.getLocalisedValue(this.getProperty('attribution'))
                     });
                 }
-                if (this.__jsonld.license) {
+                if (this.getProperty('license')) {
                     metadata.push({
                         "label": "license",
-                        "value": this.getLocalisedValue(this.__jsonld.license)
+                        "value": this.getLocalisedValue(this.getProperty('license'))
                     });
                 }
-                if (this.__jsonld.logo) {
+                if (this.getProperty('logo')) {
                     metadata.push({
                         "label": "logo",
-                        "value": '<img src="' + this.__jsonld.logo + '"/>' });
+                        "value": '<img src="' + this.getProperty('logo') + '"/>' });
                 }
             }
             return metadata;
         };
         // todo: use jmespath to flatten tree?
         // https://github.com/jmespath/jmespath.js/issues/6
+        // using r.__parsed in the meantime
         Manifest.prototype.getRanges = function () {
             var ranges = [];
-            if (!this.__jsonld.structures && !this.__jsonld.structures.length)
+            var structures = this.getProperty('structures');
+            if (!structures && !structures.length)
                 return ranges;
-            for (var i = 0; i < this.__jsonld.structures.length; i++) {
-                var r = this.__jsonld.structures[i];
+            for (var i = 0; i < structures.length; i++) {
+                var r = structures[i];
                 ranges.push(r.__parsed);
             }
             return ranges;
@@ -468,7 +474,7 @@ var Manifesto;
             return parsed;
         };
         Manifest.prototype.getSeeAlso = function () {
-            return this.getLocalisedValue(this.__jsonld.seeAlso);
+            return this.getLocalisedValue(this.getProperty('seeAlso'));
         };
         Manifest.prototype.getService = function (resource, profile) {
             var services = this.getServices(resource);
@@ -511,7 +517,7 @@ var Manifesto;
             return this.sequences[sequenceIndex];
         };
         Manifest.prototype.getTitle = function () {
-            return this.getLocalisedValue(this.__jsonld.label);
+            return this.getLocalisedValue(this.getProperty('label'));
         };
         Manifest.prototype.getTotalSequences = function () {
             return this.sequences.length;
@@ -551,7 +557,7 @@ var Manifesto;
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
         };
-        Manifest.prototype.loadResource = function (resource, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
+        Manifest.prototype.loadResource = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
             var _this = this;
             var options = this.options;
             return new Promise(function (resolve, reject) {
@@ -561,13 +567,19 @@ var Manifesto;
                     // returned access tokens are not stored, therefore the login window flashes for every request.
                     resource.getData().then(function () {
                         if (resource.isAccessControlled) {
-                            login(resource.loginService).then(function () {
-                                getAccessToken(resource.tokenService).then(function (token) {
-                                    resource.getData(token).then(function () {
-                                        resolve(handleResourceResponse(resource));
+                            // if the resource has a click through service, use that.
+                            if (resource.clickThroughService) {
+                                resolve(clickThrough(resource));
+                            }
+                            else {
+                                login(resource.loginService.id).then(function () {
+                                    getAccessToken(resource.tokenService.id).then(function (token) {
+                                        resource.getData(token).then(function () {
+                                            resolve(handleResourceResponse(resource));
+                                        });
                                     });
                                 });
-                            });
+                            }
                         }
                         else {
                             // this info.json isn't access controlled, therefore no need to request an access token
@@ -592,14 +604,14 @@ var Manifesto;
                                 else {
                                     // otherwise, load the resource data to determine the correct access control services.
                                     // if access controlled, do login.
-                                    _this.authorize(resource, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                                    _this.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                         resolve(handleResourceResponse(resource));
                                     });
                                 }
                             });
                         }
                         else {
-                            _this.authorize(resource, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                            _this.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                 resolve(handleResourceResponse(resource));
                             });
                         }
@@ -607,11 +619,11 @@ var Manifesto;
                 }
             });
         };
-        Manifest.prototype.authorize = function (resource, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
+        Manifest.prototype.authorize = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
             return new Promise(function (resolve, reject) {
                 resource.getData().then(function () {
                     if (resource.isAccessControlled) {
-                        getStoredAccessToken(resource.tokenService).then(function (storedAccessToken) {
+                        getStoredAccessToken(resource.tokenService.id).then(function (storedAccessToken) {
                             if (storedAccessToken) {
                                 // try using the stored access token
                                 resource.getData(storedAccessToken).then(function () {
@@ -619,16 +631,22 @@ var Manifesto;
                                 });
                             }
                             else {
-                                // get an access token
-                                login(resource.loginService).then(function () {
-                                    getAccessToken(resource.tokenService).then(function (accessToken) {
-                                        storeAccessToken(resource, accessToken).then(function () {
-                                            resource.getData(accessToken).then(function () {
-                                                resolve(resource);
+                                // if the resource has a click through service, use that.
+                                if (resource.clickThroughService) {
+                                    clickThrough(resource);
+                                }
+                                else {
+                                    // get an access token
+                                    login(resource.loginService.id).then(function () {
+                                        getAccessToken(resource.tokenService.id).then(function (accessToken) {
+                                            storeAccessToken(resource, accessToken).then(function () {
+                                                resource.getData(accessToken).then(function () {
+                                                    resolve(resource);
+                                                });
                                             });
                                         });
                                     });
-                                });
+                                }
                             }
                         });
                     }
@@ -639,11 +657,11 @@ var Manifesto;
                 });
             });
         };
-        Manifest.prototype.loadResources = function (resources, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
+        Manifest.prototype.loadResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
             var that = this;
             return new Promise(function (resolve) {
                 var promises = _.map(resources, function (resource) {
-                    return that.loadResource(resource, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse);
+                    return that.loadResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse);
                 });
                 Promise.all(promises)
                     .then(function () {
@@ -674,14 +692,14 @@ var Manifesto;
         //    return null;
         //}
         Range.prototype.getViewingDirection = function () {
-            if (this.__jsonld.viewingDirection) {
-                return new Manifesto.ViewingDirection(this.__jsonld.viewingDirection);
+            if (this.getProperty('viewingDirection')) {
+                return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
             }
             return null;
         };
         Range.prototype.getViewingHint = function () {
-            if (this.__jsonld.viewingHint) {
-                return new Manifesto.ViewingHint(this.__jsonld.viewingHint);
+            if (this.getProperty('viewingHint')) {
+                return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
             }
             return null;
         };
@@ -697,7 +715,7 @@ var Manifesto;
             _super.call(this, jsonld);
         }
         Rendering.prototype.getFormat = function () {
-            return new Manifesto.RenderingFormat(this.__jsonld.format);
+            return new Manifesto.RenderingFormat(this.getProperty('format'));
         };
         return Rendering;
     })(Manifesto.JSONLDResource);
@@ -859,20 +877,20 @@ var Manifesto;
             return thumbs;
         };
         Sequence.prototype.getStartCanvas = function () {
-            return this.__jsonld.startCanvas;
+            return this.getProperty('startCanvas');
         };
         Sequence.prototype.getTotalCanvases = function () {
             return this.canvases.length;
         };
         Sequence.prototype.getViewingDirection = function () {
-            if (this.__jsonld.viewingDirection) {
-                return new Manifesto.ViewingDirection(this.__jsonld.viewingDirection);
+            if (this.getProperty('viewingDirection')) {
+                return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
             }
             return Manifesto.ViewingDirection.LEFTTORIGHT;
         };
         Sequence.prototype.getViewingHint = function () {
-            if (this.__jsonld.viewingHint) {
-                return new Manifesto.ViewingHint(this.__jsonld.viewingHint);
+            if (this.getProperty('viewingHint')) {
+                return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
             }
             return Manifesto.ViewingHint.NONE;
         };
@@ -1018,7 +1036,10 @@ var Manifesto;
             _super.call(this, resource);
         }
         Service.prototype.getProfile = function () {
-            return new Manifesto.ServiceProfile(this.__jsonld.profile);
+            return new Manifesto.ServiceProfile(this.getProperty('profile'));
+        };
+        Service.prototype.getDescription = function () {
+            return this.getManifest().getLocalisedValue(this.getProperty('description'));
         };
         return Service;
     })(Manifesto.JSONLDResource);

@@ -147,10 +147,11 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
-    getImages(loginMethod: (loginService: string) => Promise<void>,
-              getAccessTokenMethod: (tokenServiceUrl: string) => Promise<Manifesto.IAccessToken>,
-              storeAccessTokenMethod: (resource: Resource, token: Manifesto.IAccessToken) => Promise<void>,
-              getStoredAccessTokenMethod: (tokenService: string) => Promise<Manifesto.IAccessToken>,
+    getImages(clickThrough: (resource: Manifesto.IResource) => void,
+              login: (loginService: string) => Promise<void>,
+              getAccessToken: (tokenServiceUrl: string) => Promise<Manifesto.IAccessToken>,
+              storeAccessToken: (resource: Resource, token: Manifesto.IAccessToken) => Promise<void>,
+              getStoredAccessToken: (tokenService: string) => Promise<Manifesto.IAccessToken>,
               handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]> {
 
         var indices = this.getPagedIndices();
@@ -165,10 +166,11 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return new Promise<any[]>((resolve) => {
             this.manifest.loadResources(
                 images,
-                loginMethod,
-                getAccessTokenMethod,
-                storeAccessTokenMethod,
-                getStoredAccessTokenMethod,
+                clickThrough,
+                login,
+                getAccessToken,
+                storeAccessToken,
+                getStoredAccessToken,
                 handleResourceResponse).then((resources: Resource[]) => {
                 this.images = _.map(resources, (resource: Resource) => {
                     return <Resource>_.toPlainObject(resource.data);

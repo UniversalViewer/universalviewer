@@ -5,6 +5,11 @@
   "options": {
   },
   "modules": {
+    "clickThroughDialogue": {
+      "content": {
+        "viewTerms": "Read Full Terms and Conditions (xx-XX)"
+      }
+    },
     "dialogue": {
       "content": {
         "close": "Close (xx-XX)"

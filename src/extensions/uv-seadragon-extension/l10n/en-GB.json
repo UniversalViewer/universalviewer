@@ -8,6 +8,11 @@
     "canvasIndexOutOfRange": "Canvas index out of range."
   },
   "modules": {
+    "clickThroughDialogue": {
+      "content": {
+        "viewTerms": "Read Full Terms and Conditions"
+      }
+    },
     "dialogue": {
       "content": {
         "close": "Close"

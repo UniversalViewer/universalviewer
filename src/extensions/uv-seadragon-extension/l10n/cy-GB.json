@@ -6,6 +6,11 @@
     "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)"
   },
   "modules": {
+    "clickThroughDialogue": {
+      "content": {
+        "viewTerms": "Darllenwch Telerau ac Amodau Llawn"
+      }
+    },
     "dialogue": {
       "content": {
         "close": "Cau"

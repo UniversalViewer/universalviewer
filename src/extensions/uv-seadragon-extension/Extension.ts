@@ -3,6 +3,7 @@ import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
+import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
 import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
@@ -30,12 +31,14 @@ import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/Tr
 
 class Extension extends BaseExtension {
 
+    $clickThroughDialogue: JQuery;
     $downloadDialogue: JQuery;
     $embedDialogue: JQuery;
     $externalContentDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: SeadragonCenterPanel;
+    clickThroughDialogue: ClickThroughDialogue;
     currentRotation: number = 0;
     downloadDialogue: DownloadDialogue;
     embedDialogue: EmbedDialogue;
@@ -207,6 +210,10 @@ class Extension extends BaseExtension {
         Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
 
+        this.$clickThroughDialogue = $('<div class="overlay clickthrough"></div>');
+        Shell.$overlays.append(this.$clickThroughDialogue);
+        this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
+
         this.$downloadDialogue = $('<div class="overlay download"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
@@ -282,6 +289,7 @@ class Extension extends BaseExtension {
     getImages(): Promise<Resource[]> {
         return new Promise<Resource[]>((resolve) => {
             (<ISeadragonProvider>this.provider).getImages(
+                this.clickThrough,
                 this.login,
                 this.getAccessToken,
                 this.storeAccessToken,
@@ -292,6 +300,10 @@ class Extension extends BaseExtension {
                 this.showMessage(errorMessage);
             });
         });
+    }
+
+    clickThrough(resource: Manifesto.IResource): void {
+        $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [resource.clickThroughService]);
     }
 
     login(loginServiceUrl: string): Promise<void> {
@@ -321,24 +333,24 @@ class Extension extends BaseExtension {
 
     storeAccessToken(resource: Resource, token: Manifesto.IAccessToken): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            Storage.set(resource.tokenService, token, token.expiresIn);
+            Storage.set(resource.tokenService.id, token, token.expiresIn);
             resolve();
         });
     }
 
-    getStoredAccessToken(url: string): Promise<Manifesto.IAccessToken> {
+    getStoredAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
             // first try an exact match of the url
-            var item: StorageItem = Storage.get(url);
+            var item: StorageItem = Storage.get(tokenServiceUrl);
 
             if (item){
                 resolve(<Manifesto.IAccessToken>item.value);
             }
 
             // find an access token for the domain
-            var domain = Utils.Urls.GetUrlParts(url).hostname;
+            var domain = Utils.Urls.GetUrlParts(tokenServiceUrl).hostname;
 
             var items: StorageItem[] = Storage.getItems();
 

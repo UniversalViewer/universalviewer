@@ -2,15 +2,16 @@ import IProvider = require("./IProvider");
 import Storage = require("./Storage");
 
 class Resource implements Manifesto.IResource {
+    public clickThroughService: Manifesto.IService;
     public data: any;
     public dataUri: string;
     public error: any;
     public isAccessControlled: boolean = false;
-    public loginService: string;
-    public logoutService: string;
+    public loginService: Manifesto.IService;
+    public logoutService: Manifesto.IService;
     public provider: IProvider;
     public status: number;
-    public tokenService: string;
+    public tokenService: Manifesto.IService;
 
     constructor(provider: IProvider) {
         this.provider = provider;
@@ -18,16 +19,12 @@ class Resource implements Manifesto.IResource {
 
     private _parseAuthServices(resource: any): void {
 
-        var loginService: Manifesto.IService = this.provider.getService(resource, manifesto.ServiceProfile.login().toString());
-        if (loginService) this.loginService = loginService.id;
+        this.clickThroughService = this.provider.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
+        this.loginService = this.provider.getService(resource, manifesto.ServiceProfile.login().toString());
+        this.logoutService = this.provider.getService(resource, manifesto.ServiceProfile.logout().toString());
+        this.tokenService = this.provider.getService(resource, manifesto.ServiceProfile.token().toString());
 
-        var logoutService: Manifesto.IService = this.provider.getService(resource, manifesto.ServiceProfile.logout().toString());
-        if (logoutService) this.logoutService = logoutService.id;
-
-        var tokenService: Manifesto.IService = this.provider.getService(resource, manifesto.ServiceProfile.token().toString());
-        if (tokenService) this.tokenService = tokenService.id;
-
-        if (this.loginService) this.isAccessControlled = true;
+        if (this.clickThroughService || this.loginService) this.isAccessControlled = true;
     }
 
     public getData(accessToken?: Manifesto.IAccessToken): Promise<Resource> {
