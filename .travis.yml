@@ -1,0 +1,12 @@
+# Inspired by https://github.com/DigitalInnovation/mns-digital-blog/blob/master/.travis.yml
+language: node_js
+node_js:
+- '0.10'
+before_install:
+- npm install -g grunt-cli
+- npm install -g bower
+install:
+- npm install
+- bower install
+script:
+- grunt build
