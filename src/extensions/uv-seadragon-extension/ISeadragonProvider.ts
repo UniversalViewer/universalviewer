@@ -8,17 +8,17 @@ interface ISeadragonProvider extends IProvider{
     getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string;
     getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any, download?: boolean, relativeUri?: boolean): string;
     getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string;
-    getImages(clickThrough: (resource: Manifesto.IResource) => void,
+    getImages(clickThrough: (resource: Manifesto.IExternalResource) => void,
               login: (loginService: string) => Promise<void>,
               getAccessToken: (tokenServiceUrl: string) => Promise<Manifesto.IAccessToken>,
-              storeAccessToken: (resource: Manifesto.IResource, token: Manifesto.IAccessToken) => Promise<void>,
+              storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken) => Promise<void>,
               getStoredAccessToken: (tokenService: string) => Promise<Manifesto.IAccessToken>,
-              handleResourceResponse: (resource: Manifesto.IResource) => Promise<any>): Promise<Resource[]>;
-    getImageUri(canvas: Manifesto.ICanvas): string;
+              handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>): Promise<Resource[]>;
+    getInfoUri(canvas: Manifesto.ICanvas): string;
     getSearchResultByCanvasIndex(index: number): SearchResult;
     getSearchWithinService(): Manifesto.IService;
     getSearchWithinServiceUri(): string;
-    images: Resource[];
+    images: Manifesto.IExternalResource[];
     isSearchWithinEnabled(): boolean;
     parseSearchWithinResults(results: any);
     searchResults: SearchResult[];

@@ -1,7 +1,7 @@
 import IProvider = require("./IProvider");
 import Storage = require("./Storage");
 
-class Resource implements Manifesto.IResource {
+class Resource implements Manifesto.IExternalResource {
     public clickThroughService: Manifesto.IService;
     public data: any;
     public dataUri: string;

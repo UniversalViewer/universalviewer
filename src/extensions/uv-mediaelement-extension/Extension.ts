@@ -1,24 +1,26 @@
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseCommands = require("../../modules/uv-shared-module/Commands");
-import Commands = require("./Commands");
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
+import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import BootStrapper = require("../../Bootstrapper");
-import MediaElementCenterPanel = require("../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel");
+import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
-import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
+import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
+import MediaElementCenterPanel = require("../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel");
+import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import Params = require("../../modules/uv-shared-module/Params");
 import Provider = require("./Provider");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
+import Resource = require("../../modules/uv-shared-module/Resource");
+import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
+import Storage = require("../../modules/uv-shared-module/Storage");
 import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
+import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
 
 class Extension extends BaseExtension{
 
@@ -81,6 +83,8 @@ class Extension extends BaseExtension{
     }
 
     createModules(): void{
+        super.createModules();
+
         this.headerPanel = new HeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
@@ -121,14 +125,14 @@ class Extension extends BaseExtension{
     }
 
     isLeftPanelEnabled(): boolean{
-        return  Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
+        return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
                 && (this.provider.isMultiCanvas() || this.provider.isMultiSequence());
     }
 
     viewFile(canvasIndex: number): void {
 
         // if it's a valid canvas index.
-        if (canvasIndex == -1) return;
+        if (canvasIndex === -1) return;
 
         this.viewCanvas(canvasIndex, () => {
             var canvas = this.provider.getCanvasByIndex(canvasIndex);
@@ -136,6 +140,27 @@ class Extension extends BaseExtension{
             this.setParam(Params.canvasIndex, canvasIndex);
         });
 
+    }
+
+    getMedia(element: Manifesto.IElement): Promise<Manifesto.IExternalResource> {
+        var resource: Manifesto.IExternalResource = new Resource(this.provider);
+
+        var ixifService = element.getService(manifesto.ServiceProfile.ixif());
+
+        resource.dataUri = ixifService.getInfoUri();
+
+        return new Promise<Manifesto.IExternalResource>((resolve) => {
+            (<IProvider>this.provider).manifest.loadResource(
+                resource,
+                this.clickThrough,
+                this.login,
+                this.getAccessToken,
+                this.storeAccessToken,
+                this.getStoredAccessToken,
+                this.handleResourceResponse).then((resource: Manifesto.IExternalResource) => {
+                    resolve(resource);
+                });
+        });
     }
 }
 

@@ -7,7 +7,7 @@ import Resource = require("../../modules/uv-shared-module/Resource");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
-    images: Resource[];
+    images: Manifesto.IExternalResource[];
     searchResults: SearchResult[] = [];
 
     constructor(bootstrapper: BootStrapper) {
@@ -110,28 +110,28 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getImageId(canvas: any): string {
-        var id = this.getImageUri(canvas);
+        var id = this.getInfoUri(canvas);
         // First trim off info.json, then extract ID:
         id = id.substr(0, id.lastIndexOf("/"));
         return id.substr(id.lastIndexOf("/") + 1);
     }
 
     getImageBaseUri(canvas: any): string {
-        var uri = this.getImageUri(canvas);
+        var uri = this.getInfoUri(canvas);
         // First trim off info.json, then trim off ID....
         uri = uri.substr(0, uri.lastIndexOf("/"));
         return uri.substr(0, uri.lastIndexOf("/"));
     }
 
-    getImageUri(canvas: any): string{
-        var imageUri = canvas.getImageUri();
+    getInfoUri(canvas: any): string{
+        var infoUri = canvas.getInfoUri();
 
-        if (!imageUri){
+        if (!infoUri){
             // todo: use compiler flag (when available)
-            imageUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'lib/imageunavailable.json';
+            infoUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'lib/imageunavailable.json';
         }
 
-        return imageUri;
+        return infoUri;
     }
 
     getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string{
@@ -147,19 +147,19 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
-    getImages(clickThrough: (resource: Manifesto.IResource) => void,
+    getImages(clickThrough: (resource: Manifesto.IExternalResource) => void,
               login: (loginService: string) => Promise<void>,
               getAccessToken: (tokenServiceUrl: string) => Promise<Manifesto.IAccessToken>,
-              storeAccessToken: (resource: Resource, token: Manifesto.IAccessToken) => Promise<void>,
+              storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken) => Promise<void>,
               getStoredAccessToken: (tokenService: string) => Promise<Manifesto.IAccessToken>,
-              handleResourceResponse: (resource: Resource) => Promise<any>): Promise<Resource[]> {
+              handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>): Promise<Manifesto.IExternalResource[]> {
 
         var indices = this.getPagedIndices();
         var images = [];
 
         _.each(indices, (index) => {
             var r: Resource = new Resource(this);
-            r.dataUri = this.getImageUri(this.getCanvasByIndex(index));
+            r.dataUri = this.getInfoUri(this.getCanvasByIndex(index));
             images.push(r);
         });
 
@@ -171,9 +171,9 @@ class Provider extends BaseProvider implements ISeadragonProvider{
                 getAccessToken,
                 storeAccessToken,
                 getStoredAccessToken,
-                handleResourceResponse).then((resources: Resource[]) => {
-                this.images = _.map(resources, (resource: Resource) => {
-                    return <Resource>_.toPlainObject(resource.data);
+                handleResourceResponse).then((resources: Manifesto.IExternalResource[]) => {
+                this.images = _.map(resources, (resource: Manifesto.IExternalResource) => {
+                    return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
                 });
                 resolve(this.images);
             });

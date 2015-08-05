@@ -42,8 +42,6 @@ class Extension extends BaseExtension{
     create(overrideDependencies?: any): void {
         super.create();
 
-        var that = this;
-
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
             this.viewFile(index);
         });
@@ -89,6 +87,8 @@ class Extension extends BaseExtension{
     }
 
     createModules(): void{
+        super.createModules();
+
         this.headerPanel = new HeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){

@@ -1,16 +1,21 @@
 import BaseCommands = require("./Commands");
 import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
+import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
 import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
 import Shell = require("./Shell");
+import Storage = require("../../modules/uv-shared-module/Storage");
+import StorageItem = require("../../modules/uv-shared-module/StorageItem");
 
 class BaseExtension implements IExtension {
 
+    $clickThroughDialogue: JQuery;
     $element: JQuery;
     bootstrapper: BootStrapper;
     canvasIndex: number;
+    clickThroughDialogue: ClickThroughDialogue;
     embedHeight: number;
     embedWidth: number;
     extensions: any;
@@ -161,7 +166,9 @@ class BaseExtension implements IExtension {
     }
 
     createModules(): void {
-
+        this.$clickThroughDialogue = $('<div class="overlay clickthrough"></div>');
+        Shell.$overlays.append(this.$clickThroughDialogue);
+        this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
     }
 
     modulesCreated(): void {
@@ -356,6 +363,83 @@ class BaseExtension implements IExtension {
 
     isRightPanelEnabled(): boolean{
         return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
+    }
+
+    // auth
+
+    clickThrough(resource: Manifesto.IExternalResource): void {
+        $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [resource.clickThroughService]);
+    }
+
+    login(loginServiceUrl: string): Promise<void> {
+        return new Promise<void>((resolve) => {
+
+            var win = window.open(loginServiceUrl, 'loginwindow', 'height=600,width=600');
+
+            var pollTimer = window.setInterval(() => {
+                if (win.closed) {
+                    window.clearInterval(pollTimer);
+                    $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
+                    resolve();
+                }
+            }, 500);
+        });
+    }
+
+    getAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
+        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
+            $.getJSON(tokenServiceUrl + "?callback=?", (token: Manifesto.IAccessToken) => {
+                resolve(token);
+            }).fail((error) => {
+                reject(error);
+            });
+        });
+    }
+
+    storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            Storage.set(resource.tokenService.id, token, token.expiresIn);
+            resolve();
+        });
+    }
+
+    getStoredAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
+
+        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
+
+            // first try an exact match of the url
+            var item: StorageItem = Storage.get(tokenServiceUrl);
+
+            if (item){
+                resolve(<Manifesto.IAccessToken>item.value);
+            }
+
+            // find an access token for the domain
+            var domain = Utils.Urls.GetUrlParts(tokenServiceUrl).hostname;
+
+            var items: StorageItem[] = Storage.getItems();
+
+            for(var i = 0; i < items.length; i++) {
+                item = items[i];
+
+                if(item.key.contains(domain)) {
+                    resolve(<Manifesto.IAccessToken>item.value);
+                }
+            }
+
+            resolve(null);
+        });
+    }
+
+    handleResourceResponse(resource: Manifesto.IExternalResource) : Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            if (resource.status === 200) {
+                resolve(resource);
+            } else {
+                // access denied
+                reject(resource.error.statusText);
+            }
+        });
     }
 }
 

@@ -320,16 +320,8 @@ class BaseProvider implements IProvider{
         return this.sequence.getThumbs(width, height);
     }
 
-    //getLocalisedValue(resource: any): string {
-    //    return this.manifest.getLocalisedValue(resource, this.locale);
-    //}
-
     getRangeByPath(path: string): any{
         return this.manifest.getRangeByPath(path);
-    }
-
-    getCanvasById(id: string): any{
-        return this.sequence.getCanvasById(id);
     }
 
     getCanvasIndexById(id: string): number {

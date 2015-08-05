@@ -3,7 +3,6 @@ import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
-import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
 import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
@@ -23,22 +22,18 @@ import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-mod
 import Settings = require("../../modules/uv-shared-module/Settings");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
-import Storage = require("../../modules/uv-shared-module/Storage");
-import StorageItem = require("../../modules/uv-shared-module/StorageItem");
 import ThumbsView = require("../../modules/uv-treeviewleftpanel-module/ThumbsView");
 import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
 import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
 
 class Extension extends BaseExtension {
 
-    $clickThroughDialogue: JQuery;
     $downloadDialogue: JQuery;
     $embedDialogue: JQuery;
     $externalContentDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: SeadragonCenterPanel;
-    clickThroughDialogue: ClickThroughDialogue;
     currentRotation: number = 0;
     downloadDialogue: DownloadDialogue;
     embedDialogue: EmbedDialogue;
@@ -188,6 +183,8 @@ class Extension extends BaseExtension {
     }
 
     createModules(): void{
+        super.createModules();
+
         this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
@@ -209,10 +206,6 @@ class Extension extends BaseExtension {
         this.$embedDialogue = $('<div class="overlay embed"></div>');
         Shell.$overlays.append(this.$embedDialogue);
         this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
-
-        this.$clickThroughDialogue = $('<div class="overlay clickthrough"></div>');
-        Shell.$overlays.append(this.$clickThroughDialogue);
-        this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
@@ -279,101 +272,26 @@ class Extension extends BaseExtension {
 
         this.viewCanvas(canvasIndex, () => {
             var canvas = this.provider.getCanvasByIndex(canvasIndex);
-            var uri = (<ISeadragonProvider>this.provider).getImageUri(canvas);
+            var uri = (<ISeadragonProvider>this.provider).getInfoUri(canvas);
             $.publish(BaseCommands.OPEN_MEDIA, [uri]);
             this.setParam(Params.canvasIndex, canvasIndex);
         });
 
     }
 
-    getImages(): Promise<Resource[]> {
-        return new Promise<Resource[]>((resolve) => {
+    getImages(): Promise<Manifesto.IExternalResource[]> {
+        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
             (<ISeadragonProvider>this.provider).getImages(
                 this.clickThrough,
                 this.login,
                 this.getAccessToken,
                 this.storeAccessToken,
                 this.getStoredAccessToken,
-                this.handleResourceResponse).then((images: Resource[]) => {
+                this.handleResourceResponse).then((images: Manifesto.IExternalResource[]) => {
                 resolve(images);
             })['catch']((errorMessage) => {
                 this.showMessage(errorMessage);
             });
-        });
-    }
-
-    clickThrough(resource: Manifesto.IResource): void {
-        $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [resource.clickThroughService]);
-    }
-
-    login(loginServiceUrl: string): Promise<void> {
-        return new Promise<void>((resolve) => {
-
-            var win = window.open(loginServiceUrl, 'loginwindow', 'height=600,width=600');
-
-            var pollTimer = window.setInterval(() => {
-                if (win.closed) {
-                    window.clearInterval(pollTimer);
-                    $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
-                    resolve();
-                }
-            }, 500);
-        });
-    }
-
-    getAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
-        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-            $.getJSON(tokenServiceUrl + "?callback=?", (token: Manifesto.IAccessToken) => {
-                resolve(token);
-            }).fail((error) => {
-                reject(error);
-            });
-        });
-    }
-
-    storeAccessToken(resource: Resource, token: Manifesto.IAccessToken): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            Storage.set(resource.tokenService.id, token, token.expiresIn);
-            resolve();
-        });
-    }
-
-    getStoredAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
-
-        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-
-            // first try an exact match of the url
-            var item: StorageItem = Storage.get(tokenServiceUrl);
-
-            if (item){
-                resolve(<Manifesto.IAccessToken>item.value);
-            }
-
-            // find an access token for the domain
-            var domain = Utils.Urls.GetUrlParts(tokenServiceUrl).hostname;
-
-            var items: StorageItem[] = Storage.getItems();
-
-            for(var i = 0; i < items.length; i++) {
-                item = items[i];
-
-                if(item.key.contains(domain)) {
-                    resolve(<Manifesto.IAccessToken>item.value);
-                }
-            }
-
-            resolve(null);
-        });
-    }
-
-    handleResourceResponse(resource: Resource) : Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-            if (resource.status === 200) {
-                resolve(resource);
-            } else {
-                // access denied
-                reject(resource.error.statusText);
-            }
         });
     }
 

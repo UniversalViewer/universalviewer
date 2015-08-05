@@ -38,6 +38,9 @@ declare module Manifesto {
         value: string;
         static AUTOCOMPLETE: ServiceProfile;
         static CLICKTHROUGH: ServiceProfile;
+        static IIIFIMAGELEVEL1: ServiceProfile;
+        static IIIFIMAGELEVEL2: ServiceProfile;
+        static IXIF: ServiceProfile;
         static LOGIN: ServiceProfile;
         static LOGOUT: ServiceProfile;
         static OTHERMANIFESTATIONS: ServiceProfile;
@@ -47,6 +50,9 @@ declare module Manifesto {
         toString(): string;
         autoComplete(): ServiceProfile;
         clickThrough(): ServiceProfile;
+        iiifImageLevel1(): ServiceProfile;
+        iiifImageLevel2(): ServiceProfile;
+        ixif(): ServiceProfile;
         login(): ServiceProfile;
         logout(): ServiceProfile;
         otherManifestations(): ServiceProfile;
@@ -89,15 +95,6 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    interface IJSONLDResource {
-        context: string;
-        id: string;
-        __jsonld: any;
-        getLabel(): string;
-        getProperty(name: string): any;
-    }
-}
-declare module Manifesto {
     class JSONLDResource implements IJSONLDResource {
         context: string;
         id: string;
@@ -110,10 +107,17 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    class Canvas extends JSONLDResource implements ICanvas {
+    class ManifestResource extends JSONLDResource {
+        getService(profile: ServiceProfile | string): IService;
+    }
+}
+declare var _endsWith: any;
+declare var _last: any;
+declare module Manifesto {
+    class Canvas extends ManifestResource implements ICanvas {
         ranges: IRange[];
         constructor(jsonld: any);
-        getImageUri(): string;
+        getInfoUri(): string;
         getRange(): IRange;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
@@ -122,7 +126,7 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    class Element extends JSONLDResource implements IElement {
+    class Element extends ManifestResource implements IElement {
         type: ElementType;
         constructor(jsonld: any);
         getType(): ElementType;
@@ -130,6 +134,7 @@ declare module Manifesto {
 }
 declare var _assign: any;
 declare var _isArray: any;
+declare var _map: any;
 declare module Manifesto {
     class Manifest extends JSONLDResource implements IManifest {
         options: IManifestoOptions;
@@ -145,10 +150,10 @@ declare module Manifesto {
         getRanges(): IRange[];
         getRangeById(id: string): IRange;
         getRangeByPath(path: string): IRange;
-        getRendering(resource: IJSONLDResource, format: Manifesto.RenderingFormat | string): IRendering;
+        getRendering(resource: IJSONLDResource, format: RenderingFormat | string): IRendering;
         getRenderings(resource: any): IRendering[];
         getSeeAlso(): any;
-        getService(resource: IJSONLDResource, profile: Manifesto.ServiceProfile | string): IService;
+        getService(resource: IJSONLDResource, profile: ServiceProfile | string): IService;
         getServices(resource: any): IService[];
         getSequenceByIndex(sequenceIndex: number): ISequence;
         getTitle(): string;
@@ -156,9 +161,9 @@ declare module Manifesto {
         getTree(): TreeNode;
         private _parseTreeNode(node, range);
         isMultiSequence(): boolean;
-        loadResource(resource: IResource, clickThrough: (resource: IResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IResource) => Promise<any>): Promise<any>;
-        authorize(resource: IResource, clickThrough: (resource: IResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>): Promise<IResource>;
-        loadResources(resources: IResource[], clickThrough: (resource: IResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IResource) => Promise<any>): Promise<IResource[]>;
+        loadResource(resource: IExternalResource, clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>): Promise<IExternalResource>;
+        authorize(resource: IExternalResource, clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>): Promise<IExternalResource>;
+        loadResources(resources: IExternalResource[], clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>): Promise<IExternalResource[]>;
     }
 }
 declare module Manifesto {
@@ -180,8 +185,9 @@ declare module Manifesto {
     }
 }
 declare var _isNumber: any;
+declare var _last: any;
 declare module Manifesto {
-    class Sequence extends JSONLDResource implements ISequence {
+    class Sequence extends ManifestResource implements ISequence {
         canvases: ICanvas[];
         constructor(jsonld: any);
         getCanvasById(id: string): ICanvas;
@@ -221,11 +227,13 @@ declare module Manifesto {
         static serialise(manifest: Manifest): string;
     }
 }
+declare var _endsWith: any;
 declare module Manifesto {
     class Service extends JSONLDResource implements IService {
         constructor(resource: any);
         getProfile(): ServiceProfile;
         getDescription(): string;
+        getInfoUri(): string;
     }
 }
 declare module Manifesto {
@@ -266,9 +274,9 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    interface ICanvas extends IJSONLDResource {
+    interface ICanvas extends IManifestResource {
         getHeight(): number;
-        getImageUri(): string;
+        getInfoUri(): string;
         getRange(): IRange;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
@@ -277,8 +285,31 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    interface IElement extends IJSONLDResource {
+    interface IElement extends IManifestResource {
         getType(): ElementType;
+    }
+}
+declare module Manifesto {
+    interface IExternalResource {
+        clickThroughService: IService;
+        data: any;
+        dataUri: string;
+        error: any;
+        isAccessControlled: boolean;
+        loginService: IService;
+        logoutService: IService;
+        status: number;
+        tokenService: IService;
+        getData(accessToken?: IAccessToken): Promise<IExternalResource>;
+    }
+}
+declare module Manifesto {
+    interface IJSONLDResource {
+        context: string;
+        id: string;
+        __jsonld: any;
+        getLabel(): string;
+        getProperty(name: string): any;
     }
 }
 declare module Manifesto {
@@ -300,12 +331,17 @@ declare module Manifesto {
         getTotalSequences(): number;
         getTree(): TreeNode;
         isMultiSequence(): boolean;
-        loadResource(resource: IResource, clickThrough: (resource: IResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IResource) => Promise<any>): Promise<IResource>;
-        loadResources(resources: IResource[], clickThrough: (resource: IResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IResource) => Promise<any>): Promise<IResource[]>;
+        loadResource(resource: IExternalResource, clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>): Promise<IExternalResource>;
+        loadResources(resources: IExternalResource[], clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>): Promise<IExternalResource[]>;
         options: IManifestoOptions;
         rootRange: IRange;
         sequences: ISequence[];
         treeRoot: TreeNode;
+    }
+}
+declare module Manifesto {
+    interface IManifestResource extends IJSONLDResource {
+        getService(profile: ServiceProfile | string): IService;
     }
 }
 interface IManifesto {
@@ -342,21 +378,7 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    interface IResource {
-        clickThroughService: IService;
-        data: any;
-        dataUri: string;
-        error: any;
-        isAccessControlled: boolean;
-        loginService: IService;
-        logoutService: IService;
-        status: number;
-        tokenService: IService;
-        getData(accessToken?: IAccessToken): Promise<IResource>;
-    }
-}
-declare module Manifesto {
-    interface ISequence extends IJSONLDResource {
+    interface ISequence extends IManifestResource {
         canvases: ICanvas[];
         getCanvasById(id: string): ICanvas;
         getCanvasByIndex(index: number): ICanvas;
@@ -367,6 +389,7 @@ declare module Manifesto {
         getNextPageIndex(index: number): number;
         getPagedIndices(index: number): number[];
         getPrevPageIndex(index: number): number;
+        getService(profile: Manifesto.ServiceProfile | string): IService;
         getStartCanvas(): string;
         getStartCanvasIndex(): number;
         getThumbs(width: number, height: number): Manifesto.Thumb[];
@@ -384,5 +407,7 @@ declare module Manifesto {
 declare module Manifesto {
     interface IService extends IJSONLDResource {
         getProfile(): ServiceProfile;
+        getDescription(): string;
+        getInfoUri(): string;
     }
 }
