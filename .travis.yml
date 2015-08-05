@@ -5,8 +5,16 @@ node_js:
 before_install:
 - npm install -g grunt-cli
 - npm install -g bower
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- curl -Lo chrome.zip https://download-chromium.appspot.com/dl/Linux_x64 && unzip chrome.zip
 install:
 - npm install
 - bower install
+before_script:
+- ./node_modules/protractor/bin/webdriver-manager update
+- ./node_modules/protractor/bin/webdriver-manager start &
 script:
 - grunt build
+- grunt serve &
+- grunt test
