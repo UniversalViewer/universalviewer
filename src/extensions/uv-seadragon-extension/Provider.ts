@@ -3,11 +3,10 @@ import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
-import Resource = require("../../modules/uv-shared-module/Resource");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
-    images: Manifesto.IExternalResource[];
     searchResults: SearchResult[] = [];
 
     constructor(bootstrapper: BootStrapper) {
@@ -89,7 +88,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return uri;
     }
 
-    getConfinedImageUri(canvas: any, width: number, height?: number): string {
+    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string {
         var baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
@@ -109,21 +108,21 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return uri;
     }
 
-    getImageId(canvas: any): string {
+    getImageId(canvas: Manifesto.ICanvas): string {
         var id = this.getInfoUri(canvas);
         // First trim off info.json, then extract ID:
         id = id.substr(0, id.lastIndexOf("/"));
         return id.substr(id.lastIndexOf("/") + 1);
     }
 
-    getImageBaseUri(canvas: any): string {
+    getImageBaseUri(canvas: Manifesto.ICanvas): string {
         var uri = this.getInfoUri(canvas);
         // First trim off info.json, then trim off ID....
         uri = uri.substr(0, uri.lastIndexOf("/"));
         return uri.substr(0, uri.lastIndexOf("/"));
     }
 
-    getInfoUri(canvas: any): string{
+    getInfoUri(canvas: Manifesto.ICanvas): string{
         var infoUri = canvas.getInfoUri();
 
         if (!infoUri){
@@ -147,37 +146,28 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
-    getImages(clickThrough: (resource: Manifesto.IExternalResource) => void,
-              login: (loginService: string) => Promise<void>,
-              getAccessToken: (tokenServiceUrl: string) => Promise<Manifesto.IAccessToken>,
-              storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken) => Promise<void>,
-              getStoredAccessToken: (tokenService: string) => Promise<Manifesto.IAccessToken>,
-              handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>): Promise<Manifesto.IExternalResource[]> {
+    getPagedIndices(canvasIndex?: number): number[]{
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
 
-        var indices = this.getPagedIndices();
-        var images = [];
+        var indices = [];
 
-        _.each(indices, (index) => {
-            var r: Resource = new Resource(this);
-            r.dataUri = this.getInfoUri(this.getCanvasByIndex(index));
-            images.push(r);
-        });
+        if (!this.isPagingSettingEnabled()) {
+            indices.push(this.canvasIndex);
+        } else {
+            if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.isTotalCanvasesEven())){
+                indices = [canvasIndex];
+            } else if (canvasIndex % 2){
+                indices = [canvasIndex, canvasIndex + 1];
+            } else {
+                indices = [canvasIndex - 1, canvasIndex];
+            }
 
-        return new Promise<any[]>((resolve) => {
-            this.manifest.loadResources(
-                images,
-                clickThrough,
-                login,
-                getAccessToken,
-                storeAccessToken,
-                getStoredAccessToken,
-                handleResourceResponse).then((resources: Manifesto.IExternalResource[]) => {
-                this.images = _.map(resources, (resource: Manifesto.IExternalResource) => {
-                    return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
-                });
-                resolve(this.images);
-            });
-        });
+            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
+                indices = indices.reverse();
+            }
+        }
+
+        return indices;
     }
 
     isSearchWithinEnabled(): boolean {
@@ -218,7 +208,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return uri;
     }
 
-    searchWithin(terms: string, callback: (results: any) => void): void {
+    searchWithin(terms: string, cb: (results: any) => void): void {
         var that = this;
 
         var searchUri = this.getSearchWithinServiceUri();
@@ -230,7 +220,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
                 that.parseSearchWithinResults(results);
             }
 
-            callback(results);
+            cb(results);
         });
     }
 

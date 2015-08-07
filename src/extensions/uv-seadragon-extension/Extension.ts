@@ -16,7 +16,7 @@ import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../modules/uv-shared-module/Params");
-import Resource = require("../../modules/uv-shared-module/Resource");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 import Settings = require("../../modules/uv-shared-module/Settings");
@@ -41,7 +41,6 @@ class Extension extends BaseExtension {
     footerPanel: FooterPanel;
     headerPanel: PagingHeaderPanel;
     helpDialogue: HelpDialogue;
-    isLoading: boolean = false;
     leftPanel: TreeViewLeftPanel;
     mode: Mode;
     rightPanel: MoreInfoRightPanel;
@@ -165,7 +164,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.SEADRAGON_OPEN, () => {
-            this.isLoading = false;
+
         });
 
         $.subscribe(Commands.SEADRAGON_ROTATION, (e, rotation) => {
@@ -246,53 +245,20 @@ class Extension extends BaseExtension {
 
     viewPage(canvasIndex: number, isReload?: boolean): void {
 
-        // todo: stopgap until this issue is resolved: https://github.com/openseadragon/openseadragon/issues/629
-        if (this.isLoading){
-            return;
-        }
-
         // if it's a valid canvas index.
         if (canvasIndex === -1) return;
-
-        this.isLoading = true;
 
         if (this.provider.isPagingSettingEnabled() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.
             if (indices.contains(this.provider.canvasIndex)) {
-                this.viewCanvas(canvasIndex, () => {
-                    this.setParam(Params.canvasIndex, canvasIndex);
-                });
-
-                this.isLoading = false;
+                this.viewCanvas(canvasIndex);
                 return;
             }
         }
 
-        this.viewCanvas(canvasIndex, () => {
-            var canvas = this.provider.getCanvasByIndex(canvasIndex);
-            var uri = (<ISeadragonProvider>this.provider).getInfoUri(canvas);
-            $.publish(BaseCommands.OPEN_MEDIA, [uri]);
-            this.setParam(Params.canvasIndex, canvasIndex);
-        });
-
-    }
-
-    getImages(): Promise<Manifesto.IExternalResource[]> {
-        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-            (<ISeadragonProvider>this.provider).getImages(
-                this.clickThrough,
-                this.login,
-                this.getAccessToken,
-                this.storeAccessToken,
-                this.getStoredAccessToken,
-                this.handleResourceResponse).then((images: Manifesto.IExternalResource[]) => {
-                resolve(images);
-            })['catch']((errorMessage) => {
-                this.showMessage(errorMessage);
-            });
-        });
+        this.viewCanvas(canvasIndex);
     }
 
     getViewer() {
@@ -368,7 +334,7 @@ class Extension extends BaseExtension {
         if (!data.type) return;
 
         if (data.type === 'manifest') {
-            this.viewManifest(data);
+            //this.viewManifest(data);
         } else {
             this.viewRange(data.path);
         }

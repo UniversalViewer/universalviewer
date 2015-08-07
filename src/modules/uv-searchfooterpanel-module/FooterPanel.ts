@@ -170,7 +170,7 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         // hide search options if not enabled/supported.
-        if (!this.provider.isSearchWithinEnabled()) {
+        if (!(<ISeadragonProvider>this.provider).isSearchWithinEnabled()) {
             this.$searchContainer.hide();
             this.$searchPagerContainer.hide();
             this.$searchResultsContainer.hide();
@@ -178,7 +178,7 @@ class FooterPanel extends BaseFooterPanel {
             this.$element.addClass('min');
         }
 
-        new AutoComplete(this.$searchText, this.provider.getAutoCompleteUri(), 300,
+        new AutoComplete(this.$searchText, (<ISeadragonProvider>this.provider).getAutoCompleteUri(), 300,
             (results: string[]) => {
                 return results;
             },
@@ -228,7 +228,7 @@ class FooterPanel extends BaseFooterPanel {
 
     positionSearchResultPlacemarkers(): void {
 
-        var results = this.provider.searchResults;
+        var results = (<ISeadragonProvider>this.provider).searchResults;
 
         if (!results.length) return;
 
@@ -410,7 +410,7 @@ class FooterPanel extends BaseFooterPanel {
 
     clearSearchResults(): void {
 
-        this.provider.searchResults = [];
+        (<ISeadragonProvider>this.provider).searchResults = [];
 
         // clear all existing placemarkers
         var placemarkers = this.getSearchResultPlacemarkers();
@@ -468,7 +468,7 @@ class FooterPanel extends BaseFooterPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
+        return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
     displaySearchResults(terms, results): void {
@@ -507,7 +507,7 @@ class FooterPanel extends BaseFooterPanel {
     resize(): void {
         super.resize();
 
-        if (this.provider.searchResults.length) {
+        if ((<ISeadragonProvider>this.provider).searchResults.length) {
             this.positionSearchResultPlacemarkers();
         }
 

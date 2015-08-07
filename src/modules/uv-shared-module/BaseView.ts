@@ -1,15 +1,17 @@
 import Panel = require("./Panel");
 import BootStrapper = require("../../Bootstrapper");
+import IExtension = require("./IExtension");
+import IProvider = require("./IProvider");
 
 class BaseView extends Panel{
 
     bootstrapper: BootStrapper;
     config: any;
     content: any;
-    extension: any;
+    extension: IExtension;
     modules: string[];
     options: any;
-    provider: any;
+    provider: IProvider;
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
         this.modules = [];

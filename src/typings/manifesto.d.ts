@@ -162,8 +162,8 @@ declare module Manifesto {
         private _parseTreeNode(node, range);
         isMultiSequence(): boolean;
         loadResource(resource: IExternalResource, clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>): Promise<IExternalResource>;
-        authorize(resource: IExternalResource, clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>): Promise<IExternalResource>;
         loadResources(resources: IExternalResource[], clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>): Promise<IExternalResource[]>;
+        authorize(resource: IExternalResource, clickThrough: (resource: IExternalResource) => void, login: (loginServiceUrl: string) => Promise<void>, getAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (tokenServiceUrl: string) => Promise<IAccessToken>): Promise<IExternalResource>;
     }
 }
 declare module Manifesto {
@@ -295,12 +295,13 @@ declare module Manifesto {
         data: any;
         dataUri: string;
         error: any;
-        isAccessControlled: boolean;
+        isResponseHandled: boolean;
         loginService: IService;
         logoutService: IService;
         status: number;
         tokenService: IService;
         getData(accessToken?: IAccessToken): Promise<IExternalResource>;
+        isAccessControlled(): boolean;
     }
 }
 declare module Manifesto {

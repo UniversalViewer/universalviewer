@@ -2,8 +2,9 @@ import BaseCommands = require("../uv-shared-module/Commands");
 import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
+import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
-import Resource = require("../../modules/uv-shared-module/Resource");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import Params = require("../uv-shared-module/Params");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
@@ -18,7 +19,7 @@ class SeadragonCenterPanel extends CenterPanel {
     isCreated: boolean = false;
     isFirstLoad: boolean = true;
     nextButtonEnabled: boolean = false;
-    pages: Resource[];
+    pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
     title: string;
     userData: any;
@@ -49,22 +50,17 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$content.append(this.$viewer);
 
         $.subscribe(BaseCommands.OPEN_MEDIA, () => {
-            this.tryLoad();
+            // todo: OPEN_MEDIA should be able to waitFor RESIZE
+            // https://facebook.github.io/flux/docs/dispatcher.html
+            if (!this.isCreated) {
+                setTimeout(() => {
+                    this.createUI();
+                    this.openMedia();
+                }, 500); // hack to allow time for panel open animations to complete.
+            } else {
+                this.openMedia();
+            }
         });
-    }
-
-    // delay viewer creation to ensure it happens after initial resize
-    // todo: implement a listener for an onResized event
-    tryLoad(): void {
-        //console.log("try load");
-        if (!this.isCreated) {
-            setTimeout(() => {
-                this.createUI();
-                this.loadPages();
-            }, 500); // allow time for panel open animations to complete.
-        } else {
-            this.loadPages();
-        }
     }
 
     createUI(): void {
@@ -289,12 +285,13 @@ class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    loadPages(): void {
+    openMedia(): void {
 
         this.$spinner.show();
 
-        this.extension.getImages().then((images: any) => {
-            this.viewer.open(images);
+        this.extension.getExternalResources().then((resources: Manifesto.IExternalResource[]) => {
+            // OSD can open an array info.json objects
+            this.viewer.open(resources);
         });
     }
 
@@ -303,7 +300,7 @@ class SeadragonCenterPanel extends CenterPanel {
         var viewingDirection = this.provider.getViewingDirection().toString();
 
         // if there's more than one image, align them next to each other.
-        if (this.provider.images.length > 1) {
+        if ((<ISeadragonProvider>this.provider).resources.length > 1) {
 
             // check if tilesources should be aligned horizontally or vertically
             if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
@@ -428,11 +425,11 @@ class SeadragonCenterPanel extends CenterPanel {
 
         switch (viewingDirection.toString()){
             case manifesto.ViewingDirection.topToBottom().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.provider.images.length), true);
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * (<ISeadragonProvider>this.provider).resources.length), true);
                 break;
             case manifesto.ViewingDirection.leftToRight().toString():
             case manifesto.ViewingDirection.rightToLeft().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.provider.images.length, this.viewer.world.getItemAt(0).normHeight), true);
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, (<ISeadragonProvider>this.provider).resources.length, this.viewer.world.getItemAt(0).normHeight), true);
                 break;
         }
     }
@@ -512,7 +509,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
     overlaySearchResults(): void {
 
-        var searchResults = this.provider.searchResults;
+        var searchResults = (<ISeadragonProvider>this.provider).searchResults;
 
         if (!searchResults.length) return;
 

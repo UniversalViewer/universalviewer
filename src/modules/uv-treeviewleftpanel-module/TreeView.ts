@@ -1,6 +1,7 @@
 import BaseCommands = require("../uv-shared-module/Commands");
 import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
+import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Shell = require("../uv-shared-module/Shell");
 
 class TreeView extends BaseView {
@@ -119,11 +120,12 @@ class TreeView extends BaseView {
 
     selectTreeNodeFromCanvasIndex(index: number): void {
         // may be authenticating
-        if (index == -1) return;
+        if (index === -1) return;
 
         this.deselectCurrentNode();
 
-        var range = this.provider.getRangeByCanvasIndex(index);
+        var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
+        var range: Manifesto.IRange = canvas.getRange();
 
         if (!range) return;
 

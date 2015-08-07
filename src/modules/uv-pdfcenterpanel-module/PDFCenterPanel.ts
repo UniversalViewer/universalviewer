@@ -15,50 +15,55 @@ class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.OPEN_MEDIA, (e, canvas) => {
-            this.viewMedia(canvas);
+        $.subscribe(BaseCommands.OPEN_MEDIA, (e) => {
+            this.openMedia();
         });
     }
 
-    viewMedia(canvas) {
-        var pdfUri = canvas.id;
-        var browser = window.browserDetect.browser;
-        var version = window.browserDetect.version;
+    openMedia() {
 
-        if ((browser === 'Explorer' && version < 10) || !this.config.options.usePdfJs) {
+        this.extension.getExternalResources().then(() => {
+            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
-            // create pdf object
-            new PDFObject({
-                url: pdfUri,
-                id: "PDF"
-            }).embed('content');
+            var pdfUri = canvas.id;
+            var browser = window.browserDetect.browser;
+            var version = window.browserDetect.version;
 
-        } else {
-            
-            var viewerPath;
+            if ((browser === 'Explorer' && version < 10) || !this.config.options.usePdfJs) {
 
-            // todo: use compiler conditional
-            if (window.DEBUG){
-                viewerPath = 'modules/uv-pdfcenterpanel-module/html/viewer.html';
+                // create pdf object
+                new PDFObject({
+                    url: pdfUri,
+                    id: "PDF"
+                }).embed('content');
+
             } else {
-                viewerPath = 'html/uv-pdfcenterpanel-module/viewer.html';
-            }
 
-            // load viewer.html
-            this.$content.load(viewerPath, () => {
+                var viewerPath;
+
+                // todo: use compiler conditional
                 if (window.DEBUG){
-                    PDFJS.workerSrc = 'extensions/uv-pdf-extension/lib/pdf.worker.min.js';
+                    viewerPath = 'modules/uv-pdfcenterpanel-module/html/viewer.html';
                 } else {
-                    PDFJS.workerSrc = 'lib/pdf.worker.min.js';
+                    viewerPath = 'html/uv-pdfcenterpanel-module/viewer.html';
                 }
 
-                PDFJS.DEFAULT_URL = pdfUri;
+                // load viewer.html
+                this.$content.load(viewerPath, () => {
+                    if (window.DEBUG){
+                        PDFJS.workerSrc = 'extensions/uv-pdf-extension/lib/pdf.worker.min.js';
+                    } else {
+                        PDFJS.workerSrc = 'lib/pdf.worker.min.js';
+                    }
 
-                window.webViewerLoad();
+                    PDFJS.DEFAULT_URL = pdfUri;
 
-                this.resize();
-            });
-        }
+                    window.webViewerLoad();
+
+                    this.resize();
+                });
+            }
+        });
     }
 
     resize() {

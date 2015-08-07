@@ -2,6 +2,7 @@ import BaseCommands = require("./Commands");
 import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
+import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
@@ -48,6 +49,7 @@ class BaseExtension implements IExtension {
             this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message, origin) => {
                     message = $.parseJSON(message);
+                    // todo: waitFor CREATED
                     this.handleParentFrameEvent(message);
                 }
             });
@@ -140,7 +142,7 @@ class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseCommands.ESCAPE, () => {
-            if (this.bootstrapper.isFullScreen) {
+            if (this.isFullScreen()) {
                 $.publish(BaseCommands.TOGGLE_FULLSCREEN);
             }
         });
@@ -214,7 +216,7 @@ class BaseExtension implements IExtension {
         $.publish(BaseCommands.CREATED);
         this.setParams();
         this.setDefaultFocus();
-        this.viewMedia();
+        this.viewCanvas(0);
     }
 
     setParams(): void{
@@ -228,17 +230,6 @@ class BaseExtension implements IExtension {
         setTimeout(() => {
             $('[tabindex=1]').focus();
         }, 1);
-    }
-
-    viewMedia(): void {
-        var canvas = this.provider.getCanvasByIndex(0);
-
-        this.viewCanvas(0, () => {
-
-            $.publish(BaseCommands.OPEN_MEDIA, [canvas]);
-
-            this.setParam(Params.canvasIndex, 0);
-        });
     }
 
     width(): number {
@@ -268,7 +259,7 @@ class BaseExtension implements IExtension {
     }
 
     handleParentFrameEvent(message): void {
-        // todo: come up with better way of postponing this until viewer is fully created
+        // todo: waitFor CREATED
         setTimeout(() => {
             switch (message.eventName) {
                 case BaseCommands.TOGGLE_FULLSCREEN:
@@ -277,6 +268,59 @@ class BaseExtension implements IExtension {
             }
         }, 1000);
     }
+
+    getExternalResources(): Promise<Manifesto.IExternalResource[]> {
+
+        var indices = this.provider.getPagedIndices();
+        var resources = [];
+
+        _.each(indices, (index) => {
+            var r: Manifesto.IExternalResource = new ExternalResource(this.provider);
+            r.dataUri = this.provider.getInfoUri(this.provider.getCanvasByIndex(index));
+            resources.push(r);
+        });
+
+        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+            this.provider.manifest.loadResources(
+                resources,
+                this.clickThrough,
+                this.login,
+                this.getAccessToken,
+                this.storeAccessToken,
+                this.getStoredAccessToken,
+                this.handleExternalResourceResponse).then((r: Manifesto.IExternalResource[]) => {
+                    this.provider.resources = _.map(r, (resource: Manifesto.IExternalResource) => {
+                        return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
+                    });
+                    resolve(this.provider.resources);
+                })['catch']((errorMessage) => {
+                this.showMessage(errorMessage);
+            });
+        });
+    }
+
+    //getExternalResources(): Promise<Manifesto.IExternalResource[]> {
+    //    var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+    //    var resource: Manifesto.IExternalResource = new ExternalResource(this.provider);
+    //    var ixifService = canvas.getService(manifesto.ServiceProfile.ixif());
+    //
+    //    resource.dataUri = ixifService.getInfoUri();
+    //
+    //    return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+    //        (<IProvider>this.provider).manifest.loadResources(
+    //            [resource],
+    //            this.clickThrough,
+    //            this.login,
+    //            this.getAccessToken,
+    //            this.storeAccessToken,
+    //            this.getStoredAccessToken,
+    //            this.handleExternalResourceResponse).then((resources: Manifesto.IExternalResource[]) => {
+    //                resolve(resources);
+    //            })['catch']((errorMessage) => {
+    //            this.showMessage(errorMessage);
+    //        });
+    //    });
+    //}
 
     // get hash or data-attribute params depending on whether the UV is embedded.
     getParam(key: Params): any{
@@ -302,15 +346,13 @@ class BaseExtension implements IExtension {
         }
     }
 
-    viewCanvas(canvasIndex: number, callback?: (i: number) => any): void {
-
+    viewCanvas(canvasIndex: number): void {
+        if (canvasIndex === -1) return;
         this.provider.canvasIndex = canvasIndex;
-
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
-
         this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
-
-        if (callback) callback(canvasIndex);
+        $.publish(BaseCommands.OPEN_MEDIA);
+        this.setParam(Params.canvasIndex, canvasIndex);
     }
 
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void {
@@ -334,12 +376,12 @@ class BaseExtension implements IExtension {
         return Shell.$overlays.is(':visible');
     }
 
-    viewManifest(manifest: any): void{
+    viewManifest(manifestIndex: number): void{
         //var seeAlsoUri = this.provider.getManifestSeeAlsoUri(manifest);
         //if (seeAlsoUri){
         //    window.open(seeAlsoUri, '_blank');
         //} else {
-            if (this.bootstrapper.isFullScreen) {
+            if (this.isFullScreen()) {
                 $.publish(BaseCommands.TOGGLE_FULLSCREEN);
             }
 
@@ -354,6 +396,10 @@ class BaseExtension implements IExtension {
         } catch (e) {
             return true;
         }
+    }
+
+    isFullScreen(): boolean {
+        return this.bootstrapper.isFullScreen;
     }
 
     isLeftPanelEnabled(): boolean{
@@ -431,10 +477,15 @@ class BaseExtension implements IExtension {
         });
     }
 
-    handleResourceResponse(resource: Manifesto.IExternalResource) : Promise<any> {
+    handleExternalResourceResponse(resource: Manifesto.IExternalResource) : Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            if (resource.status === 200) {
+            resource.isResponseHandled = true;
+
+            if (resource.status === HTTPStatusCode.OK) {
                 resolve(resource);
+            } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
+                resolve(resource);
+                $.publish(BaseCommands.OPEN_MEDIA);
             } else {
                 // access denied
                 reject(resource.error.statusText);

@@ -19,11 +19,12 @@
   "dependencies": {
     "es6-promise": "~2.2.0",
     "extensions": "edsilv/extensions#~0.1.5",
+    "http-status-codes": "edsilv/http-status-codes#~0.0.2",
     "jquery-plugins": "edsilv/jquery-plugins#~0.0.14",
     "utils": "edsilv/utils#~0.0.23",
     "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme",
-    "manifesto": "~0.1.11",
+    "manifesto": "edsilv/manifesto#dev",
     "lodash-compat": "~3.10.0"
   },
   "devDependencies": {

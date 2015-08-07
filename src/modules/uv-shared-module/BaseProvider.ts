@@ -3,7 +3,7 @@ import BootStrapper = require("../../Bootstrapper");
 import CanvasType = require("./CanvasType");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
-import Resource = require("./Resource");
+import ExternalResource = require("./ExternalResource");
 import Storage = require("./Storage");
 
 // providers contain methods that could be implemented differently according
@@ -24,6 +24,7 @@ class BaseProvider implements IProvider{
     isOnlyInstance: boolean;
     isReload: boolean;
     manifest: Manifesto.IManifest;
+    resources: Manifesto.IExternalResource[];
     rootStructure: any;
     sequence: Manifesto.ISequence;
     sequenceIndex: number;
@@ -221,28 +222,14 @@ class BaseProvider implements IProvider{
         return false;
     }
 
+    getInfoUri(canvas: Manifesto.ICanvas): string{
+        return canvas.getInfoUri();
+    }
+
     getPagedIndices(canvasIndex?: number): number[]{
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
 
-        var indices = [];
-
-        if (!this.isPagingSettingEnabled()) {
-            indices.push(this.canvasIndex);
-        } else {
-            if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.isTotalCanvasesEven())){
-                indices = [canvasIndex];
-            } else if (canvasIndex % 2){
-                indices = [canvasIndex, canvasIndex + 1];
-            } else {
-                indices = [canvasIndex - 1, canvasIndex];
-            }
-
-            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
-                indices = indices.reverse();
-            }
-        }
-
-        return indices;
+        return [canvasIndex];
     }
 
     getViewingDirection(): Manifesto.ViewingDirection {

@@ -271,6 +271,7 @@ var Manifesto;
         //
         //}
         // todo: use getImages instead. the client must decide which to use.
+        // each service has a getInfoUri method.
         Canvas.prototype.getInfoUri = function () {
             var infoUri;
             if (this.__jsonld.resources) {
@@ -437,7 +438,7 @@ var Manifesto;
         Manifest.prototype.getRanges = function () {
             var ranges = [];
             var structures = this.getProperty('structures');
-            if (!structures && !structures.length)
+            if (!structures)
                 return ranges;
             for (var i = 0; i < structures.length; i++) {
                 var r = structures[i];
@@ -556,11 +557,11 @@ var Manifesto;
         };
         Manifest.prototype.getTree = function () {
             this.treeRoot = new Manifesto.TreeNode('root');
-            this.treeRoot.label = "root";
+            this.treeRoot.label = 'root';
             if (!this.rootRange)
                 return this.treeRoot;
             this.treeRoot.data = this.rootRange;
-            this.treeRoot.data.type = "manifest";
+            this.treeRoot.data.type = 'manifest';
             this.rootRange.treeNode = this.treeRoot;
             if (this.rootRange.ranges) {
                 for (var i = 0; i < this.rootRange.ranges.length; i++) {
@@ -575,7 +576,7 @@ var Manifesto;
         Manifest.prototype._parseTreeNode = function (node, range) {
             node.label = range.getLabel();
             node.data = range;
-            node.data.type = "range";
+            node.data.type = 'range';
             range.treeNode = node;
             if (range.ranges) {
                 for (var i = 0; i < range.ranges.length; i++) {
@@ -598,7 +599,7 @@ var Manifesto;
                     // always request the access token for every access controlled info.json request
                     // returned access tokens are not stored, therefore the login window flashes for every request.
                     resource.getData().then(function () {
-                        if (resource.isAccessControlled) {
+                        if (resource.isAccessControlled()) {
                             // if the resource has a click through service, use that.
                             if (resource.clickThroughService) {
                                 resolve(clickThrough(resource));
@@ -614,7 +615,7 @@ var Manifesto;
                             }
                         }
                         else {
-                            // this info.json isn't access controlled, therefore no need to request an access token
+                            // this info.json isn't access controlled, therefore no need to request an access token.
                             resolve(resource);
                         }
                     });
@@ -630,7 +631,7 @@ var Manifesto;
                             // try using the stored access token
                             resource.getData(storedAccessToken).then(function () {
                                 // if the info.json loaded using the stored access token
-                                if (resource.status === 200) {
+                                if (resource.status === HTTPStatusCode.OK) {
                                     resolve(handleResourceResponse(resource));
                                 }
                                 else {
@@ -651,10 +652,22 @@ var Manifesto;
                 }
             });
         };
+        Manifest.prototype.loadResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
+            var that = this;
+            return new Promise(function (resolve) {
+                var promises = _map(resources, function (resource) {
+                    return that.loadResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse);
+                });
+                Promise.all(promises)
+                    .then(function () {
+                    resolve(resources);
+                });
+            });
+        };
         Manifest.prototype.authorize = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
             return new Promise(function (resolve, reject) {
                 resource.getData().then(function () {
-                    if (resource.isAccessControlled) {
+                    if (resource.isAccessControlled()) {
                         getStoredAccessToken(resource.tokenService.id).then(function (storedAccessToken) {
                             if (storedAccessToken) {
                                 // try using the stored access token
@@ -663,8 +676,15 @@ var Manifesto;
                                 });
                             }
                             else {
-                                // if the resource has a click through service, use that.
-                                if (resource.clickThroughService) {
+                                if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY && !resource.isResponseHandled) {
+                                    // if the resource was redirected to a degraded version
+                                    // and the response hasn't been handled yet.
+                                    // if the client wishes to trigger a login, set resource.isResponseHandled to true
+                                    // and call loadResources() again.
+                                    resolve(resource);
+                                }
+                                else if (resource.clickThroughService) {
+                                    // if the resource has a click through service, use that.
                                     clickThrough(resource);
                                 }
                                 else {
@@ -686,18 +706,6 @@ var Manifesto;
                         // this info.json isn't access controlled, therefore there's no need to request an access token
                         resolve(resource);
                     }
-                });
-            });
-        };
-        Manifest.prototype.loadResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
-            var that = this;
-            return new Promise(function (resolve) {
-                var promises = _map(resources, function (resource) {
-                    return that.loadResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse);
-                });
-                Promise.all(promises)
-                    .then(function () {
-                    resolve(resources);
                 });
             });
         };

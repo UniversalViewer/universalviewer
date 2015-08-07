@@ -41,7 +41,6 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
     resize(): void {
         super.resize();
-
     }
 }
 

@@ -75,7 +75,7 @@ class FooterPanel extends BaseView {
             this.$fullScreenBtn.addClass('lightbox');
         }
 
-        if (this.bootstrapper.isFullScreen) {
+        if (this.extension.isFullScreen()) {
             this.$fullScreenBtn.swapClass('fullScreen', 'exitFullscreen');
             this.$fullScreenBtn.text(this.content.exitFullScreen);
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);

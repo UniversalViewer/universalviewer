@@ -2,6 +2,7 @@ import BaseCommands = require("../uv-shared-module/Commands");
 import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import IProvider = require("../uv-shared-module/IProvider");
+import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Shell = require("../uv-shared-module/Shell");
@@ -235,8 +236,8 @@ class ThumbsView extends BaseView {
     }
 
     isPageModeEnabled(): boolean {
-        if (typeof this.extension.getMode === "function") {
-            return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
+        if (typeof (<ISeadragonExtension>this.extension).getMode === "function") {
+            return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
         }
         return this.config.options.pageModeEnabled;
     }

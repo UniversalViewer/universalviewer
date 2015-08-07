@@ -42,8 +42,8 @@ class Extension extends BaseExtension{
     create(overrideDependencies?: any): void {
         super.create();
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
-            this.viewFile(index);
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
+            this.viewCanvas(canvasIndex);
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
@@ -122,19 +122,6 @@ class Extension extends BaseExtension{
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
         }
-    }
-
-    viewFile(canvasIndex: number): void {
-
-        // if it's a valid canvas index.
-        if (canvasIndex == -1) return;
-
-        this.viewCanvas(canvasIndex, () => {
-            var canvas = this.provider.getCanvasByIndex(canvasIndex);
-            $.publish(BaseCommands.OPEN_MEDIA, [canvas]);
-            this.setParam(Params.canvasIndex, canvasIndex);
-        });
-
     }
 }
 

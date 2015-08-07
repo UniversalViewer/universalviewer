@@ -189,7 +189,7 @@ class PagingHeaderPanel extends HeaderPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
+        return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
     setTitles(): void {
@@ -245,7 +245,7 @@ class PagingHeaderPanel extends HeaderPanel {
 
         if (!value) {
 
-            this.extension.showDialogue(this.content.emptyValue);
+            this.extension.showMessage(this.content.emptyValue);
             $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
 
             return;

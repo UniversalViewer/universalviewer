@@ -3,7 +3,7 @@ import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
-import Resource = require("../../modules/uv-shared-module/Resource");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 
 class MediaElementCenterPanel extends CenterPanel {
 
@@ -42,7 +42,7 @@ class MediaElementCenterPanel extends CenterPanel {
         }
 
         $.subscribe(BaseCommands.OPEN_MEDIA, (e, canvas) => {
-            that.viewMedia(canvas);
+            that.openMedia();
         });
 
         this.$container = $('<div class="container"></div>');
@@ -57,16 +57,15 @@ class MediaElementCenterPanel extends CenterPanel {
         return elementType.toString() === manifesto.ElementType.movingimage().toString();
     }
 
-    viewMedia(canvas: Manifesto.ICanvas) {
+    openMedia() {
 
         var that = this;
 
-        // load info.json
-        // profile: http://wellcomelibrary.org/ld/ixif/0/alpha.json
-        this.extension.getMedia(canvas).then(() => {
+        this.extension.getExternalResources().then(() => {
 
             this.$container.empty();
 
+            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
             this.mediaHeight = this.config.defaultHeight;
             this.mediaWidth = this.config.defaultWidth;
 
@@ -87,11 +86,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
             if (this.isVideo(canvas)){
 
-                //if (!canvas.sources){
-                //    this.media = this.$container.append('<video id="' + id + '" type="video/mp4" src="' + canvas.mediaUri + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
-                //} else {
                 this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
-                //}
 
                 this.player = new MediaElementPlayer("#" + id, {
                     type: ['video/mp4', 'video/webm', 'video/flv'],
@@ -197,7 +192,7 @@ class MediaElementCenterPanel extends CenterPanel {
             this.$container.width(size.width);
         }
 
-        if (this.player && !this.extension.isFullScreen){
+        if (this.player && !this.extension.isFullScreen()){
             this.player.resize();
         }
 

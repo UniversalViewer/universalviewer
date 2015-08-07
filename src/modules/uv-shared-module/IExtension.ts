@@ -2,30 +2,31 @@ import BaseProvider = require("./BaseProvider");
 import Params = require("./Params");
 
 interface IExtension{
-
+    create(): void;
+    createModules(): void;
+    dependenciesLoaded(): void;
     embedHeight: number;
     embedWidth: number;
+    getDependencies(callback: (deps: any) => void): any;
+    getExternalResources(): Promise<Manifesto.IExternalResource[]>;
+    getParam(key: Params): any;
+    height(): number;
+    isFullScreen(): boolean;
+    isOverlayActive(): boolean;
+    loadDependencies(deps: any): void;
     mouseX: number;
     mouseY: number;
     name: string;
     provider: any;
-    shifted: boolean;
-
-    create(): void;
-    createModules(): void;
-    dependenciesLoaded(): void;
-    getDependencies(callback: (deps: any) => void): any;
-    getParam(key: Params): any;
-    height(): number;
-    isOverlayActive(): boolean;
-    loadDependencies(deps: any): void;
     redirect(uri: string): void;
     refresh(): void;
     resize(): void;
+    shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
+    tabbing: boolean;
     triggerSocket(eventName: string, eventObject: any): void;
-    viewManifest(manifest: any): void;
-    viewMedia(): void;
+    viewCanvas(canvasIndex): void;
+    viewManifest(manifestIndex: number): void
     width(): number;
 }
 
