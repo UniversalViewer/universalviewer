@@ -223,7 +223,9 @@ class BaseProvider implements IProvider{
     }
 
     getInfoUri(canvas: Manifesto.ICanvas): string{
-        return canvas.getInfoUri();
+        // default to IxIF
+        var service = this.manifest.getService(canvas, manifesto.ServiceProfile.ixif());
+        return service.getInfoUri();
     }
 
     getPagedIndices(canvasIndex?: number): number[]{

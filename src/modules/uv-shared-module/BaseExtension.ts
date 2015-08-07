@@ -276,7 +276,8 @@ class BaseExtension implements IExtension {
 
         _.each(indices, (index) => {
             var r: Manifesto.IExternalResource = new ExternalResource(this.provider);
-            r.dataUri = this.provider.getInfoUri(this.provider.getCanvasByIndex(index));
+            var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
+            r.dataUri = this.provider.getInfoUri(canvas);
             resources.push(r);
         });
 
