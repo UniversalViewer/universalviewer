@@ -216,7 +216,7 @@ class BaseExtension implements IExtension {
         $.publish(BaseCommands.CREATED);
         this.setParams();
         this.setDefaultFocus();
-        this.viewCanvas(0);
+        this.viewCanvas(this.provider.getCanvasIndexParam());
     }
 
     setParams(): void{
@@ -349,10 +349,19 @@ class BaseExtension implements IExtension {
 
     viewCanvas(canvasIndex: number): void {
         if (canvasIndex === -1) return;
+
+        if (this.provider.isCanvasIndexOutOfRange(canvasIndex)){
+            this.showMessage(this.provider.config.content.canvasIndexOutOfRange);
+            canvasIndex = 0;
+        }
+
         this.provider.canvasIndex = canvasIndex;
+
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
         this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
+
         $.publish(BaseCommands.OPEN_MEDIA);
+
         this.setParam(Params.canvasIndex, canvasIndex);
     }
 

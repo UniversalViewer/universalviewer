@@ -168,6 +168,14 @@ class BaseProvider implements IProvider{
         return this.sequence.getLastCanvasLabel();
     }
 
+    getCanvasIndexParam(): number {
+        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.canvasIndex], parent.document)) || 0;
+    }
+
+    getSequenceIndexParam(): number {
+        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex], parent.document)) || 0;
+    }
+
     isCanvasIndexOutOfRange(index: number): boolean {
         return this.sequence.isCanvasIndexOutOfRange(index);
     }

@@ -1,6 +1,6 @@
 {
   "name": "UniversalViewer",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Navigate sequences of images in a zoomable, extensible interface.",
   "devDependencies": {
     "async": "^0.9.0",
@@ -18,8 +18,6 @@
     "grunt-sync": "^0.2.3",
     "grunt-text-replace": "~0.3.7",
     "grunt-typescript": "^0.6.2",
-    "gulp": "^3.9.0",
-    "gulp-typescript": "^2.8.0",
     "hooker": "^0.2.3",
     "json-schema-generator": "git://github.com/krg7880/json-schema-generator.git",
     "less": "^2.4.0",

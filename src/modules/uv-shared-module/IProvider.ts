@@ -17,6 +17,7 @@ interface IProvider{
     getCanvasByIndex(index: number): any;
     getCanvasIndexById(id: string): number;
     getCanvasIndexByLabel(label: string): number;
+    getCanvasIndexParam(): number;
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
     getCurrentCanvas(): any;
     getFirstPageIndex(): number;
@@ -34,6 +35,7 @@ interface IProvider{
     getRendering(resource: any, format: Manifesto.RenderingFormat): Manifesto.IRendering;
     getRenderings(resource: any): Manifesto.IRendering[];
     getSeeAlso(): any;
+    getSequenceIndexParam(): number;
     getSequenceType(): string;
     getService(resource: any, profile: Manifesto.ServiceProfile | string): Manifesto.IService;
     getStartCanvasIndex(): number;

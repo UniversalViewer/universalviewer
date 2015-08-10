@@ -227,17 +227,6 @@ class Extension extends BaseExtension {
         }
     }
 
-    viewMedia(): void {
-        var canvasIndex = parseInt(this.getParam(Params.canvasIndex)) || this.provider.getStartCanvasIndex();
-
-        if (this.provider.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.provider.config.content.canvasIndexOutOfRange);
-            return;
-        }
-
-        this.viewPage(canvasIndex || this.provider.getStartCanvasIndex());
-    }
-
     updateSettings(): void {
         this.viewPage(this.provider.canvasIndex, true);
         $.publish(BaseCommands.SETTINGS_CHANGED);
@@ -247,6 +236,11 @@ class Extension extends BaseExtension {
 
         // if it's a valid canvas index.
         if (canvasIndex === -1) return;
+
+        if (this.provider.isCanvasIndexOutOfRange(canvasIndex)){
+            this.showMessage(this.provider.config.content.canvasIndexOutOfRange);
+            canvasIndex = 0;
+        }
 
         if (this.provider.isPagingSettingEnabled() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
