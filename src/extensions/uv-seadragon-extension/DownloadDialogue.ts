@@ -137,9 +137,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             this.$downloadButton.show();
         }
 
-        var settings: ISettings = this.provider.getSettings();
-
-        if (this.provider.isPagingEnabled() && settings.pagingEnabled) {
+        if (this.provider.isPagingSettingEnabled()) {
             this.$pagingNote.show();
         } else {
             this.$pagingNote.hide();
@@ -209,18 +207,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
-        var settings: ISettings = this.provider.getSettings();
-
         switch (option){
             case DownloadOption.currentViewAsJpg:
             case DownloadOption.dynamicCanvasRenderings:
             case DownloadOption.dynamicImageRenderings:
             case DownloadOption.wholeImageHighRes:
-                return settings.pagingEnabled ? false : true;
+                return this.provider.isPagingSettingEnabled() ? false : true;
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
                 var dimensions = this.getDimensionsForCurrentCanvas();
-                return (!settings.pagingEnabled && (dimensions[0] > this.options.confinedImageSize))
+                return (!this.provider.isPagingSettingEnabled() && (dimensions[0] > this.options.confinedImageSize))
             default:
                 return true;
         }

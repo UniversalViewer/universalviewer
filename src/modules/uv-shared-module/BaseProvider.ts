@@ -218,12 +218,17 @@ class BaseProvider implements IProvider{
         return this.sequence.isMultiCanvas();
     }
 
+    isPagingAvailable(): boolean {
+        // paged mode is useless unless you have at least 3 pages...
+        return this.isPagingEnabled() && this.getTotalCanvases() > 2;
+    }
+
     isPagingEnabled(): boolean{
         return this.sequence.isPagingEnabled();
     }
 
     isPagingSettingEnabled(): boolean {
-        if (this.isPagingEnabled()){
+        if (this.isPagingAvailable()){
             return this.getSettings().pagingEnabled;
         }
 

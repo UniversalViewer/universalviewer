@@ -49,6 +49,7 @@ interface IProvider{
     isLastCanvas(index?: number): boolean;
     isMultiCanvas(): boolean;
     isMultiSequence(): boolean;
+    isPagingAvailable(): boolean;
     isPagingEnabled(): boolean;
     isPagingSettingEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
