@@ -300,29 +300,6 @@ class BaseExtension implements IExtension {
         });
     }
 
-    //getExternalResources(): Promise<Manifesto.IExternalResource[]> {
-    //    var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
-    //    var resource: Manifesto.IExternalResource = new ExternalResource(this.provider);
-    //    var ixifService = canvas.getService(manifesto.ServiceProfile.ixif());
-    //
-    //    resource.dataUri = ixifService.getInfoUri();
-    //
-    //    return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-    //        (<IProvider>this.provider).manifest.loadResources(
-    //            [resource],
-    //            this.clickThrough,
-    //            this.login,
-    //            this.getAccessToken,
-    //            this.storeAccessToken,
-    //            this.getStoredAccessToken,
-    //            this.handleExternalResourceResponse).then((resources: Manifesto.IExternalResource[]) => {
-    //                resolve(resources);
-    //            })['catch']((errorMessage) => {
-    //            this.showMessage(errorMessage);
-    //        });
-    //    });
-    //}
-
     // get hash or data-attribute params depending on whether the UV is embedded.
     getParam(key: Params): any{
         var value;

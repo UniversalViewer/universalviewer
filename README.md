@@ -1,12 +1,12 @@
 # Universal Viewer
 
-[![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer)
-
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UniversalViewer/universalviewer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UniversalViewer/universalviewer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [Demo](http://universalviewer.azurewebsites.net/)
 
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
+
+[Twitter](https://twitter.com/universalviewer)
 
 ## Contributors
 
@@ -18,6 +18,20 @@
 ## Stable Builds
 
 See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
+
+## About
+
+The Universal Viewer is an [open source](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt) project to enable cultural heritage institutions to present their digital artifacts in an [IIIF-compliant](http://iiif.io/) and highly customisable user interface. 
+
+Features:
+
+- [OpenSeadragon](https://openseadragon.github.io/) image zooming using the [IIIF image API](http://iiif.io/api/image/2.0/).
+- YouTube-style embedding with deep links to specific pages/zoom regions.
+- [Themable](https://stackedit.io/viewer#!provider=gist&gistId=5411c4576c2ec7387bba&filename=uv-theming-tutorial.md), fork the [UV theme](https://github.com/UniversalViewer/uv-en-GB-theme) on github to create your own.
+- Highly [configurable](https://github.com/UniversalViewer/universalviewer/wiki/Configuration) and [extensible](https://stackedit.io/viewer#!provider=gist&gistId=f2067315480bcd385630&filename=uv-extensions-tutorial.md).
+- Supports "IxIF" out of the box, allowing [audio](http://universalviewer.azurewebsites.net/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest), [video](http://universalviewer.azurewebsites.net/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest), and [pdf](http://universalviewer.azurewebsites.net/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest) viewing experiences.
+- Supports search and autocomplete service integration with overlayed search results.
+- Internationalised UI using [transifex.com](https://www.transifex.com/) (currently supports English and Welsh. Volunteers for more translations gratefully accepted!)
 
 ## Development
 

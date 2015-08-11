@@ -792,11 +792,13 @@ var Manifesto;
             }
             return null;
         };
-        Sequence.prototype.getCanvasIndexByLabel = function (label) {
+        Sequence.prototype.getCanvasIndexByLabel = function (label, foliation) {
             label = label.trim();
             // trim any preceding zeros.
             if (_isNumber(label)) {
                 label = parseInt(label, 10).toString();
+                if (foliation)
+                    label = 'r' + label; // default to recto
             }
             var doublePageRegExp = /(\d*)\D+(\d*)/;
             var match, regExp, regStr, labelPart1, labelPart2;
