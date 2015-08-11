@@ -157,6 +157,11 @@
                             display: block;
                             padding: 2px 0 0 0;
                         }
+                        .label {
+                            overflow-x: hidden;
+                            text-align: center;
+                            text-overflow: ellipsis;
+                        }
 
                         &.placeholder {
                             .wrap {
@@ -166,7 +171,8 @@
 
                         &.oneCol{
                             margin: 0 0 7px 0;
-                            .wrap{
+                            .wrap,
+                            .label {
                                 width: 208px;
                                 max-height: 373px;
                             }
@@ -174,7 +180,8 @@
 
                         &.twoCol{
                             margin: 0 7px 7px 0;
-                            .wrap{
+                            .wrap,
+                            .label {
                                 width: 98px;
                                 max-height: 182px;
                             }
