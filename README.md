@@ -15,10 +15,6 @@
 ![National Library of Wales](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/nlw_logo.png "National Library of Wales")
 ![Villanova University, Falvey Memorial Library](https://raw.githubusercontent.com/UniversalViewer/universalviewer/master/assets/vufalvey_logo.png "Villanova University, Falvey Memorial Library")
 
-## Stable Builds
-
-See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
-
 ## About
 
 The Universal Viewer is an [open source](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt) project to enable cultural heritage institutions to present their digital artifacts in an [IIIF-compliant](http://iiif.io/) and highly customisable user interface. 
@@ -32,6 +28,10 @@ Features:
 - Supports "IxIF" out of the box, allowing [audio](http://universalviewer.azurewebsites.net/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest), [video](http://universalviewer.azurewebsites.net/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest), and [pdf](http://universalviewer.azurewebsites.net/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest) viewing experiences.
 - Supports search and autocomplete service integration with overlayed search results.
 - Internationalised UI using [transifex.com](https://www.transifex.com/) (currently supports English and Welsh. Volunteers for more translations gratefully accepted!)
+
+## Stable Builds
+
+See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
 
 ## Development
 
