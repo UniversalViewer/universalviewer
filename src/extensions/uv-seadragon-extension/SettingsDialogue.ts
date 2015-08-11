@@ -66,7 +66,7 @@ class SettingsDialogue extends BaseSettingsDialogue {
 
         var settings: ISettings = this.getSettings();
 
-        if (!this.provider.isPagingEnabled()){
+        if (!this.provider.isPagingAvailable()){
             this.$pagingEnabled.hide();
         } else {
             if (settings.pagingEnabled){

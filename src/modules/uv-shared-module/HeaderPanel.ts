@@ -107,9 +107,7 @@ class HeaderPanel extends BaseView {
             return;
         }
 
-        var settings: ISettings = this.provider.getSettings();
-
-        if (settings.pagingEnabled){
+        if (this.provider.isPagingSettingEnabled()){
             this.$pagingToggleButton.removeClass('two-up');
             this.$pagingToggleButton.addClass('one-up');
             this.$pagingToggleButton.prop('title', this.content.oneUp);
@@ -139,7 +137,7 @@ class HeaderPanel extends BaseView {
     }
 
     pagingToggleIsVisible(): boolean {
-        return this.options.pagingToggleEnabled && this.provider.isPagingEnabled();
+        return this.options.pagingToggleEnabled && this.provider.isPagingAvailable();
     }
 
     showMessage(message: string): void {
