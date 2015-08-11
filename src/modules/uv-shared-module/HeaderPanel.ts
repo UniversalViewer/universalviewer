@@ -102,7 +102,7 @@ class HeaderPanel extends BaseView {
     }
 
     updatePagingToggle(): void {
-        if (!this.provider.isPagingEnabled()){
+        if (!this.pagingToggleIsVisible()){
             this.$pagingToggleButton.hide();
             return;
         }
@@ -139,7 +139,7 @@ class HeaderPanel extends BaseView {
     }
 
     pagingToggleIsVisible(): boolean {
-        return this.options.pagingToggleEnabled;
+        return this.options.pagingToggleEnabled && this.provider.isPagingEnabled();
     }
 
     showMessage(message: string): void {
