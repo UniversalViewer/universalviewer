@@ -86,6 +86,7 @@
         "first": "First",
         "firstImage": "First Image",
         "firstPage": "First Page",
+        "folio": "Folio",
         "go": "Go",
         "help": "Help",
         "image": "Image",
@@ -143,7 +144,8 @@
         "locale": "Locale",
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
-        "title": "Settings"
+        "title": "Settings",
+        "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
       }
     },
     "treeViewLeftPanel": {

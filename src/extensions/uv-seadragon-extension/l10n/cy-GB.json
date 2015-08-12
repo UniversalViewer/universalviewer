@@ -84,6 +84,7 @@
         "first": "gyntaf",
         "firstImage": "Delwedd Gyntaf",
         "firstPage": "Tudalen gyntaf",
+        "folio": "ffolio",
         "go": "GWELD",
         "help": "Cymorth",
         "image": "Delwedd",
@@ -139,7 +140,8 @@
         "locale": "Iaith",
         "pagingEnabled": "Arddangos dwy dudalen",
         "preserveViewport": "Cadw'r lefel o glosio",
-        "title": "Dewisiadau"
+        "title": "Dewisiadau",
+        "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
       }
     },
     "treeViewLeftPanel": {

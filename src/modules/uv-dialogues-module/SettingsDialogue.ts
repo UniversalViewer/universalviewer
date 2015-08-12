@@ -12,6 +12,7 @@ class SettingsDialogue extends Dialogue {
     $scroll: JQuery;
     $title: JQuery;
     $version: JQuery;
+    $website: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -40,6 +41,9 @@ class SettingsDialogue extends Dialogue {
         this.$version = $('<div class="version"></div>');
         this.$content.append(this.$version);
 
+        this.$website = $('<div class="website"></div>');
+        this.$content.append(this.$website);
+
         this.$locale = $('<div class="setting locale"></div>');
         this.$scroll.append(this.$locale);
 
@@ -53,6 +57,9 @@ class SettingsDialogue extends Dialogue {
         this.$title.text(this.content.title);
 
         this.$version.text("v" + Version.Version);
+
+        this.$website.html(this.content.website);
+        this.$website.targetBlank();
 
         var locales = this.provider.getLocales();
 

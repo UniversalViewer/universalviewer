@@ -75,6 +75,7 @@
         "close": "Close (xx-XX)",
         "emptyValue": "Please enter a value (xx-XX)",
         "first": "First (xx-XX)",
+        "folio": "Folio (xx-XX)",
         "go": "Go (xx-XX)",
         "help": "Help (xx-XX)",
         "image": "Image (xx-XX)",
@@ -126,7 +127,8 @@
         "locale": "Locale (xx-XX)",
         "pagingEnabled": "Two Page View (xx-XX)",
         "preserveViewport": "Preserve Zoom (xx-XX)",
-        "title": "Settings (xx-XX)"
+        "title": "Settings (xx-XX)",
+        "website": "<a href='https://github.com/universalviewer/universalviewer'>more info (xx-XX)</a>"
       }
     },
     "treeViewLeftPanel": {

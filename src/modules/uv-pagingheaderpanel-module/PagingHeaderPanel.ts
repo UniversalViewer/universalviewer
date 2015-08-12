@@ -67,7 +67,7 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$imageModeOption = $('<input type="radio" id="image" name="mode" tabindex="17"/>');
         this.$modeOptions.append(this.$imageModeOption);
 
-        this.$pageModeLabel = $('<label for="page">' + this.content.page + '</label>');
+        this.$pageModeLabel = $('<label for="page"></label>');
         this.$modeOptions.append(this.$pageModeLabel);
         this.$pageModeOption = $('<input type="radio" id="page" name="mode" tabindex="18"/>');
         this.$modeOptions.append(this.$pageModeOption);
@@ -102,6 +102,12 @@ class PagingHeaderPanel extends HeaderPanel {
             // disable page mode option.
             this.$pageModeOption.attr('disabled', 'disabled');
             this.$pageModeLabel.addClass('disabled');
+        }
+
+        if (this.provider.getManifestType().toString() === manifesto.ManifestType.folio().toString()){
+            this.$pageModeLabel.text(this.content.folio);
+        } else {
+            this.$pageModeLabel.text(this.content.page);
         }
 
         this.setTitles();
@@ -150,8 +156,8 @@ class PagingHeaderPanel extends HeaderPanel {
             this.search();
         });
 
-        this.$searchText.focus(function() {
-            $(this).select()
+        this.$searchText.click(function() {
+            $(this).select();
         });
 
         this.$searchButton.onPressed(() => {

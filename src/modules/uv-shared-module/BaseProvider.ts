@@ -1,6 +1,5 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
-import CanvasType = require("./CanvasType");
 import IProvider = require("./IProvider");
 import Params = require("./Params");
 import ExternalResource = require("./ExternalResource");
@@ -110,9 +109,15 @@ class BaseProvider implements IProvider{
         return (null === this.jsonp) ? Modernizr.cors : !this.jsonp;
     }
 
-    // todo: should this inspect a viewingHint?
-    getManifestType(): string{
-        return 'monograph';
+    getManifestType(): Manifesto.ManifestType{
+        var manifestType = this.manifest.getType();
+
+        // default to monograph
+        if (manifestType.toString() === ""){
+            manifestType = manifesto.ManifestType.monograph();
+        }
+
+        return manifestType;
     }
 
     getService(resource: any, profile: Manifesto.ServiceProfile | string): Manifesto.IService {
@@ -127,11 +132,11 @@ class BaseProvider implements IProvider{
         return this.manifest.getRenderings(resource);
     }
 
-    getSequenceType(): string{
-        // todo: use viewingHint attribute?
-        // default to 'seadragon-iiif'
-        return 'seadragon-iiif';
-    }
+    //getSequenceType(): string{
+    //    // todo: use rendering?
+    //    // default to 'seadragon-iiif'
+    //    return 'seadragon-iiif';
+    //}
 
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType {
         if (!canvas){
@@ -331,7 +336,8 @@ class BaseProvider implements IProvider{
     }
 
     getCanvasIndexByLabel(label: string): number {
-        return this.sequence.getCanvasIndexByLabel(label);
+        var foliated = this.getManifestType().toString() === manifesto.ManifestType.folio().toString();
+        return this.sequence.getCanvasIndexByLabel(label, foliated);
     }
 
     getTree(): Manifesto.TreeNode{
@@ -351,31 +357,29 @@ class BaseProvider implements IProvider{
         return this.manifest.getMetadata(includeRootProperties);
     }
 
-    // todo: is this still needed?
     defaultToThumbsView(): boolean{
-        var manifestType = this.getManifestType();
-
-        switch (manifestType){
-            case 'monograph':
+        switch (this.getManifestType().toString()){
+            case manifesto.ManifestType.monograph().toString():
                 if (!this.isMultiSequence()) return true;
                 break;
-            case 'archive':
-                return true;
-                break;
-            case 'boundmanuscript':
-                return true;
-                break;
-            case 'artwork':
-                return true;
+            //case 'archive':
+            //    return true;
+            //    break;
+            //case 'boundmanuscript':
+            //    return true;
+            //    break;
+            //case 'artwork':
+            //    return true;
         }
 
-        var sequenceType = this.getSequenceType();
-
-        switch (sequenceType){
-            case 'application-pdf':
-                return true;
-                break;
-        }
+        // todo: use rendering?
+        //var sequenceType = this.getSequenceType();
+        //
+        //switch (sequenceType){
+        //    case 'application-pdf':
+        //        return true;
+        //        break;
+        //}
 
         return false;
     }

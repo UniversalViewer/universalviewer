@@ -1,6 +1,5 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
-import CanvasType = require("./CanvasType");
 import ExternalResource = require("./ExternalResource");
 
 // the provider contains all methods related to
@@ -26,7 +25,7 @@ interface IProvider{
     getLastPageIndex(): number;
     getLicense(): string;
     getLogo(): string;
-    getManifestType(): string;
+    getManifestType(): Manifesto.ManifestType;
     getMetadata(includeRootProperties?: boolean): any;
     getNextPageIndex(index?: number): number;
     getPagedIndices(index?: number): number[];
@@ -36,7 +35,6 @@ interface IProvider{
     getRenderings(resource: any): Manifesto.IRendering[];
     getSeeAlso(): any;
     getSequenceIndexParam(): number;
-    getSequenceType(): string;
     getService(resource: any, profile: Manifesto.ServiceProfile | string): Manifesto.IService;
     getStartCanvasIndex(): number;
     getThumbs(width: number, height: number): Manifesto.Thumb[];

@@ -262,14 +262,14 @@ class Extension extends BaseExtension {
     getMode(): Mode {
         if (this.mode) return this.mode;
 
-        switch (this.provider.getManifestType()) {
-            case 'monograph':
+        switch (this.provider.getManifestType().toString()) {
+            case manifesto.ManifestType.monograph().toString():
                 return Mode.page;
                 break;
-            case 'archive',
-                 'boundmanuscript':
-                return Mode.image;
-                break;
+            //case 'archive',
+            //     'boundmanuscript':
+            //    return Mode.image;
+            //    break;
             default:
                 return Mode.image;
         }
