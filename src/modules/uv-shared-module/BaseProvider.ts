@@ -272,8 +272,7 @@ class BaseProvider implements IProvider{
         if (this.isPagingSettingEnabled()){
             var indices = this.getPagedIndices(canvasIndex);
 
-            // todo: use constants
-            if (this.getViewingDirection().toString() === "right-to-left"){
+            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
                 index = indices.last() - 1;
             } else {
                 index = indices[0] - 1;
@@ -416,7 +415,7 @@ class BaseProvider implements IProvider{
 
     getLocales(): any[] {
         if (this.locales) return this.locales;
-
+b
         // use data-locales to prioritise
         var items = this.config.localisation.locales.clone();
         var sorting = this.bootstrapper.params.locales;

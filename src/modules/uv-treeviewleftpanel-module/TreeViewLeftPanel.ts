@@ -120,8 +120,7 @@ class TreeViewLeftPanel extends LeftPanel {
 
         var viewingDirection = this.provider.getViewingDirection().toString();
 
-        // todo: use constants
-        if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
+        if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             width = this.config.options.oneColThumbWidth;
             height = this.config.options.oneColThumbHeight;
         } else {

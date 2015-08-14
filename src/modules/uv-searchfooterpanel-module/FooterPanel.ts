@@ -296,6 +296,8 @@ class FooterPanel extends BaseFooterPanel {
 
         var canvasIndex = parseInt($placemarker.attr('data-index'));
 
+        $.publish(Commands.SEARCH_PREVIEW_START, [canvasIndex]);
+
         var placemarkers = that.getSearchResultPlacemarkers();
         var elemIndex = placemarkers.index($placemarker[0]);
 
@@ -359,6 +361,8 @@ class FooterPanel extends BaseFooterPanel {
     }
 
     onPlacemarkerMouseLeave(e, that): void {
+        $.publish(Commands.SEARCH_PREVIEW_FINISH);
+
         var $placemarker = $(this);
 
         var newElement = e.toElement || e.relatedTarget;

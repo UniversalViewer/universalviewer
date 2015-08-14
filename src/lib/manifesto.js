@@ -609,125 +609,6 @@ var Manifesto;
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
         };
-        Manifest.prototype.loadResource = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
-            var _this = this;
-            var options = this.options;
-            return new Promise(function (resolve, reject) {
-                if (options.pessimisticAccessControl) {
-                    // pessimistic: access control cookies may have been deleted.
-                    // always request the access token for every access controlled info.json request
-                    // returned access tokens are not stored, therefore the login window flashes for every request.
-                    resource.getData().then(function () {
-                        if (resource.isAccessControlled()) {
-                            // if the resource has a click through service, use that.
-                            if (resource.clickThroughService) {
-                                resolve(clickThrough(resource));
-                            }
-                            else {
-                                login(resource.loginService.id).then(function () {
-                                    getAccessToken(resource.tokenService.id).then(function (token) {
-                                        resource.getData(token).then(function () {
-                                            resolve(handleResourceResponse(resource));
-                                        });
-                                    });
-                                });
-                            }
-                        }
-                        else {
-                            // this info.json isn't access controlled, therefore no need to request an access token.
-                            resolve(resource);
-                        }
-                    });
-                }
-                else {
-                    // optimistic: access control cookies may not have been deleted.
-                    // store access tokens to avoid login window flashes.
-                    // if cookies are deleted a page refresh is required.
-                    // try loading the resource using an access token that matches the info.json domain.
-                    // if an access token is found, request the resource using it regardless of whether it is access controlled.
-                    getStoredAccessToken(resource.dataUri).then(function (storedAccessToken) {
-                        if (storedAccessToken) {
-                            // try using the stored access token
-                            resource.getData(storedAccessToken).then(function () {
-                                // if the info.json loaded using the stored access token
-                                if (resource.status === HTTPStatusCode.OK) {
-                                    resolve(handleResourceResponse(resource));
-                                }
-                                else {
-                                    // otherwise, load the resource data to determine the correct access control services.
-                                    // if access controlled, do login.
-                                    _this.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
-                                        resolve(handleResourceResponse(resource));
-                                    });
-                                }
-                            });
-                        }
-                        else {
-                            _this.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
-                                resolve(handleResourceResponse(resource));
-                            });
-                        }
-                    });
-                }
-            });
-        };
-        Manifest.prototype.loadResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse) {
-            var that = this;
-            return new Promise(function (resolve) {
-                var promises = _map(resources, function (resource) {
-                    return that.loadResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse);
-                });
-                Promise.all(promises)
-                    .then(function () {
-                    resolve(resources);
-                });
-            });
-        };
-        Manifest.prototype.authorize = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
-            return new Promise(function (resolve, reject) {
-                resource.getData().then(function () {
-                    if (resource.isAccessControlled()) {
-                        getStoredAccessToken(resource.tokenService.id).then(function (storedAccessToken) {
-                            if (storedAccessToken) {
-                                // try using the stored access token
-                                resource.getData(storedAccessToken).then(function () {
-                                    resolve(resource);
-                                });
-                            }
-                            else {
-                                if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY && !resource.isResponseHandled) {
-                                    // if the resource was redirected to a degraded version
-                                    // and the response hasn't been handled yet.
-                                    // if the client wishes to trigger a login, set resource.isResponseHandled to true
-                                    // and call loadResources() again.
-                                    resolve(resource);
-                                }
-                                else if (resource.clickThroughService) {
-                                    // if the resource has a click through service, use that.
-                                    clickThrough(resource);
-                                }
-                                else {
-                                    // get an access token
-                                    login(resource.loginService.id).then(function () {
-                                        getAccessToken(resource.tokenService.id).then(function (accessToken) {
-                                            storeAccessToken(resource, accessToken).then(function () {
-                                                resource.getData(accessToken).then(function () {
-                                                    resolve(resource);
-                                                });
-                                            });
-                                        });
-                                    });
-                                }
-                            }
-                        });
-                    }
-                    else {
-                        // this info.json isn't access controlled, therefore there's no need to request an access token
-                        resolve(resource);
-                    }
-                });
-            });
-        };
         return Manifest;
     })(Manifesto.JSONLDResource);
     Manifesto.Manifest = Manifest;
@@ -1153,6 +1034,153 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 var http = _dereq_("http");
 var url = _dereq_("url");
+var Manifesto;
+(function (Manifesto) {
+    var Utils = (function () {
+        function Utils() {
+        }
+        Utils.loadManifest = function (uri) {
+            return new Promise(function (resolve, reject) {
+                var u = url.parse(uri);
+                var fetch = http.request({
+                    host: u.hostname,
+                    port: u.port || 80,
+                    path: u.pathname,
+                    method: "GET",
+                    withCredentials: false
+                }, function (res) {
+                    var result = "";
+                    res.on('data', function (chunk) {
+                        result += chunk;
+                    });
+                    res.on('end', function () {
+                        resolve(result);
+                    });
+                });
+                fetch.end();
+            });
+        };
+        Utils.loadExternalResource = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+            return new Promise(function (resolve, reject) {
+                if (options && options.pessimisticAccessControl) {
+                    // pessimistic: access control cookies may have been deleted.
+                    // always request the access token for every access controlled info.json request
+                    // returned access tokens are not stored, therefore the login window flashes for every request.
+                    resource.getData().then(function () {
+                        if (resource.isAccessControlled()) {
+                            // if the resource has a click through service, use that.
+                            if (resource.clickThroughService) {
+                                resolve(clickThrough(resource));
+                            }
+                            else {
+                                login(resource.loginService.id).then(function () {
+                                    getAccessToken(resource.tokenService.id).then(function (token) {
+                                        resource.getData(token).then(function () {
+                                            resolve(handleResourceResponse(resource));
+                                        });
+                                    });
+                                });
+                            }
+                        }
+                        else {
+                            // this info.json isn't access controlled, therefore no need to request an access token.
+                            resolve(resource);
+                        }
+                    });
+                }
+                else {
+                    // optimistic: access control cookies may not have been deleted.
+                    // store access tokens to avoid login window flashes.
+                    // if cookies are deleted a page refresh is required.
+                    // try loading the resource using an access token that matches the info.json domain.
+                    // if an access token is found, request the resource using it regardless of whether it is access controlled.
+                    getStoredAccessToken(resource.dataUri).then(function (storedAccessToken) {
+                        if (storedAccessToken) {
+                            // try using the stored access token
+                            resource.getData(storedAccessToken).then(function () {
+                                // if the info.json loaded using the stored access token
+                                if (resource.status === HTTPStatusCode.OK) {
+                                    resolve(handleResourceResponse(resource));
+                                }
+                                else {
+                                    // otherwise, load the resource data to determine the correct access control services.
+                                    // if access controlled, do login.
+                                    Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                                        resolve(handleResourceResponse(resource));
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                                resolve(handleResourceResponse(resource));
+                            });
+                        }
+                    });
+                }
+            });
+        };
+        Utils.loadExternalResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+            return new Promise(function (resolve) {
+                var promises = _map(resources, function (resource) {
+                    return Utils.loadExternalResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
+                });
+                Promise.all(promises)
+                    .then(function () {
+                    resolve(resources);
+                });
+            });
+        };
+        Utils.authorize = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
+            return new Promise(function (resolve, reject) {
+                resource.getData().then(function () {
+                    if (resource.isAccessControlled()) {
+                        getStoredAccessToken(resource.tokenService.id).then(function (storedAccessToken) {
+                            if (storedAccessToken) {
+                                // try using the stored access token
+                                resource.getData(storedAccessToken).then(function () {
+                                    resolve(resource);
+                                });
+                            }
+                            else {
+                                if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY && !resource.isResponseHandled) {
+                                    // if the resource was redirected to a degraded version
+                                    // and the response hasn't been handled yet.
+                                    // if the client wishes to trigger a login, set resource.isResponseHandled to true
+                                    // and call loadExternalResources() again.
+                                    resolve(resource);
+                                }
+                                else if (resource.clickThroughService) {
+                                    // if the resource has a click through service, use that.
+                                    clickThrough(resource);
+                                }
+                                else {
+                                    // get an access token
+                                    login(resource.loginService.id).then(function () {
+                                        getAccessToken(resource.tokenService.id).then(function (accessToken) {
+                                            storeAccessToken(resource, accessToken).then(function () {
+                                                resource.getData(accessToken).then(function () {
+                                                    resolve(resource);
+                                                });
+                                            });
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        // this info.json isn't access controlled, therefore there's no need to request an access token
+                        resolve(resource);
+                    }
+                });
+            });
+        };
+        return Utils;
+    })();
+    Manifesto.Utils = Utils;
+})(Manifesto || (Manifesto = {}));
+;
 module.exports = {
     CanvasType: new Manifesto.CanvasType(),
     ElementType: new Manifesto.ElementType(),
@@ -1161,24 +1189,11 @@ module.exports = {
     ServiceProfile: new Manifesto.ServiceProfile(),
     ViewingDirection: new Manifesto.ViewingDirection(),
     ViewingHint: new Manifesto.ViewingHint(),
-    load: function (manifestUri, cb) {
-        var u = url.parse(manifestUri);
-        var fetch = http.request({
-            host: u.hostname,
-            port: u.port || 80,
-            path: u.pathname,
-            method: "GET",
-            withCredentials: false
-        }, function (res) {
-            var result = "";
-            res.on('data', function (chunk) {
-                result += chunk;
-            });
-            res.on('end', function () {
-                cb(result);
-            });
-        });
-        fetch.end();
+    loadManifest: function (uri) {
+        return Manifesto.Utils.loadManifest(uri);
+    },
+    loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+        return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
     },
     create: function (manifest, options) {
         return Manifesto.Deserialiser.parse(manifest, options);
@@ -1204,6 +1219,7 @@ module.exports = {
 /// <reference path="./Service.ts" />
 /// <reference path="./Thumb.ts" />
 /// <reference path="./TreeNode.ts" />
+/// <reference path="./Utils.ts" />
 /// <reference path="./Manifesto.ts" /> 
 
 },{"http":6,"jmespath":27,"lodash.assign":40,"lodash.endswith":50,"lodash.isarray":52,"lodash.last":53,"lodash.map":54,"url":24}],2:[function(_dereq_,module,exports){

@@ -40,6 +40,14 @@ class ThumbsView extends BaseView {
             this.loadThumbs();
         });
 
+        $.subscribe(Commands.SEARCH_PREVIEW_START, (e, canvasIndex) => {
+            //this.searchPreviewStart(canvasIndex);
+        });
+
+        $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
+            //this.searchPreviewFinish();
+        });
+
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
@@ -62,9 +70,8 @@ class ThumbsView extends BaseView {
 
         $.views.helpers({
             separator: function(){
-                // todo: use constants
                 var viewingDirection = that.provider.getViewingDirection().toString();
-                if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
+                if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
                     return true; // one thumb per line
                 }
                 // two thumbs per line
@@ -84,10 +91,9 @@ class ThumbsView extends BaseView {
                     className += " placeholder";
                 }
 
-                // todo: use constants
                 var viewingDirection = that.provider.getViewingDirection().toString();
 
-                if (viewingDirection === "top-to-bottom" || viewingDirection === "bottom-to-top"){
+                if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
                     className += " oneCol";
                 } else {
                     className += " twoCol";

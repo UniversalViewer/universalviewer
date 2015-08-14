@@ -19,6 +19,8 @@ class Commands {
     static SEADRAGON_ANIMATION_FINISH: string       = Commands.namespace + 'onAnimationfinish';
     static SEADRAGON_ANIMATION_START: string        = Commands.namespace + 'onAnimationStart';
     static SEADRAGON_OPEN: string                   = Commands.namespace + 'onOpen';
+    static SEARCH_PREVIEW_START: string             = Commands.namespace + 'onSearchPreviewStart';
+    static SEARCH_PREVIEW_FINISH: string            = Commands.namespace + 'onSearchPreviewFinish';
     static SEADRAGON_RESIZE: string                 = Commands.namespace + 'onResize';
     static SEADRAGON_ROTATION: string               = Commands.namespace + 'onRotation';
     static SEARCH: string                           = Commands.namespace + 'onSearch';

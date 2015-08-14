@@ -282,7 +282,7 @@ class BaseExtension implements IExtension {
         });
 
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-            this.provider.manifest.loadResources(
+            manifesto.loadExternalResources(
                 resources,
                 this.clickThrough,
                 this.login,
