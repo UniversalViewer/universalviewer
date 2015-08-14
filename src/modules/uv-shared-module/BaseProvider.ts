@@ -415,7 +415,7 @@ class BaseProvider implements IProvider{
 
     getLocales(): any[] {
         if (this.locales) return this.locales;
-b
+
         // use data-locales to prioritise
         var items = this.config.localisation.locales.clone();
         var sorting = this.bootstrapper.params.locales;
