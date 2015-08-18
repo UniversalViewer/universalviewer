@@ -41,11 +41,11 @@ class ThumbsView extends BaseView {
         });
 
         $.subscribe(Commands.SEARCH_PREVIEW_START, (e, canvasIndex) => {
-            //this.searchPreviewStart(canvasIndex);
+            this.searchPreviewStart(canvasIndex);
         });
 
         $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
-            //this.searchPreviewFinish();
+            this.searchPreviewFinish();
         });
 
         this.$thumbs = $('<div class="thumbs"></div>');
@@ -177,7 +177,7 @@ class ThumbsView extends BaseView {
 
         for (var i = thumbRange.start; i <= thumbRange.end; i++) {
 
-            var $thumb = $(this.$thumbs.find('.thumb')[i]);
+            var $thumb = this.getThumbByIndex(i);
             var $wrap = $thumb.find('.wrap');
 
             // if no img has been added yet
@@ -255,15 +255,15 @@ class ThumbsView extends BaseView {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
-        this.$thumbs.find('.thumb').removeClass('selected');
+        this.getAllThumbs().removeClass('selected');
 
-        this.$selectedThumb = $(this.$thumbs.find('.thumb')[index]);
+        this.$selectedThumb = this.getThumbByIndex(index);
 
         if (this.provider.isPagingSettingEnabled()){
             var indices = this.provider.getPagedIndices(index);
 
             _.each(indices, (index: number) => {
-                $(this.$thumbs.find('.thumb')[index]).addClass('selected');
+                this.getThumbByIndex(index).addClass('selected');
             });
         } else {
             this.$selectedThumb.addClass('selected');
@@ -279,9 +279,32 @@ class ThumbsView extends BaseView {
         this.loadThumbs(index);
     }
 
+    getAllThumbs(): JQuery {
+        return this.$thumbs.find('.thumb');
+    }
+
+    getThumbByIndex(canvasIndex): JQuery {
+        return $(this.getAllThumbs()[canvasIndex])
+    }
+
+    scrollToThumb(canvasIndex: number): void {
+        var $thumb = this.getThumbByIndex(canvasIndex)
+        this.$element.scrollTop($thumb.position().top);
+    }
+    
+    searchPreviewStart(canvasIndex: number): void {
+        this.scrollToThumb(canvasIndex);
+        var $thumb = this.getThumbByIndex(canvasIndex);
+        $thumb.addClass('searchpreview');
+    }
+
+    searchPreviewFinish(): void {
+        this.scrollToThumb(this.provider.canvasIndex);
+        this.getAllThumbs().removeClass('searchpreview');
+    }
+
     resize(): void {
         super.resize();
-
     }
 }
 

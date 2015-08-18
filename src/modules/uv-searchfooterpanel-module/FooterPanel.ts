@@ -138,8 +138,14 @@ class FooterPanel extends BaseFooterPanel {
             if (this.$searchText.val() === this.content.enterKeyword) this.$searchText.val('');
         });
 
+        this.$placemarkerDetails.on('mouseover', () => {
+            $.publish(Commands.SEARCH_PREVIEW_START, [this.currentPlacemarkerIndex]);
+        });
+
         this.$placemarkerDetails.on('mouseleave', function() {
             $(this).hide();
+
+            $.publish(Commands.SEARCH_PREVIEW_FINISH);
 
             // reset all placemarkers.
             var placemarkers = that.getSearchResultPlacemarkers();
@@ -315,7 +321,7 @@ class FooterPanel extends BaseFooterPanel {
             var label = canvas.getLabel();
 
             if (label === "") {
-                label = "-";
+                label = this.provider.manifest.options.defaultLabel;
             }
 
             title = String.format(title, that.content.pageCaps, label);

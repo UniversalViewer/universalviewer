@@ -39,6 +39,14 @@ class GalleryView extends BaseView {
             this.setLabel();
         });
 
+        $.subscribe(Commands.SEARCH_PREVIEW_START, (e, canvasIndex) => {
+            this.searchPreviewStart(canvasIndex);
+        });
+
+        $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
+            this.searchPreviewFinish();
+        });
+
         this.$header = $('<div class="header"></div>');
         this.$element.append(this.$header);
 
@@ -79,15 +87,15 @@ class GalleryView extends BaseView {
 
         this.$sizeRange.on('change', () => {
             this.updateThumbs();
-            this.scrollToSelectedThumb();
+            this.scrollToThumb(this.getSelectedThumbIndex());
         });
 
         $.templates({
-            galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
-                                <div class="wrap"></div>\
-                                <span class="index">{{:#index + 1}}</span>\
-                                <span class="label">{{>label}}&nbsp;</span>\
-                             </div>'
+            galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
+                                        <div class="wrap"></div>\
+                                        <span class="index">{{:#index + 1}}</span>\
+                                        <span class="label">{{>label}}&nbsp;</span>\
+                                     </div>'
         });
 
         $.views.helpers({
@@ -156,7 +164,7 @@ class GalleryView extends BaseView {
         this.range = Math.clamp(norm, 0.05, 1);
 
         // test which thumbs are scrolled into view
-        var thumbs = this.$thumbs.find('.thumb');
+        var thumbs = this.getAllThumbs();
 
         for (var i = 0; i < thumbs.length; i++) {
             var $thumb = $(thumbs[i]);
@@ -241,7 +249,7 @@ class GalleryView extends BaseView {
 
         setTimeout(() => {
             this.selectIndex(this.provider.canvasIndex);
-            this.scrollToSelectedThumb();
+            this.scrollToThumb(this.getSelectedThumbIndex());
         }, 1);
     }
 
@@ -277,9 +285,9 @@ class GalleryView extends BaseView {
 
         index = parseInt(index);
 
-        this.$thumbs.find('.thumb').removeClass('selected');
+        this.getAllThumbs().removeClass('selected');
 
-        this.$selectedThumb = $(this.$thumbs.find('.thumb')[index]);
+        this.$selectedThumb = this.getThumbByIndex(index);
 
         this.$selectedThumb.addClass('selected');
 
@@ -287,8 +295,32 @@ class GalleryView extends BaseView {
         this.updateThumbs();
     }
 
-    scrollToSelectedThumb(): void {
-        this.$main.scrollTop(this.$selectedThumb.position().top);
+    getSelectedThumbIndex(): number {
+        return this.$selectedThumb.data('index');
+    }
+
+    getAllThumbs(): JQuery {
+        return this.$thumbs.find('.thumb');
+    }
+
+    getThumbByIndex(canvasIndex): JQuery {
+        return $(this.getAllThumbs()[canvasIndex])
+    }
+
+    scrollToThumb(canvasIndex: number): void {
+        var $thumb = this.getThumbByIndex(canvasIndex)
+        this.$main.scrollTop($thumb.position().top);
+    }
+
+    searchPreviewStart(canvasIndex: number): void {
+        this.scrollToThumb(canvasIndex);
+        var $thumb = this.getThumbByIndex(canvasIndex);
+        $thumb.addClass('searchpreview');
+    }
+
+    searchPreviewFinish(): void {
+        this.scrollToThumb(this.provider.canvasIndex);
+        this.getAllThumbs().removeClass('searchpreview');
     }
 
     resize(): void {
