@@ -24,7 +24,7 @@
     "utils": "edsilv/utils#~0.0.23",
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "universalviewer/uv-en-GB-theme",
-    "manifesto": "universalviewer/manifesto#dev",
+    "manifesto": "universalviewer/manifesto#collections",
     "lodash-compat": "~3.10.0"
   },
   "devDependencies": {

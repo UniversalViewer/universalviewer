@@ -22,7 +22,7 @@ class BaseProvider implements IProvider{
     isLightbox: boolean;
     isOnlyInstance: boolean;
     isReload: boolean;
-    manifest: Manifesto.IManifest;
+    manifest: Manifesto.IIIIFResource;
     resources: Manifesto.IExternalResource[];
     rootStructure: any;
     sequence: Manifesto.ISequence;
@@ -32,7 +32,7 @@ class BaseProvider implements IProvider{
     locales: any[];
 
     // map param names to enum indices.
-    paramMap: string[] = ['si', 'ci', 'z', 'r'];
+    paramMap: string[] = ['mi', 'si', 'ci', 'z', 'r'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -110,7 +110,7 @@ class BaseProvider implements IProvider{
     }
 
     getManifestType(): Manifesto.ManifestType{
-        var manifestType = this.manifest.getType();
+        var manifestType = this.manifest.getManifestType();
 
         // default to monograph
         if (manifestType.toString() === ""){

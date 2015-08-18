@@ -6,7 +6,7 @@ import ExternalResource = require("./ExternalResource");
 // interacting with the IIIF data model.
 interface IProvider{
     canvasIndex: number;
-    manifest: Manifesto.IManifest;
+    manifest: Manifesto.IIIIFResource;
     resources: Manifesto.IExternalResource[];
     sequence: any;
     sequenceIndex: number;
