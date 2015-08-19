@@ -1150,7 +1150,7 @@ var Manifesto;
                                     // and call loadExternalResources() again.
                                     resolve(resource);
                                 }
-                                else if (resource.clickThroughService) {
+                                else if (resource.clickThroughService && !resource.isResponseHandled) {
                                     // if the resource has a click through service, use that.
                                     clickThrough(resource);
                                 }
