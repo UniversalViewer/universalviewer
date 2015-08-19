@@ -14,22 +14,24 @@ class BaseProvider implements IProvider{
     bootstrapper: BootStrapper;
     canvasIndex: number;
     config: any;
-    manifestUri: string;
     domain: string;
-    embedScriptUri: string;
     embedDomain: string;
+    embedScriptUri: string;
+    iiifResource: Manifesto.IIIIFResource;
     isHomeDomain: boolean;
     isLightbox: boolean;
     isOnlyInstance: boolean;
     isReload: boolean;
-    manifest: Manifesto.IIIIFResource;
+    jsonp: boolean;
+    locale: string;
+    locales: any[];
+    manifest: Manifesto.IManifest;
+    manifestIndex: number;
+    manifestUri: string;
     resources: Manifesto.IExternalResource[];
     rootStructure: any;
     sequence: Manifesto.ISequence;
     sequenceIndex: number;
-    jsonp: boolean;
-    locale: string;
-    locales: any[];
 
     // map param names to enum indices.
     paramMap: string[] = ['mi', 'si', 'ci', 'z', 'r'];
@@ -43,12 +45,12 @@ class BaseProvider implements IProvider{
     constructor(bootstrapper: BootStrapper) {
         this.bootstrapper = bootstrapper;
         this.config = this.bootstrapper.config;
-        this.manifest = manifesto.create(
+        this.iiifResource = manifesto.create(
             JSON.stringify(this.bootstrapper.manifest),
             <Manifesto.IManifestoOptions>{ locale: this.bootstrapper.params.localeName});
 
         // get data-attributes that can't be overridden by hash params.
-        // other data-attributes are retrieved through app.getParam.
+        // other data-attributes are retrieved through extension.getParam.
 
         // todo: make these getters when ES5 target is available
         this.manifestUri = this.bootstrapper.params.manifestUri;
@@ -62,18 +64,18 @@ class BaseProvider implements IProvider{
         this.domain = this.bootstrapper.params.domain;
         this.isLightbox = this.bootstrapper.params.isLightbox;
 
-        if (this.isHomeDomain && !this.isReload){
-            this.sequenceIndex = parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex], parent.document));
-        }
-
-        if (!this.sequenceIndex){
-            this.sequenceIndex = parseInt(Utils.Urls.GetQuerystringParameter(this.paramMap[Params.sequenceIndex])) || 0;
-        }
+        this.manifestIndex = this.getManifestIndexParam();
+        this.sequenceIndex = this.getSequenceIndexParam();
     }
 
     load(): void{
-        // we know that this sequence exists because the bootstrapper
-        // will have loaded it already.
+
+        if (this.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
+            this.manifest = (<Manifesto.ICollection>this.iiifResource).getManifestByIndex(this.manifestIndex);
+        } else {
+            this.manifest = <Manifesto.IManifest>this.iiifResource;
+        }
+
         this.sequence = this.manifest.getSequenceByIndex(this.sequenceIndex);
 
         // replace all ref sequences with an object that can store
@@ -173,12 +175,28 @@ class BaseProvider implements IProvider{
         return this.sequence.getLastCanvasLabel();
     }
 
-    getCanvasIndexParam(): number {
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.canvasIndex], parent.document)) || 0;
+    getManifestIndexParam(): number {
+        // if the hash param is available and is first load
+        if (this.isHomeDomain && !this.isReload){
+            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.manifestIndex], parent.document)) || 0;
+        }
+
+        // get param from iframe querystring
+        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.manifestIndex])) || 0;
     }
 
     getSequenceIndexParam(): number {
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex], parent.document)) || 0;
+        // if the hash param is available and is first load
+        if (this.isHomeDomain && !this.isReload){
+            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex], parent.document)) || 0;
+        }
+
+        // get param from iframe querystring
+        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex])) || 0;
+    }
+
+    getCanvasIndexParam(): number {
+        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.canvasIndex], parent.document)) || 0;
     }
 
     isCanvasIndexOutOfRange(index: number): boolean {
@@ -335,7 +353,7 @@ class BaseProvider implements IProvider{
     }
 
     getCanvasIndexByLabel(label: string): number {
-        var foliated = this.getManifestType().toString() === manifesto.ManifestType.folio().toString();
+        var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
         return this.sequence.getCanvasIndexByLabel(label, foliated);
     }
 

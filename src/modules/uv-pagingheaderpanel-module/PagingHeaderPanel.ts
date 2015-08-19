@@ -104,7 +104,7 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.addClass('disabled');
         }
 
-        if (this.provider.getManifestType().toString() === manifesto.ManifestType.folio().toString()){
+        if (this.provider.getManifestType().toString() === manifesto.ManifestType.manuscript().toString()){
             this.$pageModeLabel.text(this.content.folio);
         } else {
             this.$pageModeLabel.text(this.content.page);

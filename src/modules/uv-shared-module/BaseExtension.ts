@@ -401,6 +401,7 @@ class BaseExtension implements IExtension {
     // auth
 
     clickThrough(resource: Manifesto.IExternalResource): void {
+        resource.isResponseHandled = true;
         $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [resource.clickThroughService]);
     }
 

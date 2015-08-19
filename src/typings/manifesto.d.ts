@@ -402,6 +402,7 @@ interface IManifesto {
     create: (manifest: string, options?: Manifesto.IManifestoOptions) => Manifesto.IIIIFResource;
     CanvasType: Manifesto.CanvasType;
     ElementType: Manifesto.ElementType;
+    IIIFResourceType: Manifesto.IIIFResourceType;
     ManifestType: Manifesto.ManifestType;
     RenderingFormat: Manifesto.RenderingFormat;
     ServiceProfile: Manifesto.ServiceProfile;

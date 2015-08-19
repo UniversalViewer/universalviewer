@@ -94,6 +94,8 @@ class Bootstrapper{
         }
     }
 
+    // todo: the bootstrapper creates a manifesto manifest/collection, determines the type of extension
+    // to use and passes the manifest/collection to the extension.
     parseManifest(manifest: any): void {
         this.manifest = manifest;
 
@@ -151,13 +153,6 @@ class Bootstrapper{
         }
     }
 
-    notFound(): void{
-        try{
-            parent.$(parent.document).trigger("onNotFound");
-            return;
-        } catch (e) {}
-    }
-
     parseExtension(): void {
 
         var that = this;
@@ -197,6 +192,13 @@ class Bootstrapper{
                 });
             });
         });
+    }
+
+    notFound(): void{
+        try{
+            parent.$(parent.document).trigger("onNotFound");
+            return;
+        } catch (e) {}
     }
 
     featureDetect(cb: () => void): void {
