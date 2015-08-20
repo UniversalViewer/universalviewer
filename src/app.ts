@@ -83,25 +83,25 @@ require([
 
         var extensions = {};
 
-        extensions['seadragon/iiif'] = {
+        extensions[manifesto.CanvasType.canvas().toString()] = {
             type: seadragonExtension,
             provider: seadragonProvider,
             name: 'uv-seadragon-extension'
         };
 
-        extensions['video/ixif'] = {
+        extensions[manifesto.ElementType.movingimage().toString()] = {
             type: mediaelementExtension,
             provider: mediaelementProvider,
             name: 'uv-mediaelement-extension'
         };
 
-        extensions['audio/ixif'] = {
+        extensions[manifesto.ElementType.sound().toString()] = {
             type: mediaelementExtension,
             provider: mediaelementProvider,
             name: 'uv-mediaelement-extension'
         };
 
-        extensions['pdf/ixif'] = {
+        extensions[manifesto.RenderingFormat.pdf().toString()] = {
             type: pdfExtension,
             provider: pdfProvider,
             name: 'uv-pdf-extension'

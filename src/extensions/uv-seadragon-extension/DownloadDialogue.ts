@@ -124,7 +124,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             this.addDownloadOptionsForRenderings(currentCanvas, this.content.entireFileAsOriginal);
         }
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicSequenceRenderings)) {
-            this.addDownloadOptionsForRenderings(this.provider.sequence, this.content.entireDocument);
+            this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument);
         }
 
         if (!this.$downloadOptions.find('li:visible').length){

@@ -5,7 +5,7 @@ import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickTh
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
-import Params = require("./Params");
+import Params = require("../../Params");
 import Shell = require("./Shell");
 import Storage = require("../../modules/uv-shared-module/Storage");
 import StorageItem = require("../../modules/uv-shared-module/StorageItem");
@@ -306,11 +306,13 @@ class BaseExtension implements IExtension {
 
         // deep linking is only allowed when hosted on home domain.
         if (this.provider.isDeepLinkingEnabled()){
-            value = Utils.Urls.GetHashParameter(this.provider.paramMap[key], parent.document);
+            // todo: use a static type on bootstrapper.params
+            value = Utils.Urls.GetHashParameter(this.provider.bootstrapper.params.paramMap[key], parent.document);
         }
 
         if (!value){
-            value = Utils.Urls.GetQuerystringParameter(this.provider.paramMap[key]);
+            // todo: use a static type on bootstrapper.params
+            value = Utils.Urls.GetQuerystringParameter(this.provider.bootstrapper.params.paramMap[key]);
         }
 
         return value;
@@ -320,7 +322,7 @@ class BaseExtension implements IExtension {
     setParam(key: Params, value: any): void{
 
         if (this.provider.isDeepLinkingEnabled()){
-            Utils.Urls.SetHashParameter(this.provider.paramMap[key], value, parent.document);
+            Utils.Urls.SetHashParameter(this.provider.bootstrapper.params.paramMap[key], value, parent.document);
         }
     }
 

@@ -8,7 +8,6 @@ interface IProvider{
     canvasIndex: number;
     manifest: Manifesto.IIIIFResource;
     resources: Manifesto.IExternalResource[];
-    sequence: any;
     sequenceIndex: number;
 
     addTimestamp(uri: string): string;
@@ -18,7 +17,8 @@ interface IProvider{
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexParam(): number;
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
-    getCurrentCanvas(): any;
+    getCurrentCanvas(): Manifesto.ICanvas;
+    getCurrentSequence(): Manifesto.ISequence;
     getFirstPageIndex(): number;
     getInfoUri(canvas: Manifesto.ICanvas): string;
     getLastCanvasLabel(): string;
@@ -76,7 +76,6 @@ interface IProvider{
     getSerializedLocales(): string;
     getSettings(): ISettings;
     isDeepLinkingEnabled(): boolean;
-    paramMap: string[];
     reload(params?: BootstrapParams);
     sanitize(html: string): string;
     serializeLocales(locales: any[]): string;

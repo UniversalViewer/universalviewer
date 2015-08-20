@@ -1,7 +1,6 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import IProvider = require("./IProvider");
-import Params = require("./Params");
 import ExternalResource = require("./ExternalResource");
 import Storage = require("./Storage");
 
@@ -29,12 +28,7 @@ class BaseProvider implements IProvider{
     manifestIndex: number;
     manifestUri: string;
     resources: Manifesto.IExternalResource[];
-    rootStructure: any;
-    sequence: Manifesto.ISequence;
     sequenceIndex: number;
-
-    // map param names to enum indices.
-    paramMap: string[] = ['mi', 'si', 'ci', 'z', 'r'];
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -45,9 +39,7 @@ class BaseProvider implements IProvider{
     constructor(bootstrapper: BootStrapper) {
         this.bootstrapper = bootstrapper;
         this.config = this.bootstrapper.config;
-        this.iiifResource = manifesto.create(
-            JSON.stringify(this.bootstrapper.manifest),
-            <Manifesto.IManifestoOptions>{ locale: this.bootstrapper.params.localeName});
+        this.iiifResource = this.bootstrapper.iiifResource;
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through extension.getParam.
@@ -64,8 +56,9 @@ class BaseProvider implements IProvider{
         this.domain = this.bootstrapper.params.domain;
         this.isLightbox = this.bootstrapper.params.isLightbox;
 
-        this.manifestIndex = this.getManifestIndexParam();
-        this.sequenceIndex = this.getSequenceIndexParam();
+        this.manifestIndex = this.bootstrapper.params.manifestIndex;
+        this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
+        this.canvasIndex = this.bootstrapper.params.canvasIndex;
     }
 
     load(): void{
@@ -75,40 +68,21 @@ class BaseProvider implements IProvider{
         } else {
             this.manifest = <Manifesto.IManifest>this.iiifResource;
         }
-
-        this.sequence = this.manifest.getSequenceByIndex(this.sequenceIndex);
-
-        // replace all ref sequences with an object that can store
-        // its path and sub structures. they won't get used for anything
-        // else without a reload.
-        //for (var i = 0; i < this.manifest.sequences.length; i++) {
-        //    if (!this.manifest.sequences[i].canvases) {
-        //        this.manifest.sequences[i] = {};
-        //    }
-        //}
-
-        //this.parseManifest();
-
-        //this.parseStructure();
     }
 
     // re-bootstraps the application with new querystring params
     reload(params?: BootstrapParams): void {
         var p = new BootstrapParams();
-        p.isReload = true;
 
         if (params){
             p = $.extend(p, params);
         }
 
+        p.isReload = true;
+
         $.disposePubSub();
 
         this.bootstrapper.bootStrap(p);
-    }
-
-    corsEnabled(): boolean {
-        // No jsonp setting? Then use autodetection. Otherwise, use explicit setting.
-        return (null === this.jsonp) ? Modernizr.cors : !this.jsonp;
     }
 
     getManifestType(): Manifesto.ManifestType{
@@ -134,11 +108,13 @@ class BaseProvider implements IProvider{
         return this.manifest.getRenderings(resource);
     }
 
-    //getSequenceType(): string{
-    //    // todo: use rendering?
-    //    // default to 'seadragon-iiif'
-    //    return 'seadragon-iiif';
-    //}
+    getCanvasIndexParam(): number {
+        return this.bootstrapper.params.getCanvasIndexParam();
+    }
+
+    getSequenceIndexParam(): number {
+        return this.bootstrapper.params.getSequenceIndexParam();
+    }
 
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType {
         if (!canvas){
@@ -172,47 +148,23 @@ class BaseProvider implements IProvider{
     }
 
     getLastCanvasLabel(): string {
-        return this.sequence.getLastCanvasLabel();
-    }
-
-    getManifestIndexParam(): number {
-        // if the hash param is available and is first load
-        if (this.isHomeDomain && !this.isReload){
-            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.manifestIndex], parent.document)) || 0;
-        }
-
-        // get param from iframe querystring
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.manifestIndex])) || 0;
-    }
-
-    getSequenceIndexParam(): number {
-        // if the hash param is available and is first load
-        if (this.isHomeDomain && !this.isReload){
-            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex], parent.document)) || 0;
-        }
-
-        // get param from iframe querystring
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex])) || 0;
-    }
-
-    getCanvasIndexParam(): number {
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.canvasIndex], parent.document)) || 0;
+        return this.getCurrentSequence().getLastCanvasLabel();
     }
 
     isCanvasIndexOutOfRange(index: number): boolean {
-        return this.sequence.isCanvasIndexOutOfRange(index);
+        return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
     }
 
     isTotalCanvasesEven(): boolean {
-        return this.sequence.isTotalCanvasesEven();
+        return this.getCurrentSequence().isTotalCanvasesEven();
     }
 
     isFirstCanvas(index?: number): boolean {
-        return this.sequence.isFirstCanvas(index);
+        return this.getCurrentSequence().isFirstCanvas(index);
     }
 
     isLastCanvas(index?: number): boolean {
-        return this.sequence.isLastCanvas(index);
+        return this.getCurrentSequence().isLastCanvas(index);
     }
 
     isSeeAlsoEnabled(): boolean{
@@ -220,25 +172,27 @@ class BaseProvider implements IProvider{
     }
 
     getCanvasByIndex(index: number): Manifesto.ICanvas {
-        return this.sequence.getCanvasByIndex(index);
+        return this.getCurrentSequence().getCanvasByIndex(index);
     }
 
-    getRangeByCanvasIndex(index: number): any {
-        if (index === -1) return null;
-        var canvas: Manifesto.ICanvas = this.getCanvasByIndex(index);
-        return canvas.getRange();
+    getSequenceByIndex(index: number): Manifesto.ISequence {
+        return this.manifest.getSequenceByIndex(index);
     }
 
     getCurrentCanvas(): any {
-        return this.sequence.getCanvasByIndex(this.canvasIndex);
+        return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
+    }
+
+    getCurrentSequence(): any {
+        return this.getSequenceByIndex(this.sequenceIndex);
     }
 
     getTotalCanvases(): number{
-        return this.sequence.getTotalCanvases();
+        return this.getCurrentSequence().getTotalCanvases();
     }
 
     isMultiCanvas(): boolean{
-        return this.sequence.isMultiCanvas();
+        return this.getCurrentSequence().isMultiCanvas();
     }
 
     isPagingAvailable(): boolean {
@@ -247,7 +201,7 @@ class BaseProvider implements IProvider{
     }
 
     isPagingEnabled(): boolean{
-        return this.sequence.isPagingEnabled();
+        return this.getCurrentSequence().isPagingEnabled();
     }
 
     isPagingSettingEnabled(): boolean {
@@ -271,7 +225,7 @@ class BaseProvider implements IProvider{
     }
 
     getViewingDirection(): Manifesto.ViewingDirection {
-        return this.sequence.getViewingDirection();
+        return this.getCurrentSequence().getViewingDirection();
     }
 
     getFirstPageIndex(): number {
@@ -329,7 +283,7 @@ class BaseProvider implements IProvider{
     }
 
     getStartCanvasIndex(): number {
-        return this.sequence.getStartCanvasIndex();
+        return this.getCurrentSequence().getStartCanvasIndex();
     }
 
     addTimestamp(uri: string): string{
@@ -341,7 +295,7 @@ class BaseProvider implements IProvider{
     }
 
     getThumbs(width: number, height: number): Manifesto.Thumb[] {
-        return this.sequence.getThumbs(width, height);
+        return this.getCurrentSequence().getThumbs(width, height);
     }
 
     getRangeByPath(path: string): any{
@@ -349,12 +303,12 @@ class BaseProvider implements IProvider{
     }
 
     getCanvasIndexById(id: string): number {
-        return this.sequence.getCanvasIndexById(id);
+        return this.getCurrentSequence().getCanvasIndexById(id);
     }
 
     getCanvasIndexByLabel(label: string): number {
         var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
-        return this.sequence.getCanvasIndexByLabel(label, foliated);
+        return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
     }
 
     getTree(): Manifesto.TreeNode{

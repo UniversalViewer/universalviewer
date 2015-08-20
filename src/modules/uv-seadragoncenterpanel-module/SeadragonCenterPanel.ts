@@ -5,7 +5,7 @@ import CenterPanel = require("../uv-shared-module/CenterPanel");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
-import Params = require("../uv-shared-module/Params");
+import Params = require("../../Params");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 
