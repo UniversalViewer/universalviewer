@@ -11711,7 +11711,7 @@ function equalByTag(object, other, tag) {
       return +object == +other;
 
     case errorTag:
-      return object.name == other.name && object.information == other.information;
+      return object.name == other.name && object.message == other.message;
 
     case numberTag:
       // Treat `NaN` vs. `NaN` as equal.
