@@ -52,7 +52,6 @@ interface IProvider{
     isPagingSettingEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
-    load(): void;
 
     // todo: move these to baseextension?
     bootstrapper: BootStrapper;

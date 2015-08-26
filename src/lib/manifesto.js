@@ -282,7 +282,6 @@ var Manifesto;
         function ManifestResource() {
             _super.apply(this, arguments);
         }
-        // todo: add getMetadata
         ManifestResource.prototype.getService = function (profile) {
             var m = this.getManifest();
             return m.getService(this, profile);
@@ -521,6 +520,7 @@ var Manifesto;
                 else {
                     var options = that.options;
                     Manifesto.Utils.loadManifest(that.__jsonld['@id']).then(function (data) {
+                        that.isLoaded = true;
                         resolve(Manifesto.Deserialiser.parse(data, options));
                     });
                 }
@@ -1193,8 +1193,8 @@ var Manifesto;
                                 resolve(clickThrough(resource));
                             }
                             else {
-                                login(resource.loginService.id).then(function () {
-                                    getAccessToken(resource.tokenService.id).then(function (token) {
+                                login(resource).then(function () {
+                                    getAccessToken(resource).then(function (token) {
                                         resource.getData(token).then(function () {
                                             resolve(handleResourceResponse(resource));
                                         });
@@ -1214,7 +1214,7 @@ var Manifesto;
                     // if cookies are deleted a page refresh is required.
                     // try loading the resource using an access token that matches the info.json domain.
                     // if an access token is found, request the resource using it regardless of whether it is access controlled.
-                    getStoredAccessToken(resource.dataUri).then(function (storedAccessToken) {
+                    getStoredAccessToken(resource).then(function (storedAccessToken) {
                         if (storedAccessToken) {
                             // try using the stored access token
                             resource.getData(storedAccessToken).then(function () {
@@ -1255,7 +1255,7 @@ var Manifesto;
             return new Promise(function (resolve, reject) {
                 resource.getData().then(function () {
                     if (resource.isAccessControlled()) {
-                        getStoredAccessToken(resource.tokenService.id).then(function (storedAccessToken) {
+                        getStoredAccessToken(resource).then(function (storedAccessToken) {
                             if (storedAccessToken) {
                                 // try using the stored access token
                                 resource.getData(storedAccessToken).then(function () {
@@ -1270,14 +1270,22 @@ var Manifesto;
                                     // and call loadExternalResources() again.
                                     resolve(resource);
                                 }
-                                else if (resource.clickThroughService) {
+                                else if (resource.clickThroughService && !resource.isResponseHandled) {
                                     // if the resource has a click through service, use that.
-                                    clickThrough(resource);
+                                    clickThrough(resource).then(function () {
+                                        getAccessToken(resource).then(function (accessToken) {
+                                            storeAccessToken(resource, accessToken).then(function () {
+                                                resource.getData(accessToken).then(function () {
+                                                    resolve(resource);
+                                                });
+                                            });
+                                        });
+                                    });
                                 }
                                 else {
                                     // get an access token
-                                    login(resource.loginService.id).then(function () {
-                                        getAccessToken(resource.tokenService.id).then(function (accessToken) {
+                                    login(resource).then(function () {
+                                        getAccessToken(resource).then(function (accessToken) {
                                             storeAccessToken(resource, accessToken).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
@@ -11703,7 +11711,7 @@ function equalByTag(object, other, tag) {
       return +object == +other;
 
     case errorTag:
-      return object.name == other.name && object.message == other.message;
+      return object.name == other.name && object.information == other.information;
 
     case numberTag:
       // Treat `NaN` vs. `NaN` as equal.

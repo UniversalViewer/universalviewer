@@ -1,4 +1,4 @@
-import BaseCommands = require("../uv-shared-module/Commands");
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import HeaderPanel = require("../uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");

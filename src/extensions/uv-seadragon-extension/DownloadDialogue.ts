@@ -1,4 +1,4 @@
-import BaseCommands = require("../../modules/uv-shared-module/Commands");
+import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
 import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
 import ISeadragonExtension = require("./ISeadragonExtension");

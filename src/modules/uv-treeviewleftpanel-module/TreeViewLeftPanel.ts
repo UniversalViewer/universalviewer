@@ -1,4 +1,4 @@
-import BaseCommands = require("../uv-shared-module/Commands");
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import GalleryView = require("./GalleryView");
 import IProvider = require("../uv-shared-module/IProvider");

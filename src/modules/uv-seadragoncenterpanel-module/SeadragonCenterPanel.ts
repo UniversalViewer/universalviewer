@@ -1,4 +1,4 @@
-import BaseCommands = require("../uv-shared-module/Commands");
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
@@ -49,7 +49,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.append(this.$viewer);
 
-        $.subscribe(BaseCommands.OPEN_MEDIA, () => {
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, () => {
             // todo: OPEN_MEDIA should be able to waitFor RESIZE
             // https://facebook.github.io/flux/docs/dispatcher.html
             if (!this.isCreated) {

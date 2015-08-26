@@ -1,7 +1,8 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
-import IProvider = require("./IProvider");
 import ExternalResource = require("./ExternalResource");
+import IProvider = require("./IProvider");
+import Params = require("../../Params");
 import Storage = require("./Storage");
 
 // providers contain methods that could be implemented differently according
@@ -40,6 +41,7 @@ class BaseProvider implements IProvider{
         this.bootstrapper = bootstrapper;
         this.config = this.bootstrapper.config;
         this.iiifResource = this.bootstrapper.iiifResource;
+        this.manifest = this.bootstrapper.manifest;
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through extension.getParam.
@@ -59,15 +61,6 @@ class BaseProvider implements IProvider{
         this.manifestIndex = this.bootstrapper.params.manifestIndex;
         this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
         this.canvasIndex = this.bootstrapper.params.canvasIndex;
-    }
-
-    load(): void{
-
-        if (this.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
-            this.manifest = (<Manifesto.ICollection>this.iiifResource).getManifestByIndex(this.manifestIndex);
-        } else {
-            this.manifest = <Manifesto.IManifest>this.iiifResource;
-        }
     }
 
     // re-bootstraps the application with new querystring params
@@ -109,11 +102,11 @@ class BaseProvider implements IProvider{
     }
 
     getCanvasIndexParam(): number {
-        return this.bootstrapper.params.getCanvasIndexParam();
+        return this.bootstrapper.params.getParam(Params.canvasIndex);
     }
 
     getSequenceIndexParam(): number {
-        return this.bootstrapper.params.getSequenceIndexParam();
+        return this.bootstrapper.params.getParam(Params.sequenceIndex);
     }
 
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType {

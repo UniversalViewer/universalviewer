@@ -2,6 +2,7 @@ import Params = require("./Params");
 
 class BootstrapParams {
     canvasIndex: number;
+    collectionIndex: number;
     config: string;
     domain: string;
     embedDomain: string;
@@ -16,7 +17,7 @@ class BootstrapParams {
     locales: any[];
     manifestIndex: number;
     manifestUri: string;
-    paramMap: string[] = ['mi', 'si', 'ci', 'z', 'r'];
+    paramMap: string[] = ['c', 'm', 's', 'cv', 'z', 'r'];
     sequenceIndex: number;
 
     constructor() {
@@ -33,9 +34,10 @@ class BootstrapParams {
         this.manifestUri = Utils.Urls.GetQuerystringParameter('manifestUri');
         this.setLocale(Utils.Urls.GetQuerystringParameter('locale'));
 
-        this.manifestIndex = this.getManifestIndexParam();
-        this.sequenceIndex = this.getSequenceIndexParam();
-        this.canvasIndex = this.getCanvasIndexParam();
+        this.collectionIndex = this.getParam(Params.collectionIndex);
+        this.manifestIndex = this.getParam(Params.manifestIndex);
+        this.sequenceIndex = this.getParam(Params.sequenceIndex);
+        this.canvasIndex = this.getParam(Params.canvasIndex);
     }
 
     // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' into array
@@ -59,28 +61,18 @@ class BootstrapParams {
         return this.localeName;
     }
 
-    getManifestIndexParam(): number {
-        // if the hash param is available and is first load
-        if (this.isHomeDomain && !this.isReload){
-            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.manifestIndex], parent.document)) || 0;
+    getParam(param: Params): any {
+        if (this.hashParamsAvailable()){
+            // get param from parent document
+            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[param], parent.document)) || 0;
         }
 
         // get param from iframe querystring
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.manifestIndex])) || 0;
+        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[param])) || 0;
     }
 
-    getSequenceIndexParam(): number {
-        // if the hash param is available and is first load
-        if (this.isHomeDomain && !this.isReload){
-            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex], parent.document)) || 0;
-        }
-
-        // get param from iframe querystring
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.sequenceIndex])) || 0;
-    }
-
-    getCanvasIndexParam(): number {
-        return parseInt(Utils.Urls.GetHashParameter(this.paramMap[Params.canvasIndex], parent.document)) || 0;
+    hashParamsAvailable(): boolean {
+        return (this.isHomeDomain && !this.isReload);
     }
 }
 

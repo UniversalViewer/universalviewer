@@ -1,5 +1,5 @@
 import BaseView = require("./BaseView");
-import Commands = require("./Commands");
+import Commands = require("./BaseCommands");
 
 class Dialogue extends BaseView {
 

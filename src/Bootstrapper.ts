@@ -1,3 +1,4 @@
+import BaseCommands = require("./modules/uv-shared-module/BaseCommands");
 import BootstrapParams = require("BootstrapParams");
 import IExtension = require("./modules/uv-shared-module/IExtension");
 
@@ -9,22 +10,22 @@ class Bootstrapper{
     extension: IExtension;
     extensions: IExtension[];
     iiifResource: Manifesto.IIIIFResource;
-    isFullScreen: boolean = false; // persist full screen between reloads
+    isFullScreen: boolean = false;
+    manifest: Manifesto.IManifest;
     params: BootstrapParams;
-    socket: any; // maintain the same socket between reloads
+    socket: any;
 
     constructor(extensions: any) {
         this.extensions = extensions;
     }
 
     bootStrap(params?: BootstrapParams): void {
-        var that = this;
 
-        that.params = new BootstrapParams();
+        this.params = new BootstrapParams();
 
         // merge new params
         if (params){
-            that.params = $.extend(true, that.params, params);
+            this.params = $.extend(true, this.params, params);
         }
 
         // empty app div
@@ -38,7 +39,7 @@ class Bootstrapper{
 
         jQuery.support.cors = true;
 
-        that.loadManifest();
+        this.loadIIIFResource();
     }
 
     isCORSEnabled(): boolean {
@@ -46,13 +47,13 @@ class Bootstrapper{
         return (null === this.params.jsonp) ? Modernizr.cors : !this.params.jsonp;
     }
 
-    loadManifest(): void{
+    loadIIIFResource(): void{
         var that = this;
 
         if (this.isCORSEnabled()){
-            $.getJSON(that.params.manifestUri, (manifest) => {
-                that.parseManifest(manifest);
-                this.determineExtension();
+            $.getJSON(that.params.manifestUri, (r) => {
+                this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
+                this.loadResource();
             });
         } else {
             // use jsonp
@@ -66,29 +67,31 @@ class Bootstrapper{
 
             $.ajax(settings);
 
-            window.manifestCallback = (manifest: any) => {
-                that.parseManifest(manifest);
-                this.determineExtension();
+            window.manifestCallback = (r: any) => {
+                this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
+                this.loadResource();
             };
         }
     }
 
-    parseManifest(data: any): void {
-        this.iiifResource = manifesto.create(JSON.stringify(data),
+    parseIIIFResource(data: string): Manifesto.IIIIFResource {
+        return manifesto.create(data,
             <Manifesto.IManifestoOptions>{
                 locale: this.params.localeName
             });
     }
 
-    determineExtension(): void {
+    loadResource(): void {
 
         var manifest: Manifesto.IManifest;
-        var sequence: Manifesto.ISequence;
-        var canvas: Manifesto.ICanvas;
-        var extension: IExtension;
 
         if (this.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
-            manifest = (<Manifesto.ICollection>this.iiifResource).getManifestByIndex(this.params.manifestIndex);
+            if ((<Manifesto.ICollection>this.iiifResource).collections && (<Manifesto.ICollection>this.iiifResource).collections.length){
+                var collection = (<Manifesto.ICollection>this.iiifResource).collections[this.params.collectionIndex];
+                manifest = collection.getManifestByIndex(this.params.manifestIndex);
+            } else {
+                manifest = (<Manifesto.ICollection>this.iiifResource).getManifestByIndex(this.params.manifestIndex);
+            }
         } else {
             manifest = <Manifesto.IManifest>this.iiifResource;
         }
@@ -98,7 +101,20 @@ class Bootstrapper{
             return;
         }
 
-        sequence = manifest.getSequenceByIndex(this.params.sequenceIndex);
+        manifest.load().then((m: Manifesto.IManifest) => {
+            this.manifestLoaded(m);
+        });
+    }
+
+    manifestLoaded(manifest: Manifesto.IManifest): void {
+
+        this.manifest = manifest;
+
+        var sequence: Manifesto.ISequence;
+        var canvas: Manifesto.ICanvas;
+        var extension: IExtension;
+
+        sequence = this.manifest.getSequenceByIndex(this.params.sequenceIndex);
 
         if (!sequence){
             this.notFound();
@@ -119,7 +135,7 @@ class Bootstrapper{
 
         // if there isn't an extension for the canvasType, try the rendering
         if (!extension){
-            var renderings: Manifesto.IRendering[] = manifest.getRenderings(sequence);
+            var renderings: Manifesto.IRendering[] = this.manifest.getRenderings(sequence);
             extension = this.extensions[renderings[0].toString()];
         }
 
@@ -134,7 +150,7 @@ class Bootstrapper{
 
     notFound(): void{
         try{
-            parent.$(parent.document).trigger("onNotFound");
+            parent.$(parent.document).trigger(BaseCommands.NOT_FOUND);
             return;
         } catch (e) {}
     }
@@ -202,7 +218,6 @@ class Bootstrapper{
         this.config = config;
 
         var provider = new extension.provider(this);
-        provider.load();
 
         this.extension = new extension.type(this);
         this.extension.name = extension.name;

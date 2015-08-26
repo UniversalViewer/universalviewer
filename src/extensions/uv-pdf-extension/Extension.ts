@@ -1,4 +1,4 @@
-import BaseCommands = require("../../modules/uv-shared-module/Commands");
+import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");

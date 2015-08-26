@@ -1,4 +1,4 @@
-import BaseCommands = require("./Commands");
+import BaseCommands = require("./BaseCommands");
 
 class Panel {
 

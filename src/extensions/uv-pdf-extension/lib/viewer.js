@@ -3105,7 +3105,7 @@ var PDFView = {
       'PDF.js v{{version}} (build: {{build}})') + '\n';
     if (moreInfo) {
       moreInfoText +=
-        mozL10n.get('error_message', {message: moreInfo.message},
+        mozL10n.get('error_message', {message: moreInfo.information},
         'Message: {{message}}');
       if (moreInfo.stack) {
         moreInfoText += '\n' +

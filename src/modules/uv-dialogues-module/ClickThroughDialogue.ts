@@ -1,13 +1,14 @@
-import BaseCommands = require("../uv-shared-module/Commands");
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Dialogue = require("../uv-shared-module/Dialogue");
 
 class ClickThroughDialogue extends Dialogue {
 
+    acceptCallback: any;
     $acceptTermsButton: JQuery;
     $message: JQuery;
     $title: JQuery;
     $viewTermsButton: JQuery;
-    service: Manifesto.IService;
+    resource: Manifesto.IExternalResource;
 
     constructor($element: JQuery) {
         super($element);
@@ -19,8 +20,9 @@ class ClickThroughDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, (e, service: Manifesto.IService) => {
-            this.service = service;
+        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, (e, params) => {
+            this.acceptCallback = params.acceptCallback;
+            this.resource = params.resource;
             this.open();
         });
 
@@ -56,7 +58,7 @@ class ClickThroughDialogue extends Dialogue {
 
             this.$message.empty();
             this.$message.addClass('loading');
-            this.$message.load(this.service.getProperty('exp:fullTermsSimple'), () => {
+            this.$message.load(this.resource.clickThroughService.getProperty('exp:fullTermsSimple'), () => {
                 this.$message.removeClass('loading');
                 this.$message.targetBlank();
                 this.$viewTermsButton.hide();
@@ -67,19 +69,20 @@ class ClickThroughDialogue extends Dialogue {
 
         this.$acceptTermsButton.on('click', (e) => {
             e.preventDefault();
+            this.close();
+            if (this.acceptCallback) this.acceptCallback();
 
-            var redirectUrl = this.service.id + escape(parent.document.URL);
-
-            this.extension.redirect(redirectUrl);
+            //var redirectUrl = this.service.id + escape(parent.document.URL);
+            //this.extension.redirect(redirectUrl);
         });
     }
 
     open(): void {
         super.open();
 
-        this.$title.text(this.service.getLabel());
-        this.$message.html(this.service.getProperty('description'));
-        this.$acceptTermsButton.text(this.service.getProperty('exp:actionLabel'));
+        this.$title.text(this.resource.clickThroughService.getLabel());
+        this.$message.html(this.resource.clickThroughService.getProperty('description'));
+        this.$acceptTermsButton.text(this.resource.clickThroughService.getProperty('exp:actionLabel'));
 
         this.resize();
     }

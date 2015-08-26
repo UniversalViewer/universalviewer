@@ -1,5 +1,5 @@
 import BootstrapParams = require("../../BootstrapParams");
-import Commands = require("../uv-shared-module/Commands");
+import Commands = require("../uv-shared-module/BaseCommands");
 import Dialogue = require("../uv-shared-module/Dialogue");
 import Shell = require("../uv-shared-module/Shell");
 import Version = require("../../_Version");

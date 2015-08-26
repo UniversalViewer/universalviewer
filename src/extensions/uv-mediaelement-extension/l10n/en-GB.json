@@ -2,6 +2,9 @@
   "localisation": {
     "label": "English (GB)"
   },
+  "content": {
+    "degradedResource": "This media is degraded."
+  },
   "modules": {
     "dialogue": {
       "content": {

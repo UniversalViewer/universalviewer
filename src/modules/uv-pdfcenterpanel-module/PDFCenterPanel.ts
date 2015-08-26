@@ -1,4 +1,4 @@
-import BaseCommands = require("../uv-shared-module/Commands");
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseProvider = require("../uv-shared-module/BaseProvider");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import IPDFProvider = require("../../extensions/uv-pdf-extension/IPDFProvider");
@@ -15,7 +15,7 @@ class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.OPEN_MEDIA, (e) => {
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e) => {
             this.openMedia();
         });
     }

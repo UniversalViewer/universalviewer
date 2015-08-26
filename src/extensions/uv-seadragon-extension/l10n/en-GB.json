@@ -5,7 +5,8 @@
   "options": {
   },
   "content": {
-    "canvasIndexOutOfRange": "Canvas index out of range."
+    "canvasIndexOutOfRange": "Canvas index out of range.",
+    "degradedResource": "This image is degraded."
   },
   "modules": {
     "clickThroughDialogue": {
