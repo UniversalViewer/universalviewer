@@ -3,7 +3,8 @@
     "label": "Cymraeg"
   },
   "content": {
-    "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)"
+    "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)",
+    "degradedResource": "This image is degraded."
   },
   "modules": {
     "clickThroughDialogue": {

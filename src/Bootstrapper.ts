@@ -1,51 +1,31 @@
+import BaseCommands = require("./modules/uv-shared-module/BaseCommands");
 import BootstrapParams = require("BootstrapParams");
-import BaseExtension = require("./modules/uv-shared-module/BaseExtension");
+import IExtension = require("./modules/uv-shared-module/IExtension");
 
+// The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
+// then determining which extension to use and instantiating it.
 class Bootstrapper{
 
     config: any;
-    extension: BaseExtension;
-    extensions: any;
-    isFullScreen: boolean = false; // persist full screen between reloads
-    manifest: any;
+    extension: IExtension;
+    extensions: IExtension[];
+    iiifResource: Manifesto.IIIIFResource;
+    isFullScreen: boolean = false;
+    manifest: Manifesto.IManifest;
     params: BootstrapParams;
-    sequence: any;
-    sequenceIndex: number;
-    sequences: any;
-    socket: any; // maintain the same socket between reloads
+    socket: any;
 
-    // this loads the manifest, determines what kind of extension and provider to use, and instantiates them.
     constructor(extensions: any) {
         this.extensions = extensions;
     }
 
-    getBootstrapParams(): BootstrapParams {
-        var p = new BootstrapParams();
-        var jsonpParam = Utils.Urls.GetQuerystringParameter('jsonp');
-
-        p.config = Utils.Urls.GetQuerystringParameter('config');
-        p.domain = Utils.Urls.GetQuerystringParameter('domain');
-        p.embedDomain = Utils.Urls.GetQuerystringParameter('embedDomain');
-        p.embedScriptUri = Utils.Urls.GetQuerystringParameter('embedScriptUri');
-        p.isHomeDomain = Utils.Urls.GetQuerystringParameter('isHomeDomain') === "true";
-        p.isLightbox = Utils.Urls.GetQuerystringParameter('isLightbox') === "true";
-        p.isOnlyInstance = Utils.Urls.GetQuerystringParameter('isOnlyInstance') === "true";
-        p.isReload = Utils.Urls.GetQuerystringParameter('isReload') === "true";
-        p.jsonp = jsonpParam === null ? null : !(jsonpParam === "false" || jsonpParam === "0");
-        p.manifestUri = Utils.Urls.GetQuerystringParameter('manifestUri');
-        p.setLocale(Utils.Urls.GetQuerystringParameter('locale'));
-
-        return p;
-    }
-
     bootStrap(params?: BootstrapParams): void {
-        var that = this;
 
-        that.params = this.getBootstrapParams();
+        this.params = new BootstrapParams();
 
         // merge new params
         if (params){
-            that.params = $.extend(true, that.params, params);
+            this.params = $.extend(true, this.params, params);
         }
 
         // empty app div
@@ -59,24 +39,23 @@ class Bootstrapper{
 
         jQuery.support.cors = true;
 
-        that.loadManifest();
+        this.loadIIIFResource();
     }
 
-    corsEnabled(): boolean {
+    isCORSEnabled(): boolean {
         // No jsonp setting? Then use autodetection. Otherwise, use explicit setting.
         return (null === this.params.jsonp) ? Modernizr.cors : !this.params.jsonp;
     }
 
-    loadManifest(): void{
+    loadIIIFResource(): void{
         var that = this;
 
-        if (this.corsEnabled()){
-            //console.log('CORS Enabled');
-            $.getJSON(that.params.manifestUri, (manifest) => {
-                that.parseManifest(manifest);
+        if (this.isCORSEnabled()){
+            $.getJSON(that.params.manifestUri, (r) => {
+                this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
+                this.loadResource();
             });
         } else {
-            //console.log('JSONP Enabled');
             // use jsonp
             var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
                 url: that.params.manifestUri,
@@ -88,115 +67,92 @@ class Bootstrapper{
 
             $.ajax(settings);
 
-            window.manifestCallback = (manifest: any) => {
-                that.parseManifest(manifest);
+            window.manifestCallback = (r: any) => {
+                this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
+                this.loadResource();
             };
         }
     }
 
-    parseManifest(manifest: any): void {
-        this.manifest = manifest;
+    parseIIIFResource(data: string): Manifesto.IIIIFResource {
+        return manifesto.create(data,
+            <Manifesto.IManifestoOptions>{
+                locale: this.params.localeName
+            });
+    }
 
-        if (this.params.isHomeDomain && !this.params.isReload) {
-            this.sequenceIndex = parseInt(Utils.Urls.GetHashParameter("si", parent.document));
+    loadResource(): void {
+
+        var manifest: Manifesto.IManifest;
+
+        if (this.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
+            if ((<Manifesto.ICollection>this.iiifResource).collections && (<Manifesto.ICollection>this.iiifResource).collections.length){
+                var collection = (<Manifesto.ICollection>this.iiifResource).collections[this.params.collectionIndex];
+                manifest = collection.getManifestByIndex(this.params.manifestIndex);
+            } else {
+                manifest = (<Manifesto.ICollection>this.iiifResource).getManifestByIndex(this.params.manifestIndex);
+            }
+        } else {
+            manifest = <Manifesto.IManifest>this.iiifResource;
         }
 
-        if (!this.sequenceIndex) {
-            this.sequenceIndex = parseInt(Utils.Urls.GetQuerystringParameter("si")) || 0;
-        }
-
-        // is it a collection?
-        if (this.manifest.manifests){
-            // for now, default to the first manifest in the collection.
-            // todo: improve collections handling - should a new "mi" param be introduced?
-            this.params.manifestUri = this.manifest.manifests[0].service['@id'];
-            this.loadManifest();
+        if (!manifest){
+            this.notFound();
             return;
         }
 
-        // normalise IxIF to sequence and canvas objects
-        if (this.manifest.mediaSequences){
-            this.manifest.sequences = this.manifest.mediaSequences;
-
-            _.each(this.manifest.sequences, (sequence: any) => {
-                sequence.canvases = sequence.elements;
-            });
-        }
-
-        this.sequences = this.manifest.sequences;
-
-        if (!this.sequences) {
-            this.notFound();
-        }
-
-        this.loadSequence();
+        manifest.load().then((m: Manifesto.IManifest) => {
+            this.manifestLoaded(m);
+        });
     }
 
-    loadSequence(): void{
+    manifestLoaded(manifest: Manifesto.IManifest): void {
 
-        var that = this;
+        this.manifest = manifest;
 
-        // if it's a reference
-        if (_.isUndefined(that.sequences[that.sequenceIndex].canvases)) {
-            // load referenced sequence.
-            var sequenceUri = String(that.sequences[that.sequenceIndex]['@id']);
+        var sequence: Manifesto.ISequence;
+        var canvas: Manifesto.ICanvas;
+        var extension: IExtension;
 
-            $.getJSON(sequenceUri, (sequenceData) => {
-                that.sequence = that.sequences[that.sequenceIndex] = sequenceData;
-                that.parseExtension();
-            });
-        } else {
-            that.sequence = that.sequences[that.sequenceIndex];
-            that.parseExtension();
+        sequence = this.manifest.getSequenceByIndex(this.params.sequenceIndex);
+
+        if (!sequence){
+            this.notFound();
+            return;
         }
+
+        canvas = sequence.getCanvasByIndex(this.params.canvasIndex);
+
+        if (!canvas){
+            this.notFound();
+            return;
+        }
+
+        var canvasType = canvas.getType();
+
+        // try using canvasType
+        extension = this.extensions[canvasType.toString()];
+
+        // if there isn't an extension for the canvasType, try the rendering
+        if (!extension){
+            var renderings: Manifesto.IRendering[] = this.manifest.getRenderings(sequence);
+            extension = this.extensions[renderings[0].toString()];
+        }
+
+        this.featureDetect(() => {
+            this.configure(extension, (config) => {
+                this.injectCss(extension, config, () => {
+                    this.createExtension(extension, config);
+                });
+            });
+        });
     }
 
     notFound(): void{
         try{
-            parent.$(parent.document).trigger("onNotFound");
+            parent.$(parent.document).trigger(BaseCommands.NOT_FOUND);
             return;
         } catch (e) {}
-    }
-
-    parseExtension(): void {
-
-        var that = this;
-        var extension;
-
-        // look at the first canvas type in the sequence and use that
-        // to establish which extension to use.
-        // todo: should viewinghint="time-based" be added to the manifest/sequence?
-        // The UV should probably be able to load different extensions on a per-canvas-basis.
-
-        var canvasType = that.sequence.canvases[0]['@type'];
-        var format = that.sequence.canvases[0].format;
-
-        switch(canvasType.toLowerCase()) {
-            case 'sc:canvas':
-                extension = that.extensions['seadragon/iiif'];
-                break;
-            case 'dctypes:sound':
-                extension = that.extensions['audio/ixif'];
-                break;
-            case 'dctypes:movingimage':
-                extension = that.extensions['video/ixif'];
-                break;
-            case 'foaf:document':
-                switch(format.toLowerCase()) {
-                    case 'application/pdf' :
-                        extension = that.extensions['pdf/ixif'];
-                        break;
-                }
-                break;
-        }
-
-        that.featureDetect(() => {
-            that.configure(extension, (config) => {
-                that.injectCss(extension, config, () => {
-                    that.createExtension(extension, config);
-                });
-            });
-        });
     }
 
     featureDetect(cb: () => void): void {
@@ -262,7 +218,6 @@ class Bootstrapper{
         this.config = config;
 
         var provider = new extension.provider(this);
-        provider.load();
 
         this.extension = new extension.type(this);
         this.extension.name = extension.name;

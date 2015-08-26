@@ -1,4 +1,3 @@
-# Inspired by https://github.com/DigitalInnovation/mns-digital-blog/blob/master/.travis.yml
 language: node_js
 node_js:
 - '0.12.7'
@@ -18,3 +17,5 @@ script:
 - grunt build
 - grunt serve &
 - grunt test
+notifications:
+  slack: universalviewer:0hPpv56Z7ber0j0C6KdLwFFW

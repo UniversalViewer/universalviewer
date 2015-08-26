@@ -1,10 +1,9 @@
-import BaseCommands = require("./Commands");
+import BaseCommands = require("./BaseCommands");
 import Dialogue = require("./Dialogue");
 
 class GenericDialogue extends Dialogue {
 
     acceptCallback: any;
-
     $acceptButton: JQuery;
     $message: JQuery;
 
@@ -19,6 +18,7 @@ class GenericDialogue extends Dialogue {
         super.create();
 
         $.subscribe(BaseCommands.SHOW_GENERIC_DIALOGUE, (e, params) => {
+            this.acceptCallback = params.acceptCallback;
             this.showMessage(params);
         });
 
@@ -55,15 +55,13 @@ class GenericDialogue extends Dialogue {
 
     showMessage(params): void {
 
-        this.$message.html(params.message);
+        this.$message.html(params.information);
 
         if (params.buttonText) {
             this.$acceptButton.text(params.buttonText);
         } else {
             this.$acceptButton.text(this.content.ok);
         }
-
-        this.acceptCallback = params.acceptCallback;
 
         if (params.allowClose === false) {
             this.disableClose();

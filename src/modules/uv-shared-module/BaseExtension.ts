@@ -1,11 +1,11 @@
-import BaseCommands = require("./Commands");
+import BaseCommands = require("./BaseCommands");
 import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
-import Params = require("./Params");
+import Params = require("../../Params");
 import Shell = require("./Shell");
 import Storage = require("../../modules/uv-shared-module/Storage");
 import StorageItem = require("../../modules/uv-shared-module/StorageItem");
@@ -139,6 +139,10 @@ class BaseExtension implements IExtension {
                         overrideFullScreen: this.provider.config.options.overrideFullScreen
                     });
             }
+        });
+
+        $.subscribe(BaseCommands.RESOURCE_DEGRADED, () => {
+            $.publish(BaseCommands.SHOW_INFORMATION, [this.provider.config.content.degradedResource]);
         });
 
         $.subscribe(BaseCommands.ESCAPE, () => {
@@ -306,11 +310,13 @@ class BaseExtension implements IExtension {
 
         // deep linking is only allowed when hosted on home domain.
         if (this.provider.isDeepLinkingEnabled()){
-            value = Utils.Urls.GetHashParameter(this.provider.paramMap[key], parent.document);
+            // todo: use a static type on bootstrapper.params
+            value = Utils.Urls.GetHashParameter(this.provider.bootstrapper.params.paramMap[key], parent.document);
         }
 
         if (!value){
-            value = Utils.Urls.GetQuerystringParameter(this.provider.paramMap[key]);
+            // todo: use a static type on bootstrapper.params
+            value = Utils.Urls.GetQuerystringParameter(this.provider.bootstrapper.params.paramMap[key]);
         }
 
         return value;
@@ -320,7 +326,7 @@ class BaseExtension implements IExtension {
     setParam(key: Params, value: any): void{
 
         if (this.provider.isDeepLinkingEnabled()){
-            Utils.Urls.SetHashParameter(this.provider.paramMap[key], value, parent.document);
+            Utils.Urls.SetHashParameter(this.provider.bootstrapper.params.paramMap[key], value, parent.document);
         }
     }
 
@@ -337,7 +343,7 @@ class BaseExtension implements IExtension {
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
         this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
 
-        $.publish(BaseCommands.OPEN_MEDIA);
+        $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
 
         this.setParam(Params.canvasIndex, canvasIndex);
     }
@@ -400,14 +406,30 @@ class BaseExtension implements IExtension {
 
     // auth
 
-    clickThrough(resource: Manifesto.IExternalResource): void {
-        $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [resource.clickThroughService]);
-    }
-
-    login(loginServiceUrl: string): Promise<void> {
+    clickThrough(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
-            var win = window.open(loginServiceUrl, 'loginwindow', 'height=600,width=600');
+            $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [{
+                resource: resource,
+                acceptCallback: () => {
+                    var win = window.open(resource.clickThroughService.id);
+
+                    var pollTimer = window.setInterval(() => {
+                        if (win.closed) {
+                            window.clearInterval(pollTimer);
+                            $.publish(BaseCommands.CLICKTHROUGH_OCCURRED);
+                            resolve();
+                        }
+                    }, 100);
+                }
+            }]);
+        });
+    }
+
+    login(resource: Manifesto.IExternalResource): Promise<void> {
+        return new Promise<void>((resolve) => {
+
+            var win = window.open(resource.loginService.id, 'loginwindow', 'height=600,width=600');
 
             var pollTimer = window.setInterval(() => {
                 if (win.closed) {
@@ -419,9 +441,9 @@ class BaseExtension implements IExtension {
         });
     }
 
-    getAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
+    getAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken> {
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-            $.getJSON(tokenServiceUrl + "?callback=?", (token: Manifesto.IAccessToken) => {
+            $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
                 resolve(token);
             }).fail((error) => {
                 reject(error);
@@ -436,19 +458,19 @@ class BaseExtension implements IExtension {
         });
     }
 
-    getStoredAccessToken(tokenServiceUrl: string): Promise<Manifesto.IAccessToken> {
+    getStoredAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
             // first try an exact match of the url
-            var item: StorageItem = Storage.get(tokenServiceUrl);
+            var item: StorageItem = Storage.get(resource.dataUri);
 
             if (item){
                 resolve(<Manifesto.IAccessToken>item.value);
             }
 
             // find an access token for the domain
-            var domain = Utils.Urls.GetUrlParts(tokenServiceUrl).hostname;
+            var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
 
             var items: StorageItem[] = Storage.getItems();
 
@@ -465,6 +487,8 @@ class BaseExtension implements IExtension {
     }
 
     handleExternalResourceResponse(resource: Manifesto.IExternalResource) : Promise<any> {
+        var that = this;
+
         return new Promise<any>((resolve, reject) => {
             resource.isResponseHandled = true;
 
@@ -472,7 +496,7 @@ class BaseExtension implements IExtension {
                 resolve(resource);
             } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                 resolve(resource);
-                $.publish(BaseCommands.OPEN_MEDIA);
+                $.publish(BaseCommands.RESOURCE_DEGRADED);
             } else {
                 // access denied
                 reject(resource.error.statusText);

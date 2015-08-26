@@ -6823,7 +6823,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
         $.EventSource.call( this );
 
         this.addHandler( 'open-failed', function ( event ) {
-            var msg = $.getString( "Errors.OpenFailed", event.eventSource, event.message);
+            var msg = $.getString( "Errors.OpenFailed", event.eventSource, event.information);
             _this._showMessage( msg );
         });
 

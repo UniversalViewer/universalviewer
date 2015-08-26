@@ -6,9 +6,8 @@ import ExternalResource = require("./ExternalResource");
 // interacting with the IIIF data model.
 interface IProvider{
     canvasIndex: number;
-    manifest: Manifesto.IManifest;
+    manifest: Manifesto.IIIIFResource;
     resources: Manifesto.IExternalResource[];
-    sequence: any;
     sequenceIndex: number;
 
     addTimestamp(uri: string): string;
@@ -18,7 +17,8 @@ interface IProvider{
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexParam(): number;
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
-    getCurrentCanvas(): any;
+    getCurrentCanvas(): Manifesto.ICanvas;
+    getCurrentSequence(): Manifesto.ISequence;
     getFirstPageIndex(): number;
     getInfoUri(canvas: Manifesto.ICanvas): string;
     getLastCanvasLabel(): string;
@@ -52,7 +52,6 @@ interface IProvider{
     isPagingSettingEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
-    load(): void;
 
     // todo: move these to baseextension?
     bootstrapper: BootStrapper;
@@ -76,7 +75,6 @@ interface IProvider{
     getSerializedLocales(): string;
     getSettings(): ISettings;
     isDeepLinkingEnabled(): boolean;
-    paramMap: string[];
     reload(params?: BootstrapParams);
     sanitize(html: string): string;
     serializeLocales(locales: any[]): string;

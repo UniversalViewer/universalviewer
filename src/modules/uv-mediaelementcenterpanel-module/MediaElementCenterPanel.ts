@@ -1,4 +1,4 @@
-import BaseCommands = require("../uv-shared-module/Commands");
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
@@ -41,7 +41,7 @@ class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        $.subscribe(BaseCommands.OPEN_MEDIA, (e, canvas) => {
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, canvas) => {
             that.openMedia();
         });
 

@@ -2,6 +2,9 @@
   "localisation": {
     "label": "Cymraeg"
   },
+  "content": {
+    "degradedResource": "This pdf is degraded."
+  },
   "modules": {
     "dialogue": {
       "content": {

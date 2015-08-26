@@ -2,6 +2,9 @@
   "localisation": {
     "label": "English (GB)"
   },
+  "content": {
+    "degradedResource": "This pdf is degraded."
+  },
   "modules": {
     "dialogue": {
       "content": {

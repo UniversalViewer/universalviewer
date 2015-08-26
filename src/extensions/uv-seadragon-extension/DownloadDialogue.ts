@@ -1,4 +1,4 @@
-import BaseCommands = require("../../modules/uv-shared-module/Commands");
+import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
 import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
 import ISeadragonExtension = require("./ISeadragonExtension");
@@ -124,7 +124,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             this.addDownloadOptionsForRenderings(currentCanvas, this.content.entireFileAsOriginal);
         }
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicSequenceRenderings)) {
-            this.addDownloadOptionsForRenderings(this.provider.sequence, this.content.entireDocument);
+            this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument);
         }
 
         if (!this.$downloadOptions.find('li:visible').length){

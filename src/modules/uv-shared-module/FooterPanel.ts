@@ -1,4 +1,4 @@
-import BaseCommands = require("./Commands");
+import BaseCommands = require("./BaseCommands");
 import BaseView = require("./BaseView");
 
 class FooterPanel extends BaseView {

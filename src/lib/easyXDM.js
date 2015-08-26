@@ -2529,7 +2529,7 @@
                 }
             }
             catch (ex1) {
-                error(ex1.message);
+                error(ex1.information);
             }
         }
 

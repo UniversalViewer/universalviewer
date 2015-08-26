@@ -1,5 +1,5 @@
 import BaseProvider = require("./BaseProvider");
-import Params = require("./Params");
+import Params = require("../../Params");
 
 interface IExtension{
     create(): void;

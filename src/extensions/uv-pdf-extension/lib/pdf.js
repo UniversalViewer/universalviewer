@@ -4703,7 +4703,7 @@ var WorkerTransport = (function WorkerTransportClosure() {
           return this.passwordCallback(updatePassword,
                                        PasswordResponses.NEED_PASSWORD);
         }
-        this.workerReadyPromise.reject(data.exception.message, data.exception);
+        this.workerReadyPromise.reject(data.exception.information, data.exception);
       }, this);
 
       messageHandler.on('IncorrectPassword', function transportBadPass(data) {
@@ -4711,7 +4711,7 @@ var WorkerTransport = (function WorkerTransportClosure() {
           return this.passwordCallback(updatePassword,
                                        PasswordResponses.INCORRECT_PASSWORD);
         }
-        this.workerReadyPromise.reject(data.exception.message, data.exception);
+        this.workerReadyPromise.reject(data.exception.information, data.exception);
       }, this);
 
       messageHandler.on('InvalidPDF', function transportInvalidPDF(data) {
@@ -4719,11 +4719,11 @@ var WorkerTransport = (function WorkerTransportClosure() {
       }, this);
 
       messageHandler.on('MissingPDF', function transportMissingPDF(data) {
-        this.workerReadyPromise.reject(data.exception.message, data.exception);
+        this.workerReadyPromise.reject(data.exception.information, data.exception);
       }, this);
 
       messageHandler.on('UnknownError', function transportUnknownError(data) {
-        this.workerReadyPromise.reject(data.exception.message, data.exception);
+        this.workerReadyPromise.reject(data.exception.information, data.exception);
       }, this);
 
       messageHandler.on('DataLoaded', function transportPage(data) {

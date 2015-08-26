@@ -1,4 +1,4 @@
-import BaseCommands = require("../../modules/uv-shared-module/Commands");
+import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
@@ -11,7 +11,7 @@ import IPDFProvider = require("./IPDFProvider");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import Params = require("../../modules/uv-shared-module/Params");
+import Params = require("../../Params");
 import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
 import Provider = require("./Provider");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
