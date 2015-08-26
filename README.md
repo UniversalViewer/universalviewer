@@ -17,7 +17,7 @@
 
 ## About
 
-The Universal Viewer is an [open source](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt) project to enable cultural heritage institutions to present their digital artifacts in an [IIIF-compliant](http://iiif.io/) and highly customisable user interface. 
+The Universal Viewer is an [open source](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt) project to enable cultural heritage institutions to present their digital artefacts in an [IIIF-compliant](http://iiif.io/) and highly customisable user interface. 
 
 Features:
 
