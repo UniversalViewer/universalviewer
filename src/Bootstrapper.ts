@@ -133,10 +133,10 @@ class Bootstrapper{
         // try using canvasType
         extension = this.extensions[canvasType.toString()];
 
-        // if there isn't an extension for the canvasType, try the rendering
+        // if there isn't an extension for the canvasType, try the format
         if (!extension){
-            var renderings: Manifesto.IRendering[] = this.manifest.getRenderings(sequence);
-            extension = this.extensions[renderings[0].toString()];
+            var format = canvas.getProperty('format');
+            extension = this.extensions[format];
         }
 
         this.featureDetect(() => {
