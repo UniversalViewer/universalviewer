@@ -153,9 +153,9 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$downloadOptions.find('.dynamic').remove();
     }
 
-    addDownloadOptionsForRenderings(resource: any, defaultLabel: string)
+    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string)
     {
-        var renderings: Manifesto.IRendering[] = this.provider.getRenderings(resource);
+        var renderings: Manifesto.IRendering[] = manifesto.getRenderings(resource);
 
         for (var i = 0; i < renderings.length; i++) {
             var rendering: Manifesto.IRendering = renderings[i];

@@ -255,19 +255,7 @@ var Manifesto;
             this.__jsonld.__parsed = this;
             this.context = this.getProperty('@context');
             this.id = this.getProperty('@id');
-            this._label = this.getProperty('label');
         }
-        JSONLDResource.prototype.getManifest = function () {
-            return this.getProperty('__manifest');
-        };
-        JSONLDResource.prototype.getLabel = function () {
-            // todo: why test if it's a digit?
-            //var regExp = /\d/;
-            //if (regExp.test(this._label)) {
-            return this.getManifest().getLocalisedValue(this._label);
-            //}
-            //return null;
-        };
         JSONLDResource.prototype.getProperty = function (name) {
             return this.__jsonld[name];
         };
@@ -279,12 +267,34 @@ var Manifesto;
 (function (Manifesto) {
     var ManifestResource = (function (_super) {
         __extends(ManifestResource, _super);
-        function ManifestResource() {
-            _super.apply(this, arguments);
+        function ManifestResource(jsonld, options) {
+            _super.call(this, jsonld);
+            this.options = options;
         }
+        ManifestResource.prototype.getLabel = function () {
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
+        };
+        ManifestResource.prototype.getMetadata = function () {
+            var metadata = this.getProperty('metadata');
+            // get localised value for each metadata item.
+            for (var i = 0; i < metadata.length; i++) {
+                var item = metadata[i];
+                item.label = Manifesto.Utils.getLocalisedValue(item.label, this.options.locale);
+                item.value = Manifesto.Utils.getLocalisedValue(item.value, this.options.locale);
+            }
+            return metadata;
+        };
+        ManifestResource.prototype.getRendering = function (format) {
+            return Manifesto.Utils.getRendering(this, format);
+        };
+        ManifestResource.prototype.getRenderings = function () {
+            return Manifesto.Utils.getRenderings(this);
+        };
         ManifestResource.prototype.getService = function (profile) {
-            var m = this.getManifest();
-            return m.getService(this, profile);
+            return Manifesto.Utils.getService(this, profile);
+        };
+        ManifestResource.prototype.getServices = function () {
+            return Manifesto.Utils.getServices(this);
         };
         return ManifestResource;
     })(Manifesto.JSONLDResource);
@@ -296,13 +306,13 @@ var Manifesto;
 (function (Manifesto) {
     var Canvas = (function (_super) {
         __extends(Canvas, _super);
-        function Canvas(jsonld) {
-            _super.call(this, jsonld);
+        function Canvas(jsonld, options) {
+            _super.call(this, jsonld, options);
             this.ranges = [];
         }
         // todo: return all image services matching the IIIFIMAGELEVEL1/2 profile
         // https://github.com/UniversalViewer/universalviewer/issues/119
-        //getImages(): IService[] {
+        //getImages(): IAnnotation[] {
         //
         //}
         // todo: use getImages instead. the client must decide which to use.
@@ -367,8 +377,8 @@ var Manifesto;
 (function (Manifesto) {
     var Element = (function (_super) {
         __extends(Element, _super);
-        function Element(jsonld) {
-            _super.call(this, jsonld);
+        function Element(jsonld, options) {
+            _super.call(this, jsonld, options);
         }
         Element.prototype.getType = function () {
             return new Manifesto.ElementType(this.getProperty('@type'));
@@ -383,7 +393,7 @@ var Manifesto;
     var IIIFResource = (function (_super) {
         __extends(IIIFResource, _super);
         function IIIFResource(jsonld, options) {
-            _super.call(this, jsonld);
+            _super.call(this, jsonld, options);
             this.isLoaded = false;
             var defaultOptions = {
                 defaultLabel: '-',
@@ -393,123 +403,25 @@ var Manifesto;
             this.options = _assign(defaultOptions, options);
         }
         IIIFResource.prototype.getAttribution = function () {
-            return this.getLocalisedValue(this.getProperty('attribution'));
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('attribution'), this.options.locale);
+        };
+        IIIFResource.prototype.getDescription = function () {
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('description'), this.options.locale);
         };
         IIIFResource.prototype.getIIIFResourceType = function () {
             return new Manifesto.IIIFResourceType(this.getProperty('@type'));
-        };
-        IIIFResource.prototype.getLocalisedValue = function (resource, locale) {
-            // if the resource is not an array of translations, return the string.
-            if (!_isArray(resource)) {
-                return resource;
-            }
-            if (!locale)
-                locale = this.options.locale;
-            // test for exact match
-            for (var i = 0; i < resource.length; i++) {
-                var value = resource[i];
-                var language = value['@language'];
-                if (locale === language) {
-                    return value['@value'];
-                }
-            }
-            // test for inexact match
-            var match = locale.substr(0, locale.indexOf('-'));
-            for (var i = 0; i < resource.length; i++) {
-                var value = resource[i];
-                var language = value['@language'];
-                if (language === match) {
-                    return value['@value'];
-                }
-            }
-            return null;
         };
         IIIFResource.prototype.getLogo = function () {
             return this.getProperty('logo');
         };
         IIIFResource.prototype.getLicense = function () {
-            return this.getLocalisedValue(this.getProperty('license'));
-        };
-        // todo: remove includeRootProperties
-        // todo: any resource may have metadata, add resource param
-        IIIFResource.prototype.getMetadata = function (includeRootProperties) {
-            var metadata = this.getProperty('metadata');
-            // get localised value for each metadata item.
-            for (var i = 0; i < metadata.length; i++) {
-                var item = metadata[i];
-                item.label = this.getLocalisedValue(item.label);
-                item.value = this.getLocalisedValue(item.value);
-            }
-            if (metadata && includeRootProperties) {
-                if (this.getProperty('description')) {
-                    metadata.push({
-                        "label": "description",
-                        "value": this.getLocalisedValue(this.getProperty('description'))
-                    });
-                }
-                if (this.getProperty('attribution')) {
-                    metadata.push({
-                        "label": "attribution",
-                        "value": this.getLocalisedValue(this.getProperty('attribution'))
-                    });
-                }
-                if (this.getProperty('license')) {
-                    metadata.push({
-                        "label": "license",
-                        "value": this.getLocalisedValue(this.getProperty('license'))
-                    });
-                }
-                if (this.getProperty('logo')) {
-                    metadata.push({
-                        "label": "logo",
-                        "value": '<img src="' + this.getProperty('logo') + '"/>' });
-                }
-            }
-            return metadata;
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('license'), this.options.locale);
         };
         IIIFResource.prototype.getSeeAlso = function () {
-            return this.getLocalisedValue(this.getProperty('seeAlso'));
-        };
-        IIIFResource.prototype.getService = function (resource, profile) {
-            var services = this.getServices(resource);
-            // normalise profile to string
-            if (typeof profile !== 'string') {
-                profile = profile.toString();
-            }
-            for (var i = 0; i < services.length; i++) {
-                var service = services[i];
-                if (service.getProfile().toString() === profile) {
-                    return service;
-                }
-            }
-            return null;
-        };
-        IIIFResource.prototype.getServices = function (resource) {
-            var service;
-            // if passing a parsed object, use the __jsonld.service property,
-            // otherwise look for a service property
-            if (resource.__jsonld) {
-                service = resource.__jsonld.service;
-            }
-            else {
-                service = resource.service;
-            }
-            var parsed = [];
-            if (!service)
-                return parsed;
-            // normalise to array
-            if (!_isArray(service)) {
-                service = [service];
-            }
-            for (var i = 0; i < service.length; i++) {
-                var s = service[i];
-                s.__manifest = this;
-                parsed.push(new Manifesto.Service(s));
-            }
-            return parsed;
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('seeAlso'), this.options.locale);
         };
         IIIFResource.prototype.getTitle = function () {
-            return this.getLocalisedValue(this.getProperty('label'));
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
         };
         IIIFResource.prototype.load = function () {
             var that = this;
@@ -519,7 +431,7 @@ var Manifesto;
                 }
                 else {
                     var options = that.options;
-                    Manifesto.Utils.loadManifest(that.__jsonld['@id']).then(function (data) {
+                    Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
                         that.isLoaded = true;
                         resolve(Manifesto.Deserialiser.parse(data, options));
                     });
@@ -527,7 +439,7 @@ var Manifesto;
             });
         };
         return IIIFResource;
-    })(Manifesto.JSONLDResource);
+    })(Manifesto.ManifestResource);
     Manifesto.IIIFResource = IIIFResource;
 })(Manifesto || (Manifesto = {}));
 var _isArray = _dereq_("lodash.isarray");
@@ -541,6 +453,36 @@ var Manifesto;
             this.sequences = [];
             jsonld.__manifest = this;
         }
+        //getMetadata(): any {
+        //    var metadata = this.getMetadata();
+        //
+        //    if (this.getLicense()){
+        //        metadata.unshift({
+        //            "label": "license",
+        //            "value": this.getLicense()
+        //        });
+        //    }
+        //
+        //    if (this.getAttribution()){
+        //        metadata.unshift({
+        //            "label": "attribution",
+        //            "value": this.getAttribution()
+        //        });
+        //    }
+        //
+        //    if (this.getDescription()){
+        //        metadata.unshift({
+        //            "label": "description",
+        //            "value": this.getDescription()
+        //        });
+        //    }
+        //
+        //    if (this.getLogo()){
+        //        metadata.pop({
+        //            "label": "logo",
+        //            "value": '<img src="' + this.getLogo() + '"/>'});
+        //    }
+        //}
         // todo: use jmespath to flatten tree?
         // https://github.com/jmespath/jmespath.js/issues/6
         // using r.__parsed in the meantime
@@ -574,45 +516,6 @@ var Manifesto;
                 }
             }
             return null;
-        };
-        Manifest.prototype.getRendering = function (resource, format) {
-            var renderings = this.getRenderings(resource);
-            // normalise format to string
-            if (typeof format !== 'string') {
-                format = format.toString();
-            }
-            for (var i = 0; i < renderings.length; i++) {
-                var rendering = renderings[i];
-                if (rendering.getFormat().toString() === format) {
-                    return rendering;
-                }
-            }
-            return null;
-        };
-        Manifest.prototype.getRenderings = function (resource) {
-            var rendering;
-            // if passing a parsed object, use the __jsonld.rendering property,
-            // otherwise look for a rendering property
-            if (resource.__jsonld) {
-                rendering = resource.__jsonld.rendering;
-            }
-            else {
-                rendering = resource.rendering;
-            }
-            var parsed = [];
-            if (!rendering) {
-                return parsed;
-            }
-            // normalise to array
-            if (!_isArray(rendering)) {
-                rendering = [rendering];
-            }
-            for (var i = 0; i < rendering.length; i++) {
-                var r = rendering[i];
-                r.__manifest = this;
-                parsed.push(new Manifesto.Rendering(r));
-            }
-            return parsed;
         };
         Manifest.prototype.getSequenceByIndex = function (sequenceIndex) {
             return this.sequences[sequenceIndex];
@@ -692,20 +595,11 @@ var Manifesto;
 (function (Manifesto) {
     var Range = (function (_super) {
         __extends(Range, _super);
-        function Range(jsonld) {
-            _super.call(this, jsonld);
+        function Range(jsonld, options) {
+            _super.call(this, jsonld, options);
             this.canvases = [];
             this.ranges = [];
         }
-        //getLabel(): string {
-        //    var regExp = /\d/;
-        //
-        //    if (regExp.test(this.__jsonld.label)) {
-        //        return this.manifest.getLocalisedValue(this.__jsonld.label);
-        //    }
-        //
-        //    return null;
-        //}
         Range.prototype.getViewingDirection = function () {
             if (this.getProperty('viewingDirection')) {
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
@@ -719,21 +613,21 @@ var Manifesto;
             return null;
         };
         return Range;
-    })(Manifesto.JSONLDResource);
+    })(Manifesto.ManifestResource);
     Manifesto.Range = Range;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
 (function (Manifesto) {
     var Rendering = (function (_super) {
         __extends(Rendering, _super);
-        function Rendering(jsonld) {
-            _super.call(this, jsonld);
+        function Rendering(jsonld, options) {
+            _super.call(this, jsonld, options);
         }
         Rendering.prototype.getFormat = function () {
             return new Manifesto.RenderingFormat(this.getProperty('format'));
         };
         return Rendering;
-    })(Manifesto.JSONLDResource);
+    })(Manifesto.ManifestResource);
     Manifesto.Rendering = Rendering;
 })(Manifesto || (Manifesto = {}));
 var _last = _dereq_("lodash.last");
@@ -741,8 +635,8 @@ var Manifesto;
 (function (Manifesto) {
     var Sequence = (function (_super) {
         __extends(Sequence, _super);
-        function Sequence(jsonld) {
-            _super.call(this, jsonld);
+        function Sequence(jsonld, options) {
+            _super.call(this, jsonld, options);
             this.canvases = [];
         }
         Sequence.prototype.getCanvasById = function (id) {
@@ -797,12 +691,21 @@ var Manifesto;
             }
             return -1;
         };
-        Sequence.prototype.getLastCanvasLabel = function () {
+        Sequence.prototype.getLastCanvasLabel = function (digitsOnly) {
             for (var i = this.getTotalCanvases() - 1; i >= 0; i--) {
                 var canvas = this.getCanvasByIndex(i);
-                return canvas.getLabel();
+                var label = canvas.getLabel();
+                if (digitsOnly) {
+                    var regExp = /\d/;
+                    if (regExp.test(label)) {
+                        return label;
+                    }
+                }
+                else if (label) {
+                    return label;
+                }
             }
-            return this.getManifest().options.defaultLabel;
+            return this.options.defaultLabel;
         };
         Sequence.prototype.getLastPageIndex = function () {
             return this.getTotalCanvases() - 1;
@@ -976,7 +879,7 @@ var Manifesto;
         };
         Deserialiser.parseManifest = function (json, options) {
             var manifest = new Manifesto.Manifest(json, options);
-            this.parseSequences(manifest);
+            this.parseSequences(manifest, options);
             if (manifest.__jsonld.structures && manifest.__jsonld.structures.length) {
                 this.parseRanges(manifest, JsonUtils.getRootRange(manifest.__jsonld), '');
             }
@@ -991,34 +894,31 @@ var Manifesto;
                 }
             }
         };
-        Deserialiser.parseSequences = function (manifest) {
+        Deserialiser.parseSequences = function (manifest, options) {
             // if IxIF mediaSequences is present, use that. Otherwise fall back to IIIF sequences.
             var children = manifest.__jsonld.mediaSequences || manifest.__jsonld.sequences;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var s = children[i];
-                    s.__manifest = manifest;
-                    var sequence = new Manifesto.Sequence(s);
-                    sequence.canvases = this.parseCanvases(manifest, s);
+                    var sequence = new Manifesto.Sequence(s, options);
+                    sequence.canvases = this.parseCanvases(s, options);
                     manifest.sequences.push(sequence);
                 }
             }
         };
-        Deserialiser.parseCanvases = function (manifest, sequence) {
+        Deserialiser.parseCanvases = function (sequence, options) {
             var canvases = [];
             // if IxIF elements are present, use them. Otherwise fall back to IIIF canvases.
             var children = sequence.elements || sequence.canvases;
             for (var i = 0; i < children.length; i++) {
                 var c = children[i];
-                c.__manifest = manifest;
-                var canvas = new Manifesto.Canvas(c);
+                var canvas = new Manifesto.Canvas(c, options);
                 canvases.push(canvas);
             }
             return canvases;
         };
         Deserialiser.parseRanges = function (manifest, r, path, parentRange) {
-            r.__manifest = manifest;
-            var range = new Manifesto.Range(r);
+            var range = new Manifesto.Range(r, manifest.options);
             // if no parent range is passed, assign the new range to manifest.rootRange
             if (!parentRange) {
                 manifest.rootRange = range;
@@ -1098,14 +998,14 @@ var Manifesto;
 (function (Manifesto) {
     var Service = (function (_super) {
         __extends(Service, _super);
-        function Service(resource) {
-            _super.call(this, resource);
+        function Service(jsonld, options) {
+            _super.call(this, jsonld, options);
         }
         Service.prototype.getProfile = function () {
             return new Manifesto.ServiceProfile(this.getProperty('profile'));
         };
         Service.prototype.getDescription = function () {
-            return this.getManifest().getLocalisedValue(this.getProperty('description'));
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('description'), this.options.locale);
         };
         Service.prototype.getInfoUri = function () {
             var infoUri = this.id;
@@ -1116,7 +1016,7 @@ var Manifesto;
             return infoUri;
         };
         return Service;
-    })(Manifesto.JSONLDResource);
+    })(Manifesto.ManifestResource);
     Manifesto.Service = Service;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
@@ -1159,7 +1059,31 @@ var Manifesto;
     var Utils = (function () {
         function Utils() {
         }
-        Utils.loadManifest = function (uri) {
+        Utils.getLocalisedValue = function (resource, locale) {
+            // if the resource is not an array of translations, return the string.
+            if (!_isArray(resource)) {
+                return resource;
+            }
+            // test for exact match
+            for (var i = 0; i < resource.length; i++) {
+                var value = resource[i];
+                var language = value['@language'];
+                if (locale === language) {
+                    return value['@value'];
+                }
+            }
+            // test for inexact match
+            var match = locale.substr(0, locale.indexOf('-'));
+            for (var i = 0; i < resource.length; i++) {
+                var value = resource[i];
+                var language = value['@language'];
+                if (language === match) {
+                    return value['@value'];
+                }
+            }
+            return null;
+        };
+        Utils.loadResource = function (uri) {
             return new Promise(function (resolve, reject) {
                 var u = url.parse(uri);
                 var fetch = http.request({
@@ -1304,11 +1228,85 @@ var Manifesto;
                 });
             });
         };
+        Utils.getRendering = function (resource, format) {
+            var renderings = this.getRenderings(resource);
+            // normalise format to string
+            if (typeof format !== 'string') {
+                format = format.toString();
+            }
+            for (var i = 0; i < renderings.length; i++) {
+                var rendering = renderings[i];
+                if (rendering.getFormat().toString() === format) {
+                    return rendering;
+                }
+            }
+            return null;
+        };
+        Utils.getRenderings = function (resource) {
+            var rendering;
+            // if passing a manifesto-parsed object, use the __jsonld.rendering property,
+            // otherwise look for a rendering property
+            if (resource.__jsonld) {
+                rendering = resource.__jsonld.rendering;
+            }
+            else {
+                rendering = resource.rendering;
+            }
+            var parsed = [];
+            if (!rendering) {
+                return parsed;
+            }
+            // coerce to array
+            if (!_isArray(rendering)) {
+                rendering = [rendering];
+            }
+            for (var i = 0; i < rendering.length; i++) {
+                var r = rendering[i];
+                parsed.push(new Manifesto.Rendering(r, resource.options));
+            }
+            return parsed;
+        };
+        Utils.getService = function (resource, profile) {
+            var services = this.getServices(resource);
+            // coerce profile to string
+            if (typeof profile !== 'string') {
+                profile = profile.toString();
+            }
+            for (var i = 0; i < services.length; i++) {
+                var service = services[i];
+                if (service.getProfile().toString() === profile) {
+                    return service;
+                }
+            }
+            return null;
+        };
+        Utils.getServices = function (resource) {
+            var service;
+            // if passing a manifesto-parsed object, use the __jsonld.service property,
+            // otherwise look for a service property (info.json services)
+            if (resource.__jsonld) {
+                service = resource.__jsonld.service;
+            }
+            else {
+                service = resource.service;
+            }
+            var parsed = [];
+            if (!service)
+                return parsed;
+            // coerce to array
+            if (!_isArray(service)) {
+                service = [service];
+            }
+            for (var i = 0; i < service.length; i++) {
+                var s = service[i];
+                parsed.push(new Manifesto.Service(s, resource.options));
+            }
+            return parsed;
+        };
         return Utils;
     })();
     Manifesto.Utils = Utils;
 })(Manifesto || (Manifesto = {}));
-;
 module.exports = {
     CanvasType: new Manifesto.CanvasType(),
     ElementType: new Manifesto.ElementType(),
@@ -1318,14 +1316,21 @@ module.exports = {
     ServiceProfile: new Manifesto.ServiceProfile(),
     ViewingDirection: new Manifesto.ViewingDirection(),
     ViewingHint: new Manifesto.ViewingHint(),
-    loadManifest: function (uri) {
-        return Manifesto.Utils.loadManifest(uri);
+    create: function (manifest, options) {
+        return Manifesto.Deserialiser.parse(manifest, options);
+    },
+    // todo: deprecate this - temporary to enable current UV download menu
+    getRenderings: function (resource) {
+        return Manifesto.Utils.getRenderings(resource);
+    },
+    getService: function (resource, profile) {
+        return Manifesto.Utils.getService(resource, profile);
     },
     loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
         return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
     },
-    create: function (manifest, options) {
-        return Manifesto.Deserialiser.parse(manifest, options);
+    loadManifest: function (uri) {
+        return Manifesto.Utils.loadResource(uri);
     }
 };
 /// <reference path="./StringValue.ts" />

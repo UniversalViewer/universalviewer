@@ -23,7 +23,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             // add each file src
             var canvas = this.provider.getCurrentCanvas();
 
-            _.each(this.provider.getRenderings(canvas), (rendering: any) => {
+            _.each(canvas.getRenderings(), (rendering: any) => {
                 this.addEntireFileDownloadOption(rendering);
             });
         }

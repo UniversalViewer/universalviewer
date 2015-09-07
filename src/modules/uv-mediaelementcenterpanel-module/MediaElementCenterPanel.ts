@@ -77,7 +77,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
             var sources = [];
 
-            _.each(this.provider.getRenderings(canvas), (rendering: Manifesto.IRendering) => {
+            _.each(canvas.getRenderings(), (rendering: Manifesto.IRendering) => {
                 sources.push({
                     type: rendering.getFormat().toString(),
                     src: rendering.id

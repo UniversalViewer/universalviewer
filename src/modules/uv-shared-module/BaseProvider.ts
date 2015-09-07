@@ -89,18 +89,6 @@ class BaseProvider implements IProvider{
         return manifestType;
     }
 
-    getService(resource: any, profile: Manifesto.ServiceProfile | string): Manifesto.IService {
-        return this.manifest.getService(resource, profile);
-    }
-
-    getRendering(resource: any, format: Manifesto.RenderingFormat | string): Manifesto.IRendering {
-        return this.manifest.getRendering(resource, format);
-    }
-
-    getRenderings(resource: any): Manifesto.IRendering[] {
-        return this.manifest.getRenderings(resource);
-    }
-
     getCanvasIndexParam(): number {
         return this.bootstrapper.params.getParam(Params.canvasIndex);
     }
@@ -207,7 +195,7 @@ class BaseProvider implements IProvider{
 
     getInfoUri(canvas: Manifesto.ICanvas): string{
         // default to IxIF
-        var service = this.manifest.getService(canvas, manifesto.ServiceProfile.ixif());
+        var service = canvas.getService(manifesto.ServiceProfile.ixif());
         return service.getInfoUri();
     }
 
@@ -317,8 +305,37 @@ class BaseProvider implements IProvider{
         return this.embedDomain;
     }
 
-    getMetadata(includeRootProperties?: boolean): any{
-        return this.manifest.getMetadata(includeRootProperties);
+    getMetadata(): any{
+        var metadata = this.manifest.getMetadata();
+
+        if (this.manifest.getDescription()){
+            metadata.unshift({
+                "label": "description",
+                "value": this.manifest.getDescription()
+            });
+        }
+
+        if (this.manifest.getAttribution()){
+            metadata.unshift({
+                "label": "attribution",
+                "value": this.manifest.getAttribution()
+            });
+        }
+
+        if (this.manifest.getLicense()){
+            metadata.unshift({
+                "label": "license",
+                "value": this.manifest.getLicense()
+            });
+        }
+
+        if (this.manifest.getLogo()){
+            metadata.push({
+                "label": "logo",
+                "value": '<img src="' + this.manifest.getLogo() + '"/>'});
+        }
+
+        return metadata;
     }
 
     defaultToThumbsView(): boolean{

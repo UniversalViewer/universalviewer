@@ -26,16 +26,13 @@ interface IProvider{
     getLicense(): string;
     getLogo(): string;
     getManifestType(): Manifesto.ManifestType;
-    getMetadata(includeRootProperties?: boolean): any;
+    getMetadata(): any;
     getNextPageIndex(index?: number): number;
     getPagedIndices(index?: number): number[];
     getPrevPageIndex(index?: number): number;
     getRangeByPath(path: string): Manifesto.IRange;
-    getRendering(resource: any, format: Manifesto.RenderingFormat): Manifesto.IRendering;
-    getRenderings(resource: any): Manifesto.IRendering[];
     getSeeAlso(): any;
     getSequenceIndexParam(): number;
-    getService(resource: any, profile: Manifesto.ServiceProfile | string): Manifesto.IService;
     getStartCanvasIndex(): number;
     getThumbs(width: number, height: number): Manifesto.Thumb[];
     getTitle(): string;

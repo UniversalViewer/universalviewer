@@ -183,7 +183,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getAutoCompleteService(): Manifesto.IService {
-        return this.getService(this.manifest, manifesto.ServiceProfile.autoComplete());
+        return this.manifest.getService(manifesto.ServiceProfile.autoComplete());
     }
 
     getAutoCompleteUri(): string{
@@ -195,7 +195,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getSearchWithinService(): Manifesto.IService {
-        return this.getService(this.manifest, manifesto.ServiceProfile.searchWithin());
+        return this.manifest.getService(manifesto.ServiceProfile.searchWithin());
     }
 
     getSearchWithinServiceUri(): string {

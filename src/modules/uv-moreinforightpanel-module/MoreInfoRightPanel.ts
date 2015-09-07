@@ -47,7 +47,7 @@ class MoreInfoRightPanel extends RightPanel {
         // show loading icon.
         this.$main.addClass('loading');
 
-        var data = this.provider.getMetadata(true);
+        var data = this.provider.getMetadata();
         this.displayInfo(data);
     }
 

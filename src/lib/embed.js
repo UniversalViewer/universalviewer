@@ -424,7 +424,7 @@ docReady(function() {
                 if (config) uri += "&config=" + config;
                 if (jsonp) uri += "&jsonp=" + jsonp;
 
-                // these are values that getParam can either retrieve from hash or query string
+                // these are values that getParam can either retrieve from the iframe querystring or parent document hash params
                 if (sequenceIndex) uri += "&si=" + sequenceIndex;
                 if (canvasIndex) uri += "&ci=" + canvasIndex;
                 if (zoom) uri += "&z=" + zoom;

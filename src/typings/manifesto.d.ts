@@ -106,16 +106,20 @@ declare module Manifesto {
         context: string;
         id: string;
         __jsonld: any;
-        private _label;
         constructor(jsonld: any);
-        getManifest(): IManifest;
-        getLabel(): string;
         getProperty(name: string): any;
     }
 }
 declare module Manifesto {
-    class ManifestResource extends JSONLDResource {
+    class ManifestResource extends JSONLDResource implements IManifestResource {
+        options: IManifestoOptions;
+        constructor(jsonld: any, options: IManifestoOptions);
+        getLabel(): string;
+        getMetadata(): any;
+        getRendering(format: RenderingFormat | string): IRendering;
+        getRenderings(): IRendering[];
         getService(profile: ServiceProfile | string): IService;
+        getServices(): IService[];
     }
 }
 declare var _endsWith: any;
@@ -123,7 +127,7 @@ declare var _last: any;
 declare module Manifesto {
     class Canvas extends ManifestResource implements ICanvas {
         ranges: IRange[];
-        constructor(jsonld: any);
+        constructor(jsonld: any, options: IManifestoOptions);
         getInfoUri(): string;
         getRange(): IRange;
         getThumbUri(width: number, height: number): string;
@@ -135,25 +139,21 @@ declare module Manifesto {
 declare module Manifesto {
     class Element extends ManifestResource implements IElement {
         type: ElementType;
-        constructor(jsonld: any);
+        constructor(jsonld: any, options: IManifestoOptions);
         getType(): ElementType;
     }
 }
 declare var _assign: any;
 declare module Manifesto {
-    class IIIFResource extends JSONLDResource implements IIIIFResource {
-        options: IManifestoOptions;
+    class IIIFResource extends ManifestResource implements IIIIFResource {
         isLoaded: boolean;
         constructor(jsonld: any, options?: IManifestoOptions);
         getAttribution(): string;
+        getDescription(): string;
         getIIIFResourceType(): IIIFResourceType;
-        getLocalisedValue(resource: any, locale?: string): string;
         getLogo(): string;
         getLicense(): string;
-        getMetadata(includeRootProperties?: boolean): any;
         getSeeAlso(): any;
-        getService(resource: IJSONLDResource, profile: ServiceProfile | string): IService;
-        getServices(resource: any): IService[];
         getTitle(): string;
         load(): Promise<IIIIFResource>;
     }
@@ -163,14 +163,12 @@ declare var _map: any;
 declare module Manifesto {
     class Manifest extends IIIFResource implements IManifest {
         rootRange: IRange;
-        sequences: Sequence[];
+        sequences: ISequence[];
         treeRoot: TreeNode;
         constructor(jsonld: any, options?: IManifestoOptions);
         getRanges(): IRange[];
         getRangeById(id: string): IRange;
         getRangeByPath(path: string): IRange;
-        getRendering(resource: IJSONLDResource, format: RenderingFormat | string): IRendering;
-        getRenderings(resource: any): IRendering[];
         getSequenceByIndex(sequenceIndex: number): ISequence;
         getTotalSequences(): number;
         getTree(): TreeNode;
@@ -181,9 +179,9 @@ declare module Manifesto {
 }
 declare module Manifesto {
     class Collection extends IIIFResource implements ICollection {
-        collections: Collection[];
-        manifests: Manifest[];
-        constructor(jsonld: any, options?: IManifestoOptions);
+        collections: ICollection[];
+        manifests: IManifest[];
+        constructor(jsonld: any, options: IManifestoOptions);
         getCollectionByIndex(collectionIndex: number): ICollection;
         getManifestByIndex(manifestIndex: number): IManifest;
         getTotalCollections(): number;
@@ -191,20 +189,20 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    class Range extends JSONLDResource implements IRange {
+    class Range extends ManifestResource implements IRange {
         canvases: any[];
         parentRange: Range;
         path: string;
         ranges: Range[];
         treeNode: TreeNode;
-        constructor(jsonld: any);
+        constructor(jsonld: any, options: IManifestoOptions);
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
     }
 }
 declare module Manifesto {
-    class Rendering extends JSONLDResource implements IRendering {
-        constructor(jsonld: any);
+    class Rendering extends ManifestResource implements IRendering {
+        constructor(jsonld: any, options: IManifestoOptions);
         getFormat(): RenderingFormat;
     }
 }
@@ -212,12 +210,12 @@ declare var _last: any;
 declare module Manifesto {
     class Sequence extends ManifestResource implements ISequence {
         canvases: ICanvas[];
-        constructor(jsonld: any);
+        constructor(jsonld: any, options: IManifestoOptions);
         getCanvasById(id: string): ICanvas;
         getCanvasByIndex(canvasIndex: number): any;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string, foliated?: boolean): number;
-        getLastCanvasLabel(): string;
+        getLastCanvasLabel(digitsOnly?: boolean): string;
         getLastPageIndex(): number;
         getNextPageIndex(canvasIndex: number, pagingEnabled?: boolean): number;
         getPagedIndices(canvasIndex: number, pagingEnabled?: boolean): number[];
@@ -245,9 +243,9 @@ declare module Manifesto {
         static parseCollections(collection: Collection, options?: IManifestoOptions): void;
         static parseManifest(json: any, options?: IManifestoOptions): Manifest;
         static parseManifests(collection: Collection, options?: IManifestoOptions): void;
-        static parseSequences(manifest: Manifest): void;
-        static parseCanvases(manifest: Manifest, sequence: any): Canvas[];
-        static parseRanges(manifest: Manifest, r: any, path: string, parentRange?: Range): void;
+        static parseSequences(manifest: Manifest, options: IManifestoOptions): void;
+        static parseCanvases(sequence: any, options: IManifestoOptions): ICanvas[];
+        static parseRanges(manifest: Manifest, r: any, path: string, parentRange?: IRange): void;
         static getCanvasById(manifest: Manifest, id: string): ICanvas;
     }
     class Serialiser {
@@ -256,8 +254,8 @@ declare module Manifesto {
 }
 declare var _endsWith: any;
 declare module Manifesto {
-    class Service extends JSONLDResource implements IService {
-        constructor(resource: any);
+    class Service extends ManifestResource implements IService {
+        constructor(jsonld: any, options: IManifestoOptions);
         getProfile(): ServiceProfile;
         getDescription(): string;
         getInfoUri(): string;
@@ -290,10 +288,15 @@ declare var http: any;
 declare var url: any;
 declare module Manifesto {
     class Utils {
-        static loadManifest(uri: string): Promise<any>;
+        static getLocalisedValue(resource: any, locale: string): string;
+        static loadResource(uri: string): Promise<any>;
         static loadExternalResource(resource: IExternalResource, clickThrough: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>, options?: IManifestoOptions): Promise<IExternalResource>;
         static loadExternalResources(resources: IExternalResource[], clickThrough: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>, options?: IManifestoOptions): Promise<IExternalResource[]>;
         static authorize(resource: IExternalResource, clickThrough: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken) => Promise<void>, getStoredAccessToken: (resource: IExternalResource) => Promise<IAccessToken>): Promise<IExternalResource>;
+        static getRendering(resource: any, format: RenderingFormat | string): IRendering;
+        static getRenderings(resource: any): IRendering[];
+        static getService(resource: any, profile: ServiceProfile | string): IService;
+        static getServices(resource: any): IService[];
     }
 }
 declare module Manifesto {
@@ -350,17 +353,13 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    interface IIIIFResource extends IJSONLDResource {
-        options: IManifestoOptions;
+    interface IIIIFResource extends IManifestResource {
         isLoaded: boolean;
         getAttribution(): string;
+        getDescription(): string;
         getLicense(): string;
-        getLocalisedValue(resource: IJSONLDResource | string, locale?: string): string;
         getLogo(): string;
-        getMetadata(includeRootProperties?: boolean): any;
         getSeeAlso(): any;
-        getService(resource: IJSONLDResource, profile: ServiceProfile | string): IService;
-        getServices(resource: any): IService[];
         getTitle(): string;
         getIIIFResourceType(): IIIFResourceType;
         load(): Promise<IIIIFResource>;
@@ -371,7 +370,6 @@ declare module Manifesto {
         context: string;
         id: string;
         __jsonld: any;
-        getLabel(): string;
         getProperty(name: string): any;
     }
 }
@@ -379,8 +377,6 @@ declare module Manifesto {
     interface IManifest extends IIIIFResource {
         getRangeById(id: string): IRange;
         getRangeByPath(path: string): IRange;
-        getRendering(resource: IJSONLDResource, format: RenderingFormat | string): IRendering;
-        getRenderings(resource: any): IRendering[];
         getSequenceByIndex(index: number): ISequence;
         getTotalSequences(): number;
         getTree(): TreeNode;
@@ -393,16 +389,24 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface IManifestResource extends IJSONLDResource {
+        options: IManifestoOptions;
+        getLabel(): string;
+        getMetadata(): any;
+        getRendering(format: RenderingFormat | string): IRendering;
+        getRenderings(): IRendering[];
         getService(profile: ServiceProfile | string): IService;
+        getServices(): IService[];
     }
 }
 interface IManifesto {
-    loadManifest: (uri: string) => Promise<any>;
-    loadExternalResources: (resources: Manifesto.IExternalResource[], clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
-    create: (manifest: string, options?: Manifesto.IManifestoOptions) => Manifesto.IIIIFResource;
     CanvasType: Manifesto.CanvasType;
+    create: (manifest: string, options?: Manifesto.IManifestoOptions) => Manifesto.IIIIFResource;
     ElementType: Manifesto.ElementType;
+    getRenderings(resource: any): Manifesto.IRendering[];
+    getService: (resource: any, profile: Manifesto.ServiceProfile | string) => Manifesto.IService;
     IIIFResourceType: Manifesto.IIIFResourceType;
+    loadExternalResources: (resources: Manifesto.IExternalResource[], clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
+    loadManifest: (uri: string) => Promise<any>;
     ManifestType: Manifesto.ManifestType;
     RenderingFormat: Manifesto.RenderingFormat;
     ServiceProfile: Manifesto.ServiceProfile;
@@ -417,18 +421,18 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    interface IRange extends IJSONLDResource {
+    interface IRange extends IManifestResource {
         canvases: any[];
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
-        parentRange: Range;
+        parentRange: IRange;
         path: string;
-        ranges: Range[];
+        ranges: IRange[];
         treeNode: TreeNode;
     }
 }
 declare module Manifesto {
-    interface IRendering extends IJSONLDResource {
+    interface IRendering extends IManifestResource {
         getFormat(): RenderingFormat;
     }
 }
@@ -439,12 +443,12 @@ declare module Manifesto {
         getCanvasByIndex(index: number): ICanvas;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string, foliated: boolean): number;
-        getLastCanvasLabel(): string;
+        getLastCanvasLabel(digitsOnly?: boolean): string;
         getLastPageIndex(): number;
         getNextPageIndex(index: number): number;
         getPagedIndices(index: number): number[];
         getPrevPageIndex(index: number): number;
-        getService(profile: Manifesto.ServiceProfile | string): IService;
+        getRendering(format: RenderingFormat | string): IRendering;
         getStartCanvas(): string;
         getStartCanvasIndex(): number;
         getThumbs(width: number, height: number): Manifesto.Thumb[];
@@ -460,9 +464,8 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    interface IService extends IJSONLDResource {
+    interface IService extends IManifestResource {
         getProfile(): ServiceProfile;
-        getDescription(): string;
         getInfoUri(): string;
     }
 }
