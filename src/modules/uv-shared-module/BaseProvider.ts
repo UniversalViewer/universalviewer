@@ -13,6 +13,7 @@ class BaseProvider implements IProvider{
 
     bootstrapper: BootStrapper;
     canvasIndex: number;
+    collectionIndex: number;
     config: any;
     domain: string;
     embedDomain: string;
@@ -58,6 +59,7 @@ class BaseProvider implements IProvider{
         this.domain = this.bootstrapper.params.domain;
         this.isLightbox = this.bootstrapper.params.isLightbox;
 
+        this.collectionIndex = this.bootstrapper.params.collectionIndex;
         this.manifestIndex = this.bootstrapper.params.manifestIndex;
         this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
         this.canvasIndex = this.bootstrapper.params.canvasIndex;
@@ -76,6 +78,11 @@ class BaseProvider implements IProvider{
         $.disposePubSub();
 
         this.bootstrapper.bootStrap(p);
+    }
+
+    getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number {
+        // todo: support nested collections. walk up parents adding to array and return csv string.
+        return iiifResource.parentCollection.index;
     }
 
     getManifestType(): Manifesto.ManifestType{
@@ -293,7 +300,7 @@ class BaseProvider implements IProvider{
     }
 
     getTree(): Manifesto.TreeNode{
-        return this.manifest.getTree();
+        return this.iiifResource.getTree();
     }
 
     getDomain(): string{

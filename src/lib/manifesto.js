@@ -284,9 +284,11 @@ var Manifesto;
             }
             return metadata;
         };
+        // todo: once UV download menu uses manifesto parsed objects, this can be moved back from Utils
         ManifestResource.prototype.getRendering = function (format) {
             return Manifesto.Utils.getRendering(this, format);
         };
+        // todo: once UV download menu uses manifesto parsed objects, this can be moved back from Utils
         ManifestResource.prototype.getRenderings = function () {
             return Manifesto.Utils.getRenderings(this);
         };
@@ -394,6 +396,7 @@ var Manifesto;
         __extends(IIIFResource, _super);
         function IIIFResource(jsonld, options) {
             _super.call(this, jsonld, options);
+            this.index = 0;
             this.isLoaded = false;
             var defaultOptions = {
                 defaultLabel: '-',
@@ -423,6 +426,11 @@ var Manifesto;
         IIIFResource.prototype.getTitle = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
         };
+        IIIFResource.prototype.getTree = function () {
+            this.treeRoot = new Manifesto.TreeNode('root');
+            this.treeRoot.data = this;
+            return this.treeRoot;
+        };
         IIIFResource.prototype.load = function () {
             var that = this;
             return new Promise(function (resolve, reject) {
@@ -450,39 +458,10 @@ var Manifesto;
         __extends(Manifest, _super);
         function Manifest(jsonld, options) {
             _super.call(this, jsonld, options);
+            this.index = 0;
             this.sequences = [];
             jsonld.__manifest = this;
         }
-        //getMetadata(): any {
-        //    var metadata = this.getMetadata();
-        //
-        //    if (this.getLicense()){
-        //        metadata.unshift({
-        //            "label": "license",
-        //            "value": this.getLicense()
-        //        });
-        //    }
-        //
-        //    if (this.getAttribution()){
-        //        metadata.unshift({
-        //            "label": "attribution",
-        //            "value": this.getAttribution()
-        //        });
-        //    }
-        //
-        //    if (this.getDescription()){
-        //        metadata.unshift({
-        //            "label": "description",
-        //            "value": this.getDescription()
-        //        });
-        //    }
-        //
-        //    if (this.getLogo()){
-        //        metadata.pop({
-        //            "label": "logo",
-        //            "value": '<img src="' + this.getLogo() + '"/>'});
-        //    }
-        //}
         // todo: use jmespath to flatten tree?
         // https://github.com/jmespath/jmespath.js/issues/6
         // using r.__parsed in the meantime
@@ -524,12 +503,14 @@ var Manifesto;
             return this.sequences.length;
         };
         Manifest.prototype.getTree = function () {
-            this.treeRoot = new Manifesto.TreeNode('root');
-            this.treeRoot.label = 'root';
+            _super.prototype.getTree.call(this);
+            this.treeRoot.data.type = 'manifest';
+            if (!this.isLoaded) {
+                return this.treeRoot;
+            }
             if (!this.rootRange)
                 return this.treeRoot;
             this.treeRoot.data = this.rootRange;
-            this.treeRoot.data.type = 'manifest';
             this.rootRange.treeNode = this.treeRoot;
             if (this.rootRange.ranges) {
                 for (var i = 0; i < this.rootRange.ranges.length; i++) {
@@ -586,6 +567,39 @@ var Manifesto;
         };
         Collection.prototype.getTotalManifests = function () {
             return this.manifests.length;
+        };
+        Collection.prototype.getTree = function () {
+            _super.prototype.getTree.call(this);
+            this.treeRoot.data.type = 'collection';
+            this._parseManifests(this);
+            this._parseCollections(this);
+            return this.treeRoot;
+        };
+        Collection.prototype._parseManifests = function (parentCollection) {
+            if (parentCollection.manifests && parentCollection.manifests.length) {
+                for (var i = 0; i < parentCollection.manifests.length; i++) {
+                    var manifest = parentCollection.manifests[i];
+                    //manifest.parentCollection = parentCollection;
+                    //manifest.index = i;
+                    var tree = manifest.getTree();
+                    tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
+                    parentCollection.treeRoot.addNode(tree);
+                }
+            }
+        };
+        Collection.prototype._parseCollections = function (parentCollection) {
+            if (parentCollection.collections && parentCollection.collections.length) {
+                for (var i = 0; i < parentCollection.collections.length; i++) {
+                    var collection = parentCollection.collections[i];
+                    //collection.parentCollection = parentCollection;
+                    //collection.index = i;
+                    var tree = collection.getTree();
+                    tree.label = collection.getTitle() || 'collection ' + (i + 1);
+                    parentCollection.treeRoot.addNode(tree);
+                    this._parseManifests(collection);
+                    this._parseCollections(collection);
+                }
+            }
         };
         return Collection;
     })(Manifesto.IIIFResource);
@@ -873,6 +887,8 @@ var Manifesto;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var child = this.parseCollection(children[i], options);
+                    child.index = i;
+                    child.parentCollection = collection;
                     collection.collections.push(child);
                 }
             }
@@ -890,6 +906,8 @@ var Manifesto;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var child = this.parseManifest(children[i], options);
+                    child.index = i;
+                    child.parentCollection = collection;
                     collection.manifests.push(child);
                 }
             }

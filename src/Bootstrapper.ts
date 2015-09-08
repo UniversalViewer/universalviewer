@@ -86,8 +86,15 @@ class Bootstrapper{
         var manifest: Manifesto.IManifest;
 
         if (this.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
+            // if it's a collection and has child collections, get the collection by index
             if ((<Manifesto.ICollection>this.iiifResource).collections && (<Manifesto.ICollection>this.iiifResource).collections.length){
                 var collection = (<Manifesto.ICollection>this.iiifResource).collections[this.params.collectionIndex];
+
+                if (!collection){
+                    this.notFound();
+                    return;
+                }
+
                 manifest = collection.getManifestByIndex(this.params.manifestIndex);
             } else {
                 manifest = (<Manifesto.ICollection>this.iiifResource).getManifestByIndex(this.params.manifestIndex);

@@ -1,6 +1,7 @@
 import BaseCommands = require("./BaseCommands");
 import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
+import BootstrapParams = require("../../BootstrapParams");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
@@ -226,8 +227,10 @@ class BaseExtension implements IExtension {
     setParams(): void{
         if (!this.provider.isHomeDomain) return;
 
-        // set sequenceIndex hash param.
+        this.setParam(Params.collectionIndex, this.provider.collectionIndex);
+        this.setParam(Params.manifestIndex, this.provider.manifestIndex);
         this.setParam(Params.sequenceIndex, this.provider.sequenceIndex);
+        this.setParam(Params.canvasIndex, this.provider.canvasIndex);
     }
 
     setDefaultFocus(): void {
@@ -369,17 +372,12 @@ class BaseExtension implements IExtension {
         return Shell.$overlays.is(':visible');
     }
 
-    viewManifest(manifestIndex: number): void{
-        //var seeAlsoUri = this.provider.getManifestSeeAlsoUri(manifest);
-        //if (seeAlsoUri){
-        //    window.open(seeAlsoUri, '_blank');
-        //} else {
-            if (this.isFullScreen()) {
-                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
-            }
+    viewManifest(manifest: Manifesto.IManifest): void{
+        var p = new BootstrapParams();
+        p.collectionIndex = this.provider.getCollectionIndex(manifest);
+        p.manifestIndex = manifest.index;
 
-            //this.triggerSocket(BaseCommands.SEQUENCE_INDEX_CHANGED, manifest.assetSequence);
-        //}
+        this.provider.reload(p);
     }
 
     inIframe(): boolean {

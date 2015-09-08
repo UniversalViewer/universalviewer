@@ -328,7 +328,7 @@ class Extension extends BaseExtension {
         if (!data.type) return;
 
         if (data.type === 'manifest') {
-            //this.viewManifest(data);
+            this.viewManifest(data);
         } else {
             this.viewRange(data.path);
         }

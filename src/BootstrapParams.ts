@@ -17,7 +17,7 @@ class BootstrapParams {
     locales: any[];
     manifestIndex: number;
     manifestUri: string;
-    paramMap: string[] = ['c', 'm', 's', 'cv', 'z', 'r'];
+    paramMap: string[] = ['c', 'm', 's', 'cv', 'z', 'r']; // todo: remove z, r
     sequenceIndex: number;
 
     constructor() {
@@ -40,23 +40,6 @@ class BootstrapParams {
         this.canvasIndex = this.getParam(Params.canvasIndex);
     }
 
-    // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' into array
-    setLocale(locale: string): void {
-        this.locale = locale;
-        this.locales = [];
-        var l = this.locale.split(',');
-
-        for (var i = 0; i < l.length; i++) {
-            var v = l[i].split(':');
-            this.locales.push({
-                name: v[0].trim(),
-                label: (v[1]) ? v[1].trim() : ""
-            });
-        }
-
-        this.localeName = this.locales[0].name;
-    }
-
     getLocaleName(): string {
         return this.localeName;
     }
@@ -72,7 +55,25 @@ class BootstrapParams {
     }
 
     hashParamsAvailable(): boolean {
+        // if reloading,
         return (this.isHomeDomain && !this.isReload);
+    }
+
+    // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' into array
+    setLocale(locale: string): void {
+        this.locale = locale;
+        this.locales = [];
+        var l = this.locale.split(',');
+
+        for (var i = 0; i < l.length; i++) {
+            var v = l[i].split(':');
+            this.locales.push({
+                name: v[0].trim(),
+                label: (v[1]) ? v[1].trim() : ""
+            });
+        }
+
+        this.localeName = this.locales[0].name;
     }
 }
 
