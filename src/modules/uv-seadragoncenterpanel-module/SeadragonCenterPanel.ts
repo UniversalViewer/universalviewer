@@ -97,7 +97,7 @@ class SeadragonCenterPanel extends CenterPanel {
             id: "viewer",
             ajaxWithCredentials: false,
             showNavigationControl: true,
-            showNavigator: true,
+            showNavigator: this.config.options.showNavigator,
             showRotationControl: true,
             showHomeControl: true,
             showFullPageControl: false,
@@ -105,6 +105,13 @@ class SeadragonCenterPanel extends CenterPanel {
             controlsFadeDelay: this.config.options.controlsFadeDelay,
             controlsFadeLength: this.config.options.controlsFadeLength,
             navigatorPosition: this.config.options.navigatorPosition,
+            animationTime: this.config.options.animationTime,
+            visibilityRatio: this.config.options.visibilityRatio,
+            constrainDuringPan: this.config.options.constrainDuringPan,
+            immediateRender: this.config.options.immediateRender,
+            maxZoomLevel: this.config.options.maxZoomLevel,
+            blendTime: this.config.options.blendTime,
+            autoHideControls: this.options.autoHideControls,
             prefixUrl: prefixUrl,
             navImages: {
                 zoomIn: {
