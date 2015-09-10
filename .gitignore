@@ -5,6 +5,7 @@
 lib
 !src/lib
 !src/extensions/**/lib
+!dist/**/lib
 
 #################
 ## TypeScript
