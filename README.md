@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UniversalViewer/universalviewer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+    bower install uv
+
 [Demo](http://universalviewer.azurewebsites.net/)
 
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
