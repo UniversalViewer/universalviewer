@@ -242,6 +242,7 @@ declare module Manifesto {
     }
 }
 declare var jmespath: any;
+declare var _isString: any;
 declare module Manifesto {
     class Deserialiser {
         static parse(manifest: string, options?: IManifestoOptions): IIIIFResource;
