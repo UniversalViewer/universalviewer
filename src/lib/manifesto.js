@@ -284,9 +284,11 @@ var Manifesto;
             }
             return metadata;
         };
+        // todo: once UV download menu uses manifesto parsed objects, this can be moved back from Utils
         ManifestResource.prototype.getRendering = function (format) {
             return Manifesto.Utils.getRendering(this, format);
         };
+        // todo: once UV download menu uses manifesto parsed objects, this can be moved back from Utils
         ManifestResource.prototype.getRenderings = function () {
             return Manifesto.Utils.getRenderings(this);
         };
@@ -394,6 +396,7 @@ var Manifesto;
         __extends(IIIFResource, _super);
         function IIIFResource(jsonld, options) {
             _super.call(this, jsonld, options);
+            this.index = 0;
             this.isLoaded = false;
             var defaultOptions = {
                 defaultLabel: '-',
@@ -423,6 +426,11 @@ var Manifesto;
         IIIFResource.prototype.getTitle = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
         };
+        IIIFResource.prototype.getTree = function () {
+            this.treeRoot = new Manifesto.TreeNode('root');
+            this.treeRoot.data = this;
+            return this.treeRoot;
+        };
         IIIFResource.prototype.load = function () {
             var that = this;
             return new Promise(function (resolve, reject) {
@@ -450,39 +458,10 @@ var Manifesto;
         __extends(Manifest, _super);
         function Manifest(jsonld, options) {
             _super.call(this, jsonld, options);
+            this.index = 0;
             this.sequences = [];
             jsonld.__manifest = this;
         }
-        //getMetadata(): any {
-        //    var metadata = this.getMetadata();
-        //
-        //    if (this.getLicense()){
-        //        metadata.unshift({
-        //            "label": "license",
-        //            "value": this.getLicense()
-        //        });
-        //    }
-        //
-        //    if (this.getAttribution()){
-        //        metadata.unshift({
-        //            "label": "attribution",
-        //            "value": this.getAttribution()
-        //        });
-        //    }
-        //
-        //    if (this.getDescription()){
-        //        metadata.unshift({
-        //            "label": "description",
-        //            "value": this.getDescription()
-        //        });
-        //    }
-        //
-        //    if (this.getLogo()){
-        //        metadata.pop({
-        //            "label": "logo",
-        //            "value": '<img src="' + this.getLogo() + '"/>'});
-        //    }
-        //}
         // todo: use jmespath to flatten tree?
         // https://github.com/jmespath/jmespath.js/issues/6
         // using r.__parsed in the meantime
@@ -524,12 +503,14 @@ var Manifesto;
             return this.sequences.length;
         };
         Manifest.prototype.getTree = function () {
-            this.treeRoot = new Manifesto.TreeNode('root');
-            this.treeRoot.label = 'root';
+            _super.prototype.getTree.call(this);
+            this.treeRoot.data.type = 'manifest';
+            if (!this.isLoaded) {
+                return this.treeRoot;
+            }
             if (!this.rootRange)
                 return this.treeRoot;
             this.treeRoot.data = this.rootRange;
-            this.treeRoot.data.type = 'manifest';
             this.rootRange.treeNode = this.treeRoot;
             if (this.rootRange.ranges) {
                 for (var i = 0; i < this.rootRange.ranges.length; i++) {
@@ -586,6 +567,39 @@ var Manifesto;
         };
         Collection.prototype.getTotalManifests = function () {
             return this.manifests.length;
+        };
+        Collection.prototype.getTree = function () {
+            _super.prototype.getTree.call(this);
+            this.treeRoot.data.type = 'collection';
+            this._parseManifests(this);
+            this._parseCollections(this);
+            return this.treeRoot;
+        };
+        Collection.prototype._parseManifests = function (parentCollection) {
+            if (parentCollection.manifests && parentCollection.manifests.length) {
+                for (var i = 0; i < parentCollection.manifests.length; i++) {
+                    var manifest = parentCollection.manifests[i];
+                    //manifest.parentCollection = parentCollection;
+                    //manifest.index = i;
+                    var tree = manifest.getTree();
+                    tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
+                    parentCollection.treeRoot.addNode(tree);
+                }
+            }
+        };
+        Collection.prototype._parseCollections = function (parentCollection) {
+            if (parentCollection.collections && parentCollection.collections.length) {
+                for (var i = 0; i < parentCollection.collections.length; i++) {
+                    var collection = parentCollection.collections[i];
+                    //collection.parentCollection = parentCollection;
+                    //collection.index = i;
+                    var tree = collection.getTree();
+                    tree.label = collection.getTitle() || 'collection ' + (i + 1);
+                    parentCollection.treeRoot.addNode(tree);
+                    this._parseManifests(collection);
+                    this._parseCollections(collection);
+                }
+            }
         };
         return Collection;
     })(Manifesto.IIIFResource);
@@ -837,6 +851,7 @@ var Manifesto;
     Manifesto.Sequence = Sequence;
 })(Manifesto || (Manifesto = {}));
 var jmespath = _dereq_('jmespath');
+var _isString = _dereq_("lodash.isstring");
 var Manifesto;
 (function (Manifesto) {
     var Deserialiser = (function () {
@@ -873,6 +888,8 @@ var Manifesto;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var child = this.parseCollection(children[i], options);
+                    child.index = i;
+                    child.parentCollection = collection;
                     collection.collections.push(child);
                 }
             }
@@ -881,7 +898,8 @@ var Manifesto;
             var manifest = new Manifesto.Manifest(json, options);
             this.parseSequences(manifest, options);
             if (manifest.__jsonld.structures && manifest.__jsonld.structures.length) {
-                this.parseRanges(manifest, JsonUtils.getRootRange(manifest.__jsonld), '');
+                var r = JsonUtils.getRootRange(manifest.__jsonld);
+                this.parseRanges(manifest, r, '');
             }
             return manifest;
         };
@@ -890,6 +908,8 @@ var Manifesto;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var child = this.parseManifest(children[i], options);
+                    child.index = i;
+                    child.parentCollection = collection;
                     collection.manifests.push(child);
                 }
             }
@@ -918,7 +938,11 @@ var Manifesto;
             return canvases;
         };
         Deserialiser.parseRanges = function (manifest, r, path, parentRange) {
-            var range = new Manifesto.Range(r, manifest.options);
+            var range;
+            if (_isString(r)) {
+                r = JsonUtils.getRangeById(manifest.__jsonld, r);
+            }
+            range = new Manifesto.Range(r, manifest.options);
             // if no parent range is passed, assign the new range to manifest.rootRange
             if (!parentRange) {
                 manifest.rootRange = range;
@@ -974,12 +998,14 @@ var Manifesto;
             var result = jmespath.search(manifest, "sequences[].canvases[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
+            console.log("canvas " + id + " not found");
             return null;
         };
         JsonUtils.getRangeById = function (manifest, id) {
             var result = jmespath.search(manifest, "structures[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
+            console.log("range " + id + " not found");
             return null;
         };
         JsonUtils.getRootRange = function (manifest) {
@@ -1359,7 +1385,7 @@ module.exports = {
 /// <reference path="./Utils.ts" />
 /// <reference path="./Manifesto.ts" /> 
 
-},{"http":6,"jmespath":27,"lodash.assign":40,"lodash.endswith":50,"lodash.isarray":52,"lodash.last":53,"lodash.map":54,"url":24}],2:[function(_dereq_,module,exports){
+},{"http":6,"jmespath":27,"lodash.assign":40,"lodash.endswith":50,"lodash.isarray":52,"lodash.isstring":53,"lodash.last":54,"lodash.map":55,"url":24}],2:[function(_dereq_,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -10840,6 +10866,61 @@ module.exports = isArray;
 
 },{}],53:[function(_dereq_,module,exports){
 /**
+ * lodash 3.0.1 (Custom Build) <https://lodash.com/>
+ * Build: `lodash modern modularize exports="npm" -o ./`
+ * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+ * Based on Underscore.js 1.8.2 <http://underscorejs.org/LICENSE>
+ * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Available under MIT license <https://lodash.com/license>
+ */
+
+/** `Object#toString` result references. */
+var stringTag = '[object String]';
+
+/**
+ * Checks if `value` is object-like.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the [`toStringTag`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.prototype.tostring)
+ * of values.
+ */
+var objToString = objectProto.toString;
+
+/**
+ * Checks if `value` is classified as a `String` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @example
+ *
+ * _.isString('abc');
+ * // => true
+ *
+ * _.isString(1);
+ * // => false
+ */
+function isString(value) {
+  return typeof value == 'string' || (isObjectLike(value) && objToString.call(value) == stringTag);
+}
+
+module.exports = isString;
+
+},{}],54:[function(_dereq_,module,exports){
+/**
  * lodash 3.0.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
  * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
@@ -10868,7 +10949,7 @@ function last(array) {
 
 module.exports = last;
 
-},{}],54:[function(_dereq_,module,exports){
+},{}],55:[function(_dereq_,module,exports){
 /**
  * lodash 3.1.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11020,7 +11101,7 @@ function map(collection, iteratee, thisArg) {
 
 module.exports = map;
 
-},{"lodash._arraymap":55,"lodash._basecallback":56,"lodash._baseeach":61,"lodash.isarray":52}],55:[function(_dereq_,module,exports){
+},{"lodash._arraymap":56,"lodash._basecallback":57,"lodash._baseeach":62,"lodash.isarray":52}],56:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11052,7 +11133,7 @@ function arrayMap(array, iteratee) {
 
 module.exports = arrayMap;
 
-},{}],56:[function(_dereq_,module,exports){
+},{}],57:[function(_dereq_,module,exports){
 /**
  * lodash 3.3.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11476,7 +11557,7 @@ function property(path) {
 
 module.exports = baseCallback;
 
-},{"lodash._baseisequal":57,"lodash._bindcallback":59,"lodash.isarray":52,"lodash.pairs":60}],57:[function(_dereq_,module,exports){
+},{"lodash._baseisequal":58,"lodash._bindcallback":60,"lodash.isarray":52,"lodash.pairs":61}],58:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.7 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11820,7 +11901,7 @@ function isObject(value) {
 
 module.exports = baseIsEqual;
 
-},{"lodash.isarray":52,"lodash.istypedarray":58,"lodash.keys":62}],58:[function(_dereq_,module,exports){
+},{"lodash.isarray":52,"lodash.istypedarray":59,"lodash.keys":63}],59:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11932,9 +12013,9 @@ function isTypedArray(value) {
 
 module.exports = isTypedArray;
 
-},{}],59:[function(_dereq_,module,exports){
-module.exports=_dereq_(44)
 },{}],60:[function(_dereq_,module,exports){
+module.exports=_dereq_(44)
+},{}],61:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12014,7 +12095,7 @@ function pairs(object) {
 
 module.exports = pairs;
 
-},{"lodash.keys":62}],61:[function(_dereq_,module,exports){
+},{"lodash.keys":63}],62:[function(_dereq_,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12197,11 +12278,11 @@ function isObject(value) {
 
 module.exports = baseEach;
 
-},{"lodash.keys":62}],62:[function(_dereq_,module,exports){
+},{"lodash.keys":63}],63:[function(_dereq_,module,exports){
 module.exports=_dereq_(34)
-},{"lodash._getnative":63,"lodash.isarguments":64,"lodash.isarray":52}],63:[function(_dereq_,module,exports){
+},{"lodash._getnative":64,"lodash.isarguments":65,"lodash.isarray":52}],64:[function(_dereq_,module,exports){
 module.exports=_dereq_(35)
-},{}],64:[function(_dereq_,module,exports){
+},{}],65:[function(_dereq_,module,exports){
 module.exports=_dereq_(36)
 },{}]},{},[1])
 (1)

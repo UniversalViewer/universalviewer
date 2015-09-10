@@ -146,7 +146,10 @@ declare module Manifesto {
 declare var _assign: any;
 declare module Manifesto {
     class IIIFResource extends ManifestResource implements IIIIFResource {
+        index: number;
         isLoaded: boolean;
+        parentCollection: ICollection;
+        treeRoot: TreeNode;
         constructor(jsonld: any, options?: IManifestoOptions);
         getAttribution(): string;
         getDescription(): string;
@@ -155,6 +158,7 @@ declare module Manifesto {
         getLicense(): string;
         getSeeAlso(): any;
         getTitle(): string;
+        getTree(): TreeNode;
         load(): Promise<IIIIFResource>;
     }
 }
@@ -162,9 +166,9 @@ declare var _isArray: any;
 declare var _map: any;
 declare module Manifesto {
     class Manifest extends IIIFResource implements IManifest {
+        index: number;
         rootRange: IRange;
         sequences: ISequence[];
-        treeRoot: TreeNode;
         constructor(jsonld: any, options?: IManifestoOptions);
         getRanges(): IRange[];
         getRangeById(id: string): IRange;
@@ -186,6 +190,9 @@ declare module Manifesto {
         getManifestByIndex(manifestIndex: number): IManifest;
         getTotalCollections(): number;
         getTotalManifests(): number;
+        getTree(): TreeNode;
+        private _parseManifests(parentCollection);
+        private _parseCollections(parentCollection);
     }
 }
 declare module Manifesto {
@@ -235,21 +242,22 @@ declare module Manifesto {
     }
 }
 declare var jmespath: any;
+declare var _isString: any;
 declare module Manifesto {
     class Deserialiser {
         static parse(manifest: string, options?: IManifestoOptions): IIIIFResource;
         static parseJson(json: any, options?: IManifestoOptions): IIIIFResource;
-        static parseCollection(json: any, options?: IManifestoOptions): Collection;
-        static parseCollections(collection: Collection, options?: IManifestoOptions): void;
-        static parseManifest(json: any, options?: IManifestoOptions): Manifest;
-        static parseManifests(collection: Collection, options?: IManifestoOptions): void;
-        static parseSequences(manifest: Manifest, options: IManifestoOptions): void;
+        static parseCollection(json: any, options?: IManifestoOptions): ICollection;
+        static parseCollections(collection: ICollection, options?: IManifestoOptions): void;
+        static parseManifest(json: any, options?: IManifestoOptions): IManifest;
+        static parseManifests(collection: ICollection, options?: IManifestoOptions): void;
+        static parseSequences(manifest: IManifest, options: IManifestoOptions): void;
         static parseCanvases(sequence: any, options: IManifestoOptions): ICanvas[];
-        static parseRanges(manifest: Manifest, r: any, path: string, parentRange?: IRange): void;
-        static getCanvasById(manifest: Manifest, id: string): ICanvas;
+        static parseRanges(manifest: IManifest, r: any, path: string, parentRange?: IRange): void;
+        static getCanvasById(manifest: IManifest, id: string): ICanvas;
     }
     class Serialiser {
-        static serialise(manifest: Manifest): string;
+        static serialise(manifest: IManifest): string;
     }
 }
 declare var _endsWith: any;
@@ -324,11 +332,12 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface ICollection extends IIIIFResource {
+        collections: ICollection[];
         getCollectionByIndex(index: number): ICollection;
         getManifestByIndex(index: number): IManifest;
         getTotalCollections(): number;
         getTotalManifests(): number;
-        collections: ICollection[];
+        getTree(): TreeNode;
         manifests: IManifest[];
     }
 }
@@ -354,15 +363,19 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface IIIIFResource extends IManifestResource {
-        isLoaded: boolean;
         getAttribution(): string;
         getDescription(): string;
+        getIIIFResourceType(): IIIFResourceType;
         getLicense(): string;
         getLogo(): string;
         getSeeAlso(): any;
         getTitle(): string;
-        getIIIFResourceType(): IIIFResourceType;
+        getTree(): TreeNode;
+        index: number;
+        isLoaded: boolean;
         load(): Promise<IIIIFResource>;
+        parentCollection: ICollection;
+        treeRoot: TreeNode;
     }
 }
 declare module Manifesto {
@@ -384,7 +397,6 @@ declare module Manifesto {
         isMultiSequence(): boolean;
         rootRange: IRange;
         sequences: ISequence[];
-        treeRoot: TreeNode;
     }
 }
 declare module Manifesto {
