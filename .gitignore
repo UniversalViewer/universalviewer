@@ -53,6 +53,7 @@ node_modules
 !src/lib/*.js
 !src/*/*/lib/*.js
 !src/extensions/*/dependencies.js
+!dist/**/*.js
 
 #################
 ## Build
