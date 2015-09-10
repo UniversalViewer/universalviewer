@@ -64,7 +64,8 @@ src/extensions/*/build
 ## Dist
 #################
 
-##dist/
+dist/*.tar
+dist/*.zip
 
 #################
 ## Themes
