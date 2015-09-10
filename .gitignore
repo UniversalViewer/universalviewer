@@ -64,7 +64,7 @@ src/extensions/*/build
 ## Dist
 #################
 
-dist/
+##dist/
 
 #################
 ## Themes

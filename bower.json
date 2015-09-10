@@ -11,6 +11,7 @@
   ],
   "ignore": [
     "**/.*",
+    "!dist/**",
     "*.js",
     "*.ts",
     "build",
@@ -23,17 +24,17 @@
     "bower_components"
   ],
   "dependencies": {
+  },
+  "devDependencies": {
     "es6-promise": "~2.2.0",
     "extensions": "edsilv/extensions#~0.1.5",
     "http-status-codes": "edsilv/http-status-codes#~0.0.2",
     "jquery-plugins": "edsilv/jquery-plugins#~0.0.14",
+    "lodash-compat": "~3.10.0",
+    "manifesto": "universalviewer/manifesto#dev",
+    "r.js": "~2.1.18",
     "utils": "edsilv/utils#~0.0.23",
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
-    "uv-en-GB-theme": "universalviewer/uv-en-GB-theme",
-    "manifesto": "universalviewer/manifesto#dev",
-    "lodash-compat": "~3.10.0"
-  },
-  "devDependencies": {
-    "r.js": "~2.1.18"
+    "uv-en-GB-theme": "universalviewer/uv-en-GB-theme"
   }
 }

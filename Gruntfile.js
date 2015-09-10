@@ -164,6 +164,17 @@ module.exports = function (grunt) {
                         dest: '<%= config.dirs.examples %>/'
                     }
                 ]
+            },
+            dist: {
+                // copy contents of /build to /dist/build.
+                files: [
+                    {
+                        cwd: '<%= config.dirs.build %>',
+                        expand: true,
+                        src: ['**'],
+                        dest: '<%= config.dirs.dist %>/<%= config.dirs.uv %>/'
+                    }
+                ]
             }
         },
 
@@ -445,6 +456,7 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'clean:dist',
+            'copy:dist',
             'compress:zip',
             'compress:tar'
         );
