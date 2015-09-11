@@ -126,10 +126,15 @@ class TreeView extends BaseView {
 
         var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
         var range: Manifesto.IRange = canvas.getRange();
+        var treeNode: Manifesto.TreeNode;
 
-        if (!range) return;
+        if (range && range.treeNode) {
+            treeNode = range.treeNode;
+        } else {
+            treeNode = this.provider.manifest.treeRoot;
+        }
 
-        if (range.treeNode) this.selectNode(range.treeNode);
+        if (treeNode) this.selectNode(treeNode);
     }
 
     deselectCurrentNode(): void {
@@ -155,7 +160,6 @@ class TreeView extends BaseView {
 
     // walks down the tree using the specified path e.g. [2,2,0]
     getNodeByPath(parentNode: Manifesto.TreeNode, path: string[]): Manifesto.TreeNode {
-
         if (path.length == 0) return parentNode;
         var index = path.shift();
         var node = parentNode.nodes[index];
