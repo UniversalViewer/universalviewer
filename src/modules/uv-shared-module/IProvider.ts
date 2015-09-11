@@ -7,6 +7,7 @@ import ExternalResource = require("./ExternalResource");
 interface IProvider{
     canvasIndex: number;
     collectionIndex: number;
+    iiifResource: Manifesto.IIIIFResource;
     manifest: Manifesto.IIIIFResource;
     manifestIndex: number;
     resources: Manifesto.IExternalResource[];
