@@ -998,12 +998,14 @@ var Manifesto;
             var result = jmespath.search(manifest, "sequences[].canvases[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
+            console.log("canvas " + id + " not found");
             return null;
         };
         JsonUtils.getRangeById = function (manifest, id) {
             var result = jmespath.search(manifest, "structures[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
+            console.log("range " + id + " not found");
             return null;
         };
         JsonUtils.getRootRange = function (manifest) {
