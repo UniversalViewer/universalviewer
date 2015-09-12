@@ -29,12 +29,11 @@ class EmbedDialogue extends BaseEmbedDialogue {
         var rotation = (<ISeadragonExtension>this.extension).getViewerRotation();
 
         this.code = (<ISeadragonProvider>this.provider).getEmbedScript(
-            this.provider.canvasIndex,
-            zoom,
+            this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight,
-            rotation,
-            this.options.embedTemplate);
+            zoom,
+            rotation);
 
         this.$code.val(this.code);
     }

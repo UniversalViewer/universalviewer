@@ -206,7 +206,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, manifestUri, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, manifestUri, collectionIndex, manifestIndex, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -229,6 +229,8 @@ docReady(function() {
             // get initial params from the container's 'data-' attributes.
             manifestUri = $app.attr('data-uri');
             manifestUri = encodeURIComponent(manifestUri);
+            collectionIndex = $app.attr('data-collectionindex');
+            manifestIndex = $app.attr('data-manifestindex');
             sequenceIndex = $app.attr('data-sequenceindex');
             canvasIndex = $app.attr('data-canvasindex');
             zoom = $app.attr('data-zoom');
@@ -382,21 +384,6 @@ docReady(function() {
                 return {width: viewPortWidth, height: viewPortHeight};
             }
 
-            function viewSequence(index) {
-
-                $appFrame.prop('src', '');
-                $app.empty();
-
-                sequenceIndex = index;
-                reload = true;
-
-                createSocket();
-
-                if (isFullScreen){
-                    triggerSocket('uv.onToggleFullScreen');
-                }
-            }
-
             function showLightbox(){
                 $img.hide();
                 $appFrame.show();
@@ -425,8 +412,10 @@ docReady(function() {
                 if (jsonp) uri += "&jsonp=" + jsonp;
 
                 // these are values that getParam can either retrieve from the iframe querystring or parent document hash params
-                if (sequenceIndex) uri += "&si=" + sequenceIndex;
-                if (canvasIndex) uri += "&ci=" + canvasIndex;
+                if (collectionIndex) uri += "&c=" + collectionIndex;
+                if (manifestIndex) uri += "&m=" + manifestIndex;
+                if (sequenceIndex) uri += "&s=" + sequenceIndex;
+                if (canvasIndex) uri += "&cv=" + canvasIndex;
                 if (zoom) uri += "&z=" + zoom;
                 if (rotation) uri += "&r=" + rotation;
 

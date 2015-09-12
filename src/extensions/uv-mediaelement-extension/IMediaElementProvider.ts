@@ -2,7 +2,7 @@
 import IProvider = require("../../modules/uv-shared-module/IProvider");
 
 interface IMediaElementProvider extends IProvider{
-	getEmbedScript(width: number, height: number, embedTemplate: string): string;
+	getEmbedScript(embedTemplate: string, width: number, height: number): string;
     getPosterImageUri(): string;
 }
 
