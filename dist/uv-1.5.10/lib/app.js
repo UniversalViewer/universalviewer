@@ -2485,7 +2485,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.9';
+    exports.Version = '1.5.10';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -6970,9 +6970,8 @@ var Manifesto;
                 else {
                     var options = that.options;
                     Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
-                        var parsed = Manifesto.Deserialiser.parse(data, options);
-                        that = _assign(that, parsed);
-                        resolve(that);
+                        that.isLoaded = true;
+                        resolve(Manifesto.Deserialiser.parse(data, options));
                     });
                 }
             });
@@ -7110,6 +7109,8 @@ var Manifesto;
             if (parentCollection.manifests && parentCollection.manifests.length) {
                 for (var i = 0; i < parentCollection.manifests.length; i++) {
                     var manifest = parentCollection.manifests[i];
+                    //manifest.parentCollection = parentCollection;
+                    //manifest.index = i;
                     var tree = manifest.getTree();
                     tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
                     parentCollection.treeRoot.addNode(tree);
@@ -7120,9 +7121,12 @@ var Manifesto;
             if (parentCollection.collections && parentCollection.collections.length) {
                 for (var i = 0; i < parentCollection.collections.length; i++) {
                     var collection = parentCollection.collections[i];
+                    //collection.parentCollection = parentCollection;
+                    //collection.index = i;
                     var tree = collection.getTree();
                     tree.label = collection.getTitle() || 'collection ' + (i + 1);
                     parentCollection.treeRoot.addNode(tree);
+                    this._parseManifests(collection);
                     this._parseCollections(collection);
                 }
             }
@@ -7524,12 +7528,14 @@ var Manifesto;
             var result = jmespath.search(manifest, "sequences[].canvases[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
+            console.log("canvas " + id + " not found");
             return null;
         };
         JsonUtils.getRangeById = function (manifest, id) {
             var result = jmespath.search(manifest, "structures[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
+            console.log("range " + id + " not found");
             return null;
         };
         JsonUtils.getRootRange = function (manifest) {

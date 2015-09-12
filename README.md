@@ -76,19 +76,19 @@ To build the debug version of the viewer, just run (on the command line, in the 
 
 This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with source maps to aid in debugging.
 
-### Release Builds
+### Distribution Builds
 
-To build the release version of the viewer, just run (on the command line, in the `universalviewer` folder):
+To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
 	grunt build
 
-The built files appear in the `build` folder and are copied to `examples/uv-[build]`.
+A versioned `uv-major.minor.patch` folder along with compressed .zip and .tar files will appear in the `/dist` folder. Use these in your website, or alternatively use:
+ 
+    bower install uv --save
+    
+which will download the distribution folder to `bower_components`.
 
-If you want to create a zip file for distribution (this will appear in the `dist` folder), use:
-
-	grunt dist
-
-Note that the `build` folder is masked with `.gitignore`; it's just for your local use, and won't be checked in to the repository.
+See https://github.com/UniversalViewer/demo-site for examples.
 
 ### Examples
 

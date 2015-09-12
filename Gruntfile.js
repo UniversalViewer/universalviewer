@@ -445,7 +445,8 @@ module.exports = function (grunt) {
             'replace:themeimages',
             'replace:examples',
             'clean:examples',
-            'copy:examples'
+            'copy:examples',
+            'dist'
         );
     });
 
