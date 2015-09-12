@@ -133,15 +133,11 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return infoUri;
     }
 
-    getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string{
-
-        var esu = this.options.embedScriptUri || this.embedScriptUri;
-
-        var template = this.options.embedTemplate || embedTemplate;
+    getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string{
 
         var configUri = this.config.uri || '';
 
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.sequenceIndex, canvasIndex, zoom, rotation, width, height, esu);
+        var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
 
         return script;
     }

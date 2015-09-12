@@ -7,7 +7,7 @@ interface ISeadragonProvider extends IProvider{
     getAutoCompleteUri(): string;
     getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string;
     getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any, download?: boolean, relativeUri?: boolean): string;
-    getEmbedScript(canvasIndex: number, zoom: string, width: number, height: number, rotation: number, embedTemplate: string): string;
+    getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string;
     getImageBaseUri(canvas: Manifesto.ICanvas): string;
     getImageId(canvas: Manifesto.ICanvas): string;
     getSearchResultByCanvasIndex(index: number): SearchResult;

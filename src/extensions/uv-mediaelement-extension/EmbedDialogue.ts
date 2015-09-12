@@ -17,9 +17,9 @@ class EmbedDialogue extends BaseEmbedDialogue {
     formatCode(): void {
 
         this.code = (<IMediaElementProvider>this.provider).getEmbedScript(
+            this.options.embedTemplate,
             this.currentWidth,
-            this.currentHeight,
-            this.options.embedTemplate);
+            this.currentHeight);
 
         this.$code.val(this.code);        
     }

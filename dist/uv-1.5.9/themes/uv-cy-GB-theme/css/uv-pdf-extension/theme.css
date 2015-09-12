@@ -320,6 +320,7 @@
 #app .leftPanel .views .thumbsView .thumbs .thumb .label {
   overflow-x: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb.placeholder .wrap {
   background: url('../../img/uv-treeviewleftpanel-module/unavailable.png') no-repeat 50% 50%;
@@ -421,6 +422,11 @@
   color: #fff;
   display: block;
   padding: 2px 0 0 0;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb .label {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb.placeholder .wrap {
   background: url('../../img/uv-treeviewleftpanel-module/unavailable.png') no-repeat 50% 50%;

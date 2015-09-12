@@ -94,7 +94,7 @@ class GalleryView extends BaseView {
             galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
                                         <div class="wrap"></div>\
                                         <span class="index">{{:#index + 1}}</span>\
-                                        <span class="label">{{>label}}&nbsp;</span>\
+                                        <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
                                      </div>'
         });
 
@@ -203,9 +203,12 @@ class GalleryView extends BaseView {
         var height = $thumb.data('height');
 
         var $wrap = $thumb.find('.wrap');
+        var $label = $thumb.find('.label');
 
         $wrap.width(width * this.range);
         $wrap.height(height * this.range);
+
+        $label.width(width * this.range);
     }
 
     //sizeThumbImage($thumb: JQuery) : void {

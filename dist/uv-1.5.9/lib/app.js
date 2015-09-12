@@ -91,14 +91,15 @@ define('BootstrapParams',["require", "exports", "./Params"], function (require, 
             this.domain = Utils.Urls.GetQuerystringParameter('domain');
             this.embedDomain = Utils.Urls.GetQuerystringParameter('embedDomain');
             this.embedScriptUri = Utils.Urls.GetQuerystringParameter('embedScriptUri');
-            this.isHomeDomain = Utils.Urls.GetQuerystringParameter('isHomeDomain') === "true";
-            this.isLightbox = Utils.Urls.GetQuerystringParameter('isLightbox') === "true";
-            this.isOnlyInstance = Utils.Urls.GetQuerystringParameter('isOnlyInstance') === "true";
-            this.isReload = Utils.Urls.GetQuerystringParameter('isReload') === "true";
+            this.isHomeDomain = Utils.Urls.GetQuerystringParameter('isHomeDomain') === 'true';
+            this.isLightbox = Utils.Urls.GetQuerystringParameter('isLightbox') === 'true';
+            this.isOnlyInstance = Utils.Urls.GetQuerystringParameter('isOnlyInstance') === 'true';
+            this.isReload = Utils.Urls.GetQuerystringParameter('isReload') === 'true';
             var jsonpParam = Utils.Urls.GetQuerystringParameter('jsonp');
-            this.jsonp = jsonpParam === null ? null : !(jsonpParam === "false" || jsonpParam === "0");
+            this.jsonp = jsonpParam === null ? null : !(jsonpParam === 'false' || jsonpParam === '0');
             this.manifestUri = Utils.Urls.GetQuerystringParameter('manifestUri');
-            this.setLocale(Utils.Urls.GetQuerystringParameter('locale'));
+            var locale = Utils.Urls.GetQuerystringParameter('locale') || 'en-GB';
+            this.setLocale(locale);
             this.collectionIndex = this.getParam(Params.collectionIndex);
             this.manifestIndex = this.getParam(Params.manifestIndex);
             this.sequenceIndex = this.getParam(Params.sequenceIndex);
@@ -110,14 +111,16 @@ define('BootstrapParams',["require", "exports", "./Params"], function (require, 
         BootstrapParams.prototype.getParam = function (param) {
             if (this.hashParamsAvailable()) {
                 // get param from parent document
-                return parseInt(Utils.Urls.GetHashParameter(this.paramMap[param], parent.document)) || 0;
+                var p = parseInt(Utils.Urls.GetHashParameter(this.paramMap[param], parent.document));
+                if (p || p === 0)
+                    return p;
             }
             // get param from iframe querystring
-            return parseInt(Utils.Urls.GetHashParameter(this.paramMap[param])) || 0;
+            return parseInt(Utils.Urls.GetQuerystringParameter(this.paramMap[param])) || 0;
         };
         BootstrapParams.prototype.hashParamsAvailable = function () {
             // if reloading,
-            return (this.isHomeDomain && !this.isReload);
+            return (this.isHomeDomain && !this.isReload && this.isOnlyInstance);
         };
         // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' into array
         BootstrapParams.prototype.setLocale = function (locale) {
@@ -1633,7 +1636,7 @@ define('extensions/uv-mediaelement-extension/EmbedDialogue',["require", "exports
             _super.prototype.create.call(this);
         };
         EmbedDialogue.prototype.formatCode = function () {
-            this.code = this.provider.getEmbedScript(this.currentWidth, this.currentHeight, this.options.embedTemplate);
+            this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
             this.$code.val(this.code);
         };
         EmbedDialogue.prototype.resize = function () {
@@ -2482,7 +2485,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.8';
+    exports.Version = '1.5.9';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -2695,7 +2698,7 @@ define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", 
                 galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
                                         <div class="wrap"></div>\
                                         <span class="index">{{:#index + 1}}</span>\
-                                        <span class="label">{{>label}}&nbsp;</span>\
+                                        <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
                                      </div>'
             });
             $.views.helpers({
@@ -2772,8 +2775,10 @@ define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", 
             var width = $thumb.data('width');
             var height = $thumb.data('height');
             var $wrap = $thumb.find('.wrap');
+            var $label = $thumb.find('.label');
             $wrap.width(width * this.range);
             $wrap.height(height * this.range);
+            $label.width(width * this.range);
         };
         //sizeThumbImage($thumb: JQuery) : void {
         //    var width = $thumb.data('width');
@@ -2978,7 +2983,7 @@ define('modules/uv-treeviewleftpanel-module/ThumbsView',["require", "exports", "
                 thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
-                                <span class="label">{{>label}}&nbsp;</span>\
+                                <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
                              </div>\
                              {{if ~separator()}} \
                                  <div class="separator"></div> \
@@ -3296,10 +3301,15 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
             this.deselectCurrentNode();
             var canvas = this.provider.getCanvasByIndex(index);
             var range = canvas.getRange();
-            if (!range)
-                return;
-            if (range.treeNode)
-                this.selectNode(range.treeNode);
+            var treeNode;
+            if (range && range.treeNode) {
+                treeNode = range.treeNode;
+            }
+            else {
+                treeNode = this.provider.manifest.treeRoot;
+            }
+            if (treeNode)
+                this.selectNode(treeNode);
         };
         TreeView.prototype.deselectCurrentNode = function () {
             if (this.selectedNode)
@@ -4040,11 +4050,9 @@ define('extensions/uv-mediaelement-extension/Provider',["require", "exports", ".
             _super.call(this, bootstrapper);
             this.config.options = $.extend(true, this.options, {}, bootstrapper.config.options);
         }
-        Provider.prototype.getEmbedScript = function (width, height, embedTemplate) {
-            var esu = this.options.embedScriptUri || this.embedScriptUri;
-            var template = this.options.embedTemplate || embedTemplate;
+        Provider.prototype.getEmbedScript = function (template, width, height) {
             var configUri = this.config.uri || '';
-            var script = String.format(template, this.manifestUri, this.sequenceIndex, configUri, width, height, esu);
+            var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, width, height, this.embedScriptUri);
             return script;
         };
         // todo: use canvas.getThumbnail()
@@ -4120,7 +4128,7 @@ define('extensions/uv-pdf-extension/EmbedDialogue',["require", "exports", "../..
             _super.prototype.create.call(this);
         };
         EmbedDialogue.prototype.formatCode = function () {
-            this.code = this.provider.getEmbedScript(this.currentWidth, this.currentHeight, this.options.embedTemplate);
+            this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
             this.$code.val(this.code);
         };
         EmbedDialogue.prototype.resize = function () {
@@ -4314,11 +4322,9 @@ define('extensions/uv-pdf-extension/Provider',["require", "exports", "../../modu
             _super.call(this, bootstrapper);
             this.config.options = $.extend(true, this.options, {}, bootstrapper.config.options);
         }
-        Provider.prototype.getEmbedScript = function (width, height, embedTemplate) {
-            var esu = this.options.embedScriptUri || this.embedScriptUri;
-            var template = this.options.embedTemplate || embedTemplate;
+        Provider.prototype.getEmbedScript = function (template, width, height) {
             var configUri = this.config.uri || '';
-            var script = String.format(template, this.manifestUri, this.sequenceIndex, configUri, width, height, esu);
+            var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, width, height, this.embedScriptUri);
             return script;
         };
         return Provider;
@@ -4544,7 +4550,7 @@ define('extensions/uv-seadragon-extension/EmbedDialogue',["require", "exports", 
         EmbedDialogue.prototype.formatCode = function () {
             var zoom = this.extension.getViewerBounds();
             var rotation = this.extension.getViewerRotation();
-            this.code = this.provider.getEmbedScript(this.provider.canvasIndex, zoom, this.currentWidth, this.currentHeight, rotation, this.options.embedTemplate);
+            this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight, zoom, rotation);
             this.$code.val(this.code);
         };
         EmbedDialogue.prototype.resize = function () {
@@ -6426,11 +6432,9 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
             }
             return infoUri;
         };
-        Provider.prototype.getEmbedScript = function (canvasIndex, zoom, width, height, rotation, embedTemplate) {
-            var esu = this.options.embedScriptUri || this.embedScriptUri;
-            var template = this.options.embedTemplate || embedTemplate;
+        Provider.prototype.getEmbedScript = function (template, width, height, zoom, rotation) {
             var configUri = this.config.uri || '';
-            var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.sequenceIndex, canvasIndex, zoom, rotation, width, height, esu);
+            var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
             return script;
         };
         Provider.prototype.getPagedIndices = function (canvasIndex) {
@@ -6966,8 +6970,9 @@ var Manifesto;
                 else {
                     var options = that.options;
                     Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
-                        that.isLoaded = true;
-                        resolve(Manifesto.Deserialiser.parse(data, options));
+                        var parsed = Manifesto.Deserialiser.parse(data, options);
+                        that = _assign(that, parsed);
+                        resolve(that);
                     });
                 }
             });
@@ -7105,8 +7110,6 @@ var Manifesto;
             if (parentCollection.manifests && parentCollection.manifests.length) {
                 for (var i = 0; i < parentCollection.manifests.length; i++) {
                     var manifest = parentCollection.manifests[i];
-                    //manifest.parentCollection = parentCollection;
-                    //manifest.index = i;
                     var tree = manifest.getTree();
                     tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
                     parentCollection.treeRoot.addNode(tree);
@@ -7117,12 +7120,9 @@ var Manifesto;
             if (parentCollection.collections && parentCollection.collections.length) {
                 for (var i = 0; i < parentCollection.collections.length; i++) {
                     var collection = parentCollection.collections[i];
-                    //collection.parentCollection = parentCollection;
-                    //collection.index = i;
                     var tree = collection.getTree();
                     tree.label = collection.getTitle() || 'collection ' + (i + 1);
                     parentCollection.treeRoot.addNode(tree);
-                    this._parseManifests(collection);
                     this._parseCollections(collection);
                 }
             }
@@ -7524,14 +7524,12 @@ var Manifesto;
             var result = jmespath.search(manifest, "sequences[].canvases[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
-            console.log("canvas " + id + " not found");
             return null;
         };
         JsonUtils.getRangeById = function (manifest, id) {
             var result = jmespath.search(manifest, "structures[?\"@id\"=='" + id + "'][]");
             if (result.length)
                 return result[0];
-            console.log("range " + id + " not found");
             return null;
         };
         JsonUtils.getRootRange = function (manifest) {

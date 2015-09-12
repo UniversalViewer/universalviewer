@@ -63,7 +63,7 @@ class ThumbsView extends BaseView {
             thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
-                                <span class="label">{{>label}}&nbsp;</span>\
+                                <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
                              </div>\
                              {{if ~separator()}} \
                                  <div class="separator"></div> \
