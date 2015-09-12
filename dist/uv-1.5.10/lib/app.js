@@ -6970,8 +6970,9 @@ var Manifesto;
                 else {
                     var options = that.options;
                     Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
-                        that.isLoaded = true;
-                        resolve(Manifesto.Deserialiser.parse(data, options));
+                        var parsed = Manifesto.Deserialiser.parse(data, options);
+                        that = _assign(that, parsed);
+                        resolve(that);
                     });
                 }
             });
@@ -7109,8 +7110,6 @@ var Manifesto;
             if (parentCollection.manifests && parentCollection.manifests.length) {
                 for (var i = 0; i < parentCollection.manifests.length; i++) {
                     var manifest = parentCollection.manifests[i];
-                    //manifest.parentCollection = parentCollection;
-                    //manifest.index = i;
                     var tree = manifest.getTree();
                     tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
                     parentCollection.treeRoot.addNode(tree);
@@ -7121,12 +7120,9 @@ var Manifesto;
             if (parentCollection.collections && parentCollection.collections.length) {
                 for (var i = 0; i < parentCollection.collections.length; i++) {
                     var collection = parentCollection.collections[i];
-                    //collection.parentCollection = parentCollection;
-                    //collection.index = i;
                     var tree = collection.getTree();
                     tree.label = collection.getTitle() || 'collection ' + (i + 1);
                     parentCollection.treeRoot.addNode(tree);
-                    this._parseManifests(collection);
                     this._parseCollections(collection);
                 }
             }
