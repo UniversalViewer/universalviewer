@@ -74,6 +74,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
             var id = Utils.Dates.GetTimeStamp();
             var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
+            var posterAttr: string = poster ? ' poster="' + poster + '"' : '';
 
             var sources = [];
 
@@ -86,7 +87,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
             if (this.isVideo(canvas)){
 
-                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
+                this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
 
                 this.player = new MediaElementPlayer("#" + id, {
                     type: ['video/mp4', 'video/webm', 'video/flv'],
@@ -133,7 +134,7 @@ class MediaElementCenterPanel extends CenterPanel {
                     }
                 }
 
-                this.media = this.$container.append('<audio id="' + id + '" type="' + sources[preferredSource].type + '" src="' + sources[preferredSource].src + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
+                this.media = this.$container.append('<audio id="' + id + '" type="' + sources[preferredSource].type + '" src="' + sources[preferredSource].src + '" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></audio>');
 
                 this.player = new MediaElementPlayer("#" + id, {
                     plugins: ['flash'],
