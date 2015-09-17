@@ -224,6 +224,33 @@
 #app .leftPanel .tabsContent {
   padding: 10px 10px 10px 10px;
 }
+#app .leftPanel .tabsContent .options {
+  overflow: hidden;
+}
+#app .leftPanel .tabsContent .options .treeView {
+  height: 30px;
+}
+#app .leftPanel .tabsContent .options .treeView span {
+  display: block;
+  float: left;
+  color: #ffffff;
+  padding: 5px 4px 0 10px;
+  font-size: 11px;
+}
+#app .leftPanel .tabsContent .options .treeView select {
+  float: left;
+  font-size: 11px;
+}
+#app .leftPanel .tabsContent .btn-group .btn {
+  padding: 0 5px 0 5px;
+  background: #555555;
+  color: #999999;
+  width: 55px;
+}
+#app .leftPanel .tabsContent .btn-group .btn.on {
+  background: #DDD;
+  color: #000;
+}
 #app .leftPanel .views .treeView {
   overflow: auto;
   color: #ffffff;

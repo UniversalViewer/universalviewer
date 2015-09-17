@@ -578,6 +578,8 @@ define('modules/uv-dialogues-module/ClickThroughDialogue',["require", "exports",
 
 define('modules/uv-shared-module/ExternalResource',["require", "exports"], function (require, exports) {
     var ExternalResource = (function () {
+        // todo: pass in services associated with this resource if they exist
+        // if the resource returns services in the info.json, those override
         function ExternalResource(provider) {
             this.isResponseHandled = false;
             this.provider = provider;
@@ -607,7 +609,7 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
                         }
                     }
                 }).done(function (data) {
-                    var uri = data['@id'];
+                    var uri = unescape(data['@id']);
                     if (!_.endsWith(uri, '/info.json')) {
                         uri += '/info.json';
                     }
@@ -1193,6 +1195,8 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             var p = new BootstrapParams();
             p.collectionIndex = this.provider.getCollectionIndex(manifest);
             p.manifestIndex = manifest.index;
+            p.sequenceIndex = 0;
+            p.canvasIndex = 0;
             this.provider.reload(p);
         };
         BaseExtension.prototype.inIframe = function () {
@@ -2485,7 +2489,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.10';
+    exports.Version = '1.5.11';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -3190,6 +3194,15 @@ define('modules/uv-treeviewleftpanel-module/ThumbsView',["require", "exports", "
     return ThumbsView;
 });
 
+define('extensions/uv-seadragon-extension/TreeSortType',["require", "exports"], function (require, exports) {
+    var TreeSortType;
+    (function (TreeSortType) {
+        TreeSortType[TreeSortType["date"] = 0] = "date";
+        TreeSortType[TreeSortType["none"] = 1] = "none";
+    })(TreeSortType || (TreeSortType = {}));
+    return TreeSortType;
+});
+
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -3374,7 +3387,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "./GalleryView", "../uv-shared-module/LeftPanel", "./ThumbsView", "./TreeView"], function (require, exports, BaseCommands, Commands, GalleryView, LeftPanel, ThumbsView, TreeView) {
+define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "./GalleryView", "../uv-shared-module/LeftPanel", "./ThumbsView", "../../extensions/uv-seadragon-extension/TreeSortType", "./TreeView"], function (require, exports, BaseCommands, Commands, GalleryView, LeftPanel, ThumbsView, TreeSortType, TreeView) {
     var TreeViewLeftPanel = (function (_super) {
         __extends(TreeViewLeftPanel, _super);
         function TreeViewLeftPanel($element) {
@@ -3409,6 +3422,16 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$main.append(this.$tabsContent);
             this.$options = $('<div class="options"></div>');
             this.$tabsContent.append(this.$options);
+            this.$treeViewOptions = $('<div class="treeView"></div>');
+            this.$options.append(this.$treeViewOptions);
+            this.$sortByLabel = $('<span class="sort">' + this.content.sortBy + '</span>');
+            this.$treeViewOptions.append(this.$sortByLabel);
+            this.$buttonGroup = $('<div class="btn-group"></div>');
+            this.$treeViewOptions.append(this.$buttonGroup);
+            this.$sortByDateButton = $('<button class="btn">' + this.content.date + '</button>');
+            this.$buttonGroup.append(this.$sortByDateButton);
+            this.$sortByVolumeButton = $('<button class="btn">' + this.content.volume + '</button>');
+            this.$buttonGroup.append(this.$sortByVolumeButton);
             this.$views = $('<div class="views"></div>');
             this.$tabsContent.append(this.$views);
             this.$treeView = $('<div class="treeView"></div>');
@@ -3417,6 +3440,13 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$views.append(this.$thumbsView);
             this.$galleryView = $('<div class="galleryView"></div>');
             this.$views.append(this.$galleryView);
+            this.$sortByDateButton.on('click', function () {
+                _this.sortByDate();
+            });
+            this.$sortByVolumeButton.on('click', function () {
+                _this.sortByVolume();
+            });
+            this.$treeViewOptions.hide();
             this.$treeButton.onPressed(function () {
                 _this.openTreeView();
                 $.publish(Commands.OPEN_TREE_VIEW);
@@ -3430,11 +3460,40 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$expandFullButton.attr('tabindex', '8');
             this.$title.text(this.content.title);
             this.$closedTitle.text(this.content.title);
+            this.$sortByVolumeButton.addClass('on');
         };
         TreeViewLeftPanel.prototype.createTreeView = function () {
             this.treeView = new TreeView(this.$treeView);
             this.treeView.elideCount = this.config.options.elideCount;
             this.dataBindTreeView();
+            this.updateTreeViewOptions();
+        };
+        TreeViewLeftPanel.prototype.updateTreeViewOptions = function () {
+            if (this.isCollection()) {
+                this.$treeViewOptions.show();
+            }
+            else {
+                this.$treeViewOptions.hide();
+            }
+        };
+        TreeViewLeftPanel.prototype.sortByDate = function () {
+            this.treeView.rootNode = this.provider.getSortedTree(TreeSortType.date);
+            this.treeView.dataBind();
+            //this.selectCurrentTreeNode();
+            this.$sortByDateButton.addClass('on');
+            this.$sortByVolumeButton.removeClass('on');
+            this.resize();
+        };
+        TreeViewLeftPanel.prototype.sortByVolume = function () {
+            this.treeView.rootNode = this.provider.getSortedTree(TreeSortType.none);
+            this.treeView.dataBind();
+            //this.selectCurrentTreeNode();
+            this.$sortByDateButton.removeClass('on');
+            this.$sortByVolumeButton.addClass('on');
+            this.resize();
+        };
+        TreeViewLeftPanel.prototype.isCollection = function () {
+            return this.treeData.data.type === 'collection';
         };
         TreeViewLeftPanel.prototype.dataBindTreeView = function () {
             if (!this.treeView)
@@ -3479,7 +3538,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             if (this.isUnopened) {
                 var treeEnabled = Utils.Bools.GetBool(this.config.options.treeEnabled, true);
                 var thumbsEnabled = Utils.Bools.GetBool(this.config.options.thumbsEnabled, true);
-                this.treeData = this.provider.getTree();
+                this.treeData = this.provider.getSortedTree(TreeSortType.none);
                 if (!this.treeData.nodes.length) {
                     treeEnabled = false;
                 }
@@ -3548,6 +3607,8 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 this.thumbsView.hide();
             if (this.galleryView)
                 this.galleryView.hide();
+            this.updateTreeViewOptions();
+            this.resize();
             this.treeView.resize();
         };
         TreeViewLeftPanel.prototype.openThumbsView = function () {
@@ -3561,6 +3622,8 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$thumbsButton.addClass('on');
             if (this.treeView)
                 this.treeView.hide();
+            this.$treeViewOptions.hide();
+            this.resize();
             if (this.isFullyExpanded) {
                 this.thumbsView.hide();
                 if (this.galleryView)
@@ -6330,7 +6393,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider", "./SearchResult"], function (require, exports, BaseProvider, SearchResult) {
+define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider", "./SearchResult", "./TreeSortType"], function (require, exports, BaseProvider, SearchResult, TreeSortType) {
     var Provider = (function (_super) {
         __extends(Provider, _super);
         function Provider(bootstrapper) {
@@ -6523,6 +6586,188 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
             }
             return null;
         };
+        // returns a list of treenodes for each decade.
+        // expanding a decade generates a list of years
+        // expanding a year gives a list of months containing issues
+        // expanding a month gives a list of issues.
+        Provider.prototype.getSortedTree = function (sortType) {
+            var tree = this.iiifResource.getTree();
+            var sortedTree = manifesto.getTreeNode();
+            if (sortType === TreeSortType.date) {
+                this.getSortedTreeNodesByDate(sortedTree, tree);
+            }
+            else if (sortType === TreeSortType.none) {
+                sortedTree = tree;
+            }
+            return sortedTree;
+        };
+        Provider.prototype.getSortedTreeNodesByDate = function (sortedTree, tree) {
+            var all = tree.nodes.en().traverseUnique(function (node) { return node.nodes; })
+                .where(function (n) { return n.data.type === manifesto.TreeNodeType.collection().toString() ||
+                n.data.type === manifesto.TreeNodeType.manifest().toString(); }).toArray();
+            //var collections: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
+            //    .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString()).toArray();
+            var manifests = tree.nodes.en().traverseUnique(function (n) { return n.nodes; })
+                .where(function (n) { return n.data.type === manifesto.TreeNodeType.manifest().toString(); }).toArray();
+            this.createDecadeNodes(sortedTree, all);
+            this.sortDecadeNodes(sortedTree);
+            this.createYearNodes(sortedTree, all);
+            this.sortYearNodes(sortedTree);
+            this.createMonthNodes(sortedTree, manifests);
+            this.sortMonthNodes(sortedTree);
+            this.createDateNodes(sortedTree, manifests);
+            this.pruneDecadeNodes(sortedTree);
+        };
+        Provider.prototype.createDecadeNodes = function (rootNode, nodes) {
+            var decadeNode;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                var year = this.getNodeYear(node);
+                var decade = Number(year.toString().substr(2, 1));
+                var endYear = Number(year.toString().substr(0, 3) + "9");
+                if (!this.getDecadeNode(rootNode, year)) {
+                    decadeNode = manifesto.getTreeNode();
+                    decadeNode.label = year + " - " + endYear;
+                    decadeNode.navDate = node.navDate;
+                    decadeNode.data.startYear = year;
+                    decadeNode.data.endYear = endYear;
+                    rootNode.addNode(decadeNode);
+                }
+            }
+        };
+        // delete any empty decades
+        Provider.prototype.pruneDecadeNodes = function (rootNode) {
+            var pruned = [];
+            for (var i = 0; i < rootNode.nodes.length; i++) {
+                var n = rootNode.nodes[i];
+                if (!n.nodes.length) {
+                    pruned.push(n);
+                }
+            }
+            for (var j = 0; j < pruned.length; j++) {
+                var p = pruned[j];
+                rootNode.nodes.remove(p);
+            }
+        };
+        Provider.prototype.sortDecadeNodes = function (rootNode) {
+            rootNode.nodes = rootNode.nodes.sort(function (a, b) {
+                return a.data.startYear - b.data.startYear;
+            });
+        };
+        Provider.prototype.getDecadeNode = function (rootNode, year) {
+            for (var i = 0; i < rootNode.nodes.length; i++) {
+                var n = rootNode.nodes[i];
+                if (year >= n.data.startYear && year <= n.data.endYear)
+                    return n;
+            }
+            return null;
+        };
+        Provider.prototype.createYearNodes = function (rootNode, nodes) {
+            var yearNode;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                var year = this.getNodeYear(node);
+                var decadeNode = this.getDecadeNode(rootNode, year);
+                if (decadeNode && !this.getYearNode(decadeNode, year)) {
+                    yearNode = manifesto.getTreeNode();
+                    yearNode.label = year.toString();
+                    yearNode.navDate = node.navDate;
+                    yearNode.data.year = year;
+                    decadeNode.addNode(yearNode);
+                }
+            }
+        };
+        Provider.prototype.sortYearNodes = function (rootNode) {
+            var _this = this;
+            for (var i = 0; i < rootNode.nodes.length; i++) {
+                var decadeNode = rootNode.nodes[i];
+                decadeNode.nodes = decadeNode.nodes.sort(function (a, b) {
+                    return (_this.getNodeYear(a) - _this.getNodeYear(b));
+                });
+            }
+        };
+        Provider.prototype.getYearNode = function (decadeNode, year) {
+            for (var i = 0; i < decadeNode.nodes.length; i++) {
+                var n = decadeNode.nodes[i];
+                if (year === this.getNodeYear(n))
+                    return n;
+            }
+            return null;
+        };
+        Provider.prototype.createMonthNodes = function (rootNode, nodes) {
+            var monthNode;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                var year = this.getNodeYear(node);
+                var month = this.getNodeMonth(node);
+                var decadeNode = this.getDecadeNode(rootNode, year);
+                var yearNode = this.getYearNode(decadeNode, year);
+                if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)) {
+                    monthNode = manifesto.getTreeNode();
+                    monthNode.label = this.getNodeDisplayMonth(node);
+                    monthNode.navDate = node.navDate;
+                    monthNode.data.year = year;
+                    monthNode.data.month = month;
+                    yearNode.addNode(monthNode);
+                }
+            }
+        };
+        Provider.prototype.sortMonthNodes = function (rootNode) {
+            var _this = this;
+            for (var i = 0; i < rootNode.nodes.length; i++) {
+                var decadeNode = rootNode.nodes[i];
+                for (var j = 0; j < decadeNode.nodes.length; j++) {
+                    var monthNode = decadeNode.nodes[j];
+                    monthNode.nodes = monthNode.nodes.sort(function (a, b) {
+                        return _this.getNodeMonth(a) - _this.getNodeMonth(b);
+                    });
+                }
+            }
+        };
+        Provider.prototype.getMonthNode = function (yearNode, month) {
+            for (var i = 0; i < yearNode.nodes.length; i++) {
+                var n = yearNode.nodes[i];
+                if (month === this.getNodeMonth(n))
+                    return n;
+            }
+            return null;
+        };
+        Provider.prototype.createDateNodes = function (rootNode, nodes) {
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                var year = this.getNodeYear(node);
+                var month = this.getNodeMonth(node);
+                var dateNode = manifesto.getTreeNode();
+                dateNode.label = this.getNodeDisplayDate(node);
+                dateNode.data = node.data;
+                dateNode.data.type = 'manifest';
+                dateNode.data.year = year;
+                dateNode.data.month = month;
+                var decadeNode = this.getDecadeNode(rootNode, year);
+                if (decadeNode) {
+                    var yearNode = this.getYearNode(decadeNode, year);
+                    if (yearNode) {
+                        var monthNode = this.getMonthNode(yearNode, month);
+                        if (monthNode) {
+                            monthNode.addNode(dateNode);
+                        }
+                    }
+                }
+            }
+        };
+        Provider.prototype.getNodeYear = function (node) {
+            return node.navDate.getFullYear();
+        };
+        Provider.prototype.getNodeMonth = function (node) {
+            return node.navDate.getMonth();
+        };
+        Provider.prototype.getNodeDisplayMonth = function (node) {
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return months[node.navDate.getMonth()];
+        };
+        Provider.prototype.getNodeDisplayDate = function (node) {
+            return node.navDate.toDateString();
+        };
         return Provider;
     })(BaseProvider);
     return Provider;
@@ -6674,11 +6919,17 @@ var Manifesto;
         ServiceProfile.prototype.clickThrough = function () {
             return new ServiceProfile(ServiceProfile.CLICKTHROUGH.toString());
         };
-        ServiceProfile.prototype.iiifImageLevel1 = function () {
-            return new ServiceProfile(ServiceProfile.IIIFIMAGELEVEL1.toString());
+        ServiceProfile.prototype.iiif1ImageLevel1 = function () {
+            return new ServiceProfile(ServiceProfile.IIIF1IMAGELEVEL1.toString());
         };
-        ServiceProfile.prototype.iiifImageLevel2 = function () {
-            return new ServiceProfile(ServiceProfile.IIIFIMAGELEVEL2.toString());
+        ServiceProfile.prototype.iiif1ImageLevel2 = function () {
+            return new ServiceProfile(ServiceProfile.IIIF1IMAGELEVEL2.toString());
+        };
+        ServiceProfile.prototype.iiif2ImageLevel1 = function () {
+            return new ServiceProfile(ServiceProfile.IIIF2IMAGELEVEL1.toString());
+        };
+        ServiceProfile.prototype.iiif2ImageLevel2 = function () {
+            return new ServiceProfile(ServiceProfile.IIIF2IMAGELEVEL2.toString());
         };
         ServiceProfile.prototype.ixif = function () {
             return new ServiceProfile(ServiceProfile.IXIF.toString());
@@ -6700,8 +6951,10 @@ var Manifesto;
         };
         ServiceProfile.AUTOCOMPLETE = new ServiceProfile("http://iiif.io/api/autocomplete/1/");
         ServiceProfile.CLICKTHROUGH = new ServiceProfile("http://wellcomelibrary.org/ld/iiif-ext/0/accept-terms-click-through");
-        ServiceProfile.IIIFIMAGELEVEL1 = new ServiceProfile("http://iiif.io/api/image/2/level1.json");
-        ServiceProfile.IIIFIMAGELEVEL2 = new ServiceProfile("http://iiif.io/api/image/2/level2.json");
+        ServiceProfile.IIIF1IMAGELEVEL1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level1");
+        ServiceProfile.IIIF1IMAGELEVEL2 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2");
+        ServiceProfile.IIIF2IMAGELEVEL1 = new ServiceProfile("http://iiif.io/api/image/2/level1.json");
+        ServiceProfile.IIIF2IMAGELEVEL2 = new ServiceProfile("http://iiif.io/api/image/2/level2.json");
         ServiceProfile.IXIF = new ServiceProfile("http://wellcomelibrary.org/ld/ixif/0/alpha.json");
         ServiceProfile.LOGIN = new ServiceProfile("http://iiif.io/api/image/2/auth/login");
         ServiceProfile.LOGOUT = new ServiceProfile("http://iiif.io/api/image/2/auth/logout");
@@ -6870,26 +7123,33 @@ var Manifesto;
         // todo: Prefer thumbnail service to image service if supplied and if
         // the thumbnail service can provide a satisfactory size +/- x pixels.
         Canvas.prototype.getThumbUri = function (width, height) {
-            var uri;
+            var uri, resource, tile, service;
             //if(this.__jsonld.thumbnail){
             //    return this.__jsonld.thumbnail;
             //} else if (this.__jsonld.resources){
             if (this.__jsonld.resources) {
                 // todo: create thumbnail serviceprofile and use manifest.getService
-                uri = this.__jsonld.resources[0].resource.service['@id'];
+                resource = this.__jsonld.resources[0].resource;
             }
             else if (this.__jsonld.images && this.__jsonld.images[0].resource.service) {
                 // todo: create thumbnail serviceprofile and use manifest.getService
-                uri = this.__jsonld.images[0].resource.service['@id'];
+                resource = this.__jsonld.images[0].resource;
             }
             else {
                 return null;
             }
+            service = resource.service;
+            uri = service['@id'];
             if (!_endsWith(uri, '/')) {
                 uri += '/';
             }
             // todo: allow region, rotation, quality, and format as parameters?
-            var tile = 'full/' + width + ',' + height + '/0/default.jpg';
+            if (service.profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() || service.profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString()) {
+                tile = 'full/' + width + ',' + height + '/0/native.jpg';
+            }
+            else {
+                tile = 'full/' + width + ',' + height + '/0/default.jpg';
+            }
             return uri + tile;
         };
         Canvas.prototype.getType = function () {
@@ -6950,6 +7210,9 @@ var Manifesto;
         IIIFResource.prototype.getLicense = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('license'), this.options.locale);
         };
+        IIIFResource.prototype.getNavDate = function () {
+            return new Date(this.getProperty('navDate'));
+        };
         IIIFResource.prototype.getSeeAlso = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('seeAlso'), this.options.locale);
         };
@@ -6969,6 +7232,7 @@ var Manifesto;
                 }
                 else {
                     var options = that.options;
+                    options.navDate = that.getNavDate();
                     Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
                         var parsed = Manifesto.Deserialiser.parse(data, options);
                         that = _assign(that, parsed);
@@ -7035,7 +7299,7 @@ var Manifesto;
         };
         Manifest.prototype.getTree = function () {
             _super.prototype.getTree.call(this);
-            this.treeRoot.data.type = 'manifest';
+            this.treeRoot.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
             if (!this.isLoaded) {
                 return this.treeRoot;
             }
@@ -7056,7 +7320,7 @@ var Manifesto;
         Manifest.prototype._parseTreeNode = function (node, range) {
             node.label = range.getLabel();
             node.data = range;
-            node.data.type = 'range';
+            node.data.type = Manifesto.TreeNodeType.RANGE.toString();
             range.treeNode = node;
             if (range.ranges) {
                 for (var i = 0; i < range.ranges.length; i++) {
@@ -7101,7 +7365,7 @@ var Manifesto;
         };
         Collection.prototype.getTree = function () {
             _super.prototype.getTree.call(this);
-            this.treeRoot.data.type = 'collection';
+            this.treeRoot.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
             this._parseManifests(this);
             this._parseCollections(this);
             return this.treeRoot;
@@ -7112,6 +7376,8 @@ var Manifesto;
                     var manifest = parentCollection.manifests[i];
                     var tree = manifest.getTree();
                     tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
+                    tree.navDate = manifest.getNavDate();
+                    tree.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
                     parentCollection.treeRoot.addNode(tree);
                 }
             }
@@ -7122,6 +7388,8 @@ var Manifesto;
                     var collection = parentCollection.collections[i];
                     var tree = collection.getTree();
                     tree.label = collection.getTitle() || 'collection ' + (i + 1);
+                    tree.navDate = collection.getNavDate();
+                    tree.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
                     parentCollection.treeRoot.addNode(tree);
                     this._parseCollections(collection);
                 }
@@ -7388,6 +7656,12 @@ var Manifesto;
         };
         Deserialiser.parseJson = function (json, options) {
             var object;
+            // have options been passed for the manifest to inherit?
+            if (options) {
+                if (options.navDate && !isNaN(options.navDate.getTime())) {
+                    json.navDate = options.navDate.toString();
+                }
+            }
             switch (json['@type']) {
                 case 'sc:Collection':
                     object = this.parseCollection(json, options);
@@ -7603,6 +7877,30 @@ var Manifesto;
         return TreeNode;
     })();
     Manifesto.TreeNode = TreeNode;
+})(Manifesto || (Manifesto = {}));
+var Manifesto;
+(function (Manifesto) {
+    var TreeNodeType = (function (_super) {
+        __extends(TreeNodeType, _super);
+        function TreeNodeType() {
+            _super.apply(this, arguments);
+        }
+        // todo: use getters when ES3 target is no longer required.
+        TreeNodeType.prototype.collection = function () {
+            return new TreeNodeType(TreeNodeType.COLLECTION.toString());
+        };
+        TreeNodeType.prototype.manifest = function () {
+            return new TreeNodeType(TreeNodeType.MANIFEST.toString());
+        };
+        TreeNodeType.prototype.range = function () {
+            return new TreeNodeType(TreeNodeType.RANGE.toString());
+        };
+        TreeNodeType.COLLECTION = new TreeNodeType("collection");
+        TreeNodeType.MANIFEST = new TreeNodeType("manifest");
+        TreeNodeType.RANGE = new TreeNodeType("range");
+        return TreeNodeType;
+    })(Manifesto.StringValue);
+    Manifesto.TreeNodeType = TreeNodeType;
 })(Manifesto || (Manifesto = {}));
 var http = _dereq_("http");
 var url = _dereq_("url");
@@ -7866,6 +8164,7 @@ module.exports = {
     ManifestType: new Manifesto.ManifestType(),
     RenderingFormat: new Manifesto.RenderingFormat(),
     ServiceProfile: new Manifesto.ServiceProfile(),
+    TreeNodeType: new Manifesto.TreeNodeType(),
     ViewingDirection: new Manifesto.ViewingDirection(),
     ViewingHint: new Manifesto.ViewingHint(),
     create: function (manifest, options) {
@@ -7877,6 +8176,10 @@ module.exports = {
     },
     getService: function (resource, profile) {
         return Manifesto.Utils.getService(resource, profile);
+    },
+    // todo: enable this syntax: var treeNode = new manifesto.TreeNode()
+    getTreeNode: function () {
+        return new Manifesto.TreeNode();
     },
     loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
         return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
@@ -7908,6 +8211,7 @@ module.exports = {
 /// <reference path="./Service.ts" />
 /// <reference path="./Thumb.ts" />
 /// <reference path="./TreeNode.ts" />
+/// <reference path="./TreeNodeType.ts" />
 /// <reference path="./Utils.ts" />
 /// <reference path="./Manifesto.ts" /> 
 
@@ -18868,6 +19172,10 @@ window.browserDetect = {
 window.browserDetect.init();
 define("browserdetect", function(){});
 
+var exjs;!function(r){r.version="0.2.15"}(exjs||(exjs={}));var exjs;!function(r){Array.isArray||(Array.isArray=function(r){return"[object Array]"===Object.prototype.toString.call(r)})}(exjs||(exjs={}));var exjs;!function(r){var t=function(){function t(){}return t.prototype.getEnumerator=function(){return{moveNext:function(){return!1},current:void 0}},t.prototype.aggregate=function(r,t){for(var e=r,n=this.getEnumerator();n.moveNext();)e=t(e,n.current);return e},t.prototype.all=function(r){if(r)for(var t=this.getEnumerator(),e=0;t.moveNext();){if(!r(t.current,e))return!1;e++}return!0},t.prototype.any=function(r){for(var t=this.getEnumerator(),e=0;t.moveNext();){if(!r)return!0;if(r(t.current,e))return!0;e++}return!1},t.prototype.apply=function(r){throw new Error("Not implemented")},t.prototype.at=function(r){for(var t=this.getEnumerator(),e=0;t.moveNext();){if(e===r)return t.current;e++}return void 0},t.prototype.average=function(r){var t=0,e=0;r=r||function(r){if("number"!=typeof r)throw new Error("Object is not a number.");return r};for(var n=this.getEnumerator();n.moveNext();)e+=r(n.current),t++;return 0===t?0:e/t},t.prototype.concat=function(r){throw new Error("Not implemented")},t.prototype.count=function(r){for(var t=0,e=this.getEnumerator();e.moveNext();)(!r||r(e.current))&&t++;return t},t.prototype.difference=function(r,t){return t=t||function(r,t){return r===t},r instanceof Array&&(r=r.en()),{intersection:this.intersect(r,t).toArray().en(),aNotB:this.except(r,t).toArray().en(),bNotA:r.except(this,t).toArray().en()}},t.prototype.distinct=function(r){throw new Error("Not implemented")},t.prototype.except=function(r,t){throw new Error("Not implemented")},t.prototype.first=function(r){for(var t=this.getEnumerator();t.moveNext();)if(!r||r(t.current))return t.current;return void 0},t.prototype.firstIndex=function(r){for(var t=this.getEnumerator(),e=0;t.moveNext();e++)if(!r||r(t.current))return e;return-1},t.prototype.forEach=function(r){for(var t=this.getEnumerator();t.moveNext();)r(t.current)},t.prototype.groupBy=function(r,t){throw new Error("Not implemented")},t.prototype.intersect=function(r,t){throw new Error("Not implemented")},t.prototype.join=function(r,t,e,n,o){throw new Error("Not implemented")},t.prototype.last=function(r){for(var t,e=this.getEnumerator();e.moveNext();)(!r||r(e.current))&&(t=e.current);return t},t.prototype.lastIndex=function(r){for(var t=-1,e=this.getEnumerator(),n=0;e.moveNext();n++)(!r||r(e.current))&&(t=n);return t},t.prototype.max=function(r){var t=this.getEnumerator();if(!t.moveNext())return 0;r=r||function(r){if("number"!=typeof r)throw new Error("Object is not a number.");return r};for(var e=r(t.current);t.moveNext();)e=Math.max(e,r(t.current));return e},t.prototype.min=function(r){var t=this.getEnumerator();if(!t.moveNext())return 0;r=r||function(r){if("number"!=typeof r)throw new Error("Object is not a number.");return r};for(var e=r(t.current);t.moveNext();)e=Math.min(e,r(t.current));return e},t.prototype.orderBy=function(r,t){throw new Error("Not implemented")},t.prototype.orderByDescending=function(r,t){throw new Error("Not implemented")},t.prototype.reverse=function(){throw new Error("Not implemented")},t.prototype.select=function(r){throw new Error("Not implemented")},t.prototype.selectMany=function(r){throw new Error("Not implemented")},t.prototype.skip=function(r){throw new Error("Not implemented")},t.prototype.skipWhile=function(r){throw new Error("Not implemented")},t.prototype.standardDeviation=function(r){var t=this.average(r),e=0,n=0;r=r||function(r){if("number"!=typeof r)throw new Error("Object is not a number.");return r};for(var o=this.getEnumerator();o.moveNext();){var u=r(o.current)-t;e+=u*u,n++}return Math.sqrt(e/n)},t.prototype.sum=function(r){var t=0;r=r||function(r){if("number"!=typeof r)throw new Error("Object is not a number.");return r};for(var e=this.getEnumerator();e.moveNext();)t+=r(e.current);return t},t.prototype.take=function(r){throw new Error("Not implemented")},t.prototype.takeWhile=function(r){throw new Error("Not implemented")},t.prototype.traverse=function(r){throw new Error("Not implemented")},t.prototype.traverseUnique=function(r,t){throw new Error("Not implemented")},t.prototype.toArray=function(){for(var r=[],t=this.getEnumerator();t.moveNext();)r.push(t.current);return r},t.prototype.toMap=function(t,e){for(var n=new r.Map,o=this.getEnumerator();o.moveNext();)n.set(t(o.current),e(o.current));return n},t.prototype.toList=function(){throw new Error("Not implemented")},t.prototype.union=function(r,t){throw new Error("Not implemented")},t.prototype.where=function(r){throw new Error("Not implemented")},t.prototype.zip=function(r,t){throw new Error("Not implemented")},t}();r.Enumerable=t}(exjs||(exjs={}));var Symbol,exjs;!function(r){function t(r){var t;return{next:function(){var e={done:!0,value:void 0};return r&&(t=t||r.getEnumerator())?(e.done=!t.moveNext(),e.value=t.current,e):e}}}Symbol&&Symbol.iterator&&(r.Enumerable.prototype[Symbol.iterator]=function(){return t(this)})}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){var e,n=0,o={current:void 0,moveNext:function(){return e||(e=r.getEnumerator()),e.moveNext()?(t(o.current=e.current,n),n++,!0):!1}};return o}r.Enumerable.prototype.apply=function(e){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return t(n,e)},o},r.List&&(r.List.prototype.apply=r.Enumerable.prototype.apply)}(exjs||(exjs={}));var __extends=this&&this.__extends||function(r,t){function e(){this.constructor=r}for(var n in t)t.hasOwnProperty(n)&&(r[n]=t[n]);e.prototype=t.prototype,r.prototype=new e},exjs;!function(r){function t(r){var t=r.length,e={moveNext:void 0,current:void 0},n=-1;return e.moveNext=function(){return n++,n>=t?(e.current=void 0,!1):(e.current=r[n],!0)},e}function e(){return this&&Array.isArray(this)?new n(this):new r.Enumerable}var n=function(r){function e(e){r.call(this),this.getEnumerator=function(){return t(e)},this.toArray=function(){return e.slice(0)}}return __extends(e,r),e}(r.Enumerable);try{Object.defineProperty(Array.prototype,"en",{value:e,enumerable:!1,writable:!1,configurable:!1})}catch(o){Array.prototype.en=e}}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){var e,n=!1,o={current:void 0,moveNext:function(){return e||(e=r.getEnumerator()),o.current=void 0,e.moveNext()?(o.current=e.current,!0):n?!1:(n=!0,e=t.getEnumerator(),e.moveNext()?(o.current=e.current,!0):!1)}};return o}r.Enumerable.prototype.concat=function(e){var n=this,o=e instanceof Array?e.en():e,u=new r.Enumerable;return u.getEnumerator=function(){return t(n,o)},u},r.List&&(r.List.prototype.concat=r.Enumerable.prototype.concat)}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){var e,n=[],o={current:void 0,moveNext:function(){if(e||(e=r.getEnumerator()),o.current=void 0,!t){for(;e.moveNext();)if(n.indexOf(e.current)<0)return n.push(o.current=e.current),!0;return!1}for(;e.moveNext();){for(var u=0,i=n.length,c=!1;i>u&&!c;u++)c=!!t(n[u],e.current);if(!c)return n.push(o.current=e.current),!0}return!1}};return o}r.Enumerable.prototype.distinct=function(e){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return t(n,e)},o},r.List&&(r.List.prototype.distinct=r.Enumerable.prototype.distinct)}(exjs||(exjs={}));var exjs;!function(r){function t(r,t,e){e=e||function(r,t){return r===t};var n,o={current:void 0,moveNext:function(){for(n||(n=r.getEnumerator()),o.current=void 0;n.moveNext();){for(var u=!1,i=t.getEnumerator();i.moveNext()&&!u;)u=e(n.current,i.current);if(!u)return o.current=n.current,!0}return!1}};return o}r.Enumerable.prototype.except=function(e,n){var o=this,u=e instanceof Array?e.en():e,i=new r.Enumerable;return i.getEnumerator=function(){return t(o,u,n)},i},r.List&&(r.List.prototype.except=r.Enumerable.prototype.except)}(exjs||(exjs={})),Function.prototype.fromJson=function(r,t){function e(r,t){if(null==r)return r;if(t instanceof Function)return t(r);if(t instanceof Array){if(t=t[0],!(t instanceof Function&&r instanceof Array))return void 0;for(var e=[],n=0;n<r.length;n++)e.push(t(r[n]));return e}return void 0}var n=new this;if(null==r)return n;var o=[];for(var u in t){var i=e(r[u],t[u]);void 0!==i&&(n[u]=i,o.push(u))}for(var u in this.$jsonMappings)if(!(o.indexOf(u)>-1)){var i=e(r[u],this.$jsonMappings[u]);void 0!==i&&(n[u]=i,o.push(u))}for(var u in r)o.indexOf(u)>-1||(n[u]=r[u]);return n};var exjs;!function(r){function t(r,t,n){var o,u=0,i={current:void 0,moveNext:function(){return o||(o=e(r,t,n)),i.current=void 0,u>=o.length?!1:(i.current=o[u],u++,!0)}};return i}function e(r,t,e){e=e||function(r,t){return r===t};for(var o,u=[],i=[],c=r.getEnumerator();c.moveNext();){o=t(c.current);for(var a=-1,p=0,s=i.length;s>p;p++)if(e(o,i[p])){a=p;break}var f;0>a?(i.push(o),u.push(f=new n(o))):f=u[a],f._add(c.current)}return u}var n=function(r){function t(t){var e=this;r.call(this),this.key=t,this._arr=[],this.getEnumerator=function(){return e._arr.en().getEnumerator()}}return __extends(t,r),t.prototype._add=function(r){this._arr.push(r)},t}(r.Enumerable);r.Enumerable.prototype.groupBy=function(e,n){var o=this,u=new r.Enumerable;return u.getEnumerator=function(){return t(o,e,n)},u},r.List&&(r.List.prototype.groupBy=r.Enumerable.prototype.groupBy)}(exjs||(exjs={}));var exjs;!function(r){function t(t,e,n){n=n||function(r,t){return r===t};var o,u={current:void 0,moveNext:function(){for(o||(o=r.en(t).distinct().getEnumerator()),u.current=void 0;o.moveNext();){for(var i=!1,c=e.getEnumerator();c.moveNext()&&!i;)i=n(o.current,c.current);if(i)return u.current=o.current,!0}return!1}};return u}r.Enumerable.prototype.intersect=function(e,n){var o=this,u=e instanceof Array?e.en():e,i=new r.Enumerable;return i.getEnumerator=function(){return t(o,u,n)},i},r.List&&(r.List.prototype.intersect=r.Enumerable.prototype.intersect)}(exjs||(exjs={}));var exjs;!function(r){function t(t,e,n,o,u,i){i=i||function(r,t){return r===t};var c,a,p=0,s={current:void 0,moveNext:function(){if(s.current=void 0,!c){if(c=t.getEnumerator(),!c.moveNext())return!1;a=r.en(e).toArray()}var f;do{for(;p<a.length;p++)if(f=a[p],i(n(c.current),o(f)))return p++,s.current=u(c.current,f),!0;p=0}while(c.moveNext());return!1}};return s}r.Enumerable.prototype.join=function(e,n,o,u,i){var c=this,a=e instanceof Array?e.en():e,p=new r.Enumerable;return p.getEnumerator=function(){return t(c,a,n,o,u,i)},p},r.List&&(r.List.prototype.join=r.Enumerable.prototype.join)}(exjs||(exjs={}));var exjs;!function(r){function t(){this.constructor=e}r.Enumerable.prototype.toList=function(){for(var r=new e,t=this.getEnumerator();t.moveNext();)r.push(t.current);return r};var e=function(r){function t(){r.apply(this,arguments)}return __extends(t,r),t.prototype.toString=function(){throw new Error("Not implemented")},t.prototype.toLocaleString=function(){throw new Error("Not implemented")},t.prototype.pop=function(){throw new Error("Not implemented")},t.prototype.push=function(){for(var r=[],t=0;t<arguments.length;t++)r[t-0]=arguments[t];throw new Error("Not implemented")},t.prototype.shift=function(){throw new Error("Not implemented")},t.prototype.slice=function(r,t){throw new Error("Not implemented")},t.prototype.sort=function(r){throw new Error("Not implemented")},t.prototype.splice=function(){throw new Error("Not implemented")},t.prototype.unshift=function(){for(var r=[],t=0;t<arguments.length;t++)r[t-0]=arguments[t];throw new Error("Not implemented")},t.prototype.indexOf=function(r,t){throw new Error("Not implemented")},t.prototype.lastIndexOf=function(r,t){throw new Error("Not implemented")},t.prototype.every=function(r,t){throw new Error("Not implemented")},t.prototype.some=function(r,t){throw new Error("Not implemented")},t.prototype.forEach=function(r,t){throw new Error("Not implemented")},t.prototype.map=function(r,t){throw new Error("Not implemented")},t.prototype.filter=function(r,t){throw new Error("Not implemented")},t.prototype.reduce=function(r,t){throw new Error("Not implemented")},t.prototype.reduceRight=function(r,t){throw new Error("Not implemented")},t.prototype.remove=function(r){throw new Error("Not implemented")},t.prototype.removeWhere=function(r){throw new Error("Not implemented")},t}(r.Enumerable);r.List=e;for(var n in Array)Array.hasOwnProperty(n)&&(e[n]=Array[n]);t.prototype=Array.prototype,e.prototype=new t;for(var o in r.Enumerable.prototype)"getEnumerator"!==o&&(e.prototype[o]=r.Enumerable.prototype[o]);e.prototype.getEnumerator=function(){var r=this,t=r.length,e={moveNext:void 0,current:void 0},n=-1;return e.moveNext=function(){return n++,n>=t?(e.current=void 0,!1):(e.current=r[n],!0)},e},e.prototype.remove=function(r){return this.removeWhere(function(t){return t===r}).any()},e.prototype.removeWhere=function(r){for(var t,e=[],n=this.length-1;n>=0;n--)t=this[n],r(t,n)===!0&&(this.splice(n,1),e.push(t));return e.en().reverse()}}(exjs||(exjs={}));var exjs;!function(r){var t=function(){function t(r){this._keys=[],this._values=[];var t;if(r instanceof Array?t=r.en():r&&r.getEnumerator instanceof Function&&(t=r),t)for(var e=t.getEnumerator();e&&e.moveNext();)this.set(e.current[0],e.current[1])}return Object.defineProperty(t.prototype,"size",{get:function(){return this._keys.length},enumerable:!0,configurable:!0}),t.prototype.clear=function(){this._keys.length=0,this._values.length=0},t.prototype["delete"]=function(r){var t=this._keys.indexOf(r);return t>-1?(this._keys.splice(t,1),this._values.splice(t,1),!0):!1},t.prototype.entries=function(){var t=this;return r.range(0,this.size).select(function(r){return[t._keys[r],t._values[r]]})},t.prototype.forEach=function(r,t){null==t&&(t=this);for(var e=0,n=this._keys,o=this._values,u=n.length;u>e;e++)r.call(t,o[e],n[e],this)},t.prototype.get=function(r){var t=this._keys.indexOf(r);return this._values[t]},t.prototype.has=function(r){return this._keys.indexOf(r)>-1},t.prototype.keys=function(){return this._keys.en()},t.prototype.set=function(r,t){var e=this._keys.indexOf(r);return void(e>-1?this._values[e]=t:(this._keys.push(r),this._values.push(t)))},t.prototype.values=function(){return this._values.en()},t}();r.Map=t,window.Map||(window.Map=t)}(exjs||(exjs={}));var exjs;!function(r){function t(r,t,n,o){return new e(r,t,n,o)}var e=function(t){function e(r,e,n,o){t.call(this),this.Source=r,o=o||function(r,t){return r>t?1:t>r?-1:0};var u=n===!0?-1:1;this.Sorter=function(r,t){return u*o(e(r),e(t))}}return __extends(e,t),e.prototype.getEnumerator=function(){var t,e=this.Source,n=this.Sorter,o=0,u={current:void 0,moveNext:function(){return t||(t=r.en(e).toArray(),t.sort(n)),u.current=void 0,o>=t.length?!1:(u.current=t[o],o++,!0)}};return u},e.prototype.thenBy=function(r,t){return new n(this,r,!1,t)},e.prototype.thenByDescending=function(r,t){return new n(this,r,!0,t)},e}(r.Enumerable),n=function(r){function t(t,e,n,o){r.call(this,t,e,n,o);var u=t.Sorter,i=this.Sorter;this.Sorter=function(r,t){return u(r,t)||i(r,t)}}return __extends(t,r),t}(e),o=r.Enumerable.prototype;o.orderBy=function(r,e){return t(this,r,!1,e)},o.orderByDescending=function(r,e){return t(this,r,!0,e)},r.List&&(r.List.prototype.orderBy=r.Enumerable.prototype.orderBy,r.List.prototype.orderByDescending=r.Enumerable.prototype.orderByDescending)}(exjs||(exjs={}));var exjs;!function(r){function t(r,t,e){var n=r-e,o={current:void 0,moveNext:function(){return n+=e,n>=t?!1:(o.current=n,!0)}};return o}function e(e,n,o){if(e=e||0,n=n||0,e>n)throw new Error("Start cannot be greater than end.");null==o&&(o=1);var u=new r.Enumerable;return u.getEnumerator=function(){return t(e,n,o)},u}r.range=e}(exjs||(exjs={}));var exjs;!function(r){function t(t){var e,n=0,o={current:void 0,moveNext:function(){return e||(e=r.en(t).toArray(),n=e.length),n--,o.current=e[n],n>=0}};return o}r.Enumerable.prototype.reverse=function(){var e=this,n=new r.Enumerable;return n.getEnumerator=function(){return t(e)},n},r.List&&(r.List.prototype.reverse=r.Enumerable.prototype.reverse)}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){if(t=t||0,0===t)return Math.round(r);var e=Math.pow(10,t);return Math.round(r*e)/e}r.round=t}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){var e,n=0,o={current:void 0,moveNext:function(){return e||(e=r.getEnumerator()),e.moveNext()?(o.current=t(e.current,n),n++,!0):!1}};return o}function e(t,e){var n,o,u={current:void 0,moveNext:function(){for(u.current=void 0,n||(n=t.getEnumerator());!o||!o.moveNext();){if(!n.moveNext())return!1;o=r.selectorEnumerator(e(n.current))}return u.current=o.current,!0}};return u}r.Enumerable.prototype.select=function(e){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return t(n,e)},o},r.Enumerable.prototype.selectMany=function(t){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return e(n,t)},o},r.List&&(r.List.prototype.select=r.Enumerable.prototype.select,r.List.prototype.selectMany=r.Enumerable.prototype.selectMany)}(exjs||(exjs={}));var exjs;!function(r){function t(r){return Array.isArray(r)?r.en().getEnumerator():null!=r&&"function"==typeof r.getEnumerator?r.getEnumerator():null}r.selectorEnumerator=t}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){var e,n={current:void 0,moveNext:function(){if(!e){e=r.getEnumerator();for(var o=0;t>o;o++)if(!e.moveNext())return!1}return e.moveNext()?(n.current=e.current,!0):(n.current=void 0,!1)}};return n}function e(r,t){var e,n={current:void 0,moveNext:function(){if(!e){e=r.getEnumerator();for(var o=0;e.moveNext();o++)if(!t(n.current=e.current,o))return!0;return n.current=void 0,!1}return e.moveNext()?(n.current=e.current,!0):(n.current=void 0,!1)}};return n}r.Enumerable.prototype.skip=function(e){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return t(n,e)},o},r.Enumerable.prototype.skipWhile=function(t){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return e(n,t)},o},r.List&&(r.List.prototype.skip=r.Enumerable.prototype.skip,r.List.prototype.skipWhile=r.Enumerable.prototype.skipWhile)}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){var e,n=0,o={current:void 0,moveNext:function(){return e||(e=r.getEnumerator()),n++,n>t?!1:(o.current=void 0,e.moveNext()?(o.current=e.current,!0):!1)}};return o}function e(r,t){var e,n=0,o={current:void 0,moveNext:function(){return e||(e=r.getEnumerator()),e.moveNext()&&t(e.current,n)?(n++,o.current=e.current,!0):(o.current=void 0,!1)}};return o}r.Enumerable.prototype.take=function(e){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return t(n,e)},o},r.Enumerable.prototype.takeWhile=function(t){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return e(n,t)},o},r.List&&(r.List.prototype.take=r.Enumerable.prototype.take,r.List.prototype.takeWhile=r.Enumerable.prototype.takeWhile)}(exjs||(exjs={}));var exjs;!function(r){function t(t,e){var n,o=!1,u=[],i={current:void 0,moveNext:function(){if(o){if(null==n)return!1;u.push(n),n=r.selectorEnumerator(e(i.current))}else n=t.getEnumerator(),o=!0;for(;!(n&&n.moveNext()||u.length<1);)n=u.pop();return i.current=null==n?void 0:n.current,void 0!==i.current}};return i}function e(t,e,n){var o,u=!1,i=[],c={current:void 0,moveNext:function(){if(u){if(null==o)return!1;i.push(o),o=r.selectorEnumerator(e(c.current))}else o=t.getEnumerator(),u=!0;do{for(;!(o&&o.moveNext()||i.length<1);)o=i.pop();c.current=null==o?void 0:o.current}while(n(c.current));return void 0!==c.current}};return c}r.Enumerable.prototype.traverse=function(e){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return t(n,e)},o},r.Enumerable.prototype.traverseUnique=function(t,n){var o=this,u=[],i=new r.Enumerable;return n?i.getEnumerator=function(){return e(o,t,function(r){return u.some(function(t){return n(r,t)})?!0:(u.push(r),!1)})}:i.getEnumerator=function(){return e(o,t,function(r){return u.indexOf(r)>-1?!0:(u.push(r),!1)})},i},r.List&&(r.List.prototype.traverse=r.Enumerable.prototype.traverse,r.List.prototype.traverseUnique=r.Enumerable.prototype.traverseUnique)}(exjs||(exjs={}));var exjs;!function(r){function t(t,e,n){n=n||function(r,t){return r===t};var o,u,i=[],c={current:void 0,moveNext:function(){if(o||(o=r.en(t).distinct().getEnumerator()),c.current=void 0,!u&&o.moveNext())return i.push(c.current=o.current),!0;for(u=u||r.en(e).distinct().getEnumerator();u.moveNext();){for(var a=0,p=!1,s=i.length;s>a&&!p;a++)p=n(i[a],u.current);if(!p)return c.current=u.current,!0}return!1}};return c}r.Enumerable.prototype.union=function(e,n){var o=this,u=e instanceof Array?e.en():e,i=new r.Enumerable;return i.getEnumerator=function(){return t(o,u,n)},i},r.List&&(r.List.prototype.union=r.Enumerable.prototype.union)}(exjs||(exjs={}));var exjs;!function(r){function t(r,t){var e,n={current:void 0,moveNext:function(){e||(e=r.getEnumerator());for(var o;e.moveNext();)if(t(o=e.current))return n.current=o,!0;return!1}};return n}r.Enumerable.prototype.where=function(e){var n=this,o=new r.Enumerable;return o.getEnumerator=function(){return t(n,e)},o},r.List&&(r.List.prototype.where=r.Enumerable.prototype.where)}(exjs||(exjs={}));var exjs;!function(r){function t(t){var n=new r.Enumerable;return n.getEnumerator=function(){return e(t)},n}function e(r){var t=r.getEnumerator(),e={current:void 0,moveNext:void 0};return e.moveNext=function(){return t.moveNext()?(e.current=t.current,!0):(e.current=void 0,!1)},e}r.en=t}(exjs||(exjs={}));var ex=exjs.en,exjs;!function(r){function t(r,t,e){var n,o,u={current:void 0,moveNext:function(){return n||(n=r.getEnumerator()),o||(o=t.getEnumerator()),u.current=void 0,n.moveNext()&&o.moveNext()?(u.current=e(n.current,o.current),!0):!1}};return u}r.Enumerable.prototype.zip=function(e,n){var o=this,u=e instanceof Array?e.en():e,i=new r.Enumerable;return i.getEnumerator=function(){return t(o,u,n)},i},r.List&&(r.List.prototype.zip=r.Enumerable.prototype.zip)}(exjs||(exjs={}));
+//# sourceMappingURL=ex.min.js.map;
+define("ex", function(){});
+
 if (!Array.prototype.clone) {
     Array.prototype.clone = function () {
         return this.slice(0);
@@ -23902,6 +24210,7 @@ require.config({
     paths: {
         'browserdetect': 'lib/browserdetect',
         'promise': 'lib/promise.min',
+        'ex': 'lib/ex.min',
         'ext': 'lib/extensions',
         'httpstatuscodes': 'lib/http-status-codes',
         'jquery': 'lib/jquery-1.10.2.min',
@@ -23949,6 +24258,7 @@ require([
     'extensions/uv-seadragon-extension/Provider',
     'manifesto',
     'browserdetect',
+    'ex',
     'ext',
     'httpstatuscodes',
     'jquery',

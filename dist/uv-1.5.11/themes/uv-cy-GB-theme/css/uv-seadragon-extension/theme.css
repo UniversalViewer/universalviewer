@@ -554,6 +554,33 @@
 #app .leftPanel .tabsContent {
   padding: 10px 10px 10px 10px;
 }
+#app .leftPanel .tabsContent .options {
+  overflow: hidden;
+}
+#app .leftPanel .tabsContent .options .treeView {
+  height: 30px;
+}
+#app .leftPanel .tabsContent .options .treeView span {
+  display: block;
+  float: left;
+  color: #ffffff;
+  padding: 5px 4px 0 10px;
+  font-size: 11px;
+}
+#app .leftPanel .tabsContent .options .treeView select {
+  float: left;
+  font-size: 11px;
+}
+#app .leftPanel .tabsContent .btn-group .btn {
+  padding: 0 5px 0 5px;
+  background: #555555;
+  color: #999999;
+  width: 55px;
+}
+#app .leftPanel .tabsContent .btn-group .btn.on {
+  background: #DDD;
+  color: #000;
+}
 #app .leftPanel .views .treeView {
   overflow: auto;
   color: #ffffff;
@@ -1816,8 +1843,20 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .headerPanel .options .centerOptions {
   margin: 5px 0 0 0;
-  width: 385px;
+  width: 432px;
   position: absolute;
+}
+#app .headerPanel .options .centerOptions .prevOptions {
+  margin: 0 10px 0 0;
+}
+#app .headerPanel .options .centerOptions .mode label {
+  width: 42px;
+}
+#app .headerPanel .options .centerOptions .search {
+  width: 140px;
+}
+#app .headerPanel .options .centerOptions .nextOptions {
+  margin: 0 0 0 10px;
 }
 #app .headerPanel .options .rightOptions {
   float: right;
@@ -2140,6 +2179,12 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 0;
   color: transparent;
   width: 21px;
+}
+#app .footerPanel .searchOptions {
+  width: 425px;
+}
+#app .footerPanel .searchPager .controls .searchResultsInfo {
+  width: 290px;
 }
 #app.lightbox .footerPanel .options a.imageBtn.normal {
   background: url('../../img/close_lightbox.png') no-repeat;
