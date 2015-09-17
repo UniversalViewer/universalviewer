@@ -1,6 +1,7 @@
-import IProvider = require("../../modules/uv-shared-module/IProvider");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import IProvider = require("../../modules/uv-shared-module/IProvider");
 import SearchResult = require("./SearchResult");
+import TreeSortType = require("./TreeSortType");
 
 interface ISeadragonProvider extends IProvider{
     getAutoCompleteService(): Manifesto.IService;
@@ -13,6 +14,7 @@ interface ISeadragonProvider extends IProvider{
     getSearchResultByCanvasIndex(index: number): SearchResult;
     getSearchWithinService(): Manifesto.IService;
     getSearchWithinServiceUri(): string;
+    getSortedTree(sortType: TreeSortType): Manifesto.TreeNode;
     isSearchWithinEnabled(): boolean;
     parseSearchWithinResults(results: any);
     searchResults: SearchResult[];

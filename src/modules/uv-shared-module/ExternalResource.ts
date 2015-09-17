@@ -13,6 +13,8 @@ class ExternalResource implements Manifesto.IExternalResource {
     public status: number;
     public tokenService: Manifesto.IService;
 
+    // todo: pass in services associated with this resource if they exist
+    // if the resource returns services in the info.json, those override
     constructor(provider: IProvider) {
         this.provider = provider;
     }
@@ -47,7 +49,7 @@ class ExternalResource implements Manifesto.IExternalResource {
                 }
             }).done((data) => {
 
-                var uri = data['@id'];
+                var uri = unescape(data['@id']);
 
                 if (!_.endsWith(uri, '/info.json')){
                     uri += '/info.json';

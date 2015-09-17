@@ -2,6 +2,7 @@ require.config({
     paths: {
         'browserdetect': 'lib/browserdetect',
         'promise': 'lib/promise.min',
+        'ex': 'lib/ex.min',
         'ext': 'lib/extensions',
         'httpstatuscodes': 'lib/http-status-codes',
         'jquery': 'lib/jquery-1.10.2.min',
@@ -50,6 +51,7 @@ require([
     'extensions/uv-seadragon-extension/Provider',
     'manifesto',
     'browserdetect',
+    'ex',
     'ext',
     'httpstatuscodes',
     'jquery',

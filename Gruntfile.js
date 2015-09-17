@@ -209,6 +209,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: [
                             'es6-promise/promise.min.js',
+                            'exjs/dist/ex.min.js',
                             'extensions/dist/extensions.js',
                             'http-status-codes/dist/http-status-codes.js',
                             'jquery-plugins/dist/jquery-plugins.js',
@@ -225,6 +226,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
+                            'exjs/dist/ex.d.ts',
                             'extensions/typings/extensions.d.ts',
                             'http-status-codes/dist/http-status-codes.d.ts',
                             'jquery-plugins/typings/jquery-plugins.d.ts',

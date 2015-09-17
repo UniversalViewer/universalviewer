@@ -376,6 +376,8 @@ class BaseExtension implements IExtension {
         var p = new BootstrapParams();
         p.collectionIndex = this.provider.getCollectionIndex(manifest);
         p.manifestIndex = manifest.index;
+        p.sequenceIndex = 0;
+        p.canvasIndex = 0;
 
         this.provider.reload(p);
     }

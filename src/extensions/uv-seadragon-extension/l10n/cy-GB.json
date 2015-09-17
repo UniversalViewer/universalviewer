@@ -149,11 +149,14 @@
       "content": {
         "collapse": "Cuddio'r Cynnwys",
         "collapseFull": "Cuddio'r Galeri",
+        "date": "dyddiad",
         "expand": "Ehangu'r Cynnwys",
         "expandFull": "Ehangu'r Galeri",
         "index": "Mynegai",
+        "sortBy": "trefnu yn ôl",
         "thumbnails": "Bodluniau",
-        "title": "Cynnwys"
+        "title": "Cynnwys",
+        "volume": "cyfaint"
       }
     }
   }
