@@ -53,8 +53,10 @@ declare module Manifesto {
     class ServiceProfile extends StringValue {
         static AUTOCOMPLETE: ServiceProfile;
         static CLICKTHROUGH: ServiceProfile;
-        static IIIFIMAGELEVEL1: ServiceProfile;
-        static IIIFIMAGELEVEL2: ServiceProfile;
+        static IIIF1IMAGELEVEL1: ServiceProfile;
+        static IIIF1IMAGELEVEL2: ServiceProfile;
+        static IIIF2IMAGELEVEL1: ServiceProfile;
+        static IIIF2IMAGELEVEL2: ServiceProfile;
         static IXIF: ServiceProfile;
         static LOGIN: ServiceProfile;
         static LOGOUT: ServiceProfile;
@@ -63,8 +65,10 @@ declare module Manifesto {
         static TOKEN: ServiceProfile;
         autoComplete(): ServiceProfile;
         clickThrough(): ServiceProfile;
-        iiifImageLevel1(): ServiceProfile;
-        iiifImageLevel2(): ServiceProfile;
+        iiif1ImageLevel1(): ServiceProfile;
+        iiif1ImageLevel2(): ServiceProfile;
+        iiif2ImageLevel1(): ServiceProfile;
+        iiif2ImageLevel2(): ServiceProfile;
         ixif(): ServiceProfile;
         login(): ServiceProfile;
         logout(): ServiceProfile;
@@ -156,6 +160,7 @@ declare module Manifesto {
         getIIIFResourceType(): IIIFResourceType;
         getLogo(): string;
         getLicense(): string;
+        getNavDate(): Date;
         getSeeAlso(): any;
         getTitle(): string;
         getTree(): TreeNode;
@@ -287,9 +292,20 @@ declare module Manifesto {
         nodes: TreeNode[];
         selected: boolean;
         expanded: boolean;
+        navDate: Date;
         parentNode: TreeNode;
         constructor(label?: string, data?: any);
         addNode(node: TreeNode): void;
+    }
+}
+declare module Manifesto {
+    class TreeNodeType extends StringValue {
+        static COLLECTION: TreeNodeType;
+        static MANIFEST: TreeNodeType;
+        static RANGE: TreeNodeType;
+        collection(): TreeNodeType;
+        manifest(): TreeNodeType;
+        range(): TreeNodeType;
     }
 }
 declare var http: any;
@@ -368,6 +384,7 @@ declare module Manifesto {
         getIIIFResourceType(): IIIFResourceType;
         getLicense(): string;
         getLogo(): string;
+        getNavDate(): Date;
         getSeeAlso(): any;
         getTitle(): string;
         getTree(): TreeNode;
@@ -416,12 +433,14 @@ interface IManifesto {
     ElementType: Manifesto.ElementType;
     getRenderings(resource: any): Manifesto.IRendering[];
     getService: (resource: any, profile: Manifesto.ServiceProfile | string) => Manifesto.IService;
+    getTreeNode(): Manifesto.TreeNode;
     IIIFResourceType: Manifesto.IIIFResourceType;
     loadExternalResources: (resources: Manifesto.IExternalResource[], clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
     loadManifest: (uri: string) => Promise<any>;
     ManifestType: Manifesto.ManifestType;
     RenderingFormat: Manifesto.RenderingFormat;
     ServiceProfile: Manifesto.ServiceProfile;
+    TreeNodeType: Manifesto.TreeNodeType;
     ViewingDirection: Manifesto.ViewingDirection;
     ViewingHint: Manifesto.ViewingHint;
 }
@@ -429,6 +448,7 @@ declare module Manifesto {
     interface IManifestoOptions {
         defaultLabel: string;
         locale: string;
+        navDate?: Date;
         pessimisticAccessControl: boolean;
     }
 }

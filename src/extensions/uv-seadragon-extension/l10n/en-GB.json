@@ -153,11 +153,14 @@
       "content": {
         "collapse": "Collapse Contents",
         "collapseFull": "Collapse Gallery",
+        "date": "date",
         "expand": "Expand Contents",
         "expandFull": "Expand Gallery",
         "index": "Index",
+        "sortBy": "Sort By:",
         "thumbnails": "Thumbnails",
-        "title": "Contents"
+        "title": "Contents",
+        "volume": "volume"
       }
     }
   }

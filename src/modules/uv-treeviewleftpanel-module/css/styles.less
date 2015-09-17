@@ -45,6 +45,41 @@
 
         .tabsContent{
             padding: @padding-medium;
+
+            .options{
+                overflow: hidden;
+
+                .treeView{
+                    height: 30px;
+
+                    span{
+                        display: block;
+                        float: left;
+                        color: @text-color;
+                        padding: 5px 4px 0 10px;
+                        font-size: @font-size-small;
+                    }
+
+                    select{
+                        float: left;
+                        font-size: @font-size-small;
+                    }
+                }
+            }
+
+            .btn-group {
+                .btn{
+                    padding: 0 @margin-small-horizontal 0 @margin-small-horizontal;
+                    background: @gray;
+                    color: @gray-light;
+                    width: 55px;
+
+                    &.on {
+                        background: #DDD;
+                        color: #000;
+                    }
+                }
+            }
         }
 
         .views{

@@ -1,9 +1,10 @@
-import BootStrapper = require("../../Bootstrapper");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import BootStrapper = require("../../Bootstrapper");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import TreeSortType = require("./TreeSortType");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
@@ -246,6 +247,228 @@ class Provider extends BaseProvider implements ISeadragonProvider{
             }
         }
         return null;
+    }
+
+    // returns a list of treenodes for each decade.
+    // expanding a decade generates a list of years
+    // expanding a year gives a list of months containing issues
+    // expanding a month gives a list of issues.
+    getSortedTree(sortType: TreeSortType): Manifesto.TreeNode {
+
+        var tree = this.iiifResource.getTree();
+        var sortedTree = manifesto.getTreeNode();
+
+        if (sortType === TreeSortType.date){
+            this.getSortedTreeNodesByDate(sortedTree, tree);
+        } else if (sortType === TreeSortType.none) {
+            sortedTree = tree;
+        }
+
+        return sortedTree;
+    }
+
+    getSortedTreeNodesByDate(sortedTree: Manifesto.TreeNode, tree: Manifesto.TreeNode): void{
+
+        var all: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(node => node.nodes)
+            .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString() ||
+                          n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
+
+        //var collections: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
+        //    .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString()).toArray();
+
+        var manifests: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
+            .where((n) => n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
+
+        this.createDecadeNodes(sortedTree, all);
+        this.sortDecadeNodes(sortedTree);
+        this.createYearNodes(sortedTree, all);
+        this.sortYearNodes(sortedTree);
+        this.createMonthNodes(sortedTree, manifests);
+        this.sortMonthNodes(sortedTree);
+        this.createDateNodes(sortedTree, manifests);
+
+        this.pruneDecadeNodes(sortedTree);
+    }
+
+    createDecadeNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
+        var decadeNode: Manifesto.TreeNode;
+
+        for (var i = 0; i < nodes.length; i++) {
+            var node: Manifesto.TreeNode = nodes[i];
+            var year = this.getNodeYear(node);
+            var decade = Number(year.toString().substr(2, 1));
+            var endYear = Number(year.toString().substr(0, 3) + "9");
+
+            if(!this.getDecadeNode(rootNode, year)){
+                decadeNode = manifesto.getTreeNode();
+                decadeNode.label = year + " - " + endYear;
+                decadeNode.navDate = node.navDate;
+                decadeNode.data.startYear = year;
+                decadeNode.data.endYear = endYear;
+                rootNode.addNode(decadeNode);
+            }
+        }
+    }
+
+    // delete any empty decades
+    pruneDecadeNodes(rootNode: Manifesto.TreeNode): void {
+        var pruned: Manifesto.TreeNode[] = [];
+
+        for (var i = 0; i < rootNode.nodes.length; i++){
+            var n = rootNode.nodes[i];
+            if (!n.nodes.length){
+                pruned.push(n);
+            }
+        }
+
+        for (var j = 0; j < pruned.length; j++){
+            var p = pruned[j];
+
+            rootNode.nodes.remove(p);
+        }
+    }
+
+    sortDecadeNodes(rootNode: Manifesto.TreeNode): void {
+        rootNode.nodes = rootNode.nodes.sort(function(a, b) {
+            return a.data.startYear - b.data.startYear;
+        });
+    }
+
+    getDecadeNode(rootNode: Manifesto.TreeNode, year: number): Manifesto.TreeNode{
+        for (var i = 0; i < rootNode.nodes.length; i++){
+            var n = rootNode.nodes[i];
+            if (year >= n.data.startYear && year <= n.data.endYear) return n;
+        }
+
+        return null;
+    }
+
+    createYearNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
+        var yearNode: Manifesto.TreeNode;
+
+        for (var i = 0; i < nodes.length; i++) {
+            var node: Manifesto.TreeNode = nodes[i];
+            var year = this.getNodeYear(node);
+            var decadeNode = this.getDecadeNode(rootNode, year);
+
+            if(decadeNode && !this.getYearNode(decadeNode, year)){
+                yearNode = manifesto.getTreeNode();
+                yearNode.label = year.toString();
+                yearNode.navDate = node.navDate;
+                yearNode.data.year = year;
+
+                decadeNode.addNode(yearNode);
+            }
+        }
+    }
+
+    sortYearNodes(rootNode: Manifesto.TreeNode): void {
+        for (var i = 0; i < rootNode.nodes.length; i++){
+            var decadeNode = rootNode.nodes[i];
+
+            decadeNode.nodes = decadeNode.nodes.sort((a: Manifesto.TreeNode, b: Manifesto.TreeNode) => {
+                return (this.getNodeYear(a) - this.getNodeYear(b));
+            });
+        }
+    }
+
+    getYearNode(decadeNode: Manifesto.TreeNode, year: Number): Manifesto.TreeNode{
+        for (var i = 0; i < decadeNode.nodes.length; i++){
+            var n = decadeNode.nodes[i];
+            if (year === this.getNodeYear(n)) return n;
+        }
+
+        return null;
+    }
+
+    createMonthNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
+        var monthNode: Manifesto.TreeNode;
+
+        for (var i = 0; i < nodes.length; i++) {
+            var node: Manifesto.TreeNode = nodes[i];
+            var year = this.getNodeYear(node);
+            var month = this.getNodeMonth(node);
+            var decadeNode = this.getDecadeNode(rootNode, year);
+            var yearNode = this.getYearNode(decadeNode, year);
+
+            if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)){
+                monthNode = manifesto.getTreeNode();
+                monthNode.label = this.getNodeDisplayMonth(node);
+                monthNode.navDate = node.navDate;
+                monthNode.data.year = year;
+                monthNode.data.month = month;
+                yearNode.addNode(monthNode);
+            }
+        }
+    }
+
+    sortMonthNodes(rootNode: Manifesto.TreeNode): void {
+        for (var i = 0; i < rootNode.nodes.length; i++){
+            var decadeNode = rootNode.nodes[i];
+
+            for (var j = 0; j < decadeNode.nodes.length; j++){
+                var monthNode = decadeNode.nodes[j];
+
+                monthNode.nodes = monthNode.nodes.sort((a: Manifesto.TreeNode, b: Manifesto.TreeNode) => {
+                    return this.getNodeMonth(a) - this.getNodeMonth(b);
+                });
+            }
+        }
+    }
+
+    getMonthNode(yearNode: Manifesto.TreeNode, month: Number): Manifesto.TreeNode{
+        for (var i = 0; i < yearNode.nodes.length; i++){
+            var n = yearNode.nodes[i];
+            if (month === this.getNodeMonth(n)) return n;
+        }
+
+        return null;
+    }
+
+    createDateNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
+        for (var i = 0; i < nodes.length; i++) {
+            var node: Manifesto.TreeNode = nodes[i];
+            var year = this.getNodeYear(node);
+            var month = this.getNodeMonth(node);
+
+            var dateNode = manifesto.getTreeNode();
+            dateNode.label = this.getNodeDisplayDate(node);
+            dateNode.data = node.data;
+            dateNode.data.type = 'manifest';
+            dateNode.data.year = year;
+            dateNode.data.month = month;
+
+            var decadeNode = this.getDecadeNode(rootNode, year);
+
+            if (decadeNode) {
+                var yearNode = this.getYearNode(decadeNode, year);
+
+                if (yearNode){
+                    var monthNode = this.getMonthNode(yearNode, month);
+
+                    if (monthNode){
+                        monthNode.addNode(dateNode);
+                    }
+                }
+            }
+        }
+    }
+
+    getNodeYear(node: Manifesto.TreeNode): number{
+        return node.navDate.getFullYear();
+    }
+
+    getNodeMonth(node: Manifesto.TreeNode): number{
+        return node.navDate.getMonth();
+    }
+
+    getNodeDisplayMonth(node: Manifesto.TreeNode): string{
+        var months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[node.navDate.getMonth()];
+    }
+
+    getNodeDisplayDate(node: Manifesto.TreeNode): string{
+        return node.navDate.toDateString();
     }
 }
 
