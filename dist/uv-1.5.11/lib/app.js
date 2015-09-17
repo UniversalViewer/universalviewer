@@ -2047,6 +2047,7 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
                 _this.$container.width(_this.mediaWidth);
                 var id = Utils.Dates.GetTimeStamp();
                 var poster = _this.provider.getPosterImageUri();
+                var posterAttr = poster ? ' poster="' + poster + '"' : '';
                 var sources = [];
                 _.each(canvas.getRenderings(), function (rendering) {
                     sources.push({
@@ -2055,7 +2056,7 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
                     });
                 });
                 if (_this.isVideo(canvas)) {
-                    _this.media = _this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></video>');
+                    _this.media = _this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
                     _this.player = new MediaElementPlayer("#" + id, {
                         type: ['video/mp4', 'video/webm', 'video/flv'],
                         plugins: ['flash'],
@@ -2095,7 +2096,7 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
                             break;
                         }
                     }
-                    _this.media = _this.$container.append('<audio id="' + id + '" type="' + sources[preferredSource].type + '" src="' + sources[preferredSource].src + '" class="mejs-uv" controls="controls" preload="none" poster="' + poster + '"></audio>');
+                    _this.media = _this.$container.append('<audio id="' + id + '" type="' + sources[preferredSource].type + '" src="' + sources[preferredSource].src + '" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></audio>');
                     _this.player = new MediaElementPlayer("#" + id, {
                         plugins: ['flash'],
                         alwaysShowControls: false,
