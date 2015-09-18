@@ -50,12 +50,15 @@
     },
     "moreInfoRightPanel": {
       "content": {
+        "attribution": "priodoliad",
         "collapse": "Cuddio Mwy o Wybodaeth",
         "collapseFull": "Cuddio'r Galeri",
+        "description": "disgrifiad",
         "expand": "Ehangu Fwy o Wybodaeth",
         "expandFull": "Ehangu'r Galeri",
         "holdingText": "Eich modiwl fan hyn!",
         "less": "llai",
+        "license": "trwydded",
         "more": "mwy",
         "noData": "Nid oes data i'w arddangos",
         "title": "Mwy o Wybodaeth"

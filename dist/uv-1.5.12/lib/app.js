@@ -2470,6 +2470,17 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
             var $text = $elem.find('.text');
             item.label = this.provider.sanitize(item.label);
             item.value = this.provider.sanitize(item.value);
+            switch (item.label.toLowerCase()) {
+                case "attribution":
+                    item.label = this.content.attribution;
+                    break;
+                case "description":
+                    item.label = this.content.description;
+                    break;
+                case "license":
+                    item.label = this.content.license;
+                    break;
+            }
             // replace \n with <br>
             item.value = item.value.replace('\n', '<br>');
             $header.html(item.label);
@@ -2490,7 +2501,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.11';
+    exports.Version = '1.5.12';
 });
 
 var __extends = this.__extends || function (d, b) {

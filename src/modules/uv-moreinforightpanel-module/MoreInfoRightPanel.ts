@@ -91,6 +91,18 @@ class MoreInfoRightPanel extends RightPanel {
         item.label = this.provider.sanitize(item.label);
         item.value = this.provider.sanitize(item.value);
 
+        switch(item.label.toLowerCase()){
+            case "attribution":
+                item.label = this.content.attribution;
+                break;
+            case "description":
+                item.label = this.content.description;
+                break;
+            case "license":
+                item.label = this.content.license;
+                break;
+        }
+
         // replace \n with <br>
         item.value = item.value.replace('\n', '<br>');
 
