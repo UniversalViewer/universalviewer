@@ -167,7 +167,7 @@ class TreeViewLeftPanel extends LeftPanel {
     }
 
     isCollection(): boolean {
-        return this.treeData.data.type === 'collection';
+        return this.treeData.data.type === manifesto.TreeNodeType.collection().toString();
     }
 
     dataBindTreeView(): void{
@@ -301,8 +301,9 @@ class TreeViewLeftPanel extends LeftPanel {
         if (this.galleryView) this.galleryView.hide();
 
         this.updateTreeViewOptions();
-        this.resize();
+        this.selectCurrentTreeNode();
 
+        this.resize();
         this.treeView.resize();
     }
 

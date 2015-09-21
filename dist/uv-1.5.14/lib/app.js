@@ -2501,7 +2501,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.13';
+    exports.Version = '1.5.14';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -3508,7 +3508,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.resize();
         };
         TreeViewLeftPanel.prototype.isCollection = function () {
-            return this.treeData.data.type === 'collection';
+            return this.treeData.data.type === manifesto.TreeNodeType.collection().toString();
         };
         TreeViewLeftPanel.prototype.dataBindTreeView = function () {
             if (!this.treeView)
@@ -3623,6 +3623,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             if (this.galleryView)
                 this.galleryView.hide();
             this.updateTreeViewOptions();
+            this.selectCurrentTreeNode();
             this.resize();
             this.treeView.resize();
         };
