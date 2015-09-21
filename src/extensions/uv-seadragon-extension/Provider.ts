@@ -432,6 +432,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
             var month = this.getNodeMonth(node);
 
             var dateNode = manifesto.getTreeNode();
+            dateNode.id = node.id;
             dateNode.label = this.getNodeDisplayDate(node);
             dateNode.data = node.data;
             dateNode.data.type = 'manifest';

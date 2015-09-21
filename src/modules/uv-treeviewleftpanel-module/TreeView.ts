@@ -20,10 +20,6 @@ class TreeView extends BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
-            this.selectTreeNodeFromCanvasIndex(canvasIndex);
-        });
-
         this.$tree = $('<ul class="tree"></ul>');
         this.$element.append(this.$tree);
 
@@ -108,6 +104,11 @@ class TreeView extends BaseView {
         this.resize();
     }
 
+    public getNodeById(id: string): Manifesto.TreeNode {
+        return this.rootNode.nodes.en().traverseUnique(node => node.nodes)
+            .where((n) => n.id === id).first();
+    }
+
     public selectPath(path: string): void {
         if (!this.rootNode) return;
 
@@ -118,31 +119,33 @@ class TreeView extends BaseView {
         this.selectNode(node);
     }
 
-    selectTreeNodeFromCanvasIndex(index: number): void {
-        // may be authenticating
-        if (index === -1) return;
-
-        this.deselectCurrentNode();
-
-        var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
-        var range: Manifesto.IRange = canvas.getRange();
-        var treeNode: Manifesto.TreeNode;
-
-        if (range && range.treeNode) {
-            treeNode = range.treeNode;
-        } else {
-            treeNode = this.provider.manifest.treeRoot;
-        }
-
-        if (treeNode) this.selectNode(treeNode);
-    }
+    //selectTreeNodeFromCanvasIndex(index: number): void {
+    //    // may be authenticating
+    //    if (index === -1) return;
+    //
+    //    this.deselectCurrentNode();
+    //
+    //    var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
+    //    var range: Manifesto.IRange = canvas.getRange();
+    //    var treeNode: Manifesto.TreeNode;
+    //
+    //    if (range && range.treeNode) {
+    //        treeNode = range.treeNode;
+    //    } else {
+    //        treeNode = this.provider.manifest.treeRoot;
+    //    }
+    //
+    //    if (treeNode) this.selectNode(treeNode);
+    //}
 
     deselectCurrentNode(): void {
         if (this.selectedNode) $.observable(this.selectedNode).setProperty("selected", false);
     }
 
-    selectNode(node: Manifesto.TreeNode): void{
+    selectNode(node: any): void{
         if (!this.rootNode) return;
+
+        this.deselectCurrentNode();
 
         this.selectedNode = node;
         $.observable(this.selectedNode).setProperty("selected", true);
@@ -160,7 +163,7 @@ class TreeView extends BaseView {
 
     // walks down the tree using the specified path e.g. [2,2,0]
     getNodeByPath(parentNode: Manifesto.TreeNode, path: string[]): Manifesto.TreeNode {
-        if (path.length == 0) return parentNode;
+        if (path.length === 0) return parentNode;
         var index = path.shift();
         var node = parentNode.nodes[index];
         return this.getNodeByPath(node, path);

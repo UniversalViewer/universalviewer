@@ -53,6 +53,8 @@ class TreeViewLeftPanel extends LeftPanel {
             if (this.isFullyExpanded){
                 this.collapseFull();
             }
+
+            this.selectCurrentTreeNode();
         });
 
         this.$tabs = $('<div class="tabs"></div>');
@@ -149,7 +151,7 @@ class TreeViewLeftPanel extends LeftPanel {
     sortByDate(): void {
         this.treeView.rootNode = (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.date);
         this.treeView.dataBind();
-        //this.selectCurrentTreeNode();
+        this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
         this.$sortByVolumeButton.removeClass('on');
         this.resize();
@@ -158,7 +160,7 @@ class TreeViewLeftPanel extends LeftPanel {
     sortByVolume(): void {
         this.treeView.rootNode = (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none);
         this.treeView.dataBind();
-        //this.selectCurrentTreeNode();
+        this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
         this.$sortByVolumeButton.addClass('on');
         this.resize();
@@ -330,6 +332,32 @@ class TreeViewLeftPanel extends LeftPanel {
             if (this.galleryView) this.galleryView.hide();
             this.thumbsView.show();
             this.thumbsView.resize();
+        }
+    }
+
+    selectCurrentTreeNode(): void{
+        if (this.treeView) {
+
+            var id: string;
+            var node: Manifesto.TreeNode;
+
+            // try finding a range first
+            var range: Manifesto.IRange = this.provider.getCurrentCanvas().getRange();
+
+            if (range){
+                id = range.treeNode.id;
+                node = this.treeView.getNodeById(id);
+            }
+
+            // use manifest root node
+            if (!node){
+                id = this.provider.manifest.treeRoot.id;
+                node = this.treeView.getNodeById(id);
+            }
+
+            if (node){
+                this.treeView.selectNode(node);
+            }
         }
     }
 

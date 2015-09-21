@@ -155,6 +155,7 @@ declare module Manifesto {
         parentCollection: ICollection;
         treeRoot: TreeNode;
         constructor(jsonld: any, options?: IManifestoOptions);
+        generateTreeNodeIds(treeNode: TreeNode, index?: number): void;
         getAttribution(): string;
         getDescription(): string;
         getIIIFResourceType(): IIIFResourceType;
@@ -292,6 +293,7 @@ declare module Manifesto {
         nodes: TreeNode[];
         selected: boolean;
         expanded: boolean;
+        id: string;
         navDate: Date;
         parentNode: TreeNode;
         constructor(label?: string, data?: any);

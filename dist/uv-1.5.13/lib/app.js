@@ -2501,7 +2501,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.12';
+    exports.Version = '1.5.13';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -3221,7 +3221,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands"], function (require, exports, BaseCommands, BaseView, Commands) {
+define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands"], function (require, exports, BaseView, Commands) {
     var TreeView = (function (_super) {
         __extends(TreeView, _super);
         function TreeView($element) {
@@ -3229,11 +3229,7 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
             this.isOpen = false;
         }
         TreeView.prototype.create = function () {
-            var _this = this;
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, function (e, canvasIndex) {
-                _this.selectTreeNodeFromCanvasIndex(canvasIndex);
-            });
             this.$tree = $('<ul class="tree"></ul>');
             this.$element.append(this.$tree);
             $.templates({
@@ -3310,6 +3306,10 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
             this.$tree.link($.templates.pageTemplate, this.rootNode);
             this.resize();
         };
+        TreeView.prototype.getNodeById = function (id) {
+            return this.rootNode.nodes.en().traverseUnique(function (node) { return node.nodes; })
+                .where(function (n) { return n.id === id; }).first();
+        };
         TreeView.prototype.selectPath = function (path) {
             if (!this.rootNode)
                 return;
@@ -3319,23 +3319,24 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
             var node = this.getNodeByPath(this.rootNode, pathArr);
             this.selectNode(node);
         };
-        TreeView.prototype.selectTreeNodeFromCanvasIndex = function (index) {
-            // may be authenticating
-            if (index === -1)
-                return;
-            this.deselectCurrentNode();
-            var canvas = this.provider.getCanvasByIndex(index);
-            var range = canvas.getRange();
-            var treeNode;
-            if (range && range.treeNode) {
-                treeNode = range.treeNode;
-            }
-            else {
-                treeNode = this.provider.manifest.treeRoot;
-            }
-            if (treeNode)
-                this.selectNode(treeNode);
-        };
+        //selectTreeNodeFromCanvasIndex(index: number): void {
+        //    // may be authenticating
+        //    if (index === -1) return;
+        //
+        //    this.deselectCurrentNode();
+        //
+        //    var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
+        //    var range: Manifesto.IRange = canvas.getRange();
+        //    var treeNode: Manifesto.TreeNode;
+        //
+        //    if (range && range.treeNode) {
+        //        treeNode = range.treeNode;
+        //    } else {
+        //        treeNode = this.provider.manifest.treeRoot;
+        //    }
+        //
+        //    if (treeNode) this.selectNode(treeNode);
+        //}
         TreeView.prototype.deselectCurrentNode = function () {
             if (this.selectedNode)
                 $.observable(this.selectedNode).setProperty("selected", false);
@@ -3343,6 +3344,7 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
         TreeView.prototype.selectNode = function (node) {
             if (!this.rootNode)
                 return;
+            this.deselectCurrentNode();
             this.selectedNode = node;
             $.observable(this.selectedNode).setProperty("selected", true);
             this.expandParents(this.selectedNode);
@@ -3356,7 +3358,7 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
         };
         // walks down the tree using the specified path e.g. [2,2,0]
         TreeView.prototype.getNodeByPath = function (parentNode, path) {
-            if (path.length == 0)
+            if (path.length === 0)
                 return parentNode;
             var index = path.shift();
             var node = parentNode.nodes[index];
@@ -3421,6 +3423,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 if (_this.isFullyExpanded) {
                     _this.collapseFull();
                 }
+                _this.selectCurrentTreeNode();
             });
             this.$tabs = $('<div class="tabs"></div>');
             this.$main.append(this.$tabs);
@@ -3491,7 +3494,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
         TreeViewLeftPanel.prototype.sortByDate = function () {
             this.treeView.rootNode = this.provider.getSortedTree(TreeSortType.date);
             this.treeView.dataBind();
-            //this.selectCurrentTreeNode();
+            this.selectCurrentTreeNode();
             this.$sortByDateButton.addClass('on');
             this.$sortByVolumeButton.removeClass('on');
             this.resize();
@@ -3499,7 +3502,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
         TreeViewLeftPanel.prototype.sortByVolume = function () {
             this.treeView.rootNode = this.provider.getSortedTree(TreeSortType.none);
             this.treeView.dataBind();
-            //this.selectCurrentTreeNode();
+            this.selectCurrentTreeNode();
             this.$sortByDateButton.removeClass('on');
             this.$sortByVolumeButton.addClass('on');
             this.resize();
@@ -3648,6 +3651,26 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                     this.galleryView.hide();
                 this.thumbsView.show();
                 this.thumbsView.resize();
+            }
+        };
+        TreeViewLeftPanel.prototype.selectCurrentTreeNode = function () {
+            if (this.treeView) {
+                var id;
+                var node;
+                // try finding a range first
+                var range = this.provider.getCurrentCanvas().getRange();
+                if (range) {
+                    id = range.treeNode.id;
+                    node = this.treeView.getNodeById(id);
+                }
+                // use manifest root node
+                if (!node) {
+                    id = this.provider.manifest.treeRoot.id;
+                    node = this.treeView.getNodeById(id);
+                }
+                if (node) {
+                    this.treeView.selectNode(node);
+                }
             }
         };
         TreeViewLeftPanel.prototype.resize = function () {
@@ -6750,6 +6773,7 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
                 var year = this.getNodeYear(node);
                 var month = this.getNodeMonth(node);
                 var dateNode = manifesto.getTreeNode();
+                dateNode.id = node.id;
                 dateNode.label = this.getNodeDisplayDate(node);
                 dateNode.data = node.data;
                 dateNode.data.type = 'manifest';
@@ -6784,6 +6808,221 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
     })(BaseProvider);
     return Provider;
 });
+
+if (!Array.prototype.clone) {
+    Array.prototype.clone = function () {
+        return this.slice(0);
+    };
+}
+if (!Array.prototype.contains) {
+    Array.prototype.contains = function (val) {
+        return this.indexOf(val) !== -1;
+    };
+}
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (searchElement, fromIndex) {
+        var i = (fromIndex || 0);
+        var j = this.length;
+        for (i; i < j; i++) {
+            if (this[i] === searchElement) {
+                return i;
+            }
+        }
+        return -1;
+    };
+}
+Array.prototype.indexOfTest = function (test, fromIndex) {
+    var i = (fromIndex || 0);
+    var j = this.length;
+    for (i; i < j; i++) {
+        if (test(this[i]))
+            return i;
+    }
+    return -1;
+};
+Array.prototype.insert = function (item, index) {
+    this.splice(index, 0, item);
+};
+if (!Array.prototype.last) {
+    Array.prototype.last = function () {
+        return this[this.length - 1];
+    };
+}
+Array.prototype.move = function (fromIndex, toIndex) {
+    this.splice(toIndex, 0, this.splice(fromIndex, 1)[0]);
+};
+Array.prototype.remove = function (item) {
+    var index = this.indexOf(item);
+    if (index > -1) {
+        this.splice(index, 1);
+    }
+};
+Array.prototype.removeAt = function (index) {
+    this.splice(index, 1);
+};
+Math.clamp = function (value, min, max) {
+    return Math.min(Math.max(value, min), max);
+};
+Math.constrain = function (value, low, high) {
+    return Math.clamp(value, low, high);
+};
+Math.degreesToRadians = function (degrees) {
+    return Math.TAU * (degrees / 360);
+};
+Math.distanceBetween = function (x1, y1, x2, y2) {
+    return Math.sqrt(Math.sq(x2 - x1) + Math.sq(y2 - y1));
+};
+Math.lerp = function (start, stop, amount) {
+    return start + (stop - start) * amount;
+};
+Math.mag = function (a, b, c) {
+    return Math.sqrt(a * a + b * b + c * c);
+};
+Math.map = function (value, start1, stop1, start2, stop2) {
+    return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+};
+Math.median = function (values) {
+    values.sort(function (a, b) {
+        return a - b;
+    });
+    var half = Math.floor(values.length / 2);
+    if (values.length % 2) {
+        return values[half];
+    }
+    else {
+        return (values[half - 1] + values[half]) / 2.0;
+    }
+};
+Math.normalise = function (num, min, max) {
+    return (num - min) / (max - min);
+};
+Math.radiansToDegrees = function (radians) {
+    return (radians * 360) / Math.TAU;
+};
+/**
+ * Get a random number between two numbers.
+ * If 'high' isn't passed, get a number from 0 to 'low'.
+ * @param {Number} low The low number.
+ * @param {Number} [high] The high number.
+ */
+Math.randomBetween = function (low, high) {
+    if (!high) {
+        high = low;
+        low = 0;
+    }
+    if (low >= high)
+        return low;
+    return low + (high - low) * Math.random();
+};
+Math.roundToDecimalPlace = function (num, dec) {
+    return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
+};
+Math.sq = function (n) {
+    return n * n;
+};
+Math.TAU = Math.PI * 2;
+if (!Number.prototype.isInteger) {
+    Number.prototype.isInteger = function () {
+        return this % 1 === 0;
+    };
+}
+/**
+ * Polyfill for Object.keys
+ *
+ * @see: https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/keys
+ */
+if (!Object.keys) {
+    Object.keys = (function () {
+        var hasOwnProperty = Object.prototype.hasOwnProperty, hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'), dontEnums = [
+            'toString',
+            'toLocaleString',
+            'valueOf',
+            'hasOwnProperty',
+            'isPrototypeOf',
+            'propertyIsEnumerable',
+            'constructor'
+        ], dontEnumsLength = dontEnums.length;
+        return function (obj) {
+            if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null)
+                throw new TypeError('Object.keys called on non-object');
+            var result = [];
+            for (var prop in obj) {
+                if (hasOwnProperty.call(obj, prop))
+                    result.push(prop);
+            }
+            if (hasDontEnumBug) {
+                for (var i = 0; i < dontEnumsLength; i++) {
+                    if (hasOwnProperty.call(obj, dontEnums[i]))
+                        result.push(dontEnums[i]);
+                }
+            }
+            return result;
+        };
+    })();
+}
+;
+String.prototype.b64_to_utf8 = function () {
+    return decodeURIComponent(escape(window.atob(this)));
+};
+String.prototype.contains = function (str) {
+    return this.indexOf(str) !== -1;
+};
+if (!String.prototype.endsWith) {
+    String.prototype.endsWith = function (str) {
+        return this.indexOf(str, this.length - str.length) !== -1;
+    };
+}
+String.format = function () {
+    var s = arguments[0];
+    for (var i = 0; i < arguments.length - 1; i++) {
+        var reg = new RegExp("\\{" + i + "\\}", "gm");
+        s = s.replace(reg, arguments[i + 1]);
+    }
+    return s;
+};
+String.prototype.hashCode = function () {
+    var hash = 0, i, chr, len;
+    if (this.length == 0)
+        return hash;
+    for (i = 0, len = this.length; i < len; i++) {
+        chr = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash.toString();
+};
+String.prototype.ltrim = function () {
+    return this.replace(/^\s+/, '');
+};
+String.prototype.rtrim = function () {
+    return this.replace(/\s+$/, '');
+};
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (str) {
+        return this.indexOf(str) == 0;
+    };
+}
+String.prototype.toCssClass = function () {
+    return this.replace(/[^a-z0-9]/g, function (s) {
+        var c = s.charCodeAt(0);
+        if (c == 32)
+            return '-';
+        if (c >= 65 && c <= 90)
+            return '_' + s.toLowerCase();
+        return '__' + ('000' + c.toString(16)).slice(-4);
+    });
+};
+String.prototype.toFileName = function () {
+    return this.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+};
+if (!String.prototype.trim) {
+    String.prototype.trim = function () {
+        return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+    };
+}
+String.prototype.utf8_to_b64 = function () {
+    return window.btoa(unescape(encodeURIComponent(this)));
+};
 
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define('manifesto',e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.manifesto=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 var Manifesto;
@@ -7207,6 +7446,21 @@ var Manifesto;
             };
             this.options = _assign(defaultOptions, options);
         }
+        IIIFResource.prototype.generateTreeNodeIds = function (treeNode, index) {
+            if (index === void 0) { index = 0; }
+            var id;
+            if (!treeNode.parentNode) {
+                id = '0';
+            }
+            else {
+                id = treeNode.parentNode.id + "/" + index;
+            }
+            treeNode.id = id.hashCode();
+            for (var i = 0; i < treeNode.nodes.length; i++) {
+                var n = treeNode.nodes[i];
+                this.generateTreeNodeIds(n, i);
+            }
+        };
         IIIFResource.prototype.getAttribution = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('attribution'), this.options.locale);
         };
@@ -7327,6 +7581,7 @@ var Manifesto;
                     this._parseTreeNode(node, range);
                 }
             }
+            this.generateTreeNodeIds(this.treeRoot);
             return this.treeRoot;
         };
         Manifest.prototype._parseTreeNode = function (node, range) {
@@ -7380,6 +7635,7 @@ var Manifesto;
             this.treeRoot.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
             this._parseManifests(this);
             this._parseCollections(this);
+            this.generateTreeNodeIds(this.treeRoot);
             return this.treeRoot;
         };
         Collection.prototype._parseManifests = function (parentCollection) {
@@ -24015,6 +24271,12 @@ var Utils;
                     height = height1 * scale;
                 }
                 return new Size(Math.floor(width), Math.floor(height));
+            };
+            Dimensions.HitRect = function (x, y, w, h, mx, my) {
+                if (mx > x && mx < (x + w) && my > y && my < (y + h)) {
+                    return true;
+                }
+                return false;
             };
             return Dimensions;
         })();

@@ -2739,6 +2739,12 @@ var Utils;
                 }
                 return new Size(Math.floor(width), Math.floor(height));
             };
+            Dimensions.HitRect = function (x, y, w, h, mx, my) {
+                if (mx > x && mx < (x + w) && my > y && my < (y + h)) {
+                    return true;
+                }
+                return false;
+            };
             return Dimensions;
         })();
         Measurements.Dimensions = Dimensions;
