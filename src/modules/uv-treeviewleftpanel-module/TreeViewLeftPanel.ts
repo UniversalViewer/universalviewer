@@ -141,7 +141,7 @@ class TreeViewLeftPanel extends LeftPanel {
     }
 
     updateTreeViewOptions(): void{
-        if (this.isCollection() && this.treeData.nodes.length && this.treeData.nodes[0].navDate){
+        if (this.isCollection() && this.treeData.nodes.length && !isNaN(this.treeData.nodes[0].navDate.getTime())){
             this.$treeViewOptions.show();
         } else {
             this.$treeViewOptions.hide();

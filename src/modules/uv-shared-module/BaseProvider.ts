@@ -171,7 +171,19 @@ class BaseProvider implements IProvider{
         // get ranges that contain the canvas id. return the last.
         var ranges: Manifesto.IRange[] = this.manifest.getRanges();
 
-        var range = ranges.en().where(range => (range.getCanvases().en().where(c => canvas.id))).last();
+        //var range = ranges.en().where(range => (range.getCanvases().en().where(c => canvas.id))).last();
+
+        var select: Manifesto.IRange[] = [];
+
+        for (var i = 0; i < ranges.length; i++){
+            var r = ranges[i];
+
+            if (r.getCanvases().contains(canvas.id)){
+                select.push(r);
+            }
+        }
+
+        var range: Manifesto.IRange = select.last();
 
         return range;
     }
