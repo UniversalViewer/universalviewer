@@ -141,7 +141,7 @@ class TreeViewLeftPanel extends LeftPanel {
     }
 
     updateTreeViewOptions(): void{
-        if (this.isCollection()){
+        if (this.isCollection() && this.treeData.nodes.length && this.treeData.nodes[0].navDate){
             this.$treeViewOptions.show();
         } else {
             this.$treeViewOptions.hide();
@@ -292,8 +292,7 @@ class TreeViewLeftPanel extends LeftPanel {
         this.treeView.show();
 
         setTimeout(() => {
-            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
-            var range: Manifesto.IRange = canvas.getRange();
+            var range: Manifesto.IRange = this.provider.getCanvasRange(this.provider.getCurrentCanvas());
             if (this.treeView && range && range.treeNode) this.treeView.selectNode(range.treeNode);
         }, 1);
 
@@ -343,7 +342,7 @@ class TreeViewLeftPanel extends LeftPanel {
             var node: Manifesto.TreeNode;
 
             // try finding a range first
-            var range: Manifesto.IRange = this.provider.getCurrentCanvas().getRange();
+            var range: Manifesto.IRange = this.provider.getCanvasRange(this.provider.getCurrentCanvas());
 
             if (range){
                 id = range.treeNode.id;

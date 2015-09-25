@@ -180,15 +180,15 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getAutoCompleteService(): Manifesto.IService {
-        return this.manifest.getService(manifesto.ServiceProfile.autoComplete());
+        var service: Manifesto.IService = this.getSearchWithinService();
+        if (!service) return null;
+        return service.getService(manifesto.ServiceProfile.autoComplete());
     }
 
     getAutoCompleteUri(): string{
         var service = this.getAutoCompleteService();
-
         if (!service) return null;
-
-        return service.id + '{0}';
+        return service.id + '?q={0}';
     }
 
     getSearchWithinService(): Manifesto.IService {
@@ -201,7 +201,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         if (!service) return null;
 
         var uri = service.id;
-        uri = uri + "{0}";
+        uri = uri + "?q={0}";
         return uri;
     }
 

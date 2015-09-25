@@ -185,8 +185,10 @@ class FooterPanel extends BaseFooterPanel {
         }
 
         new AutoComplete(this.$searchText, (<ISeadragonProvider>this.provider).getAutoCompleteUri(), 300,
-            (results: string[]) => {
-                return results;
+            (results: any) => {
+                return _.map(results.terms, (result: any) => {
+                    return result.match;
+                });
             },
             (terms: string) => {
                 this.search(terms);

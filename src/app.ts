@@ -2,7 +2,7 @@ require.config({
     paths: {
         'browserdetect': 'lib/browserdetect',
         'promise': 'lib/promise.min',
-        'ex': 'lib/ex.min',
+        'ex': 'lib/ex.es3.min',
         'ext': 'lib/extensions',
         'httpstatuscodes': 'lib/http-status-codes',
         'jquery': 'lib/jquery-1.10.2.min',

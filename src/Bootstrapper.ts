@@ -53,7 +53,14 @@ class Bootstrapper{
         if (this.isCORSEnabled()){
             $.getJSON(that.params.manifestUri, (r) => {
                 this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
-                this.loadResource();
+                this.loadResource().then((manifest: Manifesto.IManifest) => {
+                    if (!manifest){
+                        this.notFound();
+                        return;
+                    }
+
+                    this.manifestLoaded(manifest);
+                });
             });
         } else {
             // use jsonp
@@ -69,7 +76,14 @@ class Bootstrapper{
 
             window.manifestCallback = (r: any) => {
                 this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
-                this.loadResource();
+                this.loadResource().then((manifest: Manifesto.IManifest) => {
+                    if (!manifest){
+                        this.notFound();
+                        return;
+                    }
+
+                    this.manifestLoaded(manifest);
+                });
             };
         }
     }
@@ -81,35 +95,35 @@ class Bootstrapper{
             });
     }
 
-    loadResource(): void {
+    loadResource(): Promise<Manifesto.IManifest> {
 
-        var manifest: Manifesto.IManifest;
+        var that = this;
 
-        if (this.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
-            // if it's a collection and has child collections, get the collection by index
-            if ((<Manifesto.ICollection>this.iiifResource).collections && (<Manifesto.ICollection>this.iiifResource).collections.length){
-                var collection = (<Manifesto.ICollection>this.iiifResource).collections[this.params.collectionIndex];
+        return new Promise<Manifesto.IManifest>((resolve) => {
 
-                if (!collection){
-                    this.notFound();
-                    return;
+            if (that.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
+                // if it's a collection and has child collections, get the collection by index
+                if ((<Manifesto.ICollection>that.iiifResource).collections && (<Manifesto.ICollection>that.iiifResource).collections.length){
+
+                    (<Manifesto.ICollection>that.iiifResource).getCollectionByIndex(that.params.collectionIndex).then((collection: Manifesto.ICollection) => {
+
+                        if (!collection){
+                            that.notFound();
+                            resolve();
+                        }
+
+                        collection.getManifestByIndex(that.params.manifestIndex).then((manifest: Manifesto.IManifest) => {
+                            resolve(manifest);
+                        });
+                    });
+                } else {
+                    (<Manifesto.ICollection>that.iiifResource).getManifestByIndex(that.params.manifestIndex).then((manifest: Manifesto.IManifest) => {
+                        resolve(manifest);
+                    });
                 }
-
-                manifest = collection.getManifestByIndex(this.params.manifestIndex);
             } else {
-                manifest = (<Manifesto.ICollection>this.iiifResource).getManifestByIndex(this.params.manifestIndex);
+                resolve(<Manifesto.IManifest>that.iiifResource);
             }
-        } else {
-            manifest = <Manifesto.IManifest>this.iiifResource;
-        }
-
-        if (!manifest){
-            this.notFound();
-            return;
-        }
-
-        manifest.load().then((m: Manifesto.IManifest) => {
-            this.manifestLoaded(m);
         });
     }
 

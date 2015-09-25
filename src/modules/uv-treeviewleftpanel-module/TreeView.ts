@@ -119,25 +119,6 @@ class TreeView extends BaseView {
         this.selectNode(node);
     }
 
-    //selectTreeNodeFromCanvasIndex(index: number): void {
-    //    // may be authenticating
-    //    if (index === -1) return;
-    //
-    //    this.deselectCurrentNode();
-    //
-    //    var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
-    //    var range: Manifesto.IRange = canvas.getRange();
-    //    var treeNode: Manifesto.TreeNode;
-    //
-    //    if (range && range.treeNode) {
-    //        treeNode = range.treeNode;
-    //    } else {
-    //        treeNode = this.provider.manifest.treeRoot;
-    //    }
-    //
-    //    if (treeNode) this.selectNode(treeNode);
-    //}
-
     deselectCurrentNode(): void {
         if (this.selectedNode) $.observable(this.selectedNode).setProperty("selected", false);
     }

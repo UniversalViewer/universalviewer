@@ -127,7 +127,7 @@ class AutoComplete{
 
         var nextIndex;
 
-        if (direction == 1) {
+        if (direction === 1) {
             nextIndex = this.selectedResultIndex + 1;
         } else {
             nextIndex = this.selectedResultIndex - 1;
@@ -215,6 +215,7 @@ class AutoComplete{
     }
 
     listResults(results: string[]): void {
+        // get an array of strings
         this.results = this.parseResults(results);
 
         this.clearResults();

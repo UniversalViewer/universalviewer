@@ -299,9 +299,9 @@ class Extension extends BaseExtension {
 
         if (!range) return;
 
-        var canvas = range.canvases[0];
+        var canvasId = range.getCanvases()[0];
 
-        var index = this.provider.getCanvasIndexById(canvas.id);
+        var index = this.provider.getCanvasIndexById(canvasId);
 
         this.viewPage(index);
     }
