@@ -75,7 +75,15 @@
         "defaultZoomLevel": 0,
         "navigatorPosition": "BOTTOM_RIGHT",
         "pageGap": 0.01,
-        "trimAttributionCount": 150
+        "trimAttributionCount": 150,
+        "showNavigator": true,
+        "animationTime": 1.2,
+        "visibilityRatio": 0.5,
+        "constrainDuringPan": false,
+        "immediateRender": false,
+        "maxZoomLevel": null,
+        "blendTime": 0,
+        "autoHideControls": true
       }
     },
     "searchFooterPanel":
