@@ -13,6 +13,7 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.CREATED = Commands.namespace + 'onCreated';
         Commands.DOWN_ARROW = Commands.namespace + 'onDownArrow';
         Commands.DOWNLOAD = Commands.namespace + 'onDownload';
+        Commands.DROP = Commands.namespace + 'onDrop';
         Commands.EMBED = Commands.namespace + 'onEmbed';
         Commands.END = Commands.namespace + 'onEnd';
         Commands.ESCAPE = Commands.namespace + 'onEscape';
@@ -1016,47 +1017,67 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             if (this.provider.isLightbox)
                 this.$element.addClass('lightbox');
             // events.
-            window.onresize = function () {
-                var $win = $(window);
-                $('body').height($win.height());
-                _this.resize();
-            };
-            $(document).on('mousemove', function (e) {
-                _this.mouseX = e.pageX;
-                _this.mouseY = e.pageY;
-            });
-            // keyboard events.
-            $(document).on('keyup keydown', function (e) {
-                _this.shifted = e.shiftKey;
-                _this.tabbing = e.keyCode === 9;
-            });
-            $(document).keyup(function (e) {
-                var event = null;
-                if (e.keyCode === 13)
-                    event = BaseCommands.RETURN;
-                if (e.keyCode === 27)
-                    event = BaseCommands.ESCAPE;
-                if (e.keyCode === 33)
-                    event = BaseCommands.PAGE_UP;
-                if (e.keyCode === 34)
-                    event = BaseCommands.PAGE_DOWN;
-                if (e.keyCode === 35)
-                    event = BaseCommands.END;
-                if (e.keyCode === 36)
-                    event = BaseCommands.HOME;
-                if (e.keyCode === 37)
-                    event = BaseCommands.LEFT_ARROW;
-                if (e.keyCode === 38)
-                    event = BaseCommands.UP_ARROW;
-                if (e.keyCode === 39)
-                    event = BaseCommands.RIGHT_ARROW;
-                if (e.keyCode === 40)
-                    event = BaseCommands.DOWN_ARROW;
-                if (event) {
+            if (!this.provider.isReload) {
+                window.onresize = function () {
+                    var $win = $(window);
+                    $('body').height($win.height());
+                    _this.resize();
+                };
+                $(document).on('mousemove', function (e) {
+                    _this.mouseX = e.pageX;
+                    _this.mouseY = e.pageY;
+                });
+                this.$element.on('drop', (function (e) {
                     e.preventDefault();
-                    $.publish(event);
-                }
-            });
+                    var parser = document.createElement('a');
+                    var dropUrl = e.originalEvent.dataTransfer.getData("text");
+                    var url = Utils.Urls.GetUrlParts(dropUrl);
+                    var manifestUri = Utils.Urls.GetQuerystringParameterFromString('manifest', url.search);
+                    //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
+                    if (manifestUri) {
+                        _this.triggerSocket(BaseCommands.DROP, manifestUri);
+                        var p = new BootstrapParams();
+                        p.manifestUri = manifestUri;
+                        _this.provider.reload(p);
+                    }
+                }));
+                this.$element.on('dragover', (function (e) {
+                    // allow drop
+                    e.preventDefault();
+                }));
+                // keyboard events.
+                $(document).on('keyup keydown', function (e) {
+                    _this.shifted = e.shiftKey;
+                    _this.tabbing = e.keyCode === 9;
+                });
+                $(document).keyup(function (e) {
+                    var event = null;
+                    if (e.keyCode === 13)
+                        event = BaseCommands.RETURN;
+                    if (e.keyCode === 27)
+                        event = BaseCommands.ESCAPE;
+                    if (e.keyCode === 33)
+                        event = BaseCommands.PAGE_UP;
+                    if (e.keyCode === 34)
+                        event = BaseCommands.PAGE_DOWN;
+                    if (e.keyCode === 35)
+                        event = BaseCommands.END;
+                    if (e.keyCode === 36)
+                        event = BaseCommands.HOME;
+                    if (e.keyCode === 37)
+                        event = BaseCommands.LEFT_ARROW;
+                    if (e.keyCode === 38)
+                        event = BaseCommands.UP_ARROW;
+                    if (e.keyCode === 39)
+                        event = BaseCommands.RIGHT_ARROW;
+                    if (e.keyCode === 40)
+                        event = BaseCommands.DOWN_ARROW;
+                    if (event) {
+                        e.preventDefault();
+                        $.publish(event);
+                    }
+                });
+            }
             this.$element.append('<a href="/" id="top"></a>');
             $.subscribe(BaseCommands.OPEN_LEFT_PANEL, function (e) {
                 _this.resize();
@@ -1119,25 +1140,39 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             var that = this;
             // todo: use compiler flag (when available)
             var depsUri = (window.DEBUG) ? '../../extensions/' + this.name + '/dependencies' : this.name + '-dependencies';
-            require([depsUri], function (deps) {
-                // if debugging, set the base uri to the extension's directory.
-                // otherwise set it to the current directory (where app.js is hosted).
-                if (!that.provider.isReload) {
+            // check if the deps are already loaded
+            var scripts = $('script[data-requiremodule]')
+                .filter(function () {
+                var attr = $(this).attr('data-requiremodule');
+                return (attr.indexOf(that.name) != -1 && attr.indexOf('dependencies') != -1);
+            });
+            if (!scripts.length) {
+                require([depsUri], function (deps) {
+                    // if debugging, set the base uri to the extension's directory.
+                    // otherwise set it to the current directory (where app.js is hosted).
                     // todo: use compiler flag (when available)
                     var baseUri = (window.DEBUG) ? '../../extensions/' + that.name + '/lib/' : '';
                     // for each dependency, prepend baseUri.
                     for (var i = 0; i < deps.dependencies.length; i++) {
                         deps.dependencies[i] = baseUri + deps.dependencies[i];
                     }
-                }
-                cb(deps);
-            });
+                    cb(deps);
+                });
+            }
+            else {
+                cb(null);
+            }
         };
         BaseExtension.prototype.loadDependencies = function (deps) {
             var that = this;
-            require(deps.dependencies, function () {
+            if (deps) {
+                require(deps.dependencies, function () {
+                    that.dependenciesLoaded();
+                });
+            }
+            else {
                 that.dependenciesLoaded();
-            });
+            }
         };
         BaseExtension.prototype.dependenciesLoaded = function () {
             this.createModules();
@@ -2576,7 +2611,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.16';
+    exports.Version = '1.5.17';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -8604,8 +8639,8 @@ var Manifesto;
             return null;
         };
         Utils.getServiceByReference = function (resource, id) {
-            var services = this.getServices(resource.options.resource);
             var service;
+            var services = this.getServices(resource.options.resource);
             for (var i = 0; i < services.length; i++) {
                 var s = services[i];
                 if (s.id === id) {
@@ -8634,7 +8669,7 @@ var Manifesto;
             }
             for (var i = 0; i < service.length; i++) {
                 var s = service[i];
-                if (_isString(s)) {
+                if (_isString(s) && resource !== resource.options.resource) {
                     services.push(this.getServiceByReference(resource, s));
                 }
                 else {

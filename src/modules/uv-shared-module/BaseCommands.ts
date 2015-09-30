@@ -11,6 +11,7 @@ class Commands {
     static CREATED: string                          = Commands.namespace + 'onCreated';
     static DOWN_ARROW: string                       = Commands.namespace + 'onDownArrow';
     static DOWNLOAD: string                         = Commands.namespace + 'onDownload';
+    static DROP: string                             = Commands.namespace + 'onDrop';
     static EMBED: string                            = Commands.namespace + 'onEmbed';
     static END: string                              = Commands.namespace + 'onEnd';
     static ESCAPE: string                           = Commands.namespace + 'onEscape';

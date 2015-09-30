@@ -1690,8 +1690,8 @@ var Manifesto;
             return null;
         };
         Utils.getServiceByReference = function (resource, id) {
-            var services = this.getServices(resource.options.resource);
             var service;
+            var services = this.getServices(resource.options.resource);
             for (var i = 0; i < services.length; i++) {
                 var s = services[i];
                 if (s.id === id) {
@@ -1720,7 +1720,7 @@ var Manifesto;
             }
             for (var i = 0; i < service.length; i++) {
                 var s = service[i];
-                if (_isString(s)) {
+                if (_isString(s) && resource !== resource.options.resource) {
                     services.push(this.getServiceByReference(resource, s));
                 }
                 else {

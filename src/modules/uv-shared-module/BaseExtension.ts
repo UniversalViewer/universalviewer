@@ -75,45 +75,69 @@ class BaseExtension implements IExtension {
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
 
         // events.
-        window.onresize = () => {
+        if (!this.provider.isReload){
+            window.onresize = () => {
 
-            var $win = $(window);
-            $('body').height($win.height());
+                var $win = $(window);
+                $('body').height($win.height());
 
-            this.resize();
-        };
+                this.resize();
+            };
 
-        $(document).on('mousemove', (e) => {
-            this.mouseX = e.pageX;
-            this.mouseY = e.pageY;
-        });
+            $(document).on('mousemove', (e) => {
+                this.mouseX = e.pageX;
+                this.mouseY = e.pageY;
+            });
 
-        // keyboard events.
-
-        $(document).on('keyup keydown', (e) => {
-            this.shifted = e.shiftKey;
-            this.tabbing = e.keyCode === 9;
-        });
-
-        $(document).keyup((e) => {
-            var event: string = null;
-
-            if (e.keyCode === 13) event = BaseCommands.RETURN;
-            if (e.keyCode === 27) event = BaseCommands.ESCAPE;
-            if (e.keyCode === 33) event = BaseCommands.PAGE_UP;
-            if (e.keyCode === 34) event = BaseCommands.PAGE_DOWN;
-            if (e.keyCode === 35) event = BaseCommands.END;
-            if (e.keyCode === 36) event = BaseCommands.HOME;
-            if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
-            if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
-            if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
-            if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
-
-            if (event){
+            this.$element.on('drop', (e => {
                 e.preventDefault();
-                $.publish(event)
-            }
-        });
+                var parser = document.createElement('a');
+                var dropUrl = (<any>e.originalEvent).dataTransfer.getData("text");
+                var url = Utils.Urls.GetUrlParts(dropUrl);
+                var manifestUri = Utils.Urls.GetQuerystringParameterFromString('manifest', url.search);
+                //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
+
+                if (manifestUri){
+                    this.triggerSocket(BaseCommands.DROP, manifestUri);
+
+                    var p = new BootstrapParams();
+                    p.manifestUri = manifestUri;
+                    this.provider.reload(p);
+                }
+            }));
+
+            this.$element.on('dragover', (e => {
+                // allow drop
+                e.preventDefault();
+            }));
+
+            // keyboard events.
+
+            $(document).on('keyup keydown', (e) => {
+                this.shifted = e.shiftKey;
+                this.tabbing = e.keyCode === 9;
+            });
+
+            $(document).keyup((e) => {
+                var event: string = null;
+
+                if (e.keyCode === 13) event = BaseCommands.RETURN;
+                if (e.keyCode === 27) event = BaseCommands.ESCAPE;
+                if (e.keyCode === 33) event = BaseCommands.PAGE_UP;
+                if (e.keyCode === 34) event = BaseCommands.PAGE_DOWN;
+                if (e.keyCode === 35) event = BaseCommands.END;
+                if (e.keyCode === 36) event = BaseCommands.HOME;
+                if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
+                if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
+                if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
+                if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
+
+                if (event){
+                    e.preventDefault();
+                    $.publish(event)
+                }
+            });
+        }
 
         this.$element.append('<a href="/" id="top"></a>');
 
@@ -195,11 +219,19 @@ class BaseExtension implements IExtension {
         // todo: use compiler flag (when available)
         var depsUri = (window.DEBUG) ? '../../extensions/' + this.name + '/dependencies' : this.name + '-dependencies';
 
-        require([depsUri], function (deps) {
-            // if debugging, set the base uri to the extension's directory.
-            // otherwise set it to the current directory (where app.js is hosted).
+        // check if the deps are already loaded
+        var scripts = $('script[data-requiremodule]')
+            .filter(function() {
+                var attr = $(this).attr('data-requiremodule');
+                return (attr.indexOf(that.name) != -1 && attr.indexOf('dependencies') != -1)
+            });
 
-            if (!that.provider.isReload){
+        if (!scripts.length) {
+
+            require([depsUri], function (deps) {
+                // if debugging, set the base uri to the extension's directory.
+                // otherwise set it to the current directory (where app.js is hosted).
+
                 // todo: use compiler flag (when available)
                 var baseUri = (window.DEBUG) ? '../../extensions/' + that.name + '/lib/' : '';
 
@@ -207,18 +239,24 @@ class BaseExtension implements IExtension {
                 for (var i = 0; i < deps.dependencies.length; i++) {
                     deps.dependencies[i] = baseUri + deps.dependencies[i];
                 }
-            }
 
-            cb(deps);
-        });
+                cb(deps);
+            });
+        } else {
+            cb(null);
+        }
     }
 
     loadDependencies(deps: any): void {
         var that = this;
 
-        require(deps.dependencies, function () {
+        if (deps){
+            require(deps.dependencies, function () {
+                that.dependenciesLoaded();
+            });
+        } else {
             that.dependenciesLoaded();
-        });
+        }
     }
 
     dependenciesLoaded(): void {
