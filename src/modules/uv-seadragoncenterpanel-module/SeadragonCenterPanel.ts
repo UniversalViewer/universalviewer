@@ -357,7 +357,7 @@ class SeadragonCenterPanel extends CenterPanel {
             var settings: ISettings = this.provider.getSettings();
 
             // zoom to bounds unless setting disabled
-            if (settings.preserveViewport){
+            if (settings.preserveViewport && this.currentBounds){
                 this.fitToBounds(this.currentBounds);
             } else {
                 this.goHome();
