@@ -124,7 +124,40 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getInfoUri(canvas: Manifesto.ICanvas): string{
-        var infoUri = canvas.getInfoUri();
+        var infoUri: string;
+
+        var images: Manifesto.IAnnotation[] = canvas.getImages();
+
+        if (images && images.length) {
+            var firstImage = images[0];
+            var resource: Manifesto.IResource = firstImage.getResource();
+            var services: Manifesto.IService[] = resource.getServices();
+
+            for (var i = 0; i < services.length; i++) {
+                var service: Manifesto.IService = services[i];
+                var profile:string = service.getProfile().toString();
+                var id = service.id;
+
+                if (!_.endsWith(id, '/')) {
+                    id += '/';
+                }
+
+                if (profile === manifesto.ServiceProfile.stanfordIIIFImageCompliance1().toString() ||
+                    profile === manifesto.ServiceProfile.stanfordIIIFImageCompliance2().toString() ||
+                    profile === manifesto.ServiceProfile.stanfordIIIF1ImageCompliance1().toString() ||
+                    profile === manifesto.ServiceProfile.stanfordIIIF1ImageCompliance2().toString() ||
+                    profile === manifesto.ServiceProfile.stanfordIIIFImageConformance1().toString() ||
+                    profile === manifesto.ServiceProfile.stanfordIIIFImageConformance2().toString() ||
+                    profile === manifesto.ServiceProfile.stanfordIIIF1ImageConformance1().toString() ||
+                    profile === manifesto.ServiceProfile.stanfordIIIF1ImageConformance2().toString() ||
+                    profile === manifesto.ServiceProfile.iiif1ImageLevel1().toString() ||
+                    profile === manifesto.ServiceProfile.iiif1ImageLevel2().toString() ||
+                    profile === manifesto.ServiceProfile.iiif2ImageLevel1().toString() ||
+                    profile === manifesto.ServiceProfile.iiif2ImageLevel2().toString()){
+                    infoUri = id + 'info.json';
+                }
+            }
+        }
 
         if (!infoUri){
             // todo: use compiler flag (when available)

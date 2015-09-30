@@ -22,7 +22,7 @@
     "http-status-codes": "edsilv/http-status-codes#~0.0.2",
     "jquery-plugins": "edsilv/jquery-plugins#~0.0.14",
     "lodash-compat": "~3.10.0",
-    "manifesto": "universalviewer/manifesto#services",
+    "manifesto": "universalviewer/manifesto#dev",
     "r.js": "~2.1.18",
     "utils": "edsilv/utils#~0.0.23",
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",

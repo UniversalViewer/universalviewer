@@ -95,6 +95,14 @@ declare module Manifesto {
     class ServiceProfile extends StringValue {
         static AUTOCOMPLETE: ServiceProfile;
         static CLICKTHROUGH: ServiceProfile;
+        static STANFORDIIIFIMAGECOMPLIANCE1: ServiceProfile;
+        static STANFORDIIIFIMAGECOMPLIANCE2: ServiceProfile;
+        static STANFORDIIIFIMAGECONFORMANCE1: ServiceProfile;
+        static STANFORDIIIFIMAGECONFORMANCE2: ServiceProfile;
+        static STANFORDIIIF1IMAGECOMPLIANCE1: ServiceProfile;
+        static STANFORDIIIF1IMAGECOMPLIANCE2: ServiceProfile;
+        static STANFORDIIIF1IMAGECONFORMANCE1: ServiceProfile;
+        static STANFORDIIIF1IMAGECONFORMANCE2: ServiceProfile;
         static IIIF1IMAGELEVEL1: ServiceProfile;
         static IIIF1IMAGELEVEL2: ServiceProfile;
         static IIIF2IMAGELEVEL1: ServiceProfile;
@@ -116,6 +124,14 @@ declare module Manifesto {
         logout(): ServiceProfile;
         otherManifestations(): ServiceProfile;
         searchWithin(): ServiceProfile;
+        stanfordIIIFImageCompliance1(): ServiceProfile;
+        stanfordIIIFImageCompliance2(): ServiceProfile;
+        stanfordIIIFImageConformance1(): ServiceProfile;
+        stanfordIIIFImageConformance2(): ServiceProfile;
+        stanfordIIIF1ImageCompliance1(): ServiceProfile;
+        stanfordIIIF1ImageCompliance2(): ServiceProfile;
+        stanfordIIIF1ImageConformance1(): ServiceProfile;
+        stanfordIIIF1ImageConformance2(): ServiceProfile;
         token(): ServiceProfile;
     }
 }
@@ -175,7 +191,6 @@ declare module Manifesto {
         ranges: IRange[];
         constructor(jsonld: any, options: IManifestoOptions);
         getImages(): IAnnotation[];
-        getInfoUri(): string;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
         getWidth(): number;
@@ -307,6 +322,7 @@ declare module Manifesto {
     }
 }
 declare var _endsWith: any;
+declare var _isArray: any;
 declare module Manifesto {
     class Service extends ManifestResource implements IService {
         constructor(jsonld: any, options: IManifestoOptions);
@@ -392,7 +408,6 @@ declare module Manifesto {
     interface ICanvas extends IManifestResource {
         getHeight(): number;
         getImages(): IAnnotation[];
-        getInfoUri(): string;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
         getWidth(): number;
