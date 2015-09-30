@@ -54,6 +54,11 @@
         "title": "Cymorth"
       }
     },
+    "loginDialogue": {
+      "content": {
+        "login": "Mewngofnodi"
+      }
+    },
     "mediaelementCenterPanel": {
       "content": {
 

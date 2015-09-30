@@ -26,10 +26,6 @@ class ClickThroughDialogue extends Dialogue {
             this.open();
         });
 
-        $.subscribe(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE, (e) => {
-            this.close();
-        });
-
         this.$title = $('<h1></h1>');
         this.$content.append(this.$title);
 
@@ -58,7 +54,7 @@ class ClickThroughDialogue extends Dialogue {
 
             this.$message.empty();
             this.$message.addClass('loading');
-            this.$message.load(this.resource.clickThroughService.getProperty('exp:fullTermsSimple'), () => {
+            this.$message.load(this.resource.clickThroughService.getProperty('fullTermsSimple'), () => {
                 this.$message.removeClass('loading');
                 this.$message.targetBlank();
                 this.$viewTermsButton.hide();
@@ -80,9 +76,9 @@ class ClickThroughDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        this.$title.text(this.resource.clickThroughService.getLabel());
+        this.$title.text(this.resource.clickThroughService.getProperty('label'));
         this.$message.html(this.resource.clickThroughService.getProperty('description'));
-        this.$acceptTermsButton.text(this.resource.clickThroughService.getProperty('exp:actionLabel'));
+        this.$acceptTermsButton.text(this.resource.clickThroughService.getProperty('actionLabel'));
 
         this.resize();
     }

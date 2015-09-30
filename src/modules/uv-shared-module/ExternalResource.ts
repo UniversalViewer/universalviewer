@@ -22,8 +22,10 @@ class ExternalResource implements Manifesto.IExternalResource {
     private _parseAuthServices(resource: any): void {
         this.clickThroughService = manifesto.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
         this.loginService = manifesto.getService(resource, manifesto.ServiceProfile.login().toString());
-        this.logoutService = manifesto.getService(resource, manifesto.ServiceProfile.logout().toString());
-        this.tokenService = manifesto.getService(resource, manifesto.ServiceProfile.token().toString());
+        if (this.loginService){
+            this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
+            this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
+        }
     }
 
     public isAccessControlled(): boolean {

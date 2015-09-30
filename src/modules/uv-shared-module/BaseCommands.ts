@@ -54,6 +54,7 @@ class Commands {
     static SHOW_GENERIC_DIALOGUE: string            = Commands.namespace + 'onShowGenericDialogue';
     static SHOW_HELP_DIALOGUE: string               = Commands.namespace + 'onShowHelpDialogue';
     static SHOW_INFORMATION: string                 = Commands.namespace + 'onShowInformation';
+    static SHOW_LOGIN_DIALOGUE: string              = Commands.namespace + 'onShowLoginDialogue';
     static SHOW_OVERLAY: string                     = Commands.namespace + 'onShowOverlay';
     static SHOW_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onShowSettingsDialogue';
     static THUMB_SELECTED: string                   = Commands.namespace + 'onThumbSelected';

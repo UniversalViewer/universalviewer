@@ -6,6 +6,7 @@ import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickTh
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import IProvider = require("./IProvider");
+import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import Params = require("../../Params");
 import Shell = require("./Shell");
 import Storage = require("../../modules/uv-shared-module/Storage");
@@ -15,12 +16,14 @@ class BaseExtension implements IExtension {
 
     $clickThroughDialogue: JQuery;
     $element: JQuery;
+    $loginDialogue: JQuery;
     bootstrapper: BootStrapper;
     canvasIndex: number;
     clickThroughDialogue: ClickThroughDialogue;
     embedHeight: number;
     embedWidth: number;
     extensions: any;
+    loginDialogue: LoginDialogue;
     mouseX: number;
     mouseY: number;
     name: string;
@@ -176,6 +179,10 @@ class BaseExtension implements IExtension {
         this.$clickThroughDialogue = $('<div class="overlay clickthrough"></div>');
         Shell.$overlays.append(this.$clickThroughDialogue);
         this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
+
+        this.$loginDialogue = $('<div class="overlay login"></div>');
+        Shell.$overlays.append(this.$loginDialogue);
+        this.loginDialogue = new LoginDialogue(this.$loginDialogue);
     }
 
     modulesCreated(): void {
@@ -429,15 +436,20 @@ class BaseExtension implements IExtension {
     login(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
-            var win = window.open(resource.loginService.id, 'loginwindow', 'height=600,width=600');
+            $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
+                resource: resource,
+                acceptCallback: () => {
+                    var win = window.open(resource.loginService.id);
 
-            var pollTimer = window.setInterval(() => {
-                if (win.closed) {
-                    window.clearInterval(pollTimer);
-                    $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
-                    resolve();
+                    var pollTimer = window.setInterval(() => {
+                        if (win.closed) {
+                            window.clearInterval(pollTimer);
+                            $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
+                            resolve();
+                        }
+                    }, 100);
                 }
-            }, 500);
+            }]);
         });
     }
 

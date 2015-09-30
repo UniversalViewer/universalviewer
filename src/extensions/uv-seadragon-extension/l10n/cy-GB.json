@@ -65,6 +65,11 @@
         "title": "Cymorth"
       }
     },
+    "loginDialogue": {
+      "content": {
+        "login": "Mewngofnodi"
+      }
+    },
     "moreInfoRightPanel": {
       "content": {
         "attribution": "priodoliad",

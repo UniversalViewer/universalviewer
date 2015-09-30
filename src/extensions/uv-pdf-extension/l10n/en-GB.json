@@ -54,6 +54,11 @@
         "title": "Help"
       }
     },
+    "loginDialogue": {
+      "content": {
+        "login": "Login"
+      }
+    },
     "moreInfoRightPanel": {
       "content": {
         "attribution": "Attribution",
