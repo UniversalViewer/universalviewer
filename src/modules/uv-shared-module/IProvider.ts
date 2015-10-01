@@ -10,6 +10,7 @@ interface IProvider{
     iiifResource: Manifesto.IIIIFResource;
     manifest: Manifesto.IIIIFResource;
     manifestIndex: number;
+    manifestUri: string;
     resources: Manifesto.IExternalResource[];
     sequenceIndex: number;
 

@@ -419,6 +419,7 @@ class BaseExtension implements IExtension {
 
     viewManifest(manifest: Manifesto.IManifest): void{
         var p = new BootstrapParams();
+        p.manifestUri = this.provider.manifestUri;
         p.collectionIndex = this.provider.getCollectionIndex(manifest);
         p.manifestIndex = manifest.index;
         p.sequenceIndex = 0;
