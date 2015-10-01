@@ -339,8 +339,8 @@ class Extension extends BaseExtension {
         var that = this;
 
         (<ISeadragonProvider>this.provider).searchWithin(terms, (results: any) => {
-            if (results.resources.length) {
-                $.publish(Commands.SEARCH_RESULTS, [terms, results.resources]);
+            if (results.hits.length) {
+                $.publish(Commands.SEARCH_RESULTS, [terms, results]);
 
                 // reload current index as it may contain results.
                 that.viewPage(that.provider.canvasIndex, true);
