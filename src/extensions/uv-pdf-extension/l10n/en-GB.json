@@ -3,7 +3,8 @@
     "label": "English (GB)"
   },
   "content": {
-    "degradedResource": "This pdf is degraded."
+    "degradedResourceMessage": "Please log in to view at full quality.",
+    "degradedResourceLogin": "log in"
   },
   "modules": {
     "dialogue": {

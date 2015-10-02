@@ -6,9 +6,8 @@ import Params = require("../../Params");
 import Storage = require("./Storage");
 
 // providers contain methods that could be implemented differently according
-// to factors like varying back end data provision systems.
-// they provide a consistent interface and set of data structures
-// for extensions to operate against.
+// to factors like varying back end data provisioning systems.
+// todo: expose the provider as an external API to the containing page.
 class BaseProvider implements IProvider{
 
     bootstrapper: BootStrapper;

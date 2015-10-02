@@ -5,6 +5,8 @@ import BootstrapParams = require("../../BootstrapParams");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
+import Information = require("./Information");
+import InformationAction = require("./InformationAction");
 import IProvider = require("./IProvider");
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import Params = require("../../Params");
@@ -91,7 +93,6 @@ class BaseExtension implements IExtension {
 
             this.$element.on('drop', (e => {
                 e.preventDefault();
-                var parser = document.createElement('a');
                 var dropUrl = (<any>e.originalEvent).dataTransfer.getData("text");
                 var url = Utils.Urls.GetUrlParts(dropUrl);
                 var manifestUri = Utils.Urls.GetQuerystringParameterFromString('manifest', url.search);
@@ -169,8 +170,8 @@ class BaseExtension implements IExtension {
             }
         });
 
-        $.subscribe(BaseCommands.RESOURCE_DEGRADED, () => {
-            $.publish(BaseCommands.SHOW_INFORMATION, [this.provider.config.content.degradedResource]);
+        $.subscribe(BaseCommands.RESOURCE_DEGRADED, (e, resource: ExternalResource) => {
+            this.handleDegraded(resource)
         });
 
         $.subscribe(BaseCommands.ESCAPE, () => {
@@ -321,21 +322,35 @@ class BaseExtension implements IExtension {
         }, 1000);
     }
 
-    getExternalResources(): Promise<Manifesto.IExternalResource[]> {
+    getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
 
         var indices = this.provider.getPagedIndices();
-        var resources = [];
+        var resourcesToLoad = [];
 
         _.each(indices, (index) => {
             var r: Manifesto.IExternalResource = new ExternalResource(this.provider);
             var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
             r.dataUri = this.provider.getInfoUri(canvas);
-            resources.push(r);
+
+            // used to reload resources with isResponseHandled = true.
+            if (resources){
+                var found: Manifesto.IExternalResource = _.find(resources, (f: Manifesto.IExternalResource) => {
+                    return f.dataUri === r.dataUri;
+                });
+
+                if (found) {
+                    resourcesToLoad.push(found);
+                } else {
+                    resourcesToLoad.push(r);
+                }
+            } else {
+                resourcesToLoad.push(r);
+            }
         });
 
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
             manifesto.loadExternalResources(
-                resources,
+                resourcesToLoad,
                 this.clickThrough,
                 this.login,
                 this.getAccessToken,
@@ -537,8 +552,7 @@ class BaseExtension implements IExtension {
         });
     }
 
-    handleExternalResourceResponse(resource: Manifesto.IExternalResource) : Promise<any> {
-        var that = this;
+    handleExternalResourceResponse(resource: Manifesto.IExternalResource): Promise<any> {
 
         return new Promise<any>((resolve, reject) => {
             resource.isResponseHandled = true;
@@ -547,12 +561,31 @@ class BaseExtension implements IExtension {
                 resolve(resource);
             } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                 resolve(resource);
-                $.publish(BaseCommands.RESOURCE_DEGRADED);
+                $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
             } else {
                 // access denied
                 reject(resource.error.statusText);
             }
         });
+    }
+
+    handleDegraded(resource: Manifesto.IExternalResource): void {
+        var actions: InformationAction[] = [];
+
+        var loginAction: InformationAction = new InformationAction();
+
+        loginAction.label = this.provider.config.content.degradedResourceLogin;
+
+        loginAction.action = () => {
+            $.publish(BaseCommands.HIDE_INFORMATION);
+            $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE, [[resource]]);
+        };
+
+        actions.push(loginAction);
+
+        var information: Information = new Information(this.provider.config.content.degradedResourceMessage, actions);
+
+        $.publish(BaseCommands.SHOW_INFORMATION, [information]);
     }
 }
 

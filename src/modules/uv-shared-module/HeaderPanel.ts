@@ -1,6 +1,8 @@
 import BaseCommands = require("./BaseCommands");
 import BaseView = require("./BaseView");
 import BootstrapParams = require("../../BootstrapParams");
+import Information = require("../uv-shared-module/Information");
+import InformationAction = require("../uv-shared-module/InformationAction");
 import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
 
 class HeaderPanel extends BaseView {
@@ -13,7 +15,7 @@ class HeaderPanel extends BaseView {
     $pagingToggleButton: JQuery;
     $rightOptions: JQuery;
     $settingsButton: JQuery;
-    information: string;
+    information: Information;
 
     constructor($element: JQuery) {
         super($element, false, false);
@@ -29,7 +31,7 @@ class HeaderPanel extends BaseView {
             this.updatePagingToggle();
         });
 
-        $.subscribe(BaseCommands.SHOW_INFORMATION, (e, information) => {
+        $.subscribe(BaseCommands.SHOW_INFORMATION, (e, information: Information) => {
             this.showInformation(information);
         });
 
@@ -60,7 +62,8 @@ class HeaderPanel extends BaseView {
         this.$rightOptions.append(this.$settingsButton);
 
         this.$informationBox = $('<div class="informationBox"> \
-                                    <div class="text"></div> \
+                                    <div class="message"></div> \
+                                    <div class="actions"></div> \
                                     <div class="close"></div> \
                                   </div>');
 
@@ -139,9 +142,22 @@ class HeaderPanel extends BaseView {
         return this.options.pagingToggleEnabled && this.provider.isPagingAvailable();
     }
 
-    showInformation(information: string): void {
+    showInformation(information: Information): void {
         this.information = information;
-        this.$informationBox.find('.text').html(information).find('a').attr('target', '_top');
+        var $message = this.$informationBox.find('.message');
+        $message.html(information.message).find('a').attr('target', '_top');
+        var $actions = this.$informationBox.find('.actions');
+        $actions.empty();
+
+        for (var i = 0; i < information.actions.length; i++) {
+            var action: InformationAction = information.actions[i];
+
+            var $action = $('<a href="#" class="btn btn-default">' + action.label + '</a>');
+            $action.on('click', action.action);
+
+            $actions.append($action);
+        }
+
         this.$informationBox.show();
         this.$element.addClass('showInformation');
         this.extension.resize();
@@ -176,9 +192,10 @@ class HeaderPanel extends BaseView {
         });
 
         if (this.$informationBox.is(':visible')){
-            var $text = this.$informationBox.find('.text');
-            $text.width(this.$element.width() - $text.horizontalMargins() - this.$informationBox.find('.close').outerWidth(true));
-            $text.ellipsisFill(this.information);
+            var $actions = this.$informationBox.find('.actions');
+            var $message = this.$informationBox.find('.message');
+            $message.width(this.$element.width() - $message.horizontalMargins() - $actions.outerWidth(true) - this.$informationBox.find('.close').outerWidth(true) - 1);
+            $message.ellipsisFill(this.information.message);
         }
 
         // hide toggle buttons below minimum width

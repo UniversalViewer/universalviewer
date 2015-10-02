@@ -6,7 +6,8 @@
   },
   "content": {
     "canvasIndexOutOfRange": "Canvas index out of range.",
-    "degradedResource": "This image is degraded."
+    "degradedResourceMessage": "Please log in to view at full quality.",
+    "degradedResourceLogin": "log in"
   },
   "modules": {
     "clickThroughDialogue": {

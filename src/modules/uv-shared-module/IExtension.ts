@@ -8,7 +8,7 @@ interface IExtension{
     embedHeight: number;
     embedWidth: number;
     getDependencies(callback: (deps: any) => void): any;
-    getExternalResources(): Promise<Manifesto.IExternalResource[]>;
+    getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getParam(key: Params): any;
     height(): number;
     isFullScreen(): boolean;

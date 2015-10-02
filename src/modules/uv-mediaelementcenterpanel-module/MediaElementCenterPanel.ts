@@ -41,8 +41,8 @@ class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, canvas) => {
-            that.openMedia();
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
+            that.openMedia(resources);
         });
 
         this.$container = $('<div class="container"></div>');
@@ -57,11 +57,11 @@ class MediaElementCenterPanel extends CenterPanel {
         return elementType.toString() === manifesto.ElementType.movingimage().toString();
     }
 
-    openMedia() {
+    openMedia(resources: Manifesto.IExternalResource[]) {
 
         var that = this;
 
-        this.extension.getExternalResources().then(() => {
+        this.extension.getExternalResources(resources).then(() => {
 
             this.$container.empty();
 

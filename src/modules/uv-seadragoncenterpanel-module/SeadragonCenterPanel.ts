@@ -49,16 +49,16 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.append(this.$viewer);
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, () => {
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
             // todo: OPEN_MEDIA should be able to waitFor RESIZE
             // https://facebook.github.io/flux/docs/dispatcher.html
             if (!this.isCreated) {
                 setTimeout(() => {
                     this.createUI();
-                    this.openMedia();
+                    this.openMedia(resources);
                 }, 500); // hack to allow time for panel open animations to complete.
             } else {
-                this.openMedia();
+                this.openMedia(resources);
             }
         });
     }
@@ -292,11 +292,11 @@ class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    openMedia(): void {
+    openMedia(resources?: Manifesto.IExternalResource[]): void {
 
         this.$spinner.show();
 
-        this.extension.getExternalResources().then((resources: Manifesto.IExternalResource[]) => {
+        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalResource[]) => {
             // OSD can open an array info.json objects
             this.viewer.open(resources);
         });

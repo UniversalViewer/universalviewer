@@ -4,7 +4,8 @@
   },
   "content": {
     "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)",
-    "degradedResource": "This image is degraded."
+    "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
+    "degradedResourceLogin": "Mewngofnodi"
   },
   "modules": {
     "clickThroughDialogue": {

@@ -3,7 +3,8 @@
     "label": "Cymraeg"
   },
   "content": {
-    "degradedResource": "This pdf is degraded."
+    "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
+    "degradedResourceLogin": "Mewngofnodi"
   },
   "modules": {
     "dialogue": {

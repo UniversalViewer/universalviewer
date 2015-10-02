@@ -15,14 +15,14 @@ class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e) => {
-            this.openMedia();
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
+            this.openMedia(resources);
         });
     }
 
-    openMedia() {
+    openMedia(resources: Manifesto.IExternalResource[]) {
 
-        this.extension.getExternalResources().then(() => {
+        this.extension.getExternalResources(resources).then(() => {
             var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
             var pdfUri = canvas.id;

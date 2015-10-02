@@ -6,7 +6,8 @@
   },
   "content": {
     "canvasIndexOutOfRange": "Canvas index out of range. (xx-XX)",
-    "degradedResource": "This image is degraded. (xx-XX)"
+    "degradedResourceMessage": "Please log in to view at full quality. (xx-XX)",
+    "degradedResourceLogin": "log in (xx-XX)"
   },
   "modules": {
     "clickThroughDialogue": {
