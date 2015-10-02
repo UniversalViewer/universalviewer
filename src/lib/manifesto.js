@@ -1498,7 +1498,7 @@ var Manifesto;
                 var u = url.parse(uri);
                 var fetch = http.request({
                     host: u.hostname,
-                    port: u.port || 80,
+                    port: u.port,
                     path: u.pathname,
                     method: "GET",
                     withCredentials: false
