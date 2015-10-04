@@ -93,7 +93,7 @@ class BaseExtension implements IExtension {
 
             this.$element.on('drop', (e => {
                 e.preventDefault();
-                var dropUrl = (<any>e.originalEvent).dataTransfer.getData("text");
+                var dropUrl = (<any>e.originalEvent).dataTransfer.getData("URL");
                 var url = Utils.Urls.GetUrlParts(dropUrl);
                 var manifestUri = Utils.Urls.GetQuerystringParameterFromString('manifest', url.search);
                 //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
