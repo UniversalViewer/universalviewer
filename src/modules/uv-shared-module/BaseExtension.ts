@@ -532,27 +532,29 @@ class BaseExtension implements IExtension {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
+            var foundToken: Manifesto.IAccessToken;
+
             // first try an exact match of the url
             var item: StorageItem = Storage.get(resource.dataUri);
 
             if (item){
-                resolve(<Manifesto.IAccessToken>item.value);
-            }
+                foundToken = item.value;
+            } else {
+                // find an access token for the domain
+                var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
 
-            // find an access token for the domain
-            var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
+                var items: StorageItem[] = Storage.getItems();
 
-            var items: StorageItem[] = Storage.getItems();
+                for(var i = 0; i < items.length; i++) {
+                    item = items[i];
 
-            for(var i = 0; i < items.length; i++) {
-                item = items[i];
-
-                if(item.key.contains(domain)) {
-                    resolve(<Manifesto.IAccessToken>item.value);
+                    if(item.key.contains(domain)) {
+                        foundToken = item.value;
+                    }
                 }
             }
 
-            resolve(null);
+            resolve(foundToken);
         });
     }
 

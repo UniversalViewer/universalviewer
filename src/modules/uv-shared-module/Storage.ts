@@ -78,20 +78,34 @@ class Storage {
                 var keys = Object.keys(this._memoryStorage);
 
                 for(var i = 0; i < keys.length; i++) {
-                    items.push(this.get(keys[i], StorageType.memory));
+                    var item: StorageItem = this.get(keys[i], StorageType.memory);
+
+                    if (item){
+                        items.push(item);
+                    }
                 }
 
                 break;
             case StorageType.session:
                 for(var i = 0; i < sessionStorage.length; i++) {
                     var key = sessionStorage.key(i);
-                    items.push(this.get(key, StorageType.session));
+
+                    var item: StorageItem = this.get(key, StorageType.session);
+
+                    if (item){
+                        items.push(item);
+                    }
                 }
                 break;
             case StorageType.local:
                 for(var i = 0; i < localStorage.length; i++) {
                     var key = localStorage.key(i);
-                    items.push(this.get(key, StorageType.local));
+
+                    var item: StorageItem = this.get(key, StorageType.local);
+
+                    if (item){
+                        items.push(item);
+                    }
                 }
                 break;
         }
