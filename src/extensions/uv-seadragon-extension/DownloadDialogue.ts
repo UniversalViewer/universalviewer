@@ -115,9 +115,9 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.resetDynamicDownloadOptions();
         var currentCanvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
-            // todo: use canvas.getImages() when available
-            for (var i = 0; i < currentCanvas.__jsonld.images.length; i++) {
-                this.addDownloadOptionsForRenderings(currentCanvas.__jsonld.images[i], this.content.entireFileAsOriginal);
+            var images = currentCanvas.getImages();
+            for (var i = 0; i < images.length; i++) {
+                this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal);
             }
         }
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicCanvasRenderings)) {
@@ -179,31 +179,27 @@ class DownloadDialogue extends BaseDownloadDialogue {
         return this.$downloadOptions.find("input:checked");
     }
 
-    getOriginalImageForCurrentCanvas() {
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
-        // todo: use canvas.getImages() when available
-        if (canvas.__jsonld['images'][0]['resource']['@id']) {
-            return canvas.__jsonld['images'][0]['resource']['@id'];
+    getCurrentCanvasImageResource() {
+        var images = this.provider.getCurrentCanvas().getImages();
+        if (images[0]) {
+            return images[0].getResource();
         }
-        return false;
+        return null;
+    }
+
+    getOriginalImageForCurrentCanvas() {
+        var resource = this.getCurrentCanvasImageResource();
+        return resource ? resource.id : null;
     }
 
     getMimeTypeForCurrentCanvas() {
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
-        // todo: use canvas.getImages() when available
-        if (canvas.__jsonld['images'][0]['resource']['format']) {
-            return canvas.__jsonld['images'][0]['resource']['format'];
-        }
-        return false;
+        var resource = this.getCurrentCanvasImageResource();
+        return resource ? resource.getFormat().toString() : null;
     }
 
     getDimensionsForCurrentCanvas() {
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
-        // todo: use canvas.getImages() when available
-        if (canvas.__jsonld['images'][0]['resource']['width'] && canvas.__jsonld['images'][0]['resource']['height']) {
-            return [canvas.__jsonld['images'][0]['resource']['width'], canvas.__jsonld['images'][0]['resource']['height']];
-        }
-        return [0, 0];
+        var resource = this.getCurrentCanvasImageResource();
+        return resource ? [resource.getWidth(), resource.getHeight()] : [0, 0];
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
