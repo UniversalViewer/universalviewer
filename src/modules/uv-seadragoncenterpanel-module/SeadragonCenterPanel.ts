@@ -6,8 +6,8 @@ import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/IS
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import Params = require("../../Params");
-import SearchHit = require("../../extensions/uv-seadragon-extension/SearchHit");
-import SearchHitRect = require("../../extensions/uv-seadragon-extension/SearchHitRect");
+import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
+import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 
 class SeadragonCenterPanel extends CenterPanel {
 
@@ -525,7 +525,7 @@ class SeadragonCenterPanel extends CenterPanel {
         for (var i = 0; i < indices.length; i++){
             var canvasIndex = indices[i];
 
-            var searchHit: SearchHit = null;
+            var searchHit: SearchResult = null;
 
             for (var j = 0; j < searchResults.length; j++) {
                 if (searchResults[j].canvasIndex === canvasIndex) {
@@ -549,7 +549,7 @@ class SeadragonCenterPanel extends CenterPanel {
         }
     }
 
-    getSearchOverlayRects(rects: SearchHitRect[], index: number) {
+    getSearchOverlayRects(rects: SearchResultRect[], index: number) {
         var newRects = [];
 
         var width = this.viewer.world.getItemAt(index).source.dimensions.x;
@@ -560,7 +560,7 @@ class SeadragonCenterPanel extends CenterPanel {
         }
 
         for (var i = 0; i < rects.length; i++) {
-            var searchRect: SearchHitRect = rects[i];
+            var searchRect: SearchResultRect = rects[i];
 
             var factor = 1 / width;
             var x = factor * (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);

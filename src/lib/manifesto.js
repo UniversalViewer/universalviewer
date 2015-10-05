@@ -1498,7 +1498,7 @@ var Manifesto;
                 var u = url.parse(uri);
                 var fetch = http.request({
                     host: u.hostname,
-                    port: u.port || 80,
+                    port: u.port,
                     path: u.pathname,
                     method: "GET",
                     withCredentials: false
@@ -1601,7 +1601,7 @@ var Manifesto;
                                     // if the resource was redirected to a degraded version
                                     // and the response hasn't been handled yet.
                                     // if the client wishes to trigger a login, set resource.isResponseHandled to true
-                                    // and call loadExternalResources() again.
+                                    // and call loadExternalResources() again passing the resource.
                                     resolve(resource);
                                 }
                                 else if (resource.clickThroughService && !resource.isResponseHandled) {

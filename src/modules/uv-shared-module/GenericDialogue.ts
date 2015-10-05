@@ -55,7 +55,7 @@ class GenericDialogue extends Dialogue {
 
     showMessage(params): void {
 
-        this.$message.html(params.information);
+        this.$message.html(params.message);
 
         if (params.buttonText) {
             this.$acceptButton.text(params.buttonText);

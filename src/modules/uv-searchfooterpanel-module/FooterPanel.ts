@@ -184,16 +184,22 @@ class FooterPanel extends BaseFooterPanel {
             this.$element.addClass('min');
         }
 
-        new AutoComplete(this.$searchText, (<ISeadragonProvider>this.provider).getAutoCompleteUri(), 300,
-            (results: any) => {
-                return _.map(results.terms, (result: any) => {
-                    return result.match;
-                });
-            },
-            (terms: string) => {
-                this.search(terms);
-            }
-        );
+        var autocompleteService = (<ISeadragonProvider>this.provider).getAutoCompleteUri();
+
+        if (autocompleteService){
+
+            new AutoComplete(this.$searchText, autocompleteService, 300,
+                (results: any) => {
+                    return _.map(results.terms, (result: any) => {
+                        return result.match;
+                    });
+                },
+                (terms: string) => {
+                    this.search(terms);
+                }
+            );
+
+        }
     }
 
     checkForSearchParams(): void{
@@ -497,11 +503,11 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         var $number = this.$searchPagerContainer.find('.number');
-        $number.text(results.length);
+        $number.text(results.resources.length);
 
         var foundFor = this.$searchResultsInfo.find('.foundFor');
 
-        if (results.length == 1) {
+        if (results.resources.length === 1) {
             foundFor.html(this.content.resultFoundFor);
         } else {
             foundFor.html(this.content.resultsFoundFor);

@@ -625,14 +625,15 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
                     if (!_.endsWith(uri, '/info.json')) {
                         uri += '/info.json';
                     }
-                    if (uri !== that.dataUri) {
+                    that.data = data;
+                    that._parseAuthServices(that.data);
+                    // if the request was redirected to a degraded version and there's a login service to get the full quality version
+                    if (uri !== that.dataUri && that.loginService) {
                         that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                     }
                     else {
                         that.status = HTTPStatusCode.OK;
                     }
-                    that.data = data;
-                    that._parseAuthServices(that.data);
                     resolve(that);
                 }).fail(function (error) {
                     that.status = error.status;
@@ -647,6 +648,26 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
         return ExternalResource;
     })();
     return ExternalResource;
+});
+
+define('modules/uv-shared-module/Information',["require", "exports"], function (require, exports) {
+    var Information = (function () {
+        function Information(message, actions) {
+            this.message = message;
+            this.actions = actions;
+        }
+        return Information;
+    })();
+    return Information;
+});
+
+define('modules/uv-shared-module/InformationAction',["require", "exports"], function (require, exports) {
+    var InformationAction = (function () {
+        function InformationAction() {
+        }
+        return InformationAction;
+    })();
+    return InformationAction;
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -749,7 +770,7 @@ define('modules/uv-shared-module/GenericDialogue',["require", "exports", "./Base
                 this.acceptCallback();
         };
         GenericDialogue.prototype.showMessage = function (params) {
-            this.$message.html(params.information);
+            this.$message.html(params.message);
             if (params.buttonText) {
                 this.$acceptButton.text(params.buttonText);
             }
@@ -974,7 +995,7 @@ define('modules/uv-shared-module/Storage',["require", "exports", "./StorageItem"
     return Storage;
 });
 
-define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCommands", "../../BootstrapParams", "../../modules/uv-dialogues-module/ClickThroughDialogue", "./ExternalResource", "../../modules/uv-dialogues-module/LoginDialogue", "../../Params", "./Shell", "../../modules/uv-shared-module/Storage"], function (require, exports, BaseCommands, BootstrapParams, ClickThroughDialogue, ExternalResource, LoginDialogue, Params, Shell, Storage) {
+define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCommands", "../../BootstrapParams", "../../modules/uv-dialogues-module/ClickThroughDialogue", "./ExternalResource", "./Information", "./InformationAction", "../../modules/uv-dialogues-module/LoginDialogue", "../../Params", "./Shell", "../../modules/uv-shared-module/Storage"], function (require, exports, BaseCommands, BootstrapParams, ClickThroughDialogue, ExternalResource, Information, InformationAction, LoginDialogue, Params, Shell, Storage) {
     var BaseExtension = (function () {
         function BaseExtension(bootstrapper) {
             this.shifted = false;
@@ -1029,8 +1050,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 });
                 this.$element.on('drop', (function (e) {
                     e.preventDefault();
-                    var parser = document.createElement('a');
-                    var dropUrl = e.originalEvent.dataTransfer.getData("text");
+                    var dropUrl = e.originalEvent.dataTransfer.getData("URL");
                     var url = Utils.Urls.GetUrlParts(dropUrl);
                     var manifestUri = Utils.Urls.GetQuerystringParameterFromString('manifest', url.search);
                     //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
@@ -1101,8 +1121,8 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                     });
                 }
             });
-            $.subscribe(BaseCommands.RESOURCE_DEGRADED, function () {
-                $.publish(BaseCommands.SHOW_INFORMATION, [_this.provider.config.content.degradedResource]);
+            $.subscribe(BaseCommands.RESOURCE_DEGRADED, function (e, resource) {
+                _this.handleDegraded(resource);
             });
             $.subscribe(BaseCommands.ESCAPE, function () {
                 if (_this.isFullScreen()) {
@@ -1226,18 +1246,32 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 }
             }, 1000);
         };
-        BaseExtension.prototype.getExternalResources = function () {
+        BaseExtension.prototype.getExternalResources = function (resources) {
             var _this = this;
             var indices = this.provider.getPagedIndices();
-            var resources = [];
+            var resourcesToLoad = [];
             _.each(indices, function (index) {
                 var r = new ExternalResource(_this.provider);
                 var canvas = _this.provider.getCanvasByIndex(index);
                 r.dataUri = _this.provider.getInfoUri(canvas);
-                resources.push(r);
+                // used to reload resources with isResponseHandled = true.
+                if (resources) {
+                    var found = _.find(resources, function (f) {
+                        return f.dataUri === r.dataUri;
+                    });
+                    if (found) {
+                        resourcesToLoad.push(found);
+                    }
+                    else {
+                        resourcesToLoad.push(r);
+                    }
+                }
+                else {
+                    resourcesToLoad.push(r);
+                }
             });
             return new Promise(function (resolve) {
-                manifesto.loadExternalResources(resources, _this.clickThrough, _this.login, _this.getAccessToken, _this.storeAccessToken, _this.getStoredAccessToken, _this.handleExternalResourceResponse).then(function (r) {
+                manifesto.loadExternalResources(resourcesToLoad, _this.clickThrough, _this.login, _this.getAccessToken, _this.storeAccessToken, _this.getStoredAccessToken, _this.handleExternalResourceResponse).then(function (r) {
                     _this.provider.resources = _.map(r, function (resource) {
                         return _.toPlainObject(resource.data);
                     });
@@ -1298,6 +1332,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
         };
         BaseExtension.prototype.viewManifest = function (manifest) {
             var p = new BootstrapParams();
+            p.manifestUri = this.provider.manifestUri;
             p.collectionIndex = this.provider.getCollectionIndex(manifest);
             p.manifestIndex = manifest.index;
             p.sequenceIndex = 0;
@@ -1393,7 +1428,6 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             });
         };
         BaseExtension.prototype.handleExternalResourceResponse = function (resource) {
-            var that = this;
             return new Promise(function (resolve, reject) {
                 resource.isResponseHandled = true;
                 if (resource.status === HTTPStatusCode.OK) {
@@ -1401,13 +1435,25 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 }
                 else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                     resolve(resource);
-                    $.publish(BaseCommands.RESOURCE_DEGRADED);
+                    $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
                 }
                 else {
                     // access denied
                     reject(resource.error.statusText);
                 }
             });
+        };
+        BaseExtension.prototype.handleDegraded = function (resource) {
+            var actions = [];
+            var loginAction = new InformationAction();
+            loginAction.label = this.provider.config.content.degradedResourceLogin;
+            loginAction.action = function () {
+                $.publish(BaseCommands.HIDE_INFORMATION);
+                $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE, [[resource]]);
+            };
+            actions.push(loginAction);
+            var information = new Information(this.provider.config.content.degradedResourceMessage, actions);
+            $.publish(BaseCommands.SHOW_INFORMATION, [information]);
         };
         return BaseExtension;
     })();
@@ -1889,7 +1935,8 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
             this.$settingsButton.attr('title', this.content.settings);
             this.$rightOptions.append(this.$settingsButton);
             this.$informationBox = $('<div class="informationBox"> \
-                                    <div class="text"></div> \
+                                    <div class="message"></div> \
+                                    <div class="actions"></div> \
                                     <div class="close"></div> \
                                   </div>');
             this.$element.append(this.$informationBox);
@@ -1954,7 +2001,16 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
         };
         HeaderPanel.prototype.showInformation = function (information) {
             this.information = information;
-            this.$informationBox.find('.text').html(information).find('a').attr('target', '_top');
+            var $message = this.$informationBox.find('.message');
+            $message.html(information.message).find('a').attr('target', '_top');
+            var $actions = this.$informationBox.find('.actions');
+            $actions.empty();
+            for (var i = 0; i < information.actions.length; i++) {
+                var action = information.actions[i];
+                var $action = $('<a href="#" class="btn btn-default">' + action.label + '</a>');
+                $action.on('click', action.action);
+                $actions.append($action);
+            }
             this.$informationBox.show();
             this.$element.addClass('showInformation');
             this.extension.resize();
@@ -1981,9 +2037,10 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
                 left: pos
             });
             if (this.$informationBox.is(':visible')) {
-                var $text = this.$informationBox.find('.text');
-                $text.width(this.$element.width() - $text.horizontalMargins() - this.$informationBox.find('.close').outerWidth(true));
-                $text.ellipsisFill(this.information);
+                var $actions = this.$informationBox.find('.actions');
+                var $message = this.$informationBox.find('.message');
+                $message.width(this.$element.width() - $message.horizontalMargins() - $actions.outerWidth(true) - this.$informationBox.find('.close').outerWidth(true) - 1);
+                $message.ellipsisFill(this.information.message);
             }
             // hide toggle buttons below minimum width
             if (this.extension.width() < this.provider.config.options.minWidthBreakPoint) {
@@ -2134,8 +2191,8 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
                     }
                 });
             }
-            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, canvas) {
-                that.openMedia();
+            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
+                that.openMedia(resources);
             });
             this.$container = $('<div class="container"></div>');
             this.$content.append(this.$container);
@@ -2145,10 +2202,10 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
             var elementType = this.provider.getCanvasType(canvas);
             return elementType.toString() === manifesto.ElementType.movingimage().toString();
         };
-        MediaElementCenterPanel.prototype.openMedia = function () {
+        MediaElementCenterPanel.prototype.openMedia = function (resources) {
             var _this = this;
             var that = this;
-            this.extension.getExternalResources().then(function () {
+            this.extension.getExternalResources(resources).then(function () {
                 _this.$container.empty();
                 var canvas = _this.provider.getCurrentCanvas();
                 _this.mediaHeight = _this.config.defaultHeight;
@@ -2611,7 +2668,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.17';
+    exports.Version = '1.5.18';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -3860,9 +3917,8 @@ define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "
 
 define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../BootstrapParams", "../../Params"], function (require, exports, BootstrapParams, Params) {
     // providers contain methods that could be implemented differently according
-    // to factors like varying back end data provision systems.
-    // they provide a consistent interface and set of data structures
-    // for extensions to operate against.
+    // to factors like varying back end data provisioning systems.
+    // todo: expose the provider as an external API to the containing page.
     var BaseProvider = (function () {
         function BaseProvider(bootstrapper) {
             this.options = {
@@ -4350,13 +4406,13 @@ define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", 
             var _this = this;
             this.setConfig('pdfCenterPanel');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e) {
-                _this.openMedia();
+            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
+                _this.openMedia(resources);
             });
         };
-        PDFCenterPanel.prototype.openMedia = function () {
+        PDFCenterPanel.prototype.openMedia = function (resources) {
             var _this = this;
-            this.extension.getExternalResources().then(function () {
+            this.extension.getExternalResources(resources).then(function () {
                 var canvas = _this.provider.getCurrentCanvas();
                 var pdfUri = canvas.id;
                 var browser = window.browserDetect.browser;
@@ -5106,13 +5162,16 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
                 this.$searchResultsContainer.hide();
                 this.$element.addClass('min');
             }
-            new AutoComplete(this.$searchText, this.provider.getAutoCompleteUri(), 300, function (results) {
-                return _.map(results.terms, function (result) {
-                    return result.match;
+            var autocompleteService = this.provider.getAutoCompleteUri();
+            if (autocompleteService) {
+                new AutoComplete(this.$searchText, autocompleteService, 300, function (results) {
+                    return _.map(results.terms, function (result) {
+                        return result.match;
+                    });
+                }, function (terms) {
+                    _this.search(terms);
                 });
-            }, function (terms) {
-                _this.search(terms);
-            });
+            }
         };
         FooterPanel.prototype.checkForSearchParams = function () {
             // if a h or q value is in the hash params, do a search.
@@ -5336,9 +5395,9 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
                 'left': 0
             });
             var $number = this.$searchPagerContainer.find('.number');
-            $number.text(results.length);
+            $number.text(results.resources.length);
             var foundFor = this.$searchResultsInfo.find('.foundFor');
-            if (results.length == 1) {
+            if (results.resources.length === 1) {
                 foundFor.html(this.content.resultFoundFor);
             }
             else {
@@ -5674,17 +5733,17 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             _super.prototype.create.call(this);
             this.$viewer = $('<div id="viewer"></div>');
             this.$content.append(this.$viewer);
-            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function () {
+            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
                 // todo: OPEN_MEDIA should be able to waitFor RESIZE
                 // https://facebook.github.io/flux/docs/dispatcher.html
                 if (!_this.isCreated) {
                     setTimeout(function () {
                         _this.createUI();
-                        _this.openMedia();
+                        _this.openMedia(resources);
                     }, 500); // hack to allow time for panel open animations to complete.
                 }
                 else {
-                    _this.openMedia();
+                    _this.openMedia(resources);
                 }
             });
         };
@@ -5884,10 +5943,10 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                 $.publish(Commands.NEXT);
             });
         };
-        SeadragonCenterPanel.prototype.openMedia = function () {
+        SeadragonCenterPanel.prototype.openMedia = function (resources) {
             var _this = this;
             this.$spinner.show();
-            this.extension.getExternalResources().then(function (resources) {
+            this.extension.getExternalResources(resources).then(function (resources) {
                 // OSD can open an array info.json objects
                 _this.viewer.open(resources);
             });
@@ -6080,16 +6139,16 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             var indices = this.provider.getPagedIndices();
             for (var i = 0; i < indices.length; i++) {
                 var canvasIndex = indices[i];
-                var searchResult = null;
+                var searchHit = null;
                 for (var j = 0; j < searchResults.length; j++) {
                     if (searchResults[j].canvasIndex === canvasIndex) {
-                        searchResult = searchResults[j];
+                        searchHit = searchResults[j];
                         break;
                     }
                 }
-                if (!searchResult)
+                if (!searchHit)
                     continue;
-                var rects = this.getSearchOverlayRects(searchResult.rects, i);
+                var rects = this.getSearchOverlayRects(searchHit.rects, i);
                 for (var k = 0; k < rects.length; k++) {
                     var rect = rects[k];
                     var div = document.createElement("div");
@@ -6452,8 +6511,8 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
         Extension.prototype.searchWithin = function (terms) {
             var that = this;
             this.provider.searchWithin(terms, function (results) {
-                if (results.resources.length) {
-                    $.publish(Commands.SEARCH_RESULTS, [terms, results.resources]);
+                if (results.resources && results.resources.length) {
+                    $.publish(Commands.SEARCH_RESULTS, [terms, results]);
                     // reload current index as it may contain results.
                     that.viewPage(that.provider.canvasIndex, true);
                 }
@@ -6511,9 +6570,9 @@ define('extensions/uv-seadragon-extension/SearchResultRect',["require", "exports
 
 define('extensions/uv-seadragon-extension/SearchResult',["require", "exports", "./SearchResultRect"], function (require, exports, SearchResultRect) {
     var SearchResult = (function () {
-        function SearchResult(resource) {
+        function SearchResult(resource, provider) {
             this.rects = [];
-            this.canvasIndex = parseInt(resource.on.match(/.*c(\d*)#/)[1]);
+            this.canvasIndex = provider.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
             this.addRect(resource);
         }
         SearchResult.prototype.addRect = function (resource) {
@@ -6730,7 +6789,7 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
             var searchUri = this.getSearchWithinServiceUri();
             searchUri = String.format(searchUri, terms);
             $.getJSON(searchUri, function (results) {
-                if (results.resources.length) {
+                if (results.resources && results.resources.length) {
                     that.parseSearchWithinResults(results);
                 }
                 cb(results);
@@ -6740,7 +6799,7 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
             this.searchResults = [];
             for (var i = 0; i < results.resources.length; i++) {
                 var r = results.resources[i];
-                var sr = new SearchResult(r);
+                var sr = new SearchResult(r, this);
                 var match = this.getSearchResultByCanvasIndex(sr.canvasIndex);
                 if (match) {
                     match.addRect(r);
@@ -8447,7 +8506,7 @@ var Manifesto;
                 var u = url.parse(uri);
                 var fetch = http.request({
                     host: u.hostname,
-                    port: u.port || 80,
+                    port: u.port,
                     path: u.pathname,
                     method: "GET",
                     withCredentials: false
@@ -8550,7 +8609,7 @@ var Manifesto;
                                     // if the resource was redirected to a degraded version
                                     // and the response hasn't been handled yet.
                                     // if the client wishes to trigger a login, set resource.isResponseHandled to true
-                                    // and call loadExternalResources() again.
+                                    // and call loadExternalResources() again passing the resource.
                                     resolve(resource);
                                 }
                                 else if (resource.clickThroughService && !resource.isResponseHandled) {

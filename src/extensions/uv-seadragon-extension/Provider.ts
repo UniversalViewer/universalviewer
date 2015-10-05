@@ -2,13 +2,13 @@ import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import ISeadragonProvider = require("./ISeadragonProvider");
-import SearchHit = require("./SearchHit");
-import SearchHitRect = require("./SearchHitRect");
+import SearchResult = require("./SearchResult");
+import SearchResultRect = require("./SearchResultRect");
 import TreeSortType = require("./TreeSortType");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
-    searchResults: SearchHit[] = [];
+    searchResults: SearchResult[] = [];
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -246,7 +246,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         searchUri = String.format(searchUri, terms);
 
         $.getJSON(searchUri, (results: any) => {
-            if (results.resources.length) {
+            if (results.resources && results.resources.length) {
                 that.parseSearchWithinResults(results);
             }
 
@@ -260,7 +260,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         for (var i = 0; i < results.resources.length; i++) {
             var r = results.resources[i];
 
-            var sr: SearchHit = new SearchHit(r, this);
+            var sr: SearchResult = new SearchResult(r, this);
 
             var match = this.getSearchResultByCanvasIndex(sr.canvasIndex);
 
@@ -272,7 +272,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         }
     }
 
-    getSearchResultByCanvasIndex(canvasIndex: number): SearchHit {
+    getSearchResultByCanvasIndex(canvasIndex: number): SearchResult {
         for (var i = 0; i < this.searchResults.length; i++) {
             var r = this.searchResults[i];
             if (r.canvasIndex === canvasIndex){

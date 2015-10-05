@@ -1,4 +1,4 @@
-class SearchHitRect {
+class SearchResultRect {
     public index: number;
     public x: number;
     public y: number;
@@ -15,4 +15,4 @@ class SearchHitRect {
     }
 }
 
-export = SearchHitRect;
+export = SearchResultRect;

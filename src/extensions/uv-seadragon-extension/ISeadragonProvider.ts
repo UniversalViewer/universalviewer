@@ -1,6 +1,6 @@
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
-import SearchHit = require("./SearchHit");
+import SearchResult = require("./SearchResult");
 import TreeSortType = require("./TreeSortType");
 
 interface ISeadragonProvider extends IProvider{
@@ -11,13 +11,13 @@ interface ISeadragonProvider extends IProvider{
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string;
     getImageBaseUri(canvas: Manifesto.ICanvas): string;
     getImageId(canvas: Manifesto.ICanvas): string;
-    getSearchResultByCanvasIndex(index: number): SearchHit;
+    getSearchResultByCanvasIndex(index: number): SearchResult;
     getSearchWithinService(): Manifesto.IService;
     getSearchWithinServiceUri(): string;
     getSortedTree(sortType: TreeSortType): Manifesto.TreeNode;
     isSearchWithinEnabled(): boolean;
     parseSearchWithinResults(results: any);
-    searchResults: SearchHit[];
+    searchResults: SearchResult[];
     searchWithin(terms: string, callback: (results: any) => void): void;
 }
 

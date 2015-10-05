@@ -339,7 +339,7 @@ class Extension extends BaseExtension {
         var that = this;
 
         (<ISeadragonProvider>this.provider).searchWithin(terms, (results: any) => {
-            if (results.hits.length) {
+            if (results.resources && results.resources.length) {
                 $.publish(Commands.SEARCH_RESULTS, [terms, results]);
 
                 // reload current index as it may contain results.

@@ -3074,10 +3074,17 @@ input[type=range]:focus::-ms-fill-upper {
   position: absolute;
   height: 40px;
 }
-#app .headerPanel .informationBox .text {
+#app .headerPanel .informationBox .message {
   float: left;
   overflow: hidden;
   margin: 13px;
+}
+#app .headerPanel .informationBox .actions {
+  float: left;
+  margin: 6px 0 0 0;
+}
+#app .headerPanel .informationBox .actions .btn {
+  margin: 0 6px 0 0;
 }
 #app .headerPanel .informationBox .close {
   float: right;

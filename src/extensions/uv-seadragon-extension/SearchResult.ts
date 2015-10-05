@@ -1,9 +1,9 @@
 import IProvider = require("../../modules/uv-shared-module/IProvider");
-import SearchHitRect = require("./SearchHitRect");
+import SearchResultRect = require("./SearchResultRect");
 
-class SearchHit {
+class SearchResult {
     public canvasIndex: number;
-    public rects: SearchHitRect[] = [];
+    public rects: SearchResultRect[] = [];
 
     constructor(resource: any, provider: IProvider) {
         this.canvasIndex = provider.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
@@ -11,7 +11,7 @@ class SearchHit {
     }
 
     addRect(resource: any): void {
-        var rect = new SearchHitRect(resource);
+        var rect = new SearchResultRect(resource);
         this.rects.push(rect);
         // sort ascending
         this.rects.sort(function(a, b) {
@@ -20,4 +20,4 @@ class SearchHit {
     }
 }
 
-export = SearchHit;
+export = SearchResult;
