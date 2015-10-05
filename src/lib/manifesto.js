@@ -1496,22 +1496,25 @@ var Manifesto;
         Utils.loadResource = function (uri) {
             return new Promise(function (resolve, reject) {
                 var u = url.parse(uri);
-                var fetch = http.request({
+                var request = http.request({
                     host: u.hostname,
                     port: u.port,
                     path: u.pathname,
                     method: "GET",
                     withCredentials: false
-                }, function (res) {
+                }, function (response) {
                     var result = "";
-                    res.on('data', function (chunk) {
+                    response.on('data', function (chunk) {
                         result += chunk;
                     });
-                    res.on('end', function () {
+                    response.on('end', function () {
                         resolve(result);
                     });
                 });
-                fetch.end();
+                request.on('error', function (error) {
+                    reject(error);
+                });
+                request.end();
             });
         };
         Utils.loadExternalResource = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
@@ -1531,8 +1534,14 @@ var Manifesto;
                                     getAccessToken(resource).then(function (token) {
                                         resource.getData(token).then(function () {
                                             resolve(handleResourceResponse(resource));
+                                        })["catch"](function (error) {
+                                            reject(error);
                                         });
+                                    })["catch"](function (error) {
+                                        reject(error);
                                     });
+                                })["catch"](function (error) {
+                                    reject(error);
                                 });
                             }
                         }
@@ -1540,6 +1549,8 @@ var Manifesto;
                             // this info.json isn't access controlled, therefore no need to request an access token.
                             resolve(resource);
                         }
+                    })["catch"](function (error) {
+                        reject(error);
                     });
                 }
                 else {
@@ -1561,27 +1572,37 @@ var Manifesto;
                                     // if access controlled, do login.
                                     Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                         resolve(handleResourceResponse(resource));
+                                    })["catch"](function (error) {
+                                        reject(error);
                                     });
                                 }
+                            })["catch"](function (error) {
+                                reject(error);
                             });
                         }
                         else {
                             Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                 resolve(handleResourceResponse(resource));
+                            })["catch"](function (error) {
+                                reject(error);
                             });
                         }
+                    })["catch"](function (error) {
+                        reject(error);
                     });
                 }
             });
         };
         Utils.loadExternalResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
-            return new Promise(function (resolve) {
+            return new Promise(function (resolve, reject) {
                 var promises = _map(resources, function (resource) {
                     return Utils.loadExternalResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
                 });
                 Promise.all(promises)
                     .then(function () {
                     resolve(resources);
+                })["catch"](function (error) {
+                    reject(error);
                 });
             });
         };
@@ -1594,6 +1615,8 @@ var Manifesto;
                                 // try using the stored access token
                                 resource.getData(storedAccessToken).then(function () {
                                     resolve(resource);
+                                })["catch"](function (error) {
+                                    reject(error);
                                 });
                             }
                             else {
@@ -1611,8 +1634,14 @@ var Manifesto;
                                             storeAccessToken(resource, accessToken).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
+                                                })["catch"](function (error) {
+                                                    reject(error);
                                                 });
+                                            })["catch"](function (error) {
+                                                reject(error);
                                             });
+                                        })["catch"](function (error) {
+                                            reject(error);
                                         });
                                     });
                                 }
@@ -1623,12 +1652,20 @@ var Manifesto;
                                             storeAccessToken(resource, accessToken).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
+                                                })["catch"](function (error) {
+                                                    reject(error);
                                                 });
+                                            })["catch"](function (error) {
+                                                reject(error);
                                             });
+                                        })["catch"](function (error) {
+                                            reject(error);
                                         });
                                     });
                                 }
                             }
+                        })["catch"](function (error) {
+                            reject(error);
                         });
                     }
                     else {

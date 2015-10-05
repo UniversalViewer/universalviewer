@@ -510,7 +510,11 @@ class BaseExtension implements IExtension {
     getAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken> {
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
             $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
-                resolve(token);
+                if (token.error){
+                    reject(token.errorDescription);
+                } else {
+                    resolve(token);
+                }
             }).fail((error) => {
                 reject(error);
             });
