@@ -4,6 +4,7 @@ import ExternalResource = require("./ExternalResource");
 import IProvider = require("./IProvider");
 import Params = require("../../Params");
 import Storage = require("./Storage");
+import UriLabeller = require("./UriLabeller");
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provisioning systems.
@@ -23,6 +24,7 @@ class BaseProvider implements IProvider{
     isOnlyInstance: boolean;
     isReload: boolean;
     jsonp: boolean;
+    licenseFormatter: UriLabeller;
     locale: string;
     locales: any[];
     manifest: Manifesto.IManifest;
@@ -62,6 +64,8 @@ class BaseProvider implements IProvider{
         this.manifestIndex = this.bootstrapper.params.manifestIndex;
         this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
         this.canvasIndex = this.bootstrapper.params.canvasIndex;
+
+        this.licenseFormatter = new UriLabeller(this.config.license ? this.config.license : {});
     }
 
     // re-bootstraps the application with new querystring params
@@ -338,7 +342,7 @@ class BaseProvider implements IProvider{
         if (this.manifest.getLicense()){
             metadata.unshift({
                 "label": "license",
-                "value": this.manifest.getLicense()
+                "value": this.licenseFormatter.format(this.manifest.getLicense())
             });
         }
 
