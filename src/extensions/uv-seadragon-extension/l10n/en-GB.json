@@ -1,13 +1,9 @@
 {
-  "localisation": {
-    "label": "English (GB)"
-  },
+  "extends": "../../../l10n/en-GB",
   "options": {
   },
   "content": {
-    "canvasIndexOutOfRange": "Canvas index out of range.",
-    "degradedResourceMessage": "Please log in to view at full quality.",
-    "degradedResourceLogin": "log in"
+    "canvasIndexOutOfRange": "Canvas index out of range."
   },
   "modules": {
     "clickThroughDialogue": {
@@ -15,41 +11,14 @@
         "viewTerms": "Read Full Terms and Conditions"
       }
     },
-    "dialogue": {
-      "content": {
-        "close": "Close"
-      }
-    },
     "downloadDialogue": {
       "content": {
         "currentViewAsJpg": "Current view (jpg)",
-        "download": "Download",
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
-        "entireFileAsOriginal": "Entire file ({0})",
-        "noneAvailable": "No download options are available.",
         "pagingNote": "Please turn off Two Page View for additional options.",
-        "preview": "Preview",
-        "title": "Download",
         "wholeImageHighRes": "Whole image high res ({0})",
         "wholeImageLowResAsJpg": "Whole image low res (jpg)"
-      }
-    },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Custom Size",
-        "height": "Height",
-        "instructions": "To embed this item in your own website, copy and paste the code below:",
-        "title": "Embed",
-        "width": "Width"
-      }
-    },
-    "footerPanel": {
-      "content": {
-        "download": "Download",
-        "embed": "Embed",
-        "exitFullScreen": "Exit Full Screen",
-        "fullScreen": "Full Screen"
       }
     },
     "genericDialogue": {
@@ -57,36 +26,8 @@
         "emptyValue": "please enter a value.",
         "invalidNumber": "Please enter a valid number.",
         "noMatches": "No matches were found.",
-        "ok": "OK",
         "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
         "refresh": "Refresh"
-      }
-    },
-    "helpDialogue": {
-      "content": {
-        "text": "placeholder text",
-        "title": "Help"
-      }
-    },
-    "loginDialogue": {
-      "content": {
-        "login": "Login"
-      }
-    },
-    "moreInfoRightPanel": {
-      "content": {
-        "attribution": "Attribution",
-        "collapse": "Collapse More Information",
-        "collapseFull": "Collapse Gallery",
-        "description": "Description",
-        "expand": "Expand More Information",
-        "expandFull": "Expand Gallery",
-        "holdingText": "Your module goes here!",
-        "less": "less",
-        "license": "License",
-        "more": "more",
-        "noData": "No data to display",
-        "title": "More Information"
       }
     },
     "pagingHeaderPanel": {
@@ -151,10 +92,6 @@
     },
     "settingsDialogue": {
       "content": {
-        "locale": "Locale",
-        "pagingEnabled": "Two Page View",
-        "preserveViewport": "Preserve Zoom",
-        "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
       }
     },
