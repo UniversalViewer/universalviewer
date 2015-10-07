@@ -1,1 +1,84 @@
 ﻿
+@import 'variables';
+@import 'mixins';
+@import 'mixins-extended';
+@import 'scaffolding';
+@import 'buttons';
+@import 'range';
+@import 'button-groups';
+@import 'header-panel';
+@import 'left-panel';
+@import 'right-panel';
+@import 'center-panel';
+@import 'footer-panel';
+@import 'overlays';
+
+//@img-path: '../../../themes/@{theme}/img/';
+@img-path: '../../../modules/uv-shared-module/img/';
+
+#app {
+    background-color: @body-bg;
+    position: relative;
+
+    // Common styles
+    .btn-default,
+    .btn-primary,
+    .btn-success,
+    .btn-info,
+    .btn-warning,
+    .btn-danger {
+        .border-radius(0);
+    }
+
+    .imageBtn{
+        cursor: pointer;
+        .btn-focus();
+    }
+
+    .action, a.action.black, input.action {
+        display: inline-block;
+        background: url('@{img-path}sprite.png') 0 -1000px no-repeat;
+        text-transform: none;
+        padding: 0 0 0 16px;
+        font-weight: bold;
+    }
+
+    .headerPanel{
+        position: relative;
+        background-color: @panel-dark-bg;
+        color: #fff;
+        height: 40px;
+    }
+
+    .mainPanel{
+        position: relative;
+        margin-top: @panel-margin;
+        margin-right: @panel-margin;
+        margin-bottom: 0px;
+        margin-left: @panel-margin;
+    }
+
+    .leftPanel{
+        position: absolute;
+        background: @panel-dark-bg;
+        border: @panel-border;
+    }
+
+    .centerPanel{
+        position: absolute;
+    }
+
+    .rightPanel{
+        position: absolute;
+        background: @panel-dark-bg;
+        border: @panel-border;
+    }
+
+    .footerPanel{
+        position: relative;
+        margin-top: 0;
+        margin-right: @panel-margin;
+        margin-bottom: 0px;
+        margin-left: @panel-margin;
+    }
+}

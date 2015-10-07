@@ -1,0 +1,82 @@
+#app{
+
+    .headerPanel{
+
+        color: @text-secondary-color;
+
+        a.imageBtn {
+            height: 30px;
+            width: 30px;
+            float: left;
+        }
+
+        &.showInformation{
+            height: 80px;
+        }
+
+        .options{
+            height: 40px;
+
+            .centerOptions{
+                margin: 5px 0 0 0;
+                position: absolute;
+            }
+
+            .rightOptions{
+                float: right;
+                margin: 6px 0 0 0;
+
+//              .help {
+//                  margin-left: 1em;
+//                  padding-right: 22px;
+//                  padding-bottom: 2px;
+//                  background: url('@{img-path}sprite.png');
+//                  background-repeat: no-repeat;
+//                  background-position: 0 -2999px;
+//                  margin-top: 6px;
+//              }
+
+                .settings{
+                    background: url('@{img-path}settings.png');
+                    height: 30px;
+                    width: 30px;
+                    margin-right: 8px;
+                }
+            }
+        }
+
+        .informationBox{
+            background: @brand-warning;
+            color: @gray-dark;
+            width: 100%;
+            position: absolute;
+            height: 40px;
+
+            .message{
+                float: left;
+                overflow: hidden;
+                margin: 13px;
+            }
+
+            .actions{
+                float: left;
+                margin: 6px 0 0 0;
+
+                .btn {
+                    margin: 0 6px 0 0;
+                }
+            }
+
+            .close{
+                float: right;
+                background-image: url('@{img-path}close_information_box.png');
+                background-repeat: no-repeat;
+                width: 17px;
+                height: 17px;
+                background-position: 4px 4px;
+                cursor: pointer;
+                margin: 12px;
+            }
+        }
+    }
+}

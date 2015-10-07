@@ -74,7 +74,15 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         cwd: '<%= config.dirs.lib %>',
-                        src: ['embed.js', 'easyXDM.min.js', 'easyxdm.swf', 'json2.min.js', 'require.js', 'l10n.js', 'base64.min.js'],
+                        src: [
+                            'embed.js',
+                            'easyXDM.min.js',
+                            'easyxdm.swf',
+                            'json2.min.js',
+                            'require.js',
+                            'l10n.js',
+                            'base64.min.js'
+                        ],
                         dest: '<%= config.dirs.build %>/lib/'
                     },
                     // extension configuration files

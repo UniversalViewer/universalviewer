@@ -393,7 +393,6 @@ declare module Manifesto {
 declare module Manifesto {
     interface IAccessToken {
         accessToken: string;
-        created: number;
         error: string;
         errorDescription: string;
         expiresIn: number;

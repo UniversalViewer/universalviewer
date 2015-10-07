@@ -1,4 +1,3 @@
-import IProvider = require("./IProvider");
 import Storage = require("./Storage");
 
 class ExternalResource implements Manifesto.IExternalResource {
@@ -9,14 +8,13 @@ class ExternalResource implements Manifesto.IExternalResource {
     public isResponseHandled: boolean = false;
     public loginService: Manifesto.IService;
     public logoutService: Manifesto.IService;
-    public provider: IProvider;
     public status: number;
     public tokenService: Manifesto.IService;
 
     // todo: pass in services associated with this resource if they exist
     // if the resource returns services in the info.json, those override
-    constructor(provider: IProvider) {
-        this.provider = provider;
+    constructor() {
+
     }
 
     private _parseAuthServices(resource: any): void {
@@ -61,6 +59,7 @@ class ExternalResource implements Manifesto.IExternalResource {
                 that._parseAuthServices(that.data);
 
                 // if the request was redirected to a degraded version and there's a login service to get the full quality version
+                // todo: compare the ids, otherwise any redirect is treated as degraded
                 if (uri !== that.dataUri && that.loginService){
                     that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                 } else {

@@ -1,0 +1,94 @@
+#app{
+
+    @expandFullEnabled: true;
+
+    .leftPanel {
+
+        a{
+            color: @text-color;
+            text-decoration: none;
+        }
+
+        .top{
+            height: 35px;
+            position: relative;
+
+            .title{
+                height: 20px;
+                margin: 9px 0 0 10px;
+                float: left;
+                cursor: pointer;
+            }
+
+            .collapseButton{
+                float: right;
+                background: url('@{img-path}arrows_left.png') no-repeat;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                margin: 7px 5px 0 0;
+                display: block;
+            }
+
+            .expandFullButton{
+                float: right;
+                background: url('@{img-path}arrows_right.png') no-repeat;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                margin: 7px 5px 0 0;
+                display: none;
+            }
+
+            .expandFull();
+        }
+
+        .closed{
+            width: 25px;
+            float: right;
+
+            .title{
+                .link-color-decoration(@text-color, none);
+                white-space: nowrap;
+                display: block;
+                margin: 8px 8px 0 0px;
+                cursor: pointer;
+                text-transform: uppercase;
+                .rotate(90deg);
+            }
+
+            .expandButton{
+                background: url('@{img-path}arrows_right.png') no-repeat;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                margin: 7px 5px 0 0;
+                display: block;
+                .btn-focus();
+            }
+
+            .expandFullButton{
+                .btn-focus();
+            }
+        }
+    }
+
+    .expandFull() when (@expandFullEnabled = true) {
+        .expandFullButton{
+            display: block;
+        }
+    }
+}
+
+// ie8
+#app.browser-Explorer.browser-version-8 {
+    .leftPanel{
+        .closed{
+            .title{
+                //                filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+                //                width: 250px;
+                writing-mode: tb-lr;
+            }
+        }
+    }
+}

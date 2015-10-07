@@ -1,0 +1,52 @@
+// @edsilv additions
+
+.loading(@img){
+    background-image: url(@img);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+.border-radius(@radius){
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    -o-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.link-color-decoration(@color, @decoration){
+    color: @color;
+    text-decoration: @decoration;
+    &:link, &:visited, &:hover, &:active {
+        color: @color;
+        text-decoration: @decoration;
+    }
+}
+
+.icon-btn(@img, @height){
+    background-image: @img;
+    background-repeat: no-repeat;
+    height: @height;
+    line-height: @height;
+    cursor: pointer;
+    .link-color-decoration(@text-color, none);
+}
+
+.icon-left(@img, @height, @padding-left){
+    .icon-btn(@img, @height);
+    background-position: left center;
+    padding-left: @padding-left;
+    padding-right: @padding-medium-horizontal;
+}
+
+.icon-right(@img, @height, @padding-right){
+    .icon-btn(@img, @height);
+    background-position: right center;
+    padding-right: @padding-right;
+    padding-left: @padding-medium-horizontal;
+}
+
+.hide-text(){
+    line-height: 0;
+    font-size: 0;
+    color: transparent;
+}

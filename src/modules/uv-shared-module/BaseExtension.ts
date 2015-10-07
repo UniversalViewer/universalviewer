@@ -328,7 +328,7 @@ class BaseExtension implements IExtension {
         var resourcesToLoad = [];
 
         _.each(indices, (index) => {
-            var r: Manifesto.IExternalResource = new ExternalResource(this.provider);
+            var r: Manifesto.IExternalResource = new ExternalResource();
             var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
             r.dataUri = this.provider.getInfoUri(canvas);
 
@@ -493,15 +493,24 @@ class BaseExtension implements IExtension {
             $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
-                    var win = window.open(resource.loginService.id);
-
-                    var pollTimer = window.setInterval(() => {
+                    var win = window.open(resource.loginService.id + "?t=" + new Date().getTime(), 'loginwindow', "height=600,width=600");
+                    var pollTimer = window.setInterval(function () {
                         if (win.closed) {
                             window.clearInterval(pollTimer);
                             $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
                             resolve();
                         }
-                    }, 100);
+                    }, 1000);
+
+                    //var win = window.open(resource.loginService.id);
+                    //
+                    //var pollTimer = window.setInterval(() => {
+                    //    if (win.closed) {
+                    //        window.clearInterval(pollTimer);
+                    //        $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
+                    //        resolve();
+                    //    }
+                    //}, 100);
                 }
             }]);
         });

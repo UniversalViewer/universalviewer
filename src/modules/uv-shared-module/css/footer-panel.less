@@ -1,0 +1,85 @@
+#app {
+
+    .footerPanel{
+
+        .searchOptions{
+            width: 425px;
+        }
+
+        .options {
+            height: 41px;
+
+            a{
+                float: left;
+                margin-top: 10px;
+                margin-right: 15px;
+
+                &.embed{
+                    .icon-left(url('@{img-path}embed.png'), 20px, 35px);
+                    line-height: 22px;
+                }
+
+                &.download{
+                    .icon-left(url('@{img-path}download.png'), 20px, 30px);
+                    line-height: 22px;
+                }
+
+                &.fullScreen{
+                    .icon-right(url('@{img-path}fullscreen.png'), 20px, 30px);
+                    line-height: 22px;
+                    float: right;
+                    margin-right: 0;
+                }
+
+                &.exitFullscreen{
+                    .icon-right(url('@{img-path}exit_fullscreen.png'), 20px, 30px);
+                    line-height: 22px;
+                    float: right;
+                    margin-right: 0;
+                }
+            }
+
+            &.minimiseButtons{
+
+                a{
+
+                    &.embed{
+                        .hide-text();
+                        width: 27px;
+                    }
+
+                    &.fullScreen{
+                        .hide-text();
+                        width: 21px;
+                    }
+
+                    &.exitFullscreen{
+                        .hide-text();
+                        width: 21px;
+                    }
+
+                    &.normal{
+                        .hide-text();
+                        width: 21px;
+                    }
+                }
+            }
+
+        }
+    }
+
+}
+
+#app.lightbox{
+
+    .footerPanel{
+        .options{
+            a.imageBtn{
+                &.normal{
+                    background: url('@{img-path}close_lightbox.png') no-repeat;
+                }
+            }
+        }
+    }
+
+}

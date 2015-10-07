@@ -1,0 +1,104 @@
+#app{
+
+    @expandFullEnabled: false;
+
+    .rightPanel{
+
+        .top{
+            height: 35px;
+            position: relative;
+
+            .title{
+                position: absolute;
+                height: 20px;
+                margin-top: 9px;
+                cursor: pointer;
+                left: 35px;
+            }
+
+            .collapseButton{
+                position: absolute;
+                background: url('@{img-path}arrows_right.png') no-repeat;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                margin-top: 7px;
+                display: block;
+                left: 5px;
+            }
+
+            .expandFullButton{
+                position: absolute;
+                background: url('@{img-path}arrows_left.png') no-repeat;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                margin-top: 7px;
+                display: none;
+                left: 5px;
+            }
+
+            .expandFull();
+        }
+
+        .closed{
+            width: 25px;
+
+            .title{
+                .link-color-decoration(@text-color, none);
+                white-space: nowrap;
+                display: block;
+                margin: 8px 3px 0 5px;
+                cursor: pointer;
+                text-transform: uppercase;
+                .rotate(90deg);
+            }
+
+            .expandButton{
+                background: url('@{img-path}arrows_left.png') no-repeat;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                margin: 7px 0 0 5px;
+                display: block;
+                .btn-focus();
+            }
+
+            .expandFullButton{
+                .btn-focus();
+            }
+        }
+
+        .main {
+            margin-right: @margin-medium-horizontal;
+            margin-bottom: @margin-medium-vertical;
+        }
+    }
+
+    .expandFull() when (@expandFullEnabled = true) {
+        .title{
+            left: 55px;
+        }
+
+        .collapseButton{
+            left: 30px;
+        }
+
+        .expandFullButton{
+            display: block;
+        }
+    }
+}
+
+// ie8
+#app.browser-Explorer.browser-version-8 {
+    .rightPanel{
+        .closed{
+            .title{
+                //filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+                //width: 250px;
+                writing-mode: tb-lr;
+            }
+        }
+    }
+}

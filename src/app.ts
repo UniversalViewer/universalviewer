@@ -6,6 +6,7 @@ require.config({
         'ext': 'lib/extensions',
         'httpstatuscodes': 'lib/http-status-codes',
         'jquery': 'lib/jquery-1.10.2.min',
+        'jqueryxdomain': 'lib/jquery.xdomainrequest.min',
         'jsviews': 'lib/jsviews.min',
         'l10n': 'lib/l10n',
         'length': 'lib/Length.min',
@@ -24,6 +25,9 @@ require.config({
             exports: '$'
         },
         jsviews: {
+            deps: ['jquery']
+        },
+        jqueryxdomain: {
             deps: ['jquery']
         },
         plugins: {
@@ -55,6 +59,7 @@ require([
     'ext',
     'httpstatuscodes',
     'jquery',
+    'jqueryxdomain',
     'jsviews',
     'l10n',
     'length',

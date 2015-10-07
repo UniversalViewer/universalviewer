@@ -1,0 +1,134 @@
+#app {
+
+    .overlays{
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: @overlay-modal-bg;
+        background-image: url('@{img-path}modal_bg.gif');
+        display: none;
+    }
+
+    .overlay{
+        position: absolute;
+
+        .top{
+            width: 100%;
+            overflow: auto;
+            .close{
+                .icon-right(url('@{img-path}close.png'), 24px, 34px);
+                float: right;
+                background-color: @gray-darker;
+            }
+        }
+
+        .middle{
+            background: @overlay-bg;
+            width: 100%;
+
+            .content{
+                padding-top: @padding-medium-vertical;
+                padding-right: @padding-medium-horizontal;
+                padding-bottom: @padding-medium-vertical;
+                padding-left: @padding-medium-horizontal;
+
+                overflow: auto;
+
+                .buttons{
+                    padding: @padding-medium-vertical 0 0 0;
+                    float: right;
+
+                    .btn{
+                        margin: 0 0 0 @margin-medium-horizontal;
+                    }
+                }
+
+                h1{
+                    color: @headings-color;
+                    font-size: @headings-size-large;
+                    font-weight: @headings-font-weight;
+                    margin: 0 0 0 0;
+                    padding: 0 0 @padding-medium-vertical 0;
+                    border-bottom: 1px solid @gray-light;
+                }
+
+                h2{
+                    color: @headings-color;
+                    font-size: @headings-size-small;
+                    font-weight: @headings-font-weight;
+                    margin: 0;
+                    padding: @padding-large-vertical 0 @padding-medium-vertical 0;
+                }
+
+                p{
+                    margin: 0;
+                    padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+
+                    p{
+                        padding-top: 0;
+                    }
+                }
+
+                ol.options{
+                    list-style-image: none;
+                    list-style-position: inside;
+                    list-style-type: none;
+                    margin: 0;
+
+                    li{
+                        //background: @gray-lighter;
+                        margin: 2px 0 0 0;
+                        padding: 4px;
+
+                        input{
+                            margin: 0;
+                            padding: 0;
+                            width: auto;
+                            height: auto;
+                            display: inline;
+                        }
+
+                        label{
+                            display: inline;
+                            margin: 0 0 0 @margin-small-horizontal;
+                            padding: 0;
+                            float: none;
+                            clear: none;
+                            line-height: 0.9em;
+                            text-align: left;
+                            width: 200px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .bottom{
+            height: 11px;
+            background: url('@{img-path}dialogue_arrow.png') no-repeat;
+        }
+
+        &.genericDialogue{
+            width: 250px;
+
+            .bottom{
+                background: none;
+            }
+
+            .message{
+                color: #000;
+                padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+            }
+
+            .accept{
+                float: right;
+            }
+        }
+
+        .scroll{
+            margin: @margin-medium-vertical 0 0 0;
+            padding: 0 @padding-medium-horizontal 0 0;
+            overflow: auto;
+        }
+    }
+}

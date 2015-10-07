@@ -1,0 +1,198 @@
+
+// Global values
+// --------------------------------------------------
+
+// Grays
+// -------------------------
+
+@gray-darker:                   lighten(#000, 13.5%); // #222
+@gray-dark:                     lighten(#000, 20%);   // #333
+@gray:                          lighten(#000, 33.5%); // #555
+@gray-light:                    lighten(#000, 60%);   // #999
+@gray-lighter:                  lighten(#000, 93.5%); // #eee
+
+// Brand colors
+// -------------------------
+
+@brand-primary:                 #cc0000;
+@brand-primary-light:           lighten(@brand-primary, 60%);
+@brand-primary-lighter:         lighten(@brand-primary, 90%);
+@brand-secondary:               #869f33;
+@brand-warning:                 #FFB81D;
+@brand-success:                 #5cb85c;
+@brand-danger:                  #d9534f;
+@brand-info:                    #5bc0de;
+
+// Scaffolding
+// -------------------------
+
+@body-bg:                       #000;
+@text-color:                    #fff;
+@text-secondary-color:          #000;
+@headings-color:                #000;
+@disabled:                      @gray-light;
+
+// Links
+// -------------------------
+
+@link-color:                    #869f33;
+@link-hover-color:              lighten(@link-color, 10%);
+@link-secondary-color:          @brand-secondary;
+@link-secondary-hover-color:    lighten(@link-secondary-color, 10%);
+
+// Typography
+// -------------------------
+
+@font-family-sans-serif:        sans-serif;
+@font-family-base:              @font-family-sans-serif;
+
+@font-size-base:                12px;
+@font-size-large:               14px;
+@font-size-small:               11px;
+
+@line-height-base:              1.428571429; // 20/14
+@line-height-computed:          floor(@font-size-base * @line-height-base); // ~20px
+
+@headings-font-family:          @font-family-base;
+@headings-font-weight:          bold;
+@headings-line-height:          1.1;
+@headings-size-small:           14px;
+@headings-size-large:           18px;
+@headings-size-xlarge:          20px;
+
+// Iconography
+// -------------------------
+
+//@icon-font-path:              "../fonts/";
+//@icon-font-name:              "glyphicons-halflings-regular";
+
+// Components
+// -------------------------
+
+@padding-base-vertical:          5px;
+@padding-base-horizontal:        5px;
+
+@line-height-large:              1.33;
+@line-height-small:              1.5;
+
+@border-radius-base:             4px;
+@border-radius-large:            6px;
+@border-radius-small:            3px;
+
+@component-active-bg:            @brand-primary;
+
+@caret-width-base:               4px;
+@caret-width-large:              5px;
+
+// Buttons
+// -------------------------
+
+@btn-font-weight:               normal;
+
+@btn-default-color:             #fff;
+@btn-default-bg:                @gray;
+@btn-default-border:            @gray;
+
+@btn-primary-color:             #fff;
+@btn-primary-bg:                @brand-primary;
+@btn-primary-border:            @brand-primary;
+
+@btn-secondary-color:           #fff;
+@btn-secondary-bg:              @brand-secondary;
+@btn-secondary-border:          @brand-secondary;
+
+@btn-success-color:             #fff;
+@btn-success-bg:                @brand-success;
+@btn-success-border:            @brand-success;
+
+@btn-warning-color:             #fff;
+@btn-warning-bg:                @brand-warning;
+@btn-warning-border:            @brand-warning;
+
+@btn-danger-color:              #fff;
+@btn-danger-bg:                 @brand-danger;
+@btn-danger-border:             @brand-danger;
+
+@btn-info-color:                #fff;
+@btn-info-bg:                   @brand-info;
+@btn-info-border:               @brand-info;
+
+@btn-disabled-color:            @gray-dark;
+@btn-disabled-hover-color:      @gray-darker;
+@btn-disabled-bg:               @gray;
+@btn-disabled-hover-bg:         @gray-dark;
+
+@btn-link-disabled-color:       @gray-light;
+
+@btn-focused-border:            lightskyblue;
+
+// Panels
+// -------------------------
+
+@panel-dark-bg:                 #1f1f1f;
+@panel-light-bg:                #dfdfdf;
+@panel-border-color:            #373737;
+@panel-border:                  1px solid @panel-border-color;
+@panel-margin:                  8px;
+
+// Thumbnails
+// -------------------------
+@thumbnail-padding:             @padding-small;
+@thumbnail-bg:                  @body-bg;
+@thumbnail-border:              @gray;
+@thumbnail-border-radius:       @border-radius-base;
+
+@thumbnail-caption-color:       @text-color;
+@thumbnail-caption-padding:     @padding-medium;
+
+// Margins
+// -------------------------
+
+@margin-small-vertical:         5px;
+@margin-small-horizontal:       5px;
+@margin-small:                  @margin-small-vertical @margin-small-horizontal @margin-small-vertical @margin-small-horizontal;
+
+@padding-small-vertical:        5px;
+@padding-small-horizontal:      5px;
+@padding-small:                 @padding-small-vertical @padding-small-horizontal @padding-small-vertical @padding-small-horizontal;
+
+@margin-medium-vertical:        10px;
+@margin-medium-horizontal:      10px;
+@margin-medium:                 @margin-medium-vertical @margin-medium-horizontal @margin-medium-vertical @margin-medium-horizontal;
+
+@padding-medium-vertical:       10px;
+@padding-medium-horizontal:     10px;
+@padding-medium:                @padding-medium-vertical @padding-medium-horizontal @padding-medium-vertical @padding-medium-horizontal;
+
+@margin-large-vertical:         15px;
+@margin-large-horizontal:       15px;
+@margin-large:                  @margin-large-vertical @margin-large-horizontal @margin-large-vertical @margin-large-horizontal;
+
+@padding-large-vertical:        15px;
+@padding-large-horizontal:      15px;
+@padding-large:                 @padding-large-vertical @padding-large-horizontal @padding-large-vertical @padding-large-horizontal;
+
+// Overlays
+// -------------------------
+
+@overlay-modal-bg:              rgba(0, 0, 0, 0.5);
+@overlay-bg:                    #fff;
+@overlay-group-bg:              #F5F5F5;
+
+// Miscellaneous
+// -------------------------
+
+// Hr border color
+@hr-border:                     @gray-lighter;
+
+// Horizontal forms & lists
+@component-offset-horizontal:   180px;
+
+// loaders
+@loader-black-bg:               'data:image/gif;base64,R0lGODlhEAAQAPIAAAAAAP///zw8PLy8vP///5ycnHx8fGxsbCH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==';
+@loader-white-bg:               'data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQACgABACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkEAAoAAgAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkEAAoAAwAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkEAAoABAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQACgAFACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQACgAGACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAAKAAcALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==';
+
+// scrollbars
+@scrollbar-width:               12px;
+@scrollbar-thumb-color:         lighten(@brand-secondary, 10%);
+
