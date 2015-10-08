@@ -51,16 +51,22 @@ class ExternalResource implements Manifesto.IExternalResource {
 
                 var uri = unescape(data['@id']);
 
-                if (!_.endsWith(uri, '/info.json')){
-                    uri += '/info.json';
-                }
-
                 that.data = data;
                 that._parseAuthServices(that.data);
 
+                // remove trailing /info.json
+                if (_.endsWith(uri, '/info.json')){
+                    uri = uri.substr(0, _.lastIndexOf(uri, '/'));
+                }
+
+                var dataUri = that.dataUri;
+
+                if (_.endsWith(dataUri, '/info.json')){
+                    dataUri = dataUri.substr(0, _.lastIndexOf(dataUri, '/'));
+                }
+
                 // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                // todo: compare the ids, otherwise any redirect is treated as degraded
-                if (uri !== that.dataUri && that.loginService){
+                if (uri !== dataUri && that.loginService){
                     that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                 } else {
                     that.status = HTTPStatusCode.OK;

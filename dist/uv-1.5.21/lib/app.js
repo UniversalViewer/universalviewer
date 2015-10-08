@@ -621,14 +621,18 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
                     }
                 }).done(function (data) {
                     var uri = unescape(data['@id']);
-                    if (!_.endsWith(uri, '/info.json')) {
-                        uri += '/info.json';
-                    }
                     that.data = data;
                     that._parseAuthServices(that.data);
+                    // remove trailing /info.json
+                    if (_.endsWith(uri, '/info.json')) {
+                        uri = uri.substr(0, _.lastIndexOf(uri, '/'));
+                    }
+                    var dataUri = that.dataUri;
+                    if (_.endsWith(dataUri, '/info.json')) {
+                        dataUri = dataUri.substr(0, _.lastIndexOf(dataUri, '/'));
+                    }
                     // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                    // todo: compare the ids, otherwise any redirect is treated as degraded
-                    if (uri !== that.dataUri && that.loginService) {
+                    if (uri !== dataUri && that.loginService) {
                         that.status = HTTPStatusCode.MOVED_TEMPORARILY;
                     }
                     else {
@@ -1380,7 +1384,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                                     $.publish(BaseCommands.CLICKTHROUGH_OCCURRED);
                                     resolve();
                                 }
-                            }, 100);
+                            }, 500);
                         }
                     }]);
             });
@@ -1390,23 +1394,14 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
                         resource: resource,
                         acceptCallback: function () {
-                            var win = window.open(resource.loginService.id + "?t=" + new Date().getTime(), 'loginwindow', "height=600,width=600");
+                            var win = window.open(resource.loginService.id + "?t=" + new Date().getTime());
                             var pollTimer = window.setInterval(function () {
                                 if (win.closed) {
                                     window.clearInterval(pollTimer);
                                     $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
                                     resolve();
                                 }
-                            }, 1000);
-                            //var win = window.open(resource.loginService.id);
-                            //
-                            //var pollTimer = window.setInterval(() => {
-                            //    if (win.closed) {
-                            //        window.clearInterval(pollTimer);
-                            //        $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
-                            //        resolve();
-                            //    }
-                            //}, 100);
+                            }, 500);
                         }
                     }]);
             });
@@ -2694,7 +2689,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.20';
+    exports.Version = '1.5.21';
 });
 
 var __extends = this.__extends || function (d, b) {

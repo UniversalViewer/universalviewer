@@ -481,7 +481,7 @@ class BaseExtension implements IExtension {
                             $.publish(BaseCommands.CLICKTHROUGH_OCCURRED);
                             resolve();
                         }
-                    }, 100);
+                    }, 500);
                 }
             }]);
         });
@@ -493,24 +493,14 @@ class BaseExtension implements IExtension {
             $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
-                    var win = window.open(resource.loginService.id + "?t=" + new Date().getTime(), 'loginwindow', "height=600,width=600");
+                    var win = window.open(resource.loginService.id + "?t=" + new Date().getTime());
                     var pollTimer = window.setInterval(function () {
                         if (win.closed) {
                             window.clearInterval(pollTimer);
                             $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
                             resolve();
                         }
-                    }, 1000);
-
-                    //var win = window.open(resource.loginService.id);
-                    //
-                    //var pollTimer = window.setInterval(() => {
-                    //    if (win.closed) {
-                    //        window.clearInterval(pollTimer);
-                    //        $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
-                    //        resolve();
-                    //    }
-                    //}, 100);
+                    }, 500);
                 }
             }]);
         });
