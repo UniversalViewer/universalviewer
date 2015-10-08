@@ -220,9 +220,11 @@ class TreeViewLeftPanel extends LeftPanel {
             var treeEnabled = Utils.Bools.GetBool(this.config.options.treeEnabled, true);
             var thumbsEnabled = Utils.Bools.GetBool(this.config.options.thumbsEnabled, true);
 
-            this.treeData = (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none);
+            this.treeData = (typeof (<ISeadragonProvider>this.provider).getSortedTree === 'function')
+                ? (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none)
+                : null;
 
-            if (!this.treeData.nodes.length) {
+            if (!this.treeData || !this.treeData.nodes.length) {
                 treeEnabled = false;
             }
 
