@@ -31,8 +31,8 @@ class Bootstrapper{
         // empty app div
         $('#app').empty();
 
-        //// add loading class
-        //$('#app').addClass('loading');
+        // add loading class
+        $('#app').addClass('loading');
 
         // remove any existing css
         $('link[type*="text/css"]').remove();

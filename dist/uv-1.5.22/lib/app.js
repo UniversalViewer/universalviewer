@@ -159,8 +159,8 @@ define('Bootstrapper',["require", "exports", "./modules/uv-shared-module/BaseCom
             }
             // empty app div
             $('#app').empty();
-            //// add loading class
-            //$('#app').addClass('loading');
+            // add loading class
+            $('#app').addClass('loading');
             // remove any existing css
             $('link[type*="text/css"]').remove();
             jQuery.support.cors = true;
@@ -610,9 +610,15 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
         ExternalResource.prototype.getData = function (accessToken) {
             var that = this;
             return new Promise(function (resolve, reject) {
+                // check if dataUri ends with info.json
+                // if not issue a HEAD request.
+                var type = 'GET';
+                if (!_.endsWith(that.dataUri, 'info.json')) {
+                    type = 'HEAD';
+                }
                 $.ajax({
                     url: that.dataUri,
-                    type: 'GET',
+                    type: type,
                     dataType: 'json',
                     beforeSend: function (xhr) {
                         if (accessToken) {
@@ -620,25 +626,32 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
                         }
                     }
                 }).done(function (data) {
-                    var uri = unescape(data['@id']);
-                    that.data = data;
-                    that._parseAuthServices(that.data);
-                    // remove trailing /info.json
-                    if (_.endsWith(uri, '/info.json')) {
-                        uri = uri.substr(0, _.lastIndexOf(uri, '/'));
-                    }
-                    var dataUri = that.dataUri;
-                    if (_.endsWith(dataUri, '/info.json')) {
-                        dataUri = dataUri.substr(0, _.lastIndexOf(dataUri, '/'));
-                    }
-                    // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                    if (uri !== dataUri && that.loginService) {
-                        that.status = HTTPStatusCode.MOVED_TEMPORARILY;
+                    // if it's a resource without an info.json
+                    if (!data) {
+                        that.status = HTTPStatusCode.OK;
+                        resolve(that);
                     }
                     else {
-                        that.status = HTTPStatusCode.OK;
+                        var uri = unescape(data['@id']);
+                        that.data = data;
+                        that._parseAuthServices(that.data);
+                        // remove trailing /info.json
+                        if (_.endsWith(uri, '/info.json')) {
+                            uri = uri.substr(0, _.lastIndexOf(uri, '/'));
+                        }
+                        var dataUri = that.dataUri;
+                        if (_.endsWith(dataUri, '/info.json')) {
+                            dataUri = dataUri.substr(0, _.lastIndexOf(dataUri, '/'));
+                        }
+                        // if the request was redirected to a degraded version and there's a login service to get the full quality version
+                        if (uri !== dataUri && that.loginService) {
+                            that.status = HTTPStatusCode.MOVED_TEMPORARILY;
+                        }
+                        else {
+                            that.status = HTTPStatusCode.OK;
+                        }
+                        resolve(that);
                     }
-                    resolve(that);
                 }).fail(function (error) {
                     that.status = error.status;
                     that.error = error;
@@ -2279,7 +2292,7 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
                     // Try to find an MP3, since this is most likely to work:
                     var preferredSource = 0;
                     for (var i in sources) {
-                        if (sources[i].type == "audio/mp3") {
+                        if (sources[i].type === "audio/mp3") {
                             preferredSource = i;
                             break;
                         }
@@ -2689,7 +2702,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.21';
+    exports.Version = '1.5.22';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -3723,8 +3736,10 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             if (this.isUnopened) {
                 var treeEnabled = Utils.Bools.GetBool(this.config.options.treeEnabled, true);
                 var thumbsEnabled = Utils.Bools.GetBool(this.config.options.thumbsEnabled, true);
-                this.treeData = this.provider.getSortedTree(TreeSortType.none);
-                if (!this.treeData.nodes.length) {
+                this.treeData = (typeof this.provider.getSortedTree === 'function')
+                    ? this.provider.getSortedTree(TreeSortType.none)
+                    : null;
+                if (!this.treeData || !this.treeData.nodes.length) {
                     treeEnabled = false;
                 }
                 // hide the tabs if either tree or thumbs are disabled.
@@ -4078,7 +4093,11 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
         BaseProvider.prototype.getInfoUri = function (canvas) {
             // default to IxIF
             var service = canvas.getService(manifesto.ServiceProfile.ixif());
-            return service.getInfoUri();
+            if (service) {
+                return service.getInfoUri();
+            }
+            // return the canvas id.
+            return canvas.id;
         };
         BaseProvider.prototype.getPagedIndices = function (canvasIndex) {
             if (typeof (canvasIndex) === 'undefined')
@@ -6713,23 +6732,11 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
                 var services = resource.getServices();
                 for (var i = 0; i < services.length; i++) {
                     var service = services[i];
-                    var profile = service.getProfile().toString();
                     var id = service.id;
                     if (!_.endsWith(id, '/')) {
                         id += '/';
                     }
-                    if (profile === manifesto.ServiceProfile.stanfordIIIFImageCompliance1().toString() ||
-                        profile === manifesto.ServiceProfile.stanfordIIIFImageCompliance2().toString() ||
-                        profile === manifesto.ServiceProfile.stanfordIIIF1ImageCompliance1().toString() ||
-                        profile === manifesto.ServiceProfile.stanfordIIIF1ImageCompliance2().toString() ||
-                        profile === manifesto.ServiceProfile.stanfordIIIFImageConformance1().toString() ||
-                        profile === manifesto.ServiceProfile.stanfordIIIFImageConformance2().toString() ||
-                        profile === manifesto.ServiceProfile.stanfordIIIF1ImageConformance1().toString() ||
-                        profile === manifesto.ServiceProfile.stanfordIIIF1ImageConformance2().toString() ||
-                        profile === manifesto.ServiceProfile.iiif1ImageLevel1().toString() ||
-                        profile === manifesto.ServiceProfile.iiif1ImageLevel2().toString() ||
-                        profile === manifesto.ServiceProfile.iiif2ImageLevel1().toString() ||
-                        profile === manifesto.ServiceProfile.iiif2ImageLevel2().toString()) {
+                    if (manifesto.isImageProfile(service.getProfile())) {
                         infoUri = id + 'info.json';
                     }
                 }
@@ -7687,7 +7694,6 @@ var Manifesto;
             _super.call(this, jsonld, options);
             this.ranges = [];
         }
-        // https://github.com/UniversalViewer/universalviewer/issues/119
         Canvas.prototype.getImages = function () {
             var images = [];
             if (!this.__jsonld.images)
@@ -8820,6 +8826,23 @@ module.exports = {
     // todo: enable this syntax: var treeNode = new manifesto.TreeNode()
     getTreeNode: function () {
         return new Manifesto.TreeNode();
+    },
+    isImageProfile: function (profile) {
+        if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2.toString()) {
+            return true;
+        }
+        return false;
     },
     loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
         return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);

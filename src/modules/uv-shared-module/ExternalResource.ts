@@ -38,9 +38,18 @@ class ExternalResource implements Manifesto.IExternalResource {
 
         return new Promise<Manifesto.IExternalResource>((resolve, reject) => {
 
+            // check if dataUri ends with info.json
+            // if not issue a HEAD request.
+
+            var type: string = 'GET';
+
+            if (!_.endsWith(that.dataUri, 'info.json')){
+                type = 'HEAD';
+            }
+
             $.ajax(<JQueryAjaxSettings>{
                 url: that.dataUri,
-                type: 'GET',
+                type: type,
                 dataType: 'json',
                 beforeSend: (xhr) => {
                     if (accessToken){
@@ -49,30 +58,36 @@ class ExternalResource implements Manifesto.IExternalResource {
                 }
             }).done((data) => {
 
-                var uri = unescape(data['@id']);
-
-                that.data = data;
-                that._parseAuthServices(that.data);
-
-                // remove trailing /info.json
-                if (_.endsWith(uri, '/info.json')){
-                    uri = uri.substr(0, _.lastIndexOf(uri, '/'));
-                }
-
-                var dataUri = that.dataUri;
-
-                if (_.endsWith(dataUri, '/info.json')){
-                    dataUri = dataUri.substr(0, _.lastIndexOf(dataUri, '/'));
-                }
-
-                // if the request was redirected to a degraded version and there's a login service to get the full quality version
-                if (uri !== dataUri && that.loginService){
-                    that.status = HTTPStatusCode.MOVED_TEMPORARILY;
-                } else {
+                // if it's a resource without an info.json
+                if (!data){
                     that.status = HTTPStatusCode.OK;
-                }
+                    resolve(that);
+                } else {
+                    var uri = unescape(data['@id']);
 
-                resolve(that);
+                    that.data = data;
+                    that._parseAuthServices(that.data);
+
+                    // remove trailing /info.json
+                    if (_.endsWith(uri, '/info.json')){
+                        uri = uri.substr(0, _.lastIndexOf(uri, '/'));
+                    }
+
+                    var dataUri = that.dataUri;
+
+                    if (_.endsWith(dataUri, '/info.json')){
+                        dataUri = dataUri.substr(0, _.lastIndexOf(dataUri, '/'));
+                    }
+
+                    // if the request was redirected to a degraded version and there's a login service to get the full quality version
+                    if (uri !== dataUri && that.loginService){
+                        that.status = HTTPStatusCode.MOVED_TEMPORARILY;
+                    } else {
+                        that.status = HTTPStatusCode.OK;
+                    }
+
+                    resolve(that);
+                }
 
             }).fail((error) => {
 
