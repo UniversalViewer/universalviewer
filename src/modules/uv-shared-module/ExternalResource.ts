@@ -11,10 +11,9 @@ class ExternalResource implements Manifesto.IExternalResource {
     public status: number;
     public tokenService: Manifesto.IService;
 
-    // todo: pass in services associated with this resource if they exist
-    // if the resource returns services in the info.json, those override
-    constructor() {
-
+    constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string) {
+        this.dataUri = dataUriFunc(resource);
+        this._parseAuthServices(resource);
     }
 
     private _parseAuthServices(resource: any): void {

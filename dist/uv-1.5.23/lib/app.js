@@ -588,10 +588,10 @@ define('modules/uv-dialogues-module/ClickThroughDialogue',["require", "exports",
 
 define('modules/uv-shared-module/ExternalResource',["require", "exports"], function (require, exports) {
     var ExternalResource = (function () {
-        // todo: pass in services associated with this resource if they exist
-        // if the resource returns services in the info.json, those override
-        function ExternalResource() {
+        function ExternalResource(resource, dataUriFunc) {
             this.isResponseHandled = false;
+            this.dataUri = dataUriFunc(resource);
+            this._parseAuthServices(resource);
         }
         ExternalResource.prototype._parseAuthServices = function (resource) {
             this.clickThroughService = manifesto.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
@@ -1277,9 +1277,8 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             var indices = this.provider.getPagedIndices();
             var resourcesToLoad = [];
             _.each(indices, function (index) {
-                var r = new ExternalResource();
                 var canvas = _this.provider.getCanvasByIndex(index);
-                r.dataUri = _this.provider.getInfoUri(canvas);
+                var r = new ExternalResource(canvas, _this.provider.getInfoUri);
                 // used to reload resources with isResponseHandled = true.
                 if (resources) {
                     var found = _.find(resources, function (f) {
@@ -2702,7 +2701,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.22';
+    exports.Version = '1.5.23';
 });
 
 var __extends = this.__extends || function (d, b) {
