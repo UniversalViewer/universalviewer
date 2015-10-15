@@ -3,6 +3,7 @@ import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import BootstrapParams = require("../../BootstrapParams");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
+import ExternalEventManager = require("./ExternalEventManager");
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import Information = require("./Information");
@@ -25,6 +26,7 @@ class BaseExtension implements IExtension {
     embedHeight: number;
     embedWidth: number;
     extensions: any;
+    externalEventManager: ExternalEventManager;
     loginDialogue: LoginDialogue;
     mouseX: number;
     mouseY: number;
@@ -60,6 +62,8 @@ class BaseExtension implements IExtension {
                 }
             });
         }
+
+        this.externalEventManager = new ExternalEventManager(this);
 
         this.triggerSocket(BaseCommands.LOAD, {
             bootstrapper: {
@@ -99,7 +103,7 @@ class BaseExtension implements IExtension {
                 //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
 
                 if (manifestUri){
-                    this.triggerSocket(BaseCommands.DROP, manifestUri);
+                    $.publish(BaseCommands.DROP, manifestUri);
 
                     var p = new BootstrapParams();
                     p.manifestUri = manifestUri;
@@ -291,12 +295,6 @@ class BaseExtension implements IExtension {
 
     height(): number {
         return $(window).height();
-    }
-
-    triggerSocket(eventName: string, eventObject?: any): void {
-        if (this.bootstrapper.socket) {
-            this.bootstrapper.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
-        }
     }
 
     redirect(uri: string): void {
