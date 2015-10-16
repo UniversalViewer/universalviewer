@@ -54,17 +54,13 @@ class Extension extends BaseExtension{
             $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
+        this.createEventHandlers();
+    }
+
+    createEventHandlers(): void {
         //$.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
         //    this.viewManifest(data);
         //});
-
-        $.subscribe(BaseCommands.DOWNLOAD, (e) => {
-            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
-        });
-
-        $.subscribe(BaseCommands.EMBED, (e) => {
-            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
-        });
 
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);

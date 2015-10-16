@@ -12,7 +12,6 @@ class Commands {
     static DOWN_ARROW: string                       = Commands.namespace + 'onDownArrow';
     static DOWNLOAD: string                         = Commands.namespace + 'onDownload';
     static DROP: string                             = Commands.namespace + 'onDrop';
-    static EMBED: string                            = Commands.namespace + 'onEmbed';
     static END: string                              = Commands.namespace + 'onEnd';
     static ESCAPE: string                           = Commands.namespace + 'onEscape';
     static HIDE_DOWNLOAD_DIALOGUE: string           = Commands.namespace + 'onHideDownloadDialogue';

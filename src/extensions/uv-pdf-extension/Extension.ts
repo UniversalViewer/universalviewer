@@ -42,6 +42,11 @@ class Extension extends BaseExtension{
     create(overrideDependencies?: any): void {
         super.create();
 
+        this.createEventHandlers();
+    }
+
+    createEventHandlers(): void {
+
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
@@ -55,14 +60,6 @@ class Extension extends BaseExtension{
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
-        });
-
-        $.subscribe(BaseCommands.DOWNLOAD, (e) => {
-            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
-        });
-
-        $.subscribe(BaseCommands.EMBED, (e) => {
-            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
         });
 
         $.subscribe(BaseCommands.SHOW_OVERLAY, (e, params) => {

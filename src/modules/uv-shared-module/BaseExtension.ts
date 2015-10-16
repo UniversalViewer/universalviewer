@@ -3,7 +3,6 @@ import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import BootstrapParams = require("../../BootstrapParams");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
-import ExternalEventManager = require("./ExternalEventManager");
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import Information = require("./Information");
@@ -26,7 +25,6 @@ class BaseExtension implements IExtension {
     embedHeight: number;
     embedWidth: number;
     extensions: any;
-    externalEventManager: ExternalEventManager;
     loginDialogue: LoginDialogue;
     mouseX: number;
     mouseY: number;
@@ -62,8 +60,6 @@ class BaseExtension implements IExtension {
                 }
             });
         }
-
-        this.externalEventManager = new ExternalEventManager(this);
 
         this.triggerSocket(BaseCommands.LOAD, {
             bootstrapper: {
@@ -103,7 +99,7 @@ class BaseExtension implements IExtension {
                 //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
 
                 if (manifestUri){
-                    $.publish(BaseCommands.DROP, manifestUri);
+                    this.triggerSocket(BaseCommands.DROP, manifestUri);
 
                     var p = new BootstrapParams();
                     p.manifestUri = manifestUri;
@@ -146,47 +142,7 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
-        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e) => {
-            this.resize();
-        });
-
-        $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
-            if (!this.isOverlayActive()){
-                $('#top').focus();
-                this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
-                this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
-                    {
-                        isFullScreen: this.bootstrapper.isFullScreen,
-                        overrideFullScreen: this.provider.config.options.overrideFullScreen
-                    });
-            }
-        });
-
-        $.subscribe(BaseCommands.RESOURCE_DEGRADED, (e, resource: ExternalResource) => {
-            this.handleDegraded(resource)
-        });
-
-        $.subscribe(BaseCommands.ESCAPE, () => {
-            if (this.isFullScreen()) {
-                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
-            }
-        });
-
-        $.subscribe(BaseCommands.CREATED, () => {
-            this.triggerSocket(BaseCommands.CREATED);
-        });
+        this.createEventHandlers();
 
         // create shell and shared views.
         this.shell = new Shell(this.$element);
@@ -202,6 +158,254 @@ class BaseExtension implements IExtension {
                 this.loadDependencies(deps);
             });
         }
+    }
+
+    createEventHandlers(): void {
+        $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
+            this.triggerSocket(BaseCommands.AUTHORIZATION_OCCURRED);
+        });
+
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, () => {
+            this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+        });
+
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+            this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
+        });
+
+        $.subscribe(BaseCommands.CLICKTHROUGH_OCCURRED, () => {
+            this.triggerSocket(BaseCommands.CLICKTHROUGH_OCCURRED);
+        });
+
+        $.subscribe(BaseCommands.CLOSE_ACTIVE_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, () => {
+            this.triggerSocket(BaseCommands.CLOSE_LEFT_PANEL);
+            this.resize();
+        });
+
+        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, () => {
+            this.triggerSocket(BaseCommands.CLOSE_RIGHT_PANEL);
+            this.resize();
+        });
+
+        $.subscribe(BaseCommands.CREATED, () => {
+            this.triggerSocket(BaseCommands.CREATED);
+        });
+
+        $.subscribe(BaseCommands.DOWN_ARROW, () => {
+            this.triggerSocket(BaseCommands.DOWN_ARROW);
+        });
+
+        $.subscribe(BaseCommands.DOWNLOAD, (e, id) => {
+            this.triggerSocket(BaseCommands.DOWNLOAD, id);
+        });
+
+        $.subscribe(BaseCommands.END, () => {
+            this.triggerSocket(BaseCommands.END);
+        });
+
+        $.subscribe(BaseCommands.ESCAPE, () => {
+            this.triggerSocket(BaseCommands.ESCAPE);
+
+            if (this.isFullScreen()) {
+                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
+            }
+        });
+
+        $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_DOWNLOAD_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.HIDE_EMBED_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_EMBED_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.HIDE_GENERIC_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_GENERIC_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.HIDE_HELP_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_HELP_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.HIDE_INFORMATION, () => {
+            this.triggerSocket(BaseCommands.HIDE_INFORMATION);
+        });
+
+        $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
+            this.triggerSocket(BaseCommands.HIDE_OVERLAY);
+        });
+
+        $.subscribe(BaseCommands.HIDE_SETTINGS_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_SETTINGS_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.HOME, () => {
+            this.triggerSocket(BaseCommands.HOME);
+        });
+
+        $.subscribe(BaseCommands.LEFT_ARROW, () => {
+            this.triggerSocket(BaseCommands.LEFT_ARROW);
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.triggerSocket(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
+            this.triggerSocket(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH, () => {
+            this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
+            this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+        });
+
+        $.subscribe(BaseCommands.NOT_FOUND, () => {
+            this.triggerSocket(BaseCommands.NOT_FOUND);
+        });
+
+        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, () => {
+            this.triggerSocket(BaseCommands.OPEN_LEFT_PANEL);
+            this.resize();
+        });
+
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, () => {
+            this.triggerSocket(BaseCommands.OPEN_EXTERNAL_RESOURCE);
+        });
+
+        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, () => {
+            this.triggerSocket(BaseCommands.OPEN_RIGHT_PANEL);
+            this.resize();
+        });
+
+        $.subscribe(BaseCommands.PAGE_DOWN, () => {
+            this.triggerSocket(BaseCommands.PAGE_DOWN);
+        });
+
+        $.subscribe(BaseCommands.PAGE_UP, () => {
+            this.triggerSocket(BaseCommands.PAGE_UP);
+        });
+
+        $.subscribe(BaseCommands.RESOURCE_DEGRADED, (e, resource: ExternalResource) => {
+            this.triggerSocket(BaseCommands.RESOURCE_DEGRADED);
+            this.handleDegraded(resource)
+        });
+
+        $.subscribe(BaseCommands.RETURN, () => {
+            this.triggerSocket(BaseCommands.RETURN);
+        });
+
+        $.subscribe(BaseCommands.RIGHT_ARROW, () => {
+            this.triggerSocket(BaseCommands.RIGHT_ARROW);
+        });
+
+        $.subscribe(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.triggerSocket(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_FINISH);
+        });
+
+        $.subscribe(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_START, () => {
+            this.triggerSocket(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_START);
+        });
+
+        $.subscribe(BaseCommands.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
+            this.triggerSocket(BaseCommands.RIGHTPANEL_EXPAND_FULL_FINISH);
+        });
+
+        $.subscribe(BaseCommands.RIGHTPANEL_EXPAND_FULL_START, () => {
+            this.triggerSocket(BaseCommands.RIGHTPANEL_EXPAND_FULL_START);
+        });
+
+        $.subscribe(BaseCommands.SEQUENCE_INDEX_CHANGED, () => {
+            this.triggerSocket(BaseCommands.SEQUENCE_INDEX_CHANGED);
+        });
+
+        // todo: test in containing page
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, args) => {
+            this.triggerSocket(BaseCommands.SETTINGS_CHANGED, args);
+        });
+
+        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_EMBED_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_GENERIC_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_GENERIC_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_HELP_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_HELP_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_INFORMATION, () => {
+            this.triggerSocket(BaseCommands.SHOW_INFORMATION);
+        });
+
+        $.subscribe(BaseCommands.SHOW_LOGIN_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_LOGIN_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
+            this.triggerSocket(BaseCommands.SHOW_OVERLAY);
+        });
+
+        $.subscribe(BaseCommands.SHOW_SETTINGS_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_SETTINGS_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
+            this.triggerSocket(BaseCommands.THUMB_SELECTED, canvasIndex);
+        });
+
+        $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
+            if (!this.isOverlayActive()){
+                $('#top').focus();
+                this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
+                this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
+                    {
+                        isFullScreen: this.bootstrapper.isFullScreen,
+                        overrideFullScreen: this.provider.config.options.overrideFullScreen
+                    });
+            }
+        });
+
+        $.subscribe(BaseCommands.UP_ARROW, () => {
+            this.triggerSocket(BaseCommands.UP_ARROW);
+        });
+
+        $.subscribe(BaseCommands.UPDATE_SETTINGS, () => {
+            this.triggerSocket(BaseCommands.UPDATE_SETTINGS);
+        });
+
+        $.subscribe(BaseCommands.VIEW_FULL_TERMS, () => {
+            this.triggerSocket(BaseCommands.VIEW_FULL_TERMS);
+        })
+
+        $.subscribe(BaseCommands.WINDOW_UNLOAD, () => {
+            this.triggerSocket(BaseCommands.WINDOW_UNLOAD);
+        });
     }
 
     createModules(): void {
@@ -295,6 +499,12 @@ class BaseExtension implements IExtension {
 
     height(): number {
         return $(window).height();
+    }
+
+    triggerSocket(eventName: string, eventObject?: any): void {
+        if (this.bootstrapper.socket) {
+            this.bootstrapper.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
+        }
     }
 
     redirect(uri: string): void {
@@ -401,7 +611,6 @@ class BaseExtension implements IExtension {
         this.provider.canvasIndex = canvasIndex;
 
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
-        this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
 
         $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
 

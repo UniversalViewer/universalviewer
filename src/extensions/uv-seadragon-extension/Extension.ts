@@ -57,14 +57,16 @@ class Extension extends BaseExtension {
 
         // events.
         $.subscribe(Commands.FIRST, (e) => {
+            this.triggerSocket(Commands.FIRST);
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
-        $.subscribe(BaseCommands.HOME, (e) => {
+        $.subscribe(BaseCommands.HOME, (e) => {;
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
         $.subscribe(Commands.LAST, (e) => {
+            this.triggerSocket(Commands.LAST);
             this.viewPage(this.provider.getLastPageIndex());
         });
 
@@ -73,10 +75,12 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.PREV, (e) => {
+            this.triggerSocket(Commands.PREV);
             this.viewPage(this.provider.getPrevPageIndex());
         });
 
         $.subscribe(Commands.NEXT, (e) => {
+            this.triggerSocket(Commands.NEXT);
             this.viewPage(this.provider.getNextPageIndex());
         });
 
@@ -97,15 +101,18 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.MODE_CHANGED, (e, mode: string) => {
+            this.triggerSocket(Commands.MODE_CHANGED, mode);
             this.mode = new Mode(mode);
             $.publish(BaseCommands.SETTINGS_CHANGED, [mode]);
         });
 
         $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
+            this.triggerSocket(Commands.PAGE_SEARCH, value);
             this.viewLabel(value);
         });
 
         $.subscribe(Commands.IMAGE_SEARCH, (e, index: number) => {
+            this.triggerSocket(Commands.IMAGE_SEARCH, index);
             this.viewPage(index);
         });
 
@@ -115,14 +122,17 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.VIEW_PAGE, (e, index: number) => {
+            this.triggerSocket(Commands.VIEW_PAGE, index);
             this.viewPage(index);
         });
 
         $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
+            this.triggerSocket(Commands.NEXT_SEARCH_RESULT);
             this.nextSearchResult();
         });
 
         $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
+            this.triggerSocket(Commands.PREV_SEARCH_RESULT);
             this.prevSearchResult();
         });
 
@@ -131,6 +141,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
+            this.triggerSocket(Commands.TREE_NODE_SELECTED);
             this.treeNodeSelected(data);
         });
 
@@ -143,7 +154,7 @@ class Extension extends BaseExtension {
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {;
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
@@ -168,16 +179,9 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.SEADRAGON_ROTATION, (e, rotation) => {
+            this.triggerSocket(Commands.SEADRAGON_ROTATION);
             this.currentRotation = rotation;
             this.setParam(Params.rotation, rotation);
-        });
-
-        $.subscribe(BaseCommands.EMBED, (e) => {
-            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
-        });
-
-        $.subscribe(BaseCommands.DOWNLOAD, (e) => {
-            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
     }
 

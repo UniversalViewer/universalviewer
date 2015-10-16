@@ -42,6 +42,7 @@ class ExternalResource implements Manifesto.IExternalResource {
 
             var type: string = 'GET';
 
+            // todo: use manifesto.hasServiceDescriptor
             if (!_.endsWith(that.dataUri, 'info.json')){
                 type = 'HEAD';
             }
@@ -58,6 +59,7 @@ class ExternalResource implements Manifesto.IExternalResource {
             }).done((data) => {
 
                 // if it's a resource without an info.json
+                // todo: if resource doesn't have a @profile
                 if (!data){
                     that.status = HTTPStatusCode.OK;
                     resolve(that);

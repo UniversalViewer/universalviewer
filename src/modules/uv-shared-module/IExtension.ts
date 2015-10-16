@@ -1,14 +1,13 @@
 import BaseProvider = require("./BaseProvider");
-import ExternalEventManager = require("./ExternalEventManager");
 import Params = require("../../Params");
 
 interface IExtension{
     create(): void;
+    createEventHandlers(): void;
     createModules(): void;
     dependenciesLoaded(): void;
     embedHeight: number;
     embedWidth: number;
-    externalEventManager: ExternalEventManager;
     getDependencies(callback: (deps: any) => void): any;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getParam(key: Params): any;
@@ -26,6 +25,7 @@ interface IExtension{
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
+    triggerSocket(eventName: string, eventObject?: any): void;
     viewCanvas(canvasIndex): void;
     viewManifest(manifest: Manifesto.IManifest): void;
     width(): number;
