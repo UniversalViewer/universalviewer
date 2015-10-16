@@ -54,10 +54,6 @@ class Extension extends BaseExtension{
             $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
-        this.createEventHandlers();
-    }
-
-    createEventHandlers(): void {
         //$.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
         //    this.viewManifest(data);
         //});
@@ -75,6 +71,18 @@ class Extension extends BaseExtension{
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
+        });
+
+        $.subscribe(Commands.MEDIA_ENDED, (e) => {
+            this.triggerSocket(Commands.MEDIA_ENDED);
+        });
+
+        $.subscribe(Commands.MEDIA_PAUSED, (e) => {
+            this.triggerSocket(Commands.MEDIA_PAUSED);
+        });
+
+        $.subscribe(Commands.MEDIA_PLAYED, (e) => {
+            this.triggerSocket(Commands.MEDIA_PLAYED);
         });
     }
 

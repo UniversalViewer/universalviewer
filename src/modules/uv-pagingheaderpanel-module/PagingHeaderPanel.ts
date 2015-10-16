@@ -42,8 +42,8 @@ class PagingHeaderPanel extends HeaderPanel {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, mode) => {
-            this.modeChanged(mode);
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e) => {
+            this.modeChanged();
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, (e) => {
@@ -342,7 +342,7 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$nextButton.enable();
     }
 
-    modeChanged(mode): void {
+    modeChanged(): void {
         this.setSearchFieldValue(this.provider.canvasIndex);
         this.setTitles();
         this.setTotal();

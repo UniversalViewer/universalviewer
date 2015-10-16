@@ -55,7 +55,26 @@ class Extension extends BaseExtension {
 
         var that = this;
 
-        // events.
+        $.subscribe(Commands.CLEAR_SEARCH, (e) => {
+            this.triggerSocket(Commands.CLEAR_SEARCH);
+        });
+
+        $.subscribe(Commands.SEARCH_PREVIEW_START, (e) => {
+            this.triggerSocket(Commands.SEARCH_PREVIEW_START);
+        });
+
+        $.subscribe(Commands.SEARCH_PREVIEW_FINISH, (e) => {
+            this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
+            this.triggerSocket(Commands.SEARCH_RESULTS, obj);
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, (e) => {
+            this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
+        });
+
         $.subscribe(Commands.FIRST, (e) => {
             this.triggerSocket(Commands.FIRST);
             this.viewPage(this.provider.getFirstPageIndex());
@@ -103,7 +122,8 @@ class Extension extends BaseExtension {
         $.subscribe(Commands.MODE_CHANGED, (e, mode: string) => {
             this.triggerSocket(Commands.MODE_CHANGED, mode);
             this.mode = new Mode(mode);
-            $.publish(BaseCommands.SETTINGS_CHANGED, [mode]);
+            var settings: ISettings = this.provider.getSettings();
+            $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
         });
 
         $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
@@ -141,7 +161,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
-            this.triggerSocket(Commands.TREE_NODE_SELECTED);
+            this.triggerSocket(Commands.TREE_NODE_SELECTED, data.path);
             this.treeNodeSelected(data);
         });
 
@@ -233,7 +253,8 @@ class Extension extends BaseExtension {
 
     updateSettings(): void {
         this.viewPage(this.provider.canvasIndex, true);
-        $.publish(BaseCommands.SETTINGS_CHANGED);
+        var settings: ISettings = this.provider.getSettings();
+        $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
     }
 
     viewPage(canvasIndex: number, isReload?: boolean): void {
@@ -344,7 +365,7 @@ class Extension extends BaseExtension {
 
         (<ISeadragonProvider>this.provider).searchWithin(terms, (results: any) => {
             if (results.resources && results.resources.length) {
-                $.publish(Commands.SEARCH_RESULTS, [terms, results]);
+                $.publish(Commands.SEARCH_RESULTS, [{terms, results}]);
 
                 // reload current index as it may contain results.
                 that.viewPage(that.provider.canvasIndex, true);

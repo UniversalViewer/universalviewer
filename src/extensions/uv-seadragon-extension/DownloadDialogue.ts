@@ -161,13 +161,15 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var rendering: Manifesto.IRendering = renderings[i];
             if (rendering) {
                 var label = rendering.getLabel();
+                var currentId;
                 if (label) {
+                    currentId = _.camelCase(label);
                     label += " ({0})";
                 } else {
+                    currentId = "dynamic_download_" + ++this.renderingUrlsCount;
                     label = defaultLabel;
                 }
                 label = String.format(label, this.simplifyMimeType(rendering.getFormat().toString()));
-                var currentId = "dynamic_download_" + ++this.renderingUrlsCount;
                 this.renderingUrls[currentId] = rendering.id;
                 var newButton = $('<li class="dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
                 this.$downloadOptions.append(newButton);

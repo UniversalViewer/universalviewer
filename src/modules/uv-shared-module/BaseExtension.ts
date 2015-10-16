@@ -142,25 +142,6 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
-        this.createEventHandlers();
-
-        // create shell and shared views.
-        this.shell = new Shell(this.$element);
-
-        // set canvasIndex to -1 (nothing selected yet).
-        this.canvasIndex = -1;
-
-        // dependencies
-        if (overrideDependencies){
-            this.loadDependencies(overrideDependencies);
-        } else {
-            this.getDependencies((deps: any) => {
-                this.loadDependencies(deps);
-            });
-        }
-    }
-
-    createEventHandlers(): void {
         $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
             this.triggerSocket(BaseCommands.AUTHORIZATION_OCCURRED);
         });
@@ -330,7 +311,6 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.SEQUENCE_INDEX_CHANGED);
         });
 
-        // todo: test in containing page
         $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, args) => {
             this.triggerSocket(BaseCommands.SETTINGS_CHANGED, args);
         });
@@ -401,11 +381,26 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.VIEW_FULL_TERMS, () => {
             this.triggerSocket(BaseCommands.VIEW_FULL_TERMS);
-        })
+        });
 
         $.subscribe(BaseCommands.WINDOW_UNLOAD, () => {
             this.triggerSocket(BaseCommands.WINDOW_UNLOAD);
         });
+
+        // create shell and shared views.
+        this.shell = new Shell(this.$element);
+
+        // set canvasIndex to -1 (nothing selected yet).
+        this.canvasIndex = -1;
+
+        // dependencies
+        if (overrideDependencies){
+            this.loadDependencies(overrideDependencies);
+        } else {
+            this.getDependencies((deps: any) => {
+                this.loadDependencies(deps);
+            });
+        }
     }
 
     createModules(): void {

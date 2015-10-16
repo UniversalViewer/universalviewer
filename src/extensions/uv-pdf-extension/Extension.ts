@@ -42,11 +42,6 @@ class Extension extends BaseExtension{
     create(overrideDependencies?: any): void {
         super.create();
 
-        this.createEventHandlers();
-    }
-
-    createEventHandlers(): void {
-
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });

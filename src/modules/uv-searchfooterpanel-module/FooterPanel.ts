@@ -52,8 +52,8 @@ class FooterPanel extends BaseFooterPanel {
             this.settingsChanged();
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, (e, terms, results) => {
-            this.displaySearchResults(terms, results);
+        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
+            this.displaySearchResults(obj.terms, obj.results);
         });
 
         $.subscribe(BaseCommands.CREATED, (e) => {

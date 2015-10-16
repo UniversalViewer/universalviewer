@@ -3,7 +3,6 @@ import Params = require("../../Params");
 
 interface IExtension{
     create(): void;
-    createEventHandlers(): void;
     createModules(): void;
     dependenciesLoaded(): void;
     embedHeight: number;

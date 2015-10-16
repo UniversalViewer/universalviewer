@@ -73,7 +73,7 @@ class HeaderPanel extends BaseView {
         this.$informationBox.find('.close').attr('title', this.content.close);
         this.$informationBox.find('.close').on('click', (e) => {
             e.preventDefault();
-            this.hideInformation();
+            $.publish(BaseCommands.HIDE_INFORMATION);
         });
 
         this.updatePagingToggle();
