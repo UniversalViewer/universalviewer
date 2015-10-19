@@ -291,10 +291,9 @@ class Extension extends BaseExtension {
             case manifesto.ManifestType.monograph().toString():
                 return Mode.page;
                 break;
-            //case 'archive',
-            //     'boundmanuscript':
-            //    return Mode.image;
-            //    break;
+            case manifesto.ManifestType.manuscript().toString():
+                return Mode.page;
+                break;
             default:
                 return Mode.image;
         }

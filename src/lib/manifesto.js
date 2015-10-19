@@ -511,6 +511,9 @@ var Manifesto;
         ServiceProfile.prototype.token = function () {
             return new ServiceProfile(ServiceProfile.TOKEN.toString());
         };
+        ServiceProfile.prototype.uiExtensions = function () {
+            return new ServiceProfile(ServiceProfile.UIEXTENSIONS.toString());
+        };
         ServiceProfile.AUTOCOMPLETE = new ServiceProfile("http://iiif.io/api/search/0/autocomplete");
         ServiceProfile.CLICKTHROUGH = new ServiceProfile("http://wellcomelibrary.org/ld/iiif-ext/0/accept-terms-click-through");
         ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/compliance.html#level1");
@@ -531,6 +534,7 @@ var Manifesto;
         ServiceProfile.OTHERMANIFESTATIONS = new ServiceProfile("http://iiif.io/api/otherManifestations.json");
         ServiceProfile.SEARCHWITHIN = new ServiceProfile("http://iiif.io/api/search/0/search");
         ServiceProfile.TOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
+        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.azurewebsites.net/ui-extensions-profile");
         return ServiceProfile;
     })(Manifesto.StringValue);
     Manifesto.ServiceProfile = ServiceProfile;
@@ -963,7 +967,11 @@ var Manifesto;
             }
         };
         Manifest.prototype.getManifestType = function () {
-            return new Manifesto.ManifestType(this.getProperty('exp:manifestType'));
+            var service = this.getService(Manifesto.ServiceProfile.UIEXTENSIONS);
+            if (service) {
+                return new Manifesto.ManifestType(service.getProperty('manifestType'));
+            }
+            return new Manifesto.ManifestType('');
         };
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
@@ -1813,6 +1821,8 @@ module.exports = {
         }
         return false;
     },
+    // todo: create hasServiceDescriptor
+    // based on @profile and @type (or lack of) can the resource describe associated services?
     loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
         return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
     },

@@ -115,7 +115,7 @@ class PagingHeaderPanel extends HeaderPanel {
         this.setTotal();
 
         // check if the book has more than one page, otherwise hide prev/next options.
-        if (this.provider.getTotalCanvases() == 1) {
+        if (this.provider.getTotalCanvases() === 1) {
             this.$centerOptions.hide();
         }
 
