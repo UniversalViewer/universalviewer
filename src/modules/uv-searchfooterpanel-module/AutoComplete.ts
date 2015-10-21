@@ -84,7 +84,7 @@ class AutoComplete{
 
             // after a delay, show autocomplete list.
             typewatch(() => {
-                
+
             	// don't do anything if not a valid key.
                 if (!that.isValidKey(e.keyCode)) {
                     e.preventDefault();
@@ -95,7 +95,7 @@ class AutoComplete{
 
                 // if there are more than 2 chars and no spaces
                 // update the autocomplete list.
-                if (val && val.length > 2 && val.indexOf(' ') == -1) {
+                if (val && val.length > 2 && val.indexOf(' ') === -1) {
                     that.search(val);
                 } else {
                     // otherwise, hide the autocomplete list.
@@ -155,14 +155,14 @@ class AutoComplete{
         this.$searchResultsList.scrollTop(top);
     }
 
-    isValidKey(keyCode): boolean {
+    isValidKey(keyCode: number): boolean {
 
     	// up and down are invalid. otherwise get converted to
     	// '&'' and '(' respectively.
     	if (keyCode === 38 || keyCode === 40) return false;
 
-        // ignore if it's a backspace or space.
-        if (keyCode != 8 && keyCode != 32) {
+        // ignore if it's a backspace, space, or tab.
+        if (keyCode !== 8 && keyCode !== 32 && keyCode !== 9) {
             // prev:  new RegExp("^[a-zA-Z]+$");
             // standard keyboard non-control characters
             var regex = new RegExp("^[\\w()!£$%^&*()-+=@'#~?<>|/\\\\]+$");
@@ -178,7 +178,7 @@ class AutoComplete{
         return true;
     }
 
-    search(term): void {
+    search(term: string): void {
 
         this.results = [];
 
