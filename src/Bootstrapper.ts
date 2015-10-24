@@ -160,6 +160,11 @@ class Bootstrapper{
             extension = this.extensions[format];
         }
 
+        // if there still isn't an extension, show an error.
+        if (!extension){
+            alert("No matching UV extension found.");
+        }
+
         this.featureDetect(() => {
             this.configure(extension, (config) => {
                 this.injectCss(extension, config, () => {

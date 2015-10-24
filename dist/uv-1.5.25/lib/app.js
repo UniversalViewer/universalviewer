@@ -262,6 +262,10 @@ define('Bootstrapper',["require", "exports", "./modules/uv-shared-module/BaseCom
                 var format = canvas.getProperty('format');
                 extension = this.extensions[format];
             }
+            // if there still isn't an extension, show an error.
+            if (!extension) {
+                alert("No matching UV extension found.");
+            }
             this.featureDetect(function () {
                 _this.configure(extension, function (config) {
                     _this.injectCss(extension, config, function () {
@@ -2853,7 +2857,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.24';
+    exports.Version = '1.5.25';
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -4371,6 +4375,10 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
                     if (!this.isMultiSequence())
                         return true;
                     break;
+                case manifesto.ManifestType.manuscript().toString():
+                    if (!this.isMultiSequence())
+                        return true;
+                    break;
             }
             // todo: use rendering?
             //var sequenceType = this.getSequenceType();
@@ -5099,7 +5107,7 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
                     var val = that.getTerms();
                     // if there are more than 2 chars and no spaces
                     // update the autocomplete list.
-                    if (val && val.length > 2 && val.indexOf(' ') == -1) {
+                    if (val && val.length > 2 && val.indexOf(' ') === -1) {
                         that.search(val);
                     }
                     else {
@@ -5150,8 +5158,8 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
             // '&'' and '(' respectively.
             if (keyCode === 38 || keyCode === 40)
                 return false;
-            // ignore if it's a backspace or space.
-            if (keyCode != 8 && keyCode != 32) {
+            // ignore if it's a backspace, space, or tab.
+            if (keyCode !== 8 && keyCode !== 32 && keyCode !== 9) {
                 // prev:  new RegExp("^[a-zA-Z]+$");
                 // standard keyboard non-control characters
                 var regex = new RegExp("^[\\w()!£$%^&*()-+=@'#~?<>|/\\\\]+$");
@@ -5540,7 +5548,7 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
         FooterPanel.prototype.getPageLineRatio = function () {
             var lineWidth = this.$line.width();
             // find page/width ratio by dividing the line width by the number of pages in the book.
-            if (this.provider.getTotalCanvases() == 1)
+            if (this.provider.getTotalCanvases() === 1)
                 return 0;
             return lineWidth / (this.provider.getTotalCanvases() - 1);
         };
@@ -5695,7 +5703,7 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
             this.setTitles();
             this.setTotal();
             // check if the book has more than one page, otherwise hide prev/next options.
-            if (this.provider.getTotalCanvases() == 1) {
+            if (this.provider.getTotalCanvases() === 1) {
                 this.$centerOptions.hide();
             }
             // ui event handlers.
@@ -6663,10 +6671,9 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 case manifesto.ManifestType.monograph().toString():
                     return Mode.page;
                     break;
-                //case 'archive',
-                //     'boundmanuscript':
-                //    return Mode.image;
-                //    break;
+                case manifesto.ManifestType.manuscript().toString():
+                    return Mode.page;
+                    break;
                 default:
                     return Mode.image;
             }
@@ -7716,6 +7723,9 @@ var Manifesto;
         ServiceProfile.prototype.token = function () {
             return new ServiceProfile(ServiceProfile.TOKEN.toString());
         };
+        ServiceProfile.prototype.uiExtensions = function () {
+            return new ServiceProfile(ServiceProfile.UIEXTENSIONS.toString());
+        };
         ServiceProfile.AUTOCOMPLETE = new ServiceProfile("http://iiif.io/api/search/0/autocomplete");
         ServiceProfile.CLICKTHROUGH = new ServiceProfile("http://wellcomelibrary.org/ld/iiif-ext/0/accept-terms-click-through");
         ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/compliance.html#level1");
@@ -7736,6 +7746,7 @@ var Manifesto;
         ServiceProfile.OTHERMANIFESTATIONS = new ServiceProfile("http://iiif.io/api/otherManifestations.json");
         ServiceProfile.SEARCHWITHIN = new ServiceProfile("http://iiif.io/api/search/0/search");
         ServiceProfile.TOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
+        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.azurewebsites.net/ui-extensions-profile");
         return ServiceProfile;
     })(Manifesto.StringValue);
     Manifesto.ServiceProfile = ServiceProfile;
@@ -8168,7 +8179,11 @@ var Manifesto;
             }
         };
         Manifest.prototype.getManifestType = function () {
-            return new Manifesto.ManifestType(this.getProperty('exp:manifestType'));
+            var service = this.getService(Manifesto.ServiceProfile.UIEXTENSIONS);
+            if (service) {
+                return new Manifesto.ManifestType(service.getProperty('manifestType'));
+            }
+            return new Manifesto.ManifestType('');
         };
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
@@ -9018,6 +9033,8 @@ module.exports = {
         }
         return false;
     },
+    // todo: create hasServiceDescriptor
+    // based on @profile and @type (or lack of) can the resource describe associated services?
     loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
         return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
     },
