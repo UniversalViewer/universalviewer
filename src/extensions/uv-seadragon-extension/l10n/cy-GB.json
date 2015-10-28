@@ -1,11 +1,7 @@
 {
-  "localisation": {
-    "label": "Cymraeg"
-  },
+  "extends": "../../../l10n/cy-GB",
   "content": {
-    "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)",
-    "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
-    "degradedResourceLogin": "Mewngofnodi"
+    "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)"
   },
   "modules": {
     "clickThroughDialogue": {
@@ -13,41 +9,14 @@
         "viewTerms": "Darllenwch Telerau ac Amodau Llawn"
       }
     },
-    "dialogue": {
-      "content": {
-        "close": "Cau"
-      }
-    },
     "downloadDialogue": {
       "content": {
         "currentViewAsJpg": "Golwg presennol (jpg)",
-        "download": "Lawrlwytho",
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
-        "entireFileAsOriginal": "Y ffeil gyfan ({0})",
-        "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
         "pagingNote": "Dad-ddewiswch 'Arddangos Dwy Dudalen' i weld dewisiadau pellach.",
-        "preview": "Rhagolwg",
-        "title": "Lawrlwytho",
         "wholeImageHighRes": "Y ddelwedd gyfan o ansawdd uchel ({0})",
         "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)"
-      }
-    },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Maint ddewisol",
-        "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:",
-        "title": "Ymgorffori",
-        "width": "Lled"
-      }
-    },
-    "footerPanel": {
-      "content": {
-        "download": "Lawrlwytho",
-        "embed": "Ymgorffori",
-        "exitFullScreen": "Dianc o'r sgrin lawn",
-        "fullScreen": "Sgrin lawn"
       }
     },
     "genericDialogue": {
@@ -55,36 +24,8 @@
         "emptyValue": "rhowch rif",
         "invalidNumber": "Rhowch rif dilys",
         "noMatches": "Dim canlyniad sy'n cyfateb.",
-        "ok": "GWELD",
         "pageNotFound": "Nid yw'r eitem yn cynnwys tudalen gyda'r rhif a nodwyd. Ceisiwch cyfnewid y math i 'delwedd'.",
         "refresh": "Ailosod"
-      }
-    },
-    "helpDialogue": {
-      "content": {
-        "text": "testun i'w osod",
-        "title": "Cymorth"
-      }
-    },
-    "loginDialogue": {
-      "content": {
-        "login": "Mewngofnodi"
-      }
-    },
-    "moreInfoRightPanel": {
-      "content": {
-        "attribution": "priodoliad",
-        "collapse": "Cuddio Mwy o Wybodaeth",
-        "collapseFull": "Cuddio'r Galeri",
-        "description": "disgrifiad",
-        "expand": "Ehangu Fwy o Wybodaeth",
-        "expandFull": "Ehangu'r Galeri",
-        "holdingText": "Eich modiwl fan hyn!",
-        "less": "llai",
-        "license": "trwydded",
-        "more": "mwy",
-        "noData": "Nid oes data i'w arddangos",
-        "title": "Mwy o Wybodaeth"
       }
     },
     "pagingHeaderPanel": {
@@ -147,10 +88,6 @@
     },
     "settingsDialogue": {
       "content": {
-        "locale": "Iaith",
-        "pagingEnabled": "Arddangos dwy dudalen",
-        "preserveViewport": "Cadw'r lefel o glosio",
-        "title": "Dewisiadau",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
       }
     },

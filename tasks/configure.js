@@ -22,6 +22,23 @@ module.exports = function (grunt) {
         });
     });
 
+    function extendConfigurationFile(filename, json) {
+        var baseDir = path.dirname(filename);
+        while (json.extends) {
+            var extFile = path.join(baseDir, json.extends + '.json');
+            var extJSON = grunt.file.readJSON(extFile);
+            delete json.extends;
+            json = _.merge(extJSON, json);
+            // If we're extending multiple files in a chain, we always want
+            // the current "extends" path to be relative to the base path of
+            // the most recently loaded file....
+            if (json.extends) {
+                baseDir = path.dirname(extFile);
+            }
+        }
+        return json;
+    }
+
     function configureExtension(dir) {
 
         var locales = getLocales(dir);
@@ -51,22 +68,8 @@ module.exports = function (grunt) {
                 configFile = path.join(configDir, options.default + '.json');
             }
 
-            var configJSON = grunt.file.readJSON(configFile);
-            var localeJSON = grunt.file.readJSON(localeFile);
-
-            if (configJSON.extends){
-                var extFile = path.join(configDir, configJSON.extends + '.json');
-                var extJSON = grunt.file.readJSON(extFile);
-                configJSON = _.merge(extJSON, configJSON);
-                delete configJSON.extends;
-            }
-
-            //if (localeJSON.extends){
-            //    grunt.file.setBase(localeDir);
-            //    var extJSON = grunt.file.readJSON(localeJSON.extends);
-            //    grunt.file.setBase('./');
-            //    localeJSON = _.merge(localeJSON, extJSON);
-            //}
+            var configJSON = extendConfigurationFile(configFile, grunt.file.readJSON(configFile));
+            var localeJSON = extendConfigurationFile(localeFile, grunt.file.readJSON(localeFile));
 
             var merged = _.merge(configJSON, localeJSON, locales);
 
@@ -92,17 +95,9 @@ module.exports = function (grunt) {
 
         _.each(jsonFiles, function(file) {
 
-            var localeJSON = grunt.file.readJSON(file);
+            var localeJSON = extendConfigurationFile(file, grunt.file.readJSON(file));
 
             var localisation = localeJSON.localisation;
-
-            if (!localisation) {
-                // if it extends another l10n file, get the localisation settings from that.
-                if (localeJSON.extends){
-                    var extJSON = grunt.file.readJSON(localeJSON.extends);
-                    localisation = extJSON.localisation;
-                }
-            }
 
             var label = localisation.label;
             //var isDefault = !!settings.default;
