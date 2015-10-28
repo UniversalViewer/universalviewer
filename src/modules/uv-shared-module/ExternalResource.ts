@@ -44,6 +44,17 @@ class ExternalResource implements Manifesto.IExternalResource {
 
             // todo: use manifesto.hasServiceDescriptor
             if (!_.endsWith(that.dataUri, 'info.json')){
+                // If access control is unnecessary, short circuit the process.
+                // Note that isAccessControlled check for short-circuiting only
+                // works in the "binary resource" context, since in that case,
+                // we know about access control from the manifest. For image
+                // resources, we need to check info.json for details and can't
+                // short-circuit like this.
+                if (!that.isAccessControlled()) {
+                    that.status = HTTPStatusCode.OK;
+                    resolve(that);
+                    return;
+                }
                 type = 'HEAD';
             }
 
