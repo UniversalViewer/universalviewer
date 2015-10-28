@@ -211,7 +211,7 @@ module.exports = function (grunt) {
                         dest: '<%= config.dirs.themes %>'
                     },
                     {
-                        // all files that need to be copied from /lib to /src/lib post bower install
+                        // all js files that need to be copied from /lib to /src/lib post bower install
                         cwd: '<%= config.dirs.bower %>',
                         expand: true,
                         flatten: true,
@@ -229,7 +229,7 @@ module.exports = function (grunt) {
                         dest: '<%= config.dirs.lib %>'
                     },
                     {
-                        // all files that need to be copied from /lib to /src/typings post bower install
+                        // all d.ts files that need to be copied from /lib to /src/typings post bower install
                         cwd: '<%= config.dirs.bower %>',
                         expand: true,
                         flatten: true,
