@@ -10,7 +10,8 @@ module.exports = function (grunt) {
 
     function refresh() {
         packageJson = grunt.file.readJSON("package.json");
-        grunt.config.set('config.dirs.uv', 'uv-' + packageJson.version);
+        grunt.config.set('config.dirs.uvVersioned', 'uv-' + packageJson.version);
+        grunt.config.set('config.dirs.uv', 'uv');
     }
 
     refresh();
@@ -180,7 +181,7 @@ module.exports = function (grunt) {
                         cwd: '<%= config.dirs.build %>',
                         expand: true,
                         src: ['**'],
-                        dest: '<%= config.dirs.dist %>/<%= config.dirs.uv %>/'
+                        dest: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>/'
                     }
                 ]
             }
@@ -251,7 +252,7 @@ module.exports = function (grunt) {
             zip: {
                 options: {
                     mode: 'zip',
-                    archive: '<%= config.dirs.dist %>/<%= config.dirs.uv %>.zip',
+                    archive: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>.zip',
                     level: 9
                 },
                 files: [
@@ -265,7 +266,7 @@ module.exports = function (grunt) {
             tar: {
                 options: {
                     mode: 'tar',
-                    archive: '<%= config.dirs.dist %>/<%= config.dirs.uv %>.tar'
+                    archive: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>.tar'
                 },
                 files: [
                     {
@@ -331,10 +332,10 @@ module.exports = function (grunt) {
             examples: {
                 // replace uv version
                 src: [
-                    '<%= config.dirs.examples %>/index.html',
-                    '<%= config.dirs.examples %>/noeditor.html',
-                    '<%= config.dirs.examples %>/examples.js',
-                    '<%= config.dirs.examples %>/uv.js',
+                    //'<%= config.dirs.examples %>/index.html',
+                    //'<%= config.dirs.examples %>/noeditor.html',
+                    //'<%= config.dirs.examples %>/examples.js',
+                    //'<%= config.dirs.examples %>/uv.js',
                     '<%= config.dirs.examples %>/web.config'
                 ],
                 overwrite: true,
