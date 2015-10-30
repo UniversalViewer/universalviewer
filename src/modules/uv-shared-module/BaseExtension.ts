@@ -7,6 +7,8 @@ import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import Information = require("./Information");
 import InformationAction = require("./InformationAction");
+import InformationArgs = require("./InformationArgs");
+import InformationType = require("./InformationType");
 import IProvider = require("./IProvider");
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import Params = require("../../Params");
@@ -760,29 +762,26 @@ class BaseExtension implements IExtension {
                 resolve(resource);
                 $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
             } else {
-                // access denied
-                reject(resource.error.statusText);
+                if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
+                    resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR){
+                    // if the browser doesn't support CORS
+                    if (!Modernizr.cors){
+                        var informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
+                        $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
+                        resolve(resource);
+                    } else {
+                        reject(resource.error.statusText);
+                    }
+                } else {
+                    reject(resource.error.statusText);
+                }
             }
         });
     }
 
     handleDegraded(resource: Manifesto.IExternalResource): void {
-        var actions: InformationAction[] = [];
-
-        var loginAction: InformationAction = new InformationAction();
-
-        loginAction.label = this.provider.config.content.degradedResourceLogin;
-
-        loginAction.action = () => {
-            $.publish(BaseCommands.HIDE_INFORMATION);
-            $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE, [[resource]]);
-        };
-
-        actions.push(loginAction);
-
-        var information: Information = new Information(this.provider.config.content.degradedResourceMessage, actions);
-
-        $.publish(BaseCommands.SHOW_INFORMATION, [information]);
+        var informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
+        $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
     }
 }
 

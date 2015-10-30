@@ -5,6 +5,7 @@
   "options": {
   },
   "content": {
+    "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
     "canvasIndexOutOfRange": "Canvas index out of range.",
     "degradedResourceMessage": "Please log in to view at full quality.",
     "degradedResourceLogin": "log in"

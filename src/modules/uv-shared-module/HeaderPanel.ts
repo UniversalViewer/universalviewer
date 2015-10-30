@@ -3,6 +3,8 @@ import BaseView = require("./BaseView");
 import BootstrapParams = require("../../BootstrapParams");
 import Information = require("../uv-shared-module/Information");
 import InformationAction = require("../uv-shared-module/InformationAction");
+import InformationArgs = require("../uv-shared-module/InformationArgs");
+import InformationFactory = require("../uv-shared-module/InformationFactory");
 import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
 
 class HeaderPanel extends BaseView {
@@ -31,8 +33,8 @@ class HeaderPanel extends BaseView {
             this.updatePagingToggle();
         });
 
-        $.subscribe(BaseCommands.SHOW_INFORMATION, (e, information: Information) => {
-            this.showInformation(information);
+        $.subscribe(BaseCommands.SHOW_INFORMATION, (e, args: InformationArgs) => {
+            this.showInformation(args);
         });
 
         $.subscribe(BaseCommands.HIDE_INFORMATION, () => {
@@ -142,15 +144,18 @@ class HeaderPanel extends BaseView {
         return this.options.pagingToggleEnabled && this.provider.isPagingAvailable();
     }
 
-    showInformation(information: Information): void {
-        this.information = information;
+    showInformation(args: InformationArgs): void {
+
+        var informationFactory: InformationFactory = new InformationFactory(this.provider);
+
+        this.information = informationFactory.Get(args);
         var $message = this.$informationBox.find('.message');
-        $message.html(information.message).find('a').attr('target', '_top');
+        $message.html(this.information.message).find('a').attr('target', '_top');
         var $actions = this.$informationBox.find('.actions');
         $actions.empty();
 
-        for (var i = 0; i < information.actions.length; i++) {
-            var action: InformationAction = information.actions[i];
+        for (var i = 0; i < this.information.actions.length; i++) {
+            var action: InformationAction = this.information.actions[i];
 
             var $action = $('<a href="#" class="btn btn-default">' + action.label + '</a>');
             $action.on('click', action.action);

@@ -1054,7 +1054,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             this.embedHeight = $win.height();
             this.$element.width(this.embedWidth);
             this.$element.height(this.embedHeight);
-            if (!this.provider.isReload && this.inIframe()) {
+            if (!this.provider.isReload && Utils.Documents.IsInIFrame()) {
                 // communication with parent frame (if it exists).
                 this.bootstrapper.socket = new easyXDM.Socket({
                     onMessage: function (message, origin) {
@@ -1531,15 +1531,6 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             p.sequenceIndex = 0;
             p.canvasIndex = 0;
             this.provider.reload(p);
-        };
-        BaseExtension.prototype.inIframe = function () {
-            // see http://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
-            try {
-                return window.self !== window.top;
-            }
-            catch (e) {
-                return true;
-            }
         };
         BaseExtension.prototype.isFullScreen = function () {
             return this.bootstrapper.isFullScreen;
@@ -22733,6 +22724,23 @@ var Utils;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
+    var Documents = (function () {
+        function Documents() {
+        }
+        Documents.IsInIFrame = function () {
+            try {
+                return window.self !== window.top;
+            }
+            catch (e) {
+                return true;
+            }
+        };
+        return Documents;
+    })();
+    Utils.Documents = Documents;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
     var Events = (function () {
         function Events() {
         }
@@ -23043,6 +23051,128 @@ var Utils;
 
 define("utils", function(){});
 
+/*!
+ * jQuery-ajaxTransport-XDomainRequest - v1.0.4 - 2015-03-05
+ * https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest
+ * Copyright (c) 2015 Jason Moon (@JSONMOON)
+ * Licensed MIT (/blob/master/LICENSE.txt)
+ */
+(function(factory) {
+    //if (typeof define === 'function' && define.amd) {
+    //    // AMD. Register as anonymous module.
+    //    define(['jquery'], factory);
+    //} else if (typeof exports === 'object') {
+    //    // CommonJS
+    //    module.exports = factory(require('jquery'));
+    //} else {
+        // Browser globals.
+        factory(jQuery);
+    //}
+}(function($) {
+
+// Only continue if we're on IE8/IE9 with jQuery 1.5+ (contains the ajaxTransport function)
+    if ($.support.cors || !$.ajaxTransport || !window.XDomainRequest) {
+        return $;
+    }
+
+    var httpRegEx = /^(https?:)?\/\//i;
+    var getOrPostRegEx = /^get|post$/i;
+    var sameSchemeRegEx = new RegExp('^(\/\/|' + location.protocol + ')', 'i');
+
+// ajaxTransport exists in jQuery 1.5+
+    $.ajaxTransport('* text html xml json', function(options, userOptions, jqXHR) {
+
+        // Only continue if the request is: asynchronous, uses GET or POST method, has HTTP or HTTPS protocol, and has the same scheme as the calling page
+        if (!options.crossDomain || !options.async || !getOrPostRegEx.test(options.type) || !httpRegEx.test(options.url) || !sameSchemeRegEx.test(options.url)) {
+            return;
+        }
+
+        var xdr = null;
+
+        return {
+            send: function(headers, complete) {
+                var postData = '';
+                var userType = (userOptions.dataType || '').toLowerCase();
+
+                xdr = new XDomainRequest();
+                if (/^\d+$/.test(userOptions.timeout)) {
+                    xdr.timeout = userOptions.timeout;
+                }
+
+                xdr.ontimeout = function() {
+                    complete(500, 'timeout');
+                };
+
+                xdr.onload = function() {
+                    var allResponseHeaders = 'Content-Length: ' + xdr.responseText.length + '\r\nContent-Type: ' + xdr.contentType;
+                    var status = {
+                        code: 200,
+                        message: 'success'
+                    };
+                    var responses = {
+                        text: xdr.responseText
+                    };
+                    try {
+                        if (userType === 'html' || /text\/html/i.test(xdr.contentType)) {
+                            responses.html = xdr.responseText;
+                        } else if (userType === 'json' || (userType !== 'text' && /\/json/i.test(xdr.contentType))) {
+                            try {
+                                responses.json = $.parseJSON(xdr.responseText);
+                            } catch(e) {
+                                status.code = 500;
+                                status.message = 'parseerror';
+                                //throw 'Invalid JSON: ' + xdr.responseText;
+                            }
+                        } else if (userType === 'xml' || (userType !== 'text' && /\/xml/i.test(xdr.contentType))) {
+                            var doc = new ActiveXObject('Microsoft.XMLDOM');
+                            doc.async = false;
+                            try {
+                                doc.loadXML(xdr.responseText);
+                            } catch(e) {
+                                doc = undefined;
+                            }
+                            if (!doc || !doc.documentElement || doc.getElementsByTagName('parsererror').length) {
+                                status.code = 500;
+                                status.message = 'parseerror';
+                                throw 'Invalid XML: ' + xdr.responseText;
+                            }
+                            responses.xml = doc;
+                        }
+                    } catch(parseMessage) {
+                        throw parseMessage;
+                    } finally {
+                        complete(status.code, status.message, responses, allResponseHeaders);
+                    }
+                };
+
+                // set an empty handler for 'onprogress' so requests don't get aborted
+                xdr.onprogress = function(){};
+                xdr.onerror = function() {
+                    complete(401, 'error', {
+                        text: xdr.responseText
+                    });
+                };
+
+                if (userOptions.data) {
+                    postData = ($.type(userOptions.data) === 'string') ? userOptions.data : $.param(userOptions.data);
+                }
+                xdr.open(options.type, options.url);
+                xdr.send(postData);
+            },
+            abort: function() {
+                if (xdr) {
+                    xdr.abort();
+                }
+            }
+        };
+    });
+
+    return $;
+
+}));
+
+define("xdomainrequest", ["jquery"], function(){});
+
 /*yepnope1.5.x|WTFPL*/
 (function(a,b,c){function d(a){return"[object Function]"==o.call(a)}function e(a){return"string"==typeof a}function f(){}function g(a){return!a||"loaded"==a||"complete"==a||"uninitialized"==a}function h(){var a=p.shift();q=1,a?a.t?m(function(){("c"==a.t?B.injectCss:B.injectJs)(a.s,0,a.a,a.x,a.e,1)},0):(a(),h()):q=0}function i(a,c,d,e,f,i,j){function k(b){if(!o&&g(l.readyState)&&(u.r=o=1,!q&&h(),l.onload=l.onreadystatechange=null,b)){"img"!=a&&m(function(){t.removeChild(l)},50);for(var d in y[c])y[c].hasOwnProperty(d)&&y[c][d].onload()}}var j=j||B.errorTimeout,l=b.createElement(a),o=0,r=0,u={t:d,s:c,e:f,a:i,x:j};1===y[c]&&(r=1,y[c]=[]),"object"==a?l.data=c:(l.src=c,l.type=a),l.width=l.height="0",l.onerror=l.onload=l.onreadystatechange=function(){k.call(this,r)},p.splice(e,0,u),"img"!=a&&(r||2===y[c]?(t.insertBefore(l,s?null:n),m(k,j)):y[c].push(l))}function j(a,b,c,d,f){return q=0,b=b||"j",e(a)?i("c"==b?v:u,a,b,this.i++,c,d,f):(p.splice(this.i++,0,a),1==p.length&&h()),this}function k(){var a=B;return a.loader={load:j,i:0},a}var l=b.documentElement,m=a.setTimeout,n=b.getElementsByTagName("script")[0],o={}.toString,p=[],q=0,r="MozAppearance"in l.style,s=r&&!!b.createRange().compareNode,t=s?l:n.parentNode,l=a.opera&&"[object Opera]"==o.call(a.opera),l=!!b.attachEvent&&!l,u=r?"object":l?"script":"img",v=l?"script":u,w=Array.isArray||function(a){return"[object Array]"==o.call(a)},x=[],y={},z={timeout:function(a,b){return b.length&&(a.timeout=b[0]),a}},A,B;B=function(a){function b(a){var a=a.split("!"),b=x.length,c=a.pop(),d=a.length,c={url:c,origUrl:c,prefixes:a},e,f,g;for(f=0;f<d;f++)g=a[f].split("="),(e=z[g.shift()])&&(c=e(c,g));for(f=0;f<b;f++)c=x[f](c);return c}function g(a,e,f,g,h){var i=b(a),j=i.autoCallback;i.url.split(".").pop().split("?").shift(),i.bypass||(e&&(e=d(e)?e:e[a]||e[g]||e[a.split("/").pop().split("?")[0]]),i.instead?i.instead(a,e,f,g,h):(y[i.url]?i.noexec=!0:y[i.url]=1,f.load(i.url,i.forceCSS||!i.forceJS&&"css"==i.url.split(".").pop().split("?").shift()?"c":c,i.noexec,i.attrs,i.timeout),(d(e)||d(j))&&f.load(function(){k(),e&&e(i.origUrl,h,g),j&&j(i.origUrl,h,g),y[i.url]=2})))}function h(a,b){function c(a,c){if(a){if(e(a))c||(j=function(){var a=[].slice.call(arguments);k.apply(this,a),l()}),g(a,j,b,0,h);else if(Object(a)===a)for(n in m=function(){var b=0,c;for(c in a)a.hasOwnProperty(c)&&b++;return b}(),a)a.hasOwnProperty(n)&&(!c&&!--m&&(d(j)?j=function(){var a=[].slice.call(arguments);k.apply(this,a),l()}:j[n]=function(a){return function(){var b=[].slice.call(arguments);a&&a.apply(this,b),l()}}(k[n])),g(a[n],j,b,n,h))}else!c&&l()}var h=!!a.test,i=a.load||a.both,j=a.callback||f,k=j,l=a.complete||f,m,n;c(h?a.yep:a.nope,!!i),i&&c(i)}var i,j,l=this.yepnope.loader;if(e(a))g(a,0,l,0);else if(w(a))for(i=0;i<a.length;i++)j=a[i],e(j)?g(j,0,l,0):w(j)?B(j):Object(j)===j&&h(j,l);else Object(a)===a&&h(a,l)},B.addPrefix=function(a,b){z[a]=b},B.addFilter=function(a){x.push(a)},B.errorTimeout=1e4,null==b.readyState&&b.addEventListener&&(b.readyState="loading",b.addEventListener("DOMContentLoaded",A=function(){b.removeEventListener("DOMContentLoaded",A,0),b.readyState="complete"},0)),a.yepnope=k(),a.yepnope.executeStack=h,a.yepnope.injectJs=function(a,c,d,e,i,j){var k=b.createElement("script"),l,o,e=e||B.errorTimeout;k.src=a;for(o in d)k.setAttribute(o,d[o]);c=j?h:c||f,k.onreadystatechange=k.onload=function(){!l&&g(k.readyState)&&(l=1,c(),k.onload=k.onreadystatechange=null)},m(function(){l||(l=1,c(1))},e),i?k.onload():n.parentNode.insertBefore(k,n)},a.yepnope.injectCss=function(a,c,d,e,g,i){var e=b.createElement("link"),j,c=i?h:c||f;e.href=a,e.rel="stylesheet",e.type="text/css";for(j in d)e.setAttribute(j,d[j]);g||(n.parentNode.insertBefore(e,n),m(c,0))}})(this,document);
 define("yepnope", function(){});
@@ -23123,6 +23253,7 @@ require.config({
         'pubsub': 'lib/pubsub',
         'sanitize': 'lib/sanitize',
         'utils': 'lib/utils',
+        'xdomainrequest': 'lib/jquery.xdomainrequest',
         'yepnope': 'lib/yepnope.1.5.4-min',
         'yepnopecss': 'lib/yepnope.css'
     },
@@ -23141,6 +23272,9 @@ require.config({
         },
         underscore: {
             exports: '_'
+        },
+        xdomainrequest: {
+            deps: ['jquery']
         },
         yepnopecss: {
             deps: ['yepnope']
@@ -23171,6 +23305,7 @@ require([
     'pubsub',
     'sanitize',
     'utils',
+    'xdomainrequest',
     'yepnope',
     'yepnopecss',
 ], function (bootstrapper, mediaelementExtension, mediaelementProvider, pdfExtension, pdfProvider, seadragonExtension, seadragonProvider, manifesto) {

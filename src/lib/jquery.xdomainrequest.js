@@ -5,16 +5,16 @@
  * Licensed MIT (/blob/master/LICENSE.txt)
  */
 (function(factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as anonymous module.
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // CommonJS
-        module.exports = factory(require('jquery'));
-    } else {
+    //if (typeof define === 'function' && define.amd) {
+    //    // AMD. Register as anonymous module.
+    //    define(['jquery'], factory);
+    //} else if (typeof exports === 'object') {
+    //    // CommonJS
+    //    module.exports = factory(require('jquery'));
+    //} else {
         // Browser globals.
         factory(jQuery);
-    }
+    //}
 }(function($) {
 
 // Only continue if we're on IE8/IE9 with jQuery 1.5+ (contains the ajaxTransport function)

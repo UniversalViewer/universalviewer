@@ -16,6 +16,7 @@ require.config({
         'pubsub': 'lib/pubsub',
         'sanitize': 'lib/sanitize',
         'utils': 'lib/utils',
+        'xdomainrequest': 'lib/jquery.xdomainrequest',
         'yepnope': 'lib/yepnope.1.5.4-min',
         'yepnopecss': 'lib/yepnope.css'
     },
@@ -34,6 +35,9 @@ require.config({
         },
         underscore: {
             exports: '_'
+        },
+        xdomainrequest: {
+           deps: ['jquery']
         },
         yepnopecss: {
             deps: ['yepnope']
@@ -65,6 +69,7 @@ require([
     'pubsub',
     'sanitize',
     'utils',
+    'xdomainrequest',
     'yepnope',
     'yepnopecss',
     ], (
