@@ -2575,6 +2575,23 @@ var Utils;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
+    var Documents = (function () {
+        function Documents() {
+        }
+        Documents.IsInIFrame = function () {
+            try {
+                return window.self !== window.top;
+            }
+            catch (e) {
+                return true;
+            }
+        };
+        return Documents;
+    })();
+    Utils.Documents = Documents;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
     var Events = (function () {
         function Events() {
         }

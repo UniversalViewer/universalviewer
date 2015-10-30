@@ -50,7 +50,7 @@ class BaseExtension implements IExtension {
         this.$element.width(this.embedWidth);
         this.$element.height(this.embedHeight);
 
-        if (!this.provider.isReload && this.inIframe()){
+        if (!this.provider.isReload && Utils.Documents.IsInIFrame()){
             // communication with parent frame (if it exists).
             this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message, origin) => {
@@ -642,15 +642,6 @@ class BaseExtension implements IExtension {
         p.canvasIndex = 0;
 
         this.provider.reload(p);
-    }
-
-    inIframe(): boolean {
-        // see http://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
-        try {
-            return window.self !== window.top;
-        } catch (e) {
-            return true;
-        }
     }
 
     isFullScreen(): boolean {
