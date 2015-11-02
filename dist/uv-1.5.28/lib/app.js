@@ -683,24 +683,24 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
     return ExternalResource;
 });
 
-define('modules/uv-shared-module/Information',["require", "exports"], function (require, exports) {
-    var Information = (function () {
-        function Information(message, actions) {
-            this.message = message;
-            this.actions = actions;
+define('modules/uv-shared-module/InformationArgs',["require", "exports"], function (require, exports) {
+    var InformationArgs = (function () {
+        function InformationArgs(informationType, param) {
+            this.informationType = informationType;
+            this.param = param;
         }
-        return Information;
+        return InformationArgs;
     })();
-    return Information;
+    return InformationArgs;
 });
 
-define('modules/uv-shared-module/InformationAction',["require", "exports"], function (require, exports) {
-    var InformationAction = (function () {
-        function InformationAction() {
-        }
-        return InformationAction;
-    })();
-    return InformationAction;
+define('modules/uv-shared-module/InformationType',["require", "exports"], function (require, exports) {
+    var InformationType;
+    (function (InformationType) {
+        InformationType[InformationType["AUTH_CORS_ERROR"] = 0] = "AUTH_CORS_ERROR";
+        InformationType[InformationType["DEGRADED_RESOURCE"] = 1] = "DEGRADED_RESOURCE";
+    })(InformationType || (InformationType = {}));
+    return InformationType;
 });
 
 var __extends = this.__extends || function (d, b) {
@@ -1037,7 +1037,7 @@ define('modules/uv-shared-module/Storage',["require", "exports", "./StorageItem"
     return Storage;
 });
 
-define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCommands", "../../BootstrapParams", "../../modules/uv-dialogues-module/ClickThroughDialogue", "./ExternalResource", "./Information", "./InformationAction", "../../modules/uv-dialogues-module/LoginDialogue", "../../Params", "./Shell", "../../modules/uv-shared-module/Storage"], function (require, exports, BaseCommands, BootstrapParams, ClickThroughDialogue, ExternalResource, Information, InformationAction, LoginDialogue, Params, Shell, Storage) {
+define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCommands", "../../BootstrapParams", "../../modules/uv-dialogues-module/ClickThroughDialogue", "./ExternalResource", "./InformationArgs", "./InformationType", "../../modules/uv-dialogues-module/LoginDialogue", "../../Params", "./Shell", "../../modules/uv-shared-module/Storage"], function (require, exports, BaseCommands, BootstrapParams, ClickThroughDialogue, ExternalResource, InformationArgs, InformationType, LoginDialogue, Params, Shell, Storage) {
     var BaseExtension = (function () {
         function BaseExtension(bootstrapper) {
             this.shifted = false;
@@ -1137,6 +1137,17 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                     if (event) {
                         e.preventDefault();
                         $.publish(event);
+                    }
+                });
+                $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function (e) {
+                    if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
+                        e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
+                        e.type === 'MSFullscreenChange' && parent.document.msFullscreenElement === null) {
+                        if (_this.isOverlayActive()) {
+                            $.publish(BaseCommands.ESCAPE);
+                        }
+                        $.publish(BaseCommands.ESCAPE);
+                        $.publish(BaseCommands.RESIZE);
                     }
                 });
             }
@@ -1630,22 +1641,27 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                     $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
                 }
                 else {
-                    // access denied
-                    reject(resource.error.statusText);
+                    if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
+                        resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR) {
+                        // if the browser doesn't support CORS
+                        if (!Modernizr.cors) {
+                            var informationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
+                            $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
+                            resolve(resource);
+                        }
+                        else {
+                            reject(resource.error.statusText);
+                        }
+                    }
+                    else {
+                        reject(resource.error.statusText);
+                    }
                 }
             });
         };
         BaseExtension.prototype.handleDegraded = function (resource) {
-            var actions = [];
-            var loginAction = new InformationAction();
-            loginAction.label = this.provider.config.content.degradedResourceLogin;
-            loginAction.action = function () {
-                $.publish(BaseCommands.HIDE_INFORMATION);
-                $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE, [[resource]]);
-            };
-            actions.push(loginAction);
-            var information = new Information(this.provider.config.content.degradedResourceMessage, actions);
-            $.publish(BaseCommands.SHOW_INFORMATION, [information]);
+            var informationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
+            $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
         };
         return BaseExtension;
     })();
@@ -2099,13 +2115,61 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseComm
     return FooterPanel;
 });
 
+define('modules/uv-shared-module/Information',["require", "exports"], function (require, exports) {
+    var Information = (function () {
+        function Information(message, actions) {
+            this.message = message;
+            this.actions = actions;
+        }
+        return Information;
+    })();
+    return Information;
+});
+
+define('modules/uv-shared-module/InformationAction',["require", "exports"], function (require, exports) {
+    var InformationAction = (function () {
+        function InformationAction() {
+        }
+        return InformationAction;
+    })();
+    return InformationAction;
+});
+
+define('modules/uv-shared-module/InformationFactory',["require", "exports", "./BaseCommands", "./Information", "./InformationAction", "./InformationType"], function (require, exports, BaseCommands, Information, InformationAction, InformationType) {
+    var InformationFactory = (function () {
+        function InformationFactory(provider) {
+            this.provider = provider;
+        }
+        InformationFactory.prototype.Get = function (args) {
+            switch (args.informationType) {
+                case (InformationType.AUTH_CORS_ERROR):
+                    return new Information(this.provider.config.content.authCORSError, []);
+                    break;
+                case (InformationType.DEGRADED_RESOURCE):
+                    var actions = [];
+                    var loginAction = new InformationAction();
+                    loginAction.label = this.provider.config.content.degradedResourceLogin;
+                    loginAction.action = function () {
+                        $.publish(BaseCommands.HIDE_INFORMATION);
+                        $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE, [[args.param]]);
+                    };
+                    actions.push(loginAction);
+                    return new Information(this.provider.config.content.degradedResourceMessage, actions);
+                    break;
+            }
+        };
+        return InformationFactory;
+    })();
+    return InformationFactory;
+});
+
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseCommands", "./BaseView"], function (require, exports, BaseCommands, BaseView) {
+define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseCommands", "./BaseView", "../uv-shared-module/InformationFactory"], function (require, exports, BaseCommands, BaseView, InformationFactory) {
     var HeaderPanel = (function (_super) {
         __extends(HeaderPanel, _super);
         function HeaderPanel($element) {
@@ -2118,8 +2182,8 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
             $.subscribe(BaseCommands.SETTINGS_CHANGED, function () {
                 _this.updatePagingToggle();
             });
-            $.subscribe(BaseCommands.SHOW_INFORMATION, function (e, information) {
-                _this.showInformation(information);
+            $.subscribe(BaseCommands.SHOW_INFORMATION, function (e, args) {
+                _this.showInformation(args);
             });
             $.subscribe(BaseCommands.HIDE_INFORMATION, function () {
                 _this.hideInformation();
@@ -2204,14 +2268,15 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
         HeaderPanel.prototype.pagingToggleIsVisible = function () {
             return this.options.pagingToggleEnabled && this.provider.isPagingAvailable();
         };
-        HeaderPanel.prototype.showInformation = function (information) {
-            this.information = information;
+        HeaderPanel.prototype.showInformation = function (args) {
+            var informationFactory = new InformationFactory(this.provider);
+            this.information = informationFactory.Get(args);
             var $message = this.$informationBox.find('.message');
-            $message.html(information.message).find('a').attr('target', '_top');
+            $message.html(this.information.message).find('a').attr('target', '_top');
             var $actions = this.$informationBox.find('.actions');
             $actions.empty();
-            for (var i = 0; i < information.actions.length; i++) {
-                var action = information.actions[i];
+            for (var i = 0; i < this.information.actions.length; i++) {
+                var action = this.information.actions[i];
                 var $action = $('<a href="#" class="btn btn-default">' + action.label + '</a>');
                 $action.on('click', action.action);
                 $actions.append($action);
@@ -2859,7 +2924,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.27';
+    exports.Version = '1.5.28';
 });
 
 var __extends = this.__extends || function (d, b) {
