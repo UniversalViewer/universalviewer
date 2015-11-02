@@ -365,6 +365,7 @@ class BaseExtension implements IExtension {
             if (!this.isOverlayActive()){
                 $('#top').focus();
                 this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
+
                 this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
                     {
                         isFullScreen: this.bootstrapper.isFullScreen,
