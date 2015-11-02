@@ -206,7 +206,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, manifestUri, collectionIndex, manifestIndex, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, manifestUri, collectionIndex, manifestIndex, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, width, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -240,10 +240,6 @@ docReady(function() {
             locale = $app.attr('data-locale') || "en-GB"; // todo: this should be defaulted in bootstrapper
 
             isFullScreen = false;
-            height = $app.height();
-            //var position = $app.position();
-            //top = position.top;
-            //left = position.left;
             var offset = $app.offset();
             top = offset.top;
             left = offset.left;
@@ -300,44 +296,99 @@ docReady(function() {
                     return;
                 }
 
+                var elem = $app[0];
+
                 if (isFullScreen) {
 
-                    // store current scroll position.
-                    lastScroll = $(document).scrollTop();
+                    var requestFullScreen = getRequestFullScreen(elem);
 
-                    $("html").css("overflow", "hidden");
-                    window.scrollTo(0, 0);
+                    // if requestFullScreen is available
+                    if (requestFullScreen){
+                        width = $app.width();
+                        height = $app.height();
 
-                    var offset = getOffset();
+                        requestFullScreen.call(elem);
+                        $app.css("width", "");
+                        $app.css("height", "");
+                    } else {
+                        // use css
 
-                    // todo: prevent parent from having overflow:hidden?
+                        // store current scroll position.
+                        lastScroll = $(document).scrollTop();
 
-                    $appFrame.css({
-                        'position': 'absolute',
-                        'z-index': 9999,
-                        'top': offset.top,
-                        'left': offset.left
-                    });
+                        $("html").css("overflow", "hidden");
+                        window.scrollTo(0, 0);
+
+                        var offset = getOffset();
+
+                        // todo: prevent parent from having overflow:hidden?
+
+                        $appFrame.css({
+                            'position': 'absolute',
+                            'z-index': 9999,
+                            'top': offset.top,
+                            'left': offset.left
+                        });
+                    }
+
                 } else {
-                    $("html").css("overflow", "auto");
 
-                    $appFrame.css({
-                        'position': 'static',
-                        'z-index': 'auto',
-                        'height': height,
-                        'width': '100%',
-                        'top': top,
-                        'left': left
-                    });
+                    var exitFullScreen = getExitFullScreen();
 
-                    // return to last scroll position.
-                    window.scrollTo(0, lastScroll);
+                    // if exitFullScreen is available
+                    if (exitFullScreen) {
+                        exitFullScreen.call(document);
+                        $app.width(width);
+                        $app.height(height);
+                    } else {
+                        // use css
 
-                    // if lightbox, hide iframe.
-                    if (isLightbox) hideLightbox();
+                        $("html").css("overflow", "auto");
+
+                        $appFrame.css({
+                            'position': 'static',
+                            'z-index': 'auto',
+                            'height': $app.height(),
+                            'width': '100%',
+                            'top': top,
+                            'left': left
+                        });
+
+                        // return to last scroll position.
+                        window.scrollTo(0, lastScroll);
+
+                        // if lightbox, hide iframe.
+                        if (isLightbox) hideLightbox();
+                    }
                 }
 
                 resize();
+            }
+
+            function getRequestFullScreen(elem) {
+                if (elem.requestFullscreen) {
+                    return elem.requestFullscreen;
+                } else if (elem.msRequestFullscreen) {
+                    return elem.msRequestFullscreen;
+                } else if (elem.mozRequestFullScreen) {
+                    return elem.mozRequestFullScreen;
+                } else if (elem.webkitRequestFullscreen) {
+                    return elem.webkitRequestFullscreen;
+                }
+                return false;
+            }
+
+            function getExitFullScreen() {
+                if (document.exitFullscreen) {
+                    return document.exitFullscreen;
+                } else if (document.msExitFullscreen) {
+                    return document.msExitFullscreen;
+                } else if (document.mozCancelFullScreen) {
+                    return document.mozCancelFullScreen;
+                } else if (document.webkitExitFullscreen) {
+                    return document.webkitExitFullscreen;
+                }
+                return false;
             }
 
             function getOffset() {
@@ -366,20 +417,20 @@ docReady(function() {
 
                 // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
                 if (typeof window.innerWidth != 'undefined') {
-                    viewPortWidth = window.innerWidth,
-                        viewPortHeight = window.innerHeight
+                    viewPortWidth = window.innerWidth;
+                    viewPortHeight = window.innerHeight;
                 }
                 // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
                 else if (typeof document.documentElement != 'undefined'
                     && typeof document.documentElement.clientWidth !=
                     'undefined' && document.documentElement.clientWidth != 0) {
-                    viewPortWidth = document.documentElement.clientWidth,
-                        viewPortHeight = document.documentElement.clientHeight
+                    viewPortWidth = document.documentElement.clientWidth;
+                    viewPortHeight = document.documentElement.clientHeight;
                 }
                 // older versions of IE
                 else {
-                    viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
-                        viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
+                    viewPortWidth = document.getElementsByTagName('body')[0].clientWidth;
+                    viewPortHeight = document.getElementsByTagName('body')[0].clientHeight;
                 }
                 return {width: viewPortWidth, height: viewPortHeight};
             }

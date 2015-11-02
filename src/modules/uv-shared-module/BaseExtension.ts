@@ -137,9 +137,45 @@ class BaseExtension implements IExtension {
 
                 if (event){
                     e.preventDefault();
-                    $.publish(event)
+                    $.publish(event);
                 }
             });
+
+            $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', (e) => {
+                if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
+                    e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
+                    e.type === 'MSFullscreenChange' && parent.document.msFullscreenElement === null) {
+                    if (this.isOverlayActive()){
+                        $.publish(BaseCommands.ESCAPE);
+                    }
+                    $.publish(BaseCommands.ESCAPE);
+                    $.publish(BaseCommands.RESIZE);
+                }
+            });
+
+            //if (parent.document.addEventListener){
+            //    // firefox reserves the escape key when in full screen mode
+            //    parent.document.addEventListener("mozfullscreenchange", () => {
+            //        if (!parent.document.mozFullScreen){
+            //            if (this.isOverlayActive()){
+            //                $.publish(BaseCommands.ESCAPE);
+            //            }
+            //            $.publish(BaseCommands.ESCAPE);
+            //            $.publish(BaseCommands.RESIZE);
+            //        }
+            //    }, false);
+            //
+            //    // IE reserves the escape key when in full screen mode
+            //    parent.document.addEventListener("MSFullscreenChange", () => {
+            //        if (parent.document.msFullscreenElement === null){
+            //            if (this.isOverlayActive()){
+            //                $.publish(BaseCommands.ESCAPE);
+            //            }
+            //            $.publish(BaseCommands.ESCAPE);
+            //            $.publish(BaseCommands.RESIZE);
+            //        }
+            //    }, false);
+            //}
         }
 
         this.$element.append('<a href="/" id="top"></a>');

@@ -50,5 +50,10 @@ interface Window{
     openSeadragonViewer: any; // for testing convenience
 }
 
+interface Document{
+    mozFullScreen: boolean;
+    msFullscreenElement: any;
+}
+
 // google
 declare function trackEvent(category: string, action: string, label: string, value?: any): void;
