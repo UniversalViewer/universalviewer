@@ -199,8 +199,8 @@ class GalleryView extends BaseView {
     }
 
     sizeThumb($thumb: JQuery) : void {
-        var width = $thumb.data('width');
-        var height = $thumb.data('height');
+        var width: number = Number($thumb.data('width'));
+        var height: number = Number($thumb.data('height'));
 
         var $wrap = $thumb.find('.wrap');
         var $label = $thumb.find('.label');
@@ -299,7 +299,7 @@ class GalleryView extends BaseView {
     }
 
     getSelectedThumbIndex(): number {
-        return this.$selectedThumb.data('index');
+        return Number(this.$selectedThumb.data('index'));
     }
 
     getAllThumbs(): JQuery {

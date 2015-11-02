@@ -89,7 +89,7 @@ class HeaderPanel extends BaseView {
         });
 
         this.$localeToggleButton.on('click', () => {
-            this.provider.changeLocale(this.$localeToggleButton.data('locale'));
+            this.provider.changeLocale(String(this.$localeToggleButton.data('locale')));
         });
 
         this.$settingsButton.onPressed(() => {

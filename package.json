@@ -17,7 +17,7 @@
     "grunt-protractor-runner": "^1.1.4",
     "grunt-sync": "^0.2.3",
     "grunt-text-replace": "~0.3.7",
-    "grunt-typescript": "^0.6.2",
+    "grunt-typescript": "^0.8.0",
     "hooker": "^0.2.3",
     "json-schema-generator": "git://github.com/krg7880/json-schema-generator.git",
     "less": "^2.4.0",
