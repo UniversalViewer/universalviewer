@@ -8854,6 +8854,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
     function onCanvasKeyPress( event ) {
         if ( !event.preventDefaultAction && !event.ctrl && !event.alt && !event.meta ) {
             switch( event.keyCode ){
+                case 43://=|+
                 case 61://=|+
                     this.viewport.zoomBy(1.1);
                     this.viewport.applyConstraints();
