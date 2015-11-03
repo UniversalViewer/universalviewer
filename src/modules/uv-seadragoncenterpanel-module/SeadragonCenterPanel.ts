@@ -605,5 +605,12 @@ class SeadragonCenterPanel extends CenterPanel {
             this.$rights.css('top', this.$content.height() - this.$rights.outerHeight() - this.$rights.verticalMargins());
         }
     }
+
+    setFocus(): void {
+        var $canvas = $(this.viewer.canvas);
+
+        if (!$canvas.is(":focus"))
+            $canvas.focus();
+    }
 }
 export = SeadragonCenterPanel;

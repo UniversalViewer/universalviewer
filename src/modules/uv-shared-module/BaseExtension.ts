@@ -141,6 +141,22 @@ class BaseExtension implements IExtension {
                 }
             });
 
+            if (!this.useArrowKeysToNavigate()) {
+                $(document).keydown((e) => {
+                    var event: string = null;
+
+                    if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
+                    if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
+                    if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
+                    if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
+
+                    if (event) {
+                        e.preventDefault();
+                        $.publish(event);
+                    }
+                });
+            }
+
             $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', (e) => {
                 if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
                     e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
@@ -694,6 +710,10 @@ class BaseExtension implements IExtension {
 
     isRightPanelEnabled(): boolean{
         return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
+    }
+
+    useArrowKeysToNavigate(): boolean {
+        return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
     }
 
     // auth
