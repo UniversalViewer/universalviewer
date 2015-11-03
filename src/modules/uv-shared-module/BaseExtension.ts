@@ -143,6 +143,10 @@ class BaseExtension implements IExtension {
 
             if (!this.useArrowKeysToNavigate()) {
                 $(document).keydown((e) => {
+                    //Prevent home, end, page up and page down from scrolling the window.
+                    if (e.keyCode === 33 || e.keyCode === 34 || e.keyCode === 35 || e.keyCode === 36)
+                        e.preventDefault();
+
                     var event: string = null;
 
                     if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
