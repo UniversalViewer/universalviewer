@@ -1133,17 +1133,19 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                         $.publish(event);
                     }
                 });
-                $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function (e) {
-                    if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
-                        e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
-                        e.type === 'MSFullscreenChange' && parent.document.msFullscreenElement === null) {
-                        if (_this.isOverlayActive()) {
+                if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
+                    $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function (e) {
+                        if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
+                            e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
+                            e.type === 'MSFullscreenChange' && parent.document.msFullscreenElement === null) {
+                            if (_this.isOverlayActive()) {
+                                $.publish(BaseCommands.ESCAPE);
+                            }
                             $.publish(BaseCommands.ESCAPE);
+                            $.publish(BaseCommands.RESIZE);
                         }
-                        $.publish(BaseCommands.ESCAPE);
-                        $.publish(BaseCommands.RESIZE);
-                    }
-                });
+                    });
+                }
             }
             this.$element.append('<a href="/" id="top"></a>');
             $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, function () {
@@ -2906,7 +2908,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.28';
+    exports.Version = '1.5.29';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
