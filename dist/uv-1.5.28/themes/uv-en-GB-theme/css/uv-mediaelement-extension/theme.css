@@ -1,5 +1,5 @@
 #app .overlay {
-  color: #000000;
+  color: #000;
 }
 #app .overlay.embed {
   width: 470px;
@@ -216,7 +216,7 @@
   border-bottom: 1px solid #373737;
 }
 #app .leftPanel .tabs .tab {
-  color: #ffffff;
+  color: #fff;
   background-color: #1f1f1f;
   height: 24px;
   display: inline-block;
@@ -251,7 +251,7 @@
 #app .leftPanel .tabsContent .options .treeView span {
   display: block;
   float: left;
-  color: #ffffff;
+  color: #fff;
   padding: 5px 4px 0 10px;
   font-size: 11px;
 }
@@ -271,7 +271,7 @@
 }
 #app .leftPanel .views .treeView {
   overflow: auto;
-  color: #ffffff;
+  color: #fff;
   font-weight: normal;
 }
 #app .leftPanel .views .treeView .toggle {
@@ -497,7 +497,7 @@
 }
 #app .rightPanel .main {
   overflow: auto;
-  color: #ffffff;
+  color: #fff;
 }
 #app .rightPanel .main.loading {
   background-image: url('data:image/gif;base64,R0lGODlhEAAQAPIAAAAAAP///zw8PLy8vP///5ycnHx8fGxsbCH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==');
@@ -521,7 +521,7 @@
   text-transform: uppercase;
 }
 #app .rightPanel .main .items .item .text {
-  color: #ffffff;
+  color: #fff;
   margin: 5px 10px 0 0;
   overflow: hidden;
   word-wrap: break-word;
@@ -1397,7 +1397,7 @@
 }
 /* END: UV */
 #app .mejs-container.mejs-uv {
-  background-color: #000000;
+  background-color: #000;
 }
 #app .centerPanel .content {
   position: relative;
@@ -1436,8 +1436,8 @@ body {
   font-family: sans-serif;
   font-size: 12px;
   line-height: 1.42857143;
-  color: #ffffff;
-  background-color: #000000;
+  color: #fff;
+  background-color: #000;
 }
 input,
 button,
@@ -1481,7 +1481,7 @@ img {
 .img-thumbnail {
   padding: 5px 5px 5px 5px;
   line-height: 1.42857143;
-  background-color: #000000;
+  background-color: #000;
   border: 1px solid #555555;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -1535,7 +1535,7 @@ hr {
 }
 .btn:hover,
 .btn:focus {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 .btn:active,
@@ -1556,7 +1556,7 @@ fieldset[disabled] .btn {
   box-shadow: none;
 }
 .btn-default {
-  color: #ffffff;
+  color: #fff;
   background-color: #555555;
   border-color: #555555;
 }
@@ -1565,7 +1565,7 @@ fieldset[disabled] .btn {
 .btn-default:active,
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
-  color: #ffffff;
+  color: #fff;
   background-color: #414141;
   border-color: #373737;
 }
@@ -1593,7 +1593,7 @@ fieldset[disabled] .btn-default.active {
   border-color: #555555;
 }
 .btn-primary {
-  color: #ffffff;
+  color: #fff;
   background-color: #cc0000;
   border-color: #cc0000;
 }
@@ -1602,7 +1602,7 @@ fieldset[disabled] .btn-default.active {
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-  color: #ffffff;
+  color: #fff;
   background-color: #a30000;
   border-color: #8f0000;
 }
@@ -1630,7 +1630,7 @@ fieldset[disabled] .btn-primary.active {
   border-color: #cc0000;
 }
 .btn-secondary {
-  color: #ffffff;
+  color: #fff;
   background-color: #869f33;
   border-color: #869f33;
 }
@@ -1639,7 +1639,7 @@ fieldset[disabled] .btn-primary.active {
 .btn-secondary:active,
 .btn-secondary.active,
 .open .dropdown-toggle.btn-secondary {
-  color: #ffffff;
+  color: #fff;
   background-color: #6c8029;
   border-color: #5f7124;
 }
@@ -1667,16 +1667,16 @@ fieldset[disabled] .btn-secondary.active {
   border-color: #869f33;
 }
 .btn-warning {
-  color: #ffffff;
-  background-color: #ffb81d;
-  border-color: #ffb81d;
+  color: #fff;
+  background-color: #FFB81D;
+  border-color: #FFB81D;
 }
 .btn-warning:hover,
 .btn-warning:focus,
 .btn-warning:active,
 .btn-warning.active,
 .open .dropdown-toggle.btn-warning {
-  color: #ffffff;
+  color: #fff;
   background-color: #f3a700;
   border-color: #df9900;
 }
@@ -1700,11 +1700,11 @@ fieldset[disabled] .btn-warning:active,
 .btn-warning.disabled.active,
 .btn-warning[disabled].active,
 fieldset[disabled] .btn-warning.active {
-  background-color: #ffb81d;
-  border-color: #ffb81d;
+  background-color: #FFB81D;
+  border-color: #FFB81D;
 }
 .btn-danger {
-  color: #ffffff;
+  color: #fff;
   background-color: #d9534f;
   border-color: #d9534f;
 }
@@ -1713,7 +1713,7 @@ fieldset[disabled] .btn-warning.active {
 .btn-danger:active,
 .btn-danger.active,
 .open .dropdown-toggle.btn-danger {
-  color: #ffffff;
+  color: #fff;
   background-color: #d2322d;
   border-color: #c12e2a;
 }
@@ -1741,7 +1741,7 @@ fieldset[disabled] .btn-danger.active {
   border-color: #d9534f;
 }
 .btn-success {
-  color: #ffffff;
+  color: #fff;
   background-color: #5cb85c;
   border-color: #5cb85c;
 }
@@ -1750,7 +1750,7 @@ fieldset[disabled] .btn-danger.active {
 .btn-success:active,
 .btn-success.active,
 .open .dropdown-toggle.btn-success {
-  color: #ffffff;
+  color: #fff;
   background-color: #47a447;
   border-color: #419641;
 }
@@ -1778,7 +1778,7 @@ fieldset[disabled] .btn-success.active {
   border-color: #5cb85c;
 }
 .btn-info {
-  color: #ffffff;
+  color: #fff;
   background-color: #5bc0de;
   border-color: #5bc0de;
 }
@@ -1787,7 +1787,7 @@ fieldset[disabled] .btn-success.active {
 .btn-info:active,
 .btn-info.active,
 .open .dropdown-toggle.btn-info {
-  color: #ffffff;
+  color: #fff;
   background-color: #39b3d7;
   border-color: #2aabd2;
 }
@@ -1961,7 +1961,7 @@ input[type=range]:focus::-ms-fill-upper {
   background: #eeeeee;
 }
 .btn-default .caret {
-  border-top-color: #ffffff;
+  border-top-color: #fff;
 }
 .btn-primary .caret,
 .btn-success .caret,
@@ -1971,7 +1971,7 @@ input[type=range]:focus::-ms-fill-upper {
   border-top-color: #fff;
 }
 .dropup .btn-default .caret {
-  border-bottom-color: #ffffff;
+  border-bottom-color: #fff;
 }
 .dropup .btn-primary .caret,
 .dropup .btn-success .caret,
@@ -2173,7 +2173,7 @@ input[type=range]:focus::-ms-fill-upper {
   display: none;
 }
 #app .headerPanel {
-  color: #000000;
+  color: #000;
 }
 #app .headerPanel a.imageBtn {
   height: 30px;
@@ -2201,7 +2201,7 @@ input[type=range]:focus::-ms-fill-upper {
   margin-right: 8px;
 }
 #app .headerPanel .informationBox {
-  background: #ffb81d;
+  background: #FFB81D;
   color: #333333;
   width: 100%;
   position: absolute;
@@ -2230,7 +2230,7 @@ input[type=range]:focus::-ms-fill-upper {
   margin: 12px;
 }
 #app .leftPanel a {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .leftPanel .top {
@@ -2269,7 +2269,7 @@ input[type=range]:focus::-ms-fill-upper {
   float: right;
 }
 #app .leftPanel .closed .title {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   white-space: nowrap;
   display: block;
@@ -2284,7 +2284,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .leftPanel .closed .title:visited,
 #app .leftPanel .closed .title:hover,
 #app .leftPanel .closed .title:active {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .leftPanel .closed .expandButton {
@@ -2339,7 +2339,7 @@ input[type=range]:focus::-ms-fill-upper {
   width: 25px;
 }
 #app .rightPanel .closed .title {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   white-space: nowrap;
   display: block;
@@ -2354,7 +2354,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .rightPanel .closed .title:visited,
 #app .rightPanel .closed .title:hover,
 #app .rightPanel .closed .title:active {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .rightPanel .closed .expandButton {
@@ -2381,7 +2381,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .centerPanel .title {
   height: 38px;
   font-size: 20px;
-  color: #ffffff;
+  color: #fff;
   padding: 0 20px 0 20px;
 }
 #app .centerPanel .title span {
@@ -2404,7 +2404,7 @@ input[type=range]:focus::-ms-fill-upper {
   height: 20px;
   line-height: 20px;
   cursor: pointer;
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   background-position: left center;
   padding-left: 35px;
@@ -2415,7 +2415,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.embed:visited,
 #app .footerPanel .options a.embed:hover,
 #app .footerPanel .options a.embed:active {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .footerPanel .options a.download {
@@ -2424,7 +2424,7 @@ input[type=range]:focus::-ms-fill-upper {
   height: 20px;
   line-height: 20px;
   cursor: pointer;
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   background-position: left center;
   padding-left: 30px;
@@ -2435,7 +2435,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.download:visited,
 #app .footerPanel .options a.download:hover,
 #app .footerPanel .options a.download:active {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .footerPanel .options a.fullScreen {
@@ -2444,7 +2444,7 @@ input[type=range]:focus::-ms-fill-upper {
   height: 20px;
   line-height: 20px;
   cursor: pointer;
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   background-position: right center;
   padding-right: 30px;
@@ -2457,7 +2457,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.fullScreen:visited,
 #app .footerPanel .options a.fullScreen:hover,
 #app .footerPanel .options a.fullScreen:active {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .footerPanel .options a.exitFullscreen {
@@ -2466,7 +2466,7 @@ input[type=range]:focus::-ms-fill-upper {
   height: 20px;
   line-height: 20px;
   cursor: pointer;
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   background-position: right center;
   padding-right: 30px;
@@ -2479,7 +2479,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.exitFullscreen:visited,
 #app .footerPanel .options a.exitFullscreen:hover,
 #app .footerPanel .options a.exitFullscreen:active {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .footerPanel .options.minimiseButtons a.embed {
@@ -2546,7 +2546,7 @@ input[type=range]:focus::-ms-fill-upper {
   height: 24px;
   line-height: 24px;
   cursor: pointer;
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   background-position: right center;
   padding-right: 34px;
@@ -2558,11 +2558,11 @@ input[type=range]:focus::-ms-fill-upper {
 #app .overlay .top .close:visited,
 #app .overlay .top .close:hover,
 #app .overlay .top .close:active {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 #app .overlay .middle {
-  background: #ffffff;
+  background: #fff;
   width: 100%;
 }
 #app .overlay .middle .content {
@@ -2580,7 +2580,7 @@ input[type=range]:focus::-ms-fill-upper {
   margin: 0 0 0 10px;
 }
 #app .overlay .middle .content h1 {
-  color: #000000;
+  color: #000;
   font-size: 18px;
   font-weight: bold;
   margin: 0 0 0 0;
@@ -2588,7 +2588,7 @@ input[type=range]:focus::-ms-fill-upper {
   border-bottom: 1px solid #999999;
 }
 #app .overlay .middle .content h2 {
-  color: #000000;
+  color: #000;
   font-size: 14px;
   font-weight: bold;
   margin: 0;
@@ -2651,7 +2651,7 @@ input[type=range]:focus::-ms-fill-upper {
   overflow: auto;
 }
 #app {
-  background-color: #000000;
+  background-color: #000;
   position: relative;
 }
 #app .btn-default,

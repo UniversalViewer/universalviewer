@@ -369,11 +369,10 @@ define('modules/uv-shared-module/Panel',["require", "exports", "./BaseCommands"]
     return Panel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/BaseView',["require", "exports", "./Panel"], function (require, exports, Panel) {
     var BaseView = (function (_super) {
@@ -414,11 +413,10 @@ define('modules/uv-shared-module/BaseView',["require", "exports", "./Panel"], fu
     return BaseView;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/Dialogue',["require", "exports", "./BaseView", "./BaseCommands"], function (require, exports, BaseView, Commands) {
     var Dialogue = (function (_super) {
@@ -517,11 +515,10 @@ define('modules/uv-shared-module/Dialogue',["require", "exports", "./BaseView", 
     return Dialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-dialogues-module/ClickThroughDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue"], function (require, exports, BaseCommands, Dialogue) {
     var ClickThroughDialogue = (function (_super) {
@@ -703,11 +700,10 @@ define('modules/uv-shared-module/InformationType',["require", "exports"], functi
     return InformationType;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-dialogues-module/LoginDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue"], function (require, exports, BaseCommands, Dialogue) {
     var LoginDialogue = (function (_super) {
@@ -759,11 +755,10 @@ define('modules/uv-dialogues-module/LoginDialogue',["require", "exports", "../uv
     return LoginDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/GenericDialogue',["require", "exports", "./BaseCommands", "./Dialogue"], function (require, exports, BaseCommands, Dialogue) {
     var GenericDialogue = (function (_super) {
@@ -823,11 +818,10 @@ define('modules/uv-shared-module/GenericDialogue',["require", "exports", "./Base
     return GenericDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/Shell',["require", "exports", "./BaseCommands", "./BaseView", "./GenericDialogue"], function (require, exports, BaseCommands, BaseView, GenericDialogue) {
     var Shell = (function (_super) {
@@ -1681,11 +1675,10 @@ define('extensions/uv-mediaelement-extension/Commands',["require", "exports"], f
     return Commands;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue"], function (require, exports, BaseCommands, Dialogue) {
     var DownloadDialogue = (function (_super) {
@@ -1783,11 +1776,10 @@ define('modules/uv-shared-module/DownloadOption',["require", "exports"], functio
     return DownloadOption;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-mediaelement-extension/DownloadDialogue',["require", "exports", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseDownloadDialogue, DownloadOption) {
     var DownloadDialogue = (function (_super) {
@@ -1830,11 +1822,10 @@ define('extensions/uv-mediaelement-extension/DownloadDialogue',["require", "expo
     return DownloadDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue"], function (require, exports, BaseCommands, Dialogue) {
     var EmbedDialogue = (function (_super) {
@@ -2000,11 +1991,10 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
     return EmbedDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-mediaelement-extension/EmbedDialogue',["require", "exports", "../../modules/uv-dialogues-module/EmbedDialogue"], function (require, exports, BaseEmbedDialogue) {
     var EmbedDialogue = (function (_super) {
@@ -2028,11 +2018,10 @@ define('extensions/uv-mediaelement-extension/EmbedDialogue',["require", "exports
     return EmbedDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseCommands", "./BaseView"], function (require, exports, BaseCommands, BaseView) {
     var FooterPanel = (function (_super) {
@@ -2163,11 +2152,10 @@ define('modules/uv-shared-module/InformationFactory',["require", "exports", "./B
     return InformationFactory;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseCommands", "./BaseView", "../uv-shared-module/InformationFactory"], function (require, exports, BaseCommands, BaseView, InformationFactory) {
     var HeaderPanel = (function (_super) {
@@ -2223,7 +2211,7 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
                 _this.updateSettings(settings);
             });
             this.$localeToggleButton.on('click', function () {
-                _this.provider.changeLocale(_this.$localeToggleButton.data('locale'));
+                _this.provider.changeLocale(String(_this.$localeToggleButton.data('locale')));
             });
             this.$settingsButton.onPressed(function () {
                 $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
@@ -2331,11 +2319,10 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
     return HeaderPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-dialogues-module/HelpDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue"], function (require, exports, BaseCommands, Dialogue) {
     var HelpDialogue = (function (_super) {
@@ -2374,11 +2361,10 @@ define('modules/uv-dialogues-module/HelpDialogue',["require", "exports", "../uv-
     return HelpDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/CenterPanel',["require", "exports", "./Shell", "./BaseView"], function (require, exports, Shell, BaseView) {
     var CenterPanel = (function (_super) {
@@ -2417,11 +2403,10 @@ define('modules/uv-shared-module/CenterPanel',["require", "exports", "./Shell", 
     return CenterPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-mediaelement-extension/Commands", "../uv-shared-module/CenterPanel"], function (require, exports, BaseCommands, Commands, CenterPanel) {
     var MediaElementCenterPanel = (function (_super) {
@@ -2583,11 +2568,10 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
     return MediaElementCenterPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/BaseExpandPanel',["require", "exports", "./BaseView"], function (require, exports, BaseView) {
     var BaseExpandPanel = (function (_super) {
@@ -2769,11 +2753,10 @@ define('modules/uv-shared-module/BaseExpandPanel',["require", "exports", "./Base
     return BaseExpandPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/RightPanel',["require", "exports", "./BaseCommands", "./BaseExpandPanel"], function (require, exports, BaseCommands, BaseExpandPanel) {
     var RightPanel = (function (_super) {
@@ -2817,11 +2800,10 @@ define('modules/uv-shared-module/RightPanel',["require", "exports", "./BaseComma
     return RightPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "exports", "../uv-shared-module/RightPanel"], function (require, exports, RightPanel) {
     var MoreInfoRightPanel = (function (_super) {
@@ -2927,11 +2909,10 @@ define('_Version',["require", "exports"], function (require, exports) {
     exports.Version = '1.5.28';
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-dialogues-module/SettingsDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue", "../../_Version"], function (require, exports, Commands, Dialogue, Version) {
     var SettingsDialogue = (function (_super) {
@@ -3000,11 +2981,10 @@ define('modules/uv-dialogues-module/SettingsDialogue',["require", "exports", "..
     return SettingsDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-mediaelement-extension/SettingsDialogue',["require", "exports", "../../modules/uv-dialogues-module/SettingsDialogue"], function (require, exports, BaseSettingsDialogue) {
     var SettingsDialogue = (function (_super) {
@@ -3073,11 +3053,10 @@ define('extensions/uv-seadragon-extension/Mode',["require", "exports"], function
     return Mode;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseView, Commands, Mode) {
     var GalleryView = (function (_super) {
@@ -3211,8 +3190,8 @@ define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", 
             this.$thumbs.find('.thumb .wrap').equaliseHeight(false, true);
         };
         GalleryView.prototype.sizeThumb = function ($thumb) {
-            var width = $thumb.data('width');
-            var height = $thumb.data('height');
+            var width = Number($thumb.data('width'));
+            var height = Number($thumb.data('height'));
             var $wrap = $thumb.find('.wrap');
             var $label = $thumb.find('.label');
             $wrap.width(width * this.range);
@@ -3293,7 +3272,7 @@ define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", 
             this.updateThumbs();
         };
         GalleryView.prototype.getSelectedThumbIndex = function () {
-            return this.$selectedThumb.data('index');
+            return Number(this.$selectedThumb.data('index'));
         };
         GalleryView.prototype.getAllThumbs = function () {
             return this.$thumbs.find('.thumb');
@@ -3324,11 +3303,10 @@ define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", 
     return GalleryView;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-shared-module/LeftPanel',["require", "exports", "./BaseCommands", "./BaseExpandPanel"], function (require, exports, BaseCommands, BaseExpandPanel) {
     var LeftPanel = (function (_super) {
@@ -3377,11 +3355,10 @@ define('modules/uv-shared-module/LeftPanel',["require", "exports", "./BaseComman
     return LeftPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-treeviewleftpanel-module/ThumbsView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseView, Commands, Mode) {
     var ThumbsView = (function (_super) {
@@ -3638,11 +3615,10 @@ define('extensions/uv-seadragon-extension/TreeSortType',["require", "exports"], 
     return TreeSortType;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands"], function (require, exports, BaseView, Commands) {
     var TreeView = (function (_super) {
@@ -3800,11 +3776,10 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
     return TreeView;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "./GalleryView", "../uv-shared-module/LeftPanel", "./ThumbsView", "../../extensions/uv-seadragon-extension/TreeSortType", "./TreeView"], function (require, exports, BaseCommands, Commands, GalleryView, LeftPanel, ThumbsView, TreeSortType, TreeView) {
     var TreeViewLeftPanel = (function (_super) {
@@ -4090,11 +4065,10 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
     return TreeViewLeftPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-dialogues-module/HelpDialogue", "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Commands, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, HelpDialogue, MediaElementCenterPanel, MoreInfoRightPanel, SettingsDialogue, Shell, TreeViewLeftPanel) {
     var Extension = (function (_super) {
@@ -4557,11 +4531,10 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
     return BaseProvider;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-mediaelement-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider"], function (require, exports, BaseProvider) {
     var Provider = (function (_super) {
@@ -4584,11 +4557,10 @@ define('extensions/uv-mediaelement-extension/Provider',["require", "exports", ".
     return Provider;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-pdf-extension/DownloadDialogue',["require", "exports", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseDownloadDialogue, DownloadOption) {
     var DownloadDialogue = (function (_super) {
@@ -4631,11 +4603,10 @@ define('extensions/uv-pdf-extension/DownloadDialogue',["require", "exports", "..
     return DownloadDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-pdf-extension/EmbedDialogue',["require", "exports", "../../modules/uv-dialogues-module/EmbedDialogue"], function (require, exports, BaseEmbedDialogue) {
     var EmbedDialogue = (function (_super) {
@@ -4659,11 +4630,10 @@ define('extensions/uv-pdf-extension/EmbedDialogue',["require", "exports", "../..
     return EmbedDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/CenterPanel"], function (require, exports, BaseCommands, CenterPanel) {
     var PDFCenterPanel = (function (_super) {
@@ -4725,11 +4695,10 @@ define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", 
     return PDFCenterPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-pdf-extension/SettingsDialogue',["require", "exports", "../../modules/uv-dialogues-module/SettingsDialogue"], function (require, exports, BaseSettingsDialogue) {
     var SettingsDialogue = (function (_super) {
@@ -4746,11 +4715,10 @@ define('extensions/uv-pdf-extension/SettingsDialogue',["require", "exports", "..
     return SettingsDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-pdf-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel"], function (require, exports, BaseCommands, BaseExtension, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, MoreInfoRightPanel, PDFCenterPanel, SettingsDialogue, Shell, TreeViewLeftPanel) {
     var Extension = (function (_super) {
@@ -4823,11 +4791,10 @@ define('extensions/uv-pdf-extension/Extension',["require", "exports", "../../mod
     return Extension;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-pdf-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider"], function (require, exports, BaseProvider) {
     var Provider = (function (_super) {
@@ -4846,11 +4813,10 @@ define('extensions/uv-pdf-extension/Provider',["require", "exports", "../../modu
     return Provider;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseCommands, BaseDownloadDialogue, DownloadOption) {
     var DownloadDialogue = (function (_super) {
@@ -5035,11 +5001,10 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
     return DownloadDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-seadragon-extension/EmbedDialogue',["require", "exports", "../../modules/uv-dialogues-module/EmbedDialogue", "./Commands"], function (require, exports, BaseEmbedDialogue, Commands) {
     var EmbedDialogue = (function (_super) {
@@ -5072,11 +5037,10 @@ define('extensions/uv-seadragon-extension/EmbedDialogue',["require", "exports", 
     return EmbedDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-dialogues-module/ExternalContentDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue"], function (require, exports, BaseCommands, Dialogue) {
     var ExternalContentDialogue = (function (_super) {
@@ -5304,11 +5268,10 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
     return AutoComplete;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/FooterPanel", "../../extensions/uv-seadragon-extension/Commands", "./AutoComplete", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseFooterPanel, Commands, AutoComplete, Mode) {
     var FooterPanel = (function (_super) {
@@ -5691,11 +5654,10 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
     return FooterPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "../uv-shared-module/HeaderPanel", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, Commands, HeaderPanel, Mode) {
     var PagingHeaderPanel = (function (_super) {
@@ -5970,11 +5932,10 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
     return PagingHeaderPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "../uv-shared-module/CenterPanel", "../../Params"], function (require, exports, BaseCommands, Commands, CenterPanel, Params) {
     var SeadragonCenterPanel = (function (_super) {
@@ -6462,11 +6423,10 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
     return SeadragonCenterPanel;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports", "../../modules/uv-dialogues-module/SettingsDialogue"], function (require, exports, BaseSettingsDialogue) {
     var SettingsDialogue = (function (_super) {
@@ -6537,11 +6497,10 @@ define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports
     return SettingsDialogue;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-dialogues-module/ExternalContentDialogue", "../../modules/uv-searchfooterpanel-module/FooterPanel", "../../modules/uv-dialogues-module/HelpDialogue", "./Mode", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel", "../../Params", "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Commands, DownloadDialogue, EmbedDialogue, ExternalContentDialogue, FooterPanel, HelpDialogue, Mode, MoreInfoRightPanel, PagingHeaderPanel, Params, SeadragonCenterPanel, SettingsDialogue, Shell, TreeViewLeftPanel) {
     var Extension = (function (_super) {
@@ -6871,11 +6830,10 @@ define('extensions/uv-seadragon-extension/SearchResult',["require", "exports", "
     return SearchResult;
 });
 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider", "./SearchResult", "./TreeSortType"], function (require, exports, BaseProvider, SearchResult, TreeSortType) {
     var Provider = (function (_super) {
@@ -7514,8 +7472,7 @@ var Manifesto;
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Manifesto;
 (function (Manifesto) {
