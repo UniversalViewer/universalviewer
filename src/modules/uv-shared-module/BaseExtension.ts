@@ -141,6 +141,36 @@ class BaseExtension implements IExtension {
                 }
             });
 
+            
+            $(document).keydown((e) => {
+                //Prevent home, end, page up and page down from scrolling the window.
+                if (e.keyCode === 33 || e.keyCode === 34 || e.keyCode === 35 || e.keyCode === 36)
+                    e.preventDefault();
+
+                var event: string = null;
+
+                if (!this.useArrowKeysToNavigate()) {
+                    //Prevent arrow keys from their default action.
+                    if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40)
+                        e.preventDefault();
+
+                    if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
+                    if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
+                    if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
+                    if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
+                }
+
+                if (e.keyCode === 107 || e.keyCode === 171 || e.keyCode === 187)
+                    event = BaseCommands.PLUS;
+                if (e.keyCode === 109 || e.keyCode === 173 || e.keyCode === 189)
+                    event = BaseCommands.MINUS;
+
+                if (event) {
+                    $.publish(event);
+                }
+            });
+            
+
             $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', (e) => {
                 if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
                     e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
@@ -694,6 +724,10 @@ class BaseExtension implements IExtension {
 
     isRightPanelEnabled(): boolean{
         return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
+    }
+
+    useArrowKeysToNavigate(): boolean {
+        return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
     }
 
     // auth

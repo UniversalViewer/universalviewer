@@ -63,6 +63,8 @@ class Commands {
     static UPDATE_SETTINGS: string                  = Commands.namespace + 'onUpdateSettings';
     static VIEW_FULL_TERMS: string                  = Commands.namespace + 'onViewFullTerms';
     static WINDOW_UNLOAD: string                    = Commands.namespace + 'onWindowUnload';
+    static PLUS: string                             = Commands.namespace + 'onPlus';
+    static MINUS: string                            = Commands.namespace + 'onMinus';
 }
 
 export = Commands;
