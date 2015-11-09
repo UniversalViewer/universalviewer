@@ -1158,12 +1158,12 @@ var Manifesto;
             }
             return -1;
         };
-        Sequence.prototype.getLastCanvasLabel = function (digitsOnly) {
+        Sequence.prototype.getLastCanvasLabel = function (alphanumeric) {
             for (var i = this.getTotalCanvases() - 1; i >= 0; i--) {
                 var canvas = this.getCanvasByIndex(i);
                 var label = canvas.getLabel();
-                if (digitsOnly) {
-                    var regExp = /\d/;
+                if (alphanumeric) {
+                    var regExp = /^[a-zA-Z0-9]*$/;
                     if (regExp.test(label)) {
                         return label;
                     }

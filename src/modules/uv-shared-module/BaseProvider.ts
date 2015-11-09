@@ -134,8 +134,8 @@ class BaseProvider implements IProvider{
         return this.manifest.isMultiSequence();
     }
 
-    getLastCanvasLabel(): string {
-        return this.getCurrentSequence().getLastCanvasLabel();
+    getLastCanvasLabel(alphanumeric?: boolean): string {
+        return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
     }
 
     isCanvasIndexOutOfRange(index: number): boolean {

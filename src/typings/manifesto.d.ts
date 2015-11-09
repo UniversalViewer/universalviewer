@@ -290,7 +290,7 @@ declare module Manifesto {
         getCanvasByIndex(canvasIndex: number): any;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string, foliated?: boolean): number;
-        getLastCanvasLabel(digitsOnly?: boolean): string;
+        getLastCanvasLabel(alphanumeric?: boolean): string;
         getLastPageIndex(): number;
         getNextPageIndex(canvasIndex: number, pagingEnabled?: boolean): number;
         getPagedIndices(canvasIndex: number, pagingEnabled?: boolean): number[];

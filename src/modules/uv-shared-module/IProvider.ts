@@ -27,7 +27,7 @@ interface IProvider{
     getCurrentSequence(): Manifesto.ISequence;
     getFirstPageIndex(): number;
     getInfoUri(canvas: Manifesto.ICanvas): string;
-    getLastCanvasLabel(): string;
+    getLastCanvasLabel(alphanumeric?: boolean): string;
     getLastPageIndex(): number;
     getLicense(): string;
     getLogo(): string;

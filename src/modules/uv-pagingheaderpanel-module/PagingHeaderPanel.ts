@@ -220,7 +220,7 @@ class PagingHeaderPanel extends HeaderPanel {
         var of = this.content.of;
 
         if (this.isPageModeEnabled()) {
-            this.$total.html(String.format(of, this.provider.getLastCanvasLabel()));
+            this.$total.html(String.format(of, this.provider.getLastCanvasLabel(true)));
         } else {
             this.$total.html(String.format(of, this.provider.getTotalCanvases()));
         }
