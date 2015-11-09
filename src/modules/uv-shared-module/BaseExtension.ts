@@ -140,6 +140,26 @@ class BaseExtension implements IExtension {
                     $.publish(event);
                 }
             });
+            
+            if (!this.useArrowKeysToNavigate()) {
+                $(document).keydown((e) => {
+                    //Prevent home, end, page up and page down from scrolling the window.
+                    if (e.keyCode === 33 || e.keyCode === 34 || e.keyCode === 35 || e.keyCode === 36)
+                        e.preventDefault();
+
+                    var event: string = null;
+
+                    if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
+                    if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
+                    if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
+                    if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
+
+                    if (event) {
+                        e.preventDefault();
+                        $.publish(event);
+                    }
+                });
+            }
 
             if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
                 $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', (e) => {
@@ -149,6 +169,7 @@ class BaseExtension implements IExtension {
                         if (this.isOverlayActive()) {
                             $.publish(BaseCommands.ESCAPE);
                         }
+
                         $.publish(BaseCommands.ESCAPE);
                         $.publish(BaseCommands.RESIZE);
                     }
@@ -672,6 +693,10 @@ class BaseExtension implements IExtension {
 
     isRightPanelEnabled(): boolean{
         return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
+    }
+
+    useArrowKeysToNavigate(): boolean {
+        return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
     }
 
     // auth

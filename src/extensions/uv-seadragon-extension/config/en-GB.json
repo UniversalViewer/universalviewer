@@ -9,7 +9,8 @@
     "preserveViewport": false,
     "rightPanelEnabled": true,
     "searchWithinEnabled": true,
-    "theme": "uv-en-GB-theme"
+    "theme": "uv-en-GB-theme",
+    "useArrowKeysToNavigate": true
   },
   "modules":
   {
