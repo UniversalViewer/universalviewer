@@ -111,12 +111,28 @@ class Extension extends BaseExtension {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
+        $.subscribe(BaseCommands.UP_ARROW, (e) => {
+            if (!this.useArrowKeysToNavigate())
+                this.centerPanel.setFocus();
+        });
+
+        $.subscribe(BaseCommands.DOWN_ARROW, (e) => {
+            if (!this.useArrowKeysToNavigate())
+                this.centerPanel.setFocus();
+        });
+
         $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
-            this.viewPage(this.provider.getPrevPageIndex());
+            if (this.useArrowKeysToNavigate())
+                this.viewPage(this.provider.getPrevPageIndex());
+            else
+                this.centerPanel.setFocus();
         });
 
         $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
-            this.viewPage(this.provider.getNextPageIndex());
+            if (this.useArrowKeysToNavigate())
+                this.viewPage(this.provider.getNextPageIndex());
+            else
+                this.centerPanel.setFocus();
         });
 
         $.subscribe(Commands.MODE_CHANGED, (e, mode: string) => {
@@ -195,7 +211,8 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(Commands.SEADRAGON_OPEN, () => {
-
+            if (!this.useArrowKeysToNavigate())
+                this.centerPanel.setFocus();
         });
 
         $.subscribe(Commands.SEADRAGON_ROTATION, (e, rotation) => {
@@ -203,6 +220,8 @@ class Extension extends BaseExtension {
             this.currentRotation = rotation;
             this.setParam(Params.rotation, rotation);
         });
+
+        
     }
 
     createModules(): void{
