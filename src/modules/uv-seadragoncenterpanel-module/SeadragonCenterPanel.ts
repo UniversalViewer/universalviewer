@@ -50,7 +50,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$content.append(this.$viewer);
 
         $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
-            // todo: OPEN_MEDIA should be able to waitFor RESIZE
+            // todo: OPEN_EXTERNAL_RESOURCE should be able to waitFor RESIZE
             // https://facebook.github.io/flux/docs/dispatcher.html
             if (!this.isCreated) {
                 setTimeout(() => {
