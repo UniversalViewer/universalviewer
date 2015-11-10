@@ -1,0 +1,14 @@
+src
+examples
+tasks
+tests
+.bowerrc
+.gitattributes
+.gitmodules
+.travis.yml
+bower.json
+*.js
+favicon.ico
+*.ts
+
+
