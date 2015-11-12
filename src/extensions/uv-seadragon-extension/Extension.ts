@@ -377,7 +377,7 @@ class Extension extends BaseExtension {
         }
     }
 
-    searchWithin(terms) {
+    searchWithin(terms): void {
 
         var that = this;
 
@@ -395,14 +395,14 @@ class Extension extends BaseExtension {
         });
     }
 
-    clearSearch() {
+    clearSearch(): void {
         (<ISeadragonProvider>this.provider).searchResults = [];
 
         // reload current index as it may contain results.
         this.viewPage(this.provider.canvasIndex);
     }
 
-    prevSearchResult() {
+    prevSearchResult(): void {
 
         // get the first result with a canvasIndex less than the current index.
         for (var i = (<ISeadragonProvider>this.provider).searchResults.length - 1; i >= 0; i--) {
@@ -415,7 +415,7 @@ class Extension extends BaseExtension {
         }
     }
 
-    nextSearchResult() {
+    nextSearchResult(): void {
 
         // get the first result with an index greater than the current index.
         for (var i = 0; i < (<ISeadragonProvider>this.provider).searchResults.length; i++) {
@@ -426,6 +426,25 @@ class Extension extends BaseExtension {
                 break;
             }
         }
+    }
+
+    bookmark(): void {
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+
+        this.triggerSocket(BaseCommands.BOOKMARK,
+            {
+                "cropUri": (<ISeadragonProvider>this.provider).getCroppedImageUri(canvas, this.getViewer(), true),
+                "thumbUri": canvas.getThumbUri())
+            });
+
+        /*
+         CaptureType: "i"
+         ImageIndex: 0
+         PageNumber: ""
+         Path: "/player/b18035978#?asi=0&ai=0&z=-0.2461%2C0.29%2C1.6656%2C0.8427"
+         Thumbnail: "/crop/b18035978/0/b3ec346f-71bf-4bb1-a7f1-1cad996fa0d4/jp2?left=0&top=984&width=3395&height=2861&scaleWidth=452&scaleHeight=381&origWidth=3395&origHeight=4944&RGN=-0.24606471054921475,0.19902912621359223,1.665577885238572,0.5786812297734628"
+         Title: "The biocrats"
+         */
     }
 }
 

@@ -183,6 +183,10 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.AUTHORIZATION_OCCURRED);
         });
 
+        $.subscribe(BaseCommands.BOOKMARK, () => {
+            this.bookmark();
+        });
+
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, () => {
             this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
         });
@@ -697,6 +701,10 @@ class BaseExtension implements IExtension {
 
     useArrowKeysToNavigate(): boolean {
         return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
+    }
+
+    bookmark(): void {
+        // override for each extension
     }
 
     // auth

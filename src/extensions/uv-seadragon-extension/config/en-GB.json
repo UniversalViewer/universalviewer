@@ -1,6 +1,7 @@
 {
   "options":
   {
+    "bookmarkThumbWidth": 90,
     "leftPanelEnabled": true,
     "minWidthBreakPoint": 610,
     "overrideFullScreen": false,
