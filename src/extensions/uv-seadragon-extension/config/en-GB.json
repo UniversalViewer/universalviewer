@@ -70,21 +70,22 @@
     {
       "options":
       {
+        "animationTime": 0.025,
+        "autoHideControls": true,
+        "blendTime": 0,
+        "constrainDuringPan": false,
         "controlsFadeAfterInactive": 1500,
         "controlsFadeDelay": 250,
         "controlsFadeLength": 250,
         "defaultZoomLevel": 0,
+        "immediateRender": false,
+        "maxZoomLevel": 8,
         "navigatorPosition": "BOTTOM_RIGHT",
         "pageGap": 0.01,
-        "trimAttributionCount": 150,
+        "showHomeControl": false,
         "showNavigator": true,
-        "animationTime": 1.2,
-        "visibilityRatio": 0.5,
-        "constrainDuringPan": false,
-        "immediateRender": false,
-        "maxZoomLevel": null,
-        "blendTime": 0,
-        "autoHideControls": true
+        "trimAttributionCount": 150,
+        "visibilityRatio": 0.5
       }
     },
     "searchFooterPanel":

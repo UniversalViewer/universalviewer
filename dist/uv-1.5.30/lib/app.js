@@ -1133,6 +1133,26 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                         $.publish(event);
                     }
                 });
+                if (!this.useArrowKeysToNavigate()) {
+                    $(document).keydown(function (e) {
+                        //Prevent home, end, page up and page down from scrolling the window.
+                        if (e.keyCode === 33 || e.keyCode === 34 || e.keyCode === 35 || e.keyCode === 36)
+                            e.preventDefault();
+                        var event = null;
+                        if (e.keyCode === 37)
+                            event = BaseCommands.LEFT_ARROW;
+                        if (e.keyCode === 38)
+                            event = BaseCommands.UP_ARROW;
+                        if (e.keyCode === 39)
+                            event = BaseCommands.RIGHT_ARROW;
+                        if (e.keyCode === 40)
+                            event = BaseCommands.DOWN_ARROW;
+                        if (event) {
+                            e.preventDefault();
+                            $.publish(event);
+                        }
+                    });
+                }
                 if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
                     $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function (e) {
                         if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
@@ -1548,6 +1568,9 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
         };
         BaseExtension.prototype.isRightPanelEnabled = function () {
             return Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
+        };
+        BaseExtension.prototype.useArrowKeysToNavigate = function () {
+            return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
         };
         // auth
         BaseExtension.prototype.clickThrough = function (resource) {
@@ -2908,7 +2931,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.29';
+    exports.Version = '1.5.30';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4237,8 +4260,8 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
         BaseProvider.prototype.isMultiSequence = function () {
             return this.manifest.isMultiSequence();
         };
-        BaseProvider.prototype.getLastCanvasLabel = function () {
-            return this.getCurrentSequence().getLastCanvasLabel();
+        BaseProvider.prototype.getLastCanvasLabel = function (alphanumeric) {
+            return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
         };
         BaseProvider.prototype.isCanvasIndexOutOfRange = function (index) {
             return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
@@ -5600,7 +5623,7 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
                 if (label === "") {
                     label = this.content.defaultLabel;
                 }
-                var lastCanvasOrderLabel = this.provider.getLastCanvasLabel();
+                var lastCanvasOrderLabel = this.provider.getLastCanvasLabel(true);
                 this.$pagePositionLabel.html(String.format(displaying, this.content.page, label, lastCanvasOrderLabel));
             }
             else {
@@ -5821,7 +5844,7 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
         PagingHeaderPanel.prototype.setTotal = function () {
             var of = this.content.of;
             if (this.isPageModeEnabled()) {
-                this.$total.html(String.format(of, this.provider.getLastCanvasLabel()));
+                this.$total.html(String.format(of, this.provider.getLastCanvasLabel(true)));
             }
             else {
                 this.$total.html(String.format(of, this.provider.getTotalCanvases()));
@@ -5957,7 +5980,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.$viewer = $('<div id="viewer"></div>');
             this.$content.append(this.$viewer);
             $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
-                // todo: OPEN_MEDIA should be able to waitFor RESIZE
+                // todo: OPEN_EXTERNAL_RESOURCE should be able to waitFor RESIZE
                 // https://facebook.github.io/flux/docs/dispatcher.html
                 if (!_this.isCreated) {
                     setTimeout(function () {
@@ -6002,7 +6025,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                 showNavigationControl: true,
                 showNavigator: this.config.options.showNavigator == null ? true : this.config.options.showNavigator,
                 showRotationControl: true,
-                showHomeControl: true,
+                showHomeControl: this.config.options.showHomeControl || false,
                 showFullPageControl: false,
                 defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
                 controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
@@ -6420,6 +6443,11 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                 this.$rights.css('top', this.$content.height() - this.$rights.outerHeight() - this.$rights.verticalMargins());
             }
         };
+        SeadragonCenterPanel.prototype.setFocus = function () {
+            var $canvas = $(this.viewer.canvas);
+            if (!$canvas.is(":focus"))
+                $canvas.focus();
+        };
         return SeadragonCenterPanel;
     })(CenterPanel);
     return SeadragonCenterPanel;
@@ -6559,11 +6587,25 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             $.subscribe(BaseCommands.PAGE_DOWN, function (e) {
                 _this.viewPage(_this.provider.getNextPageIndex());
             });
+            $.subscribe(BaseCommands.UP_ARROW, function (e) {
+                if (!_this.useArrowKeysToNavigate())
+                    _this.centerPanel.setFocus();
+            });
+            $.subscribe(BaseCommands.DOWN_ARROW, function (e) {
+                if (!_this.useArrowKeysToNavigate())
+                    _this.centerPanel.setFocus();
+            });
             $.subscribe(BaseCommands.LEFT_ARROW, function (e) {
-                _this.viewPage(_this.provider.getPrevPageIndex());
+                if (_this.useArrowKeysToNavigate())
+                    _this.viewPage(_this.provider.getPrevPageIndex());
+                else
+                    _this.centerPanel.setFocus();
             });
             $.subscribe(BaseCommands.RIGHT_ARROW, function (e) {
-                _this.viewPage(_this.provider.getNextPageIndex());
+                if (_this.useArrowKeysToNavigate())
+                    _this.viewPage(_this.provider.getNextPageIndex());
+                else
+                    _this.centerPanel.setFocus();
             });
             $.subscribe(Commands.MODE_CHANGED, function (e, mode) {
                 _this.triggerSocket(Commands.MODE_CHANGED, mode);
@@ -6626,6 +6668,8 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 });
             });
             $.subscribe(Commands.SEADRAGON_OPEN, function () {
+                if (!_this.useArrowKeysToNavigate())
+                    _this.centerPanel.setFocus();
             });
             $.subscribe(Commands.SEADRAGON_ROTATION, function (e, rotation) {
                 _this.triggerSocket(Commands.SEADRAGON_ROTATION);
@@ -8397,12 +8441,12 @@ var Manifesto;
             }
             return -1;
         };
-        Sequence.prototype.getLastCanvasLabel = function (digitsOnly) {
+        Sequence.prototype.getLastCanvasLabel = function (alphanumeric) {
             for (var i = this.getTotalCanvases() - 1; i >= 0; i--) {
                 var canvas = this.getCanvasByIndex(i);
                 var label = canvas.getLabel();
-                if (digitsOnly) {
-                    var regExp = /\d/;
+                if (alphanumeric) {
+                    var regExp = /^[a-zA-Z0-9]*$/;
                     if (regExp.test(label)) {
                         return label;
                     }
