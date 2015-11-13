@@ -754,7 +754,7 @@ class BaseExtension implements IExtension {
 
     storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            storage.Manager.set(resource.tokenService.id, token, token.expiresIn);
+            Utils.Storage.set(resource.tokenService.id, token, token.expiresIn);
             resolve();
         });
     }
@@ -766,7 +766,7 @@ class BaseExtension implements IExtension {
             var foundToken: Manifesto.IAccessToken;
 
             // first try an exact match of the url
-            var item: storage.StorageItem = storage.Manager.get(resource.dataUri);
+            var item: storage.StorageItem = Utils.Storage.get(resource.dataUri);
 
             if (item){
                 foundToken = item.value;
@@ -774,7 +774,7 @@ class BaseExtension implements IExtension {
                 // find an access token for the domain
                 var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
 
-                var items: storage.StorageItem[] = storage.Manager.getItems();
+                var items: storage.StorageItem[] = Utils.Storage.getItems();
 
                 for(var i = 0; i < items.length; i++) {
                     item = items[i];

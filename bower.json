@@ -24,10 +24,9 @@
     "lodash-compat": "~3.10.0",
     "manifesto": "universalviewer/manifesto#dev",
     "r.js": "~2.1.18",
-    "utils": "edsilv/utils#~0.0.27",
+    "utils": "edsilv/utils#~0.0.28",
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "universalviewer/uv-en-GB-theme",
-    "exjs": "~0.3.0",
-    "storage": "edsilv/storage"
+    "exjs": "~0.3.0"
   }
 }
