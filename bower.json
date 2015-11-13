@@ -27,6 +27,7 @@
     "utils": "edsilv/utils#~0.0.27",
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "universalviewer/uv-en-GB-theme",
-    "exjs": "~0.3.0"
+    "exjs": "~0.3.0",
+    "storage": "edsilv/storage"
   }
 }

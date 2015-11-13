@@ -13,8 +13,6 @@ import IProvider = require("./IProvider");
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import Params = require("../../Params");
 import Shell = require("./Shell");
-import Storage = require("../../modules/uv-shared-module/Storage");
-import StorageItem = require("../../modules/uv-shared-module/StorageItem");
 
 class BaseExtension implements IExtension {
 
@@ -756,7 +754,7 @@ class BaseExtension implements IExtension {
 
     storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            Storage.set(resource.tokenService.id, token, token.expiresIn);
+            storage.Manager.set(resource.tokenService.id, token, token.expiresIn);
             resolve();
         });
     }
@@ -768,7 +766,7 @@ class BaseExtension implements IExtension {
             var foundToken: Manifesto.IAccessToken;
 
             // first try an exact match of the url
-            var item: StorageItem = Storage.get(resource.dataUri);
+            var item: storage.StorageItem = storage.Manager.get(resource.dataUri);
 
             if (item){
                 foundToken = item.value;
@@ -776,7 +774,7 @@ class BaseExtension implements IExtension {
                 // find an access token for the domain
                 var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
 
-                var items: StorageItem[] = Storage.getItems();
+                var items: storage.StorageItem[] = storage.Manager.getItems();
 
                 for(var i = 0; i < items.length; i++) {
                     item = items[i];

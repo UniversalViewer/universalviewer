@@ -225,6 +225,7 @@ module.exports = function (grunt) {
                             'jquery-plugins/dist/jquery-plugins.js',
                             'lodash-compat/lodash.min.js',
                             'manifesto/dist/client/manifesto.js',
+                            'storage/dist/storage.js',
                             'Units/Length.min.js',
                             'utils/dist/utils.js'
                         ],
@@ -241,6 +242,7 @@ module.exports = function (grunt) {
                             'http-status-codes/dist/http-status-codes.d.ts',
                             'jquery-plugins/typings/jquery-plugins.d.ts',
                             'manifesto/dist/manifesto.d.ts',
+                            'storage/dist/storage.d.ts',
                             'utils/dist/utils.d.ts'
                         ],
                         dest: '<%= config.dirs.typings %>'

@@ -3,7 +3,6 @@ import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("./ExternalResource");
 import IProvider = require("./IProvider");
 import Params = require("../../Params");
-import Storage = require("./Storage");
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provisioning systems.
