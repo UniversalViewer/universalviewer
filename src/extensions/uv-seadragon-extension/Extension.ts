@@ -111,6 +111,14 @@ class Extension extends BaseExtension {
             this.viewPage(this.provider.getNextPageIndex());
         });
 
+        $.subscribe(BaseCommands.PLUS, (e) => {
+            this.centerPanel.setFocus();
+        });
+
+        $.subscribe(BaseCommands.MINUS, (e) => {
+            this.centerPanel.setFocus();
+        });
+
         $.subscribe(BaseCommands.UP_ARROW, (e) => {
             if (!this.useArrowKeysToNavigate())
                 this.centerPanel.setFocus();
