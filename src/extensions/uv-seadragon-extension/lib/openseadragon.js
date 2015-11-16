@@ -1,6 +1,6 @@
-//! OpenSeadragon 2.0.0
-//! Built on 2015-11-04
-//! Git commit: v2.0.0-142-9fa3136-dirty
+//! OpenSeadragon 2.1.0
+//! Built on 2015-11-12
+//! Git commit: v2.1.0-3-b2c17b5
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -89,7 +89,7 @@
 
 
 /**
- * @version  OpenSeadragon 2.0.0
+ * @version  OpenSeadragon 2.1.0
  *
  * @file
  * <h2><strong>OpenSeadragon - Javascript Deep Zooming</strong></h2>
@@ -260,6 +260,11 @@
   *
   * @property {Boolean} [preserveImageSizeOnResize=false]
   *     Set to true to have the image size preserved when the viewer is resized. This requires autoResize=true (default).
+  *
+  * @property {Number} [minScrollDeltaTime=50]
+  *     Number of milliseconds between canvas-scroll events. This value helps normalize the rate of canvas-scroll
+  *     events between different devices, causing the faster devices to slow down enough to make the zoom control
+  *     more manageable.
   *
   * @property {Number} [pixelsPerWheelLine=40]
   *     For pixel-resolution scrolling devices, the number of pixels equal to one scroll line.
@@ -714,9 +719,9 @@ if (typeof define === 'function' && define.amd) {
      * @since 1.0.0
      */
     $.version = {
-        versionStr: '2.0.0',
+        versionStr: '2.1.0',
         major: parseInt('2', 10),
-        minor: parseInt('0', 10),
+        minor: parseInt('1', 10),
         revision: parseInt('0', 10)
     };
 
@@ -844,6 +849,23 @@ if (typeof define === 'function' && define.amd) {
         return !!( $.isFunction( canvasElement.getContext ) &&
                     canvasElement.getContext( '2d' ) );
     }());
+
+    /**
+     * Test whether the submitted canvas is tainted or not.
+     * @argument {Canvas} canvas The canvas to test.
+     * @returns {Boolean} True if the canvas is tainted.
+     */
+    $.isCanvasTainted = function(canvas) {
+        var isTainted = false;
+        try {
+            // We test if the canvas is tainted by retrieving data from it.
+            // An exception will be raised if the canvas is tainted.
+            var data = canvas.getContext('2d').getImageData(0, 0, 1, 1);
+        } catch (e) {
+            isTainted = true;
+        }
+        return isTainted;
+    };
 
     /**
      * A ratio comparing the device screen's pixel density to the canvas's backing store pixel density. Defaults to 1 if canvas isn't supported by the browser.
@@ -1009,6 +1031,7 @@ if (typeof define === 'function' && define.amd) {
             pixelsPerWheelLine:     40,
             autoResize:             true,
             preserveImageSizeOnResize: false, // requires autoResize=true
+            minScrollDeltaTime:     50,
 
             //DEFAULT CONTROL SETTINGS
             showSequenceControl:     true,  //SEQUENCE
@@ -6886,6 +6909,8 @@ $.Viewer = function( options ) {
     this._loadQueue = [];
     this.currentOverlays = [];
 
+    this._lastScrollTime = $.now(); // variable used to help normalize the scroll event speed of different devices
+
     //Inherit some behaviors and properties
     $.EventSource.call( this );
 
@@ -7287,7 +7312,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
             var originalSuccess = options.success;
             options.success = function(event) {
                 successes++;
-                
+
                 // TODO: now that options has other things besides tileSource, the overlays
                 // should probably be at the options level, not the tileSource level.
                 if (options.tileSource.overlays) {
@@ -7969,18 +7994,20 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
             }
         }
 
+        if ($.isArray(options.tileSource)) {
+            setTimeout(function() {
+                raiseAddItemFailed({
+                    message: "[Viewer.addTiledImage] Sequences can not be added; add them one at a time instead.",
+                    source: options.tileSource,
+                    options: options
+                });
+            });
+            return;
+        }
+
         this._loadQueue.push(myQueueItem);
 
         getTileSourceImplementation( this, options.tileSource, function( tileSource ) {
-
-            if ( tileSource instanceof Array ) {
-                raiseAddItemFailed({
-                    message: "[Viewer.addTiledImage] Sequences can not be added; add them one at a time instead.",
-                    source: tileSource,
-                    options: options
-                });
-                return;
-            }
 
             myQueueItem.tileSource = tileSource;
 
@@ -8723,12 +8750,30 @@ function getTileSourceImplementation( viewer, tileSource, successCallback,
         }
     }
 
+    function waitUntilReady(tileSource, originalTileSource) {
+        if (tileSource.ready) {
+            successCallback(tileSource);
+        } else {
+            tileSource.addHandler('ready', function () {
+                successCallback(tileSource);
+            });
+            tileSource.addHandler('open-failed', function (event) {
+                failCallback({
+                    message: event.message,
+                    source: originalTileSource
+                });
+            });
+        }
+    }
+
     setTimeout( function() {
         if ( $.type( tileSource ) == 'string' ) {
             //If its still a string it means it must be a url at this point
             tileSource = new $.TileSource({
                 url: tileSource,
+                crossOriginPolicy: viewer.crossOriginPolicy,
                 ajaxWithCredentials: viewer.ajaxWithCredentials,
+                useCanvas: viewer.useCanvas,
                 success: function( event ) {
                     successCallback( event.tileSource );
                 }
@@ -8737,9 +8782,15 @@ function getTileSourceImplementation( viewer, tileSource, successCallback,
                 failCallback( event );
             } );
 
-        } else if ( $.isPlainObject( tileSource ) || tileSource.nodeType ) {
+        } else if ($.isPlainObject(tileSource) || tileSource.nodeType) {
+            if (!tileSource.crossOriginPolicy && viewer.crossOriginPolicy) {
+                tileSource.crossOriginPolicy = viewer.crossOriginPolicy;
+            }
             if (tileSource.ajaxWithCredentials === undefined) {
                 tileSource.ajaxWithCredentials = viewer.ajaxWithCredentials;
+            }
+            if (tileSource.useCanvas === undefined) {
+                tileSource.useCanvas = viewer.useCanvas;
             }
 
             if ( $.isFunction( tileSource.getTileUrl ) ) {
@@ -8758,14 +8809,13 @@ function getTileSourceImplementation( viewer, tileSource, successCallback,
                     return;
                 }
                 var options = $TileSource.prototype.configure.apply( _this, [ tileSource ] );
-                var readySource = new $TileSource( options );
-                successCallback( readySource );
+                waitUntilReady(new $TileSource(options), tileSource);
             }
         } else {
             //can assume it's already a tile source implementation
-            successCallback( tileSource );
+            waitUntilReady(tileSource, tileSource);
         }
-    }, 1 );
+    });
 }
 
 function getOverlayObject( viewer, overlay ) {
@@ -9421,44 +9471,57 @@ function onCanvasPinch( event ) {
 
 function onCanvasScroll( event ) {
     var gestureSettings,
-        factor;
+        factor,
+        thisScrollTime,
+        deltaScrollTime;
 
-    if ( !event.preventDefaultAction && this.viewport ) {
-        gestureSettings = this.gestureSettingsByDeviceType( event.pointerType );
-        if ( gestureSettings.scrollToZoom ) {
-            factor = Math.pow( this.zoomPerScroll, event.scroll );
-            this.viewport.zoomBy(
-                factor,
-                this.viewport.pointFromPixel( event.position, true )
-            );
-            this.viewport.applyConstraints();
+    /* Certain scroll devices fire the scroll event way too fast so we are injecting a simple adjustment to keep things
+     * partially normalized. If we have already fired an event within the last 'minScrollDelta' milliseconds we skip
+     * this one and wait for the next event. */
+    thisScrollTime = $.now();
+    deltaScrollTime = thisScrollTime - this._lastScrollTime;
+    if (deltaScrollTime > this.minScrollDeltaTime) {
+        this._lastScrollTime = thisScrollTime;
+
+        if ( !event.preventDefaultAction && this.viewport ) {
+            gestureSettings = this.gestureSettingsByDeviceType( event.pointerType );
+            if ( gestureSettings.scrollToZoom ) {
+                factor = Math.pow( this.zoomPerScroll, event.scroll );
+                this.viewport.zoomBy(
+                    factor,
+                    this.viewport.pointFromPixel( event.position, true )
+                );
+                this.viewport.applyConstraints();
+            }
+        }
+        /**
+         * Raised when a scroll event occurs on the {@link OpenSeadragon.Viewer#canvas} element (mouse wheel).
+         *
+         * @event canvas-scroll
+         * @memberof OpenSeadragon.Viewer
+         * @type {object}
+         * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised this event.
+         * @property {OpenSeadragon.MouseTracker} tracker - A reference to the MouseTracker which originated this event.
+         * @property {OpenSeadragon.Point} position - The position of the event relative to the tracked element.
+         * @property {Number} scroll - The scroll delta for the event.
+         * @property {Boolean} shift - True if the shift key was pressed during this event.
+         * @property {Object} originalEvent - The original DOM event.
+         * @property {?Object} userData - Arbitrary subscriber-defined object.
+         */
+        this.raiseEvent( 'canvas-scroll', {
+            tracker: event.eventSource,
+            position: event.position,
+            scroll: event.scroll,
+            shift: event.shift,
+            originalEvent: event.originalEvent
+        });
+        if (gestureSettings && gestureSettings.scrollToZoom) {
+            //cancels event
+            return false;
         }
     }
-    /**
-     * Raised when a scroll event occurs on the {@link OpenSeadragon.Viewer#canvas} element (mouse wheel).
-     *
-     * @event canvas-scroll
-     * @memberof OpenSeadragon.Viewer
-     * @type {object}
-     * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised this event.
-     * @property {OpenSeadragon.MouseTracker} tracker - A reference to the MouseTracker which originated this event.
-     * @property {OpenSeadragon.Point} position - The position of the event relative to the tracked element.
-     * @property {Number} scroll - The scroll delta for the event.
-     * @property {Boolean} shift - True if the shift key was pressed during this event.
-     * @property {Object} originalEvent - The original DOM event.
-     * @property {?Object} userData - Arbitrary subscriber-defined object.
-     */
-    this.raiseEvent( 'canvas-scroll', {
-        tracker: event.eventSource,
-        position: event.position,
-        scroll: event.scroll,
-        shift: event.shift,
-        originalEvent: event.originalEvent
-    });
-
-    if (gestureSettings && gestureSettings.scrollToZoom) {
-        //cancels event
-        return false;
+    else {
+        return false;   // We are swallowing this event
     }
 }
 
@@ -12595,6 +12658,295 @@ function configureFromObject( tileSource, configuration ){
 }( OpenSeadragon ));
 
 /*
+ * OpenSeadragon - ImageTileSource
+ *
+ * Copyright (C) 2009 CodePlex Foundation
+ * Copyright (C) 2010-2013 OpenSeadragon contributors
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ * - Redistributions of source code must retain the above copyright notice,
+ *   this list of conditions and the following disclaimer.
+ *
+ * - Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the distribution.
+ *
+ * - Neither the name of CodePlex Foundation nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+(function ($) {
+
+    /**
+     * @class ImageTileSource
+     * @classdesc The ImageTileSource allows a simple image to be loaded
+     * into an OpenSeadragon Viewer.
+     * There are 2 ways to open an ImageTileSource:
+     * 1. viewer.open({type: 'image', url: fooUrl});
+     * 2. viewer.open(new OpenSeadragon.ImageTileSource({url: fooUrl}));
+     *
+     * With the first syntax, the crossOriginPolicy, ajaxWithCredentials and
+     * useCanvas options are inherited from the viewer if they are not
+     * specified directly in the options object.
+     *
+     * @memberof OpenSeadragon
+     * @extends OpenSeadragon.TileSource
+     * @param {Object} options Options object.
+     * @param {String} options.url URL of the image
+     * @param {Boolean} [options.buildPyramid=true] If set to true (default), a
+     * pyramid will be built internally to provide a better downsampling.
+     * @param {String|Boolean} [options.crossOriginPolicy=false] Valid values are
+     * 'Anonymous', 'use-credentials', and false. If false, image requests will
+     * not use CORS preventing internal pyramid building for images from other
+     * domains.
+     * @param {String|Boolean} [options.ajaxWithCredentials=false] Whether to set
+     * the withCredentials XHR flag for AJAX requests (when loading tile sources).
+     * @param {Boolean} [options.useCanvas=true] Set to false to prevent any use
+     * of the canvas API.
+     */
+    $.ImageTileSource = function (options) {
+
+        options = $.extend({
+            buildPyramid: true,
+            crossOriginPolicy: false,
+            ajaxWithCredentials: false,
+            useCanvas: true
+        }, options);
+        $.TileSource.apply(this, [options]);
+
+    };
+
+    $.extend($.ImageTileSource.prototype, $.TileSource.prototype, /** @lends OpenSeadragon.ImageTileSource.prototype */{
+        /**
+         * Determine if the data and/or url imply the image service is supported by
+         * this tile source.
+         * @function
+         * @param {Object|Array} data
+         * @param {String} optional - url
+         */
+        supports: function (data, url) {
+            return data.type && data.type === "image";
+        },
+        /**
+         *
+         * @function
+         * @param {Object} options - the options
+         * @param {String} dataUrl - the url the image was retreived from, if any.
+         * @return {Object} options - A dictionary of keyword arguments sufficient
+         *      to configure this tile sources constructor.
+         */
+        configure: function (options, dataUrl) {
+            return options;
+        },
+        /**
+         * Responsible for retrieving, and caching the
+         * image metadata pertinent to this TileSources implementation.
+         * @function
+         * @param {String} url
+         * @throws {Error}
+         */
+        getImageInfo: function (url) {
+            var image = this._image = new Image();
+            var _this = this;
+
+            if (this.crossOriginPolicy) {
+                image.crossOrigin = this.crossOriginPolicy;
+            }
+            if (this.ajaxWithCredentials) {
+                image.useCredentials = this.ajaxWithCredentials;
+            }
+
+            $.addEvent(image, 'load', function () {
+                _this.width = image.naturalWidth;
+                _this.height = image.naturalHeight;
+                _this.aspectRatio = _this.width / _this.height;
+                _this.dimensions = new $.Point(_this.width, _this.height);
+                _this._tileWidth = _this.width;
+                _this._tileHeight = _this.height;
+                _this.tileOverlap = 0;
+                _this.minLevel = 0;
+                _this.levels = _this._buildLevels();
+                _this.maxLevel = _this.levels.length - 1;
+
+                _this.ready = true;
+                /**
+                 * Raised when a TileSource is opened and initialized.
+                 *
+                 * @event ready
+                 * @memberof OpenSeadragon.TileSource
+                 * @type {object}
+                 * @property {OpenSeadragon.TileSource} eventSource - A reference
+                 * to the TileSource which raised the event.
+                 * @property {Object} tileSource
+                 * @property {?Object} userData - Arbitrary subscriber-defined object.
+                 */
+                _this.raiseEvent('ready', {tileSource: _this});
+            });
+
+            $.addEvent(image, 'error', function () {
+                /***
+                 * Raised when an error occurs loading a TileSource.
+                 *
+                 * @event open-failed
+                 * @memberof OpenSeadragon.TileSource
+                 * @type {object}
+                 * @property {OpenSeadragon.TileSource} eventSource - A reference
+                 * to the TileSource which raised the event.
+                 * @property {String} message
+                 * @property {String} source
+                 * @property {?Object} userData - Arbitrary subscriber-defined object.
+                 */
+                _this.raiseEvent('open-failed', {
+                    message: "Error loading image at " + url,
+                    source: url
+                });
+            });
+
+            image.src = url;
+        },
+        /**
+         * @function
+         * @param {Number} level
+         */
+        getLevelScale: function (level) {
+            var levelScale = NaN;
+            if (level >= this.minLevel && level <= this.maxLevel) {
+                levelScale =
+                        this.levels[level].width /
+                        this.levels[this.maxLevel].width;
+            }
+            return levelScale;
+        },
+        /**
+         * @function
+         * @param {Number} level
+         */
+        getNumTiles: function (level) {
+            var scale = this.getLevelScale(level);
+            if (scale) {
+                return new $.Point(1, 1);
+            } else {
+                return new $.Point(0, 0);
+            }
+        },
+        /**
+         * @function
+         * @param {Number} level
+         * @param {OpenSeadragon.Point} point
+         */
+        getTileAtPoint: function (level, point) {
+            return new $.Point(0, 0);
+        },
+        /**
+         * Retrieves a tile url
+         * @function
+         * @param {Number} level Level of the tile
+         * @param {Number} x x coordinate of the tile
+         * @param {Number} y y coordinate of the tile
+         */
+        getTileUrl: function (level, x, y) {
+            var url = null;
+            if (level >= this.minLevel && level <= this.maxLevel) {
+                url = this.levels[level].url;
+            }
+            return url;
+        },
+        /**
+         * Retrieves a tile context 2D
+         * @function
+         * @param {Number} level Level of the tile
+         * @param {Number} x x coordinate of the tile
+         * @param {Number} y y coordinate of the tile
+         */
+        getContext2D: function (level, x, y) {
+            var context = null;
+            if (level >= this.minLevel && level <= this.maxLevel) {
+                context = this.levels[level].context2D;
+            }
+            return context;
+        },
+
+        // private
+        //
+        // Builds the differents levels of the pyramid if possible
+        // (i.e. if canvas API enabled and no canvas tainting issue).
+        _buildLevels: function () {
+            var levels = [{
+                    url: this._image.src,
+                    width: this._image.naturalWidth,
+                    height: this._image.naturalHeight
+                }];
+
+            if (!this.buildPyramid || !$.supportsCanvas || !this.useCanvas) {
+                // We don't need the image anymore. Allows it to be GC.
+                delete this._image;
+                return levels;
+            }
+
+            var currentWidth = this._image.naturalWidth;
+            var currentHeight = this._image.naturalHeight;
+
+            var bigCanvas = document.createElement("canvas");
+            var bigContext = bigCanvas.getContext("2d");
+
+            bigCanvas.width = currentWidth;
+            bigCanvas.height = currentHeight;
+            bigContext.drawImage(this._image, 0, 0, currentWidth, currentHeight);
+            // We cache the context of the highest level because the browser
+            // is a lot faster at downsampling something it already has
+            // downsampled before.
+            levels[0].context2D = bigContext;
+            // We don't need the image anymore. Allows it to be GC.
+            delete this._image;
+
+            if ($.isCanvasTainted(bigCanvas)) {
+                // If the canvas is tainted, we can't compute the pyramid.
+                return levels;
+            }
+
+            // We build smaller levels until either width or height becomes
+            // 1 pixel wide.
+            while (currentWidth >= 2 && currentHeight >= 2) {
+                currentWidth = Math.floor(currentWidth / 2);
+                currentHeight = Math.floor(currentHeight / 2);
+                var smallCanvas = document.createElement("canvas");
+                var smallContext = smallCanvas.getContext("2d");
+                smallCanvas.width = currentWidth;
+                smallCanvas.height = currentHeight;
+                smallContext.drawImage(bigCanvas, 0, 0, currentWidth, currentHeight);
+
+                levels.splice(0, 0, {
+                    context2D: smallContext,
+                    width: currentWidth,
+                    height: currentHeight
+                });
+
+                bigCanvas = smallCanvas;
+                bigContext = smallContext;
+            }
+            return levels;
+        }
+    });
+
+}(OpenSeadragon));
+
+/*
  * OpenSeadragon - TileSourceCollection
  *
  * Copyright (C) 2009 CodePlex Foundation
@@ -14723,8 +15075,10 @@ function completeJob( loader, job, callback ) {
  * @param {Boolean} exists Is this tile a part of a sparse image? ( Also has
  *      this tile failed to load? )
  * @param {String} url The URL of this tile's image.
+ * @param {CanvasRenderingContext2D} context2D The context2D of this tile if it
+ * is provided directly by the tile source.
  */
-$.Tile = function(level, x, y, bounds, exists, url) {
+$.Tile = function(level, x, y, bounds, exists, url, context2D) {
     /**
      * The zoom level this tile belongs to.
      * @member {Number} level
@@ -14761,6 +15115,12 @@ $.Tile = function(level, x, y, bounds, exists, url) {
      * @memberof OpenSeadragon.Tile#
      */
     this.url     = url;
+    /**
+     * The context2D of this tile if it is provided directly by the tile source.
+     * @member {CanvasRenderingContext2D} context2D
+     * @memberOf OpenSeadragon.Tile#
+     */
+    this.context2D = context2D;
     /**
      * Is this tile loaded?
      * @member {Boolean} loaded
@@ -14925,14 +15285,14 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
             size     = this.size,
             rendered;
 
-        if (!this.cacheImageRecord) {
+        if (!this.context2D && !this.cacheImageRecord) {
             $.console.warn(
                 '[Tile.drawCanvas] attempting to draw tile %s when it\'s not cached',
                 this.toString());
             return;
         }
 
-        rendered = this.cacheImageRecord.getRenderedContext();
+        rendered = this.context2D || this.cacheImageRecord.getRenderedContext();
 
         if ( !this.loaded || !rendered ){
             $.console.warn(
@@ -14951,7 +15311,8 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
         //ie its done fading or fading is turned off, and if we are drawing
         //an image with an alpha channel, then the only way
         //to avoid seeing the tile underneath is to clear the rectangle
-        if( context.globalAlpha == 1 && this.url.match('.png') ){
+        if (context.globalAlpha === 1 &&
+                (this.context2D || this.url.match('.png'))) {
             //clearing only the inside of the rectangle occupied
             //by the png prevents edge flikering
             context.clearRect(
@@ -17916,7 +18277,7 @@ function updateViewport( tiledImage ) {
     drawTiles( tiledImage, tiledImage.lastDrawn );
 
     // Load the new 'best' tile
-    if ( best ) {
+    if (best && !best.context2D) {
         loadTile( tiledImage, best, currentTime );
     }
 
@@ -18061,10 +18422,14 @@ function updateTile( tiledImage, drawLevel, haveDrawn, x, y, level, levelOpacity
     );
 
     if (!tile.loaded) {
-        var imageRecord = tiledImage._tileCache.getImageRecord(tile.url);
-        if (imageRecord) {
-            var image = imageRecord.getImage();
-            setTileLoaded(tiledImage, tile, image);
+        if (tile.context2D) {
+            setTileLoaded(tiledImage, tile);
+        } else {
+            var imageRecord = tiledImage._tileCache.getImageRecord(tile.url);
+            if (imageRecord) {
+                var image = imageRecord.getImage();
+                setTileLoaded(tiledImage, tile, image);
+            }
         }
     }
 
@@ -18097,6 +18462,7 @@ function getTile( x, y, level, tileSource, tilesMatrix, time, numTiles, worldWid
         bounds,
         exists,
         url,
+        context2D,
         tile;
 
     if ( !tilesMatrix[ level ] ) {
@@ -18112,6 +18478,8 @@ function getTile( x, y, level, tileSource, tilesMatrix, time, numTiles, worldWid
         bounds  = tileSource.getTileBounds( level, xMod, yMod );
         exists  = tileSource.tileExists( level, xMod, yMod );
         url     = tileSource.getTileUrl( level, xMod, yMod );
+        context2D = tileSource.getContext2D ?
+            tileSource.getContext2D(level, xMod, yMod) : undefined;
 
         bounds.x += ( x - xMod ) / numTiles.x;
         bounds.y += (worldHeight / worldWidth) * (( y - yMod ) / numTiles.y);
@@ -18122,7 +18490,8 @@ function getTile( x, y, level, tileSource, tilesMatrix, time, numTiles, worldWid
             y,
             bounds,
             exists,
-            url
+            url,
+            context2D
         );
     }
 
@@ -18201,12 +18570,14 @@ function setTileLoaded(tiledImage, tile, image, cutoff) {
         if (increment === 0) {
             tile.loading = false;
             tile.loaded = true;
-            tiledImage._tileCache.cacheTile({
-                image: image,
-                tile: tile,
-                cutoff: cutoff,
-                tiledImage: tiledImage
-            });
+            if (!tile.context2D) {
+                tiledImage._tileCache.cacheTile({
+                    image: image,
+                    tile: tile,
+                    cutoff: cutoff,
+                    tiledImage: tiledImage
+                });
+            }
             tiledImage._needsDraw = true;
         }
     }
