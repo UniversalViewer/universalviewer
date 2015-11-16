@@ -2793,6 +2793,161 @@ var Utils;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
+    var Storage = (function () {
+        function Storage() {
+        }
+        Storage.clear = function (storageType) {
+            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            switch (storageType) {
+                case Utils.StorageType.memory:
+                    this._memoryStorage = {};
+                    break;
+                case Utils.StorageType.session:
+                    sessionStorage.clear();
+                    break;
+                case Utils.StorageType.local:
+                    localStorage.clear();
+                    break;
+            }
+        };
+        Storage.clearExpired = function (storageType) {
+            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            var items = this.getItems(storageType);
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (this._isExpired(item)) {
+                    this.remove(item.key);
+                }
+            }
+        };
+        Storage.get = function (key, storageType) {
+            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            var data;
+            switch (storageType) {
+                case Utils.StorageType.memory:
+                    data = this._memoryStorage[key];
+                    break;
+                case Utils.StorageType.session:
+                    data = sessionStorage.getItem(key);
+                    break;
+                case Utils.StorageType.local:
+                    data = localStorage.getItem(key);
+                    break;
+            }
+            if (!data)
+                return null;
+            var item = JSON.parse(data);
+            if (this._isExpired(item))
+                return null;
+            // useful reference
+            item.key = key;
+            return item;
+        };
+        Storage._isExpired = function (item) {
+            if (new Date().getTime() < item.expiresAt) {
+                return false;
+            }
+            return true;
+        };
+        Storage.getItems = function (storageType) {
+            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            var items = [];
+            switch (storageType) {
+                case Utils.StorageType.memory:
+                    var keys = Object.keys(this._memoryStorage);
+                    for (var i = 0; i < keys.length; i++) {
+                        var item = this.get(keys[i], Utils.StorageType.memory);
+                        if (item) {
+                            items.push(item);
+                        }
+                    }
+                    break;
+                case Utils.StorageType.session:
+                    for (var i = 0; i < sessionStorage.length; i++) {
+                        var key = sessionStorage.key(i);
+                        var item = this.get(key, Utils.StorageType.session);
+                        if (item) {
+                            items.push(item);
+                        }
+                    }
+                    break;
+                case Utils.StorageType.local:
+                    for (var i = 0; i < localStorage.length; i++) {
+                        var key = localStorage.key(i);
+                        var item = this.get(key, Utils.StorageType.local);
+                        if (item) {
+                            items.push(item);
+                        }
+                    }
+                    break;
+            }
+            return items;
+        };
+        Storage.remove = function (key, storageType) {
+            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            switch (storageType) {
+                case Utils.StorageType.memory:
+                    delete this._memoryStorage[key];
+                    break;
+                case Utils.StorageType.session:
+                    sessionStorage.removeItem(key);
+                    break;
+                case Utils.StorageType.local:
+                    localStorage.removeItem(key);
+                    break;
+            }
+        };
+        Storage.set = function (key, value, expirationSecs, storageType) {
+            if (storageType === void 0) { storageType = Utils.StorageType.memory; }
+            var expirationMS = expirationSecs * 1000;
+            var record = new Utils.StorageItem();
+            record.value = value;
+            record.expiresAt = new Date().getTime() + expirationMS;
+            switch (storageType) {
+                case Utils.StorageType.memory:
+                    this._memoryStorage[key] = JSON.stringify(record);
+                    break;
+                case Utils.StorageType.session:
+                    sessionStorage.setItem(key, JSON.stringify(record));
+                    break;
+                case Utils.StorageType.local:
+                    localStorage.setItem(key, JSON.stringify(record));
+                    break;
+            }
+            return record;
+        };
+        Storage._memoryStorage = {};
+        return Storage;
+    })();
+    Utils.Storage = Storage;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var StorageItem = (function () {
+        function StorageItem() {
+        }
+        return StorageItem;
+    })();
+    Utils.StorageItem = StorageItem;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var StorageType = (function () {
+        function StorageType(value) {
+            this.value = value;
+        }
+        StorageType.prototype.toString = function () {
+            return this.value;
+        };
+        StorageType.memory = new StorageType("memory");
+        StorageType.session = new StorageType("session");
+        StorageType.local = new StorageType("local");
+        return StorageType;
+    })();
+    Utils.StorageType = StorageType;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
     var Strings = (function () {
         function Strings() {
         }

@@ -1,5 +1,3 @@
-import Storage = require("./Storage");
-
 class ExternalResource implements Manifesto.IExternalResource {
     public clickThroughService: Manifesto.IService;
     public data: any;

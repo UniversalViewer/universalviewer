@@ -18,7 +18,6 @@ import ExternalResource = require("../../modules/uv-shared-module/ExternalResour
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
-import Storage = require("../../modules/uv-shared-module/Storage");
 import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
 import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
 
