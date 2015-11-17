@@ -113,7 +113,9 @@
         "logo": "Logo",
         "more": "more",
         "noData": "No data to display",
-        "title": "Information"
+        "title": "More Information",
+        "manifestHeader": "About the book",
+        "canvasHeader": "About the image"
       }
     },
     "pagingHeaderPanel": {
