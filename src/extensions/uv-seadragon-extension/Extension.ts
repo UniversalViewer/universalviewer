@@ -1,11 +1,13 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import Bookmark = require("../../modules/uv-shared-module/Bookmark");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
 import GalleryView = require("../../modules/uv-treeviewleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
@@ -16,7 +18,6 @@ import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../Params");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 import Settings = require("../../modules/uv-shared-module/Settings");
@@ -437,22 +438,19 @@ class Extension extends BaseExtension {
     }
 
     bookmark(): void {
+        super.bookmark();
+
         var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var bookmark: Bookmark = new Bookmark();
 
-        this.triggerSocket(BaseCommands.BOOKMARK,
-            {
-                "cropUri": (<ISeadragonProvider>this.provider).getCroppedImageUri(canvas, this.getViewer(), true),
-                "thumbUri": canvas.getThumbUri())
-            });
+        bookmark.index = this.provider.canvasIndex;
+        bookmark.label = canvas.getLabel();
+        bookmark.path = (<ISeadragonProvider>this.provider).getCroppedImageUri(canvas, this.getViewer(), true);
+        bookmark.thumb = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+        bookmark.title = this.provider.getTitle();
+        bookmark.type = manifesto.ElementType.image().toString();
 
-        /*
-         CaptureType: "i"
-         ImageIndex: 0
-         PageNumber: ""
-         Path: "/player/b18035978#?asi=0&ai=0&z=-0.2461%2C0.29%2C1.6656%2C0.8427"
-         Thumbnail: "/crop/b18035978/0/b3ec346f-71bf-4bb1-a7f1-1cad996fa0d4/jp2?left=0&top=984&width=3395&height=2861&scaleWidth=452&scaleHeight=381&origWidth=3395&origHeight=4944&RGN=-0.24606471054921475,0.19902912621359223,1.665577885238572,0.5786812297734628"
-         Title: "The biocrats"
-         */
+        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
     }
 }
 

@@ -1,6 +1,7 @@
 {
   "options":
   {
+    "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "leftPanelEnabled": true,
     "minWidthBreakPoint": 610,
@@ -34,6 +35,7 @@
     "footerPanel":
     {
       "options":{
+        "bookmarkEnabled": false,
         "downloadEnabled": true,
         "embedEnabled": true,
         "fullscreenEnabled": true,

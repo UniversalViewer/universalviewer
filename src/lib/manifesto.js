@@ -324,10 +324,12 @@ var Manifesto;
         function ElementType() {
             _super.apply(this, arguments);
         }
-        // todo: Should IIIFIMAGE go here?
         // todo: use getters when ES3 target is no longer required.
         ElementType.prototype.document = function () {
             return new ElementType(ElementType.DOCUMENT.toString());
+        };
+        ElementType.prototype.image = function () {
+            return new ElementType(ElementType.IMAGE.toString());
         };
         ElementType.prototype.movingimage = function () {
             return new ElementType(ElementType.MOVINGIMAGE.toString());
@@ -336,6 +338,7 @@ var Manifesto;
             return new ElementType(ElementType.SOUND.toString());
         };
         ElementType.DOCUMENT = new ElementType("foaf:document");
+        ElementType.IMAGE = new ElementType("dcTypes:Image");
         ElementType.MOVINGIMAGE = new ElementType("dctypes:movingimage");
         ElementType.SOUND = new ElementType("dctypes:sound");
         return ElementType;

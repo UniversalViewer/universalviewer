@@ -32,6 +32,7 @@
     },
     "footerPanel": {
       "content": {
+        "bookmark": "Add to bookmarks",
         "download": "Download",
         "embed": "Embed",
         "exitFullScreen": "Exit Full Screen",

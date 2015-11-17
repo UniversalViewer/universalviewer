@@ -714,6 +714,18 @@ class BaseExtension implements IExtension {
         // override for each extension
     }
 
+    getBookmarkUri(): string {
+        var absUri = parent.document.URL;
+        var parts = Utils.Urls.GetUrlParts(absUri);
+        var relUri = parts.pathname + parts.search + parent.document.location.hash;
+
+        if (!relUri.startsWith("/")) {
+            relUri = "/" + relUri;
+        }
+
+        return relUri;
+    }
+
     // auth
 
     clickThrough(resource: Manifesto.IExternalResource): Promise<void> {
