@@ -206,7 +206,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, manifestUri, collectionIndex, manifestIndex, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, height, width, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, manifestUri, collectionIndex, manifestIndex, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, dimensions, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -289,6 +289,16 @@ docReady(function() {
                 socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
             }
 
+            function getDimensions() {
+                var width = $app[0].style.width;
+                var height = $app[0].style.height;
+
+                return {
+                    width: width,
+                    height: height
+                }
+            }
+
             function toggleFullScreen(obj) {
                 isFullScreen = obj.isFullScreen;
 
@@ -304,8 +314,7 @@ docReady(function() {
 
                     // if requestFullScreen is available
                     if (requestFullScreen){
-                        width = $app.width();
-                        height = $app.height();
+                        dimensions = getDimensions();
 
                         requestFullScreen.call(elem);
                         $app.css("width", "");
@@ -338,8 +347,8 @@ docReady(function() {
                     // if exitFullScreen is available
                     if (exitFullScreen) {
                         exitFullScreen.call(document);
-                        $app.width(width);
-                        $app.height(height);
+                        $app.width(dimensions.width);
+                        $app.height(dimensions.height);
                     } else {
                         // use css
 
