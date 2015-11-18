@@ -12,7 +12,7 @@
     "rightPanelEnabled": true,
     "searchWithinEnabled": true,
     "theme": "uv-en-GB-theme",
-    "useArrowKeysToNavigate": true
+    "useArrowKeysToNavigate": false
   },
   "modules":
   {
