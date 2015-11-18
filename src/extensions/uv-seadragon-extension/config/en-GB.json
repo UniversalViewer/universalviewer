@@ -73,7 +73,7 @@
     {
       "options":
       {
-        "animationTime": 0.025,
+        "animationTime": 0.15,
         "autoHideControls": true,
         "blendTime": 0,
         "constrainDuringPan": false,
