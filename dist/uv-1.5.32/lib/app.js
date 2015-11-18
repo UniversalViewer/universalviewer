@@ -2819,7 +2819,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.31';
+    exports.Version = '1.5.32';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -8010,7 +8010,12 @@ var Manifesto;
             return new Manifesto.IIIFResourceType(this.getProperty('@type'));
         };
         IIIFResource.prototype.getLogo = function () {
-            return this.getProperty('logo');
+            var logo = this.getProperty('logo');
+            if (!logo)
+                return null;
+            if (_isString(logo))
+                return logo;
+            return logo['@id'];
         };
         IIIFResource.prototype.getLicense = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('license'), this.options.locale);

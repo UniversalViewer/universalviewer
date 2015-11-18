@@ -785,7 +785,12 @@ var Manifesto;
             return new Manifesto.IIIFResourceType(this.getProperty('@type'));
         };
         IIIFResource.prototype.getLogo = function () {
-            return this.getProperty('logo');
+            var logo = this.getProperty('logo');
+            if (!logo)
+                return null;
+            if (_isString(logo))
+                return logo;
+            return logo['@id'];
         };
         IIIFResource.prototype.getLicense = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('license'), this.options.locale);
