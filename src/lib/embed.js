@@ -290,12 +290,9 @@ docReady(function() {
             }
 
             function getDimensions() {
-                var width = $app[0].style.width;
-                var height = $app[0].style.height;
-
                 return {
-                    width: width,
-                    height: height
+                    width: $app[0].style.width,
+                    height: $app[0].style.height
                 }
             }
 
