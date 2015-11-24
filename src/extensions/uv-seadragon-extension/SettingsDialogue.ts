@@ -2,6 +2,9 @@ import BaseSettingsDialogue = require("../../modules/uv-dialogues-module/Setting
 
 class SettingsDialogue extends BaseSettingsDialogue {
 
+    $navigatorEnabled: JQuery;
+    $navigatorEnabledCheckbox: JQuery;
+    $navigatorEnabledLabel: JQuery;
     $pagingEnabled: JQuery;
     $pagingEnabledCheckbox: JQuery;
     $pagingEnabledLabel: JQuery;
@@ -18,6 +21,15 @@ class SettingsDialogue extends BaseSettingsDialogue {
 
         super.create();
 
+        this.$navigatorEnabled = $('<div class="setting navigatorEnabled"></div>');
+        this.$scroll.append(this.$navigatorEnabled);
+
+        this.$navigatorEnabledCheckbox = $('<input id="navigatorEnabled" type="checkbox" />');
+        this.$navigatorEnabled.append(this.$navigatorEnabledCheckbox);
+
+        this.$navigatorEnabledLabel = $('<label for="navigatorEnabled">' + this.content.navigatorEnabled + '</label>');
+        this.$navigatorEnabled.append(this.$navigatorEnabledLabel);
+        
         this.$pagingEnabled = $('<div class="setting pagingEnabled"></div>');
         this.$scroll.append(this.$pagingEnabled);
 
@@ -35,6 +47,18 @@ class SettingsDialogue extends BaseSettingsDialogue {
 
         this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
         this.$preserveViewport.append(this.$preserveViewportLabel);
+
+        this.$navigatorEnabledCheckbox.change(() => {
+            var settings: ISettings = this.getSettings();
+
+            if(this.$navigatorEnabledCheckbox.is(":checked")) {
+                settings.navigatorEnabled = true;
+            } else {
+                settings.navigatorEnabled = false;
+            }
+
+            this.updateSettings(settings);
+        });
 
         this.$pagingEnabledCheckbox.change(() => {
             var settings: ISettings = this.getSettings();
