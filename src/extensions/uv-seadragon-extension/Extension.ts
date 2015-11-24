@@ -121,27 +121,31 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(BaseCommands.UP_ARROW, (e) => {
-            if (!this.useArrowKeysToNavigate())
+            if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
+            }
         });
 
         $.subscribe(BaseCommands.DOWN_ARROW, (e) => {
-            if (!this.useArrowKeysToNavigate())
+            if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
+            }
         });
 
         $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
-            if (this.useArrowKeysToNavigate())
+            if (this.useArrowKeysToNavigate()) {
                 this.viewPage(this.provider.getPrevPageIndex());
-            else
+            } else {
                 this.centerPanel.setFocus();
+            }
         });
 
         $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
-            if (this.useArrowKeysToNavigate())
+            if (this.useArrowKeysToNavigate()) {
                 this.viewPage(this.provider.getNextPageIndex());
-            else
+            } else {
                 this.centerPanel.setFocus();
+            }
         });
 
         $.subscribe(Commands.MODE_CHANGED, (e, mode: string) => {
@@ -230,7 +234,25 @@ class Extension extends BaseExtension {
             this.setParam(Params.rotation, rotation);
         });
 
-        
+        $.subscribe(Commands.DOWNLOAD_CURRENTVIEW, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
+        });
+
+        $.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+        });
+
+        $.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+        });
+
+        $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
+        });
+
+        $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+        });
     }
 
     createModules(): void{

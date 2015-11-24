@@ -186,6 +186,10 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
+        $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
+            this.triggerSocket(BaseCommands.ACCEPT_TERMS);
+        });
+
         $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
             this.triggerSocket(BaseCommands.AUTHORIZATION_OCCURRED);
         });
@@ -266,6 +270,10 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.HIDE_INFORMATION, () => {
             this.triggerSocket(BaseCommands.HIDE_INFORMATION);
+        });
+
+        $.subscribe(BaseCommands.HIDE_LOGIN_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_LOGIN_DIALOGUE);
         });
 
         $.subscribe(BaseCommands.HIDE_OVERLAY, () => {

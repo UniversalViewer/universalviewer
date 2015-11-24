@@ -40,8 +40,7 @@ class DownloadDialogue extends Dialogue {
         this.$element.hide();
     }
 
-    simplifyMimeType(mime: string)
-    {
+    simplifyMimeType(mime: string) {
         switch (mime) {
         case 'text/plain':
             return 'txt';

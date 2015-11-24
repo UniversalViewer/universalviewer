@@ -58,7 +58,17 @@ class LoginDialogue extends Dialogue {
         this.$message.html(this.resource.loginService.getProperty('description'));
         this.$message.targetBlank();
 
+        this.$message.find('#fullterms').on('click', () => {
+            $.publish(BaseCommands.VIEW_FULL_TERMS);
+        });
+
         this.resize();
+    }
+
+    close(): void {
+        super.close();
+
+        $.publish(BaseCommands.HIDE_LOGIN_DIALOGUE);
     }
 
     resize(): void {

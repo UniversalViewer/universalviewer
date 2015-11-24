@@ -3,6 +3,11 @@ class Commands {
 
     static CLEAR_SEARCH: string                     = Commands.namespace + 'onClearSearch';
     static CURRENT_VIEW_URI: string                 = Commands.namespace + 'onCurrentViewUri';
+    static DOWNLOAD_CURRENTVIEW: string             = Commands.namespace + 'onDownloadCurrentView';
+    static DOWNLOAD_WHOLEIMAGEHIGHRES: string       = Commands.namespace + 'onDownloadWholeImageHighRes';
+    static DOWNLOAD_WHOLEIMAGELOWRES: string        = Commands.namespace + 'onDownloadWholeImageLowRes';
+    static DOWNLOAD_ENTIREDOCUMENTASPDF: string     = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
+    static DOWNLOAD_ENTIREDOCUMENTASTEXT: string    = Commands.namespace + 'onDownloadEntireDocumentAsText';
     static FIRST: string                            = Commands.namespace + 'onFirst';
     static GALLERY_THUMB_SELECTED: string           = Commands.namespace + 'onGalleryThumbSelected';
     static IMAGE_SEARCH: string                     = Commands.namespace + 'onImageSearch';

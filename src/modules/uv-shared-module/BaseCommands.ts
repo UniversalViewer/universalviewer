@@ -1,6 +1,7 @@
 class Commands {
     static namespace: string = 'uv.';
 
+    static ACCEPT_TERMS: string                     = Commands.namespace + 'onAcceptTerms';
     static AUTHORIZATION_OCCURRED: string           = Commands.namespace + 'onAuthorizationOccurred';
     static BOOKMARK: string                         = Commands.namespace + 'onBookmark';
     static CANVAS_INDEX_CHANGE_FAILED: string       = Commands.namespace + 'onCanvasIndexChangeFailed';
@@ -21,6 +22,7 @@ class Commands {
     static HIDE_GENERIC_DIALOGUE: string            = Commands.namespace + 'onHideGenericDialogue';
     static HIDE_HELP_DIALOGUE: string               = Commands.namespace + 'onHideHelpDialogue';
     static HIDE_INFORMATION: string                 = Commands.namespace + 'onHideInformation';
+    static HIDE_LOGIN_DIALOGUE: string              = Commands.namespace + 'onHideLoginDialogue';
     static HIDE_OVERLAY: string                     = Commands.namespace + 'onHideOverlay';
     static HIDE_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onHideSettingsDialogue';
     static HOME: string                             = Commands.namespace + 'onHome';
@@ -30,12 +32,14 @@ class Commands {
     static LEFTPANEL_EXPAND_FULL_FINISH: string     = Commands.namespace + 'onLeftPanelExpandFullFinish';
     static LEFTPANEL_EXPAND_FULL_START: string      = Commands.namespace + 'onLeftPanelExpandFullStart';
     static LOAD: string                             = Commands.namespace + 'onLoad';
+    static MINUS: string                            = Commands.namespace + 'onMinus';
     static NOT_FOUND: string                        = Commands.namespace + 'onNotFound';
-    static OPEN_LEFT_PANEL: string                  = Commands.namespace + 'onOpenLeftPanel';
     static OPEN_EXTERNAL_RESOURCE: string           = Commands.namespace + 'onOpenExternalResource';
+    static OPEN_LEFT_PANEL: string                  = Commands.namespace + 'onOpenLeftPanel';
     static OPEN_RIGHT_PANEL: string                 = Commands.namespace + 'onOpenRightPanel';
     static PAGE_DOWN: string                        = Commands.namespace + 'onPageDown';
     static PAGE_UP: string                          = Commands.namespace + 'onPageUp';
+    static PLUS: string                             = Commands.namespace + 'onPlus';
     static REDIRECT: string                         = Commands.namespace + 'onRedirect';
     static REFRESH: string                          = Commands.namespace + 'onRefresh';
     static RESIZE: string                           = Commands.namespace + 'onResize';
@@ -64,8 +68,6 @@ class Commands {
     static UPDATE_SETTINGS: string                  = Commands.namespace + 'onUpdateSettings';
     static VIEW_FULL_TERMS: string                  = Commands.namespace + 'onViewFullTerms';
     static WINDOW_UNLOAD: string                    = Commands.namespace + 'onWindowUnload';
-    static PLUS: string                             = Commands.namespace + 'onPlus';
-    static MINUS: string                            = Commands.namespace + 'onMinus';
 }
 
 export = Commands;

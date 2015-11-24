@@ -3,6 +3,7 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         function Commands() {
         }
         Commands.namespace = 'uv.';
+        Commands.ACCEPT_TERMS = Commands.namespace + 'onAcceptTerms';
         Commands.AUTHORIZATION_OCCURRED = Commands.namespace + 'onAuthorizationOccurred';
         Commands.BOOKMARK = Commands.namespace + 'onBookmark';
         Commands.CANVAS_INDEX_CHANGE_FAILED = Commands.namespace + 'onCanvasIndexChangeFailed';
@@ -23,6 +24,7 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.HIDE_GENERIC_DIALOGUE = Commands.namespace + 'onHideGenericDialogue';
         Commands.HIDE_HELP_DIALOGUE = Commands.namespace + 'onHideHelpDialogue';
         Commands.HIDE_INFORMATION = Commands.namespace + 'onHideInformation';
+        Commands.HIDE_LOGIN_DIALOGUE = Commands.namespace + 'onHideLoginDialogue';
         Commands.HIDE_OVERLAY = Commands.namespace + 'onHideOverlay';
         Commands.HIDE_SETTINGS_DIALOGUE = Commands.namespace + 'onHideSettingsDialogue';
         Commands.HOME = Commands.namespace + 'onHome';
@@ -32,12 +34,14 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.LEFTPANEL_EXPAND_FULL_FINISH = Commands.namespace + 'onLeftPanelExpandFullFinish';
         Commands.LEFTPANEL_EXPAND_FULL_START = Commands.namespace + 'onLeftPanelExpandFullStart';
         Commands.LOAD = Commands.namespace + 'onLoad';
+        Commands.MINUS = Commands.namespace + 'onMinus';
         Commands.NOT_FOUND = Commands.namespace + 'onNotFound';
-        Commands.OPEN_LEFT_PANEL = Commands.namespace + 'onOpenLeftPanel';
         Commands.OPEN_EXTERNAL_RESOURCE = Commands.namespace + 'onOpenExternalResource';
+        Commands.OPEN_LEFT_PANEL = Commands.namespace + 'onOpenLeftPanel';
         Commands.OPEN_RIGHT_PANEL = Commands.namespace + 'onOpenRightPanel';
         Commands.PAGE_DOWN = Commands.namespace + 'onPageDown';
         Commands.PAGE_UP = Commands.namespace + 'onPageUp';
+        Commands.PLUS = Commands.namespace + 'onPlus';
         Commands.REDIRECT = Commands.namespace + 'onRedirect';
         Commands.REFRESH = Commands.namespace + 'onRefresh';
         Commands.RESIZE = Commands.namespace + 'onResize';
@@ -66,8 +70,6 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.UPDATE_SETTINGS = Commands.namespace + 'onUpdateSettings';
         Commands.VIEW_FULL_TERMS = Commands.namespace + 'onViewFullTerms';
         Commands.WINDOW_UNLOAD = Commands.namespace + 'onWindowUnload';
-        Commands.PLUS = Commands.namespace + 'onPlus';
-        Commands.MINUS = Commands.namespace + 'onMinus';
         return Commands;
     })();
     return Commands;
@@ -568,6 +570,7 @@ define('modules/uv-dialogues-module/ClickThroughDialogue',["require", "exports",
             this.$acceptTermsButton.on('click', function (e) {
                 e.preventDefault();
                 _this.close();
+                $.publish(BaseCommands.ACCEPT_TERMS);
                 if (_this.acceptCallback)
                     _this.acceptCallback();
                 //var redirectUrl = this.service.id + escape(parent.document.URL);
@@ -748,7 +751,14 @@ define('modules/uv-dialogues-module/LoginDialogue',["require", "exports", "../uv
             this.$title.text(this.resource.loginService.getProperty('label'));
             this.$message.html(this.resource.loginService.getProperty('description'));
             this.$message.targetBlank();
+            this.$message.find('#fullterms').on('click', function () {
+                $.publish(BaseCommands.VIEW_FULL_TERMS);
+            });
             this.resize();
+        };
+        LoginDialogue.prototype.close = function () {
+            _super.prototype.close.call(this);
+            $.publish(BaseCommands.HIDE_LOGIN_DIALOGUE);
         };
         LoginDialogue.prototype.resize = function () {
             _super.prototype.resize.call(this);
@@ -1021,6 +1031,9 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 }
             }
             this.$element.append('<a href="/" id="top"></a>');
+            $.subscribe(BaseCommands.ACCEPT_TERMS, function () {
+                _this.triggerSocket(BaseCommands.ACCEPT_TERMS);
+            });
             $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, function () {
                 _this.triggerSocket(BaseCommands.AUTHORIZATION_OCCURRED);
             });
@@ -1082,6 +1095,9 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             });
             $.subscribe(BaseCommands.HIDE_INFORMATION, function () {
                 _this.triggerSocket(BaseCommands.HIDE_INFORMATION);
+            });
+            $.subscribe(BaseCommands.HIDE_LOGIN_DIALOGUE, function () {
+                _this.triggerSocket(BaseCommands.HIDE_LOGIN_DIALOGUE);
             });
             $.subscribe(BaseCommands.HIDE_OVERLAY, function () {
                 _this.triggerSocket(BaseCommands.HIDE_OVERLAY);
@@ -2819,7 +2835,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.32';
+    exports.Version = '1.5.33';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2921,6 +2937,11 @@ define('extensions/uv-seadragon-extension/Commands',["require", "exports"], func
         Commands.namespace = 'seadragonExtension.';
         Commands.CLEAR_SEARCH = Commands.namespace + 'onClearSearch';
         Commands.CURRENT_VIEW_URI = Commands.namespace + 'onCurrentViewUri';
+        Commands.DOWNLOAD_CURRENTVIEW = Commands.namespace + 'onDownloadCurrentView';
+        Commands.DOWNLOAD_WHOLEIMAGEHIGHRES = Commands.namespace + 'onDownloadWholeImageHighRes';
+        Commands.DOWNLOAD_WHOLEIMAGELOWRES = Commands.namespace + 'onDownloadWholeImageLowRes';
+        Commands.DOWNLOAD_ENTIREDOCUMENTASPDF = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
+        Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT = Commands.namespace + 'onDownloadEntireDocumentAsText';
         Commands.FIRST = Commands.namespace + 'onFirst';
         Commands.GALLERY_THUMB_SELECTED = Commands.namespace + 'onGalleryThumbSelected';
         Commands.IMAGE_SEARCH = Commands.namespace + 'onImageSearch';
@@ -4767,7 +4788,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseCommands, BaseDownloadDialogue, DownloadOption) {
+define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-dialogues-module/DownloadDialogue", "./Commands", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseCommands, BaseDownloadDialogue, Commands, DownloadOption) {
     var DownloadDialogue = (function (_super) {
         __extends(DownloadDialogue, _super);
         function DownloadDialogue($element) {
@@ -4802,6 +4823,12 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                 var id = selectedOption.attr('id');
                 var canvas = _this.provider.getCurrentCanvas();
                 if (_this.renderingUrls[id]) {
+                    if (id.toLowerCase().indexOf('pdf') !== -1) {
+                        $.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
+                    }
+                    else if (id.toLowerCase().indexOf('text') !== -1) {
+                        $.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+                    }
                     window.open(_this.renderingUrls[id]);
                 }
                 else {
@@ -4809,12 +4836,15 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                         case DownloadOption.currentViewAsJpg.toString():
                             var viewer = that.extension.getViewer();
                             window.open(that.provider.getCroppedImageUri(canvas, viewer, true));
+                            $.publish(Commands.DOWNLOAD_CURRENTVIEW);
                             break;
                         case DownloadOption.wholeImageHighRes.toString():
                             window.open(_this.getOriginalImageForCurrentCanvas());
+                            $.publish(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
                             break;
                         case DownloadOption.wholeImageLowResAsJpg.toString():
                             window.open(that.provider.getConfinedImageUri(canvas, that.options.confinedImageSize));
+                            $.publish(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
                             break;
                     }
                 }
@@ -6518,24 +6548,30 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 _this.centerPanel.setFocus();
             });
             $.subscribe(BaseCommands.UP_ARROW, function (e) {
-                if (!_this.useArrowKeysToNavigate())
+                if (!_this.useArrowKeysToNavigate()) {
                     _this.centerPanel.setFocus();
+                }
             });
             $.subscribe(BaseCommands.DOWN_ARROW, function (e) {
-                if (!_this.useArrowKeysToNavigate())
+                if (!_this.useArrowKeysToNavigate()) {
                     _this.centerPanel.setFocus();
+                }
             });
             $.subscribe(BaseCommands.LEFT_ARROW, function (e) {
-                if (_this.useArrowKeysToNavigate())
+                if (_this.useArrowKeysToNavigate()) {
                     _this.viewPage(_this.provider.getPrevPageIndex());
-                else
+                }
+                else {
                     _this.centerPanel.setFocus();
+                }
             });
             $.subscribe(BaseCommands.RIGHT_ARROW, function (e) {
-                if (_this.useArrowKeysToNavigate())
+                if (_this.useArrowKeysToNavigate()) {
                     _this.viewPage(_this.provider.getNextPageIndex());
-                else
+                }
+                else {
                     _this.centerPanel.setFocus();
+                }
             });
             $.subscribe(Commands.MODE_CHANGED, function (e, mode) {
                 _this.triggerSocket(Commands.MODE_CHANGED, mode);
@@ -6605,6 +6641,21 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 _this.triggerSocket(Commands.SEADRAGON_ROTATION);
                 _this.currentRotation = rotation;
                 _this.setParam(Params.rotation, rotation);
+            });
+            $.subscribe(Commands.DOWNLOAD_CURRENTVIEW, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
+            });
+            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+            });
+            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+            });
+            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
+            });
+            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
             });
         };
         Extension.prototype.createModules = function () {

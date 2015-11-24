@@ -66,6 +66,7 @@ class ClickThroughDialogue extends Dialogue {
         this.$acceptTermsButton.on('click', (e) => {
             e.preventDefault();
             this.close();
+            $.publish(BaseCommands.ACCEPT_TERMS);
             if (this.acceptCallback) this.acceptCallback();
 
             //var redirectUrl = this.service.id + escape(parent.document.URL);
