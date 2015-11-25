@@ -551,7 +551,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
     
     setNavigatorVisible() {
-        var navigatorEnabled = Utils.Bools.GetBool(this.provider.config.options.navigatorEnabled, true);
+        var navigatorEnabled = Utils.Bools.GetBool(this.provider.getSettings().navigatorEnabled, true);
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         
