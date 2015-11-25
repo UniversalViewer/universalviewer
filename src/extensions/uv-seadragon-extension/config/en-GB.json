@@ -122,7 +122,8 @@
         "thumbsLoadRange": 15,
         "treeEnabled": true,
         "twoColThumbHeight": 150,
-        "twoColThumbWidth": 90
+        "twoColThumbWidth": 90,
+        "enableExpandFullButton": true
       }
     }
   }
