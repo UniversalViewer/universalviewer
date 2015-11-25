@@ -20,10 +20,17 @@ class ClickThroughDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, (e, params) => {
+        this.openCommand = BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE;
+        this.closeCommand = BaseCommands.HIDE_CLICKTHROUGH_DIALOGUE;
+
+        $.subscribe(this.openCommand, (e, params) => {
             this.acceptCallback = params.acceptCallback;
             this.resource = params.resource;
             this.open();
+        });
+
+        $.subscribe(this.closeCommand, (e) => {
+            this.close();
         });
 
         this.$title = $('<h1></h1>');

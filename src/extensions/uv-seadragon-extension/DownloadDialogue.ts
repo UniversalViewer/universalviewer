@@ -92,7 +92,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         });
 
         this.$settingsButton.onPressed(() => {
-            this.close();
+            $.publish(BaseCommands.HIDE_DOWNLOAD_DIALOGUE);
             $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
     }

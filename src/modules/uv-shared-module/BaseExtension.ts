@@ -308,6 +308,10 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
         });
 
+        $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, (e, url) => {
+            this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
+        });
+
         $.subscribe(BaseCommands.NOT_FOUND, () => {
             this.triggerSocket(BaseCommands.NOT_FOUND);
         });

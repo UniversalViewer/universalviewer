@@ -17,11 +17,14 @@ class HelpDialogue extends Dialogue {
         
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_HELP_DIALOGUE, (e, params) => {
+        this.openCommand = BaseCommands.SHOW_HELP_DIALOGUE;
+        this.closeCommand = BaseCommands.HIDE_HELP_DIALOGUE;
+
+        $.subscribe(this.openCommand, (e, params) => {
             this.open();
         });
 
-        $.subscribe(BaseCommands.HIDE_HELP_DIALOGUE, (e) => {
+        $.subscribe(this.closeCommand, (e) => {
             this.close();
         });
 
