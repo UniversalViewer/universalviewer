@@ -89,6 +89,12 @@ class SettingsDialogue extends BaseSettingsDialogue {
         super.open();
 
         var settings: ISettings = this.getSettings();
+        
+        if (settings.navigatorEnabled){
+            this.$navigatorEnabledCheckbox.prop("checked", true);
+        } else {
+            this.$navigatorEnabledCheckbox.removeAttr("checked");
+        }
 
         if (!this.provider.isPagingAvailable()){
             this.$pagingEnabled.hide();

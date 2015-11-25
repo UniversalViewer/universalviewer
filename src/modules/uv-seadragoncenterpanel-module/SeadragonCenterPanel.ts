@@ -160,6 +160,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$rotateButton.addClass('rotate');
         
         this.$navigator = this.$viewer.find(".navigator");
+        this.setNavigatorVisible();
 
         // events
 
@@ -361,15 +362,7 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }
         
-        var navigatorEnabled = Utils.Bools.GetBool(this.provider.config.options.navigatorEnabled, true);
-        
-        this.viewer.navigator.setVisible(navigatorEnabled);
-        
-        if (navigatorEnabled)
-            this.$navigator.show();
-        else
-            this.$navigator.hide();
-        
+        this.setNavigatorVisible();
 
         this.isFirstLoad = false;
         this.overlaySearchResults();
@@ -555,6 +548,17 @@ class SeadragonCenterPanel extends CenterPanel {
 
         if (!$canvas.is(":focus"))
             $canvas.focus();
+    }
+    
+    setNavigatorVisible() {
+        var navigatorEnabled = Utils.Bools.GetBool(this.provider.config.options.navigatorEnabled, true);
+
+        this.viewer.navigator.setVisible(navigatorEnabled);
+        
+        if (navigatorEnabled)
+            this.$navigator.show();
+        else
+            this.$navigator.hide();
     }
 }
 export = SeadragonCenterPanel;
