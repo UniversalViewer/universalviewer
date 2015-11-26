@@ -18,6 +18,8 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.DROP = Commands.namespace + 'onDrop';
         Commands.END = Commands.namespace + 'onEnd';
         Commands.ESCAPE = Commands.namespace + 'onEscape';
+        Commands.EXTERNAL_LINK_CLICKED = Commands.namespace + 'onExternalLinkClicked';
+        Commands.HIDE_CLICKTHROUGH_DIALOGUE = Commands.namespace + 'onHideClickthroughDialogue';
         Commands.HIDE_DOWNLOAD_DIALOGUE = Commands.namespace + 'onHideDownloadDialogue';
         Commands.HIDE_EMBED_DIALOGUE = Commands.namespace + 'onHideEmbedDialogue';
         Commands.HIDE_EXTERNALCONTENT_DIALOGUE = Commands.namespace + 'onHideExternalContentDialogue';
@@ -502,11 +504,12 @@ define('modules/uv-shared-module/Dialogue',["require", "exports", "./BaseView", 
         Dialogue.prototype.afterFirstOpen = function () {
         };
         Dialogue.prototype.close = function () {
-            if (this.isActive) {
-                this.$element.hide();
-                this.isActive = false;
-                $.publish(Commands.HIDE_OVERLAY);
-            }
+            if (!this.isActive)
+                return;
+            this.$element.hide();
+            this.isActive = false;
+            $.publish(this.closeCommand);
+            $.publish(Commands.HIDE_OVERLAY);
         };
         Dialogue.prototype.resize = function () {
             _super.prototype.resize.call(this);
@@ -535,10 +538,15 @@ define('modules/uv-dialogues-module/ClickThroughDialogue',["require", "exports",
             var _this = this;
             this.setConfig('clickThroughDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_CLICKTHROUGH_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.acceptCallback = params.acceptCallback;
                 _this.resource = params.resource;
                 _this.open();
+            });
+            $.subscribe(this.closeCommand, function (e) {
+                _this.close();
             });
             this.$title = $('<h1></h1>');
             this.$content.append(this.$title);
@@ -721,10 +729,15 @@ define('modules/uv-dialogues-module/LoginDialogue',["require", "exports", "../uv
             var _this = this;
             this.setConfig('loginDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.SHOW_LOGIN_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_LOGIN_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_LOGIN_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.acceptCallback = params.acceptCallback;
                 _this.resource = params.resource;
                 _this.open();
+            });
+            $.subscribe(this.closeCommand, function (e) {
+                _this.close();
             });
             this.$title = $('<h1></h1>');
             this.$content.append(this.$title);
@@ -735,8 +748,8 @@ define('modules/uv-dialogues-module/LoginDialogue',["require", "exports", "../uv
                     <a class="login btn btn-primary" href="#" target="_parent"></a>\
                 </div>\
             </div>');
-            this.$message = this.$content.find(".message");
-            this.$loginButton = this.$content.find(".login");
+            this.$message = this.$content.find('.message');
+            this.$loginButton = this.$content.find('.login');
             this.$loginButton.text(this.content.login);
             this.$element.hide();
             this.$loginButton.on('click', function (e) {
@@ -751,14 +764,11 @@ define('modules/uv-dialogues-module/LoginDialogue',["require", "exports", "../uv
             this.$title.text(this.resource.loginService.getProperty('label'));
             this.$message.html(this.resource.loginService.getProperty('description'));
             this.$message.targetBlank();
-            this.$message.find('#fullterms').on('click', function () {
-                $.publish(BaseCommands.VIEW_FULL_TERMS);
+            this.$message.find('a').on('click', function () {
+                var url = $(this).attr('href');
+                $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
             });
             this.resize();
-        };
-        LoginDialogue.prototype.close = function () {
-            _super.prototype.close.call(this);
-            $.publish(BaseCommands.HIDE_LOGIN_DIALOGUE);
         };
         LoginDialogue.prototype.resize = function () {
             _super.prototype.resize.call(this);
@@ -1122,6 +1132,9 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             });
             $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, function () {
                 _this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+            });
+            $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, function (e, url) {
+                _this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
             });
             $.subscribe(BaseCommands.NOT_FOUND, function () {
                 _this.triggerSocket(BaseCommands.NOT_FOUND);
@@ -1608,10 +1621,12 @@ define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "..
             var _this = this;
             this.setConfig('downloadDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_DOWNLOAD_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_DOWNLOAD_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.open();
             });
-            $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, function (e) {
+            $.subscribe(this.closeCommand, function (e) {
                 _this.close();
             });
             // create ui.
@@ -1663,6 +1678,9 @@ define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "..
         DownloadDialogue.prototype.isDownloadOptionAvailable = function (option) {
             // this needs to be overridden in extension-specific subclasses.
             return false;
+        };
+        DownloadDialogue.prototype.close = function () {
+            _super.prototype.close.call(this);
         };
         DownloadDialogue.prototype.resize = function () {
             this.$element.css({
@@ -1755,11 +1773,13 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             var _this = this;
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_EMBED_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_EMBED_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.open();
                 _this.formatCode();
             });
-            $.subscribe(BaseCommands.HIDE_EMBED_DIALOGUE, function (e) {
+            $.subscribe(this.closeCommand, function (e) {
                 _this.close();
             });
             this.smallWidth = 560;
@@ -1898,6 +1918,9 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.formatCode();
         };
         EmbedDialogue.prototype.formatCode = function () {
+        };
+        EmbedDialogue.prototype.close = function () {
+            _super.prototype.close.call(this);
         };
         EmbedDialogue.prototype.resize = function () {
             this.$element.css({
@@ -2267,10 +2290,12 @@ define('modules/uv-dialogues-module/HelpDialogue',["require", "exports", "../uv-
             var _this = this;
             this.setConfig('helpDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.SHOW_HELP_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_HELP_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_HELP_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.open();
             });
-            $.subscribe(BaseCommands.HIDE_HELP_DIALOGUE, function (e) {
+            $.subscribe(this.closeCommand, function (e) {
                 _this.close();
             });
             this.$title = $('<h1></h1>');
@@ -2835,7 +2860,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.33';
+    exports.Version = '1.5.34';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2843,7 +2868,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-dialogues-module/SettingsDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue", "../../_Version"], function (require, exports, Commands, Dialogue, Version) {
+define('modules/uv-dialogues-module/SettingsDialogue',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseCommands", "../uv-shared-module/Dialogue", "../../_Version"], function (require, exports, BaseCommands, Commands, Dialogue, Version) {
     var SettingsDialogue = (function (_super) {
         __extends(SettingsDialogue, _super);
         function SettingsDialogue($element) {
@@ -2853,10 +2878,12 @@ define('modules/uv-dialogues-module/SettingsDialogue',["require", "exports", "..
             var _this = this;
             this.setConfig('settingsDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(Commands.SHOW_SETTINGS_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_SETTINGS_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_SETTINGS_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.open();
             });
-            $.subscribe(Commands.HIDE_SETTINGS_DIALOGUE, function (e) {
+            $.subscribe(this.closeCommand, function (e) {
                 _this.close();
             });
             this.$title = $('<h1></h1>');
@@ -2938,10 +2965,10 @@ define('extensions/uv-seadragon-extension/Commands',["require", "exports"], func
         Commands.CLEAR_SEARCH = Commands.namespace + 'onClearSearch';
         Commands.CURRENT_VIEW_URI = Commands.namespace + 'onCurrentViewUri';
         Commands.DOWNLOAD_CURRENTVIEW = Commands.namespace + 'onDownloadCurrentView';
-        Commands.DOWNLOAD_WHOLEIMAGEHIGHRES = Commands.namespace + 'onDownloadWholeImageHighRes';
-        Commands.DOWNLOAD_WHOLEIMAGELOWRES = Commands.namespace + 'onDownloadWholeImageLowRes';
         Commands.DOWNLOAD_ENTIREDOCUMENTASPDF = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
         Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT = Commands.namespace + 'onDownloadEntireDocumentAsText';
+        Commands.DOWNLOAD_WHOLEIMAGEHIGHRES = Commands.namespace + 'onDownloadWholeImageHighRes';
+        Commands.DOWNLOAD_WHOLEIMAGELOWRES = Commands.namespace + 'onDownloadWholeImageLowRes';
         Commands.FIRST = Commands.namespace + 'onFirst';
         Commands.GALLERY_THUMB_SELECTED = Commands.namespace + 'onGalleryThumbSelected';
         Commands.IMAGE_SEARCH = Commands.namespace + 'onImageSearch';
@@ -2958,11 +2985,11 @@ define('extensions/uv-seadragon-extension/Commands',["require", "exports"], func
         Commands.SEADRAGON_ANIMATION_FINISH = Commands.namespace + 'onAnimationfinish';
         Commands.SEADRAGON_ANIMATION_START = Commands.namespace + 'onAnimationStart';
         Commands.SEADRAGON_OPEN = Commands.namespace + 'onOpen';
-        Commands.SEARCH_PREVIEW_START = Commands.namespace + 'onSearchPreviewStart';
-        Commands.SEARCH_PREVIEW_FINISH = Commands.namespace + 'onSearchPreviewFinish';
         Commands.SEADRAGON_RESIZE = Commands.namespace + 'onResize';
         Commands.SEADRAGON_ROTATION = Commands.namespace + 'onRotation';
         Commands.SEARCH = Commands.namespace + 'onSearch';
+        Commands.SEARCH_PREVIEW_FINISH = Commands.namespace + 'onSearchPreviewFinish';
+        Commands.SEARCH_PREVIEW_START = Commands.namespace + 'onSearchPreviewStart';
         Commands.SEARCH_RESULTS = Commands.namespace + 'onSearchResults';
         Commands.SEARCH_RESULTS_EMPTY = Commands.namespace + 'onSearchResultsEmpty';
         Commands.TREE_NODE_SELECTED = Commands.namespace + 'onTreeNodeSelected';
@@ -4852,7 +4879,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                 _this.close();
             });
             this.$settingsButton.onPressed(function () {
-                _this.close();
+                $.publish(BaseCommands.HIDE_DOWNLOAD_DIALOGUE);
                 $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
             });
         };
@@ -5031,11 +5058,13 @@ define('modules/uv-dialogues-module/ExternalContentDialogue',["require", "export
             var _this = this;
             this.setConfig('externalContentDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.open();
                 _this.$iframe.prop('src', params.uri);
             });
-            $.subscribe(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE, function (e) {
+            $.subscribe(this.closeCommand, function (e) {
                 _this.close();
             });
             this.$iframe = $('<iframe></iframe>');
@@ -6500,62 +6529,47 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             $.subscribe(Commands.CLEAR_SEARCH, function (e) {
                 _this.triggerSocket(Commands.CLEAR_SEARCH);
             });
-            $.subscribe(Commands.SEARCH_PREVIEW_START, function (e) {
-                _this.triggerSocket(Commands.SEARCH_PREVIEW_START);
+            $.subscribe(BaseCommands.DOWN_ARROW, function (e) {
+                if (!_this.useArrowKeysToNavigate()) {
+                    _this.centerPanel.setFocus();
+                }
             });
-            $.subscribe(Commands.SEARCH_PREVIEW_FINISH, function (e) {
-                _this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
+            $.subscribe(Commands.DOWNLOAD_CURRENTVIEW, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
             });
-            $.subscribe(Commands.SEARCH_RESULTS, function (e, obj) {
-                _this.triggerSocket(Commands.SEARCH_RESULTS, obj);
+            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
             });
-            $.subscribe(Commands.SEARCH_RESULTS_EMPTY, function (e) {
-                _this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
+            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+            });
+            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+            });
+            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, function (e) {
+                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+            });
+            $.subscribe(BaseCommands.END, function (e) {
+                _this.viewPage(_this.provider.getLastPageIndex());
             });
             $.subscribe(Commands.FIRST, function (e) {
                 _this.triggerSocket(Commands.FIRST);
                 _this.viewPage(_this.provider.getFirstPageIndex());
             });
+            $.subscribe(Commands.GALLERY_THUMB_SELECTED, function (e) {
+                _this.triggerSocket(Commands.GALLERY_THUMB_SELECTED);
+            });
             $.subscribe(BaseCommands.HOME, function (e) {
                 ;
                 _this.viewPage(_this.provider.getFirstPageIndex());
             });
+            $.subscribe(Commands.IMAGE_SEARCH, function (e, index) {
+                _this.triggerSocket(Commands.IMAGE_SEARCH, index);
+                _this.viewPage(index);
+            });
             $.subscribe(Commands.LAST, function (e) {
                 _this.triggerSocket(Commands.LAST);
                 _this.viewPage(_this.provider.getLastPageIndex());
-            });
-            $.subscribe(BaseCommands.END, function (e) {
-                _this.viewPage(_this.provider.getLastPageIndex());
-            });
-            $.subscribe(Commands.PREV, function (e) {
-                _this.triggerSocket(Commands.PREV);
-                _this.viewPage(_this.provider.getPrevPageIndex());
-            });
-            $.subscribe(Commands.NEXT, function (e) {
-                _this.triggerSocket(Commands.NEXT);
-                _this.viewPage(_this.provider.getNextPageIndex());
-            });
-            $.subscribe(BaseCommands.PAGE_UP, function (e) {
-                _this.viewPage(_this.provider.getPrevPageIndex());
-            });
-            $.subscribe(BaseCommands.PAGE_DOWN, function (e) {
-                _this.viewPage(_this.provider.getNextPageIndex());
-            });
-            $.subscribe(BaseCommands.PLUS, function (e) {
-                _this.centerPanel.setFocus();
-            });
-            $.subscribe(BaseCommands.MINUS, function (e) {
-                _this.centerPanel.setFocus();
-            });
-            $.subscribe(BaseCommands.UP_ARROW, function (e) {
-                if (!_this.useArrowKeysToNavigate()) {
-                    _this.centerPanel.setFocus();
-                }
-            });
-            $.subscribe(BaseCommands.DOWN_ARROW, function (e) {
-                if (!_this.useArrowKeysToNavigate()) {
-                    _this.centerPanel.setFocus();
-                }
             });
             $.subscribe(BaseCommands.LEFT_ARROW, function (e) {
                 if (_this.useArrowKeysToNavigate()) {
@@ -6565,6 +6579,60 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                     _this.centerPanel.setFocus();
                 }
             });
+            $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, function (e) {
+                ;
+                Shell.$centerPanel.show();
+                Shell.$rightPanel.show();
+                _this.resize();
+            });
+            $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, function (e) {
+                Shell.$centerPanel.hide();
+                Shell.$rightPanel.hide();
+            });
+            $.subscribe(BaseCommands.MINUS, function (e) {
+                _this.centerPanel.setFocus();
+            });
+            $.subscribe(Commands.MODE_CHANGED, function (e, mode) {
+                _this.triggerSocket(Commands.MODE_CHANGED, mode);
+                _this.mode = new Mode(mode);
+                var settings = _this.provider.getSettings();
+                $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
+            });
+            $.subscribe(Commands.NEXT, function (e) {
+                _this.triggerSocket(Commands.NEXT);
+                _this.viewPage(_this.provider.getNextPageIndex());
+            });
+            $.subscribe(Commands.NEXT_SEARCH_RESULT, function () {
+                _this.triggerSocket(Commands.NEXT_SEARCH_RESULT);
+                _this.nextSearchResult();
+            });
+            $.subscribe(Commands.OPEN_THUMBS_VIEW, function (e) {
+                _this.triggerSocket(Commands.OPEN_THUMBS_VIEW);
+            });
+            $.subscribe(Commands.OPEN_TREE_VIEW, function (e) {
+                _this.triggerSocket(Commands.OPEN_TREE_VIEW);
+            });
+            $.subscribe(BaseCommands.PAGE_DOWN, function (e) {
+                _this.viewPage(_this.provider.getNextPageIndex());
+            });
+            $.subscribe(Commands.PAGE_SEARCH, function (e, value) {
+                _this.triggerSocket(Commands.PAGE_SEARCH, value);
+                _this.viewLabel(value);
+            });
+            $.subscribe(BaseCommands.PAGE_UP, function (e) {
+                _this.viewPage(_this.provider.getPrevPageIndex());
+            });
+            $.subscribe(BaseCommands.PLUS, function (e) {
+                _this.centerPanel.setFocus();
+            });
+            $.subscribe(Commands.PREV, function (e) {
+                _this.triggerSocket(Commands.PREV);
+                _this.viewPage(_this.provider.getPrevPageIndex());
+            });
+            $.subscribe(Commands.PREV_SEARCH_RESULT, function () {
+                _this.triggerSocket(Commands.PREV_SEARCH_RESULT);
+                _this.prevSearchResult();
+            });
             $.subscribe(BaseCommands.RIGHT_ARROW, function (e) {
                 if (_this.useArrowKeysToNavigate()) {
                     _this.viewPage(_this.provider.getNextPageIndex());
@@ -6573,55 +6641,8 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                     _this.centerPanel.setFocus();
                 }
             });
-            $.subscribe(Commands.MODE_CHANGED, function (e, mode) {
-                _this.triggerSocket(Commands.MODE_CHANGED, mode);
-                _this.mode = new Mode(mode);
-                var settings = _this.provider.getSettings();
-                $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
-            });
-            $.subscribe(Commands.PAGE_SEARCH, function (e, value) {
-                _this.triggerSocket(Commands.PAGE_SEARCH, value);
-                _this.viewLabel(value);
-            });
-            $.subscribe(Commands.IMAGE_SEARCH, function (e, index) {
-                _this.triggerSocket(Commands.IMAGE_SEARCH, index);
-                _this.viewPage(index);
-            });
-            $.subscribe(Commands.SEARCH, function (e, terms) {
-                _this.triggerSocket(Commands.SEARCH, terms);
-                _this.searchWithin(terms);
-            });
-            $.subscribe(Commands.VIEW_PAGE, function (e, index) {
-                _this.triggerSocket(Commands.VIEW_PAGE, index);
-                _this.viewPage(index);
-            });
-            $.subscribe(Commands.NEXT_SEARCH_RESULT, function () {
-                _this.triggerSocket(Commands.NEXT_SEARCH_RESULT);
-                _this.nextSearchResult();
-            });
-            $.subscribe(Commands.PREV_SEARCH_RESULT, function () {
-                _this.triggerSocket(Commands.PREV_SEARCH_RESULT);
-                _this.prevSearchResult();
-            });
-            $.subscribe(BaseCommands.UPDATE_SETTINGS, function (e) {
-                _this.updateSettings();
-            });
-            $.subscribe(Commands.TREE_NODE_SELECTED, function (e, data) {
-                _this.triggerSocket(Commands.TREE_NODE_SELECTED, data.path);
-                _this.treeNodeSelected(data);
-            });
-            $.subscribe(BaseCommands.THUMB_SELECTED, function (e, index) {
-                _this.viewPage(index);
-            });
-            $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, function (e) {
-                Shell.$centerPanel.hide();
-                Shell.$rightPanel.hide();
-            });
-            $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, function (e) {
-                ;
-                Shell.$centerPanel.show();
-                Shell.$rightPanel.show();
-                _this.resize();
+            $.subscribe(Commands.SEADRAGON_ANIMATION, function () {
+                _this.triggerSocket(Commands.SEADRAGON_ANIMATION);
             });
             $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, function (e, viewer) {
                 if (_this.centerPanel && _this.centerPanel.currentBounds) {
@@ -6633,29 +6654,55 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                     "fullUri": that.provider.getConfinedImageUri(canvas, canvas.getWidth(), canvas.getHeight())
                 });
             });
+            $.subscribe(Commands.SEADRAGON_ANIMATION_START, function () {
+                _this.triggerSocket(Commands.SEADRAGON_ANIMATION_START);
+            });
             $.subscribe(Commands.SEADRAGON_OPEN, function () {
                 if (!_this.useArrowKeysToNavigate())
                     _this.centerPanel.setFocus();
+            });
+            $.subscribe(Commands.SEADRAGON_RESIZE, function () {
+                _this.triggerSocket(Commands.SEADRAGON_RESIZE);
             });
             $.subscribe(Commands.SEADRAGON_ROTATION, function (e, rotation) {
                 _this.triggerSocket(Commands.SEADRAGON_ROTATION);
                 _this.currentRotation = rotation;
                 _this.setParam(Params.rotation, rotation);
             });
-            $.subscribe(Commands.DOWNLOAD_CURRENTVIEW, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
+            $.subscribe(Commands.SEARCH, function (e, terms) {
+                _this.triggerSocket(Commands.SEARCH, terms);
+                _this.searchWithin(terms);
             });
-            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+            $.subscribe(Commands.SEARCH_PREVIEW_FINISH, function (e) {
+                _this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
             });
-            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+            $.subscribe(Commands.SEARCH_PREVIEW_START, function (e) {
+                _this.triggerSocket(Commands.SEARCH_PREVIEW_START);
             });
-            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
+            $.subscribe(Commands.SEARCH_RESULTS, function (e, obj) {
+                _this.triggerSocket(Commands.SEARCH_RESULTS, obj);
             });
-            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+            $.subscribe(Commands.SEARCH_RESULTS_EMPTY, function (e) {
+                _this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
+            });
+            $.subscribe(BaseCommands.THUMB_SELECTED, function (e, index) {
+                _this.viewPage(index);
+            });
+            $.subscribe(Commands.TREE_NODE_SELECTED, function (e, data) {
+                _this.triggerSocket(Commands.TREE_NODE_SELECTED, data.path);
+                _this.treeNodeSelected(data);
+            });
+            $.subscribe(BaseCommands.UP_ARROW, function (e) {
+                if (!_this.useArrowKeysToNavigate()) {
+                    _this.centerPanel.setFocus();
+                }
+            });
+            $.subscribe(BaseCommands.UPDATE_SETTINGS, function (e) {
+                _this.updateSettings();
+            });
+            $.subscribe(Commands.VIEW_PAGE, function (e, index) {
+                _this.triggerSocket(Commands.VIEW_PAGE, index);
+                _this.viewPage(index);
             });
         };
         Extension.prototype.createModules = function () {
