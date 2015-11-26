@@ -13,5 +13,5 @@ bower.json
 *.js
 favicon.ico
 *.ts
-
-
+dist/*.tar
+dist/*.zip
