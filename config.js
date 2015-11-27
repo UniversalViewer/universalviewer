@@ -11,8 +11,13 @@ var Config = (function () {
             extensions: './src/extensions',
             lib: './src/lib',
             modules: './src/modules',
+            npm: './node_modules',
             themes: './src/themes',
-            typings: './src/typings'
+            typings: './src/typings',
+            uvMediaElementExtensionLib: './src/extensions/uv-mediaelement-extension/lib',
+            uvPdfExtensionLib: './src/extensions/uv-pdf-extension/lib',
+            uvSeadragonExtensionLib: './src/extensions/uv-seadragon-extension/lib',
+            uvVirtexExtensionLib: './src/extensions/uv-virtex-extension/lib'
         };
         this.typescript = {
             dev: {
