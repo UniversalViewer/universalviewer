@@ -19,10 +19,17 @@ class LoginDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_LOGIN_DIALOGUE, (e, params) => {
+        this.openCommand = BaseCommands.SHOW_LOGIN_DIALOGUE;
+        this.closeCommand = BaseCommands.HIDE_LOGIN_DIALOGUE;
+
+        $.subscribe(this.openCommand, (e, params) => {
             this.acceptCallback = params.acceptCallback;
             this.resource = params.resource;
             this.open();
+        });
+
+        $.subscribe(this.closeCommand, (e) => {
+            this.close();
         });
 
         this.$title = $('<h1></h1>');
@@ -37,9 +44,9 @@ class LoginDialogue extends Dialogue {
             </div>'
         );
 
-        this.$message = this.$content.find(".message");
+        this.$message = this.$content.find('.message');
 
-        this.$loginButton = this.$content.find(".login");
+        this.$loginButton = this.$content.find('.login');
         this.$loginButton.text(this.content.login);
 
         this.$element.hide();
@@ -57,6 +64,11 @@ class LoginDialogue extends Dialogue {
         this.$title.text(this.resource.loginService.getProperty('label'));
         this.$message.html(this.resource.loginService.getProperty('description'));
         this.$message.targetBlank();
+
+        this.$message.find('a').on('click', function() {
+            var url: string = $(this).attr('href');
+            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+        });
 
         this.resize();
     }

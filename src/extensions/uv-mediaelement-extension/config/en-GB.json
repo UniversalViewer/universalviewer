@@ -18,7 +18,9 @@
     },
     "footerPanel":
     {
-
+      "options": {
+        "bookmarkEnabled": false
+      }
     },
     "genericDialogue":
     {

@@ -44,9 +44,11 @@ declare module Manifesto {
 declare module Manifesto {
     class ElementType extends StringValue {
         static DOCUMENT: ElementType;
+        static IMAGE: ElementType;
         static MOVINGIMAGE: ElementType;
         static SOUND: ElementType;
         document(): ElementType;
+        image(): ElementType;
         movingimage(): ElementType;
         sound(): ElementType;
     }

@@ -1,3 +1,4 @@
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BootstrapParams = require("../../BootstrapParams");
 import Commands = require("../uv-shared-module/BaseCommands");
 import Dialogue = require("../uv-shared-module/Dialogue");
@@ -24,11 +25,14 @@ class SettingsDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(Commands.SHOW_SETTINGS_DIALOGUE, (e, params) => {
+        this.openCommand = BaseCommands.SHOW_SETTINGS_DIALOGUE;
+        this.closeCommand = BaseCommands.HIDE_SETTINGS_DIALOGUE;
+
+        $.subscribe(this.openCommand, (e, params) => {
             this.open();
         });
 
-        $.subscribe(Commands.HIDE_SETTINGS_DIALOGUE, (e) => {
+        $.subscribe(this.closeCommand, (e) => {
             this.close();
         });
 

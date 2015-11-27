@@ -1,11 +1,13 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import Bookmark = require("../../modules/uv-shared-module/Bookmark");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
 import GalleryView = require("../../modules/uv-treeviewleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
@@ -16,7 +18,6 @@ import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../Params");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 import Settings = require("../../modules/uv-shared-module/Settings");
@@ -59,20 +60,34 @@ class Extension extends BaseExtension {
             this.triggerSocket(Commands.CLEAR_SEARCH);
         });
 
-        $.subscribe(Commands.SEARCH_PREVIEW_START, (e) => {
-            this.triggerSocket(Commands.SEARCH_PREVIEW_START);
+        $.subscribe(BaseCommands.DOWN_ARROW, (e) => {
+            if (!this.useArrowKeysToNavigate()) {
+                this.centerPanel.setFocus();
+            }
         });
 
-        $.subscribe(Commands.SEARCH_PREVIEW_FINISH, (e) => {
-            this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
+        $.subscribe(Commands.DOWNLOAD_CURRENTVIEW, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
-            this.triggerSocket(Commands.SEARCH_RESULTS, obj);
+        $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, (e) => {
-            this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
+        $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+        });
+
+        $.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+        });
+
+        $.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, (e) => {
+            this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+        });
+
+        $.subscribe(BaseCommands.END, (e) => {
+            this.viewPage(this.provider.getLastPageIndex());
         });
 
         $.subscribe(Commands.FIRST, (e) => {
@@ -80,8 +95,17 @@ class Extension extends BaseExtension {
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
+        $.subscribe(Commands.GALLERY_THUMB_SELECTED, (e) => {
+            this.triggerSocket(Commands.GALLERY_THUMB_SELECTED);
+        });
+
         $.subscribe(BaseCommands.HOME, (e) => {;
             this.viewPage(this.provider.getFirstPageIndex());
+        });
+
+        $.subscribe(Commands.IMAGE_SEARCH, (e, index: number) => {
+            this.triggerSocket(Commands.IMAGE_SEARCH, index);
+            this.viewPage(index);
         });
 
         $.subscribe(Commands.LAST, (e) => {
@@ -89,58 +113,27 @@ class Extension extends BaseExtension {
             this.viewPage(this.provider.getLastPageIndex());
         });
 
-        $.subscribe(BaseCommands.END, (e) => {
-            this.viewPage(this.provider.getLastPageIndex());
+        $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
+            if (this.useArrowKeysToNavigate()) {
+                this.viewPage(this.provider.getPrevPageIndex());
+            } else {
+                this.centerPanel.setFocus();
+            }
         });
 
-        $.subscribe(Commands.PREV, (e) => {
-            this.triggerSocket(Commands.PREV);
-            this.viewPage(this.provider.getPrevPageIndex());
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {;
+            Shell.$centerPanel.show();
+            Shell.$rightPanel.show();
+            this.resize();
         });
 
-        $.subscribe(Commands.NEXT, (e) => {
-            this.triggerSocket(Commands.NEXT);
-            this.viewPage(this.provider.getNextPageIndex());
-        });
-
-        $.subscribe(BaseCommands.PAGE_UP, (e) => {
-            this.viewPage(this.provider.getPrevPageIndex());
-        });
-
-        $.subscribe(BaseCommands.PAGE_DOWN, (e) => {
-            this.viewPage(this.provider.getNextPageIndex());
-        });
-
-        $.subscribe(BaseCommands.PLUS, (e) => {
-            this.centerPanel.setFocus();
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+            Shell.$centerPanel.hide();
+            Shell.$rightPanel.hide();
         });
 
         $.subscribe(BaseCommands.MINUS, (e) => {
             this.centerPanel.setFocus();
-        });
-
-        $.subscribe(BaseCommands.UP_ARROW, (e) => {
-            if (!this.useArrowKeysToNavigate())
-                this.centerPanel.setFocus();
-        });
-
-        $.subscribe(BaseCommands.DOWN_ARROW, (e) => {
-            if (!this.useArrowKeysToNavigate())
-                this.centerPanel.setFocus();
-        });
-
-        $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
-            if (this.useArrowKeysToNavigate())
-                this.viewPage(this.provider.getPrevPageIndex());
-            else
-                this.centerPanel.setFocus();
-        });
-
-        $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
-            if (this.useArrowKeysToNavigate())
-                this.viewPage(this.provider.getNextPageIndex());
-            else
-                this.centerPanel.setFocus();
         });
 
         $.subscribe(Commands.MODE_CHANGED, (e, mode: string) => {
@@ -150,24 +143,9 @@ class Extension extends BaseExtension {
             $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
-            this.triggerSocket(Commands.PAGE_SEARCH, value);
-            this.viewLabel(value);
-        });
-
-        $.subscribe(Commands.IMAGE_SEARCH, (e, index: number) => {
-            this.triggerSocket(Commands.IMAGE_SEARCH, index);
-            this.viewPage(index);
-        });
-
-        $.subscribe(Commands.SEARCH, (e, terms: string) => {
-            this.triggerSocket(Commands.SEARCH, terms);
-            this.searchWithin(terms);
-        });
-
-        $.subscribe(Commands.VIEW_PAGE, (e, index: number) => {
-            this.triggerSocket(Commands.VIEW_PAGE, index);
-            this.viewPage(index);
+        $.subscribe(Commands.NEXT, (e) => {
+            this.triggerSocket(Commands.NEXT);
+            this.viewPage(this.provider.getNextPageIndex());
         });
 
         $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
@@ -175,33 +153,51 @@ class Extension extends BaseExtension {
             this.nextSearchResult();
         });
 
+        $.subscribe(Commands.OPEN_THUMBS_VIEW, (e) => {
+            this.triggerSocket(Commands.OPEN_THUMBS_VIEW);
+        });
+
+        $.subscribe(Commands.OPEN_TREE_VIEW, (e) => {
+            this.triggerSocket(Commands.OPEN_TREE_VIEW);
+        });
+
+        $.subscribe(BaseCommands.PAGE_DOWN, (e) => {
+            this.viewPage(this.provider.getNextPageIndex());
+        });
+
+        $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
+            this.triggerSocket(Commands.PAGE_SEARCH, value);
+            this.viewLabel(value);
+        });
+
+        $.subscribe(BaseCommands.PAGE_UP, (e) => {
+            this.viewPage(this.provider.getPrevPageIndex());
+        });
+
+        $.subscribe(BaseCommands.PLUS, (e) => {
+            this.centerPanel.setFocus();
+        });
+
+        $.subscribe(Commands.PREV, (e) => {
+            this.triggerSocket(Commands.PREV);
+            this.viewPage(this.provider.getPrevPageIndex());
+        });
+
         $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
             this.triggerSocket(Commands.PREV_SEARCH_RESULT);
             this.prevSearchResult();
         });
 
-        $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
-            this.updateSettings();
+        $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
+            if (this.useArrowKeysToNavigate()) {
+                this.viewPage(this.provider.getNextPageIndex());
+            } else {
+                this.centerPanel.setFocus();
+            }
         });
 
-        $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
-            this.triggerSocket(Commands.TREE_NODE_SELECTED, data.path);
-            this.treeNodeSelected(data);
-        });
-
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
-            this.viewPage(index);
-        });
-
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
-            Shell.$centerPanel.hide();
-            Shell.$rightPanel.hide();
-        });
-
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {;
-            Shell.$centerPanel.show();
-            Shell.$rightPanel.show();
-            this.resize();
+        $.subscribe(Commands.SEADRAGON_ANIMATION, () => {
+            this.triggerSocket(Commands.SEADRAGON_ANIMATION);
         });
 
         $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
@@ -218,9 +214,17 @@ class Extension extends BaseExtension {
                 });
         });
 
+        $.subscribe(Commands.SEADRAGON_ANIMATION_START, () => {
+            this.triggerSocket(Commands.SEADRAGON_ANIMATION_START);
+        });
+
         $.subscribe(Commands.SEADRAGON_OPEN, () => {
             if (!this.useArrowKeysToNavigate())
                 this.centerPanel.setFocus();
+        });
+
+        $.subscribe(Commands.SEADRAGON_RESIZE, () => {
+            this.triggerSocket(Commands.SEADRAGON_RESIZE);
         });
 
         $.subscribe(Commands.SEADRAGON_ROTATION, (e, rotation) => {
@@ -229,7 +233,50 @@ class Extension extends BaseExtension {
             this.setParam(Params.rotation, rotation);
         });
 
-        
+        $.subscribe(Commands.SEARCH, (e, terms: string) => {
+            this.triggerSocket(Commands.SEARCH, terms);
+            this.searchWithin(terms);
+        });
+
+        $.subscribe(Commands.SEARCH_PREVIEW_FINISH, (e) => {
+            this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
+        });
+
+        $.subscribe(Commands.SEARCH_PREVIEW_START, (e) => {
+            this.triggerSocket(Commands.SEARCH_PREVIEW_START);
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
+            this.triggerSocket(Commands.SEARCH_RESULTS, obj);
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, (e) => {
+            this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
+        });
+
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
+            this.viewPage(index);
+        });
+
+        $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
+            this.triggerSocket(Commands.TREE_NODE_SELECTED, data.path);
+            this.treeNodeSelected(data);
+        });
+
+        $.subscribe(BaseCommands.UP_ARROW, (e) => {
+            if (!this.useArrowKeysToNavigate()) {
+                this.centerPanel.setFocus();
+            }
+        });
+
+        $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
+            this.updateSettings();
+        });
+
+        $.subscribe(Commands.VIEW_PAGE, (e, index: number) => {
+            this.triggerSocket(Commands.VIEW_PAGE, index);
+            this.viewPage(index);
+        });
     }
 
     createModules(): void{
@@ -385,7 +432,7 @@ class Extension extends BaseExtension {
         }
     }
 
-    searchWithin(terms) {
+    searchWithin(terms): void {
 
         var that = this;
 
@@ -403,14 +450,14 @@ class Extension extends BaseExtension {
         });
     }
 
-    clearSearch() {
+    clearSearch(): void {
         (<ISeadragonProvider>this.provider).searchResults = [];
 
         // reload current index as it may contain results.
         this.viewPage(this.provider.canvasIndex);
     }
 
-    prevSearchResult() {
+    prevSearchResult(): void {
 
         // get the first result with a canvasIndex less than the current index.
         for (var i = (<ISeadragonProvider>this.provider).searchResults.length - 1; i >= 0; i--) {
@@ -423,7 +470,7 @@ class Extension extends BaseExtension {
         }
     }
 
-    nextSearchResult() {
+    nextSearchResult(): void {
 
         // get the first result with an index greater than the current index.
         for (var i = 0; i < (<ISeadragonProvider>this.provider).searchResults.length; i++) {
@@ -434,6 +481,22 @@ class Extension extends BaseExtension {
                 break;
             }
         }
+    }
+
+    bookmark(): void {
+        super.bookmark();
+
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var bookmark: Bookmark = new Bookmark();
+
+        bookmark.index = this.provider.canvasIndex;
+        bookmark.label = canvas.getLabel();
+        bookmark.path = (<ISeadragonProvider>this.provider).getCroppedImageUri(canvas, this.getViewer(), true);
+        bookmark.thumb = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+        bookmark.title = this.provider.getTitle();
+        bookmark.type = manifesto.ElementType.image().toString();
+
+        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
     }
 }
 

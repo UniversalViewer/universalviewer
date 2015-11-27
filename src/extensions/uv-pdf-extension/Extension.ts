@@ -1,6 +1,7 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import Bookmark = require("../../modules/uv-shared-module/Bookmark");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
@@ -114,6 +115,22 @@ class Extension extends BaseExtension{
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
         }
+    }
+
+    bookmark() : void {
+        super.bookmark();
+
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var bookmark: Bookmark = new Bookmark();
+
+        bookmark.index = this.provider.canvasIndex;
+        bookmark.label = canvas.getLabel();
+        bookmark.path = this.getBookmarkUri();
+        bookmark.thumb = canvas.getProperty('thumbnail');
+        bookmark.title = this.provider.getTitle();
+        bookmark.type = manifesto.ElementType.document().toString();
+
+        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
     }
 }
 

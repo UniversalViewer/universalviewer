@@ -1,6 +1,8 @@
 {
   "options":
   {
+    "bookmarkThumbHeight": 150,
+    "bookmarkThumbWidth": 90,
     "leftPanelEnabled": true,
     "minWidthBreakPoint": 610,
     "overrideFullScreen": false,
@@ -10,7 +12,7 @@
     "rightPanelEnabled": true,
     "searchWithinEnabled": true,
     "theme": "uv-en-GB-theme",
-    "useArrowKeysToNavigate": true
+    "useArrowKeysToNavigate": false
   },
   "modules":
   {
@@ -33,6 +35,7 @@
     "footerPanel":
     {
       "options":{
+        "bookmarkEnabled": false,
         "downloadEnabled": true,
         "embedEnabled": true,
         "fullscreenEnabled": true,
@@ -70,7 +73,7 @@
     {
       "options":
       {
-        "animationTime": 0.025,
+        "animationTime": 0.15,
         "autoHideControls": true,
         "blendTime": 0,
         "constrainDuringPan": false,

@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UniversalViewer/universalviewer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+    npm install universalviewer
+
+or
+
     bower install uv
 
 http://universalviewer.github.io/examples/
@@ -16,6 +20,7 @@ http://universalviewer.github.io/examples/
 ![British Library](https://raw.githubusercontent.com/UniversalViewer/assets/master/bl_logo.png "British Library")
 ![National Library of Wales](https://raw.githubusercontent.com/UniversalViewer/assets/master/nlw_logo.png "National Library of Wales")
 ![Villanova University, Falvey Memorial Library](https://raw.githubusercontent.com/UniversalViewer/assets/master/vufalvey_logo.png "Villanova University, Falvey Memorial Library")
+![Riksarkivet](https://raw.githubusercontent.com/Riksarkivet/assets/master/logo.png "Riksarkivet (The National Archives of Sweden)")
 
 ## About
 

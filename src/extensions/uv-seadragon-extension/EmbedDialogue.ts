@@ -1,3 +1,4 @@
+import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
 import Commands = require("./Commands");
 import ISeadragonExtension = require("./ISeadragonExtension");

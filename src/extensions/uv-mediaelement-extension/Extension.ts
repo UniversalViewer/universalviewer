@@ -1,10 +1,12 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
+import Bookmark = require("../../modules/uv-shared-module/Bookmark");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
 import EmbedDialogue = require("./EmbedDialogue");
+import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
@@ -14,7 +16,6 @@ import MediaElementCenterPanel = require("../../modules/uv-mediaelementcenterpan
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import Params = require("../../Params");
 import Provider = require("./Provider");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
@@ -130,6 +131,36 @@ class Extension extends BaseExtension{
     isLeftPanelEnabled(): boolean{
         return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
                 && (this.provider.isMultiCanvas() || this.provider.isMultiSequence());
+    }
+
+    bookmark(): void {
+        super.bookmark();
+
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var bookmark: Bookmark = new Bookmark();
+
+        bookmark.index = this.provider.canvasIndex;
+        bookmark.label = canvas.getLabel();
+        bookmark.path = this.getBookmarkUri();
+        bookmark.thumb = canvas.getProperty('thumbnail');
+        bookmark.title = this.provider.getTitle();
+
+        if (this.isVideo()){
+            bookmark.type = manifesto.ElementType.movingimage().toString();
+        } else {
+            bookmark.type = manifesto.ElementType.sound().toString();
+        }
+
+        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+    }
+
+    getCanvasType(): Manifesto.CanvasType {
+        return this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
+    }
+
+    isVideo(): boolean {
+        var canvasType: Manifesto.CanvasType = this.getCanvasType();
+        return canvasType.toString() === manifesto.ElementType.movingimage().toString();
     }
 }
 

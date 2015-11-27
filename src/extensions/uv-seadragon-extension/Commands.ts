@@ -3,6 +3,11 @@ class Commands {
 
     static CLEAR_SEARCH: string                     = Commands.namespace + 'onClearSearch';
     static CURRENT_VIEW_URI: string                 = Commands.namespace + 'onCurrentViewUri';
+    static DOWNLOAD_CURRENTVIEW: string             = Commands.namespace + 'onDownloadCurrentView';
+    static DOWNLOAD_ENTIREDOCUMENTASPDF: string     = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
+    static DOWNLOAD_ENTIREDOCUMENTASTEXT: string    = Commands.namespace + 'onDownloadEntireDocumentAsText';
+    static DOWNLOAD_WHOLEIMAGEHIGHRES: string       = Commands.namespace + 'onDownloadWholeImageHighRes';
+    static DOWNLOAD_WHOLEIMAGELOWRES: string        = Commands.namespace + 'onDownloadWholeImageLowRes';
     static FIRST: string                            = Commands.namespace + 'onFirst';
     static GALLERY_THUMB_SELECTED: string           = Commands.namespace + 'onGalleryThumbSelected';
     static IMAGE_SEARCH: string                     = Commands.namespace + 'onImageSearch';
@@ -19,11 +24,11 @@ class Commands {
     static SEADRAGON_ANIMATION_FINISH: string       = Commands.namespace + 'onAnimationfinish';
     static SEADRAGON_ANIMATION_START: string        = Commands.namespace + 'onAnimationStart';
     static SEADRAGON_OPEN: string                   = Commands.namespace + 'onOpen';
-    static SEARCH_PREVIEW_START: string             = Commands.namespace + 'onSearchPreviewStart';
-    static SEARCH_PREVIEW_FINISH: string            = Commands.namespace + 'onSearchPreviewFinish';
     static SEADRAGON_RESIZE: string                 = Commands.namespace + 'onResize';
     static SEADRAGON_ROTATION: string               = Commands.namespace + 'onRotation';
     static SEARCH: string                           = Commands.namespace + 'onSearch';
+    static SEARCH_PREVIEW_FINISH: string            = Commands.namespace + 'onSearchPreviewFinish';
+    static SEARCH_PREVIEW_START: string             = Commands.namespace + 'onSearchPreviewStart';
     static SEARCH_RESULTS: string                   = Commands.namespace + 'onSearchResults';
     static SEARCH_RESULTS_EMPTY: string             = Commands.namespace + 'onSearchResultsEmpty';
     static TREE_NODE_SELECTED: string               = Commands.namespace + 'onTreeNodeSelected';

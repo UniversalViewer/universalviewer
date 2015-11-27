@@ -3,6 +3,7 @@ import BaseView = require("./BaseView");
 
 class FooterPanel extends BaseView {
 
+    $bookmarkButton: JQuery;
     $downloadButton: JQuery;
     $embedButton: JQuery;
     $fullScreenBtn: JQuery;
@@ -28,6 +29,9 @@ class FooterPanel extends BaseView {
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
+        this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '">' + this.content.bookmark + '</a>');
+        this.$options.prepend(this.$bookmarkButton);
+
         this.$embedButton = $('<a href="#" class="embed" title="' + this.content.embed + '">' + this.content.embed + '</a>');
         this.$options.append(this.$embedButton);
         this.$embedButton.attr('tabindex', '6');
@@ -38,6 +42,10 @@ class FooterPanel extends BaseView {
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
         this.$fullScreenBtn.attr('tabindex', '5');
+
+        this.$bookmarkButton.onPressed(() => {
+            $.publish(BaseCommands.BOOKMARK);
+        });
 
         this.$embedButton.onPressed(() => {
             $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
@@ -58,6 +66,7 @@ class FooterPanel extends BaseView {
             this.$embedButton.hide();
         }
 
+        this.updateBookmarkButton();
         this.updateDownloadButton();
         this.updateFullScreenButton();
 
@@ -86,13 +95,23 @@ class FooterPanel extends BaseView {
         }
     }
 
-    updateDownloadButton() {
+    updateDownloadButton(): void {
         var configEnabled = Utils.Bools.GetBool(this.options.downloadEnabled, true);
 
         if (configEnabled){
             this.$downloadButton.show();
         } else {
             this.$downloadButton.hide();
+        }
+    }
+
+    updateBookmarkButton(): void {
+        var configEnabled = Utils.Bools.GetBool(this.options.bookmarkEnabled, false);
+
+        if (configEnabled){
+            this.$bookmarkButton.show();
+        } else {
+            this.$bookmarkButton.hide();
         }
     }
 

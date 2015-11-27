@@ -186,8 +186,16 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
+        $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
+            this.triggerSocket(BaseCommands.ACCEPT_TERMS);
+        });
+
         $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
             this.triggerSocket(BaseCommands.AUTHORIZATION_OCCURRED);
+        });
+
+        $.subscribe(BaseCommands.BOOKMARK, () => {
+            this.bookmark();
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, () => {
@@ -264,6 +272,10 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.HIDE_INFORMATION);
         });
 
+        $.subscribe(BaseCommands.HIDE_LOGIN_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_LOGIN_DIALOGUE);
+        });
+
         $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
             this.triggerSocket(BaseCommands.HIDE_OVERLAY);
         });
@@ -294,6 +306,10 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
             this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+        });
+
+        $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, (e, url) => {
+            this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
         });
 
         $.subscribe(BaseCommands.NOT_FOUND, () => {
@@ -704,6 +720,22 @@ class BaseExtension implements IExtension {
 
     useArrowKeysToNavigate(): boolean {
         return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
+    }
+
+    bookmark(): void {
+        // override for each extension
+    }
+
+    getBookmarkUri(): string {
+        var absUri = parent.document.URL;
+        var parts = Utils.Urls.GetUrlParts(absUri);
+        var relUri = parts.pathname + parts.search + parent.document.location.hash;
+
+        if (!relUri.startsWith("/")) {
+            relUri = "/" + relUri;
+        }
+
+        return relUri;
     }
 
     // auth

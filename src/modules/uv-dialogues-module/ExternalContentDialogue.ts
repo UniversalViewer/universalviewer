@@ -15,12 +15,15 @@ class ExternalContentDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE, (e, params) => {
+        this.openCommand = BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE;
+        this.closeCommand = BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE;
+
+        $.subscribe(this.openCommand, (e, params) => {
             this.open();
             this.$iframe.prop('src', params.uri);
         });
 
-        $.subscribe(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE, (e) => {
+        $.subscribe(this.closeCommand, (e) => {
             this.close();
         });
 

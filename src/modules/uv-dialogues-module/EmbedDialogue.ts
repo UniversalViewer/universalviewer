@@ -37,12 +37,15 @@ class EmbedDialogue extends Dialogue {
         
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, (e, params) => {
+        this.openCommand = BaseCommands.SHOW_EMBED_DIALOGUE;
+        this.closeCommand = BaseCommands.HIDE_EMBED_DIALOGUE;
+
+        $.subscribe(this.openCommand, (e, params) => {
             this.open();
             this.formatCode();
         });
 
-        $.subscribe(BaseCommands.HIDE_EMBED_DIALOGUE, (e) => {
+        $.subscribe(this.closeCommand, (e) => {
             this.close();
         });
 
@@ -219,6 +222,10 @@ class EmbedDialogue extends Dialogue {
 
     formatCode(): void {
 
+    }
+
+    close(): void {
+        super.close();
     }
 
     resize(): void {

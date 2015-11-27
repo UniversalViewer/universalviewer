@@ -4,6 +4,7 @@ import Commands = require("../../extensions/uv-mediaelement-extension/Commands")
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import IMediaElementExtension = require("../../extensions/uv-mediaelement-extension/IMediaElementExtension");
 
 class MediaElementCenterPanel extends CenterPanel {
 
@@ -29,7 +30,7 @@ class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if (this.isVideo(this.provider.getCanvasByIndex(0))){
+        if ((<IMediaElementExtension>this.extension).isVideo()){
             $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
@@ -50,11 +51,6 @@ class MediaElementCenterPanel extends CenterPanel {
 
         this.title = this.extension.provider.getTitle();
 
-    }
-
-    isVideo(canvas: Manifesto.ICanvas): boolean {
-        var elementType = this.provider.getCanvasType(canvas);
-        return elementType.toString() === manifesto.ElementType.movingimage().toString();
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
@@ -85,7 +81,7 @@ class MediaElementCenterPanel extends CenterPanel {
                 });
             });
 
-            if (this.isVideo(canvas)){
+            if ((<IMediaElementExtension>this.extension).isVideo()){
 
                 this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
 

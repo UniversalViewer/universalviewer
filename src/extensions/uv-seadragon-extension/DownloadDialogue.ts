@@ -1,5 +1,6 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
+import Commands = require("./Commands");
 import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
 import ISeadragonExtension = require("./ISeadragonExtension");
 import ISeadragonProvider = require("./ISeadragonProvider");
@@ -58,21 +59,29 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var selectedOption = that.getSelectedOption();
 
             var id: string = selectedOption.attr('id');
-            var canvas = this.provider.getCurrentCanvas();
+            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
             if (this.renderingUrls[id]) {
+                if (id.toLowerCase().indexOf('pdf') !== -1){
+                    $.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
+                } else if (id.toLowerCase().indexOf('text') !== -1){
+                    $.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+                }
                 window.open(this.renderingUrls[id]);
             } else {
                 switch (id){
                     case DownloadOption.currentViewAsJpg.toString():
                         var viewer = (<ISeadragonExtension>that.extension).getViewer();
                         window.open((<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, viewer, true));
+                        $.publish(Commands.DOWNLOAD_CURRENTVIEW);
                         break;
                     case DownloadOption.wholeImageHighRes.toString():
                         window.open(this.getOriginalImageForCurrentCanvas());
+                        $.publish(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
                         break;
                     case DownloadOption.wholeImageLowResAsJpg.toString():
                         window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
+                        $.publish(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
                         break;
                 }
             }
@@ -83,7 +92,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         });
 
         this.$settingsButton.onPressed(() => {
-            this.close();
+            $.publish(BaseCommands.HIDE_DOWNLOAD_DIALOGUE);
             $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
     }
@@ -146,22 +155,20 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.resize();
     }
 
-    resetDynamicDownloadOptions()
-    {
+    resetDynamicDownloadOptions() {
         this.renderingUrls = [];
         this.renderingUrlsCount = 0;
         this.$downloadOptions.find('.dynamic').remove();
     }
 
-    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string)
-    {
+    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string) {
         var renderings: Manifesto.IRendering[] = manifesto.getRenderings(resource);
 
         for (var i = 0; i < renderings.length; i++) {
             var rendering: Manifesto.IRendering = renderings[i];
             if (rendering) {
-                var label = rendering.getLabel();
-                var currentId;
+                var label: string = rendering.getLabel();
+                var currentId: string;
                 if (label) {
                     currentId = _.camelCase(label);
                     label += " ({0})";
