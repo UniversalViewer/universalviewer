@@ -42,7 +42,7 @@ class VirtexCenterPanel extends CenterPanel {
 
             const canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
-            new virtex({
+            virtex.create(<Virtex.IOptions>{
                 element: "#content .virtex",
                 object: canvas.id
             });

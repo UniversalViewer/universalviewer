@@ -39,9 +39,10 @@
     "json-schema-generator": "git://github.com/krg7880/json-schema-generator.git",
     "less": "^2.4.0",
     "lodash": "^3.1.0",
-    "manifesto": "git://github.com/universalviewer/manifesto.git#3d",
+    "manifesto": "git://github.com/universalviewer/manifesto.git#dev",
     "ncp": "^2.0.0",
     "protractor": "1.3.1",
-    "virtex3d": "^0.1.5"
+    "three.js": "^0.73.0",
+    "virtex3d": "^0.2.1"
   }
 }

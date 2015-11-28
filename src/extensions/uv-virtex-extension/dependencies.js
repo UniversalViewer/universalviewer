@@ -1,5 +1,5 @@
 define(function() {
     return {
-        dependencies: ['virtex']
+        dependencies: ['virtex', 'three.min', 'Detector', 'stats.min']
     };
 });

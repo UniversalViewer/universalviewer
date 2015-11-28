@@ -276,7 +276,8 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
-                            'virtex3d/dist/virtex.js'
+                            'virtex3d/dist/virtex.js',
+                            'three.js/build/three.min.js'
                         ],
                         dest: '<%= config.dirs.uvVirtexExtension %>/lib'
                     }

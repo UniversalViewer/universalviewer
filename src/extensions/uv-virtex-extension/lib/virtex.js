@@ -1,11 +1,25 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.virtex=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-var requestAnimFrame = function () {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+(function (global){
+
+
+
+
+
+
+var requestAnimFrame = (function () {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (callback) {
             window.setTimeout(callback, 1000 / 200);
         };
-    }();
-var Virtex = function () {
-        function Virtex(options) {
+})();
+var Virtex;
+(function (Virtex) {
+    var Viewport = (function () {
+        function Viewport(options) {
             this._isMouseDown = false;
             this._mouseX = 0;
             this._mouseXOnMouseDown = 0;
@@ -19,11 +33,11 @@ var Virtex = function () {
             this._scale = 1;
             this._zoomSpeed = 1;
             this.options = $.extend({
-                ambientLightColor: 12763582,
+                ambientLightColor: 0xc2c1be,
                 cameraZ: 4.5,
-                directionalLight1Color: 16777215,
+                directionalLight1Color: 0xffffff,
                 directionalLight1Intensity: 1,
-                directionalLight2Color: 10584,
+                directionalLight2Color: 0x002958,
                 directionalLight2Intensity: 0.5,
                 fadeSpeed: 1750,
                 far: 10000,
@@ -37,7 +51,7 @@ var Virtex = function () {
             this._resize();
             this._draw();
         }
-        Virtex.prototype._init = function () {
+        Viewport.prototype._init = function () {
             var _this = this;
             if (!Detector.webgl)
                 Detector.addGetWebGLMessage();
@@ -52,6 +66,7 @@ var Virtex = function () {
             this._scene = new THREE.Scene();
             this._modelGroup = new THREE.Object3D();
             this._lightGroup = new THREE.Object3D();
+            // LIGHTS //
             var light1 = new THREE.DirectionalLight(this.options.directionalLight1Color, this.options.directionalLight1Intensity);
             light1.position.set(1, 1, 1);
             this._lightGroup.add(light1);
@@ -61,20 +76,24 @@ var Virtex = function () {
             var ambientLight = new THREE.AmbientLight(this.options.ambientLightColor);
             this._lightGroup.add(ambientLight);
             this._scene.add(this._lightGroup);
+            // CAMERA //
             this._camera = new THREE.PerspectiveCamera(this.options.fov, this._getWidth() / this._getHeight(), this.options.near, this.options.far);
             this._camera.position.z = this.options.cameraZ;
+            // RENDERER //
             this._renderer = Detector.webgl ? new THREE.WebGLRenderer({
                 antialias: true,
                 alpha: true
             }) : new THREE.CanvasRenderer();
             this._renderer.setSize(this._$viewport.width(), this._$viewport.height());
             this._$viewport.append(this._renderer.domElement);
+            // STATS //
             if (this.options.showStats) {
                 this._stats = new Stats();
                 this._stats.domElement.style.position = 'absolute';
                 this._stats.domElement.style.top = '0px';
                 this._$viewport.append(this._stats.domElement);
             }
+            // EVENTS //
             this._$element.on('mousedown', function (e) {
                 _this._onMouseDown(e.originalEvent);
             });
@@ -91,7 +110,7 @@ var Virtex = function () {
                 _this._onMouseWheel(e.originalEvent);
             });
             this._$element.on('DOMMouseScroll', function (e) {
-                _this._onMouseWheel(e.originalEvent);
+                _this._onMouseWheel(e.originalEvent); // firefox
             });
             this._$element.on('touchstart', function (e) {
                 _this._onTouchStart(e.originalEvent);
@@ -102,11 +121,11 @@ var Virtex = function () {
             this._$element.on('touchend', function (e) {
                 _this._onTouchEnd(e.originalEvent);
             });
-            window.addEventListener('resize', function () {
-                return _this._resize();
-            }, false);
-            var loader = new THREE.ObjectLoader();
+            window.addEventListener('resize', function () { return _this._resize(); }, false);
+            // LOADER //
             this._$loading.show();
+            var loader = new THREE.ObjectLoader();
+            loader.setCrossOrigin('anonymous');
             loader.load(this.options.object, function (obj) {
                 _this._modelGroup.add(obj);
                 _this._scene.add(_this._modelGroup);
@@ -116,15 +135,16 @@ var Virtex = function () {
                     _this._loadProgress(e.loaded / e.total);
                 }
             }, function (e) {
+                // error
                 console.log(e);
             });
         };
-        Virtex.prototype._loadProgress = function (progress) {
+        Viewport.prototype._loadProgress = function (progress) {
             var fullWidth = this._$loading.width();
             var width = Math.floor(fullWidth * progress);
             this._$loadingBar.width(width);
         };
-        Virtex.prototype._onMouseDown = function (event) {
+        Viewport.prototype._onMouseDown = function (event) {
             event.preventDefault();
             this._isMouseDown = true;
             this._mouseXOnMouseDown = event.clientX - this._viewportHalfX;
@@ -132,7 +152,7 @@ var Virtex = function () {
             this._mouseYOnMouseDown = event.clientY - this._viewportHalfY;
             this._targetRotationOnMouseDownY = this._targetRotationY;
         };
-        Virtex.prototype._onMouseMove = function (event) {
+        Viewport.prototype._onMouseMove = function (event) {
             this._mouseX = event.clientX - this._viewportHalfX;
             this._mouseY = event.clientY - this._viewportHalfY;
             if (this._isMouseDown) {
@@ -140,28 +160,30 @@ var Virtex = function () {
                 this._targetRotationX = this._targetRotationOnMouseDownX + (this._mouseX - this._mouseXOnMouseDown) * 0.02;
             }
         };
-        Virtex.prototype._onMouseUp = function (event) {
+        Viewport.prototype._onMouseUp = function (event) {
             this._isMouseDown = false;
         };
-        Virtex.prototype._onMouseOut = function (event) {
+        Viewport.prototype._onMouseOut = function (event) {
             this._isMouseDown = false;
         };
-        Virtex.prototype._onMouseWheel = function (event) {
+        Viewport.prototype._onMouseWheel = function (event) {
             event.preventDefault();
             event.stopPropagation();
             var delta = 0;
             if (event.wheelDelta !== undefined) {
                 delta = event.wheelDelta;
-            } else if (event.detail !== undefined) {
+            }
+            else if (event.detail !== undefined) {
                 delta = -event.detail;
             }
             if (delta > 0) {
                 this._dollyOut();
-            } else if (delta < 0) {
+            }
+            else if (delta < 0) {
                 this._dollyIn();
             }
         };
-        Virtex.prototype._onTouchStart = function (event) {
+        Viewport.prototype._onTouchStart = function (event) {
             var touches = event.touches;
             if (touches.length === 1) {
                 this._isMouseDown = true;
@@ -172,86 +194,98 @@ var Virtex = function () {
                 this._targetRotationOnMouseDownY = this._targetRotationY;
             }
         };
-        Virtex.prototype._onTouchMove = function (event) {
+        Viewport.prototype._onTouchMove = function (event) {
             event.preventDefault();
             event.stopPropagation();
             var touches = event.touches;
             switch (touches.length) {
-            case 1:
-                event.preventDefault();
-                this._mouseX = touches[0].pageX - this._viewportHalfX;
-                this._targetRotationX = this._targetRotationOnMouseDownX + (this._mouseX - this._mouseXOnMouseDown) * 0.05;
-                this._mouseY = touches[0].pageY - this._viewportHalfY;
-                this._targetRotationY = this._targetRotationOnMouseDownY + (this._mouseY - this._mouseYOnMouseDown) * 0.05;
-                break;
-            case 2:
-                var dx = touches[0].pageX - touches[1].pageX;
-                var dy = touches[0].pageY - touches[1].pageY;
-                var distance = Math.sqrt(dx * dx + dy * dy);
-                var dollyEnd = new THREE.Vector2(0, distance);
-                var dollyDelta = new THREE.Vector2();
-                dollyDelta.subVectors(dollyEnd, this._dollyStart);
-                if (dollyDelta.y > 0) {
-                    this._dollyOut();
-                } else if (dollyDelta.y < 0) {
-                    this._dollyIn();
-                }
-                this._dollyStart.copy(dollyEnd);
-                break;
-            case 3:
-                break;
+                case 1:
+                    event.preventDefault();
+                    this._mouseX = touches[0].pageX - this._viewportHalfX;
+                    this._targetRotationX = this._targetRotationOnMouseDownX + (this._mouseX - this._mouseXOnMouseDown) * 0.05;
+                    this._mouseY = touches[0].pageY - this._viewportHalfY;
+                    this._targetRotationY = this._targetRotationOnMouseDownY + (this._mouseY - this._mouseYOnMouseDown) * 0.05;
+                    break;
+                case 2:
+                    var dx = touches[0].pageX - touches[1].pageX;
+                    var dy = touches[0].pageY - touches[1].pageY;
+                    var distance = Math.sqrt(dx * dx + dy * dy);
+                    var dollyEnd = new THREE.Vector2(0, distance);
+                    var dollyDelta = new THREE.Vector2();
+                    dollyDelta.subVectors(dollyEnd, this._dollyStart);
+                    if (dollyDelta.y > 0) {
+                        this._dollyOut();
+                    }
+                    else if (dollyDelta.y < 0) {
+                        this._dollyIn();
+                    }
+                    this._dollyStart.copy(dollyEnd);
+                    break;
+                case 3:
+                    //var panEnd = new THREE.Vector2();
+                    //panEnd.set(touches[0].pageX, touches[0].pageY);
+                    //var panDelta = new THREE.Vector2();
+                    //panDelta.subVectors(panEnd, panStart);
+                    //
+                    //panCamera(panDelta.x, panDelta.y);
+                    //
+                    //panStart.copy(panEnd);
+                    break;
             }
         };
-        Virtex.prototype._onTouchEnd = function (event) {
+        Viewport.prototype._onTouchEnd = function (event) {
             this._isMouseDown = false;
         };
-        Virtex.prototype._dollyIn = function (dollyScale) {
+        Viewport.prototype._dollyIn = function (dollyScale) {
             if (dollyScale === undefined) {
                 dollyScale = this._getZoomScale();
             }
             this._scale /= dollyScale;
         };
-        Virtex.prototype._dollyOut = function (dollyScale) {
+        Viewport.prototype._dollyOut = function (dollyScale) {
             if (dollyScale === undefined) {
                 dollyScale = this._getZoomScale();
             }
             this._scale *= dollyScale;
         };
-        Virtex.prototype._getZoomScale = function () {
+        Viewport.prototype._getZoomScale = function () {
             return Math.pow(0.95, this._zoomSpeed);
         };
-        Virtex.prototype._draw = function () {
+        Viewport.prototype._draw = function () {
             var _this = this;
-            requestAnimFrame(function () {
-                return _this._draw();
-            });
+            requestAnimFrame(function () { return _this._draw(); });
             this._render();
             if (this.options.showStats) {
                 this._stats.update();
             }
         };
-        Virtex.prototype._render = function () {
+        Viewport.prototype._render = function () {
+            // horizontal rotation
             this._modelGroup.rotation.y += (this._targetRotationX - this._modelGroup.rotation.y) * 0.1;
-            var finalRotationY = this._targetRotationY - this._modelGroup.rotation.x;
+            // vertical rotation
+            var finalRotationY = (this._targetRotationY - this._modelGroup.rotation.x);
             if (this._modelGroup.rotation.x <= 1 && this._modelGroup.rotation.x >= -1) {
                 this._modelGroup.rotation.x += finalRotationY * 0.1;
             }
             if (this._modelGroup.rotation.x > 1) {
                 this._modelGroup.rotation.x = 1;
-            } else if (this._modelGroup.rotation.x < -1) {
+            }
+            else if (this._modelGroup.rotation.x < -1) {
                 this._modelGroup.rotation.x = -1;
             }
             this._camera.position.z *= this._scale;
+            //camera.position.add(pan);
             this._scale = 1;
+            //pan.set(0, 0, 0);
             this._renderer.render(this._scene, this._camera);
         };
-        Virtex.prototype._getWidth = function () {
+        Viewport.prototype._getWidth = function () {
             return this._$element.width();
         };
-        Virtex.prototype._getHeight = function () {
+        Viewport.prototype._getHeight = function () {
             return this._$element.height();
         };
-        Virtex.prototype._resize = function () {
+        Viewport.prototype._resize = function () {
             this._$element.width(this._getWidth());
             this._$element.height(this._getHeight());
             this._$viewport.width(this._getWidth());
@@ -262,13 +296,22 @@ var Virtex = function () {
             this._camera.updateProjectionMatrix();
             this._renderer.setSize(this._$viewport.width(), this._$viewport.height());
             this._$loading.css({
-                left: this._viewportHalfX - this._$loading.width() / 2,
-                top: this._viewportHalfY - this._$loading.height() / 2
+                left: (this._viewportHalfX) - (this._$loading.width() / 2),
+                top: (this._viewportHalfY) - (this._$loading.height() / 2)
             });
         };
-        return Virtex;
-    }();
-module.exports = Virtex;
+        return Viewport;
+    })();
+    Virtex.Viewport = Viewport;
+})(Virtex || (Virtex = {}));
+
+global.virtex = module.exports = {
+    create: function (options) {
+        return new Virtex.Viewport(options);
+    }
+};
+
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])
 (1)
 });
