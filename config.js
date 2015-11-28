@@ -14,10 +14,10 @@ var Config = (function () {
             npm: './node_modules',
             themes: './src/themes',
             typings: './src/typings',
-            uvMediaElementExtensionLib: './src/extensions/uv-mediaelement-extension/lib',
-            uvPdfExtensionLib: './src/extensions/uv-pdf-extension/lib',
-            uvSeadragonExtensionLib: './src/extensions/uv-seadragon-extension/lib',
-            uvVirtexExtensionLib: './src/extensions/uv-virtex-extension/lib'
+            uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
+            uvPdfExtension: './src/extensions/uv-pdf-extension',
+            uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
+            uvVirtexExtension: './src/extensions/uv-virtex-extension'
         };
         this.typescript = {
             dev: {

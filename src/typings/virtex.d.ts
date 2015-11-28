@@ -1,5 +1,5 @@
-declare module virtex {
-    interface Options {
+declare module Virtex {
+    interface IOptions {
         ambientLightColor: number;
         cameraZ: number;
         directionalLight1Color: number;
@@ -18,9 +18,16 @@ declare module virtex {
     }
 }
 
-import Options = virtex.Options;
-declare class Virtex {
-    options: Options;
+declare module Virtex {
+    interface IVirtex {
+        options: IOptions;
+    }
+}
+
+import IOptions = Virtex.IOptions;
+import IVirtex = Virtex.IVirtex;
+declare class Virtex implements IVirtex {
+    options: IOptions;
     private _$element;
     private _$viewport;
     private _$loading;
@@ -45,7 +52,7 @@ declare class Virtex {
     private _dollyStart;
     private _scale;
     private _zoomSpeed;
-    constructor(options: Options);
+    constructor(options: IOptions);
     private _init();
     private _loadProgress(progress);
     private _onMouseDown(event);

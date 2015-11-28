@@ -42,6 +42,8 @@ var Virtex = function () {
             if (!Detector.webgl)
                 Detector.addGetWebGLMessage();
             this._$element = $(this.options.element);
+            if (!this._$element.length)
+                console.log('element not found');
             this._$element.append('<div class="viewport"></div><div class="loading"><div class="bar"></div></div>');
             this._$viewport = this._$element.find('.viewport');
             this._$loading = this._$element.find('.loading');

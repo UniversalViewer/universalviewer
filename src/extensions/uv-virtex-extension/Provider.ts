@@ -1,8 +1,8 @@
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
-import IMediaElementProvider = require("./IMediaElementProvider");
+import IVirtexProvider = require("./IVirtexProvider");
 
-class Provider extends BaseProvider implements IMediaElementProvider{
+class Provider extends BaseProvider implements IVirtexProvider{
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);

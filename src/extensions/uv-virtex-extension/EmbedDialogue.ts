@@ -1,5 +1,5 @@
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
-import IMediaElementProvider = require("./IMediaElementProvider");
+import IVirtexProvider = require("./IVirtexProvider");
 
 class EmbedDialogue extends BaseEmbedDialogue {
 
@@ -16,7 +16,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
     formatCode(): void {
 
-        this.code = (<IMediaElementProvider>this.provider).getEmbedScript(
+        this.code = (<IVirtexProvider>this.provider).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight);
