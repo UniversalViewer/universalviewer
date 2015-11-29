@@ -25,11 +25,9 @@ class SeadragonCenterPanel extends CenterPanel {
     userData: any;
     viewer: any;
 
-    $closeRightsBtn: JQuery;
     $goHomeButton: JQuery;
     $nextButton: JQuery;
     $prevButton: JQuery;
-    $rights: JQuery;
     $rotateButton: JQuery;
     $spinner: JQuery;
     $viewer: JQuery;
@@ -47,7 +45,7 @@ class SeadragonCenterPanel extends CenterPanel {
         super.create();
 
         this.$viewer = $('<div id="viewer"></div>');
-        this.$content.append(this.$viewer);
+        this.$content.prepend(this.$viewer);
 
         $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
             // todo: OPEN_EXTERNAL_RESOURCE should be able to waitFor RESIZE
@@ -68,26 +66,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
-        this.$rights = $('<div class="rights">\
-                               <div class="header">\
-                                   <div class="title"></div>\
-                                   <div class="close"></div>\
-                               </div>\
-                               <div class="main">\
-                                   <div class="attribution"></div>\
-                                   <div class="license"></div>\
-                                   <div class="logo"></div>\
-                               </div>\
-                          </div>');
-
-        this.$rights.find('.header .title').text(this.content.acknowledgements);
-        this.$content.append(this.$rights);
-
-        this.$closeRightsBtn = this.$rights.find('.header .close');
-        this.$closeRightsBtn.on('click', (e) => {
-            e.preventDefault();
-            this.$rights.hide();
-        });
+        this.showAttribution();
 
         // todo: use compiler flag (when available)
         var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
@@ -253,8 +232,6 @@ class SeadragonCenterPanel extends CenterPanel {
         //    this.$rotateButton.hide();
         //}
 
-        this.showAttribution();
-
         this.isCreated = true;
 
         this.resize();
@@ -383,48 +360,6 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.isFirstLoad = false;
         this.overlaySearchResults();
-    }
-
-    showAttribution(): void {
-        var attribution = this.provider.getAttribution();
-        //var license = this.provider.getLicense();
-        //var logo = this.provider.getLogo();
-
-        if (!attribution){
-            this.$rights.hide();
-            return;
-        }
-
-        var $attribution = this.$rights.find('.attribution');
-        var $license = this.$rights.find('.license');
-        var $logo = this.$rights.find('.logo');
-
-        if (attribution){
-            $attribution.html(this.provider.sanitize(attribution));
-            $attribution.find('img').one("load", () => {
-                this.resize();
-            }).each(function() {
-                if(this.complete) $(this).load();
-            });
-            $attribution.targetBlank();
-            $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
-                this.resize();
-            });
-        } else {
-            $attribution.hide();
-        }
-
-        //if (license){
-        //    $license.append('<a href="' + license + '">' + license + '</a>');
-        //} else {
-        $license.hide();
-        //}
-        //
-        //if (logo){
-        //    $logo.append('<img src="' + logo + '"/>');
-        //} else {
-        $logo.hide();
-        //}
     }
 
     goHome(): void {
@@ -599,10 +534,6 @@ class SeadragonCenterPanel extends CenterPanel {
         if (this.provider.isMultiCanvas() && this.$prevButton && this.$nextButton) {
             this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
             this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
-        }
-
-        if (this.$rights && this.$rights.is(':visible')){
-            this.$rights.css('top', this.$content.height() - this.$rights.outerHeight() - this.$rights.verticalMargins());
         }
     }
 

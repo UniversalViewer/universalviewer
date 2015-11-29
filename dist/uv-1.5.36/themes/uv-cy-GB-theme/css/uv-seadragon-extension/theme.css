@@ -483,61 +483,6 @@
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
-#app .centerPanel .content .rights {
-  background: #333333;
-  background: rgba(51, 51, 51, 0.8);
-  position: absolute;
-  width: 190px;
-  padding: 10px 10px 10px 10px;
-  margin: 10px 0 5px 15px;
-  font-size: 11px;
-}
-#app .centerPanel .content .rights .header {
-  overflow: hidden;
-}
-#app .centerPanel .content .rights .header .title {
-  font-size: 11px;
-  font-weight: bold;
-  height: 20px;
-  width: 150px;
-  line-height: 18px;
-  float: left;
-  padding: 0;
-}
-#app .centerPanel .content .rights .header .close {
-  width: 16px;
-  height: 16px;
-  margin: 2px;
-  float: right;
-  background-image: url('../../img/uv-seadragoncenterpanel-module/close_rights.png');
-  cursor: pointer;
-}
-#app .centerPanel .content .rights .main {
-  margin-top: 5px;
-}
-#app .centerPanel .content .rights .main img {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  max-width: 100px;
-}
-#app .centerPanel .content .rights .main a:not(.toggle) {
-  color: #fff;
-}
-#app .centerPanel .content .rights .main a:not(.toggle):link {
-  color: #fff;
-}
-#app .centerPanel .content .rights .main a:not(.toggle):hover {
-  color: #fff;
-}
-#app .centerPanel .content .rights .main a:not(.toggle):visited {
-  color: #fff;
-}
-#app .centerPanel .content .rights .main a:not(.toggle):active {
-  color: #fff;
-}
-#app .centerPanel .content .rights .main .attribution {
-  overflow: hidden;
-}
 #app .openseadragon-canvas {
   outline: none;
 }
@@ -2063,6 +2008,61 @@ input[type=range]:focus::-ms-fill-upper {
 #app .centerPanel .title span {
   line-height: 30px;
 }
+#app .centerPanel .content .acknowledgements {
+  background: #333333;
+  background: rgba(51, 51, 51, 0.8);
+  position: absolute;
+  width: 190px;
+  padding: 10px 10px 10px 10px;
+  margin: 10px 0 5px 15px;
+  font-size: 11px;
+}
+#app .centerPanel .content .acknowledgements .header {
+  overflow: hidden;
+}
+#app .centerPanel .content .acknowledgements .header .title {
+  font-size: 11px;
+  font-weight: bold;
+  height: 20px;
+  width: 150px;
+  line-height: 18px;
+  float: left;
+  padding: 0;
+}
+#app .centerPanel .content .acknowledgements .header .close {
+  width: 16px;
+  height: 16px;
+  margin: 2px;
+  float: right;
+  background-image: url('../../img/uv-shared-module/close_acknowledgements.png');
+  cursor: pointer;
+}
+#app .centerPanel .content .acknowledgements .main {
+  margin-top: 5px;
+}
+#app .centerPanel .content .acknowledgements .main img {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  max-width: 100px;
+}
+#app .centerPanel .content .acknowledgements .main a:not(.toggle) {
+  color: #fff;
+}
+#app .centerPanel .content .acknowledgements .main a:not(.toggle):link {
+  color: #fff;
+}
+#app .centerPanel .content .acknowledgements .main a:not(.toggle):hover {
+  color: #fff;
+}
+#app .centerPanel .content .acknowledgements .main a:not(.toggle):visited {
+  color: #fff;
+}
+#app .centerPanel .content .acknowledgements .main a:not(.toggle):active {
+  color: #fff;
+}
+#app .centerPanel .content .acknowledgements .main .attribution {
+  overflow: hidden;
+}
 #app .footerPanel .searchOptions {
   width: 425px;
 }
@@ -2410,8 +2410,20 @@ input[type=range]:focus::-ms-fill-upper {
   margin-left: 8px;
 }
 #app .headerPanel .options .centerOptions {
-  width: 385px;
+  width: 432px;
+}
+#app .headerPanel .options .centerOptions .prevOptions {
+  margin: 0 10px 0 0;
+}
+#app .headerPanel .options .centerOptions .mode label {
+  width: 42px;
+}
+#app .headerPanel .options .centerOptions .search {
+  width: 140px;
+}
+#app .headerPanel .options .centerOptions .nextOptions {
+  margin: 0 0 0 10px;
 }
 #app .footerPanel .searchPager .controls .searchResultsInfo {
-  width: 340px;
+  width: 290px;
 }

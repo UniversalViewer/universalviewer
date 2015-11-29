@@ -2331,14 +2331,69 @@ define('modules/uv-shared-module/CenterPanel',["require", "exports", "./Shell", 
             _super.call(this, $element, false, true);
         }
         CenterPanel.prototype.create = function () {
+            var _this = this;
             _super.prototype.create.call(this);
             this.$title = $('<div class="title"></div>');
             this.$element.append(this.$title);
             this.$content = $('<div id="content" class="content"></div>');
             this.$element.append(this.$content);
+            this.$acknowledgements = $('<div class="acknowledgements">\
+                                   <div class="header">\
+                                       <div class="title"></div>\
+                                       <div class="close"></div>\
+                                   </div>\
+                                   <div class="main">\
+                                       <div class="attribution"></div>\
+                                       <div class="license"></div>\
+                                       <div class="logo"></div>\
+                                   </div>\
+                              </div>');
+            this.$acknowledgements.find('.header .title').text(this.content.acknowledgements);
+            this.$content.append(this.$acknowledgements);
+            this.$acknowledgements.hide();
+            this.$closeAttributionButton = this.$acknowledgements.find('.header .close');
+            this.$closeAttributionButton.on('click', function (e) {
+                e.preventDefault();
+                _this.$acknowledgements.hide();
+            });
             if (this.options.titleEnabled === false) {
                 this.$title.hide();
             }
+        };
+        CenterPanel.prototype.showAttribution = function () {
+            var _this = this;
+            var acknowledgements = this.provider.getAttribution();
+            //var license = this.provider.getLicense();
+            //var logo = this.provider.getLogo();
+            if (!acknowledgements) {
+                return;
+            }
+            this.$acknowledgements.show();
+            var $attribution = this.$acknowledgements.find('.attribution');
+            var $license = this.$acknowledgements.find('.license');
+            var $logo = this.$acknowledgements.find('.logo');
+            $attribution.html(this.provider.sanitize(acknowledgements));
+            $attribution.find('img').one("load", function () {
+                _this.resize();
+            }).each(function () {
+                if (this.complete)
+                    $(this).load();
+            });
+            $attribution.targetBlank();
+            $attribution.toggleExpandText(this.options.trimAttributionCount, function () {
+                _this.resize();
+            });
+            //if (license){
+            //    $license.append('<a href="' + license + '">' + license + '</a>');
+            //} else {
+            $license.hide();
+            //}
+            //
+            //if (logo){
+            //    $logo.append('<img src="' + logo + '"/>');
+            //} else {
+            $logo.hide();
+            //}
         };
         CenterPanel.prototype.resize = function () {
             _super.prototype.resize.call(this);
@@ -2355,6 +2410,9 @@ define('modules/uv-shared-module/CenterPanel',["require", "exports", "./Shell", 
             }
             this.$content.height(this.$element.height() - titleHeight);
             this.$content.width(this.$element.width());
+            if (this.$acknowledgements && this.$acknowledgements.is(':visible')) {
+                this.$acknowledgements.css('top', this.$content.height() - this.$acknowledgements.outerHeight() - this.$acknowledgements.verticalMargins());
+            }
         };
         return CenterPanel;
     })(BaseView);
@@ -2860,7 +2918,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.35';
+    exports.Version = '1.5.36';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -5961,7 +6019,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.setConfig('seadragonCenterPanel');
             _super.prototype.create.call(this);
             this.$viewer = $('<div id="viewer"></div>');
-            this.$content.append(this.$viewer);
+            this.$content.prepend(this.$viewer);
             $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
                 // todo: OPEN_EXTERNAL_RESOURCE should be able to waitFor RESIZE
                 // https://facebook.github.io/flux/docs/dispatcher.html
@@ -5981,24 +6039,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             //console.log("create ui");
             this.$spinner = $('<div class="spinner"></div>');
             this.$content.append(this.$spinner);
-            this.$rights = $('<div class="rights">\
-                               <div class="header">\
-                                   <div class="title"></div>\
-                                   <div class="close"></div>\
-                               </div>\
-                               <div class="main">\
-                                   <div class="attribution"></div>\
-                                   <div class="license"></div>\
-                                   <div class="logo"></div>\
-                               </div>\
-                          </div>');
-            this.$rights.find('.header .title').text(this.content.acknowledgements);
-            this.$content.append(this.$rights);
-            this.$closeRightsBtn = this.$rights.find('.header .close');
-            this.$closeRightsBtn.on('click', function (e) {
-                e.preventDefault();
-                _this.$rights.hide();
-            });
+            this.showAttribution();
             // todo: use compiler flag (when available)
             var prefixUrl = (window.DEBUG) ? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
             // add to window object for testing automation purposes.
@@ -6143,7 +6184,6 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             //    }
             //    this.$rotateButton.hide();
             //}
-            this.showAttribution();
             this.isCreated = true;
             this.resize();
         };
@@ -6250,46 +6290,6 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             }
             this.isFirstLoad = false;
             this.overlaySearchResults();
-        };
-        SeadragonCenterPanel.prototype.showAttribution = function () {
-            var _this = this;
-            var attribution = this.provider.getAttribution();
-            //var license = this.provider.getLicense();
-            //var logo = this.provider.getLogo();
-            if (!attribution) {
-                this.$rights.hide();
-                return;
-            }
-            var $attribution = this.$rights.find('.attribution');
-            var $license = this.$rights.find('.license');
-            var $logo = this.$rights.find('.logo');
-            if (attribution) {
-                $attribution.html(this.provider.sanitize(attribution));
-                $attribution.find('img').one("load", function () {
-                    _this.resize();
-                }).each(function () {
-                    if (this.complete)
-                        $(this).load();
-                });
-                $attribution.targetBlank();
-                $attribution.toggleExpandText(this.options.trimAttributionCount, function () {
-                    _this.resize();
-                });
-            }
-            else {
-                $attribution.hide();
-            }
-            //if (license){
-            //    $license.append('<a href="' + license + '">' + license + '</a>');
-            //} else {
-            $license.hide();
-            //}
-            //
-            //if (logo){
-            //    $logo.append('<img src="' + logo + '"/>');
-            //} else {
-            $logo.hide();
-            //}
         };
         SeadragonCenterPanel.prototype.goHome = function () {
             var viewingDirection = this.provider.getViewingDirection().toString();
@@ -6421,9 +6421,6 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             if (this.provider.isMultiCanvas() && this.$prevButton && this.$nextButton) {
                 this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
                 this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
-            }
-            if (this.$rights && this.$rights.is(':visible')) {
-                this.$rights.css('top', this.$content.height() - this.$rights.outerHeight() - this.$rights.verticalMargins());
             }
         };
         SeadragonCenterPanel.prototype.setFocus = function () {

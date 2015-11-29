@@ -8,7 +8,7 @@ or
 
     bower install uv
 
-http://universalviewer.github.io/examples/
+[Examples](http://universalviewer.io/examples/)
 
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
