@@ -92,6 +92,11 @@
     },
     "treeViewLeftPanel": {
 
+    },
+    "virtexCenterPanel": {
+      "content": {
+        "acknowledgements": "Priodoliad"
+      }
     }
   }
 }

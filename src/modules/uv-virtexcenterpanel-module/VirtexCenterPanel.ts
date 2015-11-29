@@ -8,7 +8,7 @@ import IMediaElementExtension = require("../../extensions/uv-mediaelement-extens
 
 class VirtexCenterPanel extends CenterPanel {
 
-    $container: JQuery;
+    $viewport: JQuery;
     title: string;
 
     constructor($element: JQuery) {
@@ -27,24 +27,26 @@ class VirtexCenterPanel extends CenterPanel {
             that.openMedia(resources);
         });
 
-        this.$container = $('<div class="virtex"></div>');
-        this.$content.append(this.$container);
+        this.$viewport = $('<div class="virtex"></div>');
+        this.$content.prepend(this.$viewport);
 
         this.title = this.extension.provider.getTitle();
 
+        this.showAttribution();
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
 
-            this.$container.empty();
+            this.$viewport.empty();
 
             const canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
             virtex.create(<Virtex.IOptions>{
                 element: "#content .virtex",
-                object: canvas.id
+                object: canvas.id,
+                showStats: this.options.showStats
             });
 
             this.resize();
@@ -57,8 +59,8 @@ class VirtexCenterPanel extends CenterPanel {
 
         this.$title.ellipsisFill(this.title);
 
-        this.$container.width(this.$content.width());
-        this.$container.height(this.$content.height());
+        this.$viewport.width(this.$content.width());
+        this.$viewport.height(this.$content.height());
     }
 }
 

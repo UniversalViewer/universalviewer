@@ -92,6 +92,15 @@
     },
     "treeViewLeftPanel": {
 
+    },
+    "virtexCenterPanel": {
+      "options": {
+        "showStats": false,
+        "trimAttributionCount": 150
+      },
+      "content": {
+        "acknowledgements": "Attribution"
+      }
     }
   }
 }
