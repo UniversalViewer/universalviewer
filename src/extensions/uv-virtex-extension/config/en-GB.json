@@ -16,7 +16,9 @@
     },
     "footerPanel":
     {
-
+      "options": {
+        "downloadEnabled": false
+      }
     },
     "genericDialogue":
     {
@@ -27,10 +29,6 @@
 
     },
     "helpDialogue":
-    {
-
-    },
-    "virtexCenterPanel":
     {
 
     },
@@ -62,6 +60,12 @@
         "treeEnabled": true,
         "twoColThumbHeight": 150,
         "twoColThumbWidth": 90
+      }
+    },
+    "virtexCenterPanel":
+    {
+      "options": {
+        "trimAttributionCount": 150
       }
     }
   }

@@ -92,10 +92,14 @@ class Extension extends BaseExtension{
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
+        } else {
+            Shell.$leftPanel.hide();
         }
 
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
+        } else {
+            Shell.$rightPanel.hide();
         }
     }
 
