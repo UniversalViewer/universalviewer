@@ -15,29 +15,29 @@
                 margin-right: 15px;
 
                 &.embed{
-                    .icon-left(url('@{img-path}embed.png'), 20px, 35px);
+                    .icon-left(url('@{img-path}embed.png'), 21px, 35px);
                     line-height: 22px;
                 }
 
                 &.download{
-                    .icon-left(url('@{img-path}download.png'), 20px, 30px);
+                    .icon-left(url('@{img-path}download.png'), 21px, 30px);
                     line-height: 22px;
                 }
 
                 &.bookmark{
-                    .icon-left(url('@{img-path}bookmark.png'), 20px, 30px);
+                    .icon-left(url('@{img-path}bookmark.png'), 21px, 30px);
                     line-height: 22px;
                 }
 
                 &.fullScreen{
-                    .icon-right(url('@{img-path}fullscreen.png'), 20px, 30px);
+                    .icon-right(url('@{img-path}fullscreen.png'), 21px, 30px);
                     line-height: 22px;
                     float: right;
                     margin-right: 0;
                 }
 
                 &.exitFullscreen{
-                    .icon-right(url('@{img-path}exit_fullscreen.png'), 20px, 30px);
+                    .icon-right(url('@{img-path}exit_fullscreen.png'), 21px, 30px);
                     line-height: 22px;
                     float: right;
                     margin-right: 0;
@@ -46,26 +46,46 @@
 
             &.minimiseButtons{
 
+                a:first-child {
+                    margin-left: 10px;
+                }
+
                 a{
+
+                    &.download{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
+
+                    &.bookmark{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
 
                     &.embed{
                         .hide-text();
                         width: 27px;
+                        padding: 0;
                     }
 
                     &.fullScreen{
                         .hide-text();
                         width: 21px;
+                        padding: 0;
                     }
 
                     &.exitFullscreen{
                         .hide-text();
                         width: 21px;
+                        padding: 0;
                     }
 
                     &.normal{
                         .hide-text();
                         width: 21px;
+                        padding: 0;
                     }
                 }
             }

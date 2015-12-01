@@ -844,7 +844,11 @@
 }
 #app .footerPanel .search {
   position: relative;
+<<<<<<< HEAD:dist/uv-1.5.38/themes/uv-cy-GB-theme/css/uv-seadragon-extension/theme.css
   background-color: #010101;
+=======
+  background-color: #211f1f;
+>>>>>>> upstream/master:dist/uv-1.5.38/themes/uv-cy-GB-theme/css/uv-seadragon-extension/theme.css
   height: 32px;
 }
 #app .footerPanel .search .searchTextContainer {
@@ -916,7 +920,11 @@
 }
 #app .footerPanel .searchPager {
   position: relative;
+<<<<<<< HEAD:dist/uv-1.5.38/themes/uv-cy-GB-theme/css/uv-seadragon-extension/theme.css
   background-color: #010101;
+=======
+  background-color: #211f1f;
+>>>>>>> upstream/master:dist/uv-1.5.38/themes/uv-cy-GB-theme/css/uv-seadragon-extension/theme.css
   height: 32px;
   overflow: hidden;
 }
