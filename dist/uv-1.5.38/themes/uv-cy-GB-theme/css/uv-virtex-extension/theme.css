@@ -581,10 +581,10 @@
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #565656;
+  background: none;
 }
 ::-webkit-scrollbar-thumb {
-  background: #bebebe;
+  background: #565656;
 }
 html,
 body {
@@ -1620,8 +1620,8 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.embed {
   background-image: url('../../img/uv-shared-module/embed.png');
   background-repeat: no-repeat;
-  height: 20px;
-  line-height: 20px;
+  height: 21px;
+  line-height: 21px;
   cursor: pointer;
   color: #fff;
   text-decoration: none;
@@ -1640,8 +1640,8 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.download {
   background-image: url('../../img/uv-shared-module/download.png');
   background-repeat: no-repeat;
-  height: 20px;
-  line-height: 20px;
+  height: 21px;
+  line-height: 21px;
   cursor: pointer;
   color: #fff;
   text-decoration: none;
@@ -1660,8 +1660,8 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.bookmark {
   background-image: url('../../img/uv-shared-module/bookmark.png');
   background-repeat: no-repeat;
-  height: 20px;
-  line-height: 20px;
+  height: 21px;
+  line-height: 21px;
   cursor: pointer;
   color: #fff;
   text-decoration: none;
@@ -1680,8 +1680,8 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.fullScreen {
   background-image: url('../../img/uv-shared-module/fullscreen.png');
   background-repeat: no-repeat;
-  height: 20px;
-  line-height: 20px;
+  height: 21px;
+  line-height: 21px;
   cursor: pointer;
   color: #fff;
   text-decoration: none;
@@ -1702,8 +1702,8 @@ input[type=range]:focus::-ms-fill-upper {
 #app .footerPanel .options a.exitFullscreen {
   background-image: url('../../img/uv-shared-module/exit_fullscreen.png');
   background-repeat: no-repeat;
-  height: 20px;
-  line-height: 20px;
+  height: 21px;
+  line-height: 21px;
   cursor: pointer;
   color: #fff;
   text-decoration: none;
@@ -1721,6 +1721,31 @@ input[type=range]:focus::-ms-fill-upper {
   color: #fff;
   text-decoration: none;
 }
+#app .footerPanel .options.minimiseButtons a:first-child {
+  margin-left: 10px;
+}
+#app .footerPanel .options.minimiseButtons a.download {
+  font: 0/0 a;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+  line-height: 0;
+  font-size: 0;
+  color: transparent;
+  width: 27px;
+  padding: 0;
+}
+#app .footerPanel .options.minimiseButtons a.bookmark {
+  font: 0/0 a;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+  line-height: 0;
+  font-size: 0;
+  color: transparent;
+  width: 27px;
+  padding: 0;
+}
 #app .footerPanel .options.minimiseButtons a.embed {
   font: 0/0 a;
   text-shadow: none;
@@ -1730,6 +1755,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 0;
   color: transparent;
   width: 27px;
+  padding: 0;
 }
 #app .footerPanel .options.minimiseButtons a.fullScreen {
   font: 0/0 a;
@@ -1740,6 +1766,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 0;
   color: transparent;
   width: 21px;
+  padding: 0;
 }
 #app .footerPanel .options.minimiseButtons a.exitFullscreen {
   font: 0/0 a;
@@ -1750,6 +1777,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 0;
   color: transparent;
   width: 21px;
+  padding: 0;
 }
 #app .footerPanel .options.minimiseButtons a.normal {
   font: 0/0 a;
@@ -1760,6 +1788,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 0;
   color: transparent;
   width: 21px;
+  padding: 0;
 }
 #app.lightbox .footerPanel .options a.imageBtn.normal {
   background: url('../../img/uv-shared-module/close_lightbox.png') no-repeat;
