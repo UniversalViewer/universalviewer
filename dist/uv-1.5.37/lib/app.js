@@ -795,11 +795,13 @@ define('modules/uv-shared-module/GenericDialogue',["require", "exports", "./Base
             var _this = this;
             this.setConfig('genericDialogue');
             _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.SHOW_GENERIC_DIALOGUE, function (e, params) {
+            this.openCommand = BaseCommands.SHOW_GENERIC_DIALOGUE;
+            this.closeCommand = BaseCommands.HIDE_GENERIC_DIALOGUE;
+            $.subscribe(this.openCommand, function (e, params) {
                 _this.acceptCallback = params.acceptCallback;
                 _this.showMessage(params);
             });
-            $.subscribe(BaseCommands.HIDE_GENERIC_DIALOGUE, function (e) {
+            $.subscribe(this.closeCommand, function (e) {
                 _this.close();
             });
             this.$message = $('<p></p>');

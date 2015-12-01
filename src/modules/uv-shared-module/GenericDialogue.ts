@@ -17,12 +17,15 @@ class GenericDialogue extends Dialogue {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_GENERIC_DIALOGUE, (e, params) => {
+        this.openCommand = BaseCommands.SHOW_GENERIC_DIALOGUE;
+        this.closeCommand = BaseCommands.HIDE_GENERIC_DIALOGUE;
+
+        $.subscribe(this.openCommand, (e, params) => {
             this.acceptCallback = params.acceptCallback;
             this.showMessage(params);
         });
 
-        $.subscribe(BaseCommands.HIDE_GENERIC_DIALOGUE, (e) => {
+        $.subscribe(this.closeCommand, (e) => {
             this.close();
         });
 

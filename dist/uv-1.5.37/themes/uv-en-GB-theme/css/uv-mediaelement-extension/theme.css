@@ -28,11 +28,14 @@
   margin: 0 10px 0 0;
 }
 #app .overlay.embed .middle .size.selected {
-  border: 1px solid #869f33;
-  background: #cadb90;
+  border: 1px solid #14a4c3;
+  background: #7eddf2;
 }
 #app .overlay.embed .middle .size.selected p {
   font-weight: bold;
+}
+#app .overlay.embed .middle .size.selected .box {
+  background: #fff;
 }
 #app .overlay.embed .middle .size .box {
   background: #CCCCCC;
@@ -233,11 +236,11 @@
 #app .leftPanel .tabs .tab.on {
   border: 1px solid #373737;
   border-bottom: 1px solid #1f1f1f;
-  color: #869f33;
+  color: #14a4c3;
   margin-bottom: -1px;
 }
 #app .leftPanel .tabs .tab:focus {
-  border: 1px solid lightskyblue;
+  border: 1px solid #14a4c3;
 }
 #app .leftPanel .tabsContent {
   padding: 10px 10px 10px 10px;
@@ -314,7 +317,7 @@
   overflow: hidden;
 }
 #app .leftPanel .views .treeView ul a.selected {
-  color: #869f33;
+  color: #14a4c3;
 }
 #app .leftPanel .views .thumbsView {
   overflow: auto;
@@ -354,7 +357,7 @@
   border: 2px solid #fff;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb.searchpreview .wrap {
-  border: 2px solid #869f33;
+  border: 2px solid #26b5cc;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb span {
   font-size: 11px;
@@ -460,7 +463,7 @@
   border: 2px solid #fff;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb.searchpreview .wrap {
-  border: 2px solid #869f33;
+  border: 2px solid #26b5cc;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb span {
   font-size: 11px;
@@ -527,11 +530,11 @@
   word-wrap: break-word;
 }
 #app .rightPanel .main .items .item .text a.toggle {
-  color: #869f33;
+  color: #14a4c3;
   font-weight: normal;
 }
 #app .rightPanel .main .items .item .text a.toggle:hover {
-  color: #a5c342;
+  color: #22c5e8;
 }
 #app .rightPanel .main .items .item .text a.toggle.more,
 #app .rightPanel .main .items .item .text a.toggle.less {
@@ -1420,7 +1423,7 @@
   background: #555555;
 }
 ::-webkit-scrollbar-thumb {
-  background: #a5c342;
+  background: #939393;
 }
 html,
 body {
@@ -1454,12 +1457,12 @@ textarea {
   background-image: none;
 }
 a {
-  color: #869f33;
+  color: #26b5cc;
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #a5c342;
+  color: #48c8dd;
   text-decoration: underline;
 }
 a:focus {
@@ -1594,8 +1597,8 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
   color: #fff;
-  background-color: #cc0000;
-  border-color: #cc0000;
+  background-color: #14a4c3;
+  border-color: #14a4c3;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -1603,8 +1606,8 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
   color: #fff;
-  background-color: #a30000;
-  border-color: #8f0000;
+  background-color: #10859e;
+  border-color: #0e758b;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -1626,13 +1629,13 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-  background-color: #cc0000;
-  border-color: #cc0000;
+  background-color: #14a4c3;
+  border-color: #14a4c3;
 }
 .btn-secondary {
   color: #fff;
-  background-color: #869f33;
-  border-color: #869f33;
+  background-color: #14a4c3;
+  border-color: #14a4c3;
 }
 .btn-secondary:hover,
 .btn-secondary:focus,
@@ -1640,8 +1643,8 @@ fieldset[disabled] .btn-primary.active {
 .btn-secondary.active,
 .open .dropdown-toggle.btn-secondary {
   color: #fff;
-  background-color: #6c8029;
-  border-color: #5f7124;
+  background-color: #10859e;
+  border-color: #0e758b;
 }
 .btn-secondary:active,
 .btn-secondary.active,
@@ -1663,8 +1666,8 @@ fieldset[disabled] .btn-secondary:active,
 .btn-secondary.disabled.active,
 .btn-secondary[disabled].active,
 fieldset[disabled] .btn-secondary.active {
-  background-color: #869f33;
-  border-color: #869f33;
+  background-color: #14a4c3;
+  border-color: #14a4c3;
 }
 .btn-warning {
   color: #fff;
@@ -1815,7 +1818,7 @@ fieldset[disabled] .btn-info.active {
   border-color: #5bc0de;
 }
 .btn-link {
-  color: #869f33;
+  color: #26b5cc;
   font-weight: normal;
   cursor: pointer;
   border-radius: 0;
@@ -1836,7 +1839,7 @@ fieldset[disabled] .btn-link {
 }
 .btn-link:hover,
 .btn-link:focus {
-  color: #a5c342;
+  color: #48c8dd;
   text-decoration: underline;
   background-color: transparent;
 }
@@ -2296,10 +2299,10 @@ input[type=range]:focus::-ms-fill-upper {
   display: block;
 }
 #app .leftPanel .closed .expandButton:focus {
-  border: 1px solid lightskyblue;
+  border: 1px solid #14a4c3;
 }
 #app .leftPanel .closed .expandFullButton:focus {
-  border: 1px solid lightskyblue;
+  border: 1px solid #14a4c3;
 }
 #app.browser-Explorer.browser-version-8 .leftPanel .closed .title {
   writing-mode: tb-lr;
@@ -2366,10 +2369,10 @@ input[type=range]:focus::-ms-fill-upper {
   display: block;
 }
 #app .rightPanel .closed .expandButton:focus {
-  border: 1px solid lightskyblue;
+  border: 1px solid #14a4c3;
 }
 #app .rightPanel .closed .expandFullButton:focus {
-  border: 1px solid lightskyblue;
+  border: 1px solid #14a4c3;
 }
 #app .rightPanel .main {
   margin-right: 10px;
@@ -2744,7 +2747,7 @@ input[type=range]:focus::-ms-fill-upper {
   cursor: pointer;
 }
 #app .imageBtn:focus {
-  border: 1px solid lightskyblue;
+  border: 1px solid #14a4c3;
 }
 #app .action,
 #app a.action.black,
@@ -2771,7 +2774,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .leftPanel {
   position: absolute;
   background: #1f1f1f;
-  border: 1px solid #373737;
+  border: none;
 }
 #app .centerPanel {
   position: absolute;
@@ -2779,7 +2782,7 @@ input[type=range]:focus::-ms-fill-upper {
 #app .rightPanel {
   position: absolute;
   background: #1f1f1f;
-  border: 1px solid #373737;
+  border: none;
 }
 #app .footerPanel {
   position: relative;
