@@ -1589,19 +1589,19 @@ input[type=range]:focus::-ms-fill-upper {
   max-width: 100px;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle) {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):link {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):hover {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):visited {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):active {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main .attribution {
   overflow: hidden;
