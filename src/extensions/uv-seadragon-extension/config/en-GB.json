@@ -12,7 +12,8 @@
     "rightPanelEnabled": true,
     "searchWithinEnabled": true,
     "theme": "uv-en-GB-theme",
-    "useArrowKeysToNavigate": false
+    "useArrowKeysToNavigate": false,
+    "navigatorEnabled": true
   },
   "modules":
   {
@@ -86,7 +87,6 @@
         "navigatorPosition": "BOTTOM_RIGHT",
         "pageGap": 0.01,
         "showHomeControl": false,
-        "showNavigator": true,
         "trimAttributionCount": 150,
         "visibilityRatio": 0.5
       }

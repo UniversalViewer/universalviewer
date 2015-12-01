@@ -33,6 +33,7 @@ class SeadragonCenterPanel extends CenterPanel {
     $viewer: JQuery;
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
+    $navigator: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -76,7 +77,7 @@ class SeadragonCenterPanel extends CenterPanel {
             id: "viewer",
             ajaxWithCredentials: false,
             showNavigationControl: true,
-            showNavigator: this.config.options.showNavigator == null ? true : this.config.options.showNavigator,
+            showNavigator: true,
             showRotationControl: true,
             showHomeControl: this.config.options.showHomeControl || false,
             showFullPageControl: false,
@@ -157,6 +158,9 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$rotateButton.attr('tabindex', 14);
         this.$rotateButton.prop('title', this.content.rotateRight);
         this.$rotateButton.addClass('rotate');
+        
+        this.$navigator = this.$viewer.find(".navigator");
+        this.setNavigatorVisible();
 
         // events
 
@@ -357,6 +361,8 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.disableNextButton();
             }
         }
+        
+        this.setNavigatorVisible();
 
         this.isFirstLoad = false;
         this.overlaySearchResults();
@@ -542,6 +548,17 @@ class SeadragonCenterPanel extends CenterPanel {
 
         if (!$canvas.is(":focus"))
             $canvas.focus();
+    }
+    
+    setNavigatorVisible() {
+        var navigatorEnabled = Utils.Bools.GetBool(this.provider.config.options.navigatorEnabled, true);
+
+        this.viewer.navigator.setVisible(navigatorEnabled);
+        
+        if (navigatorEnabled)
+            this.$navigator.show();
+        else
+            this.$navigator.hide();
     }
 }
 export = SeadragonCenterPanel;
