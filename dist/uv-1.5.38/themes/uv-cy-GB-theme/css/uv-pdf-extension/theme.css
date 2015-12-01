@@ -8,8 +8,8 @@
 #app .overlay.embed .middle textarea.code {
   width: 100%;
   height: 90px;
-  background: #ffffff;
-  border: 1px solid #bdb9b9;
+  background: #efefef;
+  border: 1px solid #9a9a9a;
   font-size: 11px;
 }
 #app .overlay.embed .middle .sizes {
@@ -23,7 +23,7 @@
   text-align: center;
 }
 #app .overlay.embed .middle .size {
-  border: 1px solid #bdb9b9;
+  border: 1px solid #9a9a9a;
   float: left;
   margin: 0 10px 0 0;
 }
@@ -264,8 +264,8 @@
 }
 #app .leftPanel .tabsContent .btn-group .btn {
   padding: 0 5px 0 5px;
-  background: #7b7474;
-  color: #bdb9b9;
+  background: #565656;
+  color: #9a9a9a;
   width: 55px;
 }
 #app .leftPanel .tabsContent .btn-group .btn.on {
@@ -517,8 +517,8 @@
   padding: 0;
 }
 #app .rightPanel .main .items .item .header {
-  color: #bdb9b9;
-  border-bottom: 1px solid #7b7474;
+  color: #9a9a9a;
+  border-bottom: 1px solid #565656;
   font-size: 11px;
   margin: 15px 10px 0 0;
   text-transform: uppercase;
@@ -2276,7 +2276,7 @@ canvas {
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #7b7474;
+  background: #565656;
 }
 ::-webkit-scrollbar-thumb {
   background: #bebebe;
@@ -2341,7 +2341,7 @@ img {
   padding: 5px 5px 5px 5px;
   line-height: 1.42857143;
   background-color: #000;
-  border: 1px solid #7b7474;
+  border: 1px solid #565656;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -2356,7 +2356,7 @@ hr {
   margin-top: 17px;
   margin-bottom: 17px;
   border: 0;
-  border-top: 1px solid #ffffff;
+  border-top: 1px solid #efefef;
 }
 .sr-only {
   position: absolute;
@@ -2416,8 +2416,8 @@ fieldset[disabled] .btn {
 }
 .btn-default {
   color: #fff;
-  background-color: #7b7474;
-  border-color: #7b7474;
+  background-color: #565656;
+  border-color: #565656;
 }
 .btn-default:hover,
 .btn-default:focus,
@@ -2425,8 +2425,8 @@ fieldset[disabled] .btn {
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
   color: #fff;
-  background-color: #666060;
-  border-color: #5b5656;
+  background-color: #424242;
+  border-color: #383838;
 }
 .btn-default:active,
 .btn-default.active,
@@ -2448,8 +2448,8 @@ fieldset[disabled] .btn-default:active,
 .btn-default.disabled.active,
 .btn-default[disabled].active,
 fieldset[disabled] .btn-default.active {
-  background-color: #7b7474;
-  border-color: #7b7474;
+  background-color: #565656;
+  border-color: #565656;
 }
 .btn-primary {
   color: #fff;
@@ -2703,7 +2703,7 @@ fieldset[disabled] .btn-link {
 fieldset[disabled] .btn-link:hover,
 .btn-link[disabled]:focus,
 fieldset[disabled] .btn-link:focus {
-  color: #bdb9b9;
+  color: #9a9a9a;
   text-decoration: none;
 }
 .btn-lg {
@@ -2743,7 +2743,7 @@ input[type=range] {
 input[type=range]::-webkit-slider-runnable-track {
   width: 300px;
   height: 5px;
-  background: #bdb9b9;
+  background: #9a9a9a;
   border: none;
 }
 input[type=range]::-webkit-slider-thumb {
@@ -2752,14 +2752,14 @@ input[type=range]::-webkit-slider-thumb {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #7b7474;
+  background: #565656;
   margin-top: -5px;
 }
 input[type=range]:focus {
   outline: none;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #bdb9b9;
+  background: #9a9a9a;
 }
 /* Firefox */
 input[type=range] {
@@ -2778,7 +2778,7 @@ input[type=range]::-moz-range-thumb {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #7b7474;
+  background: #565656;
 }
 /*hide the outline behind the border*/
 input[type=range]:-moz-focusring {
@@ -2801,23 +2801,23 @@ input[type=range]::-ms-track {
   color: transparent;
 }
 input[type=range]::-ms-fill-lower {
-  background: #bdb9b9;
+  background: #9a9a9a;
 }
 input[type=range]::-ms-fill-upper {
-  background: #bdb9b9;
+  background: #9a9a9a;
 }
 input[type=range]::-ms-thumb {
   border: none;
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #7b7474;
+  background: #565656;
 }
 input[type=range]:focus::-ms-fill-lower {
-  background: #bdb9b9;
+  background: #9a9a9a;
 }
 input[type=range]:focus::-ms-fill-upper {
-  background: #ffffff;
+  background: #efefef;
 }
 .btn-default .caret {
   border-top-color: #fff;
@@ -3061,7 +3061,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .headerPanel .informationBox {
   background: #FFB81D;
-  color: #585353;
+  color: #343434;
   width: 100%;
   position: absolute;
   height: 40px;
@@ -3247,8 +3247,8 @@ input[type=range]:focus::-ms-fill-upper {
   line-height: 30px;
 }
 #app .centerPanel .content .acknowledgements {
-  background: #585353;
-  background: rgba(88, 83, 83, 0.6);
+  background: #343434;
+  background: rgba(52, 52, 52, 0.7);
   position: absolute;
   width: 190px;
   padding: 10px 10px 10px 10px;
@@ -3486,7 +3486,7 @@ input[type=range]:focus::-ms-fill-upper {
   padding-right: 34px;
   padding-left: 10px;
   float: right;
-  background-color: #232121;
+  background-color: #010101;
 }
 #app .overlay .top .close:link,
 #app .overlay .top .close:visited,
@@ -3519,7 +3519,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-weight: bold;
   margin: 0 0 0 0;
   padding: 0 0 10px 0;
-  border-bottom: 1px solid #bdb9b9;
+  border-bottom: 1px solid #9a9a9a;
 }
 #app .overlay .middle .content h2 {
   color: #000;
