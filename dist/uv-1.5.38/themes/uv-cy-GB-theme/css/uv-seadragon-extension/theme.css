@@ -844,7 +844,7 @@
 }
 #app .footerPanel .search {
   position: relative;
-  background-color: #010101;
+  background-color: #211f1f;
   height: 32px;
 }
 #app .footerPanel .search .searchTextContainer {
@@ -916,7 +916,7 @@
 }
 #app .footerPanel .searchPager {
   position: relative;
-  background-color: #010101;
+  background-color: #211f1f;
   height: 32px;
   overflow: hidden;
 }
