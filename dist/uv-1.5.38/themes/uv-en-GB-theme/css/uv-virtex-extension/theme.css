@@ -8,8 +8,8 @@
 #app .overlay.embed .middle textarea.code {
   width: 100%;
   height: 90px;
-  background: #eeeeee;
-  border: 1px solid #999999;
+  background: #ffffff;
+  border: 1px solid #bdb9b9;
   font-size: 11px;
 }
 #app .overlay.embed .middle .sizes {
@@ -23,7 +23,7 @@
   text-align: center;
 }
 #app .overlay.embed .middle .size {
-  border: 1px solid #999999;
+  border: 1px solid #bdb9b9;
   float: left;
   margin: 0 10px 0 0;
 }
@@ -220,7 +220,7 @@
 }
 #app .leftPanel .tabs .tab {
   color: #fff;
-  background-color: #1f1f1f;
+  background-color: #211f1f;
   height: 24px;
   display: inline-block;
   text-align: center;
@@ -235,7 +235,7 @@
 }
 #app .leftPanel .tabs .tab.on {
   border: 1px solid #373737;
-  border-bottom: 1px solid #1f1f1f;
+  border-bottom: 1px solid #211f1f;
   color: #14a4c3;
   margin-bottom: -1px;
 }
@@ -264,8 +264,8 @@
 }
 #app .leftPanel .tabsContent .btn-group .btn {
   padding: 0 5px 0 5px;
-  background: #555555;
-  color: #999999;
+  background: #7b7474;
+  color: #bdb9b9;
   width: 55px;
 }
 #app .leftPanel .tabsContent .btn-group .btn.on {
@@ -517,8 +517,8 @@
   padding: 0;
 }
 #app .rightPanel .main .items .item .header {
-  color: #999999;
-  border-bottom: 1px solid #555555;
+  color: #bdb9b9;
+  border-bottom: 1px solid #7b7474;
   font-size: 11px;
   margin: 15px 10px 0 0;
   text-transform: uppercase;
@@ -581,10 +581,10 @@
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #555555;
+  background: #7b7474;
 }
 ::-webkit-scrollbar-thumb {
-  background: #939393;
+  background: #bebebe;
 }
 html,
 body {
@@ -646,7 +646,7 @@ img {
   padding: 5px 5px 5px 5px;
   line-height: 1.42857143;
   background-color: #000;
-  border: 1px solid #555555;
+  border: 1px solid #7b7474;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -661,7 +661,7 @@ hr {
   margin-top: 17px;
   margin-bottom: 17px;
   border: 0;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid #ffffff;
 }
 .sr-only {
   position: absolute;
@@ -721,8 +721,8 @@ fieldset[disabled] .btn {
 }
 .btn-default {
   color: #fff;
-  background-color: #555555;
-  border-color: #555555;
+  background-color: #7b7474;
+  border-color: #7b7474;
 }
 .btn-default:hover,
 .btn-default:focus,
@@ -730,8 +730,8 @@ fieldset[disabled] .btn {
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
   color: #fff;
-  background-color: #414141;
-  border-color: #373737;
+  background-color: #666060;
+  border-color: #5b5656;
 }
 .btn-default:active,
 .btn-default.active,
@@ -753,8 +753,8 @@ fieldset[disabled] .btn-default:active,
 .btn-default.disabled.active,
 .btn-default[disabled].active,
 fieldset[disabled] .btn-default.active {
-  background-color: #555555;
-  border-color: #555555;
+  background-color: #7b7474;
+  border-color: #7b7474;
 }
 .btn-primary {
   color: #fff;
@@ -1008,7 +1008,7 @@ fieldset[disabled] .btn-link {
 fieldset[disabled] .btn-link:hover,
 .btn-link[disabled]:focus,
 fieldset[disabled] .btn-link:focus {
-  color: #999999;
+  color: #bdb9b9;
   text-decoration: none;
 }
 .btn-lg {
@@ -1048,7 +1048,7 @@ input[type=range] {
 input[type=range]::-webkit-slider-runnable-track {
   width: 300px;
   height: 5px;
-  background: #999999;
+  background: #bdb9b9;
   border: none;
 }
 input[type=range]::-webkit-slider-thumb {
@@ -1057,14 +1057,14 @@ input[type=range]::-webkit-slider-thumb {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #555555;
+  background: #7b7474;
   margin-top: -5px;
 }
 input[type=range]:focus {
   outline: none;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #999999;
+  background: #bdb9b9;
 }
 /* Firefox */
 input[type=range] {
@@ -1083,7 +1083,7 @@ input[type=range]::-moz-range-thumb {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #555555;
+  background: #7b7474;
 }
 /*hide the outline behind the border*/
 input[type=range]:-moz-focusring {
@@ -1106,23 +1106,23 @@ input[type=range]::-ms-track {
   color: transparent;
 }
 input[type=range]::-ms-fill-lower {
-  background: #999999;
+  background: #bdb9b9;
 }
 input[type=range]::-ms-fill-upper {
-  background: #999999;
+  background: #bdb9b9;
 }
 input[type=range]::-ms-thumb {
   border: none;
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #555555;
+  background: #7b7474;
 }
 input[type=range]:focus::-ms-fill-lower {
-  background: #999999;
+  background: #bdb9b9;
 }
 input[type=range]:focus::-ms-fill-upper {
-  background: #eeeeee;
+  background: #ffffff;
 }
 .btn-default .caret {
   border-top-color: #fff;
@@ -1366,7 +1366,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .headerPanel .informationBox {
   background: #FFB81D;
-  color: #333333;
+  color: #585353;
   width: 100%;
   position: absolute;
   height: 40px;
@@ -1552,8 +1552,8 @@ input[type=range]:focus::-ms-fill-upper {
   line-height: 30px;
 }
 #app .centerPanel .content .acknowledgements {
-  background: #333333;
-  background: rgba(51, 51, 51, 0.8);
+  background: #585353;
+  background: rgba(88, 83, 83, 0.6);
   position: absolute;
   width: 190px;
   padding: 10px 10px 10px 10px;
@@ -1791,7 +1791,7 @@ input[type=range]:focus::-ms-fill-upper {
   padding-right: 34px;
   padding-left: 10px;
   float: right;
-  background-color: #222222;
+  background-color: #232121;
 }
 #app .overlay .top .close:link,
 #app .overlay .top .close:visited,
@@ -1824,7 +1824,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-weight: bold;
   margin: 0 0 0 0;
   padding: 0 0 10px 0;
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid #bdb9b9;
 }
 #app .overlay .middle .content h2 {
   color: #000;
@@ -1921,7 +1921,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .headerPanel {
   position: relative;
-  background-color: #1f1f1f;
+  background-color: #211f1f;
   color: #fff;
   height: 40px;
 }
@@ -1934,7 +1934,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .leftPanel {
   position: absolute;
-  background: #1f1f1f;
+  background: #211f1f;
   border: none;
 }
 #app .centerPanel {
@@ -1942,7 +1942,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .rightPanel {
   position: absolute;
-  background: #1f1f1f;
+  background: #211f1f;
   border: none;
 }
 #app .footerPanel {
