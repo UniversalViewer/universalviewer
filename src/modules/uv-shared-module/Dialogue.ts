@@ -123,8 +123,8 @@ class Dialogue extends BaseView {
         super.resize();
 
         this.$element.css({
-            'top': (this.extension.height() / 2) - (this.$element.height() / 2),
-            'left': (this.extension.width() / 2) - (this.$element.width() / 2)
+            'top': Math.floor((this.extension.height() / 2) - (this.$element.height() / 2)),
+            'left': Math.floor((this.extension.width() / 2) - (this.$element.width() / 2))
         });
     }
 }

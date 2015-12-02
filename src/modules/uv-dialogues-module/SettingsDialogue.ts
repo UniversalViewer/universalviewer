@@ -101,7 +101,6 @@ class SettingsDialogue extends Dialogue {
 
     resize(): void {
         super.resize();
-
     }
 }
 

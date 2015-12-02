@@ -516,8 +516,8 @@ define('modules/uv-shared-module/Dialogue',["require", "exports", "./BaseView", 
         Dialogue.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$element.css({
-                'top': (this.extension.height() / 2) - (this.$element.height() / 2),
-                'left': (this.extension.width() / 2) - (this.$element.width() / 2)
+                'top': Math.floor((this.extension.height() / 2) - (this.$element.height() / 2)),
+                'left': Math.floor((this.extension.width() / 2) - (this.$element.width() / 2))
             });
         };
         return Dialogue;
@@ -1701,7 +1701,7 @@ define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "..
         };
         DownloadDialogue.prototype.resize = function () {
             this.$element.css({
-                'top': this.extension.height() - this.$element.outerHeight(true)
+                'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
             });
         };
         return DownloadDialogue;
@@ -1956,7 +1956,7 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
         };
         EmbedDialogue.prototype.resize = function () {
             this.$element.css({
-                'top': this.extension.height() - this.$element.outerHeight(true)
+                'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
             });
         };
         return EmbedDialogue;
@@ -2431,8 +2431,8 @@ define('modules/uv-shared-module/CenterPanel',["require", "exports", "./Shell", 
         CenterPanel.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$element.css({
-                'left': Shell.$leftPanel.width(),
-                'width': this.$element.parent().width() - Shell.$leftPanel.width() - Shell.$rightPanel.width()
+                'left': Math.floor(Shell.$leftPanel.width()),
+                'width': Math.floor(this.$element.parent().width() - Shell.$leftPanel.width() - Shell.$rightPanel.width())
             });
             var titleHeight;
             if (this.options && this.options.titleEnabled === false) {
@@ -2837,7 +2837,7 @@ define('modules/uv-shared-module/RightPanel',["require", "exports", "./BaseComma
         RightPanel.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$element.css({
-                'left': this.$element.parent().width() - this.$element.outerWidth()
+                'left': Math.floor(this.$element.parent().width() - this.$element.outerWidth())
             });
         };
         return RightPanel;

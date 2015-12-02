@@ -92,7 +92,7 @@ class DownloadDialogue extends Dialogue {
     resize(): void {
 
         this.$element.css({
-            'top': this.extension.height() - this.$element.outerHeight(true)
+            'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
         });
     }
 }
