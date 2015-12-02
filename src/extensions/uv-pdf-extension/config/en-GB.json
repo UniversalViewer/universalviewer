@@ -1,6 +1,8 @@
 {
   "options":
   {
+    "bookmarkThumbHeight": 150,
+    "bookmarkThumbWidth": 90,
     "minWidthBreakPoint": 610,
     "pessimisticAccessControl": false,
     "rightPanelEnabled": true,

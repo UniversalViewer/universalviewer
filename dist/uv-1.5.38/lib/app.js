@@ -933,7 +933,8 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 bootstrapper: {
                     config: this.provider.bootstrapper.config,
                     params: this.provider.bootstrapper.params
-                }
+                },
+                preview: this.getSharePreview()
             });
             // add/remove classes.
             this.$element.empty();
@@ -1356,6 +1357,18 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                         break;
                 }
             }, 1000);
+        };
+        BaseExtension.prototype.getSharePreview = function () {
+            var preview = {};
+            preview.title = this.provider.getTitle();
+            // todo: use getThumb (when implemented)
+            var canvas = this.provider.getCurrentCanvas();
+            var thumbnail = canvas.getProperty('thumbnail');
+            if (!thumbnail || !_.isString(thumbnail)) {
+                thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+            }
+            preview.image = thumbnail;
+            return preview;
         };
         BaseExtension.prototype.getExternalResources = function (resources) {
             var _this = this;
@@ -1781,7 +1794,7 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.closeCommand = BaseCommands.HIDE_EMBED_DIALOGUE;
             $.subscribe(this.openCommand, function (e, params) {
                 _this.open();
-                _this.formatCode();
+                _this.update();
             });
             $.subscribe(this.closeCommand, function (e) {
                 _this.close();
@@ -1797,12 +1810,20 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             // create ui.
             this.$title = $('<h1>' + this.content.title + '</h1>');
             this.$content.append(this.$title);
+            this.$firstRow = $('<div class="firstRow"><div class="leftCol"></div><div class="rightCol"></div></div>');
+            this.$content.append(this.$firstRow);
+            this.$secondRow = $('<div class="secondRow"></div>');
+            this.$content.append(this.$secondRow);
+            this.$link = $('<a target="_blank"></a>');
+            this.$firstRow.find('.leftCol').append(this.$link);
+            this.$image = $('<img class="share" />');
+            this.$link.append(this.$image);
             this.$intro = $('<p>' + this.content.instructions + '</p>');
-            this.$content.append(this.$intro);
+            this.$firstRow.find('.rightCol').append(this.$intro);
             this.$code = $('<textarea class="code"></textarea>');
-            this.$content.append(this.$code);
+            this.$secondRow.append(this.$code);
             this.$sizes = $('<div class="sizes"></div>');
-            this.$content.append(this.$sizes);
+            this.$secondRow.append(this.$sizes);
             this.$smallSize = $('<div class="size small"></div>');
             this.$sizes.append(this.$smallSize);
             this.$smallSize.append('<p>' + this.smallWidth + ' x ' + this.smallHeight + '</p>');
@@ -1823,13 +1844,13 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.$customSizeWidthWrap = $('<div class="width"></div>');
             this.$customSizeWrap.append(this.$customSizeWidthWrap);
             this.$customSizeWidthWrap.append('<label for="width">' + this.content.width + '</label>');
-            this.$customWidth = $('<input id="width" type="text" maxlength="5"></input>');
+            this.$customWidth = $('<input id="width" type="text" maxlength="5" />');
             this.$customSizeWidthWrap.append(this.$customWidth);
             this.$customSizeWidthWrap.append('<span>px</span>');
             this.$customSizeHeightWrap = $('<div class="height"></div>');
             this.$customSizeWrap.append(this.$customSizeHeightWrap);
             this.$customSizeHeightWrap.append('<label for="height">' + this.content.height + '</label>');
-            this.$customHeight = $('<input id="height" type="text" maxlength="5"></input>');
+            this.$customHeight = $('<input id="height" type="text" maxlength="5" />');
             this.$customSizeHeightWrap.append(this.$customHeight);
             this.$customSizeHeightWrap.append('<span>px</span>');
             // initialise ui.
@@ -1889,21 +1910,21 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.currentHeight = this.smallHeight;
             this.$sizes.find('.size').removeClass('selected');
             this.$smallSize.addClass('selected');
-            this.formatCode();
+            this.update();
         };
         EmbedDialogue.prototype.selectMedium = function () {
             this.currentWidth = this.mediumWidth;
             this.currentHeight = this.mediumHeight;
             this.$sizes.find('.size').removeClass('selected');
             this.$mediumSize.addClass('selected');
-            this.formatCode();
+            this.update();
         };
         EmbedDialogue.prototype.selectLarge = function () {
             this.currentWidth = this.largeWidth;
             this.currentHeight = this.largeHeight;
             this.$sizes.find('.size').removeClass('selected');
             this.$largeSize.addClass('selected');
-            this.formatCode();
+            this.update();
         };
         EmbedDialogue.prototype.selectCustom = function () {
             if (!this.$customWidth.val()) {
@@ -1919,9 +1940,16 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
         EmbedDialogue.prototype.getCustomSize = function () {
             this.currentWidth = this.$customWidth.val();
             this.currentHeight = this.$customHeight.val();
-            this.formatCode();
+            this.update();
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            var canvas = this.provider.getCurrentCanvas();
+            var thumbnail = canvas.getProperty('thumbnail');
+            if (!thumbnail || !_.isString(thumbnail)) {
+                thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+            }
+            this.$link.attr('href', thumbnail);
+            this.$image.attr('src', thumbnail);
         };
         EmbedDialogue.prototype.close = function () {
             _super.prototype.close.call(this);
@@ -1951,7 +1979,8 @@ define('extensions/uv-mediaelement-extension/EmbedDialogue',["require", "exports
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
             this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
             this.$code.val(this.code);
         };
@@ -4665,7 +4694,8 @@ define('extensions/uv-pdf-extension/EmbedDialogue',["require", "exports", "../..
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
             this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
             this.$code.val(this.code);
         };
@@ -5081,17 +5111,18 @@ define('extensions/uv-seadragon-extension/EmbedDialogue',["require", "exports", 
             var _this = this;
             _super.call(this, $element);
             $.subscribe(Commands.SEADRAGON_OPEN, function (viewer) {
-                _this.formatCode();
+                _this.update();
             });
             $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, function (viewer) {
-                _this.formatCode();
+                _this.update();
             });
         }
         EmbedDialogue.prototype.create = function () {
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
             var zoom = this.extension.getViewerBounds();
             var rotation = this.extension.getViewerRotation();
             this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight, zoom, rotation);
@@ -7389,7 +7420,8 @@ define('extensions/uv-virtex-extension/EmbedDialogue',["require", "exports", "..
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
             this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
             this.$code.val(this.code);
         };
