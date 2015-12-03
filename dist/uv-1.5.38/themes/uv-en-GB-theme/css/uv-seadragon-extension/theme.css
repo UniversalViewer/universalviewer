@@ -234,10 +234,11 @@
 }
 #app .rightPanel .main .items .item {
   padding: 0;
+  margin: 0 0 20px 0;
 }
 #app .rightPanel .main .items .item .header {
   color: #9a9a9a;
-  border-bottom: 1px solid #565656;
+  border-bottom: 1px solid #343434;
   font-size: 11px;
   margin: 15px 10px 0 0;
   text-transform: uppercase;
@@ -2030,6 +2031,7 @@ input[type=range]:focus::-ms-fill-upper {
   line-height: 18px;
   float: left;
   padding: 0;
+  text-transform: uppercase;
 }
 #app .centerPanel .content .acknowledgements .header .close {
   width: 16px;
@@ -2048,19 +2050,19 @@ input[type=range]:focus::-ms-fill-upper {
   max-width: 100px;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle) {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):link {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):hover {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):visited {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main a:not(.toggle):active {
-  color: #fff;
+  color: #26b5cc;
 }
 #app .centerPanel .content .acknowledgements .main .attribution {
   overflow: hidden;
@@ -2293,7 +2295,6 @@ input[type=range]:focus::-ms-fill-upper {
   width: 100%;
 }
 #app .overlay .middle .content {
-  padding-top: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
@@ -2310,9 +2311,8 @@ input[type=range]:focus::-ms-fill-upper {
   color: #000;
   font-size: 18px;
   font-weight: bold;
-  margin: 0 0 0 0;
+  margin: 15px 0px 0px 0px;
   padding: 0 0 10px 0;
-  border-bottom: 1px solid #9a9a9a;
 }
 #app .overlay .middle .content h2 {
   color: #000;
