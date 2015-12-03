@@ -2639,6 +2639,9 @@ define('modules/uv-shared-module/BaseExpandPanel',["require", "exports", "./Base
             this.$expandFullButton = $('<a class="expandFullButton"></a>');
             this.$expandFullButton.prop('title', this.content.expandFull);
             this.$top.append(this.$expandFullButton);
+            if (!Utils.Bools.GetBool(this.config.options.expandFullEnabled, true)) {
+                this.$expandFullButton.hide();
+            }
             this.$collapseButton = $('<div class="collapseButton"></div>');
             this.$collapseButton.prop('title', this.content.collapse);
             this.$top.append(this.$collapseButton);
@@ -2951,7 +2954,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.38';
+    exports.Version = '1.5.39';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -6082,7 +6085,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                 id: "viewer",
                 ajaxWithCredentials: false,
                 showNavigationControl: true,
-                showNavigator: this.config.options.showNavigator == null ? true : this.config.options.showNavigator,
+                showNavigator: true,
                 showRotationControl: true,
                 showHomeControl: this.config.options.showHomeControl || false,
                 showFullPageControl: false,
@@ -6159,6 +6162,8 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.$rotateButton.attr('tabindex', 14);
             this.$rotateButton.prop('title', this.content.rotateRight);
             this.$rotateButton.addClass('rotate');
+            this.$navigator = this.$viewer.find(".navigator");
+            this.setNavigatorVisible();
             // events
             this.$element.on('mousemove', function (e) {
                 if (_this.controlsVisible)
@@ -6323,6 +6328,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                     this.disableNextButton();
                 }
             }
+            this.setNavigatorVisible();
             this.isFirstLoad = false;
             this.overlaySearchResults();
         };
@@ -6463,6 +6469,14 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             if (!$canvas.is(":focus"))
                 $canvas.focus();
         };
+        SeadragonCenterPanel.prototype.setNavigatorVisible = function () {
+            var navigatorEnabled = Utils.Bools.GetBool(this.provider.config.options.navigatorEnabled, true);
+            this.viewer.navigator.setVisible(navigatorEnabled);
+            if (navigatorEnabled)
+                this.$navigator.show();
+            else
+                this.$navigator.hide();
+        };
         return SeadragonCenterPanel;
     })(CenterPanel);
     return SeadragonCenterPanel;
@@ -6483,6 +6497,12 @@ define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports
             var _this = this;
             this.setConfig('settingsDialogue');
             _super.prototype.create.call(this);
+            this.$navigatorEnabled = $('<div class="setting navigatorEnabled"></div>');
+            this.$scroll.append(this.$navigatorEnabled);
+            this.$navigatorEnabledCheckbox = $('<input id="navigatorEnabled" type="checkbox" />');
+            this.$navigatorEnabled.append(this.$navigatorEnabledCheckbox);
+            this.$navigatorEnabledLabel = $('<label for="navigatorEnabled">' + this.content.navigatorEnabled + '</label>');
+            this.$navigatorEnabled.append(this.$navigatorEnabledLabel);
             this.$pagingEnabled = $('<div class="setting pagingEnabled"></div>');
             this.$scroll.append(this.$pagingEnabled);
             this.$pagingEnabledCheckbox = $('<input id="pagingEnabled" type="checkbox" />');
@@ -6495,6 +6515,16 @@ define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports
             this.$preserveViewport.append(this.$preserveViewportCheckbox);
             this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
             this.$preserveViewport.append(this.$preserveViewportLabel);
+            this.$navigatorEnabledCheckbox.change(function () {
+                var settings = _this.getSettings();
+                if (_this.$navigatorEnabledCheckbox.is(":checked")) {
+                    settings.navigatorEnabled = true;
+                }
+                else {
+                    settings.navigatorEnabled = false;
+                }
+                _this.updateSettings(settings);
+            });
             this.$pagingEnabledCheckbox.change(function () {
                 var settings = _this.getSettings();
                 if (_this.$pagingEnabledCheckbox.is(":checked")) {
@@ -6519,6 +6549,12 @@ define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports
         SettingsDialogue.prototype.open = function () {
             _super.prototype.open.call(this);
             var settings = this.getSettings();
+            if (settings.navigatorEnabled) {
+                this.$navigatorEnabledCheckbox.prop("checked", true);
+            }
+            else {
+                this.$navigatorEnabledCheckbox.removeAttr("checked");
+            }
             if (!this.provider.isPagingAvailable()) {
                 this.$pagingEnabled.hide();
             }
