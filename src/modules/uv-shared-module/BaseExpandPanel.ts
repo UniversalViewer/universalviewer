@@ -35,6 +35,10 @@ class BaseExpandPanel extends BaseView {
         this.$expandFullButton = $('<a class="expandFullButton"></a>');
         this.$expandFullButton.prop('title', this.content.expandFull);
         this.$top.append(this.$expandFullButton);
+        
+        if (!Utils.Bools.GetBool(this.config.options.enableExpandFullButton, true)) {
+            this.$expandFullButton.hide();
+        } 
 
         this.$collapseButton = $('<div class="collapseButton"></div>');
         this.$collapseButton.prop('title', this.content.collapse);
