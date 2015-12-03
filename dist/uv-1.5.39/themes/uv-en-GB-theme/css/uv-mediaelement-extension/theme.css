@@ -528,10 +528,6 @@
 #app .rightPanel .main .items {
   padding: 0 10px 20px 10px;
 }
-<<<<<<< HEAD:dist/uv-1.5.38/themes/uv-en-GB-theme/css/uv-mediaelement-extension/theme.css
-#app .rightPanel .main .items .item .header {
-  color: #9a9a9a;
-=======
 #app .rightPanel .main .items .item {
   padding: 0;
   margin: 0 0 20px 0;
@@ -539,14 +535,13 @@
 #app .rightPanel .main .items .item .header {
   color: #9a9a9a;
   border-bottom: 1px solid #343434;
->>>>>>> upstream/master:dist/uv-1.5.39/themes/uv-en-GB-theme/css/uv-mediaelement-extension/theme.css
   font-size: 11px;
   margin: 15px 10px 0 0;
   text-transform: uppercase;
 }
 #app .rightPanel .main .items .item .text {
   color: #fff;
-  margin: 5px 10px 15px 0;
+  margin: 5px 10px 0 0;
   overflow: hidden;
   word-wrap: break-word;
 }
@@ -2707,11 +2702,7 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 18px;
   font-weight: bold;
   margin: 15px 0px 0px 0px;
-<<<<<<< HEAD:dist/uv-1.5.38/themes/uv-en-GB-theme/css/uv-mediaelement-extension/theme.css
-  padding: 0px 0px 10px 0;
-=======
   padding: 0 0 10px 0;
->>>>>>> upstream/master:dist/uv-1.5.39/themes/uv-en-GB-theme/css/uv-mediaelement-extension/theme.css
 }
 #app .overlay .middle .content h2 {
   color: #000;
