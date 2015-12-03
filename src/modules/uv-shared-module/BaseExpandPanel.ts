@@ -36,7 +36,7 @@ class BaseExpandPanel extends BaseView {
         this.$expandFullButton.prop('title', this.content.expandFull);
         this.$top.append(this.$expandFullButton);
         
-        if (!Utils.Bools.GetBool(this.config.options.enableExpandFullButton, true)) {
+        if (!Utils.Bools.GetBool(this.config.options.expandFullEnabled, true)) {
             this.$expandFullButton.hide();
         } 
 
