@@ -1029,7 +1029,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                         $.publish(event);
                     }
                 });
-                if (Utils.Documents.IsInIFrame()) {
+                if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
                     $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, function () {
                         if (_this.isOverlayActive()) {
                             $.publish(BaseCommands.ESCAPE);

@@ -167,7 +167,7 @@ class BaseExtension implements IExtension {
                 }
             });
 
-            if (Utils.Documents.IsInIFrame()) {
+            if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
 
                 $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, () => {
                     if (this.isOverlayActive()) {
