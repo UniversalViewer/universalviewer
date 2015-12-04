@@ -19,6 +19,7 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.END = Commands.namespace + 'onEnd';
         Commands.ESCAPE = Commands.namespace + 'onEscape';
         Commands.EXTERNAL_LINK_CLICKED = Commands.namespace + 'onExternalLinkClicked';
+        Commands.PARENT_EXIT_FULLSCREEN = Commands.namespace + 'onParentExitFullScreen';
         Commands.HIDE_CLICKTHROUGH_DIALOGUE = Commands.namespace + 'onHideClickthroughDialogue';
         Commands.HIDE_DOWNLOAD_DIALOGUE = Commands.namespace + 'onHideDownloadDialogue';
         Commands.HIDE_EMBED_DIALOGUE = Commands.namespace + 'onHideEmbedDialogue';
@@ -1031,17 +1032,13 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                         $.publish(event);
                     }
                 });
-                if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
-                    $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function (e) {
-                        if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
-                            e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
-                            e.type === 'MSFullscreenChange' && parent.document.msFullscreenElement === null) {
-                            if (_this.isOverlayActive()) {
-                                $.publish(BaseCommands.ESCAPE);
-                            }
+                if (Utils.Documents.IsInIFrame()) {
+                    $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, function () {
+                        if (_this.isOverlayActive()) {
                             $.publish(BaseCommands.ESCAPE);
-                            $.publish(BaseCommands.RESIZE);
                         }
+                        $.publish(BaseCommands.ESCAPE);
+                        $.publish(BaseCommands.RESIZE);
                     });
                 }
             }
@@ -1089,7 +1086,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             });
             $.subscribe(BaseCommands.ESCAPE, function () {
                 _this.triggerSocket(BaseCommands.ESCAPE);
-                if (_this.isFullScreen()) {
+                if (_this.isFullScreen() && !_this.isOverlayActive()) {
                     $.publish(BaseCommands.TOGGLE_FULLSCREEN);
                 }
             });
@@ -1223,14 +1220,12 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 _this.triggerSocket(BaseCommands.THUMB_SELECTED, canvasIndex);
             });
             $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, function () {
-                if (!_this.isOverlayActive()) {
-                    $('#top').focus();
-                    _this.bootstrapper.isFullScreen = !_this.bootstrapper.isFullScreen;
-                    _this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN, {
-                        isFullScreen: _this.bootstrapper.isFullScreen,
-                        overrideFullScreen: _this.provider.config.options.overrideFullScreen
-                    });
-                }
+                $('#top').focus();
+                _this.bootstrapper.isFullScreen = !_this.bootstrapper.isFullScreen;
+                _this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN, {
+                    isFullScreen: _this.bootstrapper.isFullScreen,
+                    overrideFullScreen: _this.provider.config.options.overrideFullScreen
+                });
             });
             $.subscribe(BaseCommands.UP_ARROW, function () {
                 _this.triggerSocket(BaseCommands.UP_ARROW);
@@ -1354,6 +1349,9 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 switch (message.eventName) {
                     case BaseCommands.TOGGLE_FULLSCREEN:
                         $.publish(BaseCommands.TOGGLE_FULLSCREEN, message.eventObject);
+                        break;
+                    case BaseCommands.PARENT_EXIT_FULLSCREEN:
+                        $.publish(BaseCommands.PARENT_EXIT_FULLSCREEN);
                         break;
                 }
             }, 1000);
@@ -2954,7 +2952,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.39';
+    exports.Version = '1.5.40';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
