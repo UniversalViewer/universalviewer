@@ -493,6 +493,7 @@ docReady(function() {
                     props: { style: { width: "100%", height: $app.height() + "px" }, scrolling: "no" },
                     onReady: function () {
                         $appFrame = $app.find('iframe');
+                        $appFrame.attr('allowFullScreen', '');
                         if (defaultToFullScreen) {
                             toggleFullScreen({
                                 isFullScreen: true
