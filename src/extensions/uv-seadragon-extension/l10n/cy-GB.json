@@ -150,6 +150,7 @@
     "settingsDialogue": {
       "content": {
         "locale": "Iaith",
+        "navigatorEnabled": "Navigator Galluogwyd",
         "pagingEnabled": "Arddangos dwy dudalen",
         "preserveViewport": "Cadw'r lefel o glosio",
         "title": "Dewisiadau",
