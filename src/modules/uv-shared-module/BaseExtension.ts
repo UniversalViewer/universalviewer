@@ -166,20 +166,16 @@ class BaseExtension implements IExtension {
                     $.publish(event);
                 }
             });
-            
 
-            if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
-                $(parent.document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', (e) => {
-                    if (e.type === 'webkitfullscreenchange' && !parent.document.webkitIsFullScreen ||
-                        e.type === 'mozfullscreenchange' && !parent.document.mozFullScreen ||
-                        e.type === 'MSFullscreenChange' && parent.document.msFullscreenElement === null) {
-                        if (this.isOverlayActive()) {
-                            $.publish(BaseCommands.ESCAPE);
-                        }
+            if (Utils.Documents.IsInIFrame()) {
 
+                $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, () => {
+                    if (this.isOverlayActive()) {
                         $.publish(BaseCommands.ESCAPE);
-                        $.publish(BaseCommands.RESIZE);
                     }
+
+                    $.publish(BaseCommands.ESCAPE);
+                    $.publish(BaseCommands.RESIZE);
                 });
             }
         }
@@ -243,7 +239,7 @@ class BaseExtension implements IExtension {
         $.subscribe(BaseCommands.ESCAPE, () => {
             this.triggerSocket(BaseCommands.ESCAPE);
 
-            if (this.isFullScreen()) {
+            if (this.isFullScreen() && !this.isOverlayActive()) {
                 $.publish(BaseCommands.TOGGLE_FULLSCREEN);
             }
         });
@@ -420,16 +416,14 @@ class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
-            if (!this.isOverlayActive()){
-                $('#top').focus();
-                this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
+            $('#top').focus();
+            this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
 
-                this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
-                    {
-                        isFullScreen: this.bootstrapper.isFullScreen,
-                        overrideFullScreen: this.provider.config.options.overrideFullScreen
-                    });
-            }
+            this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
+                {
+                    isFullScreen: this.bootstrapper.isFullScreen,
+                    overrideFullScreen: this.provider.config.options.overrideFullScreen
+                });
         });
 
         $.subscribe(BaseCommands.UP_ARROW, () => {
@@ -581,6 +575,9 @@ class BaseExtension implements IExtension {
             switch (message.eventName) {
                 case BaseCommands.TOGGLE_FULLSCREEN:
                     $.publish(BaseCommands.TOGGLE_FULLSCREEN, message.eventObject);
+                    break;
+                case BaseCommands.PARENT_EXIT_FULLSCREEN:
+                    $.publish(BaseCommands.PARENT_EXIT_FULLSCREEN);
                     break;
             }
         }, 1000);

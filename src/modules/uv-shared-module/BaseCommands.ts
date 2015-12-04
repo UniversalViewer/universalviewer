@@ -17,6 +17,7 @@ class Commands {
     static END: string                              = Commands.namespace + 'onEnd';
     static ESCAPE: string                           = Commands.namespace + 'onEscape';
     static EXTERNAL_LINK_CLICKED: string            = Commands.namespace + 'onExternalLinkClicked';
+    static PARENT_EXIT_FULLSCREEN: string           = Commands.namespace + 'onParentExitFullScreen';
     static HIDE_CLICKTHROUGH_DIALOGUE: string       = Commands.namespace + 'onHideClickthroughDialogue';
     static HIDE_DOWNLOAD_DIALOGUE: string           = Commands.namespace + 'onHideDownloadDialogue';
     static HIDE_EMBED_DIALOGUE: string              = Commands.namespace + 'onHideEmbedDialogue';
