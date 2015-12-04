@@ -154,7 +154,7 @@
     "settingsDialogue": {
       "content": {
         "locale": "Locale",
-        "navigatorEnabled": "Mini View",
+        "navigatorEnabled": "Navigator Enabled",
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
