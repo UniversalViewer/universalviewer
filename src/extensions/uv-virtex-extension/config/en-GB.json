@@ -4,6 +4,7 @@
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "leftPanelEnabled": true,
+    "openTemplate": "http://universalviewer.io?manifest={0}",
     "rightPanelEnabled": true,
     "theme": "uv-en-GB-theme"
   },
@@ -19,7 +20,8 @@
     "footerPanel":
     {
       "options": {
-        "downloadEnabled": false
+        "downloadEnabled": false,
+        "openEnabled": false
       }
     },
     "genericDialogue":

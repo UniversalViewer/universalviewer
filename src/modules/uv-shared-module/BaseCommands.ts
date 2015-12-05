@@ -37,6 +37,7 @@ class Commands {
     static LOAD: string                             = Commands.namespace + 'onLoad';
     static MINUS: string                            = Commands.namespace + 'onMinus';
     static NOT_FOUND: string                        = Commands.namespace + 'onNotFound';
+    static OPEN: string                             = Commands.namespace + 'onOpen';
     static OPEN_EXTERNAL_RESOURCE: string           = Commands.namespace + 'onOpenExternalResource';
     static OPEN_LEFT_PANEL: string                  = Commands.namespace + 'onOpenLeftPanel';
     static OPEN_RIGHT_PANEL: string                 = Commands.namespace + 'onOpenRightPanel';

@@ -6,6 +6,7 @@ class FooterPanel extends BaseView {
     $bookmarkButton: JQuery;
     $downloadButton: JQuery;
     $embedButton: JQuery;
+    $openButton: JQuery;
     $fullScreenBtn: JQuery;
     $options: JQuery;
 
@@ -29,6 +30,9 @@ class FooterPanel extends BaseView {
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
+        this.$openButton = $('<a class="open" title="' + this.content.open + '">' + this.content.open + '</a>');
+        this.$options.prepend(this.$openButton);
+
         this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '">' + this.content.bookmark + '</a>');
         this.$options.prepend(this.$bookmarkButton);
 
@@ -42,6 +46,10 @@ class FooterPanel extends BaseView {
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
         this.$fullScreenBtn.attr('tabindex', '5');
+
+        this.$openButton.onPressed(() => {
+            $.publish(BaseCommands.OPEN);
+        });
 
         this.$bookmarkButton.onPressed(() => {
             $.publish(BaseCommands.BOOKMARK);
@@ -66,12 +74,23 @@ class FooterPanel extends BaseView {
             this.$embedButton.hide();
         }
 
+        this.updateOpenButton();
         this.updateBookmarkButton();
         this.updateDownloadButton();
         this.updateFullScreenButton();
 
         if (Utils.Bools.GetBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
+        }
+    }
+
+    updateOpenButton(): void {
+        var configEnabled = Utils.Bools.GetBool(this.options.openEnabled, false);
+
+        if (configEnabled && !this.provider.isHomeDomain){
+            this.$openButton.show();
+        } else {
+            this.$openButton.hide();
         }
     }
 

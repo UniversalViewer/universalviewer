@@ -313,6 +313,14 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.NOT_FOUND);
         });
 
+        $.subscribe(BaseCommands.OPEN, () => {
+            this.triggerSocket(BaseCommands.OPEN);
+
+            var openUri: string = String.format(this.provider.config.options.openTemplate, this.provider.manifestUri);
+
+            window.open(openUri);
+        });
+
         $.subscribe(BaseCommands.OPEN_LEFT_PANEL, () => {
             this.triggerSocket(BaseCommands.OPEN_LEFT_PANEL);
             this.resize();

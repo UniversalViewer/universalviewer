@@ -33,15 +33,17 @@ var Virtex;
             this._scale = 1;
             this._zoomSpeed = 1;
             this.options = $.extend({
-                ambientLightColor: 0xc2c1be,
+                ambientLightColor: 0xd0d0d0,
                 cameraZ: 4.5,
                 directionalLight1Color: 0xffffff,
-                directionalLight1Intensity: 1,
+                directionalLight1Intensity: 0.75,
                 directionalLight2Color: 0x002958,
                 directionalLight2Intensity: 0.5,
                 fadeSpeed: 1750,
                 far: 10000,
                 fov: 45,
+                maxZoom: 10,
+                minZoom: 2,
                 near: 0.1,
                 shading: THREE.SmoothShading,
                 shininess: 1,
@@ -273,8 +275,11 @@ var Virtex;
             else if (this._modelGroup.rotation.x < -1) {
                 this._modelGroup.rotation.x = -1;
             }
-            this._camera.position.z *= this._scale;
+            var newCameraZ = this._camera.position.z *= this._scale;
+            newCameraZ = Math.min(Math.max(newCameraZ, this.options.minZoom), this.options.maxZoom);
+            this._camera.position.z = newCameraZ;
             //camera.position.add(pan);
+            // reset scale
             this._scale = 1;
             //pan.set(0, 0, 0);
             this._renderer.render(this._scene, this._camera);

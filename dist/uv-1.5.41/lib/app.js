@@ -39,6 +39,7 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.LOAD = Commands.namespace + 'onLoad';
         Commands.MINUS = Commands.namespace + 'onMinus';
         Commands.NOT_FOUND = Commands.namespace + 'onNotFound';
+        Commands.OPEN = Commands.namespace + 'onOpen';
         Commands.OPEN_EXTERNAL_RESOURCE = Commands.namespace + 'onOpenExternalResource';
         Commands.OPEN_LEFT_PANEL = Commands.namespace + 'onOpenLeftPanel';
         Commands.OPEN_RIGHT_PANEL = Commands.namespace + 'onOpenRightPanel';
@@ -1141,6 +1142,11 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             $.subscribe(BaseCommands.NOT_FOUND, function () {
                 _this.triggerSocket(BaseCommands.NOT_FOUND);
             });
+            $.subscribe(BaseCommands.OPEN, function () {
+                _this.triggerSocket(BaseCommands.OPEN);
+                var openUri = String.format(_this.provider.config.options.openTemplate, _this.provider.manifestUri);
+                window.open(openUri);
+            });
             $.subscribe(BaseCommands.OPEN_LEFT_PANEL, function () {
                 _this.triggerSocket(BaseCommands.OPEN_LEFT_PANEL);
                 _this.resize();
@@ -2013,6 +2019,8 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseComm
             });
             this.$options = $('<div class="options"></div>');
             this.$element.append(this.$options);
+            this.$openButton = $('<a class="open" title="' + this.content.open + '">' + this.content.open + '</a>');
+            this.$options.prepend(this.$openButton);
             this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '">' + this.content.bookmark + '</a>');
             this.$options.prepend(this.$bookmarkButton);
             this.$embedButton = $('<a href="#" class="embed" title="' + this.content.embed + '">' + this.content.embed + '</a>');
@@ -2023,6 +2031,9 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseComm
             this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '">' + this.content.fullScreen + '</a>');
             this.$options.append(this.$fullScreenBtn);
             this.$fullScreenBtn.attr('tabindex', '5');
+            this.$openButton.onPressed(function () {
+                $.publish(BaseCommands.OPEN);
+            });
             this.$bookmarkButton.onPressed(function () {
                 $.publish(BaseCommands.BOOKMARK);
             });
@@ -2040,11 +2051,21 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseComm
             if (!Utils.Bools.GetBool(this.options.embedEnabled, true)) {
                 this.$embedButton.hide();
             }
+            this.updateOpenButton();
             this.updateBookmarkButton();
             this.updateDownloadButton();
             this.updateFullScreenButton();
             if (Utils.Bools.GetBool(this.options.minimiseButtons, false)) {
                 this.$options.addClass('minimiseButtons');
+            }
+        };
+        FooterPanel.prototype.updateOpenButton = function () {
+            var configEnabled = Utils.Bools.GetBool(this.options.openEnabled, false);
+            if (configEnabled && !this.provider.isHomeDomain) {
+                this.$openButton.show();
+            }
+            else {
+                this.$openButton.hide();
             }
         };
         FooterPanel.prototype.updateFullScreenButton = function () {

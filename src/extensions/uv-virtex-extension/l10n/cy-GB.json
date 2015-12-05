@@ -36,7 +36,8 @@
         "download": "Lawrlwytho",
         "embed": "Ymgorffori",
         "exitFullScreen": "Dianc o'r sgrin lawn",
-        "fullScreen": "Sgrin lawn"
+        "fullScreen": "Sgrin lawn",
+        "open": "agored"
       }
     },
     "genericDialogue": {

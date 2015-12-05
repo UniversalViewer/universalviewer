@@ -3329,6 +3329,26 @@ input[type=range]:focus::-ms-fill-upper {
   margin-top: 10px;
   margin-right: 15px;
 }
+#app .footerPanel .options a.open {
+  background-image: url('../../img/uv-shared-module/open.png');
+  background-repeat: no-repeat;
+  height: 21px;
+  line-height: 21px;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  background-position: left center;
+  padding-left: 35px;
+  padding-right: 10px;
+  line-height: 22px;
+}
+#app .footerPanel .options a.open:link,
+#app .footerPanel .options a.open:visited,
+#app .footerPanel .options a.open:hover,
+#app .footerPanel .options a.open:active {
+  color: #fff;
+  text-decoration: none;
+}
 #app .footerPanel .options a.embed {
   background-image: url('../../img/uv-shared-module/share.png');
   background-repeat: no-repeat;
@@ -3437,6 +3457,17 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .footerPanel .options.minimiseButtons a:first-child {
   margin-left: 10px;
+}
+#app .footerPanel .options.minimiseButtons a.open {
+  font: 0/0 a;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+  line-height: 0;
+  font-size: 0;
+  color: transparent;
+  width: 27px;
+  padding: 0;
 }
 #app .footerPanel .options.minimiseButtons a.download {
   font: 0/0 a;
