@@ -380,7 +380,7 @@ class BaseProvider implements IProvider{
 
     getSettings(): ISettings {
         if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
-            var settings = Utils.Storage.get("settings", Utils.StorageType.local);
+            var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             
             if (settings)
                 return $.extend(this.config.options, settings.value);
@@ -391,12 +391,12 @@ class BaseProvider implements IProvider{
 
     updateSettings(settings: ISettings): void {
         if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
-            var storedSettings = Utils.Storage.get("settings", Utils.StorageType.local);
+            var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             if (storedSettings)
                 settings = $.extend(storedSettings.value, settings);
                 
             //store for ten years
-            Utils.Storage.set("settings", settings, 315360000, Utils.StorageType.local); 
+            Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
         }
         
         this.config.options = $.extend(this.config.options, settings);

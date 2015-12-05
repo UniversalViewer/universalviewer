@@ -2162,9 +2162,7 @@ define('modules/uv-shared-module/HeaderPanel',["require", "exports", "./BaseComm
             this.updatePagingToggle();
             this.updateLocaleToggle();
             this.$pagingToggleButton.on('click', function () {
-                var settings = _this.getSettings();
-                settings.pagingEnabled = !settings.pagingEnabled;
-                _this.updateSettings(settings);
+                _this.updateSettings({ pagingEnabled: !_this.getSettings().pagingEnabled });
             });
             this.$localeToggleButton.on('click', function () {
                 _this.provider.changeLocale(String(_this.$localeToggleButton.data('locale')));
@@ -2921,7 +2919,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.40';
+    exports.Version = '1.5.41';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4478,10 +4476,22 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
             return false;
         };
         BaseProvider.prototype.getSettings = function () {
+            if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
+                var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+                if (settings)
+                    return $.extend(this.config.options, settings.value);
+            }
             return this.config.options;
         };
         BaseProvider.prototype.updateSettings = function (settings) {
-            this.config.options = settings;
+            if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
+                var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+                if (storedSettings)
+                    settings = $.extend(storedSettings.value, settings);
+                //store for ten years
+                Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
+            }
+            this.config.options = $.extend(this.config.options, settings);
         };
         BaseProvider.prototype.sanitize = function (html) {
             var elem = document.createElement('div');
@@ -6435,7 +6445,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                 $canvas.focus();
         };
         SeadragonCenterPanel.prototype.setNavigatorVisible = function () {
-            var navigatorEnabled = Utils.Bools.GetBool(this.provider.config.options.navigatorEnabled, true);
+            var navigatorEnabled = Utils.Bools.GetBool(this.provider.getSettings().navigatorEnabled, true);
             this.viewer.navigator.setVisible(navigatorEnabled);
             if (navigatorEnabled)
                 this.$navigator.show();
@@ -6481,7 +6491,7 @@ define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports
             this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
             this.$preserveViewport.append(this.$preserveViewportLabel);
             this.$navigatorEnabledCheckbox.change(function () {
-                var settings = _this.getSettings();
+                var settings = {};
                 if (_this.$navigatorEnabledCheckbox.is(":checked")) {
                     settings.navigatorEnabled = true;
                 }
@@ -6491,7 +6501,7 @@ define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports
                 _this.updateSettings(settings);
             });
             this.$pagingEnabledCheckbox.change(function () {
-                var settings = _this.getSettings();
+                var settings = {};
                 if (_this.$pagingEnabledCheckbox.is(":checked")) {
                     settings.pagingEnabled = true;
                 }
@@ -6501,7 +6511,7 @@ define('extensions/uv-seadragon-extension/SettingsDialogue',["require", "exports
                 _this.updateSettings(settings);
             });
             this.$preserveViewportCheckbox.change(function () {
-                var settings = _this.getSettings();
+                var settings = {};
                 if (_this.$preserveViewportCheckbox.is(":checked")) {
                     settings.preserveViewport = true;
                 }
