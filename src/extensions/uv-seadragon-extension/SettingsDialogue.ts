@@ -49,7 +49,7 @@ class SettingsDialogue extends BaseSettingsDialogue {
         this.$preserveViewport.append(this.$preserveViewportLabel);
 
         this.$navigatorEnabledCheckbox.change(() => {
-            var settings: ISettings = this.getSettings();
+            var settings: ISettings = {};
 
             if(this.$navigatorEnabledCheckbox.is(":checked")) {
                 settings.navigatorEnabled = true;
@@ -61,7 +61,7 @@ class SettingsDialogue extends BaseSettingsDialogue {
         });
 
         this.$pagingEnabledCheckbox.change(() => {
-            var settings: ISettings = this.getSettings();
+            var settings: ISettings = {};
 
             if(this.$pagingEnabledCheckbox.is(":checked")) {
                 settings.pagingEnabled = true;
@@ -73,7 +73,7 @@ class SettingsDialogue extends BaseSettingsDialogue {
         });
 
         this.$preserveViewportCheckbox.change(() => {
-            var settings: ISettings = this.getSettings();
+            var settings: ISettings = {};
 
             if(this.$preserveViewportCheckbox.is(":checked")) {
                 settings.preserveViewport = true;
