@@ -13,7 +13,8 @@
     "searchWithinEnabled": true,
     "theme": "uv-en-GB-theme",
     "useArrowKeysToNavigate": false,
-    "navigatorEnabled": true
+    "navigatorEnabled": true,
+    "saveUserSettings": false
   },
   "modules":
   {

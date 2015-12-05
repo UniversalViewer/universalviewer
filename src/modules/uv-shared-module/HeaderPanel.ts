@@ -83,9 +83,7 @@ class HeaderPanel extends BaseView {
         this.updateLocaleToggle();
 
         this.$pagingToggleButton.on('click', () => {
-            var settings: ISettings = this.getSettings();
-            settings.pagingEnabled = !settings.pagingEnabled;
-            this.updateSettings(settings);
+            this.updateSettings({ pagingEnabled: !this.getSettings().pagingEnabled });
         });
 
         this.$localeToggleButton.on('click', () => {
