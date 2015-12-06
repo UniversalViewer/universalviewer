@@ -7530,23 +7530,38 @@ define('modules/uv-virtexcenterpanel-module/VirtexCenterPanel',["require", "expo
             _super.call(this, $element);
         }
         VirtexCenterPanel.prototype.create = function () {
+            var _this = this;
             this.setConfig('virtexCenterPanel');
             _super.prototype.create.call(this);
             var that = this;
             $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
                 that.openMedia(resources);
             });
+            this.$navigation = $('<div class="navigation"></div>');
+            this.$content.prepend(this.$navigation);
+            this.$zoomInButton = $('<a class="imageBtn zoomIn" title="' + this.content.zoomIn + '"></a>');
+            this.$navigation.append(this.$zoomInButton);
+            this.$zoomOutButton = $('<a class="imageBtn zoomOut" title="' + this.content.zoomOut + '"></a>');
+            this.$navigation.append(this.$zoomOutButton);
             this.$viewport = $('<div class="virtex"></div>');
             this.$content.prepend(this.$viewport);
             this.title = this.extension.provider.getTitle();
             this.showAttribution();
+            this.$zoomInButton.on('click', function (e) {
+                e.preventDefault();
+                _this.viewport.zoomIn();
+            });
+            this.$zoomOutButton.on('click', function (e) {
+                e.preventDefault();
+                _this.viewport.zoomOut();
+            });
         };
         VirtexCenterPanel.prototype.openMedia = function (resources) {
             var _this = this;
             this.extension.getExternalResources(resources).then(function () {
                 _this.$viewport.empty();
                 var canvas = _this.provider.getCurrentCanvas();
-                virtex.create({
+                _this.viewport = virtex.create({
                     element: "#content .virtex",
                     object: canvas.id,
                     showStats: _this.options.showStats

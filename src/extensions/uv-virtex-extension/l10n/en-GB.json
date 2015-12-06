@@ -96,12 +96,10 @@
 
     },
     "virtexCenterPanel": {
-      "options": {
-        "showStats": false,
-        "trimAttributionCount": 150
-      },
       "content": {
-        "acknowledgements": "Attribution"
+        "acknowledgements": "Attribution",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out"
       }
     }
   }

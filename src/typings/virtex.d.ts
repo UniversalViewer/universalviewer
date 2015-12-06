@@ -18,6 +18,7 @@ declare module Virtex {
         shading: THREE.Shading;
         shininess: number;
         showStats: boolean;
+        zoomSpeed: number;
     }
 }
 
@@ -35,6 +36,7 @@ declare module Virtex {
         private _$viewport;
         private _$loading;
         private _$loadingBar;
+        private _$oldie;
         private _camera;
         private _lightGroup;
         private _modelGroup;
@@ -48,13 +50,12 @@ declare module Virtex {
         private _mouseXOnMouseDown;
         private _mouseY;
         private _mouseYOnMouseDown;
+        private _pinchStart;
         private _targetRotationOnMouseDownX;
         private _targetRotationOnMouseDownY;
         private _targetRotationX;
         private _targetRotationY;
-        private _dollyStart;
-        private _scale;
-        private _zoomSpeed;
+        private _targetZoom;
         constructor(options: IOptions);
         private _init();
         private _loadProgress(progress);
@@ -66,13 +67,12 @@ declare module Virtex {
         private _onTouchStart(event);
         private _onTouchMove(event);
         private _onTouchEnd(event);
-        private _dollyIn(dollyScale?);
-        private _dollyOut(dollyScale?);
-        private _getZoomScale();
         private _draw();
         private _render();
         private _getWidth();
         private _getHeight();
+        zoomIn(): void;
+        zoomOut(): void;
         private _resize();
     }
 }

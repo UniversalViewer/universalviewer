@@ -8,8 +8,12 @@ import IMediaElementExtension = require("../../extensions/uv-mediaelement-extens
 
 class VirtexCenterPanel extends CenterPanel {
 
+    $navigation: JQuery;
     $viewport: JQuery;
+    $zoomInButton: JQuery;
+    $zoomOutButton: JQuery;
     title: string;
+    viewport: Virtex.Viewport;
 
     constructor($element: JQuery) {
         super($element);
@@ -27,12 +31,33 @@ class VirtexCenterPanel extends CenterPanel {
             that.openMedia(resources);
         });
 
+        this.$navigation = $('<div class="navigation"></div>');
+        this.$content.prepend(this.$navigation);
+
+        this.$zoomInButton = $('<a class="imageBtn zoomIn" title="' + this.content.zoomIn + '"></a>');
+        this.$navigation.append(this.$zoomInButton);
+
+        this.$zoomOutButton = $('<a class="imageBtn zoomOut" title="' + this.content.zoomOut + '"></a>');
+        this.$navigation.append(this.$zoomOutButton);
+
         this.$viewport = $('<div class="virtex"></div>');
         this.$content.prepend(this.$viewport);
 
         this.title = this.extension.provider.getTitle();
 
         this.showAttribution();
+
+        this.$zoomInButton.on('click', (e) => {
+            e.preventDefault();
+
+            this.viewport.zoomIn();
+        });
+
+        this.$zoomOutButton.on('click', (e) => {
+            e.preventDefault();
+
+            this.viewport.zoomOut();
+        });
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
@@ -43,7 +68,7 @@ class VirtexCenterPanel extends CenterPanel {
 
             const canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
-            virtex.create(<Virtex.IOptions>{
+            this.viewport = virtex.create(<Virtex.IOptions>{
                 element: "#content .virtex",
                 object: canvas.id,
                 showStats: this.options.showStats

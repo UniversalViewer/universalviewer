@@ -97,7 +97,9 @@
     },
     "virtexCenterPanel": {
       "content": {
-        "acknowledgements": "Priodoliad"
+        "acknowledgements": "Priodoliad",
+        "zoomIn": "chwyddo Mewn",
+        "zoomOut": "Zoom Out"
       }
     }
   }

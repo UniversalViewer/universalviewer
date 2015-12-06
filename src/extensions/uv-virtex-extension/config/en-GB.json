@@ -66,9 +66,9 @@
         "twoColThumbWidth": 90
       }
     },
-    "virtexCenterPanel":
-    {
+    "virtexCenterPanel": {
       "options": {
+        "showStats": false,
         "trimAttributionCount": 150
       }
     }
