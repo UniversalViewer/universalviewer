@@ -334,12 +334,16 @@ var Manifesto;
         ElementType.prototype.movingimage = function () {
             return new ElementType(ElementType.MOVINGIMAGE.toString());
         };
+        ElementType.prototype.physicalobject = function () {
+            return new ElementType(ElementType.PHYSICALOBJECT.toString());
+        };
         ElementType.prototype.sound = function () {
             return new ElementType(ElementType.SOUND.toString());
         };
         ElementType.DOCUMENT = new ElementType("foaf:document");
-        ElementType.IMAGE = new ElementType("dcTypes:Image");
+        ElementType.IMAGE = new ElementType("dcTypes:image");
         ElementType.MOVINGIMAGE = new ElementType("dctypes:movingimage");
+        ElementType.PHYSICALOBJECT = new ElementType("dctypes:physicalobject");
         ElementType.SOUND = new ElementType("dctypes:sound");
         return ElementType;
     })(Manifesto.StringValue);
@@ -633,6 +637,8 @@ var Manifesto;
         };
         ManifestResource.prototype.getMetadata = function () {
             var metadata = this.getProperty('metadata');
+            if (!metadata)
+                return [];
             // get localised value for each metadata item.
             for (var i = 0; i < metadata.length; i++) {
                 var item = metadata[i];
@@ -839,6 +845,7 @@ var Manifesto;
         function Manifest(jsonld, options) {
             _super.call(this, jsonld, options);
             this.index = 0;
+            this.sequences = null;
             if (this.__jsonld.structures && this.__jsonld.structures.length) {
                 var r = this._getRootRange();
                 this._parseRanges(r, '');
@@ -920,17 +927,19 @@ var Manifesto;
             return null;
         };
         Manifest.prototype.getSequences = function () {
-            var sequences = [];
+            if (this.sequences != null)
+                return this.sequences;
+            this.sequences = [];
             // if IxIF mediaSequences is present, use that. Otherwise fall back to IIIF sequences.
             var children = this.__jsonld.mediaSequences || this.__jsonld.sequences;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var s = children[i];
                     var sequence = new Manifesto.Sequence(s, this.options);
-                    sequences.push(sequence);
+                    this.sequences.push(sequence);
                 }
             }
-            return sequences;
+            return this.sequences;
         };
         Manifest.prototype.getSequenceByIndex = function (sequenceIndex) {
             return this.getSequences()[sequenceIndex];
@@ -1100,19 +1109,22 @@ var Manifesto;
         __extends(Sequence, _super);
         function Sequence(jsonld, options) {
             _super.call(this, jsonld, options);
+            this.canvases = null;
         }
         Sequence.prototype.getCanvases = function () {
-            var canvases = [];
+            if (this.canvases != null)
+                return this.canvases;
+            this.canvases = [];
             // if IxIF elements are present, use them. Otherwise fall back to IIIF canvases.
             var children = this.__jsonld.elements || this.__jsonld.canvases;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var c = children[i];
                     var canvas = new Manifesto.Canvas(c, this.options);
-                    canvases.push(canvas);
+                    this.canvases.push(canvas);
                 }
             }
-            return canvases;
+            return this.canvases;
         };
         Sequence.prototype.getCanvasById = function (id) {
             for (var i = 0; i < this.getTotalCanvases(); i++) {

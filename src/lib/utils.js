@@ -2575,6 +2575,20 @@ var Utils;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
+    var Device = (function () {
+        function Device() {
+        }
+        Device.GetPixelRatio = function (ctx) {
+            var dpr = window.devicePixelRatio || 1;
+            var bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+            return dpr / bsr;
+        };
+        return Device;
+    })();
+    Utils.Device = Device;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
     var Documents = (function () {
         function Documents() {
         }
