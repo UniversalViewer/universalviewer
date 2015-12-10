@@ -114,6 +114,8 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.setTotal();
 
+        var viewingDirection: Manifesto.ViewingDirection = this.provider.getViewingDirection();
+
         // check if the book has more than one page, otherwise hide prev/next options.
         if (this.provider.getTotalCanvases() === 1) {
             this.$centerOptions.hide();
@@ -121,15 +123,36 @@ class PagingHeaderPanel extends HeaderPanel {
 
         // ui event handlers.
         this.$firstButton.onPressed(() => {
-            $.publish(Commands.FIRST);
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString():
+                    $.publish(Commands.FIRST);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.LAST);
+                    break;
+            }
         });
 
         this.$prevButton.onPressed(() => {
-            $.publish(Commands.PREV);
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString():
+                    $.publish(Commands.PREV);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.NEXT);
+                    break;
+            }
         });
 
         this.$nextButton.onPressed(() => {
-            $.publish(Commands.NEXT);
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString():
+                    $.publish(Commands.NEXT);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.PREV);
+                    break;
+            }
         });
 
         // If page mode is disabled, we don't need to show radio buttons since
@@ -165,7 +188,14 @@ class PagingHeaderPanel extends HeaderPanel {
         });
 
         this.$lastButton.onPressed(() => {
-            $.publish(Commands.LAST);
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString():
+                    $.publish(Commands.LAST);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.FIRST);
+                    break;
+            }
         });
 
         if (this.options.modeOptionsEnabled === false){

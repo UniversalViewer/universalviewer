@@ -26,8 +26,8 @@ class SeadragonCenterPanel extends CenterPanel {
     viewer: any;
 
     $goHomeButton: JQuery;
-    $nextButton: JQuery;
-    $prevButton: JQuery;
+    $rightButton: JQuery;
+    $leftButton: JQuery;
     $rotateButton: JQuery;
     $spinner: JQuery;
     $viewer: JQuery;
@@ -230,8 +230,8 @@ class SeadragonCenterPanel extends CenterPanel {
 
         //if (browser == 'Firefox') {
         //    if (this.provider.isMultiCanvas()){
-        //        this.$prevButton.hide();
-        //        this.$nextButton.hide();
+        //        this.$leftButton.hide();
+        //        this.$rightButton.hide();
         //    }
         //    this.$rotateButton.hide();
         //}
@@ -244,32 +244,48 @@ class SeadragonCenterPanel extends CenterPanel {
     createNavigationButtons() {
         if (!this.provider.isMultiCanvas()) return;
 
-        this.$prevButton = $('<div class="paging btn prev"></div>');
-        this.$prevButton.prop('title', this.content.previous);
-        this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
+        this.$leftButton = $('<div class="paging btn prev"></div>');
+        this.$leftButton.prop('title', this.content.previous);
+        this.viewer.addControl(this.$leftButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
 
-        this.$nextButton = $('<div class="paging btn next"></div>');
-        this.$nextButton.prop('title', this.content.next);
-        this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
+        this.$rightButton = $('<div class="paging btn next"></div>');
+        this.$rightButton.prop('title', this.content.next);
+        this.viewer.addControl(this.$rightButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
 
         var that = this;
 
-        this.$prevButton.on('touchstart click', (e) => {
+        var viewingDirection: Manifesto.ViewingDirection = this.provider.getViewingDirection();
+
+        this.$leftButton.on('touchstart click', (e) => {
             e.preventDefault();
             OpenSeadragon.cancelEvent(e);
 
             if (!that.prevButtonEnabled) return;
 
-            $.publish(Commands.PREV);
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString():
+                    $.publish(Commands.PREV);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.NEXT);
+                    break;
+            }
         });
 
-        this.$nextButton.on('touchstart click', (e) => {
+        this.$rightButton.on('touchstart click', (e) => {
             e.preventDefault();
             OpenSeadragon.cancelEvent(e);
 
             if (!that.nextButtonEnabled) return;
 
-            $.publish(Commands.NEXT);
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString():
+                    $.publish(Commands.NEXT);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.PREV);
+                    break;
+            }
         });
     }
 
@@ -384,22 +400,22 @@ class SeadragonCenterPanel extends CenterPanel {
 
     disablePrevButton () {
         this.prevButtonEnabled = false;
-        this.$prevButton.addClass('disabled');
+        this.$leftButton.addClass('disabled');
     }
 
     enablePrevButton () {
         this.prevButtonEnabled = true;
-        this.$prevButton.removeClass('disabled');
+        this.$leftButton.removeClass('disabled');
     }
 
     disableNextButton () {
         this.nextButtonEnabled = false;
-        this.$nextButton.addClass('disabled');
+        this.$rightButton.addClass('disabled');
     }
 
     enableNextButton () {
         this.nextButtonEnabled = true;
-        this.$nextButton.removeClass('disabled');
+        this.$rightButton.removeClass('disabled');
     }
 
     serialiseBounds(bounds): string{
@@ -537,9 +553,9 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
-        if (this.provider.isMultiCanvas() && this.$prevButton && this.$nextButton) {
-            this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
-            this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
+        if (this.provider.isMultiCanvas() && this.$leftButton && this.$rightButton) {
+            this.$leftButton.css('top', (this.$content.height() - this.$leftButton.height()) / 2);
+            this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
         }
     }
 

@@ -2919,7 +2919,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.41';
+    exports.Version = '1.5.42';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -5810,19 +5810,41 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
             }
             this.setTitles();
             this.setTotal();
+            var viewingDirection = this.provider.getViewingDirection();
             // check if the book has more than one page, otherwise hide prev/next options.
             if (this.provider.getTotalCanvases() === 1) {
                 this.$centerOptions.hide();
             }
             // ui event handlers.
             this.$firstButton.onPressed(function () {
-                $.publish(Commands.FIRST);
+                switch (viewingDirection.toString()) {
+                    case manifesto.ViewingDirection.leftToRight().toString():
+                        $.publish(Commands.FIRST);
+                        break;
+                    case manifesto.ViewingDirection.rightToLeft().toString():
+                        $.publish(Commands.LAST);
+                        break;
+                }
             });
             this.$prevButton.onPressed(function () {
-                $.publish(Commands.PREV);
+                switch (viewingDirection.toString()) {
+                    case manifesto.ViewingDirection.leftToRight().toString():
+                        $.publish(Commands.PREV);
+                        break;
+                    case manifesto.ViewingDirection.rightToLeft().toString():
+                        $.publish(Commands.NEXT);
+                        break;
+                }
             });
             this.$nextButton.onPressed(function () {
-                $.publish(Commands.NEXT);
+                switch (viewingDirection.toString()) {
+                    case manifesto.ViewingDirection.leftToRight().toString():
+                        $.publish(Commands.NEXT);
+                        break;
+                    case manifesto.ViewingDirection.rightToLeft().toString():
+                        $.publish(Commands.PREV);
+                        break;
+                }
             });
             // If page mode is disabled, we don't need to show radio buttons since
             // there is only one option:
@@ -5853,7 +5875,14 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
                 _this.search();
             });
             this.$lastButton.onPressed(function () {
-                $.publish(Commands.LAST);
+                switch (viewingDirection.toString()) {
+                    case manifesto.ViewingDirection.leftToRight().toString():
+                        $.publish(Commands.LAST);
+                        break;
+                    case manifesto.ViewingDirection.rightToLeft().toString():
+                        $.publish(Commands.FIRST);
+                        break;
+                }
             });
             if (this.options.modeOptionsEnabled === false) {
                 this.$modeOptions.hide();
@@ -6194,8 +6223,8 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             //var browser = window.browserDetect.browser;
             //if (browser == 'Firefox') {
             //    if (this.provider.isMultiCanvas()){
-            //        this.$prevButton.hide();
-            //        this.$nextButton.hide();
+            //        this.$leftButton.hide();
+            //        this.$rightButton.hide();
             //    }
             //    this.$rotateButton.hide();
             //}
@@ -6205,26 +6234,41 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
         SeadragonCenterPanel.prototype.createNavigationButtons = function () {
             if (!this.provider.isMultiCanvas())
                 return;
-            this.$prevButton = $('<div class="paging btn prev"></div>');
-            this.$prevButton.prop('title', this.content.previous);
-            this.viewer.addControl(this.$prevButton[0], { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
-            this.$nextButton = $('<div class="paging btn next"></div>');
-            this.$nextButton.prop('title', this.content.next);
-            this.viewer.addControl(this.$nextButton[0], { anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT });
+            this.$leftButton = $('<div class="paging btn prev"></div>');
+            this.$leftButton.prop('title', this.content.previous);
+            this.viewer.addControl(this.$leftButton[0], { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
+            this.$rightButton = $('<div class="paging btn next"></div>');
+            this.$rightButton.prop('title', this.content.next);
+            this.viewer.addControl(this.$rightButton[0], { anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT });
             var that = this;
-            this.$prevButton.on('touchstart click', function (e) {
+            var viewingDirection = this.provider.getViewingDirection();
+            this.$leftButton.on('touchstart click', function (e) {
                 e.preventDefault();
                 OpenSeadragon.cancelEvent(e);
                 if (!that.prevButtonEnabled)
                     return;
-                $.publish(Commands.PREV);
+                switch (viewingDirection.toString()) {
+                    case manifesto.ViewingDirection.leftToRight().toString():
+                        $.publish(Commands.PREV);
+                        break;
+                    case manifesto.ViewingDirection.rightToLeft().toString():
+                        $.publish(Commands.NEXT);
+                        break;
+                }
             });
-            this.$nextButton.on('touchstart click', function (e) {
+            this.$rightButton.on('touchstart click', function (e) {
                 e.preventDefault();
                 OpenSeadragon.cancelEvent(e);
                 if (!that.nextButtonEnabled)
                     return;
-                $.publish(Commands.NEXT);
+                switch (viewingDirection.toString()) {
+                    case manifesto.ViewingDirection.leftToRight().toString():
+                        $.publish(Commands.NEXT);
+                        break;
+                    case manifesto.ViewingDirection.rightToLeft().toString():
+                        $.publish(Commands.PREV);
+                        break;
+                }
             });
         };
         SeadragonCenterPanel.prototype.openMedia = function (resources) {
@@ -6321,19 +6365,19 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
         };
         SeadragonCenterPanel.prototype.disablePrevButton = function () {
             this.prevButtonEnabled = false;
-            this.$prevButton.addClass('disabled');
+            this.$leftButton.addClass('disabled');
         };
         SeadragonCenterPanel.prototype.enablePrevButton = function () {
             this.prevButtonEnabled = true;
-            this.$prevButton.removeClass('disabled');
+            this.$leftButton.removeClass('disabled');
         };
         SeadragonCenterPanel.prototype.disableNextButton = function () {
             this.nextButtonEnabled = false;
-            this.$nextButton.addClass('disabled');
+            this.$rightButton.addClass('disabled');
         };
         SeadragonCenterPanel.prototype.enableNextButton = function () {
             this.nextButtonEnabled = true;
-            this.$nextButton.removeClass('disabled');
+            this.$rightButton.removeClass('disabled');
         };
         SeadragonCenterPanel.prototype.serialiseBounds = function (bounds) {
             return bounds.x + ',' + bounds.y + ',' + bounds.width + ',' + bounds.height;
@@ -6434,9 +6478,9 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.$title.ellipsisFill(this.title);
             this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
             this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
-            if (this.provider.isMultiCanvas() && this.$prevButton && this.$nextButton) {
-                this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
-                this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
+            if (this.provider.isMultiCanvas() && this.$leftButton && this.$rightButton) {
+                this.$leftButton.css('top', (this.$content.height() - this.$leftButton.height()) / 2);
+                this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
             }
         };
         SeadragonCenterPanel.prototype.setFocus = function () {
@@ -8358,6 +8402,12 @@ var Manifesto;
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
         };
+        Manifest.prototype.getViewingDirection = function () {
+            if (this.getProperty('viewingDirection')) {
+                return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
+            }
+            return Manifesto.ViewingDirection.LEFTTORIGHT;
+        };
         return Manifest;
     })(Manifesto.IIIFResource);
     Manifesto.Manifest = Manifest;
@@ -8657,6 +8707,9 @@ var Manifesto;
         Sequence.prototype.getViewingDirection = function () {
             if (this.getProperty('viewingDirection')) {
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
+            }
+            else if (this.options.resource.getViewingDirection) {
+                return this.options.resource.getViewingDirection();
             }
             return Manifesto.ViewingDirection.LEFTTORIGHT;
         };
