@@ -23,6 +23,7 @@
     {
       "options": {
         "bookmarkEnabled": false,
+        "minimiseButtons": true,
         "openEnabled": false
       }
     },
