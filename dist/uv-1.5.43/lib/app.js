@@ -2919,7 +2919,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.5.42';
+    exports.Version = '1.5.43';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
