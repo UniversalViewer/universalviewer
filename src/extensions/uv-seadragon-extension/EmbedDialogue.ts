@@ -11,11 +11,11 @@ class EmbedDialogue extends BaseEmbedDialogue {
         super($element);
 
         $.subscribe(Commands.SEADRAGON_OPEN, (viewer) => {
-            this.formatCode();
+            this.update();
         });
 
         $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (viewer) => {
-            this.formatCode();
+            this.update();
         });
     }
 
@@ -24,7 +24,9 @@ class EmbedDialogue extends BaseEmbedDialogue {
         super.create();
     }
 
-    formatCode(): void {
+    update(): void {
+
+        super.update();
 
         var zoom = (<ISeadragonExtension>this.extension).getViewerBounds();
         var rotation = (<ISeadragonExtension>this.extension).getViewerRotation();

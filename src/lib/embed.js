@@ -227,7 +227,7 @@ docReady(function() {
             }
 
             // get initial params from the container's 'data-' attributes.
-            manifestUri = $app.attr('data-uri');
+            manifestUri = $app.attr('data-uri') || "";
             manifestUri = encodeURIComponent(manifestUri);
             collectionIndex = $app.attr('data-collectionindex');
             manifestIndex = $app.attr('data-manifestindex');

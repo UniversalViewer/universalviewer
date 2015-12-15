@@ -28,6 +28,8 @@ class Bootstrapper{
             this.params = $.extend(true, this.params, params);
         }
 
+        if (!this.params.manifestUri) return;
+
         // empty app div
         $('#app').empty();
 

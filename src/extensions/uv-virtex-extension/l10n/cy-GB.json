@@ -1,0 +1,106 @@
+{
+  "localisation": {
+    "label": "Cymraeg"
+  },
+  "content": {
+    "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
+    "degradedResourceLogin": "Mewngofnodi"
+  },
+  "modules": {
+    "dialogue": {
+      "content": {
+        "close": "Cau"
+      }
+    },
+    "downloadDialogue": {
+      "content": {
+        "download": "Lawrlwytho",
+        "entireFileAsOriginal": "Y ffeil gyfan ({0})",
+        "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
+        "preview": "Rhagolwg",
+        "title": "Lawrlwytho"
+      }
+    },
+    "embedDialogue": {
+      "content": {
+        "customSize": "Maint ddewisol",
+        "height": "Hyd",
+        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod:",
+        "title": "Ymgorffori",
+        "width": "Lled"
+      }
+    },
+    "footerPanel": {
+      "content": {
+        "bookmark": "Ychwanegu at nodau tudalen",
+        "download": "Lawrlwytho",
+        "embed": "Ymgorffori",
+        "exitFullScreen": "Dianc o'r sgrin lawn",
+        "fullScreen": "Sgrin lawn",
+        "open": "agored"
+      }
+    },
+    "genericDialogue": {
+      "content": {
+        "ok": "GWELD"
+      }
+    },
+    "headerPanel": {
+      "content": {
+        "close": "Cau",
+        "help": "Cymorth"
+      }
+    },
+    "helpDialogue": {
+      "content": {
+        "text": "testun i'w osod",
+        "title": "Cymorth"
+      }
+    },
+    "loginDialogue": {
+      "content": {
+        "login": "Mewngofnodi"
+      }
+    },
+    "mediaelementCenterPanel": {
+      "content": {
+
+      }
+    },
+    "moreInfoRightPanel": {
+      "content": {
+        "attribution": "priodoliad",
+        "collapse": "Cuddio Mwy o Wybodaeth",
+        "collapseFull": "Cuddio'r Galeri",
+        "description": "disgrifiad",
+        "expand": "Ehangu Fwy o Wybodaeth",
+        "expandFull": "Ehangu'r Galeri",
+        "holdingText": "Eich modiwl fan hyn!",
+        "less": "llai",
+        "license": "trwydded",
+        "more": "mwy",
+        "noData": "Nid oes data i'w arddangos",
+        "title": "Mwy o Wybodaeth"
+      }
+    },
+    "settingsDialogue": {
+      "content": {
+        "locale": "Iaith",
+        "pagingEnabled": "Arddangos dwy dudalen",
+        "preserveViewport": "Cadw'r lefel o glosio",
+        "title": "Dewisiadau",
+        "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
+      }
+    },
+    "treeViewLeftPanel": {
+
+    },
+    "virtexCenterPanel": {
+      "content": {
+        "acknowledgements": "Priodoliad",
+        "zoomIn": "chwyddo Mewn",
+        "zoomOut": "Zoom Out"
+      }
+    }
+  }
+}

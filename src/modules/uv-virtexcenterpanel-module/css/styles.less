@@ -1,0 +1,43 @@
+@import 'virtex.less';
+
+#app{
+
+    @img-path: '../../../modules/uv-virtexcenterpanel-module/img/';
+
+    .centerPanel{
+
+        a.imageBtn {
+            height: 28px;
+            width: 28px;
+            float: left;
+            cursor: pointer;
+        }
+
+        .content{
+            position: relative;
+
+            .navigation{
+                position: absolute;
+                left: 0;
+                top: 0;
+                overflow: hidden;
+                margin-left: @margin-large-horizontal;
+
+                a.imageBtn {
+                    &.zoomIn{
+                        background-image: url('@{img-path}zoom_in.png');
+                    }
+
+                    &.zoomOut{
+                        background-image: url('@{img-path}zoom_out.png');
+                    }
+                }
+
+            }
+
+            .virtex{
+                background: none;
+            }
+        }
+    }
+}

@@ -53,6 +53,8 @@ require([
     'extensions/uv-pdf-extension/Provider',
     'extensions/uv-seadragon-extension/Extension',
     'extensions/uv-seadragon-extension/Provider',
+    'extensions/uv-virtex-extension/Extension',
+    'extensions/uv-virtex-extension/Provider',
     'manifesto',
     'browserdetect',
     'ex',
@@ -80,6 +82,8 @@ require([
     pdfProvider,
     seadragonExtension,
     seadragonProvider,
+    virtexExtension,
+    virtexProvider,
     manifesto
     ) => {
 
@@ -100,6 +104,12 @@ require([
             type: mediaelementExtension,
             provider: mediaelementProvider,
             name: 'uv-mediaelement-extension'
+        };
+
+        extensions[manifesto.ElementType.physicalobject().toString()] = {
+            type: virtexExtension,
+            provider: virtexProvider,
+            name: 'uv-virtex-extension'
         };
 
         extensions[manifesto.ElementType.sound().toString()] = {

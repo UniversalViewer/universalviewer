@@ -38,7 +38,7 @@
       "content": {
         "customSize": "Maint ddewisol",
         "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod:",
+        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod.",
         "title": "Ymgorffori",
         "width": "Lled"
       }
@@ -49,7 +49,8 @@
         "download": "Lawrlwytho",
         "embed": "Ymgorffori",
         "exitFullScreen": "Dianc o'r sgrin lawn",
-        "fullScreen": "Sgrin lawn"
+        "fullScreen": "Sgrin lawn",
+        "open": "agored"
       }
     },
     "genericDialogue": {

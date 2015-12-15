@@ -5,6 +5,7 @@
     "bookmarkThumbWidth": 90,
     "leftPanelEnabled": true,
     "minWidthBreakPoint": 610,
+    "openTemplate": "http://universalviewer.io?manifest={0}",
     "overrideFullScreen": false,
     "pagingEnabled": true,
     "pessimisticAccessControl": false,
@@ -41,7 +42,8 @@
         "downloadEnabled": true,
         "embedEnabled": true,
         "fullscreenEnabled": true,
-        "minimiseButtons": false
+        "minimiseButtons": false,
+        "openEnabled": false
       }
     },
     "genericDialogue":

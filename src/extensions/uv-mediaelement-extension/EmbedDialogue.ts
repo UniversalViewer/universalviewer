@@ -14,7 +14,9 @@ class EmbedDialogue extends BaseEmbedDialogue {
         super.create();
     }
 
-    formatCode(): void {
+    update(): void {
+
+        super.update();
 
         this.code = (<IMediaElementProvider>this.provider).getEmbedScript(
             this.options.embedTemplate,

@@ -65,7 +65,8 @@ class BaseExtension implements IExtension {
             bootstrapper: {
                 config: this.provider.bootstrapper.config,
                 params: this.provider.bootstrapper.params
-            }
+            },
+            preview: this.getSharePreview()
         });
 
         // add/remove classes.
@@ -310,6 +311,14 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.NOT_FOUND, () => {
             this.triggerSocket(BaseCommands.NOT_FOUND);
+        });
+
+        $.subscribe(BaseCommands.OPEN, () => {
+            this.triggerSocket(BaseCommands.OPEN);
+
+            var openUri: string = String.format(this.provider.config.options.openTemplate, this.provider.manifestUri);
+
+            window.open(openUri);
         });
 
         $.subscribe(BaseCommands.OPEN_LEFT_PANEL, () => {
@@ -581,6 +590,26 @@ class BaseExtension implements IExtension {
                     break;
             }
         }, 1000);
+    }
+
+    getSharePreview(): any {
+        var preview: any = {};
+
+        preview.title = this.provider.getTitle();
+
+        // todo: use getThumb (when implemented)
+
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+
+        var thumbnail = canvas.getProperty('thumbnail');
+
+        if (!thumbnail || !_.isString(thumbnail)){
+            thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+        }
+
+        preview.image = thumbnail;
+
+        return preview;
     }
 
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {

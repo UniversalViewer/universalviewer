@@ -286,12 +286,16 @@ class Extension extends BaseExtension {
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+        } else {
+            Shell.$leftPanel.hide();
         }
 
         this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
 
         if (this.isRightPanelEnabled()){
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+        } else {
+            Shell.$rightPanel.hide();
         }
 
         this.footerPanel = new FooterPanel(Shell.$footerPanel);

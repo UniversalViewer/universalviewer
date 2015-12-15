@@ -246,6 +246,42 @@ module.exports = function (grunt) {
                         dest: '<%= config.dirs.typings %>'
                     }
                 ]
+            },
+            npmComponents: {
+                files: [
+                    {
+                        // all js files that need to be copied from /node_modules to /src/lib post npm install
+                        cwd: '<%= config.dirs.npm %>',
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'manifesto.js/dist/client/manifesto.js'
+                        ],
+                        dest: '<%= config.dirs.lib %>'
+                    },
+                    {
+                        // all d.ts files that need to be copied from /node_modules to /src/typings post npm install
+                        cwd: '<%= config.dirs.npm %>',
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'manifesto.js/dist/manifesto.d.ts',
+                            'virtex3d/dist/virtex.d.ts'
+                        ],
+                        dest: '<%= config.dirs.typings %>'
+                    },
+                    {
+                        // all files that need to be copied from /node_modules to /src/extensions/uv-virtex-extension/lib post npm install
+                        cwd: '<%= config.dirs.npm %>',
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'virtex3d/dist/virtex.js',
+                            'three.js/build/three.min.js'
+                        ],
+                        dest: '<%= config.dirs.uvVirtexExtension %>/lib'
+                    }
+                ]
             }
         },
 

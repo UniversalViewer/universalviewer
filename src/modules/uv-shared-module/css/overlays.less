@@ -15,16 +15,21 @@
         .top{
             width: 100%;
             overflow: auto;
+
             .close{
-                .icon-right(url('@{img-path}close.png'), 24px, 34px);
+                .hide-text();
+                //.icon-right(url('@{img-path}close.png'), 24px, 30px);
+                background-image: url('@{img-path}close.png');
+                width: 24px;
+                height: 24px;
                 float: right;
-                background-color: @gray-darker;
+                background-color: @brand-primary;
             }
         }
 
         .middle{
-            background: @overlay-bg;
             width: 100%;
+            background: @overlay-bg;
 
             .content{
                 padding-right: @padding-medium-horizontal;

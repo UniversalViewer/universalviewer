@@ -39,6 +39,7 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
         Commands.LOAD = Commands.namespace + 'onLoad';
         Commands.MINUS = Commands.namespace + 'onMinus';
         Commands.NOT_FOUND = Commands.namespace + 'onNotFound';
+        Commands.OPEN = Commands.namespace + 'onOpen';
         Commands.OPEN_EXTERNAL_RESOURCE = Commands.namespace + 'onOpenExternalResource';
         Commands.OPEN_LEFT_PANEL = Commands.namespace + 'onOpenLeftPanel';
         Commands.OPEN_RIGHT_PANEL = Commands.namespace + 'onOpenRightPanel';
@@ -164,6 +165,8 @@ define('Bootstrapper',["require", "exports", "./modules/uv-shared-module/BaseCom
             if (params) {
                 this.params = $.extend(true, this.params, params);
             }
+            if (!this.params.manifestUri)
+                return;
             // empty app div
             $('#app').empty();
             // add loading class
@@ -515,8 +518,8 @@ define('modules/uv-shared-module/Dialogue',["require", "exports", "./BaseView", 
         Dialogue.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$element.css({
-                'top': (this.extension.height() / 2) - (this.$element.height() / 2),
-                'left': (this.extension.width() / 2) - (this.$element.width() / 2)
+                'top': Math.floor((this.extension.height() / 2) - (this.$element.height() / 2)),
+                'left': Math.floor((this.extension.width() / 2) - (this.$element.width() / 2))
             });
         };
         return Dialogue;
@@ -932,7 +935,8 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 bootstrapper: {
                     config: this.provider.bootstrapper.config,
                     params: this.provider.bootstrapper.params
-                }
+                },
+                preview: this.getSharePreview()
             });
             // add/remove classes.
             this.$element.empty();
@@ -1137,6 +1141,11 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             });
             $.subscribe(BaseCommands.NOT_FOUND, function () {
                 _this.triggerSocket(BaseCommands.NOT_FOUND);
+            });
+            $.subscribe(BaseCommands.OPEN, function () {
+                _this.triggerSocket(BaseCommands.OPEN);
+                var openUri = String.format(_this.provider.config.options.openTemplate, _this.provider.manifestUri);
+                window.open(openUri);
             });
             $.subscribe(BaseCommands.OPEN_LEFT_PANEL, function () {
                 _this.triggerSocket(BaseCommands.OPEN_LEFT_PANEL);
@@ -1352,6 +1361,18 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                         break;
                 }
             }, 1000);
+        };
+        BaseExtension.prototype.getSharePreview = function () {
+            var preview = {};
+            preview.title = this.provider.getTitle();
+            // todo: use getThumb (when implemented)
+            var canvas = this.provider.getCurrentCanvas();
+            var thumbnail = canvas.getProperty('thumbnail');
+            if (!thumbnail || !_.isString(thumbnail)) {
+                thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+            }
+            preview.image = thumbnail;
+            return preview;
         };
         BaseExtension.prototype.getExternalResources = function (resources) {
             var _this = this;
@@ -1684,7 +1705,7 @@ define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "..
         };
         DownloadDialogue.prototype.resize = function () {
             this.$element.css({
-                'top': this.extension.height() - this.$element.outerHeight(true)
+                'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
             });
         };
         return DownloadDialogue;
@@ -1777,7 +1798,7 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.closeCommand = BaseCommands.HIDE_EMBED_DIALOGUE;
             $.subscribe(this.openCommand, function (e, params) {
                 _this.open();
-                _this.formatCode();
+                _this.update();
             });
             $.subscribe(this.closeCommand, function (e) {
                 _this.close();
@@ -1793,12 +1814,20 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             // create ui.
             this.$title = $('<h1>' + this.content.title + '</h1>');
             this.$content.append(this.$title);
+            this.$firstRow = $('<div class="firstRow"><div class="leftCol"></div><div class="rightCol"></div></div>');
+            this.$content.append(this.$firstRow);
+            this.$secondRow = $('<div class="secondRow"></div>');
+            this.$content.append(this.$secondRow);
+            this.$link = $('<a target="_blank"></a>');
+            this.$firstRow.find('.leftCol').append(this.$link);
+            this.$image = $('<img class="share" />');
+            this.$link.append(this.$image);
             this.$intro = $('<p>' + this.content.instructions + '</p>');
-            this.$content.append(this.$intro);
+            this.$firstRow.find('.rightCol').append(this.$intro);
             this.$code = $('<textarea class="code"></textarea>');
-            this.$content.append(this.$code);
+            this.$secondRow.append(this.$code);
             this.$sizes = $('<div class="sizes"></div>');
-            this.$content.append(this.$sizes);
+            this.$secondRow.append(this.$sizes);
             this.$smallSize = $('<div class="size small"></div>');
             this.$sizes.append(this.$smallSize);
             this.$smallSize.append('<p>' + this.smallWidth + ' x ' + this.smallHeight + '</p>');
@@ -1819,13 +1848,13 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.$customSizeWidthWrap = $('<div class="width"></div>');
             this.$customSizeWrap.append(this.$customSizeWidthWrap);
             this.$customSizeWidthWrap.append('<label for="width">' + this.content.width + '</label>');
-            this.$customWidth = $('<input id="width" type="text" maxlength="5"></input>');
+            this.$customWidth = $('<input id="width" type="text" maxlength="5" />');
             this.$customSizeWidthWrap.append(this.$customWidth);
             this.$customSizeWidthWrap.append('<span>px</span>');
             this.$customSizeHeightWrap = $('<div class="height"></div>');
             this.$customSizeWrap.append(this.$customSizeHeightWrap);
             this.$customSizeHeightWrap.append('<label for="height">' + this.content.height + '</label>');
-            this.$customHeight = $('<input id="height" type="text" maxlength="5"></input>');
+            this.$customHeight = $('<input id="height" type="text" maxlength="5" />');
             this.$customSizeHeightWrap.append(this.$customHeight);
             this.$customSizeHeightWrap.append('<span>px</span>');
             // initialise ui.
@@ -1885,21 +1914,21 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.currentHeight = this.smallHeight;
             this.$sizes.find('.size').removeClass('selected');
             this.$smallSize.addClass('selected');
-            this.formatCode();
+            this.update();
         };
         EmbedDialogue.prototype.selectMedium = function () {
             this.currentWidth = this.mediumWidth;
             this.currentHeight = this.mediumHeight;
             this.$sizes.find('.size').removeClass('selected');
             this.$mediumSize.addClass('selected');
-            this.formatCode();
+            this.update();
         };
         EmbedDialogue.prototype.selectLarge = function () {
             this.currentWidth = this.largeWidth;
             this.currentHeight = this.largeHeight;
             this.$sizes.find('.size').removeClass('selected');
             this.$largeSize.addClass('selected');
-            this.formatCode();
+            this.update();
         };
         EmbedDialogue.prototype.selectCustom = function () {
             if (!this.$customWidth.val()) {
@@ -1915,16 +1944,23 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
         EmbedDialogue.prototype.getCustomSize = function () {
             this.currentWidth = this.$customWidth.val();
             this.currentHeight = this.$customHeight.val();
-            this.formatCode();
+            this.update();
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            var canvas = this.provider.getCurrentCanvas();
+            var thumbnail = canvas.getProperty('thumbnail');
+            if (!thumbnail || !_.isString(thumbnail)) {
+                thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+            }
+            this.$link.attr('href', thumbnail);
+            this.$image.attr('src', thumbnail);
         };
         EmbedDialogue.prototype.close = function () {
             _super.prototype.close.call(this);
         };
         EmbedDialogue.prototype.resize = function () {
             this.$element.css({
-                'top': this.extension.height() - this.$element.outerHeight(true)
+                'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
             });
         };
         return EmbedDialogue;
@@ -1947,7 +1983,8 @@ define('extensions/uv-mediaelement-extension/EmbedDialogue',["require", "exports
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
             this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
             this.$code.val(this.code);
         };
@@ -1982,6 +2019,8 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseComm
             });
             this.$options = $('<div class="options"></div>');
             this.$element.append(this.$options);
+            this.$openButton = $('<a class="open" title="' + this.content.open + '">' + this.content.open + '</a>');
+            this.$options.prepend(this.$openButton);
             this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '">' + this.content.bookmark + '</a>');
             this.$options.prepend(this.$bookmarkButton);
             this.$embedButton = $('<a href="#" class="embed" title="' + this.content.embed + '">' + this.content.embed + '</a>');
@@ -1992,6 +2031,9 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseComm
             this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '">' + this.content.fullScreen + '</a>');
             this.$options.append(this.$fullScreenBtn);
             this.$fullScreenBtn.attr('tabindex', '5');
+            this.$openButton.onPressed(function () {
+                $.publish(BaseCommands.OPEN);
+            });
             this.$bookmarkButton.onPressed(function () {
                 $.publish(BaseCommands.BOOKMARK);
             });
@@ -2009,11 +2051,21 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseComm
             if (!Utils.Bools.GetBool(this.options.embedEnabled, true)) {
                 this.$embedButton.hide();
             }
+            this.updateOpenButton();
             this.updateBookmarkButton();
             this.updateDownloadButton();
             this.updateFullScreenButton();
             if (Utils.Bools.GetBool(this.options.minimiseButtons, false)) {
                 this.$options.addClass('minimiseButtons');
+            }
+        };
+        FooterPanel.prototype.updateOpenButton = function () {
+            var configEnabled = Utils.Bools.GetBool(this.options.openEnabled, false);
+            if (configEnabled && !this.provider.isHomeDomain) {
+                this.$openButton.show();
+            }
+            else {
+                this.$openButton.hide();
             }
         };
         FooterPanel.prototype.updateFullScreenButton = function () {
@@ -2396,8 +2448,8 @@ define('modules/uv-shared-module/CenterPanel',["require", "exports", "./Shell", 
         CenterPanel.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$element.css({
-                'left': Shell.$leftPanel.width(),
-                'width': this.$element.parent().width() - Shell.$leftPanel.width() - Shell.$rightPanel.width()
+                'left': Math.floor(Shell.$leftPanel.width()),
+                'width': Math.floor(this.$element.parent().width() - Shell.$leftPanel.width() - Shell.$rightPanel.width())
             });
             var titleHeight;
             if (this.options && this.options.titleEnabled === false) {
@@ -2805,7 +2857,7 @@ define('modules/uv-shared-module/RightPanel',["require", "exports", "./BaseComma
         RightPanel.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$element.css({
-                'left': this.$element.parent().width() - this.$element.outerWidth()
+                'left': Math.floor(this.$element.parent().width() - this.$element.outerWidth())
             });
         };
         return RightPanel;
@@ -4674,7 +4726,8 @@ define('extensions/uv-pdf-extension/EmbedDialogue',["require", "exports", "../..
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
             this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
             this.$code.val(this.code);
         };
@@ -5090,17 +5143,18 @@ define('extensions/uv-seadragon-extension/EmbedDialogue',["require", "exports", 
             var _this = this;
             _super.call(this, $element);
             $.subscribe(Commands.SEADRAGON_OPEN, function (viewer) {
-                _this.formatCode();
+                _this.update();
             });
             $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, function (viewer) {
-                _this.formatCode();
+                _this.update();
             });
         }
         EmbedDialogue.prototype.create = function () {
             this.setConfig('embedDialogue');
             _super.prototype.create.call(this);
         };
-        EmbedDialogue.prototype.formatCode = function () {
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
             var zoom = this.extension.getViewerBounds();
             var rotation = this.extension.getViewerRotation();
             this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight, zoom, rotation);
@@ -6798,9 +6852,15 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             if (this.isLeftPanelEnabled()) {
                 this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
             }
+            else {
+                Shell.$leftPanel.hide();
+            }
             this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
             if (this.isRightPanelEnabled()) {
                 this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            }
+            else {
+                Shell.$rightPanel.hide();
             }
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
             this.$helpDialogue = $('<div class="overlay help"></div>');
@@ -7402,6 +7462,267 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
         };
         Provider.prototype.getNodeDisplayDate = function (node) {
             return node.navDate.toDateString();
+        };
+        return Provider;
+    })(BaseProvider);
+    return Provider;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-virtex-extension/DownloadDialogue',["require", "exports", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseDownloadDialogue, DownloadOption) {
+    var DownloadDialogue = (function (_super) {
+        __extends(DownloadDialogue, _super);
+        function DownloadDialogue($element) {
+            _super.call(this, $element);
+        }
+        DownloadDialogue.prototype.create = function () {
+            this.setConfig('downloadDialogue');
+            _super.prototype.create.call(this);
+        };
+        DownloadDialogue.prototype.open = function () {
+            var _this = this;
+            _super.prototype.open.call(this);
+            if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal)) {
+                this.$downloadOptions.empty();
+                // add each file src
+                var canvas = this.provider.getCurrentCanvas();
+                _.each(canvas.getRenderings(), function (rendering) {
+                    _this.addEntireFileDownloadOption(rendering);
+                });
+            }
+            if (!this.$downloadOptions.find('li:visible').length) {
+                this.$noneAvailable.show();
+            }
+            else {
+                // select first option.
+                this.$noneAvailable.hide();
+            }
+            this.resize();
+        };
+        DownloadDialogue.prototype.isDownloadOptionAvailable = function (option) {
+            switch (option) {
+                case DownloadOption.entireFileAsOriginal:
+                    return true;
+            }
+        };
+        return DownloadDialogue;
+    })(BaseDownloadDialogue);
+    return DownloadDialogue;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-virtex-extension/EmbedDialogue',["require", "exports", "../../modules/uv-dialogues-module/EmbedDialogue"], function (require, exports, BaseEmbedDialogue) {
+    var EmbedDialogue = (function (_super) {
+        __extends(EmbedDialogue, _super);
+        function EmbedDialogue($element) {
+            _super.call(this, $element);
+        }
+        EmbedDialogue.prototype.create = function () {
+            this.setConfig('embedDialogue');
+            _super.prototype.create.call(this);
+        };
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
+            this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
+            this.$code.val(this.code);
+        };
+        EmbedDialogue.prototype.resize = function () {
+            _super.prototype.resize.call(this);
+        };
+        return EmbedDialogue;
+    })(BaseEmbedDialogue);
+    return EmbedDialogue;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-virtex-extension/SettingsDialogue',["require", "exports", "../../modules/uv-dialogues-module/SettingsDialogue"], function (require, exports, BaseSettingsDialogue) {
+    var SettingsDialogue = (function (_super) {
+        __extends(SettingsDialogue, _super);
+        function SettingsDialogue($element) {
+            _super.call(this, $element);
+        }
+        SettingsDialogue.prototype.create = function () {
+            this.setConfig('settingsDialogue');
+            _super.prototype.create.call(this);
+        };
+        return SettingsDialogue;
+    })(BaseSettingsDialogue);
+    return SettingsDialogue;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('modules/uv-virtexcenterpanel-module/VirtexCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/CenterPanel"], function (require, exports, BaseCommands, CenterPanel) {
+    var VirtexCenterPanel = (function (_super) {
+        __extends(VirtexCenterPanel, _super);
+        function VirtexCenterPanel($element) {
+            _super.call(this, $element);
+        }
+        VirtexCenterPanel.prototype.create = function () {
+            var _this = this;
+            this.setConfig('virtexCenterPanel');
+            _super.prototype.create.call(this);
+            var that = this;
+            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
+                that.openMedia(resources);
+            });
+            this.$navigation = $('<div class="navigation"></div>');
+            this.$content.prepend(this.$navigation);
+            this.$zoomInButton = $('<a class="imageBtn zoomIn" title="' + this.content.zoomIn + '"></a>');
+            this.$navigation.append(this.$zoomInButton);
+            this.$zoomOutButton = $('<a class="imageBtn zoomOut" title="' + this.content.zoomOut + '"></a>');
+            this.$navigation.append(this.$zoomOutButton);
+            this.$viewport = $('<div class="virtex"></div>');
+            this.$content.prepend(this.$viewport);
+            this.title = this.extension.provider.getTitle();
+            this.showAttribution();
+            this.$zoomInButton.on('click', function (e) {
+                e.preventDefault();
+                _this.viewport.zoomIn();
+            });
+            this.$zoomOutButton.on('click', function (e) {
+                e.preventDefault();
+                _this.viewport.zoomOut();
+            });
+        };
+        VirtexCenterPanel.prototype.openMedia = function (resources) {
+            var _this = this;
+            this.extension.getExternalResources(resources).then(function () {
+                _this.$viewport.empty();
+                var canvas = _this.provider.getCurrentCanvas();
+                _this.viewport = virtex.create({
+                    element: "#content .virtex",
+                    object: canvas.id,
+                    showStats: _this.options.showStats
+                });
+                _this.resize();
+            });
+        };
+        VirtexCenterPanel.prototype.resize = function () {
+            _super.prototype.resize.call(this);
+            this.$title.ellipsisFill(this.title);
+            this.$viewport.width(this.$content.width());
+            this.$viewport.height(this.$content.height());
+        };
+        return VirtexCenterPanel;
+    })(CenterPanel);
+    return VirtexCenterPanel;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-virtex-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel", "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, MoreInfoRightPanel, SettingsDialogue, Shell, TreeViewLeftPanel, VirtexCenterPanel) {
+    var Extension = (function (_super) {
+        __extends(Extension, _super);
+        function Extension(bootstrapper) {
+            _super.call(this, bootstrapper);
+        }
+        Extension.prototype.create = function (overrideDependencies) {
+            var _this = this;
+            _super.prototype.create.call(this, overrideDependencies);
+            $.subscribe(BaseCommands.THUMB_SELECTED, function (e, canvasIndex) {
+                _this.viewCanvas(canvasIndex);
+            });
+            //
+            //$.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+            //    Shell.$centerPanel.hide();
+            //    Shell.$rightPanel.hide();
+            //});
+            //
+            //$.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
+            //    Shell.$centerPanel.show();
+            //    Shell.$rightPanel.show();
+            //    this.resize();
+            //});
+        };
+        Extension.prototype.createModules = function () {
+            _super.prototype.createModules.call(this);
+            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+            if (this.isLeftPanelEnabled()) {
+                this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+            }
+            this.centerPanel = new VirtexCenterPanel(Shell.$centerPanel);
+            if (this.isRightPanelEnabled()) {
+                this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            }
+            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.$downloadDialogue = $('<div class="overlay download"></div>');
+            Shell.$overlays.append(this.$downloadDialogue);
+            this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
+            this.$embedDialogue = $('<div class="overlay embed"></div>');
+            Shell.$overlays.append(this.$embedDialogue);
+            this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+            this.$settingsDialogue = $('<div class="overlay settings"></div>');
+            Shell.$overlays.append(this.$settingsDialogue);
+            this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
+            if (this.isLeftPanelEnabled()) {
+                this.leftPanel.init();
+            }
+            else {
+                Shell.$leftPanel.hide();
+            }
+            if (this.isRightPanelEnabled()) {
+                this.rightPanel.init();
+            }
+            else {
+                Shell.$rightPanel.hide();
+            }
+        };
+        Extension.prototype.isLeftPanelEnabled = function () {
+            return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
+                && (this.provider.isMultiCanvas() || this.provider.isMultiSequence());
+        };
+        Extension.prototype.bookmark = function () {
+            _super.prototype.bookmark.call(this);
+            var canvas = this.provider.getCurrentCanvas();
+            var bookmark = new Bookmark();
+            bookmark.index = this.provider.canvasIndex;
+            bookmark.label = canvas.getLabel();
+            bookmark.path = this.getBookmarkUri();
+            bookmark.thumb = canvas.getProperty('thumbnail');
+            bookmark.title = this.provider.getTitle();
+            bookmark.type = manifesto.ElementType.physicalobject().toString();
+            this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        };
+        return Extension;
+    })(BaseExtension);
+    return Extension;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-virtex-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider"], function (require, exports, BaseProvider) {
+    var Provider = (function (_super) {
+        __extends(Provider, _super);
+        function Provider(bootstrapper) {
+            _super.call(this, bootstrapper);
+            this.config.options = $.extend(true, this.options, {}, bootstrapper.config.options);
+        }
+        Provider.prototype.getEmbedScript = function (template, width, height) {
+            var configUri = this.config.uri || '';
+            var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, width, height, this.embedScriptUri);
+            return script;
         };
         return Provider;
     })(BaseProvider);
@@ -19635,7 +19956,7 @@ var t=pe(function(r,e){var u=v(e,t.placeholder);return dr(r,n,w,e,u)});return t}
 g||(t&=~(b|A)),j=[n,t,r,C,E,j,k,O,a,m],O=hr.apply(w,j),Fr(n)&&Zu(O,j),O.placeholder=x,O}}if(x=p?r:this,O=h?x[n]:n,f)for(m=j.length,E=ku(f.length,m),k=qn(j);E--;)C=f[E],j[E]=Ur(C,m)?k[C]:w;return s&&a<j.length&&(j.length=a),this&&this!==Yn&&this instanceof l&&(O=d||Ht(n)),O.apply(x,j)}var s=t&E,p=t&b,h=t&A,_=t&k,g=t&j,y=t&O,d=h?w:Ht(n);return l}function _r(n,t,r){return n=n.length,t=+t,n<t&&bu(t)?(t-=n,r=null==r?" ":r+"",$e(r,du(t/r.length)).slice(0,t)):""}function vr(n,t,r,e){function u(){for(var t=-1,f=arguments.length,a=-1,c=e.length,l=De(c+f);++a<c;)l[a]=e[a];
 for(;f--;)l[a++]=arguments[++t];return(this&&this!==Yn&&this instanceof u?i:n).apply(o?r:this,l)}var o=t&b,i=Ht(n);return u}function gr(n){var t=Ve[n];return function(n,r){return(r=r===w?0:+r||0)?(r=su(10,r),t(n*r)/r):t(n)}}function yr(n){return function(t,r,e,u){var o=br(e);return null==e&&o===it?zt(t,r,n):Bt(t,r,o(e,u,1),n)}}function dr(n,t,r,e,u,o,i,f){var a=t&A;if(!a&&typeof n!="function")throw new Xe(T);var c=e?e.length:0;if(c||(t&=~(I|R),e=u=w),c-=u?u.length:0,t&R){var l=e,s=u;e=u=w}var p=a?w:Ku(n);
 return r=[n,t,r,e,u,l,s,o,i,f],p&&(e=r[1],t=p[1],f=e|t,u=t==E&&e==k||t==E&&e==C&&r[7].length<=p[8]||t==(E|C)&&e==k,(f<E||u)&&(t&b&&(r[2]=p[2],f|=e&b?0:j),(e=p[3])&&(u=r[3],r[3]=u?qt(u,e,p[4]):qn(e),r[4]=u?v(r[3],P):qn(p[4])),(e=p[5])&&(u=r[5],r[5]=u?Kt(u,e,p[6]):qn(e),r[6]=u?v(r[5],P):qn(p[6])),(e=p[7])&&(r[7]=qn(e)),t&E&&(r[8]=null==r[8]?p[8]:ku(r[8],p[8])),null==r[9]&&(r[9]=p[9]),r[0]=p[0],r[1]=f),t=r[1],f=r[9]),r[9]=null==f?a?0:n.length:ju(f-c,0)||0,n=t==b?Jt(r[0],r[2]):t!=I&&t!=(b|I)||r[4].length?hr.apply(w,r):vr.apply(w,r),
-(p?qu:Zu)(n,r)}function mr(n,t,r,e,u,o,i){var f=-1,a=n.length,c=t.length;if(a!=c&&(!u||c<=a))return false;for(;++f<a;){var l=n[f],c=t[f],s=e?e(u?c:l,u?l:c,f):w;if(s!==w){if(s)continue;return false}if(u){if(!nt(t,function(n){return l===n||r(l,n,e,u,o,i)}))return false}else if(l!==c&&!r(l,c,e,u,o,i))return false}return true}function wr(n,t,r){switch(r){case D:case M:return+n==+t;case q:return n.name==t.name&&n.information==t.message;case V:return n!=+n?t!=+t:n==+t;case Y:case G:return n==t+""}return false}function xr(n,t,r,e,u,o,i){
+(p?qu:Zu)(n,r)}function mr(n,t,r,e,u,o,i){var f=-1,a=n.length,c=t.length;if(a!=c&&(!u||c<=a))return false;for(;++f<a;){var l=n[f],c=t[f],s=e?e(u?c:l,u?l:c,f):w;if(s!==w){if(s)continue;return false}if(u){if(!nt(t,function(n){return l===n||r(l,n,e,u,o,i)}))return false}else if(l!==c&&!r(l,c,e,u,o,i))return false}return true}function wr(n,t,r){switch(r){case D:case M:return+n==+t;case q:return n.name==t.name&&n.message==t.message;case V:return n!=+n?t!=+t:n==+t;case Y:case G:return n==t+""}return false}function xr(n,t,r,e,u,o,i){
 var f=Ko(n),a=f.length,c=Ko(t).length;if(a!=c&&!u)return false;for(c=a;c--;){var l=f[c];if(!(u?l in t:eu.call(t,l)))return false}for(var s=u;++c<a;){var l=f[c],p=n[l],h=t[l],_=e?e(u?h:p,u?p:h,l):w;if(_===w?!r(p,h,e,u,o,i):!_)return false;s||(s="constructor"==l)}return s||(r=n.constructor,e=t.constructor,!(r!=e&&"constructor"in n&&"constructor"in t)||typeof r=="function"&&r instanceof r&&typeof e=="function"&&e instanceof e)?true:false}function br(n,t,r){var e=Nn.callback||Le,e=e===Le?it:e;return r?e(n,t,r):e}function Ar(n){
 for(var t=n.name+"",r=Fu[t],e=r?r.length:0;e--;){var u=r[e],o=u.func;if(null==o||o==n)return u.name}return t}function jr(n,t,e){var u=Nn.indexOf||Yr,u=u===Yr?r:u;return n?u(n,t,e):u}function kr(n){n=Ce(n);for(var t=n.length;t--;){var r,e=n[t];r=n[t][1],r=r===r&&!de(r),e[2]=r}return n}function Or(n,t){var r=null==n?w:n[t];return me(r)?r:w}function Ir(n){var t=n.length,r=new n.constructor(t);return t&&"string"==typeof n[0]&&eu.call(n,"index")&&(r.index=n.index,r.input=n.input),r}function Rr(n){return n=n.constructor,
 typeof n=="function"&&n instanceof n||(n=Ye),new n}function Er(n,t,r){var e=n.constructor;switch(t){case J:return Mt(n);case D:case M:return new e(+n);case X:case H:case Q:case nn:case tn:case rn:case en:case un:case on:return e instanceof e&&(e=Lu[t]),t=n.buffer,new e(r?Mt(t):t,n.byteOffset,n.length);case V:case G:return new e(n);case Y:var u=new e(n.source,kn.exec(n));u.lastIndex=n.lastIndex}return u}function Cr(n,t,r){return null==n||Wr(t,n)||(t=Mr(t),n=1==t.length?n:mt(n,St(t,0,-1)),t=Gr(t)),
@@ -19648,7 +19969,7 @@ u=n.length;for(var o=-1,f=[];++e<u;){var a=n[e],c=t?t(a,e,n):a;e&&i===c||(i=c,f[
 return t=br(t,r,3),e(n,t)}function fe(n,t,r){if(r?$r(n,t,r):null==t){n=Br(n);var e=n.length;return 0<e?n[Et(0,e-1)]:w}r=-1,n=Oe(n);var e=n.length,u=e-1;for(t=ku(0>t?0:+t||0,e);++r<t;){var e=Et(r,u),o=n[e];n[e]=n[r],n[r]=o}return n.length=t,n}function ae(n,t,r){var e=Wo(n)?nt:Ut;return r&&$r(n,t,r)&&(t=w),(typeof t!="function"||r!==w)&&(t=br(t,r,3)),e(n,t)}function ce(n,t){var r;if(typeof t!="function"){if(typeof n!="function")throw new Xe(T);var e=n;n=t,t=e}return function(){return 0<--n&&(r=t.apply(this,arguments)),
 1>=n&&(t=w),r}}function le(n,t,r){function e(t,r){r&&cu(r),a=p=h=w,t&&(_=wo(),c=n.apply(s,f),p||a||(f=s=w))}function u(){var n=t-(wo()-l);0>=n||n>t?e(h,a):p=_u(u,n)}function o(){e(g,p)}function i(){if(f=arguments,l=wo(),s=this,h=g&&(p||!y),false===v)var r=y&&!p;else{a||y||(_=l);var e=v-(l-_),i=0>=e||e>v;i?(a&&(a=cu(a)),_=l,c=n.apply(s,f)):a||(a=_u(o,e))}return i&&p?p=cu(p):p||t===v||(p=_u(u,t)),r&&(i=true,c=n.apply(s,f)),!i||p||a||(f=s=w),c}var f,a,c,l,s,p,h,_=0,v=false,g=true;if(typeof n!="function")throw new Xe(T);
 if(t=0>t?0:+t||0,true===r)var y=true,g=false;else de(r)&&(y=!!r.leading,v="maxWait"in r&&ju(+r.maxWait||0,t),g="trailing"in r?!!r.trailing:g);return i.cancel=function(){p&&cu(p),a&&cu(a),_=0,a=p=h=w},i}function se(n,t){if(typeof n!="function"||t&&typeof t!="function")throw new Xe(T);var r=function(){var e=arguments,u=t?t.apply(this,e):e[0],o=r.cache;return o.has(u)?o.get(u):(e=n.apply(this,e),r.cache=o.set(u,e),e)};return r.cache=new se.Cache,r}function pe(n,t){if(typeof n!="function")throw new Xe(T);return t=ju(t===w?n.length-1:+t||0,0),
-function(){for(var r=arguments,e=-1,u=ju(r.length-t,0),o=De(u);++e<u;)o[e]=r[t+e];switch(t){case 0:return n.call(this,o);case 1:return n.call(this,r[0],o);case 2:return n.call(this,r[0],r[1],o)}for(u=De(t+1),e=-1;++e<t;)u[e]=r[e];return u[t]=o,n.apply(this,u)}}function he(n,t){return n>t}function _e(n){return h(n)&&Sr(n)&&eu.call(n,"callee")&&!pu.call(n,"callee")}function ve(n,t,r,e){return e=(r=typeof r=="function"?Dt(r,e,3):w)?r(n,t):w,e===w?wt(n,t,r):!!e}function ge(n){return h(n)&&typeof n.information=="string"&&ou.call(n)==q;
+function(){for(var r=arguments,e=-1,u=ju(r.length-t,0),o=De(u);++e<u;)o[e]=r[t+e];switch(t){case 0:return n.call(this,o);case 1:return n.call(this,r[0],o);case 2:return n.call(this,r[0],r[1],o)}for(u=De(t+1),e=-1;++e<t;)u[e]=r[e];return u[t]=o,n.apply(this,u)}}function he(n,t){return n>t}function _e(n){return h(n)&&Sr(n)&&eu.call(n,"callee")&&!pu.call(n,"callee")}function ve(n,t,r,e){return e=(r=typeof r=="function"?Dt(r,e,3):w)?r(n,t):w,e===w?wt(n,t,r):!!e}function ge(n){return h(n)&&typeof n.message=="string"&&ou.call(n)==q;
 }function ye(n){return de(n)&&ou.call(n)==K}function de(n){var t=typeof n;return!!n&&("object"==t||"function"==t)}function me(n){return null==n?false:ye(n)?fu.test(ru.call(n)):h(n)&&(Gn(n)?fu:In).test(n)}function we(n){return typeof n=="number"||h(n)&&ou.call(n)==V}function xe(n){var t;if(!h(n)||ou.call(n)!=Z||Gn(n)||_e(n)||!(eu.call(n,"constructor")||(t=n.constructor,typeof t!="function"||t instanceof t)))return false;var r;return Nn.support.ownLast?(vt(n,function(n,t,e){return r=eu.call(e,t),false}),false!==r):(vt(n,function(n,t){
 r=t}),r===w||eu.call(n,r))}function be(n){return de(n)&&ou.call(n)==Y}function Ae(n){return typeof n=="string"||h(n)&&ou.call(n)==G}function je(n){return h(n)&&Lr(n.length)&&!!Fn[ou.call(n)]}function ke(n,t){return n<t}function Oe(n){var t=n?Vu(n):0;return Lr(t)?t?Nn.support.unindexedChars&&Ae(n)?n.split(""):qn(n):[]:Se(n)}function Ie(n){return ot(n,Ee(n))}function Re(n){return dt(n,Ee(n))}function Ee(n){if(null==n)return[];de(n)||(n=Ye(n));for(var t=n.length,r=Nn.support,t=t&&Lr(t)&&(Wo(n)||_e(n)||Ae(n))&&t||0,e=n.constructor,u=-1,e=ye(e)&&e.prototype||nu,o=e===n,i=De(t),f=0<t,a=r.enumErrorProps&&(n===Qe||n instanceof qe),c=r.enumPrototypes&&ye(n);++u<t;)i[u]=u+"";
 for(var l in n)c&&"prototype"==l||a&&("message"==l||"name"==l)||f&&Ur(l,t)||"constructor"==l&&(o||!eu.call(n,l))||i.push(l);if(r.nonEnumShadows&&n!==nu)for(t=n===tu?G:n===Qe?q:ou.call(n),r=Nu[t]||Nu[Z],t==Z&&(e=nu),t=Wn.length;t--;)l=Wn[t],u=r[l],o&&u||(u?!eu.call(n,l):n[l]===e[l])||i.push(l);return i}function Ce(n){n=Dr(n);for(var t=-1,r=Ko(n),e=r.length,u=De(e);++t<e;){var o=r[t];u[t]=[o,n[o]]}return u}function Se(n){return Nt(n,Ko(n))}function Ue(n){return(n=u(n))&&n.replace(En,a).replace(bn,"");
@@ -23683,6 +24004,8 @@ require([
     'extensions/uv-pdf-extension/Provider',
     'extensions/uv-seadragon-extension/Extension',
     'extensions/uv-seadragon-extension/Provider',
+    'extensions/uv-virtex-extension/Extension',
+    'extensions/uv-virtex-extension/Provider',
     'manifesto',
     'browserdetect',
     'ex',
@@ -23702,7 +24025,7 @@ require([
     'xdomainrequest',
     'yepnope',
     'yepnopecss',
-], function (bootstrapper, mediaelementExtension, mediaelementProvider, pdfExtension, pdfProvider, seadragonExtension, seadragonProvider, manifesto) {
+], function (bootstrapper, mediaelementExtension, mediaelementProvider, pdfExtension, pdfProvider, seadragonExtension, seadragonProvider, virtexExtension, virtexProvider, manifesto) {
     // todo: use a compiler flag (when available)
      // this line is removed on build.
     window.manifesto = manifesto;
@@ -23716,6 +24039,11 @@ require([
         type: mediaelementExtension,
         provider: mediaelementProvider,
         name: 'uv-mediaelement-extension'
+    };
+    extensions[manifesto.ElementType.physicalobject().toString()] = {
+        type: virtexExtension,
+        provider: virtexProvider,
+        name: 'uv-virtex-extension'
     };
     extensions[manifesto.ElementType.sound().toString()] = {
         type: mediaelementExtension,

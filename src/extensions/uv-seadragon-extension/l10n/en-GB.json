@@ -40,7 +40,7 @@
       "content": {
         "customSize": "Custom Size",
         "height": "Height",
-        "instructions": "To embed this item in your own website, copy and paste the code below:",
+        "instructions": "To embed this item in your own website, copy and paste the code below.",
         "title": "Embed",
         "width": "Width"
       }
@@ -51,7 +51,8 @@
         "download": "Download",
         "embed": "Embed",
         "exitFullScreen": "Exit Full Screen",
-        "fullScreen": "Full Screen"
+        "fullScreen": "Full Screen",
+        "open": "Open"
       }
     },
     "genericDialogue": {

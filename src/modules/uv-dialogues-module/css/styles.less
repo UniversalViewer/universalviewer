@@ -10,125 +10,148 @@
             padding: 0 0 30px 8px;
 
             .middle{
-                textarea.code {
-                    width: 100%;
-                    height: 90px;
-                    background: @gray-lighter;
-                    border: 1px solid @gray-light;
-                    font-size: @font-size-small;
+
+                .firstRow{
+                    overflow: hidden;
+
+                    margin: 0 0 @margin-small-vertical 0;
+
+                    .leftCol{
+                        float: left;
+
+                        img.share{
+                            margin: @margin-small-vertical 0 @margin-small-vertical 0;
+                            width: 50px;
+                            height: 50px;
+                        }
+                    }
+
+                    .rightCol{
+                        float: right;
+                    }
                 }
 
-                .sizes{
-                    height: 105px;
-                    margin: 10px 0 0 0;
-
-                    p{
-                        margin: 5px 0 0 0;
-                        padding: 0;
-                        font-size: 12px;
-                        text-align: center;
-                    }
-                }
-
-                .size{
-                    border: 1px solid @gray-light;
-                    float: left;
-                    margin: 0 10px 0 0;
-
-                    &.selected{
-                        border: 1px solid @brand-secondary;
-                        background: lighten(@brand-secondary, 30%); // was #FFF4DD
-
-                        p{
-                            font-weight: bold;
-                        }
-
-                        .box{
-                            background: #fff;
-                        }
-                    }
-
-                    .box{
-                        background: #CCCCCC;
-                        margin: 5px 10px 10px 10px;
-                    }
-
-                    &.small{
-                        height: 80px;
-                        width: 80px;
-                        cursor: pointer;
-
-                        .box{
-                            height: 45px;
-                        }
-                    }
-
-                    &.medium{
+                .secondRow{
+                    textarea.code {
+                        width: 100%;
                         height: 90px;
-                        width: 90px;
-                        cursor: pointer;
-
-                        .box{
-                            height: 55px;
-                        }
+                        background: @gray-lighter;
+                        border: 1px solid @gray-light;
+                        font-size: @font-size-small;
                     }
 
-                    &.large{
-                        height: 100px;
-                        width: 100px;
-                        cursor: pointer;
-
-                        .box{
-                            height: 65px;
-                        }
-                    }
-
-                    &.custom{
-                        width: 140px;
-                        height: 100px;
-                        margin: 0;
+                    .sizes{
+                        height: 105px;
+                        margin: 10px 0 0 0;
 
                         p{
-                            margin: 12px 0 0 0;
-                        }
-
-                        .wrap{
-                            width: 135px;
-                            margin: 10px 0 0 15px;
+                            margin: 5px 0 0 0;
                             padding: 0;
-                            max-width: none;
+                            font-size: 12px;
+                            text-align: center;
+                        }
+                    }
 
-                            .height{
-                                margin: 5px 0 0 0;
+                    .size{
+                        border: 1px solid @gray-light;
+                        float: left;
+                        margin: 0 10px 0 0;
+
+                        &.selected{
+                            border: 1px solid @brand-secondary;
+                            background: lighten(@brand-secondary, 30%); // was #FFF4DD
+
+                            p{
+                                font-weight: bold;
+                            }
+
+                            .box{
+                                background: #fff;
                             }
                         }
 
-                        label{
-                            margin: 0;
-                            padding: 0 5px 0 0;
-                            display: inline-block;
-                            float: none;
-                            clear: none;
-                            text-align: right;
-                            line-height: 16px;
-                            font-size: @font-size-small;
-                            width: 35px;
+                        .box{
+                            background: #CCCCCC;
+                            margin: 5px 10px 10px 10px;
                         }
 
-                        input{
-                            width: 50px;
-                            line-height: 12px;
-                            height: 18px;
-                            display: inline-block;
-                            margin: 0;
-                            padding: 0;
-                            font-size: @font-size-small;
+                        &.small{
+                            height: 80px;
+                            width: 80px;
+                            cursor: pointer;
+
+                            .box{
+                                height: 45px;
+                            }
                         }
 
-                        span{
+                        &.medium{
+                            height: 90px;
+                            width: 90px;
+                            cursor: pointer;
+
+                            .box{
+                                height: 55px;
+                            }
+                        }
+
+                        &.large{
+                            height: 100px;
+                            width: 100px;
+                            cursor: pointer;
+
+                            .box{
+                                height: 65px;
+                            }
+                        }
+
+                        &.custom{
+                            width: 140px;
+                            height: 100px;
                             margin: 0;
-                            padding: 0 0 0 5px;
-                            display: inline-block;
+
+                            p{
+                                margin: 12px 0 0 0;
+                            }
+
+                            .wrap{
+                                width: 135px;
+                                margin: 10px 0 0 15px;
+                                padding: 0;
+                                max-width: none;
+
+                                .height{
+                                    margin: 5px 0 0 0;
+                                }
+                            }
+
+                            label{
+                                margin: 0;
+                                padding: 0 5px 0 0;
+                                display: inline-block;
+                                float: none;
+                                clear: none;
+                                text-align: right;
+                                line-height: 16px;
+                                font-size: @font-size-small;
+                                width: 35px;
+                            }
+
+                            input{
+                                width: 50px;
+                                line-height: 12px;
+                                height: 18px;
+                                display: inline-block;
+                                margin: 0;
+                                padding: 0;
+                                font-size: @font-size-small;
+                            }
+
+                            span{
+                                margin: 0;
+                                padding: 0 0 0 5px;
+                                display: inline-block;
+                            }
                         }
                     }
                 }

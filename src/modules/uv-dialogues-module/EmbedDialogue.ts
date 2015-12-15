@@ -11,8 +11,11 @@ class EmbedDialogue extends Dialogue {
     $customSizeWidthWrap: JQuery;
     $customSizeWrap: JQuery;
     $customWidth: JQuery;
+    $firstRow: JQuery;
+    $image: JQuery;
     $intro: JQuery;
     $largeSize: JQuery;
+    $link: JQuery;
     $mediumSize: JQuery;
     $sizes: JQuery;
     $smallSize: JQuery;
@@ -24,6 +27,7 @@ class EmbedDialogue extends Dialogue {
     largeWidth: number;
     mediumHeight: number;
     mediumWidth: number;
+    $secondRow: JQuery;
     smallHeight: number;
     smallWidth: number;
 
@@ -42,7 +46,7 @@ class EmbedDialogue extends Dialogue {
 
         $.subscribe(this.openCommand, (e, params) => {
             this.open();
-            this.formatCode();
+            this.update();
         });
 
         $.subscribe(this.closeCommand, (e) => {
@@ -65,14 +69,26 @@ class EmbedDialogue extends Dialogue {
         this.$title = $('<h1>' + this.content.title + '</h1>');
         this.$content.append(this.$title);
 
+        this.$firstRow = $('<div class="firstRow"><div class="leftCol"></div><div class="rightCol"></div></div>');
+        this.$content.append(this.$firstRow);
+
+        this.$secondRow = $('<div class="secondRow"></div>');
+        this.$content.append(this.$secondRow);
+
+        this.$link = $('<a target="_blank"></a>');
+        this.$firstRow.find('.leftCol').append(this.$link);
+
+        this.$image = $('<img class="share" />');
+        this.$link.append(this.$image);
+
         this.$intro = $('<p>' + this.content.instructions + '</p>');
-        this.$content.append(this.$intro);
+        this.$firstRow.find('.rightCol').append(this.$intro);
 
         this.$code = $('<textarea class="code"></textarea>');
-        this.$content.append(this.$code);
+        this.$secondRow.append(this.$code);
 
         this.$sizes = $('<div class="sizes"></div>');
-        this.$content.append(this.$sizes);
+        this.$secondRow.append(this.$sizes);
 
         this.$smallSize = $('<div class="size small"></div>');
         this.$sizes.append(this.$smallSize);
@@ -97,13 +113,13 @@ class EmbedDialogue extends Dialogue {
         this.$customSizeWidthWrap = $('<div class="width"></div>');
         this.$customSizeWrap.append(this.$customSizeWidthWrap);
         this.$customSizeWidthWrap.append('<label for="width">' + this.content.width + '</label>');
-        this.$customWidth = $('<input id="width" type="text" maxlength="5"></input>');
+        this.$customWidth = $('<input id="width" type="text" maxlength="5" />');
         this.$customSizeWidthWrap.append(this.$customWidth);
         this.$customSizeWidthWrap.append('<span>px</span>');
         this.$customSizeHeightWrap = $('<div class="height"></div>');
         this.$customSizeWrap.append(this.$customSizeHeightWrap);
         this.$customSizeHeightWrap.append('<label for="height">' + this.content.height + '</label>');
-        this.$customHeight = $('<input id="height" type="text" maxlength="5"></input>');
+        this.$customHeight = $('<input id="height" type="text" maxlength="5" />');
         this.$customSizeHeightWrap.append(this.$customHeight);
         this.$customSizeHeightWrap.append('<span>px</span>');
 
@@ -179,7 +195,7 @@ class EmbedDialogue extends Dialogue {
         this.currentHeight = this.smallHeight;
         this.$sizes.find('.size').removeClass('selected');
         this.$smallSize.addClass('selected');
-        this.formatCode();
+        this.update();
     }
 
     selectMedium(): void {
@@ -187,7 +203,7 @@ class EmbedDialogue extends Dialogue {
         this.currentHeight = this.mediumHeight;
         this.$sizes.find('.size').removeClass('selected');
         this.$mediumSize.addClass('selected');
-        this.formatCode();
+        this.update();
     }
 
     selectLarge(): void {
@@ -195,7 +211,7 @@ class EmbedDialogue extends Dialogue {
         this.currentHeight = this.largeHeight;
         this.$sizes.find('.size').removeClass('selected');
         this.$largeSize.addClass('selected');
-        this.formatCode();
+        this.update();
     }
 
     selectCustom(): void {
@@ -217,11 +233,20 @@ class EmbedDialogue extends Dialogue {
         this.currentWidth = this.$customWidth.val();
         this.currentHeight = this.$customHeight.val();
 
-        this.formatCode();
+        this.update();
     }
 
-    formatCode(): void {
+    update(): void {
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
+        var thumbnail = canvas.getProperty('thumbnail');
+
+        if (!thumbnail || !_.isString(thumbnail)){
+            thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+        }
+
+        this.$link.attr('href', thumbnail);
+        this.$image.attr('src', thumbnail);
     }
 
     close(): void {
@@ -231,7 +256,7 @@ class EmbedDialogue extends Dialogue {
     resize(): void {
 
         this.$element.css({
-            'top': this.extension.height() - this.$element.outerHeight(true)
+            'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
         });
     }
 }
