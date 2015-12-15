@@ -30,7 +30,7 @@ Features:
 
 - [OpenSeadragon](https://openseadragon.github.io/) image zooming using the [IIIF image API](http://iiif.io/api/image/2.0/).
 - YouTube-style embedding with deep links to specific pages/zoom regions.
-- [Themable](https://stackedit.io/viewer#!provider=gist&gistId=5411c4576c2ec7387bba&filename=uv-theming-tutorial.md), fork the [UV theme](https://github.com/UniversalViewer/uv-en-GB-theme) on github to create your own.
+- [Themable](https://universalviewer.gitbooks.io/custom-themes/content/), fork the [UV theme](https://github.com/UniversalViewer/uv-en-GB-theme) on github to create your own.
 - Highly [configurable](https://github.com/UniversalViewer/universalviewer/wiki/Configuration) and [extensible](http://universalviewer.gitbooks.io/custom-extensions/content/).
 - Supports "IxIF" out of the box, allowing [audio](http://universalviewer.github.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest), [video](http://universalviewer.github.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest), and [pdf](http://universalviewer.github.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest) viewing experiences.
 - Supports search and autocomplete service integration with overlayed search results.
