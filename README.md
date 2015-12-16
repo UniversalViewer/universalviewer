@@ -67,11 +67,8 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 1. Run
 
         npm install
-
-1. Then run
-
         bower install
-
+        grunt sync
 
 ### Debug Builds
 
