@@ -39,7 +39,7 @@
         "customSize": "Maint ddewisol",
         "height": "Hyd",
         "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod.",
-        "title": "Ymgorffori",
+        "title": "Rhannu",
         "width": "Lled"
       }
     },
@@ -87,7 +87,7 @@
         "license": "trwydded",
         "more": "mwy",
         "noData": "Nid oes data i'w arddangos",
-        "title": "Mwy o Wybodaeth"
+        "title": "gwybodaeth"
       }
     },
     "pagingHeaderPanel": {
