@@ -1412,6 +1412,7 @@ declare module Utils {
 declare module Utils {
     class Documents {
         static IsInIFrame(): boolean;
+        static SupportsFullscreen(): boolean;
     }
 }
 declare module Utils {

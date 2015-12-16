@@ -2580,7 +2580,11 @@ var Utils;
         }
         Device.GetPixelRatio = function (ctx) {
             var dpr = window.devicePixelRatio || 1;
-            var bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+            var bsr = ctx.webkitBackingStorePixelRatio ||
+                ctx.mozBackingStorePixelRatio ||
+                ctx.msBackingStorePixelRatio ||
+                ctx.oBackingStorePixelRatio ||
+                ctx.backingStorePixelRatio || 1;
             return dpr / bsr;
         };
         return Device;
@@ -2599,6 +2603,12 @@ var Utils;
             catch (e) {
                 return true;
             }
+        };
+        Documents.SupportsFullscreen = function () {
+            var doc = document.documentElement;
+            var support = doc.requestFullscreen || doc.mozRequestFullScreen ||
+                doc.webkitRequestFullScreen || doc.msRequestFullscreen;
+            return support != undefined;
         };
         return Documents;
     })();
