@@ -13,21 +13,6 @@ var Utils;
     })();
     Utils.Bools = Bools;
 })(Utils || (Utils = {}));
-var Utils;
-(function (Utils) {
-    var Browser = (function () {
-        function Browser() {
-        }
-        Browser.SupportsFullscreen = function () {
-            var doc = document.documentElement;
-            var support = doc.requestFullscreen || doc.mozRequestFullScreen ||
-                doc.webkitRequestFullScreen || doc.msRequestFullscreen;
-            return support != undefined;
-        };
-        return Browser;
-    })();
-    Utils.Browser = Browser;
-})(Utils || (Utils = {}));
 // Copyright 2013 Basarat Ali Syed. All Rights Reserved.
 //
 // Licensed under MIT open source license http://opensource.org/licenses/MIT
@@ -2618,6 +2603,12 @@ var Utils;
             catch (e) {
                 return true;
             }
+        };
+        Documents.SupportsFullscreen = function () {
+            var doc = document.documentElement;
+            var support = doc.requestFullscreen || doc.mozRequestFullScreen ||
+                doc.webkitRequestFullScreen || doc.msRequestFullscreen;
+            return support != undefined;
         };
         return Documents;
     })();
