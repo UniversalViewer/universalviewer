@@ -1,6 +1,7 @@
 .idea
 build
 lib
+!dist/lib
 src
 examples
 tasks
