@@ -2971,7 +2971,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.4';
+    exports.Version = '1.6.5';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
