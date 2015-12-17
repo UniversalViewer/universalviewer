@@ -18,8 +18,8 @@ class PagingHeaderPanel extends HeaderPanel {
     $pageModeOption: JQuery;
     $prevButton: JQuery;
     $prevOptions: JQuery;
-    $dropdownOptions: JQuery;
-    $imageDropdown: JQuery;
+    $selectionBoxOptions: JQuery;
+    $imageSelectionBox: JQuery;
     $search: JQuery;
     $searchButton: JQuery;
     $searchText: JQuery;
@@ -80,20 +80,21 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"/>');
         this.$search.append(this.$searchText);
 
-        if (this.options.imageDropdownEnabled === true) {
-            this.$dropdownOptions = $('<div class="image-dropdown-options"></div>');
-            this.$centerOptions.append(this.$dropdownOptions);
-            this.$imageDropdown = $('<select class="image-dropdown" name="image-select" tabindex="20" ></select>');
-            this.$dropdownOptions.append(this.$imageDropdown);
+        if (this.options.imageSelectionBoxEnabled === true) {
+            this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
+            this.$centerOptions.append(this.$selectionBoxOptions);
+            this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="20" ></select>');
+            this.$selectionBoxOptions.append(this.$imageSelectionBox);
+
             for (var imageIndex = 0; imageIndex < this.provider.getTotalCanvases(); imageIndex++) {
                 var canvas = this.provider.getCanvasByIndex(imageIndex);
                 var label = canvas.getLabel();
-                this.$imageDropdown.append('<option value=' + (imageIndex) + '>' + label + '</option>')
+                this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
-            this.$imageDropdown.change(() => {
-                var valdIndex = parseInt(this.$imageDropdown.val());
-                $.publish(Commands.IMAGE_SEARCH, [valdIndex]);
+            this.$imageSelectionBox.change(() => {
+                var imageIndex = parseInt(this.$imageSelectionBox.val());
+                $.publish(Commands.IMAGE_SEARCH, [imageIndex]);
             });
         }
 
@@ -223,7 +224,7 @@ class PagingHeaderPanel extends HeaderPanel {
         }
 
         //Search is shown as default
-        if (this.options.searchOptionsEnabled === false){
+        if (this.options.imageSelectionBoxEnabled === true){
             this.$search.hide();
         }
 
@@ -231,16 +232,9 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$helpButton.hide();
         }
 
-        //Get visible element in centerOptions with greatest tabIndex
-        var maxTabIndex: number = 1;
-        var $elementWithGreatestTabIndex: JQuery = this.$searchButton;
-        this.$centerOptions.find('*:visible[tabindex]').each(function (idx, el: HTMLElement) {
-            var tIndex = parseInt($(el).attr('tabindex'));
-            if (tIndex > maxTabIndex) {
-                maxTabIndex = tIndex;
-                $elementWithGreatestTabIndex = $(el);
-            }
-        });
+        // Get visible element in centerOptions with greatest tabIndex
+        var $elementWithGreatestTabIndex: JQuery = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
+
         // cycle focus back to start.
         $elementWithGreatestTabIndex.blur(() => {
             if (this.extension.tabbing && !this.extension.shifted){
@@ -349,8 +343,8 @@ class PagingHeaderPanel extends HeaderPanel {
     canvasIndexChanged(index): void {
         this.setSearchFieldValue(index);
 
-        if (this.options.imageDropdownEnabled === true) {
-            this.$imageDropdown.val(index);
+        if (this.options.imageSelectionBoxEnabled === true) {
+            this.$imageSelectionBox.val(index);
         }
 
         if (this.provider.isFirstCanvas()){

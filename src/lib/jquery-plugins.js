@@ -151,6 +151,20 @@
         });
         return this;
     };
+    $.fn.getVisibleElementWithGreatestTabIndex = function () {
+        var $self = $(this);
+        var maxTabIndex = 0;
+        var $elementWithGreatestTabIndex = null;
+        $self.find('*:visible[tabindex]').each(function (idx, el) {
+            var $el = $(el);
+            var tabIndex = parseInt($el.attr('tabindex'));
+            if (tabIndex > maxTabIndex) {
+                maxTabIndex = tabIndex;
+                $elementWithGreatestTabIndex = $el;
+            }
+        });
+        return $elementWithGreatestTabIndex;
+    };
     $.fn.horizontalMargins = function () {
         var $self = $(this);
         return parseInt($self.css('marginLeft')) + parseInt($self.css('marginRight'));

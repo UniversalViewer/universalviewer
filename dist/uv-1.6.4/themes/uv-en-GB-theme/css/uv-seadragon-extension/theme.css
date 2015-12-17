@@ -332,6 +332,13 @@
 #app .headerPanel a.imageBtn.disabled:hover {
   background-color: transparent;
 }
+#app .headerPanel .centerOptions .image-selectionbox-options {
+  float: left;
+  margin: 0 0 0 0;
+}
+#app .headerPanel .centerOptions .image-selectionbox {
+  height: 30px;
+}
 #app .headerPanel .centerOptions .prevOptions {
   float: left;
   margin: 0 15px 0 0;
@@ -2483,20 +2490,8 @@ input[type=range]:focus::-ms-fill-upper {
   margin-left: 8px;
 }
 #app .headerPanel .options .centerOptions {
-  width: 432px;
-}
-#app .headerPanel .options .centerOptions .prevOptions {
-  margin: 0 10px 0 0;
-}
-#app .headerPanel .options .centerOptions .mode label {
-  width: 42px;
-}
-#app .headerPanel .options .centerOptions .search {
-  width: 140px;
-}
-#app .headerPanel .options .centerOptions .nextOptions {
-  margin: 0 0 0 10px;
+  width: 385px;
 }
 #app .footerPanel .searchPager .controls .searchResultsInfo {
-  width: 290px;
+  width: 340px;
 }

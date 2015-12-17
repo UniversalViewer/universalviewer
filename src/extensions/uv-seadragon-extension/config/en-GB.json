@@ -68,10 +68,10 @@
     {
       "options":
       {
+        "imageSelectionBoxEnabled": false,
         "localeToggleEnabled": false,
         "pageModeEnabled": true,
-        "pagingToggleEnabled": true,
-        "imageDropdownEnabled":  false
+        "pagingToggleEnabled": true
       }
     },
     "seadragonCenterPanel":

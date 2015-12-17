@@ -2971,7 +2971,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.3';
+    exports.Version = '1.6.4';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -5835,9 +5835,24 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
             this.$centerOptions.append(this.$search);
             this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"/>');
             this.$search.append(this.$searchText);
+            if (this.options.imageSelectionBoxEnabled === true) {
+                this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
+                this.$centerOptions.append(this.$selectionBoxOptions);
+                this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="20" ></select>');
+                this.$selectionBoxOptions.append(this.$imageSelectionBox);
+                for (var imageIndex = 0; imageIndex < this.provider.getTotalCanvases(); imageIndex++) {
+                    var canvas = this.provider.getCanvasByIndex(imageIndex);
+                    var label = canvas.getLabel();
+                    this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>');
+                }
+                this.$imageSelectionBox.change(function () {
+                    var imageIndex = parseInt(_this.$imageSelectionBox.val());
+                    $.publish(Commands.IMAGE_SEARCH, [imageIndex]);
+                });
+            }
             this.$total = $('<span class="total"></span>');
             this.$search.append(this.$total);
-            this.$searchButton = $('<a class="go btn btn-primary" tabindex="20">' + this.content.go + '</a>');
+            this.$searchButton = $('<a class="go btn btn-primary" tabindex="21">' + this.content.go + '</a>');
             this.$search.append(this.$searchButton);
             this.$nextOptions = $('<div class="nextOptions"></div>');
             this.$centerOptions.append(this.$nextOptions);
@@ -5942,23 +5957,28 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
                 this.$modeOptions.hide();
                 this.$centerOptions.addClass('modeOptionsDisabled');
             }
+            //Search is shown as default
+            if (this.options.imageSelectionBoxEnabled === true) {
+                this.$search.hide();
+            }
             if (this.options.helpEnabled === false) {
                 this.$helpButton.hide();
             }
+            // Get visible element in centerOptions with greatest tabIndex
+            var $elementWithGreatestTabIndex = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
             // cycle focus back to start.
-            // todo: design a more generic system that finds the element with the highest tabindex and attaches this listener
-            this.$searchButton.blur(function () {
+            $elementWithGreatestTabIndex.blur(function () {
                 if (_this.extension.tabbing && !_this.extension.shifted) {
                     _this.$nextButton.focus();
                 }
             });
-            //this.$nextButton.blur(() => {
-            //    if (this.extension.shifted) {
-            //        setTimeout(() => {
-            //            this.$searchButton.focus();
-            //        }, 100);
-            //    }
-            //});
+            this.$nextButton.blur(function () {
+                if (_this.extension.tabbing && _this.extension.shifted) {
+                    setTimeout(function () {
+                        $elementWithGreatestTabIndex.focus();
+                    }, 100);
+                }
+            });
         };
         PagingHeaderPanel.prototype.isPageModeEnabled = function () {
             return this.config.options.pageModeEnabled && this.extension.getMode().toString() === Mode.page.toString();
@@ -6032,6 +6052,9 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
         };
         PagingHeaderPanel.prototype.canvasIndexChanged = function (index) {
             this.setSearchFieldValue(index);
+            if (this.options.imageSelectionBoxEnabled === true) {
+                this.$imageSelectionBox.val(index);
+            }
             if (this.provider.isFirstCanvas()) {
                 this.disableFirstButton();
                 this.disablePrevButton();
@@ -20186,6 +20209,20 @@ define("modernizr", function(){});
             $(this).height(finalHeight);
         });
         return this;
+    };
+    $.fn.getVisibleElementWithGreatestTabIndex = function () {
+        var $self = $(this);
+        var maxTabIndex = 0;
+        var $elementWithGreatestTabIndex = null;
+        $self.find('*:visible[tabindex]').each(function (idx, el) {
+            var $el = $(el);
+            var tabIndex = parseInt($el.attr('tabindex'));
+            if (tabIndex > maxTabIndex) {
+                maxTabIndex = tabIndex;
+                $elementWithGreatestTabIndex = $el;
+            }
+        });
+        return $elementWithGreatestTabIndex;
     };
     $.fn.horizontalMargins = function () {
         var $self = $(this);

@@ -10,6 +10,7 @@ interface JQuery {
     ellipsisHtmlFixed(chars: number, callback: () => void): any;
     enable(): void;
     equaliseHeight(reset?: boolean, average?: boolean): any;
+    getVisibleElementWithGreatestTabIndex(): any;
     horizontalMargins(): number;
     horizontalPadding(): number;
     ismouseover(): boolean;
