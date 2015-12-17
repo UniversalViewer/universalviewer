@@ -18,6 +18,8 @@ class PagingHeaderPanel extends HeaderPanel {
     $pageModeOption: JQuery;
     $prevButton: JQuery;
     $prevOptions: JQuery;
+    $dropdownOptions: JQuery;
+    $imageDropdown: JQuery;
     $search: JQuery;
     $searchButton: JQuery;
     $searchText: JQuery;
@@ -78,10 +80,27 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"/>');
         this.$search.append(this.$searchText);
 
+        if (this.options.imageDropdownEnabled === true) {
+            this.$dropdownOptions = $('<div class="image-dropdown-options"></div>');
+            this.$centerOptions.append(this.$dropdownOptions);
+            this.$imageDropdown = $('<select class="image-dropdown" name="image-select" tabindex="20" ></select>');
+            this.$dropdownOptions.append(this.$imageDropdown);
+            for (var imageIndex = 0; imageIndex < this.provider.getTotalCanvases(); imageIndex++) {
+                var canvas = this.provider.getCanvasByIndex(imageIndex);
+                var label = canvas.getLabel();
+                this.$imageDropdown.append('<option value=' + (imageIndex) + '>' + label + '</option>')
+            }
+
+            this.$imageDropdown.change(() => {
+                var valdIndex = parseInt(this.$imageDropdown.val());
+                $.publish(Commands.IMAGE_SEARCH, [valdIndex]);
+            });
+        }
+
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
 
-        this.$searchButton = $('<a class="go btn btn-primary" tabindex="20">' + this.content.go + '</a>');
+        this.$searchButton = $('<a class="go btn btn-primary" tabindex="21">' + this.content.go + '</a>');
         this.$search.append(this.$searchButton);
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
@@ -203,25 +222,40 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$centerOptions.addClass('modeOptionsDisabled');
         }
 
+        //Search is shown as default
+        if (this.options.searchOptionsEnabled === false){
+            this.$search.hide();
+        }
+
         if (this.options.helpEnabled === false){
             this.$helpButton.hide();
         }
 
+        //Get visible element in centerOptions with greatest tabIndex
+        var maxTabIndex: number = 1;
+        var $elementWithGreatestTabIndex: JQuery = this.$searchButton;
+        this.$centerOptions.find('*:visible[tabindex]').each(function (idx, el: HTMLElement) {
+            var tIndex = parseInt($(el).attr('tabindex'));
+            if (tIndex > maxTabIndex) {
+                maxTabIndex = tIndex;
+                $elementWithGreatestTabIndex = $(el);
+            }
+        });
         // cycle focus back to start.
-        // todo: design a more generic system that finds the element with the highest tabindex and attaches this listener
-        this.$searchButton.blur(() => {
+        $elementWithGreatestTabIndex.blur(() => {
             if (this.extension.tabbing && !this.extension.shifted){
                 this.$nextButton.focus();
             }
         });
 
-        //this.$nextButton.blur(() => {
-        //    if (this.extension.shifted) {
-        //        setTimeout(() => {
-        //            this.$searchButton.focus();
-        //        }, 100);
-        //    }
-        //});
+        this.$nextButton.blur(() => {
+            if (this.extension.tabbing && this.extension.shifted) {
+                setTimeout(() => {
+                    $elementWithGreatestTabIndex.focus();
+                }, 100);
+            }
+        });        
+        
     }
 
     isPageModeEnabled(): boolean {
@@ -314,6 +348,10 @@ class PagingHeaderPanel extends HeaderPanel {
 
     canvasIndexChanged(index): void {
         this.setSearchFieldValue(index);
+
+        if (this.options.imageDropdownEnabled === true) {
+            this.$imageDropdown.val(index);
+        }
 
         if (this.provider.isFirstCanvas()){
             this.disableFirstButton();

@@ -70,7 +70,8 @@
       {
         "localeToggleEnabled": false,
         "pageModeEnabled": true,
-        "pagingToggleEnabled": true
+        "pagingToggleEnabled": true,
+        "imageDropdownEnabled":  false
       }
     },
     "seadragonCenterPanel":
