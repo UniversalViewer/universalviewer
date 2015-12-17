@@ -32,7 +32,7 @@ Features:
 - YouTube-style embedding with deep links to specific pages/zoom regions.
 - [Themable](https://universalviewer.gitbooks.io/custom-themes/content/), fork the [UV theme](https://github.com/UniversalViewer/uv-en-GB-theme) on github to create your own.
 - Highly [configurable](https://github.com/UniversalViewer/universalviewer/wiki/Configuration) and [extensible](http://universalviewer.gitbooks.io/custom-extensions/content/).
-- Supports "IxIF" out of the box, allowing [audio](http://universalviewer.github.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest), [video](http://universalviewer.github.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest), and [pdf](http://universalviewer.github.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest) viewing experiences.
+- Supports "IxIF" out of the box, allowing [3D](http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json), [audio](http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest), [video](http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest), and [pdf](http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest) viewing experiences.
 - Supports search and autocomplete service integration with overlayed search results.
 - Internationalised UI using [transifex.com](https://www.transifex.com/) (currently supports English and Welsh. Volunteers for more translations gratefully accepted!)
 
