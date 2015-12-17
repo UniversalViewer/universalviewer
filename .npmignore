@@ -12,6 +12,7 @@ tests
 .travis.yml
 bower.json
 *.js
+!dist/uv-*/**/*.js
 favicon.ico
 *.ts
 dist/*.tar
