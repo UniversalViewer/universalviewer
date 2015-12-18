@@ -162,7 +162,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string) {
-        var renderings: Manifesto.IRendering[] = manifesto.getRenderings(resource);
+        var renderings: Manifesto.IRendering[] = resource.getRenderings();
 
         for (var i = 0; i < renderings.length; i++) {
             var rendering: Manifesto.IRendering = renderings[i];
