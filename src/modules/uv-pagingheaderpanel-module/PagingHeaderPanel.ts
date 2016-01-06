@@ -236,11 +236,13 @@ class PagingHeaderPanel extends HeaderPanel {
         var $elementWithGreatestTabIndex: JQuery = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
 
         // cycle focus back to start.
-        $elementWithGreatestTabIndex.blur(() => {
-            if (this.extension.tabbing && !this.extension.shifted){
-                this.$nextButton.focus();
-            }
-        });
+        if ($elementWithGreatestTabIndex) {
+            $elementWithGreatestTabIndex.blur(() => {
+                if (this.extension.tabbing && !this.extension.shifted) {
+                    this.$nextButton.focus();
+                }
+            });
+        }
 
         this.$nextButton.blur(() => {
             if (this.extension.tabbing && this.extension.shifted) {
