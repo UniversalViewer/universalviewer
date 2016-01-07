@@ -1,6 +1,7 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("./ExternalResource");
+import IMetadataItem = require("./IMetadataItem");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
@@ -32,7 +33,7 @@ interface IProvider{
     getLicense(): string;
     getLogo(): string;
     getManifestType(): Manifesto.ManifestType;
-    getMetadata(): any;
+    getMetadata(): IMetadataItem[];
     getNextPageIndex(index?: number): number;
     getPagedIndices(index?: number): number[];
     getPrevPageIndex(index?: number): number;

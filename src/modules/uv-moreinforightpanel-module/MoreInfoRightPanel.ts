@@ -1,3 +1,4 @@
+import IMetadataItem = require("../uv-shared-module/IMetadataItem");
 import RightPanel = require("../uv-shared-module/RightPanel");
 
 class MoreInfoRightPanel extends RightPanel {
@@ -47,11 +48,11 @@ class MoreInfoRightPanel extends RightPanel {
         // show loading icon.
         this.$main.addClass('loading');
 
-        var data = this.provider.getMetadata();
+        var data: IMetadataItem[] = this.provider.getMetadata();
         this.displayInfo(data);
     }
 
-    displayInfo(data: any): void {
+    displayInfo(data: IMetadataItem[]): void {
         this.$main.removeClass('loading');
 
         if (!data){
@@ -72,8 +73,44 @@ class MoreInfoRightPanel extends RightPanel {
             limit = this.config.options.textLimit ? this.config.options.textLimit : 130;
         }
 
-        _.each(data, (item: any) => {
-            var built = this.buildItem(item);
+        var displayOrderConfig: string = this.options.displayOrder;
+
+        if (displayOrderConfig){
+
+            displayOrderConfig = displayOrderConfig.replace(/ /g,"")
+            var displayOrder: string[] = displayOrderConfig.split(',');
+
+            // filter items
+            var filtered: IMetadataItem[] = data.en().where((x: IMetadataItem) => (<string[]>displayOrder).contains(x.label)).toArray();
+
+            // sort items
+            var sorted = [];
+
+            _.each(displayOrder, (item: string) => {
+                var match: IMetadataItem = filtered.en().where((x => x.label === item)).first();
+                if (match){
+                    sorted.push(match);
+                }
+            });
+
+            data = sorted;
+        }
+
+        // flatten metadata into array.
+        var flattened: IMetadataItem[] = [];
+
+        _.each(data, (item: IMetadataItem) => {
+            if (_.isArray(item.value)){
+                flattened = flattened.concat(<IMetadataItem[]>item.value);
+            } else {
+                flattened.push(item);
+            }
+        });
+
+        data = flattened;
+
+        _.each(data, (item: IMetadataItem) => {
+            var built: any = this.buildItem(item);
             this.$items.append(built);
             if (limitType === "lines") {
                 built.find('.text').toggleExpandTextByLines(limit, this.content.less, this.content.more);
@@ -83,13 +120,13 @@ class MoreInfoRightPanel extends RightPanel {
         });
     }
 
-    buildItem(item: any): any {
+    buildItem(item: IMetadataItem): any {
         var $elem = this.moreInfoItemTemplate.clone();
         var $header = $elem.find('.header');
         var $text = $elem.find('.text');
 
         item.label = this.provider.sanitize(item.label);
-        item.value = this.provider.sanitize(item.value);
+        item.value = this.provider.sanitize(<string>item.value);
 
         switch(item.label.toLowerCase()){
             case "attribution":
@@ -104,10 +141,10 @@ class MoreInfoRightPanel extends RightPanel {
         }
 
         // replace \n with <br>
-        item.value = item.value.replace('\n', '<br>');
+        item.value = (<string>item.value).replace('\n', '<br>');
 
         $header.html(item.label);
-        $text.html(item.value);
+        $text.html(<string>item.value);
         $text.targetBlank();
 
         item.label = item.label.trim();

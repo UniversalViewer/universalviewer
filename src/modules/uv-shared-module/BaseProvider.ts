@@ -1,6 +1,7 @@
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("./ExternalResource");
+import IMetadataItem = require("./IMetadataItem");
 import IProvider = require("./IProvider");
 import Params = require("../../Params");
 
@@ -323,37 +324,47 @@ class BaseProvider implements IProvider{
         return this.embedDomain;
     }
 
-    getMetadata(): any{
+    getMetadata(): IMetadataItem[] {
+        var result: IMetadataItem[] = [];
+
         var metadata = this.manifest.getMetadata();
 
+        if (metadata){
+            result.push(<IMetadataItem>{
+                label: "metadata",
+                value: metadata
+            });
+        }
+
         if (this.manifest.getDescription()){
-            metadata.unshift({
-                "label": "description",
-                "value": this.manifest.getDescription()
+            result.push(<IMetadataItem>{
+                label: "description",
+                value: this.manifest.getDescription()
             });
         }
 
         if (this.manifest.getAttribution()){
-            metadata.unshift({
-                "label": "attribution",
-                "value": this.manifest.getAttribution()
+            result.push(<IMetadataItem>{
+                label: "attribution",
+                value: this.manifest.getAttribution()
             });
         }
 
         if (this.manifest.getLicense()){
-            metadata.unshift({
-                "label": "license",
-                "value": this.manifest.getLicense()
+            result.push(<IMetadataItem>{
+                label: "license",
+                value: this.manifest.getLicense()
             });
         }
 
         if (this.manifest.getLogo()){
-            metadata.push({
-                "label": "logo",
-                "value": '<img src="' + this.manifest.getLogo() + '"/>'});
+            result.push(<IMetadataItem>{
+                label: "logo",
+                value: '<img src="' + this.manifest.getLogo() + '"/>'
+            });
         }
 
-        return metadata;
+        return result;
     }
 
     defaultToThumbsView(): boolean{
