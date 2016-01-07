@@ -10,6 +10,32 @@
     "degradedResourceMessage": "Please log in to view at full quality.",
     "degradedResourceLogin": "log in"
   },
+  "license": {
+    "http://creativecommons.org/licenses/by/1.0/": "Creative Commons Attribution 1.0 Generic (CC BY 1.0)",
+    "http://creativecommons.org/licenses/by-nc/1.0/": "Creative Commons Attribution-NonCommercial 1.0 Generic (CC BY-NC 1.0)",
+    "http://creativecommons.org/licenses/by-nc-nd/1.0/": "Creative Commons Attribution-NonCommercial-NoDerivs 1.0 Generic (CC BY-NC-ND 1.0)",
+    "http://creativecommons.org/licenses/by-nd/1.0/": "Creative Commons Attribution-NoDerivs 1.0 Generic (CC BY-ND 1.0)",
+    "http://creativecommons.org/licenses/by-nc-sa/1.0/": "Creative Commons Attribution-NonCommercial-ShareAlike 1.0 Generic (CC BY-NC-SA 1.0)",
+    "http://creativecommons.org/licenses/by-sa/1.0/": "Creative Commons Attribution-ShareAlike 1.0 Generic (CC BY-SA 1.0)",
+    "http://creativecommons.org/licenses/by/2.0/": "Creative Commons Attribution 2.0 Generic (CC BY 2.0)",
+    "http://creativecommons.org/licenses/by-nc/2.0/": "Creative Commons Attribution-NonCommercial 2.0 Generic (CC BY-NC 2.0)",
+    "http://creativecommons.org/licenses/by-nc-nd/2.0/": "Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic (CC BY-NC-ND 2.0)",
+    "http://creativecommons.org/licenses/by-nd/2.0/": "Creative Commons Attribution-NoDerivs 2.0 Generic (CC BY-ND 2.0)",
+    "http://creativecommons.org/licenses/by-nc-sa/2.0/": "Creative Commons Attribution-NonCommercial-ShareAlike 2.0 Generic (CC BY-NC-SA 2.0)",
+    "http://creativecommons.org/licenses/by-sa/2.0/": "Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)",
+    "http://creativecommons.org/licenses/by/3.0/": "Creative Commons Attribution 3.0 Unported (CC BY 3.0)",
+    "http://creativecommons.org/licenses/by-nc/3.0/": "Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)",
+    "http://creativecommons.org/licenses/by-nc-nd/3.0/": "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0)",
+    "http://creativecommons.org/licenses/by-nd/3.0/": "Creative Commons Attribution-NoDerivs 3.0 Unported (CC BY-ND 3.0)",
+    "http://creativecommons.org/licenses/by-nc-sa/3.0/": "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)",
+    "http://creativecommons.org/licenses/by-sa/3.0/": "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)",
+    "http://creativecommons.org/licenses/by/4.0/": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "http://creativecommons.org/licenses/by-nc/4.0/": "Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)",
+    "http://creativecommons.org/licenses/by-nc-nd/4.0/": "Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International (CC BY-NC-ND 4.0)",
+    "http://creativecommons.org/licenses/by-nd/4.0/": "Creative Commons Attribution-NoDerivs 4.0 International (CC BY-ND 4.0)",
+    "http://creativecommons.org/licenses/by-nc-sa/4.0/": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)",
+    "http://creativecommons.org/licenses/by-sa/4.0/": "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"
+  },
   "modules": {
     "clickThroughDialogue": {
       "content": {
