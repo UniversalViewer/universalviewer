@@ -100,19 +100,6 @@ class MoreInfoRightPanel extends RightPanel {
             data = sorted;
         }
 
-        // flatten metadata into array.
-        var flattened: IMetadataItem[] = [];
-
-        _.each(data, (item: IMetadataItem) => {
-            if (_.isArray(item.value)){
-                flattened = flattened.concat(<IMetadataItem[]>item.value);
-            } else {
-                flattened.push(item);
-            }
-        });
-
-        data = flattened;
-
         // Exclusions
 
         var excludeConfig: string = this.options.exclude;
@@ -129,6 +116,19 @@ class MoreInfoRightPanel extends RightPanel {
                 }
             });
         }
+
+        // flatten metadata into array.
+        var flattened: IMetadataItem[] = [];
+
+        _.each(data, (item: IMetadataItem) => {
+            if (_.isArray(item.value)){
+                flattened = flattened.concat(<IMetadataItem[]>item.value);
+            } else {
+                flattened.push(item);
+            }
+        });
+
+        data = flattened;
 
         _.each(data, (item: IMetadataItem) => {
             var built: any = this.buildItem(item);
@@ -149,19 +149,21 @@ class MoreInfoRightPanel extends RightPanel {
         item.label = this.provider.sanitize(item.label);
         item.value = this.provider.sanitize(<string>item.value);
 
-        switch(item.label.toLowerCase()){
-            case "attribution":
-                item.label = this.content.attribution;
-                break;
-            case "description":
-                item.label = this.content.description;
-                break;
-            case "license":
-                item.label = this.content.license;
-                break;
-            case "logo":
-                item.label = this.content.logo;
-                break;
+        if (item.isRootLevel) {
+            switch (item.label.toLowerCase()) {
+                case "attribution":
+                    item.label = this.content.attribution;
+                    break;
+                case "description":
+                    item.label = this.content.description;
+                    break;
+                case "license":
+                    item.label = this.content.license;
+                    break;
+                case "logo":
+                    item.label = this.content.logo;
+                    break;
+            }
         }
 
         // replace \n with <br>

@@ -336,35 +336,40 @@ class BaseProvider implements IProvider{
         if (metadata){
             result.push(<IMetadataItem>{
                 label: "metadata",
-                value: metadata
+                value: metadata,
+                isRootLevel: true
             });
         }
 
         if (this.manifest.getDescription()){
             result.push(<IMetadataItem>{
                 label: "description",
-                value: this.manifest.getDescription()
+                value: this.manifest.getDescription(),
+                isRootLevel: true
             });
         }
 
         if (this.manifest.getAttribution()){
             result.push(<IMetadataItem>{
                 label: "attribution",
-                value: this.manifest.getAttribution()
+                value: this.manifest.getAttribution(),
+                isRootLevel: true
             });
         }
 
         if (this.manifest.getLicense()){
             result.push(<IMetadataItem>{
                 label: "license",
-                value: this.licenseFormatter.format(this.manifest.getLicense())
+                value: this.licenseFormatter.format(this.manifest.getLicense()),
+                isRootLevel: true
             });
         }
 
         if (this.manifest.getLogo()){
             result.push(<IMetadataItem>{
                 label: "logo",
-                value: '<img src="' + this.manifest.getLogo() + '"/>'
+                value: '<img src="' + this.manifest.getLogo() + '"/>',
+                isRootLevel: true
             });
         }
 

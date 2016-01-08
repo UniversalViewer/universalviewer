@@ -2943,17 +2943,6 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
                 });
                 data = sorted;
             }
-            // flatten metadata into array.
-            var flattened = [];
-            _.each(data, function (item) {
-                if (_.isArray(item.value)) {
-                    flattened = flattened.concat(item.value);
-                }
-                else {
-                    flattened.push(item);
-                }
-            });
-            data = flattened;
             // Exclusions
             var excludeConfig = this.options.exclude;
             if (excludeConfig) {
@@ -2967,6 +2956,17 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
                     }
                 });
             }
+            // flatten metadata into array.
+            var flattened = [];
+            _.each(data, function (item) {
+                if (_.isArray(item.value)) {
+                    flattened = flattened.concat(item.value);
+                }
+                else {
+                    flattened.push(item);
+                }
+            });
+            data = flattened;
             _.each(data, function (item) {
                 var built = _this.buildItem(item);
                 _this.$items.append(built);
@@ -2984,19 +2984,21 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
             var $text = $elem.find('.text');
             item.label = this.provider.sanitize(item.label);
             item.value = this.provider.sanitize(item.value);
-            switch (item.label.toLowerCase()) {
-                case "attribution":
-                    item.label = this.content.attribution;
-                    break;
-                case "description":
-                    item.label = this.content.description;
-                    break;
-                case "license":
-                    item.label = this.content.license;
-                    break;
-                case "logo":
-                    item.label = this.content.logo;
-                    break;
+            if (item.isRootLevel) {
+                switch (item.label.toLowerCase()) {
+                    case "attribution":
+                        item.label = this.content.attribution;
+                        break;
+                    case "description":
+                        item.label = this.content.description;
+                        break;
+                    case "license":
+                        item.label = this.content.license;
+                        break;
+                    case "logo":
+                        item.label = this.content.logo;
+                        break;
+                }
             }
             // replace \n with <br>
             item.value = item.value.replace('\n', '<br>');
@@ -4551,31 +4553,36 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
             if (metadata) {
                 result.push({
                     label: "metadata",
-                    value: metadata
+                    value: metadata,
+                    isRootLevel: true
                 });
             }
             if (this.manifest.getDescription()) {
                 result.push({
                     label: "description",
-                    value: this.manifest.getDescription()
+                    value: this.manifest.getDescription(),
+                    isRootLevel: true
                 });
             }
             if (this.manifest.getAttribution()) {
                 result.push({
                     label: "attribution",
-                    value: this.manifest.getAttribution()
+                    value: this.manifest.getAttribution(),
+                    isRootLevel: true
                 });
             }
             if (this.manifest.getLicense()) {
                 result.push({
                     label: "license",
-                    value: this.licenseFormatter.format(this.manifest.getLicense())
+                    value: this.licenseFormatter.format(this.manifest.getLicense()),
+                    isRootLevel: true
                 });
             }
             if (this.manifest.getLogo()) {
                 result.push({
                     label: "logo",
-                    value: '<img src="' + this.manifest.getLogo() + '"/>'
+                    value: '<img src="' + this.manifest.getLogo() + '"/>',
+                    isRootLevel: true
                 });
             }
             return result;
