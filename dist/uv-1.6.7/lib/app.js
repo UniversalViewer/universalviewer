@@ -3018,7 +3018,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.6';
+    exports.Version = '1.6.7';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4308,7 +4308,6 @@ define('modules/uv-shared-module/UriLabeller',["require", "exports"], function (
         };
         return UriLabeller;
     })();
-    ;
     return UriLabeller;
 });
 

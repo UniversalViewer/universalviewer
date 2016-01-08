@@ -13,6 +13,6 @@ class UriLabeller {
         var label = this.labels[url] ? this.labels[url] : url;
         return '<a href="' + url + '">' + label + '</a>';
     }
-};
+}
 
 export = UriLabeller;
