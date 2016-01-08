@@ -48,6 +48,8 @@
     {
       "options":
       {
+        "displayOrder": "",
+        "exclude": "",
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255

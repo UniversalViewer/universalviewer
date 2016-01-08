@@ -7,6 +7,9 @@ class UriLabeller {
     }
 
     format(url): string {
+        // if already a link, do nothing.
+        if (url.indexOf('<a') != -1) return url;
+
         var label = this.labels[url] ? this.labels[url] : url;
         return '<a href="' + url + '">' + label + '</a>';
     }

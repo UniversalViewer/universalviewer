@@ -77,20 +77,24 @@ class MoreInfoRightPanel extends RightPanel {
 
         if (displayOrderConfig){
 
-            displayOrderConfig = displayOrderConfig.replace(/ /g,"")
+            displayOrderConfig = displayOrderConfig.toLowerCase();
+            displayOrderConfig = displayOrderConfig.replace(/ /g,"");
             var displayOrder: string[] = displayOrderConfig.split(',');
-
-            // filter items
-            var filtered: IMetadataItem[] = data.en().where((x: IMetadataItem) => (<string[]>displayOrder).contains(x.label)).toArray();
 
             // sort items
             var sorted = [];
 
             _.each(displayOrder, (item: string) => {
-                var match: IMetadataItem = filtered.en().where((x => x.label === item)).first();
+                var match: IMetadataItem = data.en().where((x => x.label.toLowerCase() === item)).first();
                 if (match){
                     sorted.push(match);
+                    data.remove(match);
                 }
+            });
+
+            // add remaining items that were not in the displayOrder.
+            _.each(data, (item: IMetadataItem) => {
+                sorted.push(item);
             });
 
             data = sorted;
@@ -108,6 +112,23 @@ class MoreInfoRightPanel extends RightPanel {
         });
 
         data = flattened;
+
+        // Exclusions
+
+        var excludeConfig: string = this.options.exclude;
+
+        if (excludeConfig) {
+            excludeConfig = excludeConfig.toLowerCase();
+            excludeConfig = excludeConfig.replace(/ /g,"");
+            var exclude: string[] = excludeConfig.split(',');
+
+            _.each(exclude, (item: string) => {
+                var match: IMetadataItem = data.en().where((x => x.label.toLowerCase() === item)).first();
+                if (match){
+                    data.remove(match);
+                }
+            });
+        }
 
         _.each(data, (item: IMetadataItem) => {
             var built: any = this.buildItem(item);
@@ -137,6 +158,9 @@ class MoreInfoRightPanel extends RightPanel {
                 break;
             case "license":
                 item.label = this.content.license;
+                break;
+            case "logo":
+                item.label = this.content.logo;
                 break;
         }
 

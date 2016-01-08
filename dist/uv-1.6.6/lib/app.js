@@ -2923,6 +2923,50 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
             else if (limitType === "chars") {
                 limit = this.config.options.textLimit ? this.config.options.textLimit : 130;
             }
+            var displayOrderConfig = this.options.displayOrder;
+            if (displayOrderConfig) {
+                displayOrderConfig = displayOrderConfig.toLowerCase();
+                displayOrderConfig = displayOrderConfig.replace(/ /g, "");
+                var displayOrder = displayOrderConfig.split(',');
+                // sort items
+                var sorted = [];
+                _.each(displayOrder, function (item) {
+                    var match = data.en().where((function (x) { return x.label.toLowerCase() === item; })).first();
+                    if (match) {
+                        sorted.push(match);
+                        data.remove(match);
+                    }
+                });
+                // add remaining items that were not in the displayOrder.
+                _.each(data, function (item) {
+                    sorted.push(item);
+                });
+                data = sorted;
+            }
+            // flatten metadata into array.
+            var flattened = [];
+            _.each(data, function (item) {
+                if (_.isArray(item.value)) {
+                    flattened = flattened.concat(item.value);
+                }
+                else {
+                    flattened.push(item);
+                }
+            });
+            data = flattened;
+            // Exclusions
+            var excludeConfig = this.options.exclude;
+            if (excludeConfig) {
+                excludeConfig = excludeConfig.toLowerCase();
+                excludeConfig = excludeConfig.replace(/ /g, "");
+                var exclude = excludeConfig.split(',');
+                _.each(exclude, function (item) {
+                    var match = data.en().where((function (x) { return x.label.toLowerCase() === item; })).first();
+                    if (match) {
+                        data.remove(match);
+                    }
+                });
+            }
             _.each(data, function (item) {
                 var built = _this.buildItem(item);
                 _this.$items.append(built);
@@ -2949,6 +2993,9 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
                     break;
                 case "license":
                     item.label = this.content.license;
+                    break;
+                case "logo":
+                    item.label = this.content.logo;
                     break;
             }
             // replace \n with <br>
@@ -4246,7 +4293,26 @@ define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "
     return Extension;
 });
 
-define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../BootstrapParams", "../../Params"], function (require, exports, BootstrapParams, Params) {
+define('modules/uv-shared-module/UriLabeller',["require", "exports"], function (require, exports) {
+    // This class formats URIs into HTML <a> links, applying labels when available
+    var UriLabeller = (function () {
+        function UriLabeller(labels) {
+            this.labels = labels;
+        }
+        UriLabeller.prototype.format = function (url) {
+            // if already a link, do nothing.
+            if (url.indexOf('<a') != -1)
+                return url;
+            var label = this.labels[url] ? this.labels[url] : url;
+            return '<a href="' + url + '">' + label + '</a>';
+        };
+        return UriLabeller;
+    })();
+    ;
+    return UriLabeller;
+});
+
+define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../BootstrapParams", "../../Params", "./UriLabeller"], function (require, exports, BootstrapParams, Params, UriLabeller) {
     // providers contain methods that could be implemented differently according
     // to factors like varying back end data provisioning systems.
     // todo: expose the provider as an external API to the containing page.
@@ -4278,6 +4344,7 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
             this.manifestIndex = this.bootstrapper.params.manifestIndex;
             this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
             this.canvasIndex = this.bootstrapper.params.canvasIndex;
+            this.licenseFormatter = new UriLabeller(this.config.license ? this.config.license : {});
         }
         // re-bootstraps the application with new querystring params
         BaseProvider.prototype.reload = function (params) {
@@ -4480,31 +4547,39 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
             return this.embedDomain;
         };
         BaseProvider.prototype.getMetadata = function () {
+            var result = [];
             var metadata = this.manifest.getMetadata();
+            if (metadata) {
+                result.push({
+                    label: "metadata",
+                    value: metadata
+                });
+            }
             if (this.manifest.getDescription()) {
-                metadata.unshift({
-                    "label": "description",
-                    "value": this.manifest.getDescription()
+                result.push({
+                    label: "description",
+                    value: this.manifest.getDescription()
                 });
             }
             if (this.manifest.getAttribution()) {
-                metadata.unshift({
-                    "label": "attribution",
-                    "value": this.manifest.getAttribution()
+                result.push({
+                    label: "attribution",
+                    value: this.manifest.getAttribution()
                 });
             }
             if (this.manifest.getLicense()) {
-                metadata.unshift({
-                    "label": "license",
-                    "value": this.manifest.getLicense()
+                result.push({
+                    label: "license",
+                    value: this.licenseFormatter.format(this.manifest.getLicense())
                 });
             }
             if (this.manifest.getLogo()) {
-                metadata.push({
-                    "label": "logo",
-                    "value": '<img src="' + this.manifest.getLogo() + '"/>' });
+                result.push({
+                    label: "logo",
+                    value: '<img src="' + this.manifest.getLogo() + '"/>'
+                });
             }
-            return metadata;
+            return result;
         };
         BaseProvider.prototype.defaultToThumbsView = function () {
             switch (this.getManifestType().toString()) {
@@ -5068,7 +5143,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             this.$downloadOptions.find('.dynamic').remove();
         };
         DownloadDialogue.prototype.addDownloadOptionsForRenderings = function (resource, defaultLabel) {
-            var renderings = manifesto.getRenderings(resource);
+            var renderings = resource.getRenderings();
             for (var i = 0; i < renderings.length; i++) {
                 var rendering = renderings[i];
                 if (rendering) {
@@ -5967,11 +6042,13 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
             // Get visible element in centerOptions with greatest tabIndex
             var $elementWithGreatestTabIndex = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
             // cycle focus back to start.
-            $elementWithGreatestTabIndex.blur(function () {
-                if (_this.extension.tabbing && !_this.extension.shifted) {
-                    _this.$nextButton.focus();
-                }
-            });
+            if ($elementWithGreatestTabIndex) {
+                $elementWithGreatestTabIndex.blur(function () {
+                    if (_this.extension.tabbing && !_this.extension.shifted) {
+                        _this.$nextButton.focus();
+                    }
+                });
+            }
             this.$nextButton.blur(function () {
                 if (_this.extension.tabbing && _this.extension.shifted) {
                     setTimeout(function () {
@@ -8401,13 +8478,42 @@ var Manifesto;
             }
             return metadata;
         };
-        // todo: once UV download menu uses manifesto parsed objects, this can be moved back from Utils
         ManifestResource.prototype.getRendering = function (format) {
-            return Manifesto.Utils.getRendering(this, format);
+            var renderings = this.getRenderings();
+            // normalise format to string
+            if (typeof format !== 'string') {
+                format = format.toString();
+            }
+            for (var i = 0; i < renderings.length; i++) {
+                var rendering = renderings[i];
+                if (rendering.getFormat().toString() === format) {
+                    return rendering;
+                }
+            }
+            return null;
         };
-        // todo: once UV download menu uses manifesto parsed objects, this can be moved back from Utils
         ManifestResource.prototype.getRenderings = function () {
-            return Manifesto.Utils.getRenderings(this);
+            var rendering;
+            // if passing a manifesto-parsed object, use the __jsonld.rendering property,
+            // otherwise look for a rendering property
+            if (this.__jsonld) {
+                rendering = this.__jsonld.rendering;
+            }
+            else {
+                rendering = this.rendering;
+            }
+            var renderings = [];
+            if (!rendering)
+                return renderings;
+            // coerce to array
+            if (!_isArray(rendering)) {
+                rendering = [rendering];
+            }
+            for (var i = 0; i < rendering.length; i++) {
+                var r = rendering[i];
+                renderings.push(new Manifesto.Rendering(r, this.options));
+            }
+            return renderings;
         };
         ManifestResource.prototype.getService = function (profile) {
             return Manifesto.Utils.getService(this, profile);
@@ -9464,43 +9570,6 @@ var Manifesto;
                 });
             });
         };
-        Utils.getRendering = function (resource, format) {
-            var renderings = this.getRenderings(resource);
-            // normalise format to string
-            if (typeof format !== 'string') {
-                format = format.toString();
-            }
-            for (var i = 0; i < renderings.length; i++) {
-                var rendering = renderings[i];
-                if (rendering.getFormat().toString() === format) {
-                    return rendering;
-                }
-            }
-            return null;
-        };
-        Utils.getRenderings = function (resource) {
-            var rendering;
-            // if passing a manifesto-parsed object, use the __jsonld.rendering property,
-            // otherwise look for a rendering property
-            if (resource.__jsonld) {
-                rendering = resource.__jsonld.rendering;
-            }
-            else {
-                rendering = resource.rendering;
-            }
-            var renderings = [];
-            if (!rendering)
-                return renderings;
-            // coerce to array
-            if (!_isArray(rendering)) {
-                rendering = [rendering];
-            }
-            for (var i = 0; i < rendering.length; i++) {
-                var r = rendering[i];
-                renderings.push(new Manifesto.Rendering(r, resource.options));
-            }
-            return renderings;
-        };
         Utils.getService = function (resource, profile) {
             var services = this.getServices(resource);
             // coerce profile to string
@@ -9574,10 +9643,6 @@ module.exports = {
     ViewingHint: new Manifesto.ViewingHint(),
     create: function (manifest, options) {
         return Manifesto.Deserialiser.parse(manifest, options);
-    },
-    // todo: deprecate this - temporary to enable current UV download menu
-    getRenderings: function (resource) {
-        return Manifesto.Utils.getRenderings(resource);
     },
     getService: function (resource, profile) {
         return Manifesto.Utils.getService(resource, profile);

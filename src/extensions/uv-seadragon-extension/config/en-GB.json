@@ -56,8 +56,8 @@
     {
       "options":
       {
-        "displayOrder": "metadata, attribution, license",
-        "exclude": "logo",
+        "displayOrder": "",
+        "exclude": "",
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
