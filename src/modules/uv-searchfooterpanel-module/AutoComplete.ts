@@ -60,52 +60,67 @@ class AutoComplete{
         // auto complete
         this.$element.on("keyup", function(e) {
 
-        	e.preventDefault();
+        	//e.preventDefault();
+
+            // don't do anything if not a valid key.
+            //if (!that.isValidControlKey(e.keyCode)) {
+            //   //e.cancelBubble = true;
+            //   //if (e.stopPropagation) e.stopPropagation();
+            //   e.preventDefault();
+            //   return false;
+            //}
+            // else if (!that.isValidKey(e.keyCode)) {
+            //   e.preventDefault();
+            //   return false;
+            //}
 
             // if pressing enter without a list item selected
-            if (!that.getSelectedListItem().length && e.keyCode === 13) { // enter
+            if (!that.getSelectedListItem().length && e.keyCode === KeyCode.Enter) { // enter
                 that.onSelect(that.getTerms());
                 return;
             }
 
             // If there are search results
             if (that.$searchResultsList.is(':visible') && that.results.length) {
-                if (e.keyCode === 13) {
-                    // enter
+                if (e.keyCode === KeyCode.Enter) {
                     that.searchForItem(that.getSelectedListItem());
-                } else if (e.keyCode === 40) {
+                } else if (e.keyCode === KeyCode.DownArrow) {
                     that.setSelectedResultIndex(1);
                     return;
-                } else if (e.keyCode === 38) {
+                } else if (e.keyCode === KeyCode.UpArrow) {
                     that.setSelectedResultIndex(-1);
                     return;
                 }
             }
 
             // after a delay, show autocomplete list.
-            typewatch(() => {
-
-            	// don't do anything if not a valid key.
-                if (!that.isValidKey(e.keyCode)) {
-                    e.preventDefault();
-                    return false;
-                }
-
-                var val = that.getTerms();
-
-                // if there are more than 2 chars and no spaces
-                // update the autocomplete list.
-                if (val && val.length > 2 && val.indexOf(' ') === -1) {
-                    that.search(val);
-                } else {
-                    // otherwise, hide the autocomplete list.
-                    that.clearResults();
-                    that.hideResults();
-                }
-
-                return true;
-
-            }, that.delay);
+            //typewatch(() => {
+            //
+            //    //if (!that.isValidControlKey(e.keyCode)) {
+            //    //   //e.cancelBubble = true;
+            //    //   //if (e.stopPropagation) e.stopPropagation();
+            //    //   e.preventDefault();
+            //    //   return false;
+            //    //} else if (!that.isValidKey(e.keyCode)) {
+            //    //   e.preventDefault();
+            //    //   return false;
+            //    //}
+            //
+            //    var val = that.getTerms();
+            //
+            //    // if there are more than 2 chars and no spaces
+            //    // update the autocomplete list.
+            //    if (val && val.length > 2 && !val.contains(' ')) {
+            //        that.search(val);
+            //    } else {
+            //        // otherwise, hide the autocomplete list.
+            //        that.clearResults();
+            //        that.hideResults();
+            //    }
+            //
+            //    //return true;
+            //
+            //}, that.delay);
         });
 
         // hide results if clicked outside.
@@ -155,27 +170,17 @@ class AutoComplete{
         this.$searchResultsList.scrollTop(top);
     }
 
+    validControlKeyCodes: number[] = [KeyCode.Backspace, KeyCode.Spacebar, KeyCode.Tab, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.Delete];
+
+    isValidControlKey(keyCode: number): boolean {
+        return this.validControlKeyCodes.contains(keyCode);
+    }
+
     isValidKey(keyCode: number): boolean {
-
-    	// up and down are invalid. otherwise get converted to
-    	// '&'' and '(' respectively.
-    	if (keyCode === 38 || keyCode === 40) return false;
-
-        // ignore if it's a backspace, space, or tab.
-        if (keyCode !== 8 && keyCode !== 32 && keyCode !== 9) {
-            // prev:  new RegExp("^[a-zA-Z]+$");
-            // standard keyboard non-control characters
-            var regex = new RegExp("^[\\w()!£$%^&*()-+=@'#~?<>|/\\\\]+$");
-            //var regex = new RegExp("^[\\w]+$");
-            //var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-            var key = String.fromCharCode(keyCode);
-
-            if (!regex.test(key)) {
-                return false;
-            }
-        }
-
-        return true;
+        // is alphanumeric
+        var regExp = /^[a-zA-Z0-9]*$/;
+        var key = String.fromCharCode(keyCode);
+        return regExp.test(key);
     }
 
     search(term: string): void {

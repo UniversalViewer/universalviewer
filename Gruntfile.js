@@ -223,6 +223,7 @@ module.exports = function (grunt) {
                             'extensions/dist/extensions.js',
                             'http-status-codes/dist/http-status-codes.js',
                             'jquery-plugins/dist/jquery-plugins.js',
+                            'key-codes/dist/key-codes.js',
                             'lodash-compat/lodash.min.js',
                             'manifesto/dist/client/manifesto.js',
                             'Units/Length.min.js',
@@ -240,6 +241,7 @@ module.exports = function (grunt) {
                             'extensions/typings/extensions.d.ts',
                             'http-status-codes/dist/http-status-codes.d.ts',
                             'jquery-plugins/typings/jquery-plugins.d.ts',
+                            'key-codes/dist/key-codes.d.ts',
                             'manifesto/dist/manifesto.d.ts',
                             'utils/dist/utils.d.ts'
                         ],

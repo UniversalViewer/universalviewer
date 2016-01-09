@@ -21,6 +21,7 @@
     "extensions": "edsilv/extensions#~0.1.5",
     "http-status-codes": "edsilv/http-status-codes#~0.0.2",
     "jquery-plugins": "edsilv/jquery-plugins#~0.0.16",
+    "key-codes": "edsilv/key-codes",
     "lodash-compat": "~3.10.0",
     "r.js": "~2.1.18",
     "utils": "edsilv/utils#~0.0.28",
