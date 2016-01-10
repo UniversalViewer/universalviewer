@@ -40,6 +40,8 @@ class BaseExtension implements IExtension {
 
     public create(overrideDependencies?: any): void {
 
+        var that = this;
+
         this.$element = $('#app');
         this.$element.data("bootstrapper", this.bootstrapper);
 
@@ -117,53 +119,32 @@ class BaseExtension implements IExtension {
 
             $(document).on('keyup keydown', (e) => {
                 this.shifted = e.shiftKey;
-                this.tabbing = e.keyCode === 9;
+                this.tabbing = e.keyCode === KeyCodes.KeyDown.Tab;
             });
 
-            $(document).keyup((e) => {
+            $(document).keydown((e) => {
+
                 var event: string = null;
 
-                if (e.keyCode === 13) event = BaseCommands.RETURN;
-                if (e.keyCode === 27) event = BaseCommands.ESCAPE;
-                if (e.keyCode === 33) event = BaseCommands.PAGE_UP;
-                if (e.keyCode === 34) event = BaseCommands.PAGE_DOWN;
-                if (e.keyCode === 35) event = BaseCommands.END;
-                if (e.keyCode === 36) event = BaseCommands.HOME;
-                if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
-                if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
-                if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
-                if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
+                if (e.keyCode === KeyCodes.KeyDown.Enter) event = BaseCommands.RETURN;
+                if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseCommands.ESCAPE;
+                if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseCommands.PAGE_UP;
+                if (e.keyCode === KeyCodes.KeyDown.PageDown) event = BaseCommands.PAGE_DOWN;
+                if (e.keyCode === KeyCodes.KeyDown.End) event = BaseCommands.END;
+                if (e.keyCode === KeyCodes.KeyDown.Home) event = BaseCommands.HOME;
+                if (e.keyCode === KeyCodes.KeyDown.NumpadPlus || e.keyCode === 171 || e.keyCode === KeyCodes.KeyDown.Equals) event = BaseCommands.PLUS;
+                if (e.keyCode === KeyCodes.KeyDown.NumpadMinus || e.keyCode === 173 || e.keyCode === KeyCodes.KeyDown.Dash) event = BaseCommands.MINUS;
+
+                if (that.useArrowKeysToNavigate()) {
+                    if (e.keyCode === KeyCodes.KeyDown.LeftArrow) event = BaseCommands.LEFT_ARROW;
+                    if (e.keyCode === KeyCodes.KeyDown.UpArrow) event = BaseCommands.UP_ARROW;
+                    if (e.keyCode === KeyCodes.KeyDown.RightArrow) event = BaseCommands.RIGHT_ARROW;
+                    if (e.keyCode === KeyCodes.KeyDown.DownArrow) event = BaseCommands.DOWN_ARROW;
+                }
 
                 if (event){
+                    console.log(event);
                     e.preventDefault();
-                    $.publish(event);
-                }
-            });
-            
-            $(document).keydown((e) => {
-                //Prevent home, end, page up and page down from scrolling the window.
-                if (e.keyCode === 33 || e.keyCode === 34 || e.keyCode === 35 || e.keyCode === 36)
-                    e.preventDefault();
-
-                var event: string = null;
-
-                if (!this.useArrowKeysToNavigate()) {
-                    //Prevent arrow keys from their default action.
-                    if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40)
-                        e.preventDefault();
-
-                    if (e.keyCode === 37) event = BaseCommands.LEFT_ARROW;
-                    if (e.keyCode === 38) event = BaseCommands.UP_ARROW;
-                    if (e.keyCode === 39) event = BaseCommands.RIGHT_ARROW;
-                    if (e.keyCode === 40) event = BaseCommands.DOWN_ARROW;
-                }
-
-                if (e.keyCode === 107 || e.keyCode === 171 || e.keyCode === 187)
-                    event = BaseCommands.PLUS;
-                if (e.keyCode === 109 || e.keyCode === 173 || e.keyCode === 189)
-                    event = BaseCommands.MINUS;
-
-                if (event) {
                     $.publish(event);
                 }
             });

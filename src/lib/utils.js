@@ -18,11 +18,10 @@ var Utils;
 // Licensed under MIT open source license http://opensource.org/licenses/MIT
 //
 // Orginal javascript code was by Mauricio Santos
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
  * @namespace Top level namespace for collections, a TypeScript data structure library.
@@ -2580,7 +2579,11 @@ var Utils;
         }
         Device.GetPixelRatio = function (ctx) {
             var dpr = window.devicePixelRatio || 1;
-            var bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+            var bsr = ctx.webkitBackingStorePixelRatio ||
+                ctx.mozBackingStorePixelRatio ||
+                ctx.msBackingStorePixelRatio ||
+                ctx.oBackingStorePixelRatio ||
+                ctx.backingStorePixelRatio || 1;
             return dpr / bsr;
         };
         return Device;
@@ -2593,12 +2596,19 @@ var Utils;
         function Documents() {
         }
         Documents.IsInIFrame = function () {
+            // see http://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
             try {
                 return window.self !== window.top;
             }
             catch (e) {
                 return true;
             }
+        };
+        Documents.SupportsFullscreen = function () {
+            var doc = document.documentElement;
+            var support = doc.requestFullscreen || doc.mozRequestFullScreen ||
+                doc.webkitRequestFullScreen || doc.msRequestFullscreen;
+            return support != undefined;
         };
         return Documents;
     })();
@@ -2635,6 +2645,19 @@ var Utils;
         return Events;
     })();
     Utils.Events = Events;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Keyboard = (function () {
+        function Keyboard() {
+        }
+        Keyboard.GetCharCode = function (e) {
+            var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+            return charCode;
+        };
+        return Keyboard;
+    })();
+    Utils.Keyboard = Keyboard;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
@@ -2788,7 +2811,11 @@ var Utils;
         }
         Numbers.NumericalInput = function (event) {
             // Allow: backspace, delete, tab and escape
-            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
+                // Allow: Ctrl+A
+                (event.keyCode == 65 && event.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (event.keyCode >= 35 && event.keyCode <= 39)) {
                 // let it happen, don't do anything
                 return true;
             }
@@ -3037,6 +3064,7 @@ var Utils;
                 kvp.shift();
             var i = kvp.length;
             var x;
+            // replace if already present.
             while (i--) {
                 x = kvp[i].split('=');
                 if (x[0] == key) {

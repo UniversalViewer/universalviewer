@@ -13,7 +13,10 @@ class AutoComplete{
 	$searchResultTemplate: JQuery;
 	element: HTMLInputElement;
 
-	constructor(element: JQuery,
+    validKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
+    lastKeyDownWasValid: boolean = false;
+
+    constructor(element: JQuery,
                 autoCompleteUri: string,
                 delay: number,
                 parseResults: (results: any) => string[],
@@ -46,10 +49,34 @@ class AutoComplete{
 
         // validate
 
-        // prevent invalid characters being entered
-        this.$element.on("keydown", function(e) {
+        this.$element.on("keydown", function(e: JQueryEventObject) {
 
-            if (!that.isValidKey(e.keyCode)) {
+            var originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
+
+            that.lastKeyDownWasValid = that.isValidKeyDown(originalEvent);
+
+            var charCode = Utils.Keyboard.GetCharCode(originalEvent);
+
+            var cancelEvent: boolean = false;
+
+            if (charCode === KeyCodes.KeyDown.LeftArrow){
+                cancelEvent = true;
+            } else if (charCode === KeyCodes.KeyDown.RightArrow){
+                cancelEvent = true;
+            }
+
+            if (cancelEvent){
+                originalEvent.cancelBubble = true;
+                if(originalEvent.stopPropagation) originalEvent.stopPropagation();
+            }
+        });
+
+        // prevent invalid characters being entered
+        this.$element.on("keypress", function(e: JQueryEventObject) {
+
+            var isValidKeyPress: boolean = that.isValidKeyPress(<KeyboardEvent>e.originalEvent);
+
+            if (!(that.lastKeyDownWasValid || isValidKeyPress)){
                 e.preventDefault();
                 return false;
             }
@@ -60,67 +87,41 @@ class AutoComplete{
         // auto complete
         this.$element.on("keyup", function(e) {
 
-        	//e.preventDefault();
-
-            // don't do anything if not a valid key.
-            //if (!that.isValidControlKey(e.keyCode)) {
-            //   //e.cancelBubble = true;
-            //   //if (e.stopPropagation) e.stopPropagation();
-            //   e.preventDefault();
-            //   return false;
-            //}
-            // else if (!that.isValidKey(e.keyCode)) {
-            //   e.preventDefault();
-            //   return false;
-            //}
-
             // if pressing enter without a list item selected
-            if (!that.getSelectedListItem().length && e.keyCode === KeyCode.Enter) { // enter
+            if (!that.getSelectedListItem().length && e.keyCode === KeyCodes.KeyDown.Enter) { // enter
                 that.onSelect(that.getTerms());
                 return;
             }
 
             // If there are search results
             if (that.$searchResultsList.is(':visible') && that.results.length) {
-                if (e.keyCode === KeyCode.Enter) {
+                if (e.keyCode === KeyCodes.KeyDown.Enter) {
                     that.searchForItem(that.getSelectedListItem());
-                } else if (e.keyCode === KeyCode.DownArrow) {
+                } else if (e.keyCode === KeyCodes.KeyDown.DownArrow) {
                     that.setSelectedResultIndex(1);
                     return;
-                } else if (e.keyCode === KeyCode.UpArrow) {
+                } else if (e.keyCode === KeyCodes.KeyDown.UpArrow) {
                     that.setSelectedResultIndex(-1);
                     return;
                 }
             }
 
             // after a delay, show autocomplete list.
-            //typewatch(() => {
-            //
-            //    //if (!that.isValidControlKey(e.keyCode)) {
-            //    //   //e.cancelBubble = true;
-            //    //   //if (e.stopPropagation) e.stopPropagation();
-            //    //   e.preventDefault();
-            //    //   return false;
-            //    //} else if (!that.isValidKey(e.keyCode)) {
-            //    //   e.preventDefault();
-            //    //   return false;
-            //    //}
-            //
-            //    var val = that.getTerms();
-            //
-            //    // if there are more than 2 chars and no spaces
-            //    // update the autocomplete list.
-            //    if (val && val.length > 2 && !val.contains(' ')) {
-            //        that.search(val);
-            //    } else {
-            //        // otherwise, hide the autocomplete list.
-            //        that.clearResults();
-            //        that.hideResults();
-            //    }
-            //
-            //    //return true;
-            //
-            //}, that.delay);
+            typewatch(() => {
+
+                var val = that.getTerms();
+
+                // if there are more than 2 chars and no spaces
+                // update the autocomplete list.
+                if (val && val.length > 2 && !val.contains(' ')) {
+                    that.search(val);
+                } else {
+                    // otherwise, hide the autocomplete list.
+                    that.clearResults();
+                    that.hideResults();
+                }
+
+            }, that.delay);
         });
 
         // hide results if clicked outside.
@@ -132,6 +133,17 @@ class AutoComplete{
         });
 
         this.hideResults();
+    }
+
+    isValidKeyDown(e: KeyboardEvent): boolean {
+        return this.validKeyDownCodes.contains(Utils.Keyboard.GetCharCode(e));
+    }
+
+    isValidKeyPress(e: KeyboardEvent): boolean {
+        // is alphanumeric
+        var regExp = /^[a-zA-Z0-9]*$/;
+        var key = String.fromCharCode(Utils.Keyboard.GetCharCode(e));
+        return regExp.test(key);
     }
 
     getTerms(): string {
@@ -168,19 +180,6 @@ class AutoComplete{
         var top = selectedItem.outerHeight(true) * this.selectedResultIndex;
 
         this.$searchResultsList.scrollTop(top);
-    }
-
-    validControlKeyCodes: number[] = [KeyCode.Backspace, KeyCode.Spacebar, KeyCode.Tab, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.Delete];
-
-    isValidControlKey(keyCode: number): boolean {
-        return this.validControlKeyCodes.contains(keyCode);
-    }
-
-    isValidKey(keyCode: number): boolean {
-        // is alphanumeric
-        var regExp = /^[a-zA-Z0-9]*$/;
-        var key = String.fromCharCode(keyCode);
-        return regExp.test(key);
     }
 
     search(term: string): void {

@@ -913,6 +913,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
         }
         BaseExtension.prototype.create = function (overrideDependencies) {
             var _this = this;
+            var that = this;
             this.$element = $('#app');
             this.$element.data("bootstrapper", this.bootstrapper);
             // initial sizing.
@@ -978,58 +979,39 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 // keyboard events.
                 $(document).on('keyup keydown', function (e) {
                     _this.shifted = e.shiftKey;
-                    _this.tabbing = e.keyCode === 9;
-                });
-                $(document).keyup(function (e) {
-                    var event = null;
-                    if (e.keyCode === 13)
-                        event = BaseCommands.RETURN;
-                    if (e.keyCode === 27)
-                        event = BaseCommands.ESCAPE;
-                    if (e.keyCode === 33)
-                        event = BaseCommands.PAGE_UP;
-                    if (e.keyCode === 34)
-                        event = BaseCommands.PAGE_DOWN;
-                    if (e.keyCode === 35)
-                        event = BaseCommands.END;
-                    if (e.keyCode === 36)
-                        event = BaseCommands.HOME;
-                    if (e.keyCode === 37)
-                        event = BaseCommands.LEFT_ARROW;
-                    if (e.keyCode === 38)
-                        event = BaseCommands.UP_ARROW;
-                    if (e.keyCode === 39)
-                        event = BaseCommands.RIGHT_ARROW;
-                    if (e.keyCode === 40)
-                        event = BaseCommands.DOWN_ARROW;
-                    if (event) {
-                        e.preventDefault();
-                        $.publish(event);
-                    }
+                    _this.tabbing = e.keyCode === KeyCodes.KeyDown.Tab;
                 });
                 $(document).keydown(function (e) {
-                    //Prevent home, end, page up and page down from scrolling the window.
-                    if (e.keyCode === 33 || e.keyCode === 34 || e.keyCode === 35 || e.keyCode === 36)
-                        e.preventDefault();
                     var event = null;
-                    if (!_this.useArrowKeysToNavigate()) {
-                        //Prevent arrow keys from their default action.
-                        if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40)
-                            e.preventDefault();
-                        if (e.keyCode === 37)
+                    if (e.keyCode === KeyCodes.KeyDown.Enter)
+                        event = BaseCommands.RETURN;
+                    if (e.keyCode === KeyCodes.KeyDown.Escape)
+                        event = BaseCommands.ESCAPE;
+                    if (e.keyCode === KeyCodes.KeyDown.PageUp)
+                        event = BaseCommands.PAGE_UP;
+                    if (e.keyCode === KeyCodes.KeyDown.PageDown)
+                        event = BaseCommands.PAGE_DOWN;
+                    if (e.keyCode === KeyCodes.KeyDown.End)
+                        event = BaseCommands.END;
+                    if (e.keyCode === KeyCodes.KeyDown.Home)
+                        event = BaseCommands.HOME;
+                    if (e.keyCode === KeyCodes.KeyDown.NumpadPlus || e.keyCode === 171 || e.keyCode === KeyCodes.KeyDown.Equals)
+                        event = BaseCommands.PLUS;
+                    if (e.keyCode === KeyCodes.KeyDown.NumpadMinus || e.keyCode === 173 || e.keyCode === KeyCodes.KeyDown.Dash)
+                        event = BaseCommands.MINUS;
+                    if (that.useArrowKeysToNavigate()) {
+                        if (e.keyCode === KeyCodes.KeyDown.LeftArrow)
                             event = BaseCommands.LEFT_ARROW;
-                        if (e.keyCode === 38)
+                        if (e.keyCode === KeyCodes.KeyDown.UpArrow)
                             event = BaseCommands.UP_ARROW;
-                        if (e.keyCode === 39)
+                        if (e.keyCode === KeyCodes.KeyDown.RightArrow)
                             event = BaseCommands.RIGHT_ARROW;
-                        if (e.keyCode === 40)
+                        if (e.keyCode === KeyCodes.KeyDown.DownArrow)
                             event = BaseCommands.DOWN_ARROW;
                     }
-                    if (e.keyCode === 107 || e.keyCode === 171 || e.keyCode === 187)
-                        event = BaseCommands.PLUS;
-                    if (e.keyCode === 109 || e.keyCode === 173 || e.keyCode === 189)
-                        event = BaseCommands.MINUS;
                     if (event) {
+                        console.log(event);
+                        e.preventDefault();
                         $.publish(event);
                     }
                 });
@@ -3020,7 +3002,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.7';
+    exports.Version = '1.6.8';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -5291,6 +5273,8 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
     var AutoComplete = (function () {
         function AutoComplete(element, autoCompleteUri, delay, parseResults, onSelect) {
             var _this = this;
+            this.validKeyDownCodes = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
+            this.lastKeyDownWasValid = false;
             this.$element = element;
             this.autoCompleteUri = autoCompleteUri;
             this.delay = delay;
@@ -5311,9 +5295,27 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
             })();
             var that = this;
             // validate
-            // prevent invalid characters being entered
             this.$element.on("keydown", function (e) {
-                if (!that.isValidKey(e.keyCode)) {
+                var originalEvent = e.originalEvent;
+                that.lastKeyDownWasValid = that.isValidKeyDown(originalEvent);
+                var charCode = Utils.Keyboard.GetCharCode(originalEvent);
+                var cancelEvent = false;
+                if (charCode === KeyCodes.KeyDown.LeftArrow) {
+                    cancelEvent = true;
+                }
+                else if (charCode === KeyCodes.KeyDown.RightArrow) {
+                    cancelEvent = true;
+                }
+                if (cancelEvent) {
+                    originalEvent.cancelBubble = true;
+                    if (originalEvent.stopPropagation)
+                        originalEvent.stopPropagation();
+                }
+            });
+            // prevent invalid characters being entered
+            this.$element.on("keypress", function (e) {
+                var isValidKeyPress = that.isValidKeyPress(e.originalEvent);
+                if (!(that.lastKeyDownWasValid || isValidKeyPress)) {
                     e.preventDefault();
                     return false;
                 }
@@ -5321,38 +5323,31 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
             });
             // auto complete
             this.$element.on("keyup", function (e) {
-                e.preventDefault();
                 // if pressing enter without a list item selected
-                if (!that.getSelectedListItem().length && e.keyCode === 13) {
+                if (!that.getSelectedListItem().length && e.keyCode === KeyCodes.KeyDown.Enter) {
                     that.onSelect(that.getTerms());
                     return;
                 }
                 // If there are search results
                 if (that.$searchResultsList.is(':visible') && that.results.length) {
-                    if (e.keyCode === 13) {
-                        // enter
+                    if (e.keyCode === KeyCodes.KeyDown.Enter) {
                         that.searchForItem(that.getSelectedListItem());
                     }
-                    else if (e.keyCode === 40) {
+                    else if (e.keyCode === KeyCodes.KeyDown.DownArrow) {
                         that.setSelectedResultIndex(1);
                         return;
                     }
-                    else if (e.keyCode === 38) {
+                    else if (e.keyCode === KeyCodes.KeyDown.UpArrow) {
                         that.setSelectedResultIndex(-1);
                         return;
                     }
                 }
                 // after a delay, show autocomplete list.
                 typewatch(function () {
-                    // don't do anything if not a valid key.
-                    if (!that.isValidKey(e.keyCode)) {
-                        e.preventDefault();
-                        return false;
-                    }
                     var val = that.getTerms();
                     // if there are more than 2 chars and no spaces
                     // update the autocomplete list.
-                    if (val && val.length > 2 && val.indexOf(' ') === -1) {
+                    if (val && val.length > 2 && !val.contains(' ')) {
                         that.search(val);
                     }
                     else {
@@ -5360,7 +5355,6 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
                         that.clearResults();
                         that.hideResults();
                     }
-                    return true;
                 }, that.delay);
             });
             // hide results if clicked outside.
@@ -5372,6 +5366,15 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
             });
             this.hideResults();
         }
+        AutoComplete.prototype.isValidKeyDown = function (e) {
+            return this.validKeyDownCodes.contains(Utils.Keyboard.GetCharCode(e));
+        };
+        AutoComplete.prototype.isValidKeyPress = function (e) {
+            // is alphanumeric
+            var regExp = /^[a-zA-Z0-9]*$/;
+            var key = String.fromCharCode(Utils.Keyboard.GetCharCode(e));
+            return regExp.test(key);
+        };
         AutoComplete.prototype.getTerms = function () {
             return this.$element.val().trim();
         };
@@ -5397,25 +5400,6 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
             //var top = selectedItem.offset().top;
             var top = selectedItem.outerHeight(true) * this.selectedResultIndex;
             this.$searchResultsList.scrollTop(top);
-        };
-        AutoComplete.prototype.isValidKey = function (keyCode) {
-            // up and down are invalid. otherwise get converted to
-            // '&'' and '(' respectively.
-            if (keyCode === 38 || keyCode === 40)
-                return false;
-            // ignore if it's a backspace, space, or tab.
-            if (keyCode !== 8 && keyCode !== 32 && keyCode !== 9) {
-                // prev:  new RegExp("^[a-zA-Z]+$");
-                // standard keyboard non-control characters
-                var regex = new RegExp("^[\\w()!£$%^&*()-+=@'#~?<>|/\\\\]+$");
-                //var regex = new RegExp("^[\\w]+$");
-                //var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                var key = String.fromCharCode(keyCode);
-                if (!regex.test(key)) {
-                    return false;
-                }
-            }
-            return true;
         };
         AutoComplete.prototype.search = function (term) {
             this.results = [];
@@ -19001,6 +18985,191 @@ define("httpstatuscodes", function(){});
  */;
 define("jsviews", ["jquery"], function(){});
 
+var KeyCodes;
+(function (KeyCodes) {
+    var KeyDown;
+    (function (KeyDown) {
+        KeyDown.Backspace = 8;
+        KeyDown.Tab = 9;
+        KeyDown.Enter = 13;
+        KeyDown.Shift = 16;
+        KeyDown.Ctrl = 17;
+        KeyDown.Alt = 18;
+        KeyDown.PauseBreak = 19;
+        KeyDown.CapsLock = 20;
+        KeyDown.Escape = 27;
+        KeyDown.Spacebar = 32;
+        KeyDown.PageUp = 33;
+        KeyDown.PageDown = 34;
+        KeyDown.End = 35;
+        KeyDown.Home = 36;
+        KeyDown.LeftArrow = 37;
+        KeyDown.UpArrow = 38;
+        KeyDown.RightArrow = 39;
+        KeyDown.DownArrow = 40;
+        KeyDown.PrintScrn = 44;
+        KeyDown.Insert = 45;
+        KeyDown.Delete = 46;
+        KeyDown.Zero = 48;
+        KeyDown.One = 49;
+        KeyDown.Two = 50;
+        KeyDown.Three = 51;
+        KeyDown.Four = 52;
+        KeyDown.Five = 53;
+        KeyDown.Six = 54;
+        KeyDown.Seven = 55;
+        KeyDown.Eight = 56;
+        KeyDown.Nine = 57;
+        KeyDown.a = 65;
+        KeyDown.b = 66;
+        KeyDown.c = 67;
+        KeyDown.d = 68;
+        KeyDown.e = 69;
+        KeyDown.f = 70;
+        KeyDown.g = 71;
+        KeyDown.h = 72;
+        KeyDown.i = 73;
+        KeyDown.j = 74;
+        KeyDown.k = 75;
+        KeyDown.l = 76;
+        KeyDown.m = 77;
+        KeyDown.n = 78;
+        KeyDown.o = 79;
+        KeyDown.p = 80;
+        KeyDown.q = 81;
+        KeyDown.r = 82;
+        KeyDown.s = 83;
+        KeyDown.t = 84;
+        KeyDown.u = 85;
+        KeyDown.v = 86;
+        KeyDown.w = 87;
+        KeyDown.x = 88;
+        KeyDown.y = 89;
+        KeyDown.z = 90;
+        KeyDown.LeftWindowKey = 91;
+        KeyDown.RightWindowKey = 92;
+        KeyDown.SelectKey = 93;
+        KeyDown.Numpad0 = 96;
+        KeyDown.Numpad1 = 97;
+        KeyDown.Numpad2 = 98;
+        KeyDown.Numpad3 = 99;
+        KeyDown.Numpad4 = 100;
+        KeyDown.Numpad5 = 101;
+        KeyDown.Numpad6 = 102;
+        KeyDown.Numpad7 = 103;
+        KeyDown.Numpad8 = 104;
+        KeyDown.Numpad9 = 105;
+        KeyDown.Multiply = 106;
+        KeyDown.NumpadPlus = 107;
+        KeyDown.NumpadMinus = 109;
+        KeyDown.DecimalPoint = 110;
+        KeyDown.Divide = 111;
+        KeyDown.F1 = 112;
+        KeyDown.F2 = 113;
+        KeyDown.F3 = 114;
+        KeyDown.F4 = 115;
+        KeyDown.F5 = 116;
+        KeyDown.F6 = 117;
+        KeyDown.F7 = 118;
+        KeyDown.F8 = 119;
+        KeyDown.F9 = 120;
+        KeyDown.F10 = 121;
+        KeyDown.F11 = 122;
+        KeyDown.F12 = 123;
+        KeyDown.NumLock = 144;
+        KeyDown.ScrollLock = 145;
+        KeyDown.Semicolon = 186;
+        KeyDown.Equals = 187;
+        KeyDown.Comma = 188;
+        KeyDown.LessThan = 188;
+        KeyDown.Dash = 189;
+        KeyDown.Period = 190;
+        KeyDown.GreaterThan = 190;
+        KeyDown.ForwardSlash = 191;
+        KeyDown.QuestionMark = 191;
+        KeyDown.GraveAccent = 192;
+        KeyDown.Tilde = 192;
+        KeyDown.OpenCurlyBracket = 219;
+        KeyDown.OpenSquareBracket = 219;
+        KeyDown.BackSlash = 220;
+        KeyDown.VerticalPipe = 220;
+        KeyDown.CloseCurlyBracket = 221;
+        KeyDown.CloseSquareBracket = 221;
+        KeyDown.Quote = 222;
+        KeyDown.CommandFF = 224;
+    })(KeyDown = KeyCodes.KeyDown || (KeyCodes.KeyDown = {}));
+})(KeyCodes || (KeyCodes = {}));
+var KeyCodes;
+(function (KeyCodes) {
+    var KeyPress;
+    (function (KeyPress) {
+        KeyPress.Backspace = 8;
+        KeyPress.Enter = 13;
+        KeyPress.Spacebar = 32;
+        KeyPress.Hash = 35;
+        KeyPress.GraveAccent = 39;
+        KeyPress.ForwardSlash = 32;
+        KeyPress.Asterisk = 42;
+        KeyPress.Plus = 43;
+        KeyPress.Comma = 44;
+        KeyPress.Minus = 45;
+        KeyPress.Period = 46;
+        KeyPress.ForwardSlash = 47;
+        KeyPress.Zero = 48;
+        KeyPress.One = 49;
+        KeyPress.Two = 50;
+        KeyPress.Three = 51;
+        KeyPress.Four = 52;
+        KeyPress.Five = 53;
+        KeyPress.Six = 54;
+        KeyPress.Seven = 55;
+        KeyPress.Eight = 56;
+        KeyPress.Nine = 57;
+        KeyPress.Colon = 58;
+        KeyPress.Semicolon = 59;
+        KeyPress.LessThan = 60;
+        KeyPress.Equals = 61;
+        KeyPress.GreaterThan = 62;
+        KeyPress.QuestionMark = 63;
+        KeyPress.At = 64;
+        KeyPress.OpenSquareBracket = 91;
+        KeyPress.BackSlash = 92;
+        KeyPress.CloseSquareBracket = 93;
+        KeyPress.a = 97;
+        KeyPress.b = 98;
+        KeyPress.c = 99;
+        KeyPress.d = 100;
+        KeyPress.e = 101;
+        KeyPress.f = 102;
+        KeyPress.g = 103;
+        KeyPress.h = 104;
+        KeyPress.i = 105;
+        KeyPress.j = 106;
+        KeyPress.k = 107;
+        KeyPress.l = 108;
+        KeyPress.m = 109;
+        KeyPress.n = 110;
+        KeyPress.o = 111;
+        KeyPress.p = 112;
+        KeyPress.q = 113;
+        KeyPress.r = 114;
+        KeyPress.s = 115;
+        KeyPress.t = 116;
+        KeyPress.u = 117;
+        KeyPress.v = 118;
+        KeyPress.w = 119;
+        KeyPress.x = 120;
+        KeyPress.y = 121;
+        KeyPress.z = 122;
+        KeyPress.OpenCurlyBracket = 123;
+        KeyPress.VerticalPipe = 124;
+        KeyPress.CloseCurlyBracket = 125;
+        KeyPress.Tilde = 126;
+    })(KeyPress = KeyCodes.KeyPress || (KeyCodes.KeyPress = {}));
+})(KeyCodes || (KeyCodes = {}));
+
+define("keycodes", function(){});
+
 /**
  * Copyright (c) 2011-2013 Fabien Cazenave, Mozilla.
  *
@@ -20821,11 +20990,10 @@ var Utils;
 // Licensed under MIT open source license http://opensource.org/licenses/MIT
 //
 // Orginal javascript code was by Mauricio Santos
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /**
  * @namespace Top level namespace for collections, a TypeScript data structure library.
@@ -23383,7 +23551,11 @@ var Utils;
         }
         Device.GetPixelRatio = function (ctx) {
             var dpr = window.devicePixelRatio || 1;
-            var bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+            var bsr = ctx.webkitBackingStorePixelRatio ||
+                ctx.mozBackingStorePixelRatio ||
+                ctx.msBackingStorePixelRatio ||
+                ctx.oBackingStorePixelRatio ||
+                ctx.backingStorePixelRatio || 1;
             return dpr / bsr;
         };
         return Device;
@@ -23396,12 +23568,19 @@ var Utils;
         function Documents() {
         }
         Documents.IsInIFrame = function () {
+            // see http://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
             try {
                 return window.self !== window.top;
             }
             catch (e) {
                 return true;
             }
+        };
+        Documents.SupportsFullscreen = function () {
+            var doc = document.documentElement;
+            var support = doc.requestFullscreen || doc.mozRequestFullScreen ||
+                doc.webkitRequestFullScreen || doc.msRequestFullscreen;
+            return support != undefined;
         };
         return Documents;
     })();
@@ -23438,6 +23617,19 @@ var Utils;
         return Events;
     })();
     Utils.Events = Events;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Keyboard = (function () {
+        function Keyboard() {
+        }
+        Keyboard.GetCharCode = function (e) {
+            var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+            return charCode;
+        };
+        return Keyboard;
+    })();
+    Utils.Keyboard = Keyboard;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
@@ -23591,7 +23783,11 @@ var Utils;
         }
         Numbers.NumericalInput = function (event) {
             // Allow: backspace, delete, tab and escape
-            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
+                // Allow: Ctrl+A
+                (event.keyCode == 65 && event.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (event.keyCode >= 35 && event.keyCode <= 39)) {
                 // let it happen, don't do anything
                 return true;
             }
@@ -23840,6 +24036,7 @@ var Utils;
                 kvp.shift();
             var i = kvp.length;
             var x;
+            // replace if already present.
             while (i--) {
                 x = kvp[i].split('=');
                 if (x[0] == key) {
@@ -24067,6 +24264,7 @@ require.config({
         'httpstatuscodes': 'lib/http-status-codes',
         'jquery': 'lib/jquery-1.10.2.min',
         'jsviews': 'lib/jsviews.min',
+        'keycodes': 'lib/key-codes',
         'l10n': 'lib/l10n',
         'length': 'lib/Length.min',
         'lodash': 'lib/lodash.min',
@@ -24121,6 +24319,7 @@ require([
     'httpstatuscodes',
     'jquery',
     'jsviews',
+    'keycodes',
     'l10n',
     'length',
     'lodash',
