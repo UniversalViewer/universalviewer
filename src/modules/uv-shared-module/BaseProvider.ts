@@ -456,6 +456,7 @@ class BaseProvider implements IProvider{
         // if items contains sort item, add it to results.
         // if sort item has a label, substitute it
         // mark item as added.
+        // if limitLocales is disabled,
         // loop through remaining items and add to results.
 
         _.each(sorting, (sortItem: any) => {
@@ -468,12 +469,16 @@ class BaseProvider implements IProvider{
             }
         });
 
-        _.each(items, (item: any) => {
-            if (!item.added){
-                result.push(item);
-            }
-            delete item.added;
-        });
+        var limitLocales: boolean = Utils.Bools.GetBool(this.config.options.limitLocales, false);
+
+        if (!limitLocales){
+            _.each(items, (item: any) => {
+                if (!item.added){
+                    result.push(item);
+                }
+                delete item.added;
+            });
+        }
 
         return this.locales = result;
     }

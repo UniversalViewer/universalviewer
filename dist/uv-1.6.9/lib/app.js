@@ -3002,7 +3002,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.8';
+    exports.Version = '1.6.9';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4636,6 +4636,7 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
             // if items contains sort item, add it to results.
             // if sort item has a label, substitute it
             // mark item as added.
+            // if limitLocales is disabled,
             // loop through remaining items and add to results.
             _.each(sorting, function (sortItem) {
                 var match = _.filter(items, function (item) { return item.name === sortItem.name; });
@@ -4647,12 +4648,15 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
                     result.push(m);
                 }
             });
-            _.each(items, function (item) {
-                if (!item.added) {
-                    result.push(item);
-                }
-                delete item.added;
-            });
+            var limitLocales = Utils.Bools.GetBool(this.config.options.limitLocales, false);
+            if (!limitLocales) {
+                _.each(items, function (item) {
+                    if (!item.added) {
+                        result.push(item);
+                    }
+                    delete item.added;
+                });
+            }
             return this.locales = result;
         };
         BaseProvider.prototype.getAlternateLocale = function () {

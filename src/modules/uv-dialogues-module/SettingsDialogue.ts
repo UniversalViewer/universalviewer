@@ -51,11 +51,11 @@ class SettingsDialogue extends Dialogue {
         this.$locale = $('<div class="setting locale"></div>');
         this.$scroll.append(this.$locale);
 
-            this.$localeLabel = $('<label for="locale">' + this.content.locale + '</label>');
-            this.$locale.append(this.$localeLabel);
+        this.$localeLabel = $('<label for="locale">' + this.content.locale + '</label>');
+        this.$locale.append(this.$localeLabel);
 
-            this.$localeDropDown = $('<select id="locale"></select>');
-            this.$locale.append(this.$localeDropDown);
+        this.$localeDropDown = $('<select id="locale"></select>');
+        this.$locale.append(this.$localeDropDown);
 
         // initialise ui.
         this.$title.text(this.content.title);
@@ -65,7 +65,7 @@ class SettingsDialogue extends Dialogue {
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
-        var locales = this.provider.getLocales();
+        var locales: any[] = this.provider.getLocales();
 
         for (var i = 0; i < locales.length; i++){
             var locale = locales[i];

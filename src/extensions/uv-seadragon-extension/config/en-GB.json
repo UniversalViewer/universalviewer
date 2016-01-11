@@ -4,18 +4,19 @@
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "leftPanelEnabled": true,
+    "limitLocales": false,
     "minWidthBreakPoint": 610,
+    "navigatorEnabled": true,
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "overrideFullScreen": false,
     "pagingEnabled": true,
     "pessimisticAccessControl": false,
     "preserveViewport": false,
     "rightPanelEnabled": true,
+    "saveUserSettings": false,
     "searchWithinEnabled": true,
     "theme": "uv-en-GB-theme",
-    "useArrowKeysToNavigate": false,
-    "navigatorEnabled": true,
-    "saveUserSettings": false
+    "useArrowKeysToNavigate": false
   },
   "modules":
   {

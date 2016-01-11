@@ -75,7 +75,7 @@ interface IProvider{
     getAlternateLocale(): any;
     getDomain(): string;
     getEmbedDomain(): string;
-    getLocales(): any;
+    getLocales(): any[];
     getSerializedLocales(): string;
     getSettings(): ISettings;
     isDeepLinkingEnabled(): boolean;
