@@ -6,6 +6,7 @@ import AutoComplete = require("./AutoComplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import Params = require("../../Params");
 
 class FooterPanel extends BaseFooterPanel {
 
@@ -52,12 +53,12 @@ class FooterPanel extends BaseFooterPanel {
             this.settingsChanged();
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
-            this.displaySearchResults(obj.terms, obj.results);
+        $.subscribe(Commands.SEARCH, (e, terms) => {
+            this.terms = terms;
         });
 
-        $.subscribe(BaseCommands.CREATED, (e) => {
-            this.checkForSearchParams();
+        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
+            this.displaySearchResults(obj.terms, obj.results);
         });
 
         // search input.
@@ -199,22 +200,6 @@ class FooterPanel extends BaseFooterPanel {
                 }
             );
 
-        }
-    }
-
-    checkForSearchParams(): void{
-        // if a h or q value is in the hash params, do a search.
-        if (this.provider.isDeepLinkingEnabled()){
-
-            var terms = Utils.Urls.GetHashParameter('h', parent.document)
-                    || Utils.Urls.GetHashParameter('q', parent.document);
-
-            if (terms){
-                this.terms = terms.replace(/\+/g, " ").replace(/"/g, "");
-                // blur search field
-                this.$searchText.blur();
-                $.publish(Commands.SEARCH, [this.terms]);
-            }
         }
     }
 

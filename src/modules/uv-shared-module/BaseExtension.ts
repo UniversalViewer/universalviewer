@@ -143,7 +143,6 @@ class BaseExtension implements IExtension {
                 }
 
                 if (event){
-                    console.log(event);
                     e.preventDefault();
                     $.publish(event);
                 }

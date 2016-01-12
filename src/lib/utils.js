@@ -1,5 +1,35 @@
 var Utils;
 (function (Utils) {
+    var Async = (function () {
+        function Async() {
+        }
+        Async.WaitFor = function (test, successCallback, failureCallback, interval, maxTries, numTries) {
+            if (!interval)
+                interval = 200;
+            if (!maxTries)
+                maxTries = 100; // try 100 times over 20 seconds
+            if (!numTries)
+                numTries = 0;
+            numTries += 1;
+            if (numTries > maxTries) {
+                if (failureCallback)
+                    failureCallback();
+            }
+            else if (test()) {
+                successCallback();
+            }
+            else {
+                setTimeout(function () {
+                    Async.WaitFor(test, successCallback, failureCallback, interval, maxTries, numTries);
+                }, interval);
+            }
+        };
+        return Async;
+    })();
+    Utils.Async = Async;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
     var Bools = (function () {
         function Bools() {
         }

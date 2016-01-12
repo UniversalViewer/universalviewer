@@ -1,11 +1,12 @@
-// todo: zoom and rotation are not generic
+// todo: highlight, zoom, and rotation are not generic
 enum Params {
     collectionIndex,
     manifestIndex,
     sequenceIndex,
     canvasIndex,
     zoom,
-    rotation
+    rotation,
+    highlight
 }
 
 export = Params;

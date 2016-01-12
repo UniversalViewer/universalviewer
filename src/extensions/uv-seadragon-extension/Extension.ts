@@ -277,6 +277,12 @@ class Extension extends BaseExtension {
             this.triggerSocket(Commands.VIEW_PAGE, index);
             this.viewPage(index);
         });
+
+        Utils.Async.WaitFor(() => {
+            return this.centerPanel && this.centerPanel.isCreated;
+        }, () => {
+            this.checkForSearchParam();
+        });
     }
 
     createModules(): void{
@@ -326,6 +332,20 @@ class Extension extends BaseExtension {
 
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
+        }
+    }
+
+    checkForSearchParam(): void{
+        // if a h or q value is in the hash params, do a search.
+        if (this.provider.isDeepLinkingEnabled()){
+
+            // if a highlight param is set, use it to search.
+            var highlight: string = this.getParam(Params.highlight);
+
+            if (highlight){
+                highlight.replace(/\+/g, " ").replace(/"/g, "");
+                $.publish(Commands.SEARCH, [highlight]);
+            }
         }
     }
 

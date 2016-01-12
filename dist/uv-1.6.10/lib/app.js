@@ -80,7 +80,7 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
 });
 
 define('Params',["require", "exports"], function (require, exports) {
-    // todo: zoom and rotation are not generic
+    // todo: highlight, zoom, and rotation are not generic
     var Params;
     (function (Params) {
         Params[Params["collectionIndex"] = 0] = "collectionIndex";
@@ -89,6 +89,7 @@ define('Params',["require", "exports"], function (require, exports) {
         Params[Params["canvasIndex"] = 3] = "canvasIndex";
         Params[Params["zoom"] = 4] = "zoom";
         Params[Params["rotation"] = 5] = "rotation";
+        Params[Params["highlight"] = 6] = "highlight";
     })(Params || (Params = {}));
     return Params;
 });
@@ -96,7 +97,7 @@ define('Params',["require", "exports"], function (require, exports) {
 define('BootstrapParams',["require", "exports", "./Params"], function (require, exports, Params) {
     var BootstrapParams = (function () {
         function BootstrapParams() {
-            this.paramMap = ['c', 'm', 's', 'cv', 'z', 'r']; // todo: remove z, r
+            this.paramMap = ['c', 'm', 's', 'cv', 'z', 'r', 'h']; // todo: remove z, r, h (not generic)
             this.config = Utils.Urls.GetQuerystringParameter('config');
             this.domain = Utils.Urls.GetQuerystringParameter('domain');
             this.embedDomain = Utils.Urls.GetQuerystringParameter('embedDomain');
@@ -355,6 +356,7 @@ define('Bootstrapper',["require", "exports", "./modules/uv-shared-module/BaseCom
 define('modules/uv-shared-module/Panel',["require", "exports", "./BaseCommands"], function (require, exports, BaseCommands) {
     var Panel = (function () {
         function Panel($element, fitToParentWidth, fitToParentHeight) {
+            this.isResized = false;
             this.$element = $element;
             this.fitToParentWidth = fitToParentWidth || false;
             this.fitToParentHeight = fitToParentHeight || false;
@@ -374,6 +376,7 @@ define('modules/uv-shared-module/Panel',["require", "exports", "./BaseCommands"]
             if (this.fitToParentHeight) {
                 this.$element.height($parent.height());
             }
+            this.isResized = true;
         };
         return Panel;
     })();
@@ -1010,7 +1013,6 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                             event = BaseCommands.DOWN_ARROW;
                     }
                     if (event) {
-                        console.log(event);
                         e.preventDefault();
                         $.publish(event);
                     }
@@ -3002,7 +3004,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.9';
+    exports.Version = '1.6.10';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -5493,11 +5495,11 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
             $.subscribe(Commands.MODE_CHANGED, function (e, mode) {
                 _this.settingsChanged();
             });
+            $.subscribe(Commands.SEARCH, function (e, terms) {
+                _this.terms = terms;
+            });
             $.subscribe(Commands.SEARCH_RESULTS, function (e, obj) {
                 _this.displaySearchResults(obj.terms, obj.results);
-            });
-            $.subscribe(BaseCommands.CREATED, function (e) {
-                _this.checkForSearchParams();
             });
             // search input.
             this.$searchContainer = $('<div class="search"></div>');
@@ -5596,19 +5598,6 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
                 }, function (terms) {
                     _this.search(terms);
                 });
-            }
-        };
-        FooterPanel.prototype.checkForSearchParams = function () {
-            // if a h or q value is in the hash params, do a search.
-            if (this.provider.isDeepLinkingEnabled()) {
-                var terms = Utils.Urls.GetHashParameter('h', parent.document)
-                    || Utils.Urls.GetHashParameter('q', parent.document);
-                if (terms) {
-                    this.terms = terms.replace(/\+/g, " ").replace(/"/g, "");
-                    // blur search field
-                    this.$searchText.blur();
-                    $.publish(Commands.SEARCH, [this.terms]);
-                }
             }
         };
         FooterPanel.prototype.search = function (terms) {
@@ -6211,22 +6200,17 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.$viewer = $('<div id="viewer"></div>');
             this.$content.prepend(this.$viewer);
             $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
-                // todo: OPEN_EXTERNAL_RESOURCE should be able to waitFor RESIZE
-                // https://facebook.github.io/flux/docs/dispatcher.html
-                if (!_this.isCreated) {
-                    setTimeout(function () {
+                Utils.Async.WaitFor(function () {
+                    return _this.isResized;
+                }, function () {
+                    if (!_this.isCreated)
                         _this.createUI();
-                        _this.openMedia(resources);
-                    }, 500); // hack to allow time for panel open animations to complete.
-                }
-                else {
                     _this.openMedia(resources);
-                }
+                });
             });
         };
         SeadragonCenterPanel.prototype.createUI = function () {
             var _this = this;
-            //console.log("create ui");
             this.$spinner = $('<div class="spinner"></div>');
             this.$content.append(this.$spinner);
             this.showAttribution();
@@ -6614,7 +6598,6 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             return newRects;
         };
         SeadragonCenterPanel.prototype.resize = function () {
-            //console.log("resize");
             _super.prototype.resize.call(this);
             this.$viewer.height(this.$content.height() - this.$viewer.verticalMargins());
             this.$viewer.width(this.$content.width() - this.$viewer.horizontalMargins());
@@ -6939,6 +6922,11 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 _this.triggerSocket(Commands.VIEW_PAGE, index);
                 _this.viewPage(index);
             });
+            Utils.Async.WaitFor(function () {
+                return _this.centerPanel && _this.centerPanel.isCreated;
+            }, function () {
+                _this.checkForSearchParam();
+            });
         };
         Extension.prototype.createModules = function () {
             _super.prototype.createModules.call(this);
@@ -6977,6 +6965,17 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             }
             if (this.isRightPanelEnabled()) {
                 this.rightPanel.init();
+            }
+        };
+        Extension.prototype.checkForSearchParam = function () {
+            // if a h or q value is in the hash params, do a search.
+            if (this.provider.isDeepLinkingEnabled()) {
+                // if a highlight param is set, use it to search.
+                var highlight = this.getParam(Params.highlight);
+                if (highlight) {
+                    highlight.replace(/\+/g, " ").replace(/"/g, "");
+                    $.publish(Commands.SEARCH, [highlight]);
+                }
             }
         };
         Extension.prototype.updateSettings = function () {
@@ -20974,6 +20973,36 @@ Sanitize.prototype.clean_node = function(container) {
 if ( typeof define === "function" ) {
     define( "sanitize", [], function () { return Sanitize; } );
 };
+var Utils;
+(function (Utils) {
+    var Async = (function () {
+        function Async() {
+        }
+        Async.WaitFor = function (test, successCallback, failureCallback, interval, maxTries, numTries) {
+            if (!interval)
+                interval = 200;
+            if (!maxTries)
+                maxTries = 100; // try 100 times over 20 seconds
+            if (!numTries)
+                numTries = 0;
+            numTries += 1;
+            if (numTries > maxTries) {
+                if (failureCallback)
+                    failureCallback();
+            }
+            else if (test()) {
+                successCallback();
+            }
+            else {
+                setTimeout(function () {
+                    Async.WaitFor(test, successCallback, failureCallback, interval, maxTries, numTries);
+                }, interval);
+            }
+        };
+        return Async;
+    })();
+    Utils.Async = Async;
+})(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
     var Bools = (function () {

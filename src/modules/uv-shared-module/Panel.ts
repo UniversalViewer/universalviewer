@@ -5,6 +5,7 @@ class Panel {
     $element: JQuery;
     fitToParentWidth: boolean;
     fitToParentHeight: boolean;
+    isResized: boolean = false;
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
         this.$element = $element;
@@ -30,6 +31,8 @@ class Panel {
         if (this.fitToParentHeight) {
             this.$element.height($parent.height());
         }
+
+        this.isResized = true;
     }
 }
 

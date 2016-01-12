@@ -49,21 +49,16 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$content.prepend(this.$viewer);
 
         $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
-            // todo: OPEN_EXTERNAL_RESOURCE should be able to waitFor RESIZE
-            // https://facebook.github.io/flux/docs/dispatcher.html
-            if (!this.isCreated) {
-                setTimeout(() => {
-                    this.createUI();
-                    this.openMedia(resources);
-                }, 500); // hack to allow time for panel open animations to complete.
-            } else {
+            Utils.Async.WaitFor(() => {
+                return this.isResized;
+            }, () => {
+                if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
-            }
+            });
         });
     }
 
     createUI(): void {
-        //console.log("create ui");
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
@@ -535,8 +530,6 @@ class SeadragonCenterPanel extends CenterPanel {
 
     resize(): void {
 
-        //console.log("resize");
-        
         super.resize();
 
         this.$viewer.height(this.$content.height() - this.$viewer.verticalMargins());
