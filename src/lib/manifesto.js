@@ -1449,6 +1449,9 @@ var Manifesto;
         }
         Service.prototype.getProfile = function () {
             var profile = this.getProperty('profile');
+            if (!profile) {
+                profile = this.getProperty('dcterms:conformsTo');
+            }
             if (_isArray(profile)) {
                 return new Manifesto.ServiceProfile(profile[0]);
             }
