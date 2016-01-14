@@ -60,7 +60,7 @@ class TreeViewLeftPanel extends LeftPanel {
         this.$tabs = $('<div class="tabs"></div>');
         this.$main.append(this.$tabs);
 
-        this.$treeButton = $('<a class="index tab first">' + this.content.index + '</a>');
+        this.$treeButton = $('<a class="index tab">' + this.content.index + '</a>');
         this.$treeButton.prop('title', this.content.index);
         this.$tabs.append(this.$treeButton);
 
@@ -131,6 +131,22 @@ class TreeViewLeftPanel extends LeftPanel {
         this.$closedTitle.text(this.content.title);
 
         this.$sortByVolumeButton.addClass('on');
+
+        var tabOrderConfig: string = this.options.tabOrder;
+
+        if (tabOrderConfig) {
+            // sort tabs
+            tabOrderConfig = tabOrderConfig.toLowerCase();
+            tabOrderConfig = tabOrderConfig.replace(/ /g, "");
+            var tabOrder:string[] = tabOrderConfig.split(',');
+
+            if (tabOrder[0] === 'thumbs'){
+                this.$treeButton.before(this.$thumbsButton);
+                this.$thumbsButton.addClass('first');
+            } else {
+                this.$treeButton.addClass('first');
+            }
+        }
     }
 
     createTreeView(): void {

@@ -3004,7 +3004,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.12';
+    exports.Version = '1.6.13';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -3912,7 +3912,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             });
             this.$tabs = $('<div class="tabs"></div>');
             this.$main.append(this.$tabs);
-            this.$treeButton = $('<a class="index tab first">' + this.content.index + '</a>');
+            this.$treeButton = $('<a class="index tab">' + this.content.index + '</a>');
             this.$treeButton.prop('title', this.content.index);
             this.$tabs.append(this.$treeButton);
             this.$thumbsButton = $('<a class="thumbs tab">' + this.content.thumbnails + '</a>');
@@ -3961,6 +3961,20 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$title.text(this.content.title);
             this.$closedTitle.text(this.content.title);
             this.$sortByVolumeButton.addClass('on');
+            var tabOrderConfig = this.options.tabOrder;
+            if (tabOrderConfig) {
+                // sort tabs
+                tabOrderConfig = tabOrderConfig.toLowerCase();
+                tabOrderConfig = tabOrderConfig.replace(/ /g, "");
+                var tabOrder = tabOrderConfig.split(',');
+                if (tabOrder[0] === 'thumbs') {
+                    this.$treeButton.before(this.$thumbsButton);
+                    this.$thumbsButton.addClass('first');
+                }
+                else {
+                    this.$treeButton.addClass('first');
+                }
+            }
         };
         TreeViewLeftPanel.prototype.createTreeView = function () {
             this.treeView = new TreeView(this.$treeView);
