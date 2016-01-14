@@ -336,7 +336,7 @@ class Extension extends BaseExtension {
     }
 
     checkForSearchParam(): void{
-        // if a h or q value is in the hash params, do a search.
+        // if a h value is in the hash params, do a search.
         if (this.provider.isDeepLinkingEnabled()){
 
             // if a highlight param is set, use it to search.

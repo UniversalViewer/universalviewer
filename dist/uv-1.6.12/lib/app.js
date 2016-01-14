@@ -80,7 +80,6 @@ define('modules/uv-shared-module/BaseCommands',["require", "exports"], function 
 });
 
 define('Params',["require", "exports"], function (require, exports) {
-    // todo: highlight, zoom, and rotation are not generic
     var Params;
     (function (Params) {
         Params[Params["collectionIndex"] = 0] = "collectionIndex";
@@ -90,6 +89,7 @@ define('Params',["require", "exports"], function (require, exports) {
         Params[Params["zoom"] = 4] = "zoom";
         Params[Params["rotation"] = 5] = "rotation";
         Params[Params["highlight"] = 6] = "highlight";
+        Params[Params["anchor"] = 7] = "anchor";
     })(Params || (Params = {}));
     return Params;
 });
@@ -97,7 +97,7 @@ define('Params',["require", "exports"], function (require, exports) {
 define('BootstrapParams',["require", "exports", "./Params"], function (require, exports, Params) {
     var BootstrapParams = (function () {
         function BootstrapParams() {
-            this.paramMap = ['c', 'm', 's', 'cv', 'z', 'r', 'h']; // todo: remove z, r, h (not generic)
+            this.paramMap = ['c', 'm', 's', 'cv', 'z', 'r', 'h', 'a']; // todo: move z, r, h, a to their respective extensions
             this.config = Utils.Urls.GetQuerystringParameter('config');
             this.domain = Utils.Urls.GetQuerystringParameter('domain');
             this.embedDomain = Utils.Urls.GetQuerystringParameter('embedDomain');
@@ -3004,7 +3004,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.11';
+    exports.Version = '1.6.12';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4813,7 +4813,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/CenterPanel"], function (require, exports, BaseCommands, CenterPanel) {
+define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/CenterPanel", "../../Params"], function (require, exports, BaseCommands, CenterPanel, Params) {
     var PDFCenterPanel = (function (_super) {
         __extends(PDFCenterPanel, _super);
         function PDFCenterPanel($element) {
@@ -4829,6 +4829,7 @@ define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", 
         };
         PDFCenterPanel.prototype.openMedia = function (resources) {
             var _this = this;
+            var that = this;
             this.extension.getExternalResources(resources).then(function () {
                 var canvas = _this.provider.getCurrentCanvas();
                 var pdfUri = canvas.id;
@@ -4859,6 +4860,8 @@ define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", 
                             PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                         }
                         PDFJS.DEFAULT_URL = pdfUri;
+                        var anchorIndex = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;
+                        PDFView.initialBookmark = "page=" + anchorIndex;
                         window.webViewerLoad();
                         _this.resize();
                     });
@@ -6968,7 +6971,7 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             }
         };
         Extension.prototype.checkForSearchParam = function () {
-            // if a h or q value is in the hash params, do a search.
+            // if a h value is in the hash params, do a search.
             if (this.provider.isDeepLinkingEnabled()) {
                 // if a highlight param is set, use it to search.
                 var highlight = this.getParam(Params.highlight);

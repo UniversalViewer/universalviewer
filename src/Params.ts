@@ -1,4 +1,3 @@
-// todo: highlight, zoom, and rotation are not generic
 enum Params {
     collectionIndex,
     manifestIndex,
@@ -6,7 +5,8 @@ enum Params {
     canvasIndex,
     zoom,
     rotation,
-    highlight
+    highlight,
+    anchor
 }
 
 export = Params;

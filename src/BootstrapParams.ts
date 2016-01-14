@@ -17,7 +17,7 @@ class BootstrapParams {
     locales: any[];
     manifestIndex: number;
     manifestUri: string;
-    paramMap: string[] = ['c', 'm', 's', 'cv', 'z', 'r', 'h']; // todo: remove z, r, h (not generic)
+    paramMap: string[] = ['c', 'm', 's', 'cv', 'z', 'r', 'h', 'a']; // todo: move z, r, h, a to their respective extensions
     sequenceIndex: number;
 
     constructor() {
