@@ -39,6 +39,7 @@ declare var virtex: IVirtex;
 
 // app
 interface Window{
+    configExtensionCallback: any;
     manifestCallback: any;
     manifesto: IManifesto;
     browserDetect: any;

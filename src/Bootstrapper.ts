@@ -197,24 +197,28 @@ class Bootstrapper{
         var that = this;
 
         this.getConfigExtension(extension, (configExtension: any) => {
+
             // todo: use a compiler flag when available
             var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + that.params.getLocaleName() + '.config.json' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.json';
 
             $.getJSON(configPath, (config) => {
-
-                config.name = extension.name;
-
-                // if data-config has been set, extend the existing config object.
-                if (configExtension){
-                    // save a reference to the config extension uri.
-                    config.uri = that.params.config;
-
-                    $.extend(true, config, configExtension);
-                }
-
-                cb(config);
+                this.extendConfig(extension, config, configExtension, cb);
             });
         });
+    }
+
+    extendConfig(extension: any, config: any, configExtension: any, cb: (config: any) => void): void {
+        config.name = extension.name;
+
+        // if data-config has been set, extend the existing config object.
+        if (configExtension){
+            // save a reference to the config extension uri.
+            config.uri = this.params.config;
+
+            $.extend(true, config, configExtension);
+        }
+
+        cb(config);
     }
 
     getConfigExtension(extension: any, cb: (configExtension: any) => void): void {
@@ -224,9 +228,27 @@ class Bootstrapper{
         if (sessionConfig) { // if config is stored in sessionstorage
             cb(JSON.parse(sessionConfig));
         } else if (this.params.config){ // if data-config has been set
-            $.getJSON(this.params.config, (configExtension) => {
-                cb(configExtension);
-            });
+
+            if (this.isCORSEnabled()){
+                $.getJSON(this.params.config, (configExtension) => {
+                    cb(configExtension);
+                });
+            } else {
+                // use jsonp
+                var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
+                    url: this.params.config,
+                    type: 'GET',
+                    dataType: 'jsonp',
+                    jsonp: 'callback',
+                    jsonpCallback: 'configExtensionCallback'
+                };
+
+                $.ajax(settings);
+
+                window.configExtensionCallback = (configExtension) => {
+                    cb(configExtension);
+                };
+            }
         } else {
             cb(null);
         }
