@@ -1584,7 +1584,7 @@ var Manifesto;
                 request.end();
             });
         };
-        Utils.loadExternalResource = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+        Utils.loadExternalResource = function (resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
             return new Promise(function (resolve, reject) {
                 if (options && options.pessimisticAccessControl) {
                     // pessimistic: access control cookies may have been deleted.
@@ -1626,7 +1626,7 @@ var Manifesto;
                     // if cookies are deleted a page refresh is required.
                     // try loading the resource using an access token that matches the info.json domain.
                     // if an access token is found, request the resource using it regardless of whether it is access controlled.
-                    getStoredAccessToken(resource).then(function (storedAccessToken) {
+                    getStoredAccessToken(resource, tokenStorageStrategy).then(function (storedAccessToken) {
                         if (storedAccessToken) {
                             // try using the stored access token
                             resource.getData(storedAccessToken).then(function () {
@@ -1637,7 +1637,7 @@ var Manifesto;
                                 else {
                                     // otherwise, load the resource data to determine the correct access control services.
                                     // if access controlled, do login.
-                                    Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                                    Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                         resolve(handleResourceResponse(resource));
                                     })["catch"](function (error) {
                                         reject(error);
@@ -1648,7 +1648,7 @@ var Manifesto;
                             });
                         }
                         else {
-                            Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                            Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                 resolve(handleResourceResponse(resource));
                             })["catch"](function (error) {
                                 reject(error);
@@ -1660,10 +1660,10 @@ var Manifesto;
                 }
             });
         };
-        Utils.loadExternalResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+        Utils.loadExternalResources = function (resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
             return new Promise(function (resolve, reject) {
                 var promises = _map(resources, function (resource) {
-                    return Utils.loadExternalResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
+                    return Utils.loadExternalResource(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
                 });
                 Promise.all(promises)
                     .then(function () {
@@ -1673,11 +1673,11 @@ var Manifesto;
                 });
             });
         };
-        Utils.authorize = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
+        Utils.authorize = function (resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
             return new Promise(function (resolve, reject) {
                 resource.getData().then(function () {
                     if (resource.isAccessControlled()) {
-                        getStoredAccessToken(resource).then(function (storedAccessToken) {
+                        getStoredAccessToken(resource, tokenStorageStrategy).then(function (storedAccessToken) {
                             if (storedAccessToken) {
                                 // try using the stored access token
                                 resource.getData(storedAccessToken).then(function () {
@@ -1698,7 +1698,7 @@ var Manifesto;
                                     // if the resource has a click through service, use that.
                                     clickThrough(resource).then(function () {
                                         getAccessToken(resource).then(function (accessToken) {
-                                            storeAccessToken(resource, accessToken).then(function () {
+                                            storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
                                                 })["catch"](function (error) {
@@ -1716,7 +1716,7 @@ var Manifesto;
                                     // get an access token
                                     login(resource).then(function () {
                                         getAccessToken(resource).then(function (accessToken) {
-                                            storeAccessToken(resource, accessToken).then(function () {
+                                            storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
                                                 })["catch"](function (error) {
@@ -1842,8 +1842,8 @@ module.exports = {
     },
     // todo: create hasServiceDescriptor
     // based on @profile and @type (or lack of) can the resource describe associated services?
-    loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
-        return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
+    loadExternalResources: function (resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+        return Manifesto.Utils.loadExternalResources(resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
     },
     loadManifest: function (uri) {
         return Manifesto.Utils.loadResource(uri);

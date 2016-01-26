@@ -1401,8 +1401,9 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                     resourcesToLoad.push(r);
                 }
             });
+            var storageStrategy = this.provider.config.options.tokenStorage;
             return new Promise(function (resolve) {
-                manifesto.loadExternalResources(resourcesToLoad, _this.clickThrough, _this.login, _this.getAccessToken, _this.storeAccessToken, _this.getStoredAccessToken, _this.handleExternalResourceResponse).then(function (r) {
+                manifesto.loadExternalResources(resourcesToLoad, storageStrategy, _this.clickThrough, _this.login, _this.getAccessToken, _this.storeAccessToken, _this.getStoredAccessToken, _this.handleExternalResourceResponse).then(function (r) {
                     _this.provider.resources = _.map(r, function (resource) {
                         return _.toPlainObject(resource.data);
                     });
@@ -1543,24 +1544,24 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 });
             });
         };
-        BaseExtension.prototype.storeAccessToken = function (resource, token) {
+        BaseExtension.prototype.storeAccessToken = function (resource, token, storageStrategy) {
             return new Promise(function (resolve, reject) {
-                Utils.Storage.set(resource.tokenService.id, token, token.expiresIn);
+                Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
                 resolve();
             });
         };
-        BaseExtension.prototype.getStoredAccessToken = function (resource) {
+        BaseExtension.prototype.getStoredAccessToken = function (resource, storageStrategy) {
             return new Promise(function (resolve, reject) {
                 var foundToken;
                 // first try an exact match of the url
-                var item = Utils.Storage.get(resource.dataUri);
+                var item = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
                 if (item) {
                     foundToken = item.value;
                 }
                 else {
                     // find an access token for the domain
                     var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
-                    var items = Utils.Storage.getItems();
+                    var items = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
                     for (var i = 0; i < items.length; i++) {
                         item = items[i];
                         if (item.key.contains(domain)) {
@@ -3024,7 +3025,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.15';
+    exports.Version = '1.6.16';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -9446,7 +9447,7 @@ var Manifesto;
                 request.end();
             });
         };
-        Utils.loadExternalResource = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+        Utils.loadExternalResource = function (resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
             return new Promise(function (resolve, reject) {
                 if (options && options.pessimisticAccessControl) {
                     // pessimistic: access control cookies may have been deleted.
@@ -9488,7 +9489,7 @@ var Manifesto;
                     // if cookies are deleted a page refresh is required.
                     // try loading the resource using an access token that matches the info.json domain.
                     // if an access token is found, request the resource using it regardless of whether it is access controlled.
-                    getStoredAccessToken(resource).then(function (storedAccessToken) {
+                    getStoredAccessToken(resource, tokenStorageStrategy).then(function (storedAccessToken) {
                         if (storedAccessToken) {
                             // try using the stored access token
                             resource.getData(storedAccessToken).then(function () {
@@ -9499,7 +9500,7 @@ var Manifesto;
                                 else {
                                     // otherwise, load the resource data to determine the correct access control services.
                                     // if access controlled, do login.
-                                    Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                                    Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                         resolve(handleResourceResponse(resource));
                                     })["catch"](function (error) {
                                         reject(error);
@@ -9510,7 +9511,7 @@ var Manifesto;
                             });
                         }
                         else {
-                            Utils.authorize(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                            Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                 resolve(handleResourceResponse(resource));
                             })["catch"](function (error) {
                                 reject(error);
@@ -9522,10 +9523,10 @@ var Manifesto;
                 }
             });
         };
-        Utils.loadExternalResources = function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+        Utils.loadExternalResources = function (resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
             return new Promise(function (resolve, reject) {
                 var promises = _map(resources, function (resource) {
-                    return Utils.loadExternalResource(resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
+                    return Utils.loadExternalResource(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
                 });
                 Promise.all(promises)
                     .then(function () {
@@ -9535,11 +9536,11 @@ var Manifesto;
                 });
             });
         };
-        Utils.authorize = function (resource, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
+        Utils.authorize = function (resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
             return new Promise(function (resolve, reject) {
                 resource.getData().then(function () {
                     if (resource.isAccessControlled()) {
-                        getStoredAccessToken(resource).then(function (storedAccessToken) {
+                        getStoredAccessToken(resource, tokenStorageStrategy).then(function (storedAccessToken) {
                             if (storedAccessToken) {
                                 // try using the stored access token
                                 resource.getData(storedAccessToken).then(function () {
@@ -9560,7 +9561,7 @@ var Manifesto;
                                     // if the resource has a click through service, use that.
                                     clickThrough(resource).then(function () {
                                         getAccessToken(resource).then(function (accessToken) {
-                                            storeAccessToken(resource, accessToken).then(function () {
+                                            storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
                                                 })["catch"](function (error) {
@@ -9578,7 +9579,7 @@ var Manifesto;
                                     // get an access token
                                     login(resource).then(function () {
                                         getAccessToken(resource).then(function (accessToken) {
-                                            storeAccessToken(resource, accessToken).then(function () {
+                                            storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
                                                 })["catch"](function (error) {
@@ -9704,8 +9705,8 @@ module.exports = {
     },
     // todo: create hasServiceDescriptor
     // based on @profile and @type (or lack of) can the resource describe associated services?
-    loadExternalResources: function (resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
-        return Manifesto.Utils.loadExternalResources(resources, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
+    loadExternalResources: function (resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+        return Manifesto.Utils.loadExternalResources(resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
     },
     loadManifest: function (uri) {
         return Manifesto.Utils.loadResource(uri);
@@ -20231,7 +20232,7 @@ define("length", function(){});
 
 /**
  * @license
- * lodash 3.10.1 (Custom Build) lodash.com/license | Underscore.js 1.8.3 underscorejs.org/LICENSE
+ * lodash 3.10.2 (Custom Build) lodash.com/license | Underscore.js 1.8.3 underscorejs.org/LICENSE
  * Build: `lodash compat -o ./lodash.js`
  */
 ;(function(){function n(n,t){if(n!==t){var r=null===n,e=n===w,u=n===n,o=null===t,i=t===w,f=t===t;if(n>t&&!o||!u||r&&!i&&f||e&&f)return 1;if(n<t&&!r||!f||o&&!e&&u||i&&u)return-1}return 0}function t(n,t,r){for(var e=n.length,u=r?e:-1;r?u--:++u<e;)if(t(n[u],u,n))return u;return-1}function r(n,t,r){if(t!==t)return p(n,r);r-=1;for(var e=n.length;++r<e;)if(n[r]===t)return r;return-1}function e(n){return typeof n=="function"||false}function u(n){return null==n?"":n+""}function o(n,t){for(var r=-1,e=n.length;++r<e&&-1<t.indexOf(n.charAt(r)););
@@ -20325,7 +20326,7 @@ var n=arguments;return u&&!this.__chain__?o.apply(this.value(),n):this[r](functi
 n},zn.prototype.reverse=function(){if(this.__filtered__){var n=new zn(this);n.__dir__=-1,n.__filtered__=true}else n=this.clone(),n.__dir__*=-1;return n},zn.prototype.value=function(){var n,t=this.__wrapped__.value(),r=this.__dir__,e=Wo(t),u=0>r,o=e?t.length:0;n=0;for(var i=o,f=this.__views__,a=-1,c=f.length;++a<c;){var l=f[a],s=l.size;switch(l.type){case"drop":n+=s;break;case"dropRight":i-=s;break;case"take":i=ku(i,n+s);break;case"takeRight":n=ju(n,i-s)}}if(n={start:n,end:i},i=n.start,f=n.end,n=f-i,
 u=u?f:i-1,i=this.__iteratees__,f=i.length,a=0,c=ku(n,this.__takeCount__),!e||o<F||o==n&&c==n)return Pt(t,this.__actions__);e=[];n:for(;n--&&a<c;){for(u+=r,o=-1,l=t[u];++o<f;){var p=i[o],s=p.type,p=p.iteratee(l);if(s==N)l=p;else if(!p){if(s==L)continue n;break n}}e[a++]=l}return e},Nn.prototype.chain=function(){return te(this)},Nn.prototype.commit=function(){return new Pn(this.value(),this.__chain__)},Nn.prototype.concat=oo,Nn.prototype.plant=function(n){for(var t,r=this;r instanceof Tn;){var e=qr(r);
 t?u.__wrapped__=e:t=e;var u=e,r=r.__wrapped__}return u.__wrapped__=n,t},Nn.prototype.reverse=function(){var n=this.__wrapped__,t=function(n){return n.reverse()};return n instanceof zn?(this.__actions__.length&&(n=new zn(this)),n=n.reverse(),n.__actions__.push({func:re,args:[t],thisArg:w}),new Pn(n,this.__chain__)):this.thru(t)},Nn.prototype.toString=function(){return this.value()+""},Nn.prototype.run=Nn.prototype.toJSON=Nn.prototype.valueOf=Nn.prototype.value=function(){return Pt(this.__wrapped__,this.__actions__);
-},Nn.prototype.collect=Nn.prototype.map,Nn.prototype.head=Nn.prototype.first,Nn.prototype.select=Nn.prototype.filter,Nn.prototype.tail=Nn.prototype.rest,Nn}var w,x="3.10.1",b=1,A=2,j=4,k=8,O=16,I=32,R=64,E=128,C=256,S=30,U="...",$=150,W=16,F=200,L=1,N=2,T="Expected a function",P="__lodash_placeholder__",z="[object Arguments]",B="[object Array]",D="[object Boolean]",M="[object Date]",q="[object Error]",K="[object Function]",V="[object Number]",Z="[object Object]",Y="[object RegExp]",G="[object String]",J="[object ArrayBuffer]",X="[object Float32Array]",H="[object Float64Array]",Q="[object Int8Array]",nn="[object Int16Array]",tn="[object Int32Array]",rn="[object Uint8Array]",en="[object Uint8ClampedArray]",un="[object Uint16Array]",on="[object Uint32Array]",fn=/\b__p\+='';/g,an=/\b(__p\+=)''\+/g,cn=/(__e\(.*?\)|\b__t\))\+'';/g,ln=/&(?:amp|lt|gt|quot|#39|#96);/g,sn=/[&<>"'`]/g,pn=RegExp(ln.source),hn=RegExp(sn.source),_n=/<%-([\s\S]+?)%>/g,vn=/<%([\s\S]+?)%>/g,gn=/<%=([\s\S]+?)%>/g,yn=/\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,dn=/^\w*$/,mn=/[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g,wn=/^[:!,]|[\\^$.*+?()[\]{}|\/]|(^[0-9a-fA-Fnrtuvx])|([\n\r\u2028\u2029])/g,xn=RegExp(wn.source),bn=/[\u0300-\u036f\ufe20-\ufe23]/g,An=/\\(\\)?/g,jn=/\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g,kn=/\w*$/,On=/^0[xX]/,In=/^\[object .+?Constructor\]$/,Rn=/^\d+$/,En=/[\xc0-\xd6\xd8-\xde\xdf-\xf6\xf8-\xff]/g,Cn=/($^)/,Sn=/['\n\r\u2028\u2029\\]/g,Un=RegExp("[A-Z\\xc0-\\xd6\\xd8-\\xde]+(?=[A-Z\\xc0-\\xd6\\xd8-\\xde][a-z\\xdf-\\xf6\\xf8-\\xff]+)|[A-Z\\xc0-\\xd6\\xd8-\\xde]?[a-z\\xdf-\\xf6\\xf8-\\xff]+|[A-Z\\xc0-\\xd6\\xd8-\\xde]+|[0-9]+","g"),$n="Array ArrayBuffer Date Error Float32Array Float64Array Function Int8Array Int16Array Int32Array Math Number Object RegExp Set String _ clearTimeout isFinite parseFloat parseInt setTimeout TypeError Uint8Array Uint8ClampedArray Uint16Array Uint32Array WeakMap".split(" "),Wn="constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf".split(" "),Fn={};
+},Nn.prototype.collect=Nn.prototype.map,Nn.prototype.head=Nn.prototype.first,Nn.prototype.select=Nn.prototype.filter,Nn.prototype.tail=Nn.prototype.rest,Nn}var w,x="3.10.2",b=1,A=2,j=4,k=8,O=16,I=32,R=64,E=128,C=256,S=30,U="...",$=150,W=16,F=200,L=1,N=2,T="Expected a function",P="__lodash_placeholder__",z="[object Arguments]",B="[object Array]",D="[object Boolean]",M="[object Date]",q="[object Error]",K="[object Function]",V="[object Number]",Z="[object Object]",Y="[object RegExp]",G="[object String]",J="[object ArrayBuffer]",X="[object Float32Array]",H="[object Float64Array]",Q="[object Int8Array]",nn="[object Int16Array]",tn="[object Int32Array]",rn="[object Uint8Array]",en="[object Uint8ClampedArray]",un="[object Uint16Array]",on="[object Uint32Array]",fn=/\b__p\+='';/g,an=/\b(__p\+=)''\+/g,cn=/(__e\(.*?\)|\b__t\))\+'';/g,ln=/&(?:amp|lt|gt|quot|#39|#96);/g,sn=/[&<>"'`]/g,pn=RegExp(ln.source),hn=RegExp(sn.source),_n=/<%-([\s\S]+?)%>/g,vn=/<%([\s\S]+?)%>/g,gn=/<%=([\s\S]+?)%>/g,yn=/\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,dn=/^\w*$/,mn=/[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g,wn=/^[:!,]|[\\^$.*+?()[\]{}|\/]|(^[0-9a-fA-Fnrtuvx])|([\n\r\u2028\u2029])/g,xn=RegExp(wn.source),bn=/[\u0300-\u036f\ufe20-\ufe23]/g,An=/\\(\\)?/g,jn=/\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g,kn=/\w*$/,On=/^0[xX]/,In=/^\[object .+?Constructor\]$/,Rn=/^\d+$/,En=/[\xc0-\xd6\xd8-\xde\xdf-\xf6\xf8-\xff]/g,Cn=/($^)/,Sn=/['\n\r\u2028\u2029\\]/g,Un=RegExp("[A-Z\\xc0-\\xd6\\xd8-\\xde]+(?=[A-Z\\xc0-\\xd6\\xd8-\\xde][a-z\\xdf-\\xf6\\xf8-\\xff]+)|[A-Z\\xc0-\\xd6\\xd8-\\xde]?[a-z\\xdf-\\xf6\\xf8-\\xff]+|[A-Z\\xc0-\\xd6\\xd8-\\xde]+|[0-9]+","g"),$n="Array ArrayBuffer Date Error Float32Array Float64Array Function Int8Array Int16Array Int32Array Math Number Object RegExp Set String _ clearTimeout isFinite parseFloat parseInt setTimeout TypeError Uint8Array Uint8ClampedArray Uint16Array Uint32Array WeakMap".split(" "),Wn="constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf".split(" "),Fn={};
 Fn[X]=Fn[H]=Fn[Q]=Fn[nn]=Fn[tn]=Fn[rn]=Fn[en]=Fn[un]=Fn[on]=true,Fn[z]=Fn[B]=Fn[J]=Fn[D]=Fn[M]=Fn[q]=Fn[K]=Fn["[object Map]"]=Fn[V]=Fn[Z]=Fn[Y]=Fn["[object Set]"]=Fn[G]=Fn["[object WeakMap]"]=false;var Ln={};Ln[z]=Ln[B]=Ln[J]=Ln[D]=Ln[M]=Ln[X]=Ln[H]=Ln[Q]=Ln[nn]=Ln[tn]=Ln[V]=Ln[Z]=Ln[Y]=Ln[G]=Ln[rn]=Ln[en]=Ln[un]=Ln[on]=true,Ln[q]=Ln[K]=Ln["[object Map]"]=Ln["[object Set]"]=Ln["[object WeakMap]"]=false;var Nn={"\xc0":"A","\xc1":"A","\xc2":"A","\xc3":"A","\xc4":"A","\xc5":"A","\xe0":"a","\xe1":"a","\xe2":"a",
 "\xe3":"a","\xe4":"a","\xe5":"a","\xc7":"C","\xe7":"c","\xd0":"D","\xf0":"d","\xc8":"E","\xc9":"E","\xca":"E","\xcb":"E","\xe8":"e","\xe9":"e","\xea":"e","\xeb":"e","\xcc":"I","\xcd":"I","\xce":"I","\xcf":"I","\xec":"i","\xed":"i","\xee":"i","\xef":"i","\xd1":"N","\xf1":"n","\xd2":"O","\xd3":"O","\xd4":"O","\xd5":"O","\xd6":"O","\xd8":"O","\xf2":"o","\xf3":"o","\xf4":"o","\xf5":"o","\xf6":"o","\xf8":"o","\xd9":"U","\xda":"U","\xdb":"U","\xdc":"U","\xf9":"u","\xfa":"u","\xfb":"u","\xfc":"u","\xdd":"Y",
 "\xfd":"y","\xff":"y","\xc6":"Ae","\xe6":"ae","\xde":"Th","\xfe":"th","\xdf":"ss"},Tn={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","`":"&#96;"},Pn={"&amp;":"&","&lt;":"<","&gt;":">","&quot;":'"',"&#39;":"'","&#96;":"`"},zn={"function":true,object:true},Bn={0:"x30",1:"x31",2:"x32",3:"x33",4:"x34",5:"x35",6:"x36",7:"x37",8:"x38",9:"x39",A:"x41",B:"x42",C:"x43",D:"x44",E:"x45",F:"x46",a:"x61",b:"x62",c:"x63",d:"x64",e:"x65",f:"x66",n:"x6e",r:"x72",t:"x74",u:"x75",v:"x76",x:"x78"},Dn={"\\":"\\",
@@ -23885,14 +23886,14 @@ var Utils;
         }
         Storage.clear = function (storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     this._memoryStorage = {};
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     sessionStorage.clear();
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     localStorage.clear();
                     break;
             }
@@ -23910,14 +23911,14 @@ var Utils;
         Storage.get = function (key, storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
             var data;
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     data = this._memoryStorage[key];
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     data = sessionStorage.getItem(key);
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     data = localStorage.getItem(key);
                     break;
             }
@@ -23939,8 +23940,8 @@ var Utils;
         Storage.getItems = function (storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
             var items = [];
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     var keys = Object.keys(this._memoryStorage);
                     for (var i = 0; i < keys.length; i++) {
                         var item = this.get(keys[i], Utils.StorageType.memory);
@@ -23949,7 +23950,7 @@ var Utils;
                         }
                     }
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     for (var i = 0; i < sessionStorage.length; i++) {
                         var key = sessionStorage.key(i);
                         var item = this.get(key, Utils.StorageType.session);
@@ -23958,7 +23959,7 @@ var Utils;
                         }
                     }
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     for (var i = 0; i < localStorage.length; i++) {
                         var key = localStorage.key(i);
                         var item = this.get(key, Utils.StorageType.local);
@@ -23972,14 +23973,14 @@ var Utils;
         };
         Storage.remove = function (key, storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     delete this._memoryStorage[key];
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     sessionStorage.removeItem(key);
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     localStorage.removeItem(key);
                     break;
             }
@@ -23990,14 +23991,14 @@ var Utils;
             var record = new Utils.StorageItem();
             record.value = value;
             record.expiresAt = new Date().getTime() + expirationMS;
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     this._memoryStorage[key] = JSON.stringify(record);
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     sessionStorage.setItem(key, JSON.stringify(record));
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     localStorage.setItem(key, JSON.stringify(record));
                     break;
             }

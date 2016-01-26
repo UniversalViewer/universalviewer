@@ -225,7 +225,6 @@ module.exports = function (grunt) {
                             'jquery-plugins/dist/jquery-plugins.js',
                             'key-codes/dist/key-codes.js',
                             'lodash-compat/lodash.min.js',
-                            'manifesto/dist/client/manifesto.js',
                             'Units/Length.min.js',
                             'utils/dist/utils.js'
                         ],

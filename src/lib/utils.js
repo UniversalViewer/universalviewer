@@ -2869,14 +2869,14 @@ var Utils;
         }
         Storage.clear = function (storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     this._memoryStorage = {};
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     sessionStorage.clear();
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     localStorage.clear();
                     break;
             }
@@ -2894,14 +2894,14 @@ var Utils;
         Storage.get = function (key, storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
             var data;
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     data = this._memoryStorage[key];
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     data = sessionStorage.getItem(key);
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     data = localStorage.getItem(key);
                     break;
             }
@@ -2923,8 +2923,8 @@ var Utils;
         Storage.getItems = function (storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
             var items = [];
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     var keys = Object.keys(this._memoryStorage);
                     for (var i = 0; i < keys.length; i++) {
                         var item = this.get(keys[i], Utils.StorageType.memory);
@@ -2933,7 +2933,7 @@ var Utils;
                         }
                     }
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     for (var i = 0; i < sessionStorage.length; i++) {
                         var key = sessionStorage.key(i);
                         var item = this.get(key, Utils.StorageType.session);
@@ -2942,7 +2942,7 @@ var Utils;
                         }
                     }
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     for (var i = 0; i < localStorage.length; i++) {
                         var key = localStorage.key(i);
                         var item = this.get(key, Utils.StorageType.local);
@@ -2956,14 +2956,14 @@ var Utils;
         };
         Storage.remove = function (key, storageType) {
             if (storageType === void 0) { storageType = Utils.StorageType.memory; }
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     delete this._memoryStorage[key];
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     sessionStorage.removeItem(key);
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     localStorage.removeItem(key);
                     break;
             }
@@ -2974,14 +2974,14 @@ var Utils;
             var record = new Utils.StorageItem();
             record.value = value;
             record.expiresAt = new Date().getTime() + expirationMS;
-            switch (storageType) {
-                case Utils.StorageType.memory:
+            switch (storageType.value) {
+                case Utils.StorageType.memory.value:
                     this._memoryStorage[key] = JSON.stringify(record);
                     break;
-                case Utils.StorageType.session:
+                case Utils.StorageType.session.value:
                     sessionStorage.setItem(key, JSON.stringify(record));
                     break;
-                case Utils.StorageType.local:
+                case Utils.StorageType.local.value:
                     localStorage.setItem(key, JSON.stringify(record));
                     break;
             }

@@ -617,9 +617,12 @@ class BaseExtension implements IExtension {
             }
         });
 
+        var storageStrategy: string = this.provider.config.options.tokenStorage;
+
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
             manifesto.loadExternalResources(
                 resourcesToLoad,
+                storageStrategy,
                 this.clickThrough,
                 this.login,
                 this.getAccessToken,
@@ -799,21 +802,21 @@ class BaseExtension implements IExtension {
         });
     }
 
-    storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
+    storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            Utils.Storage.set(resource.tokenService.id, token, token.expiresIn);
+            Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
             resolve();
         });
     }
 
-    getStoredAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken> {
+    getStoredAccessToken(resource: Manifesto.IExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
             var foundToken: Manifesto.IAccessToken;
 
             // first try an exact match of the url
-            var item: storage.StorageItem = Utils.Storage.get(resource.dataUri);
+            var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
 
             if (item){
                 foundToken = item.value;
@@ -821,7 +824,7 @@ class BaseExtension implements IExtension {
                 // find an access token for the domain
                 var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
 
-                var items: storage.StorageItem[] = Utils.Storage.getItems();
+                var items: storage.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
 
                 for(var i = 0; i < items.length; i++) {
                     item = items[i];

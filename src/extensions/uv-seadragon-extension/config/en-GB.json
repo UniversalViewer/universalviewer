@@ -16,6 +16,7 @@
     "saveUserSettings": false,
     "searchWithinEnabled": true,
     "theme": "uv-en-GB-theme",
+    "tokenStorage": "session",
     "useArrowKeysToNavigate": false
   },
   "modules":
