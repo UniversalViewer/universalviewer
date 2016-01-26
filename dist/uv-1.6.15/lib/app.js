@@ -303,21 +303,25 @@ define('Bootstrapper',["require", "exports", "./modules/uv-shared-module/BaseCom
             });
         };
         Bootstrapper.prototype.configure = function (extension, cb) {
+            var _this = this;
             var that = this;
             this.getConfigExtension(extension, function (configExtension) {
                 // todo: use a compiler flag when available
                 var configPath = (window.DEBUG) ? 'extensions/' + extension.name + '/build/' + that.params.getLocaleName() + '.config.json' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.json';
                 $.getJSON(configPath, function (config) {
-                    config.name = extension.name;
-                    // if data-config has been set, extend the existing config object.
-                    if (configExtension) {
-                        // save a reference to the config extension uri.
-                        config.uri = that.params.config;
-                        $.extend(true, config, configExtension);
-                    }
-                    cb(config);
+                    _this.extendConfig(extension, config, configExtension, cb);
                 });
             });
+        };
+        Bootstrapper.prototype.extendConfig = function (extension, config, configExtension, cb) {
+            config.name = extension.name;
+            // if data-config has been set, extend the existing config object.
+            if (configExtension) {
+                // save a reference to the config extension uri.
+                config.uri = this.params.config;
+                $.extend(true, config, configExtension);
+            }
+            cb(config);
         };
         Bootstrapper.prototype.getConfigExtension = function (extension, cb) {
             var sessionConfig = sessionStorage.getItem(extension.name + '.' + this.params.localeName);
@@ -325,9 +329,25 @@ define('Bootstrapper',["require", "exports", "./modules/uv-shared-module/BaseCom
                 cb(JSON.parse(sessionConfig));
             }
             else if (this.params.config) {
-                $.getJSON(this.params.config, function (configExtension) {
-                    cb(configExtension);
-                });
+                if (this.isCORSEnabled()) {
+                    $.getJSON(this.params.config, function (configExtension) {
+                        cb(configExtension);
+                    });
+                }
+                else {
+                    // use jsonp
+                    var settings = {
+                        url: this.params.config,
+                        type: 'GET',
+                        dataType: 'jsonp',
+                        jsonp: 'callback',
+                        jsonpCallback: 'configExtensionCallback'
+                    };
+                    $.ajax(settings);
+                    window.configExtensionCallback = function (configExtension) {
+                        cb(configExtension);
+                    };
+                }
             }
             else {
                 cb(null);
@@ -3004,7 +3024,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.14';
+    exports.Version = '1.6.15';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -3602,6 +3622,7 @@ define('modules/uv-treeviewleftpanel-module/ThumbsView',["require", "exports", "
                         $wrap.removeClass('loadingFailed');
                         $wrap.addClass('loading');
                         var src = $thumb.attr('data-src');
+                        src += '?t=' + Utils.Dates.GetTimeStamp();
                         //console.log(i, src);
                         var img = $('<img src="' + src + '" />');
                         // fade in on load.
