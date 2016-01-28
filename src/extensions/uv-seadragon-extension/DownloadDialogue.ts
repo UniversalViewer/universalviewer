@@ -10,10 +10,16 @@ import Size = Utils.Measurements.Size;
 class DownloadDialogue extends BaseDownloadDialogue {
 
     $buttonsContainer: JQuery;
+    $canvasOptionsContainer: JQuery;
+    $canvasOptions: JQuery;
     $currentViewAsJpgButton: JQuery;
     $downloadButton: JQuery;
+    $imageOptionsContainer: JQuery;
+    $imageOptions: JQuery;
     $pagingNote: JQuery;
     $settingsButton: JQuery;
+    $sequenceOptionsContainer: JQuery;
+    $sequenceOptions: JQuery;
     $wholeImageHighResButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
     renderingUrls: string[];
@@ -35,17 +41,32 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$pagingNote.append(this.$settingsButton);
         this.$content.append(this.$pagingNote);
 
-        this.$currentViewAsJpgButton = $('<li><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
-        this.$downloadOptions.append(this.$currentViewAsJpgButton);
+        this.$imageOptionsContainer = $('<li class="group image"></li>');
+        this.$downloadOptions.append(this.$imageOptionsContainer);
+        this.$imageOptions = $('<ul></ul>');
+        this.$imageOptionsContainer.append(this.$imageOptions);
+
+        this.$currentViewAsJpgButton = $('<li class="option"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
+        this.$imageOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
-        this.$wholeImageHighResButton = $('<li><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
-        this.$downloadOptions.append(this.$wholeImageHighResButton);
+        this.$wholeImageHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
+        this.$imageOptions.append(this.$wholeImageHighResButton);
         this.$wholeImageHighResButton.hide();
 
-        this.$wholeImageLowResAsJpgButton = $('<li><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
-        this.$downloadOptions.append(this.$wholeImageLowResAsJpgButton);
+        this.$wholeImageLowResAsJpgButton = $('<li class="option"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
+        this.$imageOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
+
+        this.$canvasOptionsContainer = $('<li class="group canvas"></li>');
+        this.$downloadOptions.append(this.$canvasOptionsContainer);
+        this.$canvasOptions = $('<ul></ul>');
+        this.$canvasOptionsContainer.append(this.$canvasOptions);
+
+        this.$sequenceOptionsContainer = $('<li class="group sequence"></li>');
+        this.$downloadOptions.append(this.$sequenceOptionsContainer);
+        this.$sequenceOptions = $('<ul></ul>');
+        this.$sequenceOptionsContainer.append(this.$sequenceOptions);
 
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
@@ -142,27 +163,39 @@ class DownloadDialogue extends BaseDownloadDialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
             var images = canvas.getImages();
             for (var i = 0; i < images.length; i++) {
-                this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal);
+                this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.dynamicImageRenderings);
             }
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicCanvasRenderings)) {
-            this.addDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal);
+            this.addDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicSequenceRenderings)) {
-            this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument);
+            this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
         }
 
-        if (!this.$downloadOptions.find('li:visible').length){
+        if (!this.$downloadOptions.find('li.option:visible').length){
             this.$noneAvailable.show();
             this.$downloadButton.hide();
         } else {
             // select first option.
-            this.$downloadOptions.find('input:visible:first').prop("checked", true);
+            this.$downloadOptions.find('li.option input:visible:first').prop("checked", true);
             this.$noneAvailable.hide();
             this.$downloadButton.show();
         }
+
+        // hide empty groups
+        this.$downloadOptions.find('li.group').each((index, group) => {
+            var $group: JQuery = $(group);
+
+            $group.show();
+
+            if ($group.find('li.option:hidden').length === $group.find('li.option').length){
+                // all options are hidden, hide group.
+                $group.hide();
+            }
+        });
 
         if (this.provider.isPagingSettingEnabled()) {
             this.$pagingNote.show();
@@ -176,10 +209,10 @@ class DownloadDialogue extends BaseDownloadDialogue {
     resetDynamicDownloadOptions() {
         this.renderingUrls = [];
         this.renderingUrlsCount = 0;
-        this.$downloadOptions.find('.dynamic').remove();
+        this.$downloadOptions.find('li.dynamic').remove();
     }
 
-    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string) {
+    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption) {
         var renderings: Manifesto.IRendering[] = resource.getRenderings();
 
         for (var i = 0; i < renderings.length; i++) {
@@ -196,14 +229,25 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 }
                 label = String.format(label, this.simplifyMimeType(rendering.getFormat().toString()));
                 this.renderingUrls[currentId] = rendering.id;
-                var newButton = $('<li class="dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
-                this.$downloadOptions.append(newButton);
+                var newButton = $('<li class="option dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
+
+                switch (type) {
+                    case DownloadOption.dynamicImageRenderings:
+                        this.$imageOptions.append(newButton);
+                        break;
+                    case DownloadOption.dynamicCanvasRenderings:
+                        this.$canvasOptions.append(newButton);
+                        break;
+                    case DownloadOption.dynamicSequenceRenderings:
+                        this.$sequenceOptions.append(newButton);
+                        break;
+                }
             }
         }
     }
 
     getSelectedOption() {
-        return this.$downloadOptions.find("input:checked");
+        return this.$downloadOptions.find("li.option input:checked");
     }
 
     getCurrentCanvasImageResource() {

@@ -176,7 +176,7 @@
             .middle{
 
                 .noneAvailable{
-                    padding: @padding-medium-vertical 0 0 0;
+                    padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
                 }
 
                 .pagingNote{
@@ -184,7 +184,22 @@
                 }
 
                 ol.options{
-                    padding: @padding-medium-vertical 0 0 0;
+
+                    padding: 0;
+
+                    li.group{
+                        border-bottom: 1px solid @gray-lighter;
+
+                        &:last-child{
+                            border-bottom: none;
+                        }
+
+                        ul {
+                            list-style-type: none;
+                            margin: 0;
+                            padding: 0;
+                        }
+                    }
                 }
             }
         }
