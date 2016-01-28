@@ -228,9 +228,23 @@ class DownloadDialogue extends BaseDownloadDialogue {
         var resource = this.getCurrentCanvasImageResource();
         var size = new Size(0, 0);
 
-        if (resource){
-            size.width = resource.getWidth();
-            size.height = resource.getHeight();
+        if (!resource) return size;
+
+        size.width = resource.getWidth();
+        size.height = resource.getHeight();
+
+        var maxWidth: number = Number(resource.getProperty('maxWidth'));
+        var configMaxWidth: number = this.options.maxImageWidth;
+
+        if (maxWidth){
+            size.width = Math.min(size.width, maxWidth);
+
+            if (configMaxWidth){
+                size.width = Math.min(size.width, configMaxWidth);
+            }
+
+            var normWidth: number = Math.normalise(size.width, 0, resource.getWidth());
+            size.height = Math.floor(resource.getHeight() * normWidth);
         }
 
         return size;
@@ -246,7 +260,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
                 var size: Size = this.getDimensionsForCurrentCanvas();
-                return (!this.provider.isPagingSettingEnabled() && (size.width > this.options.confinedImageSize))
+                return (!this.provider.isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             default:
                 return true;
         }
