@@ -1,10 +1,13 @@
 import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
+import CroppedImageDimensions = require("./CroppedImageDimensions");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import ISeadragonProvider = require("./ISeadragonProvider");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
+import Size = Utils.Measurements.Size;
 import TreeSortType = require("./TreeSortType");
+import Vector = Utils.Maths.Vector;
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
@@ -22,7 +25,8 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         }, bootstrapper.config.options);
     }
 
-    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string {
+    // get the region and final size
+    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions {
 
         if (!viewer) return null;
         if (!viewer.viewport) return null;
@@ -59,50 +63,66 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         var rect2Top = viewportTopPx;
         var rect2Bottom = viewportTopPx + viewportHeightPx;
 
-        var cropWidth = Math.max(0, Math.min(rect1Right, rect2Right) - Math.max(rect1Left, rect2Left))
-        var cropHeight = Math.max(0, Math.min(rect1Bottom, rect2Bottom) - Math.max(rect1Top, rect2Top));
+        var sizeWidth = Math.max(0, Math.min(rect1Right, rect2Right) - Math.max(rect1Left, rect2Left));
+        var sizeHeight = Math.max(0, Math.min(rect1Bottom, rect2Bottom) - Math.max(rect1Top, rect2Top));
 
         // get original image pixel sizes.
 
         var ratio2 = canvas.getWidth() / imageWidthPx;
 
-        var widthPx = parseInt(String(cropWidth * ratio2));
-        var heightPx = parseInt(String(cropHeight * ratio2));
+        var regionWidth = parseInt(String(sizeWidth * ratio2));
+        var regionHeight = parseInt(String(sizeHeight * ratio2));
 
-        var topPx = parseInt(String(canvas.getHeight() * top));
-        var leftPx = parseInt(String(canvas.getWidth() * left));
+        var regionTop = parseInt(String(canvas.getHeight() * top));
+        var regionLeft = parseInt(String(canvas.getWidth() * left));
 
-        if (topPx < 0) topPx = 0;
-        if (leftPx < 0) leftPx = 0;
+        if (regionTop < 0) regionTop = 0;
+        if (regionLeft < 0) regionLeft = 0;
+
+        var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
+
+        dimensions.region = new Size(regionWidth, regionHeight);
+        dimensions.regionPos = new Vector(regionLeft, regionTop);
+        dimensions.size = new Size(sizeWidth, sizeHeight);
+
+        return dimensions;
+    }
+
+    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string {
+
+        if (!viewer) return null;
+        if (!viewer.viewport) return null;
+
+        var dimensions: CroppedImageDimensions = this.getCroppedImageDimensions(canvas, viewer);
 
         // construct uri
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
 
         var baseUri = this.getImageBaseUri(canvas);
         var id = this.getImageId(canvas);
-        var region = leftPx + "," + topPx + "," + widthPx + "," + heightPx;
-        var size = cropWidth + ',' + cropHeight;
+        var region = dimensions.regionPos.X + "," + dimensions.regionPos.Y + "," + dimensions.region.width + "," + dimensions.region.height;
+        var size = dimensions.size.width + ',' + dimensions.size.height;
         var rotation = 0;
         var quality = 'default';
-        var uri = String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
-
-        return uri;
+        return String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
     }
 
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string {
+    getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
+        var dimensions: Size = new Size(0, 0);
+        dimensions.width = width;
+        var normWidth = Math.normalise(width, 0, canvas.getWidth());
+        dimensions.height = Math.floor(canvas.getHeight() * normWidth);
+        return dimensions;
+    }
+
+    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string {
         var baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
         var id = this.getImageId(canvas);
         var region = 'full';
-        var size;
-
-        if (typeof(height) != "undefined"){
-            size = width + ',' + height;
-        } else {
-            size = width + ",";
-        }
-
+        var dimensions = this.getConfinedImageDimensions(canvas, width);
+        var size: string = dimensions.width + ',' + dimensions.height;
         var rotation = 0;
         var quality = 'default';
         var uri = String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);

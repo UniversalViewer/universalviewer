@@ -23,7 +23,7 @@
     },
     "downloadDialogue": {
       "content": {
-        "currentViewAsJpg": "Current view (jpg)",
+        "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
         "download": "Download",
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
@@ -32,8 +32,8 @@
         "pagingNote": "Please turn off Two Page View for additional options.",
         "preview": "Preview",
         "title": "Download",
-        "wholeImageHighRes": "Whole image high res ({0})",
-        "wholeImageLowResAsJpg": "Whole image low res (jpg)"
+        "wholeImageHighRes": "Whole image {0} x {1}px ({2})",
+        "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)"
       }
     },
     "embedDialogue": {

@@ -209,7 +209,7 @@ class Extension extends BaseExtension {
 
             this.triggerSocket(Commands.CURRENT_VIEW_URI,
                 {
-                    "cropUri": (<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, this.getViewer(), true),
+                    "cropUri": (<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, this.getViewer()),
                     "fullUri": (<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, canvas.getWidth(), canvas.getHeight())
                 });
         });
@@ -515,7 +515,7 @@ class Extension extends BaseExtension {
 
         bookmark.index = this.provider.canvasIndex;
         bookmark.label = canvas.getLabel();
-        bookmark.path = (<ISeadragonProvider>this.provider).getCroppedImageUri(canvas, this.getViewer(), true);
+        bookmark.path = (<ISeadragonProvider>this.provider).getCroppedImageUri(canvas, this.getViewer());
         bookmark.thumb = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
         bookmark.title = this.provider.getTitle();
         bookmark.type = manifesto.ElementType.image().toString();

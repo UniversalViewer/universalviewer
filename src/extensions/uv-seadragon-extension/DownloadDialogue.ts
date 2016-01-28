@@ -4,6 +4,8 @@ import Commands = require("./Commands");
 import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
 import ISeadragonExtension = require("./ISeadragonExtension");
 import ISeadragonProvider = require("./ISeadragonProvider");
+import CroppedImageDimensions = require("./CroppedImageDimensions");
+import Size = Utils.Measurements.Size;
 
 class DownloadDialogue extends BaseDownloadDialogue {
 
@@ -33,7 +35,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$pagingNote.append(this.$settingsButton);
         this.$content.append(this.$pagingNote);
 
-        this.$currentViewAsJpgButton = $('<li><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '">' + this.content.currentViewAsJpg + '</label></li>');
+        this.$currentViewAsJpgButton = $('<li><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
         this.$downloadOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
@@ -72,7 +74,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 switch (id){
                     case DownloadOption.currentViewAsJpg.toString():
                         var viewer = (<ISeadragonExtension>that.extension).getViewer();
-                        window.open((<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, viewer, true));
+                        window.open((<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, viewer));
                         $.publish(Commands.DOWNLOAD_CURRENTVIEW);
                         break;
                     case DownloadOption.wholeImageHighRes.toString():
@@ -100,38 +102,54 @@ class DownloadDialogue extends BaseDownloadDialogue {
     open() {
         super.open();
 
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+
         if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
+            var $label: JQuery = this.$currentViewAsJpgButton.find('label');
+            var label: string = this.content.currentViewAsJpg;
+            var viewer = (<ISeadragonExtension>this.extension).getViewer();
+            var dimensions: CroppedImageDimensions = (<ISeadragonProvider>this.provider).getCroppedImageDimensions(canvas, viewer);
+            label = String.format(label, dimensions.size.width, dimensions.size.height);
+            $label.text(label);
             this.$currentViewAsJpgButton.show();
         } else {
             this.$currentViewAsJpgButton.hide();
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.wholeImageHighRes)) {
+            var $label: JQuery = this.$wholeImageHighResButton.find('label');
             var mime = this.getMimeTypeForCurrentCanvas();
-            var label = String.format(this.content.wholeImageHighRes, this.simplifyMimeType(mime));
-            $('#' + DownloadOption.wholeImageHighRes.toString() + 'label').text(label);
+            var size: Size = this.getDimensionsForCurrentCanvas();
+            var label = String.format(this.content.wholeImageHighRes, size.width, size.height, this.simplifyMimeType(mime));
+            $label.text(label);
             this.$wholeImageHighResButton.show();
         } else {
             this.$wholeImageHighResButton.hide();
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.wholeImageLowResAsJpg)) {
+            var $label: JQuery = this.$wholeImageLowResAsJpgButton.find('label');
+            var size: Size = (<ISeadragonProvider>this.provider).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
+            var label = String.format(this.content.wholeImageLowResAsJpg, size.width, size.height);
+            $label.text(label);
             this.$wholeImageLowResAsJpgButton.show();
         } else {
             this.$wholeImageLowResAsJpgButton.hide();
         }
 
         this.resetDynamicDownloadOptions();
-        var currentCanvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
-            var images = currentCanvas.getImages();
+            var images = canvas.getImages();
             for (var i = 0; i < images.length; i++) {
                 this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal);
             }
         }
+
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicCanvasRenderings)) {
-            this.addDownloadOptionsForRenderings(currentCanvas, this.content.entireFileAsOriginal);
+            this.addDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal);
         }
+
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicSequenceRenderings)) {
             this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument);
         }
@@ -206,9 +224,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
         return resource ? resource.getFormat().toString() : null;
     }
 
-    getDimensionsForCurrentCanvas() {
+    getDimensionsForCurrentCanvas(): Size {
         var resource = this.getCurrentCanvasImageResource();
-        return resource ? [resource.getWidth(), resource.getHeight()] : [0, 0];
+        var size = new Size(0, 0);
+
+        if (resource){
+            size.width = resource.getWidth();
+            size.height = resource.getHeight();
+        }
+
+        return size;
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
@@ -217,11 +242,11 @@ class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.dynamicCanvasRenderings:
             case DownloadOption.dynamicImageRenderings:
             case DownloadOption.wholeImageHighRes:
-                return this.provider.isPagingSettingEnabled() ? false : true;
+                return !this.provider.isPagingSettingEnabled();
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
-                var dimensions = this.getDimensionsForCurrentCanvas();
-                return (!this.provider.isPagingSettingEnabled() && (dimensions[0] > this.options.confinedImageSize))
+                var size: Size = this.getDimensionsForCurrentCanvas();
+                return (!this.provider.isPagingSettingEnabled() && (size.width > this.options.confinedImageSize))
             default:
                 return true;
         }
