@@ -136,13 +136,24 @@
   padding: 0 0 30px 8px;
 }
 #app .overlay.download .middle .noneAvailable {
-  padding: 10px 0 0 0;
+  padding: 10px 0 10px 0;
 }
 #app .overlay.download .middle .pagingNote {
   padding: 10px 0 0 0;
 }
 #app .overlay.download .middle ol.options {
-  padding: 10px 0 0 0;
+  padding: 0;
+}
+#app .overlay.download .middle ol.options li.group {
+  border-bottom: 1px solid #efefef;
+}
+#app .overlay.download .middle ol.options li.group:last-child {
+  border-bottom: none;
+}
+#app .overlay.download .middle ol.options li.group ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 #app .overlay.help {
   width: 470px;

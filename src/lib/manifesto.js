@@ -1917,6 +1917,17 @@ var Manifesto;
         Resource.prototype.getHeight = function () {
             return this.getProperty('height');
         };
+        Resource.prototype.getMaxWidth = function () {
+            return this.getProperty('maxWidth');
+        };
+        Resource.prototype.getMaxHeight = function () {
+            var maxHeight = this.getProperty('maxHeight');
+            // if a maxHeight hasn't been specified, default to maxWidth.
+            // maxWidth in essence becomes maxEdge
+            if (!maxHeight) {
+                return this.getMaxWidth();
+            }
+        };
         return Resource;
     })(Manifesto.ManifestResource);
     Manifesto.Resource = Resource;

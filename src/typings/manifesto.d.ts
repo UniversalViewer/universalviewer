@@ -598,5 +598,7 @@ declare module Manifesto {
         getType(): ResourceType;
         getWidth(): number;
         getHeight(): number;
+        getMaxWidth(): number;
+        getMaxHeight(): number;
     }
 }

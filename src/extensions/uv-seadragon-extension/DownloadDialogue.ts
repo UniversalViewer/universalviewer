@@ -269,26 +269,27 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getDimensionsForCurrentCanvas(): Size {
-        var resource = this.getCurrentCanvasImageResource();
+        var image = this.getCurrentCanvasImageResource();
         var size = new Size(0, 0);
 
-        if (!resource) return size;
+        if (!image) return size;
 
-        size.width = resource.getWidth();
-        size.height = resource.getHeight();
+        size.width = image.getWidth();
+        size.height = image.getHeight();
 
-        var maxWidth: number = Number(resource.getProperty('maxWidth'));
+        var maxWidth: number = image.getMaxWidth();
+        var maxHeight: number = image.getMaxHeight();
+
         var configMaxWidth: number = this.options.maxImageWidth;
 
         if (maxWidth){
-            size.width = Math.min(size.width, maxWidth);
 
             if (configMaxWidth){
-                size.width = Math.min(size.width, configMaxWidth);
+                maxWidth = Math.min(maxWidth, configMaxWidth);
             }
 
-            var normWidth: number = Math.normalise(size.width, 0, resource.getWidth());
-            size.height = Math.floor(resource.getHeight() * normWidth);
+            size.width = Math.min(size.width, maxWidth);
+            size.height = Math.min(size.height, maxHeight);
         }
 
         return size;

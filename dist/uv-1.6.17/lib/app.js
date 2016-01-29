@@ -3025,7 +3025,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.6.16';
+    exports.Version = '1.6.17';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -5048,6 +5048,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-dialogues-module/DownloadDialogue", "./Commands", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseCommands, BaseDownloadDialogue, Commands, DownloadOption) {
+    var Size = Utils.Measurements.Size;
     var DownloadDialogue = (function (_super) {
         __extends(DownloadDialogue, _super);
         function DownloadDialogue($element) {
@@ -5062,15 +5063,27 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + ' </div>');
             this.$pagingNote.append(this.$settingsButton);
             this.$content.append(this.$pagingNote);
-            this.$currentViewAsJpgButton = $('<li><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '">' + this.content.currentViewAsJpg + '</label></li>');
-            this.$downloadOptions.append(this.$currentViewAsJpgButton);
+            this.$imageOptionsContainer = $('<li class="group image"></li>');
+            this.$downloadOptions.append(this.$imageOptionsContainer);
+            this.$imageOptions = $('<ul></ul>');
+            this.$imageOptionsContainer.append(this.$imageOptions);
+            this.$currentViewAsJpgButton = $('<li class="option"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
+            this.$imageOptions.append(this.$currentViewAsJpgButton);
             this.$currentViewAsJpgButton.hide();
-            this.$wholeImageHighResButton = $('<li><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
-            this.$downloadOptions.append(this.$wholeImageHighResButton);
+            this.$wholeImageHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
+            this.$imageOptions.append(this.$wholeImageHighResButton);
             this.$wholeImageHighResButton.hide();
-            this.$wholeImageLowResAsJpgButton = $('<li><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
-            this.$downloadOptions.append(this.$wholeImageLowResAsJpgButton);
+            this.$wholeImageLowResAsJpgButton = $('<li class="option"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
+            this.$imageOptions.append(this.$wholeImageLowResAsJpgButton);
             this.$wholeImageLowResAsJpgButton.hide();
+            this.$canvasOptionsContainer = $('<li class="group canvas"></li>');
+            this.$downloadOptions.append(this.$canvasOptionsContainer);
+            this.$canvasOptions = $('<ul></ul>');
+            this.$canvasOptionsContainer.append(this.$canvasOptions);
+            this.$sequenceOptionsContainer = $('<li class="group sequence"></li>');
+            this.$downloadOptions.append(this.$sequenceOptionsContainer);
+            this.$sequenceOptions = $('<ul></ul>');
+            this.$sequenceOptionsContainer.append(this.$sequenceOptions);
             this.$buttonsContainer = $('<div class="buttons"></div>');
             this.$content.append(this.$buttonsContainer);
             this.$downloadButton = $('<a class="btn btn-primary" href="#">' + this.content.download + '</a>');
@@ -5094,7 +5107,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                     switch (id) {
                         case DownloadOption.currentViewAsJpg.toString():
                             var viewer = that.extension.getViewer();
-                            window.open(that.provider.getCroppedImageUri(canvas, viewer, true));
+                            window.open(that.provider.getCroppedImageUri(canvas, viewer));
                             $.publish(Commands.DOWNLOAD_CURRENTVIEW);
                             break;
                         case DownloadOption.wholeImageHighRes.toString():
@@ -5117,51 +5130,72 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
         };
         DownloadDialogue.prototype.open = function () {
             _super.prototype.open.call(this);
+            var canvas = this.provider.getCurrentCanvas();
             if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
+                var $label = this.$currentViewAsJpgButton.find('label');
+                var label = this.content.currentViewAsJpg;
+                var viewer = this.extension.getViewer();
+                var dimensions = this.provider.getCroppedImageDimensions(canvas, viewer);
+                label = String.format(label, dimensions.size.width, dimensions.size.height);
+                $label.text(label);
                 this.$currentViewAsJpgButton.show();
             }
             else {
                 this.$currentViewAsJpgButton.hide();
             }
             if (this.isDownloadOptionAvailable(DownloadOption.wholeImageHighRes)) {
+                var $label = this.$wholeImageHighResButton.find('label');
                 var mime = this.getMimeTypeForCurrentCanvas();
-                var label = String.format(this.content.wholeImageHighRes, this.simplifyMimeType(mime));
-                $('#' + DownloadOption.wholeImageHighRes.toString() + 'label').text(label);
+                var size = this.getDimensionsForCurrentCanvas();
+                var label = String.format(this.content.wholeImageHighRes, size.width, size.height, this.simplifyMimeType(mime));
+                $label.text(label);
                 this.$wholeImageHighResButton.show();
             }
             else {
                 this.$wholeImageHighResButton.hide();
             }
             if (this.isDownloadOptionAvailable(DownloadOption.wholeImageLowResAsJpg)) {
+                var $label = this.$wholeImageLowResAsJpgButton.find('label');
+                var size = this.provider.getConfinedImageDimensions(canvas, this.options.confinedImageSize);
+                var label = String.format(this.content.wholeImageLowResAsJpg, size.width, size.height);
+                $label.text(label);
                 this.$wholeImageLowResAsJpgButton.show();
             }
             else {
                 this.$wholeImageLowResAsJpgButton.hide();
             }
             this.resetDynamicDownloadOptions();
-            var currentCanvas = this.provider.getCurrentCanvas();
             if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
-                var images = currentCanvas.getImages();
+                var images = canvas.getImages();
                 for (var i = 0; i < images.length; i++) {
-                    this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal);
+                    this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.dynamicImageRenderings);
                 }
             }
             if (this.isDownloadOptionAvailable(DownloadOption.dynamicCanvasRenderings)) {
-                this.addDownloadOptionsForRenderings(currentCanvas, this.content.entireFileAsOriginal);
+                this.addDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
             }
             if (this.isDownloadOptionAvailable(DownloadOption.dynamicSequenceRenderings)) {
-                this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument);
+                this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
             }
-            if (!this.$downloadOptions.find('li:visible').length) {
+            if (!this.$downloadOptions.find('li.option:visible').length) {
                 this.$noneAvailable.show();
                 this.$downloadButton.hide();
             }
             else {
                 // select first option.
-                this.$downloadOptions.find('input:visible:first').prop("checked", true);
+                this.$downloadOptions.find('li.option input:visible:first').prop("checked", true);
                 this.$noneAvailable.hide();
                 this.$downloadButton.show();
             }
+            // hide empty groups
+            this.$downloadOptions.find('li.group').each(function (index, group) {
+                var $group = $(group);
+                $group.show();
+                if ($group.find('li.option:hidden').length === $group.find('li.option').length) {
+                    // all options are hidden, hide group.
+                    $group.hide();
+                }
+            });
             if (this.provider.isPagingSettingEnabled()) {
                 this.$pagingNote.show();
             }
@@ -5173,9 +5207,9 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
         DownloadDialogue.prototype.resetDynamicDownloadOptions = function () {
             this.renderingUrls = [];
             this.renderingUrlsCount = 0;
-            this.$downloadOptions.find('.dynamic').remove();
+            this.$downloadOptions.find('li.dynamic').remove();
         };
-        DownloadDialogue.prototype.addDownloadOptionsForRenderings = function (resource, defaultLabel) {
+        DownloadDialogue.prototype.addDownloadOptionsForRenderings = function (resource, defaultLabel, type) {
             var renderings = resource.getRenderings();
             for (var i = 0; i < renderings.length; i++) {
                 var rendering = renderings[i];
@@ -5192,13 +5226,23 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                     }
                     label = String.format(label, this.simplifyMimeType(rendering.getFormat().toString()));
                     this.renderingUrls[currentId] = rendering.id;
-                    var newButton = $('<li class="dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
-                    this.$downloadOptions.append(newButton);
+                    var newButton = $('<li class="option dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
+                    switch (type) {
+                        case DownloadOption.dynamicImageRenderings:
+                            this.$imageOptions.append(newButton);
+                            break;
+                        case DownloadOption.dynamicCanvasRenderings:
+                            this.$canvasOptions.append(newButton);
+                            break;
+                        case DownloadOption.dynamicSequenceRenderings:
+                            this.$sequenceOptions.append(newButton);
+                            break;
+                    }
                 }
             }
         };
         DownloadDialogue.prototype.getSelectedOption = function () {
-            return this.$downloadOptions.find("input:checked");
+            return this.$downloadOptions.find("li.option input:checked");
         };
         DownloadDialogue.prototype.getCurrentCanvasImageResource = function () {
             var images = this.provider.getCurrentCanvas().getImages();
@@ -5216,8 +5260,23 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             return resource ? resource.getFormat().toString() : null;
         };
         DownloadDialogue.prototype.getDimensionsForCurrentCanvas = function () {
-            var resource = this.getCurrentCanvasImageResource();
-            return resource ? [resource.getWidth(), resource.getHeight()] : [0, 0];
+            var image = this.getCurrentCanvasImageResource();
+            var size = new Size(0, 0);
+            if (!image)
+                return size;
+            size.width = image.getWidth();
+            size.height = image.getHeight();
+            var maxWidth = image.getMaxWidth();
+            var maxHeight = image.getMaxHeight();
+            var configMaxWidth = this.options.maxImageWidth;
+            if (maxWidth) {
+                if (configMaxWidth) {
+                    maxWidth = Math.min(maxWidth, configMaxWidth);
+                }
+                size.width = Math.min(size.width, maxWidth);
+                size.height = Math.min(size.height, maxHeight);
+            }
+            return size;
         };
         DownloadDialogue.prototype.isDownloadOptionAvailable = function (option) {
             switch (option) {
@@ -5225,11 +5284,11 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                 case DownloadOption.dynamicCanvasRenderings:
                 case DownloadOption.dynamicImageRenderings:
                 case DownloadOption.wholeImageHighRes:
-                    return this.provider.isPagingSettingEnabled() ? false : true;
+                    return !this.provider.isPagingSettingEnabled();
                 case DownloadOption.wholeImageLowResAsJpg:
                     // hide low-res option if hi-res width is smaller than constraint
-                    var dimensions = this.getDimensionsForCurrentCanvas();
-                    return (!this.provider.isPagingSettingEnabled() && (dimensions[0] > this.options.confinedImageSize));
+                    var size = this.getDimensionsForCurrentCanvas();
+                    return (!this.provider.isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
                 default:
                     return true;
             }
@@ -6907,7 +6966,7 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 }
                 var canvas = _this.provider.getCurrentCanvas();
                 _this.triggerSocket(Commands.CURRENT_VIEW_URI, {
-                    "cropUri": that.provider.getCroppedImageUri(canvas, _this.getViewer(), true),
+                    "cropUri": that.provider.getCroppedImageUri(canvas, _this.getViewer()),
                     "fullUri": that.provider.getConfinedImageUri(canvas, canvas.getWidth(), canvas.getHeight())
                 });
             });
@@ -7149,7 +7208,7 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             var bookmark = new Bookmark();
             bookmark.index = this.provider.canvasIndex;
             bookmark.label = canvas.getLabel();
-            bookmark.path = this.provider.getCroppedImageUri(canvas, this.getViewer(), true);
+            bookmark.path = this.provider.getCroppedImageUri(canvas, this.getViewer());
             bookmark.thumb = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
             bookmark.title = this.provider.getTitle();
             bookmark.type = manifesto.ElementType.image().toString();
@@ -7158,6 +7217,20 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
         return Extension;
     })(BaseExtension);
     return Extension;
+});
+
+define('extensions/uv-seadragon-extension/CroppedImageDimensions',["require", "exports"], function (require, exports) {
+    var Size = Utils.Measurements.Size;
+    var Vector = Utils.Maths.Vector;
+    var CroppedImageDimensions = (function () {
+        function CroppedImageDimensions() {
+            this.region = new Size(0, 0);
+            this.regionPos = new Vector(0, 0);
+            this.size = new Size(0, 0);
+        }
+        return CroppedImageDimensions;
+    })();
+    return CroppedImageDimensions;
 });
 
 define('extensions/uv-seadragon-extension/SearchResultRect',["require", "exports"], function (require, exports) {
@@ -7200,7 +7273,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider", "./SearchResult", "./TreeSortType"], function (require, exports, BaseProvider, SearchResult, TreeSortType) {
+define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider", "./CroppedImageDimensions", "./SearchResult", "./TreeSortType"], function (require, exports, BaseProvider, CroppedImageDimensions, SearchResult, TreeSortType) {
+    var Size = Utils.Measurements.Size;
+    var Vector = Utils.Maths.Vector;
     var Provider = (function (_super) {
         __extends(Provider, _super);
         function Provider(bootstrapper) {
@@ -7214,7 +7289,8 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
                 iiifImageUriTemplate: '{0}/{1}/{2}/{3}/{4}/{5}.jpg'
             }, bootstrapper.config.options);
         }
-        Provider.prototype.getCroppedImageUri = function (canvas, viewer) {
+        // get the region and final size
+        Provider.prototype.getCroppedImageDimensions = function (canvas, viewer) {
             if (!viewer)
                 return null;
             if (!viewer.viewport)
@@ -7242,41 +7318,54 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
             var rect2Right = viewportLeftPx + viewportWidthPx;
             var rect2Top = viewportTopPx;
             var rect2Bottom = viewportTopPx + viewportHeightPx;
-            var cropWidth = Math.max(0, Math.min(rect1Right, rect2Right) - Math.max(rect1Left, rect2Left));
-            var cropHeight = Math.max(0, Math.min(rect1Bottom, rect2Bottom) - Math.max(rect1Top, rect2Top));
+            var sizeWidth = Math.max(0, Math.min(rect1Right, rect2Right) - Math.max(rect1Left, rect2Left));
+            var sizeHeight = Math.max(0, Math.min(rect1Bottom, rect2Bottom) - Math.max(rect1Top, rect2Top));
             // get original image pixel sizes.
             var ratio2 = canvas.getWidth() / imageWidthPx;
-            var widthPx = parseInt(String(cropWidth * ratio2));
-            var heightPx = parseInt(String(cropHeight * ratio2));
-            var topPx = parseInt(String(canvas.getHeight() * top));
-            var leftPx = parseInt(String(canvas.getWidth() * left));
-            if (topPx < 0)
-                topPx = 0;
-            if (leftPx < 0)
-                leftPx = 0;
+            var regionWidth = parseInt(String(sizeWidth * ratio2));
+            var regionHeight = parseInt(String(sizeHeight * ratio2));
+            var regionTop = parseInt(String(canvas.getHeight() * top));
+            var regionLeft = parseInt(String(canvas.getWidth() * left));
+            if (regionTop < 0)
+                regionTop = 0;
+            if (regionLeft < 0)
+                regionLeft = 0;
+            var dimensions = new CroppedImageDimensions();
+            dimensions.region = new Size(regionWidth, regionHeight);
+            dimensions.regionPos = new Vector(regionLeft, regionTop);
+            dimensions.size = new Size(sizeWidth, sizeHeight);
+            return dimensions;
+        };
+        Provider.prototype.getCroppedImageUri = function (canvas, viewer) {
+            if (!viewer)
+                return null;
+            if (!viewer.viewport)
+                return null;
+            var dimensions = this.getCroppedImageDimensions(canvas, viewer);
             // construct uri
             // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
             var baseUri = this.getImageBaseUri(canvas);
             var id = this.getImageId(canvas);
-            var region = leftPx + "," + topPx + "," + widthPx + "," + heightPx;
-            var size = cropWidth + ',' + cropHeight;
+            var region = dimensions.regionPos.X + "," + dimensions.regionPos.Y + "," + dimensions.region.width + "," + dimensions.region.height;
+            var size = dimensions.size.width + ',' + dimensions.size.height;
             var rotation = 0;
             var quality = 'default';
-            var uri = String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
-            return uri;
+            return String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
         };
-        Provider.prototype.getConfinedImageUri = function (canvas, width, height) {
+        Provider.prototype.getConfinedImageDimensions = function (canvas, width) {
+            var dimensions = new Size(0, 0);
+            dimensions.width = width;
+            var normWidth = Math.normalise(width, 0, canvas.getWidth());
+            dimensions.height = Math.floor(canvas.getHeight() * normWidth);
+            return dimensions;
+        };
+        Provider.prototype.getConfinedImageUri = function (canvas, width) {
             var baseUri = this.getImageBaseUri(canvas);
             // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
             var id = this.getImageId(canvas);
             var region = 'full';
-            var size;
-            if (typeof (height) != "undefined") {
-                size = width + ',' + height;
-            }
-            else {
-                size = width + ",";
-            }
+            var dimensions = this.getConfinedImageDimensions(canvas, width);
+            var size = dimensions.width + ',' + dimensions.height;
             var rotation = 0;
             var quality = 'default';
             var uri = String.format(this.config.options.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
@@ -9779,6 +9868,17 @@ var Manifesto;
         };
         Resource.prototype.getHeight = function () {
             return this.getProperty('height');
+        };
+        Resource.prototype.getMaxWidth = function () {
+            return this.getProperty('maxWidth');
+        };
+        Resource.prototype.getMaxHeight = function () {
+            var maxHeight = this.getProperty('maxHeight');
+            // if a maxHeight hasn't been specified, default to maxWidth.
+            // maxWidth in essence becomes maxEdge
+            if (!maxHeight) {
+                return this.getMaxWidth();
+            }
         };
         return Resource;
     })(Manifesto.ManifestResource);

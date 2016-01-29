@@ -136,13 +136,24 @@
   padding: 0 0 30px 8px;
 }
 #app .overlay.download .middle .noneAvailable {
-  padding: 10px 0 0 0;
+  padding: 10px 0 10px 0;
 }
 #app .overlay.download .middle .pagingNote {
   padding: 10px 0 0 0;
 }
 #app .overlay.download .middle ol.options {
-  padding: 10px 0 0 0;
+  padding: 0;
+}
+#app .overlay.download .middle ol.options li.group {
+  border-bottom: 1px solid #efefef;
+}
+#app .overlay.download .middle ol.options li.group:last-child {
+  border-bottom: none;
+}
+#app .overlay.download .middle ol.options li.group ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 #app .overlay.help {
   width: 470px;
@@ -3732,8 +3743,20 @@ input[type=range]:focus::-ms-fill-upper {
   border: none;
 }
 #app .headerPanel .options .centerOptions {
-  width: 390px;
+  width: 432px;
+}
+#app .headerPanel .options .centerOptions .prevOptions {
+  margin: 0 10px 0 0;
+}
+#app .headerPanel .options .centerOptions .mode label {
+  width: 42px;
+}
+#app .headerPanel .options .centerOptions .search {
+  width: 140px;
+}
+#app .headerPanel .options .centerOptions .nextOptions {
+  margin: 0 0 0 10px;
 }
 #app .footerPanel .searchPager .controls .searchResultsInfo {
-  width: 340px;
+  width: 290px;
 }
