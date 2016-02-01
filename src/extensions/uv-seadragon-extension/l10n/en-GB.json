@@ -163,7 +163,7 @@
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
       }
     },
-    "treeViewLeftPanel": {
+    "contentLeftPanel": {
       "content": {
         "collapse": "Collapse Contents",
         "collapseFull": "Collapse Gallery",

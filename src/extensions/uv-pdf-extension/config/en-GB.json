@@ -57,7 +57,7 @@
         "usePdfJs": true
       }
     },
-    "treeViewLeftPanel":{
+    "contentLeftPanel":{
       "options":{
         "elideCount": 40,
         "galleryThumbHeight": 320,

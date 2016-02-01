@@ -8,7 +8,7 @@ import ThumbsView = require("./ThumbsView");
 import TreeSortType = require("../../extensions/uv-seadragon-extension/TreeSortType");
 import TreeView = require("./TreeView");
 
-class TreeViewLeftPanel extends LeftPanel {
+class ContentLeftPanel extends LeftPanel {
 
     $buttonGroup: JQuery;
     $galleryView: JQuery;
@@ -35,7 +35,7 @@ class TreeViewLeftPanel extends LeftPanel {
 
     create(): void {
 
-        this.setConfig('treeViewLeftPanel');
+        this.setConfig('contentLeftPanel');
 
         super.create();
 
@@ -387,4 +387,4 @@ class TreeViewLeftPanel extends LeftPanel {
     }
 }
 
-export = TreeViewLeftPanel;
+export = ContentLeftPanel;
