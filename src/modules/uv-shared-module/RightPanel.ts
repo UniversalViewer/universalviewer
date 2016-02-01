@@ -39,15 +39,16 @@ class RightPanel extends BaseExpandPanel {
 
     toggleFinish(): void {
         super.toggleFinish();
+        var settings: ISettings = this.provider.getSettings();
 
-        if (this.isExpanded){
+        if (this.isExpanded) {
+            settings.panelOpenRightPanel = true; 
             $.publish(BaseCommands.OPEN_RIGHT_PANEL);
-        } else {
-            var settings: ISettings = this.provider.getSettings();
-            settings.panelOpenRightPanel = false;
-            this.provider.updateSettings(settings);
+        } else {            
+            settings.panelOpenRightPanel = false;            
             $.publish(BaseCommands.CLOSE_RIGHT_PANEL);
         }
+        this.provider.updateSettings(settings);
     }
 
     resize(): void {
