@@ -44,7 +44,7 @@ interface IProvider{
     getThumbs(width: number, height: number): Manifesto.Thumb[];
     getTitle(): string;
     getTotalCanvases(): number;
-    getTree(): Manifesto.TreeNode;
+    getTree(): Manifesto.ITreeNode;
     getViewingDirection(): Manifesto.ViewingDirection;
     isCanvasIndexOutOfRange(index: number): boolean;
     isFirstCanvas(index?: number): boolean;

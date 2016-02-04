@@ -315,7 +315,7 @@ class BaseProvider implements IProvider{
         return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
     }
 
-    getTree(): Manifesto.TreeNode{
+    getTree(): Manifesto.ITreeNode{
         return this.iiifResource.getTree();
     }
 

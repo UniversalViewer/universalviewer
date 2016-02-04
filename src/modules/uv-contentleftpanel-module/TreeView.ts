@@ -3,15 +3,17 @@ import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Shell = require("../uv-shared-module/Shell");
+import ITreeNode = require("../uv-shared-module/ITreeNode");
 
 class TreeView extends BaseView {
 
     $tree: JQuery;
     elideCount: number;
     isOpen: boolean = false;
-    selectedNode: Manifesto.TreeNode;
+    selectedNode: ITreeNode;
+    multiSelectionMode: boolean = false;
 
-    public rootNode: Manifesto.TreeNode;
+    public rootNode: ITreeNode;
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -19,6 +21,18 @@ class TreeView extends BaseView {
 
     create(): void {
         super.create();
+
+        var that = this;
+
+        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, () => {
+            this.multiSelectionMode = true;
+            this.dataBind();
+        });
+
+        $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+            this.multiSelectionMode = false;
+            this.dataBind();
+        });
 
         this.$tree = $('<ul class="tree"></ul>');
         this.$element.append(this.$tree);
@@ -29,13 +43,12 @@ class TreeView extends BaseView {
                            {{/for}}',
             treeTemplate: '<li>\
                                {^{if nodes && nodes.length}}\
-                                   {^{if expanded}}\
-                                       <div class="toggle expanded"></div>\
-                                   {{else}}\
-                                       <div class="toggle"></div>\
-                                   {{/if}}\
+                                   <div class="toggle" data-link="class{merge:expanded toggle=\'expanded\'}"></div>\
                                {{else}}\
-                                   <div class="spacer"></div>\
+                               <div class="spacer"></div>\
+                               {{/if}}\
+                               {^{if multiSelectionEnabled}}\
+                                    <input type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
                                {{/if}}\
                                {^{if selected}}\
                                    <a href="#" title="{{>label}}" class="selected" data-link="~elide(text)"></a>\
@@ -65,11 +78,11 @@ class TreeView extends BaseView {
 
         $.views.tags({
             tree: {
-                toggle: function () {
+                toggleExpanded: function() {
                     $.observable(this.data).setProperty("expanded", !this.data.expanded);
-                    //this.contents().find('a').each(function() {
-                    //    that.elide($(this));
-                    //});
+                },
+                toggleMultiSelect: function() {
+                    that._multiSelectTreeNode(this.data, !this.data.multiSelected);
                 },
                 init: function (tagCtx, linkCtx, ctx) {
                     var data = tagCtx.view.data;
@@ -77,19 +90,17 @@ class TreeView extends BaseView {
                     this.data = tagCtx.view.data;
                 },
                 onAfterLink: function () {
-                    var self = this;
+                    var self: any = this;
 
-                    self.contents("li").first()
-                        .on("click", ".toggle", function () {
-                            self.toggle();
-                        }).on("click", "a", function (e) {
+                    self.contents('li').first()
+                        .on('click', '.toggle', function() {
+                            self.toggleExpanded();
+                        }).on('click', 'a', function(e) {
                             e.preventDefault();
-
-                            if (self.data.nodes.length){
-                                self.toggle();
-                            }
-
+                            if (self.data.nodes.length) self.toggle();
                             $.publish(Commands.TREE_NODE_SELECTED, [self.data.data]);
+                        }).on('click', 'input.multiSelect', function(e) {
+                            self.toggleMultiSelect();
                         });
                 },
                 template: $.templates.treeTemplate
@@ -100,13 +111,41 @@ class TreeView extends BaseView {
     public dataBind(): void {
         if (!this.rootNode) return;
 
+        this._setMultiSelectionEnabled(this.multiSelectionMode);
+
         this.$tree.link($.templates.pageTemplate, this.rootNode);
         this.resize();
     }
 
-    public getNodeById(id: string): Manifesto.TreeNode {
-        return this.rootNode.nodes.en().traverseUnique(node => node.nodes)
-            .where((n) => n.id === id).first();
+    private _getAllNodes(): ITreeNode[] {
+        return <ITreeNode[]>this.rootNode.nodes.en().traverseUnique(node => node.nodes).toArray();
+    }
+
+    public getMultiSelectedNodes(): ITreeNode[] {
+        return this._getAllNodes().en().where((n) => n.multiSelected).toArray();
+    }
+
+    public getNodeById(id: string): ITreeNode {
+        return this._getAllNodes().en().where((n) => n.id === id).first();
+    }
+
+    private _multiSelectTreeNode(node: ITreeNode, isSelected: boolean): void {
+        $.observable(node).setProperty("multiSelected", isSelected);
+
+        // recursively select/deselect child nodes
+        for (var i = 0; i < node.nodes.length; i++){
+            var n: ITreeNode = <ITreeNode>node.nodes[i];
+            this._multiSelectTreeNode(n, isSelected);
+        }
+    }
+
+    private _setMultiSelectionEnabled(enabled: boolean): void {
+        var nodes: ITreeNode[] = this._getAllNodes();
+
+        for (var i = 0; i < nodes.length; i++){
+            var node: ITreeNode = nodes[i];
+            node.multiSelectionEnabled = enabled;
+        }
     }
 
     public selectPath(path: string): void {
@@ -135,19 +174,19 @@ class TreeView extends BaseView {
     }
 
     // walk up the tree expanding parent nodes.
-    expandParents(node: Manifesto.TreeNode): void{
+    expandParents(node: ITreeNode): void{
         if (!node.parentNode) return;
 
         $.observable(node.parentNode).setProperty("expanded", true);
-        this.expandParents(node.parentNode);
+        this.expandParents(<ITreeNode>node.parentNode);
     }
 
     // walks down the tree using the specified path e.g. [2,2,0]
-    getNodeByPath(parentNode: Manifesto.TreeNode, path: string[]): Manifesto.TreeNode {
+    getNodeByPath(parentNode: ITreeNode, path: string[]): ITreeNode {
         if (path.length === 0) return parentNode;
         var index = path.shift();
         var node = parentNode.nodes[index];
-        return this.getNodeByPath(node, path);
+        return this.getNodeByPath(<ITreeNode>node, path);
     }
 
     public show(): void {

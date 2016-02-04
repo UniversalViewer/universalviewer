@@ -21,6 +21,31 @@
   },
   "modules":
   {
+    "contentLeftPanel":
+    {
+      "options":
+      {
+        "elideCount": 40,
+        "expandFullEnabled": true,
+        "galleryThumbHeight": 320,
+        "galleryThumbWidth": 200,
+        "oneColThumbHeight": 320,
+        "oneColThumbWidth": 200,
+        "pageModeEnabled": true,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": true,
+        "tabOrder": "",
+        "thumbsEnabled": true,
+        "thumbsExtraHeight": 8,
+        "thumbsImageFadeInDuration": 300,
+        "thumbsLoadRange": 15,
+        "treeEnabled": true,
+        "twoColThumbHeight": 150,
+        "twoColThumbWidth": 90
+      }
+    },
     "dialogue": {
     },
     "downloadDialogue":
@@ -28,7 +53,8 @@
       "options":
       {
         "confinedImageSize": 1000,
-        "maxImageWidth": 1000
+        "maxImageWidth": 1000,
+        "selectionEnabled": true
       }
     },
     "embedDialogue":
@@ -110,31 +136,6 @@
     },
     "settingsDialogue":
     {
-    },
-    "contentLeftPanel":
-    {
-      "options":
-      {
-        "elideCount": 40,
-        "expandFullEnabled": true,
-        "galleryThumbHeight": 320,
-        "galleryThumbWidth": 200,
-        "oneColThumbHeight": 320,
-        "oneColThumbWidth": 200,
-        "pageModeEnabled": true,
-        "panelAnimationDuration": 250,
-        "panelCollapsedWidth": 30,
-        "panelExpandedWidth": 255,
-        "panelOpen": true,
-        "tabOrder": "",
-        "thumbsEnabled": true,
-        "thumbsExtraHeight": 8,
-        "thumbsImageFadeInDuration": 300,
-        "thumbsLoadRange": 15,
-        "treeEnabled": true,
-        "twoColThumbHeight": 150,
-        "twoColThumbWidth": 90
-      }
     }
   }
 }

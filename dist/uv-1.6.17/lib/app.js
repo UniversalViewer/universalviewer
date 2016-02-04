@@ -1731,6 +1731,7 @@ define('modules/uv-shared-module/DownloadOption',["require", "exports"], functio
         DownloadOption.dynamicImageRenderings = new DownloadOption("dynamicImageRenderings");
         DownloadOption.dynamicSequenceRenderings = new DownloadOption("dynamicSequenceRenderings");
         DownloadOption.entireFileAsOriginal = new DownloadOption("entireFileAsOriginal");
+        DownloadOption.selection = new DownloadOption("selection");
         DownloadOption.wholeImageHighRes = new DownloadOption("wholeImageHighRes");
         DownloadOption.wholeImageLowResAsJpg = new DownloadOption("wholeImageLowResAsJpg");
         return DownloadOption;
@@ -2708,6 +2709,10 @@ define('modules/uv-shared-module/BaseExpandPanel',["require", "exports", "./Base
         BaseExpandPanel.prototype.init = function () {
             _super.prototype.init.call(this);
         };
+        BaseExpandPanel.prototype.setTitle = function (title) {
+            this.$title.text(title);
+            this.$closedTitle.text(title);
+        };
         BaseExpandPanel.prototype.toggle = function (autoToggled) {
             var _this = this;
             (autoToggled) ? this.autoToggled = true : this.autoToggled = false;
@@ -2894,8 +2899,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
             this.$main.append(this.$noData);
             this.$expandButton.attr('tabindex', '4');
             this.$collapseButton.attr('tabindex', '4');
-            this.$title.text(this.content.title);
-            this.$closedTitle.text(this.content.title);
+            this.setTitle(this.content.title);
         };
         MoreInfoRightPanel.prototype.toggleFinish = function () {
             _super.prototype.toggleFinish.call(this);
@@ -3134,11 +3138,14 @@ define('extensions/uv-seadragon-extension/Commands',["require", "exports"], func
         Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT = Commands.namespace + 'onDownloadEntireDocumentAsText';
         Commands.DOWNLOAD_WHOLEIMAGEHIGHRES = Commands.namespace + 'onDownloadWholeImageHighRes';
         Commands.DOWNLOAD_WHOLEIMAGELOWRES = Commands.namespace + 'onDownloadWholeImageLowRes';
+        Commands.ENTER_MULTI_SELECTION_MODE = Commands.namespace + 'onEnterMultiSelectionMode';
+        Commands.EXIT_MULTI_SELECTION_MODE = Commands.namespace + 'onExitMultiSelectionMode';
         Commands.FIRST = Commands.namespace + 'onFirst';
         Commands.GALLERY_THUMB_SELECTED = Commands.namespace + 'onGalleryThumbSelected';
         Commands.IMAGE_SEARCH = Commands.namespace + 'onImageSearch';
         Commands.LAST = Commands.namespace + 'onLast';
         Commands.MODE_CHANGED = Commands.namespace + 'onModeChanged';
+        Commands.MULTI_SELECTION = Commands.namespace + 'onMultiSelection';
         Commands.NEXT = Commands.namespace + 'onNext';
         Commands.NEXT_SEARCH_RESULT = Commands.namespace + 'onNextSearchResult';
         Commands.OPEN_THUMBS_VIEW = Commands.namespace + 'onOpenThumbsView';
@@ -3184,7 +3191,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseView, Commands, Mode) {
+define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseView, Commands, Mode) {
     var GalleryView = (function (_super) {
         __extends(GalleryView, _super);
         function GalleryView($element) {
@@ -3193,7 +3200,7 @@ define('modules/uv-treeviewleftpanel-module/GalleryView',["require", "exports", 
         }
         GalleryView.prototype.create = function () {
             var _this = this;
-            this.setConfig('treeViewLeftPanel');
+            this.setConfig('contentLeftPanel');
             _super.prototype.create.call(this);
             $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, function (e, index) {
                 _this.selectIndex(parseInt(index));
@@ -3486,7 +3493,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-treeviewleftpanel-module/ThumbsView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseView, Commands, Mode) {
+define('modules/uv-contentleftpanel-module/ThumbsView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseView, Commands, Mode) {
     var ThumbsView = (function (_super) {
         __extends(ThumbsView, _super);
         function ThumbsView($element) {
@@ -3496,7 +3503,7 @@ define('modules/uv-treeviewleftpanel-module/ThumbsView',["require", "exports", "
         }
         ThumbsView.prototype.create = function () {
             var _this = this;
-            this.setConfig('treeViewLeftPanel');
+            this.setConfig('contentLeftPanel');
             _super.prototype.create.call(this);
             $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, function (e, index) {
                 _this.selectIndex(parseInt(index));
@@ -3747,15 +3754,26 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands"], function (require, exports, BaseView, Commands) {
+define('modules/uv-contentleftpanel-module/TreeView',["require", "exports", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands"], function (require, exports, BaseView, Commands) {
     var TreeView = (function (_super) {
         __extends(TreeView, _super);
         function TreeView($element) {
             _super.call(this, $element, true, true);
             this.isOpen = false;
+            this.multiSelectionMode = false;
         }
         TreeView.prototype.create = function () {
+            var _this = this;
             _super.prototype.create.call(this);
+            var that = this;
+            $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, function () {
+                _this.multiSelectionMode = true;
+                _this.dataBind();
+            });
+            $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, function () {
+                _this.multiSelectionMode = false;
+                _this.dataBind();
+            });
             this.$tree = $('<ul class="tree"></ul>');
             this.$element.append(this.$tree);
             $.templates({
@@ -3764,13 +3782,12 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
                            {{/for}}',
                 treeTemplate: '<li>\
                                {^{if nodes && nodes.length}}\
-                                   {^{if expanded}}\
-                                       <div class="toggle expanded"></div>\
-                                   {{else}}\
-                                       <div class="toggle"></div>\
-                                   {{/if}}\
+                                   <div class="toggle" data-link="class{merge:expanded toggle=\'expanded\'}"></div>\
                                {{else}}\
-                                   <div class="spacer"></div>\
+                               <div class="spacer"></div>\
+                               {{/if}}\
+                               {^{if multiSelectionEnabled}}\
+                                    <input type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
                                {{/if}}\
                                {^{if selected}}\
                                    <a href="#" title="{{>label}}" class="selected" data-link="~elide(text)"></a>\
@@ -3798,11 +3815,11 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
             });
             $.views.tags({
                 tree: {
-                    toggle: function () {
+                    toggleExpanded: function () {
                         $.observable(this.data).setProperty("expanded", !this.data.expanded);
-                        //this.contents().find('a').each(function() {
-                        //    that.elide($(this));
-                        //});
+                    },
+                    toggleMultiSelect: function () {
+                        that._multiSelectTreeNode(this.data, !this.data.multiSelected);
                     },
                     init: function (tagCtx, linkCtx, ctx) {
                         var data = tagCtx.view.data;
@@ -3811,15 +3828,16 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
                     },
                     onAfterLink: function () {
                         var self = this;
-                        self.contents("li").first()
-                            .on("click", ".toggle", function () {
-                            self.toggle();
-                        }).on("click", "a", function (e) {
+                        self.contents('li').first()
+                            .on('click', '.toggle', function () {
+                            self.toggleExpanded();
+                        }).on('click', 'a', function (e) {
                             e.preventDefault();
-                            if (self.data.nodes.length) {
+                            if (self.data.nodes.length)
                                 self.toggle();
-                            }
                             $.publish(Commands.TREE_NODE_SELECTED, [self.data.data]);
+                        }).on('click', 'input.multiSelect', function (e) {
+                            self.toggleMultiSelect();
                         });
                     },
                     template: $.templates.treeTemplate
@@ -3829,12 +3847,33 @@ define('modules/uv-treeviewleftpanel-module/TreeView',["require", "exports", "..
         TreeView.prototype.dataBind = function () {
             if (!this.rootNode)
                 return;
+            this._setMultiSelectionEnabled(this.multiSelectionMode);
             this.$tree.link($.templates.pageTemplate, this.rootNode);
             this.resize();
         };
+        TreeView.prototype._getAllNodes = function () {
+            return this.rootNode.nodes.en().traverseUnique(function (node) { return node.nodes; }).toArray();
+        };
+        TreeView.prototype.getMultiSelectedNodes = function () {
+            return this._getAllNodes().en().where(function (n) { return n.multiSelected; }).toArray();
+        };
         TreeView.prototype.getNodeById = function (id) {
-            return this.rootNode.nodes.en().traverseUnique(function (node) { return node.nodes; })
-                .where(function (n) { return n.id === id; }).first();
+            return this._getAllNodes().en().where(function (n) { return n.id === id; }).first();
+        };
+        TreeView.prototype._multiSelectTreeNode = function (node, isSelected) {
+            $.observable(node).setProperty("multiSelected", isSelected);
+            // recursively select/deselect child nodes
+            for (var i = 0; i < node.nodes.length; i++) {
+                var n = node.nodes[i];
+                this._multiSelectTreeNode(n, isSelected);
+            }
+        };
+        TreeView.prototype._setMultiSelectionEnabled = function (enabled) {
+            var nodes = this._getAllNodes();
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                node.multiSelectionEnabled = enabled;
+            }
         };
         TreeView.prototype.selectPath = function (path) {
             if (!this.rootNode)
@@ -3908,20 +3947,19 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "./GalleryView", "../uv-shared-module/LeftPanel", "./ThumbsView", "../../extensions/uv-seadragon-extension/TreeSortType", "./TreeView"], function (require, exports, BaseCommands, Commands, GalleryView, LeftPanel, ThumbsView, TreeSortType, TreeView) {
-    var TreeViewLeftPanel = (function (_super) {
-        __extends(TreeViewLeftPanel, _super);
-        function TreeViewLeftPanel($element) {
+define('modules/uv-contentleftpanel-module/ContentLeftPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "./GalleryView", "../uv-shared-module/LeftPanel", "./ThumbsView", "../../extensions/uv-seadragon-extension/TreeSortType", "./TreeView"], function (require, exports, BaseCommands, Commands, GalleryView, LeftPanel, ThumbsView, TreeSortType, TreeView) {
+    var ContentLeftPanel = (function (_super) {
+        __extends(ContentLeftPanel, _super);
+        function ContentLeftPanel($element) {
             _super.call(this, $element);
         }
-        TreeViewLeftPanel.prototype.create = function () {
+        ContentLeftPanel.prototype.create = function () {
             var _this = this;
-            this.setConfig('treeViewLeftPanel');
+            this.setConfig('contentLeftPanel');
             _super.prototype.create.call(this);
+            var that = this;
             $.subscribe(BaseCommands.SETTINGS_CHANGED, function () {
-                _this.dataBindThumbsView();
-                _this.dataBindTreeView();
-                _this.dataBindGalleryView();
+                _this.dataBind();
             });
             $.subscribe(Commands.GALLERY_THUMB_SELECTED, function () {
                 _this.collapseFull();
@@ -3931,6 +3969,20 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                     _this.collapseFull();
                 }
                 _this.selectCurrentTreeNode();
+            });
+            $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, function () {
+                that.setTitle(that.content.selection);
+                if (!that.isFullyExpanded) {
+                    that.expandFull();
+                }
+                _this.$selectButton.show();
+            });
+            $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, function () {
+                that.setTitle(that.content.title);
+                _this.$selectButton.hide();
+            });
+            $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, function () {
+                $.publish(Commands.EXIT_MULTI_SELECTION_MODE);
             });
             this.$tabs = $('<div class="tabs"></div>');
             this.$main.append(this.$tabs);
@@ -3944,6 +3996,12 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$main.append(this.$tabsContent);
             this.$options = $('<div class="options"></div>');
             this.$tabsContent.append(this.$options);
+            this.$leftOptions = $('<div class="left"></div>');
+            this.$options.append(this.$leftOptions);
+            this.$rightOptions = $('<div class="right"></div>');
+            this.$options.append(this.$rightOptions);
+            this.$selectButton = $('<a class="btn btn-primary">' + this.content.select + '</a>');
+            this.$rightOptions.append(this.$selectButton);
             this.$treeViewOptions = $('<div class="treeView"></div>');
             this.$options.append(this.$treeViewOptions);
             this.$sortByLabel = $('<span class="sort">' + this.content.sortBy + '</span>');
@@ -3962,6 +4020,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$views.append(this.$thumbsView);
             this.$galleryView = $('<div class="galleryView"></div>');
             this.$views.append(this.$galleryView);
+            this.$selectButton.hide();
             this.$sortByDateButton.on('click', function () {
                 _this.sortByDate();
             });
@@ -3977,11 +4036,17 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 _this.openThumbsView();
                 $.publish(Commands.OPEN_THUMBS_VIEW);
             });
+            this.$selectButton.on('click', function () {
+                var selectedNodes = _this.treeView.getMultiSelectedNodes();
+                var ids = _.map(selectedNodes, function (node) {
+                    return node.data.id;
+                });
+                $.publish(Commands.MULTI_SELECTION, [ids]);
+            });
             this.$expandButton.attr('tabindex', '7');
             this.$collapseButton.attr('tabindex', '7');
             this.$expandFullButton.attr('tabindex', '8');
-            this.$title.text(this.content.title);
-            this.$closedTitle.text(this.content.title);
+            this.setTitle(this.content.title);
             this.$sortByVolumeButton.addClass('on');
             var tabOrderConfig = this.options.tabOrder;
             if (tabOrderConfig) {
@@ -3998,13 +4063,18 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 }
             }
         };
-        TreeViewLeftPanel.prototype.createTreeView = function () {
+        ContentLeftPanel.prototype.createTreeView = function () {
             this.treeView = new TreeView(this.$treeView);
             this.treeView.elideCount = this.config.options.elideCount;
             this.dataBindTreeView();
             this.updateTreeViewOptions();
         };
-        TreeViewLeftPanel.prototype.updateTreeViewOptions = function () {
+        ContentLeftPanel.prototype.dataBind = function () {
+            this.dataBindThumbsView();
+            this.dataBindTreeView();
+            this.dataBindGalleryView();
+        };
+        ContentLeftPanel.prototype.updateTreeViewOptions = function () {
             if (this.isCollection() && this.treeData.nodes.length && !isNaN(this.treeData.nodes[0].navDate.getTime())) {
                 this.$treeViewOptions.show();
             }
@@ -4012,7 +4082,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 this.$treeViewOptions.hide();
             }
         };
-        TreeViewLeftPanel.prototype.sortByDate = function () {
+        ContentLeftPanel.prototype.sortByDate = function () {
             this.treeView.rootNode = this.provider.getSortedTree(TreeSortType.date);
             this.treeView.dataBind();
             this.selectCurrentTreeNode();
@@ -4020,7 +4090,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$sortByVolumeButton.removeClass('on');
             this.resize();
         };
-        TreeViewLeftPanel.prototype.sortByVolume = function () {
+        ContentLeftPanel.prototype.sortByVolume = function () {
             this.treeView.rootNode = this.provider.getSortedTree(TreeSortType.none);
             this.treeView.dataBind();
             this.selectCurrentTreeNode();
@@ -4028,20 +4098,20 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.$sortByVolumeButton.addClass('on');
             this.resize();
         };
-        TreeViewLeftPanel.prototype.isCollection = function () {
+        ContentLeftPanel.prototype.isCollection = function () {
             return this.treeData.data.type === manifesto.TreeNodeType.collection().toString();
         };
-        TreeViewLeftPanel.prototype.dataBindTreeView = function () {
+        ContentLeftPanel.prototype.dataBindTreeView = function () {
             if (!this.treeView)
                 return;
             this.treeView.rootNode = this.treeData;
             this.treeView.dataBind();
         };
-        TreeViewLeftPanel.prototype.createThumbsView = function () {
+        ContentLeftPanel.prototype.createThumbsView = function () {
             this.thumbsView = new ThumbsView(this.$thumbsView);
             this.dataBindThumbsView();
         };
-        TreeViewLeftPanel.prototype.dataBindThumbsView = function () {
+        ContentLeftPanel.prototype.dataBindThumbsView = function () {
             if (!this.thumbsView)
                 return;
             var width, height;
@@ -4057,11 +4127,11 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.thumbsView.thumbs = this.provider.getThumbs(width, height);
             this.thumbsView.dataBind();
         };
-        TreeViewLeftPanel.prototype.createGalleryView = function () {
+        ContentLeftPanel.prototype.createGalleryView = function () {
             this.galleryView = new GalleryView(this.$galleryView);
             this.dataBindGalleryView();
         };
-        TreeViewLeftPanel.prototype.dataBindGalleryView = function () {
+        ContentLeftPanel.prototype.dataBindGalleryView = function () {
             if (!this.galleryView)
                 return;
             var width = this.config.options.galleryThumbWidth;
@@ -4069,7 +4139,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.galleryView.thumbs = this.provider.getThumbs(width, height);
             this.galleryView.dataBind();
         };
-        TreeViewLeftPanel.prototype.toggleFinish = function () {
+        ContentLeftPanel.prototype.toggleFinish = function () {
             _super.prototype.toggleFinish.call(this);
             if (this.isUnopened) {
                 var treeEnabled = Utils.Bools.GetBool(this.config.options.treeEnabled, true);
@@ -4099,11 +4169,11 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 this.$thumbsButton.attr('tabindex', '');
             }
         };
-        TreeViewLeftPanel.prototype.expandFullStart = function () {
+        ContentLeftPanel.prototype.expandFullStart = function () {
             _super.prototype.expandFullStart.call(this);
             $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
         };
-        TreeViewLeftPanel.prototype.expandFullFinish = function () {
+        ContentLeftPanel.prototype.expandFullFinish = function () {
             _super.prototype.expandFullFinish.call(this);
             if (this.$treeButton.hasClass('on')) {
                 this.openTreeView();
@@ -4113,11 +4183,11 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             }
             $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
         };
-        TreeViewLeftPanel.prototype.collapseFullStart = function () {
+        ContentLeftPanel.prototype.collapseFullStart = function () {
             _super.prototype.collapseFullStart.call(this);
             $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
         };
-        TreeViewLeftPanel.prototype.collapseFullFinish = function () {
+        ContentLeftPanel.prototype.collapseFullFinish = function () {
             _super.prototype.collapseFullFinish.call(this);
             // todo: write a more generic tabs system with base tab class.
             // thumbsView may not necessarily have been created yet.
@@ -4127,7 +4197,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             }
             $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
         };
-        TreeViewLeftPanel.prototype.openTreeView = function () {
+        ContentLeftPanel.prototype.openTreeView = function () {
             var _this = this;
             if (!this.treeView) {
                 this.createTreeView();
@@ -4149,7 +4219,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
             this.resize();
             this.treeView.resize();
         };
-        TreeViewLeftPanel.prototype.openThumbsView = function () {
+        ContentLeftPanel.prototype.openThumbsView = function () {
             if (!this.thumbsView) {
                 this.createThumbsView();
             }
@@ -4176,7 +4246,7 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 this.thumbsView.resize();
             }
         };
-        TreeViewLeftPanel.prototype.selectCurrentTreeNode = function () {
+        ContentLeftPanel.prototype.selectCurrentTreeNode = function () {
             if (this.treeView) {
                 var id;
                 var node;
@@ -4196,14 +4266,14 @@ define('modules/uv-treeviewleftpanel-module/TreeViewLeftPanel',["require", "expo
                 }
             }
         };
-        TreeViewLeftPanel.prototype.resize = function () {
+        ContentLeftPanel.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$tabsContent.height(this.$main.height() - (this.$tabs.is(':visible') ? this.$tabs.height() : 0) - this.$tabsContent.verticalPadding());
             this.$views.height(this.$tabsContent.height() - this.$options.height());
         };
-        return TreeViewLeftPanel;
+        return ContentLeftPanel;
     })(LeftPanel);
-    return TreeViewLeftPanel;
+    return ContentLeftPanel;
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4211,7 +4281,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-dialogues-module/HelpDialogue", "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, Commands, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, HelpDialogue, MediaElementCenterPanel, MoreInfoRightPanel, SettingsDialogue, Shell, TreeViewLeftPanel) {
+define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-dialogues-module/HelpDialogue", "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-contentleftpanel-module/ContentLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, Commands, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, HelpDialogue, MediaElementCenterPanel, MoreInfoRightPanel, SettingsDialogue, Shell, ContentLeftPanel) {
     var Extension = (function (_super) {
         __extends(Extension, _super);
         function Extension(bootstrapper) {
@@ -4256,7 +4326,7 @@ define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "
             _super.prototype.createModules.call(this);
             this.headerPanel = new HeaderPanel(Shell.$headerPanel);
             if (this.isLeftPanelEnabled()) {
-                this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+                this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
             }
             this.centerPanel = new MediaElementCenterPanel(Shell.$centerPanel);
             if (this.isRightPanelEnabled()) {
@@ -4937,7 +5007,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-pdf-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, MoreInfoRightPanel, PDFCenterPanel, SettingsDialogue, Shell, TreeViewLeftPanel) {
+define('extensions/uv-pdf-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-contentleftpanel-module/ContentLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, MoreInfoRightPanel, PDFCenterPanel, SettingsDialogue, Shell, ContentLeftPanel) {
     var Extension = (function (_super) {
         __extends(Extension, _super);
         function Extension(bootstrapper) {
@@ -4980,7 +5050,7 @@ define('extensions/uv-pdf-extension/Extension',["require", "exports", "../../mod
             _super.prototype.createModules.call(this);
             this.headerPanel = new HeaderPanel(Shell.$headerPanel);
             if (this.isLeftPanelEnabled()) {
-                this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+                this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
             }
             this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);
             if (this.isRightPanelEnabled()) {
@@ -5084,6 +5154,9 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             this.$downloadOptions.append(this.$sequenceOptionsContainer);
             this.$sequenceOptions = $('<ul></ul>');
             this.$sequenceOptionsContainer.append(this.$sequenceOptions);
+            this.$selectionButton = $('<li class="option"><input id="' + DownloadOption.selection.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.selection.toString() + 'label" for="' + DownloadOption.selection.toString() + '"></label></li>');
+            this.$sequenceOptions.append(this.$selectionButton);
+            this.$selectionButton.hide();
             this.$buttonsContainer = $('<div class="buttons"></div>');
             this.$content.append(this.$buttonsContainer);
             this.$downloadButton = $('<a class="btn btn-primary" href="#">' + this.content.download + '</a>');
@@ -5109,6 +5182,9 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                             var viewer = that.extension.getViewer();
                             window.open(that.provider.getCroppedImageUri(canvas, viewer));
                             $.publish(Commands.DOWNLOAD_CURRENTVIEW);
+                            break;
+                        case DownloadOption.selection.toString():
+                            $.publish(Commands.ENTER_MULTI_SELECTION_MODE);
                             break;
                         case DownloadOption.wholeImageHighRes.toString():
                             window.open(_this.getOriginalImageForCurrentCanvas());
@@ -5163,6 +5239,14 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             }
             else {
                 this.$wholeImageLowResAsJpgButton.hide();
+            }
+            if (this.isDownloadOptionAvailable(DownloadOption.selection)) {
+                var $label = this.$selectionButton.find('label');
+                $label.text(this.content.downloadSelection);
+                this.$selectionButton.show();
+            }
+            else {
+                this.$selectionButton.hide();
             }
             this.resetDynamicDownloadOptions();
             if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
@@ -5289,6 +5373,8 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                     // hide low-res option if hi-res width is smaller than constraint
                     var size = this.getDimensionsForCurrentCanvas();
                     return (!this.provider.isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
+                case DownloadOption.selection:
+                    return this.options.selectionEnabled;
                 default:
                     return true;
             }
@@ -6831,7 +6917,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-dialogues-module/ExternalContentDialogue", "../../modules/uv-searchfooterpanel-module/FooterPanel", "../../modules/uv-dialogues-module/HelpDialogue", "./Mode", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel", "../../Params", "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, Commands, DownloadDialogue, EmbedDialogue, ExternalContentDialogue, FooterPanel, HelpDialogue, Mode, MoreInfoRightPanel, PagingHeaderPanel, Params, SeadragonCenterPanel, SettingsDialogue, Shell, TreeViewLeftPanel) {
+define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-dialogues-module/ExternalContentDialogue", "../../modules/uv-searchfooterpanel-module/FooterPanel", "../../modules/uv-dialogues-module/HelpDialogue", "./Mode", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel", "../../Params", "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-contentleftpanel-module/ContentLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, Commands, DownloadDialogue, EmbedDialogue, ExternalContentDialogue, FooterPanel, HelpDialogue, Mode, MoreInfoRightPanel, PagingHeaderPanel, Params, SeadragonCenterPanel, SettingsDialogue, Shell, ContentLeftPanel) {
     var Extension = (function (_super) {
         __extends(Extension, _super);
         function Extension(bootstrapper) {
@@ -6913,6 +6999,9 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 _this.mode = new Mode(mode);
                 var settings = _this.provider.getSettings();
                 $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
+            });
+            $.subscribe(Commands.MULTI_SELECTION, function (e, ids) {
+                _this.triggerSocket(Commands.MULTI_SELECTION, ids);
             });
             $.subscribe(Commands.NEXT, function (e) {
                 _this.triggerSocket(Commands.NEXT);
@@ -7030,7 +7119,7 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             _super.prototype.createModules.call(this);
             this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
             if (this.isLeftPanelEnabled()) {
-                this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+                this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
             }
             else {
                 Shell.$leftPanel.hide();
@@ -7520,8 +7609,8 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
             var all = tree.nodes.en().traverseUnique(function (node) { return node.nodes; })
                 .where(function (n) { return n.data.type === manifesto.TreeNodeType.collection().toString() ||
                 n.data.type === manifesto.TreeNodeType.manifest().toString(); }).toArray();
-            //var collections: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
-            //    .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString()).toArray();
+            //var collections: ITreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
+            //    .where((n) => n.data.type === ITreeNodeType.collection().toString()).toArray();
             var manifests = tree.nodes.en().traverseUnique(function (n) { return n.nodes; })
                 .where(function (n) { return n.data.type === manifesto.TreeNodeType.manifest().toString(); }).toArray();
             this.createDecadeNodes(sortedTree, all);
@@ -7850,7 +7939,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-virtex-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel", "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, MoreInfoRightPanel, SettingsDialogue, Shell, TreeViewLeftPanel, VirtexCenterPanel) {
+define('extensions/uv-virtex-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-contentleftpanel-module/ContentLeftPanel", "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, MoreInfoRightPanel, SettingsDialogue, Shell, ContentLeftPanel, VirtexCenterPanel) {
     var Extension = (function (_super) {
         __extends(Extension, _super);
         function Extension(bootstrapper) {
@@ -7878,7 +7967,7 @@ define('extensions/uv-virtex-extension/Extension',["require", "exports", "../../
             _super.prototype.createModules.call(this);
             this.headerPanel = new HeaderPanel(Shell.$headerPanel);
             if (this.isLeftPanelEnabled()) {
-                this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+                this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
             }
             this.centerPanel = new VirtexCenterPanel(Shell.$centerPanel);
             if (this.isRightPanelEnabled()) {
@@ -8168,6 +8257,7 @@ String.prototype.utf8_to_b64 = function () {
 };
 
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define('manifesto',e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.manifesto=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function (global){
 var Manifesto;
 (function (Manifesto) {
     var StringValue = (function () {
@@ -9023,6 +9113,7 @@ var Manifesto;
                     var tree = manifest.getTree();
                     tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
                     tree.navDate = manifest.getNavDate();
+                    tree.data.id = manifest.id;
                     tree.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
                     parentCollection.treeRoot.addNode(tree);
                 }
@@ -9035,6 +9126,7 @@ var Manifesto;
                     var tree = collection.getTree();
                     tree.label = collection.getTitle() || 'collection ' + (i + 1);
                     tree.navDate = collection.getNavDate();
+                    tree.data.id = collection.id;
                     tree.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
                     parentCollection.treeRoot.addNode(tree);
                     this._parseCollections(collection);
@@ -9444,10 +9536,8 @@ var Manifesto;
     var TreeNode = (function () {
         function TreeNode(label, data) {
             this.label = label;
-            this.data = data;
+            this.data = data || {};
             this.nodes = [];
-            if (!data)
-                this.data = {};
         }
         TreeNode.prototype.addNode = function (node) {
             this.nodes.push(node);
@@ -9752,7 +9842,7 @@ var Manifesto;
     })();
     Manifesto.Utils = Utils;
 })(Manifesto || (Manifesto = {}));
-module.exports = {
+global.manifesto = module.exports = {
     AnnotationMotivation: new Manifesto.AnnotationMotivation(),
     CanvasType: new Manifesto.CanvasType(),
     ElementType: new Manifesto.ElementType(),
@@ -9826,6 +9916,7 @@ module.exports = {
 /// <reference path="./Serialisation.ts" />
 /// <reference path="./Service.ts" />
 /// <reference path="./Thumb.ts" />
+/// <reference path="./ITreeNode.ts" />
 /// <reference path="./TreeNode.ts" />
 /// <reference path="./TreeNodeType.ts" />
 /// <reference path="./Utils.ts" />
@@ -9885,6 +9976,7 @@ var Manifesto;
     Manifesto.Resource = Resource;
 })(Manifesto || (Manifesto = {}));
 
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"http":6,"lodash.assign":27,"lodash.endswith":37,"lodash.isarray":39,"lodash.isstring":40,"lodash.last":41,"lodash.map":42,"url":24}],2:[function(_dereq_,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
@@ -24507,10 +24599,9 @@ require([
     'xdomainrequest',
     'yepnope',
     'yepnopecss',
-], function (bootstrapper, mediaelementExtension, mediaelementProvider, pdfExtension, pdfProvider, seadragonExtension, seadragonProvider, virtexExtension, virtexProvider, manifesto) {
+], function (bootstrapper, mediaelementExtension, mediaelementProvider, pdfExtension, pdfProvider, seadragonExtension, seadragonProvider, virtexExtension, virtexProvider) {
     // todo: use a compiler flag (when available)
      // this line is removed on build.
-    window.manifesto = manifesto;
     var extensions = {};
     extensions[manifesto.CanvasType.canvas().toString()] = {
         type: seadragonExtension,

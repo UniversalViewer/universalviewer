@@ -216,6 +216,7 @@ String.prototype.utf8_to_b64 = function () {
 };
 
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.manifesto=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function (global){
 var Manifesto;
 (function (Manifesto) {
     var StringValue = (function () {
@@ -1071,6 +1072,7 @@ var Manifesto;
                     var tree = manifest.getTree();
                     tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
                     tree.navDate = manifest.getNavDate();
+                    tree.data.id = manifest.id;
                     tree.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
                     parentCollection.treeRoot.addNode(tree);
                 }
@@ -1083,6 +1085,7 @@ var Manifesto;
                     var tree = collection.getTree();
                     tree.label = collection.getTitle() || 'collection ' + (i + 1);
                     tree.navDate = collection.getNavDate();
+                    tree.data.id = collection.id;
                     tree.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
                     parentCollection.treeRoot.addNode(tree);
                     this._parseCollections(collection);
@@ -1492,10 +1495,8 @@ var Manifesto;
     var TreeNode = (function () {
         function TreeNode(label, data) {
             this.label = label;
-            this.data = data;
+            this.data = data || {};
             this.nodes = [];
-            if (!data)
-                this.data = {};
         }
         TreeNode.prototype.addNode = function (node) {
             this.nodes.push(node);
@@ -1800,7 +1801,7 @@ var Manifesto;
     })();
     Manifesto.Utils = Utils;
 })(Manifesto || (Manifesto = {}));
-module.exports = {
+global.manifesto = module.exports = {
     AnnotationMotivation: new Manifesto.AnnotationMotivation(),
     CanvasType: new Manifesto.CanvasType(),
     ElementType: new Manifesto.ElementType(),
@@ -1874,6 +1875,7 @@ module.exports = {
 /// <reference path="./Serialisation.ts" />
 /// <reference path="./Service.ts" />
 /// <reference path="./Thumb.ts" />
+/// <reference path="./ITreeNode.ts" />
 /// <reference path="./TreeNode.ts" />
 /// <reference path="./TreeNodeType.ts" />
 /// <reference path="./Utils.ts" />
@@ -1933,6 +1935,7 @@ var Manifesto;
     Manifesto.Resource = Resource;
 })(Manifesto || (Manifesto = {}));
 
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"http":6,"lodash.assign":27,"lodash.endswith":37,"lodash.isarray":39,"lodash.isstring":40,"lodash.last":41,"lodash.map":42,"url":24}],2:[function(_dereq_,module,exports){
 /*!
  * The buffer module from node.js, for the browser.

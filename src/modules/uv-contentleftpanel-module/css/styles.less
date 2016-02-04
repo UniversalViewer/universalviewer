@@ -51,20 +51,33 @@
             .options{
                 overflow: hidden;
 
-                .treeView{
-                    height: 30px;
+                .left {
 
-                    span{
-                        display: block;
-                        float: left;
-                        color: @text-color;
-                        padding: 5px 4px 0 10px;
-                        font-size: @font-size-small;
+                    float: left;
+
+                    .treeView{
+                        height: 30px;
+
+                        span{
+                            display: block;
+                            float: left;
+                            color: @text-color;
+                            padding: 5px 4px 0 10px;
+                            font-size: @font-size-small;
+                        }
+
+                        select{
+                            float: left;
+                            font-size: @font-size-small;
+                        }
                     }
+                }
 
-                    select{
-                        float: left;
-                        font-size: @font-size-small;
+                .right {
+                    float: right;
+
+                    .download{
+
                     }
                 }
             }
@@ -106,6 +119,10 @@
                     &.expanded {
                         background-image: url('@{img-path}minus.png');
                     }
+
+                    &.multiSelect{
+                        margin-left: 5px;
+                    }
                 }
 
                 .spacer {
@@ -115,6 +132,15 @@
                     float: left;
                     height: 10px;
                     width: 10px;
+                }
+
+                input.multiSelect {
+                    margin-top: 0px;
+                    margin-right: @margin-small-horizontal;
+                    display: block;
+                    float: left;
+                    height: 13px;
+                    width: 13px;
                 }
 
                 ul.tree, ul.tree ul {

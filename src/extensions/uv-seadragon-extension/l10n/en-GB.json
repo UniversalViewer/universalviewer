@@ -16,6 +16,22 @@
         "viewTerms": "Read Full Terms and Conditions"
       }
     },
+    "contentLeftPanel": {
+      "content": {
+        "collapse": "Collapse Contents",
+        "collapseFull": "Collapse Gallery",
+        "date": "date",
+        "expand": "Expand Contents",
+        "expandFull": "Expand Gallery",
+        "index": "Index",
+        "select": "Select",
+        "selection": "Selection",
+        "sortBy": "Sort By:",
+        "thumbnails": "Thumbnails",
+        "title": "Contents",
+        "volume": "volume"
+      }
+    },
     "dialogue": {
       "content": {
         "close": "Close"
@@ -25,6 +41,7 @@
       "content": {
         "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
         "download": "Download",
+        "downloadSelection": "Download Selection",
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
         "entireFileAsOriginal": "Entire file ({0})",
@@ -161,20 +178,6 @@
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
-      }
-    },
-    "contentLeftPanel": {
-      "content": {
-        "collapse": "Collapse Contents",
-        "collapseFull": "Collapse Gallery",
-        "date": "date",
-        "expand": "Expand Contents",
-        "expandFull": "Expand Gallery",
-        "index": "Index",
-        "sortBy": "Sort By:",
-        "thumbnails": "Thumbnails",
-        "title": "Contents",
-        "volume": "volume"
       }
     }
   }

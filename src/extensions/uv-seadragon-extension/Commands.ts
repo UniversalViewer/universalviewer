@@ -8,11 +8,14 @@ class Commands {
     static DOWNLOAD_ENTIREDOCUMENTASTEXT: string    = Commands.namespace + 'onDownloadEntireDocumentAsText';
     static DOWNLOAD_WHOLEIMAGEHIGHRES: string       = Commands.namespace + 'onDownloadWholeImageHighRes';
     static DOWNLOAD_WHOLEIMAGELOWRES: string        = Commands.namespace + 'onDownloadWholeImageLowRes';
+    static ENTER_MULTI_SELECTION_MODE: string       = Commands.namespace + 'onEnterMultiSelectionMode';
+    static EXIT_MULTI_SELECTION_MODE: string        = Commands.namespace + 'onExitMultiSelectionMode';
     static FIRST: string                            = Commands.namespace + 'onFirst';
     static GALLERY_THUMB_SELECTED: string           = Commands.namespace + 'onGalleryThumbSelected';
     static IMAGE_SEARCH: string                     = Commands.namespace + 'onImageSearch';
     static LAST: string                             = Commands.namespace + 'onLast';
     static MODE_CHANGED: string                     = Commands.namespace + 'onModeChanged';
+    static MULTI_SELECTION: string                  = Commands.namespace + 'onMultiSelection';
     static NEXT: string                             = Commands.namespace + 'onNext';
     static NEXT_SEARCH_RESULT: string               = Commands.namespace + 'onNextSearchResult';
     static OPEN_THUMBS_VIEW: string                 = Commands.namespace + 'onOpenThumbsView';

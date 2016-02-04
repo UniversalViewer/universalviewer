@@ -8,6 +8,7 @@ import SearchResultRect = require("./SearchResultRect");
 import Size = Utils.Measurements.Size;
 import TreeSortType = require("./TreeSortType");
 import Vector = Utils.Maths.Vector;
+import ITreeNode = require("../../modules/uv-shared-module/ITreeNode");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
@@ -294,10 +295,10 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     // expanding a decade generates a list of years
     // expanding a year gives a list of months containing issues
     // expanding a month gives a list of issues.
-    getSortedTree(sortType: TreeSortType): Manifesto.TreeNode {
+    getSortedTree(sortType: TreeSortType): ITreeNode {
 
-        var tree = this.iiifResource.getTree();
-        var sortedTree = manifesto.getTreeNode();
+        var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
+        var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
 
         if (sortType === TreeSortType.date){
             this.getSortedTreeNodesByDate(sortedTree, tree);
@@ -308,16 +309,16 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return sortedTree;
     }
 
-    getSortedTreeNodesByDate(sortedTree: Manifesto.TreeNode, tree: Manifesto.TreeNode): void{
+    getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
 
-        var all: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(node => node.nodes)
+        var all: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
             .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString() ||
                           n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
 
-        //var collections: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
-        //    .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString()).toArray();
+        //var collections: ITreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
+        //    .where((n) => n.data.type === ITreeNodeType.collection().toString()).toArray();
 
-        var manifests: Manifesto.TreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
+        var manifests: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
             .where((n) => n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
 
         this.createDecadeNodes(sortedTree, all);
@@ -331,17 +332,17 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         this.pruneDecadeNodes(sortedTree);
     }
 
-    createDecadeNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
-        var decadeNode: Manifesto.TreeNode;
+    createDecadeNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
+        var decadeNode: ITreeNode;
 
         for (var i = 0; i < nodes.length; i++) {
-            var node: Manifesto.TreeNode = nodes[i];
+            var node: ITreeNode = nodes[i];
             var year = this.getNodeYear(node);
             var decade = Number(year.toString().substr(2, 1));
             var endYear = Number(year.toString().substr(0, 3) + "9");
 
             if(!this.getDecadeNode(rootNode, year)){
-                decadeNode = manifesto.getTreeNode();
+                decadeNode = <ITreeNode>manifesto.getTreeNode();
                 decadeNode.label = year + " - " + endYear;
                 decadeNode.navDate = node.navDate;
                 decadeNode.data.startYear = year;
@@ -352,48 +353,48 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     // delete any empty decades
-    pruneDecadeNodes(rootNode: Manifesto.TreeNode): void {
-        var pruned: Manifesto.TreeNode[] = [];
+    pruneDecadeNodes(rootNode: ITreeNode): void {
+        var pruned: ITreeNode[] = [];
 
         for (var i = 0; i < rootNode.nodes.length; i++){
-            var n = rootNode.nodes[i];
+            var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
             if (!n.nodes.length){
                 pruned.push(n);
             }
         }
 
         for (var j = 0; j < pruned.length; j++){
-            var p = pruned[j];
+            var p: ITreeNode = <ITreeNode>pruned[j];
 
             rootNode.nodes.remove(p);
         }
     }
 
-    sortDecadeNodes(rootNode: Manifesto.TreeNode): void {
+    sortDecadeNodes(rootNode: ITreeNode): void {
         rootNode.nodes = rootNode.nodes.sort(function(a, b) {
             return a.data.startYear - b.data.startYear;
         });
     }
 
-    getDecadeNode(rootNode: Manifesto.TreeNode, year: number): Manifesto.TreeNode{
+    getDecadeNode(rootNode: ITreeNode, year: number): ITreeNode{
         for (var i = 0; i < rootNode.nodes.length; i++){
-            var n = rootNode.nodes[i];
+            var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
             if (year >= n.data.startYear && year <= n.data.endYear) return n;
         }
 
         return null;
     }
 
-    createYearNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
-        var yearNode: Manifesto.TreeNode;
+    createYearNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
+        var yearNode: ITreeNode;
 
         for (var i = 0; i < nodes.length; i++) {
-            var node: Manifesto.TreeNode = nodes[i];
+            var node: ITreeNode = nodes[i];
             var year = this.getNodeYear(node);
             var decadeNode = this.getDecadeNode(rootNode, year);
 
             if(decadeNode && !this.getYearNode(decadeNode, year)){
-                yearNode = manifesto.getTreeNode();
+                yearNode = <ITreeNode>manifesto.getTreeNode();
                 yearNode.label = year.toString();
                 yearNode.navDate = node.navDate;
                 yearNode.data.year = year;
@@ -403,37 +404,37 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         }
     }
 
-    sortYearNodes(rootNode: Manifesto.TreeNode): void {
+    sortYearNodes(rootNode: ITreeNode): void {
         for (var i = 0; i < rootNode.nodes.length; i++){
             var decadeNode = rootNode.nodes[i];
 
-            decadeNode.nodes = decadeNode.nodes.sort((a: Manifesto.TreeNode, b: Manifesto.TreeNode) => {
+            decadeNode.nodes = decadeNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
                 return (this.getNodeYear(a) - this.getNodeYear(b));
             });
         }
     }
 
-    getYearNode(decadeNode: Manifesto.TreeNode, year: Number): Manifesto.TreeNode{
+    getYearNode(decadeNode: ITreeNode, year: Number): ITreeNode{
         for (var i = 0; i < decadeNode.nodes.length; i++){
-            var n = decadeNode.nodes[i];
+            var n: ITreeNode = <ITreeNode>decadeNode.nodes[i];
             if (year === this.getNodeYear(n)) return n;
         }
 
         return null;
     }
 
-    createMonthNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
-        var monthNode: Manifesto.TreeNode;
+    createMonthNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
+        var monthNode: ITreeNode;
 
         for (var i = 0; i < nodes.length; i++) {
-            var node: Manifesto.TreeNode = nodes[i];
+            var node: ITreeNode = nodes[i];
             var year = this.getNodeYear(node);
             var month = this.getNodeMonth(node);
             var decadeNode = this.getDecadeNode(rootNode, year);
             var yearNode = this.getYearNode(decadeNode, year);
 
             if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)){
-                monthNode = manifesto.getTreeNode();
+                monthNode = <ITreeNode>manifesto.getTreeNode();
                 monthNode.label = this.getNodeDisplayMonth(node);
                 monthNode.navDate = node.navDate;
                 monthNode.data.year = year;
@@ -443,32 +444,32 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         }
     }
 
-    sortMonthNodes(rootNode: Manifesto.TreeNode): void {
+    sortMonthNodes(rootNode: ITreeNode): void {
         for (var i = 0; i < rootNode.nodes.length; i++){
             var decadeNode = rootNode.nodes[i];
 
             for (var j = 0; j < decadeNode.nodes.length; j++){
                 var monthNode = decadeNode.nodes[j];
 
-                monthNode.nodes = monthNode.nodes.sort((a: Manifesto.TreeNode, b: Manifesto.TreeNode) => {
+                monthNode.nodes = monthNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
                     return this.getNodeMonth(a) - this.getNodeMonth(b);
                 });
             }
         }
     }
 
-    getMonthNode(yearNode: Manifesto.TreeNode, month: Number): Manifesto.TreeNode{
+    getMonthNode(yearNode: ITreeNode, month: Number): ITreeNode{
         for (var i = 0; i < yearNode.nodes.length; i++){
-            var n = yearNode.nodes[i];
+            var n: ITreeNode = <ITreeNode>yearNode.nodes[i];
             if (month === this.getNodeMonth(n)) return n;
         }
 
         return null;
     }
 
-    createDateNodes(rootNode: Manifesto.TreeNode, nodes: Manifesto.TreeNode[]): void{
+    createDateNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
         for (var i = 0; i < nodes.length; i++) {
-            var node: Manifesto.TreeNode = nodes[i];
+            var node: ITreeNode = <ITreeNode>nodes[i];
             var year = this.getNodeYear(node);
             var month = this.getNodeMonth(node);
 
@@ -496,20 +497,20 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         }
     }
 
-    getNodeYear(node: Manifesto.TreeNode): number{
+    getNodeYear(node: ITreeNode): number{
         return node.navDate.getFullYear();
     }
 
-    getNodeMonth(node: Manifesto.TreeNode): number{
+    getNodeMonth(node: ITreeNode): number{
         return node.navDate.getMonth();
     }
 
-    getNodeDisplayMonth(node: Manifesto.TreeNode): string{
+    getNodeDisplayMonth(node: ITreeNode): string{
         var months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[node.navDate.getMonth()];
     }
 
-    getNodeDisplayDate(node: Manifesto.TreeNode): string{
+    getNodeDisplayDate(node: ITreeNode): string{
         return node.navDate.toDateString();
     }
 }

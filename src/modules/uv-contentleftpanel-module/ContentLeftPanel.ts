@@ -7,12 +7,16 @@ import LeftPanel = require("../uv-shared-module/LeftPanel");
 import ThumbsView = require("./ThumbsView");
 import TreeSortType = require("../../extensions/uv-seadragon-extension/TreeSortType");
 import TreeView = require("./TreeView");
+import ITreeNode = require("../uv-shared-module/ITreeNode");
 
 class ContentLeftPanel extends LeftPanel {
 
     $buttonGroup: JQuery;
     $galleryView: JQuery;
+    $leftOptions: JQuery;
     $options: JQuery;
+    $rightOptions: JQuery;
+    $selectButton: JQuery;
     $sortByDateButton: JQuery;
     $sortByLabel: JQuery;
     $sortByVolumeButton: JQuery;
@@ -26,7 +30,7 @@ class ContentLeftPanel extends LeftPanel {
     $views: JQuery;
     galleryView: GalleryView;
     thumbsView: ThumbsView;
-    treeData: Manifesto.TreeNode;
+    treeData: Manifesto.ITreeNode;
     treeView: TreeView;
 
     constructor($element: JQuery) {
@@ -39,10 +43,10 @@ class ContentLeftPanel extends LeftPanel {
 
         super.create();
 
+        var that = this;
+
         $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
-            this.dataBindThumbsView();
-            this.dataBindTreeView();
-            this.dataBindGalleryView();
+            this.dataBind();
         });
 
         $.subscribe(Commands.GALLERY_THUMB_SELECTED, () => {
@@ -55,6 +59,23 @@ class ContentLeftPanel extends LeftPanel {
             }
 
             this.selectCurrentTreeNode();
+        });
+
+        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, () => {
+            that.setTitle(that.content.selection);
+            if (!that.isFullyExpanded){
+                that.expandFull();
+            }
+            this.$selectButton.show();
+        });
+
+        $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+            that.setTitle(that.content.title);
+            this.$selectButton.hide();
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            $.publish(Commands.EXIT_MULTI_SELECTION_MODE);
         });
 
         this.$tabs = $('<div class="tabs"></div>');
@@ -73,6 +94,15 @@ class ContentLeftPanel extends LeftPanel {
 
         this.$options = $('<div class="options"></div>');
         this.$tabsContent.append(this.$options);
+
+        this.$leftOptions = $('<div class="left"></div>');
+        this.$options.append(this.$leftOptions);
+
+        this.$rightOptions = $('<div class="right"></div>');
+        this.$options.append(this.$rightOptions);
+
+        this.$selectButton = $('<a class="btn btn-primary">' + this.content.select + '</a>');
+        this.$rightOptions.append(this.$selectButton);
 
         this.$treeViewOptions = $('<div class="treeView"></div>');
         this.$options.append(this.$treeViewOptions);
@@ -101,6 +131,8 @@ class ContentLeftPanel extends LeftPanel {
         this.$galleryView = $('<div class="galleryView"></div>');
         this.$views.append(this.$galleryView);
 
+        this.$selectButton.hide();
+
         this.$sortByDateButton.on('click', () => {
             this.sortByDate();
         });
@@ -123,12 +155,21 @@ class ContentLeftPanel extends LeftPanel {
             $.publish(Commands.OPEN_THUMBS_VIEW);
         });
 
+        this.$selectButton.on('click', () => {
+            var selectedNodes: ITreeNode[] = this.treeView.getMultiSelectedNodes();
+
+            var ids: String[] = _.without(_.map(selectedNodes, (node: ITreeNode) => {
+                return node.data.id;
+            }), undefined);
+
+            $.publish(Commands.MULTI_SELECTION, [ids]);
+        });
+
         this.$expandButton.attr('tabindex', '7');
         this.$collapseButton.attr('tabindex', '7');
         this.$expandFullButton.attr('tabindex', '8');
 
-        this.$title.text(this.content.title);
-        this.$closedTitle.text(this.content.title);
+        this.setTitle(this.content.title);
 
         this.$sortByVolumeButton.addClass('on');
 
@@ -156,6 +197,12 @@ class ContentLeftPanel extends LeftPanel {
         this.updateTreeViewOptions();
     }
 
+    dataBind(): void {
+        this.dataBindThumbsView();
+        this.dataBindTreeView();
+        this.dataBindGalleryView();
+    }
+
     updateTreeViewOptions(): void{
         if (this.isCollection() && this.treeData.nodes.length && !isNaN(this.treeData.nodes[0].navDate.getTime())){
             this.$treeViewOptions.show();
@@ -165,7 +212,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByDate(): void {
-        this.treeView.rootNode = (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.date);
+        this.treeView.rootNode = <ITreeNode>(<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.date);
         this.treeView.dataBind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -174,7 +221,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByVolume(): void {
-        this.treeView.rootNode = (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none);
+        this.treeView.rootNode = <ITreeNode>(<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none);
         this.treeView.dataBind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -188,7 +235,7 @@ class ContentLeftPanel extends LeftPanel {
 
     dataBindTreeView(): void{
         if (!this.treeView) return;
-        this.treeView.rootNode = this.treeData;
+        this.treeView.rootNode = <ITreeNode>this.treeData;
         this.treeView.dataBind();
     }
 
@@ -357,7 +404,7 @@ class ContentLeftPanel extends LeftPanel {
         if (this.treeView) {
 
             var id: string;
-            var node: Manifesto.TreeNode;
+            var node: Manifesto.ITreeNode;
 
             // try finding a range first
             var range: Manifesto.IRange = this.provider.getCanvasRange(this.provider.getCurrentCanvas());

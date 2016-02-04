@@ -94,6 +94,11 @@ class BaseExpandPanel extends BaseView {
         super.init();
     }
 
+    setTitle(title: string): void {
+        this.$title.text(title);
+        this.$closedTitle.text(title);
+    }
+
     toggle(autoToggled?: boolean): void {
 
         (autoToggled) ? this.autoToggled = true : this.autoToggled = false;

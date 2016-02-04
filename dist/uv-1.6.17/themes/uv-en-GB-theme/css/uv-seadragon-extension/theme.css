@@ -564,19 +564,25 @@
 #app .leftPanel .tabsContent .options {
   overflow: hidden;
 }
-#app .leftPanel .tabsContent .options .treeView {
+#app .leftPanel .tabsContent .options .left {
+  float: left;
+}
+#app .leftPanel .tabsContent .options .left .treeView {
   height: 30px;
 }
-#app .leftPanel .tabsContent .options .treeView span {
+#app .leftPanel .tabsContent .options .left .treeView span {
   display: block;
   float: left;
   color: #fff;
   padding: 5px 4px 0 10px;
   font-size: 11px;
 }
-#app .leftPanel .tabsContent .options .treeView select {
+#app .leftPanel .tabsContent .options .left .treeView select {
   float: left;
   font-size: 11px;
+}
+#app .leftPanel .tabsContent .options .right {
+  float: right;
 }
 #app .leftPanel .tabsContent .btn-group .btn {
   padding: 0 5px 0 5px;
@@ -601,10 +607,13 @@
   float: left;
   height: 10px;
   width: 10px;
-  background-image: url('../../img/uv-treeviewleftpanel-module/plus.png');
+  background-image: url('../../img/uv-contentleftpanel-module/plus.png');
 }
 #app .leftPanel .views .treeView .toggle.expanded {
-  background-image: url('../../img/uv-treeviewleftpanel-module/minus.png');
+  background-image: url('../../img/uv-contentleftpanel-module/minus.png');
+}
+#app .leftPanel .views .treeView .toggle.multiSelect {
+  margin-left: 5px;
 }
 #app .leftPanel .views .treeView .spacer {
   margin-top: 3px;
@@ -613,6 +622,14 @@
   float: left;
   height: 10px;
   width: 10px;
+}
+#app .leftPanel .views .treeView input.multiSelect {
+  margin-top: 0px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  height: 13px;
+  width: 13px;
 }
 #app .leftPanel .views .treeView ul.tree,
 #app .leftPanel .views .treeView ul.tree ul {
@@ -659,10 +676,10 @@
   background-position: 50% 50%;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb .wrap.loadingFailed {
-  background: url('../../img/uv-treeviewleftpanel-module/error.png') no-repeat 50% 50%;
+  background: url('../../img/uv-contentleftpanel-module/error.png') no-repeat 50% 50%;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb .wrap.hidden {
-  background: url('../../img/uv-treeviewleftpanel-module/hidden_thumb.png') no-repeat 50% 50%;
+  background: url('../../img/uv-contentleftpanel-module/hidden_thumb.png') no-repeat 50% 50%;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb .wrap img {
   display: block;
@@ -687,7 +704,7 @@
   white-space: nowrap;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb.placeholder .wrap {
-  background: url('../../img/uv-treeviewleftpanel-module/unavailable.png') no-repeat 50% 50%;
+  background: url('../../img/uv-contentleftpanel-module/unavailable.png') no-repeat 50% 50%;
 }
 #app .leftPanel .views .thumbsView .thumbs .thumb.oneCol {
   margin: 0 0 7px 0;
@@ -768,7 +785,7 @@
   background-position: 50% 50%;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap.hidden {
-  background: url('../../img/uv-treeviewleftpanel-module/hidden_thumb.png') no-repeat 50% 50%;
+  background: url('../../img/uv-contentleftpanel-module/hidden_thumb.png') no-repeat 50% 50%;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap img {
   display: block;
@@ -793,7 +810,7 @@
   white-space: nowrap;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb.placeholder .wrap {
-  background: url('../../img/uv-treeviewleftpanel-module/unavailable.png') no-repeat 50% 50%;
+  background: url('../../img/uv-contentleftpanel-module/unavailable.png') no-repeat 50% 50%;
 }
 #app .leftPanel .views .galleryView .main .thumbs.left-to-right .thumb {
   float: left;

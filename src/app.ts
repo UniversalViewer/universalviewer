@@ -85,14 +85,11 @@ require([
     seadragonExtension,
     seadragonProvider,
     virtexExtension,
-    virtexProvider,
-    manifesto
+    virtexProvider
     ) => {
 
         // todo: use a compiler flag (when available)
         window.DEBUG = true; // this line is removed on build.
-
-        window.manifesto = manifesto;
 
         var extensions = {};
 
