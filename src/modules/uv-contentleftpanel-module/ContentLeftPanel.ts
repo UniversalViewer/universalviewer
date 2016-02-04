@@ -11,12 +11,14 @@ import ITreeNode = require("../uv-shared-module/ITreeNode");
 
 class ContentLeftPanel extends LeftPanel {
 
-    $buttonGroup: JQuery;
     $galleryView: JQuery;
     $leftOptions: JQuery;
+    $multiSelectOptions: JQuery;
     $options: JQuery;
     $rightOptions: JQuery;
+    $selectAllButton: JQuery;
     $selectButton: JQuery;
+    $sortButtonGroup: JQuery;
     $sortByDateButton: JQuery;
     $sortByLabel: JQuery;
     $sortByVolumeButton: JQuery;
@@ -29,6 +31,7 @@ class ContentLeftPanel extends LeftPanel {
     $treeViewOptions: JQuery;
     $views: JQuery;
     galleryView: GalleryView;
+    multiSelectionMode: boolean = false;
     thumbsView: ThumbsView;
     treeData: Manifesto.ITreeNode;
     treeView: TreeView;
@@ -61,21 +64,26 @@ class ContentLeftPanel extends LeftPanel {
             this.selectCurrentTreeNode();
         });
 
-        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, () => {
+        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, (s, e) => {
+            that.multiSelectionMode = true;
             that.setTitle(that.content.selection);
             if (!that.isFullyExpanded){
                 that.expandFull();
             }
-            this.$selectButton.show();
+            this.$multiSelectOptions.show();
+            this.$selectButton.text(e);
         });
 
         $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+            that.multiSelectionMode = false;
             that.setTitle(that.content.title);
-            this.$selectButton.hide();
+            this.$multiSelectOptions.hide();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            $.publish(Commands.EXIT_MULTI_SELECTION_MODE);
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
+            if (this.multiSelectionMode) {
+                $.publish(Commands.EXIT_MULTI_SELECTION_MODE);
+            }
         });
 
         this.$tabs = $('<div class="tabs"></div>');
@@ -101,23 +109,29 @@ class ContentLeftPanel extends LeftPanel {
         this.$rightOptions = $('<div class="right"></div>');
         this.$options.append(this.$rightOptions);
 
-        this.$selectButton = $('<a class="btn btn-primary">' + this.content.select + '</a>');
-        this.$rightOptions.append(this.$selectButton);
-
         this.$treeViewOptions = $('<div class="treeView"></div>');
-        this.$options.append(this.$treeViewOptions);
+        this.$leftOptions.append(this.$treeViewOptions);
 
         this.$sortByLabel = $('<span class="sort">' + this.content.sortBy + '</span>');
         this.$treeViewOptions.append(this.$sortByLabel);
 
-        this.$buttonGroup = $('<div class="btn-group"></div>');
-        this.$treeViewOptions.append(this.$buttonGroup);
+        this.$sortButtonGroup = $('<div class="btn-group"></div>');
+        this.$treeViewOptions.append(this.$sortButtonGroup);
 
         this.$sortByDateButton = $('<button class="btn">' + this.content.date + '</button>');
-        this.$buttonGroup.append(this.$sortByDateButton);
+        this.$sortButtonGroup.append(this.$sortByDateButton);
 
         this.$sortByVolumeButton = $('<button class="btn">' + this.content.volume + '</button>');
-        this.$buttonGroup.append(this.$sortByVolumeButton);
+        this.$sortButtonGroup.append(this.$sortByVolumeButton);
+
+        this.$multiSelectOptions = $('<div class="multiSelect"></div>');
+        this.$rightOptions.append(this.$multiSelectOptions);
+
+        this.$selectAllButton = $('<input id="multiSelectAll" type="checkbox" /><label for="multiSelectAll">' + this.content.selectAll + '</label>');
+        this.$multiSelectOptions.append(this.$selectAllButton);
+
+        this.$selectButton = $('<a class="btn btn-primary">' + this.content.select + '</a>');
+        this.$multiSelectOptions.append(this.$selectButton);
 
         this.$views = $('<div class="views"></div>');
         this.$tabsContent.append(this.$views);
@@ -131,7 +145,7 @@ class ContentLeftPanel extends LeftPanel {
         this.$galleryView = $('<div class="galleryView"></div>');
         this.$views.append(this.$galleryView);
 
-        this.$selectButton.hide();
+        this.$multiSelectOptions.hide();
 
         this.$sortByDateButton.on('click', () => {
             this.sortByDate();
@@ -430,7 +444,7 @@ class ContentLeftPanel extends LeftPanel {
         super.resize();
 
         this.$tabsContent.height(this.$main.height() - (this.$tabs.is(':visible') ? this.$tabs.height() : 0) - this.$tabsContent.verticalPadding());
-        this.$views.height(this.$tabsContent.height() - this.$options.height());
+        this.$views.height(this.$tabsContent.height() - this.$options.outerHeight());
     }
 }
 

@@ -26,6 +26,7 @@ interface IExtension{
     tabbing: boolean;
     triggerSocket(eventName: string, eventObject?: any): void;
     viewCanvas(canvasIndex): void;
+    viewCollection(collection: Manifesto.ICollection): void;
     viewManifest(manifest: Manifesto.IManifest): void;
     width(): number;
 }

@@ -97,7 +97,7 @@ class TreeView extends BaseView {
                             self.toggleExpanded();
                         }).on('click', 'a', function(e) {
                             e.preventDefault();
-                            if (self.data.nodes.length) self.toggle();
+                            if (self.data.nodes.length) self.toggleExpanded();
                             $.publish(Commands.TREE_NODE_SELECTED, [self.data.data]);
                         }).on('click', 'input.multiSelect', function(e) {
                             self.toggleMultiSelect();

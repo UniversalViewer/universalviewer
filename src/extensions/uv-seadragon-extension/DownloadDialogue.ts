@@ -104,7 +104,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                         $.publish(Commands.DOWNLOAD_CURRENTVIEW);
                         break;
                     case DownloadOption.selection.toString():
-                        $.publish(Commands.ENTER_MULTI_SELECTION_MODE);
+                        $.publish(Commands.ENTER_MULTI_SELECTION_MODE, [this.content.downloadSelectionButton]);
                         break;
                     case DownloadOption.wholeImageHighRes.toString():
                         window.open(this.getOriginalImageForCurrentCanvas());

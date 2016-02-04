@@ -23,6 +23,7 @@
         "expandFull": "Ehangu'r Galeri",
         "index": "Mynegai",
         "select": "dewiswch",
+        "selectAll": "Dewis pob",
         "selection": "Dewis",
         "sortBy": "trefnu yn ôl",
         "thumbnails": "Bodluniau",
@@ -39,6 +40,8 @@
       "content": {
         "currentViewAsJpg": "Golwg presennol (jpg)",
         "download": "Lawrlwytho",
+        "downloadSelection": "Download Dewis",
+        "downloadSelectionButton": "Download PDF",
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
         "entireFileAsOriginal": "Y ffeil gyfan ({0})",

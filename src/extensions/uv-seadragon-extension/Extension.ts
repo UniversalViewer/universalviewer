@@ -453,10 +453,16 @@ class Extension extends BaseExtension {
     treeNodeSelected(data: any): void{
         if (!data.type) return;
 
-        if (data.type === 'manifest') {
-            this.viewManifest(data);
-        } else {
-            this.viewRange(data.path);
+        switch (data.type){
+            case manifesto.IIIFResourceType.manifest().toString():
+                this.viewManifest(data);
+                break;
+            case manifesto.IIIFResourceType.collection().toString():
+                this.viewCollection(data);
+                break;
+            default:
+                this.viewRange(data.path);
+                break;
         }
     }
 

@@ -85,7 +85,11 @@ class BaseProvider implements IProvider{
 
     getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number {
         // todo: support nested collections. walk up parents adding to array and return csv string.
-        return iiifResource.parentCollection.index;
+        var index: number;
+        if (iiifResource.parentCollection) {
+            index = iiifResource.parentCollection.index;
+        }
+        return index;
     }
 
     getManifestType(): Manifesto.ManifestType{

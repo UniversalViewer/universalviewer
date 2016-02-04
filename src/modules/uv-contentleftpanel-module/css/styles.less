@@ -51,18 +51,21 @@
             .options{
                 overflow: hidden;
 
+                padding: 0 0 @padding-medium-vertical 0;
+
                 .left {
 
                     float: left;
 
                     .treeView{
-                        height: 30px;
+
+                        padding: @padding-small-vertical 0 0 0;
 
                         span{
                             display: block;
                             float: left;
                             color: @text-color;
-                            padding: 5px 4px 0 10px;
+                            padding: 5px 4px 0 0;
                             font-size: @font-size-small;
                         }
 
@@ -76,8 +79,10 @@
                 .right {
                     float: right;
 
-                    .download{
-
+                    .multiSelect{
+                        .btn{
+                            margin-left: @margin-medium-horizontal;
+                        }
                     }
                 }
             }
