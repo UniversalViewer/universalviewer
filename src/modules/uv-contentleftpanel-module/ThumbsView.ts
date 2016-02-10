@@ -14,6 +14,7 @@ class ThumbsView extends BaseView {
     isCreated: boolean = false;
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
+    multiSelectionMode: boolean = false;
 
     public thumbs: Manifesto.Thumb[];
 
@@ -50,6 +51,16 @@ class ThumbsView extends BaseView {
 
         $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
             this.searchPreviewFinish();
+        });
+
+        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, () => {
+            this.multiSelectionMode = true;
+            this.dataBind();
+        });
+
+        $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+            this.multiSelectionMode = false;
+            this.dataBind();
         });
 
         this.$thumbs = $('<div class="thumbs"></div>');
@@ -146,6 +157,10 @@ class ThumbsView extends BaseView {
         this.loadThumbs(0);
 
         this.isCreated = true;
+    }
+
+    public selectAll(selected): void {
+
     }
 
     scrollStop(): void {

@@ -1,4 +1,23 @@
 (function ($) {
+    $.fn.checkboxButton = function (onClicked) {
+        return this.each(function () {
+            var $this = $(this);
+            $this.on('click', function (e) {
+                var tagName = e.target.tagName;
+                var $checkbox;
+                if (tagName === "LABEL") {
+                    e.preventDefault();
+                    $checkbox = $(this).parent().find(':checkbox');
+                    $checkbox.prop('checked', !$checkbox.prop('checked'));
+                }
+                else {
+                    $checkbox = $(this);
+                }
+                var checked = $checkbox.is(':checked');
+                onClicked(checked);
+            });
+        });
+    };
     $.fn.disable = function () {
         return this.each(function () {
             var $this = $(this);

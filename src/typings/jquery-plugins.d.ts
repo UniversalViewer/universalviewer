@@ -3,6 +3,7 @@ interface JQueryStatic {
 }
 
 interface JQuery {
+    checkboxButton(onClicked: (checked: boolean) => void);
     disable(): void;
     ellipsis(chars: number): string;
     ellipsisFill(text?: string): any;

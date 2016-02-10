@@ -17,6 +17,7 @@ class ContentLeftPanel extends LeftPanel {
     $options: JQuery;
     $rightOptions: JQuery;
     $selectAllButton: JQuery;
+    $selectAllButtonCheckbox: JQuery;
     $selectButton: JQuery;
     $sortButtonGroup: JQuery;
     $sortByDateButton: JQuery;
@@ -31,6 +32,8 @@ class ContentLeftPanel extends LeftPanel {
     $treeViewOptions: JQuery;
     $views: JQuery;
     galleryView: GalleryView;
+    isTreeViewOpen: boolean = false;
+    isThumbsViewOpen: boolean = false;
     multiSelectionMode: boolean = false;
     thumbsView: ThumbsView;
     treeData: Manifesto.ITreeNode;
@@ -69,8 +72,9 @@ class ContentLeftPanel extends LeftPanel {
             that.setTitle(that.content.selection);
             if (!that.isFullyExpanded){
                 that.expandFull();
+            } else {
+                this._showMultiSelectOptions();
             }
-            this.$multiSelectOptions.show();
             this.$selectButton.text(e);
         });
 
@@ -84,6 +88,16 @@ class ContentLeftPanel extends LeftPanel {
             if (this.multiSelectionMode) {
                 $.publish(Commands.EXIT_MULTI_SELECTION_MODE);
             }
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
+            if (this.multiSelectionMode) {
+                this._showMultiSelectOptions();
+            }
+        });
+
+        $.subscribe(Commands.TREE_NODE_MULTISELECTED, (s, node: ITreeNode) => {
+            that.$selectAllButtonCheckbox.prop('checked', that.treeView.allNodesSelected());
         });
 
         this.$tabs = $('<div class="tabs"></div>');
@@ -129,6 +143,7 @@ class ContentLeftPanel extends LeftPanel {
 
         this.$selectAllButton = $('<input id="multiSelectAll" type="checkbox" /><label for="multiSelectAll">' + this.content.selectAll + '</label>');
         this.$multiSelectOptions.append(this.$selectAllButton);
+        this.$selectAllButtonCheckbox = $(this.$selectAllButton[0]);
 
         this.$selectButton = $('<a class="btn btn-primary">' + this.content.select + '</a>');
         this.$multiSelectOptions.append(this.$selectButton);
@@ -169,12 +184,24 @@ class ContentLeftPanel extends LeftPanel {
             $.publish(Commands.OPEN_THUMBS_VIEW);
         });
 
+        this.$selectAllButton.checkboxButton((checked: boolean) => {
+            if (this.isTreeViewOpen){
+                this.treeView.selectAll(checked);
+            } else {
+                this.thumbsView.selectAll(checked);
+            }
+        });
+
         this.$selectButton.on('click', () => {
             var selectedNodes: ITreeNode[] = this.treeView.getMultiSelectedNodes();
 
-            var ids: String[] = _.without(_.map(selectedNodes, (node: ITreeNode) => {
+            selectedNodes = _.filter(selectedNodes, (node: ITreeNode) => {
+                return node.data.type === manifesto.TreeNodeType.range().toString();
+            });
+
+            var ids: String[] = _.map(selectedNodes, (node: ITreeNode) => {
                 return node.data.id;
-            }), undefined);
+            });
 
             $.publish(Commands.MULTI_SELECTION, [ids]);
         });
@@ -207,6 +234,7 @@ class ContentLeftPanel extends LeftPanel {
     createTreeView(): void {
         this.treeView = new TreeView(this.$treeView);
         this.treeView.elideCount = this.config.options.elideCount;
+        this.treeView.multiSelectionMode = this.multiSelectionMode;
         this.dataBindTreeView();
         this.updateTreeViewOptions();
     }
@@ -215,6 +243,10 @@ class ContentLeftPanel extends LeftPanel {
         this.dataBindThumbsView();
         this.dataBindTreeView();
         this.dataBindGalleryView();
+    }
+
+    private _showMultiSelectOptions(): void {
+        this.$multiSelectOptions.show();
     }
 
     updateTreeViewOptions(): void{
@@ -255,6 +287,7 @@ class ContentLeftPanel extends LeftPanel {
 
     createThumbsView(): void {
         this.thumbsView = new ThumbsView(this.$thumbsView);
+        this.thumbsView.multiSelectionMode = this.multiSelectionMode;
         this.dataBindThumbsView();
     }
 
@@ -361,6 +394,9 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     openTreeView(): void {
+        this.isTreeViewOpen = true;
+        this.isThumbsViewOpen = false;
+
         if (!this.treeView) {
             this.createTreeView();
         }
@@ -386,6 +422,9 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     openThumbsView(): void {
+        this.isTreeViewOpen = false;
+        this.isThumbsViewOpen = true;
+
         if (!this.thumbsView) {
             this.createThumbsView();
         }
