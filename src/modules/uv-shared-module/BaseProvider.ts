@@ -302,7 +302,7 @@ class BaseProvider implements IProvider{
         return (this.isHomeDomain && this.isOnlyInstance);
     }
 
-    getThumbs(width: number, height: number): Manifesto.Thumb[] {
+    getThumbs(width: number, height: number): Manifesto.IThumb[] {
         return this.getCurrentSequence().getThumbs(width, height);
     }
 

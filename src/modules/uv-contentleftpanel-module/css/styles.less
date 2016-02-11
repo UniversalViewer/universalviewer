@@ -78,8 +78,13 @@
 
                 .right {
                     float: right;
+                    overflow: hidden;
 
                     .multiSelect{
+                        .multiSelectAll {
+                            float: left;
+                        }
+
                         .btn{
                             margin-left: @margin-medium-horizontal;
                         }
@@ -340,6 +345,15 @@
                                 text-align: center;
                                 background: none;
 
+                                &.multiSelected{
+                                    border: 2px solid @brand-primary;
+                                    background: @brand-primary;
+
+                                    .thumbImage{
+                                        .opacity(.35);
+                                    }
+                                }
+
                                 &.loading{
                                     .loading(@loader-black-bg);
                                 }
@@ -350,9 +364,16 @@
 
                                 img{
                                     display: block;
+                                    float: left;
                                     max-width: 100%;
                                     max-height: 100%;
                                     //margin: 0 auto;
+                                }
+
+                                input{
+                                    float: left;
+                                    cursor: pointer;
+                                    margin-top: -20px;
                                 }
                             }
 

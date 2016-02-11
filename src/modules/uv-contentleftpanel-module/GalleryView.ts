@@ -5,6 +5,7 @@ import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import IThumb = require("../uv-shared-module/IThumb");
 
 class GalleryView extends BaseView {
 
@@ -17,9 +18,10 @@ class GalleryView extends BaseView {
     $thumbs: JQuery;
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
+    multiSelectionMode: boolean = false;
     range: number;
 
-    public thumbs: Manifesto.Thumb[];
+    public thumbs: IThumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -47,13 +49,24 @@ class GalleryView extends BaseView {
             this.searchPreviewFinish();
         });
 
+        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, () => {
+            this.multiSelectionMode = true;
+            this.dataBind();
+            this.resize();
+        });
+
+        $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+            this.multiSelectionMode = false;
+            this.dataBind();
+        });
+
         this.$header = $('<div class="header"></div>');
         this.$element.append(this.$header);
 
         this.$sizeDownButton = $('<input class="btn btn-default size-down" type="button" value="-" />');
         this.$header.append(this.$sizeDownButton);
 
-        this.$sizeRange = $('<input type="range" name="size" min="0" max="10" value="5" />');
+        this.$sizeRange = $('<input type="range" name="size" min="1" max="10" value="6" />');
         this.$header.append(this.$sizeRange);
 
         this.$sizeUpButton = $('<input class="btn btn-default size-up" type="button" value="+" />');
@@ -77,7 +90,7 @@ class GalleryView extends BaseView {
         });
 
         this.$sizeUpButton.on('click', () => {
-            var val = Number(this.$sizeRange.val()) + 1
+            var val = Number(this.$sizeRange.val()) + 1;
 
             if (val <= Number(this.$sizeRange.attr('max'))){
                 this.$sizeRange.val(val.toString());
@@ -91,11 +104,16 @@ class GalleryView extends BaseView {
         });
 
         $.templates({
-            galleryThumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
-                                        <div class="wrap"></div>\
-                                        <span class="index">{{:#index + 1}}</span>\
-                                        <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
-                                     </div>'
+            galleryThumbsTemplate: '\
+                <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
+                    <div class="wrap" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
+                    {^{if multiSelectionEnabled}}\
+                        <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
+                    {{/if}}\
+                    </div>\
+                    <span class="index">{{:#index + 1}}</span>\
+                    <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
+                </div>'
         });
 
         $.views.helpers({
@@ -128,6 +146,7 @@ class GalleryView extends BaseView {
 
     public dataBind(): void{
         if (!this.thumbs) return;
+        this._reset();
         this.createThumbs();
     }
 
@@ -138,21 +157,37 @@ class GalleryView extends BaseView {
 
         this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
 
-        this.$thumbs.delegate(".thumb", "click", function (e) {
-            e.preventDefault();
+        if (!that.multiSelectionMode){
+            // add a selection click event to all thumbs
+            this.$thumbs.delegate('.thumb', 'click', function (e) {
+                e.preventDefault();
+                var data = $.view(this).data;
+                that.lastThumbClickedIndex = data.index;
+                $.publish(BaseCommands.THUMB_SELECTED, [data.index]);
+            });
+        } else {
+            // make each thumb a checkboxButton
+            $.each(this.$thumbs.find('.thumb'), (index: number, thumb: any) => {
+                var $thumb = $(thumb);
 
-            var data = $.view(this).data;
-
-            that.lastThumbClickedIndex = data.index;
-
-            $.publish(BaseCommands.THUMB_SELECTED, [data.index]);
-        });
+                $thumb.checkboxButton(function(checked: boolean) {
+                    var data = $.view(this).data;
+                    that._setThumbMultiSelected(data, !data.multiSelected);
+                });
+            })
+        }
 
         this.selectIndex(this.provider.canvasIndex);
 
         this.setLabel();
 
         this.updateThumbs();
+    }
+
+    private _setThumbMultiSelected(thumb: IThumb, selected: boolean): void {
+        $.observable(thumb).setProperty("multiSelected", selected);
+
+        $.publish(Commands.THUMB_MULTISELECTED, [thumb]);
     }
 
     updateThumbs(): void {
@@ -211,14 +246,7 @@ class GalleryView extends BaseView {
         $label.width(width * this.range);
     }
 
-    //sizeThumbImage($thumb: JQuery) : void {
-    //    var width = $thumb.data('width');
-    //    var height = $thumb.data('height');
-    //
-    //    var $img = $thumb.find('img');
-    //}
-
-    loadThumb($thumb: JQuery, callback?: (img: JQuery) => void): void {
+    loadThumb($thumb: JQuery, cb?: (img: JQuery) => void): void {
         var $wrap = $thumb.find('.wrap');
 
         if ($wrap.hasClass('loading') || $wrap.hasClass('loaded')) return;
@@ -232,15 +260,15 @@ class GalleryView extends BaseView {
         if (visible !== "false") {
             $wrap.addClass('loading');
             var src = $thumb.attr('data-src');
-            var img = $('<img src="' + src + '" />');
+            var img = $('<img class="thumbImage" src="' + src + '" />');
             // fade in on load.
             $(img).hide().load(function () {
                 $(this).fadeIn(fadeDuration, function () {
                     $(this).parent().swapClass('loading', 'loaded');
                 });
             });
-            $wrap.append(img);
-            if (callback) callback(img);
+            $wrap.prepend(img);
+            if (cb) cb(img);
         } else {
             $wrap.addClass('hidden');
         }
@@ -282,7 +310,7 @@ class GalleryView extends BaseView {
     selectIndex(index): void {
 
         // may be authenticating
-        if (index == -1) return;
+        if (index === -1) return;
 
         if (!this.thumbs || !this.thumbs.length) return;
 
@@ -296,6 +324,18 @@ class GalleryView extends BaseView {
 
         // make sure visible images are loaded.
         this.updateThumbs();
+    }
+
+    private _setMultiSelectionEnabled(enabled: boolean): void {
+        for (var i = 0; i < this.thumbs.length; i++){
+            var thumb: IThumb = this.thumbs[i];
+            thumb.multiSelectionEnabled = enabled;
+        }
+    }
+
+    private _reset(): void {
+        this.$thumbs.undelegate('.thumb', 'click');
+        this._setMultiSelectionEnabled(this.multiSelectionMode);
     }
 
     getSelectedThumbIndex(): number {

@@ -34,6 +34,7 @@ class Commands {
     static SEARCH_PREVIEW_START: string             = Commands.namespace + 'onSearchPreviewStart';
     static SEARCH_RESULTS: string                   = Commands.namespace + 'onSearchResults';
     static SEARCH_RESULTS_EMPTY: string             = Commands.namespace + 'onSearchResultsEmpty';
+    static THUMB_MULTISELECTED: string              = Commands.namespace + 'onThumbMultiSelected';
     static TREE_NODE_SELECTED: string               = Commands.namespace + 'onTreeNodeSelected';
     static TREE_NODE_MULTISELECTED: string          = Commands.namespace + 'onTreeNodeMultiSelected';
     static VIEW_PAGE: string                        = Commands.namespace + 'onViewPage';

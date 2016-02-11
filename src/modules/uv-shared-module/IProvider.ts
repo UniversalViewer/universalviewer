@@ -41,7 +41,7 @@ interface IProvider{
     getSeeAlso(): any;
     getSequenceIndexParam(): number;
     getStartCanvasIndex(): number;
-    getThumbs(width: number, height: number): Manifesto.Thumb[];
+    getThumbs(width: number, height: number): Manifesto.IThumb[];
     getTitle(): string;
     getTotalCanvases(): number;
     getTree(): Manifesto.ITreeNode;

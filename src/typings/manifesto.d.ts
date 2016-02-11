@@ -303,7 +303,7 @@ declare module Manifesto {
         getPagedIndices(canvasIndex: number, pagingEnabled?: boolean): number[];
         getPrevPageIndex(canvasIndex: number, pagingEnabled?: boolean): number;
         getStartCanvasIndex(): number;
-        getThumbs(width: number, height?: number): Manifesto.Thumb[];
+        getThumbs(width: number, height?: number): Manifesto.IThumb[];
         getStartCanvas(): string;
         getTotalCanvases(): number;
         getViewingDirection(): ViewingDirection;
@@ -341,14 +341,24 @@ declare module Manifesto {
     }
 }
 declare module Manifesto {
-    class Thumb {
+    interface IThumb {
         index: number;
         uri: string;
         label: string;
         width: number;
         height: number;
         visible: boolean;
-        constructor(index: number, uri: string, label: string, width: number, height: number, visible: boolean);
+    }
+}
+declare module Manifesto {
+    class Thumb implements IThumb {
+        index: number;
+        uri: string;
+        label: string;
+        width: number;
+        height: number;
+        visible: boolean;
+        constructor(index: number, uri: string, label: string, width: number, height: number, visible?: boolean);
     }
 }
 declare module Manifesto {
@@ -586,7 +596,7 @@ declare module Manifesto {
         getRendering(format: RenderingFormat | string): IRendering;
         getStartCanvas(): string;
         getStartCanvasIndex(): number;
-        getThumbs(width: number, height: number): Manifesto.Thumb[];
+        getThumbs(width: number, height: number): Manifesto.IThumb[];
         getTotalCanvases(): number;
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;

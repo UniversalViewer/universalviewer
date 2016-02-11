@@ -8,6 +8,7 @@ import ThumbsView = require("./ThumbsView");
 import TreeSortType = require("../../extensions/uv-seadragon-extension/TreeSortType");
 import TreeView = require("./TreeView");
 import ITreeNode = require("../uv-shared-module/ITreeNode");
+import IThumb = require("../uv-shared-module/IThumb");
 
 class ContentLeftPanel extends LeftPanel {
 
@@ -141,9 +142,9 @@ class ContentLeftPanel extends LeftPanel {
         this.$multiSelectOptions = $('<div class="multiSelect"></div>');
         this.$rightOptions.append(this.$multiSelectOptions);
 
-        this.$selectAllButton = $('<input id="multiSelectAll" type="checkbox" /><label for="multiSelectAll">' + this.content.selectAll + '</label>');
+        this.$selectAllButton = $('<div class="multiSelectAll"><input id="multiSelectAll" type="checkbox" /><label for="multiSelectAll">' + this.content.selectAll + '</label></div>');
         this.$multiSelectOptions.append(this.$selectAllButton);
-        this.$selectAllButtonCheckbox = $(this.$selectAllButton[0]);
+        this.$selectAllButtonCheckbox = $(this.$selectAllButton.find('input:checkbox'));
 
         this.$selectButton = $('<a class="btn btn-primary">' + this.content.select + '</a>');
         this.$multiSelectOptions.append(this.$selectButton);
@@ -247,6 +248,7 @@ class ContentLeftPanel extends LeftPanel {
 
     private _showMultiSelectOptions(): void {
         this.$multiSelectOptions.show();
+        this.resize();
     }
 
     updateTreeViewOptions(): void{
@@ -287,7 +289,6 @@ class ContentLeftPanel extends LeftPanel {
 
     createThumbsView(): void {
         this.thumbsView = new ThumbsView(this.$thumbsView);
-        this.thumbsView.multiSelectionMode = this.multiSelectionMode;
         this.dataBindThumbsView();
     }
 
@@ -311,6 +312,7 @@ class ContentLeftPanel extends LeftPanel {
 
     createGalleryView(): void {
         this.galleryView = new GalleryView(this.$galleryView);
+        this.galleryView.multiSelectionMode = this.multiSelectionMode;
         this.dataBindGalleryView();
     }
 
@@ -318,7 +320,7 @@ class ContentLeftPanel extends LeftPanel {
         if (!this.galleryView) return;
         var width = this.config.options.galleryThumbWidth;
         var height = this.config.options.galleryThumbHeight;
-        this.galleryView.thumbs = this.provider.getThumbs(width, height);
+        this.galleryView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
         this.galleryView.dataBind();
     }
 
