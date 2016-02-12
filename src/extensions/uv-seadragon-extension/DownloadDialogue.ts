@@ -138,9 +138,14 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var label: string = this.content.currentViewAsJpg;
             var viewer = (<ISeadragonExtension>this.extension).getViewer();
             var dimensions: CroppedImageDimensions = (<ISeadragonProvider>this.provider).getCroppedImageDimensions(canvas, viewer);
-            label = String.format(label, dimensions.size.width, dimensions.size.height);
-            $label.text(label);
-            this.$currentViewAsJpgButton.show();
+
+            if (dimensions){
+                label = String.format(label, dimensions.size.width, dimensions.size.height);
+                $label.text(label);
+                this.$currentViewAsJpgButton.show();
+            } else {
+                this.$currentViewAsJpgButton.hide();
+            }
         } else {
             this.$currentViewAsJpgButton.hide();
         }

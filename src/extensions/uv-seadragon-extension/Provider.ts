@@ -32,6 +32,10 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
+        if (!canvas.getHeight() || !canvas.getWidth()){
+            return null;
+        }
+
         var bounds = viewer.viewport.getBounds(true);
         var containerSize = viewer.viewport.getContainerSize();
         var zoom = viewer.viewport.getZoom(true);
