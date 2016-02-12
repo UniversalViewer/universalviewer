@@ -3,7 +3,6 @@
         return this.each(function () {
             var $this = $(this);
             $this.on('click', function (e) {
-                console.log("click");
                 var tagName = e.target.tagName;
                 var $checkbox;
                 if (tagName !== "INPUT") {

@@ -5,6 +5,7 @@ import IMetadataItem = require("./IMetadataItem");
 import IProvider = require("./IProvider");
 import Params = require("../../Params");
 import UriLabeller = require("./UriLabeller");
+import IRange = require("./IRange");
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provisioning systems.
@@ -317,6 +318,10 @@ class BaseProvider implements IProvider{
     getCanvasIndexByLabel(label: string): number {
         var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
         return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
+    }
+
+    getRanges(): IRange[] {
+        return <IRange[]>(<Manifesto.IManifest>this.manifest).getRanges();
     }
 
     getTree(): Manifesto.ITreeNode{

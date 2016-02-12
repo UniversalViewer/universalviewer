@@ -1159,6 +1159,7 @@ var Manifesto;
                 for (var i = 0; i < children.length; i++) {
                     var c = children[i];
                     var canvas = new Manifesto.Canvas(c, this.options);
+                    canvas.index = i;
                     this.canvases.push(canvas);
                 }
             }
@@ -1306,17 +1307,10 @@ var Manifesto;
         };
         Sequence.prototype.getThumbs = function (width, height) {
             var thumbs = [];
-            for (var i = 0; i < this.getTotalCanvases(); i++) {
+            var totalCanvases = this.getTotalCanvases();
+            for (var i = 0; i < totalCanvases; i++) {
                 var canvas = this.getCanvasByIndex(i);
-                //if (!_isNumber(height)) {
-                var heightRatio = canvas.getHeight() / canvas.getWidth();
-                if (heightRatio) {
-                    height = Math.floor(width * heightRatio);
-                }
-                //}
-                var uri = canvas.getThumbUri(width, height);
-                var label = canvas.getLabel();
-                thumbs.push(new Manifesto.Thumb(i, uri, label, width, height, true));
+                thumbs.push(new Manifesto.Thumb(width, canvas));
             }
             return thumbs;
         };
@@ -1478,14 +1472,16 @@ var Manifesto;
 var Manifesto;
 (function (Manifesto) {
     var Thumb = (function () {
-        function Thumb(index, uri, label, width, height, visible) {
-            if (visible === void 0) { visible = true; }
-            this.index = index;
-            this.uri = uri;
-            this.label = label;
+        function Thumb(width, canvas) {
+            this.data = canvas;
+            this.index = canvas.index;
             this.width = width;
-            this.height = height;
-            this.visible = visible;
+            var heightRatio = canvas.getHeight() / canvas.getWidth();
+            if (heightRatio) {
+                this.height = Math.floor(this.width * heightRatio);
+            }
+            this.uri = canvas.getThumbUri(width, this.height);
+            this.label = canvas.getLabel();
         }
         return Thumb;
     })();
@@ -1502,6 +1498,15 @@ var Manifesto;
         TreeNode.prototype.addNode = function (node) {
             this.nodes.push(node);
             node.parentNode = this;
+        };
+        TreeNode.prototype.isCollection = function () {
+            return this.data.type === Manifesto.TreeNodeType.COLLECTION.toString();
+        };
+        TreeNode.prototype.isManifest = function () {
+            return this.data.type === Manifesto.TreeNodeType.MANIFEST.toString();
+        };
+        TreeNode.prototype.isRange = function () {
+            return this.data.type === Manifesto.TreeNodeType.RANGE.toString();
         };
         return TreeNode;
     })();

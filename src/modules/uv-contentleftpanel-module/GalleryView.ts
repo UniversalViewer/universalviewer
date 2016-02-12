@@ -6,6 +6,11 @@ import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/IS
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import IThumb = require("../uv-shared-module/IThumb");
+import IRange = require("../uv-shared-module/IRange");
+import MultiSelectState = require("../uv-shared-module/MultiSelectState");
+import IThumb = Manifesto.IThumb;
+import IThumb = Manifesto.IThumb;
+import ICanvas = require("../uv-shared-module/ICanvas");
 
 class GalleryView extends BaseView {
 
@@ -49,15 +54,35 @@ class GalleryView extends BaseView {
             this.searchPreviewFinish();
         });
 
-        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, () => {
+        $.subscribe(Commands.ENTER_MULTISELECT_MODE, () => {
             this.multiSelectionMode = true;
             this.dataBind();
             this.resize();
         });
 
-        $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+        $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
             this.multiSelectionMode = false;
             this.dataBind();
+        });
+
+        $.subscribe(Commands.MULTISELECT_STATE_CHANGE, (s, state: MultiSelectState) => {
+
+            for (var j = 0; j < state.canvases.length; j++){
+                var canvas: ICanvas = state.canvases[j];
+                var thumb: IThumb = this._getThumbByCanvas(canvas);
+                this._setThumbMultiSelected(thumb, canvas.multiSelected);
+            }
+
+            // range selections override canvas selections
+            for (var i = 0; i < state.ranges.length; i++){
+                var range: IRange = state.ranges[i];
+                var thumbs: IThumb[] = this._getThumbsByRange(range);
+
+                for (var k = 0; k < thumbs.length; k++){
+                    var thumb: IThumb = thumbs[k];
+                    this._setThumbMultiSelected(thumb, range.multiSelected);
+                }
+            }
         });
 
         this.$header = $('<div class="header"></div>');
@@ -184,10 +209,25 @@ class GalleryView extends BaseView {
         this.updateThumbs();
     }
 
+    private _getThumbsByRange(range: IRange): IThumb[] {
+        //return this.thumbs.en().where(t => t.data.).toArray();
+    }
+
+    private _getThumbByCanvas(canvas: ICanvas): IThumb {
+
+    }
+
     private _setThumbMultiSelected(thumb: IThumb, selected: boolean): void {
         $.observable(thumb).setProperty("multiSelected", selected);
 
         $.publish(Commands.THUMB_MULTISELECTED, [thumb]);
+    }
+
+    private _selectAll(selected: boolean): void {
+        for (var i = 0; i < this.thumbs.length; i++){
+            var thumb: IThumb = this.thumbs[i];
+            this._setThumbMultiSelected(thumb, selected);
+        }
     }
 
     updateThumbs(): void {

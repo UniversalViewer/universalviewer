@@ -4,6 +4,8 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Shell = require("../uv-shared-module/Shell");
 import ITreeNode = require("../uv-shared-module/ITreeNode");
+import IRange = require("../uv-shared-module/IRange");
+import MultiSelectState = require("../uv-shared-module/MultiSelectState");
 
 class TreeView extends BaseView {
 
@@ -26,14 +28,18 @@ class TreeView extends BaseView {
 
         var that = this;
 
-        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, () => {
+        $.subscribe(Commands.ENTER_MULTISELECT_MODE, () => {
             this.multiSelectionMode = true;
             this.dataBind();
         });
 
-        $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+        $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
             this.multiSelectionMode = false;
             this.dataBind();
+        });
+
+        $.subscribe(Commands.MULTISELECT_STATE_CHANGE, (s, state: MultiSelectState) => {
+
         });
 
         this.$tree = $('<ul class="tree"></ul>');
@@ -126,7 +132,7 @@ class TreeView extends BaseView {
         this._setMultiSelectionEnabled(this.multiSelectionMode);
     }
 
-    public selectAll(selected): void {
+    private _selectAll(selected): void {
         var allNodes: ITreeNode[] = this._getAllNodes();
 
         for (var i = 0; i < allNodes.length; i++){
@@ -152,19 +158,7 @@ class TreeView extends BaseView {
     }
 
     private _nodeIsMultiSelectable(node: ITreeNode): boolean {
-        return (this._nodeIsManifest(node) && node.nodes.length > 0 || this._nodeIsRange(node));
-    }
-
-    private _nodeIsCollection(node: ITreeNode): boolean {
-        return node.data.type === manifesto.TreeNodeType.collection().toString();
-    }
-
-    private _nodeIsManifest(node: ITreeNode): boolean {
-        return node.data.type === manifesto.TreeNodeType.manifest().toString();
-    }
-
-    private _nodeIsRange(node: ITreeNode): boolean {
-        return node.data.type === manifesto.TreeNodeType.range().toString();
+        return (node.isManifest() && node.nodes.length > 0 || node.isRange());
     }
 
     private _getAllNodes(): ITreeNode[] {

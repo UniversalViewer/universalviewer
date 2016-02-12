@@ -2,6 +2,7 @@ import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("./ExternalResource");
 import IMetadataItem = require("./IMetadataItem");
+import IRange = require("./IRange");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
@@ -37,6 +38,7 @@ interface IProvider{
     getNextPageIndex(index?: number): number;
     getPagedIndices(index?: number): number[];
     getPrevPageIndex(index?: number): number;
+    getRanges(): IRange[];
     getRangeByPath(path: string): Manifesto.IRange;
     getSeeAlso(): any;
     getSequenceIndexParam(): number;

@@ -7,8 +7,11 @@ import LeftPanel = require("../uv-shared-module/LeftPanel");
 import ThumbsView = require("./ThumbsView");
 import TreeSortType = require("../../extensions/uv-seadragon-extension/TreeSortType");
 import TreeView = require("./TreeView");
+import IRange = require("../uv-shared-module/IRange");
 import ITreeNode = require("../uv-shared-module/ITreeNode");
 import IThumb = require("../uv-shared-module/IThumb");
+import MultiSelectState = require("../uv-shared-module/MultiSelectState");
+import ICanvas = require("../uv-shared-module/ICanvas");
 
 class ContentLeftPanel extends LeftPanel {
 
@@ -36,6 +39,7 @@ class ContentLeftPanel extends LeftPanel {
     isTreeViewOpen: boolean = false;
     isThumbsViewOpen: boolean = false;
     multiSelectionMode: boolean = false;
+    multiSelectState: MultiSelectState;
     thumbsView: ThumbsView;
     treeData: Manifesto.ITreeNode;
     treeView: TreeView;
@@ -68,7 +72,7 @@ class ContentLeftPanel extends LeftPanel {
             this.selectCurrentTreeNode();
         });
 
-        $.subscribe(Commands.ENTER_MULTI_SELECTION_MODE, (s, e) => {
+        $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
             that.multiSelectionMode = true;
             that.setTitle(that.content.selection);
             if (!that.isFullyExpanded){
@@ -79,7 +83,7 @@ class ContentLeftPanel extends LeftPanel {
             this.$selectButton.text(e);
         });
 
-        $.subscribe(Commands.EXIT_MULTI_SELECTION_MODE, () => {
+        $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
             that.multiSelectionMode = false;
             that.setTitle(that.content.title);
             this.$multiSelectOptions.hide();
@@ -87,7 +91,7 @@ class ContentLeftPanel extends LeftPanel {
 
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
             if (this.multiSelectionMode) {
-                $.publish(Commands.EXIT_MULTI_SELECTION_MODE);
+                $.publish(Commands.EXIT_MULTISELECT_MODE);
             }
         });
 
@@ -98,7 +102,19 @@ class ContentLeftPanel extends LeftPanel {
         });
 
         $.subscribe(Commands.TREE_NODE_MULTISELECTED, (s, node: ITreeNode) => {
-            that.$selectAllButtonCheckbox.prop('checked', that.treeView.allNodesSelected());
+            if (node.isRange()){
+                this._updateRangeMultiSelectState(node.data, node.multiSelected);
+            }
+        });
+
+        $.subscribe(Commands.THUMB_MULTISELECTED, (s, thumb: IThumb) => {
+            var range: IRange = <IRange>this.provider.getCanvasRange(thumb.data);
+
+            if (range){
+                this._updateRangeMultiSelectState(range, thumb.multiSelected);
+            }
+
+            this._updateCanvasMultiSelectState(thumb.data, thumb.multiSelected);
         });
 
         this.$tabs = $('<div class="tabs"></div>');
@@ -186,25 +202,16 @@ class ContentLeftPanel extends LeftPanel {
         });
 
         this.$selectAllButton.checkboxButton((checked: boolean) => {
-            if (this.isTreeViewOpen){
-                this.treeView.selectAll(checked);
-            } else {
-                this.thumbsView.selectAll(checked);
-            }
+            this._multiSelectAll(checked);
         });
 
         this.$selectButton.on('click', () => {
-            var selectedNodes: ITreeNode[] = this.treeView.getMultiSelectedNodes();
 
-            selectedNodes = _.filter(selectedNodes, (node: ITreeNode) => {
-                return node.data.type === manifesto.TreeNodeType.range().toString();
-            });
+            //var ids: String[] = _.map(this.ranges, (range: IRange) => {
+            //    return range.id;
+            //});
 
-            var ids: String[] = _.map(selectedNodes, (node: ITreeNode) => {
-                return node.data.id;
-            });
-
-            $.publish(Commands.MULTI_SELECTION, [ids]);
+            //$.publish(Commands.MULTISELECTION_MADE, [ids]);
         });
 
         this.$expandButton.attr('tabindex', '7');
@@ -230,6 +237,10 @@ class ContentLeftPanel extends LeftPanel {
                 this.$treeButton.addClass('first');
             }
         }
+
+        this.multiSelectState = new MultiSelectState();
+        this.multiSelectState.ranges = this.provider.getRanges();
+        this.multiSelectState.canvases = <ICanvas[]>this.provider.getCurrentSequence().getCanvases();
     }
 
     createTreeView(): void {
@@ -257,6 +268,45 @@ class ContentLeftPanel extends LeftPanel {
         } else {
             this.$treeViewOptions.hide();
         }
+    }
+
+    private _multiSelectAll(selected: boolean): void {
+        for(var i = 0; i < this.multiSelectState.ranges.length; i++) {
+            var range: IRange = this.multiSelectState.ranges[i];
+            range.multiSelected = selected;
+        }
+
+        for(var j = 0; j < this.multiSelectState.canvases.length; j++) {
+            var canvas: ICanvas = this.multiSelectState.canvases[j];
+            canvas.multiSelected = selected;
+        }
+
+        this._publishMultiSelectStateChange();
+    }
+
+    private _updateRangeMultiSelectState(range: IRange, selected: boolean): void {
+        var r: IRange = this.multiSelectState.ranges.en().where(r => r.id === range.id).first();
+        r.multiSelected = selected;
+        this._publishMultiSelectStateChange();
+    }
+
+    private _updateCanvasMultiSelectState(canvas: ICanvas, selected: boolean): void {
+        var c: ICanvas = this.multiSelectState.canvases.en().where(c => c.id === canvas.id).first();
+        c.multiSelected = selected;
+        this._publishMultiSelectStateChange();
+    }
+
+    private _publishMultiSelectStateChange(): void {
+        this.$selectAllButtonCheckbox.prop('checked', this._allRangesSelected() && this._allCanvasesSelected());
+        $.publish(Commands.MULTISELECT_STATE_CHANGE, [this.multiSelectState]);
+    }
+
+    private _allRangesSelected(): boolean {
+        return this.multiSelectState.ranges.en().where(r => r.multiSelected).toArray().length === this.multiSelectState.ranges.length;
+    }
+
+    private _allCanvasesSelected(): boolean {
+        return this.multiSelectState.canvases.en().where(c => c.multiSelected).toArray().length === this.multiSelectState.canvases.length;
     }
 
     sortByDate(): void {

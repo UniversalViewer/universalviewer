@@ -194,6 +194,7 @@ declare var _endsWith: any;
 declare var _last: any;
 declare module Manifesto {
     class Canvas extends ManifestResource implements ICanvas {
+        index: number;
         ranges: IRange[];
         constructor(jsonld: any, options: IManifestoOptions);
         getImages(): IAnnotation[];
@@ -342,23 +343,25 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface IThumb {
-        index: number;
-        uri: string;
-        label: string;
-        width: number;
+        data: any;
         height: number;
+        index: number;
+        label: string;
+        uri: string;
         visible: boolean;
+        width: number;
     }
 }
 declare module Manifesto {
     class Thumb implements IThumb {
+        data: any;
         index: number;
         uri: string;
         label: string;
         width: number;
         height: number;
         visible: boolean;
-        constructor(index: number, uri: string, label: string, width: number, height: number, visible?: boolean);
+        constructor(width: number, canvas: ICanvas);
     }
 }
 declare module Manifesto {
@@ -372,6 +375,9 @@ declare module Manifesto {
         navDate: Date;
         parentNode: ITreeNode;
         addNode(node: ITreeNode): void;
+        isCollection(): boolean;
+        isManifest(): boolean;
+        isRange(): boolean;
     }
 }
 declare module Manifesto {
@@ -386,6 +392,9 @@ declare module Manifesto {
         parentNode: ITreeNode;
         constructor(label?: string, data?: any);
         addNode(node: ITreeNode): void;
+        isCollection(): boolean;
+        isManifest(): boolean;
+        isRange(): boolean;
     }
 }
 declare module Manifesto {
@@ -438,6 +447,7 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface ICanvas extends IManifestResource {
+        index: number;
         getHeight(): number;
         getImages(): IAnnotation[];
         getThumbUri(width: number, height: number): string;

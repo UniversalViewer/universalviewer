@@ -143,8 +143,8 @@ class Extension extends BaseExtension {
             $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Commands.MULTI_SELECTION, (e, ids: string[]) => {
-            this.triggerSocket(Commands.MULTI_SELECTION, ids);
+        $.subscribe(Commands.MULTISELECTION_MADE, (e, ids: string[]) => {
+            this.triggerSocket(Commands.MULTISELECTION_MADE, ids);
         });
 
         $.subscribe(Commands.NEXT, (e) => {
