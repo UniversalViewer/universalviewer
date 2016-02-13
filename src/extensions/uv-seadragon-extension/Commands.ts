@@ -16,7 +16,7 @@ class Commands {
     static LAST: string                                 = Commands.namespace + 'onLast';
     static MODE_CHANGED: string                         = Commands.namespace + 'onModeChanged';
     static MULTISELECTION_MADE: string                  = Commands.namespace + 'onMultiSelectionMade';
-    static MULTISELECT_STATE_CHANGE: string             = Commands.namespace + 'onMultiSelectStateChange';
+    static MULTISELECT_CHANGE: string                   = Commands.namespace + 'onMultiSelectChange';
     static NEXT: string                                 = Commands.namespace + 'onNext';
     static NEXT_SEARCH_RESULT: string                   = Commands.namespace + 'onNextSearchResult';
     static OPEN_THUMBS_VIEW: string                     = Commands.namespace + 'onOpenThumbsView';

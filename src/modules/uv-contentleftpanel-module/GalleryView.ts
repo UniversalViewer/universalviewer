@@ -8,9 +8,8 @@ import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import IThumb = require("../uv-shared-module/IThumb");
 import IRange = require("../uv-shared-module/IRange");
 import MultiSelectState = require("../uv-shared-module/MultiSelectState");
-import IThumb = Manifesto.IThumb;
-import IThumb = Manifesto.IThumb;
 import ICanvas = require("../uv-shared-module/ICanvas");
+import Thumb = Manifesto.Thumb;
 
 class GalleryView extends BaseView {
 
@@ -65,7 +64,7 @@ class GalleryView extends BaseView {
             this.dataBind();
         });
 
-        $.subscribe(Commands.MULTISELECT_STATE_CHANGE, (s, state: MultiSelectState) => {
+        $.subscribe(Commands.MULTISELECT_CHANGE, (s, state: MultiSelectState) => {
 
             for (var j = 0; j < state.canvases.length; j++){
                 var canvas: ICanvas = state.canvases[j];
@@ -211,10 +210,11 @@ class GalleryView extends BaseView {
 
     private _getThumbsByRange(range: IRange): IThumb[] {
         //return this.thumbs.en().where(t => t.data.).toArray();
+        return [];
     }
 
     private _getThumbByCanvas(canvas: ICanvas): IThumb {
-
+        return <IThumb>{};
     }
 
     private _setThumbMultiSelected(thumb: IThumb, selected: boolean): void {

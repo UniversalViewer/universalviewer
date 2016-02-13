@@ -38,7 +38,7 @@ class TreeView extends BaseView {
             this.dataBind();
         });
 
-        $.subscribe(Commands.MULTISELECT_STATE_CHANGE, (s, state: MultiSelectState) => {
+        $.subscribe(Commands.MULTISELECT_CHANGE, (s, state: MultiSelectState) => {
 
         });
 

@@ -298,7 +298,7 @@ class ContentLeftPanel extends LeftPanel {
 
     private _publishMultiSelectStateChange(): void {
         this.$selectAllButtonCheckbox.prop('checked', this._allRangesSelected() && this._allCanvasesSelected());
-        $.publish(Commands.MULTISELECT_STATE_CHANGE, [this.multiSelectState]);
+        $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
     }
 
     private _allRangesSelected(): boolean {
