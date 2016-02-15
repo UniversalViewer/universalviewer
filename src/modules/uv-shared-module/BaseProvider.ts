@@ -6,6 +6,7 @@ import IProvider = require("./IProvider");
 import Params = require("../../Params");
 import UriLabeller = require("./UriLabeller");
 import IRange = require("./IRange");
+import ICanvas = require("./ICanvas");
 
 // providers contain methods that could be implemented differently according
 // to factors like varying back end data provisioning systems.
@@ -177,9 +178,18 @@ class BaseProvider implements IProvider{
 
     getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange {
         // get ranges that contain the canvas id. return the last.
-        var ranges: Manifesto.IRange[] = this.manifest.getRanges();
+        return this.getCanvasRanges(canvas).last();
+    }
 
-        return ranges.en().last(range => (range.getCanvases().en().any(c => c === canvas.id)));
+    getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[] {
+
+        if (canvas.ranges){
+            return canvas.ranges;
+        } else {
+            canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvases().en().any(c => c === canvas.id))).toArray();
+        }
+
+        return canvas.ranges;
     }
 
     getCurrentCanvas(): Manifesto.ICanvas {

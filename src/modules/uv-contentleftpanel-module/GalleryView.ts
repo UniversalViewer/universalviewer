@@ -22,7 +22,7 @@ class GalleryView extends BaseView {
     $thumbs: JQuery;
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
-    multiSelectionMode: boolean = false;
+    multiSelectState: MultiSelectState;
     range: number;
 
     public thumbs: IThumb[];
@@ -54,34 +54,16 @@ class GalleryView extends BaseView {
         });
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, () => {
-            this.multiSelectionMode = true;
             this.dataBind();
             this.resize();
         });
 
         $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
-            this.multiSelectionMode = false;
             this.dataBind();
         });
 
         $.subscribe(Commands.MULTISELECT_CHANGE, (s, state: MultiSelectState) => {
-
-            for (var j = 0; j < state.canvases.length; j++){
-                var canvas: ICanvas = state.canvases[j];
-                var thumb: IThumb = this._getThumbByCanvas(canvas);
-                this._setThumbMultiSelected(thumb, canvas.multiSelected);
-            }
-
-            // range selections override canvas selections
-            for (var i = 0; i < state.ranges.length; i++){
-                var range: IRange = state.ranges[i];
-                var thumbs: IThumb[] = this._getThumbsByRange(range);
-
-                for (var k = 0; k < thumbs.length; k++){
-                    var thumb: IThumb = thumbs[k];
-                    this._setThumbMultiSelected(thumb, range.multiSelected);
-                }
-            }
+            this._multiSelectStateChange(state);
         });
 
         this.$header = $('<div class="header"></div>');
@@ -181,7 +163,7 @@ class GalleryView extends BaseView {
 
         this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
 
-        if (!that.multiSelectionMode){
+        if (!that.multiSelectState.enabled){
             // add a selection click event to all thumbs
             this.$thumbs.delegate('.thumb', 'click', function (e) {
                 e.preventDefault();
@@ -197,6 +179,7 @@ class GalleryView extends BaseView {
                 $thumb.checkboxButton(function(checked: boolean) {
                     var data = $.view(this).data;
                     that._setThumbMultiSelected(data, !data.multiSelected);
+                    $.publish(Commands.THUMB_MULTISELECTED, [data]);
                 });
             })
         }
@@ -209,18 +192,48 @@ class GalleryView extends BaseView {
     }
 
     private _getThumbsByRange(range: IRange): IThumb[] {
-        //return this.thumbs.en().where(t => t.data.).toArray();
-        return [];
+        var thumbs: IThumb[] = [];
+
+        for (var i = 0; i < this.thumbs.length; i++) {
+            var thumb: IThumb = this.thumbs[i];
+            var canvas: ICanvas = thumb.data;
+
+            var r: IRange = <IRange>this.provider.getCanvasRange(canvas);
+
+            if (r && r.id === range.id){
+                thumbs.push(thumb);
+            }
+        }
+
+        return thumbs;
+    }
+
+    private _multiSelectStateChange(state: MultiSelectState): void {
+
+        for (var j = 0; j < state.canvases.length; j++){
+            var canvas: ICanvas = state.canvases[j];
+            var thumb: IThumb = this._getThumbByCanvas(canvas);
+            this._setThumbMultiSelected(thumb, canvas.multiSelected);
+        }
+
+        // range selections override canvas selections
+        for (var i = 0; i < state.ranges.length; i++){
+            var range: IRange = state.ranges[i];
+            var thumbs: IThumb[] = this._getThumbsByRange(range);
+
+            for (var k = 0; k < thumbs.length; k++){
+                var thumb: IThumb = thumbs[k];
+                this._setThumbMultiSelected(thumb, range.multiSelected);
+            }
+        }
     }
 
     private _getThumbByCanvas(canvas: ICanvas): IThumb {
-        return <IThumb>{};
+        return this.thumbs.en().where(c => c.data.id === canvas.id).first();
     }
 
     private _setThumbMultiSelected(thumb: IThumb, selected: boolean): void {
         $.observable(thumb).setProperty("multiSelected", selected);
-
-        $.publish(Commands.THUMB_MULTISELECTED, [thumb]);
     }
 
     private _selectAll(selected: boolean): void {
@@ -375,7 +388,7 @@ class GalleryView extends BaseView {
 
     private _reset(): void {
         this.$thumbs.undelegate('.thumb', 'click');
-        this._setMultiSelectionEnabled(this.multiSelectionMode);
+        this._setMultiSelectionEnabled(this.multiSelectState.enabled);
     }
 
     getSelectedThumbIndex(): number {

@@ -23,6 +23,7 @@ interface IProvider{
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexParam(): number;
     getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange;
+    getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
     getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
     getCurrentCanvas(): Manifesto.ICanvas;

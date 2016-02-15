@@ -11,11 +11,11 @@ class TreeView extends BaseView {
 
     $tree: JQuery;
     allNodes: ITreeNode[];
-    allMultiSelectableNodes: ITreeNode[];
+    multiSelectableNodes: ITreeNode[];
     elideCount: number;
     isOpen: boolean = false;
     selectedNode: ITreeNode;
-    multiSelectionMode: boolean = false;
+    multiSelectState: MultiSelectState;
 
     public rootNode: ITreeNode;
 
@@ -29,17 +29,11 @@ class TreeView extends BaseView {
         var that = this;
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, () => {
-            this.multiSelectionMode = true;
-            this.dataBind();
-        });
-
-        $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
-            this.multiSelectionMode = false;
             this.dataBind();
         });
 
         $.subscribe(Commands.MULTISELECT_CHANGE, (s, state: MultiSelectState) => {
-
+            this._multiSelectStateChange(state);
         });
 
         this.$tree = $('<ul class="tree"></ul>');
@@ -126,10 +120,22 @@ class TreeView extends BaseView {
         this.resize();
     }
 
+    private _multiSelectStateChange(state: MultiSelectState): void {
+        this.multiSelectState = state;
+
+        for (var i = 0; i < this.multiSelectState.ranges.length; i++) {
+            var range: IRange = this.multiSelectState.ranges[i];
+            var node: ITreeNode = this._getMultiSelectableNodes().en().where(n => n.data.id === range.id).first();
+            this._setNodeMultiSelected(node, range.multiSelected);
+        }
+
+        this.dataBind();
+    }
+
     private _reset(): void {
         this.allNodes = null;
-        this.allMultiSelectableNodes = null;
-        this._setMultiSelectionEnabled(this.multiSelectionMode);
+        this.multiSelectableNodes = null;
+        this._setMultiSelectionEnabled(this.multiSelectState.enabled);
     }
 
     private _selectAll(selected): void {
@@ -142,19 +148,19 @@ class TreeView extends BaseView {
     }
 
     public allNodesSelected(): boolean {
-        var applicableNodes: ITreeNode[] = this._allMultiSelectableNodes();
+        var applicableNodes: ITreeNode[] = this._getMultiSelectableNodes();
         var multiSelectedNodes: ITreeNode[] = this.getMultiSelectedNodes();
 
         return applicableNodes.length === multiSelectedNodes.length;
     }
 
-    private _allMultiSelectableNodes(): ITreeNode[] {
+    private _getMultiSelectableNodes(): ITreeNode[] {
         // if cached
-        if (this.allMultiSelectableNodes){
-            return this.allMultiSelectableNodes;
+        if (this.multiSelectableNodes){
+            return this.multiSelectableNodes;
         }
 
-        return this.allMultiSelectableNodes = this._getAllNodes().en().where((n) => this._nodeIsMultiSelectable(n)).toArray();
+        return this.multiSelectableNodes = this._getAllNodes().en().where((n) => this._nodeIsMultiSelectable(n)).toArray();
     }
 
     private _nodeIsMultiSelectable(node: ITreeNode): boolean {
@@ -183,6 +189,8 @@ class TreeView extends BaseView {
         if (!this._nodeIsMultiSelectable(node)) return;
 
         this._setNodeMultiSelected(node, isSelected);
+
+        $.publish(Commands.TREE_NODE_MULTISELECTED, [node]);
 
         // recursively select/deselect child nodes
         for (var i = 0; i < node.nodes.length; i++){
@@ -236,8 +244,6 @@ class TreeView extends BaseView {
         if (!selected){
             this._setNodeIndeterminate(node, false);
         }
-
-        $.publish(Commands.TREE_NODE_MULTISELECTED, [node]);
     }
 
     private _setNodeIndeterminate(node: ITreeNode, indeterminate: boolean): void {

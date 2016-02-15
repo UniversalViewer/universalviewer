@@ -240,7 +240,8 @@ declare module Manifesto {
     class Manifest extends IIIFResource implements IManifest {
         index: number;
         rootRange: IRange;
-        private sequences;
+        private _ranges;
+        private _sequences;
         constructor(jsonld: any, options?: IManifestoOptions);
         private _getRootRange();
         private _getRangeById(id);
@@ -450,6 +451,7 @@ declare module Manifesto {
 declare module Manifesto {
     interface ICanvas extends IManifestResource {
         index: number;
+        ranges: IRange[];
         getHeight(): number;
         getImages(): IAnnotation[];
         getThumbUri(width: number, height: number): string;

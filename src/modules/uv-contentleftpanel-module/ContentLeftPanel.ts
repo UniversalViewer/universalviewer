@@ -38,7 +38,6 @@ class ContentLeftPanel extends LeftPanel {
     galleryView: GalleryView;
     isTreeViewOpen: boolean = false;
     isThumbsViewOpen: boolean = false;
-    multiSelectionMode: boolean = false;
     multiSelectState: MultiSelectState;
     thumbsView: ThumbsView;
     treeData: Manifesto.ITreeNode;
@@ -73,30 +72,44 @@ class ContentLeftPanel extends LeftPanel {
         });
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
-            that.multiSelectionMode = true;
+
+            that._reset();
+
+            that.multiSelectState.enabled = true;
+
+            $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
+
             that.setTitle(that.content.selection);
+
             if (!that.isFullyExpanded){
                 that.expandFull();
             } else {
                 this._showMultiSelectOptions();
             }
+
             this.$selectButton.text(e);
         });
 
         $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
-            that.multiSelectionMode = false;
+
+            that._reset();
+
+            that.multiSelectState.enabled = false;
+
+            $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
+
             that.setTitle(that.content.title);
             this.$multiSelectOptions.hide();
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            if (this.multiSelectionMode) {
+            if (this.multiSelectState.enabled) {
                 $.publish(Commands.EXIT_MULTISELECT_MODE);
             }
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
-            if (this.multiSelectionMode) {
+            if (this.multiSelectState.enabled) {
                 this._showMultiSelectOptions();
             }
         });
@@ -238,23 +251,28 @@ class ContentLeftPanel extends LeftPanel {
             }
         }
 
-        this.multiSelectState = new MultiSelectState();
-        this.multiSelectState.ranges = this.provider.getRanges();
-        this.multiSelectState.canvases = <ICanvas[]>this.provider.getCurrentSequence().getCanvases();
+        this._reset();
     }
 
     createTreeView(): void {
         this.treeView = new TreeView(this.$treeView);
         this.treeView.elideCount = this.config.options.elideCount;
-        this.treeView.multiSelectionMode = this.multiSelectionMode;
+        this.treeView.multiSelectState = this.multiSelectState;
         this.dataBindTreeView();
         this.updateTreeViewOptions();
     }
 
     dataBind(): void {
+        this._reset();
         this.dataBindThumbsView();
         this.dataBindTreeView();
         this.dataBindGalleryView();
+    }
+
+    private _reset(): void {
+        this.multiSelectState = new MultiSelectState();
+        this.multiSelectState.ranges = _.cloneDeep(this.provider.getRanges());
+        this.multiSelectState.canvases = <ICanvas[]>_.cloneDeep(this.provider.getCurrentSequence().getCanvases());
     }
 
     private _showMultiSelectOptions(): void {
@@ -362,7 +380,7 @@ class ContentLeftPanel extends LeftPanel {
 
     createGalleryView(): void {
         this.galleryView = new GalleryView(this.$galleryView);
-        this.galleryView.multiSelectionMode = this.multiSelectionMode;
+        this.galleryView.multiSelectState = this.multiSelectState;
         this.dataBindGalleryView();
     }
 
