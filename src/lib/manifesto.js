@@ -1108,7 +1108,7 @@ var Manifesto;
             _super.call(this, jsonld, options);
             this.ranges = [];
         }
-        Range.prototype.getCanvases = function () {
+        Range.prototype.getCanvasIds = function () {
             if (this.__jsonld.canvases) {
                 return this.__jsonld.canvases;
             }

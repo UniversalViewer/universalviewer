@@ -18,6 +18,8 @@ interface IProvider{
 
     addTimestamp(uri: string): string;
     getAttribution(): string;
+    getCanvasById(id: string): Manifesto.ICanvas;
+    getCanvasesById(ids: string[]): Manifesto.ICanvas[];
     getCanvasByIndex(index: number): any;
     getCanvasIndexById(id: string): number;
     getCanvasIndexByLabel(label: string): number;
@@ -41,6 +43,7 @@ interface IProvider{
     getPrevPageIndex(index?: number): number;
     getRanges(): IRange[];
     getRangeByPath(path: string): Manifesto.IRange;
+    getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
     getSeeAlso(): any;
     getSequenceIndexParam(): number;
     getStartCanvasIndex(): number;

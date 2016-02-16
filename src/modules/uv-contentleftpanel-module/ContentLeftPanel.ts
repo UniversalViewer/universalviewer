@@ -77,7 +77,7 @@ class ContentLeftPanel extends LeftPanel {
 
             that.multiSelectState.enabled = true;
 
-            $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
+            this._publishMultiSelectStateChange();
 
             that.setTitle(that.content.selection);
 
@@ -220,11 +220,11 @@ class ContentLeftPanel extends LeftPanel {
 
         this.$selectButton.on('click', () => {
 
-            //var ids: String[] = _.map(this.ranges, (range: IRange) => {
-            //    return range.id;
-            //});
+            var ids: String[] = _.map(that._getAllSelectedCanvases(), (canvas: ICanvas) => {
+                return canvas.id;
+            });
 
-            //$.publish(Commands.MULTISELECTION_MADE, [ids]);
+            $.publish(Commands.MULTISELECTION_MADE, [ids]);
         });
 
         this.$expandButton.attr('tabindex', '7');
@@ -271,8 +271,10 @@ class ContentLeftPanel extends LeftPanel {
 
     private _reset(): void {
         this.multiSelectState = new MultiSelectState();
-        this.multiSelectState.ranges = _.cloneDeep(this.provider.getRanges());
-        this.multiSelectState.canvases = <ICanvas[]>_.cloneDeep(this.provider.getCurrentSequence().getCanvases());
+        this.multiSelectState.ranges = this.provider.getRanges();
+        this.multiSelectState.canvases = <ICanvas[]>this.provider.getCurrentSequence().getCanvases();
+        //this.multiSelectState.ranges = _.cloneDeep(this.provider.getRanges());
+        //this.multiSelectState.canvases = <ICanvas[]>_.cloneDeep(this.provider.getCurrentSequence().getCanvases());
     }
 
     private _showMultiSelectOptions(): void {
@@ -289,22 +291,51 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     private _multiSelectAll(selected: boolean): void {
-        for(var i = 0; i < this.multiSelectState.ranges.length; i++) {
-            var range: IRange = this.multiSelectState.ranges[i];
-            range.multiSelected = selected;
-        }
-
-        for(var j = 0; j < this.multiSelectState.canvases.length; j++) {
-            var canvas: ICanvas = this.multiSelectState.canvases[j];
-            canvas.multiSelected = selected;
-        }
+        this._multiSelectRanges(this.multiSelectState.ranges, selected);
+        this._multiSelectCanvases(this.multiSelectState.canvases, selected);
 
         this._publishMultiSelectStateChange();
+    }
+
+    private _multiSelectRanges(ranges: IRange[], selected: boolean): void {
+        for(var i = 0; i < ranges.length; i++) {
+            var range: IRange = ranges[i];
+            range.multiSelected = selected;
+            var canvases: ICanvas[] = this._getCanvasesByIds(range.getCanvasIds());
+            this._multiSelectCanvases(canvases, selected);
+        }
+    }
+
+    private _multiSelectCanvases(canvases: ICanvas[], selected: boolean): void {
+        for(var j = 0; j < canvases.length; j++) {
+            var canvas: ICanvas = canvases[j];
+            canvas.multiSelected = selected;
+        }
+    }
+
+    private _getCanvasById(id: string): ICanvas {
+        return this.multiSelectState.canvases.en().where(c => c.id === id).first();
+    }
+
+    private _getCanvasesByIds(ids: string[]): ICanvas[] {
+        var canvases: ICanvas[] = [];
+
+        for (var i = 0; i < ids.length; i++) {
+            var id: string = ids[i];
+            canvases.push(this._getCanvasById(id));
+        }
+
+        return canvases;
     }
 
     private _updateRangeMultiSelectState(range: IRange, selected: boolean): void {
         var r: IRange = this.multiSelectState.ranges.en().where(r => r.id === range.id).first();
         r.multiSelected = selected;
+
+        var canvases: ICanvas[] = <ICanvas[]>this.provider.getRangeCanvases(r);
+
+        this._multiSelectCanvases(canvases, selected);
+
         this._publishMultiSelectStateChange();
     }
 
@@ -320,11 +351,19 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     private _allRangesSelected(): boolean {
-        return this.multiSelectState.ranges.en().where(r => r.multiSelected).toArray().length === this.multiSelectState.ranges.length;
+        return this._getAllSelectedRanges().length === this.multiSelectState.ranges.length;
+    }
+
+    private _getAllSelectedRanges(): IRange[] {
+        return this.multiSelectState.ranges.en().where(r => r.multiSelected).toArray();
     }
 
     private _allCanvasesSelected(): boolean {
-        return this.multiSelectState.canvases.en().where(c => c.multiSelected).toArray().length === this.multiSelectState.canvases.length;
+        return this._getAllSelectedCanvases().length === this.multiSelectState.canvases.length;
+    }
+
+    private _getAllSelectedCanvases(): ICanvas[] {
+        return this.multiSelectState.canvases.en().where(c => c.multiSelected).toArray();
     }
 
     sortByDate(): void {
@@ -353,6 +392,8 @@ class ContentLeftPanel extends LeftPanel {
         if (!this.treeView) return;
         this.treeView.rootNode = <ITreeNode>this.treeData;
         this.treeView.dataBind();
+        // ensure tree has current multiselect state
+        this._publishMultiSelectStateChange();
     }
 
     createThumbsView(): void {
@@ -390,6 +431,8 @@ class ContentLeftPanel extends LeftPanel {
         var height = this.config.options.galleryThumbHeight;
         this.galleryView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
         this.galleryView.dataBind();
+        // ensure gallery has current multiselect state
+        this._publishMultiSelectStateChange();
     }
 
     toggleFinish(): void {

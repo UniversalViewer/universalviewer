@@ -425,8 +425,7 @@ class Extension extends BaseExtension {
 
         if (!range) return;
 
-        var canvasId = range.getCanvases()[0];
-
+        var canvasId: string = range.getCanvasIds()[0];
         var index = this.provider.getCanvasIndexById(canvasId);
 
         this.viewPage(index);

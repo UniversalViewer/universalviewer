@@ -168,6 +168,21 @@ class BaseProvider implements IProvider{
         return this.config.options.seeAlsoEnabled !== false;
     }
 
+    getCanvasById(id: string): Manifesto.ICanvas {
+        return this.getCurrentSequence().getCanvasById(id);
+    }
+
+    getCanvasesById(ids: string[]): Manifesto.ICanvas[] {
+        var canvases: Manifesto.ICanvas[] = [];
+
+        for (var i = 0; i < ids.length; i++) {
+            var id: string = ids[i];
+            canvases.push(this.getCanvasById(id));
+        }
+
+        return canvases;
+    }
+
     getCanvasByIndex(index: number): Manifesto.ICanvas {
         return this.getCurrentSequence().getCanvasByIndex(index);
     }
@@ -186,7 +201,7 @@ class BaseProvider implements IProvider{
         if (canvas.ranges){
             return canvas.ranges;
         } else {
-            canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvases().en().any(c => c === canvas.id))).toArray();
+            canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
         }
 
         return canvas.ranges;
@@ -198,6 +213,11 @@ class BaseProvider implements IProvider{
 
     getCurrentSequence(): Manifesto.ISequence {
         return this.getSequenceByIndex(this.sequenceIndex);
+    }
+
+    getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
+        var ids: string[] = range.getCanvasIds();
+        return this.getCanvasesById(ids);
     }
 
     getTotalCanvases(): number{

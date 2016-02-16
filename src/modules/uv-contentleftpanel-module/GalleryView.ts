@@ -236,13 +236,6 @@ class GalleryView extends BaseView {
         $.observable(thumb).setProperty("multiSelected", selected);
     }
 
-    private _selectAll(selected: boolean): void {
-        for (var i = 0; i < this.thumbs.length; i++){
-            var thumb: IThumb = this.thumbs[i];
-            this._setThumbMultiSelected(thumb, selected);
-        }
-    }
-
     updateThumbs(): void {
 
         if (!this.thumbs || !this.thumbs.length) return;

@@ -101,7 +101,12 @@ class TreeView extends BaseView {
                         }).on('click', 'a', function(e) {
                             e.preventDefault();
                             if (self.data.nodes.length) self.toggleExpanded();
-                            $.publish(Commands.TREE_NODE_SELECTED, [self.data.data]);
+
+                            if (that.multiSelectState.enabled){
+                                self.toggleMultiSelect();
+                            } else {
+                                $.publish(Commands.TREE_NODE_SELECTED, [self.data.data]);
+                            }
                         }).on('click', 'input.multiSelect', function(e) {
                             self.toggleMultiSelect();
                         });
@@ -138,15 +143,6 @@ class TreeView extends BaseView {
         this._setMultiSelectionEnabled(this.multiSelectState.enabled);
     }
 
-    private _selectAll(selected): void {
-        var allNodes: ITreeNode[] = this._getAllNodes();
-
-        for (var i = 0; i < allNodes.length; i++){
-            var node: ITreeNode = allNodes[i];
-            this._multiSelectTreeNode(node, selected);
-        }
-    }
-
     public allNodesSelected(): boolean {
         var applicableNodes: ITreeNode[] = this._getMultiSelectableNodes();
         var multiSelectedNodes: ITreeNode[] = this.getMultiSelectedNodes();
@@ -155,6 +151,7 @@ class TreeView extends BaseView {
     }
 
     private _getMultiSelectableNodes(): ITreeNode[] {
+
         // if cached
         if (this.multiSelectableNodes){
             return this.multiSelectableNodes;
@@ -248,7 +245,6 @@ class TreeView extends BaseView {
 
     private _setNodeIndeterminate(node: ITreeNode, indeterminate: boolean): void {
         var $checkbox: JQuery = this._getNodeCheckbox(node);
-
         $checkbox.prop("indeterminate", indeterminate);
     }
 
