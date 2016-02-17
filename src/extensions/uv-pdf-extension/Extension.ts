@@ -18,8 +18,8 @@ import Provider = require("./Provider");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
-import ThumbsView = require("../../modules/uv-treeviewleftpanel-module/ThumbsView");
-import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
+import ThumbsView = require("../../modules/uv-contentleftpanel-module/ThumbsView");
+import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
 
 class Extension extends BaseExtension{
 
@@ -32,7 +32,7 @@ class Extension extends BaseExtension{
     embedDialogue: EmbedDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
-    leftPanel: TreeViewLeftPanel;
+    leftPanel: ContentLeftPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
@@ -85,7 +85,7 @@ class Extension extends BaseExtension{
         this.headerPanel = new HeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
-            this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
         }
 
         this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);

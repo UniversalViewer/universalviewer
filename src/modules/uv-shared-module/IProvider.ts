@@ -2,6 +2,7 @@ import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("./ExternalResource");
 import IMetadataItem = require("./IMetadataItem");
+import IRange = require("./IRange");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
@@ -17,11 +18,14 @@ interface IProvider{
 
     addTimestamp(uri: string): string;
     getAttribution(): string;
+    getCanvasById(id: string): Manifesto.ICanvas;
+    getCanvasesById(ids: string[]): Manifesto.ICanvas[];
     getCanvasByIndex(index: number): any;
     getCanvasIndexById(id: string): number;
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexParam(): number;
     getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange;
+    getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
     getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
     getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
     getCurrentCanvas(): Manifesto.ICanvas;
@@ -37,14 +41,16 @@ interface IProvider{
     getNextPageIndex(index?: number): number;
     getPagedIndices(index?: number): number[];
     getPrevPageIndex(index?: number): number;
+    getRanges(): IRange[];
     getRangeByPath(path: string): Manifesto.IRange;
+    getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
     getSeeAlso(): any;
     getSequenceIndexParam(): number;
     getStartCanvasIndex(): number;
-    getThumbs(width: number, height: number): Manifesto.Thumb[];
+    getThumbs(width: number, height: number): Manifesto.IThumb[];
     getTitle(): string;
     getTotalCanvases(): number;
-    getTree(): Manifesto.TreeNode;
+    getTree(): Manifesto.ITreeNode;
     getViewingDirection(): Manifesto.ViewingDirection;
     isCanvasIndexOutOfRange(index: number): boolean;
     isFirstCanvas(index?: number): boolean;

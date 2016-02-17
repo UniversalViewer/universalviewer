@@ -240,7 +240,8 @@ declare module Manifesto {
     class Manifest extends IIIFResource implements IManifest {
         index: number;
         rootRange: IRange;
-        private sequences;
+        private _ranges;
+        private _sequences;
         constructor(jsonld: any, options?: IManifestoOptions);
         private _getRootRange();
         private _getRangeById(id);
@@ -274,12 +275,13 @@ declare module Manifesto {
 }
 declare module Manifesto {
     class Range extends ManifestResource implements IRange {
+        canvases: ICanvas[];
         parentRange: Range;
         path: string;
         ranges: Range[];
         treeNode: ITreeNode;
         constructor(jsonld: any, options: IManifestoOptions);
-        getCanvases(): string[];
+        getCanvasIds(): string[];
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
     }
@@ -450,6 +452,10 @@ declare module Manifesto {
 declare module Manifesto {
     interface ICanvas extends IManifestResource {
         index: number;
+<<<<<<< HEAD
+=======
+        ranges: IRange[];
+>>>>>>> selection
         getHeight(): number;
         getImages(): IAnnotation[];
         getThumbUri(width: number, height: number): string;
@@ -572,7 +578,7 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface IRange extends IManifestResource {
-        getCanvases(): string[];
+        getCanvasIds(): string[];
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
         parentRange: IRange;

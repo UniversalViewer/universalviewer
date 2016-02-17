@@ -14,6 +14,23 @@
         "viewTerms": "Darllenwch Telerau ac Amodau Llawn"
       }
     },
+    "contentLeftPanel": {
+      "content": {
+        "collapse": "Cuddio'r Cynnwys",
+        "collapseFull": "Cuddio'r Galeri",
+        "date": "dyddiad",
+        "expand": "Ehangu'r Cynnwys",
+        "expandFull": "Ehangu'r Galeri",
+        "index": "Mynegai",
+        "select": "dewiswch",
+        "selectAll": "Dewis pob",
+        "selection": "Dewis",
+        "sortBy": "trefnu yn ôl",
+        "thumbnails": "Bodluniau",
+        "title": "Cynnwys",
+        "volume": "cyfaint"
+      }
+    },
     "dialogue": {
       "content": {
         "close": "Cau"
@@ -23,6 +40,8 @@
       "content": {
         "currentViewAsJpg": "Golwg presennol (jpg)",
         "download": "Lawrlwytho",
+        "downloadSelection": "Download Dewis",
+        "downloadSelectionButton": "Download PDF",
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
         "entireFileAsOriginal": "Y ffeil gyfan ({0})",
@@ -157,20 +176,6 @@
         "preserveViewport": "Cadw'r lefel o glosio",
         "title": "Dewisiadau",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
-      }
-    },
-    "treeViewLeftPanel": {
-      "content": {
-        "collapse": "Cuddio'r Cynnwys",
-        "collapseFull": "Cuddio'r Galeri",
-        "date": "dyddiad",
-        "expand": "Ehangu'r Cynnwys",
-        "expandFull": "Ehangu'r Galeri",
-        "index": "Mynegai",
-        "sortBy": "trefnu yn ôl",
-        "thumbnails": "Bodluniau",
-        "title": "Cynnwys",
-        "volume": "cyfaint"
       }
     }
   }

@@ -714,6 +714,17 @@ class BaseExtension implements IExtension {
         this.provider.reload(p);
     }
 
+    viewCollection(collection: Manifesto.ICollection): void{
+        var p = new BootstrapParams();
+        p.manifestUri = this.provider.manifestUri;
+        p.collectionIndex = collection.index;
+        p.manifestIndex = 0;
+        p.sequenceIndex = 0;
+        p.canvasIndex = 0;
+
+        this.provider.reload(p);
+    }
+
     isFullScreen(): boolean {
         return this.bootstrapper.isFullScreen;
     }

@@ -24,6 +24,7 @@ class SettingsDialogue extends BaseSettingsDialogue {
         this.$navigatorEnabled = $('<div class="setting navigatorEnabled"></div>');
         this.$scroll.append(this.$navigatorEnabled);
 
+        // todo: use .checkboxButton jquery extension
         this.$navigatorEnabledCheckbox = $('<input id="navigatorEnabled" type="checkbox" />');
         this.$navigatorEnabled.append(this.$navigatorEnabledCheckbox);
 

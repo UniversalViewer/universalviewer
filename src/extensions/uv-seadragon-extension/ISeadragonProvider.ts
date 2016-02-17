@@ -18,7 +18,7 @@ interface ISeadragonProvider extends IProvider{
     getSearchResultByCanvasIndex(index: number): SearchResult;
     getSearchWithinService(): Manifesto.IService;
     getSearchWithinServiceUri(): string;
-    getSortedTree(sortType: TreeSortType): Manifesto.TreeNode;
+    getSortedTree(sortType: TreeSortType): Manifesto.ITreeNode;
     isSearchWithinEnabled(): boolean;
     parseSearchWithinResults(results: any);
     searchResults: SearchResult[];
