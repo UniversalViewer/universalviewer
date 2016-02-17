@@ -34,6 +34,11 @@
                     line-height: 22px;
                 }
 
+                &.feedback{
+                    .icon-left(url('@{img-path}feedback.png'), 21px, 30px);
+                    line-height: 22px;
+                }
+
                 &.fullScreen{
                     .icon-right(url('@{img-path}fullscreen.png'), 21px, 30px);
                     line-height: 22px;
@@ -72,6 +77,12 @@
                     }
 
                     &.bookmark{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
+
+                    &.feedback{
                         .hide-text();
                         width: 27px;
                         padding: 0;

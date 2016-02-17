@@ -24,6 +24,7 @@
     {
       "options": {
         "bookmarkEnabled": false,
+        "feedbackEnabled": false,
         "minimiseButtons": true,
         "openEnabled": false
       }

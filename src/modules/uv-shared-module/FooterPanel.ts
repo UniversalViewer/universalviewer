@@ -3,6 +3,7 @@ import BaseView = require("./BaseView");
 
 class FooterPanel extends BaseView {
 
+    $feedbackButton: JQuery;
     $bookmarkButton: JQuery;
     $downloadButton: JQuery;
     $embedButton: JQuery;
@@ -30,6 +31,9 @@ class FooterPanel extends BaseView {
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
+        this.$feedbackButton = $('<a class="feedback" title="' + this.content.feedback + '">' + this.content.feedback + '</a>');
+        this.$options.prepend(this.$feedbackButton);
+
         this.$openButton = $('<a class="open" title="' + this.content.open + '">' + this.content.open + '</a>');
         this.$options.prepend(this.$openButton);
 
@@ -49,6 +53,10 @@ class FooterPanel extends BaseView {
 
         this.$openButton.onPressed(() => {
             $.publish(BaseCommands.OPEN);
+        });
+
+        this.$feedbackButton.onPressed(() => {
+            $.publish(BaseCommands.FEEDBACK);
         });
 
         this.$bookmarkButton.onPressed(() => {
@@ -75,6 +83,7 @@ class FooterPanel extends BaseView {
         }
 
         this.updateOpenButton();
+        this.updateFeedbackButton();
         this.updateBookmarkButton();
         this.updateDownloadButton();
         this.updateFullScreenButton();
@@ -121,6 +130,16 @@ class FooterPanel extends BaseView {
             this.$downloadButton.show();
         } else {
             this.$downloadButton.hide();
+        }
+    }
+
+    updateFeedbackButton(): void {
+        var configEnabled = Utils.Bools.GetBool(this.options.feedbackEnabled, false);
+
+        if (configEnabled){
+            this.$feedbackButton.show();
+        } else {
+            this.$feedbackButton.hide();
         }
     }
 

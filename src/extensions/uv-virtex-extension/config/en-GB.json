@@ -22,6 +22,7 @@
     {
       "options": {
         "downloadEnabled": false,
+        "feedbackEnabled": false,
         "minimiseButtons": true,
         "openEnabled": false
       }

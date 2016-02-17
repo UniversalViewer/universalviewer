@@ -225,6 +225,10 @@ class BaseExtension implements IExtension {
             }
         });
 
+        $.subscribe(BaseCommands.FEEDBACK, () => {
+            this.feedback();
+        });
+
         $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, () => {
             this.triggerSocket(BaseCommands.HIDE_DOWNLOAD_DIALOGUE);
         });
@@ -744,6 +748,10 @@ class BaseExtension implements IExtension {
 
     bookmark(): void {
         // override for each extension
+    }
+
+    feedback(): void {
+        this.triggerSocket(BaseCommands.FEEDBACK, new BootstrapParams());
     }
 
     getBookmarkUri(): string {
