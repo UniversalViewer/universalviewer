@@ -1032,6 +1032,12 @@ var Manifesto;
             }
             return Manifesto.ViewingDirection.LEFTTORIGHT;
         };
+        Manifest.prototype.getViewingHint = function () {
+            if (this.getProperty('viewingHint')) {
+                return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
+            }
+            return Manifesto.ViewingHint.EMPTY;
+        };
         return Manifest;
     })(Manifesto.IIIFResource);
     Manifesto.Manifest = Manifest;

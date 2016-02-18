@@ -52,6 +52,7 @@ interface IProvider{
     getTotalCanvases(): number;
     getTree(): Manifesto.ITreeNode;
     getViewingDirection(): Manifesto.ViewingDirection;
+    getViewingHint(): Manifesto.ViewingHint;
     isCanvasIndexOutOfRange(index: number): boolean;
     isFirstCanvas(index?: number): boolean;
     isLastCanvas(index?: number): boolean;

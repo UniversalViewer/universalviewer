@@ -257,6 +257,7 @@ declare module Manifesto {
         getManifestType(): ManifestType;
         isMultiSequence(): boolean;
         getViewingDirection(): ViewingDirection;
+        getViewingHint(): ViewingHint;
     }
 }
 declare module Manifesto {
@@ -528,6 +529,7 @@ declare module Manifesto {
         getTree(): ITreeNode;
         getManifestType(): ManifestType;
         getViewingDirection(): Manifesto.ViewingDirection;
+        getViewingHint(): ViewingHint;
         isMultiSequence(): boolean;
         rootRange: IRange;
     }

@@ -264,7 +264,23 @@ class BaseProvider implements IProvider{
     }
 
     getViewingDirection(): Manifesto.ViewingDirection {
-        return this.getCurrentSequence().getViewingDirection();
+        var viewingDirection: Manifesto.ViewingDirection = this.getCurrentSequence().getViewingDirection();
+
+        if (!viewingDirection.toString()) {
+            viewingDirection = this.manifest.getViewingDirection();
+        }
+
+        return viewingDirection;
+    }
+
+    getViewingHint(): Manifesto.ViewingHint {
+        var viewingHint: Manifesto.ViewingHint = this.getCurrentSequence().getViewingHint();
+
+        if (!viewingHint.toString()) {
+            viewingHint = this.manifest.getViewingHint();
+        }
+
+        return viewingHint;
     }
 
     getFirstPageIndex(): number {

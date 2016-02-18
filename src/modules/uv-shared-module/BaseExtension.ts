@@ -636,6 +636,9 @@ class BaseExtension implements IExtension {
                     this.provider.resources = _.map(r, (resource: Manifesto.IExternalResource) => {
                         return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
                     });
+
+                    console.log(this.provider.resources[0].profile);
+
                     resolve(this.provider.resources);
                 })['catch']((errorMessage) => {
                 this.showMessage(errorMessage);
@@ -733,12 +736,19 @@ class BaseExtension implements IExtension {
         return this.bootstrapper.isFullScreen;
     }
 
-    isLeftPanelEnabled(): boolean{
-        return  Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
-            && this.provider.isMultiCanvas();
+    isLeftPanelEnabled(): boolean {
+        if (Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)){
+            if (this.provider.isMultiCanvas()){
+                if (this.provider.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
-    isRightPanelEnabled(): boolean{
+    isRightPanelEnabled(): boolean {
         return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
