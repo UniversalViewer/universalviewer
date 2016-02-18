@@ -298,28 +298,56 @@ class SeadragonCenterPanel extends CenterPanel {
 
         var viewingDirection = this.provider.getViewingDirection().toString();
 
-        // if there's more than one image, align them next to each other.
-        if ((<ISeadragonProvider>this.provider).resources.length > 1) {
+        var resources: Manifesto.IExternalResource[] = (<ISeadragonProvider>this.provider).resources;
 
-            // check if tilesources should be aligned horizontally or vertically
-            if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
-                // vertical
-                var topPage = this.viewer.world.getItemAt(0);
-                var topPageBounds = topPage.getBounds(true);
-                var y = topPageBounds.y + topPageBounds.height;
-                var bottomPage = this.viewer.world.getItemAt(1);
-                var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
-                bottomPagePos.y = y + this.config.options.pageGap;
-                bottomPage.setPosition(bottomPagePos, true);
+        // if there's more than one image, align them next to each other.
+        if (resources.length > 1) {
+
+            if (resources.length === 2) {
+
+                // check if tilesources should be aligned horizontally or vertically
+                if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
+                    // vertical
+                    var topPage = this.viewer.world.getItemAt(0);
+                    var topPageBounds = topPage.getBounds(true);
+                    var y = topPageBounds.y + topPageBounds.height;
+                    var bottomPage = this.viewer.world.getItemAt(1);
+                    var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+                    bottomPagePos.y = y + this.config.options.pageGap;
+                    bottomPage.setPosition(bottomPagePos, true);
+                } else {
+                    // horizontal
+                    var leftPage = this.viewer.world.getItemAt(0);
+                    var leftPageBounds = leftPage.getBounds(true);
+                    var x = leftPageBounds.x + leftPageBounds.width;
+                    var rightPage = this.viewer.world.getItemAt(1);
+                    var rightPagePos = rightPage.getBounds(true).getTopLeft();
+                    rightPagePos.x = x + this.config.options.pageGap;
+                    rightPage.setPosition(rightPagePos, true);
+                }
             } else {
-                // horizontal
-                var leftPage = this.viewer.world.getItemAt(0);
-                var leftPageBounds = leftPage.getBounds(true);
-                var x = leftPageBounds.x + leftPageBounds.width;
-                var rightPage = this.viewer.world.getItemAt(1);
-                var rightPagePos = rightPage.getBounds(true).getTopLeft();
-                rightPagePos.x = x + this.config.options.pageGap;
-                rightPage.setPosition(rightPagePos, true);
+                // a scroll
+                if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
+                    // vertical
+                    //var topPage = this.viewer.world.getItemAt(0);
+                    //var topPageBounds = topPage.getBounds(true);
+                    //var y = topPageBounds.y + topPageBounds.height;
+                    //var bottomPage = this.viewer.world.getItemAt(1);
+                    //var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+                    //bottomPagePos.y = y;
+                    //bottomPage.setPosition(bottomPagePos, true);
+                } else {
+                    // horizontal
+                    for (var i = 0; i < resources.length - 1; i++){
+                        var page = this.viewer.world.getItemAt(i);
+                        var pageBounds = page.getBounds(true);
+                        var x = pageBounds.x + pageBounds.width;
+                        var nextPage = this.viewer.world.getItemAt(i + 1);
+                        var nextPagePos = nextPage.getBounds(true).getTopLeft();
+                        nextPagePos.x = x;
+                        nextPage.setPosition(nextPagePos, true);
+                    }
+                }
             }
         }
     }

@@ -6,14 +6,14 @@ class ExternalResource implements Manifesto.IExternalResource {
     public isResponseHandled: boolean = false;
     public loginService: Manifesto.IService;
     public logoutService: Manifesto.IService;
-    public profile: Manifesto.ServiceProfile;
+    //public profile: Manifesto.ServiceProfile;
     public status: number;
     public tokenService: Manifesto.IService;
 
     constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string) {
         this.dataUri = dataUriFunc(resource);
         this._parseAuthServices(resource);
-        this.profile = (<Manifesto.IService>resource).getProfile();
+        //this.profile = (<Manifesto.IService>resource).getProfile();
     }
 
     private _parseAuthServices(resource: any): void {

@@ -18,6 +18,7 @@ interface IProvider{
 
     addTimestamp(uri: string): string;
     getAttribution(): string;
+    getCanvases(): Manifesto.ICanvas[];
     getCanvasById(id: string): Manifesto.ICanvas;
     getCanvasesById(ids: string[]): Manifesto.ICanvas[];
     getCanvasByIndex(index: number): any;

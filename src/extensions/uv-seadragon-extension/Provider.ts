@@ -190,23 +190,30 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     getPagedIndices(canvasIndex?: number): number[]{
-        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+        if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
 
         var indices = [];
 
-        if (!this.isPagingSettingEnabled()) {
-            indices.push(this.canvasIndex);
+        // if it's a continuous manifest, get all resources.
+        if (this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString()){
+            indices = _.map(this.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
+                return index;
+            });
         } else {
-            if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.isTotalCanvasesEven())){
-                indices = [canvasIndex];
-            } else if (canvasIndex % 2){
-                indices = [canvasIndex, canvasIndex + 1];
+            if (!this.isPagingSettingEnabled()) {
+                indices.push(this.canvasIndex);
             } else {
-                indices = [canvasIndex - 1, canvasIndex];
-            }
+                if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.isTotalCanvasesEven())){
+                    indices = [canvasIndex];
+                } else if (canvasIndex % 2){
+                    indices = [canvasIndex, canvasIndex + 1];
+                } else {
+                    indices = [canvasIndex - 1, canvasIndex];
+                }
 
-            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
-                indices = indices.reverse();
+                if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
+                    indices = indices.reverse();
+                }
             }
         }
 

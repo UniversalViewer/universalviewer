@@ -636,9 +636,6 @@ class BaseExtension implements IExtension {
                     this.provider.resources = _.map(r, (resource: Manifesto.IExternalResource) => {
                         return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
                     });
-
-                    console.log(this.provider.resources[0].profile);
-
                     resolve(this.provider.resources);
                 })['catch']((errorMessage) => {
                 this.showMessage(errorMessage);

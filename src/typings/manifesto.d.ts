@@ -99,12 +99,16 @@ declare module Manifesto {
     class ServiceProfile extends StringValue {
         static AUTOCOMPLETE: ServiceProfile;
         static CLICKTHROUGH: ServiceProfile;
+        static STANFORDIIIFIMAGECOMPLIANCE0: ServiceProfile;
         static STANFORDIIIFIMAGECOMPLIANCE1: ServiceProfile;
         static STANFORDIIIFIMAGECOMPLIANCE2: ServiceProfile;
+        static STANFORDIIIFIMAGECONFORMANCE0: ServiceProfile;
         static STANFORDIIIFIMAGECONFORMANCE1: ServiceProfile;
         static STANFORDIIIFIMAGECONFORMANCE2: ServiceProfile;
+        static STANFORDIIIF1IMAGECOMPLIANCE0: ServiceProfile;
         static STANFORDIIIF1IMAGECOMPLIANCE1: ServiceProfile;
         static STANFORDIIIF1IMAGECOMPLIANCE2: ServiceProfile;
+        static STANFORDIIIF1IMAGECONFORMANCE0: ServiceProfile;
         static STANFORDIIIF1IMAGECONFORMANCE1: ServiceProfile;
         static STANFORDIIIF1IMAGECONFORMANCE2: ServiceProfile;
         static IIIF1IMAGELEVEL0: ServiceProfile;
@@ -555,6 +559,9 @@ interface IManifesto {
     getTreeNode(): Manifesto.ITreeNode;
     IIIFResourceType: Manifesto.IIIFResourceType;
     isImageProfile(profile: Manifesto.ServiceProfile): boolean;
+    isLevel0ImageProfile(profile: Manifesto.ServiceProfile): boolean;
+    isLevel1ImageProfile(profile: Manifesto.ServiceProfile): boolean;
+    isLevel2ImageProfile(profile: Manifesto.ServiceProfile): boolean;
     loadExternalResources: (resources: Manifesto.IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource, tokenStorageStrategy: string) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
     loadManifest: (uri: string) => Promise<string>;
     ManifestType: Manifesto.ManifestType;

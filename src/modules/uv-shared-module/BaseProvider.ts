@@ -168,6 +168,10 @@ class BaseProvider implements IProvider{
         return this.config.options.seeAlsoEnabled !== false;
     }
 
+    getCanvases(): Manifesto.ICanvas[] {
+        return this.getCurrentSequence().getCanvases();
+    }
+
     getCanvasById(id: string): Manifesto.ICanvas {
         return this.getCurrentSequence().getCanvasById(id);
     }
