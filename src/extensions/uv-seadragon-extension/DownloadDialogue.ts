@@ -218,7 +218,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             }
         });
 
-        if (this.provider.isPagingSettingEnabled()) {
+        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled()) {
             this.$pagingNote.show();
         } else {
             this.$pagingNote.hide();
@@ -322,11 +322,11 @@ class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.dynamicCanvasRenderings:
             case DownloadOption.dynamicImageRenderings:
             case DownloadOption.wholeImageHighRes:
-                return !this.provider.isPagingSettingEnabled();
+                return !(<ISeadragonProvider>this.provider).isPagingSettingEnabled();
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
                 var size: Size = this.getDimensionsForCurrentCanvas();
-                return (!this.provider.isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
+                return (!(<ISeadragonProvider>this.provider).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.selection:
                 return this.options.selectionEnabled;
             default:

@@ -39,9 +39,7 @@ interface IProvider{
     getLogo(): string;
     getManifestType(): Manifesto.ManifestType;
     getMetadata(): IMetadataItem[];
-    getNextPageIndex(index?: number): number;
-    getPagedIndices(index?: number): number[];
-    getPrevPageIndex(index?: number): number;
+    getPagedIndices(index?: number): number[]; // todo: rename to something generic
     getRanges(): IRange[];
     getRangeByPath(path: string): Manifesto.IRange;
     getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
@@ -59,9 +57,6 @@ interface IProvider{
     isLastCanvas(index?: number): boolean;
     isMultiCanvas(): boolean;
     isMultiSequence(): boolean;
-    isPagingAvailable(): boolean;
-    isPagingEnabled(): boolean;
-    isPagingSettingEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
 

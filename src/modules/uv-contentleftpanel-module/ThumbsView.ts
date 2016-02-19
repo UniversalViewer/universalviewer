@@ -269,7 +269,7 @@ class ThumbsView extends BaseView {
 
         this.$selectedThumb = this.getThumbByIndex(index);
 
-        if (this.provider.isPagingSettingEnabled()){
+        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled()){
             var indices = this.provider.getPagedIndices(index);
 
             _.each(indices, (index: number) => {

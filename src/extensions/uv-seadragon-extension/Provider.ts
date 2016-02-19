@@ -189,13 +189,34 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return script;
     }
 
+    getPrevPageIndex(canvasIndex?: number): number {
+        if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
+
+        var index;
+
+        if (this.isPagingSettingEnabled()){
+            var indices = this.getPagedIndices(canvasIndex);
+
+            if (this.isRightToLeft()){
+                index = indices.last() - 1;
+            } else {
+                index = indices[0] - 1;
+            }
+
+        } else {
+            index = canvasIndex - 1;
+        }
+
+        return index;
+    }
+
     getPagedIndices(canvasIndex?: number): number[]{
         if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
 
         var indices = [];
 
         // if it's a continuous manifest, get all resources.
-        if (this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString()){
+        if (this.isContinuous()){
             indices = _.map(this.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
                 return index;
             });
@@ -211,7 +232,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
                     indices = [canvasIndex - 1, canvasIndex];
                 }
 
-                if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
+                if (this.isRightToLeft()){
                     indices = indices.reverse();
                 }
             }
@@ -230,6 +251,80 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         }
 
         return true;
+    }
+
+    isContinuous(): boolean {
+        return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
+    }
+
+    isPaged(): boolean {
+        return this.getViewingHint().toString() === manifesto.ViewingHint.paged().toString();
+    }
+
+    isBottomToTop(): boolean {
+        return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString()
+    }
+
+    isTopToBottom(): boolean {
+        return this.getViewingDirection().toString() === manifesto.ViewingDirection.topToBottom().toString();
+    }
+
+    isLeftToRight(): boolean {
+        return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
+    }
+
+    isRightToLeft(): boolean {
+        return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
+    }
+
+    isHorizontallyAligned(): boolean {
+        return this.isLeftToRight() || this.isRightToLeft()
+    }
+
+    isVerticallyAligned(): boolean {
+        return this.isTopToBottom() || this.isBottomToTop()
+    }
+
+    isPagingAvailable(): boolean {
+        // paged mode is useless unless you have at least 3 pages...
+        return this.isPagingEnabled() && this.getTotalCanvases() > 2;
+    }
+
+    isPagingEnabled(): boolean{
+        return this.getCurrentSequence().isPagingEnabled();
+    }
+
+    isPagingSettingEnabled(): boolean {
+        if (this.isPagingAvailable()){
+            return this.getSettings().pagingEnabled;
+        }
+
+        return false;
+    }
+
+    getNextPageIndex(canvasIndex?: number): number {
+        if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
+
+        var index;
+
+        if (this.isPagingSettingEnabled()){
+            var indices = this.getPagedIndices(canvasIndex);
+
+            if (this.isRightToLeft()){
+                index = indices[0] + 1;
+            } else {
+                index = indices.last() + 1;
+            }
+
+        } else {
+            index = canvasIndex + 1;
+        }
+
+        if (index > this.getTotalCanvases() - 1) {
+            return -1;
+        }
+
+        return index;
     }
 
     getAutoCompleteService(): Manifesto.IService {

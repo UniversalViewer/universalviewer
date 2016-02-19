@@ -1,4 +1,5 @@
 import BaseSettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
+import ISeadragonProvider = require("./ISeadragonProvider");
 
 class SettingsDialogue extends BaseSettingsDialogue {
 
@@ -97,7 +98,7 @@ class SettingsDialogue extends BaseSettingsDialogue {
             this.$navigatorEnabledCheckbox.removeAttr("checked");
         }
 
-        if (!this.provider.isPagingAvailable()){
+        if (!(<ISeadragonProvider>this.provider).isPagingAvailable()){
             this.$pagingEnabled.hide();
         } else {
             if (settings.pagingEnabled){

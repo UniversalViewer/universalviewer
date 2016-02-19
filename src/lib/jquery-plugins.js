@@ -188,9 +188,25 @@
         var $self = $(this);
         return parseInt($self.css('marginLeft')) + parseInt($self.css('marginRight'));
     };
+    $.fn.leftMargin = function () {
+        var $self = $(this);
+        return parseInt($self.css('marginLeft'));
+    };
+    $.fn.rightMargin = function () {
+        var $self = $(this);
+        return parseInt($self.css('marginRight'));
+    };
     $.fn.horizontalPadding = function () {
         var $self = $(this);
         return parseInt($self.css('paddingLeft')) + parseInt($self.css('paddingRight'));
+    };
+    $.fn.leftPadding = function () {
+        var $self = $(this);
+        return parseInt($self.css('paddingLeft'));
+    };
+    $.fn.rightPadding = function () {
+        var $self = $(this);
+        return parseInt($self.css('paddingRight'));
     };
     $.mlp = { x: 0, y: 0 }; // Mouse Last Position
     function documentHandler() {

@@ -15,10 +15,14 @@ interface JQuery {
     horizontalMargins(): number;
     horizontalPadding(): number;
     ismouseover(): boolean;
+    leftMargin(): number;
+    leftPadding(): number;
     on(events: string, handler: (eventObject: JQueryEventObject, ...args: any[]) => any, wait: Number): JQuery;
     onEnter(callback: () => void): any;
     onPressed(callback: () => void): any;
     removeLastWord(chars?: number, depth?: number): any;
+    rightMargin(): number;
+    rightPadding(): number;
     swapClass(removeClass: string, addClass: string): void;
     targetBlank(): void;
     toggleClass(class1: string, class2: string): any;

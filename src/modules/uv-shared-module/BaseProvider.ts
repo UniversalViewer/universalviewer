@@ -232,23 +232,6 @@ class BaseProvider implements IProvider{
         return this.getCurrentSequence().isMultiCanvas();
     }
 
-    isPagingAvailable(): boolean {
-        // paged mode is useless unless you have at least 3 pages...
-        return this.isPagingEnabled() && this.getTotalCanvases() > 2;
-    }
-
-    isPagingEnabled(): boolean{
-        return this.getCurrentSequence().isPagingEnabled();
-    }
-
-    isPagingSettingEnabled(): boolean {
-        if (this.isPagingAvailable()){
-            return this.getSettings().pagingEnabled;
-        }
-
-        return false;
-    }
-
     getInfoUri(canvas: Manifesto.ICanvas): string{
         // default to IxIF
         var service = canvas.getService(manifesto.ServiceProfile.ixif());
@@ -293,52 +276,6 @@ class BaseProvider implements IProvider{
 
     getLastPageIndex(): number {
         return this.getTotalCanvases() - 1;
-    }
-
-    getPrevPageIndex(canvasIndex?: number): number {
-        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
-
-        var index;
-
-        if (this.isPagingSettingEnabled()){
-            var indices = this.getPagedIndices(canvasIndex);
-
-            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
-                index = indices.last() - 1;
-            } else {
-                index = indices[0] - 1;
-            }
-
-        } else {
-            index = canvasIndex - 1;
-        }
-
-        return index;
-    }
-
-    getNextPageIndex(canvasIndex?: number): number {
-        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
-
-        var index;
-
-        if (this.isPagingSettingEnabled()){
-            var indices = this.getPagedIndices(canvasIndex);
-
-            if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()){
-                index = indices[0] + 1;
-            } else {
-                index = indices.last() + 1;
-            }
-
-        } else {
-            index = canvasIndex + 1;
-        }
-
-        if (index > this.getTotalCanvases() - 1) {
-            return -1;
-        }
-
-        return index;
     }
 
     getStartCanvasIndex(): number {

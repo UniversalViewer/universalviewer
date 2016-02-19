@@ -115,7 +115,7 @@ class Extension extends BaseExtension {
 
         $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.provider.getPrevPageIndex());
+                this.viewPage((<ISeadragonProvider>this.provider).getPrevPageIndex());
             } else {
                 this.centerPanel.setFocus();
             }
@@ -149,7 +149,7 @@ class Extension extends BaseExtension {
 
         $.subscribe(Commands.NEXT, (e) => {
             this.triggerSocket(Commands.NEXT);
-            this.viewPage(this.provider.getNextPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getNextPageIndex());
         });
 
         $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
@@ -166,7 +166,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(BaseCommands.PAGE_DOWN, (e) => {
-            this.viewPage(this.provider.getNextPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getNextPageIndex());
         });
 
         $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
@@ -175,7 +175,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(BaseCommands.PAGE_UP, (e) => {
-            this.viewPage(this.provider.getPrevPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getPrevPageIndex());
         });
 
         $.subscribe(BaseCommands.PLUS, (e) => {
@@ -184,7 +184,7 @@ class Extension extends BaseExtension {
 
         $.subscribe(Commands.PREV, (e) => {
             this.triggerSocket(Commands.PREV);
-            this.viewPage(this.provider.getPrevPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getPrevPageIndex());
         });
 
         $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
@@ -194,7 +194,7 @@ class Extension extends BaseExtension {
 
         $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.provider.getNextPageIndex());
+                this.viewPage((<ISeadragonProvider>this.provider).getNextPageIndex());
             } else {
                 this.centerPanel.setFocus();
             }
@@ -369,7 +369,7 @@ class Extension extends BaseExtension {
             canvasIndex = 0;
         }
 
-        if (this.provider.isPagingSettingEnabled() && !isReload){
+        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.
