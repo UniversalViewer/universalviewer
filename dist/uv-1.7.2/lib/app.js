@@ -634,6 +634,7 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
             this.isResponseHandled = false;
             this.dataUri = dataUriFunc(resource);
             this._parseAuthServices(resource);
+            //this.profile = (<Manifesto.IService>resource).getProfile();
         }
         ExternalResource.prototype._parseAuthServices = function (resource) {
             this.clickThroughService = manifesto.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
@@ -1487,8 +1488,14 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             return this.bootstrapper.isFullScreen;
         };
         BaseExtension.prototype.isLeftPanelEnabled = function () {
-            return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
-                && this.provider.isMultiCanvas();
+            if (Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)) {
+                if (this.provider.isMultiCanvas()) {
+                    if (this.provider.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         };
         BaseExtension.prototype.isRightPanelEnabled = function () {
             return Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
@@ -3060,7 +3067,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.1';
+    exports.Version = '1.7.2';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4827,6 +4834,9 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
         BaseProvider.prototype.isSeeAlsoEnabled = function () {
             return this.config.options.seeAlsoEnabled !== false;
         };
+        BaseProvider.prototype.getCanvases = function () {
+            return this.getCurrentSequence().getCanvases();
+        };
         BaseProvider.prototype.getCanvasById = function (id) {
             return this.getCurrentSequence().getCanvasById(id);
         };
@@ -4873,19 +4883,6 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
         BaseProvider.prototype.isMultiCanvas = function () {
             return this.getCurrentSequence().isMultiCanvas();
         };
-        BaseProvider.prototype.isPagingAvailable = function () {
-            // paged mode is useless unless you have at least 3 pages...
-            return this.isPagingEnabled() && this.getTotalCanvases() > 2;
-        };
-        BaseProvider.prototype.isPagingEnabled = function () {
-            return this.getCurrentSequence().isPagingEnabled();
-        };
-        BaseProvider.prototype.isPagingSettingEnabled = function () {
-            if (this.isPagingAvailable()) {
-                return this.getSettings().pagingEnabled;
-            }
-            return false;
-        };
         BaseProvider.prototype.getInfoUri = function (canvas) {
             // default to IxIF
             var service = canvas.getService(manifesto.ServiceProfile.ixif());
@@ -4901,52 +4898,24 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
             return [canvasIndex];
         };
         BaseProvider.prototype.getViewingDirection = function () {
-            return this.getCurrentSequence().getViewingDirection();
+            var viewingDirection = this.getCurrentSequence().getViewingDirection();
+            if (!viewingDirection.toString()) {
+                viewingDirection = this.manifest.getViewingDirection();
+            }
+            return viewingDirection;
+        };
+        BaseProvider.prototype.getViewingHint = function () {
+            var viewingHint = this.getCurrentSequence().getViewingHint();
+            if (!viewingHint.toString()) {
+                viewingHint = this.manifest.getViewingHint();
+            }
+            return viewingHint;
         };
         BaseProvider.prototype.getFirstPageIndex = function () {
             return 0;
         };
         BaseProvider.prototype.getLastPageIndex = function () {
             return this.getTotalCanvases() - 1;
-        };
-        BaseProvider.prototype.getPrevPageIndex = function (canvasIndex) {
-            if (typeof (canvasIndex) === 'undefined')
-                canvasIndex = this.canvasIndex;
-            var index;
-            if (this.isPagingSettingEnabled()) {
-                var indices = this.getPagedIndices(canvasIndex);
-                if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
-                    index = indices.last() - 1;
-                }
-                else {
-                    index = indices[0] - 1;
-                }
-            }
-            else {
-                index = canvasIndex - 1;
-            }
-            return index;
-        };
-        BaseProvider.prototype.getNextPageIndex = function (canvasIndex) {
-            if (typeof (canvasIndex) === 'undefined')
-                canvasIndex = this.canvasIndex;
-            var index;
-            if (this.isPagingSettingEnabled()) {
-                var indices = this.getPagedIndices(canvasIndex);
-                if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
-                    index = indices[0] + 1;
-                }
-                else {
-                    index = indices.last() + 1;
-                }
-            }
-            else {
-                index = canvasIndex + 1;
-            }
-            if (index > this.getTotalCanvases() - 1) {
-                return -1;
-            }
-            return index;
         };
         BaseProvider.prototype.getStartCanvasIndex = function () {
             return this.getCurrentSequence().getStartCanvasIndex();
@@ -6947,29 +6916,58 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             });
         };
         SeadragonCenterPanel.prototype.positionPages = function () {
-            var viewingDirection = this.provider.getViewingDirection().toString();
-            // if there's more than one image, align them next to each other.
-            if (this.provider.resources.length > 1) {
-                // check if tilesources should be aligned horizontally or vertically
-                if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
-                    // vertical
-                    var topPage = this.viewer.world.getItemAt(0);
-                    var topPageBounds = topPage.getBounds(true);
-                    var y = topPageBounds.y + topPageBounds.height;
-                    var bottomPage = this.viewer.world.getItemAt(1);
-                    var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
-                    bottomPagePos.y = y + this.config.options.pageGap;
-                    bottomPage.setPosition(bottomPagePos, true);
+            var resources = this.provider.resources;
+            // if there's more than one image, determine alignment strategy
+            if (resources.length > 1) {
+                if (resources.length === 2) {
+                    // recto verso
+                    if (this.provider.isVerticallyAligned()) {
+                        // vertical alignment
+                        var topPage = this.viewer.world.getItemAt(0);
+                        var topPageBounds = topPage.getBounds(true);
+                        var y = topPageBounds.y + topPageBounds.height;
+                        var bottomPage = this.viewer.world.getItemAt(1);
+                        var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+                        bottomPagePos.y = y + this.config.options.pageGap;
+                        bottomPage.setPosition(bottomPagePos, true);
+                    }
+                    else {
+                        // horizontal alignment
+                        var leftPage = this.viewer.world.getItemAt(0);
+                        var leftPageBounds = leftPage.getBounds(true);
+                        var x = leftPageBounds.x + leftPageBounds.width;
+                        var rightPage = this.viewer.world.getItemAt(1);
+                        var rightPagePos = rightPage.getBounds(true).getTopLeft();
+                        rightPagePos.x = x + this.config.options.pageGap;
+                        rightPage.setPosition(rightPagePos, true);
+                    }
                 }
                 else {
-                    // horizontal
-                    var leftPage = this.viewer.world.getItemAt(0);
-                    var leftPageBounds = leftPage.getBounds(true);
-                    var x = leftPageBounds.x + leftPageBounds.width;
-                    var rightPage = this.viewer.world.getItemAt(1);
-                    var rightPagePos = rightPage.getBounds(true).getTopLeft();
-                    rightPagePos.x = x + this.config.options.pageGap;
-                    rightPage.setPosition(rightPagePos, true);
+                    // scroll
+                    if (this.provider.isVerticallyAligned()) {
+                        // vertical alignment
+                        for (var i = 0; i < resources.length - 1; i++) {
+                            var page = this.viewer.world.getItemAt(i);
+                            var pageBounds = page.getBounds(true);
+                            var y = pageBounds.y + pageBounds.height;
+                            var nextPage = this.viewer.world.getItemAt(i + 1);
+                            var nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.y = y;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    }
+                    else {
+                        // horizontal alignment
+                        for (var i = 0; i < resources.length - 1; i++) {
+                            var page = this.viewer.world.getItemAt(i);
+                            var pageBounds = page.getBounds(true);
+                            var x = pageBounds.x + pageBounds.width;
+                            var nextPage = this.viewer.world.getItemAt(i + 1);
+                            var nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.x = x;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    }
                 }
             }
         };
@@ -6999,7 +6997,11 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                     this.goHome();
                 }
             }
-            if (this.provider.isMultiCanvas()) {
+            if (this.provider.isContinuous()) {
+                this.hidePrevButton();
+                this.hideNextButton();
+            }
+            else if (this.provider.isMultiCanvas()) {
                 $('.navigator').addClass('extraMargin');
                 if (!this.provider.isFirstCanvas()) {
                     this.enablePrevButton();
@@ -7038,6 +7040,14 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.prevButtonEnabled = true;
             this.$leftButton.removeClass('disabled');
         };
+        SeadragonCenterPanel.prototype.hidePrevButton = function () {
+            this.disablePrevButton();
+            this.$leftButton.hide();
+        };
+        SeadragonCenterPanel.prototype.showPrevButton = function () {
+            this.enablePrevButton();
+            this.$leftButton.show();
+        };
         SeadragonCenterPanel.prototype.disableNextButton = function () {
             this.nextButtonEnabled = false;
             this.$rightButton.addClass('disabled');
@@ -7045,6 +7055,14 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
         SeadragonCenterPanel.prototype.enableNextButton = function () {
             this.nextButtonEnabled = true;
             this.$rightButton.removeClass('disabled');
+        };
+        SeadragonCenterPanel.prototype.hideNextButton = function () {
+            this.disableNextButton();
+            this.$rightButton.hide();
+        };
+        SeadragonCenterPanel.prototype.showNextButton = function () {
+            this.enableNextButton();
+            this.$rightButton.show();
         };
         SeadragonCenterPanel.prototype.serialiseBounds = function (bounds) {
             return bounds.x + ',' + bounds.y + ',' + bounds.width + ',' + bounds.height;
@@ -7147,6 +7165,15 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             if (this.provider.isMultiCanvas() && this.$leftButton && this.$rightButton) {
                 this.$leftButton.css('top', (this.$content.height() - this.$leftButton.height()) / 2);
                 this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
+            }
+            // stretch navigator
+            if (this.provider.isContinuous()) {
+                if (this.provider.isHorizontallyAligned()) {
+                    this.$navigator.width(this.$viewer.width() - this.$viewer.rightMargin());
+                }
+                else {
+                    this.$navigator.height(this.$viewer.height());
+                }
             }
         };
         SeadragonCenterPanel.prototype.setFocus = function () {
@@ -7861,25 +7888,51 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
             var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
             return script;
         };
-        Provider.prototype.getPagedIndices = function (canvasIndex) {
-            if (typeof (canvasIndex) === 'undefined')
+        Provider.prototype.getPrevPageIndex = function (canvasIndex) {
+            if (_.isUndefined(canvasIndex))
                 canvasIndex = this.canvasIndex;
-            var indices = [];
-            if (!this.isPagingSettingEnabled()) {
-                indices.push(this.canvasIndex);
-            }
-            else {
-                if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.isTotalCanvasesEven())) {
-                    indices = [canvasIndex];
-                }
-                else if (canvasIndex % 2) {
-                    indices = [canvasIndex, canvasIndex + 1];
+            var index;
+            if (this.isPagingSettingEnabled()) {
+                var indices = this.getPagedIndices(canvasIndex);
+                if (this.isRightToLeft()) {
+                    index = indices.last() - 1;
                 }
                 else {
-                    indices = [canvasIndex - 1, canvasIndex];
+                    index = indices[0] - 1;
                 }
-                if (this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
-                    indices = indices.reverse();
+            }
+            else {
+                index = canvasIndex - 1;
+            }
+            return index;
+        };
+        Provider.prototype.getPagedIndices = function (canvasIndex) {
+            if (_.isUndefined(canvasIndex))
+                canvasIndex = this.canvasIndex;
+            var indices = [];
+            // if it's a continuous manifest, get all resources.
+            if (this.isContinuous()) {
+                indices = _.map(this.getCanvases(), function (c, index) {
+                    return index;
+                });
+            }
+            else {
+                if (!this.isPagingSettingEnabled()) {
+                    indices.push(this.canvasIndex);
+                }
+                else {
+                    if (this.isFirstCanvas(canvasIndex) || (this.isLastCanvas(canvasIndex) && this.isTotalCanvasesEven())) {
+                        indices = [canvasIndex];
+                    }
+                    else if (canvasIndex % 2) {
+                        indices = [canvasIndex, canvasIndex + 1];
+                    }
+                    else {
+                        indices = [canvasIndex - 1, canvasIndex];
+                    }
+                    if (this.isRightToLeft()) {
+                        indices = indices.reverse();
+                    }
                 }
             }
             return indices;
@@ -7892,6 +7945,64 @@ define('extensions/uv-seadragon-extension/Provider',["require", "exports", "../.
                 return false;
             }
             return true;
+        };
+        Provider.prototype.isContinuous = function () {
+            return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
+        };
+        Provider.prototype.isPaged = function () {
+            return this.getViewingHint().toString() === manifesto.ViewingHint.paged().toString();
+        };
+        Provider.prototype.isBottomToTop = function () {
+            return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString();
+        };
+        Provider.prototype.isTopToBottom = function () {
+            return this.getViewingDirection().toString() === manifesto.ViewingDirection.topToBottom().toString();
+        };
+        Provider.prototype.isLeftToRight = function () {
+            return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
+        };
+        Provider.prototype.isRightToLeft = function () {
+            return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
+        };
+        Provider.prototype.isHorizontallyAligned = function () {
+            return this.isLeftToRight() || this.isRightToLeft();
+        };
+        Provider.prototype.isVerticallyAligned = function () {
+            return this.isTopToBottom() || this.isBottomToTop();
+        };
+        Provider.prototype.isPagingAvailable = function () {
+            // paged mode is useless unless you have at least 3 pages...
+            return this.isPagingEnabled() && this.getTotalCanvases() > 2;
+        };
+        Provider.prototype.isPagingEnabled = function () {
+            return this.getCurrentSequence().isPagingEnabled();
+        };
+        Provider.prototype.isPagingSettingEnabled = function () {
+            if (this.isPagingAvailable()) {
+                return this.getSettings().pagingEnabled;
+            }
+            return false;
+        };
+        Provider.prototype.getNextPageIndex = function (canvasIndex) {
+            if (_.isUndefined(canvasIndex))
+                canvasIndex = this.canvasIndex;
+            var index;
+            if (this.isPagingSettingEnabled()) {
+                var indices = this.getPagedIndices(canvasIndex);
+                if (this.isRightToLeft()) {
+                    index = indices[0] + 1;
+                }
+                else {
+                    index = indices.last() + 1;
+                }
+            }
+            else {
+                index = canvasIndex + 1;
+            }
+            if (index > this.getTotalCanvases() - 1) {
+                return -1;
+            }
+            return index;
         };
         Provider.prototype.getAutoCompleteService = function () {
             var service = this.getSearchWithinService();
@@ -8924,12 +9035,16 @@ var Manifesto;
         };
         ServiceProfile.AUTOCOMPLETE = new ServiceProfile("http://iiif.io/api/search/0/autocomplete");
         ServiceProfile.CLICKTHROUGH = new ServiceProfile("http://wellcomelibrary.org/ld/iiif-ext/0/accept-terms-click-through");
+        ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/compliance.html#level0");
         ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/compliance.html#level1");
         ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/compliance.html#level2");
+        ServiceProfile.STANFORDIIIFIMAGECONFORMANCE0 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/conformance.html#level0");
         ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/conformance.html#level1");
         ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/conformance.html#level2");
+        ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE0 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level0");
         ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level1");
         ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2");
+        ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE0 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level0");
         ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1");
         ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level2");
         ServiceProfile.IIIF1IMAGELEVEL0 = new ServiceProfile("http://iiif.io/api/image/1/level0.json");
@@ -9432,6 +9547,12 @@ var Manifesto;
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
             }
             return Manifesto.ViewingDirection.LEFTTORIGHT;
+        };
+        Manifest.prototype.getViewingHint = function () {
+            if (this.getProperty('viewingHint')) {
+                return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
+            }
+            return Manifesto.ViewingHint.EMPTY;
         };
         return Manifest;
     })(Manifesto.IIIFResource);
@@ -10236,12 +10357,16 @@ global.manifesto = module.exports = {
         return new Manifesto.TreeNode();
     },
     isImageProfile: function (profile) {
-        if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
+        if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
             profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE0.toString() ||
             profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
             profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE0.toString() ||
             profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
             profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE0.toString() ||
             profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
             profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
             profile.toString() === Manifesto.ServiceProfile.IIIF1IMAGELEVEL0.toString() ||
@@ -10249,6 +10374,39 @@ global.manifesto = module.exports = {
             profile.toString() === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
             profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL0.toString() ||
             profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2.toString()) {
+            return true;
+        }
+        return false;
+    },
+    isLevel0ImageProfile: function (profile) {
+        if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE0.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE0.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE0.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF1IMAGELEVEL0.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL0.toString()) {
+            return true;
+        }
+        return false;
+    },
+    isLevel1ImageProfile: function (profile) {
+        if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1.toString()) {
+            return true;
+        }
+        return false;
+    },
+    isLevel2ImageProfile: function (profile) {
+        if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
+            profile.toString() === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
             profile.toString() === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2.toString()) {
             return true;
         }
@@ -21398,9 +21556,25 @@ define("modernizr", function(){});
         var $self = $(this);
         return parseInt($self.css('marginLeft')) + parseInt($self.css('marginRight'));
     };
+    $.fn.leftMargin = function () {
+        var $self = $(this);
+        return parseInt($self.css('marginLeft'));
+    };
+    $.fn.rightMargin = function () {
+        var $self = $(this);
+        return parseInt($self.css('marginRight'));
+    };
     $.fn.horizontalPadding = function () {
         var $self = $(this);
         return parseInt($self.css('paddingLeft')) + parseInt($self.css('paddingRight'));
+    };
+    $.fn.leftPadding = function () {
+        var $self = $(this);
+        return parseInt($self.css('paddingLeft'));
+    };
+    $.fn.rightPadding = function () {
+        var $self = $(this);
+        return parseInt($self.css('paddingRight'));
     };
     $.mlp = { x: 0, y: 0 }; // Mouse Last Position
     function documentHandler() {
