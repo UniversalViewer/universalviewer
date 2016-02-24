@@ -219,7 +219,6 @@ module.exports = function (grunt) {
                         src: [
                             'es6-promise/promise.min.js',
                             'exjs/dist/ex.es3.min.js',
-                            'exjs/dist/ex.es3.min.js.map',
                             'extensions/dist/extensions.js',
                             'http-status-codes/dist/http-status-codes.js',
                             'jquery-plugins/dist/jquery-plugins.js',

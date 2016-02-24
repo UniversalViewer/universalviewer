@@ -13,6 +13,9 @@ import IProvider = require("./IProvider");
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import Params = require("../../Params");
 import Shell = require("./Shell");
+import IAccessToken = Manifesto.IAccessToken;
+import ILoginDialogueOptions = require("./ILoginDialogueOptions");
+import LoginWarningMessages = require("./LoginWarningMessages");
 
 class BaseExtension implements IExtension {
 
@@ -165,6 +168,11 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
             this.triggerSocket(BaseCommands.ACCEPT_TERMS);
+        });
+
+        $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
+            this.triggerSocket(BaseCommands.AUTHORIZATION_FAILED);
+            this.showMessage(this.provider.config.content.authorisationFailedMessage);
         });
 
         $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
@@ -798,6 +806,13 @@ class BaseExtension implements IExtension {
     login(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
+            var options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
+
+            if (resource.status === HTTPStatusCode.FORBIDDEN){
+                options.warningMessage = LoginWarningMessages.FORBIDDEN;
+                options.showCancelButton = true;
+            }
+
             $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
@@ -809,7 +824,8 @@ class BaseExtension implements IExtension {
                             resolve();
                         }
                     }, 500);
-                }
+                },
+                options: options
             }]);
         });
     }
@@ -839,13 +855,13 @@ class BaseExtension implements IExtension {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
-            var foundToken: Manifesto.IAccessToken;
+            var foundItems: storage.StorageItem[] = [];
 
             // first try an exact match of the url
             var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
 
             if (item){
-                foundToken = item.value;
+                foundItems.push(item);
             } else {
                 // find an access token for the domain
                 var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
@@ -856,9 +872,20 @@ class BaseExtension implements IExtension {
                     item = items[i];
 
                     if(item.key.contains(domain)) {
-                        foundToken = item.value;
+                        foundItems.push(item);
                     }
                 }
+            }
+
+            // sort by expiresAt
+            foundItems = _.sortBy(foundItems, (item: storage.StorageItem) => {
+                return item.expiresAt;
+            });
+
+            var foundToken: IAccessToken;
+
+            if (foundItems.length){
+                foundToken = <Manifesto.IAccessToken>foundItems.last().value
             }
 
             resolve(foundToken);
@@ -875,7 +902,11 @@ class BaseExtension implements IExtension {
             } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                 resolve(resource);
                 $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
+            } else if (resource.status === HTTPStatusCode.UNAUTHORIZED) {
+                resolve(resource);
+                $.publish(BaseCommands.AUTHORIZATION_FAILED, [resource]);
             } else {
+
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
                     resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR){
                     // if the browser doesn't support CORS

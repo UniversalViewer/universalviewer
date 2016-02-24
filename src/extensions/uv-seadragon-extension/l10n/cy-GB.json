@@ -4,9 +4,11 @@
   },
   "content": {
     "authCORSError": "Eich porwr yn peidio cefnogi CORS, os gwelwch yn dda uwchraddio i weld y cynnwys hwn.",
+    "authorisationFailedMessage": "Nid oedd yn ymddangos eich ymgais mewngofnodi i fod yn llwyddiannus . Trio eto os gwelwch yn dda.",
     "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)",
     "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
-    "degradedResourceLogin": "Mewngofnodi"
+    "degradedResourceLogin": "Mewngofnodi",
+    "forbiddenResourceMessage": "Eich hawliau mynediad presennol yn annigonol i weld llun hwn"
   },
   "modules": {
     "clickThroughDialogue": {
@@ -90,7 +92,8 @@
     },
     "loginDialogue": {
       "content": {
-        "login": "Mewngofnodi"
+        "login": "Mewngofnodi",
+        "cancel": "Diddymu"
       }
     },
     "moreInfoRightPanel": {

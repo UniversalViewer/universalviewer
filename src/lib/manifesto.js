@@ -1661,24 +1661,31 @@ var Manifesto;
                                     Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                         resolve(handleResourceResponse(resource));
                                     })["catch"](function (error) {
-                                        reject(error);
+                                        resolve(Utils.authorizationFailed());
                                     });
                                 }
                             })["catch"](function (error) {
-                                reject(error);
+                                resolve(Utils.authorizationFailed());
                             });
                         }
                         else {
                             Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                 resolve(handleResourceResponse(resource));
                             })["catch"](function (error) {
-                                reject(error);
+                                resolve(Utils.authorizationFailed());
                             });
                         }
                     })["catch"](function (error) {
-                        reject(error);
+                        resolve(Utils.authorizationFailed());
                     });
                 }
+            });
+        };
+        Utils.authorizationFailed = function () {
+            return new Promise(function (resolve, reject) {
+                var errorResponse = {};
+                errorResponse.status = HTTPStatusCode.UNAUTHORIZED;
+                resolve(errorResponse);
             });
         };
         Utils.loadExternalResources = function (resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
@@ -1702,7 +1709,28 @@ var Manifesto;
                             if (storedAccessToken) {
                                 // try using the stored access token
                                 resource.getData(storedAccessToken).then(function () {
-                                    resolve(resource);
+                                    // invalid access token
+                                    if (resource.status === HTTPStatusCode.FORBIDDEN) {
+                                        // get an access token
+                                        login(resource).then(function () {
+                                            getAccessToken(resource).then(function (accessToken) {
+                                                storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
+                                                    resource.getData(accessToken).then(function () {
+                                                        resolve(resource);
+                                                    })["catch"](function (error) {
+                                                        reject(error);
+                                                    });
+                                                })["catch"](function (error) {
+                                                    reject(error);
+                                                });
+                                            })["catch"](function (error) {
+                                                reject(error);
+                                            });
+                                        });
+                                    }
+                                    else {
+                                        resolve(resource);
+                                    }
                                 })["catch"](function (error) {
                                     reject(error);
                                 });

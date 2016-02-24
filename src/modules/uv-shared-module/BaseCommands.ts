@@ -2,6 +2,7 @@ class Commands {
     static namespace: string = 'uv.';
 
     static ACCEPT_TERMS: string                     = Commands.namespace + 'onAcceptTerms';
+    static AUTHORIZATION_FAILED: string             = Commands.namespace + 'onAuthorizationFailed';
     static AUTHORIZATION_OCCURRED: string           = Commands.namespace + 'onAuthorizationOccurred';
     static BOOKMARK: string                         = Commands.namespace + 'onBookmark';
     static CANVAS_INDEX_CHANGE_FAILED: string       = Commands.namespace + 'onCanvasIndexChangeFailed';
