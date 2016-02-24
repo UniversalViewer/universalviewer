@@ -1082,7 +1082,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             $.subscribe(BaseCommands.ACCEPT_TERMS, function () {
                 _this.triggerSocket(BaseCommands.ACCEPT_TERMS);
             });
-            $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, function () {
+            $.subscribe(BaseCommands.AUTHORIZATION_FAILED, function () {
                 _this.triggerSocket(BaseCommands.AUTHORIZATION_FAILED);
                 _this.showMessage(_this.provider.config.content.authorisationFailedMessage);
             });
@@ -1446,8 +1446,14 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                         return _.toPlainObject(resource.data);
                     });
                     resolve(_this.provider.resources);
-                })['catch'](function (errorMessage) {
-                    _this.showMessage(errorMessage);
+                })['catch'](function (error) {
+                    if (error.name === HTTPStatusCode.SERVICE_UNAVAILABLE.toString()) {
+                        // show friendly error
+                        $.publish(BaseCommands.AUTHORIZATION_FAILED);
+                    }
+                    else {
+                        _this.showMessage(error.message || error);
+                    }
                 });
             });
         };
@@ -1651,10 +1657,6 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                     resolve(resource);
                     $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
-                }
-                else if (resource.status === HTTPStatusCode.UNAUTHORIZED) {
-                    resolve(resource);
-                    $.publish(BaseCommands.AUTHORIZATION_FAILED, [resource]);
                 }
                 else {
                     if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
@@ -10185,14 +10187,14 @@ var Manifesto;
                                     getAccessToken(resource).then(function (token) {
                                         resource.getData(token).then(function () {
                                             resolve(handleResourceResponse(resource));
-                                        })["catch"](function (error) {
-                                            reject(error);
+                                        })["catch"](function (message) {
+                                            reject(Utils.createInternalServerError(message));
                                         });
-                                    })["catch"](function (error) {
-                                        reject(error);
+                                    })["catch"](function (message) {
+                                        reject(Utils.createInternalServerError(message));
                                     });
-                                })["catch"](function (error) {
-                                    reject(error);
+                                })["catch"](function (message) {
+                                    reject(Utils.createInternalServerError(message));
                                 });
                             }
                         }
@@ -10200,8 +10202,8 @@ var Manifesto;
                             // this info.json isn't access controlled, therefore no need to request an access token.
                             resolve(resource);
                         }
-                    })["catch"](function (error) {
-                        reject(error);
+                    })["catch"](function (message) {
+                        reject(Utils.createInternalServerError(message));
                     });
                 }
                 else {
@@ -10224,32 +10226,37 @@ var Manifesto;
                                     Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                         resolve(handleResourceResponse(resource));
                                     })["catch"](function (error) {
-                                        resolve(Utils.authorizationFailed());
+                                        reject(Utils.createAuthorizationFailedError());
                                     });
                                 }
                             })["catch"](function (error) {
-                                resolve(Utils.authorizationFailed());
+                                reject(Utils.createAuthorizationFailedError());
                             });
                         }
                         else {
                             Utils.authorize(resource, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
                                 resolve(handleResourceResponse(resource));
                             })["catch"](function (error) {
-                                resolve(Utils.authorizationFailed());
+                                reject(Utils.createAuthorizationFailedError());
                             });
                         }
                     })["catch"](function (error) {
-                        resolve(Utils.authorizationFailed());
+                        reject(Utils.createAuthorizationFailedError());
                     });
                 }
             });
         };
-        Utils.authorizationFailed = function () {
-            return new Promise(function (resolve, reject) {
-                var errorResponse = {};
-                errorResponse.status = HTTPStatusCode.UNAUTHORIZED;
-                resolve(errorResponse);
-            });
+        Utils.createError = function (name, message) {
+            var error = new Error();
+            error.message = message;
+            error.name = HTTPStatusCode.SERVICE_UNAVAILABLE.toString();
+            return error;
+        };
+        Utils.createAuthorizationFailedError = function () {
+            return Utils.createError(HTTPStatusCode.SERVICE_UNAVAILABLE.toString(), "Authorization failed");
+        };
+        Utils.createInternalServerError = function (message) {
+            return Utils.createError(HTTPStatusCode.INTERNAL_SERVER_ERROR.toString(), message);
         };
         Utils.loadExternalResources = function (resources, tokenStorageStrategy, clickThrough, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
             return new Promise(function (resolve, reject) {
@@ -10280,22 +10287,22 @@ var Manifesto;
                                                 storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
                                                     resource.getData(accessToken).then(function () {
                                                         resolve(resource);
-                                                    })["catch"](function (error) {
-                                                        reject(error);
+                                                    })["catch"](function (message) {
+                                                        reject(Utils.createInternalServerError(message));
                                                     });
-                                                })["catch"](function (error) {
-                                                    reject(error);
+                                                })["catch"](function (message) {
+                                                    reject(Utils.createInternalServerError(message));
                                                 });
-                                            })["catch"](function (error) {
-                                                reject(error);
+                                            })["catch"](function (message) {
+                                                reject(Utils.createInternalServerError(message));
                                             });
                                         });
                                     }
                                     else {
                                         resolve(resource);
                                     }
-                                })["catch"](function (error) {
-                                    reject(error);
+                                })["catch"](function (message) {
+                                    reject(Utils.createInternalServerError(message));
                                 });
                             }
                             else {
@@ -10313,14 +10320,14 @@ var Manifesto;
                                             storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
-                                                })["catch"](function (error) {
-                                                    reject(error);
+                                                })["catch"](function (message) {
+                                                    reject(Utils.createInternalServerError(message));
                                                 });
-                                            })["catch"](function (error) {
-                                                reject(error);
+                                            })["catch"](function (message) {
+                                                reject(Utils.createInternalServerError(message));
                                             });
-                                        })["catch"](function (error) {
-                                            reject(error);
+                                        })["catch"](function (message) {
+                                            reject(Utils.createInternalServerError(message));
                                         });
                                     });
                                 }
@@ -10331,20 +10338,20 @@ var Manifesto;
                                             storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
                                                 resource.getData(accessToken).then(function () {
                                                     resolve(resource);
-                                                })["catch"](function (error) {
-                                                    reject(error);
+                                                })["catch"](function (message) {
+                                                    reject(Utils.createInternalServerError(message));
                                                 });
-                                            })["catch"](function (error) {
-                                                reject(error);
+                                            })["catch"](function (message) {
+                                                reject(Utils.createInternalServerError(message));
                                             });
-                                        })["catch"](function (error) {
-                                            reject(error);
+                                        })["catch"](function (message) {
+                                            reject(Utils.createInternalServerError(message));
                                         });
                                     });
                                 }
                             }
-                        })["catch"](function (error) {
-                            reject(error);
+                        })["catch"](function (message) {
+                            reject(Utils.createInternalServerError(message));
                         });
                     }
                     else {

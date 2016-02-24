@@ -170,7 +170,7 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.ACCEPT_TERMS);
         });
 
-        $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
+        $.subscribe(BaseCommands.AUTHORIZATION_FAILED, () => {
             this.triggerSocket(BaseCommands.AUTHORIZATION_FAILED);
             this.showMessage(this.provider.config.content.authorisationFailedMessage);
         });
@@ -645,8 +645,13 @@ class BaseExtension implements IExtension {
                         return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
                     });
                     resolve(this.provider.resources);
-                })['catch']((errorMessage) => {
-                this.showMessage(errorMessage);
+                })['catch']((error: any) => {
+                    if (error.name === HTTPStatusCode.SERVICE_UNAVAILABLE.toString()) {
+                        // show friendly error
+                        $.publish(BaseCommands.AUTHORIZATION_FAILED);
+                    } else {
+                        this.showMessage(error.message || error);
+                    }
             });
         });
     }
@@ -902,9 +907,6 @@ class BaseExtension implements IExtension {
             } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                 resolve(resource);
                 $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
-            } else if (resource.status === HTTPStatusCode.UNAUTHORIZED) {
-                resolve(resource);
-                $.publish(BaseCommands.AUTHORIZATION_FAILED, [resource]);
             } else {
 
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
