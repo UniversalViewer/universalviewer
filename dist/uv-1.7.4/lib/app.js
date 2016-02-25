@@ -3120,7 +3120,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.3';
+    exports.Version = '1.7.4';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -10280,8 +10280,8 @@ var Manifesto;
                                 // try using the stored access token
                                 resource.getData(storedAccessToken).then(function () {
                                     // invalid access token
-                                    if (resource.status === HTTPStatusCode.FORBIDDEN) {
-                                        // get an access token
+                                    if (resource.status !== HTTPStatusCode.OK) {
+                                        // get a new access token
                                         login(resource).then(function () {
                                             getAccessToken(resource).then(function (accessToken) {
                                                 storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {

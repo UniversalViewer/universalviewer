@@ -37,6 +37,7 @@ var Virtex;
                 directionalLight1Intensity: 0.75,
                 directionalLight2Color: 0x002958,
                 directionalLight2Intensity: 0.5,
+                doubleSided: true,
                 fadeSpeed: 1750,
                 far: 10000,
                 fov: 45,
@@ -136,6 +137,12 @@ var Virtex;
             var loader = new THREE.ObjectLoader();
             loader.setCrossOrigin('anonymous');
             loader.load(this.options.object, function (obj) {
+                if (_this.options.doubleSided) {
+                    obj.traverse(function (child) {
+                        if (child.material)
+                            child.material.side = THREE.DoubleSide;
+                    });
+                }
                 _this._modelGroup.add(obj);
                 _this._scene.add(_this._modelGroup);
                 _this._$loading.fadeOut(_this.options.fadeSpeed);
@@ -291,6 +298,7 @@ var Virtex;
             var t = this._camera.position.z + this.options.zoomSpeed;
             if (t < this.options.maxZoom) {
                 this._targetZoom = t;
+                console.log(t);
             }
             else {
                 this._targetZoom = this.options.maxZoom;

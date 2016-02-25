@@ -7,6 +7,7 @@ declare module Virtex {
         directionalLight1Intensity: number;
         directionalLight2Color: number;
         directionalLight2Intensity: number;
+        doubleSided: boolean;
         element: string;
         fadeSpeed: number;
         far: number;
