@@ -96,21 +96,21 @@ class ContentLeftPanel extends LeftPanel {
 
             that.multiSelectState.enabled = false;
 
-            $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
+            $.publish(Commands.MULTISELECT_CHANGE, [that.multiSelectState]);
 
             that.setTitle(that.content.title);
-            this.$multiSelectOptions.hide();
+            that.$multiSelectOptions.hide();
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            if (this.multiSelectState.enabled) {
+            if (that.multiSelectState.enabled) {
                 $.publish(Commands.EXIT_MULTISELECT_MODE);
             }
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
-            if (this.multiSelectState.enabled) {
-                this._showMultiSelectOptions();
+            if (that.multiSelectState.enabled) {
+                that._showMultiSelectOptions();
             }
         });
 

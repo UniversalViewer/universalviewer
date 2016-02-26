@@ -345,15 +345,6 @@
                                 text-align: center;
                                 background: none;
 
-                                &.multiSelected{
-                                    border: 2px solid @brand-primary;
-                                    background: @brand-primary;
-
-                                    .thumbImage{
-                                        .opacity(.35);
-                                    }
-                                }
-
                                 &.loading{
                                     .loading(@loader-black-bg);
                                 }
@@ -407,6 +398,21 @@
                             &.placeholder{
                                 .wrap {
                                     background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                                }
+                            }
+                        }
+
+                        &.multiSelect{
+                            .thumb {
+                                .wrap {
+                                    &.multiSelected {
+                                        border: 2px solid @brand-primary;
+                                        background: @brand-primary;
+
+                                        .thumbImage {
+                                            .opacity(.35);
+                                        }
+                                    }
                                 }
                             }
                         }

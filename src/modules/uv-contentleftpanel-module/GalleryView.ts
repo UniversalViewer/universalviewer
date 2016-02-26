@@ -210,6 +210,14 @@ class GalleryView extends BaseView {
 
     private _multiSelectStateChange(state: MultiSelectState): void {
 
+        this.multiSelectState = state;
+
+        if (state.enabled){
+            this.$thumbs.addClass("multiSelect");
+        } else {
+            this.$thumbs.removeClass("multiSelect");
+        }
+
         for (var j = 0; j < state.canvases.length; j++){
             var canvas: ICanvas = state.canvases[j];
             var thumb: IThumb = this._getThumbByCanvas(canvas);
