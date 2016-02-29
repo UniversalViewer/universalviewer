@@ -1,11 +1,17 @@
+import BaseCommands = require("../uv-shared-module/BaseCommands");
 import IMetadataItem = require("../uv-shared-module/IMetadataItem");
 import RightPanel = require("../uv-shared-module/RightPanel");
 
 class MoreInfoRightPanel extends RightPanel {
 
+    limitType = "lines";
+    limit = 4;
     $items: JQuery;
+    $canvasItems: JQuery;
     $noData: JQuery;
     moreInfoItemTemplate: JQuery;
+    manifestData: any[];
+    canvasData: any[];
 
     constructor($element: JQuery) {
         super($element);
@@ -17,6 +23,15 @@ class MoreInfoRightPanel extends RightPanel {
 
         super.create();
 
+        if (this.config.options.textLimitType) {
+            this.limitType = this.config.options.textLimitType;
+        }
+        if (this.limitType === "lines") {
+            this.limit = this.config.options.textLimit ? this.config.options.textLimit : 4;
+        } else if (this.limitType === "chars") {
+            this.limit = this.config.options.textLimit ? this.config.options.textLimit : 130;
+        }
+
         this.moreInfoItemTemplate = $('<div class="item">\
                                            <div class="header"></div>\
                                            <div class="text"></div>\
@@ -25,6 +40,9 @@ class MoreInfoRightPanel extends RightPanel {
         this.$items = $('<div class="items"></div>');
         this.$main.append(this.$items);
 
+        this.$canvasItems = $('<div class="items"></div>');
+        this.$main.append(this.$canvasItems);
+
         this.$noData = $('<div class="noData">' + this.content.noData + '</div>');
         this.$main.append(this.$noData);
 
@@ -32,6 +50,16 @@ class MoreInfoRightPanel extends RightPanel {
         this.$collapseButton.attr('tabindex', '4');
 
         this.setTitle(this.content.title);
+
+        this.manifestData = this.provider.getMetadata();
+        this.canvasData = [];
+
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+            var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(canvasIndex);
+
+            this.canvasData = canvas.getMetadata();
+            this.displayInfo();
+        });
     }
 
     toggleFinish(): void {
@@ -46,32 +74,22 @@ class MoreInfoRightPanel extends RightPanel {
 
         // show loading icon.
         this.$main.addClass('loading');
-
-        var data: IMetadataItem[] = this.provider.getMetadata();
-        this.displayInfo(data);
+        this.displayInfo();
     }
 
-    displayInfo(data: IMetadataItem[]): void {
+    displayInfo(): void {
         this.$main.removeClass('loading');
 
-        if (!data){
+        if (this.manifestData.length == 0 && this.canvasData.length == 0){
             this.$noData.show();
             return;
         }
 
         this.$noData.hide();
 
-        var limitType = "lines";
-        if (this.config.options.textLimitType) {
-            limitType = this.config.options.textLimitType;
-        }
-        var limit;
-        if (limitType === "lines") {
-            limit = this.config.options.textLimit ? this.config.options.textLimit : 4;
-        } else if (limitType === "chars") {
-            limit = this.config.options.textLimit ? this.config.options.textLimit : 130;
-        }
-
+        var manifestRenderData = $.extend(true, [], this.manifestData);
+        var canvasRenderData = $.extend(true, [], this.canvasData);
+        
         var displayOrderConfig: string = this.options.displayOrder;
 
         if (displayOrderConfig){
@@ -84,19 +102,19 @@ class MoreInfoRightPanel extends RightPanel {
             var sorted = [];
 
             _.each(displayOrder, (item: string) => {
-                var match: IMetadataItem = data.en().where((x => x.label.toLowerCase() === item)).first();
+                var match: IMetadataItem = manifestRenderData.en().where((x => x.label.toLowerCase() === item)).first();
                 if (match){
                     sorted.push(match);
-                    data.remove(match);
+                    manifestRenderData.remove(match);
                 }
             });
 
             // add remaining items that were not in the displayOrder.
-            _.each(data, (item: IMetadataItem) => {
+            _.each(manifestRenderData, (item: IMetadataItem) => {
                 sorted.push(item);
             });
 
-            data = sorted;
+            manifestRenderData = sorted;
         }
 
         // Exclusions
@@ -109,9 +127,9 @@ class MoreInfoRightPanel extends RightPanel {
             var exclude: string[] = excludeConfig.split(',');
 
             _.each(exclude, (item: string) => {
-                var match: IMetadataItem = data.en().where((x => x.label.toLowerCase() === item)).first();
+                var match: IMetadataItem = manifestRenderData.en().where((x => x.label.toLowerCase() === item)).first();
                 if (match){
-                    data.remove(match);
+                    manifestRenderData.remove(match);
                 }
             });
         }
@@ -119,7 +137,7 @@ class MoreInfoRightPanel extends RightPanel {
         // flatten metadata into array.
         var flattened: IMetadataItem[] = [];
 
-        _.each(data, (item: IMetadataItem) => {
+        _.each(manifestRenderData, (item: IMetadataItem) => {
             if (_.isArray(item.value)){
                 flattened = flattened.concat(<IMetadataItem[]>item.value);
             } else {
@@ -127,17 +145,59 @@ class MoreInfoRightPanel extends RightPanel {
             }
         });
 
-        data = flattened;
+        manifestRenderData = flattened;
+        
+        if (this.config.options.aggregateValues) {
+            this.aggregateValues(manifestRenderData, canvasRenderData);
+        }
+        
+        this.renderElement(this.$items, manifestRenderData, this.content.manifestHeader);
+        this.renderElement(this.$canvasItems, canvasRenderData, this.content.canvasHeader);
+    }
 
-        _.each(data, (item: IMetadataItem) => {
-            var built: any = this.buildItem(item);
-            this.$items.append(built);
-            if (limitType === "lines") {
-                built.find('.text').toggleExpandTextByLines(limit, this.content.less, this.content.more);
-            } else if (limitType === "chars") {
-                built.find('.text').ellipsisHtmlFixed(limit, null);
-            }
+    aggregateValues(fromData: any[], toData: any[]) {
+        var values: string[] = this.config.options.aggregateValues.split(",");
+
+        _.each(toData, item => {
+            _.each(values, value => {
+                value = value.trim();
+
+                if (item.label.toLowerCase() == value.toLowerCase()) {
+                    var manifestIndex = _.findIndex(fromData, x => x.label.toLowerCase() == value.toLowerCase());
+
+                    if (manifestIndex != -1) {
+                        var data = fromData.splice(manifestIndex, 1)[0];
+                        item.value = data.value + item.value;
+                    }
+                }
+            });
         });
+    }
+
+    renderElement(element: JQuery, data: any, header: string) {
+        element.empty();
+
+        if (data.length !== 0) {
+            if (header)
+                element.append(this.buildHeader(header));
+
+            _.each(data, (item: any) => {
+                var built = this.buildItem(item);
+                element.append(built);
+                if (this.limitType === "lines") {
+                    built.find('.text').toggleExpandTextByLines(this.limit, this.content.less, this.content.more);
+                } else if (this.limitType === "chars") {
+                    built.find('.text').ellipsisHtmlFixed(this.limit, null);
+                }
+            });
+        }
+    }
+
+    buildHeader(label: string): JQuery {
+        var $header = $('<div class="header"></div>');
+        $header.html(this.provider.sanitize(label));
+
+        return $header;
     }
 
     buildItem(item: IMetadataItem): any {
