@@ -86,12 +86,15 @@
     {
       "options":
       {
+        "aggregateValues": "",
+        "canvasHeader": "About the image",
         "displayOrder": "",
         "exclude": "",
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
         "panelOpen": false,
+        "manifestHeader": "About the book",
         "textLimit": 4,
         "textLimitType": "lines"
       }
