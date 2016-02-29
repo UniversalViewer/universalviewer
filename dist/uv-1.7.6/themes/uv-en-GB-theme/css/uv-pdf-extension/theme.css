@@ -589,6 +589,13 @@
 #app .rightPanel .main .items {
   padding: 0 10px 20px 10px;
 }
+#app .rightPanel .main .items .header {
+  color: #14a4c3;
+  border-bottom: 1px solid #14a4c3;
+  font-size: 11px;
+  margin: 15px 10px 0 0;
+  text-transform: uppercase;
+}
 #app .rightPanel .main .items .item {
   padding: 0;
   margin: 0 0 20px 0;

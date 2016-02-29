@@ -112,11 +112,17 @@ declare module Manifesto {
         static STANFORDIIIF1IMAGECONFORMANCE1: ServiceProfile;
         static STANFORDIIIF1IMAGECONFORMANCE2: ServiceProfile;
         static IIIF1IMAGELEVEL0: ServiceProfile;
+        static IIIF1IMAGELEVEL0PROFILE: ServiceProfile;
         static IIIF1IMAGELEVEL1: ServiceProfile;
+        static IIIF1IMAGELEVEL1PROFILE: ServiceProfile;
         static IIIF1IMAGELEVEL2: ServiceProfile;
+        static IIIF1IMAGELEVEL2PROFILE: ServiceProfile;
         static IIIF2IMAGELEVEL0: ServiceProfile;
+        static IIIF2IMAGELEVEL0PROFILE: ServiceProfile;
         static IIIF2IMAGELEVEL1: ServiceProfile;
+        static IIIF2IMAGELEVEL1PROFILE: ServiceProfile;
         static IIIF2IMAGELEVEL2: ServiceProfile;
+        static IIIF2IMAGELEVEL2PROFILE: ServiceProfile;
         static IXIF: ServiceProfile;
         static LOGIN: ServiceProfile;
         static LOGOUT: ServiceProfile;
