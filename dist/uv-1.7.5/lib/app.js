@@ -3120,7 +3120,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.4';
+    exports.Version = '1.7.5';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -3430,6 +3430,13 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             return thumbs;
         };
         GalleryView.prototype._multiSelectStateChange = function (state) {
+            this.multiSelectState = state;
+            if (state.enabled) {
+                this.$thumbs.addClass("multiSelect");
+            }
+            else {
+                this.$thumbs.removeClass("multiSelect");
+            }
             for (var j = 0; j < state.canvases.length; j++) {
                 var canvas = state.canvases[j];
                 var thumb = this._getThumbByCanvas(canvas);
@@ -4246,18 +4253,18 @@ define('modules/uv-contentleftpanel-module/ContentLeftPanel',["require", "export
             $.subscribe(Commands.EXIT_MULTISELECT_MODE, function () {
                 that._reset();
                 that.multiSelectState.enabled = false;
-                $.publish(Commands.MULTISELECT_CHANGE, [_this.multiSelectState]);
+                $.publish(Commands.MULTISELECT_CHANGE, [that.multiSelectState]);
                 that.setTitle(that.content.title);
-                _this.$multiSelectOptions.hide();
+                that.$multiSelectOptions.hide();
             });
             $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, function () {
-                if (_this.multiSelectState.enabled) {
+                if (that.multiSelectState.enabled) {
                     $.publish(Commands.EXIT_MULTISELECT_MODE);
                 }
             });
             $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, function () {
-                if (_this.multiSelectState.enabled) {
-                    _this._showMultiSelectOptions();
+                if (that.multiSelectState.enabled) {
+                    that._showMultiSelectOptions();
                 }
             });
             $.subscribe(Commands.TREE_NODE_MULTISELECTED, function (s, node) {
@@ -6908,6 +6915,8 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             });
             this.title = this.extension.provider.getTitle();
             this.createNavigationButtons();
+            this.hidePrevButton();
+            this.hideNextButton();
             // if firefox, hide rotation and prev/next until this is resolved
             //var browser = window.browserDetect.browser;
             //if (browser == 'Firefox') {
@@ -6921,8 +6930,6 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.resize();
         };
         SeadragonCenterPanel.prototype.createNavigationButtons = function () {
-            if (!this.provider.isMultiCanvas())
-                return;
             this.$leftButton = $('<div class="paging btn prev"></div>');
             this.$leftButton.prop('title', this.content.previous);
             this.viewer.addControl(this.$leftButton[0], { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
@@ -7050,11 +7057,9 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                     this.goHome();
                 }
             }
-            if (this.provider.isContinuous()) {
-                this.hidePrevButton();
-                this.hideNextButton();
-            }
-            else if (this.provider.isMultiCanvas()) {
+            if (this.provider.isMultiCanvas() && !this.provider.isContinuous()) {
+                this.showPrevButton();
+                this.showNextButton();
                 $('.navigator').addClass('extraMargin');
                 if (!this.provider.isFirstCanvas()) {
                     this.enablePrevButton();
@@ -7204,6 +7209,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             return newRects;
         };
         SeadragonCenterPanel.prototype.resize = function () {
+            var _this = this;
             _super.prototype.resize.call(this);
             this.$viewer.height(this.$content.height() - this.$viewer.verticalMargins());
             this.$viewer.width(this.$content.width() - this.$viewer.horizontalMargins());
@@ -7219,15 +7225,19 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                 this.$leftButton.css('top', (this.$content.height() - this.$leftButton.height()) / 2);
                 this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
             }
-            // stretch navigator
-            if (this.provider.isContinuous()) {
-                if (this.provider.isHorizontallyAligned()) {
-                    this.$navigator.width(this.$viewer.width() - this.$viewer.rightMargin());
+            // stretch navigator, allowing time for OSD to resize
+            setTimeout(function () {
+                if (_this.provider.isContinuous()) {
+                    if (_this.provider.isHorizontallyAligned()) {
+                        var width = _this.$viewer.width() - _this.$viewer.rightMargin();
+                        console.log(width);
+                        _this.$navigator.width(width);
+                    }
+                    else {
+                        _this.$navigator.height(_this.$viewer.height());
+                    }
                 }
-                else {
-                    this.$navigator.height(this.$viewer.height());
-                }
-            }
+            }, 100);
         };
         SeadragonCenterPanel.prototype.setFocus = function () {
             var $canvas = $(this.viewer.canvas);

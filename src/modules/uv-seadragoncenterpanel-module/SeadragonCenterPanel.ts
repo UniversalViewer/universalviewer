@@ -220,6 +220,9 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.createNavigationButtons();
 
+        this.hidePrevButton();
+        this.hideNextButton();
+
         // if firefox, hide rotation and prev/next until this is resolved
         //var browser = window.browserDetect.browser;
 
@@ -237,7 +240,6 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     createNavigationButtons() {
-        if (!this.provider.isMultiCanvas()) return;
 
         this.$leftButton = $('<div class="paging btn prev"></div>');
         this.$leftButton.prop('title', this.content.previous);
@@ -383,10 +385,10 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }
 
-        if ((<ISeadragonProvider>this.provider).isContinuous()){
-            this.hidePrevButton();
-            this.hideNextButton();
-        } else if (this.provider.isMultiCanvas()) {
+        if (this.provider.isMultiCanvas() && !(<ISeadragonProvider>this.provider).isContinuous()) {
+
+            this.showPrevButton();
+            this.showNextButton();
 
             $('.navigator').addClass('extraMargin');
 
@@ -601,15 +603,18 @@ class SeadragonCenterPanel extends CenterPanel {
             this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
         }
 
-        // stretch navigator
-        if ((<ISeadragonProvider>this.provider).isContinuous()){
-            if ((<ISeadragonProvider>this.provider).isHorizontallyAligned()){
-                this.$navigator.width(this.$viewer.width() - this.$viewer.rightMargin());
-            } else {
-                this.$navigator.height(this.$viewer.height());
+        // stretch navigator, allowing time for OSD to resize
+        setTimeout(() => {
+            if ((<ISeadragonProvider>this.provider).isContinuous()){
+                if ((<ISeadragonProvider>this.provider).isHorizontallyAligned()){
+                    var width: number = this.$viewer.width() - this.$viewer.rightMargin();
+                    console.log(width);
+                    this.$navigator.width(width);
+                } else {
+                    this.$navigator.height(this.$viewer.height());
+                }
             }
-        }
-
+        }, 100);
     }
 
     setFocus(): void {
