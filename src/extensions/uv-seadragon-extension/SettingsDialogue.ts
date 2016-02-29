@@ -6,6 +6,13 @@ class SettingsDialogue extends BaseSettingsDialogue {
     $navigatorEnabled: JQuery;
     $navigatorEnabledCheckbox: JQuery;
     $navigatorEnabledLabel: JQuery;
+
+    $clickToZoomEnabled: JQuery;
+    $clickToZoomEnabledCheckbox: JQuery;
+    $clickToZoomEnabledLabel: JQuery;
+
+
+
     $pagingEnabled: JQuery;
     $pagingEnabledCheckbox: JQuery;
     $pagingEnabledLabel: JQuery;
@@ -31,6 +38,15 @@ class SettingsDialogue extends BaseSettingsDialogue {
 
         this.$navigatorEnabledLabel = $('<label for="navigatorEnabled">' + this.content.navigatorEnabled + '</label>');
         this.$navigatorEnabled.append(this.$navigatorEnabledLabel);
+        
+        this.$clickToZoomEnabled = $('<div class="setting clickToZoom"></div>');
+        this.$scroll.append(this.$clickToZoomEnabled);
+
+        this.$clickToZoomEnabledCheckbox = $('<input id="clickToZoomEnabled" type="checkbox" />');
+        this.$clickToZoomEnabled.append(this.$clickToZoomEnabledCheckbox);
+
+        this.$clickToZoomEnabledLabel = $('<label for="clickToZoomEnabled">' + this.content.clickToZoomEnabled + '</label>');
+        this.$clickToZoomEnabled.append(this.$clickToZoomEnabledLabel);        
         
         this.$pagingEnabled = $('<div class="setting pagingEnabled"></div>');
         this.$scroll.append(this.$pagingEnabled);
@@ -61,6 +77,20 @@ class SettingsDialogue extends BaseSettingsDialogue {
 
             this.updateSettings(settings);
         });
+        
+        this.$clickToZoomEnabledCheckbox.change(() => {
+            var settings: ISettings = {};
+
+            if(this.$clickToZoomEnabledCheckbox.is(":checked")) {
+                settings.clickToZoomEnabled = true;
+            } else {
+                settings.clickToZoomEnabled = false;
+            }
+
+            this.updateSettings(settings);
+            var viewer = (<ISeadragonExtension>this.extension).getViewer();
+            viewer.gestureSettingsMouse.clickToZoom = settings.clickToZoomEnabled;
+        });        
 
         this.$pagingEnabledCheckbox.change(() => {
             var settings: ISettings = {};
@@ -97,6 +127,12 @@ class SettingsDialogue extends BaseSettingsDialogue {
         } else {
             this.$navigatorEnabledCheckbox.removeAttr("checked");
         }
+        
+        if (settings.clickToZoomEnabled){
+            this.$clickToZoomEnabledCheckbox.prop("checked", true);
+        } else {
+            this.$clickToZoomEnabledCheckbox.removeAttr("checked");
+        }        
 
         if (!this.extension.helper.isPagingAvailable()){
             this.$pagingEnabled.hide();

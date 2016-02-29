@@ -180,6 +180,9 @@ class SeadragonCenterPanel extends CenterPanel {
             blendTime: this.config.options.blendTime || 0,
             autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: prefixUrl,
+            gestureSettingsMouse: {
+                clickToZoom: !!this.extension.config.options.clickToZoomEnabled
+            },
             navImages: {
                 zoomIn: {
                     REST:   'zoom_in.png',
