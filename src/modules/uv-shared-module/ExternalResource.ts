@@ -1,5 +1,6 @@
 class ExternalResource implements Manifesto.IExternalResource {
     public clickThroughService: Manifesto.IService;
+    public restrictedService: Manifesto.IService;
     public data: any;
     public dataUri: string;
     public error: any;
@@ -18,6 +19,7 @@ class ExternalResource implements Manifesto.IExternalResource {
 
     private _parseAuthServices(resource: any): void {
         this.clickThroughService = manifesto.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
+        this.restrictedService = manifesto.getService(resource, manifesto.ServiceProfile.restricted().toString());
         this.loginService = manifesto.getService(resource, manifesto.ServiceProfile.login().toString());
         if (this.loginService){
             this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
@@ -26,7 +28,7 @@ class ExternalResource implements Manifesto.IExternalResource {
     }
 
     public isAccessControlled(): boolean {
-        if(this.clickThroughService || this.loginService){
+        if(this.clickThroughService || this.loginService || this.restrictedService){
             return true;
         }
         return false;
