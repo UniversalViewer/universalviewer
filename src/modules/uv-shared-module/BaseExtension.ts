@@ -3,6 +3,7 @@ import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import BootstrapParams = require("../../BootstrapParams");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
+import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import Information = require("./Information");
@@ -20,11 +21,13 @@ import LoginWarningMessages = require("./LoginWarningMessages");
 class BaseExtension implements IExtension {
 
     $clickThroughDialogue: JQuery;
+    $restrictedDialogue: JQuery;
     $element: JQuery;
     $loginDialogue: JQuery;
     bootstrapper: BootStrapper;
     canvasIndex: number;
     clickThroughDialogue: ClickThroughDialogue;
+    restrictedDialogue: RestrictedDialogue;
     embedHeight: number;
     embedWidth: number;
     extensions: any;
@@ -372,10 +375,6 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.SETTINGS_CHANGED, args);
         });
 
-        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE);
-        });
-
         $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, () => {
             this.triggerSocket(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
@@ -402,6 +401,14 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.SHOW_LOGIN_DIALOGUE, () => {
             this.triggerSocket(BaseCommands.SHOW_LOGIN_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_RESTRICTED_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_RESTRICTED_DIALOGUE);
         });
 
         $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
@@ -463,6 +470,10 @@ class BaseExtension implements IExtension {
         this.$clickThroughDialogue = $('<div class="overlay clickthrough"></div>');
         Shell.$overlays.append(this.$clickThroughDialogue);
         this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
+
+        this.$restrictedDialogue = $('<div class="overlay login"></div>');
+        Shell.$overlays.append(this.$restrictedDialogue);
+        this.restrictedDialogue = new RestrictedDialogue(this.$restrictedDialogue);
 
         this.$loginDialogue = $('<div class="overlay login"></div>');
         Shell.$overlays.append(this.$loginDialogue);
@@ -636,6 +647,7 @@ class BaseExtension implements IExtension {
                 resourcesToLoad,
                 storageStrategy,
                 this.clickThrough,
+                this.restricted,
                 this.login,
                 this.getAccessToken,
                 this.storeAccessToken,
@@ -808,6 +820,20 @@ class BaseExtension implements IExtension {
         });
     }
 
+
+    restricted(resource: Manifesto.IExternalResource): Promise<void> {
+        return new Promise<void>((resolve) => {
+
+            $.publish(BaseCommands.SHOW_RESTRICTED_DIALOGUE, [{
+                resource: resource,
+                acceptCallback: () => {
+                    // navigate to next visible item
+                    resolve();
+                }
+            }]);
+        });
+    }
+
     login(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
@@ -835,16 +861,24 @@ class BaseExtension implements IExtension {
         });
     }
 
-    getAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken> {
+    getAccessToken(resource: Manifesto.IExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
             $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
                 if (token.error){
-                    reject(token.errorDescription);
+                    if(rejectOnError) {
+                        reject(token.errorDescription);
+                    } else {
+                        resolve(null);
+                    }
                 } else {
                     resolve(token);
                 }
             }).fail((error) => {
-                reject(error);
+                if(rejectOnError) {
+                    reject(error);
+                } else {
+                    resolve(null);
+                }
             });
         });
     }
@@ -862,8 +896,14 @@ class BaseExtension implements IExtension {
 
             var foundItems: storage.StorageItem[] = [];
 
+            var item: storage.StorageItem;
+            // try to match on the tokenService, if the resource has one:
+            if(resource.tokenService) {
+                item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(storageStrategy));
+            }
+
             // first try an exact match of the url
-            var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
+            //var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
 
             if (item){
                 foundItems.push(item);
