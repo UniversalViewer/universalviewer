@@ -49,7 +49,7 @@ class RestrictedDialogue extends Dialogue {
         this.$message.targetBlank();
 
         this.$nextVisibleButton = this.$content.find('.nextvisible');
-        // this.$nextVisibleButton.text(this.content.nextVisible); // figure out config
+        // TODO: get from config   this.$nextVisibleButton.text(this.content.nextVisible); // figure out config
         this.$nextVisibleButton.text("Next visible item");
 
         this.$element.hide();

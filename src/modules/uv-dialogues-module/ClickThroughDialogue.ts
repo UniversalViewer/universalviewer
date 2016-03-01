@@ -47,7 +47,7 @@ class ClickThroughDialogue extends Dialogue {
         this.$message = this.$content.find(".message");
 
         this.$acceptTermsButton = this.$content.find(".acceptTerms");
-        // this.$acceptTermsButton.text(this.content.acceptTerms); // figure out config
+        // TODO: get from config this.$acceptTermsButton.text(this.content.acceptTerms); // figure out config
         this.$acceptTermsButton.text("Accept Terms and Open");
 
         this.$element.hide();
