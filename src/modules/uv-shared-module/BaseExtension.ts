@@ -240,6 +240,11 @@ class BaseExtension implements IExtension {
             this.feedback();
         });
 
+        $.subscribe(BaseCommands.FORBIDDEN, () => {
+            this.triggerSocket(BaseCommands.FORBIDDEN);
+            $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
+        });
+
         $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, () => {
             this.triggerSocket(BaseCommands.HIDE_DOWNLOAD_DIALOGUE);
         });
@@ -658,11 +663,18 @@ class BaseExtension implements IExtension {
                     });
                     resolve(this.provider.resources);
                 })['catch']((error: any) => {
-                    if (error.name === HTTPStatusCode.SERVICE_UNAVAILABLE.toString()) {
-                        // show friendly error
-                        $.publish(BaseCommands.AUTHORIZATION_FAILED);
-                    } else {
-                        this.showMessage(error.message || error);
+                    switch(error.name){
+                        case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
+                            $.publish(BaseCommands.AUTHORIZATION_FAILED);
+                            break;
+                        case manifesto.StatusCodes.FORBIDDEN.toString():
+                            $.publish(BaseCommands.FORBIDDEN);
+                            break;
+                        case manifesto.StatusCodes.RESTRICTED.toString():
+                            // do nothing
+                            break;
+                        default:
+                            this.showMessage(error.message || error);
                     }
             });
         });
@@ -820,15 +832,14 @@ class BaseExtension implements IExtension {
         });
     }
 
-
     restricted(resource: Manifesto.IExternalResource): Promise<void> {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
 
             $.publish(BaseCommands.SHOW_RESTRICTED_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
-                    // navigate to next visible item
-                    resolve();
+                    $.publish(BaseCommands.LOAD_FAILED);
+                    reject(resource);
                 }
             }]);
         });
@@ -950,15 +961,20 @@ class BaseExtension implements IExtension {
             } else {
 
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
-                    resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR){
+                    resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR) {
                     // if the browser doesn't support CORS
-                    if (!Modernizr.cors){
-                        var informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
+                    if (!Modernizr.cors) {
+                        var informationArgs:InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
                         $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
                         resolve(resource);
                     } else {
                         reject(resource.error.statusText);
                     }
+                } else if (resource.error.status === HTTPStatusCode.FORBIDDEN){
+                    var error: Error = new Error();
+                    error.message = "Forbidden";
+                    error.name = manifesto.StatusCodes.FORBIDDEN.toString();
+                    reject(error);
                 } else {
                     reject(resource.error.statusText);
                 }

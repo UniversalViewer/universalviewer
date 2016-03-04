@@ -140,6 +140,11 @@
         "twoUp": "Gweld dwy dudalen ar y tro"
       }
     },
+    "restrictedDialogue": {
+      "content": {
+        "cancel": "Diddymu"
+      }
+    },
     "seadragonCenterPanel": {
       "content": {
         "acknowledgements": "Priodoliad",

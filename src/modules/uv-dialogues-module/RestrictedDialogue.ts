@@ -4,6 +4,7 @@ import Dialogue = require("../uv-shared-module/Dialogue");
 class RestrictedDialogue extends Dialogue {
 
     acceptCallback: any;
+    $cancelButton: JQuery;
     $nextVisibleButton: JQuery;
     $message: JQuery;
     $title: JQuery;
@@ -40,7 +41,7 @@ class RestrictedDialogue extends Dialogue {
             <div>\
                 <p class="message scroll"></p>\
                 <div class="buttons">\
-                    <a class="nextvisible btn btn-primary" href="#" target="_parent"></a>\
+                    <a class="cancel btn btn-primary" href="#" target="_parent"></a>\
                 </div>\
             </div>'
         );
@@ -48,16 +49,18 @@ class RestrictedDialogue extends Dialogue {
         this.$message = this.$content.find('.message');
         this.$message.targetBlank();
 
-        this.$nextVisibleButton = this.$content.find('.nextvisible');
-        // TODO: get from config   this.$nextVisibleButton.text(this.content.nextVisible); // figure out config
-        this.$nextVisibleButton.text("Next visible item");
+        // todo: revisit?
+        //this.$nextVisibleButton = this.$content.find('.nextvisible');
+        //this.$nextVisibleButton.text(this.content.nextVisibleItem);
+
+        this.$cancelButton = this.$content.find('.cancel');
+        this.$cancelButton.text(this.content.cancel);
 
         this.$element.hide();
 
-        this.$nextVisibleButton.on('click', (e) => {
+        this.$cancelButton.on('click', (e) => {
             e.preventDefault();
             this.close();
-            if (this.acceptCallback) this.acceptCallback();
         });
     }
 
@@ -77,6 +80,14 @@ class RestrictedDialogue extends Dialogue {
         });
 
         this.resize();
+    }
+
+    close(): void {
+        super.close();
+
+        if (this.acceptCallback){
+            this.acceptCallback();
+        }
     }
 
     resize(): void {

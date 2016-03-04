@@ -157,6 +157,11 @@
         "zoomOut": "Zoom Out"
       }
     },
+    "restrictedDialogue": {
+      "content": {
+        "cancel": "Cancel"
+      }
+    },
     "searchFooterPanel":
     {
       "content":
