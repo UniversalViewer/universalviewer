@@ -14,6 +14,7 @@ class MoreInfoRightPanel extends RightPanel {
     canvasData: IMetadataItem[];
     aggregateValuesConfig: string[];
     canvasExcludeConfig: string[];
+    copyTextTemplate: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -43,6 +44,7 @@ class MoreInfoRightPanel extends RightPanel {
                                            <div class="header"></div>\
                                            <div class="text"></div>\
                                        </div>');
+        this.copyTextTemplate = $('<a class="copyText" alt=""' + this.content.copyToClipboard  + '"" title="' + this.content.copyToClipboard + '"></a>');
 
         this.$items = $('<div class="items"></div>');
         this.$main.append(this.$items);
@@ -261,7 +263,34 @@ class MoreInfoRightPanel extends RightPanel {
 
         $elem.addClass(item.label.toCssClass());
 
+        if (Utils.Clipboard.SupportsCopy())
+            this.addCopyButton($elem, $header);
+        
         return $elem;
+    }
+    
+    addCopyButton($elem: JQuery, $header: JQuery): void {
+        var $copyBtn = this.copyTextTemplate.clone();
+        $header.append($copyBtn);
+        if (this.isTouch()) {
+            $copyBtn.show();
+        }
+        else {
+            $elem.on('mouseenter', function() {
+                $(this).find('.copyText').show();
+            });
+            $elem.on('mouseleave', function() {
+                $(this).find('.copyText').hide();
+            });
+        }
+        $elem.on('click', (e) => {
+            var imgElement = e.target as HTMLElement;
+            var headerTextElement = imgElement.previousSibling.textContent;
+            var manifestItems = this.manifestData[0].value as IMetadataItem[];
+            var matchingItems = manifestItems.concat(this.canvasData).filter(md => md.label == headerTextElement);
+            var text = matchingItems.map(function(md) { return md.value }).join('');
+            Utils.Clipboard.Copy(text);
+        });
     }
 
     resize(): void {

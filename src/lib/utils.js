@@ -43,6 +43,25 @@ var Utils;
     })();
     Utils.Bools = Bools;
 })(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Clipboard = (function () {
+        function Clipboard() {
+        }
+        Clipboard.Copy = function (text) {
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val(text).select();
+            document.execCommand("copy");
+            $temp.remove();
+        };
+        Clipboard.SupportsCopy = function () {
+            return document.queryCommandSupported && document.queryCommandSupported('copy');
+        };
+        return Clipboard;
+    })();
+    Utils.Clipboard = Clipboard;
+})(Utils || (Utils = {}));
 // Copyright 2013 Basarat Ali Syed. All Rights Reserved.
 //
 // Licensed under MIT open source license http://opensource.org/licenses/MIT
