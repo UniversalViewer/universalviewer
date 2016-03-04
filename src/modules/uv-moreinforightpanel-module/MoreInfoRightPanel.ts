@@ -44,7 +44,7 @@ class MoreInfoRightPanel extends RightPanel {
                                            <div class="header"></div>\
                                            <div class="text"></div>\
                                        </div>');
-        this.copyTextTemplate = $('<a class="copyText" alt=""' + this.content.copyToClipboard  + '"" title="' + this.content.copyToClipboard + '"></a>');
+        this.copyTextTemplate = $('<a class="copyText" alt="' + this.content.copyToClipboard  + '" title="' + this.content.copyToClipboard + '"></a>');
 
         this.$items = $('<div class="items"></div>');
         this.$main.append(this.$items);
@@ -263,7 +263,7 @@ class MoreInfoRightPanel extends RightPanel {
 
         $elem.addClass(item.label.toCssClass());
 
-        if (Utils.Clipboard.SupportsCopy())
+        if (Utils.Clipboard.SupportsCopy() && $text.text() && $header.text())
             this.addCopyButton($elem, $header);
         
         return $elem;
@@ -286,8 +286,10 @@ class MoreInfoRightPanel extends RightPanel {
         $elem.on('click', (e) => {
             var imgElement = e.target as HTMLElement;
             var headerTextElement = imgElement.previousSibling.textContent;
-            var manifestItems = this.manifestData[0].value as IMetadataItem[];
-            var matchingItems = manifestItems.concat(this.canvasData).filter(md => md.label == headerTextElement);
+            var manifestItems = this.flatten(this.manifestData);
+            var canvasItems = this.flatten(this.canvasData);
+            var matchingItems = manifestItems.concat(canvasItems)
+                    .filter(md => md.label && headerTextElement && md.label.toLowerCase() == headerTextElement.toLowerCase());
             var text = matchingItems.map(function(md) { return md.value }).join('');
             Utils.Clipboard.Copy(text);
         });

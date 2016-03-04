@@ -49,11 +49,16 @@ var Utils;
         function Clipboard() {
         }
         Clipboard.Copy = function (text) {
-            var $temp = $("<input>");
-            $("body").append($temp);
-            $temp.val(text).select();
+            var $tempDiv = $("<div>");
+            var brRegex = /<br\s*[\/]?>/gi;
+            text = text.replace(brRegex, "\n");
+            $("body").append($tempDiv);
+            $tempDiv.append(text);
+            var $tempInput = $("<textarea>");
+            $tempDiv.append($tempInput);
+            $tempInput.val($tempDiv.text()).select();
             document.execCommand("copy");
-            $temp.remove();
+            $tempDiv.remove();
         };
         Clipboard.SupportsCopy = function () {
             return document.queryCommandSupported && document.queryCommandSupported('copy');
