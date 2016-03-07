@@ -184,6 +184,17 @@ module.exports = function (grunt) {
                         dest: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>/'
                     }
                 ]
+            },
+            distexamples: {
+                // copy zip archives to examples
+                files: [
+                    {
+                        cwd: '<%= config.dirs.dist %>',
+                        expand: true,
+                        src: ['*.zip', '*.tar'],
+                        dest: '<%= config.dirs.examples %>/'
+                    }
+                ]
             }
         },
 
@@ -507,7 +518,8 @@ module.exports = function (grunt) {
             'clean:dist',
             'copy:dist',
             'compress:zip',
-            'compress:tar'
+            'compress:tar',
+            'copy:distexamples'
         );
     });
 
