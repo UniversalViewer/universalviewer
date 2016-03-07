@@ -151,8 +151,8 @@ class MoreInfoRightPanel extends RightPanel {
             this.aggregateValues(manifestRenderData, canvasRenderData);
         }
         
-        this.renderElement(this.$items, manifestRenderData, this.content.manifestHeader);
-        this.renderElement(this.$canvasItems, canvasRenderData, this.content.canvasHeader);
+        this.renderElement(this.$items, manifestRenderData, this.content.manifestHeader, canvasRenderData.length !== 0);
+        this.renderElement(this.$canvasItems, canvasRenderData, this.content.canvasHeader, true);
     }
 
     aggregateValues(fromData: any[], toData: any[]) {
@@ -174,11 +174,11 @@ class MoreInfoRightPanel extends RightPanel {
         });
     }
 
-    renderElement(element: JQuery, data: any, header: string) {
+    renderElement(element: JQuery, data: any, header: string, renderHeader: boolean) {
         element.empty();
 
         if (data.length !== 0) {
-            if (header)
+            if (renderHeader && header)
                 element.append(this.buildHeader(header));
 
             _.each(data, (item: any) => {
