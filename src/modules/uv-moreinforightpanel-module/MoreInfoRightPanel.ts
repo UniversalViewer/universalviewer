@@ -44,7 +44,9 @@ class MoreInfoRightPanel extends RightPanel {
                                            <div class="header"></div>\
                                            <div class="text"></div>\
                                        </div>');
-        this.copyTextTemplate = $('<a class="copyText" alt="' + this.content.copyToClipboard  + '" title="' + this.content.copyToClipboard + '"></a>');
+        this.copyTextTemplate = $('<div class="copyText" alt="' + this.content.copyToClipboard  + '" title="' + this.content.copyToClipboard + '">\
+                                     <div class="copiedText">' + this.content.copiedToClipboard + ' </div>\
+                                   </div>');
 
         this.$items = $('<div class="items"></div>');
         this.$main.append(this.$items);
@@ -271,16 +273,20 @@ class MoreInfoRightPanel extends RightPanel {
     
     addCopyButton($elem: JQuery, $header: JQuery): void {
         var $copyBtn = this.copyTextTemplate.clone();
+        var $copiedText = $copyBtn.children();
         $header.append($copyBtn);
         if (this.isTouch()) {
             $copyBtn.show();
         }
         else {
             $elem.on('mouseenter', function() {
-                $(this).find('.copyText').show();
+                $copyBtn.show();
             });
             $elem.on('mouseleave', function() {
-                $(this).find('.copyText').hide();
+                $copyBtn.hide();
+            });
+            $copyBtn.on('mouseleave', function() {
+                $copiedText.hide();
             });
         }
         $elem.on('click', (e) => {
@@ -292,6 +298,12 @@ class MoreInfoRightPanel extends RightPanel {
                     .filter(md => md.label && headerTextElement && md.label.toLowerCase() == headerTextElement.toLowerCase());
             var text = matchingItems.map(function(md) { return md.value }).join('');
             Utils.Clipboard.Copy(text);
+            $copiedText.show();
+            if (this.isTouch()) {
+                setTimeout(function() {
+                    $copiedText.hide();
+                }, 2000);
+            }
         });
     }
 

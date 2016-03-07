@@ -49,6 +49,7 @@
                         text-transform: uppercase;
                         
                         .copyText {
+                            position: relative;
                             float: right;
                             display: none;
                             width: 15px;
@@ -56,6 +57,21 @@
                             cursor: pointer;
                             background-image: url('@{img-path}copy.png');
                         }
+                        .copiedText {
+                            display: none;
+                            position: absolute;
+                            top: 18px;
+                            right: -10px;
+                            white-space: nowrap;
+                            padding: 4px;
+                            text-transform: none;
+                            background-color: @gray-dark;
+                            z-index: 1;
+                            border: 1px solid @gray-light;
+                            border-radius: 2px;
+                            color: @text-color;
+                        }
+                        
                     }
 
                     .text{

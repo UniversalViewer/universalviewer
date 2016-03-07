@@ -116,7 +116,8 @@
         "title": "More Information",
         "manifestHeader": "About the book",
         "canvasHeader": "About the image",
-        "copyToClipboard": "Copy to clipboard"
+        "copyToClipboard": "Copy to clipboard",
+        "copiedToClipboard": "Copied to clipboard"
       }
     },
     "pagingHeaderPanel": {
