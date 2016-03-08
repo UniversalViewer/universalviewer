@@ -54,7 +54,7 @@
       {
         "confinedImageSize": 1000,
         "maxImageWidth": 1000,
-        "selectionEnabled": true
+        "selectionEnabled": false
       }
     },
     "embedDialogue":

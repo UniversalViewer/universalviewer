@@ -300,6 +300,21 @@ class SeadragonCenterPanel extends CenterPanel {
 
         var resources: Manifesto.IExternalResource[] = (<ISeadragonProvider>this.provider).resources;
 
+        var x: number;
+        var y: number;
+        var page: any;
+        var pageBounds: any;
+        var nextPage: any;
+        var nextPagePos: any;
+        var topPage: any;
+        var topPageBounds: any;
+        var bottomPage: any;
+        var bottomPagePos: any;
+        var leftPage: any;
+        var leftPageBounds: any;
+        var rightPage: any;
+        var rightPagePos: any;
+
         // if there's more than one image, determine alignment strategy
         if (resources.length > 1) {
 
@@ -307,46 +322,75 @@ class SeadragonCenterPanel extends CenterPanel {
                 // recto verso
                 if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
                     // vertical alignment
-                    var topPage = this.viewer.world.getItemAt(0);
-                    var topPageBounds = topPage.getBounds(true);
-                    var y = topPageBounds.y + topPageBounds.height;
-                    var bottomPage = this.viewer.world.getItemAt(1);
-                    var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+                    topPage = this.viewer.world.getItemAt(0);
+                    topPageBounds = topPage.getBounds(true);
+                    y = topPageBounds.y + topPageBounds.height;
+                    bottomPage = this.viewer.world.getItemAt(1);
+                    bottomPagePos = bottomPage.getBounds(true).getTopLeft();
                     bottomPagePos.y = y + this.config.options.pageGap;
                     bottomPage.setPosition(bottomPagePos, true);
                 } else {
                     // horizontal alignment
-                    var leftPage = this.viewer.world.getItemAt(0);
-                    var leftPageBounds = leftPage.getBounds(true);
-                    var x = leftPageBounds.x + leftPageBounds.width;
-                    var rightPage = this.viewer.world.getItemAt(1);
-                    var rightPagePos = rightPage.getBounds(true).getTopLeft();
+                    leftPage = this.viewer.world.getItemAt(0);
+                    leftPageBounds = leftPage.getBounds(true);
+                    x = leftPageBounds.x + leftPageBounds.width;
+                    rightPage = this.viewer.world.getItemAt(1);
+                    rightPagePos = rightPage.getBounds(true).getTopLeft();
                     rightPagePos.x = x + this.config.options.pageGap;
                     rightPage.setPosition(rightPagePos, true);
                 }
             } else {
+
                 // scroll
                 if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
                     // vertical alignment
-                    for (var i = 0; i < resources.length - 1; i++){
-                        var page = this.viewer.world.getItemAt(i);
-                        var pageBounds = page.getBounds(true);
-                        var y = pageBounds.y + pageBounds.height;
-                        var nextPage = this.viewer.world.getItemAt(i + 1);
-                        var nextPagePos = nextPage.getBounds(true).getTopLeft();
-                        nextPagePos.y = y;
-                        nextPage.setPosition(nextPagePos, true);
+                    if ((<ISeadragonProvider>this.provider).isTopToBottom()) {
+                        // top to bottom
+                        for (var i = 0; i < resources.length - 1; i++) {
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            y = pageBounds.y + pageBounds.height;
+                            nextPage = this.viewer.world.getItemAt(i + 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.y = y;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    } else {
+                        // bottom to top
+                        for (var i = resources.length; i > 0; i--) {
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            y = pageBounds.y - pageBounds.height;
+                            nextPage = this.viewer.world.getItemAt(i - 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.y = y;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
                     }
                 } else {
                     // horizontal alignment
-                    for (var i = 0; i < resources.length - 1; i++){
-                        var page = this.viewer.world.getItemAt(i);
-                        var pageBounds = page.getBounds(true);
-                        var x = pageBounds.x + pageBounds.width;
-                        var nextPage = this.viewer.world.getItemAt(i + 1);
-                        var nextPagePos = nextPage.getBounds(true).getTopLeft();
-                        nextPagePos.x = x;
-                        nextPage.setPosition(nextPagePos, true);
+                    if ((<ISeadragonProvider>this.provider).isLeftToRight()){
+                        // left to right
+                        for (var i = 0; i < resources.length - 1; i++){
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            x = pageBounds.x + pageBounds.width;
+                            nextPage = this.viewer.world.getItemAt(i + 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.x = x;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    } else {
+                        // right to left
+                        for (var i = resources.length - 1; i > 0; i--){
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            x = pageBounds.x - pageBounds.width;
+                            nextPage = this.viewer.world.getItemAt(i - 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.x = x;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
                     }
                 }
             }
@@ -412,7 +456,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     goHome(): void {
-        var viewingDirection = this.provider.getViewingDirection().toString();
+        var viewingDirection: string = this.provider.getViewingDirection().toString();
 
         switch (viewingDirection.toString()){
             case manifesto.ViewingDirection.topToBottom().toString() :

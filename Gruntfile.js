@@ -37,6 +37,7 @@ module.exports = function (grunt) {
             build : ['<%= config.dirs.build %>'],
             dist: ['<%= config.dirs.dist %>'],
             examples: ['<%= config.dirs.examples %>/uv-*'],
+            distexamples: ['<%= config.dirs.examples %>/uv-*.zip', '<%= config.dirs.examples %>/uv-*.tar'],
             extension: ['./src/extensions/*/build/*']
         },
 
@@ -519,6 +520,7 @@ module.exports = function (grunt) {
             'copy:dist',
             'compress:zip',
             'compress:tar',
+            'clean:distexamples',
             'copy:distexamples'
         );
     });

@@ -282,6 +282,14 @@ class BaseProvider implements IProvider{
         return this.getCurrentSequence().getStartCanvasIndex();
     }
 
+    getShareUrl(): string {
+        if (Utils.Documents.IsInIFrame()){
+            return parent.document.location.href;
+        }
+
+        return document.location.href;
+    }
+
     addTimestamp(uri: string): string{
         return uri + "?t=" + Utils.Dates.GetTimeStamp();
     }

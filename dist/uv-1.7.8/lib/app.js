@@ -2030,6 +2030,8 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             this.$firstRow.find('.leftCol').append(this.$link);
             this.$image = $('<img class="share" />');
             this.$link.append(this.$image);
+            this.$url = $('<input type="text"></input>');
+            this.$firstRow.find('.rightCol').append(this.$url);
             this.$intro = $('<p>' + this.content.instructions + '</p>');
             this.$firstRow.find('.rightCol').append(this.$intro);
             this.$code = $('<textarea class="code"></textarea>');
@@ -2162,6 +2164,7 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             }
             this.$link.attr('href', thumbnail);
             this.$image.attr('src', thumbnail);
+            this.$url.val(this.provider.getShareUrl());
         };
         EmbedDialogue.prototype.close = function () {
             _super.prototype.close.call(this);
@@ -3289,7 +3292,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.7';
+    exports.Version = '1.7.8';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -5148,6 +5151,12 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
         };
         BaseProvider.prototype.getStartCanvasIndex = function () {
             return this.getCurrentSequence().getStartCanvasIndex();
+        };
+        BaseProvider.prototype.getShareUrl = function () {
+            if (Utils.Documents.IsInIFrame()) {
+                return parent.document.location.href;
+            }
+            return document.location.href;
         };
         BaseProvider.prototype.addTimestamp = function (uri) {
             return uri + "?t=" + Utils.Dates.GetTimeStamp();

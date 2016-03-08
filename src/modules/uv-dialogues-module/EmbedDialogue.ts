@@ -20,6 +20,7 @@ class EmbedDialogue extends Dialogue {
     $sizes: JQuery;
     $smallSize: JQuery;
     $title: JQuery;
+    $url: JQuery;
     code: string;
     currentHeight: number;
     currentWidth: number;
@@ -81,6 +82,9 @@ class EmbedDialogue extends Dialogue {
         this.$image = $('<img class="share" />');
         this.$link.append(this.$image);
 
+        this.$url = $('<input class="url" type="text"></input>');
+        this.$firstRow.find('.rightCol').append(this.$url);
+
         this.$intro = $('<p>' + this.content.instructions + '</p>');
         this.$firstRow.find('.rightCol').append(this.$intro);
 
@@ -123,11 +127,12 @@ class EmbedDialogue extends Dialogue {
         this.$customSizeHeightWrap.append(this.$customHeight);
         this.$customSizeHeightWrap.append('<span>px</span>');
 
-        // initialise ui.
+        this.$url.click(function() {
+            $(this).select();
+        });
 
-        // ui event handlers.
         this.$code.focus(function() {
-            $(this).select()
+            $(this).select();
         });
 
         this.$code.mouseup((e) => {
@@ -247,6 +252,8 @@ class EmbedDialogue extends Dialogue {
 
         this.$link.attr('href', thumbnail);
         this.$image.attr('src', thumbnail);
+
+        this.$url.val(this.provider.getShareUrl());
     }
 
     close(): void {
