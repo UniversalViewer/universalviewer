@@ -88,8 +88,9 @@
       {
         "aggregateValues": "",
         "canvasHeader": "About the image",
+        "canvasExclude": "",
         "displayOrder": "",
-        "exclude": "",
+        "manifestExclude": "",
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
