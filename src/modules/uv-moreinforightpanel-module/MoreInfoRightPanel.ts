@@ -75,7 +75,7 @@ class MoreInfoRightPanel extends RightPanel {
             data = this.exclude(data, this.readConfig(this.options.manifestExclude));
         }
         
-        return this.flattenMetadataIntoArray(data);
+        return this.flatten(data);
     }
     
     getCanvasData(canvas: Manifesto.ICanvas) {
@@ -85,7 +85,7 @@ class MoreInfoRightPanel extends RightPanel {
             data = this.exclude(data, this.canvasExcludeConfig);
         }
         
-        return this.flattenMetadataIntoArray(data);
+        return this.flatten(data);
     }
     
     readConfig(config: string) {
@@ -166,11 +166,11 @@ class MoreInfoRightPanel extends RightPanel {
         return excluded;
     }
     
-    flattenMetadataIntoArray(renderData: IMetadataItem[]) {
+    flatten(data: IMetadataItem[]) {
         // flatten metadata into array.
         var flattened: IMetadataItem[] = [];
 
-        _.each(renderData, item => {
+        _.each(data, item => {
             if (_.isArray(item.value)){
                 flattened = flattened.concat(<IMetadataItem[]>item.value);
             } else {
