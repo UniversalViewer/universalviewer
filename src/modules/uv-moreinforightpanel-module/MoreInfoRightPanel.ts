@@ -10,8 +10,10 @@ class MoreInfoRightPanel extends RightPanel {
     $canvasItems: JQuery;
     $noData: JQuery;
     moreInfoItemTemplate: JQuery;
-    manifestData: any[];
-    canvasData: any[];
+    manifestData: IMetadataItem[];
+    canvasData: IMetadataItem[];
+    aggregateValuesConfig: string[];
+    canvasExcludeConfig: string[];
 
     constructor($element: JQuery) {
         super($element);
@@ -31,6 +33,11 @@ class MoreInfoRightPanel extends RightPanel {
         } else if (this.limitType === "chars") {
             this.limit = this.config.options.textLimit ? this.config.options.textLimit : 130;
         }
+        
+        this.aggregateValuesConfig = this.readConfig(this.options.aggregateValues);
+        this.canvasExcludeConfig = this.readConfig(this.options.canvasExclude);
+        this.manifestData = this.getManifestData();
+        this.canvasData = [];
 
         this.moreInfoItemTemplate = $('<div class="item">\
                                            <div class="header"></div>\
@@ -51,15 +58,46 @@ class MoreInfoRightPanel extends RightPanel {
 
         this.setTitle(this.content.title);
 
-        this.manifestData = this.provider.getMetadata();
-        this.canvasData = [];
-
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
-            var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(canvasIndex);
-
-            this.canvasData = canvas.getMetadata();
+            this.canvasData = this.getCanvasData(this.provider.getCanvasByIndex(canvasIndex));
             this.displayInfo();
         });
+    }
+    
+    getManifestData() {
+        var data = this.provider.getMetadata();
+        
+        if (this.options.displayOrder) {
+            data = this.sort(data, this.readConfig(this.options.displayOrder));
+        }
+        
+        if (this.options.manifestExclude) {
+            data = this.exclude(data, this.readConfig(this.options.manifestExclude));
+        }
+        
+        return this.flattenMetadataIntoArray(data);
+    }
+    
+    getCanvasData(canvas: Manifesto.ICanvas) {
+        var data = this.provider.getCanvasMetadata(canvas);
+            
+        if (this.canvasExcludeConfig.length !== 0) {
+            data = this.exclude(data, this.canvasExcludeConfig);
+        }
+        
+        return this.flattenMetadataIntoArray(data);
+    }
+    
+    readConfig(config: string) {
+        if (config) {
+            return config
+                .toLowerCase()
+                .replace(/ /g,"")
+                .split(',');
+        }
+        else {
+            return [];
+        }
     }
 
     toggleFinish(): void {
@@ -89,55 +127,50 @@ class MoreInfoRightPanel extends RightPanel {
 
         var manifestRenderData = $.extend(true, [], this.manifestData);
         var canvasRenderData = $.extend(true, [], this.canvasData);
+       
+        this.aggregateValues(manifestRenderData, canvasRenderData);
+        this.renderElement(this.$items, manifestRenderData, this.content.manifestHeader, canvasRenderData.length !== 0);
+        this.renderElement(this.$canvasItems, canvasRenderData, this.content.canvasHeader, manifestRenderData.length !== 0);
+    }
+    
+    sort(data: IMetadataItem[], displayOrder: string[]) {
+         // sort items
+        var sorted: IMetadataItem[] = [];
+
+        _.each(displayOrder, (item: string) => {
+            var match: IMetadataItem = data.en().where((x => x.label.toLowerCase() === item)).first();
+            if (match){
+                sorted.push(match);
+                data.remove(match);
+            }
+        });
+
+        // add remaining items that were not in the displayOrder.
+        _.each(data, (item: IMetadataItem) => {
+            sorted.push(item);
+        });
+
+        return sorted;
+    }
+    
+    exclude(data: IMetadataItem[], excludeConfig: string[]) {
+        var excluded: IMetadataItem[] = $.extend(true, [], data);
         
-        var displayOrderConfig: string = this.options.displayOrder;
-
-        if (displayOrderConfig){
-
-            displayOrderConfig = displayOrderConfig.toLowerCase();
-            displayOrderConfig = displayOrderConfig.replace(/ /g,"");
-            var displayOrder: string[] = displayOrderConfig.split(',');
-
-            // sort items
-            var sorted = [];
-
-            _.each(displayOrder, (item: string) => {
-                var match: IMetadataItem = manifestRenderData.en().where((x => x.label.toLowerCase() === item)).first();
-                if (match){
-                    sorted.push(match);
-                    manifestRenderData.remove(match);
-                }
-            });
-
-            // add remaining items that were not in the displayOrder.
-            _.each(manifestRenderData, (item: IMetadataItem) => {
-                sorted.push(item);
-            });
-
-            manifestRenderData = sorted;
-        }
-
-        // Exclusions
-
-        var excludeConfig: string = this.options.exclude;
-
-        if (excludeConfig) {
-            excludeConfig = excludeConfig.toLowerCase();
-            excludeConfig = excludeConfig.replace(/ /g,"");
-            var exclude: string[] = excludeConfig.split(',');
-
-            _.each(exclude, (item: string) => {
-                var match: IMetadataItem = manifestRenderData.en().where((x => x.label.toLowerCase() === item)).first();
-                if (match){
-                    manifestRenderData.remove(match);
-                }
-            });
-        }
-
+        _.each(excludeConfig, (item: string) => {
+            var match: IMetadataItem = excluded.en().where((x => x.label.toLowerCase() === item)).first();
+            if (match){
+                excluded.remove(match);
+            }
+        });
+        
+        return excluded;
+    }
+    
+    flattenMetadataIntoArray(renderData: IMetadataItem[]) {
         // flatten metadata into array.
         var flattened: IMetadataItem[] = [];
 
-        _.each(manifestRenderData, (item: IMetadataItem) => {
+        _.each(renderData, item => {
             if (_.isArray(item.value)){
                 flattened = flattened.concat(<IMetadataItem[]>item.value);
             } else {
@@ -145,33 +178,24 @@ class MoreInfoRightPanel extends RightPanel {
             }
         });
 
-        manifestRenderData = flattened;
-        
-        if (this.config.options.aggregateValues) {
-            this.aggregateValues(manifestRenderData, canvasRenderData);
-        }
-        
-        this.renderElement(this.$items, manifestRenderData, this.content.manifestHeader, canvasRenderData.length !== 0);
-        this.renderElement(this.$canvasItems, canvasRenderData, this.content.canvasHeader, true);
+        return flattened;
     }
 
     aggregateValues(fromData: any[], toData: any[]) {
-        var values: string[] = this.config.options.aggregateValues.split(",");
+        if (this.aggregateValuesConfig.length !== 0) {
+            _.each(toData, item => {
+                _.each(this.aggregateValuesConfig, value => {
+                    if (item.label.toLowerCase() == value) {
+                        var manifestIndex = _.findIndex(fromData, x => x.label.toLowerCase() == value.toLowerCase());
 
-        _.each(toData, item => {
-            _.each(values, value => {
-                value = value.trim();
-
-                if (item.label.toLowerCase() == value.toLowerCase()) {
-                    var manifestIndex = _.findIndex(fromData, x => x.label.toLowerCase() == value.toLowerCase());
-
-                    if (manifestIndex != -1) {
-                        var data = fromData.splice(manifestIndex, 1)[0];
-                        item.value = data.value + item.value;
+                        if (manifestIndex != -1) {
+                            var data = fromData.splice(manifestIndex, 1)[0];
+                            item.value = data.value + item.value;
+                        }
                     }
-                }
+                });
             });
-        });
+        }
     }
 
     renderElement(element: JQuery, data: any, header: string, renderHeader: boolean) {

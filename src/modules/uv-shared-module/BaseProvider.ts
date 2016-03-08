@@ -371,6 +371,22 @@ class BaseProvider implements IProvider{
 
         return result;
     }
+    
+    getCanvasMetadata(canvas: Manifesto.ICanvas): IMetadataItem[] {
+        var result: IMetadataItem[] = [];
+
+        var metadata = canvas.getMetadata();
+
+        if (metadata){
+            result.push(<IMetadataItem>{
+                label: "metadata",
+                value: metadata,
+                isRootLevel: true
+            });
+        }
+
+        return result;
+    }
 
     defaultToThumbsView(): boolean{
         switch (this.getManifestType().toString()){
