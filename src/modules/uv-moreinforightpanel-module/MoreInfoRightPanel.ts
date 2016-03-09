@@ -289,42 +289,27 @@ class MoreInfoRightPanel extends RightPanel {
                 $copiedText.hide();
             });
         }
-        $elem.on('click', (e) => {
+        $copyBtn.on('click', (e) => {
             var imgElement = e.target as HTMLElement;
-<<<<<<< Updated upstream
-            var headerTextElement = imgElement.previousSibling.textContent;
-            var manifestItems = this.flatten(this.manifestData);
-            var canvasItems = this.flatten(this.canvasData);
-            var matchingItems = manifestItems.concat(canvasItems)
-                    .filter(md => md.label && headerTextElement && md.label.toLowerCase() == headerTextElement.toLowerCase());
-            var text = matchingItems.map(function(md) { return md.value }).join('');
-            Utils.Clipboard.Copy(text);
-            $copiedText.show();
-            if (this.isTouch()) {
-                setTimeout(function() {
-                    $copiedText.hide();
-                }, 2000);
-            }
-=======
-            var headerText = imgElement.previousSibling.textContent;
+            var headerText = imgElement.previousSibling.textContent || imgElement.previousSibling.nodeValue;
             this.copyValueForLabel(headerText);
->>>>>>> Stashed changes
         });
     }
     
     copyValueForLabel(label: string) {
-        var manifestItems = this.flattenMetadataIntoArray(this.manifestData);
-        var canvasItems = this.flattenMetadataIntoArray(this.canvasData);
-        var matchingItems = manifestItems.concat(canvasItems)
-                .filter(md => md.label && label && md.label.toLowerCase() == label.toLowerCase());
-        var text = matchingItems.map(function(md) { return md.value }).join('');
+        var manifestItems = this.flatten(this.manifestData);
+        var canvasItems = this.flatten(this.canvasData);
+        var $matchingItems = $(manifestItems.concat(canvasItems))
+            .filter(function (i, md: any) { return md.label && label && md.label.toLowerCase() == label.toLowerCase(); });
+        var text = $matchingItems.map(function (i, md: any) { return md.value; }).get().join('');
+        if (!text)
+            return;
         Utils.Clipboard.Copy(text);
+        var $copiedText = $('.items .item .header:contains(' + label + ') .copiedText');
         $copiedText.show();
-        if (this.isTouch()) {
-            setTimeout(function() {
-                $copiedText.hide();
-            }, 2000);
-        }        
+        setTimeout(function() {
+            $copiedText.hide();
+        }, 2000);
     }
 
     resize(): void {
