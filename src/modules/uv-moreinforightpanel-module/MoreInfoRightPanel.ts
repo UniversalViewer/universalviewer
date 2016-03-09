@@ -291,6 +291,7 @@ class MoreInfoRightPanel extends RightPanel {
         }
         $elem.on('click', (e) => {
             var imgElement = e.target as HTMLElement;
+<<<<<<< Updated upstream
             var headerTextElement = imgElement.previousSibling.textContent;
             var manifestItems = this.flatten(this.manifestData);
             var canvasItems = this.flatten(this.canvasData);
@@ -304,7 +305,26 @@ class MoreInfoRightPanel extends RightPanel {
                     $copiedText.hide();
                 }, 2000);
             }
+=======
+            var headerText = imgElement.previousSibling.textContent;
+            this.copyValueForLabel(headerText);
+>>>>>>> Stashed changes
         });
+    }
+    
+    copyValueForLabel(label: string) {
+        var manifestItems = this.flattenMetadataIntoArray(this.manifestData);
+        var canvasItems = this.flattenMetadataIntoArray(this.canvasData);
+        var matchingItems = manifestItems.concat(canvasItems)
+                .filter(md => md.label && label && md.label.toLowerCase() == label.toLowerCase());
+        var text = matchingItems.map(function(md) { return md.value }).join('');
+        Utils.Clipboard.Copy(text);
+        $copiedText.show();
+        if (this.isTouch()) {
+            setTimeout(function() {
+                $copiedText.hide();
+            }, 2000);
+        }        
     }
 
     resize(): void {
