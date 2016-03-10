@@ -4,6 +4,7 @@ class AutoComplete{
 	results: any;
 	selectedResultIndex: number;
     $element: JQuery;
+    autoCompleteFunc: (terms: string) => string[];
     autoCompleteUri: string;
     delay: number;
     onSelect: (terms: string) => void;
@@ -20,9 +21,11 @@ class AutoComplete{
                 autoCompleteUri: string,
                 delay: number,
                 parseResults: (results: any) => string[],
-                onSelect: (terms: string) => void){
+                onSelect: (terms: string) => void,
+                autoCompleteFunc?: (terms: string) => string[]){
 
         this.$element = element;
+        this.autoCompleteFunc = autoCompleteFunc;
         this.autoCompleteUri = autoCompleteUri;
         this.delay = delay;
         this.parseResults = parseResults;
@@ -194,9 +197,16 @@ class AutoComplete{
 
         var that = this;
 
-        $.getJSON(String.format(this.autoCompleteUri, term), function (results: string[]) {
-            that.listResults(results);
-        });
+        if (this.autoCompleteUri){
+            $.getJSON(String.format(this.autoCompleteUri, term), function (results: string[]) {
+                that.listResults(results);
+            });
+        } else {
+            this.autoCompleteFunc(term, (results: string[]) => {
+               that.listResults(results);
+            });
+        }
+
     }
 
     clearResults(): void {

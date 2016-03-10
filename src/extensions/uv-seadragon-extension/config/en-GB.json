@@ -104,6 +104,7 @@
     {
       "options":
       {
+        "autoCompleteBoxEnabled": true,
         "imageSelectionBoxEnabled": false,
         "localeToggleEnabled": false,
         "pageModeEnabled": true,

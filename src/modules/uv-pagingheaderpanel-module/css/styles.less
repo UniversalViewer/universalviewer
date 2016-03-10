@@ -136,6 +136,41 @@
             &.modeOptionsDisabled{
                 width: 280px;
             }
+
+            .autocomplete{
+                position: absolute;
+                background: #fff;
+                width: 270px;
+                border: 2px solid @brand-primary-lighter;
+                list-style-type: none;
+                -webkit-margin-before: 0px;
+                -webkit-margin-after: 0px;
+                -webkit-margin-start: 0px;
+                -webkit-margin-end: 0px;
+                -webkit-padding-start: 0px;
+                margin: 0;
+                padding: 0;
+                max-height: 300px;
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                .result{
+                    padding: 4px;
+                    width: 270px;
+                    overflow: hidden;
+
+                    &.loading{
+                        background-image: url(@loader-white-bg);
+                        background-repeat: no-repeat;
+                        background-position: 4px 4px;
+                        height: 25px;
+                    }
+
+                    &.selected{
+                        background: @gray-lighter;
+                    }
+                }
+            }
         }
 
         .rightOptions {

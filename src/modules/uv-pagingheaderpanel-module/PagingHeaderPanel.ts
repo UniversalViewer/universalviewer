@@ -1,3 +1,4 @@
+import AutoComplete = require("../uv-shared-module/AutoComplete");
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import HeaderPanel = require("../uv-shared-module/HeaderPanel");
@@ -8,6 +9,7 @@ import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 class PagingHeaderPanel extends HeaderPanel {
 
     $firstButton: JQuery;
+    $autoCompleteBox: JQuery;
     $imageModeLabel: JQuery;
     $imageModeOption: JQuery;
     $lastButton: JQuery;
@@ -80,7 +82,20 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"/>');
         this.$search.append(this.$searchText);
 
-        if (this.options.imageSelectionBoxEnabled === true) {
+        if (this.options.autoCompleteBoxEnabled === true) {
+            this.$autoCompleteBox = $('<input class="autocomplete" type="text" maxlength="100" />');
+            this.$centerOptions.append(this.$autoCompleteBox);
+
+            new AutoComplete(this.$autoCompleteBox, null, 300,
+                (results: any) => {
+
+                },
+                (terms: string) => {
+                    this.search(terms);
+                },
+                this.findPage
+            );
+        } else if (this.options.imageSelectionBoxEnabled === true) {
             this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
             this.$centerOptions.append(this.$selectionBoxOptions);
             this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="20" ></select>');
@@ -196,7 +211,7 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.$searchText.onEnter(() => {
             this.$searchText.blur();
-            this.search();
+            this.search(this.$searchText.val());
         });
 
         this.$searchText.click(function() {
@@ -204,7 +219,7 @@ class PagingHeaderPanel extends HeaderPanel {
         });
 
         this.$searchButton.onPressed(() => {
-            this.search();
+            this.search(this.$searchText.val());
         });
 
         this.$lastButton.onPressed(() => {
@@ -252,6 +267,10 @@ class PagingHeaderPanel extends HeaderPanel {
             }
         });        
         
+    }
+
+    findPage(term: string): string[] {
+        return [];
     }
 
     isPageModeEnabled(): boolean {
@@ -305,9 +324,7 @@ class PagingHeaderPanel extends HeaderPanel {
         }
     }
 
-    search(): void {
-
-        var value = this.$searchText.val();
+    search(value: string): void {
 
         if (!value) {
 
