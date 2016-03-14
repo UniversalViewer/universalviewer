@@ -731,8 +731,11 @@ var Manifesto;
             }
             return images;
         };
+        Canvas.prototype.getIndex = function () {
+            return this.getProperty('index');
+        };
         // todo: Prefer thumbnail service to image service if supplied and if
-        // the thumbnail service can provide a satisfactory size +/- x pixels.
+        // todo: the thumbnail service can provide a satisfactory size +/- x pixels.
         Canvas.prototype.getThumbUri = function (width, height) {
             var uri;
             var images = this.getImages();

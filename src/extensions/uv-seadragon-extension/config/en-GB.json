@@ -53,7 +53,7 @@
       "options":
       {
         "confinedImageSize": 1000,
-        "maxImageWidth": 1000,
+        "maxImageWidth": 5000,
         "selectionEnabled": false
       }
     },

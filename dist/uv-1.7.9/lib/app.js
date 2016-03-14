@@ -6053,20 +6053,30 @@ define('modules/uv-dialogues-module/ExternalContentDialogue',["require", "export
     return ExternalContentDialogue;
 });
 
-define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"], function (require, exports) {
+define('modules/uv-shared-module/AutoComplete',["require", "exports"], function (require, exports) {
     var AutoComplete = (function () {
-        function AutoComplete(element, autoCompleteUri, delay, parseResults, onSelect) {
+        function AutoComplete(element, autoCompleteFunc, parseResultsFunc, onSelect, delay, minChars, positionAbove) {
             var _this = this;
+            if (delay === void 0) { delay = 300; }
+            if (minChars === void 0) { minChars = 2; }
+            if (positionAbove === void 0) { positionAbove = false; }
             this.validKeyDownCodes = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
             this.lastKeyDownWasValid = false;
             this.$element = element;
-            this.autoCompleteUri = autoCompleteUri;
+            this.autoCompleteFunc = autoCompleteFunc;
             this.delay = delay;
-            this.parseResults = parseResults;
+            this.minChars = minChars;
             this.onSelect = onSelect;
+            this.parseResultsFunc = parseResultsFunc;
+            this.positionAbove = positionAbove;
             // create ui.
             this.$searchResultsList = $('<ul class="autocomplete"></ul>');
-            this.$element.parent().prepend(this.$searchResultsList);
+            if (this.positionAbove) {
+                this.$element.parent().prepend(this.$searchResultsList);
+            }
+            else {
+                this.$element.parent().append(this.$searchResultsList);
+            }
             this.$searchResultTemplate = $('<li class="result"><a href="#"></a></li>');
             // init ui.
             // callback after set period.
@@ -6129,9 +6139,9 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
                 // after a delay, show autocomplete list.
                 typewatch(function () {
                     var val = that.getTerms();
-                    // if there are more than 2 chars and no spaces
+                    // if there are more than x chars and no spaces
                     // update the autocomplete list.
-                    if (val && val.length > 2 && !val.contains(' ')) {
+                    if (val && val.length > that.minChars && !val.contains(' ')) {
                         that.search(val);
                     }
                     else {
@@ -6192,7 +6202,7 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
             this.$searchResultsList.append('<li class="loading"></li>');
             this.updateListPosition();
             var that = this;
-            $.getJSON(String.format(this.autoCompleteUri, term), function (results) {
+            this.autoCompleteFunc(term, function (results) {
                 that.listResults(results);
             });
         };
@@ -6207,13 +6217,20 @@ define('modules/uv-searchfooterpanel-module/AutoComplete',["require", "exports"]
             this.$searchResultsList.show();
         };
         AutoComplete.prototype.updateListPosition = function () {
-            this.$searchResultsList.css({
-                'top': this.$searchResultsList.outerHeight(true) * -1
-            });
+            if (this.positionAbove) {
+                this.$searchResultsList.css({
+                    'top': this.$searchResultsList.outerHeight(true) * -1
+                });
+            }
+            else {
+                this.$searchResultsList.css({
+                    'top': this.$element.outerHeight(true)
+                });
+            }
         };
         AutoComplete.prototype.listResults = function (results) {
             // get an array of strings
-            this.results = this.parseResults(results);
+            this.results = this.parseResultsFunc(results);
             this.clearResults();
             if (!this.results.length) {
                 // don't do this, because there still may be results for the PHRASE but not the word.
@@ -6255,7 +6272,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/FooterPanel", "../../extensions/uv-seadragon-extension/Commands", "./AutoComplete", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseFooterPanel, Commands, AutoComplete, Mode) {
+define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/FooterPanel", "../../extensions/uv-seadragon-extension/Commands", "../uv-shared-module/AutoComplete", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseFooterPanel, Commands, AutoComplete, Mode) {
     var FooterPanel = (function (_super) {
         __extends(FooterPanel, _super);
         function FooterPanel($element) {
@@ -6369,13 +6386,17 @@ define('modules/uv-searchfooterpanel-module/FooterPanel',["require", "exports", 
             }
             var autocompleteService = this.provider.getAutoCompleteUri();
             if (autocompleteService) {
-                new AutoComplete(this.$searchText, autocompleteService, 300, function (results) {
+                new AutoComplete(this.$searchText, function (terms, cb) {
+                    $.getJSON(String.format(autocompleteService, terms), function (results) {
+                        cb(results);
+                    });
+                }, function (results) {
                     return _.map(results.terms, function (result) {
                         return result.match;
                     });
                 }, function (terms) {
                     _this.search(terms);
-                });
+                }, 300, 2, true);
             }
         };
         FooterPanel.prototype.search = function (terms) {
@@ -6628,7 +6649,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "../uv-shared-module/HeaderPanel", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, Commands, HeaderPanel, Mode) {
+define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "exports", "../uv-shared-module/AutoComplete", "../uv-shared-module/BaseCommands", "../../extensions/uv-seadragon-extension/Commands", "../uv-shared-module/HeaderPanel", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, AutoComplete, BaseCommands, Commands, HeaderPanel, Mode) {
     var PagingHeaderPanel = (function (_super) {
         __extends(PagingHeaderPanel, _super);
         function PagingHeaderPanel($element) {
@@ -6671,7 +6692,39 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
             this.$centerOptions.append(this.$search);
             this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"/>');
             this.$search.append(this.$searchText);
-            if (this.options.imageSelectionBoxEnabled === true) {
+            if (this.options.autoCompleteBoxEnabled === true) {
+                this.$searchText.hide();
+                this.$autoCompleteBox = $('<input class="autocompleteText" type="text" maxlength="100" />');
+                this.$search.append(this.$autoCompleteBox);
+                new AutoComplete(this.$autoCompleteBox, function (term, cb) {
+                    var results = [];
+                    var canvases = _this.provider.getCanvases();
+                    // if in page mode, get canvases by label.
+                    if (_this.isPageModeEnabled()) {
+                        for (var i = 0; i < canvases.length; i++) {
+                            var canvas = canvases[i];
+                            if (canvas.getLabel().startsWith(term)) {
+                                results.push(canvas.getLabel());
+                            }
+                        }
+                    }
+                    else {
+                        // get canvas by index
+                        for (var i = 0; i < canvases.length; i++) {
+                            var canvas = canvases[i];
+                            if (canvas.index.toString().startsWith(term)) {
+                                results.push(canvas.index.toString());
+                            }
+                        }
+                    }
+                    cb(results);
+                }, function (results) {
+                    return results;
+                }, function (terms) {
+                    _this.search(terms);
+                }, 300, 0);
+            }
+            else if (this.options.imageSelectionBoxEnabled === true) {
                 this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
                 this.$centerOptions.append(this.$selectionBoxOptions);
                 this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="20" ></select>');
@@ -6771,13 +6824,13 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
             }
             this.$searchText.onEnter(function () {
                 _this.$searchText.blur();
-                _this.search();
+                _this.search(_this.$searchText.val());
             });
             this.$searchText.click(function () {
                 $(this).select();
             });
             this.$searchButton.onPressed(function () {
-                _this.search();
+                _this.search(_this.$searchText.val());
             });
             this.$lastButton.onPressed(function () {
                 switch (viewingDirection.toString()) {
@@ -6861,8 +6914,7 @@ define('modules/uv-pagingheaderpanel-module/PagingHeaderPanel',["require", "expo
                 this.$searchText.val(index);
             }
         };
-        PagingHeaderPanel.prototype.search = function () {
-            var value = this.$searchText.val();
+        PagingHeaderPanel.prototype.search = function (value) {
             if (!value) {
                 this.extension.showMessage(this.content.emptyValue);
                 $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
@@ -9564,8 +9616,11 @@ var Manifesto;
             }
             return images;
         };
+        Canvas.prototype.getIndex = function () {
+            return this.getProperty('index');
+        };
         // todo: Prefer thumbnail service to image service if supplied and if
-        // the thumbnail service can provide a satisfactory size +/- x pixels.
+        // todo: the thumbnail service can provide a satisfactory size +/- x pixels.
         Canvas.prototype.getThumbUri = function (width, height) {
             var uri;
             var images = this.getImages();

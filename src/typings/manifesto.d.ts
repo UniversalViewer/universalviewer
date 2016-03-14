@@ -212,6 +212,7 @@ declare module Manifesto {
         ranges: IRange[];
         constructor(jsonld: any, options: IManifestoOptions);
         getImages(): IAnnotation[];
+        getIndex(): number;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
         getWidth(): number;
@@ -474,6 +475,7 @@ declare module Manifesto {
         ranges: IRange[];
         getHeight(): number;
         getImages(): IAnnotation[];
+        getIndex(): number;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
         getWidth(): number;

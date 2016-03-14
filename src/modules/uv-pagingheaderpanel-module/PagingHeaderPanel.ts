@@ -83,17 +83,42 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$search.append(this.$searchText);
 
         if (this.options.autoCompleteBoxEnabled === true) {
-            this.$autoCompleteBox = $('<input class="autocomplete" type="text" maxlength="100" />');
-            this.$centerOptions.append(this.$autoCompleteBox);
+            this.$searchText.hide();
+            this.$autoCompleteBox = $('<input class="autocompleteText" type="text" maxlength="100" />');
+            this.$search.append(this.$autoCompleteBox);
 
-            new AutoComplete(this.$autoCompleteBox, null, 300,
+            new AutoComplete(this.$autoCompleteBox,
+                (term: string, cb: (results: string[]) => void) => {
+                    var results: string[] = [];
+                    var canvases: Manifesto.ICanvas[] = this.provider.getCanvases();
+
+                    // if in page mode, get canvases by label.
+                    if (this.isPageModeEnabled()){
+                        for (var i = 0; i < canvases.length; i++){
+                            var canvas: Manifesto.ICanvas = canvases[i];
+                            if (canvas.getLabel().startsWith(term)){
+                                results.push(canvas.getLabel());
+                            }
+                        }
+                    } else {
+                        // get canvas by index
+                        for (var i = 0; i < canvases.length; i++){
+                            var canvas: Manifesto.ICanvas = canvases[i];
+                            if (canvas.index.toString().startsWith(term)){
+                                results.push(canvas.index.toString());
+                            }
+                        }
+                    }
+                    cb(results);
+                },
                 (results: any) => {
-
+                    return results;
                 },
                 (terms: string) => {
                     this.search(terms);
                 },
-                this.findPage
+                300,
+                0
             );
         } else if (this.options.imageSelectionBoxEnabled === true) {
             this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
@@ -219,7 +244,11 @@ class PagingHeaderPanel extends HeaderPanel {
         });
 
         this.$searchButton.onPressed(() => {
-            this.search(this.$searchText.val());
+            if (this.options.autoCompleteBoxEnabled){
+                this.search(this.$autoCompleteBox.val());
+            } else {
+                this.search(this.$searchText.val());
+            }
         });
 
         this.$lastButton.onPressed(() => {
@@ -239,7 +268,7 @@ class PagingHeaderPanel extends HeaderPanel {
         }
 
         //Search is shown as default
-        if (this.options.imageSelectionBoxEnabled === true){
+        if (this.options.imageSelectionBoxEnabled === true && this.options.autoCompleteBoxEnabled !== true){
             this.$search.hide();
         }
 
@@ -267,10 +296,6 @@ class PagingHeaderPanel extends HeaderPanel {
             }
         });        
         
-    }
-
-    findPage(term: string): string[] {
-        return [];
     }
 
     isPageModeEnabled(): boolean {
@@ -308,19 +333,26 @@ class PagingHeaderPanel extends HeaderPanel {
     setSearchFieldValue(index): void {
 
         var canvas = this.provider.getCanvasByIndex(index);
+        var value: string;
 
         if (this.isPageModeEnabled()) {
 
             var orderLabel = canvas.getLabel();
 
             if (orderLabel === "-") {
-                this.$searchText.val("");
+                value = "";
             } else {
-                this.$searchText.val(orderLabel);
+                value = orderLabel;
             }
         } else {
             index += 1;
-            this.$searchText.val(index);
+            value = index;
+        }
+
+        if (this.options.autoCompleteBoxEnabled){
+            this.$autoCompleteBox.val(value);
+        } else {
+            this.$searchText.val(value);
         }
     }
 
@@ -337,7 +369,13 @@ class PagingHeaderPanel extends HeaderPanel {
         if (this.isPageModeEnabled()) {
             $.publish(Commands.PAGE_SEARCH, [value]);
         } else {
-            var index = parseInt(this.$searchText.val(), 10);
+            var index: number;
+
+            if (this.options.autoCompleteBoxEnabled){
+                index = parseInt(this.$autoCompleteBox.val(), 10);
+            } else {
+                index = parseInt(this.$searchText.val(), 10);
+            }
 
             index -= 1;
 
@@ -362,7 +400,7 @@ class PagingHeaderPanel extends HeaderPanel {
     canvasIndexChanged(index): void {
         this.setSearchFieldValue(index);
 
-        if (this.options.imageSelectionBoxEnabled === true) {
+        if (this.options.imageSelectionBoxEnabled === true && this.options.autoCompleteBoxEnabled !== true) {
             this.$imageSelectionBox.val(index);
         }
 
