@@ -255,13 +255,12 @@ class GalleryView extends BaseView {
         // test which thumbs are scrolled into view
         var thumbs = this.getAllThumbs();
 
-        for (var i = 0; i < thumbs.length; i++) {
+        //for (var i = 0; i < thumbs.length; i++) {
             var $thumb = $(thumbs[i]);
-            this.sizeThumb($thumb);
-            //this.sizeThumbImage($thumb);
-        }
+            //this.sizeThumb($thumb);
+        //}
 
-        this.equaliseHeights();
+        //this.equaliseHeights();
 
         var scrollTop = this.$main.scrollTop();
         var scrollHeight = this.$main.height();
@@ -269,6 +268,7 @@ class GalleryView extends BaseView {
         for (var i = 0; i < thumbs.length; i++) {
 
             var $thumb = $(thumbs[i]);
+
             var thumbTop = $thumb.position().top;
             var thumbBottom = thumbTop + $thumb.height();
 
@@ -316,16 +316,20 @@ class GalleryView extends BaseView {
             var src = $thumb.attr('data-src');
             var img = $('<img class="thumbImage" src="' + src + '" />');
             // fade in on load.
+            // todo: only if < 500 images
+            /*
             $(img).hide().load(function () {
                 $(this).fadeIn(fadeDuration, function () {
                     $(this).parent().swapClass('loading', 'loaded');
                 });
             });
+            */
             $wrap.prepend(img);
             if (cb) cb(img);
         } else {
             $wrap.addClass('hidden');
         }
+
     }
 
     show(): void {
@@ -335,7 +339,7 @@ class GalleryView extends BaseView {
         setTimeout(() => {
             this.selectIndex(this.provider.canvasIndex);
             this.scrollToThumb(this.getSelectedThumbIndex());
-        }, 1);
+        }, 10);
     }
 
     hide(): void {
@@ -377,7 +381,7 @@ class GalleryView extends BaseView {
         this.$selectedThumb.addClass('selected');
 
         // make sure visible images are loaded.
-        this.updateThumbs();
+        //this.updateThumbs();
     }
 
     private _setMultiSelectionEnabled(enabled: boolean): void {
@@ -425,7 +429,7 @@ class GalleryView extends BaseView {
 
         this.$main.height(this.$element.height() - this.$header.height());
 
-        this.updateThumbs();
+        //this.updateThumbs();
     }
 }
 
