@@ -109,16 +109,18 @@ class GalleryView extends BaseView {
             this.scrollToThumb(this.getSelectedThumbIndex());
         });
 
+        this._setRange();
+
         $.templates({
             galleryThumbsTemplate: '\
                 <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
-                    <div class="wrap" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
+                    <div class="wrap" style="width:{{>width}}px; height:{{>height}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
                     {^{if multiSelectionEnabled}}\
                         <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
                     {{/if}}\
                     </div>\
                     <span class="index">{{:#index + 1}}</span>\
-                    <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
+                    <span class="label" style="width:{{>width}}px" title="{{>label}}">{{>label}}&nbsp;</span>\
                 </div>'
         });
 
@@ -141,7 +143,7 @@ class GalleryView extends BaseView {
         // use unevent to detect scroll stop.
         this.$main.on('scroll', () => {
             this.updateThumbs();
-        }, 1000);
+        }, 100);
 
         if (!Modernizr.inputtypes.range){
             this.$sizeRange.hide();
@@ -160,6 +162,13 @@ class GalleryView extends BaseView {
         var that = this;
 
         if (!this.thumbs) return;
+
+        // set initial thumb sizes
+        for(var i = 0; i < this.thumbs.length; i++) {
+            var thumb = this.thumbs[i];
+            thumb.width = Math.floor(thumb.width * this.range);
+            thumb.height = Math.floor(thumb.height * this.range);
+        }
 
         this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
 
@@ -244,26 +253,25 @@ class GalleryView extends BaseView {
         $.observable(thumb).setProperty("multiSelected", selected);
     }
 
+    private _setRange(): void {
+        var norm = Math.normalise(Number(this.$sizeRange.val()), 0, 10);
+        this.range = Math.clamp(norm, 0.05, 1);
+    }
+
     updateThumbs(): void {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
         // cache range size
-        var norm = Math.normalise(Number(this.$sizeRange.val()), 0, 10);
-        this.range = Math.clamp(norm, 0.05, 1);
-
-        // test which thumbs are scrolled into view
-        var thumbs = this.getAllThumbs();
-
-        //for (var i = 0; i < thumbs.length; i++) {
-            var $thumb = $(thumbs[i]);
-            //this.sizeThumb($thumb);
-        //}
-
-        //this.equaliseHeights();
+        this._setRange();
 
         var scrollTop = this.$main.scrollTop();
         var scrollHeight = this.$main.height();
+
+        var thumbsToEqualise: any[] = [];
+
+        // test which thumbs are scrolled into view
+        var thumbs = this.getAllThumbs();
 
         for (var i = 0; i < thumbs.length; i++) {
 
@@ -273,6 +281,11 @@ class GalleryView extends BaseView {
             var thumbBottom = thumbTop + $thumb.height();
 
             if (thumbBottom >= scrollTop && thumbTop <= scrollTop + scrollHeight){
+
+                this.sizeThumb($thumb);
+
+                thumbsToEqualise.push(thumbs[i]);
+
                 this.loadThumb($thumb, () => {
                     //this.sizeThumbImage($thumb);
                 });
@@ -281,10 +294,12 @@ class GalleryView extends BaseView {
             //    $thumb.find('.wrap').css('background', 'none');
             }
         }
+
+        this.equaliseHeights(thumbsToEqualise);
     }
 
-    equaliseHeights(): void {
-        this.$thumbs.find('.thumb .wrap').equaliseHeight(false, true);
+    equaliseHeights(thumbs): void {
+        $(thumbs).find('.wrap').equaliseHeight(false, true);
     }
 
     sizeThumb($thumb: JQuery) : void {
@@ -294,10 +309,10 @@ class GalleryView extends BaseView {
         var $wrap = $thumb.find('.wrap');
         var $label = $thumb.find('.label');
 
-        $wrap.width(width * this.range);
-        $wrap.height(height * this.range);
+        $wrap.width(Math.floor(width * this.range));
+        $wrap.height(Math.floor(height * this.range));
 
-        $label.width(width * this.range);
+        $label.width(Math.floor(width * this.range));
     }
 
     loadThumb($thumb: JQuery, cb?: (img: JQuery) => void): void {
@@ -316,14 +331,12 @@ class GalleryView extends BaseView {
             var src = $thumb.attr('data-src');
             var img = $('<img class="thumbImage" src="' + src + '" />');
             // fade in on load.
-            // todo: only if < 500 images
-            /*
             $(img).hide().load(function () {
                 $(this).fadeIn(fadeDuration, function () {
                     $(this).parent().swapClass('loading', 'loaded');
                 });
             });
-            */
+
             $wrap.prepend(img);
             if (cb) cb(img);
         } else {
