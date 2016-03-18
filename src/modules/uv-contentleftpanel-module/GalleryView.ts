@@ -114,13 +114,13 @@ class GalleryView extends BaseView {
         $.templates({
             galleryThumbsTemplate: '\
                 <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
-                    <div class="wrap" style="width:{{>width}}px; height:{{>height}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
+                    <div class="wrap" style="width:{{>initialWidth}}px; height:{{>initialHeight}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
                     {^{if multiSelectionEnabled}}\
                         <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
                     {{/if}}\
                     </div>\
                     <span class="index">{{:#index + 1}}</span>\
-                    <span class="label" style="width:{{>width}}px" title="{{>label}}">{{>label}}&nbsp;</span>\
+                    <span class="label" style="width:{{>initialWidth}}px" title="{{>label}}">{{>label}}&nbsp;</span>\
                 </div>'
         });
 
@@ -165,9 +165,9 @@ class GalleryView extends BaseView {
 
         // set initial thumb sizes
         for(var i = 0; i < this.thumbs.length; i++) {
-            var thumb = this.thumbs[i];
-            thumb.width = Math.floor(thumb.width * this.range);
-            thumb.height = Math.floor(thumb.height * this.range);
+            var thumb: IThumb = this.thumbs[i];
+            thumb.initialWidth = Math.floor(thumb.width * this.range);
+            thumb.initialHeight = Math.floor(thumb.height * this.range);
         }
 
         this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
@@ -286,12 +286,11 @@ class GalleryView extends BaseView {
 
                 thumbsToEqualise.push(thumbs[i]);
 
-                this.loadThumb($thumb, () => {
-                    //this.sizeThumbImage($thumb);
-                });
-            //    $thumb.find('.wrap').css('background', 'red');
-            //} else {
-            //    $thumb.find('.wrap').css('background', 'none');
+                this.loadThumb($thumb);
+
+                $thumb.find('.wrap').css('background', 'red');
+            } else {
+                $thumb.find('.wrap').css('background', 'none');
             }
         }
 
@@ -303,10 +302,12 @@ class GalleryView extends BaseView {
     }
 
     sizeThumb($thumb: JQuery) : void {
+
+        var $wrap = $thumb.find('.wrap');
+
         var width: number = Number($thumb.data('width'));
         var height: number = Number($thumb.data('height'));
 
-        var $wrap = $thumb.find('.wrap');
         var $label = $thumb.find('.label');
 
         $wrap.width(Math.floor(width * this.range));
@@ -394,7 +395,7 @@ class GalleryView extends BaseView {
         this.$selectedThumb.addClass('selected');
 
         // make sure visible images are loaded.
-        //this.updateThumbs();
+        this.updateThumbs();
     }
 
     private _setMultiSelectionEnabled(enabled: boolean): void {
