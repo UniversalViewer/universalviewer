@@ -288,9 +288,9 @@ class GalleryView extends BaseView {
 
                 this.loadThumb($thumb);
 
-                $thumb.find('.wrap').css('background', 'red');
+                //$thumb.find('.wrap').css('background', 'red');
             } else {
-                $thumb.find('.wrap').css('background', 'none');
+                //$thumb.find('.wrap').css('background', 'none');
             }
         }
 
