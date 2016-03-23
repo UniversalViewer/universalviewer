@@ -3545,21 +3545,22 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
                 _this.updateThumbs();
                 _this.scrollToThumb(_this.getSelectedThumbIndex());
             });
+            this._setRange();
             $.templates({
                 galleryThumbsTemplate: '\
                 <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
-                    <div class="wrap" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
+                    <div class="wrap" style="width:{{>initialWidth}}px; height:{{>initialHeight}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
                     {^{if multiSelectionEnabled}}\
                         <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
                     {{/if}}\
                     </div>\
                     <span class="index">{{:#index + 1}}</span>\
-                    <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
+                    <span class="label" style="width:{{>initialWidth}}px" title="{{>label}}">{{>label}}&nbsp;</span>\
                 </div>'
             });
             $.views.helpers({
                 className: function () {
-                    var className = "thumb";
+                    var className = "thumb preLoad";
                     if (this.data.index === 0) {
                         className += " first";
                     }
@@ -3572,7 +3573,7 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             // use unevent to detect scroll stop.
             this.$main.on('scroll', function () {
                 _this.updateThumbs();
-            }, 1000);
+            }, 100);
             if (!Modernizr.inputtypes.range) {
                 this.$sizeRange.hide();
             }
@@ -3588,6 +3589,22 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             var that = this;
             if (!this.thumbs)
                 return;
+            //this.thumbs = [this.thumbs[0]];
+            // set initial thumb sizes
+            var heights = [];
+            for (var i = 0; i < this.thumbs.length; i++) {
+                var thumb = this.thumbs[i];
+                var initialWidth = Math.floor(thumb.width * this.range);
+                var initialHeight = Math.floor(thumb.height * this.range);
+                thumb.initialWidth = initialWidth;
+                //thumb.initialHeight = initialHeight;
+                heights.push(initialHeight);
+            }
+            var medianHeight = Math.median(heights);
+            for (var j = 0; j < this.thumbs.length; j++) {
+                var thumb = this.thumbs[j];
+                thumb.initialHeight = medianHeight;
+            }
             this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
             if (!that.multiSelectState.enabled) {
                 // add a selection click event to all thumbs
@@ -3654,48 +3671,98 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
         GalleryView.prototype._setThumbMultiSelected = function (thumb, selected) {
             $.observable(thumb).setProperty("multiSelected", selected);
         };
+        GalleryView.prototype._setRange = function () {
+            var norm = Math.normalise(Number(this.$sizeRange.val()), 0, 10);
+            this.range = Math.clamp(norm, 0.05, 1);
+        };
         GalleryView.prototype.updateThumbs = function () {
             if (!this.thumbs || !this.thumbs.length)
                 return;
+            var debug = false;
             // cache range size
-            var norm = Math.normalise(Number(this.$sizeRange.val()), 0, 10);
-            this.range = Math.clamp(norm, 0.05, 1);
-            // test which thumbs are scrolled into view
-            var thumbs = this.getAllThumbs();
-            for (var i = 0; i < thumbs.length; i++) {
-                var $thumb = $(thumbs[i]);
-                this.sizeThumb($thumb);
-            }
-            this.equaliseHeights();
+            this._setRange();
             var scrollTop = this.$main.scrollTop();
             var scrollHeight = this.$main.height();
+            var scrollBottom = scrollTop + scrollHeight;
+            if (debug) {
+                console.log('scrollTop %s, scrollBottom %s', scrollTop, scrollBottom);
+            }
+            var thumbsToEqualise = [];
+            // test which thumbs are scrolled into view
+            var thumbs = this.getAllThumbs();
+            if (!this.isChunkedResizingEnabled()) {
+                thumbsToEqualise = thumbs.toArray();
+            }
             for (var i = 0; i < thumbs.length; i++) {
                 var $thumb = $(thumbs[i]);
                 var thumbTop = $thumb.position().top;
-                var thumbBottom = thumbTop + $thumb.height();
-                if (thumbBottom >= scrollTop && thumbTop <= scrollTop + scrollHeight) {
-                    this.loadThumb($thumb, function () {
-                        //this.sizeThumbImage($thumb);
-                    });
+                var thumbHeight = $thumb.outerHeight();
+                var thumbBottom = thumbTop + thumbHeight;
+                if (debug) {
+                    var $label = $thumb.find('span:visible');
+                    $label.empty().append('t: ' + thumbTop + ', b: ' + thumbBottom);
+                }
+                // check all thumbs to see if they are within the scroll area plus padding
+                if (thumbTop <= scrollBottom + thumbHeight * this.options.galleryThumbLoadPadding && thumbBottom >= scrollTop - thumbHeight * this.options.galleryThumbLoadPadding) {
+                    this.sizeThumb($thumb);
+                    if (this.isChunkedResizingEnabled()) {
+                        thumbsToEqualise.push(thumbs[i]);
+                    }
+                    $thumb.removeClass('outsideScrollArea');
+                    if (debug) {
+                        $label.append(', i: true');
+                    }
+                    this.loadThumb($thumb);
+                }
+                else {
+                    $thumb.addClass('outsideScrollArea');
+                    if (debug) {
+                        $label.append(', i: false');
+                    }
                 }
             }
+            this.equaliseHeights(thumbsToEqualise);
         };
-        GalleryView.prototype.equaliseHeights = function () {
-            this.$thumbs.find('.thumb .wrap').equaliseHeight(false, true);
+        GalleryView.prototype.isChunkedResizingEnabled = function () {
+            if (this.options.galleryThumbChunkedResizingEnabled && this.thumbs.length > this.options.galleryThumbChunkedResizingThreshold) {
+                return true;
+            }
+            return false;
+        };
+        GalleryView.prototype.equaliseHeights = function (thumbs) {
+            $(thumbs).find('.wrap').equaliseHeight(false, true);
+            //console.log('equalise', thumbs);
+            //
+            //var unEqualised = [];
+            //
+            //for (var i = 0; i < thumbs.length; i++){
+            //
+            //    var thumb = thumbs[i];
+            //
+            //    if (!$(thumb).data('eq') === true){
+            //        //$(thumb).data('eq', true);
+            //        unEqualised.push(thumb);
+            //        console.log('equalise', i);
+            //    }
+            //}
+            //$(unEqualised).find('.wrap').equaliseHeight(false, true);
         };
         GalleryView.prototype.sizeThumb = function ($thumb) {
+            var $wrap = $thumb.find('.wrap');
             var width = Number($thumb.data('width'));
             var height = Number($thumb.data('height'));
-            var $wrap = $thumb.find('.wrap');
             var $label = $thumb.find('.label');
-            $wrap.width(width * this.range);
-            $wrap.height(height * this.range);
-            $label.width(width * this.range);
+            var newWidth = Math.floor(width * this.range);
+            var newHeight = Math.floor(height * this.range);
+            $wrap.outerWidth(newWidth);
+            $wrap.outerHeight(newHeight);
+            $label.outerWidth(newWidth);
         };
         GalleryView.prototype.loadThumb = function ($thumb, cb) {
             var $wrap = $thumb.find('.wrap');
             if ($wrap.hasClass('loading') || $wrap.hasClass('loaded'))
                 return;
+            $thumb.removeClass('preLoad');
             // if no img has been added yet
             var visible = $thumb.attr('data-visible');
             var fadeDuration = this.options.thumbsImageFadeInDuration;
@@ -3724,7 +3791,7 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             setTimeout(function () {
                 _this.selectIndex(_this.provider.canvasIndex);
                 _this.scrollToThumb(_this.getSelectedThumbIndex());
-            }, 1);
+            }, 10);
         };
         GalleryView.prototype.hide = function () {
             this.isOpen = false;
@@ -3794,7 +3861,7 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
         GalleryView.prototype.resize = function () {
             _super.prototype.resize.call(this);
             this.$main.height(this.$element.height() - this.$header.height());
-            this.updateThumbs();
+            //this.updateThumbs();
         };
         return GalleryView;
     })(BaseView);

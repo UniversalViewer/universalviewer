@@ -126,7 +126,7 @@ class GalleryView extends BaseView {
 
         $.views.helpers({
             className: function(){
-                var className = "thumb";
+                var className = "thumb preLoad";
 
                 if (this.data.index === 0){
                     className += " first";
@@ -163,11 +163,25 @@ class GalleryView extends BaseView {
 
         if (!this.thumbs) return;
 
+        //this.thumbs = [this.thumbs[0]];
+
         // set initial thumb sizes
+        var heights = [];
+
         for(var i = 0; i < this.thumbs.length; i++) {
             var thumb: IThumb = this.thumbs[i];
-            thumb.initialWidth = Math.floor(thumb.width * this.range);
-            thumb.initialHeight = Math.floor(thumb.height * this.range);
+            var initialWidth = Math.floor(thumb.width * this.range);
+            var initialHeight = Math.floor(thumb.height * this.range);
+            thumb.initialWidth = initialWidth;
+            //thumb.initialHeight = initialHeight;
+            heights.push(initialHeight);
+        }
+
+        var medianHeight = Math.median(heights);
+
+        for(var j = 0; j < this.thumbs.length; j++){
+            var thumb: IThumb = this.thumbs[j];
+            thumb.initialHeight = medianHeight;
         }
 
         this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
@@ -262,43 +276,105 @@ class GalleryView extends BaseView {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
+        var debug: boolean = false;
+
         // cache range size
         this._setRange();
 
         var scrollTop = this.$main.scrollTop();
         var scrollHeight = this.$main.height();
+        var scrollBottom = scrollTop + scrollHeight;
+
+        if (debug){
+            console.log('scrollTop %s, scrollBottom %s', scrollTop, scrollBottom);
+        }
 
         var thumbsToEqualise: any[] = [];
 
         // test which thumbs are scrolled into view
         var thumbs = this.getAllThumbs();
 
+        // if chunked resizing isn't enabled, equalise all thumbs
+        if (!this.isChunkedResizingEnabled()) {
+            thumbsToEqualise = thumbs.toArray();
+        }
+
         for (var i = 0; i < thumbs.length; i++) {
 
             var $thumb = $(thumbs[i]);
 
             var thumbTop = $thumb.position().top;
-            var thumbBottom = thumbTop + $thumb.height();
+            var thumbHeight = $thumb.outerHeight();
+            var thumbBottom = thumbTop + thumbHeight;
 
-            if (thumbBottom >= scrollTop && thumbTop <= scrollTop + scrollHeight){
+            if (debug) {
+                var $label = $thumb.find('span:visible');
+                $label.empty().append('t: ' + thumbTop + ', b: ' + thumbBottom);
+            }
 
+            // if chunked resizing isn't enabled, resize all thumbs
+            if (!this.isChunkedResizingEnabled()) {
                 this.sizeThumb($thumb);
+            }
 
-                thumbsToEqualise.push(thumbs[i]);
+            // check all thumbs to see if they are within the scroll area plus padding
+            if (thumbTop <= scrollBottom + thumbHeight * this.options.galleryThumbLoadPadding && thumbBottom >= scrollTop - thumbHeight * this.options.galleryThumbLoadPadding){
+
+                // if chunked resizing is enabled, only resize, equalise, and show thumbs in the scroll area
+                if (this.isChunkedResizingEnabled()) {
+                    this.sizeThumb($thumb);
+                    thumbsToEqualise.push(thumbs[i]);
+                    $thumb.removeClass('outsideScrollArea');
+                }
+
+                if (debug) {
+                    $label.append(', i: true');
+                }
 
                 this.loadThumb($thumb);
-
-                //$thumb.find('.wrap').css('background', 'red');
             } else {
-                //$thumb.find('.wrap').css('background', 'none');
+
+                // if chunked resizing is enabled, hide this thumb so you can't see thumbs of the wrong scale when scrolling
+                if (this.isChunkedResizingEnabled()) {
+                    $thumb.addClass('outsideScrollArea');
+                }
+
+                if (debug) {
+                    $label.append(', i: false');
+                }
             }
         }
 
         this.equaliseHeights(thumbsToEqualise);
     }
 
+    isChunkedResizingEnabled(): boolean {
+        if (this.options.galleryThumbChunkedResizingEnabled && this.thumbs.length > this.options.galleryThumbChunkedResizingThreshold){
+            return true;
+        }
+        return false;
+    }
+
     equaliseHeights(thumbs): void {
+
         $(thumbs).find('.wrap').equaliseHeight(false, true);
+
+        //console.log('equalise', thumbs);
+        //
+        //var unEqualised = [];
+        //
+        //for (var i = 0; i < thumbs.length; i++){
+        //
+        //    var thumb = thumbs[i];
+        //
+        //    if (!$(thumb).data('eq') === true){
+        //        //$(thumb).data('eq', true);
+        //        unEqualised.push(thumb);
+        //        console.log('equalise', i);
+        //    }
+        //}
+
+        //$(unEqualised).find('.wrap').equaliseHeight(false, true);
     }
 
     sizeThumb($thumb: JQuery) : void {
@@ -310,16 +386,20 @@ class GalleryView extends BaseView {
 
         var $label = $thumb.find('.label');
 
-        $wrap.width(Math.floor(width * this.range));
-        $wrap.height(Math.floor(height * this.range));
+        var newWidth = Math.floor(width * this.range);
+        var newHeight = Math.floor(height * this.range);
 
-        $label.width(Math.floor(width * this.range));
+        $wrap.outerWidth(newWidth);
+        $wrap.outerHeight(newHeight);
+        $label.outerWidth(newWidth);
     }
 
     loadThumb($thumb: JQuery, cb?: (img: JQuery) => void): void {
         var $wrap = $thumb.find('.wrap');
 
         if ($wrap.hasClass('loading') || $wrap.hasClass('loaded')) return;
+
+        $thumb.removeClass('preLoad');
 
         // if no img has been added yet
 
