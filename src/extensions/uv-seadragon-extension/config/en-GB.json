@@ -28,7 +28,7 @@
         "elideCount": 40,
         "expandFullEnabled": true,
         "galleryThumbChunkedResizingEnabled": true,
-        "galleryThumbChunkedResizingThreshold": 500,
+        "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,
         "galleryThumbWidth": 200,
