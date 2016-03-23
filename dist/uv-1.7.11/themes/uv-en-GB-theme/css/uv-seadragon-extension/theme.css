@@ -838,14 +838,33 @@
   overflow: hidden;
   position: relative;
 }
+#app .leftPanel .views .galleryView .main .thumbs.multiSelect .thumb .wrap.multiSelected {
+  border: 2px solid #14a4c3;
+}
 #app .leftPanel .views .galleryView .main .thumbs .thumb {
   margin: 0 7px 7px 0;
-  float: left;
-  cursor: pointer;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap {
   border: 2px solid #373737;
   padding: 2px;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb.selected .wrap {
+  border: 2px solid #fff;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb.searchpreview .wrap {
+  border: 2px solid #26b5cc;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb.outsideScrollArea .wrap {
+  border: 2px solid transparent;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb span {
+  padding: 2px 0 0 0;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb {
+  float: left;
+  cursor: pointer;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb .wrap {
   overflow: hidden;
   text-align: center;
   background: none;
@@ -869,17 +888,10 @@
   cursor: pointer;
   margin-top: -20px;
 }
-#app .leftPanel .views .galleryView .main .thumbs .thumb.selected .wrap {
-  border: 2px solid #fff;
-}
-#app .leftPanel .views .galleryView .main .thumbs .thumb.searchpreview .wrap {
-  border: 2px solid #26b5cc;
-}
 #app .leftPanel .views .galleryView .main .thumbs .thumb span {
   font-size: 11px;
   color: #fff;
   display: block;
-  padding: 2px 0 0 0;
 }
 #app .leftPanel .views .galleryView .main .thumbs .thumb .label {
   overflow-x: hidden;
@@ -889,8 +901,13 @@
 #app .leftPanel .views .galleryView .main .thumbs .thumb.placeholder .wrap {
   background: url('../../img/uv-contentleftpanel-module/unavailable.png') no-repeat 50% 50%;
 }
+#app .leftPanel .views .galleryView .main .thumbs .thumb.outsideScrollArea .wrap img {
+  display: none;
+}
+#app .leftPanel .views .galleryView .main .thumbs .thumb.outsideScrollArea span {
+  color: transparent;
+}
 #app .leftPanel .views .galleryView .main .thumbs.multiSelect .thumb .wrap.multiSelected {
-  border: 2px solid #14a4c3;
   background: #14a4c3;
 }
 #app .leftPanel .views .galleryView .main .thumbs.multiSelect .thumb .wrap.multiSelected .thumbImage {
