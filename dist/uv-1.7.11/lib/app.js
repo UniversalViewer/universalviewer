@@ -3690,6 +3690,7 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             var thumbsToEqualise = [];
             // test which thumbs are scrolled into view
             var thumbs = this.getAllThumbs();
+            // if chunked resizing isn't enabled, equalise all thumbs
             if (!this.isChunkedResizingEnabled()) {
                 thumbsToEqualise = thumbs.toArray();
             }
@@ -3702,20 +3703,28 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
                     var $label = $thumb.find('span:visible');
                     $label.empty().append('t: ' + thumbTop + ', b: ' + thumbBottom);
                 }
+                // if chunked resizing isn't enabled, resize all thumbs
+                if (!this.isChunkedResizingEnabled()) {
+                    this.sizeThumb($thumb);
+                }
                 // check all thumbs to see if they are within the scroll area plus padding
                 if (thumbTop <= scrollBottom + thumbHeight * this.options.galleryThumbLoadPadding && thumbBottom >= scrollTop - thumbHeight * this.options.galleryThumbLoadPadding) {
-                    this.sizeThumb($thumb);
+                    // if chunked resizing is enabled, only resize, equalise, and show thumbs in the scroll area
                     if (this.isChunkedResizingEnabled()) {
+                        this.sizeThumb($thumb);
                         thumbsToEqualise.push(thumbs[i]);
+                        $thumb.removeClass('outsideScrollArea');
                     }
-                    $thumb.removeClass('outsideScrollArea');
                     if (debug) {
                         $label.append(', i: true');
                     }
                     this.loadThumb($thumb);
                 }
                 else {
-                    $thumb.addClass('outsideScrollArea');
+                    // if chunked resizing is enabled, hide this thumb so you can't see thumbs of the wrong scale when scrolling
+                    if (this.isChunkedResizingEnabled()) {
+                        $thumb.addClass('outsideScrollArea');
+                    }
                     if (debug) {
                         $label.append(', i: false');
                     }
