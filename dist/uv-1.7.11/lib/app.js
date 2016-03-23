@@ -1115,31 +1115,33 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 });
                 $(document).keydown(function (e) {
                     var event = null;
-                    if (e.keyCode === KeyCodes.KeyDown.Enter)
-                        event = BaseCommands.RETURN;
-                    if (e.keyCode === KeyCodes.KeyDown.Escape)
-                        event = BaseCommands.ESCAPE;
-                    if (e.keyCode === KeyCodes.KeyDown.PageUp)
-                        event = BaseCommands.PAGE_UP;
-                    if (e.keyCode === KeyCodes.KeyDown.PageDown)
-                        event = BaseCommands.PAGE_DOWN;
-                    if (e.keyCode === KeyCodes.KeyDown.End)
-                        event = BaseCommands.END;
-                    if (e.keyCode === KeyCodes.KeyDown.Home)
-                        event = BaseCommands.HOME;
-                    if (e.keyCode === KeyCodes.KeyDown.NumpadPlus || e.keyCode === 171 || e.keyCode === KeyCodes.KeyDown.Equals)
-                        event = BaseCommands.PLUS;
-                    if (e.keyCode === KeyCodes.KeyDown.NumpadMinus || e.keyCode === 173 || e.keyCode === KeyCodes.KeyDown.Dash)
-                        event = BaseCommands.MINUS;
-                    if (that.useArrowKeysToNavigate()) {
-                        if (e.keyCode === KeyCodes.KeyDown.LeftArrow)
-                            event = BaseCommands.LEFT_ARROW;
-                        if (e.keyCode === KeyCodes.KeyDown.UpArrow)
-                            event = BaseCommands.UP_ARROW;
-                        if (e.keyCode === KeyCodes.KeyDown.RightArrow)
-                            event = BaseCommands.RIGHT_ARROW;
-                        if (e.keyCode === KeyCodes.KeyDown.DownArrow)
-                            event = BaseCommands.DOWN_ARROW;
+                    if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
+                        if (e.keyCode === KeyCodes.KeyDown.Enter)
+                            event = BaseCommands.RETURN;
+                        if (e.keyCode === KeyCodes.KeyDown.Escape)
+                            event = BaseCommands.ESCAPE;
+                        if (e.keyCode === KeyCodes.KeyDown.PageUp)
+                            event = BaseCommands.PAGE_UP;
+                        if (e.keyCode === KeyCodes.KeyDown.PageDown)
+                            event = BaseCommands.PAGE_DOWN;
+                        if (e.keyCode === KeyCodes.KeyDown.End)
+                            event = BaseCommands.END;
+                        if (e.keyCode === KeyCodes.KeyDown.Home)
+                            event = BaseCommands.HOME;
+                        if (e.keyCode === KeyCodes.KeyDown.NumpadPlus || e.keyCode === 171 || e.keyCode === KeyCodes.KeyDown.Equals)
+                            event = BaseCommands.PLUS;
+                        if (e.keyCode === KeyCodes.KeyDown.NumpadMinus || e.keyCode === 173 || e.keyCode === KeyCodes.KeyDown.Dash)
+                            event = BaseCommands.MINUS;
+                        if (that.useArrowKeysToNavigate()) {
+                            if (e.keyCode === KeyCodes.KeyDown.LeftArrow)
+                                event = BaseCommands.LEFT_ARROW;
+                            if (e.keyCode === KeyCodes.KeyDown.UpArrow)
+                                event = BaseCommands.UP_ARROW;
+                            if (e.keyCode === KeyCodes.KeyDown.RightArrow)
+                                event = BaseCommands.RIGHT_ARROW;
+                            if (e.keyCode === KeyCodes.KeyDown.DownArrow)
+                                event = BaseCommands.DOWN_ARROW;
+                        }
                     }
                     if (event) {
                         e.preventDefault();
