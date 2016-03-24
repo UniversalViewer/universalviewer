@@ -4,14 +4,33 @@
   },
   "content": {
     "authCORSError": "Eich porwr yn peidio cefnogi CORS, os gwelwch yn dda uwchraddio i weld y cynnwys hwn.",
+    "authorisationFailedMessage": "Nid oedd yn ymddangos eich ymgais mewngofnodi i fod yn llwyddiannus . Trio eto os gwelwch yn dda.",
     "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)",
     "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
-    "degradedResourceLogin": "Mewngofnodi"
+    "degradedResourceLogin": "Mewngofnodi",
+    "forbiddenResourceMessage": "Eich hawliau mynediad presennol yn annigonol i weld llun hwn"
   },
   "modules": {
     "clickThroughDialogue": {
       "content": {
         "viewTerms": "Darllenwch Telerau ac Amodau Llawn"
+      }
+    },
+    "contentLeftPanel": {
+      "content": {
+        "collapse": "Cuddio'r Cynnwys",
+        "collapseFull": "Cuddio'r Galeri",
+        "date": "dyddiad",
+        "expand": "Ehangu'r Cynnwys",
+        "expandFull": "Ehangu'r Galeri",
+        "index": "Mynegai",
+        "select": "dewiswch",
+        "selectAll": "Dewis pob",
+        "selection": "Dewis",
+        "sortBy": "trefnu yn ôl",
+        "thumbnails": "Bodluniau",
+        "title": "Cynnwys",
+        "volume": "cyfaint"
       }
     },
     "dialogue": {
@@ -23,6 +42,8 @@
       "content": {
         "currentViewAsJpg": "Golwg presennol (jpg)",
         "download": "Lawrlwytho",
+        "downloadSelection": "Download Dewis",
+        "downloadSelectionButton": "Download PDF",
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
         "entireFileAsOriginal": "Y ffeil gyfan ({0})",
@@ -71,7 +92,8 @@
     },
     "loginDialogue": {
       "content": {
-        "login": "Mewngofnodi"
+        "login": "Mewngofnodi",
+        "cancel": "Diddymu"
       }
     },
     "moreInfoRightPanel": {
@@ -118,6 +140,11 @@
         "twoUp": "Gweld dwy dudalen ar y tro"
       }
     },
+    "restrictedDialogue": {
+      "content": {
+        "cancel": "Diddymu"
+      }
+    },
     "seadragonCenterPanel": {
       "content": {
         "acknowledgements": "Priodoliad",
@@ -157,20 +184,6 @@
         "preserveViewport": "Cadw'r lefel o glosio",
         "title": "Dewisiadau",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
-      }
-    },
-    "treeViewLeftPanel": {
-      "content": {
-        "collapse": "Cuddio'r Cynnwys",
-        "collapseFull": "Cuddio'r Galeri",
-        "date": "dyddiad",
-        "expand": "Ehangu'r Cynnwys",
-        "expandFull": "Ehangu'r Galeri",
-        "index": "Mynegai",
-        "sortBy": "trefnu yn ôl",
-        "thumbnails": "Bodluniau",
-        "title": "Cynnwys",
-        "volume": "cyfaint"
       }
     }
   }

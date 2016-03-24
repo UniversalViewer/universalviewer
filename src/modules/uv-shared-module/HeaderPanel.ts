@@ -6,6 +6,7 @@ import InformationAction = require("../uv-shared-module/InformationAction");
 import InformationArgs = require("../uv-shared-module/InformationArgs");
 import InformationFactory = require("../uv-shared-module/InformationFactory");
 import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
+import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 
 class HeaderPanel extends BaseView {
 
@@ -109,7 +110,7 @@ class HeaderPanel extends BaseView {
             return;
         }
 
-        if (this.provider.isPagingSettingEnabled()){
+        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled()){
             this.$pagingToggleButton.removeClass('two-up');
             this.$pagingToggleButton.addClass('one-up');
             this.$pagingToggleButton.prop('title', this.content.oneUp);
@@ -139,7 +140,7 @@ class HeaderPanel extends BaseView {
     }
 
     pagingToggleIsVisible(): boolean {
-        return this.options.pagingToggleEnabled && this.provider.isPagingAvailable();
+        return this.options.pagingToggleEnabled && (<ISeadragonProvider>this.provider).isPagingAvailable();
     }
 
     showInformation(args: InformationArgs): void {

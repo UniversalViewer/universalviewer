@@ -7,7 +7,6 @@ class ClickThroughDialogue extends Dialogue {
     $acceptTermsButton: JQuery;
     $message: JQuery;
     $title: JQuery;
-    $viewTermsButton: JQuery;
     resource: Manifesto.IExternalResource;
 
     constructor($element: JQuery) {
@@ -40,44 +39,24 @@ class ClickThroughDialogue extends Dialogue {
             <div>\
                 <p class="message scroll"></p>\
                 <div class="buttons">\
-                    <a class="viewTerms" href="#"></a>\
                     <a class="acceptTerms btn btn-primary" href="#" target="_parent"></a>\
                 </div>\
             </div>'
         );
 
         this.$message = this.$content.find(".message");
-        this.$message.targetBlank();
-
-        this.$viewTermsButton = this.$content.find(".viewTerms");
-        this.$viewTermsButton.text(this.content.viewTerms);
 
         this.$acceptTermsButton = this.$content.find(".acceptTerms");
+        // TODO: get from config this.$acceptTermsButton.text(this.content.acceptTerms); // figure out config
+        this.$acceptTermsButton.text("Accept Terms and Open");
 
         this.$element.hide();
-
-        this.$viewTermsButton.on('click', (e) => {
-            e.preventDefault();
-
-            this.$message.empty();
-            this.$message.addClass('loading');
-            this.$message.load(this.resource.clickThroughService.getProperty('fullTermsSimple'), () => {
-                this.$message.removeClass('loading');
-                this.$message.targetBlank();
-                this.$viewTermsButton.hide();
-            });
-
-            $.publish(BaseCommands.VIEW_FULL_TERMS);
-        });
 
         this.$acceptTermsButton.on('click', (e) => {
             e.preventDefault();
             this.close();
             $.publish(BaseCommands.ACCEPT_TERMS);
             if (this.acceptCallback) this.acceptCallback();
-
-            //var redirectUrl = this.service.id + escape(parent.document.URL);
-            //this.extension.redirect(redirectUrl);
         });
     }
 
@@ -86,7 +65,12 @@ class ClickThroughDialogue extends Dialogue {
 
         this.$title.text(this.resource.clickThroughService.getProperty('label'));
         this.$message.html(this.resource.clickThroughService.getProperty('description'));
-        this.$acceptTermsButton.text(this.resource.clickThroughService.getProperty('actionLabel'));
+        this.$message.targetBlank();
+
+        this.$message.find('a').on('click', function() {
+            var url: string = $(this).attr('href');
+            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+        });
 
         this.resize();
     }

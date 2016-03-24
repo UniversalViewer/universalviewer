@@ -2,7 +2,7 @@ import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseFooterPanel = require("../uv-shared-module/FooterPanel");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import DownloadDialogue = require("../../extensions/uv-seadragon-extension/DownloadDialogue");
-import AutoComplete = require("./AutoComplete");
+import AutoComplete = require("../uv-shared-module/AutoComplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
@@ -189,7 +189,12 @@ class FooterPanel extends BaseFooterPanel {
 
         if (autocompleteService){
 
-            new AutoComplete(this.$searchText, autocompleteService, 300,
+            new AutoComplete(this.$searchText,
+                (terms: string, cb: (results: string[]) => void) => {
+                    $.getJSON(String.format(autocompleteService, terms), (results: string[]) => {
+                        cb(results);
+                    });
+                },
                 (results: any) => {
                     return _.map(results.terms, (result: any) => {
                         return result.match;
@@ -197,7 +202,8 @@ class FooterPanel extends BaseFooterPanel {
                 },
                 (terms: string) => {
                     this.search(terms);
-                }
+                },
+                300, 2, true
             );
 
         }

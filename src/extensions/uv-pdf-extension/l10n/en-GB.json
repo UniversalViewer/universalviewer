@@ -3,8 +3,11 @@
     "label": "English (GB)"
   },
   "content": {
+    "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
+    "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
     "degradedResourceMessage": "Please log in to view at full quality.",
-    "degradedResourceLogin": "log in"
+    "degradedResourceLogin": "log in",
+    "forbiddenResourceMessage": "Your current access rights are insufficient to view this image"
   },
   "modules": {
     "dialogue": {
@@ -59,7 +62,8 @@
     },
     "loginDialogue": {
       "content": {
-        "login": "Login"
+        "login": "Login",
+        "cancel": "Cancel"
       }
     },
     "moreInfoRightPanel": {
@@ -93,7 +97,7 @@
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
       }
     },
-    "treeViewLeftPanel": {
+    "contentLeftPanel": {
 
     }
   }

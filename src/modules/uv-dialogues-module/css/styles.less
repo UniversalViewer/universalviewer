@@ -30,6 +30,16 @@
                         float: left;
                         margin-left: 10px;
                         width: 380px;
+
+                        .url {
+                            width: 100%;
+                            font-size: @font-size-small;
+                            border: 1px solid @gray-light;
+                        }
+
+                        p {
+                            padding: @padding-small-vertical 0px @padding-small-vertical 0px;
+                        }
                     }
                 }
 
@@ -304,6 +314,14 @@
                 h1{
                     border-bottom: none !important;
                     font-size: @font-size-base !important;
+                }
+
+                .warning {
+                    display: block;
+                    background-color: @brand-warning;
+                    font-weight: bold;
+                    padding: @padding-medium;
+                    margin-bottom: @margin-medium-vertical;
                 }
             }
 

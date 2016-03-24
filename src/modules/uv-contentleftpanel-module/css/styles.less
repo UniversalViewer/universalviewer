@@ -1,0 +1,504 @@
+﻿
+#app{
+
+    .leftPanel{
+
+        @img-path: '../../../modules/uv-contentleftpanel-module/img/';
+
+        .top{
+
+            .title{
+                text-transform: uppercase;
+            }
+        }
+
+        .tabs{
+            height: 25px;
+            border-bottom: 1px solid @panel-border-color;
+
+            .tab{
+                color: @text-color;
+                background-color: @panel-dark-bg;
+                display: inline-block;
+                text-align: center;
+                line-height: 22px;
+                height: 22px;
+                overflow: hidden;
+                width: 75px;
+                margin: 0;
+                cursor: pointer;
+
+                &.first{
+                    margin: 0 0 0 @margin-medium-horizontal;
+                }
+
+                &.on{
+                    border: 1px solid @panel-border-color;
+                    border-bottom: 1px solid @panel-dark-bg;
+                    color: @brand-secondary;
+                    margin-bottom: -1px;
+                    height: 25px;
+                    line-height: 25px;
+                }
+
+                .btn-focus();
+            }
+        }
+
+        .tabsContent{
+            padding: @padding-medium;
+
+            .options{
+                overflow: hidden;
+
+                padding: 0 0 @padding-medium-vertical 0;
+
+                .left {
+
+                    float: left;
+
+                    .treeView{
+
+                        padding: @padding-small-vertical 0 0 0;
+
+                        span{
+                            display: block;
+                            float: left;
+                            color: @text-color;
+                            padding: 5px 4px 0 0;
+                            font-size: @font-size-small;
+                        }
+
+                        select{
+                            float: left;
+                            font-size: @font-size-small;
+                        }
+                    }
+                }
+
+                .right {
+                    float: right;
+                    overflow: hidden;
+
+                    .multiSelect{
+                        .multiSelectAll {
+                            float: left;
+                        }
+
+                        .btn{
+                            margin-left: @margin-medium-horizontal;
+                        }
+                    }
+                }
+            }
+
+            .btn-group {
+                .btn{
+                    padding: 0 @margin-small-horizontal 0 @margin-small-horizontal;
+                    background: @gray;
+                    color: @gray-light;
+                    width: 55px;
+
+                    &.on {
+                        background: #DDD;
+                        color: #000;
+                    }
+                }
+            }
+        }
+
+        .views{
+
+            .treeView{
+                overflow: auto;
+                //                overflow-y: scroll;
+                //                overflow-x: hidden;
+                color: @text-color;
+                font-weight: normal;
+
+                .toggle {
+                    cursor: pointer;
+                    margin-top: 3px;
+                    margin-right: @margin-small-horizontal;
+                    display: block;
+                    float: left;
+                    height: 10px;
+                    width: 10px;
+                    background-image: url('@{img-path}plus.png');
+
+                    &.expanded {
+                        background-image: url('@{img-path}minus.png');
+                    }
+
+                    &.multiSelect{
+                        margin-left: 5px;
+                    }
+                }
+
+                .spacer {
+                    margin-top: 3px;
+                    margin-right: @margin-small-horizontal;
+                    display: block;
+                    float: left;
+                    height: 10px;
+                    width: 10px;
+                }
+
+                input.multiSelect {
+                    margin-top: 0px;
+                    margin-right: @margin-small-horizontal;
+                    display: block;
+                    float: left;
+                    height: 13px;
+                    width: 13px;
+                }
+
+                ul.tree, ul.tree ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                ul.tree ul {
+                    margin-left: @margin-large-horizontal;
+                }
+
+                ul.tree li {
+                    margin: 0;
+                    padding: 2px 0 2px 0;
+                    overflow: hidden;
+                    a{
+                        display: block;
+                        overflow: hidden;
+                    }
+                }
+
+                ul a.selected {
+                    color: @brand-secondary;
+                }
+            }
+
+            .thumbsView{
+
+                overflow: auto;
+
+                .thumbs {
+                    overflow: hidden;
+                    width: 210px;
+                    position: relative;
+
+                    .thumb {
+                        cursor: pointer;
+
+                        .wrap {
+                            border: 2px solid @panel-border-color;
+                            padding: 2px;
+                            overflow: hidden;
+                            text-align: center;
+                            background: none;
+
+                            &.loading {
+                                .loading(@loader-black-bg);
+                            }
+
+                            &.loadingFailed {
+                                background: url('@{img-path}error.png') no-repeat 50% 50%;
+                            }
+
+                            &.hidden {
+                                background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                            }
+
+                            img {
+                                display: block;
+                                max-width: 100%;
+                                max-height: 100%;
+                                //margin: 0 auto;
+                            }
+                        }
+
+                        &.selected {
+
+                            .wrap {
+                                border: 2px solid #fff;
+                            }
+                        }
+
+                        &.searchpreview{
+
+                            .wrap{
+                                border: 2px solid @link-color;
+                            }
+                        }
+
+                        span {
+                            font-size: @font-size-small;
+                            color: #fff;
+                            display: block;
+                            padding: 2px 0 0 0;
+                        }
+
+                        .label {
+                            overflow-x: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+
+                        &.placeholder {
+                            .wrap {
+                                background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                            }
+                        }
+
+                        &.oneCol{
+                            margin: 0 0 7px 0;
+                            .wrap,
+                            .label {
+                                width: 208px;
+                                max-height: 373px;
+                            }
+                        }
+
+                        &.twoCol{
+                            margin: 0 7px 7px 0;
+                            .wrap,
+                            .label {
+                                width: 98px;
+                                max-height: 182px;
+                            }
+                        }
+                    }
+
+                    .separator {
+                        height: 1px;
+                        clear: both;
+                        border: none;
+                    }
+
+                    &.left-to-right{
+                        .thumb{
+                            &.first{
+                                float: right;
+                            }
+                            float: left;
+                        }
+                    }
+
+                    &.right-to-left{
+                        .thumb{
+                            &.first{
+                                float: left;
+                            }
+                            float: right;
+                        }
+                    }
+                }
+            }
+
+            .galleryView{
+
+                .header{
+                    overflow: hidden;
+                    height: 45px;
+
+                    .btn {
+                        float: left;
+                        width: 30px;
+                        height: 30px;
+
+                        &.size-up{
+                            margin-left: 5px;
+                        }
+
+                        &.size-down{
+                            margin-right: 5px;
+                        }
+                    }
+
+                    input[type="range"]{
+                        float: left;
+                        margin-top: 12px;
+                        width: 100px;
+                    }
+                }
+
+                .main{
+                    overflow: auto;
+
+                    .thumbs {
+                        margin-right: @margin-medium-horizontal;
+                        overflow: hidden;
+                        position: relative;
+
+                        // all thumb spacing-related styles
+
+                        &.multiSelect{
+                            .thumb {
+                                .wrap {
+                                    &.multiSelected {
+                                        border: 2px solid @brand-primary;
+                                    }
+                                }
+                            }
+                        }
+
+                        .thumb{
+                            margin: 0 7px 7px 0;
+
+                            .wrap{
+                                border: 2px solid @panel-border-color;
+                                padding: 2px;
+                            }
+
+                            &.selected{
+                                .wrap{
+                                    border: 2px solid #fff;
+                                }
+                            }
+
+                            &.searchpreview{
+                                .wrap{
+                                    border: 2px solid @link-color;
+                                }
+                            }
+
+                            &.outsideScrollArea{
+
+                                .wrap{
+                                    border: 2px solid transparent;
+                                    //border: 2px solid red;
+                                }
+                            }
+
+                            span{
+                                padding: 2px 0 0 0;
+                            }
+                        }
+
+                        .thumb{
+                            float: left;
+                            cursor: pointer;
+
+                            .wrap{
+                                overflow: hidden;
+                                text-align: center;
+                                background: none;
+
+                                &.loading{
+                                    .loading(@loader-black-bg);
+                                }
+
+                                &.hidden{
+                                    background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                                }
+
+                                img{
+                                    display: block;
+                                    float: left;
+                                    max-width: 100%;
+                                    max-height: 100%;
+                                    //margin: 0 auto;
+                                }
+
+                                input{
+                                    float: left;
+                                    cursor: pointer;
+                                    margin-top: -20px;
+                                }
+                            }
+
+                            span{
+                                font-size: @font-size-small;
+                                color: #fff;
+                                display: block;
+                            }
+
+                            .label {
+                                overflow-x: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+
+                            &.placeholder{
+                                .wrap {
+                                    background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                                }
+                            }
+
+                            &.outsideScrollArea{
+
+                                .wrap{
+                                    img{
+                                        display: none;
+                                    }
+                                }
+
+                                span{
+                                    color: transparent;
+                                    //color: red;
+                                }
+                            }
+                        }
+
+                        &.multiSelect{
+                            .thumb {
+                                .wrap {
+                                    &.multiSelected {
+                                        background: @brand-primary;
+
+                                        .thumbImage {
+                                            .opacity(.35);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &.left-to-right{
+                            .thumb{
+                                float: left;
+                            }
+                        }
+
+                        &.right-to-left{
+                            .thumb{
+                                float: right;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+}
+
+#app.browser-Explorer {
+    .leftPanel{
+        .views{
+            .galleryView{
+                .header{
+                    input[type="range"] {
+                        margin-top: -11px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#app.browser-Firefox {
+    .leftPanel{
+        .views{
+            .galleryView{
+                .header{
+                    input[type="range"] {
+                        margin-top: 9px;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ import EmbedDialogue = require("./EmbedDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
-import GalleryView = require("../../modules/uv-treeviewleftpanel-module/GalleryView");
+import GalleryView = require("../../modules/uv-contentleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
 import IProvider = require("../../modules/uv-shared-module/IProvider");
 import ISeadragonProvider = require("./ISeadragonProvider");
@@ -23,9 +23,9 @@ import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-mod
 import Settings = require("../../modules/uv-shared-module/Settings");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
-import ThumbsView = require("../../modules/uv-treeviewleftpanel-module/ThumbsView");
-import TreeView = require("../../modules/uv-treeviewleftpanel-module/TreeView");
-import TreeViewLeftPanel = require("../../modules/uv-treeviewleftpanel-module/TreeViewLeftPanel");
+import ThumbsView = require("../../modules/uv-contentleftpanel-module/ThumbsView");
+import TreeView = require("../../modules/uv-contentleftpanel-module/TreeView");
+import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
 
 class Extension extends BaseExtension {
 
@@ -42,7 +42,7 @@ class Extension extends BaseExtension {
     footerPanel: FooterPanel;
     headerPanel: PagingHeaderPanel;
     helpDialogue: HelpDialogue;
-    leftPanel: TreeViewLeftPanel;
+    leftPanel: ContentLeftPanel;
     mode: Mode;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
@@ -115,7 +115,7 @@ class Extension extends BaseExtension {
 
         $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.provider.getPrevPageIndex());
+                this.viewPage((<ISeadragonProvider>this.provider).getPrevPageIndex());
             } else {
                 this.centerPanel.setFocus();
             }
@@ -143,9 +143,13 @@ class Extension extends BaseExtension {
             $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
         });
 
+        $.subscribe(Commands.MULTISELECTION_MADE, (e, ids: string[]) => {
+            this.triggerSocket(Commands.MULTISELECTION_MADE, ids);
+        });
+
         $.subscribe(Commands.NEXT, (e) => {
             this.triggerSocket(Commands.NEXT);
-            this.viewPage(this.provider.getNextPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getNextPageIndex());
         });
 
         $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
@@ -162,7 +166,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(BaseCommands.PAGE_DOWN, (e) => {
-            this.viewPage(this.provider.getNextPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getNextPageIndex());
         });
 
         $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
@@ -171,7 +175,7 @@ class Extension extends BaseExtension {
         });
 
         $.subscribe(BaseCommands.PAGE_UP, (e) => {
-            this.viewPage(this.provider.getPrevPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getPrevPageIndex());
         });
 
         $.subscribe(BaseCommands.PLUS, (e) => {
@@ -180,7 +184,7 @@ class Extension extends BaseExtension {
 
         $.subscribe(Commands.PREV, (e) => {
             this.triggerSocket(Commands.PREV);
-            this.viewPage(this.provider.getPrevPageIndex());
+            this.viewPage((<ISeadragonProvider>this.provider).getPrevPageIndex());
         });
 
         $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
@@ -190,7 +194,7 @@ class Extension extends BaseExtension {
 
         $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.provider.getNextPageIndex());
+                this.viewPage((<ISeadragonProvider>this.provider).getNextPageIndex());
             } else {
                 this.centerPanel.setFocus();
             }
@@ -291,7 +295,7 @@ class Extension extends BaseExtension {
         this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
-            this.leftPanel = new TreeViewLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
         } else {
             Shell.$leftPanel.hide();
         }
@@ -365,7 +369,7 @@ class Extension extends BaseExtension {
             canvasIndex = 0;
         }
 
-        if (this.provider.isPagingSettingEnabled() && !isReload){
+        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled() && !isReload){
             var indices = this.provider.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.
@@ -421,8 +425,7 @@ class Extension extends BaseExtension {
 
         if (!range) return;
 
-        var canvasId = range.getCanvases()[0];
-
+        var canvasId: string = range.getCanvasIds()[0];
         var index = this.provider.getCanvasIndexById(canvasId);
 
         this.viewPage(index);
@@ -449,10 +452,16 @@ class Extension extends BaseExtension {
     treeNodeSelected(data: any): void{
         if (!data.type) return;
 
-        if (data.type === 'manifest') {
-            this.viewManifest(data);
-        } else {
-            this.viewRange(data.path);
+        switch (data.type){
+            case manifesto.IIIFResourceType.manifest().toString():
+                this.viewManifest(data);
+                break;
+            case manifesto.IIIFResourceType.collection().toString():
+                this.viewCollection(data);
+                break;
+            default:
+                this.viewRange(data.path);
+                break;
         }
     }
 

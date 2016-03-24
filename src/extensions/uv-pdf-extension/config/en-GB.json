@@ -23,6 +23,7 @@
     {
       "options": {
         "bookmarkEnabled": false,
+        "feedbackEnabled": false,
         "minimiseButtons": true,
         "openEnabled": false
       }
@@ -43,8 +44,9 @@
     {
       "options":
       {
+        "canvasExclude": "",
         "displayOrder": "",
-        "exclude": "",
+        "manifestExclude": "",
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255
@@ -57,7 +59,7 @@
         "usePdfJs": true
       }
     },
-    "treeViewLeftPanel":{
+    "contentLeftPanel":{
       "options":{
         "elideCount": 40,
         "galleryThumbHeight": 320,

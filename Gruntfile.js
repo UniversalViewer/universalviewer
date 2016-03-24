@@ -37,6 +37,7 @@ module.exports = function (grunt) {
             build : ['<%= config.dirs.build %>'],
             dist: ['<%= config.dirs.dist %>'],
             examples: ['<%= config.dirs.examples %>/uv-*'],
+            distexamples: ['<%= config.dirs.examples %>/uv-*.zip', '<%= config.dirs.examples %>/uv-*.tar'],
             extension: ['./src/extensions/*/build/*']
         },
 
@@ -184,6 +185,17 @@ module.exports = function (grunt) {
                         dest: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>/'
                     }
                 ]
+            },
+            distexamples: {
+                // copy zip archives to examples
+                files: [
+                    {
+                        cwd: '<%= config.dirs.dist %>',
+                        expand: true,
+                        src: ['*.zip', '*.tar'],
+                        dest: '<%= config.dirs.examples %>/'
+                    }
+                ]
             }
         },
 
@@ -219,7 +231,6 @@ module.exports = function (grunt) {
                         src: [
                             'es6-promise/promise.min.js',
                             'exjs/dist/ex.es3.min.js',
-                            'exjs/dist/ex.es3.min.js.map',
                             'extensions/dist/extensions.js',
                             'http-status-codes/dist/http-status-codes.js',
                             'jquery-plugins/dist/jquery-plugins.js',
@@ -508,7 +519,9 @@ module.exports = function (grunt) {
             'clean:dist',
             'copy:dist',
             'compress:zip',
-            'compress:tar'
+            'compress:tar',
+            'clean:distexamples',
+            'copy:distexamples'
         );
     });
 

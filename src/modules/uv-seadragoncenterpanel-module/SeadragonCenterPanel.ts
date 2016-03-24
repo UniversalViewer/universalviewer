@@ -220,6 +220,9 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.createNavigationButtons();
 
+        this.hidePrevButton();
+        this.hideNextButton();
+
         // if firefox, hide rotation and prev/next until this is resolved
         //var browser = window.browserDetect.browser;
 
@@ -237,7 +240,6 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     createNavigationButtons() {
-        if (!this.provider.isMultiCanvas()) return;
 
         this.$leftButton = $('<div class="paging btn prev"></div>');
         this.$leftButton.prop('title', this.content.previous);
@@ -296,30 +298,101 @@ class SeadragonCenterPanel extends CenterPanel {
 
     positionPages() {
 
-        var viewingDirection = this.provider.getViewingDirection().toString();
+        var resources: Manifesto.IExternalResource[] = (<ISeadragonProvider>this.provider).resources;
 
-        // if there's more than one image, align them next to each other.
-        if ((<ISeadragonProvider>this.provider).resources.length > 1) {
+        var x: number;
+        var y: number;
+        var page: any;
+        var pageBounds: any;
+        var nextPage: any;
+        var nextPagePos: any;
+        var topPage: any;
+        var topPageBounds: any;
+        var bottomPage: any;
+        var bottomPagePos: any;
+        var leftPage: any;
+        var leftPageBounds: any;
+        var rightPage: any;
+        var rightPagePos: any;
 
-            // check if tilesources should be aligned horizontally or vertically
-            if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
-                // vertical
-                var topPage = this.viewer.world.getItemAt(0);
-                var topPageBounds = topPage.getBounds(true);
-                var y = topPageBounds.y + topPageBounds.height;
-                var bottomPage = this.viewer.world.getItemAt(1);
-                var bottomPagePos = bottomPage.getBounds(true).getTopLeft();
-                bottomPagePos.y = y + this.config.options.pageGap;
-                bottomPage.setPosition(bottomPagePos, true);
+        // if there's more than one image, determine alignment strategy
+        if (resources.length > 1) {
+
+            if (resources.length === 2) {
+                // recto verso
+                if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
+                    // vertical alignment
+                    topPage = this.viewer.world.getItemAt(0);
+                    topPageBounds = topPage.getBounds(true);
+                    y = topPageBounds.y + topPageBounds.height;
+                    bottomPage = this.viewer.world.getItemAt(1);
+                    bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+                    bottomPagePos.y = y + this.config.options.pageGap;
+                    bottomPage.setPosition(bottomPagePos, true);
+                } else {
+                    // horizontal alignment
+                    leftPage = this.viewer.world.getItemAt(0);
+                    leftPageBounds = leftPage.getBounds(true);
+                    x = leftPageBounds.x + leftPageBounds.width;
+                    rightPage = this.viewer.world.getItemAt(1);
+                    rightPagePos = rightPage.getBounds(true).getTopLeft();
+                    rightPagePos.x = x + this.config.options.pageGap;
+                    rightPage.setPosition(rightPagePos, true);
+                }
             } else {
-                // horizontal
-                var leftPage = this.viewer.world.getItemAt(0);
-                var leftPageBounds = leftPage.getBounds(true);
-                var x = leftPageBounds.x + leftPageBounds.width;
-                var rightPage = this.viewer.world.getItemAt(1);
-                var rightPagePos = rightPage.getBounds(true).getTopLeft();
-                rightPagePos.x = x + this.config.options.pageGap;
-                rightPage.setPosition(rightPagePos, true);
+
+                // scroll
+                if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
+                    // vertical alignment
+                    if ((<ISeadragonProvider>this.provider).isTopToBottom()) {
+                        // top to bottom
+                        for (var i = 0; i < resources.length - 1; i++) {
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            y = pageBounds.y + pageBounds.height;
+                            nextPage = this.viewer.world.getItemAt(i + 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.y = y;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    } else {
+                        // bottom to top
+                        for (var i = resources.length; i > 0; i--) {
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            y = pageBounds.y - pageBounds.height;
+                            nextPage = this.viewer.world.getItemAt(i - 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.y = y;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    }
+                } else {
+                    // horizontal alignment
+                    if ((<ISeadragonProvider>this.provider).isLeftToRight()){
+                        // left to right
+                        for (var i = 0; i < resources.length - 1; i++){
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            x = pageBounds.x + pageBounds.width;
+                            nextPage = this.viewer.world.getItemAt(i + 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.x = x;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    } else {
+                        // right to left
+                        for (var i = resources.length - 1; i > 0; i--){
+                            page = this.viewer.world.getItemAt(i);
+                            pageBounds = page.getBounds(true);
+                            x = pageBounds.x - pageBounds.width;
+                            nextPage = this.viewer.world.getItemAt(i - 1);
+                            nextPagePos = nextPage.getBounds(true).getTopLeft();
+                            nextPagePos.x = x;
+                            nextPage.setPosition(nextPagePos, true);
+                        }
+                    }
+                }
             }
         }
     }
@@ -356,7 +429,10 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }
 
-        if (this.provider.isMultiCanvas()) {
+        if (this.provider.isMultiCanvas() && !(<ISeadragonProvider>this.provider).isContinuous()) {
+
+            this.showPrevButton();
+            this.showNextButton();
 
             $('.navigator').addClass('extraMargin');
 
@@ -380,7 +456,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     goHome(): void {
-        var viewingDirection = this.provider.getViewingDirection().toString();
+        var viewingDirection: string = this.provider.getViewingDirection().toString();
 
         switch (viewingDirection.toString()){
             case manifesto.ViewingDirection.topToBottom().toString() :
@@ -393,24 +469,44 @@ class SeadragonCenterPanel extends CenterPanel {
         }
     }
 
-    disablePrevButton () {
+    disablePrevButton(): void {
         this.prevButtonEnabled = false;
         this.$leftButton.addClass('disabled');
     }
 
-    enablePrevButton () {
+    enablePrevButton(): void {
         this.prevButtonEnabled = true;
         this.$leftButton.removeClass('disabled');
     }
 
-    disableNextButton () {
+    hidePrevButton(): void {
+        this.disablePrevButton();
+        this.$leftButton.hide();
+    }
+
+    showPrevButton(): void {
+        this.enablePrevButton();
+        this.$leftButton.show();
+    }
+
+    disableNextButton(): void {
         this.nextButtonEnabled = false;
         this.$rightButton.addClass('disabled');
     }
 
-    enableNextButton () {
+    enableNextButton(): void {
         this.nextButtonEnabled = true;
         this.$rightButton.removeClass('disabled');
+    }
+
+    hideNextButton(): void {
+        this.disableNextButton();
+        this.$rightButton.hide();
+    }
+
+    showNextButton(): void {
+        this.enableNextButton();
+        this.$rightButton.show();
     }
 
     serialiseBounds(bounds): string{
@@ -550,6 +646,19 @@ class SeadragonCenterPanel extends CenterPanel {
             this.$leftButton.css('top', (this.$content.height() - this.$leftButton.height()) / 2);
             this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
         }
+
+        // stretch navigator, allowing time for OSD to resize
+        setTimeout(() => {
+            if ((<ISeadragonProvider>this.provider).isContinuous()){
+                if ((<ISeadragonProvider>this.provider).isHorizontallyAligned()){
+                    var width: number = this.$viewer.width() - this.$viewer.rightMargin();
+                    console.log(width);
+                    this.$navigator.width(width);
+                } else {
+                    this.$navigator.height(this.$viewer.height());
+                }
+            }
+        }, 100);
     }
 
     setFocus(): void {

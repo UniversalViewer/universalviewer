@@ -98,36 +98,48 @@ declare module Manifesto {
 declare module Manifesto {
     class ServiceProfile extends StringValue {
         static AUTOCOMPLETE: ServiceProfile;
-        static CLICKTHROUGH: ServiceProfile;
+        static STANFORDIIIFIMAGECOMPLIANCE0: ServiceProfile;
         static STANFORDIIIFIMAGECOMPLIANCE1: ServiceProfile;
         static STANFORDIIIFIMAGECOMPLIANCE2: ServiceProfile;
+        static STANFORDIIIFIMAGECONFORMANCE0: ServiceProfile;
         static STANFORDIIIFIMAGECONFORMANCE1: ServiceProfile;
         static STANFORDIIIFIMAGECONFORMANCE2: ServiceProfile;
+        static STANFORDIIIF1IMAGECOMPLIANCE0: ServiceProfile;
         static STANFORDIIIF1IMAGECOMPLIANCE1: ServiceProfile;
         static STANFORDIIIF1IMAGECOMPLIANCE2: ServiceProfile;
+        static STANFORDIIIF1IMAGECONFORMANCE0: ServiceProfile;
         static STANFORDIIIF1IMAGECONFORMANCE1: ServiceProfile;
         static STANFORDIIIF1IMAGECONFORMANCE2: ServiceProfile;
         static IIIF1IMAGELEVEL0: ServiceProfile;
+        static IIIF1IMAGELEVEL0PROFILE: ServiceProfile;
         static IIIF1IMAGELEVEL1: ServiceProfile;
+        static IIIF1IMAGELEVEL1PROFILE: ServiceProfile;
         static IIIF1IMAGELEVEL2: ServiceProfile;
+        static IIIF1IMAGELEVEL2PROFILE: ServiceProfile;
         static IIIF2IMAGELEVEL0: ServiceProfile;
+        static IIIF2IMAGELEVEL0PROFILE: ServiceProfile;
         static IIIF2IMAGELEVEL1: ServiceProfile;
+        static IIIF2IMAGELEVEL1PROFILE: ServiceProfile;
         static IIIF2IMAGELEVEL2: ServiceProfile;
+        static IIIF2IMAGELEVEL2PROFILE: ServiceProfile;
         static IXIF: ServiceProfile;
         static LOGIN: ServiceProfile;
+        static CLICKTHROUGH: ServiceProfile;
+        static RESTRICTED: ServiceProfile;
         static LOGOUT: ServiceProfile;
         static OTHERMANIFESTATIONS: ServiceProfile;
         static SEARCHWITHIN: ServiceProfile;
         static TOKEN: ServiceProfile;
         static UIEXTENSIONS: ServiceProfile;
         autoComplete(): ServiceProfile;
-        clickThrough(): ServiceProfile;
         iiif1ImageLevel1(): ServiceProfile;
         iiif1ImageLevel2(): ServiceProfile;
         iiif2ImageLevel1(): ServiceProfile;
         iiif2ImageLevel2(): ServiceProfile;
         ixif(): ServiceProfile;
         login(): ServiceProfile;
+        clickThrough(): ServiceProfile;
+        restricted(): ServiceProfile;
         logout(): ServiceProfile;
         otherManifestations(): ServiceProfile;
         searchWithin(): ServiceProfile;
@@ -200,6 +212,7 @@ declare module Manifesto {
         ranges: IRange[];
         constructor(jsonld: any, options: IManifestoOptions);
         getImages(): IAnnotation[];
+        getIndex(): number;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
         getWidth(): number;
@@ -240,7 +253,8 @@ declare module Manifesto {
     class Manifest extends IIIFResource implements IManifest {
         index: number;
         rootRange: IRange;
-        private sequences;
+        private _ranges;
+        private _sequences;
         constructor(jsonld: any, options?: IManifestoOptions);
         private _getRootRange();
         private _getRangeById(id);
@@ -256,6 +270,7 @@ declare module Manifesto {
         getManifestType(): ManifestType;
         isMultiSequence(): boolean;
         getViewingDirection(): ViewingDirection;
+        getViewingHint(): ViewingHint;
     }
 }
 declare module Manifesto {
@@ -274,12 +289,13 @@ declare module Manifesto {
 }
 declare module Manifesto {
     class Range extends ManifestResource implements IRange {
+        canvases: ICanvas[];
         parentRange: Range;
         path: string;
         ranges: Range[];
         treeNode: ITreeNode;
         constructor(jsonld: any, options: IManifestoOptions);
-        getCanvases(): string[];
+        getCanvasIds(): string[];
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
     }
@@ -411,13 +427,19 @@ declare module Manifesto {
 }
 declare var http: any;
 declare var url: any;
+declare var manifesto: IManifesto;
 declare module Manifesto {
     class Utils {
         static getLocalisedValue(resource: any, locale: string): string;
         static loadResource(uri: string): Promise<string>;
-        static loadExternalResource(resource: IExternalResource, tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>, options?: IManifestoOptions): Promise<IExternalResource>;
-        static loadExternalResources(resources: IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>, options?: IManifestoOptions): Promise<IExternalResource[]>;
-        static authorize(resource: IExternalResource, tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>): Promise<IExternalResource>;
+        static loadExternalResource(resource: IExternalResource, tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, restricted: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource, rejectOnError: boolean) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>, options?: IManifestoOptions): Promise<IExternalResource>;
+        static createError(name: string, message: string): Error;
+        static createAuthorizationFailedError(): Error;
+        static createRestrictedError(): Error;
+        static createInternalServerError(message: string): Error;
+        static loadExternalResources(resources: IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, restricted: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource, rejectOnError: boolean) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>, options?: IManifestoOptions): Promise<IExternalResource[]>;
+        static authorize(resource: IExternalResource, tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, restricted: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource, rejectOnError: boolean) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>): Promise<IExternalResource>;
+        private static showAuthInteraction(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, resolve, reject);
         static getService(resource: any, profile: ServiceProfile | string): IService;
         static getServiceByReference(resource: any, id: string): any;
         static getServices(resource: any): IService[];
@@ -450,8 +472,10 @@ declare module Manifesto {
 declare module Manifesto {
     interface ICanvas extends IManifestResource {
         index: number;
+        ranges: IRange[];
         getHeight(): number;
         getImages(): IAnnotation[];
+        getIndex(): number;
         getThumbUri(width: number, height: number): string;
         getType(): CanvasType;
         getWidth(): number;
@@ -476,6 +500,7 @@ declare module Manifesto {
 declare module Manifesto {
     interface IExternalResource {
         clickThroughService: IService;
+        restrictedService: IService;
         data: any;
         dataUri: string;
         error: any;
@@ -525,6 +550,7 @@ declare module Manifesto {
         getTree(): ITreeNode;
         getManifestType(): ManifestType;
         getViewingDirection(): Manifesto.ViewingDirection;
+        getViewingHint(): ViewingHint;
         isMultiSequence(): boolean;
         rootRange: IRange;
     }
@@ -550,13 +576,17 @@ interface IManifesto {
     getTreeNode(): Manifesto.ITreeNode;
     IIIFResourceType: Manifesto.IIIFResourceType;
     isImageProfile(profile: Manifesto.ServiceProfile): boolean;
-    loadExternalResources: (resources: Manifesto.IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource, tokenStorageStrategy: string) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
+    isLevel0ImageProfile(profile: Manifesto.ServiceProfile): boolean;
+    isLevel1ImageProfile(profile: Manifesto.ServiceProfile): boolean;
+    isLevel2ImageProfile(profile: Manifesto.ServiceProfile): boolean;
+    loadExternalResources: (resources: Manifesto.IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, restricted: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource, rejectOnError: boolean) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource, tokenStorageStrategy: string) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
     loadManifest: (uri: string) => Promise<string>;
     ManifestType: Manifesto.ManifestType;
     RenderingFormat: Manifesto.RenderingFormat;
     ResourceFormat: Manifesto.ResourceFormat;
     ResourceType: Manifesto.ResourceType;
     ServiceProfile: Manifesto.ServiceProfile;
+    StatusCodes: Manifesto.IStatusCodes;
     TreeNodeType: Manifesto.TreeNodeType;
     ViewingDirection: Manifesto.ViewingDirection;
     ViewingHint: Manifesto.ViewingHint;
@@ -572,7 +602,7 @@ declare module Manifesto {
 }
 declare module Manifesto {
     interface IRange extends IManifestResource {
-        getCanvases(): string[];
+        getCanvasIds(): string[];
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
         parentRange: IRange;
@@ -624,6 +654,14 @@ declare module Manifesto {
     interface IService extends IManifestResource {
         getProfile(): ServiceProfile;
         getInfoUri(): string;
+    }
+}
+declare module Manifesto {
+    interface IStatusCodes {
+        AUTHORIZATION_FAILED: number;
+        FORBIDDEN: number;
+        INTERNAL_SERVER_ERROR: number;
+        RESTRICTED: number;
     }
 }
 declare module Manifesto {

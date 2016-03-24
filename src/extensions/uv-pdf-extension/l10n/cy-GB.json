@@ -3,8 +3,11 @@
     "label": "Cymraeg"
   },
   "content": {
+    "authCORSError": "Eich porwr yn peidio cefnogi CORS, os gwelwch yn dda uwchraddio i weld y cynnwys hwn.",
+    "authorisationFailedMessage": "Nid oedd yn ymddangos eich ymgais mewngofnodi i fod yn llwyddiannus . Trio eto os gwelwch yn dda.",
     "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
-    "degradedResourceLogin": "Mewngofnodi"
+    "degradedResourceLogin": "Mewngofnodi",
+    "forbiddenResourceMessage": "Eich hawliau mynediad presennol yn annigonol i weld llun hwn"
   },
   "modules": {
     "dialogue": {
@@ -53,7 +56,8 @@
     },
     "loginDialogue": {
       "content": {
-        "login": "Mewngofnodi"
+        "login": "Mewngofnodi",
+        "cancel": "Diddymu"
       }
     },
     "moreInfoRightPanel": {
@@ -82,7 +86,7 @@
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
       }
     },
-    "treeViewLeftPanel": {
+    "contentLeftPanel": {
       "content": {
         "collapse": "Cuddio'r Cynnwys",
         "collapseFull": "Cuddio'r Galeri",

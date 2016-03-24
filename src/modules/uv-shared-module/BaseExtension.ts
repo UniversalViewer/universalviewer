@@ -3,6 +3,7 @@ import BaseProvider = require("./BaseProvider");
 import BootStrapper = require("../../Bootstrapper");
 import BootstrapParams = require("../../BootstrapParams");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
+import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
 import ExternalResource = require("./ExternalResource");
 import IExtension = require("./IExtension");
 import Information = require("./Information");
@@ -13,15 +14,20 @@ import IProvider = require("./IProvider");
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import Params = require("../../Params");
 import Shell = require("./Shell");
+import IAccessToken = Manifesto.IAccessToken;
+import ILoginDialogueOptions = require("./ILoginDialogueOptions");
+import LoginWarningMessages = require("./LoginWarningMessages");
 
 class BaseExtension implements IExtension {
 
     $clickThroughDialogue: JQuery;
+    $restrictedDialogue: JQuery;
     $element: JQuery;
     $loginDialogue: JQuery;
     bootstrapper: BootStrapper;
     canvasIndex: number;
     clickThroughDialogue: ClickThroughDialogue;
+    restrictedDialogue: RestrictedDialogue;
     embedHeight: number;
     embedWidth: number;
     extensions: any;
@@ -126,20 +132,22 @@ class BaseExtension implements IExtension {
 
                 var event: string = null;
 
-                if (e.keyCode === KeyCodes.KeyDown.Enter) event = BaseCommands.RETURN;
-                if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseCommands.ESCAPE;
-                if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseCommands.PAGE_UP;
-                if (e.keyCode === KeyCodes.KeyDown.PageDown) event = BaseCommands.PAGE_DOWN;
-                if (e.keyCode === KeyCodes.KeyDown.End) event = BaseCommands.END;
-                if (e.keyCode === KeyCodes.KeyDown.Home) event = BaseCommands.HOME;
-                if (e.keyCode === KeyCodes.KeyDown.NumpadPlus || e.keyCode === 171 || e.keyCode === KeyCodes.KeyDown.Equals) event = BaseCommands.PLUS;
-                if (e.keyCode === KeyCodes.KeyDown.NumpadMinus || e.keyCode === 173 || e.keyCode === KeyCodes.KeyDown.Dash) event = BaseCommands.MINUS;
+                if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
+                    if (e.keyCode === KeyCodes.KeyDown.Enter) event = BaseCommands.RETURN;
+                    if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseCommands.ESCAPE;
+                    if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseCommands.PAGE_UP;
+                    if (e.keyCode === KeyCodes.KeyDown.PageDown) event = BaseCommands.PAGE_DOWN;
+                    if (e.keyCode === KeyCodes.KeyDown.End) event = BaseCommands.END;
+                    if (e.keyCode === KeyCodes.KeyDown.Home) event = BaseCommands.HOME;
+                    if (e.keyCode === KeyCodes.KeyDown.NumpadPlus || e.keyCode === 171 || e.keyCode === KeyCodes.KeyDown.Equals) event = BaseCommands.PLUS;
+                    if (e.keyCode === KeyCodes.KeyDown.NumpadMinus || e.keyCode === 173 || e.keyCode === KeyCodes.KeyDown.Dash) event = BaseCommands.MINUS;
 
-                if (that.useArrowKeysToNavigate()) {
-                    if (e.keyCode === KeyCodes.KeyDown.LeftArrow) event = BaseCommands.LEFT_ARROW;
-                    if (e.keyCode === KeyCodes.KeyDown.UpArrow) event = BaseCommands.UP_ARROW;
-                    if (e.keyCode === KeyCodes.KeyDown.RightArrow) event = BaseCommands.RIGHT_ARROW;
-                    if (e.keyCode === KeyCodes.KeyDown.DownArrow) event = BaseCommands.DOWN_ARROW;
+                    if (that.useArrowKeysToNavigate()) {
+                        if (e.keyCode === KeyCodes.KeyDown.LeftArrow) event = BaseCommands.LEFT_ARROW;
+                        if (e.keyCode === KeyCodes.KeyDown.UpArrow) event = BaseCommands.UP_ARROW;
+                        if (e.keyCode === KeyCodes.KeyDown.RightArrow) event = BaseCommands.RIGHT_ARROW;
+                        if (e.keyCode === KeyCodes.KeyDown.DownArrow) event = BaseCommands.DOWN_ARROW;
+                    }
                 }
 
                 if (event){
@@ -165,6 +173,11 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
             this.triggerSocket(BaseCommands.ACCEPT_TERMS);
+        });
+
+        $.subscribe(BaseCommands.AUTHORIZATION_FAILED, () => {
+            this.triggerSocket(BaseCommands.AUTHORIZATION_FAILED);
+            this.showMessage(this.provider.config.content.authorisationFailedMessage);
         });
 
         $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
@@ -223,6 +236,15 @@ class BaseExtension implements IExtension {
             if (this.isFullScreen() && !this.isOverlayActive()) {
                 $.publish(BaseCommands.TOGGLE_FULLSCREEN);
             }
+        });
+
+        $.subscribe(BaseCommands.FEEDBACK, () => {
+            this.feedback();
+        });
+
+        $.subscribe(BaseCommands.FORBIDDEN, () => {
+            this.triggerSocket(BaseCommands.FORBIDDEN);
+            $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
         });
 
         $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, () => {
@@ -360,10 +382,6 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.SETTINGS_CHANGED, args);
         });
 
-        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE);
-        });
-
         $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, () => {
             this.triggerSocket(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
@@ -390,6 +408,14 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.SHOW_LOGIN_DIALOGUE, () => {
             this.triggerSocket(BaseCommands.SHOW_LOGIN_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_RESTRICTED_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.SHOW_RESTRICTED_DIALOGUE);
         });
 
         $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
@@ -451,6 +477,10 @@ class BaseExtension implements IExtension {
         this.$clickThroughDialogue = $('<div class="overlay clickthrough"></div>');
         Shell.$overlays.append(this.$clickThroughDialogue);
         this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
+
+        this.$restrictedDialogue = $('<div class="overlay login"></div>');
+        Shell.$overlays.append(this.$restrictedDialogue);
+        this.restrictedDialogue = new RestrictedDialogue(this.$restrictedDialogue);
 
         this.$loginDialogue = $('<div class="overlay login"></div>');
         Shell.$overlays.append(this.$loginDialogue);
@@ -624,6 +654,7 @@ class BaseExtension implements IExtension {
                 resourcesToLoad,
                 storageStrategy,
                 this.clickThrough,
+                this.restricted,
                 this.login,
                 this.getAccessToken,
                 this.storeAccessToken,
@@ -633,8 +664,20 @@ class BaseExtension implements IExtension {
                         return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
                     });
                     resolve(this.provider.resources);
-                })['catch']((errorMessage) => {
-                this.showMessage(errorMessage);
+                })['catch']((error: any) => {
+                    switch(error.name){
+                        case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
+                            $.publish(BaseCommands.AUTHORIZATION_FAILED);
+                            break;
+                        case manifesto.StatusCodes.FORBIDDEN.toString():
+                            $.publish(BaseCommands.FORBIDDEN);
+                            break;
+                        case manifesto.StatusCodes.RESTRICTED.toString():
+                            // do nothing
+                            break;
+                        default:
+                            this.showMessage(error.message || error);
+                    }
             });
         });
     }
@@ -714,16 +757,34 @@ class BaseExtension implements IExtension {
         this.provider.reload(p);
     }
 
+    viewCollection(collection: Manifesto.ICollection): void{
+        var p = new BootstrapParams();
+        p.manifestUri = this.provider.manifestUri;
+        p.collectionIndex = collection.index;
+        p.manifestIndex = 0;
+        p.sequenceIndex = 0;
+        p.canvasIndex = 0;
+
+        this.provider.reload(p);
+    }
+
     isFullScreen(): boolean {
         return this.bootstrapper.isFullScreen;
     }
 
-    isLeftPanelEnabled(): boolean{
-        return  Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
-            && this.provider.isMultiCanvas();
+    isLeftPanelEnabled(): boolean {
+        if (Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)){
+            if (this.provider.isMultiCanvas()){
+                if (this.provider.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
-    isRightPanelEnabled(): boolean{
+    isRightPanelEnabled(): boolean {
         return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
@@ -733,6 +794,10 @@ class BaseExtension implements IExtension {
 
     bookmark(): void {
         // override for each extension
+    }
+
+    feedback(): void {
+        this.triggerSocket(BaseCommands.FEEDBACK, new BootstrapParams());
     }
 
     getBookmarkUri(): string {
@@ -769,8 +834,28 @@ class BaseExtension implements IExtension {
         });
     }
 
+    restricted(resource: Manifesto.IExternalResource): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+
+            $.publish(BaseCommands.SHOW_RESTRICTED_DIALOGUE, [{
+                resource: resource,
+                acceptCallback: () => {
+                    $.publish(BaseCommands.LOAD_FAILED);
+                    reject(resource);
+                }
+            }]);
+        });
+    }
+
     login(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
+
+            var options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
+
+            if (resource.status === HTTPStatusCode.FORBIDDEN){
+                options.warningMessage = LoginWarningMessages.FORBIDDEN;
+                options.showCancelButton = true;
+            }
 
             $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
@@ -783,21 +868,30 @@ class BaseExtension implements IExtension {
                             resolve();
                         }
                     }, 500);
-                }
+                },
+                options: options
             }]);
         });
     }
 
-    getAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken> {
+    getAccessToken(resource: Manifesto.IExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
             $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
                 if (token.error){
-                    reject(token.errorDescription);
+                    if(rejectOnError) {
+                        reject(token.errorDescription);
+                    } else {
+                        resolve(null);
+                    }
                 } else {
                     resolve(token);
                 }
             }).fail((error) => {
-                reject(error);
+                if(rejectOnError) {
+                    reject(error);
+                } else {
+                    resolve(null);
+                }
             });
         });
     }
@@ -813,13 +907,19 @@ class BaseExtension implements IExtension {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
-            var foundToken: Manifesto.IAccessToken;
+            var foundItems: storage.StorageItem[] = [];
+
+            var item: storage.StorageItem;
+            // try to match on the tokenService, if the resource has one:
+            if(resource.tokenService) {
+                item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(storageStrategy));
+            }
 
             // first try an exact match of the url
-            var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
+            //var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
 
             if (item){
-                foundToken = item.value;
+                foundItems.push(item);
             } else {
                 // find an access token for the domain
                 var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
@@ -830,9 +930,20 @@ class BaseExtension implements IExtension {
                     item = items[i];
 
                     if(item.key.contains(domain)) {
-                        foundToken = item.value;
+                        foundItems.push(item);
                     }
                 }
+            }
+
+            // sort by expiresAt
+            foundItems = _.sortBy(foundItems, (item: storage.StorageItem) => {
+                return item.expiresAt;
+            });
+
+            var foundToken: IAccessToken;
+
+            if (foundItems.length){
+                foundToken = <Manifesto.IAccessToken>foundItems.last().value
             }
 
             resolve(foundToken);
@@ -850,16 +961,22 @@ class BaseExtension implements IExtension {
                 resolve(resource);
                 $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
             } else {
+
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
-                    resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR){
+                    resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR) {
                     // if the browser doesn't support CORS
-                    if (!Modernizr.cors){
-                        var informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
+                    if (!Modernizr.cors) {
+                        var informationArgs:InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
                         $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
                         resolve(resource);
                     } else {
                         reject(resource.error.statusText);
                     }
+                } else if (resource.error.status === HTTPStatusCode.FORBIDDEN){
+                    var error: Error = new Error();
+                    error.message = "Forbidden";
+                    error.name = manifesto.StatusCodes.FORBIDDEN.toString();
+                    reject(error);
                 } else {
                     reject(resource.error.statusText);
                 }
