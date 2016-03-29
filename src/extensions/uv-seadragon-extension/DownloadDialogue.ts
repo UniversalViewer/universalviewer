@@ -107,7 +107,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                         $.publish(Commands.ENTER_MULTISELECT_MODE, [this.content.downloadSelectionButton]);
                         break;
                     case DownloadOption.wholeImageHighRes.toString():
-                        window.open(this.getOriginalImageForCurrentCanvas());
+                        window.open(this.getHighResImageUriForCurrentCanvas());
                         $.publish(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
                         break;
                     case DownloadOption.wholeImageLowResAsJpg.toString():
@@ -279,9 +279,10 @@ class DownloadDialogue extends BaseDownloadDialogue {
         return null;
     }
 
-    getOriginalImageForCurrentCanvas() {
-        var resource = this.getCurrentCanvasImageResource();
-        return resource ? resource.id : null;
+    getHighResImageUriForCurrentCanvas(): string {
+        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+
+        return canvas.getCanonicalImageUri();
     }
 
     getMimeTypeForCurrentCanvas() {
@@ -290,28 +291,35 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getDimensionsForCurrentCanvas(): Size {
-        var image = this.getCurrentCanvasImageResource();
+        var currentCanvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+
         var size = new Size(0, 0);
 
-        if (!image) return size;
+        size.width = currentCanvas.externalResource.data.width;
+        size.height = currentCanvas.externalResource.data.height;
 
-        size.width = image.getWidth();
-        size.height = image.getHeight();
-
-        var maxWidth: number = image.getMaxWidth();
-        var maxHeight: number = image.getMaxHeight();
-
-        var configMaxWidth: number = this.options.maxImageWidth;
-
-        if (maxWidth){
-
-            if (configMaxWidth){
-                maxWidth = Math.min(maxWidth, configMaxWidth);
-            }
-
-            size.width = Math.min(size.width, maxWidth);
-            size.height = Math.min(size.height, maxHeight);
-        }
+        //var image = this.getCurrentCanvasImageResource();
+        //var size = new Size(0, 0);
+        //
+        //if (!image) return size;
+        //
+        //size.width = image.getWidth();
+        //size.height = image.getHeight();
+        //
+        //var maxWidth: number = image.getMaxWidth();
+        //var maxHeight: number = image.getMaxHeight();
+        //
+        //var configMaxWidth: number = this.options.maxImageWidth;
+        //
+        //if (maxWidth){
+        //
+        //    if (configMaxWidth){
+        //        maxWidth = Math.min(maxWidth, configMaxWidth);
+        //    }
+        //
+        //    size.width = Math.min(size.width, maxWidth);
+        //    size.height = Math.min(size.height, maxHeight);
+        //}
 
         return size;
     }

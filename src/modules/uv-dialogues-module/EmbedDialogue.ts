@@ -247,7 +247,7 @@ class EmbedDialogue extends Dialogue {
         var thumbnail = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !_.isString(thumbnail)){
-            thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+            thumbnail = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
         }
 
         this.$link.attr('href', thumbnail);

@@ -701,6 +701,7 @@ define('modules/uv-shared-module/ExternalResource',["require", "exports"], funct
     var ExternalResource = (function () {
         function ExternalResource(resource, dataUriFunc) {
             this.isResponseHandled = false;
+            resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
             this._parseAuthServices(resource);
             //this.profile = (<Manifesto.IService>resource).getProfile();
@@ -1501,7 +1502,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             var canvas = this.provider.getCurrentCanvas();
             var thumbnail = canvas.getProperty('thumbnail');
             if (!thumbnail || !_.isString(thumbnail)) {
-                thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+                thumbnail = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
             }
             preview.image = thumbnail;
             return preview;
@@ -2163,7 +2164,7 @@ define('modules/uv-dialogues-module/EmbedDialogue',["require", "exports", "../uv
             var canvas = this.provider.getCurrentCanvas();
             var thumbnail = canvas.getProperty('thumbnail');
             if (!thumbnail || !_.isString(thumbnail)) {
-                thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+                thumbnail = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
             }
             this.$link.attr('href', thumbnail);
             this.$image.attr('src', thumbnail);
@@ -3318,7 +3319,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.11';
+    exports.Version = '1.7.12';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -3984,12 +3985,14 @@ define('modules/uv-contentleftpanel-module/ThumbsView',["require", "exports", ".
             var extraHeight = this.options.thumbsExtraHeight;
             $.views.helpers({
                 separator: function () {
-                    var viewingDirection = that.provider.getViewingDirection().toString();
-                    if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
+                    if (that.provider.isVerticallyAligned()) {
                         return true; // one thumb per line
                     }
                     // two thumbs per line
-                    return ((this.data.index - 1) % 2 == 0) ? false : true;
+                    if (that.provider.isPaged()) {
+                        return ((this.data.index - 1) % 2 == 0) ? false : true;
+                    }
+                    return false;
                 },
                 extraHeight: function () {
                     return extraHeight;
@@ -4015,7 +4018,7 @@ define('modules/uv-contentleftpanel-module/ThumbsView',["require", "exports", ".
             // use unevent to detect scroll stop.
             this.$element.on('scroll', function () {
                 _this.scrollStop();
-            }, 1000);
+            }, 100);
             this.resize();
         };
         ThumbsView.prototype.dataBind = function () {
@@ -5854,7 +5857,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                             $.publish(Commands.ENTER_MULTISELECT_MODE, [_this.content.downloadSelectionButton]);
                             break;
                         case DownloadOption.wholeImageHighRes.toString():
-                            window.open(_this.getOriginalImageForCurrentCanvas());
+                            window.open(_this.getHighResImageUriForCurrentCanvas());
                             $.publish(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
                             break;
                         case DownloadOption.wholeImageLowResAsJpg.toString():
@@ -6007,31 +6010,41 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             }
             return null;
         };
-        DownloadDialogue.prototype.getOriginalImageForCurrentCanvas = function () {
-            var resource = this.getCurrentCanvasImageResource();
-            return resource ? resource.id : null;
+        DownloadDialogue.prototype.getHighResImageUriForCurrentCanvas = function () {
+            var canvas = this.provider.getCurrentCanvas();
+            return canvas.getCanonicalImageUri();
         };
         DownloadDialogue.prototype.getMimeTypeForCurrentCanvas = function () {
             var resource = this.getCurrentCanvasImageResource();
             return resource ? resource.getFormat().toString() : null;
         };
         DownloadDialogue.prototype.getDimensionsForCurrentCanvas = function () {
-            var image = this.getCurrentCanvasImageResource();
+            var currentCanvas = this.provider.getCurrentCanvas();
             var size = new Size(0, 0);
-            if (!image)
-                return size;
-            size.width = image.getWidth();
-            size.height = image.getHeight();
-            var maxWidth = image.getMaxWidth();
-            var maxHeight = image.getMaxHeight();
-            var configMaxWidth = this.options.maxImageWidth;
-            if (maxWidth) {
-                if (configMaxWidth) {
-                    maxWidth = Math.min(maxWidth, configMaxWidth);
-                }
-                size.width = Math.min(size.width, maxWidth);
-                size.height = Math.min(size.height, maxHeight);
-            }
+            size.width = currentCanvas.externalResource.data.width;
+            size.height = currentCanvas.externalResource.data.height;
+            //var image = this.getCurrentCanvasImageResource();
+            //var size = new Size(0, 0);
+            //
+            //if (!image) return size;
+            //
+            //size.width = image.getWidth();
+            //size.height = image.getHeight();
+            //
+            //var maxWidth: number = image.getMaxWidth();
+            //var maxHeight: number = image.getMaxHeight();
+            //
+            //var configMaxWidth: number = this.options.maxImageWidth;
+            //
+            //if (maxWidth){
+            //
+            //    if (configMaxWidth){
+            //        maxWidth = Math.min(maxWidth, configMaxWidth);
+            //    }
+            //
+            //    size.width = Math.min(size.width, maxWidth);
+            //    size.height = Math.min(size.height, maxHeight);
+            //}
             return size;
         };
         DownloadDialogue.prototype.isDownloadOptionAvailable = function (option) {
@@ -7814,7 +7827,6 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 _this.triggerSocket(Commands.GALLERY_THUMB_SELECTED);
             });
             $.subscribe(BaseCommands.HOME, function (e) {
-                ;
                 _this.viewPage(_this.provider.getFirstPageIndex());
             });
             $.subscribe(Commands.IMAGE_SEARCH, function (e, index) {
@@ -7834,7 +7846,6 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                 }
             });
             $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, function (e) {
-                ;
                 Shell.$centerPanel.show();
                 Shell.$rightPanel.show();
                 _this.resize();
@@ -8155,7 +8166,7 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             bookmark.index = this.provider.canvasIndex;
             bookmark.label = canvas.getLabel();
             bookmark.path = this.provider.getCroppedImageUri(canvas, this.getViewer());
-            bookmark.thumb = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+            bookmark.thumb = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
             bookmark.title = this.provider.getTitle();
             bookmark.type = manifesto.ElementType.image().toString();
             this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
@@ -9705,6 +9716,47 @@ var Manifesto;
         function Canvas(jsonld, options) {
             _super.call(this, jsonld, options);
         }
+        Canvas.prototype.getCanonicalImageUri = function (w) {
+            var id;
+            var region = 'full';
+            var rotation = 0;
+            var quality = 'default';
+            var width = w;
+            var size;
+            // if an info.json has been loaded
+            if (this.externalResource && this.externalResource.data) {
+                id = this.externalResource.data['@id'];
+                if (!width) {
+                    width = this.externalResource.data.width;
+                }
+                if (this.externalResource.data['@context'].indexOf('/1.0/context.json') > -1 ||
+                    this.externalResource.data['@context'].indexOf('/1.1/context.json') > -1 ||
+                    this.externalResource.data['@context'].indexOf('/1/context.json') > -1) {
+                    quality = 'native';
+                }
+            }
+            else {
+                // info.json hasn't been loaded yet
+                var images = this.getImages();
+                if (images && images.length) {
+                    var firstImage = images[0];
+                    var resource = firstImage.getResource();
+                    var services = resource.getServices();
+                    if (!width) {
+                        width = resource.getWidth();
+                    }
+                    var service = services[0];
+                    id = service.id;
+                    quality = Manifesto.Utils.getImageQuality(service.getProfile());
+                }
+                else {
+                    return null;
+                }
+            }
+            size = width + ',';
+            var uri = [id, region, size, rotation, quality + '.jpg'].join('/');
+            return uri;
+        };
         Canvas.prototype.getImages = function () {
             var images = [];
             if (!this.__jsonld.images)
@@ -9721,44 +9773,31 @@ var Manifesto;
         };
         // todo: Prefer thumbnail service to image service if supplied and if
         // todo: the thumbnail service can provide a satisfactory size +/- x pixels.
-        Canvas.prototype.getThumbUri = function (width, height) {
-            var uri;
-            var images = this.getImages();
-            if (images && images.length) {
-                var firstImage = images[0];
-                var resource = firstImage.getResource();
-                var services = resource.getServices();
-                for (var i = 0; i < services.length; i++) {
-                    var service = services[i];
-                    var profile = service.getProfile().toString();
-                    var id = service.id;
-                    if (!_endsWith(id, '/')) {
-                        id += '/';
-                    }
-                    if (profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1PROFILE.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2PROFILE.toString()) {
-                        uri = id + 'full/' + width + ',' + height + '/0/native.jpg';
-                    }
-                    else if (profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1PROFILE.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2PROFILE.toString()) {
-                        uri = id + 'full/' + width + ',' + height + '/0/default.jpg';
-                    }
-                }
-            }
-            return uri;
-        };
+        // this is used to get thumb URIs for databinding *before* the info.json has been requested
+        //getThumbUri(width: number): string {
+        //
+        //    var uri;
+        //    var images: IAnnotation[] = this.getImages();
+        //
+        //    if (images && images.length) {
+        //        var firstImage = images[0];
+        //        var resource: IResource = firstImage.getResource();
+        //        var services: IService[] = resource.getServices();
+        //
+        //        for (var i = 0; i < services.length; i++) {
+        //            var service: IService = services[i];
+        //            var id = service.id;
+        //
+        //            if (!_endsWith(id, '/')) {
+        //                id += '/';
+        //            }
+        //
+        //            uri = id + 'full/' + width + ',/0/' + Utils.getImageQuality(service.getProfile()) + '.jpg';
+        //        }
+        //    }
+        //
+        //    return uri;
+        //}
         Canvas.prototype.getType = function () {
             return new Manifesto.CanvasType(this.getProperty('@type').toLowerCase());
         };
@@ -10496,7 +10535,7 @@ var Manifesto;
             if (heightRatio) {
                 this.height = Math.floor(this.width * heightRatio);
             }
-            this.uri = canvas.getThumbUri(width, this.height);
+            this.uri = canvas.getCanonicalImageUri(width);
             this.label = canvas.getLabel();
         }
         return Thumb;
@@ -10559,6 +10598,24 @@ var Manifesto;
     var Utils = (function () {
         function Utils() {
         }
+        Utils.getImageQuality = function (profile) {
+            var p = profile.toString();
+            if (p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1PROFILE.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2PROFILE.toString()) {
+                return 'native';
+            }
+            return 'default';
+        };
         Utils.getLocalisedValue = function (resource, locale) {
             // if the resource is not an array of translations, return the string.
             if (!_isArray(resource)) {
