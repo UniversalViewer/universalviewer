@@ -265,7 +265,7 @@ class MoreInfoRightPanel extends RightPanel {
 
         $elem.addClass(item.label.toCssClass());
 
-        if (Utils.Clipboard.SupportsCopy() && $text.text() && $header.text())
+        if (this.config.options.showCopyToClipboard && Utils.Clipboard.SupportsCopy() && $text.text() && $header.text())
             this.addCopyButton($elem, $header);
         
         return $elem;
