@@ -1418,6 +1418,7 @@ declare module Utils {
 declare module Utils {
     class Device {
         static GetPixelRatio(ctx: CanvasRenderingContext2D): number;
+        static isTouch(): boolean;
     }
 }
 declare module Utils {

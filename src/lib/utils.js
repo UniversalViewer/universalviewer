@@ -2640,6 +2640,9 @@ var Utils;
                 ctx.backingStorePixelRatio || 1;
             return dpr / bsr;
         };
+        Device.isTouch = function () {
+            return !!("ontouchstart" in window) || window.navigator.msMaxTouchPoints > 0;
+        };
         return Device;
     })();
     Utils.Device = Device;

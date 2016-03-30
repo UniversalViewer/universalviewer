@@ -275,7 +275,7 @@ class MoreInfoRightPanel extends RightPanel {
         var $copyBtn = this.copyTextTemplate.clone();
         var $copiedText = $copyBtn.children();
         $header.append($copyBtn);
-        if (this.isTouch()) {
+        if (Utils.Device.isTouch()) {
             $copyBtn.show();
         }
         else {

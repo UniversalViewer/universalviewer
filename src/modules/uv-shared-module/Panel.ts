@@ -34,10 +34,6 @@ class Panel {
 
         this.isResized = true;
     }
-    
-   isTouch(): boolean {
-        return !!("ontouchstart" in window) || window.navigator.msMaxTouchPoints > 0;
-   }    
 }
 
 export = Panel;
