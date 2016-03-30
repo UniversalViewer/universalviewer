@@ -720,6 +720,47 @@ var Manifesto;
         function Canvas(jsonld, options) {
             _super.call(this, jsonld, options);
         }
+        Canvas.prototype.getCanonicalImageUri = function (w) {
+            var id;
+            var region = 'full';
+            var rotation = 0;
+            var quality = 'default';
+            var width = w;
+            var size;
+            // if an info.json has been loaded
+            if (this.externalResource && this.externalResource.data) {
+                id = this.externalResource.data['@id'];
+                if (!width) {
+                    width = this.externalResource.data.width;
+                }
+                if (this.externalResource.data['@context'].indexOf('/1.0/context.json') > -1 ||
+                    this.externalResource.data['@context'].indexOf('/1.1/context.json') > -1 ||
+                    this.externalResource.data['@context'].indexOf('/1/context.json') > -1) {
+                    quality = 'native';
+                }
+            }
+            else {
+                // info.json hasn't been loaded yet
+                var images = this.getImages();
+                if (images && images.length) {
+                    var firstImage = images[0];
+                    var resource = firstImage.getResource();
+                    var services = resource.getServices();
+                    if (!width) {
+                        width = resource.getWidth();
+                    }
+                    var service = services[0];
+                    id = service.id;
+                    quality = Manifesto.Utils.getImageQuality(service.getProfile());
+                }
+                else {
+                    return null;
+                }
+            }
+            size = width + ',';
+            var uri = [id, region, size, rotation, quality + '.jpg'].join('/');
+            return uri;
+        };
         Canvas.prototype.getImages = function () {
             var images = [];
             if (!this.__jsonld.images)
@@ -731,46 +772,36 @@ var Manifesto;
             }
             return images;
         };
-        // todo: Prefer thumbnail service to image service if supplied and if
-        // the thumbnail service can provide a satisfactory size +/- x pixels.
-        Canvas.prototype.getThumbUri = function (width, height) {
-            var uri;
-            var images = this.getImages();
-            if (images && images.length) {
-                var firstImage = images[0];
-                var resource = firstImage.getResource();
-                var services = resource.getServices();
-                for (var i = 0; i < services.length; i++) {
-                    var service = services[i];
-                    var profile = service.getProfile().toString();
-                    var id = service.id;
-                    if (!_endsWith(id, '/')) {
-                        id += '/';
-                    }
-                    if (profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1PROFILE.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2PROFILE.toString()) {
-                        uri = id + 'full/' + width + ',' + height + '/0/native.jpg';
-                    }
-                    else if (profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1PROFILE.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2PROFILE.toString()) {
-                        uri = id + 'full/' + width + ',' + height + '/0/default.jpg';
-                    }
-                }
-            }
-            return uri;
+        Canvas.prototype.getIndex = function () {
+            return this.getProperty('index');
         };
+        // todo: Prefer thumbnail service to image service if supplied and if
+        // todo: the thumbnail service can provide a satisfactory size +/- x pixels.
+        // this is used to get thumb URIs for databinding *before* the info.json has been requested
+        //getThumbUri(width: number): string {
+        //
+        //    var uri;
+        //    var images: IAnnotation[] = this.getImages();
+        //
+        //    if (images && images.length) {
+        //        var firstImage = images[0];
+        //        var resource: IResource = firstImage.getResource();
+        //        var services: IService[] = resource.getServices();
+        //
+        //        for (var i = 0; i < services.length; i++) {
+        //            var service: IService = services[i];
+        //            var id = service.id;
+        //
+        //            if (!_endsWith(id, '/')) {
+        //                id += '/';
+        //            }
+        //
+        //            uri = id + 'full/' + width + ',/0/' + Utils.getImageQuality(service.getProfile()) + '.jpg';
+        //        }
+        //    }
+        //
+        //    return uri;
+        //}
         Canvas.prototype.getType = function () {
             return new Manifesto.CanvasType(this.getProperty('@type').toLowerCase());
         };
@@ -1508,7 +1539,7 @@ var Manifesto;
             if (heightRatio) {
                 this.height = Math.floor(this.width * heightRatio);
             }
-            this.uri = canvas.getThumbUri(width, this.height);
+            this.uri = canvas.getCanonicalImageUri(width);
             this.label = canvas.getLabel();
         }
         return Thumb;
@@ -1571,6 +1602,24 @@ var Manifesto;
     var Utils = (function () {
         function Utils() {
         }
+        Utils.getImageQuality = function (profile) {
+            var p = profile.toString();
+            if (p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1PROFILE.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2PROFILE.toString()) {
+                return 'native';
+            }
+            return 'default';
+        };
         Utils.getLocalisedValue = function (resource, locale) {
             // if the resource is not an array of translations, return the string.
             if (!_isArray(resource)) {

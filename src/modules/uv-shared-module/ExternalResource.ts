@@ -12,6 +12,7 @@ class ExternalResource implements Manifesto.IExternalResource {
     public tokenService: Manifesto.IService;
 
     constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string) {
+        resource.externalResource = this;
         this.dataUri = dataUriFunc(resource);
         this._parseAuthServices(resource);
         //this.profile = (<Manifesto.IService>resource).getProfile();

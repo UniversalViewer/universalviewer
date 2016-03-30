@@ -27,7 +27,10 @@
       {
         "elideCount": 40,
         "expandFullEnabled": true,
+        "galleryThumbChunkedResizingEnabled": true,
+        "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
+        "galleryThumbLoadPadding": 3,
         "galleryThumbWidth": 200,
         "oneColThumbHeight": 320,
         "oneColThumbWidth": 200,
@@ -53,7 +56,7 @@
       "options":
       {
         "confinedImageSize": 1000,
-        "maxImageWidth": 1000,
+        "maxImageWidth": 5000,
         "selectionEnabled": false
       }
     },
@@ -104,6 +107,7 @@
     {
       "options":
       {
+        "autoCompleteBoxEnabled": true,
         "imageSelectionBoxEnabled": false,
         "localeToggleEnabled": false,
         "pageModeEnabled": true,

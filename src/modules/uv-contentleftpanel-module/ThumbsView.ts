@@ -75,12 +75,15 @@ class ThumbsView extends BaseView {
 
         $.views.helpers({
             separator: function(){
-                var viewingDirection = that.provider.getViewingDirection().toString();
-                if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
+                if ((<ISeadragonProvider>that.provider).isVerticallyAligned()){
                     return true; // one thumb per line
                 }
                 // two thumbs per line
-                return ((this.data.index -1) % 2 == 0) ? false : true;
+                if ((<ISeadragonProvider>that.provider).isPaged()) {
+                    return ((this.data.index - 1) % 2 == 0) ? false : true;
+                }
+
+                return false;
             },
             extraHeight: function(){
                 return extraHeight;
@@ -111,7 +114,7 @@ class ThumbsView extends BaseView {
         // use unevent to detect scroll stop.
         this.$element.on('scroll', () => {
             this.scrollStop();
-        }, 1000);
+        }, 100);
 
         this.resize();
     }

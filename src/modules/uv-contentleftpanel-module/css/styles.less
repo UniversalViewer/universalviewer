@@ -330,18 +330,57 @@
                         overflow: hidden;
                         position: relative;
 
+                        // all thumb spacing-related styles
+
+                        &.multiSelect{
+                            .thumb {
+                                .wrap {
+                                    &.multiSelected {
+                                        border: 2px solid @brand-primary;
+                                    }
+                                }
+                            }
+                        }
+
                         .thumb{
                             margin: 0 7px 7px 0;
-                            float: left;
-                            cursor: pointer;
-                            //max-height: 200px;
 
                             .wrap{
                                 border: 2px solid @panel-border-color;
                                 padding: 2px;
-                                //max-height: 200px;
+                            }
+
+                            &.selected{
+                                .wrap{
+                                    border: 2px solid #fff;
+                                }
+                            }
+
+                            &.searchpreview{
+                                .wrap{
+                                    border: 2px solid @link-color;
+                                }
+                            }
+
+                            &.outsideScrollArea{
+
+                                .wrap{
+                                    border: 2px solid transparent;
+                                    //border: 2px solid red;
+                                }
+                            }
+
+                            span{
+                                padding: 2px 0 0 0;
+                            }
+                        }
+
+                        .thumb{
+                            float: left;
+                            cursor: pointer;
+
+                            .wrap{
                                 overflow: hidden;
-                                //width: 98px;
                                 text-align: center;
                                 background: none;
 
@@ -368,25 +407,10 @@
                                 }
                             }
 
-                            &.selected{
-
-                                .wrap{
-                                    border: 2px solid #fff;
-                                }
-                            }
-
-                            &.searchpreview{
-
-                                .wrap{
-                                    border: 2px solid @link-color;
-                                }
-                            }
-
                             span{
                                 font-size: @font-size-small;
                                 color: #fff;
                                 display: block;
-                                padding: 2px 0 0 0;
                             }
 
                             .label {
@@ -400,13 +424,26 @@
                                     background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
                                 }
                             }
+
+                            &.outsideScrollArea{
+
+                                .wrap{
+                                    img{
+                                        display: none;
+                                    }
+                                }
+
+                                span{
+                                    color: transparent;
+                                    //color: red;
+                                }
+                            }
                         }
 
                         &.multiSelect{
                             .thumb {
                                 .wrap {
                                     &.multiSelected {
-                                        border: 2px solid @brand-primary;
                                         background: @brand-primary;
 
                                         .thumbImage {
