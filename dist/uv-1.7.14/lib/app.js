@@ -424,7 +424,6 @@ define('modules/uv-shared-module/BaseView',["require", "exports", "./Panel"], fu
             _super.call(this, $element, fitToParentWidth, fitToParentHeight);
         }
         BaseView.prototype.create = function () {
-            var _this = this;
             _super.prototype.create.call(this);
             this.extension = this.bootstrapper.extension;
             this.provider = this.extension.provider;
@@ -433,11 +432,12 @@ define('modules/uv-shared-module/BaseView',["require", "exports", "./Panel"], fu
             this.config.options = {};
             this.content = this.config.content;
             this.options = this.config.options;
+            var that = this;
             // build config inheritance chain
-            if (this.modules.length) {
-                this.modules = this.modules.reverse();
-                _.each(this.modules, function (moduleName) {
-                    _this.config = $.extend(true, _this.config, _this.provider.config.modules[moduleName]);
+            if (that.modules.length) {
+                that.modules = that.modules.reverse();
+                _.each(that.modules, function (moduleName) {
+                    that.config = $.extend(true, that.config, that.provider.config.modules[moduleName]);
                 });
             }
         };
@@ -1870,21 +1870,6 @@ define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "..
             // hide
             this.$element.hide();
         };
-        DownloadDialogue.prototype.simplifyMimeType = function (mime) {
-            switch (mime) {
-                case 'text/plain':
-                    return 'txt';
-                case 'image/jpeg':
-                    return 'jpg';
-                case 'application/msword':
-                    return 'doc';
-                case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                    return 'docx';
-                default:
-                    var parts = mime.split('/');
-                    return parts[parts.length - 1];
-            }
-        };
         DownloadDialogue.prototype.addEntireFileDownloadOption = function (rendering) {
             var fileUri = rendering.id;
             var label = rendering.getLabel();
@@ -1896,7 +1881,7 @@ define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "..
             }
             var fileType;
             if (rendering.getFormat()) {
-                fileType = this.simplifyMimeType(rendering.getFormat().toString());
+                fileType = Utils.Files.SimplifyMimeType(rendering.getFormat().toString());
             }
             else {
                 fileType = this.getFileExtension(fileUri);
@@ -2716,7 +2701,7 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
             var that = this;
             // events.
             // only full screen video
-            if (this.extension.isVideo()) {
+            if (this.provider.isVideo()) {
                 $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, function (e) {
                     if (that.bootstrapper.isFullScreen) {
                         that.$container.css('backgroundColor', '#000');
@@ -2755,7 +2740,7 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
                         src: rendering.id
                     });
                 });
-                if (_this.extension.isVideo()) {
+                if (_this.provider.isVideo()) {
                     _this.media = _this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
                     _this.player = new MediaElementPlayer("#" + id, {
                         type: ['video/mp4', 'video/webm', 'video/flv'],
@@ -3319,7 +3304,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.13';
+    exports.Version = '1.7.14';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -3402,6 +3387,854 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define('extensions/uv-mediaelement-extension/SettingsDialogue',["require", "exports", "../../modules/uv-dialogues-module/SettingsDialogue"], function (require, exports, BaseSettingsDialogue) {
+    var SettingsDialogue = (function (_super) {
+        __extends(SettingsDialogue, _super);
+        function SettingsDialogue($element) {
+            _super.call(this, $element);
+        }
+        SettingsDialogue.prototype.create = function () {
+            this.setConfig('settingsDialogue');
+            _super.prototype.create.call(this);
+        };
+        return SettingsDialogue;
+    })(BaseSettingsDialogue);
+    return SettingsDialogue;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('modules/uv-shared-module/LeftPanel',["require", "exports", "./BaseCommands", "./BaseExpandPanel"], function (require, exports, BaseCommands, BaseExpandPanel) {
+    var LeftPanel = (function (_super) {
+        __extends(LeftPanel, _super);
+        function LeftPanel($element) {
+            _super.call(this, $element);
+        }
+        LeftPanel.prototype.create = function () {
+            _super.prototype.create.call(this);
+            this.$element.width(this.options.panelCollapsedWidth);
+        };
+        LeftPanel.prototype.init = function () {
+            _super.prototype.init.call(this);
+            if (this.options.panelOpen) {
+                this.toggle(true);
+            }
+        };
+        LeftPanel.prototype.getTargetWidth = function () {
+            if (this.isFullyExpanded || !this.isExpanded) {
+                return this.options.panelExpandedWidth;
+            }
+            else {
+                return this.options.panelCollapsedWidth;
+            }
+        };
+        LeftPanel.prototype.getFullTargetWidth = function () {
+            return this.$element.parent().width();
+        };
+        LeftPanel.prototype.toggleFinish = function () {
+            _super.prototype.toggleFinish.call(this);
+            if (this.isExpanded) {
+                $.publish(BaseCommands.OPEN_LEFT_PANEL);
+            }
+            else {
+                $.publish(BaseCommands.CLOSE_LEFT_PANEL);
+            }
+        };
+        LeftPanel.prototype.resize = function () {
+            _super.prototype.resize.call(this);
+            if (this.isFullyExpanded) {
+                this.$element.width(this.$element.parent().width());
+            }
+        };
+        return LeftPanel;
+    })(BaseExpandPanel);
+    return LeftPanel;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('modules/uv-resourcesleftpanel-module/ResourcesLeftPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/LeftPanel"], function (require, exports, BaseCommands, LeftPanel) {
+    var ResourcesLeftPanel = (function (_super) {
+        __extends(ResourcesLeftPanel, _super);
+        function ResourcesLeftPanel($element) {
+            _super.call(this, $element);
+        }
+        ResourcesLeftPanel.prototype.create = function () {
+            this.setConfig('resourcesLeftPanel');
+            _super.prototype.create.call(this);
+            this.$expandButton.attr('tabindex', '7');
+            this.$collapseButton.attr('tabindex', '7');
+            this.$expandFullButton.attr('tabindex', '8');
+            this.setTitle(this.content.title);
+            this.$resources = $('<ul></ul>');
+            this.$main.append(this.$resources);
+            this.dataBind();
+        };
+        ResourcesLeftPanel.prototype.dataBind = function () {
+            var annotations = this.provider.getResources();
+            for (var i = 0; i < annotations.length; i++) {
+                var annotation = annotations[i];
+                var resource = annotation.getResource();
+                var $listItem = $('<li><a href="' + resource.id + '" target="_blank">' + resource.getLabel() + ' (' + Utils.Files.SimplifyMimeType(resource.getFormat().toString()) + ')' + '</li>');
+                this.$resources.append($listItem);
+            }
+        };
+        ResourcesLeftPanel.prototype.expandFullStart = function () {
+            _super.prototype.expandFullStart.call(this);
+            $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+        };
+        ResourcesLeftPanel.prototype.expandFullFinish = function () {
+            _super.prototype.expandFullFinish.call(this);
+            $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
+        };
+        ResourcesLeftPanel.prototype.collapseFullStart = function () {
+            _super.prototype.collapseFullStart.call(this);
+            $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
+        };
+        ResourcesLeftPanel.prototype.collapseFullFinish = function () {
+            _super.prototype.collapseFullFinish.call(this);
+            $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        };
+        ResourcesLeftPanel.prototype.resize = function () {
+            _super.prototype.resize.call(this);
+            this.$resources.height(this.$main.height());
+        };
+        return ResourcesLeftPanel;
+    })(LeftPanel);
+    return ResourcesLeftPanel;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-dialogues-module/HelpDialogue", "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, Commands, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, HelpDialogue, MediaElementCenterPanel, MoreInfoRightPanel, SettingsDialogue, Shell, ResourcesLeftPanel) {
+    var Extension = (function (_super) {
+        __extends(Extension, _super);
+        function Extension(bootstrapper) {
+            _super.call(this, bootstrapper);
+        }
+        Extension.prototype.create = function (overrideDependencies) {
+            var _this = this;
+            _super.prototype.create.call(this, overrideDependencies);
+            // listen for mediaelement enter/exit fullscreen events.
+            $(window).bind('enterfullscreen', function () {
+                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
+            });
+            $(window).bind('exitfullscreen', function () {
+                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
+            });
+            $.subscribe(BaseCommands.THUMB_SELECTED, function (e, canvasIndex) {
+                _this.viewCanvas(canvasIndex);
+            });
+            $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, function (e) {
+                Shell.$centerPanel.hide();
+                Shell.$rightPanel.hide();
+            });
+            $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, function (e) {
+                Shell.$centerPanel.show();
+                Shell.$rightPanel.show();
+                _this.resize();
+            });
+            $.subscribe(Commands.MEDIA_ENDED, function (e) {
+                _this.triggerSocket(Commands.MEDIA_ENDED);
+            });
+            $.subscribe(Commands.MEDIA_PAUSED, function (e) {
+                _this.triggerSocket(Commands.MEDIA_PAUSED);
+            });
+            $.subscribe(Commands.MEDIA_PLAYED, function (e) {
+                _this.triggerSocket(Commands.MEDIA_PLAYED);
+            });
+        };
+        Extension.prototype.createModules = function () {
+            _super.prototype.createModules.call(this);
+            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+            if (this.isLeftPanelEnabled()) {
+                this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
+            }
+            this.centerPanel = new MediaElementCenterPanel(Shell.$centerPanel);
+            if (this.isRightPanelEnabled()) {
+                this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            }
+            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.$helpDialogue = $('<div class="overlay help"></div>');
+            Shell.$overlays.append(this.$helpDialogue);
+            this.helpDialogue = new HelpDialogue(this.$helpDialogue);
+            this.$downloadDialogue = $('<div class="overlay download"></div>');
+            Shell.$overlays.append(this.$downloadDialogue);
+            this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
+            this.$embedDialogue = $('<div class="overlay embed"></div>');
+            Shell.$overlays.append(this.$embedDialogue);
+            this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+            this.$settingsDialogue = $('<div class="overlay settings"></div>');
+            Shell.$overlays.append(this.$settingsDialogue);
+            this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
+            if (this.isLeftPanelEnabled()) {
+                this.leftPanel.init();
+            }
+            if (this.isRightPanelEnabled()) {
+                this.rightPanel.init();
+            }
+        };
+        Extension.prototype.isLeftPanelEnabled = function () {
+            return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
+                && ((this.provider.isMultiCanvas() || this.provider.isMultiSequence()) || this.provider.hasResources());
+        };
+        Extension.prototype.bookmark = function () {
+            _super.prototype.bookmark.call(this);
+            var canvas = this.provider.getCurrentCanvas();
+            var bookmark = new Bookmark();
+            bookmark.index = this.provider.canvasIndex;
+            bookmark.label = canvas.getLabel();
+            bookmark.path = this.getBookmarkUri();
+            bookmark.thumb = canvas.getProperty('thumbnail');
+            bookmark.title = this.provider.getTitle();
+            if (this.provider.isVideo()) {
+                bookmark.type = manifesto.ElementType.movingimage().toString();
+            }
+            else {
+                bookmark.type = manifesto.ElementType.sound().toString();
+            }
+            this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        };
+        return Extension;
+    })(BaseExtension);
+    return Extension;
+});
+
+define('modules/uv-shared-module/UriLabeller',["require", "exports"], function (require, exports) {
+    // This class formats URIs into HTML <a> links, applying labels when available
+    var UriLabeller = (function () {
+        function UriLabeller(labels) {
+            this.labels = labels;
+        }
+        UriLabeller.prototype.format = function (url) {
+            // if already a link, do nothing.
+            if (url.indexOf('<a') != -1)
+                return url;
+            var label = this.labels[url] ? this.labels[url] : url;
+            return '<a href="' + url + '">' + label + '</a>';
+        };
+        return UriLabeller;
+    })();
+    return UriLabeller;
+});
+
+define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../BootstrapParams", "../../Params", "./UriLabeller"], function (require, exports, BootstrapParams, Params, UriLabeller) {
+    // providers contain methods that could be implemented differently according
+    // to factors like varying back end data provisioning systems.
+    // todo: expose the provider as an external API to the containing page.
+    var BaseProvider = (function () {
+        function BaseProvider(bootstrapper) {
+            this.options = {
+                thumbsUriTemplate: "{0}{1}",
+                timestampUris: false,
+                mediaUriTemplate: "{0}{1}"
+            };
+            this.bootstrapper = bootstrapper;
+            this.config = this.bootstrapper.config;
+            this.iiifResource = this.bootstrapper.iiifResource;
+            this.manifest = this.bootstrapper.manifest;
+            // get data-attributes that can't be overridden by hash params.
+            // other data-attributes are retrieved through extension.getParam.
+            // todo: make these getters when ES5 target is available
+            this.manifestUri = this.bootstrapper.params.manifestUri;
+            this.jsonp = this.bootstrapper.params.jsonp;
+            this.locale = this.bootstrapper.params.getLocaleName();
+            this.isHomeDomain = this.bootstrapper.params.isHomeDomain;
+            this.isReload = this.bootstrapper.params.isReload;
+            this.embedDomain = this.bootstrapper.params.embedDomain;
+            this.isOnlyInstance = this.bootstrapper.params.isOnlyInstance;
+            this.embedScriptUri = this.bootstrapper.params.embedScriptUri;
+            this.domain = this.bootstrapper.params.domain;
+            this.isLightbox = this.bootstrapper.params.isLightbox;
+            this.collectionIndex = this.bootstrapper.params.collectionIndex;
+            this.manifestIndex = this.bootstrapper.params.manifestIndex;
+            this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
+            this.canvasIndex = this.bootstrapper.params.canvasIndex;
+            this.licenseFormatter = new UriLabeller(this.config.license ? this.config.license : {});
+        }
+        // re-bootstraps the application with new querystring params
+        BaseProvider.prototype.reload = function (params) {
+            var p = new BootstrapParams();
+            if (params) {
+                p = $.extend(p, params);
+            }
+            p.isReload = true;
+            $.disposePubSub();
+            this.bootstrapper.bootStrap(p);
+        };
+        BaseProvider.prototype.getCollectionIndex = function (iiifResource) {
+            // todo: support nested collections. walk up parents adding to array and return csv string.
+            var index;
+            if (iiifResource.parentCollection) {
+                index = iiifResource.parentCollection.index;
+            }
+            return index;
+        };
+        BaseProvider.prototype.getManifestType = function () {
+            var manifestType = this.manifest.getManifestType();
+            // default to monograph
+            if (manifestType.toString() === "") {
+                manifestType = manifesto.ManifestType.monograph();
+            }
+            return manifestType;
+        };
+        BaseProvider.prototype.getCanvasIndexParam = function () {
+            return this.bootstrapper.params.getParam(Params.canvasIndex);
+        };
+        BaseProvider.prototype.getSequenceIndexParam = function () {
+            return this.bootstrapper.params.getParam(Params.sequenceIndex);
+        };
+        BaseProvider.prototype.getElementType = function (element) {
+            if (!element) {
+                element = this.getCurrentCanvas();
+            }
+            return element.getType();
+        };
+        BaseProvider.prototype.getAttribution = function () {
+            return this.manifest.getAttribution();
+        };
+        BaseProvider.prototype.getLicense = function () {
+            return this.manifest.getLicense();
+        };
+        BaseProvider.prototype.getLogo = function () {
+            return this.manifest.getLogo();
+        };
+        BaseProvider.prototype.getTitle = function () {
+            return this.manifest.getTitle();
+        };
+        BaseProvider.prototype.getSeeAlso = function () {
+            return this.manifest.getSeeAlso();
+        };
+        BaseProvider.prototype.isMultiSequence = function () {
+            return this.manifest.isMultiSequence();
+        };
+        BaseProvider.prototype.getLastCanvasLabel = function (alphanumeric) {
+            return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
+        };
+        BaseProvider.prototype.isCanvasIndexOutOfRange = function (index) {
+            return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
+        };
+        BaseProvider.prototype.isTotalCanvasesEven = function () {
+            return this.getCurrentSequence().isTotalCanvasesEven();
+        };
+        BaseProvider.prototype.isFirstCanvas = function (index) {
+            return this.getCurrentSequence().isFirstCanvas(index);
+        };
+        BaseProvider.prototype.isLastCanvas = function (index) {
+            return this.getCurrentSequence().isLastCanvas(index);
+        };
+        BaseProvider.prototype.isSeeAlsoEnabled = function () {
+            return this.config.options.seeAlsoEnabled !== false;
+        };
+        BaseProvider.prototype.getCanvases = function () {
+            return this.getCurrentSequence().getCanvases();
+        };
+        BaseProvider.prototype.getCanvasById = function (id) {
+            return this.getCurrentSequence().getCanvasById(id);
+        };
+        BaseProvider.prototype.getCanvasesById = function (ids) {
+            var canvases = [];
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids[i];
+                canvases.push(this.getCanvasById(id));
+            }
+            return canvases;
+        };
+        BaseProvider.prototype.getCanvasByIndex = function (index) {
+            return this.getCurrentSequence().getCanvasByIndex(index);
+        };
+        BaseProvider.prototype.getSequenceByIndex = function (index) {
+            return this.manifest.getSequenceByIndex(index);
+        };
+        BaseProvider.prototype.getCanvasRange = function (canvas) {
+            // get ranges that contain the canvas id. return the last.
+            return this.getCanvasRanges(canvas).last();
+        };
+        BaseProvider.prototype.getCanvasRanges = function (canvas) {
+            if (canvas.ranges) {
+                return canvas.ranges;
+            }
+            else {
+                canvas.ranges = this.manifest.getRanges().en().where(function (range) { return (range.getCanvasIds().en().any(function (c) { return c === canvas.id; })); }).toArray();
+            }
+            return canvas.ranges;
+        };
+        BaseProvider.prototype.getCurrentCanvas = function () {
+            return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
+        };
+        BaseProvider.prototype.getCurrentSequence = function () {
+            return this.getSequenceByIndex(this.sequenceIndex);
+        };
+        BaseProvider.prototype.getRangeCanvases = function (range) {
+            var ids = range.getCanvasIds();
+            return this.getCanvasesById(ids);
+        };
+        BaseProvider.prototype.getTotalCanvases = function () {
+            return this.getCurrentSequence().getTotalCanvases();
+        };
+        BaseProvider.prototype.isMultiCanvas = function () {
+            return this.getCurrentSequence().isMultiCanvas();
+        };
+        BaseProvider.prototype.getInfoUri = function (canvas) {
+            // default to IxIF
+            var service = canvas.getService(manifesto.ServiceProfile.ixif());
+            if (service) {
+                return service.getInfoUri();
+            }
+            // return the canvas id.
+            return canvas.id;
+        };
+        BaseProvider.prototype.getPagedIndices = function (canvasIndex) {
+            if (typeof (canvasIndex) === 'undefined')
+                canvasIndex = this.canvasIndex;
+            return [canvasIndex];
+        };
+        BaseProvider.prototype.getViewingDirection = function () {
+            var viewingDirection = this.getCurrentSequence().getViewingDirection();
+            if (!viewingDirection.toString()) {
+                viewingDirection = this.manifest.getViewingDirection();
+            }
+            return viewingDirection;
+        };
+        BaseProvider.prototype.getViewingHint = function () {
+            var viewingHint = this.getCurrentSequence().getViewingHint();
+            if (!viewingHint.toString()) {
+                viewingHint = this.manifest.getViewingHint();
+            }
+            return viewingHint;
+        };
+        BaseProvider.prototype.getFirstPageIndex = function () {
+            return 0;
+        };
+        BaseProvider.prototype.getLastPageIndex = function () {
+            return this.getTotalCanvases() - 1;
+        };
+        BaseProvider.prototype.getStartCanvasIndex = function () {
+            return this.getCurrentSequence().getStartCanvasIndex();
+        };
+        BaseProvider.prototype.getShareUrl = function () {
+            if (Utils.Documents.IsInIFrame()) {
+                return parent.document.location.href;
+            }
+            return document.location.href;
+        };
+        BaseProvider.prototype.addTimestamp = function (uri) {
+            return uri + "?t=" + Utils.Dates.GetTimeStamp();
+        };
+        BaseProvider.prototype.isDeepLinkingEnabled = function () {
+            return (this.isHomeDomain && this.isOnlyInstance);
+        };
+        BaseProvider.prototype.getThumbs = function (width, height) {
+            return this.getCurrentSequence().getThumbs(width, height);
+        };
+        BaseProvider.prototype.getRangeByPath = function (path) {
+            return this.manifest.getRangeByPath(path);
+        };
+        BaseProvider.prototype.getCanvasIndexById = function (id) {
+            return this.getCurrentSequence().getCanvasIndexById(id);
+        };
+        BaseProvider.prototype.getCanvasIndexByLabel = function (label) {
+            var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
+            return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
+        };
+        BaseProvider.prototype.getRanges = function () {
+            return this.manifest.getRanges();
+        };
+        BaseProvider.prototype.getTree = function () {
+            return this.iiifResource.getTree();
+        };
+        BaseProvider.prototype.getDomain = function () {
+            var parts = Utils.Urls.GetUrlParts(this.manifestUri);
+            return parts.host;
+        };
+        BaseProvider.prototype.getEmbedDomain = function () {
+            return this.embedDomain;
+        };
+        BaseProvider.prototype.getMetadata = function () {
+            var result = [];
+            var metadata = this.manifest.getMetadata();
+            if (metadata) {
+                result.push({
+                    label: "metadata",
+                    value: metadata,
+                    isRootLevel: true
+                });
+            }
+            if (this.manifest.getDescription()) {
+                result.push({
+                    label: "description",
+                    value: this.manifest.getDescription(),
+                    isRootLevel: true
+                });
+            }
+            if (this.manifest.getAttribution()) {
+                result.push({
+                    label: "attribution",
+                    value: this.manifest.getAttribution(),
+                    isRootLevel: true
+                });
+            }
+            if (this.manifest.getLicense()) {
+                result.push({
+                    label: "license",
+                    value: this.licenseFormatter.format(this.manifest.getLicense()),
+                    isRootLevel: true
+                });
+            }
+            if (this.manifest.getLogo()) {
+                result.push({
+                    label: "logo",
+                    value: '<img src="' + this.manifest.getLogo() + '"/>',
+                    isRootLevel: true
+                });
+            }
+            return result;
+        };
+        BaseProvider.prototype.getCanvasMetadata = function (canvas) {
+            var result = [];
+            var metadata = canvas.getMetadata();
+            if (metadata) {
+                result.push({
+                    label: "metadata",
+                    value: metadata,
+                    isRootLevel: true
+                });
+            }
+            return result;
+        };
+        BaseProvider.prototype.defaultToThumbsView = function () {
+            switch (this.getManifestType().toString()) {
+                case manifesto.ManifestType.monograph().toString():
+                    if (!this.isMultiSequence())
+                        return true;
+                    break;
+                case manifesto.ManifestType.manuscript().toString():
+                    if (!this.isMultiSequence())
+                        return true;
+                    break;
+            }
+            // todo: use rendering?
+            //var sequenceType = this.getSequenceType();
+            //
+            //switch (sequenceType){
+            //    case 'application-pdf':
+            //        return true;
+            //        break;
+            //}
+            return false;
+        };
+        BaseProvider.prototype.getSettings = function () {
+            if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
+                var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+                if (settings)
+                    return $.extend(this.config.options, settings.value);
+            }
+            return this.config.options;
+        };
+        BaseProvider.prototype.updateSettings = function (settings) {
+            if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
+                var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+                if (storedSettings)
+                    settings = $.extend(storedSettings.value, settings);
+                //store for ten years
+                Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
+            }
+            this.config.options = $.extend(this.config.options, settings);
+        };
+        BaseProvider.prototype.sanitize = function (html) {
+            var elem = document.createElement('div');
+            var $elem = $(elem);
+            $elem.html(html);
+            var s = new Sanitize({
+                elements: ['a', 'b', 'br', 'img', 'p', 'i', 'span'],
+                attributes: {
+                    a: ['href'],
+                    img: ['src', 'alt']
+                },
+                protocols: {
+                    a: { href: ['http', 'https'] }
+                }
+            });
+            $elem.html(s.clean_node(elem));
+            return $elem.html();
+        };
+        BaseProvider.prototype.getLocales = function () {
+            if (this.locales)
+                return this.locales;
+            // use data-locales to prioritise
+            var items = this.config.localisation.locales.clone();
+            var sorting = this.bootstrapper.params.locales;
+            var result = [];
+            // loop through sorting array
+            // if items contains sort item, add it to results.
+            // if sort item has a label, substitute it
+            // mark item as added.
+            // if limitLocales is disabled,
+            // loop through remaining items and add to results.
+            _.each(sorting, function (sortItem) {
+                var match = _.filter(items, function (item) { return item.name === sortItem.name; });
+                if (match.length) {
+                    var m = match[0];
+                    if (sortItem.label)
+                        m.label = sortItem.label;
+                    m.added = true;
+                    result.push(m);
+                }
+            });
+            var limitLocales = Utils.Bools.GetBool(this.config.options.limitLocales, false);
+            if (!limitLocales) {
+                _.each(items, function (item) {
+                    if (!item.added) {
+                        result.push(item);
+                    }
+                    delete item.added;
+                });
+            }
+            return this.locales = result;
+        };
+        BaseProvider.prototype.getAlternateLocale = function () {
+            var locales = this.getLocales();
+            var alternateLocale;
+            for (var i = 0; i < locales.length; i++) {
+                var l = locales[i];
+                if (l.name !== this.locale) {
+                    alternateLocale = l;
+                }
+            }
+            return l;
+        };
+        BaseProvider.prototype.changeLocale = function (locale) {
+            // if the current locale is "en-GB:English,cy-GB:Welsh"
+            // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
+            // re-order locales so the passed locale is first
+            var locales = this.locales.clone();
+            var index = locales.indexOfTest(function (l) {
+                return l.name === locale;
+            });
+            locales.move(index, 0);
+            // convert to comma-separated string
+            var str = this.serializeLocales(locales);
+            var p = new BootstrapParams();
+            p.setLocale(str);
+            this.reload(p);
+        };
+        BaseProvider.prototype.serializeLocales = function (locales) {
+            var str = '';
+            for (var i = 0; i < locales.length; i++) {
+                var l = locales[i];
+                if (i > 0)
+                    str += ',';
+                str += l.name;
+                if (l.label) {
+                    str += ':' + l.label;
+                }
+            }
+            return str;
+        };
+        BaseProvider.prototype.getSerializedLocales = function () {
+            return this.serializeLocales(this.locales);
+        };
+        return BaseProvider;
+    })();
+    return BaseProvider;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-mediaelement-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider"], function (require, exports, BaseProvider) {
+    var Provider = (function (_super) {
+        __extends(Provider, _super);
+        function Provider(bootstrapper) {
+            _super.call(this, bootstrapper);
+            this.config.options = $.extend(true, this.options, {}, bootstrapper.config.options);
+        }
+        Provider.prototype.getEmbedScript = function (template, width, height) {
+            var configUri = this.config.uri || '';
+            var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, width, height, this.embedScriptUri);
+            return script;
+        };
+        // todo: use canvas.getThumbnail()
+        Provider.prototype.getPosterImageUri = function () {
+            return this.getCurrentCanvas().getProperty('thumbnail');
+        };
+        Provider.prototype.getElement = function () {
+            return this.getCanvasByIndex(0);
+        };
+        Provider.prototype.getResources = function () {
+            var element = this.getElement();
+            return element.getResources();
+        };
+        Provider.prototype.hasResources = function () {
+            return this.getResources().length > 0;
+        };
+        Provider.prototype.isVideo = function () {
+            var elementType = this.getElementType();
+            return elementType.toString() === manifesto.ElementType.movingimage().toString();
+        };
+        return Provider;
+    })(BaseProvider);
+    return Provider;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-pdf-extension/DownloadDialogue',["require", "exports", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseDownloadDialogue, DownloadOption) {
+    var DownloadDialogue = (function (_super) {
+        __extends(DownloadDialogue, _super);
+        function DownloadDialogue($element) {
+            _super.call(this, $element);
+        }
+        DownloadDialogue.prototype.create = function () {
+            this.setConfig('downloadDialogue');
+            _super.prototype.create.call(this);
+        };
+        DownloadDialogue.prototype.open = function () {
+            var _this = this;
+            _super.prototype.open.call(this);
+            if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal)) {
+                this.$downloadOptions.empty();
+                // add each file src
+                var canvas = this.provider.getCurrentCanvas();
+                _.each(canvas.getRenderings(), function (rendering) {
+                    _this.addEntireFileDownloadOption(rendering);
+                });
+            }
+            if (!this.$downloadOptions.find('li:visible').length) {
+                this.$noneAvailable.show();
+            }
+            else {
+                // select first option.
+                this.$noneAvailable.hide();
+            }
+            this.resize();
+        };
+        DownloadDialogue.prototype.isDownloadOptionAvailable = function (option) {
+            switch (option) {
+                case DownloadOption.entireFileAsOriginal:
+                    return true;
+            }
+        };
+        return DownloadDialogue;
+    })(BaseDownloadDialogue);
+    return DownloadDialogue;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-pdf-extension/EmbedDialogue',["require", "exports", "../../modules/uv-dialogues-module/EmbedDialogue"], function (require, exports, BaseEmbedDialogue) {
+    var EmbedDialogue = (function (_super) {
+        __extends(EmbedDialogue, _super);
+        function EmbedDialogue($element) {
+            _super.call(this, $element);
+        }
+        EmbedDialogue.prototype.create = function () {
+            this.setConfig('embedDialogue');
+            _super.prototype.create.call(this);
+        };
+        EmbedDialogue.prototype.update = function () {
+            _super.prototype.update.call(this);
+            this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
+            this.$code.val(this.code);
+        };
+        EmbedDialogue.prototype.resize = function () {
+            _super.prototype.resize.call(this);
+        };
+        return EmbedDialogue;
+    })(BaseEmbedDialogue);
+    return EmbedDialogue;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/CenterPanel", "../../Params"], function (require, exports, BaseCommands, CenterPanel, Params) {
+    var PDFCenterPanel = (function (_super) {
+        __extends(PDFCenterPanel, _super);
+        function PDFCenterPanel($element) {
+            _super.call(this, $element);
+        }
+        PDFCenterPanel.prototype.create = function () {
+            var _this = this;
+            this.setConfig('pdfCenterPanel');
+            _super.prototype.create.call(this);
+            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
+                _this.openMedia(resources);
+            });
+        };
+        PDFCenterPanel.prototype.openMedia = function (resources) {
+            var _this = this;
+            var that = this;
+            this.extension.getExternalResources(resources).then(function () {
+                var canvas = _this.provider.getCurrentCanvas();
+                var pdfUri = canvas.id;
+                var browser = window.browserDetect.browser;
+                var version = window.browserDetect.version;
+                if ((browser === 'Explorer' && version < 10) || !_this.config.options.usePdfJs) {
+                    // create pdf object
+                    new PDFObject({
+                        url: pdfUri,
+                        id: "PDF"
+                    }).embed('content');
+                }
+                else {
+                    var viewerPath;
+                    // todo: use compiler conditional
+                    if (window.DEBUG) {
+                        viewerPath = 'modules/uv-pdfcenterpanel-module/html/viewer.html';
+                    }
+                    else {
+                        viewerPath = 'html/uv-pdfcenterpanel-module/viewer.html';
+                    }
+                    // load viewer.html
+                    _this.$content.load(viewerPath, function () {
+                        if (window.DEBUG) {
+                            PDFJS.workerSrc = 'extensions/uv-pdf-extension/lib/pdf.worker.min.js';
+                        }
+                        else {
+                            PDFJS.workerSrc = 'lib/pdf.worker.min.js';
+                        }
+                        PDFJS.DEFAULT_URL = pdfUri;
+                        var anchorIndex = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;
+                        PDFView.initialBookmark = "page=" + anchorIndex;
+                        window.webViewerLoad();
+                        _this.resize();
+                    });
+                }
+            });
+        };
+        PDFCenterPanel.prototype.resize = function () {
+            _super.prototype.resize.call(this);
+        };
+        return PDFCenterPanel;
+    })(CenterPanel);
+    return PDFCenterPanel;
+});
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define('extensions/uv-pdf-extension/SettingsDialogue',["require", "exports", "../../modules/uv-dialogues-module/SettingsDialogue"], function (require, exports, BaseSettingsDialogue) {
     var SettingsDialogue = (function (_super) {
         __extends(SettingsDialogue, _super);
         function SettingsDialogue($element) {
@@ -3885,58 +4718,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('modules/uv-shared-module/LeftPanel',["require", "exports", "./BaseCommands", "./BaseExpandPanel"], function (require, exports, BaseCommands, BaseExpandPanel) {
-    var LeftPanel = (function (_super) {
-        __extends(LeftPanel, _super);
-        function LeftPanel($element) {
-            _super.call(this, $element);
-        }
-        LeftPanel.prototype.create = function () {
-            _super.prototype.create.call(this);
-            this.$element.width(this.options.panelCollapsedWidth);
-        };
-        LeftPanel.prototype.init = function () {
-            _super.prototype.init.call(this);
-            if (this.options.panelOpen) {
-                this.toggle(true);
-            }
-        };
-        LeftPanel.prototype.getTargetWidth = function () {
-            if (this.isFullyExpanded || !this.isExpanded) {
-                return this.options.panelExpandedWidth;
-            }
-            else {
-                return this.options.panelCollapsedWidth;
-            }
-        };
-        LeftPanel.prototype.getFullTargetWidth = function () {
-            return this.$element.parent().width();
-        };
-        LeftPanel.prototype.toggleFinish = function () {
-            _super.prototype.toggleFinish.call(this);
-            if (this.isExpanded) {
-                $.publish(BaseCommands.OPEN_LEFT_PANEL);
-            }
-            else {
-                $.publish(BaseCommands.CLOSE_LEFT_PANEL);
-            }
-        };
-        LeftPanel.prototype.resize = function () {
-            _super.prototype.resize.call(this);
-            if (this.isFullyExpanded) {
-                this.$element.width(this.$element.parent().width());
-            }
-        };
-        return LeftPanel;
-    })(BaseExpandPanel);
-    return LeftPanel;
-});
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 define('modules/uv-contentleftpanel-module/ThumbsView',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/BaseView", "../../extensions/uv-seadragon-extension/Commands", "../../extensions/uv-seadragon-extension/Mode"], function (require, exports, BaseCommands, BaseView, Commands, Mode) {
     var ThumbsView = (function (_super) {
         __extends(ThumbsView, _super);
@@ -4111,7 +4892,7 @@ define('modules/uv-contentleftpanel-module/ThumbsView',["require", "exports", ".
         };
         ThumbsView.prototype.isPDF = function () {
             // todo: use constants
-            return (this.provider.getCanvasType().toString().contains("pdf"));
+            return (this.provider.getElementType().toString().contains("pdf"));
         };
         ThumbsView.prototype.setLabel = function () {
             if (this.isPDF()) {
@@ -4941,742 +5722,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./Commands", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-dialogues-module/HelpDialogue", "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-contentleftpanel-module/ContentLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, Commands, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, HelpDialogue, MediaElementCenterPanel, MoreInfoRightPanel, SettingsDialogue, Shell, ContentLeftPanel) {
-    var Extension = (function (_super) {
-        __extends(Extension, _super);
-        function Extension(bootstrapper) {
-            _super.call(this, bootstrapper);
-        }
-        Extension.prototype.create = function (overrideDependencies) {
-            var _this = this;
-            _super.prototype.create.call(this, overrideDependencies);
-            // listen for mediaelement enter/exit fullscreen events.
-            $(window).bind('enterfullscreen', function () {
-                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
-            });
-            $(window).bind('exitfullscreen', function () {
-                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
-            });
-            //$.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
-            //    this.viewManifest(data);
-            //});
-            $.subscribe(BaseCommands.THUMB_SELECTED, function (e, canvasIndex) {
-                _this.viewCanvas(canvasIndex);
-            });
-            $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, function (e) {
-                Shell.$centerPanel.hide();
-                Shell.$rightPanel.hide();
-            });
-            $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, function (e) {
-                Shell.$centerPanel.show();
-                Shell.$rightPanel.show();
-                _this.resize();
-            });
-            $.subscribe(Commands.MEDIA_ENDED, function (e) {
-                _this.triggerSocket(Commands.MEDIA_ENDED);
-            });
-            $.subscribe(Commands.MEDIA_PAUSED, function (e) {
-                _this.triggerSocket(Commands.MEDIA_PAUSED);
-            });
-            $.subscribe(Commands.MEDIA_PLAYED, function (e) {
-                _this.triggerSocket(Commands.MEDIA_PLAYED);
-            });
-        };
-        Extension.prototype.createModules = function () {
-            _super.prototype.createModules.call(this);
-            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
-            if (this.isLeftPanelEnabled()) {
-                this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
-            }
-            this.centerPanel = new MediaElementCenterPanel(Shell.$centerPanel);
-            if (this.isRightPanelEnabled()) {
-                this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
-            }
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
-            this.$helpDialogue = $('<div class="overlay help"></div>');
-            Shell.$overlays.append(this.$helpDialogue);
-            this.helpDialogue = new HelpDialogue(this.$helpDialogue);
-            this.$downloadDialogue = $('<div class="overlay download"></div>');
-            Shell.$overlays.append(this.$downloadDialogue);
-            this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
-            this.$embedDialogue = $('<div class="overlay embed"></div>');
-            Shell.$overlays.append(this.$embedDialogue);
-            this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
-            this.$settingsDialogue = $('<div class="overlay settings"></div>');
-            Shell.$overlays.append(this.$settingsDialogue);
-            this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
-            if (this.isLeftPanelEnabled()) {
-                this.leftPanel.init();
-            }
-            if (this.isRightPanelEnabled()) {
-                this.rightPanel.init();
-            }
-        };
-        Extension.prototype.isLeftPanelEnabled = function () {
-            return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
-                && (this.provider.isMultiCanvas() || this.provider.isMultiSequence());
-        };
-        Extension.prototype.bookmark = function () {
-            _super.prototype.bookmark.call(this);
-            var canvas = this.provider.getCurrentCanvas();
-            var bookmark = new Bookmark();
-            bookmark.index = this.provider.canvasIndex;
-            bookmark.label = canvas.getLabel();
-            bookmark.path = this.getBookmarkUri();
-            bookmark.thumb = canvas.getProperty('thumbnail');
-            bookmark.title = this.provider.getTitle();
-            if (this.isVideo()) {
-                bookmark.type = manifesto.ElementType.movingimage().toString();
-            }
-            else {
-                bookmark.type = manifesto.ElementType.sound().toString();
-            }
-            this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
-        };
-        Extension.prototype.getCanvasType = function () {
-            return this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
-        };
-        Extension.prototype.isVideo = function () {
-            var canvasType = this.getCanvasType();
-            return canvasType.toString() === manifesto.ElementType.movingimage().toString();
-        };
-        return Extension;
-    })(BaseExtension);
-    return Extension;
-});
-
-define('modules/uv-shared-module/UriLabeller',["require", "exports"], function (require, exports) {
-    // This class formats URIs into HTML <a> links, applying labels when available
-    var UriLabeller = (function () {
-        function UriLabeller(labels) {
-            this.labels = labels;
-        }
-        UriLabeller.prototype.format = function (url) {
-            // if already a link, do nothing.
-            if (url.indexOf('<a') != -1)
-                return url;
-            var label = this.labels[url] ? this.labels[url] : url;
-            return '<a href="' + url + '">' + label + '</a>';
-        };
-        return UriLabeller;
-    })();
-    return UriLabeller;
-});
-
-define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../BootstrapParams", "../../Params", "./UriLabeller"], function (require, exports, BootstrapParams, Params, UriLabeller) {
-    // providers contain methods that could be implemented differently according
-    // to factors like varying back end data provisioning systems.
-    // todo: expose the provider as an external API to the containing page.
-    var BaseProvider = (function () {
-        function BaseProvider(bootstrapper) {
-            this.options = {
-                thumbsUriTemplate: "{0}{1}",
-                timestampUris: false,
-                mediaUriTemplate: "{0}{1}"
-            };
-            this.bootstrapper = bootstrapper;
-            this.config = this.bootstrapper.config;
-            this.iiifResource = this.bootstrapper.iiifResource;
-            this.manifest = this.bootstrapper.manifest;
-            // get data-attributes that can't be overridden by hash params.
-            // other data-attributes are retrieved through extension.getParam.
-            // todo: make these getters when ES5 target is available
-            this.manifestUri = this.bootstrapper.params.manifestUri;
-            this.jsonp = this.bootstrapper.params.jsonp;
-            this.locale = this.bootstrapper.params.getLocaleName();
-            this.isHomeDomain = this.bootstrapper.params.isHomeDomain;
-            this.isReload = this.bootstrapper.params.isReload;
-            this.embedDomain = this.bootstrapper.params.embedDomain;
-            this.isOnlyInstance = this.bootstrapper.params.isOnlyInstance;
-            this.embedScriptUri = this.bootstrapper.params.embedScriptUri;
-            this.domain = this.bootstrapper.params.domain;
-            this.isLightbox = this.bootstrapper.params.isLightbox;
-            this.collectionIndex = this.bootstrapper.params.collectionIndex;
-            this.manifestIndex = this.bootstrapper.params.manifestIndex;
-            this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
-            this.canvasIndex = this.bootstrapper.params.canvasIndex;
-            this.licenseFormatter = new UriLabeller(this.config.license ? this.config.license : {});
-        }
-        // re-bootstraps the application with new querystring params
-        BaseProvider.prototype.reload = function (params) {
-            var p = new BootstrapParams();
-            if (params) {
-                p = $.extend(p, params);
-            }
-            p.isReload = true;
-            $.disposePubSub();
-            this.bootstrapper.bootStrap(p);
-        };
-        BaseProvider.prototype.getCollectionIndex = function (iiifResource) {
-            // todo: support nested collections. walk up parents adding to array and return csv string.
-            var index;
-            if (iiifResource.parentCollection) {
-                index = iiifResource.parentCollection.index;
-            }
-            return index;
-        };
-        BaseProvider.prototype.getManifestType = function () {
-            var manifestType = this.manifest.getManifestType();
-            // default to monograph
-            if (manifestType.toString() === "") {
-                manifestType = manifesto.ManifestType.monograph();
-            }
-            return manifestType;
-        };
-        BaseProvider.prototype.getCanvasIndexParam = function () {
-            return this.bootstrapper.params.getParam(Params.canvasIndex);
-        };
-        BaseProvider.prototype.getSequenceIndexParam = function () {
-            return this.bootstrapper.params.getParam(Params.sequenceIndex);
-        };
-        BaseProvider.prototype.getCanvasType = function (canvas) {
-            if (!canvas) {
-                canvas = this.getCurrentCanvas();
-            }
-            return canvas.getType();
-        };
-        BaseProvider.prototype.getAttribution = function () {
-            return this.manifest.getAttribution();
-        };
-        BaseProvider.prototype.getLicense = function () {
-            return this.manifest.getLicense();
-        };
-        BaseProvider.prototype.getLogo = function () {
-            return this.manifest.getLogo();
-        };
-        BaseProvider.prototype.getTitle = function () {
-            return this.manifest.getTitle();
-        };
-        BaseProvider.prototype.getSeeAlso = function () {
-            return this.manifest.getSeeAlso();
-        };
-        BaseProvider.prototype.isMultiSequence = function () {
-            return this.manifest.isMultiSequence();
-        };
-        BaseProvider.prototype.getLastCanvasLabel = function (alphanumeric) {
-            return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
-        };
-        BaseProvider.prototype.isCanvasIndexOutOfRange = function (index) {
-            return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
-        };
-        BaseProvider.prototype.isTotalCanvasesEven = function () {
-            return this.getCurrentSequence().isTotalCanvasesEven();
-        };
-        BaseProvider.prototype.isFirstCanvas = function (index) {
-            return this.getCurrentSequence().isFirstCanvas(index);
-        };
-        BaseProvider.prototype.isLastCanvas = function (index) {
-            return this.getCurrentSequence().isLastCanvas(index);
-        };
-        BaseProvider.prototype.isSeeAlsoEnabled = function () {
-            return this.config.options.seeAlsoEnabled !== false;
-        };
-        BaseProvider.prototype.getCanvases = function () {
-            return this.getCurrentSequence().getCanvases();
-        };
-        BaseProvider.prototype.getCanvasById = function (id) {
-            return this.getCurrentSequence().getCanvasById(id);
-        };
-        BaseProvider.prototype.getCanvasesById = function (ids) {
-            var canvases = [];
-            for (var i = 0; i < ids.length; i++) {
-                var id = ids[i];
-                canvases.push(this.getCanvasById(id));
-            }
-            return canvases;
-        };
-        BaseProvider.prototype.getCanvasByIndex = function (index) {
-            return this.getCurrentSequence().getCanvasByIndex(index);
-        };
-        BaseProvider.prototype.getSequenceByIndex = function (index) {
-            return this.manifest.getSequenceByIndex(index);
-        };
-        BaseProvider.prototype.getCanvasRange = function (canvas) {
-            // get ranges that contain the canvas id. return the last.
-            return this.getCanvasRanges(canvas).last();
-        };
-        BaseProvider.prototype.getCanvasRanges = function (canvas) {
-            if (canvas.ranges) {
-                return canvas.ranges;
-            }
-            else {
-                canvas.ranges = this.manifest.getRanges().en().where(function (range) { return (range.getCanvasIds().en().any(function (c) { return c === canvas.id; })); }).toArray();
-            }
-            return canvas.ranges;
-        };
-        BaseProvider.prototype.getCurrentCanvas = function () {
-            return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
-        };
-        BaseProvider.prototype.getCurrentSequence = function () {
-            return this.getSequenceByIndex(this.sequenceIndex);
-        };
-        BaseProvider.prototype.getRangeCanvases = function (range) {
-            var ids = range.getCanvasIds();
-            return this.getCanvasesById(ids);
-        };
-        BaseProvider.prototype.getTotalCanvases = function () {
-            return this.getCurrentSequence().getTotalCanvases();
-        };
-        BaseProvider.prototype.isMultiCanvas = function () {
-            return this.getCurrentSequence().isMultiCanvas();
-        };
-        BaseProvider.prototype.getInfoUri = function (canvas) {
-            // default to IxIF
-            var service = canvas.getService(manifesto.ServiceProfile.ixif());
-            if (service) {
-                return service.getInfoUri();
-            }
-            // return the canvas id.
-            return canvas.id;
-        };
-        BaseProvider.prototype.getPagedIndices = function (canvasIndex) {
-            if (typeof (canvasIndex) === 'undefined')
-                canvasIndex = this.canvasIndex;
-            return [canvasIndex];
-        };
-        BaseProvider.prototype.getViewingDirection = function () {
-            var viewingDirection = this.getCurrentSequence().getViewingDirection();
-            if (!viewingDirection.toString()) {
-                viewingDirection = this.manifest.getViewingDirection();
-            }
-            return viewingDirection;
-        };
-        BaseProvider.prototype.getViewingHint = function () {
-            var viewingHint = this.getCurrentSequence().getViewingHint();
-            if (!viewingHint.toString()) {
-                viewingHint = this.manifest.getViewingHint();
-            }
-            return viewingHint;
-        };
-        BaseProvider.prototype.getFirstPageIndex = function () {
-            return 0;
-        };
-        BaseProvider.prototype.getLastPageIndex = function () {
-            return this.getTotalCanvases() - 1;
-        };
-        BaseProvider.prototype.getStartCanvasIndex = function () {
-            return this.getCurrentSequence().getStartCanvasIndex();
-        };
-        BaseProvider.prototype.getShareUrl = function () {
-            if (Utils.Documents.IsInIFrame()) {
-                return parent.document.location.href;
-            }
-            return document.location.href;
-        };
-        BaseProvider.prototype.addTimestamp = function (uri) {
-            return uri + "?t=" + Utils.Dates.GetTimeStamp();
-        };
-        BaseProvider.prototype.isDeepLinkingEnabled = function () {
-            return (this.isHomeDomain && this.isOnlyInstance);
-        };
-        BaseProvider.prototype.getThumbs = function (width, height) {
-            return this.getCurrentSequence().getThumbs(width, height);
-        };
-        BaseProvider.prototype.getRangeByPath = function (path) {
-            return this.manifest.getRangeByPath(path);
-        };
-        BaseProvider.prototype.getCanvasIndexById = function (id) {
-            return this.getCurrentSequence().getCanvasIndexById(id);
-        };
-        BaseProvider.prototype.getCanvasIndexByLabel = function (label) {
-            var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
-            return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
-        };
-        BaseProvider.prototype.getRanges = function () {
-            return this.manifest.getRanges();
-        };
-        BaseProvider.prototype.getTree = function () {
-            return this.iiifResource.getTree();
-        };
-        BaseProvider.prototype.getDomain = function () {
-            var parts = Utils.Urls.GetUrlParts(this.manifestUri);
-            return parts.host;
-        };
-        BaseProvider.prototype.getEmbedDomain = function () {
-            return this.embedDomain;
-        };
-        BaseProvider.prototype.getMetadata = function () {
-            var result = [];
-            var metadata = this.manifest.getMetadata();
-            if (metadata) {
-                result.push({
-                    label: "metadata",
-                    value: metadata,
-                    isRootLevel: true
-                });
-            }
-            if (this.manifest.getDescription()) {
-                result.push({
-                    label: "description",
-                    value: this.manifest.getDescription(),
-                    isRootLevel: true
-                });
-            }
-            if (this.manifest.getAttribution()) {
-                result.push({
-                    label: "attribution",
-                    value: this.manifest.getAttribution(),
-                    isRootLevel: true
-                });
-            }
-            if (this.manifest.getLicense()) {
-                result.push({
-                    label: "license",
-                    value: this.licenseFormatter.format(this.manifest.getLicense()),
-                    isRootLevel: true
-                });
-            }
-            if (this.manifest.getLogo()) {
-                result.push({
-                    label: "logo",
-                    value: '<img src="' + this.manifest.getLogo() + '"/>',
-                    isRootLevel: true
-                });
-            }
-            return result;
-        };
-        BaseProvider.prototype.getCanvasMetadata = function (canvas) {
-            var result = [];
-            var metadata = canvas.getMetadata();
-            if (metadata) {
-                result.push({
-                    label: "metadata",
-                    value: metadata,
-                    isRootLevel: true
-                });
-            }
-            return result;
-        };
-        BaseProvider.prototype.defaultToThumbsView = function () {
-            switch (this.getManifestType().toString()) {
-                case manifesto.ManifestType.monograph().toString():
-                    if (!this.isMultiSequence())
-                        return true;
-                    break;
-                case manifesto.ManifestType.manuscript().toString():
-                    if (!this.isMultiSequence())
-                        return true;
-                    break;
-            }
-            // todo: use rendering?
-            //var sequenceType = this.getSequenceType();
-            //
-            //switch (sequenceType){
-            //    case 'application-pdf':
-            //        return true;
-            //        break;
-            //}
-            return false;
-        };
-        BaseProvider.prototype.getSettings = function () {
-            if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
-                var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
-                if (settings)
-                    return $.extend(this.config.options, settings.value);
-            }
-            return this.config.options;
-        };
-        BaseProvider.prototype.updateSettings = function (settings) {
-            if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
-                var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
-                if (storedSettings)
-                    settings = $.extend(storedSettings.value, settings);
-                //store for ten years
-                Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
-            }
-            this.config.options = $.extend(this.config.options, settings);
-        };
-        BaseProvider.prototype.sanitize = function (html) {
-            var elem = document.createElement('div');
-            var $elem = $(elem);
-            $elem.html(html);
-            var s = new Sanitize({
-                elements: ['a', 'b', 'br', 'img', 'p', 'i', 'span'],
-                attributes: {
-                    a: ['href'],
-                    img: ['src', 'alt']
-                },
-                protocols: {
-                    a: { href: ['http', 'https'] }
-                }
-            });
-            $elem.html(s.clean_node(elem));
-            return $elem.html();
-        };
-        BaseProvider.prototype.getLocales = function () {
-            if (this.locales)
-                return this.locales;
-            // use data-locales to prioritise
-            var items = this.config.localisation.locales.clone();
-            var sorting = this.bootstrapper.params.locales;
-            var result = [];
-            // loop through sorting array
-            // if items contains sort item, add it to results.
-            // if sort item has a label, substitute it
-            // mark item as added.
-            // if limitLocales is disabled,
-            // loop through remaining items and add to results.
-            _.each(sorting, function (sortItem) {
-                var match = _.filter(items, function (item) { return item.name === sortItem.name; });
-                if (match.length) {
-                    var m = match[0];
-                    if (sortItem.label)
-                        m.label = sortItem.label;
-                    m.added = true;
-                    result.push(m);
-                }
-            });
-            var limitLocales = Utils.Bools.GetBool(this.config.options.limitLocales, false);
-            if (!limitLocales) {
-                _.each(items, function (item) {
-                    if (!item.added) {
-                        result.push(item);
-                    }
-                    delete item.added;
-                });
-            }
-            return this.locales = result;
-        };
-        BaseProvider.prototype.getAlternateLocale = function () {
-            var locales = this.getLocales();
-            var alternateLocale;
-            for (var i = 0; i < locales.length; i++) {
-                var l = locales[i];
-                if (l.name !== this.locale) {
-                    alternateLocale = l;
-                }
-            }
-            return l;
-        };
-        BaseProvider.prototype.changeLocale = function (locale) {
-            // if the current locale is "en-GB:English,cy-GB:Welsh"
-            // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
-            // re-order locales so the passed locale is first
-            var locales = this.locales.clone();
-            var index = locales.indexOfTest(function (l) {
-                return l.name === locale;
-            });
-            locales.move(index, 0);
-            // convert to comma-separated string
-            var str = this.serializeLocales(locales);
-            var p = new BootstrapParams();
-            p.setLocale(str);
-            this.reload(p);
-        };
-        BaseProvider.prototype.serializeLocales = function (locales) {
-            var str = '';
-            for (var i = 0; i < locales.length; i++) {
-                var l = locales[i];
-                if (i > 0)
-                    str += ',';
-                str += l.name;
-                if (l.label) {
-                    str += ':' + l.label;
-                }
-            }
-            return str;
-        };
-        BaseProvider.prototype.getSerializedLocales = function () {
-            return this.serializeLocales(this.locales);
-        };
-        return BaseProvider;
-    })();
-    return BaseProvider;
-});
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-define('extensions/uv-mediaelement-extension/Provider',["require", "exports", "../../modules/uv-shared-module/BaseProvider"], function (require, exports, BaseProvider) {
-    var Provider = (function (_super) {
-        __extends(Provider, _super);
-        function Provider(bootstrapper) {
-            _super.call(this, bootstrapper);
-            this.config.options = $.extend(true, this.options, {}, bootstrapper.config.options);
-        }
-        Provider.prototype.getEmbedScript = function (template, width, height) {
-            var configUri = this.config.uri || '';
-            var script = String.format(template, this.getSerializedLocales(), configUri, this.manifestUri, this.collectionIndex, this.manifestIndex, this.sequenceIndex, this.canvasIndex, width, height, this.embedScriptUri);
-            return script;
-        };
-        // todo: use canvas.getThumbnail()
-        Provider.prototype.getPosterImageUri = function () {
-            return this.getCurrentCanvas().getProperty('thumbnail');
-        };
-        return Provider;
-    })(BaseProvider);
-    return Provider;
-});
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-define('extensions/uv-pdf-extension/DownloadDialogue',["require", "exports", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseDownloadDialogue, DownloadOption) {
-    var DownloadDialogue = (function (_super) {
-        __extends(DownloadDialogue, _super);
-        function DownloadDialogue($element) {
-            _super.call(this, $element);
-        }
-        DownloadDialogue.prototype.create = function () {
-            this.setConfig('downloadDialogue');
-            _super.prototype.create.call(this);
-        };
-        DownloadDialogue.prototype.open = function () {
-            var _this = this;
-            _super.prototype.open.call(this);
-            if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal)) {
-                this.$downloadOptions.empty();
-                // add each file src
-                var canvas = this.provider.getCurrentCanvas();
-                _.each(canvas.getRenderings(), function (rendering) {
-                    _this.addEntireFileDownloadOption(rendering);
-                });
-            }
-            if (!this.$downloadOptions.find('li:visible').length) {
-                this.$noneAvailable.show();
-            }
-            else {
-                // select first option.
-                this.$noneAvailable.hide();
-            }
-            this.resize();
-        };
-        DownloadDialogue.prototype.isDownloadOptionAvailable = function (option) {
-            switch (option) {
-                case DownloadOption.entireFileAsOriginal:
-                    return true;
-            }
-        };
-        return DownloadDialogue;
-    })(BaseDownloadDialogue);
-    return DownloadDialogue;
-});
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-define('extensions/uv-pdf-extension/EmbedDialogue',["require", "exports", "../../modules/uv-dialogues-module/EmbedDialogue"], function (require, exports, BaseEmbedDialogue) {
-    var EmbedDialogue = (function (_super) {
-        __extends(EmbedDialogue, _super);
-        function EmbedDialogue($element) {
-            _super.call(this, $element);
-        }
-        EmbedDialogue.prototype.create = function () {
-            this.setConfig('embedDialogue');
-            _super.prototype.create.call(this);
-        };
-        EmbedDialogue.prototype.update = function () {
-            _super.prototype.update.call(this);
-            this.code = this.provider.getEmbedScript(this.options.embedTemplate, this.currentWidth, this.currentHeight);
-            this.$code.val(this.code);
-        };
-        EmbedDialogue.prototype.resize = function () {
-            _super.prototype.resize.call(this);
-        };
-        return EmbedDialogue;
-    })(BaseEmbedDialogue);
-    return EmbedDialogue;
-});
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-define('modules/uv-pdfcenterpanel-module/PDFCenterPanel',["require", "exports", "../uv-shared-module/BaseCommands", "../uv-shared-module/CenterPanel", "../../Params"], function (require, exports, BaseCommands, CenterPanel, Params) {
-    var PDFCenterPanel = (function (_super) {
-        __extends(PDFCenterPanel, _super);
-        function PDFCenterPanel($element) {
-            _super.call(this, $element);
-        }
-        PDFCenterPanel.prototype.create = function () {
-            var _this = this;
-            this.setConfig('pdfCenterPanel');
-            _super.prototype.create.call(this);
-            $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, function (e, resources) {
-                _this.openMedia(resources);
-            });
-        };
-        PDFCenterPanel.prototype.openMedia = function (resources) {
-            var _this = this;
-            var that = this;
-            this.extension.getExternalResources(resources).then(function () {
-                var canvas = _this.provider.getCurrentCanvas();
-                var pdfUri = canvas.id;
-                var browser = window.browserDetect.browser;
-                var version = window.browserDetect.version;
-                if ((browser === 'Explorer' && version < 10) || !_this.config.options.usePdfJs) {
-                    // create pdf object
-                    new PDFObject({
-                        url: pdfUri,
-                        id: "PDF"
-                    }).embed('content');
-                }
-                else {
-                    var viewerPath;
-                    // todo: use compiler conditional
-                    if (window.DEBUG) {
-                        viewerPath = 'modules/uv-pdfcenterpanel-module/html/viewer.html';
-                    }
-                    else {
-                        viewerPath = 'html/uv-pdfcenterpanel-module/viewer.html';
-                    }
-                    // load viewer.html
-                    _this.$content.load(viewerPath, function () {
-                        if (window.DEBUG) {
-                            PDFJS.workerSrc = 'extensions/uv-pdf-extension/lib/pdf.worker.min.js';
-                        }
-                        else {
-                            PDFJS.workerSrc = 'lib/pdf.worker.min.js';
-                        }
-                        PDFJS.DEFAULT_URL = pdfUri;
-                        var anchorIndex = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;
-                        PDFView.initialBookmark = "page=" + anchorIndex;
-                        window.webViewerLoad();
-                        _this.resize();
-                    });
-                }
-            });
-        };
-        PDFCenterPanel.prototype.resize = function () {
-            _super.prototype.resize.call(this);
-        };
-        return PDFCenterPanel;
-    })(CenterPanel);
-    return PDFCenterPanel;
-});
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-define('extensions/uv-pdf-extension/SettingsDialogue',["require", "exports", "../../modules/uv-dialogues-module/SettingsDialogue"], function (require, exports, BaseSettingsDialogue) {
-    var SettingsDialogue = (function (_super) {
-        __extends(SettingsDialogue, _super);
-        function SettingsDialogue($element) {
-            _super.call(this, $element);
-        }
-        SettingsDialogue.prototype.create = function () {
-            this.setConfig('settingsDialogue');
-            _super.prototype.create.call(this);
-        };
-        return SettingsDialogue;
-    })(BaseSettingsDialogue);
-    return SettingsDialogue;
-});
-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 define('extensions/uv-pdf-extension/Extension',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-shared-module/BaseExtension", "../../modules/uv-shared-module/Bookmark", "./DownloadDialogue", "./EmbedDialogue", "../../modules/uv-shared-module/FooterPanel", "../../modules/uv-shared-module/HeaderPanel", "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel", "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel", "./SettingsDialogue", "../../modules/uv-shared-module/Shell", "../../modules/uv-contentleftpanel-module/ContentLeftPanel"], function (require, exports, BaseCommands, BaseExtension, Bookmark, DownloadDialogue, EmbedDialogue, FooterPanel, HeaderPanel, MoreInfoRightPanel, PDFCenterPanel, SettingsDialogue, Shell, ContentLeftPanel) {
     var Extension = (function (_super) {
         __extends(Extension, _super);
@@ -5898,7 +5943,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                 var $label = this.$wholeImageHighResButton.find('label');
                 var mime = this.getMimeTypeForCurrentCanvas();
                 var size = this.getDimensionsForCurrentCanvas();
-                var label = String.format(this.content.wholeImageHighRes, size.width, size.height, this.simplifyMimeType(mime));
+                var label = String.format(this.content.wholeImageHighRes, size.width, size.height, Utils.Files.SimplifyMimeType(mime));
                 $label.text(label);
                 this.$wholeImageHighResButton.show();
             }
@@ -5983,7 +6028,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                         currentId = "dynamic_download_" + ++this.renderingUrlsCount;
                         label = defaultLabel;
                     }
-                    label = String.format(label, this.simplifyMimeType(rendering.getFormat().toString()));
+                    label = String.format(label, Utils.Files.SimplifyMimeType(rendering.getFormat().toString()));
                     this.renderingUrls[currentId] = rendering.id;
                     var newButton = $('<li class="option dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
                     switch (type) {
@@ -9281,6 +9326,9 @@ var Manifesto;
         AnnotationMotivation.prototype.tagging = function () {
             return new AnnotationMotivation(AnnotationMotivation.TAGGING.toString());
         };
+        AnnotationMotivation.prototype.transcribing = function () {
+            return new AnnotationMotivation(AnnotationMotivation.TRANSCRIBING.toString());
+        };
         AnnotationMotivation.BOOKMARKING = new AnnotationMotivation("oa:bookmarking");
         AnnotationMotivation.CLASSIFYING = new AnnotationMotivation("oa:classifying");
         AnnotationMotivation.COMMENTING = new AnnotationMotivation("oa:commenting");
@@ -9294,25 +9342,10 @@ var Manifesto;
         AnnotationMotivation.QUESTIONING = new AnnotationMotivation("oa:questioning");
         AnnotationMotivation.REPLYING = new AnnotationMotivation("oa:replying");
         AnnotationMotivation.TAGGING = new AnnotationMotivation("oa:tagging");
+        AnnotationMotivation.TRANSCRIBING = new AnnotationMotivation("oad:transcribing");
         return AnnotationMotivation;
     })(Manifesto.StringValue);
     Manifesto.AnnotationMotivation = AnnotationMotivation;
-})(Manifesto || (Manifesto = {}));
-var Manifesto;
-(function (Manifesto) {
-    var CanvasType = (function (_super) {
-        __extends(CanvasType, _super);
-        function CanvasType() {
-            _super.apply(this, arguments);
-        }
-        // todo: use getters when ES3 target is no longer required.
-        CanvasType.prototype.canvas = function () {
-            return new CanvasType(CanvasType.CANVAS.toString());
-        };
-        CanvasType.CANVAS = new CanvasType("sc:canvas");
-        return CanvasType;
-    })(Manifesto.StringValue);
-    Manifesto.CanvasType = CanvasType;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
 (function (Manifesto) {
@@ -9322,6 +9355,9 @@ var Manifesto;
             _super.apply(this, arguments);
         }
         // todo: use getters when ES3 target is no longer required.
+        ElementType.prototype.canvas = function () {
+            return new ElementType(ElementType.CANVAS.toString());
+        };
         ElementType.prototype.document = function () {
             return new ElementType(ElementType.DOCUMENT.toString());
         };
@@ -9337,6 +9373,7 @@ var Manifesto;
         ElementType.prototype.sound = function () {
             return new ElementType(ElementType.SOUND.toString());
         };
+        ElementType.CANVAS = new ElementType("sc:canvas");
         ElementType.DOCUMENT = new ElementType("foaf:document");
         ElementType.IMAGE = new ElementType("dcTypes:image");
         ElementType.MOVINGIMAGE = new ElementType("dctypes:movingimage");
@@ -9425,7 +9462,11 @@ var Manifesto;
         ResourceFormat.prototype.jpgimage = function () {
             return new ResourceFormat(ResourceFormat.JPGIMAGE.toString());
         };
+        ResourceFormat.prototype.pdf = function () {
+            return new ResourceFormat(ResourceFormat.PDF.toString());
+        };
         ResourceFormat.JPGIMAGE = new ResourceFormat("image/jpeg");
+        ResourceFormat.PDF = new ResourceFormat("application/pdf");
         return ResourceFormat;
     })(Manifesto.StringValue);
     Manifesto.ResourceFormat = ResourceFormat;
@@ -9707,6 +9748,31 @@ var Manifesto;
     })(Manifesto.JSONLDResource);
     Manifesto.ManifestResource = ManifestResource;
 })(Manifesto || (Manifesto = {}));
+var Manifesto;
+(function (Manifesto) {
+    var Element = (function (_super) {
+        __extends(Element, _super);
+        function Element(jsonld, options) {
+            _super.call(this, jsonld, options);
+        }
+        Element.prototype.getResources = function () {
+            var resources = [];
+            if (!this.__jsonld.resources)
+                return resources;
+            for (var i = 0; i < this.__jsonld.resources.length; i++) {
+                var a = this.__jsonld.resources[i];
+                var annotation = new Manifesto.Annotation(a, this.options);
+                resources.push(annotation);
+            }
+            return resources;
+        };
+        Element.prototype.getType = function () {
+            return new Manifesto.ElementType(this.getProperty('@type'));
+        };
+        return Element;
+    })(Manifesto.ManifestResource);
+    Manifesto.Element = Element;
+})(Manifesto || (Manifesto = {}));
 var _endsWith = _dereq_("lodash.endswith");
 var _last = _dereq_("lodash.last");
 var Manifesto;
@@ -9798,9 +9864,9 @@ var Manifesto;
         //
         //    return uri;
         //}
-        Canvas.prototype.getType = function () {
-            return new Manifesto.CanvasType(this.getProperty('@type').toLowerCase());
-        };
+        //getType(): CanvasType {
+        //    return new CanvasType(this.getProperty('@type').toLowerCase());
+        //}
         Canvas.prototype.getWidth = function () {
             return this.getProperty('width');
         };
@@ -9808,22 +9874,8 @@ var Manifesto;
             return this.getProperty('height');
         };
         return Canvas;
-    })(Manifesto.ManifestResource);
+    })(Manifesto.Element);
     Manifesto.Canvas = Canvas;
-})(Manifesto || (Manifesto = {}));
-var Manifesto;
-(function (Manifesto) {
-    var Element = (function (_super) {
-        __extends(Element, _super);
-        function Element(jsonld, options) {
-            _super.call(this, jsonld, options);
-        }
-        Element.prototype.getType = function () {
-            return new Manifesto.ElementType(this.getProperty('@type'));
-        };
-        return Element;
-    })(Manifesto.ManifestResource);
-    Manifesto.Element = Element;
 })(Manifesto || (Manifesto = {}));
 var _assign = _dereq_("lodash.assign");
 var Manifesto;
@@ -10943,7 +10995,6 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 global.manifesto = module.exports = {
     AnnotationMotivation: new Manifesto.AnnotationMotivation(),
-    CanvasType: new Manifesto.CanvasType(),
     ElementType: new Manifesto.ElementType(),
     IIIFResourceType: new Manifesto.IIIFResourceType(),
     ManifestType: new Manifesto.ManifestType(),
@@ -11049,7 +11100,6 @@ global.manifesto = module.exports = {
 };
 /// <reference path="./StringValue.ts" />
 /// <reference path="./AnnotationMotivation.ts" />
-/// <reference path="./CanvasType.ts" />
 /// <reference path="./ElementType.ts" />
 /// <reference path="./IIIFResourceType.ts" />
 /// <reference path="./ManifestType.ts" />
@@ -11061,8 +11111,8 @@ global.manifesto = module.exports = {
 /// <reference path="./ViewingHint.ts" />
 /// <reference path="./JSONLDResource.ts" />
 /// <reference path="./ManifestResource.ts" />
-/// <reference path="./Canvas.ts" />
 /// <reference path="./Element.ts" />
+/// <reference path="./Canvas.ts" />
 /// <reference path="./IIIFResource.ts" />
 /// <reference path="./Manifest.ts" />
 /// <reference path="./Collection.ts" />
@@ -22742,6 +22792,30 @@ var Utils;
     })();
     Utils.Bools = Bools;
 })(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Clipboard = (function () {
+        function Clipboard() {
+        }
+        Clipboard.Copy = function (text) {
+            var $tempDiv = $("<div style='position:absolute;left:-9999px'>");
+            var brRegex = /<br\s*[\/]?>/gi;
+            text = text.replace(brRegex, "\n");
+            $("body").append($tempDiv);
+            $tempDiv.append(text);
+            var $tempInput = $("<textarea>");
+            $tempDiv.append($tempInput);
+            $tempInput.val($tempDiv.text()).select();
+            document.execCommand("copy");
+            $tempDiv.remove();
+        };
+        Clipboard.SupportsCopy = function () {
+            return document.queryCommandSupported && document.queryCommandSupported('copy');
+        };
+        return Clipboard;
+    })();
+    Utils.Clipboard = Clipboard;
+})(Utils || (Utils = {}));
 // Copyright 2013 Basarat Ali Syed. All Rights Reserved.
 //
 // Licensed under MIT open source license http://opensource.org/licenses/MIT
@@ -25315,6 +25389,9 @@ var Utils;
                 ctx.backingStorePixelRatio || 1;
             return dpr / bsr;
         };
+        Device.isTouch = function () {
+            return !!("ontouchstart" in window) || window.navigator.msMaxTouchPoints > 0;
+        };
         return Device;
     })();
     Utils.Device = Device;
@@ -25374,6 +25451,30 @@ var Utils;
         return Events;
     })();
     Utils.Events = Events;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Files = (function () {
+        function Files() {
+        }
+        Files.SimplifyMimeType = function (mime) {
+            switch (mime) {
+                case 'text/plain':
+                    return 'txt';
+                case 'image/jpeg':
+                    return 'jpg';
+                case 'application/msword':
+                    return 'doc';
+                case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                    return 'docx';
+                default:
+                    var parts = mime.split('/');
+                    return parts[parts.length - 1];
+            }
+        };
+        return Files;
+    })();
+    Utils.Files = Files;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {
@@ -26093,7 +26194,7 @@ require([
     // todo: use a compiler flag (when available)
      // this line is removed on build.
     var extensions = {};
-    extensions[manifesto.CanvasType.canvas().toString()] = {
+    extensions[manifesto.ElementType.canvas().toString()] = {
         type: seadragonExtension,
         provider: seadragonProvider,
         name: 'uv-seadragon-extension'

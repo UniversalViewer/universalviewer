@@ -97,8 +97,10 @@
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
       }
     },
-    "contentLeftPanel": {
-
+    "resourcesLeftPanel": {
+      "content": {
+        "title": "Cynnwys"
+      }
     }
   }
 }

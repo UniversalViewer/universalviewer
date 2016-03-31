@@ -93,7 +93,7 @@ require([
 
         var extensions = {};
 
-        extensions[manifesto.CanvasType.canvas().toString()] = {
+        extensions[manifesto.ElementType.canvas().toString()] = {
             type: seadragonExtension,
             provider: seadragonProvider,
             name: 'uv-seadragon-extension'

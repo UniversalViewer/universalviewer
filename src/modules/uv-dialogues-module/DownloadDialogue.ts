@@ -43,22 +43,6 @@ class DownloadDialogue extends Dialogue {
         this.$element.hide();
     }
 
-    simplifyMimeType(mime: string) {
-        switch (mime) {
-        case 'text/plain':
-            return 'txt';
-        case 'image/jpeg':
-            return 'jpg';
-        case 'application/msword':
-            return 'doc';
-        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            return 'docx';
-        default:
-            var parts = mime.split('/');
-            return parts[parts.length - 1];
-        }
-    }
-
     addEntireFileDownloadOption(rendering: Manifesto.IRendering): void{
         var fileUri = rendering.id;
         var label = rendering.getLabel();
@@ -69,7 +53,7 @@ class DownloadDialogue extends Dialogue {
         }
         var fileType;
         if (rendering.getFormat()) {
-            fileType = this.simplifyMimeType(rendering.getFormat().toString());
+            fileType = Utils.Files.SimplifyMimeType(rendering.getFormat().toString());
         } else {
             fileType = this.getFileExtension(fileUri);
         }

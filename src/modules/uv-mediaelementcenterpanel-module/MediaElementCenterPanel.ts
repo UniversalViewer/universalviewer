@@ -30,7 +30,7 @@ class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if ((<IMediaElementExtension>this.extension).isVideo()){
+        if ((<IMediaElementProvider>this.provider).isVideo()){
             $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
@@ -81,7 +81,7 @@ class MediaElementCenterPanel extends CenterPanel {
                 });
             });
 
-            if ((<IMediaElementExtension>this.extension).isVideo()){
+            if ((<IMediaElementProvider>this.provider).isVideo()){
 
                 this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
 

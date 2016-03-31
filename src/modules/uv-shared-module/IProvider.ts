@@ -27,10 +27,10 @@ interface IProvider{
     getCanvasIndexParam(): number;
     getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange;
     getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
-    getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
     getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
     getCurrentCanvas(): Manifesto.ICanvas;
     getCurrentSequence(): Manifesto.ISequence;
+    getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
     getFirstPageIndex(): number;
     getInfoUri(canvas: Manifesto.ICanvas): string;
     getLastCanvasLabel(alphanumeric?: boolean): string;

@@ -235,7 +235,7 @@ class ThumbsView extends BaseView {
 
     isPDF(): boolean{
         // todo: use constants
-        return (this.provider.getCanvasType().toString().contains("pdf"));
+        return (this.provider.getElementType().toString().contains("pdf"));
     }
 
     setLabel(): void {

@@ -154,7 +154,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var $label: JQuery = this.$wholeImageHighResButton.find('label');
             var mime = this.getMimeTypeForCurrentCanvas();
             var size: Size = this.getDimensionsForCurrentCanvas();
-            var label = String.format(this.content.wholeImageHighRes, size.width, size.height, this.simplifyMimeType(mime));
+            var label = String.format(this.content.wholeImageHighRes, size.width, size.height, Utils.Files.SimplifyMimeType(mime));
             $label.text(label);
             this.$wholeImageHighResButton.show();
         } else {
@@ -248,7 +248,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                     currentId = "dynamic_download_" + ++this.renderingUrlsCount;
                     label = defaultLabel;
                 }
-                label = String.format(label, this.simplifyMimeType(rendering.getFormat().toString()));
+                label = String.format(label, Utils.Files.SimplifyMimeType(rendering.getFormat().toString()));
                 this.renderingUrls[currentId] = rendering.id;
                 var newButton = $('<li class="option dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
 

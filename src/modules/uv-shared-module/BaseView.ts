@@ -32,11 +32,13 @@ class BaseView extends Panel{
         this.content = this.config.content;
         this.options = this.config.options;
 
+        var that = this;
+
         // build config inheritance chain
-        if (this.modules.length) {
-            this.modules = this.modules.reverse();
-            _.each(this.modules, (moduleName: string) => {
-                this.config = $.extend(true, this.config, this.provider.config.modules[moduleName]);
+        if (that.modules.length) {
+            that.modules = that.modules.reverse();
+            _.each(that.modules, (moduleName: string) => {
+                that.config = $.extend(true, that.config, that.provider.config.modules[moduleName]);
             });
         }
     }

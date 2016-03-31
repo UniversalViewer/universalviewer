@@ -26,6 +26,24 @@ class Provider extends BaseProvider implements IMediaElementProvider{
     getPosterImageUri(): string{
         return this.getCurrentCanvas().getProperty('thumbnail');
     }
+
+    getElement(): Manifesto.IElement {
+        return <Manifesto.IElement>this.getCanvasByIndex(0);
+    }
+
+    getResources(): Manifesto.IAnnotation[] {
+        var element: Manifesto.IElement = this.getElement();
+        return element.getResources();
+    }
+
+    hasResources(): boolean {
+        return this.getResources().length > 0;
+    }
+
+    isVideo(): boolean {
+        var elementType: Manifesto.ElementType = this.getElementType();
+        return elementType.toString() === manifesto.ElementType.movingimage().toString();
+    }
 }
 
 export = Provider;

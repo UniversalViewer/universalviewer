@@ -113,11 +113,11 @@ class BaseProvider implements IProvider{
         return this.bootstrapper.params.getParam(Params.sequenceIndex);
     }
 
-    getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType {
-        if (!canvas){
-            canvas = this.getCurrentCanvas();
+    getElementType(element?: Manifesto.IElement): Manifesto.ElementType {
+        if (!element){
+            element = this.getCurrentCanvas();
         }
-        return canvas.getType();
+        return element.getType();
     }
 
     getAttribution(): string {
