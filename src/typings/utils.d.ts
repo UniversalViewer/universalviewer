@@ -8,6 +8,12 @@ declare module Utils {
         static GetBool(val: any, defaultVal: boolean): boolean;
     }
 }
+declare module Utils {
+    class Clipboard {
+        static Copy(text: string): void;
+        static SupportsCopy(): boolean;
+    }
+}
 /**
  * @namespace Top level namespace for collections, a TypeScript data structure library.
  */
@@ -1412,6 +1418,7 @@ declare module Utils {
 declare module Utils {
     class Device {
         static GetPixelRatio(ctx: CanvasRenderingContext2D): number;
+        static isTouch(): boolean;
     }
 }
 declare module Utils {

@@ -43,6 +43,30 @@ var Utils;
     })();
     Utils.Bools = Bools;
 })(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Clipboard = (function () {
+        function Clipboard() {
+        }
+        Clipboard.Copy = function (text) {
+            var $tempDiv = $("<div>");
+            var brRegex = /<br\s*[\/]?>/gi;
+            text = text.replace(brRegex, "\n");
+            $("body").append($tempDiv);
+            $tempDiv.append(text);
+            var $tempInput = $("<textarea>");
+            $tempDiv.append($tempInput);
+            $tempInput.val($tempDiv.text()).select();
+            document.execCommand("copy");
+            $tempDiv.remove();
+        };
+        Clipboard.SupportsCopy = function () {
+            return document.queryCommandSupported && document.queryCommandSupported('copy');
+        };
+        return Clipboard;
+    })();
+    Utils.Clipboard = Clipboard;
+})(Utils || (Utils = {}));
 // Copyright 2013 Basarat Ali Syed. All Rights Reserved.
 //
 // Licensed under MIT open source license http://opensource.org/licenses/MIT
@@ -2615,6 +2639,9 @@ var Utils;
                 ctx.oBackingStorePixelRatio ||
                 ctx.backingStorePixelRatio || 1;
             return dpr / bsr;
+        };
+        Device.isTouch = function () {
+            return !!("ontouchstart" in window) || window.navigator.msMaxTouchPoints > 0;
         };
         return Device;
     })();
