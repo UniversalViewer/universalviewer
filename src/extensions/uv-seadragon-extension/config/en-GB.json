@@ -92,6 +92,7 @@
         "aggregateValues": "",
         "canvasHeader": "About the image",
         "canvasExclude": "",
+        "copyToClipboardEnabled": false,
         "displayOrder": "",
         "manifestExclude": "",
         "panelAnimationDuration": 250,
@@ -99,7 +100,6 @@
         "panelExpandedWidth": 255,
         "panelOpen": false,
         "manifestHeader": "About the book",
-        "showCopyToClipboard": false,
         "textLimit": 4,
         "textLimitType": "lines"
       }

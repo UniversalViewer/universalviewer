@@ -293,6 +293,29 @@
   margin: 15px 10px 0 0;
   text-transform: uppercase;
 }
+#app .rightPanel .main .items .item .header .copyText {
+  position: relative;
+  float: right;
+  display: none;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  background-image: url('../../img/uv-moreinforightpanel-module/copy.png');
+}
+#app .rightPanel .main .items .item .header .copiedText {
+  display: none;
+  position: absolute;
+  top: 18px;
+  right: -10px;
+  white-space: nowrap;
+  padding: 4px;
+  text-transform: none;
+  background-color: #343434;
+  z-index: 1;
+  border: 1px solid #9a9a9a;
+  border-radius: 2px;
+  color: #fff;
+}
 #app .rightPanel .main .items .item .text {
   color: #fff;
   margin: 5px 10px 0 0;

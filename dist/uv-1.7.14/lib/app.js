@@ -3118,6 +3118,9 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
                                            <div class="header"></div>\
                                            <div class="text"></div>\
                                        </div>');
+            this.copyTextTemplate = $('<div class="copyText" alt="' + this.content.copyToClipboard + '" title="' + this.content.copyToClipboard + '">\
+                                     <div class="copiedText">' + this.content.copiedToClipboard + ' </div>\
+                                   </div>');
             this.$items = $('<div class="items"></div>');
             this.$main.append(this.$items);
             this.$canvasItems = $('<div class="items"></div>');
@@ -3292,7 +3295,49 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
             item.label = item.label.trim();
             item.label = item.label.toLowerCase();
             $elem.addClass(item.label.toCssClass());
+            if (this.config.options.copyToClipboardEnabled && Utils.Clipboard.SupportsCopy() && $text.text() && $header.text())
+                this.addCopyButton($elem, $header);
             return $elem;
+        };
+        MoreInfoRightPanel.prototype.addCopyButton = function ($elem, $header) {
+            var _this = this;
+            var $copyBtn = this.copyTextTemplate.clone();
+            var $copiedText = $copyBtn.children();
+            $header.append($copyBtn);
+            if (Utils.Device.isTouch()) {
+                $copyBtn.show();
+            }
+            else {
+                $elem.on('mouseenter', function () {
+                    $copyBtn.show();
+                });
+                $elem.on('mouseleave', function () {
+                    $copyBtn.hide();
+                });
+                $copyBtn.on('mouseleave', function () {
+                    $copiedText.hide();
+                });
+            }
+            $copyBtn.on('click', function (e) {
+                var imgElement = e.target;
+                var headerText = imgElement.previousSibling.textContent || imgElement.previousSibling.nodeValue;
+                _this.copyValueForLabel(headerText);
+            });
+        };
+        MoreInfoRightPanel.prototype.copyValueForLabel = function (label) {
+            var manifestItems = this.flatten(this.manifestData);
+            var canvasItems = this.flatten(this.canvasData);
+            var $matchingItems = $(manifestItems.concat(canvasItems))
+                .filter(function (i, md) { return md.label && label && md.label.toLowerCase() == label.toLowerCase(); });
+            var text = $matchingItems.map(function (i, md) { return md.value; }).get().join('');
+            if (!text)
+                return;
+            Utils.Clipboard.Copy(text);
+            var $copiedText = $('.items .item .header:contains(' + label + ') .copiedText');
+            $copiedText.show();
+            setTimeout(function () {
+                $copiedText.hide();
+            }, 2000);
         };
         MoreInfoRightPanel.prototype.resize = function () {
             _super.prototype.resize.call(this);
