@@ -99,6 +99,7 @@
         "panelExpandedWidth": 255,
         "panelOpen": false,
         "manifestHeader": "About the book",
+        "showCopyToClipboard": false,
         "textLimit": 4,
         "textLimitType": "lines"
       }
