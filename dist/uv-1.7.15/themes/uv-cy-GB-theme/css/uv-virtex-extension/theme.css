@@ -464,11 +464,11 @@
   clear: both;
   border: none;
 }
+#app .leftPanel .views .thumbsView .thumbs.left-to-right.paged .thumb.first {
+  float: right;
+}
 #app .leftPanel .views .thumbsView .thumbs.left-to-right .thumb {
   float: left;
-}
-#app .leftPanel .views .thumbsView .thumbs.left-to-right .thumb.first {
-  float: right;
 }
 #app .leftPanel .views .thumbsView .thumbs.right-to-left .thumb {
   float: right;

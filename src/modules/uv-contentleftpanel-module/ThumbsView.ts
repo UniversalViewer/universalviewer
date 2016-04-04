@@ -60,6 +60,10 @@ class ThumbsView extends BaseView {
 
         var that = this;
 
+        if ((<ISeadragonProvider>that.provider).isPaged()) {
+            this.$thumbs.addClass('paged');
+        }
+
         $.templates({
             thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
@@ -297,11 +301,11 @@ class ThumbsView extends BaseView {
     }
 
     getThumbByIndex(canvasIndex): JQuery {
-        return $(this.getAllThumbs()[canvasIndex])
+        return $(this.getAllThumbs()[canvasIndex]);
     }
 
     scrollToThumb(canvasIndex: number): void {
-        var $thumb = this.getThumbByIndex(canvasIndex)
+        var $thumb = this.getThumbByIndex(canvasIndex);
         this.$element.scrollTop($thumb.position().top);
     }
     

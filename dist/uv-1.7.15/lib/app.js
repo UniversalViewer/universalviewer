@@ -3349,7 +3349,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.14';
+    exports.Version = '1.7.15';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4798,6 +4798,9 @@ define('modules/uv-contentleftpanel-module/ThumbsView',["require", "exports", ".
             this.$element.append(this.$thumbs);
             this.$thumbs.addClass(this.provider.getViewingDirection().toString()); // defaults to "left-to-right"
             var that = this;
+            if (that.provider.isPaged()) {
+                this.$thumbs.addClass('paged');
+            }
             $.templates({
                 thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
