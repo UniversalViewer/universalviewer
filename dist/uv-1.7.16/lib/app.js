@@ -673,6 +673,7 @@ define('modules/uv-dialogues-module/RestrictedDialogue',["require", "exports", "
         };
         RestrictedDialogue.prototype.open = function () {
             _super.prototype.open.call(this);
+            this.isAccepted = false;
             this.$title.text(this.resource.restrictedService.getProperty('label'));
             var message = this.resource.restrictedService.getProperty('description');
             this.$message.html(message);
@@ -685,7 +686,8 @@ define('modules/uv-dialogues-module/RestrictedDialogue',["require", "exports", "
         };
         RestrictedDialogue.prototype.close = function () {
             _super.prototype.close.call(this);
-            if (this.acceptCallback) {
+            if (!this.isAccepted && this.acceptCallback) {
+                this.isAccepted = true;
                 this.acceptCallback();
             }
         };
@@ -1263,6 +1265,12 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, function () {
                 _this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
             });
+            $.subscribe(BaseCommands.LOAD_FAILED, function () {
+                _this.triggerSocket(BaseCommands.LOAD_FAILED);
+                if (!_.isNull(that.provider.lastCanvasIndex) && that.provider.lastCanvasIndex !== that.provider.canvasIndex) {
+                    _this.viewCanvas(that.provider.lastCanvasIndex);
+                }
+            });
             $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, function (e, url) {
                 _this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
             });
@@ -1581,6 +1589,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
                 this.showMessage(this.provider.config.content.canvasIndexOutOfRange);
                 canvasIndex = 0;
             }
+            this.provider.lastCanvasIndex = this.provider.canvasIndex;
             this.provider.canvasIndex = canvasIndex;
             $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
             $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
@@ -3349,7 +3358,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.15';
+    exports.Version = '1.7.16';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
