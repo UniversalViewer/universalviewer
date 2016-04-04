@@ -26,6 +26,7 @@ class BaseProvider implements IProvider{
     isOnlyInstance: boolean;
     isReload: boolean;
     jsonp: boolean;
+    lastCanvasIndex: number;
     licenseFormatter: UriLabeller;
     locale: string;
     locales: any[];

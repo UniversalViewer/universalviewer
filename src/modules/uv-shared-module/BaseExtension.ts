@@ -307,6 +307,14 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
         });
 
+        $.subscribe(BaseCommands.LOAD_FAILED, () => {
+            this.triggerSocket(BaseCommands.LOAD_FAILED);
+
+            if (!_.isNull(that.provider.lastCanvasIndex) && that.provider.lastCanvasIndex !== that.provider.canvasIndex){
+                this.viewCanvas(that.provider.lastCanvasIndex);
+            }
+        });
+
         $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, (e, url) => {
             this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
         });
@@ -716,6 +724,7 @@ class BaseExtension implements IExtension {
             canvasIndex = 0;
         }
 
+        this.provider.lastCanvasIndex = this.provider.canvasIndex;
         this.provider.canvasIndex = canvasIndex;
 
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);

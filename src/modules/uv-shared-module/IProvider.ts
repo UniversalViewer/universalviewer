@@ -61,6 +61,7 @@ interface IProvider{
     isMultiSequence(): boolean;
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
+    lastCanvasIndex: number;
 
     // todo: move these to baseextension?
     bootstrapper: BootStrapper;
