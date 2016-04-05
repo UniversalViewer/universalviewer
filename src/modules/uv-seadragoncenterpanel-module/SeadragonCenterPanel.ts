@@ -338,6 +338,7 @@ class SeadragonCenterPanel extends CenterPanel {
                     rightPagePos = rightPage.getBounds(true).getTopLeft();
                     rightPagePos.x = x + this.config.options.pageGap;
                     rightPage.setPosition(rightPagePos, true);
+                    rightPage.setHeight(leftPageBounds.height);
                 }
             } else {
 

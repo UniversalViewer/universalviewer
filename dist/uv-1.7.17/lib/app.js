@@ -3358,7 +3358,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.16';
+    exports.Version = '1.7.17';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -7495,6 +7495,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                         rightPagePos = rightPage.getBounds(true).getTopLeft();
                         rightPagePos.x = x + this.config.options.pageGap;
                         rightPage.setPosition(rightPagePos, true);
+                        rightPage.setHeight(leftPageBounds.height);
                     }
                 }
                 else {
