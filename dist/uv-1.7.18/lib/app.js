@@ -1505,7 +1505,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
         };
         BaseExtension.prototype.getSharePreview = function () {
             var preview = {};
-            preview.title = this.provider.getTitle();
+            preview.title = this.provider.getLabel();
             // todo: use getThumb (when implemented)
             var canvas = this.provider.getCurrentCanvas();
             var thumbnail = canvas.getProperty('thumbnail');
@@ -2727,7 +2727,7 @@ define('modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel',["req
             });
             this.$container = $('<div class="container"></div>');
             this.$content.append(this.$container);
-            this.title = this.extension.provider.getTitle();
+            this.title = this.extension.provider.getLabel();
         };
         MediaElementCenterPanel.prototype.openMedia = function (resources) {
             var _this = this;
@@ -3358,7 +3358,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.17';
+    exports.Version = '1.7.18';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -3648,7 +3648,7 @@ define('extensions/uv-mediaelement-extension/Extension',["require", "exports", "
             bookmark.label = canvas.getLabel();
             bookmark.path = this.getBookmarkUri();
             bookmark.thumb = canvas.getProperty('thumbnail');
-            bookmark.title = this.provider.getTitle();
+            bookmark.title = this.provider.getLabel();
             if (this.provider.isVideo()) {
                 bookmark.type = manifesto.ElementType.movingimage().toString();
             }
@@ -3761,8 +3761,8 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
         BaseProvider.prototype.getLogo = function () {
             return this.manifest.getLogo();
         };
-        BaseProvider.prototype.getTitle = function () {
-            return this.manifest.getTitle();
+        BaseProvider.prototype.getLabel = function () {
+            return this.manifest.getLabel();
         };
         BaseProvider.prototype.getSeeAlso = function () {
             return this.manifest.getSeeAlso();
@@ -5853,7 +5853,7 @@ define('extensions/uv-pdf-extension/Extension',["require", "exports", "../../mod
             bookmark.label = canvas.getLabel();
             bookmark.path = this.getBookmarkUri();
             bookmark.thumb = canvas.getProperty('thumbnail');
-            bookmark.title = this.provider.getTitle();
+            bookmark.title = this.provider.getLabel();
             bookmark.type = manifesto.ElementType.document().toString();
             this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
         };
@@ -7394,7 +7394,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             this.$rotateButton.on('click', function () {
                 $.publish(Commands.SEADRAGON_ROTATION, [_this.viewer.viewport.getRotation()]);
             });
-            this.title = this.extension.provider.getTitle();
+            this.title = this.extension.provider.getLabel();
             this.createNavigationButtons();
             this.hidePrevButton();
             this.hideNextButton();
@@ -7471,6 +7471,7 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
             var leftPage;
             var leftPageBounds;
             var rightPage;
+            var rightPageBounds;
             var rightPagePos;
             // if there's more than one image, determine alignment strategy
             if (resources.length > 1) {
@@ -7492,10 +7493,16 @@ define('modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel',["require",
                         leftPageBounds = leftPage.getBounds(true);
                         x = leftPageBounds.x + leftPageBounds.width;
                         rightPage = this.viewer.world.getItemAt(1);
-                        rightPagePos = rightPage.getBounds(true).getTopLeft();
+                        rightPageBounds = rightPage.getBounds(true);
+                        rightPagePos = rightPageBounds.getTopLeft();
                         rightPagePos.x = x + this.config.options.pageGap;
                         rightPage.setPosition(rightPagePos, true);
-                        rightPage.setHeight(leftPageBounds.height);
+                        if (rightPage.source.width > rightPage.source.height) {
+                            rightPage.setWidth(leftPageBounds.width);
+                        }
+                        else {
+                            rightPage.setHeight(leftPageBounds.height);
+                        }
                     }
                 }
                 else {
@@ -8270,7 +8277,7 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
             bookmark.label = canvas.getLabel();
             bookmark.path = this.provider.getCroppedImageUri(canvas, this.getViewer());
             bookmark.thumb = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
-            bookmark.title = this.provider.getTitle();
+            bookmark.title = this.provider.getLabel();
             bookmark.type = manifesto.ElementType.image().toString();
             this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
         };
@@ -8957,7 +8964,7 @@ define('modules/uv-virtexcenterpanel-module/VirtexCenterPanel',["require", "expo
             this.$navigation.append(this.$zoomOutButton);
             this.$viewport = $('<div class="virtex"></div>');
             this.$content.prepend(this.$viewport);
-            this.title = this.extension.provider.getTitle();
+            this.title = this.extension.provider.getLabel();
             this.showAttribution();
             this.$zoomInButton.on('click', function (e) {
                 e.preventDefault();
@@ -9066,7 +9073,7 @@ define('extensions/uv-virtex-extension/Extension',["require", "exports", "../../
             bookmark.label = canvas.getLabel();
             bookmark.path = this.getBookmarkUri();
             bookmark.thumb = canvas.getProperty('thumbnail');
-            bookmark.title = this.provider.getTitle();
+            bookmark.title = this.provider.getLabel();
             bookmark.type = manifesto.ElementType.physicalobject().toString();
             this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
         };
@@ -9993,7 +10000,7 @@ var Manifesto;
         IIIFResource.prototype.getSeeAlso = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('seeAlso'), this.options.locale);
         };
-        IIIFResource.prototype.getTitle = function () {
+        IIIFResource.prototype.getLabel = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
         };
         IIIFResource.prototype.getTree = function () {
@@ -10011,6 +10018,7 @@ var Manifesto;
                     var options = that.options;
                     options.navDate = that.getNavDate();
                     Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
+                        that.parentLabel = that.getLabel();
                         var parsed = Manifesto.Deserialiser.parse(data, options);
                         that = _assign(that, parsed);
                         resolve(that);
@@ -10235,7 +10243,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.manifests.length; i++) {
                     var manifest = parentCollection.manifests[i];
                     var tree = manifest.getTree();
-                    tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
+                    tree.label = manifest.parentLabel || manifest.getLabel() || 'manifest ' + (i + 1);
                     tree.navDate = manifest.getNavDate();
                     tree.data.id = manifest.id;
                     tree.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
@@ -10248,7 +10256,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.collections.length; i++) {
                     var collection = parentCollection.collections[i];
                     var tree = collection.getTree();
-                    tree.label = collection.getTitle() || 'collection ' + (i + 1);
+                    tree.label = collection.parentLabel || collection.getLabel() || 'collection ' + (i + 1);
                     tree.navDate = collection.getNavDate();
                     tree.data.id = collection.id;
                     tree.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
