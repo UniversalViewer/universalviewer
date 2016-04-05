@@ -127,7 +127,7 @@ class Extension extends BaseExtension{
         bookmark.label = canvas.getLabel();
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
-        bookmark.title = this.provider.getTitle();
+        bookmark.title = this.provider.getLabel();
         bookmark.type = manifesto.ElementType.document().toString();
 
         this.triggerSocket(BaseCommands.BOOKMARK, bookmark);

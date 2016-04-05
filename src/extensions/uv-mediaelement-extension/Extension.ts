@@ -140,7 +140,7 @@ class Extension extends BaseExtension{
         bookmark.label = canvas.getLabel();
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
-        bookmark.title = this.provider.getTitle();
+        bookmark.title = this.provider.getLabel();
 
         if ((<IMediaElementProvider>this.provider).isVideo()){
             bookmark.type = manifesto.ElementType.movingimage().toString();

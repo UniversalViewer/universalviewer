@@ -526,7 +526,7 @@ class Extension extends BaseExtension {
         bookmark.label = canvas.getLabel();
         bookmark.path = (<ISeadragonProvider>this.provider).getCroppedImageUri(canvas, this.getViewer());
         bookmark.thumb = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
-        bookmark.title = this.provider.getTitle();
+        bookmark.title = this.provider.getLabel();
         bookmark.type = manifesto.ElementType.image().toString();
 
         this.triggerSocket(BaseCommands.BOOKMARK, bookmark);

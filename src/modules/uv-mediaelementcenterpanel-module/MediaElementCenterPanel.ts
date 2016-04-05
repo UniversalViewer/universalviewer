@@ -49,7 +49,7 @@ class MediaElementCenterPanel extends CenterPanel {
         this.$container = $('<div class="container"></div>');
         this.$content.append(this.$container);
 
-        this.title = this.extension.provider.getTitle();
+        this.title = (<IMediaElementProvider>this.extension.provider).getLabel();
 
     }
 

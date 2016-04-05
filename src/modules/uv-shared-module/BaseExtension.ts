@@ -613,7 +613,7 @@ class BaseExtension implements IExtension {
     getSharePreview(): any {
         var preview: any = {};
 
-        preview.title = this.provider.getTitle();
+        preview.title = this.provider.getLabel();
 
         // todo: use getThumb (when implemented)
 

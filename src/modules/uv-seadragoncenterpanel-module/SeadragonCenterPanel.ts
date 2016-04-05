@@ -216,7 +216,7 @@ class SeadragonCenterPanel extends CenterPanel {
             $.publish(Commands.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
         });
 
-        this.title = this.extension.provider.getTitle();
+        this.title = (<ISeadragonProvider>this.extension.provider).getLabel();
 
         this.createNavigationButtons();
 

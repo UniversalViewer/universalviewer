@@ -894,7 +894,7 @@ var Manifesto;
         IIIFResource.prototype.getSeeAlso = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('seeAlso'), this.options.locale);
         };
-        IIIFResource.prototype.getTitle = function () {
+        IIIFResource.prototype.getLabel = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
         };
         IIIFResource.prototype.getTree = function () {
@@ -912,6 +912,7 @@ var Manifesto;
                     var options = that.options;
                     options.navDate = that.getNavDate();
                     Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
+                        that.parentLabel = that.getLabel();
                         var parsed = Manifesto.Deserialiser.parse(data, options);
                         that = _assign(that, parsed);
                         resolve(that);
@@ -1136,7 +1137,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.manifests.length; i++) {
                     var manifest = parentCollection.manifests[i];
                     var tree = manifest.getTree();
-                    tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
+                    tree.label = manifest.parentLabel || manifest.getLabel() || 'manifest ' + (i + 1);
                     tree.navDate = manifest.getNavDate();
                     tree.data.id = manifest.id;
                     tree.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
@@ -1149,7 +1150,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.collections.length; i++) {
                     var collection = parentCollection.collections[i];
                     var tree = collection.getTree();
-                    tree.label = collection.getTitle() || 'collection ' + (i + 1);
+                    tree.label = collection.parentLabel || collection.getLabel() || 'collection ' + (i + 1);
                     tree.navDate = collection.getNavDate();
                     tree.data.id = collection.id;
                     tree.data.type = Manifesto.TreeNodeType.COLLECTION.toString();

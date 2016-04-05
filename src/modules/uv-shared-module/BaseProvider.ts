@@ -133,8 +133,8 @@ class BaseProvider implements IProvider{
         return this.manifest.getLogo();
     }
 
-    getTitle(): string {
-        return this.manifest.getTitle();
+    getLabel(): string {
+        return this.manifest.getLabel();
     }
 
     getSeeAlso(): any {

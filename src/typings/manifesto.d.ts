@@ -233,6 +233,7 @@ declare module Manifesto {
         index: number;
         isLoaded: boolean;
         parentCollection: ICollection;
+        parentLabel: string;
         treeRoot: ITreeNode;
         constructor(jsonld: any, options?: IManifestoOptions);
         generateTreeNodeIds(treeNode: ITreeNode, index?: number): void;
@@ -243,7 +244,7 @@ declare module Manifesto {
         getLicense(): string;
         getNavDate(): Date;
         getSeeAlso(): any;
-        getTitle(): string;
+        getLabel(): string;
         getTree(): ITreeNode;
         load(): Promise<IIIIFResource>;
     }
@@ -520,16 +521,17 @@ declare module Manifesto {
         getAttribution(): string;
         getDescription(): string;
         getIIIFResourceType(): IIIFResourceType;
+        getLabel(): string;
         getLicense(): string;
         getLogo(): string;
         getNavDate(): Date;
         getSeeAlso(): any;
-        getTitle(): string;
         getTree(): ITreeNode;
         index: number;
         isLoaded: boolean;
         load(): Promise<IIIIFResource>;
         parentCollection: ICollection;
+        parentLabel: string;
         treeRoot: ITreeNode;
     }
 }
