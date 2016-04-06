@@ -397,28 +397,6 @@ class BaseProvider implements IProvider{
         return result;
     }
 
-    defaultToThumbsView(): boolean{
-        switch (this.getManifestType().toString()){
-            case manifesto.ManifestType.monograph().toString():
-                if (!this.isMultiSequence()) return true;
-                break;
-            case manifesto.ManifestType.manuscript().toString():
-                if (!this.isMultiSequence()) return true;
-                break;
-        }
-
-        // todo: use rendering?
-        //var sequenceType = this.getSequenceType();
-        //
-        //switch (sequenceType){
-        //    case 'application-pdf':
-        //        return true;
-        //        break;
-        //}
-
-        return false;
-    }
-
     getSettings(): ISettings {
         if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
             var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);

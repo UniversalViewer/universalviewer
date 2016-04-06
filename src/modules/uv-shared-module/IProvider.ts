@@ -77,7 +77,6 @@ interface IProvider{
     locales: any[];
 
     changeLocale(locale: string): void;
-    defaultToThumbsView(): boolean;
     getAlternateLocale(): any;
     getDomain(): string;
     getEmbedDomain(): string;

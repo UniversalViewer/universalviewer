@@ -25,6 +25,8 @@
     {
       "options":
       {
+        "defaultToTreeEnabled": false,
+        "defaultToTreeIfGreaterThan": 0,
         "elideCount": 40,
         "expandFullEnabled": true,
         "galleryThumbChunkedResizingEnabled": true,
@@ -90,7 +92,6 @@
       "options":
       {
         "aggregateValues": "",
-        "canvasHeader": "About the image",
         "canvasExclude": "",
         "copyToClipboardEnabled": false,
         "displayOrder": "",
@@ -99,7 +100,6 @@
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
         "panelOpen": false,
-        "manifestHeader": "About the book",
         "textLimit": 4,
         "textLimitType": "lines"
       }

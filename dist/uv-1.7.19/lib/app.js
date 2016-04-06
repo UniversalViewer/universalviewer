@@ -3358,7 +3358,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.18';
+    exports.Version = '1.7.19';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -3963,27 +3963,6 @@ define('modules/uv-shared-module/BaseProvider',["require", "exports", "../../Boo
                 });
             }
             return result;
-        };
-        BaseProvider.prototype.defaultToThumbsView = function () {
-            switch (this.getManifestType().toString()) {
-                case manifesto.ManifestType.monograph().toString():
-                    if (!this.isMultiSequence())
-                        return true;
-                    break;
-                case manifesto.ManifestType.manuscript().toString():
-                    if (!this.isMultiSequence())
-                        return true;
-                    break;
-            }
-            // todo: use rendering?
-            //var sequenceType = this.getSequenceType();
-            //
-            //switch (sequenceType){
-            //    case 'application-pdf':
-            //        return true;
-            //        break;
-            //}
-            return false;
         };
         BaseProvider.prototype.getSettings = function () {
             if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
@@ -5647,7 +5626,7 @@ define('modules/uv-contentleftpanel-module/ContentLeftPanel',["require", "export
                 // hide the tabs if either tree or thumbs are disabled.
                 if (!treeEnabled || !thumbsEnabled)
                     this.$tabs.hide();
-                if (thumbsEnabled && this.provider.defaultToThumbsView()) {
+                if (thumbsEnabled && this.defaultToThumbsView()) {
                     this.openThumbsView();
                 }
                 else if (treeEnabled) {
@@ -5662,6 +5641,26 @@ define('modules/uv-contentleftpanel-module/ContentLeftPanel',["require", "export
                 this.$treeButton.attr('tabindex', '');
                 this.$thumbsButton.attr('tabindex', '');
             }
+        };
+        ContentLeftPanel.prototype.defaultToThumbsView = function () {
+            var defaultToTreeEnabled = Utils.Bools.GetBool(this.config.options.defaultToTreeEnabled, false);
+            var defaultToTreeIfGreaterThan = this.config.options.defaultToTreeIfGreaterThan || 0;
+            if (defaultToTreeEnabled) {
+                if (this.treeData.nodes.length > defaultToTreeIfGreaterThan) {
+                    return false;
+                }
+            }
+            return true;
+            //var manifestType: string = (<ISeadragonProvider>this.provider).getManifestType().toString();
+            //
+            //switch (manifestType){
+            //    case manifesto.ManifestType.monograph().toString():
+            //        if (!(<ISeadragonProvider>this.provider).isMultiSequence()) defaultToThumbs = true;
+            //        break;
+            //    case manifesto.ManifestType.manuscript().toString():
+            //        if (!(<ISeadragonProvider>this.provider).isMultiSequence()) defaultToThumbs = true;
+            //        break;
+            //}
         };
         ContentLeftPanel.prototype.expandFullStart = function () {
             _super.prototype.expandFullStart.call(this);
