@@ -113,7 +113,7 @@ class GalleryView extends BaseView {
 
         $.templates({
             galleryThumbsTemplate: '\
-                <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
+                <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}" data-initialwidth="{{>initialWidth}}" data-initialheight="{{>initialHeight}}">\
                     <div class="wrap" style="width:{{>initialWidth}}px; height:{{>initialHeight}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
                     {^{if multiSelectionEnabled}}\
                         <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
@@ -163,15 +163,17 @@ class GalleryView extends BaseView {
 
         if (!this.thumbs) return;
 
-        //this.thumbs = [this.thumbs[0]];
+        if (this.isChunkedResizingEnabled()) {
+            this.$thumbs.addClass("chunked");
+        }
 
         // set initial thumb sizes
         var heights = [];
 
         for(var i = 0; i < this.thumbs.length; i++) {
             var thumb: IThumb = this.thumbs[i];
-            var initialWidth = Math.floor(thumb.width * this.range);
-            var initialHeight = Math.floor(thumb.height * this.range);
+            var initialWidth = thumb.width;
+            var initialHeight = thumb.height;
             thumb.initialWidth = initialWidth;
             //thumb.initialHeight = initialHeight;
             heights.push(initialHeight);
@@ -289,15 +291,15 @@ class GalleryView extends BaseView {
             console.log('scrollTop %s, scrollBottom %s', scrollTop, scrollBottom);
         }
 
-        var thumbsToEqualise: any[] = [];
+        //var thumbsToEqualise: any[] = [];
 
         // test which thumbs are scrolled into view
         var thumbs = this.getAllThumbs();
 
         // if chunked resizing isn't enabled, equalise all thumbs
-        if (!this.isChunkedResizingEnabled()) {
-            thumbsToEqualise = thumbs.toArray();
-        }
+        //if (!this.isChunkedResizingEnabled()) {
+        //    thumbsToEqualise = thumbs.toArray();
+        //}
 
         for (var i = 0; i < thumbs.length; i++) {
 
@@ -317,15 +319,18 @@ class GalleryView extends BaseView {
                 this.sizeThumb($thumb);
             }
 
+            var padding: number = thumbHeight * this.options.galleryThumbLoadPadding;
+
             // check all thumbs to see if they are within the scroll area plus padding
-            if (thumbTop <= scrollBottom + thumbHeight * this.options.galleryThumbLoadPadding && thumbBottom >= scrollTop - thumbHeight * this.options.galleryThumbLoadPadding){
+            if (thumbTop <= scrollBottom + padding && thumbBottom >= scrollTop - padding){
 
                 // if chunked resizing is enabled, only resize, equalise, and show thumbs in the scroll area
                 if (this.isChunkedResizingEnabled()) {
                     this.sizeThumb($thumb);
-                    thumbsToEqualise.push(thumbs[i]);
-                    $thumb.removeClass('outsideScrollArea');
+                    //thumbsToEqualise.push(thumbs[i]);
                 }
+
+                $thumb.removeClass('outsideScrollArea');
 
                 if (debug) {
                     $label.append(', i: true');
@@ -334,10 +339,7 @@ class GalleryView extends BaseView {
                 this.loadThumb($thumb);
             } else {
 
-                // if chunked resizing is enabled, hide this thumb so you can't see thumbs of the wrong scale when scrolling
-                if (this.isChunkedResizingEnabled()) {
-                    $thumb.addClass('outsideScrollArea');
-                }
+                $thumb.addClass('outsideScrollArea');
 
                 if (debug) {
                     $label.append(', i: false');
@@ -345,7 +347,7 @@ class GalleryView extends BaseView {
             }
         }
 
-        this.equaliseHeights(thumbsToEqualise);
+        //this.equaliseHeights(thumbsToEqualise);
     }
 
     isChunkedResizingEnabled(): boolean {
@@ -381,8 +383,8 @@ class GalleryView extends BaseView {
 
         var $wrap = $thumb.find('.wrap');
 
-        var width: number = Number($thumb.data('width'));
-        var height: number = Number($thumb.data('height'));
+        var width: number = Number($thumb.data().initialwidth);
+        var height: number = Number($thumb.data().initialheight);
 
         var $label = $thumb.find('.label');
 

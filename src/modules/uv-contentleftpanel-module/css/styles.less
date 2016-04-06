@@ -346,6 +346,43 @@
                             }
                         }
 
+                        &.chunked{
+                            .thumb{
+                                &.outsideScrollArea{
+                                    .wrap{
+                                        border: 2px solid transparent;
+                                        img{
+                                            display: none;
+                                        }
+                                    }
+
+                                    span{
+                                        color: transparent;
+                                    }
+                                }
+
+                                &.outsideScrollArea.selected{
+                                    .wrap{
+                                        border: 2px solid transparent;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.chunked.multiSelect{
+                            .thumb {
+                                &.outsideScrollArea {
+                                    .wrap {
+                                        &.multiSelected {
+                                            background: none;
+                                            border: 2px solid transparent;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // all spacing-related thumb styles
                         .thumb{
                             margin: 0 7px 7px 0;
 
@@ -363,14 +400,6 @@
                             &.searchpreview{
                                 .wrap{
                                     border: 2px solid @link-color;
-                                }
-                            }
-
-                            &.outsideScrollArea{
-
-                                .wrap{
-                                    border: 2px solid transparent;
-                                    //border: 2px solid red;
                                 }
                             }
 
@@ -426,20 +455,6 @@
                             &.placeholder{
                                 .wrap {
                                     background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
-                                }
-                            }
-
-                            &.outsideScrollArea{
-
-                                .wrap{
-                                    img{
-                                        display: none;
-                                    }
-                                }
-
-                                span{
-                                    color: transparent;
-                                    //color: red;
                                 }
                             }
                         }

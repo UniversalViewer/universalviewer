@@ -3358,7 +3358,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.19';
+    exports.Version = '1.7.20';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4417,7 +4417,7 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             this._setRange();
             $.templates({
                 galleryThumbsTemplate: '\
-                <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}">\
+                <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}" data-initialwidth="{{>initialWidth}}" data-initialheight="{{>initialHeight}}">\
                     <div class="wrap" style="width:{{>initialWidth}}px; height:{{>initialHeight}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
                     {^{if multiSelectionEnabled}}\
                         <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
@@ -4458,13 +4458,15 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             var that = this;
             if (!this.thumbs)
                 return;
-            //this.thumbs = [this.thumbs[0]];
+            if (this.isChunkedResizingEnabled()) {
+                this.$thumbs.addClass("chunked");
+            }
             // set initial thumb sizes
             var heights = [];
             for (var i = 0; i < this.thumbs.length; i++) {
                 var thumb = this.thumbs[i];
-                var initialWidth = Math.floor(thumb.width * this.range);
-                var initialHeight = Math.floor(thumb.height * this.range);
+                var initialWidth = thumb.width;
+                var initialHeight = thumb.height;
                 thumb.initialWidth = initialWidth;
                 //thumb.initialHeight = initialHeight;
                 heights.push(initialHeight);
@@ -4556,13 +4558,13 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
             if (debug) {
                 console.log('scrollTop %s, scrollBottom %s', scrollTop, scrollBottom);
             }
-            var thumbsToEqualise = [];
+            //var thumbsToEqualise: any[] = [];
             // test which thumbs are scrolled into view
             var thumbs = this.getAllThumbs();
             // if chunked resizing isn't enabled, equalise all thumbs
-            if (!this.isChunkedResizingEnabled()) {
-                thumbsToEqualise = thumbs.toArray();
-            }
+            //if (!this.isChunkedResizingEnabled()) {
+            //    thumbsToEqualise = thumbs.toArray();
+            //}
             for (var i = 0; i < thumbs.length; i++) {
                 var $thumb = $(thumbs[i]);
                 var thumbTop = $thumb.position().top;
@@ -4576,30 +4578,27 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
                 if (!this.isChunkedResizingEnabled()) {
                     this.sizeThumb($thumb);
                 }
+                var padding = thumbHeight * this.options.galleryThumbLoadPadding;
                 // check all thumbs to see if they are within the scroll area plus padding
-                if (thumbTop <= scrollBottom + thumbHeight * this.options.galleryThumbLoadPadding && thumbBottom >= scrollTop - thumbHeight * this.options.galleryThumbLoadPadding) {
+                if (thumbTop <= scrollBottom + padding && thumbBottom >= scrollTop - padding) {
                     // if chunked resizing is enabled, only resize, equalise, and show thumbs in the scroll area
                     if (this.isChunkedResizingEnabled()) {
                         this.sizeThumb($thumb);
-                        thumbsToEqualise.push(thumbs[i]);
-                        $thumb.removeClass('outsideScrollArea');
                     }
+                    $thumb.removeClass('outsideScrollArea');
                     if (debug) {
                         $label.append(', i: true');
                     }
                     this.loadThumb($thumb);
                 }
                 else {
-                    // if chunked resizing is enabled, hide this thumb so you can't see thumbs of the wrong scale when scrolling
-                    if (this.isChunkedResizingEnabled()) {
-                        $thumb.addClass('outsideScrollArea');
-                    }
+                    $thumb.addClass('outsideScrollArea');
                     if (debug) {
                         $label.append(', i: false');
                     }
                 }
             }
-            this.equaliseHeights(thumbsToEqualise);
+            //this.equaliseHeights(thumbsToEqualise);
         };
         GalleryView.prototype.isChunkedResizingEnabled = function () {
             if (this.options.galleryThumbChunkedResizingEnabled && this.thumbs.length > this.options.galleryThumbChunkedResizingThreshold) {
@@ -4627,8 +4626,8 @@ define('modules/uv-contentleftpanel-module/GalleryView',["require", "exports", "
         };
         GalleryView.prototype.sizeThumb = function ($thumb) {
             var $wrap = $thumb.find('.wrap');
-            var width = Number($thumb.data('width'));
-            var height = Number($thumb.data('height'));
+            var width = Number($thumb.data().initialwidth);
+            var height = Number($thumb.data().initialheight);
             var $label = $thumb.find('.label');
             var newWidth = Math.floor(width * this.range);
             var newHeight = Math.floor(height * this.range);
