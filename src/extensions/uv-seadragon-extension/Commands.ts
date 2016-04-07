@@ -3,11 +3,11 @@ class Commands {
 
     static CLEAR_SEARCH: string                         = Commands.namespace + 'onClearSearch';
     static CURRENT_VIEW_URI: string                     = Commands.namespace + 'onCurrentViewUri';
-    static DOWNLOAD_CURRENTVIEW: string                 = Commands.namespace + 'onDownloadCurrentView';
-    static DOWNLOAD_ENTIREDOCUMENTASPDF: string         = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
-    static DOWNLOAD_ENTIREDOCUMENTASTEXT: string        = Commands.namespace + 'onDownloadEntireDocumentAsText';
-    static DOWNLOAD_WHOLEIMAGEHIGHRES: string           = Commands.namespace + 'onDownloadWholeImageHighRes';
-    static DOWNLOAD_WHOLEIMAGELOWRES: string            = Commands.namespace + 'onDownloadWholeImageLowRes';
+    //static DOWNLOAD_CURRENTVIEW: string                 = Commands.namespace + 'onDownloadCurrentView';
+    //static DOWNLOAD_ENTIREDOCUMENTASPDF: string         = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
+    //static DOWNLOAD_ENTIREDOCUMENTASTEXT: string        = Commands.namespace + 'onDownloadEntireDocumentAsText';
+    //static DOWNLOAD_WHOLEIMAGEHIGHRES: string           = Commands.namespace + 'onDownloadWholeImageHighRes';
+    //static DOWNLOAD_WHOLEIMAGELOWRES: string            = Commands.namespace + 'onDownloadWholeImageLowRes';
     static ENTER_MULTISELECT_MODE: string               = Commands.namespace + 'onEnterMultiSelectMode';
     static EXIT_MULTISELECT_MODE: string                = Commands.namespace + 'onExitMultiSelectMode';
     static FIRST: string                                = Commands.namespace + 'onFirst';
