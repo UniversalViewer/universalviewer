@@ -517,6 +517,9 @@ var Manifesto;
         ServiceProfile.prototype.token = function () {
             return new ServiceProfile(ServiceProfile.TOKEN.toString());
         };
+        ServiceProfile.prototype.trackingExtensions = function () {
+            return new ServiceProfile(ServiceProfile.TRACKINGEXTENSIONS.toString());
+        };
         ServiceProfile.prototype.uiExtensions = function () {
             return new ServiceProfile(ServiceProfile.UIEXTENSIONS.toString());
         };
@@ -553,7 +556,8 @@ var Manifesto;
         ServiceProfile.OTHERMANIFESTATIONS = new ServiceProfile("http://iiif.io/api/otherManifestations.json");
         ServiceProfile.SEARCHWITHIN = new ServiceProfile("http://iiif.io/api/search/0/search");
         ServiceProfile.TOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
-        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.azurewebsites.net/ui-extensions-profile");
+        ServiceProfile.TRACKINGEXTENSIONS = new ServiceProfile("http://universalviewer.io/tracking-extensions-profile");
+        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.io/ui-extensions-profile");
         return ServiceProfile;
     })(Manifesto.StringValue);
     Manifesto.ServiceProfile = ServiceProfile;
@@ -1079,6 +1083,13 @@ var Manifesto;
                 return new Manifesto.ManifestType(service.getProperty('manifestType'));
             }
             return new Manifesto.ManifestType('');
+        };
+        Manifest.prototype.getTrackingLabel = function () {
+            var service = this.getService(Manifesto.ServiceProfile.TRACKINGEXTENSIONS);
+            if (service) {
+                return service.getProperty('trackingLabel');
+            }
+            return '';
         };
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;

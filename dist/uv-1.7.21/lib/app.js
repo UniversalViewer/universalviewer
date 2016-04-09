@@ -260,6 +260,7 @@ define('Bootstrapper',["require", "exports", "./modules/uv-shared-module/BaseCom
         Bootstrapper.prototype.manifestLoaded = function (manifest) {
             var _this = this;
             this.manifest = manifest;
+            window.trackingLabel = manifest.getTrackingLabel();
             var sequence;
             var canvas;
             var extension;
@@ -1477,6 +1478,7 @@ define('modules/uv-shared-module/BaseExtension',["require", "exports", "./BaseCo
             return $(window).height();
         };
         BaseExtension.prototype.triggerSocket = function (eventName, eventObject) {
+            jQuery(document).trigger(eventName, [eventObject]);
             if (this.bootstrapper.socket) {
                 this.bootstrapper.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
             }
@@ -3358,7 +3360,7 @@ define('modules/uv-moreinforightpanel-module/MoreInfoRightPanel',["require", "ex
 });
 
 define('_Version',["require", "exports"], function (require, exports) {
-    exports.Version = '1.7.20';
+    exports.Version = '1.7.21';
 });
 
 var __extends = (this && this.__extends) || function (d, b) {
@@ -4289,11 +4291,11 @@ define('extensions/uv-seadragon-extension/Commands',["require", "exports"], func
         Commands.namespace = 'seadragonExtension.';
         Commands.CLEAR_SEARCH = Commands.namespace + 'onClearSearch';
         Commands.CURRENT_VIEW_URI = Commands.namespace + 'onCurrentViewUri';
-        Commands.DOWNLOAD_CURRENTVIEW = Commands.namespace + 'onDownloadCurrentView';
-        Commands.DOWNLOAD_ENTIREDOCUMENTASPDF = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
-        Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT = Commands.namespace + 'onDownloadEntireDocumentAsText';
-        Commands.DOWNLOAD_WHOLEIMAGEHIGHRES = Commands.namespace + 'onDownloadWholeImageHighRes';
-        Commands.DOWNLOAD_WHOLEIMAGELOWRES = Commands.namespace + 'onDownloadWholeImageLowRes';
+        //static DOWNLOAD_CURRENTVIEW: string                 = Commands.namespace + 'onDownloadCurrentView';
+        //static DOWNLOAD_ENTIREDOCUMENTASPDF: string         = Commands.namespace + 'onDownloadEntireDocumentAsPDF';
+        //static DOWNLOAD_ENTIREDOCUMENTASTEXT: string        = Commands.namespace + 'onDownloadEntireDocumentAsText';
+        //static DOWNLOAD_WHOLEIMAGEHIGHRES: string           = Commands.namespace + 'onDownloadWholeImageHighRes';
+        //static DOWNLOAD_WHOLEIMAGELOWRES: string            = Commands.namespace + 'onDownloadWholeImageLowRes';
         Commands.ENTER_MULTISELECT_MODE = Commands.namespace + 'onEnterMultiSelectMode';
         Commands.EXIT_MULTISELECT_MODE = Commands.namespace + 'onExitMultiSelectMode';
         Commands.FIRST = Commands.namespace + 'onFirst';
@@ -5887,7 +5889,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-dialogues-module/DownloadDialogue", "./Commands", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseCommands, BaseDownloadDialogue, Commands, DownloadOption) {
+define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports", "../../modules/uv-shared-module/BaseCommands", "../../modules/uv-dialogues-module/DownloadDialogue", "../../modules/uv-shared-module/DownloadOption"], function (require, exports, BaseCommands, BaseDownloadDialogue, DownloadOption) {
     var Size = Utils.Measurements.Size;
     var DownloadDialogue = (function (_super) {
         __extends(DownloadDialogue, _super);
@@ -5934,16 +5936,16 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             var that = this;
             this.$downloadButton.on('click', function (e) {
                 e.preventDefault();
-                var selectedOption = that.getSelectedOption();
-                var id = selectedOption.attr('id');
+                var $selectedOption = that.getSelectedOption();
+                var id = $selectedOption.attr('id');
+                var label = $selectedOption.attr('title');
                 var canvas = _this.provider.getCurrentCanvas();
                 if (_this.renderingUrls[id]) {
-                    if (id.toLowerCase().indexOf('pdf') !== -1) {
-                        $.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
-                    }
-                    else if (id.toLowerCase().indexOf('text') !== -1) {
-                        $.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
-                    }
+                    //if (id.toLowerCase().indexOf('pdf') !== -1){
+                    //$.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
+                    //} else if (id.toLowerCase().indexOf('text') !== -1){
+                    //$.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+                    //}
                     window.open(_this.renderingUrls[id]);
                 }
                 else {
@@ -5951,22 +5953,22 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                         case DownloadOption.currentViewAsJpg.toString():
                             var viewer = that.extension.getViewer();
                             window.open(that.provider.getCroppedImageUri(canvas, viewer));
-                            $.publish(Commands.DOWNLOAD_CURRENTVIEW);
+                            //$.publish(Commands.DOWNLOAD_CURRENTVIEW);
                             break;
                         case DownloadOption.selection.toString():
-                            $.publish(Commands.ENTER_MULTISELECT_MODE, [_this.content.downloadSelectionButton]);
+                            //$.publish(Commands.ENTER_MULTISELECT_MODE, [this.content.downloadSelectionButton]);
                             break;
                         case DownloadOption.wholeImageHighRes.toString():
                             window.open(_this.getHighResImageUriForCurrentCanvas());
-                            $.publish(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+                            //$.publish(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
                             break;
                         case DownloadOption.wholeImageLowResAsJpg.toString():
                             window.open(that.provider.getConfinedImageUri(canvas, that.options.confinedImageSize));
-                            $.publish(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+                            //$.publish(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
                             break;
                     }
                 }
-                $.publish(BaseCommands.DOWNLOAD, [id]);
+                $.publish(BaseCommands.DOWNLOAD, [label]);
                 _this.close();
             });
             this.$settingsButton.onPressed(function () {
@@ -5978,6 +5980,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
             _super.prototype.open.call(this);
             var canvas = this.provider.getCurrentCanvas();
             if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
+                var $input = this.$currentViewAsJpgButton.find('input');
                 var $label = this.$currentViewAsJpgButton.find('label');
                 var label = this.content.currentViewAsJpg;
                 var viewer = this.extension.getViewer();
@@ -5985,6 +5988,7 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                 if (dimensions) {
                     label = String.format(label, dimensions.size.width, dimensions.size.height);
                     $label.text(label);
+                    $input.prop('title', label);
                     this.$currentViewAsJpgButton.show();
                 }
                 else {
@@ -5995,29 +5999,35 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                 this.$currentViewAsJpgButton.hide();
             }
             if (this.isDownloadOptionAvailable(DownloadOption.wholeImageHighRes)) {
+                var $input = this.$wholeImageHighResButton.find('input');
                 var $label = this.$wholeImageHighResButton.find('label');
                 var mime = this.getMimeTypeForCurrentCanvas();
                 var size = this.getDimensionsForCurrentCanvas();
                 var label = String.format(this.content.wholeImageHighRes, size.width, size.height, Utils.Files.SimplifyMimeType(mime));
                 $label.text(label);
+                $input.prop('title', label);
                 this.$wholeImageHighResButton.show();
             }
             else {
                 this.$wholeImageHighResButton.hide();
             }
             if (this.isDownloadOptionAvailable(DownloadOption.wholeImageLowResAsJpg)) {
+                var $input = this.$wholeImageLowResAsJpgButton.find('input');
                 var $label = this.$wholeImageLowResAsJpgButton.find('label');
                 var size = this.provider.getConfinedImageDimensions(canvas, this.options.confinedImageSize);
                 var label = String.format(this.content.wholeImageLowResAsJpg, size.width, size.height);
                 $label.text(label);
+                $input.prop('title', label);
                 this.$wholeImageLowResAsJpgButton.show();
             }
             else {
                 this.$wholeImageLowResAsJpgButton.hide();
             }
             if (this.isDownloadOptionAvailable(DownloadOption.selection)) {
+                var $input = this.$selectionButton.find('input');
                 var $label = this.$selectionButton.find('label');
                 $label.text(this.content.downloadSelection);
+                $input.prop('title', this.content.downloadSelection);
                 this.$selectionButton.show();
             }
             else {
@@ -6074,18 +6084,16 @@ define('extensions/uv-seadragon-extension/DownloadDialogue',["require", "exports
                 var rendering = renderings[i];
                 if (rendering) {
                     var label = rendering.getLabel();
-                    var currentId;
+                    var currentId = "downloadOption" + ++this.renderingUrlsCount;
                     if (label) {
-                        currentId = _.camelCase(label);
                         label += " ({0})";
                     }
                     else {
-                        currentId = "dynamic_download_" + ++this.renderingUrlsCount;
                         label = defaultLabel;
                     }
                     label = String.format(label, Utils.Files.SimplifyMimeType(rendering.getFormat().toString()));
                     this.renderingUrls[currentId] = rendering.id;
-                    var newButton = $('<li class="option dynamic"><input id="' + currentId + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
+                    var newButton = $('<li class="option dynamic"><input id="' + currentId + '" title="' + label + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
                     switch (type) {
                         case DownloadOption.dynamicImageRenderings:
                             this.$imageOptions.append(newButton);
@@ -7909,21 +7917,25 @@ define('extensions/uv-seadragon-extension/Extension',["require", "exports", "../
                     _this.centerPanel.setFocus();
                 }
             });
-            $.subscribe(Commands.DOWNLOAD_CURRENTVIEW, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
-            });
-            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
-            });
-            $.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
-            });
-            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
-            });
-            $.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, function (e) {
-                _this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
-            });
+            //$.subscribe(Commands.DOWNLOAD_CURRENTVIEW, (e) => {
+            //    this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
+            //});
+            //
+            //$.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, (e) => {
+            //    this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
+            //});
+            //
+            //$.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, (e) => {
+            //    this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
+            //});
+            //
+            //$.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, (e) => {
+            //    this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+            //});
+            //
+            //$.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, (e) => {
+            //    this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+            //});
             $.subscribe(BaseCommands.END, function (e) {
                 _this.viewPage(_this.provider.getLastPageIndex());
             });
@@ -9621,6 +9633,9 @@ var Manifesto;
         ServiceProfile.prototype.token = function () {
             return new ServiceProfile(ServiceProfile.TOKEN.toString());
         };
+        ServiceProfile.prototype.trackingExtensions = function () {
+            return new ServiceProfile(ServiceProfile.TRACKINGEXTENSIONS.toString());
+        };
         ServiceProfile.prototype.uiExtensions = function () {
             return new ServiceProfile(ServiceProfile.UIEXTENSIONS.toString());
         };
@@ -9657,7 +9672,8 @@ var Manifesto;
         ServiceProfile.OTHERMANIFESTATIONS = new ServiceProfile("http://iiif.io/api/otherManifestations.json");
         ServiceProfile.SEARCHWITHIN = new ServiceProfile("http://iiif.io/api/search/0/search");
         ServiceProfile.TOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
-        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.azurewebsites.net/ui-extensions-profile");
+        ServiceProfile.TRACKINGEXTENSIONS = new ServiceProfile("http://universalviewer.io/tracking-extensions-profile");
+        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.io/ui-extensions-profile");
         return ServiceProfile;
     })(Manifesto.StringValue);
     Manifesto.ServiceProfile = ServiceProfile;
@@ -10183,6 +10199,13 @@ var Manifesto;
                 return new Manifesto.ManifestType(service.getProperty('manifestType'));
             }
             return new Manifesto.ManifestType('');
+        };
+        Manifest.prototype.getTrackingLabel = function () {
+            var service = this.getService(Manifesto.ServiceProfile.TRACKINGEXTENSIONS);
+            if (service) {
+                return service.getProperty('trackingLabel');
+            }
+            return '';
         };
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;

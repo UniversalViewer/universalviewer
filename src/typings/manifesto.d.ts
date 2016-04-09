@@ -130,6 +130,7 @@ declare module Manifesto {
         static OTHERMANIFESTATIONS: ServiceProfile;
         static SEARCHWITHIN: ServiceProfile;
         static TOKEN: ServiceProfile;
+        static TRACKINGEXTENSIONS: ServiceProfile;
         static UIEXTENSIONS: ServiceProfile;
         autoComplete(): ServiceProfile;
         iiif1ImageLevel1(): ServiceProfile;
@@ -152,6 +153,7 @@ declare module Manifesto {
         stanfordIIIF1ImageConformance1(): ServiceProfile;
         stanfordIIIF1ImageConformance2(): ServiceProfile;
         token(): ServiceProfile;
+        trackingExtensions(): ServiceProfile;
         uiExtensions(): ServiceProfile;
     }
 }
@@ -270,6 +272,7 @@ declare module Manifesto {
         getTree(): ITreeNode;
         private _parseTreeNode(node, range);
         getManifestType(): ManifestType;
+        getTrackingLabel(): string;
         isMultiSequence(): boolean;
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
@@ -555,6 +558,7 @@ declare module Manifesto {
         getManifestType(): ManifestType;
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): ViewingHint;
+        getTrackingLabel(): string;
         isMultiSequence(): boolean;
         rootRange: IRange;
     }

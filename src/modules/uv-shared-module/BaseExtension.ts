@@ -579,6 +579,7 @@ class BaseExtension implements IExtension {
     }
 
     triggerSocket(eventName: string, eventObject?: any): void {
+        jQuery(document).trigger(eventName, [eventObject]);
         if (this.bootstrapper.socket) {
             this.bootstrapper.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
         }
