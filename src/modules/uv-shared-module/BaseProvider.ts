@@ -284,7 +284,7 @@ class BaseProvider implements IProvider{
     }
 
     getShareUrl(): string {
-        if (Utils.Documents.IsInIFrame()){
+        if (Utils.Documents.IsInIFrame() && this.isDeepLinkingEnabled()){
             return parent.document.location.href;
         }
 
