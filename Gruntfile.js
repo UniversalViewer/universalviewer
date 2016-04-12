@@ -229,13 +229,12 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
-                            'es6-promise/promise.min.js',
                             'exjs/dist/ex.es3.min.js',
                             'extensions/dist/extensions.js',
                             'http-status-codes/dist/http-status-codes.js',
                             'jquery-plugins/dist/jquery-plugins.js',
+                            'jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
                             'key-codes/dist/key-codes.js',
-                            'lodash-compat/lodash.min.js',
                             'Units/Length.min.js',
                             'utils/dist/utils.js'
                         ],
@@ -284,6 +283,7 @@ module.exports = function (grunt) {
                     },
                     {
                         // all files that need to be copied from /node_modules to /src/extensions/uv-virtex-extension/lib post npm install
+                        // todo: created a json file that lists dependencies for each extension
                         cwd: '<%= config.dirs.npm %>',
                         expand: true,
                         flatten: true,
@@ -330,7 +330,7 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node lib/r.js/dist/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= global.minify %> out=<%= config.dirs.build %>/lib/app.js'
+                cmd: 'node node_modules/requirejs/bin/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= global.minify %> out=<%= config.dirs.build %>/lib/app.js'
             }
         },
 

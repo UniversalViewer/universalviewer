@@ -157,7 +157,7 @@ docReady(function() {
         if (!(j = window.jQuery) || compareVersionNumbers(version, j.fn.jquery) || callback(j, scriptUri, absScriptUri, loaded)) {
             var script = document.createElement("script");
             script.type = "text/javascript";
-            script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
+            script.src = "//cdnjs.cloudflare.com/ajax/libs/jquery/" + version + "/jquery.min.js";
             script.onload = script.onreadystatechange = function () {
                 if (!loaded && (!(d = this.readyState) || d === "loaded" || d === "complete")) {
                     callback((j = window.jQuery).noConflict(1), scriptUri, absScriptUri, loaded = true);
@@ -166,7 +166,7 @@ docReady(function() {
             };
             document.getElementsByTagName("head")[0].appendChild(script);
         }
-    })(window, document, "1.10.1", function ($, scriptUri, absScriptUri, jqueryLoaded) {
+    })(window, document, "1.10.2", function ($, scriptUri, absScriptUri, jqueryLoaded) {
 
         $.support.cors = true;
 
@@ -183,8 +183,8 @@ docReady(function() {
         // get the part preceding 'lib/embed.js'
         var baseUri = (/(.*)lib\/embed.js/).exec(scriptUri)[1];
         appUri = baseUri + 'app.html';
-        easyXDMUri = baseUri + 'lib/easyXDM.min.js';
-        json2Uri = baseUri + 'lib/json2.min.js';
+        easyXDMUri = 'https://cdnjs.cloudflare.com/ajax/libs/easyXDM/2.4.17.1/easyXDM.min.js';
+        json2Uri = 'https://cdnjs.cloudflare.com/ajax/libs/easyXDM/2.4.17.1/json2.min.js';
 
         var a = document.createElement('a');
         a.href = absScriptUri;
