@@ -60,7 +60,7 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
 1. Clone the `universalviewer` repository and sub modules:
 
-	    git clone https://github.com:UniversalViewer/universalviewer.git --recursive
+	    git clone https://github.com/UniversalViewer/universalviewer.git --recursive
 
 1. On the command line, go in to the `universalviewer` folder
 

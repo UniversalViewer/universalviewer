@@ -283,7 +283,7 @@ module.exports = function (grunt) {
                     },
                     {
                         // all files that need to be copied from /node_modules to /src/extensions/uv-virtex-extension/lib post npm install
-                        // todo: created a json file that lists dependencies for each extension
+                        // todo: create a json file that lists dependencies for each extension
                         cwd: '<%= config.dirs.npm %>',
                         expand: true,
                         flatten: true,
@@ -330,7 +330,7 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             build: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o baseUrl=src/ mainConfigFile=src/app.js name=app <%= global.minify %> out=<%= config.dirs.build %>/lib/app.js'
+                cmd: 'node node_modules/requirejs/bin/r.js -o app.build.js' // optimize=none'
             }
         },
 
@@ -349,10 +349,15 @@ module.exports = function (grunt) {
                 // todo: use a compiler flag when available
                 src: ['<%= config.dirs.build %>/lib/app.js'],
                 overwrite: true,
-                replacements: [{
-                    from: /window.DEBUG.*=.*true;/g,
-                    to: ''
-                }]
+                replacements: [
+                    //{
+                    //    from: /window.DEBUG.*=.*true;/g,
+                    //    to: ''
+                    //},
+                    {
+                        from: /window.DEBUG=!0;/g,
+                        to: ''
+                    }]
             },
             // ../../../modules/[module]/img/[image]
             // becomes
@@ -486,8 +491,8 @@ module.exports = function (grunt) {
         refresh();
 
         // grunt build --minify
-        var minify = grunt.option('minify');
-        if (minify) grunt.config.set('global.minify', '');
+        //var minify = grunt.option('minify');
+        //if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
             'typescript:dist',
