@@ -97,7 +97,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 if (mime){
                     if (mime.toLowerCase().indexOf('pdf') !== -1){
                         type = DownloadType.ENTIREDOCUMENTASPDF;
-                    } else if (mime.toLowerCase().indexOf('text') !== -1){
+                    } else if (mime.toLowerCase().indexOf('txt') !== -1){
                         type = DownloadType.ENTIREDOCUMENTASTEXT;
                     }
                 }
