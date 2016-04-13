@@ -1,7 +1,7 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import IProvider = require("../uv-shared-module/IProvider");
 import LeftPanel = require("../uv-shared-module/LeftPanel");
-import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
+import IIxIFProvider = require("../uv-shared-module/IIxIFProvider");
 
 class ResourcesLeftPanel extends LeftPanel {
 
@@ -30,7 +30,7 @@ class ResourcesLeftPanel extends LeftPanel {
     }
 
     dataBind(): void {
-        var annotations: Manifesto.IAnnotation[] = (<IMediaElementProvider>this.provider).getResources();
+        var annotations: Manifesto.IAnnotation[] = (<IIxIFProvider>this.provider).getResources();
 
         for (var i = 0; i < annotations.length; i++){
             var annotation: Manifesto.IAnnotation = annotations[i];

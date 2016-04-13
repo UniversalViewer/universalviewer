@@ -1,12 +1,9 @@
 
-import IProvider = require("../../modules/uv-shared-module/IProvider");
+import IIxIFProvider = require("../../modules/uv-shared-module/IIxIFProvider");
 
-interface IMediaElementProvider extends IProvider{
+interface IMediaElementProvider extends IIxIFProvider{
 	getEmbedScript(embedTemplate: string, width: number, height: number): string;
-    getElement(): Manifesto.IElement;
     getPosterImageUri(): string;
-    getResources(): Manifesto.IAnnotation[];
-    hasResources(): boolean;
     isVideo(): boolean;
 }
 
