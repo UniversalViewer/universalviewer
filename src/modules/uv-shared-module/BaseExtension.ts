@@ -222,8 +222,8 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.DOWN_ARROW);
         });
 
-        $.subscribe(BaseCommands.DOWNLOAD, (e, id) => {
-            this.triggerSocket(BaseCommands.DOWNLOAD, id);
+        $.subscribe(BaseCommands.DOWNLOAD, (e, obj) => {
+            this.triggerSocket(BaseCommands.DOWNLOAD, obj);
         });
 
         $.subscribe(BaseCommands.END, () => {

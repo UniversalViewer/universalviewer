@@ -1,10 +1,11 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
 import Commands = require("./Commands");
+import CroppedImageDimensions = require("./CroppedImageDimensions");
 import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
+import DownloadType = require("./DownloadType");
 import ISeadragonExtension = require("./ISeadragonExtension");
 import ISeadragonProvider = require("./ISeadragonProvider");
-import CroppedImageDimensions = require("./CroppedImageDimensions");
 import Size = Utils.Measurements.Size;
 
 class DownloadDialogue extends BaseDownloadDialogue {
@@ -88,37 +89,44 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
             var id: string = $selectedOption.attr('id');
             var label: string = $selectedOption.attr('title');
+            var mime: string = $selectedOption.data('mime').toString();
+            var type: string = DownloadType.UNKNOWN;
             var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
             if (this.renderingUrls[id]) {
-                //if (id.toLowerCase().indexOf('pdf') !== -1){
-                    //$.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
-                //} else if (id.toLowerCase().indexOf('text') !== -1){
-                    //$.publish(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
-                //}
+                if (mime){
+                    if (mime.toLowerCase().indexOf('pdf') !== -1){
+                        type = DownloadType.ENTIREDOCUMENTASPDF;
+                    } else if (mime.toLowerCase().indexOf('text') !== -1){
+                        type = DownloadType.ENTIREDOCUMENTASTEXT;
+                    }
+                }
                 window.open(this.renderingUrls[id]);
             } else {
                 switch (id){
                     case DownloadOption.currentViewAsJpg.toString():
                         var viewer = (<ISeadragonExtension>that.extension).getViewer();
                         window.open((<ISeadragonProvider>that.provider).getCroppedImageUri(canvas, viewer));
-                        //$.publish(Commands.DOWNLOAD_CURRENTVIEW);
+                        type = DownloadType.CURRENTVIEW;
                         break;
                     case DownloadOption.selection.toString():
                         $.publish(Commands.ENTER_MULTISELECT_MODE, [this.content.downloadSelectionButton]);
                         break;
                     case DownloadOption.wholeImageHighRes.toString():
                         window.open(this.getHighResImageUriForCurrentCanvas());
-                        //$.publish(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
+                        type = DownloadType.WHOLEIMAGEHIGHRES;
                         break;
                     case DownloadOption.wholeImageLowResAsJpg.toString():
                         window.open((<ISeadragonProvider>that.provider).getConfinedImageUri(canvas, that.options.confinedImageSize));
-                        //$.publish(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
+                        type = DownloadType.WHOLEIMAGELOWRES;
                         break;
                 }
             }
 
-            $.publish(BaseCommands.DOWNLOAD, [label]);
+            $.publish(BaseCommands.DOWNLOAD, [{
+                "type": type,
+                "label": label
+            }]);
 
             this.close();
         });
@@ -255,19 +263,20 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 } else {
                     label = defaultLabel;
                 }
-                label = String.format(label, Utils.Files.SimplifyMimeType(rendering.getFormat().toString()));
+                var mime: string = Utils.Files.SimplifyMimeType(rendering.getFormat().toString());
+                label = String.format(label, mime);
                 this.renderingUrls[currentId] = rendering.id;
-                var newButton = $('<li class="option dynamic"><input id="' + currentId + '" title="' + label + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
+                var $button = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
 
                 switch (type) {
                     case DownloadOption.dynamicImageRenderings:
-                        this.$imageOptions.append(newButton);
+                        this.$imageOptions.append($button);
                         break;
                     case DownloadOption.dynamicCanvasRenderings:
-                        this.$canvasOptions.append(newButton);
+                        this.$canvasOptions.append($button);
                         break;
                     case DownloadOption.dynamicSequenceRenderings:
-                        this.$sequenceOptions.append(newButton);
+                        this.$sequenceOptions.append($button);
                         break;
                 }
             }
