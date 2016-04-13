@@ -21,6 +21,19 @@ class Provider extends BaseProvider implements IPDFProvider{
 
         return script;
     }
+
+    getElement(): Manifesto.IElement {
+        return <Manifesto.IElement>this.getCanvasByIndex(0);
+    }
+
+    getResources(): Manifesto.IAnnotation[] {
+        var element: Manifesto.IElement = this.getElement();
+        return element.getResources();
+    }
+
+    hasResources(): boolean {
+        return this.getResources().length > 0;
+    }
 }
 
 export = Provider;

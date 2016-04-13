@@ -1,7 +1,7 @@
 
-import IProvider = require("../../modules/uv-shared-module/IProvider");
+import IIxIFProvider = require("../../modules/uv-shared-module/IIxIFProvider");
 
-interface IPDFProvider extends IProvider{
+interface IPDFProvider extends IIxIFProvider{
     getEmbedScript(embedTemplate: string, width: number, height: number): string;
 }
 
