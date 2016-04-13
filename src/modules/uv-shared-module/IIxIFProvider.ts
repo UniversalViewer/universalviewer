@@ -1,7 +1,7 @@
 import IProvider = require("./IProvider");
 
-interface IIxIFProvider extends IProvider{
-    getElement(): Manifesto.IElement;
+interface IIxIFProvider {
+    getCurrentElement(): Manifesto.IElement;
     getResources(): Manifesto.IAnnotation[];
     hasResources(): boolean;
 }

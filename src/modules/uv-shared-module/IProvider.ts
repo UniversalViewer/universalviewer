@@ -3,10 +3,11 @@ import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("./ExternalResource");
 import IMetadataItem = require("./IMetadataItem");
 import IRange = require("./IRange");
+import IIxIFProvider = require("./IIxIFProvider");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
-interface IProvider{
+interface IProvider extends IIxIFProvider{
     canvasIndex: number;
     collectionIndex: number;
     iiifResource: Manifesto.IIIIFResource;
