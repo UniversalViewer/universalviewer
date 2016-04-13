@@ -89,7 +89,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
             var id: string = $selectedOption.attr('id');
             var label: string = $selectedOption.attr('title');
-            var mime: string = $selectedOption.data('mime').toString();
+            var mime: any = $selectedOption.data('mime');
             var type: string = DownloadType.UNKNOWN;
             var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
 
