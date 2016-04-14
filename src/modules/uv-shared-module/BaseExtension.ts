@@ -784,7 +784,9 @@ class BaseExtension implements IExtension {
 
     isLeftPanelEnabled(): boolean {
         if (Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)){
-            if (this.provider.isMultiCanvas()){
+            if (this.provider.hasParentCollection()){
+                return true;
+            } else if (this.provider.isMultiCanvas()){
                 if (this.provider.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()){
                     return true;
                 }

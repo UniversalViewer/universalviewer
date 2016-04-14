@@ -546,6 +546,10 @@ class BaseProvider implements IProvider{
         return element.getResources();
     }
 
+    hasParentCollection(): boolean {
+        return !!this.manifest.parentCollection;
+    }
+
     hasResources(): boolean {
         return this.getResources().length > 0;
     }

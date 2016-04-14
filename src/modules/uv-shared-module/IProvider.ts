@@ -32,7 +32,6 @@ interface IProvider extends IIxIFProvider{
     getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
     getCurrentCanvas(): Manifesto.ICanvas;
     getCurrentSequence(): Manifesto.ISequence;
-    getElementType(element?: Manifesto.IElement): Manifesto.ElementType;
     getFirstPageIndex(): number;
     getInfoUri(canvas: Manifesto.ICanvas): string;
     getLabel(): string;
