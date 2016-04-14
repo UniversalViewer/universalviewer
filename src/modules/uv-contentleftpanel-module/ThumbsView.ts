@@ -4,9 +4,10 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
+import IThumb = require("../uv-shared-module/IThumb");
+import ITreeNode = require("../uv-shared-module/ITreeNode");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Shell = require("../uv-shared-module/Shell");
-import ITreeNode = require("../uv-shared-module/ITreeNode");
 
 class ThumbsView extends BaseView {
 
@@ -16,7 +17,7 @@ class ThumbsView extends BaseView {
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
-    public thumbs: Manifesto.Thumb[];
+    public thumbs: IThumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -133,6 +134,21 @@ class ThumbsView extends BaseView {
 
         if (this.isCreated) return;
         if (!this.thumbs) return;
+
+        // get median height
+        var heights = [];
+
+        for(var i = 0; i < this.thumbs.length; i++) {
+            var thumb: IThumb = this.thumbs[i];
+            heights.push(thumb.height);
+        }
+
+        var medianHeight = Math.median(heights);
+
+        for(var j = 0; j < this.thumbs.length; j++){
+            var thumb: IThumb = this.thumbs[j];
+            thumb.height = medianHeight;
+        }
 
         this.$thumbs.link($.templates.thumbsTemplate, this.thumbs);
 

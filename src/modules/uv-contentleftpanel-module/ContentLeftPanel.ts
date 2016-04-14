@@ -415,7 +415,7 @@ class ContentLeftPanel extends LeftPanel {
             height = this.config.options.twoColThumbHeight;
         }
 
-        this.thumbsView.thumbs = this.provider.getThumbs(width, height);
+        this.thumbsView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
         this.thumbsView.dataBind();
     }
 

@@ -536,6 +536,23 @@ class BaseProvider implements IProvider{
     getSerializedLocales(): string {
         return this.serializeLocales(this.locales);
     }
+
+    getCurrentElement(): Manifesto.IElement {
+        return <Manifesto.IElement>this.getCanvasByIndex(this.canvasIndex);
+    }
+
+    getResources(): Manifesto.IAnnotation[] {
+        var element: Manifesto.IElement = this.getCurrentElement();
+        return element.getResources();
+    }
+
+    hasParentCollection(): boolean {
+        return !!this.manifest.parentCollection;
+    }
+
+    hasResources(): boolean {
+        return this.getResources().length > 0;
+    }
 }
 
 export = BaseProvider;
