@@ -22,7 +22,7 @@ class ThumbsView extends BaseView {
 
     create(): void {
 
-        this.setConfig('contentLeftPanel');
+        this.setConfig('resourcesLeftPanel');
 
         super.create();
 
