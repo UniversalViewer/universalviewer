@@ -603,6 +603,7 @@ declare module Manifesto {
     interface IManifestoOptions {
         defaultLabel: string;
         locale: string;
+        index?: number;
         resource: IIIIFResource;
         navDate?: Date;
         pessimisticAccessControl: boolean;

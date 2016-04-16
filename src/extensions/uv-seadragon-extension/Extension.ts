@@ -66,26 +66,6 @@ class Extension extends BaseExtension {
             }
         });
 
-        //$.subscribe(Commands.DOWNLOAD_CURRENTVIEW, (e) => {
-        //    this.triggerSocket(Commands.DOWNLOAD_CURRENTVIEW);
-        //});
-        //
-        //$.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF, (e) => {
-        //    this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASPDF);
-        //});
-        //
-        //$.subscribe(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT, (e) => {
-        //    this.triggerSocket(Commands.DOWNLOAD_ENTIREDOCUMENTASTEXT);
-        //});
-        //
-        //$.subscribe(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES, (e) => {
-        //    this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGEHIGHRES);
-        //});
-        //
-        //$.subscribe(Commands.DOWNLOAD_WHOLEIMAGELOWRES, (e) => {
-        //    this.triggerSocket(Commands.DOWNLOAD_WHOLEIMAGELOWRES);
-        //});
-
         $.subscribe(BaseCommands.END, (e) => {
             this.viewPage(this.provider.getLastPageIndex());
         });

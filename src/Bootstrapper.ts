@@ -52,16 +52,16 @@ class Bootstrapper{
     loadIIIFResource(): void{
         var that = this;
 
-        if (this.isCORSEnabled()){
+        if (that.isCORSEnabled()){
             $.getJSON(that.params.manifestUri, (r) => {
-                this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
-                this.loadResource().then((manifest: Manifesto.IManifest) => {
+                that.iiifResource = that.parseIIIFResource(JSON.stringify(r));
+                that.loadResource().then((manifest: Manifesto.IManifest) => {
                     if (!manifest){
-                        this.notFound();
+                        that.notFound();
                         return;
                     }
 
-                    this.manifestLoaded(manifest);
+                    that.manifestLoaded(manifest);
                 });
             });
         } else {
