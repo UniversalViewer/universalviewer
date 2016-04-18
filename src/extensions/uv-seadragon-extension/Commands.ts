@@ -6,12 +6,14 @@ class Commands {
     static ENTER_MULTISELECT_MODE: string               = Commands.namespace + 'onEnterMultiSelectMode';
     static EXIT_MULTISELECT_MODE: string                = Commands.namespace + 'onExitMultiSelectMode';
     static FIRST: string                                = Commands.namespace + 'onFirst';
+    static GALLERY_DECREASE_SIZE: string                = Commands.namespace + 'onGalleryDecreaseSize';
+    static GALLERY_INCREASE_SIZE: string                = Commands.namespace + 'onGalleryIncreaseSize';
     static GALLERY_THUMB_SELECTED: string               = Commands.namespace + 'onGalleryThumbSelected';
     static IMAGE_SEARCH: string                         = Commands.namespace + 'onImageSearch';
     static LAST: string                                 = Commands.namespace + 'onLast';
     static MODE_CHANGED: string                         = Commands.namespace + 'onModeChanged';
-    static MULTISELECTION_MADE: string                  = Commands.namespace + 'onMultiSelectionMade';
     static MULTISELECT_CHANGE: string                   = Commands.namespace + 'onMultiSelectChange';
+    static MULTISELECTION_MADE: string                  = Commands.namespace + 'onMultiSelectionMade';
     static NEXT: string                                 = Commands.namespace + 'onNext';
     static NEXT_SEARCH_RESULT: string                   = Commands.namespace + 'onNextSearchResult';
     static OPEN_THUMBS_VIEW: string                     = Commands.namespace + 'onOpenThumbsView';

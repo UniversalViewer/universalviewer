@@ -583,7 +583,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
             dateNode.id = node.id;
             dateNode.label = this.getNodeDisplayDate(node);
             dateNode.data = node.data;
-            dateNode.data.type = 'manifest';
+            dateNode.data.type = manifesto.TreeNodeType.manifest().toString();
             dateNode.data.year = year;
             dateNode.data.month = month;
 
