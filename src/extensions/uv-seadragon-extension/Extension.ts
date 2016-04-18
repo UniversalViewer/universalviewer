@@ -75,6 +75,14 @@ class Extension extends BaseExtension {
             this.viewPage(this.provider.getFirstPageIndex());
         });
 
+        $.subscribe(Commands.GALLERY_DECREASE_SIZE, (e) => {
+            this.triggerSocket(Commands.GALLERY_DECREASE_SIZE);
+        });
+
+        $.subscribe(Commands.GALLERY_INCREASE_SIZE, (e) => {
+            this.triggerSocket(Commands.GALLERY_INCREASE_SIZE);
+        });
+
         $.subscribe(Commands.GALLERY_THUMB_SELECTED, (e) => {
             this.triggerSocket(Commands.GALLERY_THUMB_SELECTED);
         });

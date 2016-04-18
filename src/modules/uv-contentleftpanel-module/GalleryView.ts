@@ -92,6 +92,8 @@ class GalleryView extends BaseView {
             if (val >= Number(this.$sizeRange.attr('min'))){
                 this.$sizeRange.val(val.toString());
                 this.$sizeRange.trigger('change');
+
+                $.publish(Commands.GALLERY_DECREASE_SIZE);
             }
         });
 
@@ -101,6 +103,8 @@ class GalleryView extends BaseView {
             if (val <= Number(this.$sizeRange.attr('max'))){
                 this.$sizeRange.val(val.toString());
                 this.$sizeRange.trigger('change');
+
+                $.publish(Commands.GALLERY_INCREASE_SIZE);
             }
         });
 
@@ -291,15 +295,8 @@ class GalleryView extends BaseView {
             console.log('scrollTop %s, scrollBottom %s', scrollTop, scrollBottom);
         }
 
-        //var thumbsToEqualise: any[] = [];
-
         // test which thumbs are scrolled into view
         var thumbs = this.getAllThumbs();
-
-        // if chunked resizing isn't enabled, equalise all thumbs
-        //if (!this.isChunkedResizingEnabled()) {
-        //    thumbsToEqualise = thumbs.toArray();
-        //}
 
         for (var i = 0; i < thumbs.length; i++) {
 
@@ -327,7 +324,6 @@ class GalleryView extends BaseView {
                 // if chunked resizing is enabled, only resize, equalise, and show thumbs in the scroll area
                 if (this.isChunkedResizingEnabled()) {
                     this.sizeThumb($thumb);
-                    //thumbsToEqualise.push(thumbs[i]);
                 }
 
                 $thumb.removeClass('outsideScrollArea');
@@ -346,8 +342,6 @@ class GalleryView extends BaseView {
                 }
             }
         }
-
-        //this.equaliseHeights(thumbsToEqualise);
     }
 
     isChunkedResizingEnabled(): boolean {
@@ -355,28 +349,6 @@ class GalleryView extends BaseView {
             return true;
         }
         return false;
-    }
-
-    equaliseHeights(thumbs): void {
-
-        $(thumbs).find('.wrap').equaliseHeight(false, true);
-
-        //console.log('equalise', thumbs);
-        //
-        //var unEqualised = [];
-        //
-        //for (var i = 0; i < thumbs.length; i++){
-        //
-        //    var thumb = thumbs[i];
-        //
-        //    if (!$(thumb).data('eq') === true){
-        //        //$(thumb).data('eq', true);
-        //        unEqualised.push(thumb);
-        //        console.log('equalise', i);
-        //    }
-        //}
-
-        //$(unEqualised).find('.wrap').equaliseHeight(false, true);
     }
 
     sizeThumb($thumb: JQuery) : void {
