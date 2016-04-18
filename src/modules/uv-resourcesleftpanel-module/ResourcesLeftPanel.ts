@@ -2,6 +2,7 @@ import BaseCommands = require("../uv-shared-module/BaseCommands");
 import IProvider = require("../uv-shared-module/IProvider");
 import LeftPanel = require("../uv-shared-module/LeftPanel");
 import IIxIFProvider = require("../uv-shared-module/IIxIFProvider");
+import IThumb = require("../uv-shared-module/IThumb");
 import ThumbsView = require("./ThumbsView");
 
 class ResourcesLeftPanel extends LeftPanel {
@@ -95,7 +96,7 @@ class ResourcesLeftPanel extends LeftPanel {
         if (typeof height === "undefined") {
             height = 100;
         }
-        this.thumbsView.thumbs = this.provider.getThumbs(width, height);
+        this.thumbsView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
         // hide thumb selector for single-part manifests
         if (this.thumbsView.thumbs.length < 2) {
             this.$thumbsView.hide();
