@@ -74,6 +74,7 @@ class BaseExtension implements IExtension {
                 config: this.provider.bootstrapper.config,
                 params: this.provider.bootstrapper.params
             },
+            settings: this.provider.getSettings(),
             preview: this.getSharePreview()
         });
 
