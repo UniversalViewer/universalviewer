@@ -36,6 +36,8 @@ Features:
 - Supports search and autocomplete service integration with overlayed search results.
 - Internationalised UI using [transifex.com](https://www.transifex.com/) (currently supports English and Welsh. Volunteers for more translations gratefully accepted!)
 
+[More about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
+
 ## Stable Builds
 
 See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
