@@ -86,6 +86,11 @@ class BaseExtension implements IExtension {
         if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
         if (this.provider.isLightbox) this.$element.addClass('lightbox');
 
+        $(document).on('mousemove', (e) => {
+            this.mouseX = e.pageX;
+            this.mouseY = e.pageY;
+        });
+
         // events.
         if (!this.provider.isReload){
             window.onresize = () => {
@@ -95,11 +100,6 @@ class BaseExtension implements IExtension {
 
                 this.resize();
             };
-
-            $(document).on('mousemove', (e) => {
-                this.mouseX = e.pageX;
-                this.mouseY = e.pageY;
-            });
 
             this.$element.on('drop', (e => {
                 e.preventDefault();
@@ -176,13 +176,13 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.ACCEPT_TERMS);
         });
 
-        $.subscribe(BaseCommands.AUTHORIZATION_FAILED, () => {
-            this.triggerSocket(BaseCommands.AUTHORIZATION_FAILED);
+        $.subscribe(BaseCommands.LOGIN_FAILED, () => {
+            this.triggerSocket(BaseCommands.LOGIN_FAILED);
             this.showMessage(this.provider.config.content.authorisationFailedMessage);
         });
 
-        $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
-            this.triggerSocket(BaseCommands.AUTHORIZATION_OCCURRED);
+        $.subscribe(BaseCommands.LOGIN, () => {
+            this.triggerSocket(BaseCommands.LOGIN);
         });
 
         $.subscribe(BaseCommands.BOOKMARK, () => {
@@ -197,8 +197,8 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
         });
 
-        $.subscribe(BaseCommands.CLICKTHROUGH_OCCURRED, () => {
-            this.triggerSocket(BaseCommands.CLICKTHROUGH_OCCURRED);
+        $.subscribe(BaseCommands.CLICKTHROUGH, () => {
+            this.triggerSocket(BaseCommands.CLICKTHROUGH);
         });
 
         $.subscribe(BaseCommands.CLOSE_ACTIVE_DIALOGUE, () => {
@@ -278,6 +278,10 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
             this.triggerSocket(BaseCommands.HIDE_OVERLAY);
+        });
+
+        $.subscribe(BaseCommands.HIDE_RESTRICTED_DIALOGUE, () => {
+            this.triggerSocket(BaseCommands.HIDE_RESTRICTED_DIALOGUE);
         });
 
         $.subscribe(BaseCommands.HIDE_SETTINGS_DIALOGUE, () => {
@@ -677,7 +681,7 @@ class BaseExtension implements IExtension {
                 })['catch']((error: any) => {
                     switch(error.name){
                         case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
-                            $.publish(BaseCommands.AUTHORIZATION_FAILED);
+                            $.publish(BaseCommands.LOGIN_FAILED);
                             break;
                         case manifesto.StatusCodes.FORBIDDEN.toString():
                             $.publish(BaseCommands.FORBIDDEN);
@@ -838,7 +842,7 @@ class BaseExtension implements IExtension {
                     var pollTimer = window.setInterval(() => {
                         if (win.closed) {
                             window.clearInterval(pollTimer);
-                            $.publish(BaseCommands.CLICKTHROUGH_OCCURRED);
+                            $.publish(BaseCommands.CLICKTHROUGH);
                             resolve();
                         }
                     }, 500);
@@ -872,12 +876,22 @@ class BaseExtension implements IExtension {
 
             $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
-                acceptCallback: () => {
+                loginCallback: () => {
                     var win = window.open(resource.loginService.id + "?t=" + new Date().getTime());
                     var pollTimer = window.setInterval(function () {
                         if (win.closed) {
                             window.clearInterval(pollTimer);
-                            $.publish(BaseCommands.AUTHORIZATION_OCCURRED);
+                            $.publish(BaseCommands.LOGIN);
+                            resolve();
+                        }
+                    }, 500);
+                },
+                logoutCallback: () => {
+                    var win = window.open(resource.logoutService.id + "?t=" + new Date().getTime());
+                    var pollTimer = window.setInterval(function () {
+                        if (win.closed) {
+                            window.clearInterval(pollTimer);
+                            $.publish(BaseCommands.LOGOUT);
                             resolve();
                         }
                     }, 500);

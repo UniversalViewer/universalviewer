@@ -383,19 +383,20 @@ module.exports = function (grunt) {
                     to: '\(\'../../img/$2\'\)'
                 }]
             },
-            examples: {
+            versions: {
                 // replace uv version
                 src: [
                     //'<%= config.dirs.examples %>/index.html',
                     //'<%= config.dirs.examples %>/noeditor.html',
                     //'<%= config.dirs.examples %>/examples.js',
                     //'<%= config.dirs.examples %>/uv.js',
-                    '<%= config.dirs.examples %>/web.config'
+                    //'<%= config.dirs.examples %>/web.config',
+                    './src/lib/embed.js'
                 ],
                 overwrite: true,
                 replacements: [{
                     from: /uv-\d+\.\d+\.\d+/g,
-                    to: '<%= config.dirs.uv %>'
+                    to: '<%= config.dirs.uvVersioned %>'
                 }]
             }
         },
@@ -508,7 +509,7 @@ module.exports = function (grunt) {
             'theme:dist',
             'replace:moduleimages',
             'replace:themeimages',
-            'replace:examples',
+            'replace:versions',
             'clean:examples',
             'copy:examples',
             'dist'

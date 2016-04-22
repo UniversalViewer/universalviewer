@@ -447,7 +447,8 @@ declare module Manifesto {
         static authorize(resource: IExternalResource, tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, restricted: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource, rejectOnError: boolean) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>): Promise<IExternalResource>;
         private static showAuthInteraction(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, resolve, reject);
         static getService(resource: any, profile: ServiceProfile | string): IService;
-        static getServiceByReference(resource: any, id: string): any;
+        static getResourceById(parentResource: IJSONLDResource, id: string): IJSONLDResource;
+        static getAllArrays(obj: any): exjs.IEnumerable<any>;
         static getServices(resource: any): IService[];
     }
 }

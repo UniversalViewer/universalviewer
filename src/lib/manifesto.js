@@ -864,9 +864,9 @@ var Manifesto;
                 id = '0';
             }
             else {
-                id = treeNode.parentNode.id + "/" + index;
+                id = treeNode.parentNode.id + "-" + index;
             }
-            treeNode.id = id.hashCode();
+            treeNode.id = id;
             for (var i = 0; i < treeNode.nodes.length; i++) {
                 var n = treeNode.nodes[i];
                 this.generateTreeNodeIds(n, i);
@@ -1932,17 +1932,21 @@ var Manifesto;
             }
             return null;
         };
-        Utils.getServiceByReference = function (resource, id) {
-            var service;
-            var services = this.getServices(resource.options.resource);
-            for (var i = 0; i < services.length; i++) {
-                var s = services[i];
-                if (s.id === id) {
-                    service = new Manifesto.Service(s.__jsonld, resource.options);
-                    break;
+        Utils.getResourceById = function (parentResource, id) {
+            return [parentResource.__jsonld].en().traverseUnique(function (x) { return Utils.getAllArrays(x); })
+                .first(function (r) { return r['@id'] === id; });
+        };
+        Utils.getAllArrays = function (obj) {
+            var all = [].en();
+            if (!obj)
+                return all;
+            for (var key in obj) {
+                var val = obj[key];
+                if (_isArray(val)) {
+                    all = all.concat(val);
                 }
             }
-            return service;
+            return all;
         };
         Utils.getServices = function (resource) {
             var service;
@@ -1963,8 +1967,11 @@ var Manifesto;
             }
             for (var i = 0; i < service.length; i++) {
                 var s = service[i];
-                if (_isString(s) && resource !== resource.options.resource) {
-                    services.push(this.getServiceByReference(resource, s));
+                if (_isString(s)) {
+                    var r = this.getResourceById(resource.options.resource, s);
+                    if (r) {
+                        services.push(new Manifesto.Service(r.__jsonld || r, resource.options));
+                    }
                 }
                 else {
                     services.push(new Manifesto.Service(s, resource.options));

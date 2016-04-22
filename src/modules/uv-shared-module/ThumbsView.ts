@@ -27,11 +27,11 @@ class ThumbsView extends BaseView {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(BaseCommands.AUTHORIZATION_OCCURRED, () => {
+        $.subscribe(BaseCommands.LOGIN, () => {
             this.loadThumbs();
         });
 
-        $.subscribe(BaseCommands.CLICKTHROUGH_OCCURRED, () => {
+        $.subscribe(BaseCommands.CLICKTHROUGH, () => {
             this.loadThumbs();
         });
 

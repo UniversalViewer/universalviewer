@@ -96,6 +96,7 @@
     "loginDialogue": {
       "content": {
         "login": "Login",
+        "logout": "Logout",
         "cancel": "Cancel"
       }
     },

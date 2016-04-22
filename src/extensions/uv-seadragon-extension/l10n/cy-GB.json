@@ -93,6 +93,7 @@
     "loginDialogue": {
       "content": {
         "login": "Mewngofnodi",
+        "logout": "Allgofnodi",
         "cancel": "Diddymu"
       }
     },

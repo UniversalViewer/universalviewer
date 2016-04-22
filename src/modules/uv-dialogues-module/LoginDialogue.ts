@@ -4,9 +4,11 @@ import ILoginDialogueOptions = require("../uv-shared-module/ILoginDialogueOption
 
 class LoginDialogue extends Dialogue {
 
-    acceptCallback: any;
+    loginCallback: any;
+    logoutCallback: any;
     $cancelButton: JQuery;
     $loginButton: JQuery;
+    $logoutButton: JQuery;
     $message: JQuery;
     $title: JQuery;
     options: ILoginDialogueOptions;
@@ -26,7 +28,8 @@ class LoginDialogue extends Dialogue {
         this.closeCommand = BaseCommands.HIDE_LOGIN_DIALOGUE;
 
         $.subscribe(this.openCommand, (s, e: any) => {
-            this.acceptCallback = e.acceptCallback;
+            this.loginCallback = e.loginCallback;
+            this.logoutCallback = e.logoutCallback;
             this.options = e.options;
             this.resource = e.resource;
             this.open();
@@ -43,6 +46,7 @@ class LoginDialogue extends Dialogue {
             <div>\
                 <p class="message scroll"></p>\
                 <div class="buttons">\
+                    <a class="logout btn btn-primary" href="#" target="_parent"></a>\
                     <a class="login btn btn-primary" href="#" target="_parent"></a>\
                     <a class="cancel btn btn-primary" href="#"></a>\
                 </div>\
@@ -54,6 +58,9 @@ class LoginDialogue extends Dialogue {
         this.$loginButton = this.$content.find('.login');
         this.$loginButton.text(this.content.login);
 
+        this.$logoutButton = this.$content.find('.logout');
+        this.$logoutButton.text(this.content.logout);
+
         this.$cancelButton = this.$content.find('.cancel');
         this.$cancelButton.text(this.content.cancel);
 
@@ -62,7 +69,13 @@ class LoginDialogue extends Dialogue {
         this.$loginButton.on('click', (e) => {
             e.preventDefault();
             this.close();
-            if (this.acceptCallback) this.acceptCallback();
+            if (this.loginCallback) this.loginCallback();
+        });
+
+        this.$logoutButton.on('click', (e) => {
+            e.preventDefault();
+            this.close();
+            if (this.logoutCallback) this.logoutCallback();
         });
 
         this.$cancelButton.on('click', (e) => {
@@ -80,6 +93,9 @@ class LoginDialogue extends Dialogue {
 
         if (this.options.warningMessage){
             message = '<span class="warning">' + this.provider.config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
+            //this.$logoutButton.show();
+        } else {
+            this.$logoutButton.hide();
         }
 
         this.$message.html(message);
