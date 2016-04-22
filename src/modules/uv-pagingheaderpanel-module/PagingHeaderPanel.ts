@@ -5,6 +5,7 @@ import HeaderPanel = require("../uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 
 class PagingHeaderPanel extends HeaderPanel {
 
@@ -18,6 +19,7 @@ class PagingHeaderPanel extends HeaderPanel {
     $nextOptions: JQuery;
     $pageModeLabel: JQuery;
     $pageModeOption: JQuery;
+    $pagingToggleButton: JQuery;
     $prevButton: JQuery;
     $prevOptions: JQuery;
     $selectionBoxOptions: JQuery;
@@ -48,6 +50,7 @@ class PagingHeaderPanel extends HeaderPanel {
 
         $.subscribe(BaseCommands.SETTINGS_CHANGED, (e) => {
             this.modeChanged();
+            this.updatePagingToggle();
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, (e) => {
@@ -169,6 +172,19 @@ class PagingHeaderPanel extends HeaderPanel {
         } else {
             this.$pageModeLabel.text(this.content.page);
         }
+
+        this.$pagingToggleButton = $('<a class="imageBtn pagingToggle"></a>');
+        this.$rightOptions.prepend(this.$pagingToggleButton);
+
+        this.updatePagingToggle();
+
+        this.$pagingToggleButton.on('click', () => {
+            var enabled: boolean = !this.getSettings().pagingEnabled;
+
+            this.updateSettings({ pagingEnabled: enabled });
+
+            $.publish(Commands.PAGING_TOGGLED, [enabled]);
+        });
 
         this.setTitles();
 
@@ -294,8 +310,11 @@ class PagingHeaderPanel extends HeaderPanel {
                     $elementWithGreatestTabIndex.focus();
                 }, 100);
             }
-        });        
-        
+        });
+
+        if (this.options.pagingToggleEnabled === false){
+            this.$pagingToggleButton.hide();
+        }
     }
 
     isPageModeEnabled(): boolean {
@@ -317,6 +336,27 @@ class PagingHeaderPanel extends HeaderPanel {
         }
 
         this.$searchButton.prop('title', this.content.go);
+    }
+
+    updatePagingToggle(): void {
+        if (!this.pagingToggleIsVisible()){
+            this.$pagingToggleButton.hide();
+            return;
+        }
+
+        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled()){
+            this.$pagingToggleButton.removeClass('two-up');
+            this.$pagingToggleButton.addClass('one-up');
+            this.$pagingToggleButton.prop('title', this.content.oneUp);
+        } else {
+            this.$pagingToggleButton.removeClass('one-up');
+            this.$pagingToggleButton.addClass('two-up');
+            this.$pagingToggleButton.prop('title', this.content.twoUp);
+        }
+    }
+
+    pagingToggleIsVisible(): boolean {
+        return this.options.pagingToggleEnabled && (<ISeadragonProvider>this.provider).isPagingAvailable();
     }
 
     setTotal(): void {
@@ -469,6 +509,13 @@ class PagingHeaderPanel extends HeaderPanel {
 
     resize(): void {
         super.resize();
+
+        // hide toggle buttons below minimum width
+        if (this.extension.width() < this.provider.config.options.minWidthBreakPoint){
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.hide();
+        } else {
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.show();
+        }
     }
 }
 

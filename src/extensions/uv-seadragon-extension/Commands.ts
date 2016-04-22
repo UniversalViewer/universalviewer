@@ -19,6 +19,7 @@ class Commands {
     static OPEN_THUMBS_VIEW: string                     = Commands.namespace + 'onOpenThumbsView';
     static OPEN_TREE_VIEW: string                       = Commands.namespace + 'onOpenTreeView';
     static PAGE_SEARCH: string                          = Commands.namespace + 'onPageSearch';
+    static PAGING_TOGGLED: string                       = Commands.namespace + 'onPagingToggled';
     static PREV: string                                 = Commands.namespace + 'onPrev';
     static PREV_SEARCH_RESULT: string                   = Commands.namespace + 'onPrevSearchResult';
     static SEADRAGON_ANIMATION: string                  = Commands.namespace + 'onAnimation';

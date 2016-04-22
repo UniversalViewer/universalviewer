@@ -166,6 +166,10 @@ class Extension extends BaseExtension {
             this.viewPage((<ISeadragonProvider>this.provider).getPrevPageIndex());
         });
 
+        $.subscribe(Commands.PAGING_TOGGLED, (e, obj) => {
+            this.triggerSocket(Commands.PAGING_TOGGLED, obj);
+        });
+
         $.subscribe(BaseCommands.PLUS, (e) => {
             this.centerPanel.setFocus();
         });
