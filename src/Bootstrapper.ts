@@ -133,7 +133,11 @@ class Bootstrapper{
 
         this.manifest = manifest;
 
-        window.trackingLabel = manifest.getTrackingLabel();
+        var trackingLabel: string = manifest.getTrackingLabel();
+
+        trackingLabel += ', URI: ' + this.params.embedDomain;
+
+        window.trackingLabel = trackingLabel;
 
         var sequence: Manifesto.ISequence;
         var canvas: Manifesto.ICanvas;

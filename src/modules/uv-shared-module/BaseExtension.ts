@@ -187,6 +187,7 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.BOOKMARK, () => {
             this.bookmark();
+            this.triggerSocket(BaseCommands.BOOKMARK);
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, () => {
