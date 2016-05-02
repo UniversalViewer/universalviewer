@@ -131,7 +131,7 @@ class PagingHeaderPanel extends HeaderPanel {
 
             for (var imageIndex = 0; imageIndex < this.provider.getTotalCanvases(); imageIndex++) {
                 var canvas = this.provider.getCanvasByIndex(imageIndex);
-                var label = canvas.getLabel();
+                var label = this.provider.sanitize(canvas.getLabel());
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
