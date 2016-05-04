@@ -69,6 +69,9 @@ class ResourcesLeftPanel extends LeftPanel {
         this.dataBindThumbsView();
         var annotations: Manifesto.IAnnotation[] = (<IIxIFProvider>this.provider).getResources();
 
+        if (annotations.length === 0) {
+            this.$resourcesView.hide();
+        }
         for (var i = 0; i < annotations.length; i++){
             var annotation: Manifesto.IAnnotation = annotations[i];
             var resource: Manifesto.Resource = annotation.getResource();
@@ -130,6 +133,7 @@ class ResourcesLeftPanel extends LeftPanel {
     resize(): void {
         super.resize();
 
+        this.$views.height(this.$main.height());
         this.$resources.height(this.$main.height());
     }
 }
