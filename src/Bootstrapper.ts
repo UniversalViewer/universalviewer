@@ -114,6 +114,16 @@ class Bootstrapper{
                             resolve();
                         }
 
+                        // Special case: we're trying to load the first manifest of the
+                        // collection, but the collection has no manifests but does have
+                        // subcollections. Thus, we should dive in until we find something
+                        // we can display!
+                        if (collection.getTotalManifests() == 0 && this.params.manifestIndex == 0 && collection.getTotalCollections() > 0) {
+                            that.params.collectionIndex = 0;
+                            that.params.manifestUri = collection.id;
+                            that.bootStrap(that.params);
+                        }
+
                         collection.getManifestByIndex(that.params.manifestIndex).then((manifest: Manifesto.IManifest) => {
                             resolve(manifest);
                         });
