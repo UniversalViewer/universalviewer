@@ -23,6 +23,7 @@ interface ISeadragonProvider extends IProvider{
     isContinuous(): boolean;
     isHorizontallyAligned(): boolean;
     isLeftToRight(): boolean;
+    isPaged(): boolean;
     isRightToLeft(): boolean;
     isSearchWithinEnabled(): boolean;
     isTopToBottom(): boolean;

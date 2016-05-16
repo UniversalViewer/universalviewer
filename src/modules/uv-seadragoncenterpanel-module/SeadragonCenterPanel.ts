@@ -216,7 +216,7 @@ class SeadragonCenterPanel extends CenterPanel {
             $.publish(Commands.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
         });
 
-        this.title = this.extension.provider.getTitle();
+        this.title = (<ISeadragonProvider>this.extension.provider).getLabel();
 
         this.createNavigationButtons();
 
@@ -313,6 +313,7 @@ class SeadragonCenterPanel extends CenterPanel {
         var leftPage: any;
         var leftPageBounds: any;
         var rightPage: any;
+        var rightPageBounds: any;
         var rightPagePos: any;
 
         // if there's more than one image, determine alignment strategy
@@ -335,9 +336,16 @@ class SeadragonCenterPanel extends CenterPanel {
                     leftPageBounds = leftPage.getBounds(true);
                     x = leftPageBounds.x + leftPageBounds.width;
                     rightPage = this.viewer.world.getItemAt(1);
-                    rightPagePos = rightPage.getBounds(true).getTopLeft();
+                    rightPageBounds = rightPage.getBounds(true);
+                    rightPagePos = rightPageBounds.getTopLeft();
                     rightPagePos.x = x + this.config.options.pageGap;
                     rightPage.setPosition(rightPagePos, true);
+
+                    if (rightPage.source.width > rightPage.source.height){
+                        rightPage.setWidth(leftPageBounds.width);
+                    } else {
+                        rightPage.setHeight(leftPageBounds.height);
+                    }
                 }
             } else {
 
@@ -637,7 +645,7 @@ class SeadragonCenterPanel extends CenterPanel {
             this.fitToBounds(this.currentBounds);
         }
 
-        this.$title.ellipsisFill(this.title);
+        this.$title.ellipsisFill(this.provider.sanitize(this.title));
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));

@@ -415,7 +415,7 @@ class ContentLeftPanel extends LeftPanel {
             height = this.config.options.twoColThumbHeight;
         }
 
-        this.thumbsView.thumbs = this.provider.getThumbs(width, height);
+        this.thumbsView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
         this.thumbsView.dataBind();
     }
 
@@ -454,7 +454,7 @@ class ContentLeftPanel extends LeftPanel {
             // hide the tabs if either tree or thumbs are disabled.
             if (!treeEnabled || !thumbsEnabled) this.$tabs.hide();
 
-            if (thumbsEnabled && (<IProvider>this.provider).defaultToThumbsView()){
+            if (thumbsEnabled && this.defaultToThumbsView()){
                 this.openThumbsView();
             } else if (treeEnabled){
                 this.openTreeView();
@@ -468,6 +468,31 @@ class ContentLeftPanel extends LeftPanel {
             this.$treeButton.attr('tabindex', '');
             this.$thumbsButton.attr('tabindex', '');
         }
+    }
+
+    defaultToThumbsView(): boolean{
+
+        var defaultToTreeEnabled: boolean = Utils.Bools.GetBool(this.config.options.defaultToTreeEnabled, false);
+        var defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
+
+        if (defaultToTreeEnabled){
+            if (this.treeData.nodes.length > defaultToTreeIfGreaterThan){
+                return false;
+            }
+        }
+
+        return true;
+
+        //var manifestType: string = (<ISeadragonProvider>this.provider).getManifestType().toString();
+        //
+        //switch (manifestType){
+        //    case manifesto.ManifestType.monograph().toString():
+        //        if (!(<ISeadragonProvider>this.provider).isMultiSequence()) defaultToThumbs = true;
+        //        break;
+        //    case manifesto.ManifestType.manuscript().toString():
+        //        if (!(<ISeadragonProvider>this.provider).isMultiSequence()) defaultToThumbs = true;
+        //        break;
+        //}
     }
 
     expandFullStart(): void {

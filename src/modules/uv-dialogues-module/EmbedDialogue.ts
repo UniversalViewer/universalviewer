@@ -82,7 +82,7 @@ class EmbedDialogue extends Dialogue {
         this.$image = $('<img class="share" />');
         this.$link.append(this.$image);
 
-        this.$url = $('<input class="url" type="text"></input>');
+        this.$url = $('<input class="url" type="text" />');
         this.$firstRow.find('.rightCol').append(this.$url);
 
         this.$intro = $('<p>' + this.content.instructions + '</p>');
@@ -130,6 +130,10 @@ class EmbedDialogue extends Dialogue {
         this.$url.click(function() {
             $(this).select();
         });
+
+        if (!this.provider.isDeepLinkingEnabled()){
+            this.$url.hide();
+        }
 
         this.$code.focus(function() {
             $(this).select();
@@ -247,7 +251,7 @@ class EmbedDialogue extends Dialogue {
         var thumbnail = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !_.isString(thumbnail)){
-            thumbnail = canvas.getThumbUri(this.provider.config.options.bookmarkThumbWidth, this.provider.config.options.bookmarkThumbHeight);
+            thumbnail = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
         }
 
         this.$link.attr('href', thumbnail);

@@ -154,10 +154,8 @@ class AutoComplete{
     }
 
     isValidKeyPress(e: KeyboardEvent): boolean {
-        // is alphanumeric
-        var regExp = /^[a-zA-Z0-9]*$/;
-        var key = String.fromCharCode(Utils.Keyboard.GetCharCode(e));
-        return regExp.test(key);
+        var key: string = String.fromCharCode(Utils.Keyboard.GetCharCode(e));
+        return key.isAlphanumeric();
     }
 
     getTerms(): string {

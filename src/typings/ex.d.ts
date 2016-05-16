@@ -19,6 +19,7 @@ declare module exjs {
         all(predicate: IProjectionIndexFunc<T, boolean>): boolean;
         any(predicate?: IProjectionFunc<T, boolean>): boolean;
         any(predicate?: IProjectionIndexFunc<T, boolean>): boolean;
+        append(...items: T[]): IEnumerableEx<T>;
         apply<T>(action: IProjectionFunc<T, any>): IEnumerableEx<T>;
         apply<T>(action: IProjectionIndexFunc<T, any>): IEnumerableEx<T>;
         at(index: number): T;
@@ -45,6 +46,7 @@ declare module exjs {
         min(selector?: (t: T) => number): number;
         orderBy<TKey>(keySelector: (t: T) => TKey, comparer?: (f: TKey, s: TKey) => number): IOrderedEnumerable<T>;
         orderByDescending<TKey>(keySelector: (t: T) => TKey, comparer?: (f: TKey, s: TKey) => number): IOrderedEnumerable<T>;
+        prepend(...items: T[]): IEnumerableEx<T>;
         reverse(): IEnumerableEx<T>;
         select<TResult>(selector: IProjectionFunc<T, TResult>): IEnumerableEx<TResult>;
         select<TResult>(selector: IProjectionIndexFunc<T, TResult>): IEnumerableEx<TResult>;
@@ -120,6 +122,7 @@ declare module exjs {
         aggregate<TAccumulate>(seed: TAccumulate, accumulator: (acc: TAccumulate, cur: T) => TAccumulate): TAccumulate;
         all(predicate: IProjectionIndexFunc<T, boolean>): boolean;
         any(predicate?: IProjectionIndexFunc<T, boolean>): boolean;
+        append(...items: T[]): IEnumerableEx<T>;
         apply<T>(action: IProjectionIndexFunc<T, any>): IEnumerableEx<T>;
         at(index: number): T;
         average(selector?: (t: T) => number): number;
@@ -145,6 +148,7 @@ declare module exjs {
         min(selector?: (t: T) => number): number;
         orderBy<TKey>(keySelector: (t: T) => TKey, comparer?: (f: TKey, s: TKey) => number): IOrderedEnumerable<T>;
         orderByDescending<TKey>(keySelector: (t: T) => TKey, comparer?: (f: TKey, s: TKey) => number): IOrderedEnumerable<T>;
+        prepend(...items: T[]): IEnumerableEx<T>;
         reverse(): IEnumerableEx<T>;
         select<TResult>(selector: IProjectionIndexFunc<T, TResult>): IEnumerableEx<TResult>;
         selectMany<TResult>(selector: (t: T) => IEnumerable<TResult>): IEnumerableEx<TResult>;
@@ -218,6 +222,8 @@ declare module exjs {
 }
 declare module exjs {
 }
+declare module exjs {
+}
 interface Array<T> {
     en(): exjs.IEnumerableEx<T>;
 }
@@ -264,6 +270,8 @@ declare module exjs {
         remove(item: T): boolean;
         removeWhere(predicate: (t: T, index?: number) => boolean): IEnumerableEx<T>;
     }
+}
+declare module exjs {
 }
 declare module exjs {
 }

@@ -4,6 +4,7 @@ class Bookmark {
     public label: string;
     public thumb: string;
     public title: string;
+    public trackingLabel: string;
     public type: string;
 
     constructor() {

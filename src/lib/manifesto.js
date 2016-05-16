@@ -285,6 +285,9 @@ var Manifesto;
         AnnotationMotivation.prototype.tagging = function () {
             return new AnnotationMotivation(AnnotationMotivation.TAGGING.toString());
         };
+        AnnotationMotivation.prototype.transcribing = function () {
+            return new AnnotationMotivation(AnnotationMotivation.TRANSCRIBING.toString());
+        };
         AnnotationMotivation.BOOKMARKING = new AnnotationMotivation("oa:bookmarking");
         AnnotationMotivation.CLASSIFYING = new AnnotationMotivation("oa:classifying");
         AnnotationMotivation.COMMENTING = new AnnotationMotivation("oa:commenting");
@@ -298,25 +301,10 @@ var Manifesto;
         AnnotationMotivation.QUESTIONING = new AnnotationMotivation("oa:questioning");
         AnnotationMotivation.REPLYING = new AnnotationMotivation("oa:replying");
         AnnotationMotivation.TAGGING = new AnnotationMotivation("oa:tagging");
+        AnnotationMotivation.TRANSCRIBING = new AnnotationMotivation("oad:transcribing");
         return AnnotationMotivation;
     })(Manifesto.StringValue);
     Manifesto.AnnotationMotivation = AnnotationMotivation;
-})(Manifesto || (Manifesto = {}));
-var Manifesto;
-(function (Manifesto) {
-    var CanvasType = (function (_super) {
-        __extends(CanvasType, _super);
-        function CanvasType() {
-            _super.apply(this, arguments);
-        }
-        // todo: use getters when ES3 target is no longer required.
-        CanvasType.prototype.canvas = function () {
-            return new CanvasType(CanvasType.CANVAS.toString());
-        };
-        CanvasType.CANVAS = new CanvasType("sc:canvas");
-        return CanvasType;
-    })(Manifesto.StringValue);
-    Manifesto.CanvasType = CanvasType;
 })(Manifesto || (Manifesto = {}));
 var Manifesto;
 (function (Manifesto) {
@@ -326,6 +314,9 @@ var Manifesto;
             _super.apply(this, arguments);
         }
         // todo: use getters when ES3 target is no longer required.
+        ElementType.prototype.canvas = function () {
+            return new ElementType(ElementType.CANVAS.toString());
+        };
         ElementType.prototype.document = function () {
             return new ElementType(ElementType.DOCUMENT.toString());
         };
@@ -341,6 +332,7 @@ var Manifesto;
         ElementType.prototype.sound = function () {
             return new ElementType(ElementType.SOUND.toString());
         };
+        ElementType.CANVAS = new ElementType("sc:canvas");
         ElementType.DOCUMENT = new ElementType("foaf:document");
         ElementType.IMAGE = new ElementType("dcTypes:image");
         ElementType.MOVINGIMAGE = new ElementType("dctypes:movingimage");
@@ -429,7 +421,11 @@ var Manifesto;
         ResourceFormat.prototype.jpgimage = function () {
             return new ResourceFormat(ResourceFormat.JPGIMAGE.toString());
         };
+        ResourceFormat.prototype.pdf = function () {
+            return new ResourceFormat(ResourceFormat.PDF.toString());
+        };
         ResourceFormat.JPGIMAGE = new ResourceFormat("image/jpeg");
+        ResourceFormat.PDF = new ResourceFormat("application/pdf");
         return ResourceFormat;
     })(Manifesto.StringValue);
     Manifesto.ResourceFormat = ResourceFormat;
@@ -521,6 +517,9 @@ var Manifesto;
         ServiceProfile.prototype.token = function () {
             return new ServiceProfile(ServiceProfile.TOKEN.toString());
         };
+        ServiceProfile.prototype.trackingExtensions = function () {
+            return new ServiceProfile(ServiceProfile.TRACKINGEXTENSIONS.toString());
+        };
         ServiceProfile.prototype.uiExtensions = function () {
             return new ServiceProfile(ServiceProfile.UIEXTENSIONS.toString());
         };
@@ -557,7 +556,8 @@ var Manifesto;
         ServiceProfile.OTHERMANIFESTATIONS = new ServiceProfile("http://iiif.io/api/otherManifestations.json");
         ServiceProfile.SEARCHWITHIN = new ServiceProfile("http://iiif.io/api/search/0/search");
         ServiceProfile.TOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
-        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.azurewebsites.net/ui-extensions-profile");
+        ServiceProfile.TRACKINGEXTENSIONS = new ServiceProfile("http://universalviewer.io/tracking-extensions-profile");
+        ServiceProfile.UIEXTENSIONS = new ServiceProfile("http://universalviewer.io/ui-extensions-profile");
         return ServiceProfile;
     })(Manifesto.StringValue);
     Manifesto.ServiceProfile = ServiceProfile;
@@ -711,6 +711,31 @@ var Manifesto;
     })(Manifesto.JSONLDResource);
     Manifesto.ManifestResource = ManifestResource;
 })(Manifesto || (Manifesto = {}));
+var Manifesto;
+(function (Manifesto) {
+    var Element = (function (_super) {
+        __extends(Element, _super);
+        function Element(jsonld, options) {
+            _super.call(this, jsonld, options);
+        }
+        Element.prototype.getResources = function () {
+            var resources = [];
+            if (!this.__jsonld.resources)
+                return resources;
+            for (var i = 0; i < this.__jsonld.resources.length; i++) {
+                var a = this.__jsonld.resources[i];
+                var annotation = new Manifesto.Annotation(a, this.options);
+                resources.push(annotation);
+            }
+            return resources;
+        };
+        Element.prototype.getType = function () {
+            return new Manifesto.ElementType(this.getProperty('@type'));
+        };
+        return Element;
+    })(Manifesto.ManifestResource);
+    Manifesto.Element = Element;
+})(Manifesto || (Manifesto = {}));
 var _endsWith = _dereq_("lodash.endswith");
 var _last = _dereq_("lodash.last");
 var Manifesto;
@@ -720,6 +745,47 @@ var Manifesto;
         function Canvas(jsonld, options) {
             _super.call(this, jsonld, options);
         }
+        Canvas.prototype.getCanonicalImageUri = function (w) {
+            var id;
+            var region = 'full';
+            var rotation = 0;
+            var quality = 'default';
+            var width = w;
+            var size;
+            // if an info.json has been loaded
+            if (this.externalResource && this.externalResource.data) {
+                id = this.externalResource.data['@id'];
+                if (!width) {
+                    width = this.externalResource.data.width;
+                }
+                if (this.externalResource.data['@context'].indexOf('/1.0/context.json') > -1 ||
+                    this.externalResource.data['@context'].indexOf('/1.1/context.json') > -1 ||
+                    this.externalResource.data['@context'].indexOf('/1/context.json') > -1) {
+                    quality = 'native';
+                }
+            }
+            else {
+                // info.json hasn't been loaded yet
+                var images = this.getImages();
+                if (images && images.length) {
+                    var firstImage = images[0];
+                    var resource = firstImage.getResource();
+                    var services = resource.getServices();
+                    if (!width) {
+                        width = resource.getWidth();
+                    }
+                    var service = services[0];
+                    id = service.id;
+                    quality = Manifesto.Utils.getImageQuality(service.getProfile());
+                }
+                else {
+                    return null;
+                }
+            }
+            size = width + ',';
+            var uri = [id, region, size, rotation, quality + '.jpg'].join('/');
+            return uri;
+        };
         Canvas.prototype.getImages = function () {
             var images = [];
             if (!this.__jsonld.images)
@@ -736,47 +802,34 @@ var Manifesto;
         };
         // todo: Prefer thumbnail service to image service if supplied and if
         // todo: the thumbnail service can provide a satisfactory size +/- x pixels.
-        Canvas.prototype.getThumbUri = function (width, height) {
-            var uri;
-            var images = this.getImages();
-            if (images && images.length) {
-                var firstImage = images[0];
-                var resource = firstImage.getResource();
-                var services = resource.getServices();
-                for (var i = 0; i < services.length; i++) {
-                    var service = services[i];
-                    var profile = service.getProfile().toString();
-                    var id = service.id;
-                    if (!_endsWith(id, '/')) {
-                        id += '/';
-                    }
-                    if (profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
-                        profile === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1PROFILE.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2PROFILE.toString()) {
-                        uri = id + 'full/' + width + ',' + height + '/0/native.jpg';
-                    }
-                    else if (profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL1PROFILE.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2.toString() ||
-                        profile === Manifesto.ServiceProfile.IIIF2IMAGELEVEL2PROFILE.toString()) {
-                        uri = id + 'full/' + width + ',' + height + '/0/default.jpg';
-                    }
-                }
-            }
-            return uri;
-        };
-        Canvas.prototype.getType = function () {
-            return new Manifesto.CanvasType(this.getProperty('@type').toLowerCase());
-        };
+        // this is used to get thumb URIs for databinding *before* the info.json has been requested
+        //getThumbUri(width: number): string {
+        //
+        //    var uri;
+        //    var images: IAnnotation[] = this.getImages();
+        //
+        //    if (images && images.length) {
+        //        var firstImage = images[0];
+        //        var resource: IResource = firstImage.getResource();
+        //        var services: IService[] = resource.getServices();
+        //
+        //        for (var i = 0; i < services.length; i++) {
+        //            var service: IService = services[i];
+        //            var id = service.id;
+        //
+        //            if (!_endsWith(id, '/')) {
+        //                id += '/';
+        //            }
+        //
+        //            uri = id + 'full/' + width + ',/0/' + Utils.getImageQuality(service.getProfile()) + '.jpg';
+        //        }
+        //    }
+        //
+        //    return uri;
+        //}
+        //getType(): CanvasType {
+        //    return new CanvasType(this.getProperty('@type').toLowerCase());
+        //}
         Canvas.prototype.getWidth = function () {
             return this.getProperty('width');
         };
@@ -784,22 +837,8 @@ var Manifesto;
             return this.getProperty('height');
         };
         return Canvas;
-    })(Manifesto.ManifestResource);
+    })(Manifesto.Element);
     Manifesto.Canvas = Canvas;
-})(Manifesto || (Manifesto = {}));
-var Manifesto;
-(function (Manifesto) {
-    var Element = (function (_super) {
-        __extends(Element, _super);
-        function Element(jsonld, options) {
-            _super.call(this, jsonld, options);
-        }
-        Element.prototype.getType = function () {
-            return new Manifesto.ElementType(this.getProperty('@type'));
-        };
-        return Element;
-    })(Manifesto.ManifestResource);
-    Manifesto.Element = Element;
 })(Manifesto || (Manifesto = {}));
 var _assign = _dereq_("lodash.assign");
 var Manifesto;
@@ -808,7 +847,7 @@ var Manifesto;
         __extends(IIIFResource, _super);
         function IIIFResource(jsonld, options) {
             _super.call(this, jsonld, options);
-            this.index = 0;
+            this.index = -1;
             this.isLoaded = false;
             var defaultOptions = {
                 defaultLabel: '-',
@@ -825,9 +864,9 @@ var Manifesto;
                 id = '0';
             }
             else {
-                id = treeNode.parentNode.id + "/" + index;
+                id = treeNode.parentNode.id + "-" + index;
             }
-            treeNode.id = id.hashCode();
+            treeNode.id = id;
             for (var i = 0; i < treeNode.nodes.length; i++) {
                 var n = treeNode.nodes[i];
                 this.generateTreeNodeIds(n, i);
@@ -859,7 +898,7 @@ var Manifesto;
         IIIFResource.prototype.getSeeAlso = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('seeAlso'), this.options.locale);
         };
-        IIIFResource.prototype.getTitle = function () {
+        IIIFResource.prototype.getLabel = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
         };
         IIIFResource.prototype.getTree = function () {
@@ -877,8 +916,10 @@ var Manifesto;
                     var options = that.options;
                     options.navDate = that.getNavDate();
                     Manifesto.Utils.loadResource(that.__jsonld['@id']).then(function (data) {
+                        that.parentLabel = that.getLabel();
                         var parsed = Manifesto.Deserialiser.parse(data, options);
                         that = _assign(that, parsed);
+                        that.index = options.index;
                         resolve(that);
                     });
                 }
@@ -1044,6 +1085,13 @@ var Manifesto;
             }
             return new Manifesto.ManifestType('');
         };
+        Manifest.prototype.getTrackingLabel = function () {
+            var service = this.getService(Manifesto.ServiceProfile.TRACKINGEXTENSIONS);
+            if (service) {
+                return service.getProperty('trackingLabel');
+            }
+            return '';
+        };
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
         };
@@ -1075,11 +1123,13 @@ var Manifesto;
         }
         Collection.prototype.getCollectionByIndex = function (collectionIndex) {
             var collection = this.collections[collectionIndex];
+            collection.options.index = collectionIndex;
             // id for collection MUST be dereferenceable
             return collection.load();
         };
         Collection.prototype.getManifestByIndex = function (manifestIndex) {
             var manifest = this.manifests[manifestIndex];
+            manifest.options.index = manifestIndex;
             return manifest.load();
         };
         Collection.prototype.getTotalCollections = function () {
@@ -1101,7 +1151,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.manifests.length; i++) {
                     var manifest = parentCollection.manifests[i];
                     var tree = manifest.getTree();
-                    tree.label = manifest.getTitle() || 'manifest ' + (i + 1);
+                    tree.label = manifest.parentLabel || manifest.getLabel() || 'manifest ' + (i + 1);
                     tree.navDate = manifest.getNavDate();
                     tree.data.id = manifest.id;
                     tree.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
@@ -1114,7 +1164,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.collections.length; i++) {
                     var collection = parentCollection.collections[i];
                     var tree = collection.getTree();
-                    tree.label = collection.getTitle() || 'collection ' + (i + 1);
+                    tree.label = collection.parentLabel || collection.getLabel() || 'collection ' + (i + 1);
                     tree.navDate = collection.getNavDate();
                     tree.data.id = collection.id;
                     tree.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
@@ -1423,6 +1473,12 @@ var Manifesto;
         };
         Deserialiser.parseCollection = function (json, options) {
             var collection = new Manifesto.Collection(json, options);
+            if (options) {
+                collection.index = options.index || 0;
+            }
+            else {
+                collection.index = 0;
+            }
             this.parseCollections(collection, options);
             this.parseManifests(collection, options);
             return collection;
@@ -1431,15 +1487,18 @@ var Manifesto;
             var children = collection.__jsonld.collections;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
+                    if (options) {
+                        options.index = i;
+                    }
                     var child = this.parseCollection(children[i], options);
-                    child.index = i;
                     child.parentCollection = collection;
                     collection.collections.push(child);
                 }
             }
         };
         Deserialiser.parseManifest = function (json, options) {
-            return new Manifesto.Manifest(json, options);
+            var manifest = new Manifesto.Manifest(json, options);
+            return manifest;
         };
         Deserialiser.parseManifests = function (collection, options) {
             var children = collection.__jsonld.manifests;
@@ -1511,7 +1570,7 @@ var Manifesto;
             if (heightRatio) {
                 this.height = Math.floor(this.width * heightRatio);
             }
-            this.uri = canvas.getThumbUri(width, this.height);
+            this.uri = canvas.getCanonicalImageUri(width);
             this.label = canvas.getLabel();
         }
         return Thumb;
@@ -1574,6 +1633,24 @@ var Manifesto;
     var Utils = (function () {
         function Utils() {
         }
+        Utils.getImageQuality = function (profile) {
+            var p = profile.toString();
+            if (p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString() ||
+                p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL1PROFILE.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2.toString() ||
+                p === Manifesto.ServiceProfile.IIIF1IMAGELEVEL2PROFILE.toString()) {
+                return 'native';
+            }
+            return 'default';
+        };
         Utils.getLocalisedValue = function (resource, locale) {
             // if the resource is not an array of translations, return the string.
             if (!_isArray(resource)) {
@@ -1855,17 +1932,21 @@ var Manifesto;
             }
             return null;
         };
-        Utils.getServiceByReference = function (resource, id) {
-            var service;
-            var services = this.getServices(resource.options.resource);
-            for (var i = 0; i < services.length; i++) {
-                var s = services[i];
-                if (s.id === id) {
-                    service = new Manifesto.Service(s.__jsonld, resource.options);
-                    break;
+        Utils.getResourceById = function (parentResource, id) {
+            return [parentResource.__jsonld].en().traverseUnique(function (x) { return Utils.getAllArrays(x); })
+                .first(function (r) { return r['@id'] === id; });
+        };
+        Utils.getAllArrays = function (obj) {
+            var all = [].en();
+            if (!obj)
+                return all;
+            for (var key in obj) {
+                var val = obj[key];
+                if (_isArray(val)) {
+                    all = all.concat(val);
                 }
             }
-            return service;
+            return all;
         };
         Utils.getServices = function (resource) {
             var service;
@@ -1886,8 +1967,11 @@ var Manifesto;
             }
             for (var i = 0; i < service.length; i++) {
                 var s = service[i];
-                if (_isString(s) && resource !== resource.options.resource) {
-                    services.push(this.getServiceByReference(resource, s));
+                if (_isString(s)) {
+                    var r = this.getResourceById(resource.options.resource, s);
+                    if (r) {
+                        services.push(new Manifesto.Service(r.__jsonld || r, resource.options));
+                    }
                 }
                 else {
                     services.push(new Manifesto.Service(s, resource.options));
@@ -1901,7 +1985,6 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 global.manifesto = module.exports = {
     AnnotationMotivation: new Manifesto.AnnotationMotivation(),
-    CanvasType: new Manifesto.CanvasType(),
     ElementType: new Manifesto.ElementType(),
     IIIFResourceType: new Manifesto.IIIFResourceType(),
     ManifestType: new Manifesto.ManifestType(),
@@ -2007,7 +2090,6 @@ global.manifesto = module.exports = {
 };
 /// <reference path="./StringValue.ts" />
 /// <reference path="./AnnotationMotivation.ts" />
-/// <reference path="./CanvasType.ts" />
 /// <reference path="./ElementType.ts" />
 /// <reference path="./IIIFResourceType.ts" />
 /// <reference path="./ManifestType.ts" />
@@ -2019,8 +2101,8 @@ global.manifesto = module.exports = {
 /// <reference path="./ViewingHint.ts" />
 /// <reference path="./JSONLDResource.ts" />
 /// <reference path="./ManifestResource.ts" />
-/// <reference path="./Canvas.ts" />
 /// <reference path="./Element.ts" />
+/// <reference path="./Canvas.ts" />
 /// <reference path="./IIIFResource.ts" />
 /// <reference path="./Manifest.ts" />
 /// <reference path="./Collection.ts" />

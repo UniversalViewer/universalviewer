@@ -43,6 +43,30 @@ var Utils;
     })();
     Utils.Bools = Bools;
 })(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Clipboard = (function () {
+        function Clipboard() {
+        }
+        Clipboard.Copy = function (text) {
+            var $tempDiv = $("<div style='position:absolute;left:-9999px'>");
+            var brRegex = /<br\s*[\/]?>/gi;
+            text = text.replace(brRegex, "\n");
+            $("body").append($tempDiv);
+            $tempDiv.append(text);
+            var $tempInput = $("<textarea>");
+            $tempDiv.append($tempInput);
+            $tempInput.val($tempDiv.text()).select();
+            document.execCommand("copy");
+            $tempDiv.remove();
+        };
+        Clipboard.SupportsCopy = function () {
+            return document.queryCommandSupported && document.queryCommandSupported('copy');
+        };
+        return Clipboard;
+    })();
+    Utils.Clipboard = Clipboard;
+})(Utils || (Utils = {}));
 // Copyright 2013 Basarat Ali Syed. All Rights Reserved.
 //
 // Licensed under MIT open source license http://opensource.org/licenses/MIT
@@ -2616,6 +2640,9 @@ var Utils;
                 ctx.backingStorePixelRatio || 1;
             return dpr / bsr;
         };
+        Device.isTouch = function () {
+            return !!("ontouchstart" in window) || window.navigator.msMaxTouchPoints > 0;
+        };
         return Device;
     })();
     Utils.Device = Device;
@@ -2675,6 +2702,30 @@ var Utils;
         return Events;
     })();
     Utils.Events = Events;
+})(Utils || (Utils = {}));
+var Utils;
+(function (Utils) {
+    var Files = (function () {
+        function Files() {
+        }
+        Files.SimplifyMimeType = function (mime) {
+            switch (mime) {
+                case 'text/plain':
+                    return 'txt';
+                case 'image/jpeg':
+                    return 'jpg';
+                case 'application/msword':
+                    return 'doc';
+                case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                    return 'docx';
+                default:
+                    var parts = mime.split('/');
+                    return parts[parts.length - 1];
+            }
+        };
+        return Files;
+    })();
+    Utils.Files = Files;
 })(Utils || (Utils = {}));
 var Utils;
 (function (Utils) {

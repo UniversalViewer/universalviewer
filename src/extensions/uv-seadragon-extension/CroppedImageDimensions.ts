@@ -1,3 +1,4 @@
+///<amd-dependency path="utils"/>.
 import Size = Utils.Measurements.Size;
 import Vector = Utils.Maths.Vector;
 

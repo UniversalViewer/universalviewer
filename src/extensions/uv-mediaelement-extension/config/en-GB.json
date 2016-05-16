@@ -58,25 +58,13 @@
         "panelExpandedWidth": 255
       }
     },
-    "contentLeftPanel": {
+    "resourcesLeftPanel": {
       "options": {
-        "elideCount": 40,
-        "galleryThumbHeight": 320,
-        "galleryThumbWidth": 200,
-        "oneColThumbHeight": 320,
-        "oneColThumbWidth": 200,
-        "pageModeEnabled": true,
+        "expandFullEnabled": false,
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
         "panelExpandedWidth": 255,
-        "panelOpen": true,
-        "thumbsEnabled": true,
-        "thumbsExtraHeight": 8,
-        "thumbsImageFadeInDuration": 300,
-        "thumbsLoadRange": 15,
-        "treeEnabled": true,
-        "twoColThumbHeight": 150,
-        "twoColThumbWidth": 90
+        "panelOpen": true
       }
     }
   }

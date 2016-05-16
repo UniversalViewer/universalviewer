@@ -3,11 +3,12 @@ import Dialogue = require("../uv-shared-module/Dialogue");
 
 class RestrictedDialogue extends Dialogue {
 
-    acceptCallback: any;
     $cancelButton: JQuery;
-    $nextVisibleButton: JQuery;
     $message: JQuery;
+    $nextVisibleButton: JQuery;
     $title: JQuery;
+    acceptCallback: any;
+    isAccepted: boolean;
     resource: Manifesto.IExternalResource;
 
     constructor($element: JQuery) {
@@ -67,6 +68,8 @@ class RestrictedDialogue extends Dialogue {
     open(): void {
         super.open();
 
+        this.isAccepted = false;
+
         this.$title.text(this.resource.restrictedService.getProperty('label'));
 
         var message: string = this.resource.restrictedService.getProperty('description');
@@ -85,7 +88,8 @@ class RestrictedDialogue extends Dialogue {
     close(): void {
         super.close();
 
-        if (this.acceptCallback){
+        if (!this.isAccepted && this.acceptCallback){
+            this.isAccepted = true;
             this.acceptCallback();
         }
     }

@@ -37,7 +37,7 @@
       "content": {
         "bookmark": "Add to bookmarks",
         "download": "Download",
-        "embed": "Embed",
+        "embed": "Share",
         "exitFullScreen": "Exit Full Screen",
         "fullScreen": "Full Screen",
         "open": "Open"
@@ -97,8 +97,10 @@
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
       }
     },
-    "contentLeftPanel": {
-
+    "resourcesLeftPanel": {
+      "content": {
+        "title": "Contents"
+      }
     }
   }
 }

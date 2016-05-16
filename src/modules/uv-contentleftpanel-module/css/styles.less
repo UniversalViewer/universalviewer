@@ -1,9 +1,11 @@
+@import '../../uv-shared-module/css/thumbs-view.less';
 ﻿
 #app{
 
     .leftPanel{
 
         @img-path: '../../../modules/uv-contentleftpanel-module/img/';
+        @shared-img-path: '../../../modules/uv-shared-module/img/';
 
         .top{
 
@@ -178,123 +180,6 @@
                 }
             }
 
-            .thumbsView{
-
-                overflow: auto;
-
-                .thumbs {
-                    overflow: hidden;
-                    width: 210px;
-                    position: relative;
-
-                    .thumb {
-                        cursor: pointer;
-
-                        .wrap {
-                            border: 2px solid @panel-border-color;
-                            padding: 2px;
-                            overflow: hidden;
-                            text-align: center;
-                            background: none;
-
-                            &.loading {
-                                .loading(@loader-black-bg);
-                            }
-
-                            &.loadingFailed {
-                                background: url('@{img-path}error.png') no-repeat 50% 50%;
-                            }
-
-                            &.hidden {
-                                background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
-                            }
-
-                            img {
-                                display: block;
-                                max-width: 100%;
-                                max-height: 100%;
-                                //margin: 0 auto;
-                            }
-                        }
-
-                        &.selected {
-
-                            .wrap {
-                                border: 2px solid #fff;
-                            }
-                        }
-
-                        &.searchpreview{
-
-                            .wrap{
-                                border: 2px solid @link-color;
-                            }
-                        }
-
-                        span {
-                            font-size: @font-size-small;
-                            color: #fff;
-                            display: block;
-                            padding: 2px 0 0 0;
-                        }
-
-                        .label {
-                            overflow-x: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-
-                        &.placeholder {
-                            .wrap {
-                                background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
-                            }
-                        }
-
-                        &.oneCol{
-                            margin: 0 0 7px 0;
-                            .wrap,
-                            .label {
-                                width: 208px;
-                                max-height: 373px;
-                            }
-                        }
-
-                        &.twoCol{
-                            margin: 0 7px 7px 0;
-                            .wrap,
-                            .label {
-                                width: 98px;
-                                max-height: 182px;
-                            }
-                        }
-                    }
-
-                    .separator {
-                        height: 1px;
-                        clear: both;
-                        border: none;
-                    }
-
-                    &.left-to-right{
-                        .thumb{
-                            &.first{
-                                float: right;
-                            }
-                            float: left;
-                        }
-                    }
-
-                    &.right-to-left{
-                        .thumb{
-                            &.first{
-                                float: left;
-                            }
-                            float: right;
-                        }
-                    }
-                }
-            }
-
             .galleryView{
 
                 .header{
@@ -342,6 +227,43 @@
                             }
                         }
 
+                        &.chunked{
+                            .thumb{
+                                &.outsideScrollArea{
+                                    .wrap{
+                                        border: 2px solid transparent;
+                                        img{
+                                            display: none;
+                                        }
+                                    }
+
+                                    span{
+                                        color: transparent;
+                                    }
+                                }
+
+                                &.outsideScrollArea.selected{
+                                    .wrap{
+                                        border: 2px solid transparent;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.chunked.multiSelect{
+                            .thumb {
+                                &.outsideScrollArea {
+                                    .wrap {
+                                        &.multiSelected {
+                                            background: none;
+                                            border: 2px solid transparent;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // all spacing-related thumb styles
                         .thumb{
                             margin: 0 7px 7px 0;
 
@@ -359,14 +281,6 @@
                             &.searchpreview{
                                 .wrap{
                                     border: 2px solid @link-color;
-                                }
-                            }
-
-                            &.outsideScrollArea{
-
-                                .wrap{
-                                    border: 2px solid transparent;
-                                    //border: 2px solid red;
                                 }
                             }
 
@@ -389,7 +303,7 @@
                                 }
 
                                 &.hidden{
-                                    background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                                    background: url('@{shared-img-path}hidden_thumb.png') no-repeat 50% 50%;
                                 }
 
                                 img{
@@ -421,21 +335,7 @@
 
                             &.placeholder{
                                 .wrap {
-                                    background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
-                                }
-                            }
-
-                            &.outsideScrollArea{
-
-                                .wrap{
-                                    img{
-                                        display: none;
-                                    }
-                                }
-
-                                span{
-                                    color: transparent;
-                                    //color: red;
+                                    background: url('@{shared-img-path}unavailable.png') no-repeat 50% 50%;
                                 }
                             }
                         }

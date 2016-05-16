@@ -20,7 +20,8 @@ import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import TreeView = require("../../modules/uv-contentleftpanel-module/TreeView");
-import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
+import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
+import IMediaElementProvider = require("./IMediaElementProvider");
 
 class Extension extends BaseExtension{
 
@@ -34,7 +35,7 @@ class Extension extends BaseExtension{
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
     helpDialogue: HelpDialogue;
-    leftPanel: ContentLeftPanel;
+    leftPanel: ResourcesLeftPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
@@ -53,10 +54,6 @@ class Extension extends BaseExtension{
         $(window).bind('exitfullscreen', () => {
             $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
-
-        //$.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
-        //    this.viewManifest(data);
-        //});
 
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
@@ -92,7 +89,7 @@ class Extension extends BaseExtension{
         this.headerPanel = new HeaderPanel(Shell.$headerPanel);
 
         if (this.isLeftPanelEnabled()){
-            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
         }
 
         this.centerPanel = new MediaElementCenterPanel(Shell.$centerPanel);
@@ -128,9 +125,9 @@ class Extension extends BaseExtension{
         }
     }
 
-    isLeftPanelEnabled(): boolean{
+    isLeftPanelEnabled(): boolean {
         return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
-                && (this.provider.isMultiCanvas() || this.provider.isMultiSequence());
+                && ((this.provider.isMultiCanvas() || this.provider.isMultiSequence()) || (<IMediaElementProvider>this.provider).hasResources());
     }
 
     bookmark(): void {
@@ -143,24 +140,16 @@ class Extension extends BaseExtension{
         bookmark.label = canvas.getLabel();
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
-        bookmark.title = this.provider.getTitle();
+        bookmark.title = this.provider.getLabel();
+        bookmark.trackingLabel = window.trackingLabel;
 
-        if (this.isVideo()){
+        if ((<IMediaElementProvider>this.provider).isVideo()){
             bookmark.type = manifesto.ElementType.movingimage().toString();
         } else {
             bookmark.type = manifesto.ElementType.sound().toString();
         }
 
         this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
-    }
-
-    getCanvasType(): Manifesto.CanvasType {
-        return this.provider.getCanvasType(this.provider.getCanvasByIndex(0));
-    }
-
-    isVideo(): boolean {
-        var canvasType: Manifesto.CanvasType = this.getCanvasType();
-        return canvasType.toString() === manifesto.ElementType.movingimage().toString();
     }
 }
 

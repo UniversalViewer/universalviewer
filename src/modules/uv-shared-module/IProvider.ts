@@ -3,10 +3,11 @@ import BootStrapper = require("../../Bootstrapper");
 import ExternalResource = require("./ExternalResource");
 import IMetadataItem = require("./IMetadataItem");
 import IRange = require("./IRange");
+import IIxIFProvider = require("./IIxIFProvider");
 
 // the provider contains all methods related to
 // interacting with the IIIF data model.
-interface IProvider{
+interface IProvider extends IIxIFProvider{
     canvasIndex: number;
     collectionIndex: number;
     iiifResource: Manifesto.IIIIFResource;
@@ -18,21 +19,22 @@ interface IProvider{
 
     addTimestamp(uri: string): string;
     getAttribution(): string;
-    getCanvases(): Manifesto.ICanvas[];
     getCanvasById(id: string): Manifesto.ICanvas;
-    getCanvasesById(ids: string[]): Manifesto.ICanvas[];
     getCanvasByIndex(index: number): any;
+    getCanvases(): Manifesto.ICanvas[];
+    getCanvasesById(ids: string[]): Manifesto.ICanvas[];
     getCanvasIndexById(id: string): number;
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexParam(): number;
+    getCanvasMetadata(canvas: Manifesto.ICanvas): IMetadataItem[];
     getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange;
     getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
-    getCanvasType(canvas?: Manifesto.ICanvas): Manifesto.CanvasType;
     getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
     getCurrentCanvas(): Manifesto.ICanvas;
     getCurrentSequence(): Manifesto.ISequence;
     getFirstPageIndex(): number;
     getInfoUri(canvas: Manifesto.ICanvas): string;
+    getLabel(): string;
     getLastCanvasLabel(alphanumeric?: boolean): string;
     getLastPageIndex(): number;
     getLicense(): string;
@@ -40,16 +42,14 @@ interface IProvider{
     getManifestType(): Manifesto.ManifestType;
     getMetadata(): IMetadataItem[];
     getPagedIndices(index?: number): number[]; // todo: rename to something generic
-    getRanges(): IRange[];
-    getCanvasMetadata(canvas: Manifesto.ICanvas): IMetadataItem[];
     getRangeByPath(path: string): Manifesto.IRange;
     getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+    getRanges(): IRange[];
     getSeeAlso(): any;
     getSequenceIndexParam(): number;
-    getStartCanvasIndex(): number;
     getShareUrl(): string;
+    getStartCanvasIndex(): number;
     getThumbs(width: number, height: number): Manifesto.IThumb[];
-    getTitle(): string;
     getTotalCanvases(): number;
     getTree(): Manifesto.ITreeNode;
     getViewingDirection(): Manifesto.ViewingDirection;
@@ -61,6 +61,7 @@ interface IProvider{
     isMultiSequence(): boolean;
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
+    lastCanvasIndex: number;
 
     // todo: move these to baseextension?
     bootstrapper: BootStrapper;
@@ -76,7 +77,6 @@ interface IProvider{
     locales: any[];
 
     changeLocale(locale: string): void;
-    defaultToThumbsView(): boolean;
     getAlternateLocale(): any;
     getDomain(): string;
     getEmbedDomain(): string;

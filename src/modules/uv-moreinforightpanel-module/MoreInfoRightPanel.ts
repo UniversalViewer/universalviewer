@@ -14,6 +14,7 @@ class MoreInfoRightPanel extends RightPanel {
     canvasData: IMetadataItem[];
     aggregateValuesConfig: string[];
     canvasExcludeConfig: string[];
+    copyTextTemplate: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -43,6 +44,9 @@ class MoreInfoRightPanel extends RightPanel {
                                            <div class="header"></div>\
                                            <div class="text"></div>\
                                        </div>');
+        this.copyTextTemplate = $('<div class="copyText" alt="' + this.content.copyToClipboard  + '" title="' + this.content.copyToClipboard + '">\
+                                     <div class="copiedText">' + this.content.copiedToClipboard + ' </div>\
+                                   </div>');
 
         this.$items = $('<div class="items"></div>');
         this.$main.append(this.$items);
@@ -261,7 +265,51 @@ class MoreInfoRightPanel extends RightPanel {
 
         $elem.addClass(item.label.toCssClass());
 
+        if (this.config.options.copyToClipboardEnabled && Utils.Clipboard.SupportsCopy() && $text.text() && $header.text())
+            this.addCopyButton($elem, $header);
+        
         return $elem;
+    }
+    
+    addCopyButton($elem: JQuery, $header: JQuery): void {
+        var $copyBtn = this.copyTextTemplate.clone();
+        var $copiedText = $copyBtn.children();
+        $header.append($copyBtn);
+        if (Utils.Device.isTouch()) {
+            $copyBtn.show();
+        }
+        else {
+            $elem.on('mouseenter', function() {
+                $copyBtn.show();
+            });
+            $elem.on('mouseleave', function() {
+                $copyBtn.hide();
+            });
+            $copyBtn.on('mouseleave', function() {
+                $copiedText.hide();
+            });
+        }
+        $copyBtn.on('click', (e) => {
+            var imgElement = e.target as HTMLElement;
+            var headerText = imgElement.previousSibling.textContent || imgElement.previousSibling.nodeValue;
+            this.copyValueForLabel(headerText);
+        });
+    }
+    
+    copyValueForLabel(label: string) {
+        var manifestItems = this.flatten(this.manifestData);
+        var canvasItems = this.flatten(this.canvasData);
+        var $matchingItems = $(manifestItems.concat(canvasItems))
+            .filter(function (i, md: any) { return md.label && label && md.label.toLowerCase() == label.toLowerCase(); });
+        var text = $matchingItems.map(function (i, md: any) { return md.value; }).get().join('');
+        if (!text)
+            return;
+        Utils.Clipboard.Copy(text);
+        var $copiedText = $('.items .item .header:contains(' + label + ') .copiedText');
+        $copiedText.show();
+        setTimeout(function() {
+            $copiedText.hide();
+        }, 2000);
     }
 
     resize(): void {
