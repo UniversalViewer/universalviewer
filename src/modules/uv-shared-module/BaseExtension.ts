@@ -921,8 +921,8 @@ class BaseExtension implements IExtension {
             // pick an identifier for this message. We might want to keep track of sent messages
             var msgId = serviceUri + "|" + new Date().getTime(); //arbitrary
 
-            window.addEventListener("message", (e) => {
-                //window.removeEventListener("message", receiveToken);
+            var receiveAccessToken = (e) => {
+                window.removeEventListener("message", receiveAccessToken);
                 var token = e.data;
                 if (token.error){
                     if(rejectOnError) {
@@ -933,12 +933,15 @@ class BaseExtension implements IExtension {
                 } else {
                     resolve(token);
                 }
-            }, false);
+            }
+
+            window.addEventListener("message", receiveAccessToken, false);
 
             var tokenUri: string = serviceUri + "?messageId=" + msgId;
             $('#commsFrame').prop('src', tokenUri);
         });
 
+        // deprecated JSONP method - keep this around for reference
         //return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
         //    $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
         //        if (token.error){
