@@ -181,6 +181,8 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
+        this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
+
         $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
             this.triggerSocket(BaseCommands.ACCEPT_TERMS);
         });
@@ -912,8 +914,16 @@ class BaseExtension implements IExtension {
     }
 
     getAccessToken(resource: Manifesto.IExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
+
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-            $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
+            var serviceUri: string = resource.tokenService.id;
+
+            // pick an identifier for this message. We might want to keep track of sent messages
+            var msgId = serviceUri + "|" + new Date().getTime(); //arbitrary
+
+            var receiveAccessToken = (e) => {
+                window.removeEventListener("message", receiveAccessToken);
+                var token = e.data;
                 if (token.error){
                     if(rejectOnError) {
                         reject(token.errorDescription);
@@ -923,14 +933,34 @@ class BaseExtension implements IExtension {
                 } else {
                     resolve(token);
                 }
-            }).fail((error) => {
-                if(rejectOnError) {
-                    reject(error);
-                } else {
-                    resolve(null);
-                }
-            });
+            }
+
+            window.addEventListener("message", receiveAccessToken, false);
+
+            var tokenUri: string = serviceUri + "?messageId=" + msgId;
+            $('#commsFrame').prop('src', tokenUri);
         });
+
+        // deprecated JSONP method - keep this around for reference
+        //return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
+        //    $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
+        //        if (token.error){
+        //            if(rejectOnError) {
+        //                reject(token.errorDescription);
+        //            } else {
+        //                resolve(null);
+        //            }
+        //        } else {
+        //            resolve(token);
+        //        }
+        //    }).fail((error) => {
+        //        if(rejectOnError) {
+        //            reject(error);
+        //        } else {
+        //            resolve(null);
+        //        }
+        //    });
+        //});
     }
 
     storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
