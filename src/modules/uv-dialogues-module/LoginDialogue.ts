@@ -60,6 +60,7 @@ class LoginDialogue extends Dialogue {
 
         this.$logoutButton = this.$content.find('.logout');
         this.$logoutButton.text(this.content.logout);
+        this.$logoutButton.hide(); // todo: remove when ready
 
         this.$cancelButton = this.$content.find('.cancel');
         this.$cancelButton.text(this.content.cancel);
