@@ -181,7 +181,7 @@ class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
 
-        this.$element.append('<iframe id="commsFrame"></iframe>');
+        this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
         $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
             this.triggerSocket(BaseCommands.ACCEPT_TERMS);
