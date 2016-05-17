@@ -3587,6 +3587,11 @@ input[type=range]:focus::-ms-fill-upper {
   padding: 0 0 0 16px;
   font-weight: bold;
 }
+#app #commsFrame {
+  width: 1px;
+  height: 1px;
+  border: none;
+}
 #app .headerPanel {
   position: relative;
   background-color: #211f1f;
