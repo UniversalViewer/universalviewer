@@ -3,34 +3,34 @@
     "label": "Cymraeg"
   },
   "content": {
-    "authCORSError": "Eich porwr yn peidio cefnogi CORS, os gwelwch yn dda uwchraddio i weld y cynnwys hwn.",
-    "authorisationFailedMessage": "Nid oedd yn ymddangos eich ymgais mewngofnodi i fod yn llwyddiannus . Trio eto os gwelwch yn dda.",
+    "authCORSError": "Mae angen diweddaru'ch porwr er mwyn galluogi rhannu adnoddau traws-safle.",
+    "authorisationFailedMessage": "Ni lwyddoch i fewngofnodi. Rhowch gynnig arni eto.",
     "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)",
-    "degradedResourceMessage": "Os gwelwch yn dda mewngofnodwch i weld yn ansawdd llawn.",
+    "degradedResourceMessage": "Mewngofnodwch i weld ansawdd uchel.",
     "degradedResourceLogin": "Mewngofnodi",
-    "forbiddenResourceMessage": "Eich hawliau mynediad presennol yn annigonol i weld llun hwn"
+    "forbiddenResourceMessage": "Nid yw'ch hawliau mynediad presennol yn ddigonol i weld y ddelwedd hon"
   },
   "modules": {
     "clickThroughDialogue": {
       "content": {
-        "viewTerms": "Darllenwch Telerau ac Amodau Llawn"
+        "viewTerms": "Darllenwch y Telerau a'r Amodau Llawn"
       }
     },
     "contentLeftPanel": {
       "content": {
-        "collapse": "Cuddio'r Cynnwys",
-        "collapseFull": "Cuddio'r Galeri",
-        "date": "dyddiad",
+        "collapse": "Lleihau'r Cynnwys",
+        "collapseFull": "Lleihau'r Galeri",
+        "date": "Dyddiad",
         "expand": "Ehangu'r Cynnwys",
         "expandFull": "Ehangu'r Galeri",
         "index": "Mynegai",
-        "select": "dewiswch",
-        "selectAll": "Dewis pob",
-        "selection": "Dewis",
-        "sortBy": "trefnu yn ôl",
+        "select": "Dewiswch",
+        "selectAll": "Dewis y cyfan",
+        "selection": "Detholiad",
+        "sortBy": "Trefnu yn ôl:",
         "thumbnails": "Bodluniau",
         "title": "Cynnwys",
-        "volume": "cyfaint"
+        "volume": "cyfrol"
       }
     },
     "dialogue": {
@@ -40,10 +40,10 @@
     },
     "downloadDialogue": {
       "content": {
-        "currentViewAsJpg": "Golwg presennol (jpg)",
+        "currentViewAsJpg": "Delwedd ddethol {0} x {1}px (jpg)",
         "download": "Lawrlwytho",
-        "downloadSelection": "Download Dewis",
-        "downloadSelectionButton": "Download PDF",
+        "downloadSelection": "Lawrlwytho'r detholiad",
+        "downloadSelectionButton": "Lawrlwytho PDF",
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
         "entireFileAsOriginal": "Y ffeil gyfan ({0})",
@@ -51,8 +51,8 @@
         "pagingNote": "Dad-ddewiswch 'Arddangos Dwy Dudalen' i weld dewisiadau pellach.",
         "preview": "Rhagolwg",
         "title": "Lawrlwytho",
-        "wholeImageHighRes": "Y ddelwedd gyfan o ansawdd uchel ({0})",
-        "wholeImageLowResAsJpg": "Y ddelwedd gyfan o ansawdd isel (jpg)"
+        "wholeImageHighRes": "Delwedd gyfan {0} x {1}px ({2})",
+        "wholeImageLowResAsJpg": "Delwedd gyfan {0} x {1}px (jpg)"
       }
     },
     "embedDialogue": {
@@ -69,9 +69,10 @@
         "bookmark": "Ychwanegu at nodau tudalen",
         "download": "Lawrlwytho",
         "embed": "Ymgorffori",
+        "feedback": "Adborth",
         "exitFullScreen": "Dianc o'r sgrin lawn",
         "fullScreen": "Sgrin lawn",
-        "open": "agored"
+        "open": "Agor"
       }
     },
     "genericDialogue": {
@@ -94,24 +95,28 @@
       "content": {
         "login": "Mewngofnodi",
         "logout": "Allgofnodi",
-        "cancel": "Diddymu"
+        "cancel": "Canslo"
       }
     },
     "moreInfoRightPanel": {
       "content": {
-        "attribution": "priodoliad",
-        "collapse": "Cuddio Mwy o Wybodaeth",
+        "attribution": "Priodoledd",
+        "collapse": "Lleihau'r Wybodaeth",
         "collapseFull": "Cuddio'r Galeri",
-        "description": "disgrifiad",
-        "expand": "Ehangu Fwy o Wybodaeth",
+        "description": "Disgrifiad",
+        "expand": "Ehangu'r Wybodaeth",
         "expandFull": "Ehangu'r Galeri",
         "holdingText": "Eich modiwl fan hyn!",
         "less": "llai",
-        "license": "trwydded",
-        "logo": "logo",
+        "license": "Trwydded",
+        "logo": "Logo",
         "more": "mwy",
         "noData": "Nid oes data i'w arddangos",
-        "title": "gwybodaeth"
+        "title": "Mwy o Wybodaeth",
+        "manifestHeader": "Am yr eitem",
+        "canvasHeader": "Am y ddelwedd",
+        "copyToClipboard": "Copïo i'r clipfwrdd",
+        "copiedToClipboard": "Copïwyd i'r clipfwrdd"
       }
     },
     "pagingHeaderPanel": {
@@ -143,7 +148,7 @@
     },
     "restrictedDialogue": {
       "content": {
-        "cancel": "Diddymu"
+        "cancel": "Canslo"
       }
     },
     "seadragonCenterPanel": {
@@ -160,9 +165,9 @@
     },
     "searchFooterPanel": {
       "content": {
-        "clearSearch": "Clirio bob dewis",
+        "clearSearch": "Gwaredu",
         "defaultLabel": "-",
-        "displaying": "Dangos {0} {1} o {2}",
+        "displaying": "{0} {1} o {2}",
         "enterKeyword": "Mewnosodwch allweddair",
         "image": "delwedd",
         "imageCaps": "delwedd",
@@ -180,7 +185,7 @@
     "settingsDialogue": {
       "content": {
         "locale": "Iaith",
-        "navigatorEnabled": "Navigator Galluogwyd",
+        "navigatorEnabled": "Llywiwr wedi galluogi",
         "pagingEnabled": "Arddangos dwy dudalen",
         "preserveViewport": "Cadw'r lefel o glosio",
         "title": "Dewisiadau",
