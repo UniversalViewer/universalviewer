@@ -93,6 +93,7 @@ class BaseExtension implements IExtension {
 
         // events.
         if (!this.provider.isReload){
+
             window.onresize = () => {
 
                 var $win = $(window);
@@ -100,6 +101,18 @@ class BaseExtension implements IExtension {
 
                 this.resize();
             };
+
+            var visProp = Utils.Documents.GetHiddenProp();
+
+            if (visProp) {
+                var evtname = visProp.replace(/[H|h]idden/,'') + 'visibilitychange';
+                document.addEventListener(evtname, () => {
+                    // resize after a tab has been shown (fixes safari layout issue)
+                    if (!Utils.Documents.IsHidden()){
+                        this.resize();
+                    }
+                });
+            }
 
             this.$element.on('drop', (e => {
                 e.preventDefault();

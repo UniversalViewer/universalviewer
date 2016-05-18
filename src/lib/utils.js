@@ -2667,6 +2667,25 @@ var Utils;
                 doc.webkitRequestFullScreen || doc.msRequestFullscreen;
             return support != undefined;
         };
+        Documents.IsHidden = function () {
+            var prop = Documents.GetHiddenProp();
+            if (!prop)
+                return false;
+            return document[prop];
+        };
+        Documents.GetHiddenProp = function () {
+            var prefixes = ['webkit', 'moz', 'ms', 'o'];
+            // if 'hidden' is natively supported just return it
+            if ('hidden' in document)
+                return 'hidden';
+            // otherwise loop over all the known prefixes until we find one
+            for (var i = 0; i < prefixes.length; i++) {
+                if ((prefixes[i] + 'Hidden') in document)
+                    return prefixes[i] + 'Hidden';
+            }
+            // otherwise it's not supported
+            return null;
+        };
         return Documents;
     })();
     Utils.Documents = Documents;
