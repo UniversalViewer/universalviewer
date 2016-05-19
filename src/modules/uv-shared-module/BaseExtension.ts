@@ -31,6 +31,7 @@ class BaseExtension implements IExtension {
     embedHeight: number;
     embedWidth: number;
     extensions: any;
+    isCreated: boolean = false;
     loginDialogue: LoginDialogue;
     mouseX: number;
     mouseY: number;
@@ -63,7 +64,6 @@ class BaseExtension implements IExtension {
             this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message, origin) => {
                     message = $.parseJSON(message);
-                    // todo: waitFor CREATED
                     this.handleParentFrameEvent(message);
                 }
             });
@@ -241,6 +241,7 @@ class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseCommands.CREATED, () => {
+            this.isCreated = true;
             this.triggerSocket(BaseCommands.CREATED);
         });
 
@@ -628,8 +629,9 @@ class BaseExtension implements IExtension {
     }
 
     handleParentFrameEvent(message): void {
-        // todo: waitFor CREATED
-        setTimeout(() => {
+        Utils.Async.WaitFor(() => {
+            return this.isCreated;
+        }, () => {
             switch (message.eventName) {
                 case BaseCommands.TOGGLE_FULLSCREEN:
                     $.publish(BaseCommands.TOGGLE_FULLSCREEN, message.eventObject);
@@ -638,7 +640,7 @@ class BaseExtension implements IExtension {
                     $.publish(BaseCommands.PARENT_EXIT_FULLSCREEN);
                     break;
             }
-        }, 1000);
+        });
     }
 
     getSharePreview(): any {

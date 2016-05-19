@@ -11,6 +11,7 @@ interface IExtension{
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getParam(key: Params): any;
     height(): number;
+    isCreated: boolean;
     isFullScreen(): boolean;
     isOverlayActive(): boolean;
     loadDependencies(deps: any): void;
