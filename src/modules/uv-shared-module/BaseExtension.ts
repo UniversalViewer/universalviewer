@@ -1,22 +1,22 @@
 import BaseCommands = require("./BaseCommands");
 import BaseProvider = require("./BaseProvider");
-import BootStrapper = require("../../Bootstrapper");
 import BootstrapParams = require("../../BootstrapParams");
+import BootStrapper = require("../../Bootstrapper");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
-import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
 import ExternalResource = require("./ExternalResource");
+import IAccessToken = Manifesto.IAccessToken;
 import IExtension = require("./IExtension");
+import ILoginDialogueOptions = require("./ILoginDialogueOptions");
 import Information = require("./Information");
 import InformationAction = require("./InformationAction");
 import InformationArgs = require("./InformationArgs");
 import InformationType = require("./InformationType");
 import IProvider = require("./IProvider");
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
-import Params = require("../../Params");
-import Shell = require("./Shell");
-import IAccessToken = Manifesto.IAccessToken;
-import ILoginDialogueOptions = require("./ILoginDialogueOptions");
 import LoginWarningMessages = require("./LoginWarningMessages");
+import Params = require("../../Params");
+import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
+import Shell = require("./Shell");
 
 class BaseExtension implements IExtension {
 
@@ -32,6 +32,7 @@ class BaseExtension implements IExtension {
     embedWidth: number;
     extensions: any;
     isCreated: boolean = false;
+    isLoggedIn: boolean = false;
     loginDialogue: LoginDialogue;
     mouseX: number;
     mouseY: number;
@@ -102,10 +103,10 @@ class BaseExtension implements IExtension {
                 this.resize();
             };
 
-            var visProp = Utils.Documents.GetHiddenProp();
+            var visibilityProp: string = Utils.Documents.GetHiddenProp();
 
-            if (visProp) {
-                var evtname = visProp.replace(/[H|h]idden/,'') + 'visibilitychange';
+            if (visibilityProp) {
+                var evtname = visibilityProp.replace(/[H|h]idden/,'') + 'visibilitychange';
                 document.addEventListener(evtname, () => {
                     // resize after a tab has been shown (fixes safari layout issue)
                     if (!Utils.Documents.IsHidden()){
@@ -206,7 +207,13 @@ class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseCommands.LOGIN, () => {
+            this.isLoggedIn = true;
             this.triggerSocket(BaseCommands.LOGIN);
+        });
+
+        $.subscribe(BaseCommands.LOGOUT, () => {
+            this.isLoggedIn = false;
+            this.triggerSocket(BaseCommands.LOGOUT);
         });
 
         $.subscribe(BaseCommands.BOOKMARK, () => {
@@ -934,7 +941,7 @@ class BaseExtension implements IExtension {
             var serviceUri: string = resource.tokenService.id;
 
             // pick an identifier for this message. We might want to keep track of sent messages
-            var msgId = serviceUri + "|" + new Date().getTime(); //arbitrary
+            var msgId = serviceUri + "|" + new Date().getTime();
 
             var receiveAccessToken = (e) => {
                 window.removeEventListener("message", receiveAccessToken);
@@ -948,7 +955,7 @@ class BaseExtension implements IExtension {
                 } else {
                     resolve(token);
                 }
-            }
+            };
 
             window.addEventListener("message", receiveAccessToken, false);
 
@@ -996,9 +1003,6 @@ class BaseExtension implements IExtension {
             if(resource.tokenService) {
                 item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(storageStrategy));
             }
-
-            // first try an exact match of the url
-            //var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
 
             if (item){
                 foundItems.push(item);

@@ -10,6 +10,7 @@
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "overrideFullScreen": false,
     "pagingEnabled": true,
+    "pagingOptionEnabled": true,
     "pessimisticAccessControl": false,
     "preserveViewport": false,
     "rightPanelEnabled": true,

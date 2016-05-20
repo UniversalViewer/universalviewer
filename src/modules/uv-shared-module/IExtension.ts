@@ -13,6 +13,7 @@ interface IExtension{
     height(): number;
     isCreated: boolean;
     isFullScreen(): boolean;
+    isLoggedIn: boolean;
     isOverlayActive(): boolean;
     loadDependencies(deps: any): void;
     mouseX: number;

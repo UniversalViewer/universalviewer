@@ -60,7 +60,6 @@ class LoginDialogue extends Dialogue {
 
         this.$logoutButton = this.$content.find('.logout');
         this.$logoutButton.text(this.content.logout);
-        this.$logoutButton.hide(); // todo: remove when ready
 
         this.$cancelButton = this.$content.find('.cancel');
         this.$cancelButton.text(this.content.cancel);
@@ -83,6 +82,8 @@ class LoginDialogue extends Dialogue {
             e.preventDefault();
             this.close();
         });
+
+        this.updateLogoutButton();
     }
 
     open(): void {
@@ -94,10 +95,9 @@ class LoginDialogue extends Dialogue {
 
         if (this.options.warningMessage){
             message = '<span class="warning">' + this.provider.config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
-            //this.$logoutButton.show();
-        } else {
-            this.$logoutButton.hide();
         }
+
+        this.updateLogoutButton();
 
         this.$message.html(message);
         this.$message.targetBlank();
@@ -114,6 +114,14 @@ class LoginDialogue extends Dialogue {
         }
 
         this.resize();
+    }
+
+    updateLogoutButton(): void {
+        if (this.extension.isLoggedIn){
+            this.$logoutButton.show();
+        } else {
+            this.$logoutButton.hide();
+        }
     }
 
     resize(): void {
