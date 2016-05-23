@@ -779,7 +779,8 @@ var Manifesto;
                     quality = Manifesto.Utils.getImageQuality(service.getProfile());
                 }
                 else {
-                    return null;
+                    return "undefined" == typeof this.__jsonld.thumbnail
+                        ? null : this.__jsonld.thumbnail;
                 }
             }
             size = width + ',';
@@ -1570,6 +1571,9 @@ var Manifesto;
             if (heightRatio) {
                 this.height = Math.floor(this.width * heightRatio);
             }
+            else {
+                this.height = width;
+            }
             this.uri = canvas.getCanonicalImageUri(width);
             this.label = canvas.getLabel();
         }
@@ -1681,7 +1685,7 @@ var Manifesto;
                 var request = http.request({
                     host: u.hostname,
                     port: u.port,
-                    path: u.pathname,
+                    path: u.path,
                     method: "GET",
                     withCredentials: false
                 }, function (response) {
@@ -2126,7 +2130,11 @@ var Manifesto;
             _super.call(this, jsonld, options);
         }
         Annotation.prototype.getMotivation = function () {
-            return new Manifesto.AnnotationMotivation(this.getProperty('motivation').toLowerCase());
+            var motivation = this.getProperty('motivation');
+            if (motivation) {
+                return new Manifesto.AnnotationMotivation(motivation.toLowerCase());
+            }
+            return null;
         };
         Annotation.prototype.getOn = function () {
             return this.getProperty('on');
@@ -2146,10 +2154,18 @@ var Manifesto;
             _super.call(this, jsonld, options);
         }
         Resource.prototype.getFormat = function () {
-            return new Manifesto.ResourceFormat(this.getProperty('format').toLowerCase());
+            var format = this.getProperty('format');
+            if (format) {
+                return new Manifesto.ResourceFormat(format.toLowerCase());
+            }
+            return null;
         };
         Resource.prototype.getType = function () {
-            return new Manifesto.ResourceType(this.getProperty('@type').toLowerCase());
+            var type = this.getProperty('@type');
+            if (type) {
+                return new Manifesto.ResourceType(type.toLowerCase());
+            }
+            return null;
         };
         Resource.prototype.getWidth = function () {
             return this.getProperty('width');

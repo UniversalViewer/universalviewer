@@ -85,6 +85,7 @@ class FooterPanel extends BaseView {
         this.updateOpenButton();
         this.updateFeedbackButton();
         this.updateBookmarkButton();
+        this.updateEmbedButton();
         this.updateDownloadButton();
         this.updateFullScreenButton();
 
@@ -120,6 +121,14 @@ class FooterPanel extends BaseView {
             this.$fullScreenBtn.swapClass('exitFullscreen', 'fullScreen');
             this.$fullScreenBtn.text(this.content.fullScreen);
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
+        }
+    }
+
+    updateEmbedButton(): void {
+        if (this.provider.isUIEnabled('embed')){
+            this.$embedButton.show();
+        } else {
+            this.$embedButton.hide();
         }
     }
 

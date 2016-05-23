@@ -72,7 +72,7 @@ class TreeView extends BaseView {
         $.views.helpers({
             elide: function(text){
                 var $a = $((<any>this).linkCtx.elem);
-                var elideCount = Math.floor($a.parent().width() / 7);
+                var elideCount = Math.floor($a.parent().width() / 7); // todo: remove / 7
                 return Utils.Strings.HtmlDecode(Utils.Strings.Ellipsis(text, elideCount));
                 //https://github.com/BorisMoore/jsviews/issues/296
             }
@@ -318,7 +318,7 @@ class TreeView extends BaseView {
 
     private elide($a: JQuery): void {
         if (!$a.is(':visible')) return;
-        var elideCount = Math.floor($a.parent().width() / 7);
+        var elideCount = Math.floor($a.parent().width() / 7); // todo: remove / 7
         $a.text(Utils.Strings.HtmlDecode(Utils.Strings.Ellipsis($a.attr('title'), elideCount)));
     }
 

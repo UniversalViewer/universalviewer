@@ -233,6 +233,22 @@ class BaseProvider implements IProvider{
         return this.getCurrentSequence().isMultiCanvas();
     }
 
+    isUIEnabled(name: string): boolean {
+        var uiExtensions: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+
+        if (uiExtensions){
+            var disableUI: string[] = uiExtensions.getProperty('disableUI');
+
+            if (disableUI) {
+                if (disableUI.contains(name) || disableUI.contains(name.toLowerCase())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     getInfoUri(canvas: Manifesto.ICanvas): string{
         // default to IxIF
         var service = canvas.getService(manifesto.ServiceProfile.ixif());

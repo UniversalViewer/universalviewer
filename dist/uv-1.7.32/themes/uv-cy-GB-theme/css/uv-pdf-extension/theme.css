@@ -155,7 +155,7 @@
 #app .overlay.download .middle ol.options li.group {
   border-bottom: 1px solid #efefef;
 }
-#app .overlay.download .middle ol.options li.group:last-child {
+#app .overlay.download .middle ol.options li.group.lastVisible {
   border-bottom: none;
 }
 #app .overlay.download .middle ol.options li.group ul {

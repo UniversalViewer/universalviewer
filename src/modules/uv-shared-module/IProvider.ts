@@ -61,6 +61,7 @@ interface IProvider extends IIxIFProvider{
     isMultiSequence(): boolean;
     isSeeAlsoEnabled(): boolean;
     isTotalCanvasesEven(): boolean;
+    isUIEnabled(name: string): boolean;
     lastCanvasIndex: number;
 
     // todo: move these to baseextension?
