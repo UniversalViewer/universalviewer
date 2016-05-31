@@ -1,5 +1,5 @@
 import BaseCommands = require("./modules/uv-shared-module/BaseCommands");
-import BootstrapParams = require("BootstrapParams");
+import BootstrapParams = require("./BootstrapParams");
 import IExtension = require("./modules/uv-shared-module/IExtension");
 
 // The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
