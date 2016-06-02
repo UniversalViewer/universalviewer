@@ -440,8 +440,8 @@ class ContentLeftPanel extends LeftPanel {
 
         if (this.isUnopened) {
 
-            var treeEnabled = Utils.Bools.GetBool(this.config.options.treeEnabled, true);
-            var thumbsEnabled = Utils.Bools.GetBool(this.config.options.thumbsEnabled, true);
+            var treeEnabled = Utils.Bools.getBool(this.config.options.treeEnabled, true);
+            var thumbsEnabled = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
             this.treeData = (typeof (<ISeadragonProvider>this.provider).getSortedTree === 'function')
                 ? (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none)
@@ -472,7 +472,7 @@ class ContentLeftPanel extends LeftPanel {
 
     defaultToThumbsView(): boolean{
 
-        var defaultToTreeEnabled: boolean = Utils.Bools.GetBool(this.config.options.defaultToTreeEnabled, false);
+        var defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
         var defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
 
         if (defaultToTreeEnabled){

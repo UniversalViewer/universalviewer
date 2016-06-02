@@ -166,7 +166,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var $label: JQuery = this.$wholeImageHighResButton.find('label');
             var mime = this.getMimeTypeForCurrentCanvas();
             if (mime){
-                mime = Utils.Files.SimplifyMimeType(mime);
+                mime = Utils.Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
             }
@@ -272,7 +272,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 } else {
                     label = defaultLabel;
                 }
-                var mime: string = Utils.Files.SimplifyMimeType(rendering.getFormat().toString());
+                var mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
                 label = String.format(label, mime);
                 this.renderingUrls[currentId] = rendering.id;
                 var $button = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');

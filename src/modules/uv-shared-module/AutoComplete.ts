@@ -66,7 +66,7 @@ class AutoComplete{
 
             that.lastKeyDownWasValid = that.isValidKeyDown(originalEvent);
 
-            var charCode = Utils.Keyboard.GetCharCode(originalEvent);
+            var charCode = Utils.Keyboard.getCharCode(originalEvent);
 
             var cancelEvent: boolean = false;
 
@@ -150,11 +150,11 @@ class AutoComplete{
     }
 
     isValidKeyDown(e: KeyboardEvent): boolean {
-        return this.validKeyDownCodes.contains(Utils.Keyboard.GetCharCode(e));
+        return this.validKeyDownCodes.contains(Utils.Keyboard.getCharCode(e));
     }
 
     isValidKeyPress(e: KeyboardEvent): boolean {
-        var key: string = String.fromCharCode(Utils.Keyboard.GetCharCode(e));
+        var key: string = String.fromCharCode(Utils.Keyboard.getCharCode(e));
         return key.isAlphanumeric();
     }
 

@@ -76,7 +76,7 @@ class DownloadDialogue extends Dialogue {
         }
         var fileType;
         if (format) {
-            fileType = Utils.Files.SimplifyMimeType(format);
+            fileType = Utils.Files.simplifyMimeType(format);
         } else {
             fileType = this.getFileExtension(uri);
         }

@@ -49,7 +49,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$content.prepend(this.$viewer);
 
         $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
-            Utils.Async.WaitFor(() => {
+            Utils.Async.waitFor(() => {
                 return this.isResized;
             }, () => {
                 if (!this.isCreated) this.createUI();
@@ -677,7 +677,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
     
     setNavigatorVisible() {
-        var navigatorEnabled = Utils.Bools.GetBool(this.provider.getSettings().navigatorEnabled, true);
+        var navigatorEnabled = Utils.Bools.getBool(this.provider.getSettings().navigatorEnabled, true);
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         

@@ -242,7 +242,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     }
 
     isSearchWithinEnabled(): boolean {
-        if (!Utils.Bools.GetBool(this.config.options.searchWithinEnabled, false)){
+        if (!Utils.Bools.getBool(this.config.options.searchWithinEnabled, false)){
             return false;
         }
 

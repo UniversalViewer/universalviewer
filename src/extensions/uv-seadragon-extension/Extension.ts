@@ -274,7 +274,7 @@ class Extension extends BaseExtension {
             this.viewPage(index);
         });
 
-        Utils.Async.WaitFor(() => {
+        Utils.Async.waitFor(() => {
             return this.centerPanel && this.centerPanel.isCreated;
         }, () => {
             this.checkForSearchParam();

@@ -68,7 +68,7 @@ class MediaElementCenterPanel extends CenterPanel {
             this.$container.height(this.mediaHeight);
             this.$container.width(this.mediaWidth);
 
-            var id = Utils.Dates.GetTimeStamp();
+            var id = Utils.Dates.getTimeStamp();
             var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
             var posterAttr: string = poster ? ' poster="' + poster + '"' : '';
 
@@ -183,7 +183,7 @@ class MediaElementCenterPanel extends CenterPanel {
             this.$container.height(this.mediaHeight);
         } else {
             // fit media to available space.
-            var size: Utils.Measurements.Size = Utils.Measurements.Dimensions.FitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+            var size: Utils.Measurements.Size = Utils.Measurements.Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
 
             this.$container.height(size.height);
             this.$container.width(size.width);
