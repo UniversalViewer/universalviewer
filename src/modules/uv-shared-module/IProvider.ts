@@ -51,7 +51,6 @@ interface IProvider extends IIxIFProvider{
     getStartCanvasIndex(): number;
     getThumbs(width: number, height: number): Manifesto.IThumb[];
     getTotalCanvases(): number;
-    getTree(): Manifesto.ITreeNode;
     getViewingDirection(): Manifesto.ViewingDirection;
     getViewingHint(): Manifesto.ViewingHint;
     isCanvasIndexOutOfRange(index: number): boolean;
