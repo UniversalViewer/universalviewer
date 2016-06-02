@@ -60,7 +60,7 @@ class BaseExtension implements IExtension {
         this.$element.width(this.embedWidth);
         this.$element.height(this.embedHeight);
 
-        if (!this.provider.isReload && Utils.Documents.IsInIFrame()){
+        if (!this.provider.isReload && Utils.Documents.isInIFrame()){
             // communication with parent frame (if it exists).
             this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message, origin) => {
@@ -103,13 +103,13 @@ class BaseExtension implements IExtension {
                 this.resize();
             };
 
-            var visibilityProp: string = Utils.Documents.GetHiddenProp();
+            var visibilityProp: string = Utils.Documents.getHiddenProp();
 
             if (visibilityProp) {
                 var evtname = visibilityProp.replace(/[H|h]idden/,'') + 'visibilitychange';
                 document.addEventListener(evtname, () => {
                     // resize after a tab has been shown (fixes safari layout issue)
-                    if (!Utils.Documents.IsHidden()){
+                    if (!Utils.Documents.isHidden()){
                         this.resize();
                     }
                 });
@@ -118,9 +118,9 @@ class BaseExtension implements IExtension {
             this.$element.on('drop', (e => {
                 e.preventDefault();
                 var dropUrl = (<any>e.originalEvent).dataTransfer.getData("URL");
-                var url = Utils.Urls.GetUrlParts(dropUrl);
-                var manifestUri = Utils.Urls.GetQuerystringParameterFromString('manifest', url.search);
-                //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
+                var url = Utils.Urls.getUrlParts(dropUrl);
+                var manifestUri = Utils.Urls.getQuerystringParameterFromString('manifest', url.search);
+                //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
 
                 if (manifestUri){
                     this.triggerSocket(BaseCommands.DROP, manifestUri);
@@ -180,7 +180,7 @@ class BaseExtension implements IExtension {
                 }
             });
 
-            if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
+            if (this.bootstrapper.params.isHomeDomain && Utils.Documents.isInIFrame()) {
 
                 $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, () => {
                     if (this.isOverlayActive()) {
@@ -636,7 +636,7 @@ class BaseExtension implements IExtension {
     }
 
     handleParentFrameEvent(message): void {
-        Utils.Async.WaitFor(() => {
+        Utils.Async.waitFor(() => {
             return this.isCreated;
         }, () => {
             switch (message.eventName) {
@@ -737,12 +737,12 @@ class BaseExtension implements IExtension {
         // deep linking is only allowed when hosted on home domain.
         if (this.provider.isDeepLinkingEnabled()){
             // todo: use a static type on bootstrapper.params
-            value = Utils.Urls.GetHashParameter(this.provider.bootstrapper.params.paramMap[key], parent.document);
+            value = Utils.Urls.getHashParameter(this.provider.bootstrapper.params.paramMap[key], parent.document);
         }
 
         if (!value){
             // todo: use a static type on bootstrapper.params
-            value = Utils.Urls.GetQuerystringParameter(this.provider.bootstrapper.params.paramMap[key]);
+            value = Utils.Urls.getQuerystringParameter(this.provider.bootstrapper.params.paramMap[key]);
         }
 
         return value;
@@ -752,7 +752,7 @@ class BaseExtension implements IExtension {
     setParam(key: Params, value: any): void{
 
         if (this.provider.isDeepLinkingEnabled()){
-            Utils.Urls.SetHashParameter(this.provider.bootstrapper.params.paramMap[key], value, parent.document);
+            Utils.Urls.setHashParameter(this.provider.bootstrapper.params.paramMap[key], value, parent.document);
         }
     }
 
@@ -822,7 +822,7 @@ class BaseExtension implements IExtension {
     }
 
     isLeftPanelEnabled(): boolean {
-        if (Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)){
+        if (Utils.Bools.getBool(this.provider.config.options.leftPanelEnabled, true)){
             if (this.provider.hasParentCollection()){
                 return true;
             } else if (this.provider.isMultiCanvas()){
@@ -836,11 +836,11 @@ class BaseExtension implements IExtension {
     }
 
     isRightPanelEnabled(): boolean {
-        return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
+        return  Utils.Bools.getBool(this.provider.config.options.rightPanelEnabled, true);
     }
 
     useArrowKeysToNavigate(): boolean {
-        return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
+        return Utils.Bools.getBool(this.provider.config.options.useArrowKeysToNavigate, true);
     }
 
     bookmark(): void {
@@ -853,7 +853,7 @@ class BaseExtension implements IExtension {
 
     getBookmarkUri(): string {
         var absUri = parent.document.URL;
-        var parts = Utils.Urls.GetUrlParts(absUri);
+        var parts = Utils.Urls.getUrlParts(absUri);
         var relUri = parts.pathname + parts.search + parent.document.location.hash;
 
         if (!relUri.startsWith("/")) {
@@ -1008,7 +1008,7 @@ class BaseExtension implements IExtension {
                 foundItems.push(item);
             } else {
                 // find an access token for the domain
-                var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
+                var domain = Utils.Urls.getUrlParts(resource.dataUri).hostname;
 
                 var items: storage.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
 

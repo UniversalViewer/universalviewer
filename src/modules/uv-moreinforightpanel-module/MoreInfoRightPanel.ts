@@ -265,7 +265,7 @@ class MoreInfoRightPanel extends RightPanel {
 
         $elem.addClass(item.label.toCssClass());
 
-        if (this.config.options.copyToClipboardEnabled && Utils.Clipboard.SupportsCopy() && $text.text() && $header.text())
+        if (this.config.options.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $text.text() && $header.text())
             this.addCopyButton($elem, $header);
         
         return $elem;
@@ -304,7 +304,7 @@ class MoreInfoRightPanel extends RightPanel {
         var text = $matchingItems.map(function (i, md: any) { return md.value; }).get().join('');
         if (!text)
             return;
-        Utils.Clipboard.Copy(text);
+        Utils.Clipboard.copy(text);
         var $copiedText = $('.items .item .header:contains(' + label + ') .copiedText');
         $copiedText.show();
         setTimeout(function() {

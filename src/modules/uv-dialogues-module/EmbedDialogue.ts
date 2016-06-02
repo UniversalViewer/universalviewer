@@ -168,7 +168,7 @@ class EmbedDialogue extends Dialogue {
         });
 
         this.$customWidth.keydown((event) => {
-            Utils.Numbers.NumericalInput(event);
+            Utils.Numbers.numericalInput(event);
         });
 
         this.$customWidth.keyup((event) => {
@@ -176,7 +176,7 @@ class EmbedDialogue extends Dialogue {
         });
 
         this.$customHeight.keydown((event) => {
-            Utils.Numbers.NumericalInput(event);
+            Utils.Numbers.numericalInput(event);
         });
 
         this.$customHeight.keyup((event) => {

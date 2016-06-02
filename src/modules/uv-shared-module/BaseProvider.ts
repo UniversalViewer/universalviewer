@@ -300,7 +300,7 @@ class BaseProvider implements IProvider{
     }
 
     getShareUrl(): string {
-        if (Utils.Documents.IsInIFrame() && this.isDeepLinkingEnabled()){
+        if (Utils.Documents.isInIFrame() && this.isDeepLinkingEnabled()){
             return parent.document.location.href;
         }
 
@@ -308,7 +308,7 @@ class BaseProvider implements IProvider{
     }
 
     addTimestamp(uri: string): string{
-        return uri + "?t=" + Utils.Dates.GetTimeStamp();
+        return uri + "?t=" + Utils.Dates.getTimeStamp();
     }
 
     isDeepLinkingEnabled(): boolean {
@@ -341,7 +341,7 @@ class BaseProvider implements IProvider{
     }
 
     getDomain(): string{
-        var parts = Utils.Urls.GetUrlParts(this.manifestUri);
+        var parts = Utils.Urls.getUrlParts(this.manifestUri);
         return parts.host;
     }
 
@@ -414,7 +414,7 @@ class BaseProvider implements IProvider{
     }
 
     getSettings(): ISettings {
-        if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
             var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             
             if (settings)
@@ -425,7 +425,7 @@ class BaseProvider implements IProvider{
     }
 
     updateSettings(settings: ISettings): void {
-        if (Utils.Bools.GetBool(this.config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
             var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             if (storedSettings)
                 settings = $.extend(storedSettings.value, settings);
@@ -484,7 +484,7 @@ class BaseProvider implements IProvider{
             }
         });
 
-        var limitLocales: boolean = Utils.Bools.GetBool(this.config.options.limitLocales, false);
+        var limitLocales: boolean = Utils.Bools.getBool(this.config.options.limitLocales, false);
 
         if (!limitLocales){
             _.each(items, (item: any) => {

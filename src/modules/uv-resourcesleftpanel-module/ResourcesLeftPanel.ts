@@ -75,7 +75,7 @@ class ResourcesLeftPanel extends LeftPanel {
         for (var i = 0; i < annotations.length; i++){
             var annotation: Manifesto.IAnnotation = annotations[i];
             var resource: Manifesto.Resource = annotation.getResource();
-            var $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + resource.getLabel() + ' (' + Utils.Files.SimplifyMimeType(resource.getFormat().toString()) + ')' + '</li>');
+            var $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + resource.getLabel() + ' (' + Utils.Files.simplifyMimeType(resource.getFormat().toString()) + ')' + '</li>');
             this.$resources.append($listItem);
         }
     }

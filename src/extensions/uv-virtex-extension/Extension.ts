@@ -104,7 +104,7 @@ class Extension extends BaseExtension{
     }
 
     isLeftPanelEnabled(): boolean{
-        return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
+        return Utils.Bools.getBool(this.provider.config.options.leftPanelEnabled, true)
                 && (this.provider.isMultiCanvas() || this.provider.isMultiSequence());
     }
 

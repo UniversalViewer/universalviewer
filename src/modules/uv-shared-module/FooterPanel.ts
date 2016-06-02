@@ -78,7 +78,7 @@ class FooterPanel extends BaseView {
             $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
-        if (!Utils.Bools.GetBool(this.options.embedEnabled, true)){
+        if (!Utils.Bools.getBool(this.options.embedEnabled, true)){
             this.$embedButton.hide();
         }
 
@@ -89,13 +89,13 @@ class FooterPanel extends BaseView {
         this.updateDownloadButton();
         this.updateFullScreenButton();
 
-        if (Utils.Bools.GetBool(this.options.minimiseButtons, false)){
+        if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
         }
     }
 
     updateOpenButton(): void {
-        var configEnabled = Utils.Bools.GetBool(this.options.openEnabled, false);
+        var configEnabled = Utils.Bools.getBool(this.options.openEnabled, false);
 
         if (configEnabled && !this.provider.isHomeDomain){
             this.$openButton.show();
@@ -105,7 +105,7 @@ class FooterPanel extends BaseView {
     }
 
     updateFullScreenButton(): void {
-        if (!Utils.Bools.GetBool(this.options.fullscreenEnabled, true)){
+        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true)){
             this.$fullScreenBtn.hide();
         }
 
@@ -133,7 +133,7 @@ class FooterPanel extends BaseView {
     }
 
     updateDownloadButton(): void {
-        var configEnabled = Utils.Bools.GetBool(this.options.downloadEnabled, true);
+        var configEnabled = Utils.Bools.getBool(this.options.downloadEnabled, true);
 
         if (configEnabled){
             this.$downloadButton.show();
@@ -143,7 +143,7 @@ class FooterPanel extends BaseView {
     }
 
     updateFeedbackButton(): void {
-        var configEnabled = Utils.Bools.GetBool(this.options.feedbackEnabled, false);
+        var configEnabled = Utils.Bools.getBool(this.options.feedbackEnabled, false);
 
         if (configEnabled){
             this.$feedbackButton.show();
@@ -153,7 +153,7 @@ class FooterPanel extends BaseView {
     }
 
     updateBookmarkButton(): void {
-        var configEnabled = Utils.Bools.GetBool(this.options.bookmarkEnabled, false);
+        var configEnabled = Utils.Bools.getBool(this.options.bookmarkEnabled, false);
 
         if (configEnabled){
             this.$bookmarkButton.show();

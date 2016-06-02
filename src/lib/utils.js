@@ -3,7 +3,7 @@ var Utils;
     var Async = (function () {
         function Async() {
         }
-        Async.WaitFor = function (test, successCallback, failureCallback, interval, maxTries, numTries) {
+        Async.waitFor = function (test, successCallback, failureCallback, interval, maxTries, numTries) {
             if (!interval)
                 interval = 200;
             if (!maxTries)
@@ -20,7 +20,7 @@ var Utils;
             }
             else {
                 setTimeout(function () {
-                    Async.WaitFor(test, successCallback, failureCallback, interval, maxTries, numTries);
+                    Async.waitFor(test, successCallback, failureCallback, interval, maxTries, numTries);
                 }, interval);
             }
         };
@@ -33,7 +33,7 @@ var Utils;
     var Bools = (function () {
         function Bools() {
         }
-        Bools.GetBool = function (val, defaultVal) {
+        Bools.getBool = function (val, defaultVal) {
             if (val === null || typeof (val) === 'undefined') {
                 return defaultVal;
             }
@@ -48,7 +48,7 @@ var Utils;
     var Clipboard = (function () {
         function Clipboard() {
         }
-        Clipboard.Copy = function (text) {
+        Clipboard.copy = function (text) {
             var $tempDiv = $("<div style='position:absolute;left:-9999px'>");
             var brRegex = /<br\s*[\/]?>/gi;
             text = text.replace(brRegex, "\n");
@@ -60,7 +60,7 @@ var Utils;
             document.execCommand("copy");
             $tempDiv.remove();
         };
-        Clipboard.SupportsCopy = function () {
+        Clipboard.supportsCopy = function () {
             return document.queryCommandSupported && document.queryCommandSupported('copy');
         };
         return Clipboard;
@@ -2585,7 +2585,7 @@ var Utils;
     var Colors = (function () {
         function Colors() {
         }
-        Colors.Float32ColorToARGB = function (float32Color) {
+        Colors.float32ColorToARGB = function (float32Color) {
             var a = (float32Color & 0xff000000) >>> 24;
             var r = (float32Color & 0xff0000) >>> 16;
             var g = (float32Color & 0xff00) >>> 8;
@@ -2593,18 +2593,18 @@ var Utils;
             var result = [a, r, g, b];
             return result;
         };
-        Colors._ComponentToHex = function (c) {
+        Colors._componentToHex = function (c) {
             var hex = c.toString(16);
             return hex.length == 1 ? "0" + hex : hex;
         };
-        Colors.RGBToHexString = function (rgb) {
-            Colors.Coalesce(rgb);
-            return "#" + Colors._ComponentToHex(rgb[0]) + Colors._ComponentToHex(rgb[1]) + Colors._ComponentToHex(rgb[2]);
+        Colors.rgbToHexString = function (rgb) {
+            Colors.coalesce(rgb);
+            return "#" + Colors._componentToHex(rgb[0]) + Colors._componentToHex(rgb[1]) + Colors._componentToHex(rgb[2]);
         };
-        Colors.ARGBToHexString = function (argb) {
-            return "#" + Colors._ComponentToHex(argb[0]) + Colors._ComponentToHex(argb[1]) + Colors._ComponentToHex(argb[2]) + Colors._ComponentToHex(argb[3]);
+        Colors.argbToHexString = function (argb) {
+            return "#" + Colors._componentToHex(argb[0]) + Colors._componentToHex(argb[1]) + Colors._componentToHex(argb[2]) + Colors._componentToHex(argb[3]);
         };
-        Colors.Coalesce = function (arr) {
+        Colors.coalesce = function (arr) {
             for (var i = 1; i < arr.length; i++) {
                 if (typeof (arr[i]) === 'undefined')
                     arr[i] = arr[i - 1];
@@ -2619,7 +2619,7 @@ var Utils;
     var Dates = (function () {
         function Dates() {
         }
-        Dates.GetTimeStamp = function () {
+        Dates.getTimeStamp = function () {
             return new Date().getTime();
         };
         return Dates;
@@ -2631,7 +2631,7 @@ var Utils;
     var Device = (function () {
         function Device() {
         }
-        Device.GetPixelRatio = function (ctx) {
+        Device.getPixelRatio = function (ctx) {
             var dpr = window.devicePixelRatio || 1;
             var bsr = ctx.webkitBackingStorePixelRatio ||
                 ctx.mozBackingStorePixelRatio ||
@@ -2652,7 +2652,7 @@ var Utils;
     var Documents = (function () {
         function Documents() {
         }
-        Documents.IsInIFrame = function () {
+        Documents.isInIFrame = function () {
             // see http://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
             try {
                 return window.self !== window.top;
@@ -2661,19 +2661,19 @@ var Utils;
                 return true;
             }
         };
-        Documents.SupportsFullscreen = function () {
+        Documents.supportsFullscreen = function () {
             var doc = document.documentElement;
             var support = doc.requestFullscreen || doc.mozRequestFullScreen ||
                 doc.webkitRequestFullScreen || doc.msRequestFullscreen;
             return support != undefined;
         };
-        Documents.IsHidden = function () {
-            var prop = Documents.GetHiddenProp();
+        Documents.isHidden = function () {
+            var prop = Documents.getHiddenProp();
             if (!prop)
                 return false;
             return document[prop];
         };
-        Documents.GetHiddenProp = function () {
+        Documents.getHiddenProp = function () {
             var prefixes = ['webkit', 'moz', 'ms', 'o'];
             // if 'hidden' is natively supported just return it
             if ('hidden' in document)
@@ -2695,7 +2695,7 @@ var Utils;
     var Events = (function () {
         function Events() {
         }
-        Events.Debounce = function (fn, debounceDuration) {
+        Events.debounce = function (fn, debounceDuration) {
             // summary:
             //      Returns a debounced function that will make sure the given
             //      function is not triggered too much.
@@ -2727,7 +2727,7 @@ var Utils;
     var Files = (function () {
         function Files() {
         }
-        Files.SimplifyMimeType = function (mime) {
+        Files.simplifyMimeType = function (mime) {
             switch (mime) {
                 case 'text/plain':
                     return 'txt';
@@ -2751,7 +2751,7 @@ var Utils;
     var Keyboard = (function () {
         function Keyboard() {
         }
-        Keyboard.GetCharCode = function (e) {
+        Keyboard.getCharCode = function (e) {
             var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
             return charCode;
         };
@@ -2768,10 +2768,10 @@ var Utils;
                 this.X = x;
                 this.Y = y;
             }
-            Vector.prototype.Get = function () {
+            Vector.prototype.get = function () {
                 return new Vector(this.X, this.Y);
             };
-            Vector.prototype.Set = function (x, y) {
+            Vector.prototype.set = function (x, y) {
                 this.X = x;
                 this.Y = y;
             };
@@ -2792,69 +2792,69 @@ var Utils;
             //    this._Y = value;
             //    //this.OnPropertyChanged("Y");
             //}
-            Vector.prototype.Add = function (v) {
+            Vector.prototype.add = function (v) {
                 this.X += v.X;
                 this.Y += v.Y;
             };
-            Vector.Add = function (v1, v2) {
+            Vector.add = function (v1, v2) {
                 return new Vector(v1.X + v2.X, v1.Y + v2.Y);
             };
-            Vector.prototype.Sub = function (v) {
+            Vector.prototype.sub = function (v) {
                 this.X -= v.X;
                 this.Y -= v.Y;
             };
-            Vector.Sub = function (v1, v2) {
+            Vector.sub = function (v1, v2) {
                 return new Vector(v1.X - v2.X, v1.Y - v2.Y);
             };
-            Vector.prototype.Mult = function (n) {
+            Vector.prototype.mult = function (n) {
                 this.X = this.X * n;
                 this.Y = this.Y * n;
             };
-            Vector.Mult = function (v1, v2) {
+            Vector.mult = function (v1, v2) {
                 return new Vector(v1.X * v2.X, v1.Y * v2.Y);
             };
-            Vector.MultN = function (v1, n) {
+            Vector.multN = function (v1, n) {
                 return new Vector(v1.X * n, v1.Y * n);
             };
             Vector.prototype.Div = function (n) {
                 this.X = this.X / n;
                 this.Y = this.Y / n;
             };
-            Vector.Div = function (v1, v2) {
+            Vector.div = function (v1, v2) {
                 return new Vector(v1.X / v2.X, v1.Y / v2.Y);
             };
-            Vector.DivN = function (v1, n) {
+            Vector.divN = function (v1, n) {
                 return new Vector(v1.X / n, v1.Y / n);
             };
-            Vector.prototype.Mag = function () {
+            Vector.prototype.mag = function () {
                 return Math.sqrt(this.X * this.X + this.Y * this.Y);
             };
-            Vector.prototype.MagSq = function () {
+            Vector.prototype.magSq = function () {
                 return (this.X * this.X + this.Y * this.Y);
             };
-            Vector.prototype.Normalise = function () {
-                var m = this.Mag();
+            Vector.prototype.normalise = function () {
+                var m = this.mag();
                 if (m != 0 && m != 1) {
                     this.Div(m);
                 }
             };
-            Vector.prototype.Limit = function (max) {
-                if (this.MagSq() > max * max) {
-                    this.Normalise();
-                    this.Mult(max);
+            Vector.prototype.limit = function (max) {
+                if (this.magSq() > max * max) {
+                    this.normalise();
+                    this.mult(max);
                 }
             };
-            Vector.prototype.Equals = function (v) {
+            Vector.prototype.equals = function (v) {
                 return (this.X == v.X && this.Y == v.Y);
             };
-            Vector.prototype.Heading = function () {
+            Vector.prototype.heading = function () {
                 var angle = Math.atan2(-this.Y, this.X);
                 return -1 * angle;
             };
-            Vector.Random2D = function () {
-                return Vector.FromAngle((Math.random() * Math.TAU));
+            Vector.random2D = function () {
+                return Vector.fromAngle((Math.random() * Math.TAU));
             };
-            Vector.FromAngle = function (angle) {
+            Vector.fromAngle = function (angle) {
                 return new Vector(Math.cos(angle), Math.sin(angle));
             };
             return Vector;
@@ -2877,7 +2877,7 @@ var Utils;
         var Dimensions = (function () {
             function Dimensions() {
             }
-            Dimensions.FitRect = function (width1, height1, width2, height2) {
+            Dimensions.fitRect = function (width1, height1, width2, height2) {
                 var ratio1 = height1 / width1;
                 var ratio2 = height2 / width2;
                 var width, height, scale;
@@ -2893,7 +2893,7 @@ var Utils;
                 }
                 return new Size(Math.floor(width), Math.floor(height));
             };
-            Dimensions.HitRect = function (x, y, w, h, mx, my) {
+            Dimensions.hitRect = function (x, y, w, h, mx, my) {
                 if (mx > x && mx < (x + w) && my > y && my < (y + h)) {
                     return true;
                 }
@@ -2909,7 +2909,7 @@ var Utils;
     var Numbers = (function () {
         function Numbers() {
         }
-        Numbers.NumericalInput = function (event) {
+        Numbers.numericalInput = function (event) {
             // Allow: backspace, delete, tab and escape
             if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
                 // Allow: Ctrl+A
@@ -3092,7 +3092,7 @@ var Utils;
     var Strings = (function () {
         function Strings() {
         }
-        Strings.Ellipsis = function (text, chars) {
+        Strings.ellipsis = function (text, chars) {
             if (text.length <= chars)
                 return text;
             var trimmedText = text.substr(0, chars);
@@ -3102,7 +3102,7 @@ var Utils;
             }
             return trimmedText + "&hellip;";
         };
-        Strings.HtmlDecode = function (encoded) {
+        Strings.htmlDecode = function (encoded) {
             var div = document.createElement('div');
             div.innerHTML = encoded;
             return div.firstChild.nodeValue;
@@ -3116,17 +3116,17 @@ var Utils;
     var Urls = (function () {
         function Urls() {
         }
-        Urls.GetHashParameter = function (key, doc) {
+        Urls.getHashParameter = function (key, doc) {
             if (!doc)
                 doc = window.document;
             var regex = new RegExp("#.*[?&]" + key + "=([^&]+)(&|$)");
             var match = regex.exec(doc.location.hash);
             return (match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null);
         };
-        Urls.SetHashParameter = function (key, value, doc) {
+        Urls.setHashParameter = function (key, value, doc) {
             if (!doc)
                 doc = window.document;
-            var kvp = this.UpdateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
+            var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
             var newHash = "#?" + kvp;
             var url = doc.URL;
             // remove hash value (if present).
@@ -3136,25 +3136,25 @@ var Utils;
             }
             doc.location.replace(url + newHash);
         };
-        Urls.GetQuerystringParameter = function (key, w) {
+        Urls.getQuerystringParameter = function (key, w) {
             if (!w)
                 w = window;
-            return this.GetQuerystringParameterFromString(key, w.location.search);
+            return this.getQuerystringParameterFromString(key, w.location.search);
         };
-        Urls.GetQuerystringParameterFromString = function (key, querystring) {
+        Urls.getQuerystringParameterFromString = function (key, querystring) {
             key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
             var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
             var match = regex.exec(querystring);
             return (match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null);
         };
-        Urls.SetQuerystringParameter = function (key, value, doc) {
+        Urls.setQuerystringParameter = function (key, value, doc) {
             if (!doc)
                 doc = window.document;
-            var kvp = this.UpdateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
+            var kvp = this.updateURIKeyValuePair(doc.location.hash.replace('#?', ''), key, value);
             // redirects.
             window.location.search = kvp;
         };
-        Urls.UpdateURIKeyValuePair = function (uriSegment, key, value) {
+        Urls.updateURIKeyValuePair = function (uriSegment, key, value) {
             key = encodeURIComponent(key);
             value = encodeURIComponent(value);
             var kvp = uriSegment.split('&');
@@ -3179,13 +3179,13 @@ var Utils;
             }
             return kvp.join('&');
         };
-        Urls.GetUrlParts = function (url) {
+        Urls.getUrlParts = function (url) {
             var a = document.createElement('a');
             a.href = url;
             return a;
         };
-        Urls.ConvertToRelativeUrl = function (url) {
-            var parts = this.GetUrlParts(url);
+        Urls.convertToRelativeUrl = function (url) {
+            var parts = this.getUrlParts(url);
             var relUri = parts.pathname + parts.searchWithin;
             if (!relUri.startsWith("/")) {
                 relUri = "/" + relUri;
