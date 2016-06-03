@@ -253,46 +253,46 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return true;
     }
 
-    isContinuous(): boolean {
-        return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
-    }
+    //isContinuous(): boolean {
+    //    return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
+    //}
+    //
+    //isPaged(): boolean {
+    //    return this.getViewingHint().toString() === manifesto.ViewingHint.paged().toString();
+    //}
+    //
+    //isBottomToTop(): boolean {
+    //    return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString()
+    //}
+    //
+    //isTopToBottom(): boolean {
+    //    return this.getViewingDirection().toString() === manifesto.ViewingDirection.topToBottom().toString();
+    //}
+    //
+    //isLeftToRight(): boolean {
+    //    return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
+    //}
+    //
+    //isRightToLeft(): boolean {
+    //    return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
+    //}
+    //
+    //isHorizontallyAligned(): boolean {
+    //    return this.isLeftToRight() || this.isRightToLeft()
+    //}
+    //
+    //isVerticallyAligned(): boolean {
+    //    return this.isTopToBottom() || this.isBottomToTop()
+    //}
 
-    isPaged(): boolean {
-        return this.getViewingHint().toString() === manifesto.ViewingHint.paged().toString();
-    }
-
-    isBottomToTop(): boolean {
-        return this.getViewingDirection().toString() === manifesto.ViewingDirection.bottomToTop().toString()
-    }
-
-    isTopToBottom(): boolean {
-        return this.getViewingDirection().toString() === manifesto.ViewingDirection.topToBottom().toString();
-    }
-
-    isLeftToRight(): boolean {
-        return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
-    }
-
-    isRightToLeft(): boolean {
-        return this.getViewingDirection().toString() === manifesto.ViewingDirection.rightToLeft().toString();
-    }
-
-    isHorizontallyAligned(): boolean {
-        return this.isLeftToRight() || this.isRightToLeft()
-    }
-
-    isVerticallyAligned(): boolean {
-        return this.isTopToBottom() || this.isBottomToTop()
-    }
-
-    isPagingAvailable(): boolean {
-        // paged mode is useless unless you have at least 3 pages...
-        return this.isPagingEnabled() && this.getTotalCanvases() > 2;
-    }
-
-    isPagingEnabled(): boolean{
-        return this.getCurrentSequence().isPagingEnabled();
-    }
+    //isPagingAvailable(): boolean {
+    //    // paged mode is useless unless you have at least 3 pages...
+    //    return this.isPagingEnabled() && this.getTotalCanvases() > 2;
+    //}
+    //
+    //isPagingEnabled(): boolean{
+    //    return this.getCurrentSequence().isPagingEnabled();
+    //}
 
     isPagingSettingEnabled(): boolean {
         if (this.isPagingAvailable()){
@@ -326,12 +326,12 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
         return index;
     }
-
-    getAutoCompleteService(): Manifesto.IService {
-        var service: Manifesto.IService = this.getSearchWithinService();
-        if (!service) return null;
-        return service.getService(manifesto.ServiceProfile.autoComplete());
-    }
+    //
+    //getAutoCompleteService(): Manifesto.IService {
+    //    var service: Manifesto.IService = this.getSearchWithinService();
+    //    if (!service) return null;
+    //    return service.getService(manifesto.ServiceProfile.autoComplete());
+    //}
 
     getAutoCompleteUri(): string{
         var service = this.getAutoCompleteService();
@@ -339,9 +339,9 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return service.id + '?q={0}';
     }
 
-    getSearchWithinService(): Manifesto.IService {
-        return this.manifest.getService(manifesto.ServiceProfile.searchWithin());
-    }
+    //getSearchWithinService(): Manifesto.IService {
+    //    return this.manifest.getService(manifesto.ServiceProfile.searchWithin());
+    //}
 
     getSearchWithinServiceUri(): string {
         var service: Manifesto.IService = this.getSearchWithinService();
@@ -401,224 +401,224 @@ class Provider extends BaseProvider implements ISeadragonProvider{
     // expanding a decade generates a list of years
     // expanding a year gives a list of months containing issues
     // expanding a month gives a list of issues.
-    getSortedTree(sortType: TreeSortType): ITreeNode {
-
-        var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
-        var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
-
-        if (sortType === TreeSortType.date){
-            this.getSortedTreeNodesByDate(sortedTree, tree);
-        } else if (sortType === TreeSortType.none) {
-            sortedTree = tree;
-        }
-
-        return sortedTree;
-    }
-
-    getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
-
-        var all: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
-            .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString() ||
-                          n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
-
-        //var collections: ITreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
-        //    .where((n) => n.data.type === ITreeNodeType.collection().toString()).toArray();
-
-        var manifests: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
-            .where((n) => n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
-
-        this.createDecadeNodes(sortedTree, all);
-        this.sortDecadeNodes(sortedTree);
-        this.createYearNodes(sortedTree, all);
-        this.sortYearNodes(sortedTree);
-        this.createMonthNodes(sortedTree, manifests);
-        this.sortMonthNodes(sortedTree);
-        this.createDateNodes(sortedTree, manifests);
-
-        this.pruneDecadeNodes(sortedTree);
-    }
-
-    createDecadeNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-        var decadeNode: ITreeNode;
-
-        for (var i = 0; i < nodes.length; i++) {
-            var node: ITreeNode = nodes[i];
-            var year = this.getNodeYear(node);
-            var decade = Number(year.toString().substr(2, 1));
-            var endYear = Number(year.toString().substr(0, 3) + "9");
-
-            if(!this.getDecadeNode(rootNode, year)){
-                decadeNode = <ITreeNode>manifesto.getTreeNode();
-                decadeNode.label = year + " - " + endYear;
-                decadeNode.navDate = node.navDate;
-                decadeNode.data.startYear = year;
-                decadeNode.data.endYear = endYear;
-                rootNode.addNode(decadeNode);
-            }
-        }
-    }
-
-    // delete any empty decades
-    pruneDecadeNodes(rootNode: ITreeNode): void {
-        var pruned: ITreeNode[] = [];
-
-        for (var i = 0; i < rootNode.nodes.length; i++){
-            var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
-            if (!n.nodes.length){
-                pruned.push(n);
-            }
-        }
-
-        for (var j = 0; j < pruned.length; j++){
-            var p: ITreeNode = <ITreeNode>pruned[j];
-
-            rootNode.nodes.remove(p);
-        }
-    }
-
-    sortDecadeNodes(rootNode: ITreeNode): void {
-        rootNode.nodes = rootNode.nodes.sort(function(a, b) {
-            return a.data.startYear - b.data.startYear;
-        });
-    }
-
-    getDecadeNode(rootNode: ITreeNode, year: number): ITreeNode{
-        for (var i = 0; i < rootNode.nodes.length; i++){
-            var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
-            if (year >= n.data.startYear && year <= n.data.endYear) return n;
-        }
-
-        return null;
-    }
-
-    createYearNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-        var yearNode: ITreeNode;
-
-        for (var i = 0; i < nodes.length; i++) {
-            var node: ITreeNode = nodes[i];
-            var year = this.getNodeYear(node);
-            var decadeNode = this.getDecadeNode(rootNode, year);
-
-            if(decadeNode && !this.getYearNode(decadeNode, year)){
-                yearNode = <ITreeNode>manifesto.getTreeNode();
-                yearNode.label = year.toString();
-                yearNode.navDate = node.navDate;
-                yearNode.data.year = year;
-
-                decadeNode.addNode(yearNode);
-            }
-        }
-    }
-
-    sortYearNodes(rootNode: ITreeNode): void {
-        for (var i = 0; i < rootNode.nodes.length; i++){
-            var decadeNode = rootNode.nodes[i];
-
-            decadeNode.nodes = decadeNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
-                return (this.getNodeYear(a) - this.getNodeYear(b));
-            });
-        }
-    }
-
-    getYearNode(decadeNode: ITreeNode, year: Number): ITreeNode{
-        for (var i = 0; i < decadeNode.nodes.length; i++){
-            var n: ITreeNode = <ITreeNode>decadeNode.nodes[i];
-            if (year === this.getNodeYear(n)) return n;
-        }
-
-        return null;
-    }
-
-    createMonthNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-        var monthNode: ITreeNode;
-
-        for (var i = 0; i < nodes.length; i++) {
-            var node: ITreeNode = nodes[i];
-            var year = this.getNodeYear(node);
-            var month = this.getNodeMonth(node);
-            var decadeNode = this.getDecadeNode(rootNode, year);
-            var yearNode = this.getYearNode(decadeNode, year);
-
-            if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)){
-                monthNode = <ITreeNode>manifesto.getTreeNode();
-                monthNode.label = this.getNodeDisplayMonth(node);
-                monthNode.navDate = node.navDate;
-                monthNode.data.year = year;
-                monthNode.data.month = month;
-                yearNode.addNode(monthNode);
-            }
-        }
-    }
-
-    sortMonthNodes(rootNode: ITreeNode): void {
-        for (var i = 0; i < rootNode.nodes.length; i++){
-            var decadeNode = rootNode.nodes[i];
-
-            for (var j = 0; j < decadeNode.nodes.length; j++){
-                var monthNode = decadeNode.nodes[j];
-
-                monthNode.nodes = monthNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
-                    return this.getNodeMonth(a) - this.getNodeMonth(b);
-                });
-            }
-        }
-    }
-
-    getMonthNode(yearNode: ITreeNode, month: Number): ITreeNode{
-        for (var i = 0; i < yearNode.nodes.length; i++){
-            var n: ITreeNode = <ITreeNode>yearNode.nodes[i];
-            if (month === this.getNodeMonth(n)) return n;
-        }
-
-        return null;
-    }
-
-    createDateNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
-        for (var i = 0; i < nodes.length; i++) {
-            var node: ITreeNode = <ITreeNode>nodes[i];
-            var year = this.getNodeYear(node);
-            var month = this.getNodeMonth(node);
-
-            var dateNode = manifesto.getTreeNode();
-            dateNode.id = node.id;
-            dateNode.label = this.getNodeDisplayDate(node);
-            dateNode.data = node.data;
-            dateNode.data.type = manifesto.TreeNodeType.manifest().toString();
-            dateNode.data.year = year;
-            dateNode.data.month = month;
-
-            var decadeNode = this.getDecadeNode(rootNode, year);
-
-            if (decadeNode) {
-                var yearNode = this.getYearNode(decadeNode, year);
-
-                if (yearNode){
-                    var monthNode = this.getMonthNode(yearNode, month);
-
-                    if (monthNode){
-                        monthNode.addNode(dateNode);
-                    }
-                }
-            }
-        }
-    }
-
-    getNodeYear(node: ITreeNode): number{
-        return node.navDate.getFullYear();
-    }
-
-    getNodeMonth(node: ITreeNode): number{
-        return node.navDate.getMonth();
-    }
-
-    getNodeDisplayMonth(node: ITreeNode): string{
-        var months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        return months[node.navDate.getMonth()];
-    }
-
-    getNodeDisplayDate(node: ITreeNode): string{
-        return node.navDate.toDateString();
-    }
+    //getSortedTree(sortType: TreeSortType): ITreeNode {
+    //
+    //    var tree: ITreeNode = <ITreeNode>this.iiifResource.getTree();
+    //    var sortedTree: ITreeNode = <ITreeNode>manifesto.getTreeNode();
+    //
+    //    if (sortType === TreeSortType.date){
+    //        this.getSortedTreeNodesByDate(sortedTree, tree);
+    //    } else if (sortType === TreeSortType.none) {
+    //        sortedTree = tree;
+    //    }
+    //
+    //    return sortedTree;
+    //}
+    //
+    //getSortedTreeNodesByDate(sortedTree: ITreeNode, tree: ITreeNode): void{
+    //
+    //    var all: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(node => node.nodes)
+    //        .where((n) => n.data.type === manifesto.TreeNodeType.collection().toString() ||
+    //                      n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
+    //
+    //    //var collections: ITreeNode[] = tree.nodes.en().traverseUnique(n => n.nodes)
+    //    //    .where((n) => n.data.type === ITreeNodeType.collection().toString()).toArray();
+    //
+    //    var manifests: ITreeNode[] = <ITreeNode[]>tree.nodes.en().traverseUnique(n => n.nodes)
+    //        .where((n) => n.data.type === manifesto.TreeNodeType.manifest().toString()).toArray();
+    //
+    //    this.createDecadeNodes(sortedTree, all);
+    //    this.sortDecadeNodes(sortedTree);
+    //    this.createYearNodes(sortedTree, all);
+    //    this.sortYearNodes(sortedTree);
+    //    this.createMonthNodes(sortedTree, manifests);
+    //    this.sortMonthNodes(sortedTree);
+    //    this.createDateNodes(sortedTree, manifests);
+    //
+    //    this.pruneDecadeNodes(sortedTree);
+    //}
+    //
+    //createDecadeNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
+    //    var decadeNode: ITreeNode;
+    //
+    //    for (var i = 0; i < nodes.length; i++) {
+    //        var node: ITreeNode = nodes[i];
+    //        var year = this.getNodeYear(node);
+    //        var decade = Number(year.toString().substr(2, 1));
+    //        var endYear = Number(year.toString().substr(0, 3) + "9");
+    //
+    //        if(!this.getDecadeNode(rootNode, year)){
+    //            decadeNode = <ITreeNode>manifesto.getTreeNode();
+    //            decadeNode.label = year + " - " + endYear;
+    //            decadeNode.navDate = node.navDate;
+    //            decadeNode.data.startYear = year;
+    //            decadeNode.data.endYear = endYear;
+    //            rootNode.addNode(decadeNode);
+    //        }
+    //    }
+    //}
+    //
+    //// delete any empty decades
+    //pruneDecadeNodes(rootNode: ITreeNode): void {
+    //    var pruned: ITreeNode[] = [];
+    //
+    //    for (var i = 0; i < rootNode.nodes.length; i++){
+    //        var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
+    //        if (!n.nodes.length){
+    //            pruned.push(n);
+    //        }
+    //    }
+    //
+    //    for (var j = 0; j < pruned.length; j++){
+    //        var p: ITreeNode = <ITreeNode>pruned[j];
+    //
+    //        rootNode.nodes.remove(p);
+    //    }
+    //}
+    //
+    //sortDecadeNodes(rootNode: ITreeNode): void {
+    //    rootNode.nodes = rootNode.nodes.sort(function(a, b) {
+    //        return a.data.startYear - b.data.startYear;
+    //    });
+    //}
+    //
+    //getDecadeNode(rootNode: ITreeNode, year: number): ITreeNode{
+    //    for (var i = 0; i < rootNode.nodes.length; i++){
+    //        var n: ITreeNode = <ITreeNode>rootNode.nodes[i];
+    //        if (year >= n.data.startYear && year <= n.data.endYear) return n;
+    //    }
+    //
+    //    return null;
+    //}
+    //
+    //createYearNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
+    //    var yearNode: ITreeNode;
+    //
+    //    for (var i = 0; i < nodes.length; i++) {
+    //        var node: ITreeNode = nodes[i];
+    //        var year = this.getNodeYear(node);
+    //        var decadeNode = this.getDecadeNode(rootNode, year);
+    //
+    //        if(decadeNode && !this.getYearNode(decadeNode, year)){
+    //            yearNode = <ITreeNode>manifesto.getTreeNode();
+    //            yearNode.label = year.toString();
+    //            yearNode.navDate = node.navDate;
+    //            yearNode.data.year = year;
+    //
+    //            decadeNode.addNode(yearNode);
+    //        }
+    //    }
+    //}
+    //
+    //sortYearNodes(rootNode: ITreeNode): void {
+    //    for (var i = 0; i < rootNode.nodes.length; i++){
+    //        var decadeNode = rootNode.nodes[i];
+    //
+    //        decadeNode.nodes = decadeNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
+    //            return (this.getNodeYear(a) - this.getNodeYear(b));
+    //        });
+    //    }
+    //}
+    //
+    //getYearNode(decadeNode: ITreeNode, year: Number): ITreeNode{
+    //    for (var i = 0; i < decadeNode.nodes.length; i++){
+    //        var n: ITreeNode = <ITreeNode>decadeNode.nodes[i];
+    //        if (year === this.getNodeYear(n)) return n;
+    //    }
+    //
+    //    return null;
+    //}
+    //
+    //createMonthNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
+    //    var monthNode: ITreeNode;
+    //
+    //    for (var i = 0; i < nodes.length; i++) {
+    //        var node: ITreeNode = nodes[i];
+    //        var year = this.getNodeYear(node);
+    //        var month = this.getNodeMonth(node);
+    //        var decadeNode = this.getDecadeNode(rootNode, year);
+    //        var yearNode = this.getYearNode(decadeNode, year);
+    //
+    //        if (decadeNode && yearNode && !this.getMonthNode(yearNode, month)){
+    //            monthNode = <ITreeNode>manifesto.getTreeNode();
+    //            monthNode.label = this.getNodeDisplayMonth(node);
+    //            monthNode.navDate = node.navDate;
+    //            monthNode.data.year = year;
+    //            monthNode.data.month = month;
+    //            yearNode.addNode(monthNode);
+    //        }
+    //    }
+    //}
+    //
+    //sortMonthNodes(rootNode: ITreeNode): void {
+    //    for (var i = 0; i < rootNode.nodes.length; i++){
+    //        var decadeNode = rootNode.nodes[i];
+    //
+    //        for (var j = 0; j < decadeNode.nodes.length; j++){
+    //            var monthNode = decadeNode.nodes[j];
+    //
+    //            monthNode.nodes = monthNode.nodes.sort((a: ITreeNode, b: ITreeNode) => {
+    //                return this.getNodeMonth(a) - this.getNodeMonth(b);
+    //            });
+    //        }
+    //    }
+    //}
+    //
+    //getMonthNode(yearNode: ITreeNode, month: Number): ITreeNode{
+    //    for (var i = 0; i < yearNode.nodes.length; i++){
+    //        var n: ITreeNode = <ITreeNode>yearNode.nodes[i];
+    //        if (month === this.getNodeMonth(n)) return n;
+    //    }
+    //
+    //    return null;
+    //}
+    //
+    //createDateNodes(rootNode: ITreeNode, nodes: ITreeNode[]): void{
+    //    for (var i = 0; i < nodes.length; i++) {
+    //        var node: ITreeNode = <ITreeNode>nodes[i];
+    //        var year = this.getNodeYear(node);
+    //        var month = this.getNodeMonth(node);
+    //
+    //        var dateNode = manifesto.getTreeNode();
+    //        dateNode.id = node.id;
+    //        dateNode.label = this.getNodeDisplayDate(node);
+    //        dateNode.data = node.data;
+    //        dateNode.data.type = manifesto.TreeNodeType.manifest().toString();
+    //        dateNode.data.year = year;
+    //        dateNode.data.month = month;
+    //
+    //        var decadeNode = this.getDecadeNode(rootNode, year);
+    //
+    //        if (decadeNode) {
+    //            var yearNode = this.getYearNode(decadeNode, year);
+    //
+    //            if (yearNode){
+    //                var monthNode = this.getMonthNode(yearNode, month);
+    //
+    //                if (monthNode){
+    //                    monthNode.addNode(dateNode);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //
+    //getNodeYear(node: ITreeNode): number{
+    //    return node.navDate.getFullYear();
+    //}
+    //
+    //getNodeMonth(node: ITreeNode): number{
+    //    return node.navDate.getMonth();
+    //}
+    //
+    //getNodeDisplayMonth(node: ITreeNode): string{
+    //    var months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    //    return months[node.navDate.getMonth()];
+    //}
+    //
+    //getNodeDisplayDate(node: ITreeNode): string{
+    //    return node.navDate.toDateString();
+    //}
 }
 
 export = Provider;

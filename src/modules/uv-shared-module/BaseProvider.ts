@@ -14,27 +14,27 @@ import ICanvas = require("./ICanvas");
 class BaseProvider implements IProvider{
 
     bootstrapper: BootStrapper;
-    canvasIndex: number;
-    collectionIndex: number;
+    //canvasIndex: number;
+    //collectionIndex: number;
     config: any;
     domain: string;
     embedDomain: string;
     embedScriptUri: string;
-    iiifResource: Manifesto.IIIIFResource;
+    //iiifResource: Manifesto.IIIIFResource;
     isHomeDomain: boolean;
     isLightbox: boolean;
     isOnlyInstance: boolean;
     isReload: boolean;
     jsonp: boolean;
     lastCanvasIndex: number;
-    licenseFormatter: UriLabeller;
+    //licenseFormatter: UriLabeller;
     locale: string;
     locales: any[];
-    manifest: Manifesto.IManifest;
-    manifestIndex: number;
+    //manifest: Manifesto.IManifest;
+    //manifestIndex: number;
     manifestUri: string;
     resources: Manifesto.IExternalResource[];
-    sequenceIndex: number;
+    //sequenceIndex: number;
 
     options: any = {
         thumbsUriTemplate: "{0}{1}",
@@ -45,8 +45,8 @@ class BaseProvider implements IProvider{
     constructor(bootstrapper: BootStrapper) {
         this.bootstrapper = bootstrapper;
         this.config = this.bootstrapper.config;
-        this.iiifResource = this.bootstrapper.iiifResource;
-        this.manifest = this.bootstrapper.manifest;
+        //this.iiifResource = this.bootstrapper.iiifResource;
+        //this.manifest = this.bootstrapper.manifest;
 
         // get data-attributes that can't be overridden by hash params.
         // other data-attributes are retrieved through extension.getParam.
@@ -63,12 +63,12 @@ class BaseProvider implements IProvider{
         this.domain = this.bootstrapper.params.domain;
         this.isLightbox = this.bootstrapper.params.isLightbox;
 
-        this.collectionIndex = this.bootstrapper.params.collectionIndex;
-        this.manifestIndex = this.bootstrapper.params.manifestIndex;
-        this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
-        this.canvasIndex = this.bootstrapper.params.canvasIndex;
+        //this.collectionIndex = this.bootstrapper.params.collectionIndex;
+        //this.manifestIndex = this.bootstrapper.params.manifestIndex;
+        //this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
+        //this.canvasIndex = this.bootstrapper.params.canvasIndex;
 
-        this.licenseFormatter = new UriLabeller(this.config.license ? this.config.license : {});
+        //this.licenseFormatter = new UriLabeller(this.config.license ? this.config.license : {});
     }
 
     // re-bootstraps the application with new querystring params
@@ -86,26 +86,26 @@ class BaseProvider implements IProvider{
         this.bootstrapper.bootStrap(p);
     }
 
-    getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number {
-        // todo: support nested collections. walk up parents adding to array and return csv string.
-        var index: number;
-        if (iiifResource.parentCollection) {
-            index = iiifResource.parentCollection.index;
-        }
-        return index;
-    }
-
-    getManifestType(): Manifesto.ManifestType{
-        var manifestType = this.manifest.getManifestType();
-
-        // default to monograph
-        if (manifestType.toString() === ""){
-            manifestType = manifesto.ManifestType.monograph();
-        }
-
-        return manifestType;
-    }
-
+    //getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number {
+    //    // todo: support nested collections. walk up parents adding to array and return csv string.
+    //    var index: number;
+    //    if (iiifResource.parentCollection) {
+    //        index = iiifResource.parentCollection.index;
+    //    }
+    //    return index;
+    //}
+    //
+    //getManifestType(): Manifesto.ManifestType{
+    //    var manifestType = this.manifest.getManifestType();
+    //
+    //    // default to monograph
+    //    if (manifestType.toString() === ""){
+    //        manifestType = manifesto.ManifestType.monograph();
+    //    }
+    //
+    //    return manifestType;
+    //}
+    //
     getCanvasIndexParam(): number {
         return this.bootstrapper.params.getParam(Params.canvasIndex);
     }
@@ -113,191 +113,191 @@ class BaseProvider implements IProvider{
     getSequenceIndexParam(): number {
         return this.bootstrapper.params.getParam(Params.sequenceIndex);
     }
-
-    getElementType(element?: Manifesto.IElement): Manifesto.ElementType {
-        if (!element){
-            element = this.getCurrentCanvas();
-        }
-        return element.getType();
-    }
-
-    getAttribution(): string {
-        return this.manifest.getAttribution();
-    }
-
-    getLicense(): string {
-        return this.manifest.getLicense();
-    }
-
-    getLogo(): string {
-        return this.manifest.getLogo();
-    }
-
-    getLabel(): string {
-        return this.manifest.getLabel();
-    }
-
-    getSeeAlso(): any {
-        return this.manifest.getSeeAlso();
-    }
-
-    isMultiSequence(): boolean{
-        return this.manifest.isMultiSequence();
-    }
-
-    getLastCanvasLabel(alphanumeric?: boolean): string {
-        return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
-    }
-
-    isCanvasIndexOutOfRange(index: number): boolean {
-        return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
-    }
-
-    isTotalCanvasesEven(): boolean {
-        return this.getCurrentSequence().isTotalCanvasesEven();
-    }
-
-    isFirstCanvas(index?: number): boolean {
-        return this.getCurrentSequence().isFirstCanvas(index);
-    }
-
-    isLastCanvas(index?: number): boolean {
-        return this.getCurrentSequence().isLastCanvas(index);
-    }
-
+    //
+    //getElementType(element?: Manifesto.IElement): Manifesto.ElementType {
+    //    if (!element){
+    //        element = this.getCurrentCanvas();
+    //    }
+    //    return element.getType();
+    //}
+    //
+    //getAttribution(): string {
+    //    return this.manifest.getAttribution();
+    //}
+    //
+    //getLicense(): string {
+    //    return this.manifest.getLicense();
+    //}
+    //
+    //getLogo(): string {
+    //    return this.manifest.getLogo();
+    //}
+    //
+    //getLabel(): string {
+    //    return this.manifest.getLabel();
+    //}
+    //
+    //getSeeAlso(): any {
+    //    return this.manifest.getSeeAlso();
+    //}
+    //
+    //isMultiSequence(): boolean{
+    //    return this.manifest.isMultiSequence();
+    //}
+    //
+    //getLastCanvasLabel(alphanumeric?: boolean): string {
+    //    return this.getCurrentSequence().getLastCanvasLabel(alphanumeric);
+    //}
+    //
+    //isCanvasIndexOutOfRange(index: number): boolean {
+    //    return this.getCurrentSequence().isCanvasIndexOutOfRange(index);
+    //}
+    //
+    //isTotalCanvasesEven(): boolean {
+    //    return this.getCurrentSequence().isTotalCanvasesEven();
+    //}
+    //
+    //isFirstCanvas(index?: number): boolean {
+    //    return this.getCurrentSequence().isFirstCanvas(index);
+    //}
+    //
+    //isLastCanvas(index?: number): boolean {
+    //    return this.getCurrentSequence().isLastCanvas(index);
+    //}
+    //
     isSeeAlsoEnabled(): boolean{
         return this.config.options.seeAlsoEnabled !== false;
     }
-
-    getCanvases(): Manifesto.ICanvas[] {
-        return this.getCurrentSequence().getCanvases();
-    }
-
-    getCanvasById(id: string): Manifesto.ICanvas {
-        return this.getCurrentSequence().getCanvasById(id);
-    }
-
-    getCanvasesById(ids: string[]): Manifesto.ICanvas[] {
-        var canvases: Manifesto.ICanvas[] = [];
-
-        for (var i = 0; i < ids.length; i++) {
-            var id: string = ids[i];
-            canvases.push(this.getCanvasById(id));
-        }
-
-        return canvases;
-    }
-
-    getCanvasByIndex(index: number): Manifesto.ICanvas {
-        return this.getCurrentSequence().getCanvasByIndex(index);
-    }
-
-    getSequenceByIndex(index: number): Manifesto.ISequence {
-        return this.manifest.getSequenceByIndex(index);
-    }
-
-    getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange {
-        // get ranges that contain the canvas id. return the last.
-        return this.getCanvasRanges(canvas).last();
-    }
-
-    getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[] {
-
-        if (canvas.ranges){
-            return canvas.ranges;
-        } else {
-            canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
-        }
-
-        return canvas.ranges;
-    }
-
-    getCurrentCanvas(): Manifesto.ICanvas {
-        return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
-    }
-
-    getCurrentSequence(): Manifesto.ISequence {
-        return this.getSequenceByIndex(this.sequenceIndex);
-    }
-
-    getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
-        var ids: string[] = range.getCanvasIds();
-        return this.getCanvasesById(ids);
-    }
-
-    getTotalCanvases(): number{
-        return this.getCurrentSequence().getTotalCanvases();
-    }
-
-    isMultiCanvas(): boolean{
-        return this.getCurrentSequence().isMultiCanvas();
-    }
-
-    isUIEnabled(name: string): boolean {
-        var uiExtensions: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
-
-        if (uiExtensions){
-            var disableUI: string[] = uiExtensions.getProperty('disableUI');
-
-            if (disableUI) {
-                if (disableUI.contains(name) || disableUI.contains(name.toLowerCase())) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    getInfoUri(canvas: Manifesto.ICanvas): string{
-        // default to IxIF
-        var service = canvas.getService(manifesto.ServiceProfile.ixif());
-
-        if (service){ // todo: deprecate
-            return service.getInfoUri();
-        }
-
-        // return the canvas id.
-        return canvas.id;
-    }
-
-    getPagedIndices(canvasIndex?: number): number[]{
-        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
-
-        return [canvasIndex];
-    }
-
-    getViewingDirection(): Manifesto.ViewingDirection {
-        var viewingDirection: Manifesto.ViewingDirection = this.getCurrentSequence().getViewingDirection();
-
-        if (!viewingDirection.toString()) {
-            viewingDirection = this.manifest.getViewingDirection();
-        }
-
-        return viewingDirection;
-    }
-
-    getViewingHint(): Manifesto.ViewingHint {
-        var viewingHint: Manifesto.ViewingHint = this.getCurrentSequence().getViewingHint();
-
-        if (!viewingHint.toString()) {
-            viewingHint = this.manifest.getViewingHint();
-        }
-
-        return viewingHint;
-    }
-
-    getFirstPageIndex(): number {
-        return 0;
-    }
-
-    getLastPageIndex(): number {
-        return this.getTotalCanvases() - 1;
-    }
-
-    getStartCanvasIndex(): number {
-        return this.getCurrentSequence().getStartCanvasIndex();
-    }
+    //
+    //getCanvases(): Manifesto.ICanvas[] {
+    //    return this.getCurrentSequence().getCanvases();
+    //}
+    //
+    //getCanvasById(id: string): Manifesto.ICanvas {
+    //    return this.getCurrentSequence().getCanvasById(id);
+    //}
+    //
+    //getCanvasesById(ids: string[]): Manifesto.ICanvas[] {
+    //    var canvases: Manifesto.ICanvas[] = [];
+    //
+    //    for (var i = 0; i < ids.length; i++) {
+    //        var id: string = ids[i];
+    //        canvases.push(this.getCanvasById(id));
+    //    }
+    //
+    //    return canvases;
+    //}
+    //
+    //getCanvasByIndex(index: number): Manifesto.ICanvas {
+    //    return this.getCurrentSequence().getCanvasByIndex(index);
+    //}
+    //
+    //getSequenceByIndex(index: number): Manifesto.ISequence {
+    //    return this.manifest.getSequenceByIndex(index);
+    //}
+    //
+    //getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange {
+    //    // get ranges that contain the canvas id. return the last.
+    //    return this.getCanvasRanges(canvas).last();
+    //}
+    //
+    //getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[] {
+    //
+    //    if (canvas.ranges){
+    //        return canvas.ranges;
+    //    } else {
+    //        canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
+    //    }
+    //
+    //    return canvas.ranges;
+    //}
+    //
+    //getCurrentCanvas(): Manifesto.ICanvas {
+    //    return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
+    //}
+    //
+    //getCurrentSequence(): Manifesto.ISequence {
+    //    return this.getSequenceByIndex(this.sequenceIndex);
+    //}
+    //
+    //getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
+    //    var ids: string[] = range.getCanvasIds();
+    //    return this.getCanvasesById(ids);
+    //}
+    //
+    //getTotalCanvases(): number{
+    //    return this.getCurrentSequence().getTotalCanvases();
+    //}
+    //
+    //isMultiCanvas(): boolean{
+    //    return this.getCurrentSequence().isMultiCanvas();
+    //}
+    //
+    //isUIEnabled(name: string): boolean {
+    //    var uiExtensions: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+    //
+    //    if (uiExtensions){
+    //        var disableUI: string[] = uiExtensions.getProperty('disableUI');
+    //
+    //        if (disableUI) {
+    //            if (disableUI.contains(name) || disableUI.contains(name.toLowerCase())) {
+    //                return false;
+    //            }
+    //        }
+    //    }
+    //
+    //    return true;
+    //}
+    //
+    //getInfoUri(canvas: Manifesto.ICanvas): string{
+    //    // default to IxIF
+    //    var service = canvas.getService(manifesto.ServiceProfile.ixif());
+    //
+    //    if (service){ // todo: deprecate
+    //        return service.getInfoUri();
+    //    }
+    //
+    //    // return the canvas id.
+    //    return canvas.id;
+    //}
+    //
+    //getPagedIndices(canvasIndex?: number): number[]{
+    //    if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+    //
+    //    return [canvasIndex];
+    //}
+    //
+    //getViewingDirection(): Manifesto.ViewingDirection {
+    //    var viewingDirection: Manifesto.ViewingDirection = this.getCurrentSequence().getViewingDirection();
+    //
+    //    if (!viewingDirection.toString()) {
+    //        viewingDirection = this.manifest.getViewingDirection();
+    //    }
+    //
+    //    return viewingDirection;
+    //}
+    //
+    //getViewingHint(): Manifesto.ViewingHint {
+    //    var viewingHint: Manifesto.ViewingHint = this.getCurrentSequence().getViewingHint();
+    //
+    //    if (!viewingHint.toString()) {
+    //        viewingHint = this.manifest.getViewingHint();
+    //    }
+    //
+    //    return viewingHint;
+    //}
+    //
+    //getFirstPageIndex(): number {
+    //    return 0;
+    //}
+    //
+    //getLastPageIndex(): number {
+    //    return this.getTotalCanvases() - 1;
+    //}
+    //
+    //getStartCanvasIndex(): number {
+    //    return this.getCurrentSequence().getStartCanvasIndex();
+    //}
 
     getShareUrl(): string {
         if (Utils.Documents.isInIFrame() && this.isDeepLinkingEnabled()){
@@ -315,30 +315,30 @@ class BaseProvider implements IProvider{
         return (this.isHomeDomain && this.isOnlyInstance);
     }
 
-    getThumbs(width: number, height: number): Manifesto.IThumb[] {
-        return this.getCurrentSequence().getThumbs(width, height);
-    }
-
-    getRangeByPath(path: string): any{
-        return this.manifest.getRangeByPath(path);
-    }
-
-    getCanvasIndexById(id: string): number {
-        return this.getCurrentSequence().getCanvasIndexById(id);
-    }
-
-    getCanvasIndexByLabel(label: string): number {
-        var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
-        return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
-    }
-
-    getRanges(): IRange[] {
-        return <IRange[]>(<Manifesto.IManifest>this.manifest).getRanges();
-    }
-
-    getTree(): Manifesto.ITreeNode{
-        return this.iiifResource.getTree();
-    }
+    //getThumbs(width: number, height: number): Manifesto.IThumb[] {
+    //    return this.getCurrentSequence().getThumbs(width, height);
+    //}
+    //
+    //getRangeByPath(path: string): any{
+    //    return this.manifest.getRangeByPath(path);
+    //}
+    //
+    //getCanvasIndexById(id: string): number {
+    //    return this.getCurrentSequence().getCanvasIndexById(id);
+    //}
+    //
+    //getCanvasIndexByLabel(label: string): number {
+    //    var foliated = this.getManifestType().toString() === manifesto.ManifestType.manuscript().toString();
+    //    return this.getCurrentSequence().getCanvasIndexByLabel(label, foliated);
+    //}
+    //
+    //getRanges(): IRange[] {
+    //    return <IRange[]>(<Manifesto.IManifest>this.manifest).getRanges();
+    //}
+    //
+    //getTree(): Manifesto.ITreeNode{
+    //    return this.iiifResource.getTree();
+    //}
 
     getDomain(): string{
         var parts = Utils.Urls.getUrlParts(this.manifestUri);
@@ -349,69 +349,69 @@ class BaseProvider implements IProvider{
         return this.embedDomain;
     }
 
-    getMetadata(): IMetadataItem[] {
-        var result: IMetadataItem[] = [];
-
-        var metadata = this.manifest.getMetadata();
-
-        if (metadata){
-            result.push(<IMetadataItem>{
-                label: "metadata",
-                value: metadata,
-                isRootLevel: true
-            });
-        }
-
-        if (this.manifest.getDescription()){
-            result.push(<IMetadataItem>{
-                label: "description",
-                value: this.manifest.getDescription(),
-                isRootLevel: true
-            });
-        }
-
-        if (this.manifest.getAttribution()){
-            result.push(<IMetadataItem>{
-                label: "attribution",
-                value: this.manifest.getAttribution(),
-                isRootLevel: true
-            });
-        }
-
-        if (this.manifest.getLicense()){
-            result.push(<IMetadataItem>{
-                label: "license",
-                value: this.licenseFormatter.format(this.manifest.getLicense()),
-                isRootLevel: true
-            });
-        }
-
-        if (this.manifest.getLogo()){
-            result.push(<IMetadataItem>{
-                label: "logo",
-                value: '<img src="' + this.manifest.getLogo() + '"/>',
-                isRootLevel: true
-            });
-        }
-
-        return result;
-    }
-    
-    getCanvasMetadata(canvas: Manifesto.ICanvas): IMetadataItem[] {
-        var result: IMetadataItem[] = [];
-
-        var metadata = canvas.getMetadata();
-
-        if (metadata){
-            result.push(<IMetadataItem>{
-                label: "metadata",
-                value: metadata,
-                isRootLevel: true
-            });
-        }
-
-        return result;
-    }
+    //getMetadata(): IMetadataItem[] {
+    //    var result: IMetadataItem[] = [];
+    //
+    //    var metadata = this.manifest.getMetadata();
+    //
+    //    if (metadata){
+    //        result.push(<IMetadataItem>{
+    //            label: "metadata",
+    //            value: metadata,
+    //            isRootLevel: true
+    //        });
+    //    }
+    //
+    //    if (this.manifest.getDescription()){
+    //        result.push(<IMetadataItem>{
+    //            label: "description",
+    //            value: this.manifest.getDescription(),
+    //            isRootLevel: true
+    //        });
+    //    }
+    //
+    //    if (this.manifest.getAttribution()){
+    //        result.push(<IMetadataItem>{
+    //            label: "attribution",
+    //            value: this.manifest.getAttribution(),
+    //            isRootLevel: true
+    //        });
+    //    }
+    //
+    //    if (this.manifest.getLicense()){
+    //        result.push(<IMetadataItem>{
+    //            label: "license",
+    //            value: this.licenseFormatter.format(this.manifest.getLicense()),
+    //            isRootLevel: true
+    //        });
+    //    }
+    //
+    //    if (this.manifest.getLogo()){
+    //        result.push(<IMetadataItem>{
+    //            label: "logo",
+    //            value: '<img src="' + this.manifest.getLogo() + '"/>',
+    //            isRootLevel: true
+    //        });
+    //    }
+    //
+    //    return result;
+    //}
+    //
+    //getCanvasMetadata(canvas: Manifesto.ICanvas): IMetadataItem[] {
+    //    var result: IMetadataItem[] = [];
+    //
+    //    var metadata = canvas.getMetadata();
+    //
+    //    if (metadata){
+    //        result.push(<IMetadataItem>{
+    //            label: "metadata",
+    //            value: metadata,
+    //            isRootLevel: true
+    //        });
+    //    }
+    //
+    //    return result;
+    //}
 
     getSettings(): ISettings {
         if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
@@ -553,22 +553,22 @@ class BaseProvider implements IProvider{
         return this.serializeLocales(this.locales);
     }
 
-    getCurrentElement(): Manifesto.IElement {
-        return <Manifesto.IElement>this.getCanvasByIndex(this.canvasIndex);
-    }
-
-    getResources(): Manifesto.IAnnotation[] {
-        var element: Manifesto.IElement = this.getCurrentElement();
-        return element.getResources();
-    }
-
-    hasParentCollection(): boolean {
-        return !!this.manifest.parentCollection;
-    }
-
-    hasResources(): boolean {
-        return this.getResources().length > 0;
-    }
+    //getCurrentElement(): Manifesto.IElement {
+    //    return <Manifesto.IElement>this.getCanvasByIndex(this.canvasIndex);
+    //}
+    //
+    //getResources(): Manifesto.IAnnotation[] {
+    //    var element: Manifesto.IElement = this.getCurrentElement();
+    //    return element.getResources();
+    //}
+    //
+    //hasParentCollection(): boolean {
+    //    return !!this.manifest.parentCollection;
+    //}
+    //
+    //hasResources(): boolean {
+    //    return this.getResources().length > 0;
+    //}
 }
 
 export = BaseProvider;
