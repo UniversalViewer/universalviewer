@@ -273,8 +273,6 @@ class ContentLeftPanel extends LeftPanel {
         this.multiSelectState = new MultiSelectState();
         this.multiSelectState.ranges = this.provider.getRanges();
         this.multiSelectState.canvases = <ICanvas[]>this.provider.getCurrentSequence().getCanvases();
-        //this.multiSelectState.ranges = _.cloneDeep(this.provider.getRanges());
-        //this.multiSelectState.canvases = <ICanvas[]>_.cloneDeep(this.provider.getCurrentSequence().getCanvases());
     }
 
     private _showMultiSelectOptions(): void {
