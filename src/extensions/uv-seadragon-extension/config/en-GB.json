@@ -81,7 +81,7 @@
         "fullscreenEnabled": true,
         "minimiseButtons": true,
         "openEnabled": false,
-        "printEnabled": true
+        "printEnabled": false
       }
     },
     "genericDialogue":
