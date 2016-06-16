@@ -288,81 +288,81 @@ class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    private _multiSelectAll(selected: boolean): void {
-        this._multiSelectRanges(this.multiSelectState.ranges, selected);
-        this._multiSelectCanvases(this.multiSelectState.canvases, selected);
+    //private _multiSelectAll(selected: boolean): void {
+    //    this._multiSelectRanges(this.multiSelectState.ranges, selected);
+    //    this._multiSelectCanvases(this.multiSelectState.canvases, selected);
+    //
+    //    this._publishMultiSelectStateChange();
+    //}
 
-        this._publishMultiSelectStateChange();
-    }
+    //private _multiSelectRanges(ranges: IRange[], selected: boolean): void {
+    //    for(var i = 0; i < ranges.length; i++) {
+    //        var range: IRange = ranges[i];
+    //        range.multiSelected = selected;
+    //        var canvases: ICanvas[] = this._getCanvasesByIds(range.getCanvasIds());
+    //        this._multiSelectCanvases(canvases, selected);
+    //    }
+    //}
+    //
+    //private _multiSelectCanvases(canvases: ICanvas[], selected: boolean): void {
+    //    for(var j = 0; j < canvases.length; j++) {
+    //        var canvas: ICanvas = canvases[j];
+    //        canvas.multiSelected = selected;
+    //    }
+    //}
 
-    private _multiSelectRanges(ranges: IRange[], selected: boolean): void {
-        for(var i = 0; i < ranges.length; i++) {
-            var range: IRange = ranges[i];
-            range.multiSelected = selected;
-            var canvases: ICanvas[] = this._getCanvasesByIds(range.getCanvasIds());
-            this._multiSelectCanvases(canvases, selected);
-        }
-    }
+    //private _getCanvasById(id: string): ICanvas {
+    //    return this.multiSelectState.canvases.en().where(c => c.id === id).first();
+    //}
 
-    private _multiSelectCanvases(canvases: ICanvas[], selected: boolean): void {
-        for(var j = 0; j < canvases.length; j++) {
-            var canvas: ICanvas = canvases[j];
-            canvas.multiSelected = selected;
-        }
-    }
+    //private _getCanvasesByIds(ids: string[]): ICanvas[] {
+    //    var canvases: ICanvas[] = [];
+    //
+    //    for (var i = 0; i < ids.length; i++) {
+    //        var id: string = ids[i];
+    //        canvases.push(this._getCanvasById(id));
+    //    }
+    //
+    //    return canvases;
+    //}
 
-    private _getCanvasById(id: string): ICanvas {
-        return this.multiSelectState.canvases.en().where(c => c.id === id).first();
-    }
-
-    private _getCanvasesByIds(ids: string[]): ICanvas[] {
-        var canvases: ICanvas[] = [];
-
-        for (var i = 0; i < ids.length; i++) {
-            var id: string = ids[i];
-            canvases.push(this._getCanvasById(id));
-        }
-
-        return canvases;
-    }
-
-    private _updateRangeMultiSelectState(range: IRange, selected: boolean): void {
-        var r: IRange = this.multiSelectState.ranges.en().where(r => r.id === range.id).first();
-        r.multiSelected = selected;
-
-        var canvases: ICanvas[] = <ICanvas[]>this.provider.getRangeCanvases(r);
-
-        this._multiSelectCanvases(canvases, selected);
-
-        this._publishMultiSelectStateChange();
-    }
-
-    private _updateCanvasMultiSelectState(canvas: ICanvas, selected: boolean): void {
-        var c: ICanvas = this.multiSelectState.canvases.en().where(c => c.id === canvas.id).first();
-        c.multiSelected = selected;
-        this._publishMultiSelectStateChange();
-    }
+    //private _updateRangeMultiSelectState(range: IRange, selected: boolean): void {
+    //    var r: IRange = this.multiSelectState.ranges.en().where(r => r.id === range.id).first();
+    //    r.multiSelected = selected;
+    //
+    //    var canvases: ICanvas[] = <ICanvas[]>this.provider.getRangeCanvases(r);
+    //
+    //    this._multiSelectCanvases(canvases, selected);
+    //
+    //    this._publishMultiSelectStateChange();
+    //}
+    //
+    //private _updateCanvasMultiSelectState(canvas: ICanvas, selected: boolean): void {
+    //    var c: ICanvas = this.multiSelectState.canvases.en().where(c => c.id === canvas.id).first();
+    //    c.multiSelected = selected;
+    //    this._publishMultiSelectStateChange();
+    //}
 
     private _publishMultiSelectStateChange(): void {
         this.$selectAllButtonCheckbox.prop('checked', this._allRangesSelected() && this._allCanvasesSelected());
         $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
     }
 
-    private _allRangesSelected(): boolean {
-        return this._getAllSelectedRanges().length === this.multiSelectState.ranges.length;
-    }
-
-    private _getAllSelectedRanges(): IRange[] {
-        return this.multiSelectState.ranges.en().where(r => r.multiSelected).toArray();
-    }
-
-    private _allCanvasesSelected(): boolean {
-        return this._getAllSelectedCanvases().length === this.multiSelectState.canvases.length;
-    }
-
-    private _getAllSelectedCanvases(): ICanvas[] {
-        return this.multiSelectState.canvases.en().where(c => c.multiSelected).toArray();
-    }
+    //private _allRangesSelected(): boolean {
+    //    return this._getAllSelectedRanges().length === this.multiSelectState.ranges.length;
+    //}
+    //
+    //private _getAllSelectedRanges(): IRange[] {
+    //    return this.multiSelectState.ranges.en().where(r => r.multiSelected).toArray();
+    //}
+    //
+    //private _allCanvasesSelected(): boolean {
+    //    return this._getAllSelectedCanvases().length === this.multiSelectState.canvases.length;
+    //}
+    //
+    //private _getAllSelectedCanvases(): ICanvas[] {
+    //    return this.multiSelectState.canvases.en().where(c => c.multiSelected).toArray();
+    //}
 
     sortByDate(): void {
         this.treeView.rootNode = <ITreeNode>(<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.date);

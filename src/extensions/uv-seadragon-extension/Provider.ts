@@ -302,30 +302,30 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         return false;
     }
 
-    getNextPageIndex(canvasIndex?: number): number {
-        if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
-
-        var index;
-
-        if (this.isPagingSettingEnabled()){
-            var indices = this.getPagedIndices(canvasIndex);
-
-            if (this.isRightToLeft()){
-                index = indices[0] + 1;
-            } else {
-                index = indices.last() + 1;
-            }
-
-        } else {
-            index = canvasIndex + 1;
-        }
-
-        if (index > this.getTotalCanvases() - 1) {
-            return -1;
-        }
-
-        return index;
-    }
+    //getNextPageIndex(canvasIndex?: number): number {
+    //    if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
+    //
+    //    var index;
+    //
+    //    if (this.isPagingSettingEnabled()){
+    //        var indices = this.getPagedIndices(canvasIndex);
+    //
+    //        if (this.isRightToLeft()){
+    //            index = indices[0] + 1;
+    //        } else {
+    //            index = indices.last() + 1;
+    //        }
+    //
+    //    } else {
+    //        index = canvasIndex + 1;
+    //    }
+    //
+    //    if (index > this.getTotalCanvases() - 1) {
+    //        return -1;
+    //    }
+    //
+    //    return index;
+    //}
     //
     //getAutoCompleteService(): Manifesto.IService {
     //    var service: Manifesto.IService = this.getSearchWithinService();
