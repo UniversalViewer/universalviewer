@@ -18,6 +18,7 @@ import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../Params");
+import PrintArgs = require("./PrintArgs");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 import Settings = require("../../modules/uv-shared-module/Settings");
@@ -182,6 +183,10 @@ class Extension extends BaseExtension {
         $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
             this.triggerSocket(Commands.PREV_SEARCH_RESULT);
             this.prevSearchResult();
+        });
+
+        $.subscribe(Commands.PRINT, () => {
+            this.print();
         });
 
         $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
@@ -523,6 +528,13 @@ class Extension extends BaseExtension {
         bookmark.type = manifesto.ElementType.image().toString();
 
         this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+    }
+
+    print(): void {
+        var args: PrintArgs = new PrintArgs();
+        args.ids = "all";
+        args.mimeType = this.provider.config.options.printMimeType;
+        this.triggerSocket(Commands.PRINT, args);
     }
 }
 

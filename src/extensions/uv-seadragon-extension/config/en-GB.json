@@ -13,6 +13,7 @@
     "pagingOptionEnabled": true,
     "pessimisticAccessControl": false,
     "preserveViewport": false,
+    "printMimeType": "application/pdf",
     "rightPanelEnabled": true,
     "saveUserSettings": false,
     "searchWithinEnabled": true,
@@ -79,7 +80,8 @@
         "feedbackEnabled": false,
         "fullscreenEnabled": true,
         "minimiseButtons": true,
-        "openEnabled": false
+        "openEnabled": false,
+        "printEnabled": true
       }
     },
     "genericDialogue":
