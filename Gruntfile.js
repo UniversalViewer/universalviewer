@@ -531,7 +531,7 @@ module.exports = function (grunt) {
         );
     });
 
-    grunt.registerTask('serve', '', function() {
+    grunt.registerTask('examples', '', function() {
 
         grunt.task.run(
             'default',

@@ -598,7 +598,8 @@ class ContentLeftPanel extends LeftPanel {
             var node: Manifesto.ITreeNode;
 
             // try finding a range first
-            var range: Manifesto.IRange = this.provider.getCanvasRange(this.provider.getCurrentCanvas());
+            var rangePath: string = this.extension.currentRange ? this.extension.currentRange.path : '';
+            var range: Manifesto.IRange = this.provider.getCanvasRange(this.provider.getCurrentCanvas(), rangePath);
 
             if (range){
                 id = range.treeNode.id;

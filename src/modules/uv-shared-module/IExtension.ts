@@ -4,6 +4,7 @@ import Params = require("../../Params");
 interface IExtension{
     create(): void;
     createModules(): void;
+    currentRange: Manifesto.IRange;
     dependenciesLoaded(): void;
     embedHeight: number;
     embedWidth: number;
