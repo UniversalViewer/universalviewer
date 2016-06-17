@@ -39,6 +39,11 @@
                     line-height: 22px;
                 }
 
+                &.print{
+                    .icon-left(url('@{img-path}print.png'), 21px, 30px);
+                    line-height: 22px;
+                }
+
                 &.fullScreen{
                     .icon-right(url('@{img-path}fullscreen.png'), 21px, 30px);
                     line-height: 22px;
@@ -83,6 +88,12 @@
                     }
 
                     &.feedback{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
+                    
+                    &.print{
                         .hide-text();
                         width: 27px;
                         padding: 0;

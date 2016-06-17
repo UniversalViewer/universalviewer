@@ -19,6 +19,7 @@ class FooterPanel extends BaseFooterPanel {
     $placemarkerDetailsBottom: JQuery;
     $placemarkerDetailsTop: JQuery;
     $previousResultButton: JQuery;
+    $printButton: JQuery;
     $searchButton: JQuery;
     $searchContainer: JQuery;
     $searchLabel: JQuery;
@@ -60,6 +61,9 @@ class FooterPanel extends BaseFooterPanel {
         $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
             this.displaySearchResults(obj.terms, obj.results);
         });
+
+        this.$printButton = $('<a class="print" title="' + this.content.print + '">' + this.content.print + '</a>');
+        this.$options.prepend(this.$printButton);
 
         // search input.
         this.$searchContainer = $('<div class="search"></div>');
@@ -206,6 +210,22 @@ class FooterPanel extends BaseFooterPanel {
                 300, 2, true
             );
 
+        }
+
+        this.$printButton.onPressed(() => {
+            $.publish(Commands.PRINT);
+        });
+
+        this.updatePrintButton();
+    }
+
+    updatePrintButton(): void {
+        var configEnabled = Utils.Bools.getBool(this.options.printEnabled, false);
+
+        if (configEnabled){
+            this.$printButton.show();
+        } else {
+            this.$printButton.hide();
         }
     }
 

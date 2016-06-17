@@ -22,6 +22,7 @@ class Commands {
     static PAGING_TOGGLED: string                       = Commands.namespace + 'onPagingToggled';
     static PREV: string                                 = Commands.namespace + 'onPrev';
     static PREV_SEARCH_RESULT: string                   = Commands.namespace + 'onPrevSearchResult';
+    static PRINT: string                                = Commands.namespace + 'onPrint';
     static SEADRAGON_ANIMATION: string                  = Commands.namespace + 'onAnimation';
     static SEADRAGON_ANIMATION_FINISH: string           = Commands.namespace + 'onAnimationfinish';
     static SEADRAGON_ANIMATION_START: string            = Commands.namespace + 'onAnimationStart';
