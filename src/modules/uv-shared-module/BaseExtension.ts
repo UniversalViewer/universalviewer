@@ -27,6 +27,7 @@ class BaseExtension implements IExtension {
     bootstrapper: BootStrapper;
     canvasIndex: number;
     clickThroughDialogue: ClickThroughDialogue;
+    currentRange: Manifesto.IRange;
     restrictedDialogue: RestrictedDialogue;
     embedHeight: number;
     embedWidth: number;

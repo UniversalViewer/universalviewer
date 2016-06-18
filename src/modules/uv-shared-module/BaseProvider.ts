@@ -96,6 +96,149 @@ class BaseProvider implements IProvider{
         return this.config.options.seeAlsoEnabled !== false;
     }
 
+    getCanvases(): Manifesto.ICanvas[] {
+        return this.getCurrentSequence().getCanvases();
+    }
+
+    getCanvasById(id: string): Manifesto.ICanvas {
+        return this.getCurrentSequence().getCanvasById(id);
+    }
+
+    getCanvasesById(ids: string[]): Manifesto.ICanvas[] {
+        var canvases: Manifesto.ICanvas[] = [];
+
+        for (var i = 0; i < ids.length; i++) {
+            var id: string = ids[i];
+            canvases.push(this.getCanvasById(id));
+        }
+
+        return canvases;
+    }
+
+    getCanvasByIndex(index: number): Manifesto.ICanvas {
+        return this.getCurrentSequence().getCanvasByIndex(index);
+    }
+
+    getSequenceByIndex(index: number): Manifesto.ISequence {
+        return this.manifest.getSequenceByIndex(index);
+    }
+
+    getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange {
+        var ranges: Manifesto.IRange[] = this.getCanvasRanges(canvas);
+        
+        if (path){
+            for (var i = 0; i < ranges.length; i++) {
+                var range: Manifesto.IRange = ranges[i];
+
+                if (range.path === path){
+                    return range;
+                }
+            }
+
+            return null;
+        } else {
+            return ranges[0]; // else return the first range
+        }
+    }
+
+    getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[] {
+
+        if (canvas.ranges){
+            return canvas.ranges;
+        } else {
+            canvas.ranges = <IRange[]>this.manifest.getRanges().en().where(range => (range.getCanvasIds().en().any(c => c === canvas.id))).toArray();
+        }
+
+        return canvas.ranges;
+    }
+
+    getCurrentCanvas(): Manifesto.ICanvas {
+        return this.getCurrentSequence().getCanvasByIndex(this.canvasIndex);
+    }
+
+    getCurrentSequence(): Manifesto.ISequence {
+        return this.getSequenceByIndex(this.sequenceIndex);
+    }
+
+    getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[] {
+        var ids: string[] = range.getCanvasIds();
+        return this.getCanvasesById(ids);
+    }
+
+    getTotalCanvases(): number{
+        return this.getCurrentSequence().getTotalCanvases();
+    }
+
+    isMultiCanvas(): boolean{
+        return this.getCurrentSequence().isMultiCanvas();
+    }
+
+    isUIEnabled(name: string): boolean {
+        var uiExtensions: Manifesto.IService = this.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+
+        if (uiExtensions){
+            var disableUI: string[] = uiExtensions.getProperty('disableUI');
+
+            if (disableUI) {
+                if (disableUI.contains(name) || disableUI.contains(name.toLowerCase())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    getInfoUri(canvas: Manifesto.ICanvas): string{
+        // default to IxIF
+        var service = canvas.getService(manifesto.ServiceProfile.ixif());
+
+        if (service){ // todo: deprecate
+            return service.getInfoUri();
+        }
+
+        // return the canvas id.
+        return canvas.id;
+    }
+
+    getPagedIndices(canvasIndex?: number): number[]{
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.canvasIndex;
+
+        return [canvasIndex];
+    }
+
+    getViewingDirection(): Manifesto.ViewingDirection {
+        var viewingDirection: Manifesto.ViewingDirection = this.getCurrentSequence().getViewingDirection();
+
+        if (!viewingDirection.toString()) {
+            viewingDirection = this.manifest.getViewingDirection();
+        }
+
+        return viewingDirection;
+    }
+
+    getViewingHint(): Manifesto.ViewingHint {
+        var viewingHint: Manifesto.ViewingHint = this.getCurrentSequence().getViewingHint();
+
+        if (!viewingHint.toString()) {
+            viewingHint = this.manifest.getViewingHint();
+        }
+
+        return viewingHint;
+    }
+
+    getFirstPageIndex(): number {
+        return 0;
+    }
+
+    getLastPageIndex(): number {
+        return this.getTotalCanvases() - 1;
+    }
+
+    getStartCanvasIndex(): number {
+        return this.getCurrentSequence().getStartCanvasIndex();
+    }
+
     getShareUrl(): string {
         if (Utils.Documents.isInIFrame() && this.isDeepLinkingEnabled()){
             return parent.document.location.href;

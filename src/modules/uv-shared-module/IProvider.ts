@@ -27,7 +27,7 @@ interface IProvider extends IIxIFProvider{
     getCanvasIndexByLabel(label: string): number;
     getCanvasIndexParam(): number;
     getCanvasMetadata(canvas: Manifesto.ICanvas): IMetadataItem[];
-    getCanvasRange(canvas: Manifesto.ICanvas): Manifesto.IRange;
+    getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
     getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
     getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
     getCurrentCanvas(): Manifesto.ICanvas;
