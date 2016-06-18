@@ -9,6 +9,7 @@ import Size = Utils.Measurements.Size;
 import TreeSortType = require("./TreeSortType");
 import Vector = Utils.Maths.Vector;
 import ITreeNode = require("../../modules/uv-shared-module/ITreeNode");
+import Point = require("../../modules/uv-shared-module/Point");
 
 class Provider extends BaseProvider implements ISeadragonProvider{
 
@@ -87,7 +88,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
         var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
         dimensions.region = new Size(regionWidth, regionHeight);
-        dimensions.regionPos = new Vector(regionLeft, regionTop);
+        dimensions.regionPos = new Point(regionLeft, regionTop);
         dimensions.size = new Size(sizeWidth, sizeHeight);
 
         return dimensions;
@@ -105,7 +106,7 @@ class Provider extends BaseProvider implements ISeadragonProvider{
 
         var baseUri = this.getImageBaseUri(canvas);
         var id = this.getImageId(canvas);
-        var region = dimensions.regionPos.X + "," + dimensions.regionPos.Y + "," + dimensions.region.width + "," + dimensions.region.height;
+        var region = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
         var size = dimensions.size.width + ',' + dimensions.size.height;
         var rotation = 0;
         var quality = 'default';
