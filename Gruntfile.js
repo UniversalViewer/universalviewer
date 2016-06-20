@@ -203,58 +203,11 @@ module.exports = function (grunt) {
             bowerComponents: {
                 files: [
                     {
-                        // extensions
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        src: ['uv-*-extension/**'],
-                        dest: '<%= config.dirs.extensions %>'
-                    },
-                    {
-                        // modules
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        src: ['uv-*-module/**'],
-                        dest: '<%= config.dirs.modules %>'
-                    },
-                    {
                         // themes
                         cwd: '<%= config.dirs.bower %>',
                         expand: true,
                         src: ['uv-*-theme/**'],
                         dest: '<%= config.dirs.themes %>'
-                    },
-                    {
-                        // all js files that need to be copied from /lib to /src/lib post bower install
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'exjs/dist/ex.es3.min.js',
-                            'extensions/dist/extensions.js',
-                            'http-status-codes/dist/http-status-codes.js',
-                            'jquery-plugins/dist/jquery-plugins.js',
-                            'jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
-                            'key-codes/dist/key-codes.js',
-                            'Units/Length.min.js',
-                            'utils/dist/utils.js'
-                        ],
-                        dest: '<%= config.dirs.lib %>'
-                    },
-                    {
-                        // all d.ts files that need to be copied from /lib to /src/typings post bower install
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'exjs/dist/ex.d.ts',
-                            'extensions/typings/extensions.d.ts',
-                            'http-status-codes/dist/http-status-codes.d.ts',
-                            'jquery-plugins/typings/jquery-plugins.d.ts',
-                            'key-codes/dist/key-codes.d.ts',
-                            'manifesto/dist/manifesto.d.ts',
-                            'utils/dist/utils.d.ts'
-                        ],
-                        dest: '<%= config.dirs.typings %>'
                     }
                 ]
             },
@@ -266,7 +219,12 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
-                            'manifesto.js/dist/client/manifesto.js'
+                            'manifold/dist/manifold.bundle.js',
+                            'jquery-plugins/dist/jquery-plugins.js',
+                            'jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
+                            'key-codes/dist/key-codes.js',
+                            'units/Length.min.js',
+                            'utils/dist/utils.js'
                         ],
                         dest: '<%= config.dirs.lib %>'
                     },
@@ -276,8 +234,11 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
-                            'manifesto.js/dist/manifesto.d.ts',
-                            'virtex3d/dist/virtex.d.ts'
+                            'manifold/dist/manifold.bundle.d.ts',
+                            'virtex3d/dist/virtex.d.ts',
+                            'jquery-plugins/typings/jquery-plugins.d.ts',
+                            'key-codes/dist/key-codes.d.ts',
+                            'utils/dist/utils.d.ts'
                         ],
                         dest: '<%= config.dirs.typings %>'
                     },

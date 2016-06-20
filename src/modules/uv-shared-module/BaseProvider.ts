@@ -63,8 +63,8 @@ class BaseProvider implements IProvider{
         this.domain = this.bootstrapper.params.domain;
         this.isLightbox = this.bootstrapper.params.isLightbox;
 
-        this.collectionIndex = this.bootstrapper.params.collectionIndex;
-        this.manifestIndex = this.bootstrapper.params.manifestIndex;
+        //this.collectionIndex = this.bootstrapper.params.collectionIndex;
+        //this.manifestIndex = this.bootstrapper.params.manifestIndex;
         //this.sequenceIndex = this.bootstrapper.params.sequenceIndex;
         //this.canvasIndex = this.bootstrapper.params.canvasIndex;
     }

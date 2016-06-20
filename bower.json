@@ -17,13 +17,6 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "exjs": "BSick7/exjs",
-    "extensions": "edsilv/extensions",
-    "http-status-codes": "edsilv/http-status-codes",
-    "jquery-plugins": "edsilv/jquery-plugins",
-    "jquery-tiny-pubsub": "edsilv/jquery-tiny-pubsub",
-    "key-codes": "edsilv/key-codes",
-    "utils": "edsilv/utils",
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "universalviewer/uv-en-GB-theme"
   }
