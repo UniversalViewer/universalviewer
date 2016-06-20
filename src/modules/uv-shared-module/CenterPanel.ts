@@ -49,7 +49,7 @@ class CenterPanel extends BaseView {
     }
 
     showAttribution(): void {
-        var acknowledgements = this.provider.getAttribution();
+        var acknowledgements = this.extension.helper.getAttribution();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 
@@ -63,7 +63,7 @@ class CenterPanel extends BaseView {
         var $license = this.$acknowledgements.find('.license');
         var $logo = this.$acknowledgements.find('.logo');
 
-        $attribution.html(this.provider.sanitize(acknowledgements));
+        $attribution.html(this.extension.sanitize(acknowledgements));
 
         $attribution.find('img').one("load", () => {
             this.resize();

@@ -356,7 +356,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     updateSettings(): void {
-        this.viewPage(this.canvasIndex, true);
+        this.viewPage(this.helper.canvasIndex, true);
         var settings: ISettings = this.getSettings();
         $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
     }
@@ -375,7 +375,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             var indices = this.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.
-            if (indices.contains(this.canvasIndex)) {
+            if (indices.contains(this.helper.canvasIndex)) {
                 this.viewCanvas(canvasIndex);
                 return;
             }
@@ -462,7 +462,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         this.searchResults = [];
 
         // reload current index as it may contain results.
-        this.viewPage(this.canvasIndex);
+        this.viewPage(this.helper.canvasIndex);
     }
 
     prevSearchResult(): void {
@@ -471,7 +471,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         for (var i = this.searchResults.length - 1; i >= 0; i--) {
             var result = this.searchResults[i];
 
-            if (result.canvasIndex < this.canvasIndex) {
+            if (result.canvasIndex < this.helper.canvasIndex) {
                 this.viewPage(result.canvasIndex);
                 break;
             }
@@ -484,7 +484,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         for (var i = 0; i < this.searchResults.length; i++) {
             var result = this.searchResults[i];
 
-            if (result.canvasIndex > this.canvasIndex) {
+            if (result.canvasIndex > this.helper.canvasIndex) {
                 this.viewPage(result.canvasIndex);
                 break;
             }
@@ -497,7 +497,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
         var bookmark: Bookmark = new Bookmark();
 
-        bookmark.index = this.canvasIndex;
+        bookmark.index = this.helper.canvasIndex;
         bookmark.label = canvas.getLabel();
         bookmark.path = this.getCroppedImageUri(canvas, this.getViewer());
         bookmark.thumb = canvas.getCanonicalImageUri(this.config.options.bookmarkThumbWidth);
@@ -671,12 +671,12 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string{
         var configUri = this.config.uri || '';
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
+        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
         return script;
     }
 
     getPrevPageIndex(canvasIndex?: number): number {
-        if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
+        if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
 
         var index;
 
@@ -697,7 +697,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getPagedIndices(canvasIndex?: number): number[]{
-        if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
+        if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
 
         var indices = [];
 
@@ -708,7 +708,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             });
         } else {
             if (!this.isPagingSettingEnabled()) {
-                indices.push(this.canvasIndex);
+                indices.push(this.helper.canvasIndex);
             } else {
                 if (this.helper.isFirstCanvas(canvasIndex) || (this.helper.isLastCanvas(canvasIndex) && this.helper.isTotalCanvasesEven())){
                     indices = [canvasIndex];
@@ -748,7 +748,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getNextPageIndex(canvasIndex?: number): number {
-       if (_.isUndefined(canvasIndex)) canvasIndex = this.canvasIndex;
+       if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
     
        var index;
     
@@ -803,7 +803,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
                 $.publish(Commands.SEARCH_RESULTS, [{terms, results}]);
 
                 // reload current index as it may contain results.
-                that.viewPage(that.canvasIndex, true);
+                that.viewPage(that.helper.canvasIndex, true);
             } else {
                 that.showMessage(that.config.modules.genericDialogue.content.noMatches, () => {
                     $.publish(Commands.SEARCH_RESULTS_EMPTY);

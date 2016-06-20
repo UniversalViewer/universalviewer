@@ -1,5 +1,4 @@
 import BaseCommands = require("./BaseCommands");
-import BaseProvider = require("./BaseProvider");
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
@@ -11,7 +10,6 @@ import Information = require("./Information");
 import InformationAction = require("./InformationAction");
 import InformationArgs = require("./InformationArgs");
 import InformationType = require("./InformationType");
-import IProvider = require("./IProvider");
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import LoginWarningMessages = require("./LoginWarningMessages");
 import Params = require("../../Params");
@@ -371,7 +369,7 @@ class BaseExtension implements IExtension {
         $.subscribe(BaseCommands.LOAD_FAILED, () => {
             this.triggerSocket(BaseCommands.LOAD_FAILED);
 
-            if (!_.isNull(that.lastCanvasIndex) && that.lastCanvasIndex !== that.canvasIndex){
+            if (!_.isNull(that.lastCanvasIndex) && that.lastCanvasIndex !== that.helper.canvasIndex){
                 this.viewCanvas(that.lastCanvasIndex);
             }
         });
@@ -387,7 +385,7 @@ class BaseExtension implements IExtension {
         $.subscribe(BaseCommands.OPEN, () => {
             this.triggerSocket(BaseCommands.OPEN);
 
-            var openUri: string = String.format(this.config.options.openTemplate, this.helper.manifestUri);
+            var openUri: string = String.format(this.config.options.openTemplate, this.helper.iiifResourceUri);
 
             window.open(openUri);
         });
@@ -530,7 +528,7 @@ class BaseExtension implements IExtension {
         this.shell = new Shell(this.$element);
 
         // set canvasIndex to -1 (nothing selected yet).
-        this.canvasIndex = -1;
+        this.helper.canvasIndex = -1;
 
         // dependencies
         if (overrideDependencies){
@@ -715,7 +713,7 @@ class BaseExtension implements IExtension {
     }
 
     getDomain(): string{
-        var parts = Utils.Urls.getUrlParts(this.helper.manifestUri);
+        var parts = Utils.Urls.getUrlParts(this.helper.iiifResourceUri);
         return parts.host;
     }
 
@@ -740,7 +738,7 @@ class BaseExtension implements IExtension {
             if (storedSettings)
                 settings = $.extend(storedSettings.value, settings);
                 
-            //store for ten years
+            // store for ten years
             Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
         }
         
@@ -977,8 +975,8 @@ class BaseExtension implements IExtension {
             canvasIndex = 0;
         }
 
-        this.lastCanvasIndex = this.canvasIndex;
-        this.canvasIndex = canvasIndex;
+        this.lastCanvasIndex = this.helper.canvasIndex;
+        this.helper.canvasIndex = canvasIndex;
 
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
         $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
@@ -1009,7 +1007,7 @@ class BaseExtension implements IExtension {
 
     viewManifest(manifest: Manifesto.IManifest): void{
         var p = new BootstrapParams();
-        p.manifestUri = this.helper.manifestUri;
+        p.manifestUri = this.helper.iiifResourceUri;
         p.collectionIndex = this.helper.getCollectionIndex(manifest);
         p.manifestIndex = manifest.index;
         p.sequenceIndex = 0;
@@ -1020,7 +1018,7 @@ class BaseExtension implements IExtension {
 
     viewCollection(collection: Manifesto.ICollection): void{
         var p = new BootstrapParams();
-        p.manifestUri = this.helper.manifestUri;
+        p.manifestUri = this.helper.iiifResourceUri;
         p.collectionIndex = collection.index;
         p.manifestIndex = 0;
         p.sequenceIndex = 0;

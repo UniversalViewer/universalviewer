@@ -59,7 +59,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
             this.$container.empty();
 
-            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+            var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
             this.mediaHeight = this.config.defaultHeight;
             this.mediaWidth = this.config.defaultWidth;
 

@@ -1,9 +1,7 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import Params = require("../../Params");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
@@ -65,7 +63,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.showAttribution();
 
         // todo: use compiler flag (when available)
-        var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
+        var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.extension.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
@@ -216,7 +214,7 @@ class SeadragonCenterPanel extends CenterPanel {
             $.publish(Commands.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
         });
 
-        this.title = (<ISeadragonProvider>this.extension.provider).getLabel();
+        this.title = this.extension.helper.getLabel();
 
         this.createNavigationButtons();
 
@@ -251,7 +249,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
         var that = this;
 
-        var viewingDirection: Manifesto.ViewingDirection = this.provider.getViewingDirection();
+        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
         this.$leftButton.on('touchstart click', (e) => {
             e.preventDefault();
@@ -296,9 +294,9 @@ class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    positionPages() {
+    positionPages(): void {
 
-        var resources: Manifesto.IExternalResource[] = (<ISeadragonProvider>this.provider).resources;
+        var resources: Manifesto.IExternalResource[] = this.extension.resources;
 
         var x: number;
         var y: number;
@@ -321,7 +319,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
             if (resources.length === 2) {
                 // recto verso
-                if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
+                if (this.extension.helper.isVerticallyAligned()) {
                     // vertical alignment
                     topPage = this.viewer.world.getItemAt(0);
                     topPageBounds = topPage.getBounds(true);
@@ -350,9 +348,9 @@ class SeadragonCenterPanel extends CenterPanel {
             } else {
 
                 // scroll
-                if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
+                if (this.extension.helper.isVerticallyAligned()) {
                     // vertical alignment
-                    if ((<ISeadragonProvider>this.provider).isTopToBottom()) {
+                    if (this.extension.helper.isTopToBottom()) {
                         // top to bottom
                         for (var i = 0; i < resources.length - 1; i++) {
                             page = this.viewer.world.getItemAt(i);
@@ -377,7 +375,7 @@ class SeadragonCenterPanel extends CenterPanel {
                     }
                 } else {
                     // horizontal alignment
-                    if ((<ISeadragonProvider>this.provider).isLeftToRight()){
+                    if (this.extension.helper.isLeftToRight()){
                         // left to right
                         for (var i = 0; i < resources.length - 1; i++){
                             page = this.viewer.world.getItemAt(i);
@@ -427,7 +425,7 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         } else {
             // it's not the first load
-            var settings: ISettings = this.provider.getSettings();
+            var settings: ISettings = this.extension.getSettings();
 
             // zoom to bounds unless setting disabled
             if (settings.preserveViewport && this.currentBounds){
@@ -437,20 +435,20 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }
 
-        if (this.provider.isMultiCanvas() && !(<ISeadragonProvider>this.provider).isContinuous()) {
+        if (this.extension.helper.isMultiCanvas() && !this.extension.helper.isContinuous()) {
 
             this.showPrevButton();
             this.showNextButton();
 
             $('.navigator').addClass('extraMargin');
 
-            if (!this.provider.isFirstCanvas()) {
+            if (!this.extension.helper.isFirstCanvas()) {
                 this.enablePrevButton();
             } else {
                 this.disablePrevButton();
             }
 
-            if (!this.provider.isLastCanvas()) {
+            if (!this.extension.helper.isLastCanvas()) {
                 this.enableNextButton();
             } else {
                 this.disableNextButton();
@@ -464,15 +462,15 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     goHome(): void {
-        var viewingDirection: string = this.provider.getViewingDirection().toString();
+        var viewingDirection: string = this.extension.helper.getViewingDirection().toString();
 
         switch (viewingDirection.toString()){
             case manifesto.ViewingDirection.topToBottom().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * (<ISeadragonProvider>this.provider).resources.length), true);
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.extension.resources.length), true);
                 break;
-            case manifesto.ViewingDirection.leftToRight().toString():
+            case manifesto.ViewingDirection.leftToRight().toString() :
             case manifesto.ViewingDirection.rightToLeft().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, (<ISeadragonProvider>this.provider).resources.length, this.viewer.world.getItemAt(0).normHeight), true);
+                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.extension.resources.length, this.viewer.world.getItemAt(0).normHeight), true);
                 break;
         }
     }
@@ -572,11 +570,11 @@ class SeadragonCenterPanel extends CenterPanel {
 
     overlaySearchResults(): void {
 
-        var searchResults = (<ISeadragonProvider>this.provider).searchResults;
+        var searchResults = (<ISeadragonExtension>this.extension).searchResults;
 
         if (!searchResults.length) return;
 
-        var indices = this.provider.getPagedIndices();
+        var indices = this.extension.helper.getPagedIndices();
 
         for (var i = 0; i < indices.length; i++){
             var canvasIndex = indices[i];
@@ -645,20 +643,20 @@ class SeadragonCenterPanel extends CenterPanel {
             this.fitToBounds(this.currentBounds);
         }
 
-        this.$title.ellipsisFill(this.provider.sanitize(this.title));
+        this.$title.ellipsisFill(this.extension.sanitize(this.title));
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
-        if (this.provider.isMultiCanvas() && this.$leftButton && this.$rightButton) {
+        if (this.extension.helper.isMultiCanvas() && this.$leftButton && this.$rightButton) {
             this.$leftButton.css('top', (this.$content.height() - this.$leftButton.height()) / 2);
             this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
         }
 
         // stretch navigator, allowing time for OSD to resize
         setTimeout(() => {
-            if ((<ISeadragonProvider>this.provider).isContinuous()){
-                if ((<ISeadragonProvider>this.provider).isHorizontallyAligned()){
+            if (this.extension.helper.isContinuous()){
+                if (this.extension.helper.isHorizontallyAligned()){
                     var width: number = this.$viewer.width() - this.$viewer.rightMargin();
                     console.log(width);
                     this.$navigator.width(width);
@@ -677,7 +675,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
     
     setNavigatorVisible() {
-        var navigatorEnabled = Utils.Bools.getBool(this.provider.getSettings().navigatorEnabled, true);
+        var navigatorEnabled = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true);
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         

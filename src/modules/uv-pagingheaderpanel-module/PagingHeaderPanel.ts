@@ -53,7 +53,7 @@ class PagingHeaderPanel extends HeaderPanel {
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, (e) => {
-            this.setSearchFieldValue(this.provider.canvasIndex);
+            this.setSearchFieldValue(this.extension.helper.canvasIndex);
         });
 
         this.$prevOptions = $('<div class="prevOptions"></div>');
@@ -92,7 +92,7 @@ class PagingHeaderPanel extends HeaderPanel {
             new AutoComplete(this.$autoCompleteBox,
                 (term: string, cb: (results: string[]) => void) => {
                     var results: string[] = [];
-                    var canvases: Manifesto.ICanvas[] = this.provider.getCanvases();
+                    var canvases: Manifesto.ICanvas[] = this.extension.helper.getCanvases();
 
                     // if in page mode, get canvases by label.
                     if (this.isPageModeEnabled()){
@@ -128,9 +128,9 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="20" ></select>');
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
-            for (var imageIndex = 0; imageIndex < this.provider.getTotalCanvases(); imageIndex++) {
-                var canvas = this.provider.getCanvasByIndex(imageIndex);
-                var label = this.provider.sanitize(canvas.getLabel());
+            for (var imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
+                var canvas = this.extension.helper.getCanvasByIndex(imageIndex);
+                var label = this.extension.sanitize(canvas.getLabel());
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
@@ -166,7 +166,7 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.addClass('disabled');
         }
 
-        if (this.provider.getManifestType().toString() === manifesto.ManifestType.manuscript().toString()){
+        if (this.extension.helper.getManifestType().toString() === manifesto.ManifestType.manuscript().toString()){
             this.$pageModeLabel.text(this.content.folio);
         } else {
             this.$pageModeLabel.text(this.content.page);
@@ -436,7 +436,7 @@ class PagingHeaderPanel extends HeaderPanel {
         }
     }
 
-    canvasIndexChanged(index): void {
+    canvasIndexChanged(index: any): void {
         this.setSearchFieldValue(index);
 
         if (this.options.imageSelectionBoxEnabled === true && this.options.autoCompleteBoxEnabled !== true) {
@@ -460,48 +460,48 @@ class PagingHeaderPanel extends HeaderPanel {
         }
     }
 
-    disableFirstButton () {
+    disableFirstButton(): void {
         this.firstButtonEnabled = false;
         this.$firstButton.disable();
     }
 
-    enableFirstButton () {
+    enableFirstButton(): void {
         this.firstButtonEnabled = true;
         this.$firstButton.enable();
     }
 
-    disableLastButton () {
+    disableLastButton(): void {
         this.lastButtonEnabled = false;
         this.$lastButton.disable();
     }
 
-    enableLastButton () {
+    enableLastButton(): void {
         this.lastButtonEnabled = true;
         this.$lastButton.enable()
     }
 
-    disablePrevButton () {
+    disablePrevButton(): void {
         this.prevButtonEnabled = false;
         this.$prevButton.disable();
     }
 
-    enablePrevButton () {
+    enablePrevButton(): void {
         this.prevButtonEnabled = true;
         this.$prevButton.enable();
     }
 
-    disableNextButton () {
+    disableNextButton(): void {
         this.nextButtonEnabled = false;
         this.$nextButton.disable();
     }
 
-    enableNextButton () {
+    enableNextButton(): void {
         this.nextButtonEnabled = true;
         this.$nextButton.enable();
     }
 
     modeChanged(): void {
-        this.setSearchFieldValue(this.extension.canvasIndex);
+        this.setSearchFieldValue(this.extension.helper.canvasIndex);
         this.setTitles();
         this.setTotal();
     }

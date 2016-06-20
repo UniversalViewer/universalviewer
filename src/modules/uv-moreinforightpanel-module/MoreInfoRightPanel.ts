@@ -1,5 +1,5 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import IMetadataItem = Manifold.MetadataItem;
+import IMetadataItem = Manifold.IMetadataItem;
 import RightPanel = require("../uv-shared-module/RightPanel");
 
 class MoreInfoRightPanel extends RightPanel {
@@ -63,14 +63,22 @@ class MoreInfoRightPanel extends RightPanel {
         this.setTitle(this.content.title);
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
-            this.canvasData = this.getCanvasData(this.provider.getCanvasByIndex(canvasIndex));
+            this.canvasData = this.getCanvasData(this.extension.helper.getCanvasByIndex(canvasIndex));
             this.displayInfo();
         });
     }
     
     getManifestData() {
-        var data = this.provider.getMetadata();
         
+        var data: Manifold.IMetadataItem[];
+
+        // todo
+        // if (this.extension.config.licenseMap){
+        //     data = this.extension.helper.getMetadata(new Manifold.UriLabeller(this.extension.config.licenseMap));
+        // } else {
+            data = this.extension.helper.getMetadata();
+        //}
+
         if (this.options.displayOrder) {
             data = this.sort(data, this.readConfig(this.options.displayOrder));
         }
@@ -83,7 +91,7 @@ class MoreInfoRightPanel extends RightPanel {
     }
     
     getCanvasData(canvas: Manifesto.ICanvas) {
-        var data = this.provider.getCanvasMetadata(canvas);
+        var data = this.extension.helper.getCanvasMetadata(canvas);
             
         if (this.canvasExcludeConfig.length !== 0) {
             data = this.exclude(data, this.canvasExcludeConfig);
@@ -223,7 +231,7 @@ class MoreInfoRightPanel extends RightPanel {
 
     buildHeader(label: string): JQuery {
         var $header = $('<div class="header"></div>');
-        $header.html(this.provider.sanitize(label));
+        $header.html(this.extension.sanitize(label));
 
         return $header;
     }
@@ -233,8 +241,8 @@ class MoreInfoRightPanel extends RightPanel {
         var $header = $elem.find('.header');
         var $text = $elem.find('.text');
 
-        item.label = this.provider.sanitize(item.label);
-        item.value = this.provider.sanitize(<string>item.value);
+        item.label = this.extension.sanitize(item.label);
+        item.value = this.extension.sanitize(<string>item.value);
 
         if (item.isRootLevel) {
             switch (item.label.toLowerCase()) {

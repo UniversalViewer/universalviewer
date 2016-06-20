@@ -48,7 +48,7 @@ class DownloadDialogue extends Dialogue {
             this.$downloadOptions.empty();
 
             // add each file src
-            var canvas = this.provider.getCurrentCanvas();
+            var canvas = this.extension.helper.getCurrentCanvas();
 
             var renderingFound: boolean = false;
 
@@ -100,9 +100,9 @@ class DownloadDialogue extends Dialogue {
         switch (option){
             case DownloadOption.entireFileAsOriginal:
                 // check if ui-extensions disable it
-                var uiExtensions: Manifesto.IService = this.provider.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+                var uiExtensions: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
 
-                if (!this.provider.isUIEnabled('mediaDownload')) {
+                if (!this.extension.helper.isUIEnabled('mediaDownload')) {
                     return false;
                 }
         }

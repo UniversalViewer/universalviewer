@@ -1,9 +1,13 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
+import ICanvas = Manifold.ICanvas;
+import IRange = Manifold.IRange;
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
+import IThumb = Manifold.IThumb;
+import ITreeNode = Manifold.ITreeNode;
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import Thumb = Manifesto.Thumb;
+import MultiSelectState = Manifold.MultiSelectState;
 
 class GalleryView extends BaseView {
 
@@ -78,7 +82,7 @@ class GalleryView extends BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$main.append(this.$thumbs);
 
-        this.$thumbs.addClass(this.provider.getViewingDirection().toString()); // defaults to "left-to-right"
+        this.$thumbs.addClass(this.extension.helper.getViewingDirection().toString()); // defaults to "left-to-right"
 
         this.$sizeDownButton.on('click', () => {
             var val = Number(this.$sizeRange.val()) - 1;
@@ -207,7 +211,7 @@ class GalleryView extends BaseView {
             })
         }
 
-        this.selectIndex(this.provider.canvasIndex);
+        this.selectIndex(this.extension.helper.canvasIndex);
 
         this.setLabel();
 
@@ -221,7 +225,7 @@ class GalleryView extends BaseView {
             var thumb: IThumb = this.thumbs[i];
             var canvas: ICanvas = thumb.data;
 
-            var r: IRange = <IRange>this.provider.getCanvasRange(canvas);
+            var r: IRange = this.extension.helper.getCanvasRange(canvas);
 
             if (r && r.id === range.id){
                 thumbs.push(thumb);
@@ -399,7 +403,7 @@ class GalleryView extends BaseView {
         this.$element.show();
 
         setTimeout(() => {
-            this.selectIndex(this.provider.canvasIndex);
+            this.selectIndex(this.extension.helper.canvasIndex);
             this.scrollToThumb(this.getSelectedThumbIndex());
         }, 10);
     }
@@ -482,7 +486,7 @@ class GalleryView extends BaseView {
     }
 
     searchPreviewFinish(): void {
-        this.scrollToThumb(this.provider.canvasIndex);
+        this.scrollToThumb(this.extension.helper.canvasIndex);
         this.getAllThumbs().removeClass('searchpreview');
     }
 

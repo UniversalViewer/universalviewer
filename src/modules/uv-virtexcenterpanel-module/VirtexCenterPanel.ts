@@ -1,8 +1,6 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
-import IVirtexProvider = require("../../extensions/uv-virtex-extension/IVirtexProvider");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 
 class VirtexCenterPanel extends CenterPanel {
@@ -42,7 +40,7 @@ class VirtexCenterPanel extends CenterPanel {
         this.$viewport = $('<div class="virtex"></div>');
         this.$content.prepend(this.$viewport);
 
-        this.title = (<IVirtexProvider>this.extension.provider).getLabel();
+        this.title = this.extension.helper.getLabel();
 
         this.showAttribution();
 
@@ -65,7 +63,7 @@ class VirtexCenterPanel extends CenterPanel {
 
             this.$viewport.empty();
 
-            const canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
             this.viewport = virtex.create(<Virtex.IOptions>{
                 element: "#content .virtex",
@@ -78,11 +76,8 @@ class VirtexCenterPanel extends CenterPanel {
     }
 
     resize() {
-
         super.resize();
-
         this.$title.ellipsisFill(this.title);
-
         this.$viewport.width(this.$content.width());
         this.$viewport.height(this.$content.height());
     }

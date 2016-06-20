@@ -97,7 +97,7 @@ class FooterPanel extends BaseView {
     updateOpenButton(): void {
         var configEnabled = Utils.Bools.getBool(this.options.openEnabled, false);
 
-        if (configEnabled && !this.provider.isHomeDomain){
+        if (configEnabled && !this.extension.isHomeDomain){
             this.$openButton.show();
         } else {
             this.$openButton.hide();
@@ -109,7 +109,7 @@ class FooterPanel extends BaseView {
             this.$fullScreenBtn.hide();
         }
 
-        if (this.provider.isLightbox){
+        if (this.extension.isLightbox){
             this.$fullScreenBtn.addClass('lightbox');
         }
 
@@ -125,7 +125,7 @@ class FooterPanel extends BaseView {
     }
 
     updateEmbedButton(): void {
-        if (this.provider.isUIEnabled('embed')){
+        if (this.extension.helper.isUIEnabled('embed')){
             this.$embedButton.show();
         } else {
             this.$embedButton.hide();

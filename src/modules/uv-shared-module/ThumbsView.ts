@@ -1,8 +1,6 @@
 import BaseCommands = require("./BaseCommands");
 import BaseView = require("./BaseView");
-import IProvider = require("./IProvider");
-import IThumb = require("./IThumb");
-import ITreeNode = require("./ITreeNode");
+import IThumb = Manifold.IThumb;
 import Shell = require("./Shell");
 
 class ThumbsView extends BaseView {
@@ -38,7 +36,7 @@ class ThumbsView extends BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
-        this.$thumbs.addClass(this.provider.getViewingDirection().toString()); // defaults to "left-to-right"
+        this.$thumbs.addClass(this.extension.helper.getViewingDirection().toString()); // defaults to "left-to-right"
 
         var that = this;
 
@@ -73,7 +71,7 @@ class ThumbsView extends BaseView {
                     className += " placeholder";
                 }
 
-                var viewingDirection = that.provider.getViewingDirection().toString();
+                var viewingDirection = that.extension.helper.getViewingDirection().toString();
 
                 if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
                     className += " oneCol";
@@ -131,7 +129,7 @@ class ThumbsView extends BaseView {
             $.publish(BaseCommands.THUMB_SELECTED, [data.index]);
         });
 
-        this.selectIndex(this.provider.canvasIndex);
+        this.selectIndex(this.extension.helper.canvasIndex);
 
         this.setLabel();
 
@@ -161,7 +159,7 @@ class ThumbsView extends BaseView {
         if (!this.thumbs || !this.thumbs.length) return;
 
         if (_.isUndefined(index)){
-            index = this.provider.canvasIndex;
+            index = this.extension.helper.canvasIndex;
         }
 
         var thumbRangeMid = index;
@@ -213,7 +211,7 @@ class ThumbsView extends BaseView {
         this.$element.show();
 
         setTimeout(() => {
-            this.selectIndex(this.provider.canvasIndex);
+            this.selectIndex(this.extension.helper.canvasIndex);
         }, 1);
     }
 
@@ -224,7 +222,7 @@ class ThumbsView extends BaseView {
 
     isPDF(): boolean{
         // todo: use constants
-        return (this.provider.getElementType().toString().contains("pdf"));
+        return (this.extension.helper.getElementType().toString().contains("pdf"));
     }
 
     setLabel(): void {

@@ -139,7 +139,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
     open() {
         super.open();
 
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
         if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
             var $input: JQuery = this.$currentViewAsJpgButton.find('input');
@@ -214,7 +214,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicSequenceRenderings)) {
-            this.addDownloadOptionsForRenderings(this.provider.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
+            this.addDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
         }
 
         // hide empty groups
@@ -296,7 +296,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getCurrentCanvasImageResource() {
-        var images = this.provider.getCurrentCanvas().getImages();
+        var images = this.extension.helper.getCurrentCanvas().getImages();
         if (images[0]) {
             return images[0].getResource();
         }
@@ -304,7 +304,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getHighResImageUriForCurrentCanvas(): string {
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
         var width: number = this.getComputedDimensionsForCurrentCanvas().width;
         return canvas.getCanonicalImageUri(width);
     }
@@ -321,12 +321,12 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getDimensionsForCurrentCanvas(): Size {
-        var currentCanvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var currentCanvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
         return new Size(currentCanvas.externalResource.data.width, currentCanvas.externalResource.data.height);
     }
 
     getMaxDimensionsForCurrentCanvas(): Size {
-        var currentCanvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var currentCanvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
         return new Size(currentCanvas.externalResource.data.profile[1].maxWidth, currentCanvas.externalResource.data.profile[1].maxHeight);
     }
 

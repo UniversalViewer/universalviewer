@@ -1,8 +1,14 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import GalleryView = require("./GalleryView");
+import ICanvas = Manifold.ICanvas;
+import IRange = Manifold.IRange;
+import IThumb = Manifold.IThumb;
+import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../uv-shared-module/LeftPanel");
+import MultiSelectState = Manifold.MultiSelectState;
 import ThumbsView = require("./ThumbsView");
+import TreeSortType = Manifold.TreeSortType;
 import TreeView = require("./TreeView");
 
 class ContentLeftPanel extends LeftPanel {
@@ -113,7 +119,7 @@ class ContentLeftPanel extends LeftPanel {
         });
 
         $.subscribe(Commands.THUMB_MULTISELECTED, (s, thumb: IThumb) => {
-            var range: IRange = <IRange>this.provider.getCanvasRange(thumb.data);
+            var range: IRange = this.extension.helper.getCanvasRange(thumb.data);
 
             if (range){
                 this._updateRangeMultiSelectState(range, thumb.multiSelected);
@@ -263,8 +269,8 @@ class ContentLeftPanel extends LeftPanel {
 
     private _reset(): void {
         this.multiSelectState = new MultiSelectState();
-        this.multiSelectState.ranges = this.provider.getRanges();
-        this.multiSelectState.canvases = <ICanvas[]>this.provider.getCurrentSequence().getCanvases();
+        this.multiSelectState.ranges = this.extension.helper.getRanges();
+        this.multiSelectState.canvases = this.extension.helper.getCurrentSequence().getCanvases();
     }
 
     private _showMultiSelectOptions(): void {
@@ -357,7 +363,7 @@ class ContentLeftPanel extends LeftPanel {
     //}
 
     sortByDate(): void {
-        this.treeView.rootNode = <ITreeNode>(<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.date);
+        this.treeView.rootNode = this.extension.helper.getSortedTree(TreeSortType.date);
         this.treeView.dataBind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -366,7 +372,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByVolume(): void {
-        this.treeView.rootNode = <ITreeNode>(<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none);
+        this.treeView.rootNode = this.extension.helper.getSortedTree(TreeSortType.none);
         this.treeView.dataBind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -395,7 +401,7 @@ class ContentLeftPanel extends LeftPanel {
         if (!this.thumbsView) return;
         var width, height;
 
-        var viewingDirection = this.provider.getViewingDirection().toString();
+        var viewingDirection = this.extension.helper.getViewingDirection().toString();
 
         if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             width = this.config.options.oneColThumbWidth;
@@ -405,7 +411,7 @@ class ContentLeftPanel extends LeftPanel {
             height = this.config.options.twoColThumbHeight;
         }
 
-        this.thumbsView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
+        this.thumbsView.thumbs = this.extension.helper.getThumbs(width, height);
         this.thumbsView.dataBind();
     }
 
@@ -419,7 +425,7 @@ class ContentLeftPanel extends LeftPanel {
         if (!this.galleryView) return;
         var width = this.config.options.galleryThumbWidth;
         var height = this.config.options.galleryThumbHeight;
-        this.galleryView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
+        this.galleryView.thumbs = this.extension.helper.getThumbs(width, height);
         this.galleryView.dataBind();
         // ensure gallery has current multiselect state
         this._publishMultiSelectStateChange();
@@ -433,9 +439,7 @@ class ContentLeftPanel extends LeftPanel {
             var treeEnabled = Utils.Bools.getBool(this.config.options.treeEnabled, true);
             var thumbsEnabled = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
-            this.treeData = (typeof (<ISeadragonProvider>this.provider).getSortedTree === 'function')
-                ? (<ISeadragonProvider>this.provider).getSortedTree(TreeSortType.none)
-                : null;
+            this.treeData = this.extension.helper.getSortedTree(TreeSortType.none);
 
             if (!this.treeData || !this.treeData.nodes.length) {
                 treeEnabled = false;
@@ -535,7 +539,7 @@ class ContentLeftPanel extends LeftPanel {
         this.treeView.show();
 
         setTimeout(() => {
-            var range: Manifesto.IRange = this.provider.getCanvasRange(this.provider.getCurrentCanvas());
+            var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas());
             if (this.treeView && range && range.treeNode) this.treeView.selectNode(range.treeNode);
         }, 1);
 
@@ -589,7 +593,7 @@ class ContentLeftPanel extends LeftPanel {
 
             // try finding a range first
             var rangePath: string = this.extension.currentRange ? this.extension.currentRange.path : '';
-            var range: Manifesto.IRange = this.provider.getCanvasRange(this.provider.getCurrentCanvas(), rangePath);
+            var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas(), rangePath);
 
             if (range){
                 id = range.treeNode.id;
@@ -598,7 +602,7 @@ class ContentLeftPanel extends LeftPanel {
 
             // use manifest root node
             if (!node){
-                id = this.provider.manifest.treeRoot.id;
+                id = this.extension.helper.manifest.treeRoot.id;
                 node = this.treeView.getNodeById(id);
             }
 

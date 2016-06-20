@@ -1197,6 +1197,7 @@ declare namespace Manifold {
 declare namespace Manifold {
     class Helper implements IHelper {
         iiifResource: Manifesto.IIIIFResource;
+        iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         collectionIndex: number;
         manifestIndex: number;
@@ -1227,7 +1228,7 @@ declare namespace Manifold {
         getLicense(): string;
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;
-        getMetadata(): Manifold.IMetadataItem[];
+        getMetadata(licenseFormatter?: Manifold.UriLabeller): Manifold.IMetadataItem[];
         getMultiSelectState(): Manifold.MultiSelectState;
         getPagedIndices(canvasIndex?: number): number[];
         getRanges(): IRange[];
@@ -1291,6 +1292,7 @@ declare namespace Manifold {
 declare namespace Manifold {
     interface IHelper {
         iiifResource: Manifesto.IIIIFResource;
+        iiifResourceUri: string;
         manifest: Manifesto.IManifest;
         collectionIndex: number;
         manifestIndex: number;
