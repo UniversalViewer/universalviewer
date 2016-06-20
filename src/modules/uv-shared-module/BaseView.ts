@@ -1,7 +1,6 @@
 import Panel = require("./Panel");
 import Bootstrapper = require("../../Bootstrapper");
 import IExtension = require("./IExtension");
-import IProvider = require("./IProvider");
 
 class BaseView extends Panel{
 
@@ -11,7 +10,6 @@ class BaseView extends Panel{
     extension: IExtension;
     modules: string[];
     options: any;
-    provider: IProvider;
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
         this.modules = [];
@@ -22,9 +20,7 @@ class BaseView extends Panel{
     create(): void {
 
         super.create();
-
         this.extension = (<Bootstrapper>this.bootstrapper).extension;
-        this.provider = this.extension.provider;
 
         this.config = {};
         this.config.content = {};
@@ -38,7 +34,7 @@ class BaseView extends Panel{
         if (that.modules.length) {
             that.modules = that.modules.reverse();
             _.each(that.modules, (moduleName: string) => {
-                that.config = $.extend(true, that.config, that.provider.config.modules[moduleName]);
+                that.config = $.extend(true, that.config, that.extension.config.modules[moduleName]);
             });
         }
     }

@@ -1,17 +1,9 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import GalleryView = require("./GalleryView");
-import IProvider = require("../uv-shared-module/IProvider");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import LeftPanel = require("../uv-shared-module/LeftPanel");
 import ThumbsView = require("./ThumbsView");
-import TreeSortType = require("../../extensions/uv-seadragon-extension/TreeSortType");
 import TreeView = require("./TreeView");
-import IRange = require("../uv-shared-module/IRange");
-import ITreeNode = require("../uv-shared-module/ITreeNode");
-import IThumb = require("../uv-shared-module/IThumb");
-import MultiSelectState = require("../uv-shared-module/MultiSelectState");
-import ICanvas = require("../uv-shared-module/ICanvas");
 
 class ContentLeftPanel extends LeftPanel {
 

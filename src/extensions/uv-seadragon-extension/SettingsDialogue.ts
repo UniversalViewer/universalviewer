@@ -1,5 +1,4 @@
 import BaseSettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
-import ISeadragonProvider = require("./ISeadragonProvider");
 
 class SettingsDialogue extends BaseSettingsDialogue {
 

@@ -1,12 +1,11 @@
-import IProvider = require("../../modules/uv-shared-module/IProvider");
 import SearchResultRect = require("./SearchResultRect");
 
 class SearchResult {
     public canvasIndex: number;
     public rects: SearchResultRect[] = [];
 
-    constructor(resource: any, provider: IProvider) {
-        this.canvasIndex = provider.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
+    constructor(resource: any, helper: Manifold.IHelper) {
+        this.canvasIndex = helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
         this.addRect(resource);
     }
 

@@ -1,5 +1,5 @@
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
-import IPDFProvider = require("./IPDFProvider");
+import IPDFExtension = require("./IPDFExtension");
 
 class EmbedDialogue extends BaseEmbedDialogue {
 
@@ -18,7 +18,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
         super.update();
 
-        this.code = (<IPDFProvider>this.provider).getEmbedScript(
+        this.code = (<IPDFExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight);
@@ -28,7 +28,6 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
     resize(): void {
         super.resize();
-
     }
 }
 

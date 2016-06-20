@@ -1,5 +1,5 @@
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
-import IMediaElementProvider = require("./IMediaElementProvider");
+import IMediaElementExtension = require("./IMediaElementExtension");
 
 class EmbedDialogue extends BaseEmbedDialogue {
 
@@ -18,7 +18,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
         super.update();
 
-        this.code = (<IMediaElementProvider>this.provider).getEmbedScript(
+        this.code = (<IMediaElementExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight);

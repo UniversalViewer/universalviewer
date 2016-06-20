@@ -1,14 +1,8 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import IProvider = require("../uv-shared-module/IProvider");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import IThumb = require("../uv-shared-module/IThumb");
-import IRange = require("../uv-shared-module/IRange");
-import MultiSelectState = require("../uv-shared-module/MultiSelectState");
-import ICanvas = require("../uv-shared-module/ICanvas");
 import Thumb = Manifesto.Thumb;
 
 class GalleryView extends BaseView {

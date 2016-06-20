@@ -1,11 +1,10 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseView = require("../uv-shared-module/BaseView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
+import IRange = Manifold.IRange;
+import ITreeNode = Manifold.ITreeNode;
+import MultiSelectState = Manifold.MultiSelectState;
 import Shell = require("../uv-shared-module/Shell");
-import ITreeNode = require("../uv-shared-module/ITreeNode");
-import IRange = require("../uv-shared-module/IRange");
-import MultiSelectState = require("../uv-shared-module/MultiSelectState");
 
 class TreeView extends BaseView {
 

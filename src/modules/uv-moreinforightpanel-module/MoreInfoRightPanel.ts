@@ -1,5 +1,5 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import IMetadataItem = require("../uv-shared-module/IMetadataItem");
+import IMetadataItem = Manifold.MetadataItem;
 import RightPanel = require("../uv-shared-module/RightPanel");
 
 class MoreInfoRightPanel extends RightPanel {

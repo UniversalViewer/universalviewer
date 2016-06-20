@@ -2,7 +2,6 @@ import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
 import Commands = require("./Commands");
 import ISeadragonExtension = require("./ISeadragonExtension");
-import ISeadragonProvider = require("./ISeadragonProvider");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 
 class EmbedDialogue extends BaseEmbedDialogue {
@@ -31,7 +30,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
         var zoom = (<ISeadragonExtension>this.extension).getViewerBounds();
         var rotation = (<ISeadragonExtension>this.extension).getViewerRotation();
 
-        this.code = (<ISeadragonProvider>this.provider).getEmbedScript(
+        this.code = (<ISeadragonExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight,

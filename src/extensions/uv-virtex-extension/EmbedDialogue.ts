@@ -1,5 +1,5 @@
 import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
-import IVirtexProvider = require("./IVirtexProvider");
+import IVirtexExtension = require("./IVirtexExtension");
 
 class EmbedDialogue extends BaseEmbedDialogue {
 
@@ -18,7 +18,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
         super.update();
 
-        this.code = (<IVirtexProvider>this.provider).getEmbedScript(
+        this.code = (<IVirtexExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight);
@@ -28,7 +28,6 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
     resize(): void {
         super.resize();
-
     }
 }
 

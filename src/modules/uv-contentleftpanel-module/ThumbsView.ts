@@ -1,7 +1,6 @@
 import BaseView = require("../uv-shared-module/ThumbsView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 
 class ThumbsView extends BaseView {
@@ -24,17 +23,17 @@ class ThumbsView extends BaseView {
             this.searchPreviewFinish();
         });
 
-        if ((<ISeadragonProvider>this.provider).isPaged()) {
+        if (this.extension.helper.isPaged()) {
             this.$thumbs.addClass('paged');
         }
         var that = this;
         $.views.helpers({
             separator: function(){
-                if ((<ISeadragonProvider>that.provider).isVerticallyAligned()){
+                if (this.extension.helper.isVerticallyAligned()){
                     return true; // one thumb per line
                 }
                 // two thumbs per line
-                if ((<ISeadragonProvider>that.provider).isPaged()) {
+                if (this.extension.helper.isPaged()) {
                     return ((this.data.index - 1) % 2 == 0) ? false : true;
                 }
 
@@ -44,7 +43,7 @@ class ThumbsView extends BaseView {
     }
 
     addSelectedClassToThumbs(index: number): void {
-        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled()){
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
             var indices = this.provider.getPagedIndices(index);
 
             _.each(indices, (index: number) => {

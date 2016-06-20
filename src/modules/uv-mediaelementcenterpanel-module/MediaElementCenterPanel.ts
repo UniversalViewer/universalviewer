@@ -1,8 +1,6 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
-import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import IMediaElementExtension = require("../../extensions/uv-mediaelement-extension/IMediaElementExtension");
 
@@ -30,7 +28,7 @@ class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if ((<IMediaElementProvider>this.provider).isVideo()){
+        if ((<IMediaElementExtension>this.extension).isVideo()){
             $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
@@ -49,7 +47,7 @@ class MediaElementCenterPanel extends CenterPanel {
         this.$container = $('<div class="container"></div>');
         this.$content.append(this.$container);
 
-        this.title = (<IMediaElementProvider>this.extension.provider).getLabel();
+        this.title = this.extension.helper.getLabel();
 
     }
 
@@ -69,7 +67,7 @@ class MediaElementCenterPanel extends CenterPanel {
             this.$container.width(this.mediaWidth);
 
             var id = Utils.Dates.getTimeStamp();
-            var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
+            var poster = (<IMediaElementExtension>this.extension).getPosterImageUri();
             var posterAttr: string = poster ? ' poster="' + poster + '"' : '';
 
             var sources = [];
@@ -81,7 +79,7 @@ class MediaElementCenterPanel extends CenterPanel {
                 });
             });
 
-            if ((<IMediaElementProvider>this.provider).isVideo()){
+            if ((<IMediaElementExtension>this.extension).isVideo()){
 
                 this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
 
