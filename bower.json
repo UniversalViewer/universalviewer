@@ -17,6 +17,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    // only uses bower for themes
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
     "uv-en-GB-theme": "universalviewer/uv-en-GB-theme"
   }

@@ -239,18 +239,22 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
+                            'base-component/dist/base-component.d.ts',
                             'manifold/dist/manifold.bundle.d.ts',
-                            'virtex3d/dist/virtex.d.ts',
                             'jquery-plugins/typings/jquery-plugins.d.ts',
                             'key-codes/dist/key-codes.d.ts',
                             'utils/dist/utils.d.ts'
                         ],
                         dest: '<%= config.dirs.typings %>'
                     },
-                    mediaelementExtensionConfig.sync,
-                    pdfExtensionConfig.sync,
-                    seadragonExtensionConfig.sync,
-                    virtexExtensionConfig.sync
+                    mediaelementExtensionConfig.sync.dependencies,
+                    mediaelementExtensionConfig.sync.typings,
+                    pdfExtensionConfig.sync.dependencies,
+                    pdfExtensionConfig.sync.typings,
+                    seadragonExtensionConfig.sync.dependencies,
+                    seadragonExtensionConfig.sync.typings,
+                    virtexExtensionConfig.sync.dependencies,
+                    virtexExtensionConfig.sync.typings
                 ]
             }
         },

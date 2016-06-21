@@ -26,7 +26,9 @@ class ThumbsView extends BaseView {
         if (this.extension.helper.isPaged()) {
             this.$thumbs.addClass('paged');
         }
+
         var that = this;
+        
         $.views.helpers({
             separator: function(){
                 if (this.extension.helper.isVerticallyAligned()){
