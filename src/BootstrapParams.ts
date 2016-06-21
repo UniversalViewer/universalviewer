@@ -57,7 +57,6 @@ class BootstrapParams {
     }
 
     hashParamsAvailable(): boolean {
-        // if reloading,
         return (this.isHomeDomain && !this.isReload && this.isOnlyInstance);
     }
 

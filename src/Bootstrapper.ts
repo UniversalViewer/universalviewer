@@ -47,7 +47,7 @@ class Bootstrapper{
             manifestIndex: this.params.manifestIndex,
             sequenceIndex: this.params.sequenceIndex,
             canvasIndex: this.params.canvasIndex
-        }).then(function(helper: Manifold.Helper){
+        }).then(function(helper: Manifold.IHelper){
             
             var trackingLabel: string = helper.getTrackingLabel();
             trackingLabel += ', URI: ' + this.params.embedDomain;
@@ -78,10 +78,13 @@ class Bootstrapper{
                 extension = this.extensions[format];
             }
 
-            // if there still isn't an extension, show an error.
+            // if there still isn't a matching extension, show an error.
             if (!extension){
                 alert("No matching UV extension found.");
+                return;
             }
+
+            extension.helper = helper;
 
             this.featureDetect(() => {
                 this.configure(extension, (config) => {
