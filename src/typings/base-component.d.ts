@@ -24,6 +24,10 @@ interface IEventEmitter2 {
     emit(event: string, ...args: any[]);
 }
 
+interface Window {
+    Components: any;
+}
+
 declare var EventEmitter2: IEventEmitter2;
 declare namespace Components {
     class BaseComponent implements IBaseComponent {

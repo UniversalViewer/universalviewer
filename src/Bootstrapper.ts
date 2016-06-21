@@ -2,6 +2,8 @@ import BaseCommands = require("./modules/uv-shared-module/BaseCommands");
 import BootstrapParams = require("./BootstrapParams");
 import IExtension = require("./modules/uv-shared-module/IExtension");
 
+declare var manifold: IManifold;
+
 // The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
 // then determining which extension to use and instantiating it.
 class Bootstrapper{
@@ -19,7 +21,7 @@ class Bootstrapper{
         this.extensions = extensions;
     }
 
-    bootStrap(params?: BootstrapParams): void {
+    bootstrap(params?: BootstrapParams): void {
 
         this.params = new BootstrapParams();
 
@@ -41,13 +43,13 @@ class Bootstrapper{
 
         jQuery.support.cors = true;
 
-        Manifold.loadManifest({
+        manifold.loadManifest(<Manifold.IManifoldOptions>{
             iiifResourceUri: this.params.manifestUri,
             collectionIndex: this.params.collectionIndex,
             manifestIndex: this.params.manifestIndex,
             sequenceIndex: this.params.sequenceIndex,
             canvasIndex: this.params.canvasIndex
-        }).then(function(helper: Manifold.IHelper){
+        }).then((helper: Manifold.IHelper) => {
             
             var trackingLabel: string = helper.getTrackingLabel();
             trackingLabel += ', URI: ' + this.params.embedDomain;
@@ -193,7 +195,9 @@ class Bootstrapper{
 
     createExtension(extension: any, config: any): void{
         this.config = config;
+        var helper = extension.helper;
         this.extension = new extension.type(this);
+        this.extension.helper = helper;
         this.extension.name = extension.name;
         this.extension.create();
     }

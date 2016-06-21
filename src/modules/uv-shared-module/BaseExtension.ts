@@ -681,7 +681,7 @@ class BaseExtension implements IExtension {
 
         p.isReload = true;
         $.disposePubSub();
-        this.bootstrapper.bootStrap(p);
+        this.bootstrapper.bootstrap(p);
     }
 
     getCanvasIndexParam(): number {

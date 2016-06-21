@@ -40,6 +40,7 @@ declare var virtex: IVirtex;
 // app
 interface Window{
     configExtensionCallback: any;
+    EventEmitter2: any;
     manifestCallback: any;
     manifesto: IManifesto;
     browserDetect: any;

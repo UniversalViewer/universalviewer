@@ -102,7 +102,7 @@ class ResourcesLeftPanel extends LeftPanel {
         if (this.thumbsView.thumbs.length < 2) {
             this.$thumbsView.hide();
         }
-        this.thumbsView.dataBind();
+        this.thumbsView.databind();
     }
 
     expandFullStart(): void {

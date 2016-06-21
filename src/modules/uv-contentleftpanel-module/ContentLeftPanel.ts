@@ -300,7 +300,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByDate(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(TreeSortType.date);
+        this.treeView.rootNode = this.extension.helper.getTree(TreeSortType.DATE);
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -309,7 +309,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByVolume(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(TreeSortType.none);
+        this.treeView.rootNode = this.extension.helper.getTree(TreeSortType.NONE);
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -376,7 +376,7 @@ class ContentLeftPanel extends LeftPanel {
             var treeEnabled = Utils.Bools.getBool(this.config.options.treeEnabled, true);
             var thumbsEnabled = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
-            this.treeData = this.extension.helper.getTree(TreeSortType.none);
+            this.treeData = this.extension.helper.getTree(TreeSortType.NONE);
 
             if (!this.treeData || !this.treeData.nodes.length) {
                 treeEnabled = false;

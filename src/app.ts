@@ -1,9 +1,15 @@
 require.config({
     paths: {
+        'base-component': 'lib/base-component',
         'browserdetect': 'lib/browserdetect',
+        'eventemitter2': 'lib/eventemitter2',
+        'ex': 'lib/ex.es3.min',
+        'ext': 'lib/extensions',
+        'httpstatuscodes': 'lib/http-status-codes',
         'keycodes': 'lib/key-codes',
         'length': 'lib/Length.min',
-        'manifold': 'lib/manifold.bundle',
+        'manifesto': 'lib/manifesto',
+        'manifold': 'lib/manifold',
         'modernizr': 'lib/modernizr',
         'plugins': 'lib/jquery-plugins',
         'pubsub': 'lib/ba-tiny-pubsub.min',
@@ -20,15 +26,20 @@ require([
     'extensions/uv-pdf-extension/Extension',
     'extensions/uv-seadragon-extension/Extension',
     'extensions/uv-virtex-extension/Extension',
+    'eventemitter2',
+    'base-component',
     'browserdetect',
+    'ex',
+    'ext',
+    'httpstatuscodes',
     'keycodes',
     'length',
+    'manifesto',
     'manifold',
     'modernizr',
     'plugins',
     'pubsub',
     'sanitize',
-    'utils',
     'xdomainrequest',
     'yepnopecss',
     ], (
@@ -36,11 +47,14 @@ require([
     mediaelementExtension,
     pdfExtension,
     seadragonExtension,
-    virtexExtension
+    virtexExtension,
+    eventemitter2
     ) => {
 
         // todo: use a compiler flag (when available)
         window.DEBUG = true; // this line is removed on build.
+
+        window.EventEmitter2 = eventemitter2;
 
         var extensions = {};
 
@@ -71,5 +85,5 @@ require([
 
         var bs = new bootstrapper(extensions);
 
-        bs.bootStrap();
+        bs.bootstrap();
     });

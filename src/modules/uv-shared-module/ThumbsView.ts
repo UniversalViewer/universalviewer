@@ -91,7 +91,7 @@ class ThumbsView extends BaseView {
         this.resize();
     }
 
-    public dataBind(): void{
+    public databind(): void{
         if (!this.thumbs) return;
         this.createThumbs();
     }

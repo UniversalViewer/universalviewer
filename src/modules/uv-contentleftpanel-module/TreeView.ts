@@ -40,7 +40,7 @@ class TreeView extends BaseView {
             element: ".treeView"
         });
 
-        this.component.on('treeNodeMultiSelected', function(args) {
+        (<any>this.component).on('treeNodeMultiSelected', function(args) {
             var node = args[0];
             $.publish(Commands.TREE_NODE_MULTISELECTED, [node]);
         });

@@ -224,10 +224,15 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: [
                             'base-component/dist/base-component.js',
-                            'manifold/dist/manifold.bundle.js',
+                            'eventemitter2/lib/eventemitter2.js',
+                            'exjs/dist/ex.es3.min.js',
+                            'extensions/dist/extensions.js',
+                            'http-status-codes/dist/http-status-codes.js',
                             'jquery-plugins/dist/jquery-plugins.js',
                             'jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
                             'key-codes/dist/key-codes.js',
+                            'manifesto.js/dist/client/manifesto.js',
+                            'manifold/dist/manifold.js',
                             'units/Length.min.js',
                             'utils/dist/utils.js'
                         ],
@@ -240,9 +245,9 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: [
                             'base-component/dist/base-component.d.ts',
-                            'manifold/dist/manifold.bundle.d.ts',
                             'jquery-plugins/typings/jquery-plugins.d.ts',
                             'key-codes/dist/key-codes.d.ts',
+                            'manifold/dist/manifold.bundle.d.ts',
                             'utils/dist/utils.d.ts'
                         ],
                         dest: '<%= config.dirs.typings %>'
