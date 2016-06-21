@@ -3,6 +3,10 @@ var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
+var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
+var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
+var seadragonExtensionConfig = require('./src/extensions/uv-seadragon-extension/config');
+var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config');
 
 module.exports = function (grunt) {
 
@@ -219,6 +223,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
+                            'base-component/dist/base-component.js',
                             'manifold/dist/manifold.bundle.js',
                             'jquery-plugins/dist/jquery-plugins.js',
                             'jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
@@ -242,18 +247,10 @@ module.exports = function (grunt) {
                         ],
                         dest: '<%= config.dirs.typings %>'
                     },
-                    {
-                        // all files that need to be copied from /node_modules to /src/extensions/uv-virtex-extension/lib post npm install
-                        // todo: create a json file that lists dependencies for each extension
-                        cwd: '<%= config.dirs.npm %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'virtex3d/dist/virtex.js',
-                            'three.js/build/three.min.js'
-                        ],
-                        dest: '<%= config.dirs.uvVirtexExtension %>/lib'
-                    }
+                    mediaelementExtensionConfig.sync,
+                    pdfExtensionConfig.sync,
+                    seadragonExtensionConfig.sync,
+                    virtexExtensionConfig.sync
                 ]
             }
         },

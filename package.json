@@ -19,6 +19,7 @@
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
     "async": "^0.9.0",
+    "base-component": "git://github.com/edsilv/base-component.git",
     "chalk": "^0.5.1",
     "cucumber": "^0.4.5",
     "glob": "^4.3.5",
@@ -34,6 +35,7 @@
     "grunt-text-replace": "~0.3.7",
     "grunt-typescript": "^0.8.0",
     "hooker": "^0.2.3",
+    "iiif-tree-component": "git://github.com/edsilv/iiif-tree-component.git",
     "json-schema-generator": "git://github.com/krg7880/json-schema-generator.git",
     "jquery-plugins": "git://github.com/edsilv/jquery-plugins.git",
     "jquery-tiny-pubsub": "git://github.com/edsilv/jquery-tiny-pubsub.git",
