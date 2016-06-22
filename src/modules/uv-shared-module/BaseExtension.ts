@@ -527,9 +527,6 @@ class BaseExtension implements IExtension {
         // create shell and shared views.
         this.shell = new Shell(this.$element);
 
-        // set canvasIndex to -1 (nothing selected yet).
-        //this.helper.canvasIndex = -1;
-
         // dependencies
         if (overrideDependencies){
             this.loadDependencies(overrideDependencies);
@@ -881,9 +878,15 @@ class BaseExtension implements IExtension {
         return preview;
     }
 
+    public getPagedIndices(canvasIndex?: number): number[]{
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.helper.canvasIndex;
+
+        return [canvasIndex];
+    }
+
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
 
-        var indices = this.helper.getPagedIndices();
+        var indices = this.getPagedIndices();
         var resourcesToLoad = [];
 
         _.each(indices, (index) => {
@@ -968,7 +971,6 @@ class BaseExtension implements IExtension {
     }
 
     viewCanvas(canvasIndex: number): void {
-        //if (canvasIndex === -1) return;
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
             this.showMessage(this.config.content.canvasIndexOutOfRange);

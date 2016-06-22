@@ -22,6 +22,7 @@ interface IExtension{
     getEmbedDomain(): string;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getLocales(): any[];
+    getPagedIndices(canvasIndex?: number): number[];
     getParam(key: Params): any;
     getSequenceIndexParam(): number;
     getSerializedLocales(): string;

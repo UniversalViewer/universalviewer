@@ -334,7 +334,7 @@ class FooterPanel extends BaseFooterPanel {
         var mode = that.extension.getMode();
 
         if (mode.toString() === Mode.page.toString()) {
-            var canvas: Manifesto.ICanvas = that.provider.getCanvasByIndex(canvasIndex);
+            var canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
 
             var label = canvas.getLabel();
 

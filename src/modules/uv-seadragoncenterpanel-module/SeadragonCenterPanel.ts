@@ -574,7 +574,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
         if (!searchResults.length) return;
 
-        var indices = this.extension.helper.getPagedIndices();
+        var indices = this.extension.getPagedIndices();
 
         for (var i = 0; i < indices.length; i++){
             var canvasIndex = indices[i];

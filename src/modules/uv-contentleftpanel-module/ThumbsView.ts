@@ -46,7 +46,7 @@ class ThumbsView extends BaseView {
 
     addSelectedClassToThumbs(index: number): void {
         if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
-            var indices = this.extension.helper.getPagedIndices(index);
+            var indices = this.extension.getPagedIndices(index);
 
             _.each(indices, (index: number) => {
                 this.getThumbByIndex(index).addClass('selected');
