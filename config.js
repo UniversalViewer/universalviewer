@@ -3,6 +3,15 @@ var metadata = require('./package');
 var Config = (function () {
     function Config() {
         this.header = '// ' + metadata.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
+        this.deps = [
+            'node_modules/base-component/dist/base-component.bundle.js',
+            'node_modules/jquery-plugins/dist/jquery-plugins.js',
+            'node_modules/jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
+            'node_modules/key-codes/dist/key-codes.js',
+            'node_modules/manifold/dist/manifold.bundle.js',
+            'node_modules/units/Length.min.js',
+            'node_modules/utils/dist/utils.js'
+        ],
         this.dirs = {
             bower: './lib',
             build: './build',
@@ -19,6 +28,13 @@ var Config = (function () {
             uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
             uvVirtexExtension: './src/extensions/uv-virtex-extension'
         };
+        this.typings = [
+            'node_modules/base-component/dist/base-component.d.ts',
+            'node_modules/jquery-plugins/typings/jquery-plugins.d.ts',
+            'node_modules/key-codes/dist/key-codes.d.ts',
+            'node_modules/manifold/dist/manifold.bundle.d.ts',
+            'node_modules/utils/dist/utils.d.ts'
+        ];
         this.typescript = {
             dev: {
                 src: ['./src/**/*.ts'],

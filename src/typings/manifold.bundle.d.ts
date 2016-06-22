@@ -1384,6 +1384,7 @@ declare module Manifold {
 
 interface IManifold {
     loadManifest: (options: Manifold.IManifoldOptions) => Promise<Manifold.IHelper>;
+    TreeSortType: Manifold.TreeSortType;
 }
 
 declare module Manifold {

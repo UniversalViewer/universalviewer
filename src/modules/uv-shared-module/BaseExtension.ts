@@ -528,7 +528,7 @@ class BaseExtension implements IExtension {
         this.shell = new Shell(this.$element);
 
         // set canvasIndex to -1 (nothing selected yet).
-        this.helper.canvasIndex = -1;
+        //this.helper.canvasIndex = -1;
 
         // dependencies
         if (overrideDependencies){
@@ -968,7 +968,7 @@ class BaseExtension implements IExtension {
     }
 
     viewCanvas(canvasIndex: number): void {
-        if (canvasIndex === -1) return;
+        //if (canvasIndex === -1) return;
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
             this.showMessage(this.config.content.canvasIndexOutOfRange);

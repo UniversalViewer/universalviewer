@@ -248,6 +248,8 @@ class EmbedDialogue extends Dialogue {
     update(): void {
         var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
+        if (!canvas) return;
+
         var thumbnail = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !_.isString(thumbnail)){

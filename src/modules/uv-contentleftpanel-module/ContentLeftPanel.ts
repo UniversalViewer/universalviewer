@@ -276,9 +276,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     private _reset(): void {
-        this.multiSelectState = new MultiSelectState();
-        this.multiSelectState.ranges = <IRange[]>this.extension.helper.getRanges();
-        this.multiSelectState.canvases = <ICanvas[]>this.extension.helper.getCurrentSequence().getCanvases();
+        this.multiSelectState = this.extension.helper.getMultiSelectState();
     }
 
     private _showMultiSelectOptions(): void {
@@ -300,7 +298,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByDate(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(TreeSortType.DATE);
+        this.treeView.rootNode = this.extension.helper.getTree(manifold.TreeSortType.date());
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -309,7 +307,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByVolume(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(TreeSortType.NONE);
+        this.treeView.rootNode = this.extension.helper.getTree(manifold.TreeSortType.none());
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -376,7 +374,7 @@ class ContentLeftPanel extends LeftPanel {
             var treeEnabled = Utils.Bools.getBool(this.config.options.treeEnabled, true);
             var thumbsEnabled = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
-            this.treeData = this.extension.helper.getTree(TreeSortType.NONE);
+            this.treeData = this.extension.helper.getTree(manifold.TreeSortType.none());
 
             if (!this.treeData || !this.treeData.nodes.length) {
                 treeEnabled = false;

@@ -31,11 +31,11 @@ class ThumbsView extends BaseView {
         
         $.views.helpers({
             separator: function(){
-                if (this.extension.helper.isVerticallyAligned()){
+                if (that.extension.helper.isVerticallyAligned()){
                     return true; // one thumb per line
                 }
                 // two thumbs per line
-                if (this.extension.helper.isPaged()) {
+                if (that.extension.helper.isPaged()) {
                     return ((this.data.index - 1) % 2 == 0) ? false : true;
                 }
 

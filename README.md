@@ -99,6 +99,7 @@ See https://github.com/UniversalViewer/demo-site for examples.
 
 To view the examples run:
 
+    grunt
     grunt examples
 
 ## License

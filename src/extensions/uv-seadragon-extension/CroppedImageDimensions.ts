@@ -1,4 +1,3 @@
-///<amd-dependency path="utils"/>.
 import Size = Utils.Measurements.Size;
 import Point = require("../../modules/uv-shared-module/Point");
 

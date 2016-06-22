@@ -45,6 +45,13 @@ module.exports = function (grunt) {
             extension: ['./src/extensions/*/build/*']
         },
 
+        concat: {
+            bundle: {
+                src: grunt.file.expand('src/lib/*').concat(config.deps).concat(['!src/lib/embed.js', '!src/lib/bundle.js']),
+                dest: 'src/lib/bundle.js'
+            }
+        },
+
         copy: {
             schema: {
                 files: [
@@ -82,12 +89,7 @@ module.exports = function (grunt) {
                         cwd: '<%= config.dirs.lib %>',
                         src: [
                             'embed.js',
-                            'easyXDM.min.js',
-                            'easyxdm.swf',
-                            'json2.min.js',
-                            'require.js',
-                            'l10n.js',
-                            'base64.min.js'
+                            'bundle.js'
                         ],
                         dest: '<%= config.dirs.build %>/lib/'
                     },
@@ -218,38 +220,10 @@ module.exports = function (grunt) {
             npmComponents: {
                 files: [
                     {
-                        // all js files that need to be copied from /node_modules to /src/lib post npm install
-                        cwd: '<%= config.dirs.npm %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'base-component/dist/base-component.js',
-                            'eventemitter2/lib/eventemitter2.js',
-                            'exjs/dist/ex.es3.min.js',
-                            'extensions/dist/extensions.js',
-                            'http-status-codes/dist/http-status-codes.js',
-                            'jquery-plugins/dist/jquery-plugins.js',
-                            'jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
-                            'key-codes/dist/key-codes.js',
-                            'manifesto.js/dist/client/manifesto.js',
-                            'manifold/dist/manifold.js',
-                            'units/Length.min.js',
-                            'utils/dist/utils.js'
-                        ],
-                        dest: '<%= config.dirs.lib %>'
-                    },
-                    {
                         // all d.ts files that need to be copied from /node_modules to /src/typings post npm install
-                        cwd: '<%= config.dirs.npm %>',
                         expand: true,
                         flatten: true,
-                        src: [
-                            'base-component/dist/base-component.d.ts',
-                            'jquery-plugins/typings/jquery-plugins.d.ts',
-                            'key-codes/dist/key-codes.d.ts',
-                            'manifold/dist/manifold.bundle.d.ts',
-                            'utils/dist/utils.d.ts'
-                        ],
+                        src: config.typings,
                         dest: '<%= config.dirs.typings %>'
                     },
                     mediaelementExtensionConfig.sync.dependencies,
@@ -423,6 +397,7 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-compress");
+    grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-typescript");
@@ -443,6 +418,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', '', function(){
 
         grunt.task.run(
+            'concat:bundle',
             'typescript:dev',
             'clean:extension',
             'configure:apply',
@@ -501,7 +477,6 @@ module.exports = function (grunt) {
     grunt.registerTask('examples', '', function() {
 
         grunt.task.run(
-            'default',
             'connect'
         );
     });
