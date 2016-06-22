@@ -13,6 +13,7 @@ import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPa
 import GalleryView = require("../../modules/uv-contentleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("./ISeadragonExtension");
+import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
@@ -264,9 +265,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.viewPage(index);
         });
 
-        $.subscribe(Commands.TREE_NODE_SELECTED, (e, data: any) => {
-            this.triggerSocket(Commands.TREE_NODE_SELECTED, data.path);
-            this.treeNodeSelected(data);
+        $.subscribe(Commands.TREE_NODE_SELECTED, (e, node: ITreeNode) => {
+            this.triggerSocket(Commands.TREE_NODE_SELECTED, node.data.path);
+            this.treeNodeSelected(node);
         });
 
         $.subscribe(BaseCommands.UP_ARROW, (e) => {
@@ -276,7 +277,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
-            this.updateSettings();
+            this.viewPage(this.helper.canvasIndex, true);
+            var settings: ISettings = this.getSettings();
+            $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
         });
 
         $.subscribe(Commands.VIEW_PAGE, (e, index: number) => {
@@ -353,12 +356,6 @@ class Extension extends BaseExtension implements ISeadragonExtension {
                 $.publish(Commands.SEARCH, [highlight]);
             }
         }
-    }
-
-    updateSettings(): void {
-        this.viewPage(this.helper.canvasIndex, true);
-        var settings: ISettings = this.getSettings();
-        $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
     }
 
     viewPage(canvasIndex: number, isReload?: boolean): void {
@@ -442,7 +439,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    treeNodeSelected(data: any): void{
+    treeNodeSelected(node: ITreeNode): void{
+        var data: any = node.data;
+        
         if (!data.type) return;
 
         switch (data.type){

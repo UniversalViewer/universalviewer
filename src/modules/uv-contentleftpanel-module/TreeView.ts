@@ -4,18 +4,11 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import IRange = Manifold.IRange;
 import ITreeNode = Manifold.ITreeNode;
 import MultiSelectState = Manifold.MultiSelectState;
-import Shell = require("../uv-shared-module/Shell");
 
 class TreeView extends BaseView {
 
-
-    // allNodes: ITreeNode[];
-    // multiSelectableNodes: ITreeNode[];
-    // elideCount: number;
     isOpen: boolean = false;
     component: IIIFComponents.ITreeComponent;
-    // selectedNode: ITreeNode;
-    // multiSelectState: MultiSelectState;
 
     public rootNode: ITreeNode;
 
@@ -38,6 +31,15 @@ class TreeView extends BaseView {
 
         this.component = new IIIFComponents.TreeComponent({
             element: ".treeView"
+        });
+
+        // todo: casting as <any> is necessary because IBaseComponent doesn't implement IEventEmitter2
+        // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
+        // to implement it in BaseComponent.
+
+        (<any>this.component).on('treeNodeSelected', function(args) {
+            var node = args[0];
+            $.publish(Commands.TREE_NODE_SELECTED, [node]);
         });
 
         (<any>this.component).on('treeNodeMultiSelected', function(args) {
@@ -76,26 +78,8 @@ class TreeView extends BaseView {
         return this.component.getNodeById(id);
     }
 
-    // private elide($a: JQuery): void {
-    //     if (!$a.is(':visible')) return;
-    //     var elideCount = Math.floor($a.parent().width() / 7); // todo: remove / 7
-    //     $a.text(Utils.Strings.htmlDecode(Utils.Strings.ellipsis($a.attr('title'), elideCount)));
-    // }
-
-    // private elideAll(): void {
-    //     var that = this;
-
-    //     this.$tree.find('a').each(function() {
-    //         var $this = $(this);
-    //         that.elide($this);
-    //     });
-    // }
-
     resize(): void {
         super.resize();
-
-        // elide links
-        //this.elideAll();
     }
 }
 
