@@ -164,16 +164,23 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var $input: JQuery = this.$wholeImageHighResButton.find('input');
             var $label: JQuery = this.$wholeImageHighResButton.find('label');
             var mime = this.getMimeTypeForCurrentCanvas();
+
             if (mime){
                 mime = Utils.Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
             }
+
             var size: Size = this.getComputedDimensionsForCurrentCanvas();
-            var label = String.format(this.content.wholeImageHighRes, size.width, size.height, mime);
-            $label.text(label);
-            $input.prop('title', label);
-            this.$wholeImageHighResButton.show();
+
+            if (!size){
+                this.$wholeImageHighResButton.hide();
+            } else {
+                var label: string = String.format(this.content.wholeImageHighRes, size.width, size.height, mime);
+                $label.text(label);
+                $input.prop('title', label);
+                this.$wholeImageHighResButton.show();
+            }
         } else {
             this.$wholeImageHighResButton.hide();
         }
@@ -305,8 +312,12 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
     getHighResImageUriForCurrentCanvas(): string {
         var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-        var width: number = this.getComputedDimensionsForCurrentCanvas().width;
-        return canvas.getCanonicalImageUri(width);
+        var size: Size = this.getComputedDimensionsForCurrentCanvas();
+        if (size){
+            var width: number = size.width;
+            return canvas.getCanonicalImageUri(width);
+        }
+        return '';
     }
 
     getMimeTypeForCurrentCanvas() {
@@ -327,12 +338,17 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
     getMaxDimensionsForCurrentCanvas(): Size {
         var currentCanvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-        return new Size(currentCanvas.externalResource.data.profile[1].maxWidth, currentCanvas.externalResource.data.profile[1].maxHeight);
+        if (currentCanvas.externalResource.data.profile[1]){
+            return new Size(currentCanvas.externalResource.data.profile[1].maxWidth, currentCanvas.externalResource.data.profile[1].maxHeight);
+        }
+        return null;
     }
 
     getComputedDimensionsForCurrentCanvas(): Size {
         var size: Size = this.getDimensionsForCurrentCanvas();
         var maxSize: Size =  this.getMaxDimensionsForCurrentCanvas();
+
+        if (!maxSize) return null;
 
         var finalWidth: number = size.width;
         var finalHeight: number = size.height;
@@ -361,7 +377,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.wholeImageHighRes:
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
                     var maxSize: Size = this.getMaxDimensionsForCurrentCanvas();
-                    if (_.isUndefined(maxSize.width)){
+                    if (maxSize && _.isUndefined(maxSize.width)){
                         return true;
                     } else if (maxSize.width <= this.options.maxImageWidth){
                         return true;
@@ -371,6 +387,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
                 var size: Size = this.getComputedDimensionsForCurrentCanvas();
+                if (!size) return false;
                 return (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.selection:
                 return this.options.selectionEnabled;
