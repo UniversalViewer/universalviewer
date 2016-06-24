@@ -658,7 +658,6 @@ class SeadragonCenterPanel extends CenterPanel {
             if (this.extension.helper.isContinuous()){
                 if (this.extension.helper.isHorizontallyAligned()){
                     var width: number = this.$viewer.width() - this.$viewer.rightMargin();
-                    console.log(width);
                     this.$navigator.width(width);
                 } else {
                     this.$navigator.height(this.$viewer.height());

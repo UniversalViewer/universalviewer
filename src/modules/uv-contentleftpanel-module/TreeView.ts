@@ -30,7 +30,7 @@ class TreeView extends BaseView {
         });
 
         this.component = new IIIFComponents.TreeComponent({
-            element: ".treeView"
+            element: ".views .treeView"
         });
 
         // todo: casting as <any> is necessary because IBaseComponent doesn't implement IEventEmitter2

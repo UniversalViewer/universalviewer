@@ -71,43 +71,41 @@ class ContentLeftPanel extends LeftPanel {
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
 
-            that._reset();
-
-            that.multiSelectState.enabled = true;
-
-            this._publishMultiSelectStateChange();
+            that.multiSelectState.setEnabled(true);
 
             that.setTitle(that.content.selection);
 
             if (!that.isFullyExpanded){
                 that.expandFull();
             } else {
-                this._showMultiSelectOptions();
+                that._showMultiSelectOptions();
             }
 
-            this.$selectButton.text(e);
+            that.$selectButton.text(e);
+
+            that.updateMultiSelectState();
         });
 
         $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
 
-            that._reset();
-
-            that.multiSelectState.enabled = false;
+            that.multiSelectState.setEnabled(false);
 
             $.publish(Commands.MULTISELECT_CHANGE, [that.multiSelectState]);
 
             that.setTitle(that.content.title);
             that.$multiSelectOptions.hide();
+
+            that.updateMultiSelectState();
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            if (that.multiSelectState.enabled) {
+            if (that.multiSelectState.isEnabled) {
                 $.publish(Commands.EXIT_MULTISELECT_MODE);
             }
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
-            if (that.multiSelectState.enabled) {
+            if (that.multiSelectState.isEnabled) {
                 that._showMultiSelectOptions();
             }
         });
@@ -116,18 +114,20 @@ class ContentLeftPanel extends LeftPanel {
             if (node.isRange()){
                 this.multiSelectState.selectRange(<IRange>node.data, node.multiSelected);                    
                 //console.log('multi-selected: ' + node.label);                    
-                this._publishMultiSelectStateChange();
+                this.updateMultiSelectState();
             }
         });
 
         $.subscribe(Commands.THUMB_MULTISELECTED, (s, thumb: IThumb) => {
-            // var range: IRange = this.extension.helper.getCanvasRange(thumb.data);
+            var range: IRange = <IRange>this.extension.helper.getCanvasRange(thumb.data);
 
-            // if (range){
-            //     this._updateRangeMultiSelectState(range, thumb.multiSelected);
-            // }
+            if (range){
+                this.multiSelectState.selectRange(<IRange>range, thumb.multiSelected);
+            } else {
+                this.multiSelectState.selectCanvas(<ICanvas>thumb.data, thumb.multiSelected);
+            }
 
-            // this._updateCanvasMultiSelectState(thumb.data, thumb.multiSelected);
+            this.updateMultiSelectState();
         });
 
         this.$tabs = $('<div class="tabs"></div>');
@@ -216,14 +216,14 @@ class ContentLeftPanel extends LeftPanel {
 
         this.$selectAllButton.checkboxButton((checked: boolean) => {
             if (checked) {
-                this.multiSelectState.selectAllRanges(true);
+                this.multiSelectState.selectAll(true);
             } else {
-                this.multiSelectState.selectAllRanges(false);
+                this.multiSelectState.selectAll(false);
             }
   
-            this._publishMultiSelectStateChange();
+            this.updateMultiSelectState();
         });
-
+        
         this.$selectButton.on('click', () => {
 
             var ids: String[] = _.map(this.multiSelectState.getAllSelectedCanvases(), (canvas: ICanvas) => {
@@ -257,26 +257,19 @@ class ContentLeftPanel extends LeftPanel {
             }
         }
 
-        this._reset();
+        this.multiSelectState = this.extension.helper.getMultiSelectState();
     }
 
     createTreeView(): void {
         this.treeView = new TreeView(this.$treeView);
-        // this.treeView.elideCount = this.config.options.elideCount;
-        //this.treeView.multiSelectState = this.multiSelectState;
         this.databindTreeView();
         this.updateTreeViewOptions();
     }
 
     databind(): void {
-        this._reset();
         this.databindThumbsView();
         this.databindTreeView();
         this.databindGalleryView();
-    }
-
-    private _reset(): void {
-        this.multiSelectState = this.extension.helper.getMultiSelectState();
     }
 
     private _showMultiSelectOptions(): void {
@@ -284,15 +277,15 @@ class ContentLeftPanel extends LeftPanel {
         this.resize();
     }
 
-    updateTreeViewOptions(): void{
-        if (this.isCollection() && this.treeData.nodes.length && !isNaN(this.treeData.nodes[0].navDate.getTime())){
+    updateTreeViewOptions(): void {
+        if (this.isCollection() && this.extension.helper.treeHasNavDates(<Manifold.ITreeNode>this.treeData)){
             this.$treeViewOptions.show();
         } else {
             this.$treeViewOptions.hide();
         }
     }
 
-    private _publishMultiSelectStateChange(): void {
+    updateMultiSelectState(): void {
         this.$selectAllButtonCheckbox.prop('checked', this.multiSelectState.allRangesSelected() && this.multiSelectState.allCanvasesSelected());
         $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
     }
@@ -324,7 +317,7 @@ class ContentLeftPanel extends LeftPanel {
         this.treeView.rootNode = <ITreeNode>this.treeData;
         this.treeView.databind();
         // ensure tree has current multiselect state
-        this._publishMultiSelectStateChange();
+        this.updateMultiSelectState();
     }
 
     createThumbsView(): void {
@@ -363,7 +356,7 @@ class ContentLeftPanel extends LeftPanel {
         this.galleryView.thumbs = <IThumb[]>this.extension.helper.getThumbs(width, height);
         this.galleryView.databind();
         // ensure gallery has current multiselect state
-        this._publishMultiSelectStateChange();
+        this.updateMultiSelectState();
     }
 
     toggleFinish(): void {

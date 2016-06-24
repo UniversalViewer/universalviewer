@@ -117,7 +117,7 @@ class GalleryView extends BaseView {
             galleryThumbsTemplate: '\
                 <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}" data-initialwidth="{{>initialWidth}}" data-initialheight="{{>initialHeight}}">\
                     <div class="wrap" style="width:{{>initialWidth}}px; height:{{>initialHeight}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
-                    {^{if multiSelectionEnabled}}\
+                    {^{if multiSelectEnabled}}\
                         <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
                     {{/if}}\
                     </div>\
@@ -190,7 +190,7 @@ class GalleryView extends BaseView {
 
         this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
 
-        if (!that.multiSelectState.enabled){
+        if (!that.multiSelectState.isEnabled){
             // add a selection click event to all thumbs
             this.$thumbs.delegate('.thumb', 'click', function (e) {
                 e.preventDefault();
@@ -239,7 +239,7 @@ class GalleryView extends BaseView {
 
         this.multiSelectState = state;
 
-        if (state.enabled){
+        if (state.isEnabled){
             this.$thumbs.addClass("multiSelect");
         } else {
             this.$thumbs.removeClass("multiSelect");
@@ -459,7 +459,7 @@ class GalleryView extends BaseView {
 
     private _reset(): void {
         this.$thumbs.undelegate('.thumb', 'click');
-        this._setMultiSelectEnabled(this.multiSelectState.enabled);
+        this._setMultiSelectEnabled(this.multiSelectState.isEnabled);
     }
 
     getSelectedThumbIndex(): number {
