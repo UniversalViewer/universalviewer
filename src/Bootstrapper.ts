@@ -48,7 +48,8 @@ class Bootstrapper{
             collectionIndex: this.params.collectionIndex,
             manifestIndex: this.params.manifestIndex,
             sequenceIndex: this.params.sequenceIndex,
-            canvasIndex: this.params.canvasIndex
+            canvasIndex: this.params.canvasIndex,
+            locale: this.params.localeName
         }).then((helper: Manifold.IHelper) => {
             
             var trackingLabel: string = helper.getTrackingLabel();
