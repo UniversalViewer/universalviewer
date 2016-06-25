@@ -89,7 +89,7 @@ module.exports = function (grunt) {
                         cwd: '<%= config.dirs.lib %>',
                         src: [
                             'embed.js',
-                            'bundle.js'
+                            'bundle.min.js'
                         ],
                         dest: '<%= config.dirs.build %>/lib/'
                     },
@@ -392,6 +392,17 @@ module.exports = function (grunt) {
             },
             dist: {
             }
+        },
+
+        uglify: {
+            options: {
+                mangle: false
+            },
+            bundle: {
+                files: {
+                    'src/lib/bundle.min.js': ['src/lib/bundle.js']
+                }
+            }
         }
     });
 
@@ -399,6 +410,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-typescript");
     grunt.loadNpmTasks('grunt-contrib-connect');
@@ -419,6 +431,7 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'concat:bundle',
+            'uglify:bundle',
             'typescript:dev',
             'clean:extension',
             'configure:apply',
