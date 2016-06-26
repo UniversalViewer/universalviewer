@@ -15,7 +15,7 @@ before_script:
 - ./node_modules/protractor/bin/webdriver-manager start &
 script:
 - grunt build
-- grunt serve &
+- grunt examples &
 - grunt test
 notifications:
   slack: universalviewer:0hPpv56Z7ber0j0C6KdLwFFW
