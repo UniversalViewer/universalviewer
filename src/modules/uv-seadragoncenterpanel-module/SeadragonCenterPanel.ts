@@ -4,6 +4,7 @@ import CenterPanel = require("../uv-shared-module/CenterPanel");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
 import Params = require("../../Params");
+import Point = require("../../modules/uv-shared-module/Point");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 
@@ -290,8 +291,109 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalResource[]) => {
             // OSD can open an array info.json objects
-            this.viewer.open(resources);
+            //this.viewer.open(resources);
+
+            this.viewer.close();
+
+            resources = this.getPagePositions(resources);
+
+            for (var i = 0; i < resources.length; i++){
+                var resource: Manifesto.IExternalResource = resources[i];
+                this.viewer.addTiledImage({
+                    tileSource: resource['@id'] + '/info.json',
+                    x: (<any>resource).x,
+                    y: (<any>resource).y,
+                    width: (<any>resource).width
+                });
+            }
+
+            this.openPagesHandler();
         });
+    }
+
+    getPagePositions(resources: Manifesto.IExternalResource[]): Manifesto.IExternalResource[] {
+        var leftPage: any;
+        var rightPage: any;
+
+        // if there's more than one image, determine alignment strategy
+        if (resources.length > 1) {
+
+            if (resources.length === 2) {
+                // recto verso
+                if (this.extension.helper.isVerticallyAligned()) {
+                    // vertical alignment
+                    // topPage = this.viewer.world.getItemAt(0);
+                    // topPageBounds = topPage.getBounds(true);
+                    // y = topPageBounds.y + topPageBounds.height;
+                    // bottomPage = this.viewer.world.getItemAt(1);
+                    // bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+                    // bottomPagePos.y = y + this.config.options.pageGap;
+                    // bottomPage.setPosition(bottomPagePos, true);
+                } else {
+                    // horizontal alignment
+                    leftPage = resources[0];
+                    leftPage.x = 0;
+                    rightPage = resources[1];
+                    rightPage.x = leftPage.width;// + this.config.options.pageGap;
+                }
+            } else {
+
+                // // scroll
+                // if (this.extension.helper.isVerticallyAligned()) {
+                //     // vertical alignment
+                //     if (this.extension.helper.isTopToBottom()) {
+                //         // top to bottom
+                //         for (var i = 0; i < resources.length - 1; i++) {
+                //             page = this.viewer.world.getItemAt(i);
+                //             pageBounds = page.getBounds(true);
+                //             y = pageBounds.y + pageBounds.height;
+                //             nextPage = this.viewer.world.getItemAt(i + 1);
+                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
+                //             nextPagePos.y = y;
+                //             nextPage.setPosition(nextPagePos, true);
+                //         }
+                //     } else {
+                //         // bottom to top
+                //         for (var i = resources.length; i > 0; i--) {
+                //             page = this.viewer.world.getItemAt(i);
+                //             pageBounds = page.getBounds(true);
+                //             y = pageBounds.y - pageBounds.height;
+                //             nextPage = this.viewer.world.getItemAt(i - 1);
+                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
+                //             nextPagePos.y = y;
+                //             nextPage.setPosition(nextPagePos, true);
+                //         }
+                //     }
+                // } else {
+                //     // horizontal alignment
+                //     if (this.extension.helper.isLeftToRight()){
+                //         // left to right
+                //         for (var i = 0; i < resources.length - 1; i++){
+                //             page = this.viewer.world.getItemAt(i);
+                //             pageBounds = page.getBounds(true);
+                //             x = pageBounds.x + pageBounds.width;
+                //             nextPage = this.viewer.world.getItemAt(i + 1);
+                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
+                //             nextPagePos.x = x;
+                //             nextPage.setPosition(nextPagePos, true);
+                //         }
+                //     } else {
+                //         // right to left
+                //         for (var i = resources.length - 1; i > 0; i--){
+                //             page = this.viewer.world.getItemAt(i);
+                //             pageBounds = page.getBounds(true);
+                //             x = pageBounds.x - pageBounds.width;
+                //             nextPage = this.viewer.world.getItemAt(i - 1);
+                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
+                //             nextPagePos.x = x;
+                //             nextPage.setPosition(nextPagePos, true);
+                //         }
+                //     }
+                // }
+            }
+        }
+
+        return resources;
     }
 
     positionPages(): void {
@@ -405,7 +507,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
     openPagesHandler() {
 
-        this.positionPages();
+        //this.positionPages();
 
         // check for initial zoom/rotation params.
         if (this.isFirstLoad){
@@ -431,7 +533,7 @@ class SeadragonCenterPanel extends CenterPanel {
             if (settings.preserveViewport && this.currentBounds){
                 this.fitToBounds(this.currentBounds);
             } else {
-                this.goHome();
+                //this.goHome();
             }
         }
 
@@ -606,18 +708,18 @@ class SeadragonCenterPanel extends CenterPanel {
     getSearchOverlayRects(rects: SearchResultRect[], index: number) {
         var newRects = [];
 
-        var width = this.viewer.world.getItemAt(index).source.dimensions.x;
+        var width = (<any>this.extension.resources[index]).width;// this.viewer.world.getItemAt(index).source.dimensions.x;
         var offsetX = 0;
 
         if (index > 0){
-            offsetX = this.viewer.world.getItemAt(index - 1).source.dimensions.x;
+            offsetX = (<any>this.extension.resources[index - 1]).x;// this.viewer.world.getItemAt(index - 1).source.dimensions.x;
         }
 
         for (var i = 0; i < rects.length; i++) {
             var searchRect: SearchResultRect = rects[i];
 
             var factor = 1 / width;
-            var x = factor * (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
+            var x = factor * (Number(searchRect.x) + offsetX); // + ((index > 0) ? this.config.options.pageGap : 0);
             var y = factor * Number(searchRect.y);
             var w = factor * Number(searchRect.width);
             var h = factor * Number(searchRect.height);
