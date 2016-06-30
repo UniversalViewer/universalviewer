@@ -9,11 +9,11 @@ class EmbedDialogue extends BaseEmbedDialogue {
     constructor($element: JQuery) {
         super($element);
 
-        $.subscribe(Commands.SEADRAGON_OPEN, (viewer) => {
+        $.subscribe(Commands.SEADRAGON_OPEN, () => {
             this.update();
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (viewer) => {
+        $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, () => {
             this.update();
         });
     }

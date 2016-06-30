@@ -280,10 +280,16 @@ module.exports = function (grunt) {
             html: {
                 src: ['<%= config.dirs.build %>/app.html'],
                 overwrite: true,
-                replacements: [{
-                    from: 'data-main="app"',
-                    to: 'data-main="lib/app"'
-                }]
+                replacements: [
+                    {
+                        from: 'data-main="app"',
+                        to: 'data-main="lib/app"'
+                    },
+                    {
+                        from: 'lib/bundle.js',
+                        to: 'lib/bundle.min.js'
+                    }
+                ]
             },
             js: {
                 // replace window.DEBUG=true
@@ -431,7 +437,6 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'concat:bundle',
-            'uglify:bundle',
             'typescript:dev',
             'clean:extension',
             'configure:apply',
@@ -452,6 +457,7 @@ module.exports = function (grunt) {
         //if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
+            'uglify:bundle',
             'typescript:dist',
             'clean:extension',
             'configure:apply',

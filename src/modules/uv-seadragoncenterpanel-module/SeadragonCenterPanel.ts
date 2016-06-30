@@ -180,9 +180,13 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }, this.config.options.controlsFadeAfterInactive);
 
-        this.viewer.addHandler('open', (viewer) => {
-            $.publish(Commands.SEADRAGON_OPEN, [viewer]);
-            this.openPagesHandler();
+        // this.viewer.addHandler('open', (viewer) => {
+        //     $.publish(Commands.SEADRAGON_OPEN, [viewer]);
+        //     this.openPagesHandler();
+        // });
+
+        this.viewer.addHandler('tile-drawn', (viewer, tiledImage) => {
+            console.log(tiledImage);
         });
 
         this.viewer.addHandler('tile-drawn', () => {
@@ -314,6 +318,10 @@ class SeadragonCenterPanel extends CenterPanel {
     getPagePositions(resources: Manifesto.IExternalResource[]): Manifesto.IExternalResource[] {
         var leftPage: any;
         var rightPage: any;
+        var topPage: any;
+        var bottomPage: any;
+        var page: any;
+        var nextPage: any;
 
         // if there's more than one image, determine alignment strategy
         if (resources.length > 1) {
@@ -322,157 +330,34 @@ class SeadragonCenterPanel extends CenterPanel {
                 // recto verso
                 if (this.extension.helper.isVerticallyAligned()) {
                     // vertical alignment
-                    // topPage = this.viewer.world.getItemAt(0);
-                    // topPageBounds = topPage.getBounds(true);
-                    // y = topPageBounds.y + topPageBounds.height;
-                    // bottomPage = this.viewer.world.getItemAt(1);
-                    // bottomPagePos = bottomPage.getBounds(true).getTopLeft();
-                    // bottomPagePos.y = y + this.config.options.pageGap;
-                    // bottomPage.setPosition(bottomPagePos, true);
+                    topPage = resources[0];
+                    topPage.y = 0;
+                    bottomPage = resources[1];
+                    bottomPage.y = topPage.height + this.config.options.pageGap;
                 } else {
                     // horizontal alignment
                     leftPage = resources[0];
                     leftPage.x = 0;
                     rightPage = resources[1];
-                    rightPage.x = leftPage.width;// + this.config.options.pageGap;
+                    rightPage.x = leftPage.width + this.config.options.pageGap;
                 }
             } else {
-
-                // // scroll
-                // if (this.extension.helper.isVerticallyAligned()) {
-                //     // vertical alignment
-                //     if (this.extension.helper.isTopToBottom()) {
-                //         // top to bottom
-                //         for (var i = 0; i < resources.length - 1; i++) {
-                //             page = this.viewer.world.getItemAt(i);
-                //             pageBounds = page.getBounds(true);
-                //             y = pageBounds.y + pageBounds.height;
-                //             nextPage = this.viewer.world.getItemAt(i + 1);
-                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
-                //             nextPagePos.y = y;
-                //             nextPage.setPosition(nextPagePos, true);
-                //         }
-                //     } else {
-                //         // bottom to top
-                //         for (var i = resources.length; i > 0; i--) {
-                //             page = this.viewer.world.getItemAt(i);
-                //             pageBounds = page.getBounds(true);
-                //             y = pageBounds.y - pageBounds.height;
-                //             nextPage = this.viewer.world.getItemAt(i - 1);
-                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
-                //             nextPagePos.y = y;
-                //             nextPage.setPosition(nextPagePos, true);
-                //         }
-                //     }
-                // } else {
-                //     // horizontal alignment
-                //     if (this.extension.helper.isLeftToRight()){
-                //         // left to right
-                //         for (var i = 0; i < resources.length - 1; i++){
-                //             page = this.viewer.world.getItemAt(i);
-                //             pageBounds = page.getBounds(true);
-                //             x = pageBounds.x + pageBounds.width;
-                //             nextPage = this.viewer.world.getItemAt(i + 1);
-                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
-                //             nextPagePos.x = x;
-                //             nextPage.setPosition(nextPagePos, true);
-                //         }
-                //     } else {
-                //         // right to left
-                //         for (var i = resources.length - 1; i > 0; i--){
-                //             page = this.viewer.world.getItemAt(i);
-                //             pageBounds = page.getBounds(true);
-                //             x = pageBounds.x - pageBounds.width;
-                //             nextPage = this.viewer.world.getItemAt(i - 1);
-                //             nextPagePos = nextPage.getBounds(true).getTopLeft();
-                //             nextPagePos.x = x;
-                //             nextPage.setPosition(nextPagePos, true);
-                //         }
-                //     }
-                // }
-            }
-        }
-
-        return resources;
-    }
-
-    positionPages(): void {
-
-        var resources: Manifesto.IExternalResource[] = this.extension.resources;
-
-        var x: number;
-        var y: number;
-        var page: any;
-        var pageBounds: any;
-        var nextPage: any;
-        var nextPagePos: any;
-        var topPage: any;
-        var topPageBounds: any;
-        var bottomPage: any;
-        var bottomPagePos: any;
-        var leftPage: any;
-        var leftPageBounds: any;
-        var rightPage: any;
-        var rightPageBounds: any;
-        var rightPagePos: any;
-
-        // if there's more than one image, determine alignment strategy
-        if (resources.length > 1) {
-
-            if (resources.length === 2) {
-                // recto verso
-                if (this.extension.helper.isVerticallyAligned()) {
-                    // vertical alignment
-                    topPage = this.viewer.world.getItemAt(0);
-                    topPageBounds = topPage.getBounds(true);
-                    y = topPageBounds.y + topPageBounds.height;
-                    bottomPage = this.viewer.world.getItemAt(1);
-                    bottomPagePos = bottomPage.getBounds(true).getTopLeft();
-                    bottomPagePos.y = y + this.config.options.pageGap;
-                    bottomPage.setPosition(bottomPagePos, true);
-                } else {
-                    // horizontal alignment
-                    leftPage = this.viewer.world.getItemAt(0);
-                    leftPageBounds = leftPage.getBounds(true);
-                    x = leftPageBounds.x + leftPageBounds.width;
-                    rightPage = this.viewer.world.getItemAt(1);
-                    rightPageBounds = rightPage.getBounds(true);
-                    rightPagePos = rightPageBounds.getTopLeft();
-                    rightPagePos.x = x + this.config.options.pageGap;
-                    rightPage.setPosition(rightPagePos, true);
-
-                    if (rightPage.source.width > rightPage.source.height){
-                        rightPage.setWidth(leftPageBounds.width);
-                    } else {
-                        rightPage.setHeight(leftPageBounds.height);
-                    }
-                }
-            } else {
-
                 // scroll
                 if (this.extension.helper.isVerticallyAligned()) {
                     // vertical alignment
                     if (this.extension.helper.isTopToBottom()) {
                         // top to bottom
                         for (var i = 0; i < resources.length - 1; i++) {
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            y = pageBounds.y + pageBounds.height;
-                            nextPage = this.viewer.world.getItemAt(i + 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.y = y;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i + 1];
+                            nextPage.y = (page.y || 0) + page.height;;
                         }
                     } else {
                         // bottom to top
                         for (var i = resources.length; i > 0; i--) {
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            y = pageBounds.y - pageBounds.height;
-                            nextPage = this.viewer.world.getItemAt(i - 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.y = y;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i - 1];
+                            nextPage.y = (page.y || 0) - page.height;
                         }
                     }
                 } else {
@@ -480,34 +365,140 @@ class SeadragonCenterPanel extends CenterPanel {
                     if (this.extension.helper.isLeftToRight()){
                         // left to right
                         for (var i = 0; i < resources.length - 1; i++){
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            x = pageBounds.x + pageBounds.width;
-                            nextPage = this.viewer.world.getItemAt(i + 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.x = x;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i + 1];
+                            nextPage.x = (page.x || 0) + page.width;
                         }
                     } else {
                         // right to left
                         for (var i = resources.length - 1; i > 0; i--){
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            x = pageBounds.x - pageBounds.width;
-                            nextPage = this.viewer.world.getItemAt(i - 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.x = x;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i - 1];
+                            nextPage.x = (page.x || 0) - page.width;
                         }
                     }
                 }
             }
         }
+
+        return resources;
     }
+
+    // used with viewer.open()
+    // keeping around for reference
+    
+    // positionPages(): void {
+
+    //     var resources: Manifesto.IExternalResource[] = this.extension.resources;
+
+    //     var x: number;
+    //     var y: number;
+    //     var page: any;
+    //     var pageBounds: any;
+    //     var nextPage: any;
+    //     var nextPagePos: any;
+    //     var topPage: any;
+    //     var topPageBounds: any;
+    //     var bottomPage: any;
+    //     var bottomPagePos: any;
+    //     var leftPage: any;
+    //     var leftPageBounds: any;
+    //     var rightPage: any;
+    //     var rightPageBounds: any;
+    //     var rightPagePos: any;
+
+    //     // if there's more than one image, determine alignment strategy
+    //     if (resources.length > 1) {
+
+    //         if (resources.length === 2) {
+    //             // recto verso
+    //             if (this.extension.helper.isVerticallyAligned()) {
+    //                 // vertical alignment
+    //                 topPage = this.viewer.world.getItemAt(0);
+    //                 topPageBounds = topPage.getBounds(true);
+    //                 y = topPageBounds.y + topPageBounds.height;
+    //                 bottomPage = this.viewer.world.getItemAt(1);
+    //                 bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+    //                 bottomPagePos.y = y + this.config.options.pageGap;
+    //                 bottomPage.setPosition(bottomPagePos, true);
+    //             } else {
+    //                 // horizontal alignment
+    //                 leftPage = this.viewer.world.getItemAt(0);
+    //                 leftPageBounds = leftPage.getBounds(true);
+    //                 x = leftPageBounds.x + leftPageBounds.width;
+    //                 rightPage = this.viewer.world.getItemAt(1);
+    //                 rightPageBounds = rightPage.getBounds(true);
+    //                 rightPagePos = rightPageBounds.getTopLeft();
+    //                 rightPagePos.x = x + this.config.options.pageGap;
+    //                 rightPage.setPosition(rightPagePos, true);
+
+    //                 if (rightPage.source.width > rightPage.source.height){
+    //                     rightPage.setWidth(leftPageBounds.width);
+    //                 } else {
+    //                     rightPage.setHeight(leftPageBounds.height);
+    //                 }
+    //             }
+    //         } else {
+
+    //             // scroll
+    //             if (this.extension.helper.isVerticallyAligned()) {
+    //                 // vertical alignment
+    //                 if (this.extension.helper.isTopToBottom()) {
+    //                     // top to bottom
+    //                     for (var i = 0; i < resources.length - 1; i++) {
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         y = pageBounds.y + pageBounds.height;
+    //                         nextPage = this.viewer.world.getItemAt(i + 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.y = y;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 } else {
+    //                     // bottom to top
+    //                     for (var i = resources.length; i > 0; i--) {
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         y = pageBounds.y - pageBounds.height;
+    //                         nextPage = this.viewer.world.getItemAt(i - 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.y = y;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 }
+    //             } else {
+    //                 // horizontal alignment
+    //                 if (this.extension.helper.isLeftToRight()){
+    //                     // left to right
+    //                     for (var i = 0; i < resources.length - 1; i++){
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         x = pageBounds.x + pageBounds.width;
+    //                         nextPage = this.viewer.world.getItemAt(i + 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.x = x;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 } else {
+    //                     // right to left
+    //                     for (var i = resources.length - 1; i > 0; i--){
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         x = pageBounds.x - pageBounds.width;
+    //                         nextPage = this.viewer.world.getItemAt(i - 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.x = x;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     openPagesHandler() {
 
-        //this.positionPages();
+        $.publish(Commands.SEADRAGON_OPEN);
 
         // check for initial zoom/rotation params.
         if (this.isFirstLoad){
@@ -524,6 +515,8 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.initialBounds = this.deserialiseBounds(this.initialBounds);
                 this.currentBounds = this.initialBounds;
                 this.fitToBounds(this.currentBounds);
+            } else {
+                this.goHome();
             }
         } else {
             // it's not the first load
@@ -533,7 +526,7 @@ class SeadragonCenterPanel extends CenterPanel {
             if (settings.preserveViewport && this.currentBounds){
                 this.fitToBounds(this.currentBounds);
             } else {
-                //this.goHome();
+                this.goHome();
             }
         }
 
@@ -564,17 +557,20 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     goHome(): void {
-        var viewingDirection: string = this.extension.helper.getViewingDirection().toString();
+        
+        this.viewer.viewport.goHome();
+        
+        // var viewingDirection: string = this.extension.helper.getViewingDirection().toString();
 
-        switch (viewingDirection.toString()){
-            case manifesto.ViewingDirection.topToBottom().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.extension.resources.length), true);
-                break;
-            case manifesto.ViewingDirection.leftToRight().toString() :
-            case manifesto.ViewingDirection.rightToLeft().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, this.extension.resources.length, this.viewer.world.getItemAt(0).normHeight), true);
-                break;
-        }
+        // switch (viewingDirection.toString()){
+        //     case manifesto.ViewingDirection.topToBottom().toString() :
+        //         this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.extension.resources.length), true);
+        //         break;
+        //     case manifesto.ViewingDirection.leftToRight().toString() :
+        //     case manifesto.ViewingDirection.rightToLeft().toString() :
+        //         this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, (<any>this.extension.resources[0]).width + (<any>this.extension.resources[1]).width, (<any>this.extension.resources[0]).height), true);
+        //         break;
+        // }
     }
 
     disablePrevButton(): void {
@@ -712,17 +708,16 @@ class SeadragonCenterPanel extends CenterPanel {
         var offsetX = 0;
 
         if (index > 0){
-            offsetX = (<any>this.extension.resources[index - 1]).x;// this.viewer.world.getItemAt(index - 1).source.dimensions.x;
+            offsetX = (<any>this.extension.resources[index - 1]).width;// this.viewer.world.getItemAt(index - 1).source.dimensions.x;
         }
 
         for (var i = 0; i < rects.length; i++) {
             var searchRect: SearchResultRect = rects[i];
 
-            var factor = 1 / width;
-            var x = factor * (Number(searchRect.x) + offsetX); // + ((index > 0) ? this.config.options.pageGap : 0);
-            var y = factor * Number(searchRect.y);
-            var w = factor * Number(searchRect.width);
-            var h = factor * Number(searchRect.height);
+            var x = (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
+            var y = Number(searchRect.y);
+            var w = Number(searchRect.width);
+            var h = Number(searchRect.height);
 
             var rect = new OpenSeadragon.Rect(x, y, w, h);
 
