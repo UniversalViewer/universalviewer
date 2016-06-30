@@ -185,10 +185,6 @@ class SeadragonCenterPanel extends CenterPanel {
         //     this.openPagesHandler();
         // });
 
-        this.viewer.addHandler('tile-drawn', (viewer, tiledImage) => {
-            console.log(tiledImage);
-        });
-
         this.viewer.addHandler('tile-drawn', () => {
             this.$spinner.hide();
         });
