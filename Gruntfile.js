@@ -431,7 +431,6 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'concat:bundle',
-            'uglify:bundle',
             'typescript:dev',
             'clean:extension',
             'configure:apply',
@@ -452,6 +451,7 @@ module.exports = function (grunt) {
         //if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
+            'uglify:bundle',
             'typescript:dist',
             'clean:extension',
             'configure:apply',
