@@ -280,10 +280,16 @@ module.exports = function (grunt) {
             html: {
                 src: ['<%= config.dirs.build %>/app.html'],
                 overwrite: true,
-                replacements: [{
-                    from: 'data-main="app"',
-                    to: 'data-main="lib/app"'
-                }]
+                replacements: [
+                    {
+                        from: 'data-main="app"',
+                        to: 'data-main="lib/app"'
+                    },
+                    {
+                        from: 'lib/bundle.js',
+                        to: 'lib/bundle.min.js'
+                    }
+                ]
             },
             js: {
                 // replace window.DEBUG=true
