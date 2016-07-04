@@ -996,17 +996,21 @@ declare module Manifesto {
 declare module Manifesto {
     interface IExternalResource {
         clickThroughService: IService;
-        restrictedService: IService;
         data: any;
         dataUri: string;
         error: any;
+        getData(accessToken?: IAccessToken): Promise<IExternalResource>;
+        height: number;
+        isAccessControlled(): boolean;
         isResponseHandled: boolean;
         loginService: IService;
         logoutService: IService;
+        restrictedService: IService;
         status: number;
         tokenService: IService;
-        getData(accessToken?: IAccessToken): Promise<IExternalResource>;
-        isAccessControlled(): boolean;
+        width: number;
+        x: number;
+        y: number;
     }
 }
 
@@ -1217,6 +1221,29 @@ declare module Manifold {
         bootstrap(): Promise<Manifold.IHelper>;
         private _loaded(bootstrapper, json, resolve, reject);
         private _msieversion();
+    }
+}
+
+declare module Manifold {
+    class ExternalResource implements Manifesto.IExternalResource {
+        clickThroughService: Manifesto.IService;
+        data: any;
+        dataUri: string;
+        error: any;
+        height: number;
+        isResponseHandled: boolean;
+        loginService: Manifesto.IService;
+        logoutService: Manifesto.IService;
+        restrictedService: Manifesto.IService;
+        status: number;
+        tokenService: Manifesto.IService;
+        width: number;
+        x: number;
+        y: number;
+        constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string);
+        private _parseAuthServices(resource);
+        isAccessControlled(): boolean;
+        getData(accessToken?: Manifesto.IAccessToken): Promise<Manifesto.IExternalResource>;
     }
 }
 

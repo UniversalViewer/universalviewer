@@ -2,7 +2,7 @@ import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import ExternalResource = Manifesto.IExternalResource;
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
@@ -17,6 +17,7 @@ class SeadragonCenterPanel extends CenterPanel {
     initialRotation: any;
     isCreated: boolean = false;
     isFirstLoad: boolean = true;
+    items: any[];
     nextButtonEnabled: boolean = false;
     pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
@@ -58,6 +59,8 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     createUI(): void {
+        var that = this;
+        
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
@@ -180,13 +183,13 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }, this.config.options.controlsFadeAfterInactive);
 
-        // this.viewer.addHandler('open', (viewer) => {
-        //     $.publish(Commands.SEADRAGON_OPEN, [viewer]);
-        //     this.openPagesHandler();
-        // });
-
         this.viewer.world.addHandler('add-item', (item) => {
-            console.log(item);    
+            that.items.push(item);
+
+            if (that.items.length === that.extension.resources.length) {
+                $.publish(Commands.SEADRAGON_OPEN);
+                that.openPagesHandler();
+            }
         });
 
         this.viewer.addHandler('tile-drawn', () => {
@@ -292,6 +295,7 @@ class SeadragonCenterPanel extends CenterPanel {
     openMedia(resources?: Manifesto.IExternalResource[]): void {
 
         this.$spinner.show();
+        this.items = [];
 
         this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalResource[]) => {
             // OSD can open an array info.json objects
@@ -305,13 +309,11 @@ class SeadragonCenterPanel extends CenterPanel {
                 var resource: Manifesto.IExternalResource = resources[i];
                 this.viewer.addTiledImage({
                     tileSource: resource['@id'] + '/info.json',
-                    x: (<any>resource).x,
-                    y: (<any>resource).y,
-                    width: (<any>resource).width
+                    x: resource.x,
+                    y: resource.y,
+                    width: resource.width
                 });
             }
-
-            this.openPagesHandler();
         });
     }
 
@@ -560,6 +562,9 @@ class SeadragonCenterPanel extends CenterPanel {
         
         this.viewer.viewport.goHome();
         
+        // used with viewer.open
+        // keeping around for reference
+
         // var viewingDirection: string = this.extension.helper.getViewingDirection().toString();
 
         // switch (viewingDirection.toString()){
@@ -704,11 +709,11 @@ class SeadragonCenterPanel extends CenterPanel {
     getSearchOverlayRects(rects: SearchResultRect[], index: number) {
         var newRects = [];
 
-        var width = (<any>this.extension.resources[index]).width;// this.viewer.world.getItemAt(index).source.dimensions.x;
+        var width = this.extension.resources[index].width;
         var offsetX = 0;
 
         if (index > 0){
-            offsetX = (<any>this.extension.resources[index - 1]).width;// this.viewer.world.getItemAt(index - 1).source.dimensions.x;
+            offsetX = this.extension.resources[index - 1].width;
         }
 
         for (var i = 0; i < rects.length; i++) {
