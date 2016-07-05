@@ -308,7 +308,7 @@ class SeadragonCenterPanel extends CenterPanel {
             for (var i = 0; i < resources.length; i++){
                 var resource: Manifesto.IExternalResource = resources[i];
                 this.viewer.addTiledImage({
-                    tileSource: resource['@id'] + '/info.json',
+                    tileSource: resource,
                     x: resource.x,
                     y: resource.y,
                     width: resource.width

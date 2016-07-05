@@ -13365,7 +13365,6 @@ var Manifold;
             resource.externalResource = this;
             this.dataUri = dataUriFunc(resource);
             this._parseAuthServices(resource);
-            //this.profile = (<Manifesto.IService>resource).getProfile();
         }
         ExternalResource.prototype._parseAuthServices = function (resource) {
             this.clickThroughService = manifesto.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
@@ -13391,14 +13390,16 @@ var Manifold;
             }
             return false;
         };
+        ExternalResource.prototype.hasServiceDescriptor = function () {
+            return this.dataUri.endsWith('info.json');
+        };
         ExternalResource.prototype.getData = function (accessToken) {
             var that = this;
             return new Promise(function (resolve, reject) {
                 // check if dataUri ends with info.json
                 // if not issue a HEAD request.
                 var type = 'GET';
-                // todo: use manifesto.hasServiceDescriptor
-                if (!that.dataUri.endsWith('info.json')) {
+                if (!that.hasServiceDescriptor()) {
                     // If access control is unnecessary, short circuit the process.
                     // Note that isAccessControlled check for short-circuiting only
                     // works in the "binary resource" context, since in that case,
@@ -14012,7 +14013,7 @@ var Manifold;
 })(Manifold || (Manifold = {}));
 (function (w) {
     if (!w.Manifold) {
-        w.Manifold = w.manifold = Manifold;
+        w.Manifold = Manifold;
     }
 })(window);
 
