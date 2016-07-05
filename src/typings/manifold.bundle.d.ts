@@ -1194,7 +1194,7 @@ declare module Manifesto {
 interface Window {
     manifestCallback: any;
 }
-declare module Manifold {
+declare namespace Manifold {
     class StringValue {
         value: string;
         constructor(value?: string);
@@ -1202,7 +1202,7 @@ declare module Manifold {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     class TreeSortType extends StringValue {
         static DATE: TreeSortType;
         static NONE: TreeSortType;
@@ -1214,7 +1214,7 @@ declare module Manifold {
 /// <reference path="StringValue.d.ts" />
 /// <reference path="TreeSortType.d.ts" />
 
-declare module Manifold {
+declare namespace Manifold {
     class Bootstrapper {
         private _options;
         constructor(options: Manifold.IManifoldOptions);
@@ -1224,7 +1224,7 @@ declare module Manifold {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     class ExternalResource implements Manifesto.IExternalResource {
         clickThroughService: Manifesto.IService;
         data: any;
@@ -1247,7 +1247,7 @@ declare module Manifold {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     class Helper implements IHelper {
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
@@ -1336,12 +1336,12 @@ declare module Manifold {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface ICanvas extends IMultiSelectable, Manifesto.ICanvas {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface IHelper {
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
@@ -1416,10 +1416,9 @@ declare module Manifold {
 
 interface IManifold {
     loadManifest: (options: Manifold.IManifoldOptions) => Promise<Manifold.IHelper>;
-    TreeSortType: Manifold.TreeSortType;
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface IManifoldOptions {
         iiifResourceUri: string;
         iiifResource: Manifesto.IIIIFResource;
@@ -1432,7 +1431,7 @@ declare module Manifold {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface IMetadataItem {
         label: string;
         value: string | IMetadataItem[];
@@ -1440,32 +1439,35 @@ declare module Manifold {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface IMultiSelectable {
         multiSelected: boolean;
         multiSelectEnabled: boolean;
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface IRange extends IMultiSelectable, Manifesto.IRange {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface IThumb extends IMultiSelectable, Manifesto.IThumb {
         initialWidth: number;
         initialHeight: number;
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     interface ITreeNode extends IMultiSelectable, Manifesto.ITreeNode {
     }
 }
 
+declare namespace Manifold {
+    function loadManifest(options: any): Promise<IHelper>;
+}
 
-declare module Manifold {
+declare namespace Manifold {
     class MultiSelectState {
         isEnabled: boolean;
         ranges: IRange[];
@@ -1490,7 +1492,7 @@ declare module Manifold {
     }
 }
 
-declare module Manifold {
+declare namespace Manifold {
     class UriLabeller {
         labels: Object;
         constructor(labels: Object);

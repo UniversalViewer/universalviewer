@@ -39,6 +39,7 @@ module.exports = function (grunt) {
 
         clean: {
             build : ['<%= config.dirs.build %>'],
+            bundle: ['./src/lib/bundle.js'],
             dist: ['<%= config.dirs.dist %>'],
             examples: ['<%= config.dirs.examples %>/uv-*'],
             distexamples: ['<%= config.dirs.examples %>/uv-*.zip', '<%= config.dirs.examples %>/uv-*.tar'],
@@ -47,7 +48,7 @@ module.exports = function (grunt) {
 
         concat: {
             bundle: {
-                src: grunt.file.expand('src/lib/*').concat(config.deps).concat(['!src/lib/embed.js', '!src/lib/bundle.js']),
+                src: grunt.file.expand('src/lib/*').concat(config.deps).concat(['!src/lib/embed.js']),
                 dest: 'src/lib/bundle.js'
             }
         },
@@ -436,6 +437,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', '', function(){
 
         grunt.task.run(
+            'clean:bundle',
             'concat:bundle',
             'typescript:dev',
             'clean:extension',
