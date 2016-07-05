@@ -39,7 +39,7 @@ module.exports = function (grunt) {
 
         clean: {
             build : ['<%= config.dirs.build %>'],
-            bundle: ['./src/lib/bundle.js'],
+            bundle: ['./src/lib/bundle.js', './src/lib/bundle.min.js'],
             dist: ['<%= config.dirs.dist %>'],
             examples: ['<%= config.dirs.examples %>/uv-*'],
             distexamples: ['<%= config.dirs.examples %>/uv-*.zip', '<%= config.dirs.examples %>/uv-*.tar'],
