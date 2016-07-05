@@ -2,7 +2,7 @@ import BaseCommands = require("./BaseCommands");
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
-import ExternalResource = require("./ExternalResource");
+import ExternalResource = Manifesto.IExternalResource;
 import IAccessToken = Manifesto.IAccessToken;
 import IExtension = require("./IExtension");
 import ILoginDialogueOptions = require("./ILoginDialogueOptions");
@@ -891,7 +891,7 @@ class BaseExtension implements IExtension {
 
         _.each(indices, (index) => {
             var canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
-            var r: Manifesto.IExternalResource = new ExternalResource(canvas, this.helper.getInfoUri);
+            var r: Manifesto.IExternalResource = new Manifold.ExternalResource(canvas, this.helper.getInfoUri);
 
             // used to reload resources with isResponseHandled = true.
             if (resources){

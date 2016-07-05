@@ -1,7 +1,7 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import ExternalResource = Manifesto.IExternalResource;
 
 class VirtexCenterPanel extends CenterPanel {
 

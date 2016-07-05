@@ -43,7 +43,7 @@ class Bootstrapper{
 
         jQuery.support.cors = true;
 
-        manifold.loadManifest(<Manifold.IManifoldOptions>{
+        Manifold.loadManifest(<Manifold.IManifoldOptions>{
             iiifResourceUri: this.params.manifestUri,
             collectionIndex: this.params.collectionIndex,
             manifestIndex: this.params.manifestIndex,

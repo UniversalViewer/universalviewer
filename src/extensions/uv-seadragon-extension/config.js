@@ -6,7 +6,8 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-                'iiif-tree-component/dist/iiif-tree-component.js'
+                'iiif-tree-component/dist/iiif-tree-component.js',
+                'openseadragon/build/openseadragon/openseadragon.min.js'
             ],
             dest: '<%= config.dirs.uvSeadragonExtension %>/lib'
         },

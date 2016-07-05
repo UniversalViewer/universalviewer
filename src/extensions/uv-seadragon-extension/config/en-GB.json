@@ -133,7 +133,7 @@
         "immediateRender": false,
         "maxZoomLevel": 8,
         "navigatorPosition": "BOTTOM_RIGHT",
-        "pageGap": 0.01,
+        "pageGap": 50,
         "showHomeControl": false,
         "trimAttributionCount": 150,
         "visibilityRatio": 0.5
