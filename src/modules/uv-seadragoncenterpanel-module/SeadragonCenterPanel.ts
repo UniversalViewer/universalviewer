@@ -560,7 +560,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
     goHome(): void {
         
-        this.viewer.viewport.goHome();
+        this.viewer.viewport.goHome(true);
         
         // used with viewer.open
         // keeping around for reference
