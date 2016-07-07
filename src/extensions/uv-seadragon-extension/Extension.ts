@@ -514,9 +514,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         this.triggerSocket(Commands.PRINT, args);
     }
 
-    // get the region and final size
     getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions {
-
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
@@ -525,61 +523,106 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
 
         var bounds = viewer.viewport.getBounds(true);
-        var containerSize = viewer.viewport.getContainerSize();
-        var zoom = viewer.viewport.getZoom(true);
-
-        var top = Math.max(0, bounds.y);
-        var left = Math.max(0, bounds.x);
-
-        // change top to be normalised value proportional to height of image, not width (as per OSD).
-        top = 1 / (canvas.getHeight() / parseInt(String(canvas.getWidth() * top)));
-
-        // get on-screen pixel sizes.
-
-        var viewportWidthPx = containerSize.x;
-        var viewportHeightPx = containerSize.y;
-
-        var imageWidthPx = parseInt(String(viewportWidthPx * zoom));
-        var ratio = canvas.getWidth() / imageWidthPx;
-        var imageHeightPx = parseInt(String(canvas.getHeight() / ratio));
-
-        var viewportLeftPx = parseInt(String(left * imageWidthPx));
-        var viewportTopPx = parseInt(String(top * imageHeightPx));
-
-        var rect1Left = 0;
-        var rect1Right = imageWidthPx;
-        var rect1Top = 0;
-        var rect1Bottom = imageHeightPx;
-
-        var rect2Left = viewportLeftPx;
-        var rect2Right = viewportLeftPx + viewportWidthPx;
-        var rect2Top = viewportTopPx;
-        var rect2Bottom = viewportTopPx + viewportHeightPx;
-
-        var sizeWidth = Math.max(0, Math.min(rect1Right, rect2Right) - Math.max(rect1Left, rect2Left));
-        var sizeHeight = Math.max(0, Math.min(rect1Bottom, rect2Bottom) - Math.max(rect1Top, rect2Top));
-
-        // get original image pixel sizes.
-
-        var ratio2 = canvas.getWidth() / imageWidthPx;
-
-        var regionWidth = parseInt(String(sizeWidth * ratio2));
-        var regionHeight = parseInt(String(sizeHeight * ratio2));
-
-        var regionTop = parseInt(String(canvas.getHeight() * top));
-        var regionLeft = parseInt(String(canvas.getWidth() * left));
-
-        if (regionTop < 0) regionTop = 0;
-        if (regionLeft < 0) regionLeft = 0;
 
         var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
-        dimensions.region = new Size(regionWidth, regionHeight);
-        dimensions.regionPos = new Point(regionLeft, regionTop);
-        dimensions.size = new Size(sizeWidth, sizeHeight);
+        var width: number = Math.floor(bounds.width);
+        var height: number = Math.floor(bounds.height);
+        var x: number = Math.floor(bounds.x);
+        var y: number = Math.floor(bounds.y);
+
+        // constrain to image bounds
+        if (x + width > canvas.getWidth()) {
+            width = canvas.getWidth() - x;
+        } else if (x < 0){
+            width = width + x;
+            x = 0;
+        }
+
+        if (y + height > canvas.getHeight()) {
+            height = canvas.getHeight() - y;
+        } else if (y < 0){
+            height = height + y;
+            y = 0;
+        }
+        
+        width = Math.min(width, canvas.getWidth());
+        height = Math.min(height, canvas.getHeight());       
+
+        dimensions.region = new Size(width, height);
+        dimensions.regionPos = new Point(x, y);
+        dimensions.size = new Size(width, height);
 
         return dimensions;
     }
+
+    // keep this around for reference
+
+    // getOnScreenCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions {
+
+    //     if (!viewer) return null;
+    //     if (!viewer.viewport) return null;
+
+    //     if (!canvas.getHeight() || !canvas.getWidth()){
+    //         return null;
+    //     }
+
+    //     var bounds = viewer.viewport.getBounds(true);
+    //     var containerSize = viewer.viewport.getContainerSize();
+    //     var zoom = viewer.viewport.getZoom(true);
+
+    //     var top = Math.max(0, bounds.y);
+    //     var left = Math.max(0, bounds.x);
+
+    //     // change top to be normalised value proportional to height of image, not width (as per OSD).
+    //     top = 1 / (canvas.getHeight() / parseInt(String(canvas.getWidth() * top)));
+
+    //     // get on-screen pixel sizes.
+
+    //     var viewportWidthPx = containerSize.x;
+    //     var viewportHeightPx = containerSize.y;
+
+    //     var imageWidthPx = parseInt(String(viewportWidthPx * zoom));
+    //     var ratio = canvas.getWidth() / imageWidthPx;
+    //     var imageHeightPx = parseInt(String(canvas.getHeight() / ratio));
+
+    //     var viewportLeftPx = parseInt(String(left * imageWidthPx));
+    //     var viewportTopPx = parseInt(String(top * imageHeightPx));
+
+    //     var rect1Left = 0;
+    //     var rect1Right = imageWidthPx;
+    //     var rect1Top = 0;
+    //     var rect1Bottom = imageHeightPx;
+
+    //     var rect2Left = viewportLeftPx;
+    //     var rect2Right = viewportLeftPx + viewportWidthPx;
+    //     var rect2Top = viewportTopPx;
+    //     var rect2Bottom = viewportTopPx + viewportHeightPx;
+
+    //     var sizeWidth = Math.max(0, Math.min(rect1Right, rect2Right) - Math.max(rect1Left, rect2Left));
+    //     var sizeHeight = Math.max(0, Math.min(rect1Bottom, rect2Bottom) - Math.max(rect1Top, rect2Top));
+
+    //     // get original image pixel sizes.
+
+    //     var ratio2 = canvas.getWidth() / imageWidthPx;
+
+    //     var regionWidth = parseInt(String(sizeWidth * ratio2));
+    //     var regionHeight = parseInt(String(sizeHeight * ratio2));
+
+    //     var regionTop = parseInt(String(canvas.getHeight() * top));
+    //     var regionLeft = parseInt(String(canvas.getWidth() * left));
+
+    //     if (regionTop < 0) regionTop = 0;
+    //     if (regionLeft < 0) regionLeft = 0;
+
+    //     var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
+
+    //     dimensions.region = new Size(regionWidth, regionHeight);
+    //     dimensions.regionPos = new Point(regionLeft, regionTop);
+    //     dimensions.size = new Size(sizeWidth, sizeHeight);
+
+    //     return dimensions;
+    // }
 
     getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string {
 
