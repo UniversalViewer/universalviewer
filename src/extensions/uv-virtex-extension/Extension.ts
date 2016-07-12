@@ -5,7 +5,7 @@ import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
 import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
 import DownloadDialogue = require("./DownloadDialogue");
-import EmbedDialogue = require("./EmbedDialogue");
+import ShareDialogue = require("./ShareDialogue");
 import ExternalResource = Manifesto.IExternalResource;
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
@@ -23,12 +23,12 @@ import VirtexCenterPanel = require("../../modules/uv-virtexcenterpanel-module/Vi
 class Extension extends BaseExtension implements IVirtexExtension {
 
     $downloadDialogue: JQuery;
-    $embedDialogue: JQuery;
+    $shareDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: VirtexCenterPanel;
     downloadDialogue: DownloadDialogue;
-    embedDialogue: EmbedDialogue;
+    shareDialogue: ShareDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
     helpDialogue: HelpDialogue;
@@ -69,9 +69,9 @@ class Extension extends BaseExtension implements IVirtexExtension {
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$embedDialogue = $('<div class="overlay embed"></div>');
-        Shell.$overlays.append(this.$embedDialogue);
-        this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+        this.$shareDialogue = $('<div class="overlay share"></div>');
+        Shell.$overlays.append(this.$shareDialogue);
+        this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings"></div>');
         Shell.$overlays.append(this.$settingsDialogue);

@@ -29,6 +29,7 @@ class Commands {
     static HIDE_OVERLAY: string                     = Commands.namespace + 'onHideOverlay';
     static HIDE_RESTRICTED_DIALOGUE: string         = Commands.namespace + 'onHideRestrictedDialogue';
     static HIDE_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onHideSettingsDialogue';
+    static HIDE_SHARE_DIALOGUE: string              = Commands.namespace + 'onHideShareDialogue';
     static HOME: string                             = Commands.namespace + 'onHome';
     static LEFT_ARROW: string                       = Commands.namespace + 'onLeftArrow';
     static LEFTPANEL_COLLAPSE_FULL_FINISH: string   = Commands.namespace + 'onLeftPanelCollapseFullFinish';
@@ -74,6 +75,7 @@ class Commands {
     static SHOW_OVERLAY: string                     = Commands.namespace + 'onShowOverlay';
     static SHOW_RESTRICTED_DIALOGUE: string         = Commands.namespace + 'onShowRestrictedDialogue';
     static SHOW_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onShowSettingsDialogue';
+    static SHOW_SHARE_DIALOGUE: string              = Commands.namespace + 'onShowShareDialogue';
     static THUMB_SELECTED: string                   = Commands.namespace + 'onThumbSelected';
     static TOGGLE_FULLSCREEN: string                = Commands.namespace + 'onToggleFullScreen';
     static UP_ARROW: string                         = Commands.namespace + 'onUpArrow';

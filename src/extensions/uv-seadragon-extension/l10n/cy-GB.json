@@ -55,15 +55,6 @@
         "wholeImageLowResAsJpg": "Delwedd gyfan {0} x {1}px (jpg)"
       }
     },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Maint ddewisol",
-        "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, copïwch a gosodwch y cod isod.",
-        "title": "Rhannu",
-        "width": "Lled"
-      }
-    },
     "footerPanel": {
       "content": {
         "bookmark": "Ychwanegu at nodau tudalen",
@@ -72,7 +63,8 @@
         "feedback": "Adborth",
         "exitFullScreen": "Dianc o'r sgrin lawn",
         "fullScreen": "Sgrin lawn",
-        "open": "Agor"
+        "open": "Agor",
+        "share": "Share"
       }
     },
     "genericDialogue": {
@@ -191,6 +183,17 @@
         "preserveViewport": "Cadw'r lefel o glosio",
         "title": "Dewisiadau",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>mwy o wybodaeth</a>"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "arfer",
+        "height": "Hyd",
+        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
+        "share": "Rhannu",
+        "embed": "gwreiddio",
+        "width": "Lled",
+        "size": "maint:"
       }
     }
   }

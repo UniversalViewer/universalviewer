@@ -1,7 +1,7 @@
-import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
+import BaseShareDialogue = require("../../modules/uv-dialogues-module/ShareDialogue");
 import IPDFExtension = require("./IPDFExtension");
 
-class EmbedDialogue extends BaseEmbedDialogue {
+class ShareDialogue extends BaseShareDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -9,7 +9,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
     create(): void {
 
-        this.setConfig('embedDialogue');
+        this.setConfig('shareDialogue');
 
         super.create();
     }
@@ -31,4 +31,4 @@ class EmbedDialogue extends BaseEmbedDialogue {
     }
 }
 
-export = EmbedDialogue;
+export = ShareDialogue;

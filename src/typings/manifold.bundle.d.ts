@@ -682,6 +682,7 @@ declare module Manifesto {
         getLogo(): string;
         getLicense(): string;
         getNavDate(): Date;
+        getRelated(): any;
         getSeeAlso(): any;
         getLabel(): string;
         getTree(): ITreeNode;
@@ -1023,6 +1024,7 @@ declare module Manifesto {
         getLicense(): string;
         getLogo(): string;
         getNavDate(): Date;
+        getRelated(): any;
         getSeeAlso(): any;
         getTree(): ITreeNode;
         index: number;
@@ -1287,6 +1289,7 @@ declare namespace Manifold {
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+        getRelated(): any;
         getResources(): Manifesto.IAnnotation[];
         getSearchWithinService(): Manifesto.IService;
         getSeeAlso(): any;
@@ -1301,6 +1304,7 @@ declare namespace Manifold {
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         hasParentCollection(): boolean;
+        hasRelatedPage(): boolean;
         hasResources(): boolean;
         isBottomToTop(): boolean;
         isCanvasIndexOutOfRange(index: number): boolean;
@@ -1380,6 +1384,7 @@ declare namespace Manifold {
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
         getRangeCanvases(range: Manifesto.IRange): Manifesto.ICanvas[];
+        getRelated(): any;
         getResources(): Manifesto.IAnnotation[];
         getSearchWithinService(): Manifesto.IService;
         getSeeAlso(): any;
@@ -1393,6 +1398,7 @@ declare namespace Manifold {
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): Manifesto.ViewingHint;
         hasParentCollection(): boolean;
+        hasRelatedPage(): boolean;
         hasResources(): boolean;
         isBottomToTop(): boolean;
         isCanvasIndexOutOfRange(index: number): boolean;

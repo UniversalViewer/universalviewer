@@ -5,177 +5,89 @@
 
         color: @text-secondary-color;
 
-        &.embed{
-            width: 470px;
+        &.share{
+            width: 260px;
             padding: 0 0 30px 8px;
 
             .middle{
+                .content{
+                    .tabs{
+                        padding: @padding-small-vertical 0 0 0;
+                        line-height: normal;
+                        font-size: 0px;
 
-                .firstRow{
-                    overflow: hidden;
-
-                    margin: 0 0 @margin-small-vertical 0;
-
-                    .leftCol{
-                        float: left;
-
-                        img.share{
-                            margin: @margin-small-vertical 0 @margin-small-vertical 0;
-                            width: 50px;
-                            height: 50px;
-                        }
-                    }
-
-                    .rightCol{
-                        float: left;
-                        margin-left: 10px;
-                        width: 380px;
-
-                        .url {
-                            width: 100%;
-                            font-size: @font-size-small;
-                            border: 1px solid @gray-light;
-                        }
-
-                        p {
-                            padding: @padding-small-vertical 0px @padding-small-vertical 0px;
-                        }
-                    }
-                }
-
-                .secondRow{
-                    textarea.code {
-                        width: 100%;
-                        height: 90px;
-                        background: @gray-lighter;
-                        border: 1px solid @gray-light;
-                        font-size: @font-size-small;
-                    }
-
-                    .sizes{
-                        height: 105px;
-                        margin: 10px 0 0 0;
-
-                        p{
-                            margin: 5px 0 0 0;
-                            padding: 0;
-                            font-size: 12px;
+                        .tab{
+                            line-height: normal;
+                            color: @text-secondary-color;
+                            font-size: @font-size-base;
+                            display: inline-block;
                             text-align: center;
+                            line-height: 22px;
+                            height: 22px;
+                            overflow: hidden;
+                            width: 75px;
+                            margin: 0;
+                            cursor: pointer;
+
+                            &.first{
+                                margin: 0 0 0 @margin-medium-horizontal;
+                            }
+
+                            &.on{
+                                border-bottom: 1px solid @panel-dark-bg;
+                                color: @brand-secondary;
+                                margin-bottom: -1px;
+                                height: 23px;
+                                line-height: 23px;
+                            }
+
+                            .btn-focus();
                         }
                     }
 
-                    .size{
-                        border: 1px solid @gray-light;
-                        float: left;
-                        margin: 0 10px 0 0;
+                    .tabsContent{
+                        padding: @padding-medium-vertical 0 @padding-small-vertical 0;
+                        border-top: 1px solid @gray-lighter;
 
-                        &.selected{
-                            border: 1px solid @brand-secondary;
-                            background: lighten(@brand-secondary, 30%); // was #FFF4DD
-
-                            p{
-                                font-weight: bold;
-                            }
-
-                            .box{
-                                background: #fff;
+                        .shareView{
+                            .url {
+                                .single-line-code();
                             }
                         }
-
-                        .box{
-                            background: #CCCCCC;
-                            margin: 5px 10px 10px 10px;
-                        }
-
-                        &.small{
-                            height: 80px;
-                            width: 80px;
-                            cursor: pointer;
-
-                            .box{
-                                height: 45px;
-                            }
-                        }
-
-                        &.medium{
-                            height: 90px;
-                            width: 90px;
-                            cursor: pointer;
-
-                            .box{
-                                height: 55px;
-                            }
-                        }
-
-                        &.large{
-                            height: 100px;
-                            width: 100px;
-                            cursor: pointer;
-
-                            .box{
-                                height: 65px;
-                            }
-                        }
-
-                        &.custom{
-                            width: 140px;
-                            height: 100px;
-                            margin: 0;
-
-                            p{
-                                margin: 12px 0 0 0;
+                        
+                        .embedView{
+                            .code {
+                                .single-line-code();
                             }
 
-                            .wrap{
-                                width: 135px;
-                                margin: 10px 0 0 15px;
-                                padding: 0;
-                                max-width: none;
+                            .customSize{
+                                overflow: hidden;
+                                padding-top: @padding-medium-vertical;
+                                
+                                .size{
+                                    padding: 0 @padding-small-horizontal 0 0;
+                                }
 
-                                .height{
-                                    margin: 5px 0 0 0;
+                                .x{
+                                    padding: 0 @padding-small-horizontal 0 @padding-small-horizontal;
+                                }
+
+                                select {
+                                    margin-right: @margin-small-horizontal;
+                                    height: 21px;
+                                    font-size: 11px;
+                                }
+
+                                input {
+                                    display: inline-block;
+                                    width: 50px;
+                                    height: 21px;
+                                    font-size: 11px;
                                 }
                             }
-
-                            label{
-                                margin: 0;
-                                padding: 0 5px 0 0;
-                                display: inline-block;
-                                float: none;
-                                clear: none;
-                                text-align: right;
-                                line-height: 16px;
-                                font-size: @font-size-small;
-                                width: 35px;
-                            }
-
-                            input{
-                                width: 50px;
-                                line-height: 12px;
-                                height: 18px;
-                                display: inline-block;
-                                margin: 0;
-                                padding: 0;
-                                font-size: @font-size-small;
-                            }
-
-                            span{
-                                margin: 0;
-                                padding: 0 0 0 5px;
-                                display: inline-block;
-                            }
                         }
                     }
-                }
-            }
-
-            .copyToClipboard{
-                overflow: auto;
-
-                .btn{
-                    float: right;
-                    margin: 10px 0 0 0;
-                }
+                }                
             }
         }
 

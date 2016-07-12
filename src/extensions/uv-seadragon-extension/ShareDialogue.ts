@@ -1,10 +1,10 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
+import BaseShareDialogue = require("../../modules/uv-dialogues-module/ShareDialogue");
 import Commands = require("./Commands");
 import ISeadragonExtension = require("./ISeadragonExtension");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 
-class EmbedDialogue extends BaseEmbedDialogue {
+class ShareDialogue extends BaseShareDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -19,7 +19,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
     }
 
     create(): void {
-        this.setConfig('embedDialogue');
+        this.setConfig('shareDialogue');
         super.create();
     }
 
@@ -45,4 +45,4 @@ class EmbedDialogue extends BaseEmbedDialogue {
     }
 }
 
-export = EmbedDialogue;
+export = ShareDialogue;

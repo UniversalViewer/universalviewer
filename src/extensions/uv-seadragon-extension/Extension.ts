@@ -6,7 +6,7 @@ import Commands = require("./Commands");
 import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
 import CroppedImageDimensions = require("./CroppedImageDimensions");
 import DownloadDialogue = require("./DownloadDialogue");
-import EmbedDialogue = require("./EmbedDialogue");
+import ShareDialogue = require("./ShareDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
 import ExternalResource = Manifesto.IExternalResource;
 import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
@@ -35,14 +35,14 @@ import TreeView = require("../../modules/uv-contentleftpanel-module/TreeView");
 class Extension extends BaseExtension implements ISeadragonExtension {
 
     $downloadDialogue: JQuery;
-    $embedDialogue: JQuery;
+    $shareDialogue: JQuery;
     $externalContentDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: SeadragonCenterPanel;
     currentRotation: number = 0;
     downloadDialogue: DownloadDialogue;
-    embedDialogue: EmbedDialogue;
+    shareDialogue: ShareDialogue;
     externalContentDialogue: ExternalContentDialogue;
     footerPanel: FooterPanel;
     headerPanel: PagingHeaderPanel;
@@ -319,9 +319,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
-        this.$embedDialogue = $('<div class="overlay embed"></div>');
-        Shell.$overlays.append(this.$embedDialogue);
-        this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+        this.$shareDialogue = $('<div class="overlay share"></div>');
+        Shell.$overlays.append(this.$shareDialogue);
+        this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download"></div>');
         Shell.$overlays.append(this.$downloadDialogue);

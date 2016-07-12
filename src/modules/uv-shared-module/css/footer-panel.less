@@ -19,8 +19,13 @@
                     line-height: 22px;
                 }
 
-                &.embed{
+                &.share{
                     .icon-left(url('@{img-path}share.png'), 21px, 35px);
+                    line-height: 22px;
+                }
+
+                &.embed{
+                    .icon-left(url('@{img-path}embed.png'), 21px, 35px);
                     line-height: 22px;
                 }
 
@@ -94,6 +99,12 @@
                     }
                     
                     &.print{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
+
+                    &.share{
                         .hide-text();
                         width: 27px;
                         padding: 0;

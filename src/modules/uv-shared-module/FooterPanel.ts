@@ -6,6 +6,7 @@ class FooterPanel extends BaseView {
     $feedbackButton: JQuery;
     $bookmarkButton: JQuery;
     $downloadButton: JQuery;
+    $shareButton: JQuery;
     $embedButton: JQuery;
     $openButton: JQuery;
     $fullScreenBtn: JQuery;
@@ -40,9 +41,12 @@ class FooterPanel extends BaseView {
         this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '">' + this.content.bookmark + '</a>');
         this.$options.prepend(this.$bookmarkButton);
 
+        this.$shareButton = $('<a href="#" class="share" title="' + this.content.share + '">' + this.content.share + '</a>');
+        this.$options.append(this.$shareButton);
+        this.$shareButton.attr('tabindex', '6');
+
         this.$embedButton = $('<a href="#" class="embed" title="' + this.content.embed + '">' + this.content.embed + '</a>');
         this.$options.append(this.$embedButton);
-        this.$embedButton.attr('tabindex', '6');
 
         this.$downloadButton = $('<a class="download" title="' + this.content.download + '">' + this.content.download + '</a>');
         this.$options.prepend(this.$downloadButton);
@@ -50,6 +54,7 @@ class FooterPanel extends BaseView {
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
         this.$fullScreenBtn.attr('tabindex', '5');
+        
 
         this.$openButton.onPressed(() => {
             $.publish(BaseCommands.OPEN);
@@ -61,6 +66,10 @@ class FooterPanel extends BaseView {
 
         this.$bookmarkButton.onPressed(() => {
             $.publish(BaseCommands.BOOKMARK);
+        });
+
+        this.$shareButton.onPressed(() => {
+            $.publish(BaseCommands.SHOW_SHARE_DIALOGUE);
         });
 
         this.$embedButton.onPressed(() => {
@@ -88,6 +97,7 @@ class FooterPanel extends BaseView {
         this.updateEmbedButton();
         this.updateDownloadButton();
         this.updateFullScreenButton();
+        this.updateShareButton();
 
         if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
@@ -125,10 +135,18 @@ class FooterPanel extends BaseView {
     }
 
     updateEmbedButton(): void {
-        if (this.extension.helper.isUIEnabled('embed')){
+        if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)){
             this.$embedButton.show();
         } else {
             this.$embedButton.hide();
+        }
+    }
+
+    updateShareButton(): void {
+        if (this.extension.helper.isUIEnabled('share') && Utils.Bools.getBool(this.options.shareEnabled, true)){
+            this.$shareButton.show();
+        } else {
+            this.$shareButton.hide();
         }
     }
 

@@ -1,7 +1,7 @@
-import BaseEmbedDialogue = require("../../modules/uv-dialogues-module/EmbedDialogue");
-import IMediaElementExtension = require("./IMediaElementExtension");
+import BaseShareDialogue = require("../../modules/uv-dialogues-module/ShareDialogue");
+import IVirtexExtension = require("./IVirtexExtension");
 
-class EmbedDialogue extends BaseEmbedDialogue {
+class ShareDialogue extends BaseShareDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -9,7 +9,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
     create(): void {
         
-        this.setConfig('embedDialogue');
+        this.setConfig('shareDialogue');
         
         super.create();
     }
@@ -18,7 +18,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
         super.update();
 
-        this.code = (<IMediaElementExtension>this.extension).getEmbedScript(
+        this.code = (<IVirtexExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight);
@@ -28,8 +28,7 @@ class EmbedDialogue extends BaseEmbedDialogue {
 
     resize(): void {
         super.resize();
-
     }
 }
 
-export = EmbedDialogue;
+export = ShareDialogue;

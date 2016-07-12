@@ -694,11 +694,24 @@ class BaseExtension implements IExtension {
     }
 
     getShareUrl(): string {
-        if (Utils.Documents.isInIFrame() && this.isDeepLinkingEnabled()){
-            return parent.document.location.href;
+        // If embedded on the home domain and it's the only instance of the UV on the page
+        if (this.isDeepLinkingEnabled()){
+            // Use the current page URL with hash params
+            if (Utils.Documents.isInIFrame()){
+                return parent.document.location.href;
+            } else {
+                return document.location.href;
+            }            
+        } else {
+            // If there's a `related` property of format `text/html` in the manifest
+            if (this.helper.hasRelatedPage()){
+                // Use the `related` property in the URL box
+                var related: any = this.helper.getRelated();
+                return related['@id'];
+            }
         }
 
-        return document.location.href;
+        return null;
     }
 
     addTimestamp(uri: string): string{

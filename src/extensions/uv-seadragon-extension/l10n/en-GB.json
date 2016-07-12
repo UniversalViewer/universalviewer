@@ -57,15 +57,6 @@
         "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)"
       }
     },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Custom Size",
-        "height": "Height",
-        "instructions": "To embed this item in your own website, copy and paste the code below.",
-        "title": "Share",
-        "width": "Width"
-      }
-    },
     "footerPanel": {
       "content": {
         "bookmark": "Add to bookmarks",
@@ -74,7 +65,8 @@
         "feedback": "Feedback",
         "exitFullScreen": "Exit Full Screen",
         "fullScreen": "Full Screen",
-        "open": "Open"
+        "open": "Open",
+        "share": "Share"
       }
     },
     "genericDialogue": {
@@ -195,6 +187,17 @@
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "custom",
+        "height": "Height",
+        "instructions": "To embed this item in your own website, copy and paste the code below.",
+        "share": "Share",
+        "embed": "Embed",
+        "width": "Width",
+        "size": "Size:"
       }
     }
   }
