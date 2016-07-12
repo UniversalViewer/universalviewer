@@ -157,6 +157,7 @@ class ShareDialogue extends Dialogue {
             this.$url.val(shareUrl);
         } else {
             this.$shareButton.hide();
+            this.openEmbedView();
         }
 
         var $selected: JQuery = this.getSelectedSize();
