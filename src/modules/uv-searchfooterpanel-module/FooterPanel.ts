@@ -137,6 +137,17 @@ class FooterPanel extends BaseFooterPanel {
             this.search(this.$searchText.val());
         });
 
+        this.$searchText.on('keydown', (e) => {
+            if(e.which == 13 || e.keyCode == 13){
+              e.preventDefault();
+              var v = this.$searchText.val();
+              if ( v != undefined && v != null && v != ''){
+                this.search(v);
+              }
+              return false;
+            }
+        });
+
         this.$searchText.on('focus', () => {
             // clear initial text.
             if (this.$searchText.val() === this.content.enterKeyword) this.$searchText.val('');
