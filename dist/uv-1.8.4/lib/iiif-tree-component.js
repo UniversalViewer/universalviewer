@@ -243,7 +243,7 @@ var IIIFComponents;
         TreeComponent.prototype._resize = function () {
         };
         return TreeComponent;
-    }(Components.BaseComponent));
+    }(_Components.BaseComponent));
     IIIFComponents.TreeComponent = TreeComponent;
 })(IIIFComponents || (IIIFComponents = {}));
 var IIIFComponents;

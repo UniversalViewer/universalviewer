@@ -45,7 +45,12 @@ class ShareDialogue extends Dialogue {
 
         $.subscribe(this.openCommand, (e, params) => {
             this.open();
-            this.openShareView();
+
+            if (this.isShareAvailable()){
+                this.openShareView();
+            } else {
+                this.openEmbedView();
+            }
         });
 
         $.subscribe(this.closeCommand, (e) => {
