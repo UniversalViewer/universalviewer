@@ -315,14 +315,14 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$pagingToggleButton.hide();
         }
 
-        if (this.options.enablePagingButtons === false){
+        if (this.options.pagingButtonsEnabled === false){
             this.$firstButton.hide();
             this.$prevButton.hide();
             this.$nextButton.hide();
             this.$lastButton.hide();
         }
 
-        if (this.options.enableSearch === false){
+        if (this.options.searchEnabled === false){
             this.$search.hide();
         }
     }
