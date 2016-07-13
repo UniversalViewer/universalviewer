@@ -1,7 +1,7 @@
 // iiif-tree-component v1.0.1 https://github.com/edsilv/iiif-tree-component#readme
 
 declare namespace IIIFComponents {
-    interface ITreeComponent extends Components.IBaseComponent {
+    interface ITreeComponent extends _Components.IBaseComponent {
         getNodeById(id: string): Manifold.ITreeNode;
         selectNode(node: any): void;
         updateMultiSelectState(state: Manifold.MultiSelectState): void;
@@ -9,12 +9,12 @@ declare namespace IIIFComponents {
 }
 
 declare namespace IIIFComponents {
-    interface ITreeComponentOptions extends Components.IBaseComponentOptions {
+    interface ITreeComponentOptions extends _Components.IBaseComponentOptions {
     }
 }
 
 declare namespace IIIFComponents {
-    class TreeComponent extends Components.BaseComponent implements ITreeComponent {
+    class TreeComponent extends _Components.BaseComponent implements ITreeComponent {
         options: ITreeComponentOptions;
         private _$tree;
         private _allNodes;

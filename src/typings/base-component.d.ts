@@ -1,10 +1,10 @@
 // base-component v1.0.1 https://github.com/edsilv/base-component#readme
 interface Window {
-    Components: any;
+    _Components: any;
 }
 
 declare var TinyEmitter: any;
-declare namespace Components {
+declare namespace _Components {
     class BaseComponent implements IBaseComponent {
         options: IBaseComponentOptions;
         protected _$element: JQuery;
@@ -18,14 +18,14 @@ declare namespace Components {
     function applyMixins(derivedCtor: any, baseCtors: any[]): void;
 }
 
-declare namespace Components {
+declare namespace _Components {
     interface IBaseComponent {
         options: IBaseComponentOptions;
         databind(data: any): void;
     }
 }
 
-declare namespace Components {
+declare namespace _Components {
     interface IBaseComponentOptions {
         element?: string;
     }

@@ -509,8 +509,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
     print(): void {
         var args: PrintArgs = new PrintArgs();
-        args.ids = "all";
-        args.mimeType = this.config.options.printMimeType;
+        args.manifestUri = this.helper.iiifResourceUri;
+        args.allCanvases = true;
+        args.format = this.config.options.printMimeType;
         this.triggerSocket(Commands.PRINT, args);
     }
 

@@ -1,6 +1,8 @@
 class PrintArgs {
-    ids: string[] | string;
-    mimeType: string;
+    allCanvases: boolean;
+    canvases: string[];
+    format: string;
+    manifestUri: string;
 }
 
 export = PrintArgs;

@@ -149,15 +149,21 @@ class ShareDialogue extends Dialogue {
         this.update();
     }
 
-    update(): void {
-        var shareUrl: string = this.extension.getShareUrl();
+    getShareUrl(): string {
+        return this.extension.getShareUrl();
+    }
 
-        if (shareUrl){
+    isShareAvailable(): boolean {
+        return this.getShareUrl() !== "";
+    }
+
+    update(): void {
+
+        if (this.isShareAvailable()){
             this.$shareButton.show();
-            this.$url.val(shareUrl);
+            this.$url.val(this.getShareUrl());
         } else {
             this.$shareButton.hide();
-            this.openEmbedView();
         }
 
         var $selected: JQuery = this.getSelectedSize();
