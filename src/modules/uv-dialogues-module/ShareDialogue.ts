@@ -159,7 +159,7 @@ class ShareDialogue extends Dialogue {
     }
 
     isShareAvailable(): boolean {
-        return this.getShareUrl() !== "";
+        return !!this.getShareUrl();
     }
 
     update(): void {
