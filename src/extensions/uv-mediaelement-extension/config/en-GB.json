@@ -3,6 +3,7 @@
   {
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
+    "dropEnabled": true,
     "leftPanelEnabled": true,
     "limitLocales": false,
     "minWidthBreakPoint": 610,

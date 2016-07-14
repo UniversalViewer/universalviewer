@@ -137,7 +137,8 @@ class BaseExtension implements IExtension {
                 });
             }
 
-            this.$element.on('drop', (e => {
+            if (Utils.Bools.getBool(this.config.options.dropEnabled, true)){
+                this.$element.on('drop', (e => {
                 e.preventDefault();
                 var dropUrl = (<any>e.originalEvent).dataTransfer.getData("URL");
                 var url = Utils.Urls.getUrlParts(dropUrl);
@@ -152,6 +153,7 @@ class BaseExtension implements IExtension {
                     this.reload(p);
                 }
             }));
+            }
 
             this.$element.on('dragover', (e => {
                 // allow drop
