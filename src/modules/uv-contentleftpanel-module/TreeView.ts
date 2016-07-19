@@ -33,7 +33,7 @@ class TreeView extends BaseView {
             element: ".views .treeView"
         });
 
-        // todo: casting as <any> is necessary because IBaseComponent doesn't implement IEventEmitter2
+        // todo: casting as <any> is necessary because IBaseComponent doesn't implement ITinyEmitter
         // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
         // to implement it in BaseComponent.
 

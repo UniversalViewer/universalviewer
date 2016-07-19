@@ -126,7 +126,7 @@ class ThumbsView extends BaseView {
 
             that.lastThumbClickedIndex = data.index;
 
-            $.publish(BaseCommands.THUMB_SELECTED, [data.index]);
+            $.publish(BaseCommands.THUMB_SELECTED, [data]);
         });
 
         this.selectIndex(this.extension.helper.canvasIndex);

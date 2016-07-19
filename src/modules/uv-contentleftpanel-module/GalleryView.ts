@@ -196,7 +196,7 @@ class GalleryView extends BaseView {
                 e.preventDefault();
                 var data = $.view(this).data;
                 that.lastThumbClickedIndex = data.index;
-                $.publish(BaseCommands.THUMB_SELECTED, [data.index]);
+                $.publish(BaseCommands.THUMB_SELECTED, [data]);
             });
         } else {
             // make each thumb a checkboxButton

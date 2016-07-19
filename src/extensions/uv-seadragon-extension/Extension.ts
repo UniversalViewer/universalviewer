@@ -13,6 +13,7 @@ import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPa
 import GalleryView = require("../../modules/uv-contentleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("./ISeadragonExtension");
+import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import Mode = require("./Mode");
@@ -261,8 +262,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
-            this.viewPage(index);
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
+            this.viewPage(thumb.index);
         });
 
         $.subscribe(Commands.TREE_NODE_SELECTED, (e, node: ITreeNode) => {

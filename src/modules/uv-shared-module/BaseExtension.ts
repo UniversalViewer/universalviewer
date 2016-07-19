@@ -10,6 +10,7 @@ import Information = require("./Information");
 import InformationAction = require("./InformationAction");
 import InformationArgs = require("./InformationArgs");
 import InformationType = require("./InformationType");
+import IThumb = Manifold.IThumb;
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import LoginWarningMessages = require("./LoginWarningMessages");
 import Params = require("../../Params");
@@ -495,8 +496,8 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
-            this.triggerSocket(BaseCommands.THUMB_SELECTED, canvasIndex);
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
+            this.triggerSocket(BaseCommands.THUMB_SELECTED, thumb.index);
         });
 
         $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
