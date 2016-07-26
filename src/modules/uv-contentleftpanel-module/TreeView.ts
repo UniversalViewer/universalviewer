@@ -74,6 +74,10 @@ class TreeView extends BaseView {
         this.component.selectNode(node);
     }
 
+    public deselectCurrentNode(): void {
+        this.component.deselectCurrentNode();
+    }
+
     public getNodeById(id: string): ITreeNode {
         return this.component.getNodeById(id);
     }

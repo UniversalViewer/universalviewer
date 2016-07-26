@@ -402,11 +402,16 @@ class ContentLeftPanel extends LeftPanel {
         this.updateMultiSelectState();
     }
 
-    getTreeData(): ITreeNode {
+    getSelectedTopRangeIndex(): number {
         var topRangeIndex: number = this.$treeSelect.find(':selected').index();
         if (topRangeIndex === -1){
             topRangeIndex = 0;
         }
+        return topRangeIndex;
+    }
+
+    getTreeData(): ITreeNode {
+        var topRangeIndex: number = this.getSelectedTopRangeIndex();
         return this.extension.helper.getTree(topRangeIndex, Manifold.TreeSortType.NONE);
     }
 
@@ -519,11 +524,6 @@ class ContentLeftPanel extends LeftPanel {
 
         this.treeView.show();
 
-        setTimeout(() => {
-            var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas());
-            if (this.treeView && range && range.treeNode) this.treeView.selectNode(range.treeNode);
-        }, 1);
-
         if (this.thumbsView) this.thumbsView.hide();
         if (this.galleryView) this.galleryView.hide();
 
@@ -567,6 +567,10 @@ class ContentLeftPanel extends LeftPanel {
         }
     }
 
+    selectTopRangeIndex(index: number): void {
+        this.$treeSelect.prop('selectedIndex', index);
+    }
+
     selectCurrentTreeNode(): void{
         if (this.treeView) {
 
@@ -576,12 +580,20 @@ class ContentLeftPanel extends LeftPanel {
             // try finding a range first
             var rangePath: string = this.extension.currentRange ? this.extension.currentRange.path : '';
             var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas(), rangePath);
+            //var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas());
 
             if (range){
-                // todo: don't use the treenode id. these can be the same for multiple trees.
-                // use the range path
-                id = range.treeNode.id;
-                node = this.treeView.getNodeById(id);
+
+                // if the current selected top range isn't the correct one              
+                var topRangeIndex: number = Number(range.path.split('/')[0]);
+                var selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
+
+                if (topRangeIndex != selectedTopRangeIndex){
+                    this.selectTopRangeIndex(topRangeIndex);
+                    this.databindTreeView();
+                }
+
+                node = this.treeView.getNodeById(range.treeNode.id);
             }
 
             // use manifest root node
@@ -592,6 +604,8 @@ class ContentLeftPanel extends LeftPanel {
 
             if (node){
                 this.treeView.selectNode(node);
+            } else {
+                this.treeView.deselectCurrentNode();
             }
         }
     }

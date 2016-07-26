@@ -364,6 +364,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         // if it's a valid canvas index.
         if (canvasIndex === -1) return;
 
+        // reset currentRange
+        this.currentRange = null;
+
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
             this.showMessage(this.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
@@ -418,7 +421,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         if (!range) return;
         this.currentRange = range;
         var canvasId: string = range.getCanvasIds()[0];
-        var index = this.helper.getCanvasIndexById(canvasId);
+        var index: number = this.helper.getCanvasIndexById(canvasId);
         this.viewPage(index);
     }
 
