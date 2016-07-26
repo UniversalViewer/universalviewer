@@ -13,6 +13,7 @@ import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPa
 import GalleryView = require("../../modules/uv-contentleftpanel-module/GalleryView");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("./ISeadragonExtension");
+import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import Mode = require("./Mode");
@@ -261,8 +262,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, index: number) => {
-            this.viewPage(index);
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
+            this.viewPage(thumb.index);
         });
 
         $.subscribe(Commands.TREE_NODE_SELECTED, (e, node: ITreeNode) => {
@@ -363,6 +364,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         // if it's a valid canvas index.
         if (canvasIndex === -1) return;
 
+        // reset currentRange
+        this.currentRange = null;
+
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
             this.showMessage(this.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
@@ -417,7 +421,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         if (!range) return;
         this.currentRange = range;
         var canvasId: string = range.getCanvasIds()[0];
-        var index = this.helper.getCanvasIndexById(canvasId);
+        var index: number = this.helper.getCanvasIndexById(canvasId);
         this.viewPage(index);
     }
 

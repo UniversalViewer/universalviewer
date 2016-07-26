@@ -1,7 +1,8 @@
-// iiif-tree-component v1.0.1 https://github.com/edsilv/iiif-tree-component#readme
+// iiif-tree-component v1.0.1 https://github.com/viewdir/iiif-tree-component#readme
 
 declare namespace IIIFComponents {
     interface ITreeComponent extends _Components.IBaseComponent {
+        deselectCurrentNode(): void;
         getNodeById(id: string): Manifold.ITreeNode;
         selectNode(node: any): void;
         updateMultiSelectState(state: Manifold.MultiSelectState): void;

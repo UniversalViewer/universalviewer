@@ -196,7 +196,7 @@ class GalleryView extends BaseView {
                 e.preventDefault();
                 var data = $.view(this).data;
                 that.lastThumbClickedIndex = data.index;
-                $.publish(BaseCommands.THUMB_SELECTED, [data.index]);
+                $.publish(BaseCommands.THUMB_SELECTED, [data]);
             });
         } else {
             // make each thumb a checkboxButton
@@ -225,7 +225,7 @@ class GalleryView extends BaseView {
             var thumb: IThumb = this.thumbs[i];
             var canvas: ICanvas = thumb.data;
 
-            var r: IRange = <IRange>this.extension.helper.getCanvasRange(canvas);
+            var r: IRange = <IRange>this.extension.helper.getCanvasRange(canvas, range.path);
 
             if (r && r.id === range.id){
                 thumbs.push(thumb);
