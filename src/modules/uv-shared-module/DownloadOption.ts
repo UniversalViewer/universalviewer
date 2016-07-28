@@ -6,6 +6,7 @@ class DownloadOption {
     static entireFileAsOriginal = new DownloadOption("entireFileAsOriginal");
     static selection = new DownloadOption("selection");
     static wholeImageHighRes = new DownloadOption("wholeImageHighRes");
+    static wholeImagesHighRes = new DownloadOption("wholeImagesHighRes");
     static wholeImageLowResAsJpg = new DownloadOption("wholeImageLowResAsJpg");
 
     constructor(public value: string) {

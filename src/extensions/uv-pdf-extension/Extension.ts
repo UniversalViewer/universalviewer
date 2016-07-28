@@ -78,7 +78,11 @@ class Extension extends BaseExtension implements IPDFExtension {
     createModules(): void{
         super.createModules();
 
-        this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        if (this.isHeaderPanelEnabled()){
+            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        } else {
+            Shell.$headerPanel.hide();
+        }
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
@@ -90,7 +94,11 @@ class Extension extends BaseExtension implements IPDFExtension {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        if (this.isFooterPanelEnabled()){
+            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        } else {
+            Shell.$footerPanel.hide();
+        }
 
         this.$downloadDialogue = $('<div class="overlay download"></div>');
         Shell.$overlays.append(this.$downloadDialogue);

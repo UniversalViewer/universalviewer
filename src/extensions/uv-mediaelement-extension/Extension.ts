@@ -83,7 +83,11 @@ class Extension extends BaseExtension implements IMediaElementExtension {
     createModules(): void{
         super.createModules();
 
-        this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        if (this.isHeaderPanelEnabled()){
+            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        } else {
+            Shell.$headerPanel.hide();
+        }
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
@@ -95,7 +99,11 @@ class Extension extends BaseExtension implements IMediaElementExtension {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        if (this.isFooterPanelEnabled()){
+            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        } else {
+            Shell.$footerPanel.hide();
+        }
 
         this.$helpDialogue = $('<div class="overlay help"></div>');
         Shell.$overlays.append(this.$helpDialogue);

@@ -52,6 +52,7 @@
         "preview": "Rhagolwg",
         "title": "Lawrlwytho",
         "wholeImageHighRes": "Delwedd gyfan {0} x {1}px ({2})",
+        "wholeImagesHighRes": "Delweddau gyfan ({0})",
         "wholeImageLowResAsJpg": "Delwedd gyfan {0} x {1}px (jpg)"
       }
     },

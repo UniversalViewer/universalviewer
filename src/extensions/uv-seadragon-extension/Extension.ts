@@ -298,7 +298,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     createModules(): void{
         super.createModules();
 
-        this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
+        if (this.isHeaderPanelEnabled()){
+            this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
+        } else {
+            Shell.$headerPanel.hide();
+        }
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
@@ -314,7 +318,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             Shell.$rightPanel.hide();
         }
 
-        this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        if (this.isFooterPanelEnabled()){
+            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        } else {
+            Shell.$footerPanel.hide();
+        }
 
         this.$helpDialogue = $('<div class="overlay help"></div>');
         Shell.$overlays.append(this.$helpDialogue);
@@ -336,12 +344,20 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         Shell.$overlays.append(this.$externalContentDialogue);
         this.externalContentDialogue = new ExternalContentDialogue(this.$externalContentDialogue);
 
+        if (this.isHeaderPanelEnabled()){
+            this.headerPanel.init();
+        }
+
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         }
 
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
+        }
+
+        if (this.isFooterPanelEnabled()){
+            this.footerPanel.init();
         }
     }
 
@@ -516,6 +532,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         args.manifestUri = this.helper.iiifResourceUri;
         args.allCanvases = true;
         args.format = this.config.options.printMimeType;
+        args.sequence = this.helper.getCurrentSequence().id;
         this.triggerSocket(Commands.PRINT, args);
     }
 

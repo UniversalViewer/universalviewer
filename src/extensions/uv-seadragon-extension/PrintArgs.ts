@@ -3,6 +3,7 @@ class PrintArgs {
     canvases: string[];
     format: string;
     manifestUri: string;
+    sequence: string;
 }
 
 export = PrintArgs;
