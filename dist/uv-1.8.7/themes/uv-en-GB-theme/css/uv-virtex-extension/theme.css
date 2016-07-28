@@ -1459,6 +1459,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .headerPanel .options {
   height: 40px;
+  background-color: #211f1f;
 }
 #app .headerPanel .options .centerOptions {
   margin: 5px 0 0 0;
@@ -2183,7 +2184,6 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .headerPanel {
   position: relative;
-  background-color: #211f1f;
   color: #fff;
   height: 40px;
 }
