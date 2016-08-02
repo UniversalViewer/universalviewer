@@ -70,7 +70,7 @@ class ContentLeftPanel extends LeftPanel {
             }
 
             this.selectCurrentTreeNode();
-            this.updateTreeTab();
+            this.updateTreeTabByCanvasIndex();
         });
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
@@ -206,6 +206,7 @@ class ContentLeftPanel extends LeftPanel {
 
         this.$treeSelect.change(() => {
             this.databindTreeView();
+            this.updateTreeTabBySelection();
         });
 
         this.$multiSelectOptions.hide();
@@ -358,16 +359,26 @@ class ContentLeftPanel extends LeftPanel {
         this.updateMultiSelectState();
     }
 
-    updateTreeTab(): void {
+    updateTreeTabByCanvasIndex(): void {
         // update tab to current top range label (if there is one)
         var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
         if (topRanges.length > 1){
             var index: number = this.getCurrentCanvasTopRangeIndex();
             var currentRange: Manifesto.IRange = topRanges[index];
-            this.$treeButton.text(currentRange.getLabel());
+            this.setTreeTabTitle(currentRange.getLabel());
         } else {
-            this.$treeButton.prop('title', this.content.index);
+            this.setTreeTabTitle(this.content.index);
         }
+    }
+
+    setTreeTabTitle(title: string): void {
+        this.$treeButton.text(title);
+        this.$treeButton.prop('title', title);
+    }
+
+    updateTreeTabBySelection(): void {
+        var title: string = this.getSelectedTree().text();
+        this.setTreeTabTitle(title);
     }
 
     createThumbsView(): void {
@@ -409,8 +420,12 @@ class ContentLeftPanel extends LeftPanel {
         this.updateMultiSelectState();
     }
 
+    getSelectedTree(): JQuery {
+        return this.$treeSelect.find(':selected');
+    }
+
     getSelectedTopRangeIndex(): number {
-        var topRangeIndex: number = this.$treeSelect.find(':selected').index();
+        var topRangeIndex: number = this.getSelectedTree().index();
         if (topRangeIndex === -1){
             topRangeIndex = 0;
         }
