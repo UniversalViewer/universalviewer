@@ -650,6 +650,8 @@
   width: 75px;
   margin: 0;
   cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
  #app .leftPanel .tabs .tab.first {
   margin: 0 0 0 10px;

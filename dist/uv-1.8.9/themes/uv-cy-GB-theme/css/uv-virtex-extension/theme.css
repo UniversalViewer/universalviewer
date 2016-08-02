@@ -293,6 +293,8 @@
   width: 75px;
   margin: 0;
   cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
  #app .leftPanel .tabs .tab.first {
   margin: 0 0 0 10px;
@@ -2215,8 +2217,20 @@ input[type=range]:focus::-ms-fill-upper {
   margin-left: 8px;
 }
 #app .headerPanel .options .centerOptions {
-  width: 390px;
+  width: 432px;
+}
+#app .headerPanel .options .centerOptions .prevOptions {
+  margin: 0 10px 0 0;
+}
+#app .headerPanel .options .centerOptions .mode label {
+  width: 42px;
+}
+#app .headerPanel .options .centerOptions .search {
+  width: 140px;
+}
+#app .headerPanel .options .centerOptions .nextOptions {
+  margin: 0 0 0 10px;
 }
 #app .footerPanel .searchPager .controls .searchResultsInfo {
-  width: 340px;
+  width: 290px;
 }

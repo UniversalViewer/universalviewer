@@ -459,6 +459,8 @@ module.exports = function (grunt) {
         //if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
+            'clean:bundle',
+            'concat:bundle',
             'uglify:bundle',
             'typescript:dist',
             'clean:extension',

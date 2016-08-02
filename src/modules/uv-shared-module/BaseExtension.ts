@@ -710,6 +710,9 @@ class BaseExtension implements IExtension {
             if (this.helper.hasRelatedPage()){
                 // Use the `related` property in the URL box
                 var related: any = this.helper.getRelated();
+                if (related.length){
+                    related = related[0];
+                }
                 return related['@id'];
             }
         }

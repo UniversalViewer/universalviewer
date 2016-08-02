@@ -70,6 +70,7 @@ class ContentLeftPanel extends LeftPanel {
             }
 
             this.selectCurrentTreeNode();
+            this.updateTreeTab();
         });
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
@@ -137,7 +138,6 @@ class ContentLeftPanel extends LeftPanel {
         this.$main.append(this.$tabs);
 
         this.$treeButton = $('<a class="index tab">' + this.content.index + '</a>');
-        this.$treeButton.prop('title', this.content.index);
         this.$tabs.append(this.$treeButton);
 
         this.$thumbsButton = $('<a class="thumbs tab">' + this.content.thumbnails + '</a>');
@@ -322,18 +322,13 @@ class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    getTopRangeIndex(): number {
-        var index: number = this.$treeSelect.find(':selected').index();
-        return index;
-    }
-
     updateMultiSelectState(): void {
         this.$selectAllButtonCheckbox.prop('checked', this.multiSelectState.allRangesSelected() && this.multiSelectState.allCanvasesSelected());
         $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
     }
 
     sortByDate(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(this.getTopRangeIndex(), Manifold.TreeSortType.DATE);
+        this.treeView.rootNode = this.extension.helper.getTree(this.getSelectedTopRangeIndex(), Manifold.TreeSortType.DATE);
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -342,7 +337,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByVolume(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(this.getTopRangeIndex(), Manifold.TreeSortType.NONE);
+        this.treeView.rootNode = this.extension.helper.getTree(this.getSelectedTopRangeIndex(), Manifold.TreeSortType.NONE);
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -361,6 +356,18 @@ class ContentLeftPanel extends LeftPanel {
         this.treeView.databind();
         // ensure tree has current multiselect state
         this.updateMultiSelectState();
+    }
+
+    updateTreeTab(): void {
+        // update tab to current top range label (if there is one)
+        var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        if (topRanges.length > 1){
+            var index: number = this.getCurrentCanvasTopRangeIndex();
+            var currentRange: Manifesto.IRange = topRanges[index];
+            this.$treeButton.text(currentRange.getLabel());
+        } else {
+            this.$treeButton.prop('title', this.content.index);
+        }
     }
 
     createThumbsView(): void {
@@ -571,27 +578,44 @@ class ContentLeftPanel extends LeftPanel {
         this.$treeSelect.prop('selectedIndex', index);
     }
 
+    getCurrentCanvasRange(): Manifesto.IRange {
+        var rangePath: string = this.extension.currentRange ? this.extension.currentRange.path : '';
+        var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas(), rangePath);
+        return range;
+    }
+
+    getCurrentCanvasTopRangeIndex(): number {
+        var topRangeIndex: number = -1;
+        
+        var range: Manifesto.IRange = this.getCurrentCanvasRange();
+        
+        if (range){
+            topRangeIndex = Number(range.path.split('/')[0]);
+        }
+        
+        return topRangeIndex;
+    }
+
     selectCurrentTreeNode(): void{
         if (this.treeView) {
 
             var id: string;
             var node: Manifesto.ITreeNode;
 
-            // try finding a range first
-            var rangePath: string = this.extension.currentRange ? this.extension.currentRange.path : '';
-            var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas(), rangePath);
-            //var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas());
+            var topRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
 
-            if (range){
+            if (topRangeIndex != -1){
 
                 // if the current selected top range isn't the correct one              
-                var topRangeIndex: number = Number(range.path.split('/')[0]);
+                
                 var selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
 
                 if (topRangeIndex != selectedTopRangeIndex){
                     this.selectTopRangeIndex(topRangeIndex);
                     this.databindTreeView();
                 }
+
+                var range: Manifesto.IRange = this.getCurrentCanvasRange();
 
                 node = this.treeView.getNodeById(range.treeNode.id);
             }
