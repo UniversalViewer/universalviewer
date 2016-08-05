@@ -70,7 +70,7 @@ class ContentLeftPanel extends LeftPanel {
             }
 
             this.selectCurrentTreeNode();
-            //this.updateTreeTabByCanvasIndex();
+            this.updateTreeTabBySelection();
         });
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
@@ -207,7 +207,7 @@ class ContentLeftPanel extends LeftPanel {
         this.$treeSelect.change(() => {
             this.databindTreeView();
             this.selectCurrentTreeNode()
-            //this.updateTreeTabBySelection();
+            this.updateTreeTabBySelection();
         });
 
         this.$multiSelectOptions.hide();
@@ -378,8 +378,17 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     updateTreeTabBySelection(): void {
-        var title: string = this.getSelectedTree().text();
-        this.setTreeTabTitle(title);
+        if (this.treeView){
+            var title: string = this.getSelectedTree().text();
+            this.setTreeTabTitle(title);
+        } else {
+            var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+            if (topRanges.length > 1){
+                this.setTreeTabTitle(topRanges[0].getLabel());
+            } else {
+                this.setTreeTabTitle(this.content.index);
+            }
+        }
     }
 
     createThumbsView(): void {

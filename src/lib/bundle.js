@@ -1406,14 +1406,22 @@ var Manifesto;
             _super.apply(this, arguments);
         }
         // todo: use getters when ES3 target is no longer required.
-        IIIFResourceType.prototype.manifest = function () {
-            return new IIIFResourceType(IIIFResourceType.MANIFEST.toString());
+        IIIFResourceType.prototype.canvas = function () {
+            return new IIIFResourceType(IIIFResourceType.CANVAS.toString());
         };
         IIIFResourceType.prototype.collection = function () {
             return new IIIFResourceType(IIIFResourceType.COLLECTION.toString());
         };
-        IIIFResourceType.MANIFEST = new IIIFResourceType("sc:manifest");
+        IIIFResourceType.prototype.manifest = function () {
+            return new IIIFResourceType(IIIFResourceType.MANIFEST.toString());
+        };
+        IIIFResourceType.prototype.range = function () {
+            return new IIIFResourceType(IIIFResourceType.RANGE.toString());
+        };
+        IIIFResourceType.CANVAS = new IIIFResourceType("sc:canvas");
         IIIFResourceType.COLLECTION = new IIIFResourceType("sc:collection");
+        IIIFResourceType.MANIFEST = new IIIFResourceType("sc:manifest");
+        IIIFResourceType.RANGE = new IIIFResourceType("sc:range");
         return IIIFResourceType;
     }(Manifesto.StringValue));
     Manifesto.IIIFResourceType = IIIFResourceType;
@@ -1761,6 +1769,9 @@ var Manifesto;
             _super.call(this, jsonld);
             this.options = options;
         }
+        ManifestResource.prototype.getIIIFResourceType = function () {
+            return new Manifesto.IIIFResourceType(this.getProperty('@type'));
+        };
         ManifestResource.prototype.getLabel = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
         };
@@ -1818,6 +1829,12 @@ var Manifesto;
         };
         ManifestResource.prototype.getServices = function () {
             return Manifesto.Utils.getServices(this);
+        };
+        ManifestResource.prototype.isCanvas = function () {
+            return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.CANVAS.toString();
+        };
+        ManifestResource.prototype.isRange = function () {
+            return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.RANGE.toString();
         };
         return ManifestResource;
     }(Manifesto.JSONLDResource));
@@ -2132,6 +2149,11 @@ var Manifesto;
             }
             return null;
         };
+        Manifest.prototype._parseRangeCanvas = function (json, range) {
+            // todo: currently this isn't needed
+            //var canvas: IJSONLDResource = new JSONLDResource(json);
+            //range.members.push(<IManifestResource>canvas);
+        };
         Manifest.prototype._parseRanges = function (r, path, parentRange) {
             var range;
             if (_isString(r)) {
@@ -2144,11 +2166,31 @@ var Manifesto;
                 this._topRanges.push(range);
             }
             else {
-                parentRange.ranges.push(range);
+                parentRange.members.push(range);
             }
             if (r.ranges) {
                 for (var j = 0; j < r.ranges.length; j++) {
                     this._parseRanges(r.ranges[j], path + '/' + j, range);
+                }
+            }
+            if (r.canvases) {
+                for (var k = 0; k < r.canvases.length; k++) {
+                    this._parseRangeCanvas(r.canvases[k], r);
+                }
+            }
+            if (r.members) {
+                for (var l = 0; l < r.members.length; l++) {
+                    var child = r.members[l];
+                    // only add to members if not already parsed from backwards-compatible ranges/canvases arrays
+                    if (r.members.en().where(function (m) { return m.id === child.id; }).first()) {
+                        continue;
+                    }
+                    if (child['@type'].toLowerCase() === 'sc:range') {
+                        this._parseRanges(child, path + '/' + l, range);
+                    }
+                    else if (child['@type'].toLowerCase() === 'sc:canvas') {
+                        this._parseRangeCanvas(child, r);
+                    }
                 }
             }
         };
@@ -2162,7 +2204,8 @@ var Manifesto;
                 if (topRange.id) {
                     this._allRanges.push(topRange); // it might be a placeholder root range
                 }
-                this._allRanges = this._allRanges.concat(topRange.ranges.en().traverseUnique(function (range) { return range.ranges; }).toArray());
+                var subRanges = topRange.getRanges();
+                this._allRanges = this._allRanges.concat(subRanges.en().traverseUnique(function (range) { return range.getRanges(); }).toArray());
             }
             return this._allRanges;
         };
@@ -2252,26 +2295,42 @@ var Manifesto;
         __extends(Collection, _super);
         function Collection(jsonld, options) {
             _super.call(this, jsonld, options);
-            this.collections = [];
-            this.manifests = [];
+            this.members = [];
+            this._collections = null;
+            this._manifests = null;
             jsonld.__collection = this;
         }
+        Collection.prototype.getCollections = function () {
+            if (this._collections) {
+                return this._collections;
+            }
+            return this._collections = this.members.en().where(function (m) { return m.isCollection(); }).toArray();
+        };
+        Collection.prototype.getManifests = function () {
+            if (this._manifests) {
+                return this._manifests;
+            }
+            return this._manifests = this.members.en().where(function (m) { return m.isManifest(); }).toArray();
+        };
         Collection.prototype.getCollectionByIndex = function (collectionIndex) {
-            var collection = this.collections[collectionIndex];
+            var collection = this.getCollections()[collectionIndex];
             collection.options.index = collectionIndex;
             // id for collection MUST be dereferenceable
             return collection.load();
         };
         Collection.prototype.getManifestByIndex = function (manifestIndex) {
-            var manifest = this.manifests[manifestIndex];
+            var manifest = this.getManifests()[manifestIndex];
             manifest.options.index = manifestIndex;
             return manifest.load();
         };
         Collection.prototype.getTotalCollections = function () {
-            return this.collections.length;
+            return this.getCollections().length;
         };
         Collection.prototype.getTotalManifests = function () {
-            return this.manifests.length;
+            return this.getManifests().length;
+        };
+        Collection.prototype.getTotalMembers = function () {
+            return this.members.length;
         };
         /**
          * Get a tree of sub collections and manifests, using each child manifest's first 'top' range.
@@ -2285,9 +2344,9 @@ var Manifesto;
             return this.defaultTree;
         };
         Collection.prototype._parseManifests = function (parentCollection) {
-            if (parentCollection.manifests && parentCollection.manifests.length) {
-                for (var i = 0; i < parentCollection.manifests.length; i++) {
-                    var manifest = parentCollection.manifests[i];
+            if (parentCollection.getManifests() && parentCollection.getManifests().length) {
+                for (var i = 0; i < parentCollection.getManifests().length; i++) {
+                    var manifest = parentCollection.getManifests()[i];
                     var tree = manifest.getDefaultTree();
                     tree.label = manifest.parentLabel || manifest.getLabel() || 'manifest ' + (i + 1);
                     tree.navDate = manifest.getNavDate();
@@ -2298,9 +2357,9 @@ var Manifesto;
             }
         };
         Collection.prototype._parseCollections = function (parentCollection) {
-            if (parentCollection.collections && parentCollection.collections.length) {
-                for (var i = 0; i < parentCollection.collections.length; i++) {
-                    var collection = parentCollection.collections[i];
+            if (parentCollection.getCollections() && parentCollection.getCollections().length) {
+                for (var i = 0; i < parentCollection.getCollections().length; i++) {
+                    var collection = parentCollection.getCollections()[i];
                     var tree = collection.getDefaultTree();
                     tree.label = collection.parentLabel || collection.getLabel() || 'collection ' + (i + 1);
                     tree.navDate = collection.getNavDate();
@@ -2327,13 +2386,27 @@ var Manifesto;
         __extends(Range, _super);
         function Range(jsonld, options) {
             _super.call(this, jsonld, options);
-            this.ranges = [];
+            this._canvases = null;
+            this._ranges = null;
+            this.members = [];
         }
         Range.prototype.getCanvasIds = function () {
             if (this.__jsonld.canvases) {
                 return this.__jsonld.canvases;
             }
             return [];
+        };
+        Range.prototype.getCanvases = function () {
+            if (this._canvases) {
+                return this._canvases;
+            }
+            return this._canvases = this.members.en().where(function (m) { return m.isCanvas(); }).toArray();
+        };
+        Range.prototype.getRanges = function () {
+            if (this._ranges) {
+                return this._ranges;
+            }
+            return this._ranges = this.members.en().where(function (m) { return m.isRange(); }).toArray();
         };
         Range.prototype.getViewingDirection = function () {
             if (this.getProperty('viewingDirection')) {
@@ -2350,9 +2423,10 @@ var Manifesto;
         Range.prototype.getTree = function (treeRoot) {
             treeRoot.data = this;
             this.treeNode = treeRoot;
-            if (this.ranges) {
-                for (var i = 0; i < this.ranges.length; i++) {
-                    var range = this.ranges[i];
+            var ranges = this.getRanges();
+            if (ranges && ranges.length) {
+                for (var i = 0; i < ranges.length; i++) {
+                    var range = ranges[i];
                     var node = new Manifesto.TreeNode();
                     treeRoot.addNode(node);
                     this._parseTreeNode(node, range);
@@ -2366,9 +2440,10 @@ var Manifesto;
             node.data = range;
             node.data.type = Manifesto.TreeNodeType.RANGE.toString();
             range.treeNode = node;
-            if (range.ranges) {
-                for (var i = 0; i < range.ranges.length; i++) {
-                    var childRange = range.ranges[i];
+            var ranges = range.getRanges();
+            if (ranges && ranges.length) {
+                for (var i = 0; i < ranges.length; i++) {
+                    var childRange = ranges[i];
                     var childNode = new Manifesto.TreeNode();
                     node.addNode(childNode);
                     this._parseTreeNode(childNode, childRange);
@@ -2666,6 +2741,7 @@ var Manifesto;
             }
             this.parseCollections(collection, options);
             this.parseManifests(collection, options);
+            this.parseMembers(collection, options);
             return collection;
         };
         Deserialiser.parseCollections = function (collection, options) {
@@ -2678,7 +2754,7 @@ var Manifesto;
                     var child = this.parseCollection(children[i], options);
                     child.index = i;
                     child.parentCollection = collection;
-                    collection.collections.push(child);
+                    collection.members.push(child);
                 }
             }
         };
@@ -2693,7 +2769,33 @@ var Manifesto;
                     var child = this.parseManifest(children[i], options);
                     child.index = i;
                     child.parentCollection = collection;
-                    collection.manifests.push(child);
+                    collection.members.push(child);
+                }
+            }
+        };
+        Deserialiser.parseMember = function (json, options) {
+            if (json['@type'].toLowerCase() === 'sc:manifest') {
+                return this.parseManifest(json, options);
+            }
+            else if (json['@type'].toLowerCase() === 'sc:collection') {
+                return this.parseCollection(json, options);
+            }
+        };
+        Deserialiser.parseMembers = function (collection, options) {
+            var children = collection.__jsonld.members;
+            if (children) {
+                for (var i = 0; i < children.length; i++) {
+                    if (options) {
+                        options.index = i;
+                    }
+                    var child = this.parseMember(children[i], options);
+                    // only add to members if not already parsed from backwards-compatible collections/manifests arrays
+                    if (collection.members.en().where(function (m) { return m.id === child.id; }).first()) {
+                        continue;
+                    }
+                    child.index = i;
+                    child.parentCollection = collection;
+                    collection.members.push(child);
                 }
             }
         };
@@ -13562,7 +13664,8 @@ var Manifold;
             }
             if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
                 // if it's a collection and has child collections, get the collection by index
-                if (iiifResource.collections && iiifResource.collections.length) {
+                var collections = iiifResource.getCollections();
+                if (collections && collections.length) {
                     iiifResource.getCollectionByIndex(bootstrapper._options.collectionIndex).then(function (collection) {
                         if (!collection) {
                             reject('Collection index not found');
