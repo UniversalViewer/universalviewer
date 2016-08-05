@@ -380,9 +380,6 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         // if it's a valid canvas index.
         if (canvasIndex === -1) return;
 
-        // reset currentRange
-        this.currentRange = null;
-
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
             this.showMessage(this.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
@@ -399,6 +396,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
 
         this.viewCanvas(canvasIndex);
+
+        // reset currentRange
+        this.currentRange = null;
     }
 
     getViewer() {

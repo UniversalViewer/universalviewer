@@ -70,7 +70,7 @@ class ContentLeftPanel extends LeftPanel {
             }
 
             this.selectCurrentTreeNode();
-            this.updateTreeTabByCanvasIndex();
+            //this.updateTreeTabByCanvasIndex();
         });
 
         $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
@@ -206,7 +206,8 @@ class ContentLeftPanel extends LeftPanel {
 
         this.$treeSelect.change(() => {
             this.databindTreeView();
-            this.updateTreeTabBySelection();
+            this.selectCurrentTreeNode()
+            //this.updateTreeTabBySelection();
         });
 
         this.$multiSelectOptions.hide();
@@ -617,22 +618,25 @@ class ContentLeftPanel extends LeftPanel {
             var id: string;
             var node: Manifesto.ITreeNode;
 
-            var topRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
+            var currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
+            var selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
+            var usingCorrectTree: boolean = currentCanvasTopRangeIndex === selectedTopRangeIndex;
 
-            if (topRangeIndex != -1){
+            if (currentCanvasTopRangeIndex != -1){
 
-                // if the current selected top range isn't the correct one              
-                
-                var selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
+                // if the current selected top range isn't the correct one
+                // update the drop down and tree            
 
-                if (topRangeIndex != selectedTopRangeIndex){
-                    this.selectTopRangeIndex(topRangeIndex);
-                    this.databindTreeView();
-                }
+                //if (!usingCorrectTree){
+                    //this.selectTopRangeIndex(topRangeIndex);
+                    //this.databindTreeView();
+                //}
 
                 var range: Manifesto.IRange = this.getCurrentCanvasRange();
 
-                node = this.treeView.getNodeById(range.treeNode.id);
+                if (range && range.treeNode){
+                    node = this.treeView.getNodeById(range.treeNode.id);
+                }
             }
 
             // use manifest root node
@@ -641,7 +645,7 @@ class ContentLeftPanel extends LeftPanel {
             //     node = this.treeView.getNodeById(id);
             // }
 
-            if (node){
+            if (node && usingCorrectTree){
                 this.treeView.selectNode(node);
             } else {
                 this.treeView.deselectCurrentNode();
