@@ -378,16 +378,21 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     updateTreeTabBySelection(): void {
-        if (this.treeView){
-            var title: string = this.getSelectedTree().text();
+        var title: string;
+        var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        
+        if (topRanges.length > 1){
+            if (this.treeView){
+                title = this.getSelectedTree().text();
+            } else {
+                title = topRanges[0].getLabel();
+            }
+        }
+
+        if (title){
             this.setTreeTabTitle(title);
         } else {
-            var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
-            if (topRanges.length > 1){
-                this.setTreeTabTitle(topRanges[0].getLabel());
-            } else {
-                this.setTreeTabTitle(this.content.index);
-            }
+            this.setTreeTabTitle(this.content.index);
         }
     }
 
