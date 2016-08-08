@@ -46,6 +46,7 @@ class FooterPanel extends BaseFooterPanel {
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged();
+            this.setCurrentSearchResultPlacemarker();
         });
 
         // todo: this should be a setting
@@ -59,6 +60,7 @@ class FooterPanel extends BaseFooterPanel {
 
         $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
             this.displaySearchResults(obj.terms, obj.results);
+            this.setCurrentSearchResultPlacemarker();
         });
 
         this.$printButton = $('<a class="print" title="' + this.content.print + '">' + this.content.print + '</a>');
@@ -216,6 +218,13 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         this.updatePrintButton();
+
+        var positionMarkerEnabled: boolean = Utils.Bools.getBool(this.config.options.positionMarkerEnabled, true);
+
+        if (!positionMarkerEnabled) {
+            this.$pagePositionMarker.hide();
+            this.$pagePositionLabel.hide();
+        }
     }
 
     updatePrintButton(): void {
@@ -235,8 +244,8 @@ class FooterPanel extends BaseFooterPanel {
 
         if (this.terms === '' || this.terms === this.content.enterKeyword) {
             this.extension.showMessage(this.config.modules.genericDialogue.content.emptyValue, function(){
-                    this.$searchText.focus();
-                });
+                this.$searchText.focus();
+            });
 
             return;
         }
@@ -251,6 +260,13 @@ class FooterPanel extends BaseFooterPanel {
         return this.$searchResultsContainer.find('.searchResultPlacemarker');
     }
 
+    setCurrentSearchResultPlacemarker(): void {
+        var placemarkers: JQuery = this.getSearchResultPlacemarkers();
+        placemarkers.parent().find('.current').removeClass('current');
+        var $current = $('.searchResultPlacemarker[data-index="' + this.extension.helper.canvasIndex + '"]');
+        $current.addClass('current');
+    }
+
     positionSearchResultPlacemarkers(): void {
 
         var results = (<ISeadragonExtension>this.extension).searchResults;
@@ -258,7 +274,7 @@ class FooterPanel extends BaseFooterPanel {
         if (!results.length) return;
 
         // clear all existing placemarkers
-        var placemarkers = this.getSearchResultPlacemarkers();
+        var placemarkers: JQuery = this.getSearchResultPlacemarkers();
         placemarkers.remove();
 
         var pageWidth = this.getPageLineRatio();
@@ -356,7 +372,7 @@ class FooterPanel extends BaseFooterPanel {
 
         var instancesFoundText;
 
-        if (result.rects.length == 1) {
+        if (result.rects.length === 1) {
             instancesFoundText = that.content.instanceFound;
             instancesFoundText = String.format(instancesFoundText, terms);
         } else {

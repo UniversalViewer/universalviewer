@@ -919,6 +919,9 @@
 #app .footerPanel .searchResults .searchResultPlacemarker.hover {
   background: url('../../img/uv-searchfooterpanel-module/placemarker_down_hover.png');
 }
+#app .footerPanel .searchResults .searchResultPlacemarker.current {
+  background: url('../../img/uv-searchfooterpanel-module/placemarker_down_hover.png');
+}
 #app .footerPanel .searchResults .positionPlacemarker {
   position: absolute;
   background: url('../../img/uv-searchfooterpanel-module/placemarker_up.png');

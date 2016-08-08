@@ -141,7 +141,8 @@
       "options":{
         "elideDetailsTermsCount": 20,
         "elideResultsTermsCount": 10,
-        "pageModeEnabled": true
+        "pageModeEnabled": true,
+        "positionMarkerEnabled": true
       }
     },
     "settingsDialogue":
