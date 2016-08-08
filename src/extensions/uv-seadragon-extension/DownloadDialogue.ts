@@ -105,7 +105,17 @@ class DownloadDialogue extends BaseDownloadDialogue {
                         type = DownloadType.ENTIREDOCUMENTASTEXT;
                     }
                 }
-                window.open(this.renderingUrls[id]);
+
+                if (type = DownloadType.ENTIREDOCUMENTASPDF){
+                    var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
+                    
+                    // if downloading a pdf - if there's a print service, generate an event instead of opening a new window.
+                    if (printService){
+                        $.publish(Commands.PRINT);
+                    } else {
+                        window.open(this.renderingUrls[id]);
+                    }
+                }
             } else {
                 switch (id){
                     case DownloadOption.currentViewAsJpg.toString():
