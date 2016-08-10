@@ -36,6 +36,7 @@ interface IExtension{
     isHomeDomain: boolean;
     isLightbox: boolean;
     isLoggedIn: boolean;
+    isOnHomeDomain(): boolean;
     isOnlyInstance: boolean;
     isOverlayActive(): boolean;
     isReload: boolean;

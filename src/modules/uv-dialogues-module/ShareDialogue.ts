@@ -116,6 +116,14 @@ class ShareDialogue extends Dialogue {
         this.$heightInput = $('<input class="height" type="text" maxlength="10" />');
         this.$customSize.append(this.$heightInput);
 
+        this.$widthInput.on('keydown', (e) => {
+            return Utils.Numbers.numericalInput(e);
+        });
+
+        this.$heightInput.on('keydown', (e) => {
+            return Utils.Numbers.numericalInput(e);
+        });
+
         this.$url.focus(function() {
             $(this).select();
         });

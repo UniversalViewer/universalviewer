@@ -110,7 +110,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                     var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
                     
                     // if downloading a pdf - if there's a print service, generate an event instead of opening a new window.
-                    if (printService){
+                    if (printService && this.extension.isOnHomeDomain()){
                         $.publish(Commands.PRINT);
                     } else {
                         window.open(this.renderingUrls[id]);

@@ -18,7 +18,7 @@
 
                         .tab{
                             line-height: normal;
-                            color: @text-secondary-color;
+                            color: @gray;
                             font-size: @font-size-base;
                             display: inline-block;
                             text-align: center;
@@ -29,14 +29,25 @@
                             margin: 0;
                             cursor: pointer;
 
+                            &:hover {
+                                border-bottom: 1px solid @brand-primary;
+                                color: @text-secondary-color;
+                                margin-bottom: -1px;
+                                font-weight: bold;
+                                height: 23px;
+                                line-height: 23px;
+                                text-decoration: none;
+                            }
+
                             &.first{
                                 margin: 0 0 0 @margin-medium-horizontal;
                             }
 
                             &.on{
-                                border-bottom: 1px solid @panel-dark-bg;
-                                color: @brand-secondary;
+                                border-bottom: 1px solid @brand-primary;
+                                color: @text-secondary-color;
                                 margin-bottom: -1px;
+                                font-weight: bold;
                                 height: 23px;
                                 line-height: 23px;
                             }

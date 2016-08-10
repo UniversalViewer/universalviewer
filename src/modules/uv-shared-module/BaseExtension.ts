@@ -728,6 +728,10 @@ class BaseExtension implements IExtension {
         return (this.isHomeDomain && this.isOnlyInstance);
     }
 
+    isOnHomeDomain(): boolean {
+        return this.isDeepLinkingEnabled();
+    }
+
     getDomain(): string{
         var parts = Utils.Urls.getUrlParts(this.helper.iiifResourceUri);
         return parts.host;

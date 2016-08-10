@@ -12,7 +12,7 @@
 }
 #app .overlay.share .middle .content .tabs .tab {
   line-height: normal;
-  color: #000;
+  color: #565656;
   font-size: 12px;
   display: inline-block;
   text-align: center;
@@ -23,13 +23,23 @@
   margin: 0;
   cursor: pointer;
 }
+#app .overlay.share .middle .content .tabs .tab:hover {
+  border-bottom: 1px solid #14a4c3;
+  color: #000;
+  margin-bottom: -1px;
+  font-weight: bold;
+  height: 23px;
+  line-height: 23px;
+  text-decoration: none;
+}
 #app .overlay.share .middle .content .tabs .tab.first {
   margin: 0 0 0 10px;
 }
 #app .overlay.share .middle .content .tabs .tab.on {
-  border-bottom: 1px solid #211f1f;
-  color: #14a4c3;
+  border-bottom: 1px solid #14a4c3;
+  color: #000;
   margin-bottom: -1px;
+  font-weight: bold;
   height: 23px;
   line-height: 23px;
 }
