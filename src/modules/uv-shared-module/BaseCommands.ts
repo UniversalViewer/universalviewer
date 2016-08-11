@@ -77,6 +77,8 @@ class Commands {
     static SHOW_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onShowSettingsDialogue';
     static SHOW_SHARE_DIALOGUE: string              = Commands.namespace + 'onShowShareDialogue';
     static THUMB_SELECTED: string                   = Commands.namespace + 'onThumbSelected';
+    static TOGGLE_EXPAND_LEFT_PANEL: string         = Commands.namespace + 'onToggleExpandLeftPanel';
+    static TOGGLE_EXPAND_RIGHT_PANEL: string        = Commands.namespace + 'onToggleExpandRightPanel';
     static TOGGLE_FULLSCREEN: string                = Commands.namespace + 'onToggleFullScreen';
     static UP_ARROW: string                         = Commands.namespace + 'onUpArrow';
     static UPDATE_SETTINGS: string                  = Commands.namespace + 'onUpdateSettings';

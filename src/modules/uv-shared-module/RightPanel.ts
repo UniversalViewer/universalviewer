@@ -18,6 +18,14 @@ class RightPanel extends BaseExpandPanel {
         if (this.options.panelOpen) {
             this.toggle(true);
         }
+
+        $.subscribe(BaseCommands.TOGGLE_EXPAND_RIGHT_PANEL, () => {
+            if (this.isFullyExpanded){
+                this.collapseFull();
+            } else {
+                this.expandFull();
+            }
+        });
     }
 
     getTargetWidth(): number {

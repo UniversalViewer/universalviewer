@@ -109,6 +109,7 @@
       "options":
       {
         "autoCompleteBoxEnabled": true,
+        "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
         "localeToggleEnabled": false,
         "pageModeEnabled": true,

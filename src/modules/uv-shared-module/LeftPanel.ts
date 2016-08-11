@@ -13,6 +13,13 @@ class LeftPanel extends BaseExpandPanel {
 
         this.$element.width(this.options.panelCollapsedWidth);
 
+        $.subscribe(BaseCommands.TOGGLE_EXPAND_LEFT_PANEL, () => {
+            if (this.isFullyExpanded){
+                this.collapseFull();
+            } else {
+                this.expandFull();
+            }
+        });
     }
 
     init(): void{

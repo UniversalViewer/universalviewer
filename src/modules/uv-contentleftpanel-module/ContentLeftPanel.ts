@@ -36,6 +36,7 @@ class ContentLeftPanel extends LeftPanel {
     $treeViewOptions: JQuery;
     $treeSelect: JQuery;
     $views: JQuery;
+    expandFullEnabled: boolean = false;
     galleryView: GalleryView;
     isThumbsViewOpen: boolean = false;
     isTreeViewOpen: boolean = false;

@@ -420,14 +420,14 @@
 #app .headerPanel .centerOptions .autocomplete .result.selected {
   background: #efefef;
 }
-#app .headerPanel .rightOptions .pagingToggle {
-  margin: -1px 4px 0 0;
+#app .headerPanel .rightOptions .pagingToggleButtons {
+  float: left;
 }
-#app .headerPanel .rightOptions .pagingToggle.one-up {
+#app .headerPanel .rightOptions .pagingToggleButtons .one-up {
   background-image: url('../../img/uv-pagingheaderpanel-module/one_up.png');
   background-repeat: no-repeat;
 }
-#app .headerPanel .rightOptions .pagingToggle.two-up {
+#app .headerPanel .rightOptions .pagingToggleButtons .two-up {
   background-image: url('../../img/uv-pagingheaderpanel-module/two_up.png');
   background-repeat: no-repeat;
 }

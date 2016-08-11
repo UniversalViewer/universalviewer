@@ -7,6 +7,7 @@ class BaseExpandPanel extends BaseView {
     isFullyExpanded: boolean = false;
     isUnopened: boolean = true;
     autoToggled: boolean = false;
+    expandFullEnabled: boolean = true;
 
     $top: JQuery;
     $title: JQuery;
@@ -214,7 +215,10 @@ class BaseExpandPanel extends BaseView {
 
     collapseFullFinish(): void {
         this.isFullyExpanded = false;
-        this.$expandFullButton.show();
+
+        if (this.expandFullEnabled){
+            this.$expandFullButton.show();
+        }
 
         this.focusExpandFullButton();
     }

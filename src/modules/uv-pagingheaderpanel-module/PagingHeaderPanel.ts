@@ -8,25 +8,28 @@ import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 
 class PagingHeaderPanel extends HeaderPanel {
 
-    $firstButton: JQuery;
     $autoCompleteBox: JQuery;
+    $firstButton: JQuery;
+    $galleryButton: JQuery;
     $imageModeLabel: JQuery;
     $imageModeOption: JQuery;
+    $imageSelectionBox: JQuery;
     $lastButton: JQuery;
     $modeOptions: JQuery;
     $nextButton: JQuery;
     $nextOptions: JQuery;
+    $oneUpButton: JQuery;
     $pageModeLabel: JQuery;
     $pageModeOption: JQuery;
-    $pagingToggleButton: JQuery;
+    $pagingToggleButtons: JQuery;
     $prevButton: JQuery;
     $prevOptions: JQuery;
-    $selectionBoxOptions: JQuery;
-    $imageSelectionBox: JQuery;
     $search: JQuery;
     $searchButton: JQuery;
     $searchText: JQuery;
+    $selectionBoxOptions: JQuery;
     $total: JQuery;
+    $twoUpButton: JQuery;
 
     firstButtonEnabled: boolean = false;
     lastButtonEnabled: boolean = false;
@@ -54,6 +57,14 @@ class PagingHeaderPanel extends HeaderPanel {
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, (e) => {
             this.setSearchFieldValue(this.extension.helper.canvasIndex);
+        });
+        
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+            this.$galleryButton.addClass('on');
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
+            this.$galleryButton.removeClass('on');
         });
 
         this.$prevOptions = $('<div class="prevOptions"></div>');
@@ -172,17 +183,35 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.text(this.content.page);
         }
 
-        this.$pagingToggleButton = $('<a class="imageBtn pagingToggle"></a>');
-        this.$rightOptions.prepend(this.$pagingToggleButton);
+        this.$galleryButton = $('<a class="imageBtn gallery" title="' + this.content.gallery + '"></a>');
+        this.$rightOptions.prepend(this.$galleryButton);
+
+        this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
+        this.$rightOptions.prepend(this.$pagingToggleButtons);
+
+        this.$oneUpButton = $('<a class="imageBtn one-up" title="' + this.content.oneUp + '"></a>');
+        this.$pagingToggleButtons.append(this.$oneUpButton);
+
+        this.$twoUpButton = $('<a class="imageBtn two-up" title="' + this.content.twoUp + '"></a>');
+        this.$pagingToggleButtons.append(this.$twoUpButton);
 
         this.updatePagingToggle();
+        this.updateGalleryButton();
 
-        this.$pagingToggleButton.on('click', () => {
-            var enabled: boolean = !this.getSettings().pagingEnabled;
-
+        this.$oneUpButton.on('click', () => {
+            var enabled: boolean = false;
             this.updateSettings({ pagingEnabled: enabled });
-
             $.publish(Commands.PAGING_TOGGLED, [enabled]);
+        });
+
+        this.$twoUpButton.on('click', () => {
+            var enabled: boolean = true;
+            this.updateSettings({ pagingEnabled: enabled });
+            $.publish(Commands.PAGING_TOGGLED, [enabled]);
+        });
+
+        this.$galleryButton.on('click', () => {
+            $.publish(BaseCommands.TOGGLE_EXPAND_LEFT_PANEL);
         });
 
         this.setTitles();
@@ -282,7 +311,7 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$centerOptions.addClass('modeOptionsDisabled');
         }
 
-        //Search is shown as default
+        // Search is shown as default
         if (this.options.imageSelectionBoxEnabled === true && this.options.autoCompleteBoxEnabled !== true){
             this.$search.hide();
         }
@@ -311,8 +340,8 @@ class PagingHeaderPanel extends HeaderPanel {
             }
         });
 
-        if (this.options.pagingToggleEnabled === false){
-            this.$pagingToggleButton.hide();
+        if (!Utils.Bools.getBool(this.options.pagingToggleEnabled, true)){
+            this.$pagingToggleButtons.hide();
         }
     }
 
@@ -339,23 +368,31 @@ class PagingHeaderPanel extends HeaderPanel {
 
     updatePagingToggle(): void {
         if (!this.pagingToggleIsVisible()){
-            this.$pagingToggleButton.hide();
+            this.$pagingToggleButtons.hide();
             return;
         }
 
         if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
-            this.$pagingToggleButton.removeClass('two-up');
-            this.$pagingToggleButton.addClass('one-up');
-            this.$pagingToggleButton.prop('title', this.content.oneUp);
+            this.$oneUpButton.removeClass('on');
+            this.$twoUpButton.addClass('on');
         } else {
-            this.$pagingToggleButton.removeClass('one-up');
-            this.$pagingToggleButton.addClass('two-up');
-            this.$pagingToggleButton.prop('title', this.content.twoUp);
+            this.$twoUpButton.removeClass('on');
+            this.$oneUpButton.addClass('on');
         }
     }
 
     pagingToggleIsVisible(): boolean {
         return this.options.pagingToggleEnabled && this.extension.helper.isPagingAvailable();
+    }
+
+    updateGalleryButton(): void {
+        if (!this.galleryIsVisible()){
+            this.$galleryButton.hide();
+        }
+    }
+
+    galleryIsVisible(): boolean {
+        return Utils.Bools.getBool(this.options.galleryButtonEnabled, true);
     }
 
     setTotal(): void {
@@ -511,9 +548,11 @@ class PagingHeaderPanel extends HeaderPanel {
 
         // hide toggle buttons below minimum width
         if (this.extension.width() < this.extension.config.options.minWidthBreakPoint){
-            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.hide();
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.hide();
+            if (this.galleryIsVisible()) this.$galleryButton.hide();
         } else {
-            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.show();
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.show();
+            if (this.galleryIsVisible()) this.$galleryButton.show();
         }
     }
 }
