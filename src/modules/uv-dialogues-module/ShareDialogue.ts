@@ -79,7 +79,7 @@ class ShareDialogue extends Dialogue {
         this.$shareView = $('<div class="shareView"></div>');
         this.$tabsContent.append(this.$shareView);
 
-        this.$url = $('<input class="url" type="text" />');
+        this.$url = $('<input class="url" type="text" readonly="true" />');
         this.$shareView.append(this.$url);
 
         this.$embedView = $('<div class="embedView"></div>');
@@ -91,7 +91,7 @@ class ShareDialogue extends Dialogue {
         // this.$image = $('<img class="share" />');
         // this.$embedView.append(this.$image);
 
-        this.$code = $('<input class="code" type="text" />');
+        this.$code = $('<input class="code" type="text" readonly="true" />');
         this.$embedView.append(this.$code);
 
         this.$customSize = $('<div class="customSize"></div>');
