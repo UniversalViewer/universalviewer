@@ -2884,7 +2884,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .headerPanel .options .rightOptions {
   float: right;
-  margin: 6px 0 0 0;
+  margin: 5px 0 0 0;
 }
 #app .headerPanel .options .rightOptions .settings {
   background: url('../../img/uv-shared-module/settings.png');
@@ -2952,9 +2952,6 @@ input[type=range]:focus::-ms-fill-upper {
   cursor: pointer;
   margin: 7px 5px 0 0;
   display: none;
-}
-#app .leftPanel .top .expandFullButton {
-  display: block;
 }
 #app .leftPanel .closed {
   width: 25px;
