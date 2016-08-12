@@ -93,7 +93,7 @@
     },
     "virtexCenterPanel": {
       "content": {
-        "acknowledgements": "Priodoliad",
+        "attribution": "Priodoliad",
         "zoomIn": "chwyddo Mewn",
         "zoomOut": "Zoom Out"
       }

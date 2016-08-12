@@ -3,7 +3,7 @@ import BaseView = require("./BaseView");
 
 class CenterPanel extends BaseView {
 
-    $acknowledgements: JQuery;
+    $attribution: JQuery;
     $closeAttributionButton: JQuery;
     $content: JQuery;
     $title: JQuery;
@@ -21,49 +21,51 @@ class CenterPanel extends BaseView {
         this.$content = $('<div id="content" class="content"></div>');
         this.$element.append(this.$content);
 
-        this.$acknowledgements = $('<div class="acknowledgements">\
+        this.$attribution = $('<div class="attribution">\
                                    <div class="header">\
                                        <div class="title"></div>\
                                        <div class="close"></div>\
                                    </div>\
                                    <div class="main">\
-                                       <div class="attribution"></div>\
+                                       <div class="attribution-text"></div>\
                                        <div class="license"></div>\
                                        <div class="logo"></div>\
                                    </div>\
                               </div>');
 
-        this.$acknowledgements.find('.header .title').text(this.content.acknowledgements);
-        this.$content.append(this.$acknowledgements);
-        this.$acknowledgements.hide();
+        this.$attribution.find('.header .title').text(this.content.attribution);
+        this.$content.append(this.$attribution);
+        this.$attribution.hide();
 
-        this.$closeAttributionButton = this.$acknowledgements.find('.header .close');
+        this.$closeAttributionButton = this.$attribution.find('.header .close');
         this.$closeAttributionButton.on('click', (e) => {
             e.preventDefault();
-            this.$acknowledgements.hide();
+            this.$attribution.hide();
         });
 
-        if (this.options.titleEnabled === false){
+        if (!Utils.Bools.getBool(this.options.titleEnabled, true)){
             this.$title.hide();
         }
     }
 
-    showAttribution(): void {
-        var acknowledgements = this.extension.helper.getAttribution();
+    updateAttribution(): void {
+        var attribution = this.extension.helper.getAttribution();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 
-        if (!acknowledgements){
+        var enabled: boolean = Utils.Bools.getBool(this.options.attributionEnabled, true);
+
+        if (!attribution || !enabled){
             return;
         }
 
-        this.$acknowledgements.show();
+        this.$attribution.show();
 
-        var $attribution = this.$acknowledgements.find('.attribution');
-        var $license = this.$acknowledgements.find('.license');
-        var $logo = this.$acknowledgements.find('.logo');
+        var $attribution = this.$attribution.find('.attribution-text');
+        var $license = this.$attribution.find('.license');
+        var $logo = this.$attribution.find('.logo');
 
-        $attribution.html(this.extension.sanitize(acknowledgements));
+        $attribution.html(this.extension.sanitize(attribution));
 
         $attribution.find('img').one("load", () => {
             this.resize();
@@ -109,8 +111,8 @@ class CenterPanel extends BaseView {
         this.$content.height(this.$element.height() - titleHeight);
         this.$content.width(this.$element.width());
 
-        if (this.$acknowledgements && this.$acknowledgements.is(':visible')){
-            this.$acknowledgements.css('top', this.$content.height() - this.$acknowledgements.outerHeight() - this.$acknowledgements.verticalMargins());
+        if (this.$attribution && this.$attribution.is(':visible')){
+            this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
         }
     }
 }

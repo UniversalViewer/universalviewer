@@ -64,7 +64,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
-        this.showAttribution();
+        this.updateAttribution();
 
         // todo: use compiler flag (when available)
         var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.extension.config.options.theme + '/img/uv-seadragoncenterpanel-module/';

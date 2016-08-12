@@ -144,7 +144,7 @@
     },
     "seadragonCenterPanel": {
       "content": {
-        "acknowledgements": "Attribution",
+        "attribution": "Attribution",
         "goHome": "Go Home",
         "imageUnavailable": "Image Unavailable",
         "next": "Next",

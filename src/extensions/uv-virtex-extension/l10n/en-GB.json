@@ -93,7 +93,7 @@
     },
     "virtexCenterPanel": {
       "content": {
-        "acknowledgements": "Attribution",
+        "attribution": "Attribution",
         "zoomIn": "Zoom In",
         "zoomOut": "Zoom Out"
       }

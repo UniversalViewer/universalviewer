@@ -122,6 +122,7 @@
       {
         "animationTime": 0.15,
         "autoHideControls": true,
+        "attributionEnabled": true,
         "blendTime": 0,
         "constrainDuringPan": false,
         "controlsFadeAfterInactive": 1500,
