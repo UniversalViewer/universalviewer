@@ -14168,13 +14168,19 @@ var Manifold;
             return this.getViewingHint().toString() === manifesto.ViewingHint.continuous().toString();
         };
         Helper.prototype.isFirstCanvas = function (index) {
-            return this.getCurrentSequence().isFirstCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isFirstCanvas(index);
+            }
+            return this.getCurrentSequence().isFirstCanvas(this.canvasIndex);
         };
         Helper.prototype.isHorizontallyAligned = function () {
             return this.isLeftToRight() || this.isRightToLeft();
         };
         Helper.prototype.isLastCanvas = function (index) {
-            return this.getCurrentSequence().isLastCanvas(index);
+            if (typeof index !== 'undefined') {
+                return this.getCurrentSequence().isLastCanvas(index);
+            }
+            return this.getCurrentSequence().isLastCanvas(this.canvasIndex);
         };
         Helper.prototype.isLeftToRight = function () {
             return this.getViewingDirection().toString() === manifesto.ViewingDirection.leftToRight().toString();
