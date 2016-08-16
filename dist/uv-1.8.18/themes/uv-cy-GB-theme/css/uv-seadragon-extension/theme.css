@@ -56,6 +56,12 @@
   border: 1px solid #9a9a9a;
   font-size: 11px;
 }
+#app .overlay.share .middle .content .tabsContent .shareView .shareFrame {
+  width: 232px;
+  border: none;
+  height: 30px;
+  margin-top: 5px;
+}
 #app .overlay.share .middle .content .tabsContent .embedView .code {
   width: 100%;
   background: #efefef;

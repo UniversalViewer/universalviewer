@@ -18,6 +18,7 @@ class ShareDialogue extends Dialogue {
     $tabsContent: JQuery;
     $url: JQuery;
     $widthInput: JQuery;
+    $shareFrame: JQuery;
     $x: JQuery;
     aspectRatio: number = .75;
     code: string;
@@ -81,6 +82,9 @@ class ShareDialogue extends Dialogue {
 
         this.$url = $('<input class="url" type="text" readonly="true" />');
         this.$shareView.append(this.$url);
+
+        this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
+        this.$shareView.append(this.$shareFrame);
 
         this.$embedView = $('<div class="embedView"></div>');
         this.$tabsContent.append(this.$embedView);
@@ -155,6 +159,7 @@ class ShareDialogue extends Dialogue {
         });
 
         this.$element.hide();
+        this.updateShareFrame();
     }
 
     open(): void {
@@ -239,6 +244,17 @@ class ShareDialogue extends Dialogue {
         }
         this.currentHeight = Math.floor(this.currentWidth * this.aspectRatio);
         this.$heightInput.val(String(this.currentHeight));
+    }
+
+    updateShareFrame(): void {
+        var shareUrl: string = this.extension.helper.getShareServiceUrl();
+
+        if (Utils.Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
+            this.$shareFrame.prop('src', shareUrl);
+            this.$shareFrame.show();
+        } else {
+            this.$shareFrame.hide();
+        }
     }
 
     openShareView(): void {

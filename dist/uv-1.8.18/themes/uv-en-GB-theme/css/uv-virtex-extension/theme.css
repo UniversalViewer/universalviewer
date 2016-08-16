@@ -56,6 +56,12 @@
   border: 1px solid #9a9a9a;
   font-size: 11px;
 }
+#app .overlay.share .middle .content .tabsContent .shareView .shareFrame {
+  width: 232px;
+  border: none;
+  height: 30px;
+  margin-top: 5px;
+}
 #app .overlay.share .middle .content .tabsContent .embedView .code {
   width: 100%;
   background: #efefef;
@@ -2224,20 +2230,8 @@ input[type=range]:focus::-ms-fill-upper {
   margin-left: 8px;
 }
 #app .headerPanel .options .centerOptions {
-  width: 432px;
-}
-#app .headerPanel .options .centerOptions .prevOptions {
-  margin: 0 10px 0 0;
-}
-#app .headerPanel .options .centerOptions .mode label {
-  width: 42px;
-}
-#app .headerPanel .options .centerOptions .search {
-  width: 140px;
-}
-#app .headerPanel .options .centerOptions .nextOptions {
-  margin: 0 0 0 10px;
+  width: 390px;
 }
 #app .footerPanel .searchPager .controls .searchResultsInfo {
-  width: 290px;
+  width: 337px;
 }
