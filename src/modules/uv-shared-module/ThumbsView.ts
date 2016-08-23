@@ -5,6 +5,7 @@ import Shell = require("./Shell");
 
 class ThumbsView extends BaseView {
 
+    private _thumbsCache: JQuery;
     $selectedThumb: JQuery;
     $thumbs: JQuery;
     isCreated: boolean = false;
@@ -41,7 +42,7 @@ class ThumbsView extends BaseView {
         var that = this;
 
         $.templates({
-            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}">\
+            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-index="{{>index}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <span class="index">{{:#index + 1}}</span>\
                                 <span class="label" title="{{>label}}">{{>label}}&nbsp;</span>\
@@ -258,11 +259,14 @@ class ThumbsView extends BaseView {
     }
 
     getAllThumbs(): JQuery {
-        return this.$thumbs.find('.thumb');
+        if (!this._thumbsCache){
+            this._thumbsCache = this.$thumbs.find('.thumb');
+        }
+        return this._thumbsCache;
     }
 
-    getThumbByIndex(canvasIndex): JQuery {
-        return $(this.getAllThumbs()[canvasIndex]);
+    getThumbByIndex(canvasIndex: number): JQuery {
+        return this.$thumbs.find('[data-index="' + canvasIndex + '"]');
     }
 
     scrollToThumb(canvasIndex: number): void {

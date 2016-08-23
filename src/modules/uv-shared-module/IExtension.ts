@@ -32,14 +32,18 @@ interface IExtension{
     helper: Manifold.IHelper;
     isCreated: boolean;
     isDeepLinkingEnabled(): boolean;
+    isFooterPanelEnabled(): boolean;
     isFullScreen(): boolean;
+    isHeaderPanelEnabled(): boolean;
     isHomeDomain: boolean;
+    isLeftPanelEnabled(): boolean;
     isLightbox: boolean;
     isLoggedIn: boolean;
     isOnHomeDomain(): boolean;
     isOnlyInstance: boolean;
     isOverlayActive(): boolean;
     isReload: boolean;
+    isRightPanelEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
     jsonp: boolean;
     lastCanvasIndex: number;

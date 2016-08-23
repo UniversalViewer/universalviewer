@@ -514,24 +514,60 @@
   background-color: #000;
   background-position: 0px 50%;
   cursor: pointer;
+  padding: 0px;
+  border: none;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   -o-border-radius: 0;
   border-radius: 0;
 }
+#app .centerPanel .content #viewer .paging.btn.vertical {
+  height: 30px;
+  width: 90px;
+  background-position: 50% 0;
+}
 #app .centerPanel .content #viewer .paging.btn.prev {
-  background-image: url('../../img/uv-seadragoncenterpanel-module/prev_page.png');
+  background-image: url('../../img/uv-seadragoncenterpanel-module/left_arrow.png');
   left: 0;
 }
 #app .centerPanel .content #viewer .paging.btn.prev.disabled {
-  background-image: url('../../img/uv-seadragoncenterpanel-module/prev_page_disabled.png');
+  background-image: url('../../img/uv-seadragoncenterpanel-module/left_arrow_disabled.png');
+}
+#app .centerPanel .content #viewer .paging.btn.prev.vertical {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/up_arrow.png');
+  left: 0;
+  top: 0;
+}
+#app .centerPanel .content #viewer .paging.btn.prev.vertical.disabled {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/up_arrow_disabled.png');
+}
+#app .centerPanel .content #viewer .paging.btn.prev.vertical.down {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/down_arrow.png');
+}
+#app .centerPanel .content #viewer .paging.btn.prev.vertical.down.disabled {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/down_arrow_disabled.png');
 }
 #app .centerPanel .content #viewer .paging.btn.next {
-  background-image: url('../../img/uv-seadragoncenterpanel-module/next_page.png');
+  background-image: url('../../img/uv-seadragoncenterpanel-module/right_arrow.png');
   right: 0;
 }
 #app .centerPanel .content #viewer .paging.btn.next.disabled {
-  background-image: url('../../img/uv-seadragoncenterpanel-module/next_page_disabled.png');
+  background-image: url('../../img/uv-seadragoncenterpanel-module/right_arrow_disabled.png');
+}
+#app .centerPanel .content #viewer .paging.btn.next.vertical {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/down_arrow.png');
+  left: 0;
+  top: 0;
+  margin-left: 15px;
+}
+#app .centerPanel .content #viewer .paging.btn.next.vertical.disabled {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/down_arrow_disabled.png');
+}
+#app .centerPanel .content #viewer .paging.btn.next.vertical.up {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/up_arrow.png');
+}
+#app .centerPanel .content #viewer .paging.btn.next.vertical.up.disabled {
+  background-image: url('../../img/uv-seadragoncenterpanel-module/up_arrow_disabled.png');
 }
 #app .centerPanel .content #viewer .zoomIn {
   cursor: pointer !important;

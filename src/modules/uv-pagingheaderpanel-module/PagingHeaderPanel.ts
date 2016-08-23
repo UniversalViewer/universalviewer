@@ -228,7 +228,9 @@ class PagingHeaderPanel extends HeaderPanel {
         // ui event handlers.
         this.$firstButton.onPressed(() => {
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
                     $.publish(Commands.FIRST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
@@ -239,7 +241,9 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.$prevButton.onPressed(() => {
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
                     $.publish(Commands.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
@@ -250,11 +254,26 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.$nextButton.onPressed(() => {
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
                     $.publish(Commands.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
                     $.publish(Commands.PREV);
+                    break;
+            }
+        });
+
+        this.$lastButton.onPressed(() => {
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                    $.publish(Commands.LAST);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.FIRST);
                     break;
             }
         });
@@ -292,17 +311,6 @@ class PagingHeaderPanel extends HeaderPanel {
                 this.search(this.$autoCompleteBox.val());
             } else {
                 this.search(this.$searchText.val());
-            }
-        });
-
-        this.$lastButton.onPressed(() => {
-            switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
-                    $.publish(Commands.LAST);
-                    break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.FIRST);
-                    break;
             }
         });
 
@@ -392,7 +400,7 @@ class PagingHeaderPanel extends HeaderPanel {
     }
 
     galleryIsVisible(): boolean {
-        return Utils.Bools.getBool(this.options.galleryButtonEnabled, true);
+        return this.extension.isLeftPanelEnabled();
     }
 
     setTotal(): void {
@@ -480,20 +488,40 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox.val(index);
         }
 
-        if (this.extension.helper.isFirstCanvas()){
-            this.disableFirstButton();
-            this.disablePrevButton();
-        } else {
-            this.enableFirstButton();
-            this.enablePrevButton();
-        }
+        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
-        if (this.extension.helper.isLastCanvas()){
-            this.disableLastButton();
-            this.disableNextButton();
+        if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
+            if (this.extension.helper.isFirstCanvas()){
+                this.disableLastButton();
+                this.disableNextButton();
+            } else {
+                this.enableLastButton();
+                this.enableNextButton();
+            }
+
+            if (this.extension.helper.isLastCanvas()){
+                this.disableFirstButton();
+                this.disablePrevButton();
+            } else {
+                this.enableFirstButton();
+                this.enablePrevButton();
+            }
         } else {
-            this.enableLastButton();
-            this.enableNextButton();
+            if (this.extension.helper.isFirstCanvas()){
+                this.disableFirstButton();
+                this.disablePrevButton();
+            } else {
+                this.enableFirstButton();
+                this.enablePrevButton();
+            }
+
+            if (this.extension.helper.isLastCanvas()){
+                this.disableLastButton();
+                this.disableNextButton();
+            } else {
+                this.enableLastButton();
+                this.enableNextButton();
+            }
         }
     }
 

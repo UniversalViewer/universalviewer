@@ -11,6 +11,7 @@ import MultiSelectState = Manifold.MultiSelectState;
 
 class GalleryView extends BaseView {
 
+    private _thumbsCache: JQuery;
     $header: JQuery;
     $main: JQuery;
     $selectedThumb: JQuery;
@@ -467,11 +468,14 @@ class GalleryView extends BaseView {
     }
 
     getAllThumbs(): JQuery {
-        return this.$thumbs.find('.thumb');
+        if (!this._thumbsCache){
+            this._thumbsCache = this.$thumbs.find('.thumb');
+        }
+        return this._thumbsCache;
     }
 
-    getThumbByIndex(canvasIndex): JQuery {
-        return $(this.getAllThumbs()[canvasIndex])
+    getThumbByIndex(canvasIndex: number): JQuery {
+        return this.$thumbs.find('[data-index="' + canvasIndex + '"]');
     }
 
     scrollToThumb(canvasIndex: number): void {

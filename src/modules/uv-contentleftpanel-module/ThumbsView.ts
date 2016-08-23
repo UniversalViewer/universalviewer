@@ -1,9 +1,9 @@
-import BaseView = require("../uv-shared-module/ThumbsView");
+import BaseThumbsView = require("../uv-shared-module/ThumbsView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 
-class ThumbsView extends BaseView {
+class ThumbsView extends BaseThumbsView {
     create(): void {
 
         this.setConfig('contentLeftPanel');

@@ -397,6 +397,10 @@ class ContentLeftPanel extends LeftPanel {
         }
     }
 
+    getViewingDirection(): string {
+        return this.extension.helper.getViewingDirection().toString();
+    }
+
     createThumbsView(): void {
         this.thumbsView = new ThumbsView(this.$thumbsView);
         this.databindThumbsView();
@@ -406,7 +410,7 @@ class ContentLeftPanel extends LeftPanel {
         if (!this.thumbsView) return;
         var width, height;
 
-        var viewingDirection = this.extension.helper.getViewingDirection().toString();
+        var viewingDirection: string = this.getViewingDirection();
 
         if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             width = this.config.options.oneColThumbWidth;
@@ -416,7 +420,14 @@ class ContentLeftPanel extends LeftPanel {
             height = this.config.options.twoColThumbHeight;
         }
 
-        this.thumbsView.thumbs = <IThumb[]>this.extension.helper.getThumbs(width, height);
+        var thumbs: IThumb[] = <IThumb[]>this.extension.helper.getThumbs(width, height);
+
+        if (viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
+            thumbs.reverse();
+        }
+
+        this.thumbsView.thumbs = thumbs;
+
         this.thumbsView.databind();
     }
 
@@ -430,7 +441,17 @@ class ContentLeftPanel extends LeftPanel {
         if (!this.galleryView) return;
         var width = this.config.options.galleryThumbWidth;
         var height = this.config.options.galleryThumbHeight;
-        this.galleryView.thumbs = <IThumb[]>this.extension.helper.getThumbs(width, height);
+
+        var thumbs: IThumb[] = <IThumb[]>this.extension.helper.getThumbs(width, height);
+
+        var viewingDirection: string = this.getViewingDirection();
+
+        if (viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
+            thumbs.reverse();
+        }
+
+        this.galleryView.thumbs = thumbs;
+
         this.galleryView.databind();
         // ensure gallery has current multiselect state
         this.updateMultiSelectState();
