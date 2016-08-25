@@ -86,7 +86,6 @@ class SeadragonCenterPanel extends CenterPanel {
             visibilityRatio: this.config.options.visibilityRatio || 0.5,
             constrainDuringPan: this.config.options.constrainDuringPan || false,
             immediateRender: this.config.options.immediateRender || false,
-            maxZoomLevel: this.config.options.maxZoomLevel || null,
             blendTime: this.config.options.blendTime || 0,
             autoHideControls: this.config.options.autoHideControls == null ? true : this.config.options.autoHideControls,
             prefixUrl: prefixUrl,
@@ -324,7 +323,10 @@ class SeadragonCenterPanel extends CenterPanel {
                     tileSource: resource,
                     x: resource.x,
                     y: resource.y,
-                    width: resource.width
+                    width: resource.width,
+                    success: () => {
+                        this.viewer.viewport.maxZoomLevel = this.viewer.viewport.getZoom(true) * (this.config.options.maxZoomLevel || 8);
+                    }
                 });
             }
         });

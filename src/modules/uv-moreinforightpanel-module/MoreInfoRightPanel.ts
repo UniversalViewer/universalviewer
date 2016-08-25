@@ -35,8 +35,8 @@ class MoreInfoRightPanel extends RightPanel {
             this.limit = this.config.options.textLimit ? this.config.options.textLimit : 130;
         }
         
-        this.aggregateValuesConfig = this.readConfig(this.options.aggregateValues);
-        this.canvasExcludeConfig = this.readConfig(this.options.canvasExclude);
+        this.aggregateValuesConfig = this.readCSV(this.options.aggregateValues);
+        this.canvasExcludeConfig = this.readCSV(this.options.canvasExclude);
         this.manifestData = this.getManifestData();
         this.canvasData = [];
 
@@ -80,11 +80,11 @@ class MoreInfoRightPanel extends RightPanel {
         //}
 
         if (this.options.displayOrder) {
-            data = this.sort(data, this.readConfig(this.options.displayOrder));
+            data = this.sort(data, this.readCSV(this.options.displayOrder));
         }
         
         if (this.options.manifestExclude) {
-            data = this.exclude(data, this.readConfig(this.options.manifestExclude));
+            data = this.exclude(data, this.readCSV(this.options.manifestExclude));
         }
         
         return this.flatten(data);
@@ -100,16 +100,15 @@ class MoreInfoRightPanel extends RightPanel {
         return this.flatten(data);
     }
     
-    readConfig(config: string) {
+    readCSV(config: string): string[] {
         if (config) {
             return config
                 .toLowerCase()
                 .replace(/ /g,"")
                 .split(',');
         }
-        else {
-            return [];
-        }
+
+        return [];
     }
 
     toggleFinish(): void {
