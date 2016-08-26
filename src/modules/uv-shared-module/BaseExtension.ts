@@ -174,7 +174,10 @@ class BaseExtension implements IExtension {
                 var preventDefault: boolean = true;
 
                 if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
-                    if (e.keyCode === KeyCodes.KeyDown.Enter) event = BaseCommands.RETURN;
+                    if (e.keyCode === KeyCodes.KeyDown.Enter) {
+                        event = BaseCommands.RETURN;
+                        preventDefault = false;
+                    }
                     if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseCommands.ESCAPE;
                     if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseCommands.PAGE_UP;
                     if (e.keyCode === KeyCodes.KeyDown.PageDown) event = BaseCommands.PAGE_DOWN;
