@@ -1,37 +1,34 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import Bookmark = require("../../modules/uv-shared-module/Bookmark");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
-import EmbedDialogue = require("./EmbedDialogue");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import ShareDialogue = require("./ShareDialogue");
+import ExternalResource = Manifesto.IExternalResource;
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
-import IProvider = require("../../modules/uv-shared-module/IProvider");
+import IMediaElementExtension = require("./IMediaElementExtension");
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import MediaElementCenterPanel = require("../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import Params = require("../../Params");
-import Provider = require("./Provider");
+import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import TreeView = require("../../modules/uv-contentleftpanel-module/TreeView");
-import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
-import IMediaElementProvider = require("./IMediaElementProvider");
 
-class Extension extends BaseExtension{
+class Extension extends BaseExtension implements IMediaElementExtension {
 
     $downloadDialogue: JQuery;
-    $embedDialogue: JQuery;
+    $shareDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: MediaElementCenterPanel;
     downloadDialogue: DownloadDialogue;
-    embedDialogue: EmbedDialogue;
+    shareDialogue: ShareDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
     helpDialogue: HelpDialogue;
@@ -86,7 +83,11 @@ class Extension extends BaseExtension{
     createModules(): void{
         super.createModules();
 
-        this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        if (this.isHeaderPanelEnabled()){
+            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        } else {
+            Shell.$headerPanel.hide();
+        }
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
@@ -98,7 +99,11 @@ class Extension extends BaseExtension{
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        if (this.isFooterPanelEnabled()){
+            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        } else {
+            Shell.$footerPanel.hide();
+        }
 
         this.$helpDialogue = $('<div class="overlay help"></div>');
         Shell.$overlays.append(this.$helpDialogue);
@@ -108,9 +113,9 @@ class Extension extends BaseExtension{
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$embedDialogue = $('<div class="overlay embed"></div>');
-        Shell.$overlays.append(this.$embedDialogue);
-        this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+        this.$shareDialogue = $('<div class="overlay share"></div>');
+        Shell.$overlays.append(this.$shareDialogue);
+        this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
@@ -126,30 +131,46 @@ class Extension extends BaseExtension{
     }
 
     isLeftPanelEnabled(): boolean {
-        return Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)
-                && ((this.provider.isMultiCanvas() || this.provider.isMultiSequence()) || (<IMediaElementProvider>this.provider).hasResources());
+        return Utils.Bools.getBool(this.config.options.leftPanelEnabled, true)
+                && ((this.helper.isMultiCanvas() || this.helper.isMultiSequence()) || this.helper.hasResources());
     }
 
     bookmark(): void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var canvas: Manifesto.ICanvas = this.extensions.helper.getCurrentCanvas();
         var bookmark: Bookmark = new Bookmark();
 
-        bookmark.index = this.provider.canvasIndex;
+        bookmark.index = this.helper.canvasIndex;
         bookmark.label = canvas.getLabel();
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
-        bookmark.title = this.provider.getLabel();
+        bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
 
-        if ((<IMediaElementProvider>this.provider).isVideo()){
+        if (this.isVideo()){
             bookmark.type = manifesto.ElementType.movingimage().toString();
         } else {
             bookmark.type = manifesto.ElementType.sound().toString();
         }
 
         this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+    }
+
+    getEmbedScript(template: string, width: number, height: number): string{
+        var configUri = this.config.uri || '';
+        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+        return script;
+    }
+
+    // todo: use canvas.getThumbnail()
+    getPosterImageUri(): string{
+        return this.helper.getCurrentCanvas().getProperty('thumbnail');
+    }
+
+    isVideo(): boolean {
+        var elementType: Manifesto.ElementType = this.helper.getElementType();
+        return elementType.toString() === manifesto.ElementType.movingimage().toString();
     }
 }
 

@@ -19,8 +19,13 @@
                     line-height: 22px;
                 }
 
-                &.embed{
+                &.share{
                     .icon-left(url('@{img-path}share.png'), 21px, 35px);
+                    line-height: 22px;
+                }
+
+                &.embed{
+                    .icon-left(url('@{img-path}embed.png'), 21px, 35px);
                     line-height: 22px;
                 }
 
@@ -36,6 +41,11 @@
 
                 &.feedback{
                     .icon-left(url('@{img-path}feedback.png'), 21px, 30px);
+                    line-height: 22px;
+                }
+
+                &.print{
+                    .icon-left(url('@{img-path}print.png'), 21px, 30px);
                     line-height: 22px;
                 }
 
@@ -83,6 +93,18 @@
                     }
 
                     &.feedback{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
+                    
+                    &.print{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
+
+                    &.share{
                         .hide-text();
                         width: 27px;
                         padding: 0;

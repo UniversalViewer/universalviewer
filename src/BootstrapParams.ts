@@ -21,18 +21,18 @@ class BootstrapParams {
     sequenceIndex: number;
 
     constructor() {
-        this.config = Utils.Urls.GetQuerystringParameter('config');
-        this.domain = Utils.Urls.GetQuerystringParameter('domain');
-        this.embedDomain = Utils.Urls.GetQuerystringParameter('embedDomain');
-        this.embedScriptUri = Utils.Urls.GetQuerystringParameter('embedScriptUri');
-        this.isHomeDomain = Utils.Urls.GetQuerystringParameter('isHomeDomain') === 'true';
-        this.isLightbox = Utils.Urls.GetQuerystringParameter('isLightbox') === 'true';
-        this.isOnlyInstance = Utils.Urls.GetQuerystringParameter('isOnlyInstance') === 'true';
-        this.isReload = Utils.Urls.GetQuerystringParameter('isReload') === 'true';
-        var jsonpParam = Utils.Urls.GetQuerystringParameter('jsonp');
+        this.config = Utils.Urls.getQuerystringParameter('config');
+        this.domain = Utils.Urls.getQuerystringParameter('domain');
+        this.embedDomain = Utils.Urls.getQuerystringParameter('embedDomain');
+        this.embedScriptUri = Utils.Urls.getQuerystringParameter('embedScriptUri');
+        this.isHomeDomain = Utils.Urls.getQuerystringParameter('isHomeDomain') === 'true';
+        this.isLightbox = Utils.Urls.getQuerystringParameter('isLightbox') === 'true';
+        this.isOnlyInstance = Utils.Urls.getQuerystringParameter('isOnlyInstance') === 'true';
+        this.isReload = Utils.Urls.getQuerystringParameter('isReload') === 'true';
+        var jsonpParam = Utils.Urls.getQuerystringParameter('jsonp');
         this.jsonp = jsonpParam === null ? null : !(jsonpParam === 'false' || jsonpParam === '0');
-        this.manifestUri = Utils.Urls.GetQuerystringParameter('manifestUri');
-        var locale = Utils.Urls.GetQuerystringParameter('locale') || 'en-GB';
+        this.manifestUri = Utils.Urls.getQuerystringParameter('manifestUri');
+        var locale = Utils.Urls.getQuerystringParameter('locale') || 'en-GB';
         this.setLocale(locale);
 
         this.collectionIndex = this.getParam(Params.collectionIndex);
@@ -48,16 +48,15 @@ class BootstrapParams {
     getParam(param: Params): any {
         if (this.hashParamsAvailable()){
             // get param from parent document
-            var p = parseInt(Utils.Urls.GetHashParameter(this.paramMap[param], parent.document));
+            var p = parseInt(Utils.Urls.getHashParameter(this.paramMap[param], parent.document));
             if (p || p === 0) return p;
         }
 
         // get param from iframe querystring
-        return parseInt(Utils.Urls.GetQuerystringParameter(this.paramMap[param])) || 0;
+        return parseInt(Utils.Urls.getQuerystringParameter(this.paramMap[param])) || 0;
     }
 
     hashParamsAvailable(): boolean {
-        // if reloading,
         return (this.isHomeDomain && !this.isReload && this.isOnlyInstance);
     }
 

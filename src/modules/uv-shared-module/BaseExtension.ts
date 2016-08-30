@@ -1,47 +1,72 @@
 import BaseCommands = require("./BaseCommands");
-import BaseProvider = require("./BaseProvider");
-import BootStrapper = require("../../Bootstrapper");
 import BootstrapParams = require("../../BootstrapParams");
+import BootStrapper = require("../../Bootstrapper");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
-import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
-import ExternalResource = require("./ExternalResource");
+import ExternalResource = Manifesto.IExternalResource;
+import IAccessToken = Manifesto.IAccessToken;
 import IExtension = require("./IExtension");
+import ILoginDialogueOptions = require("./ILoginDialogueOptions");
 import Information = require("./Information");
 import InformationAction = require("./InformationAction");
 import InformationArgs = require("./InformationArgs");
 import InformationType = require("./InformationType");
-import IProvider = require("./IProvider");
+import IThumb = Manifold.IThumb;
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
-import Params = require("../../Params");
-import Shell = require("./Shell");
-import IAccessToken = Manifesto.IAccessToken;
-import ILoginDialogueOptions = require("./ILoginDialogueOptions");
 import LoginWarningMessages = require("./LoginWarningMessages");
+import Params = require("../../Params");
+import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
+import Shell = require("./Shell");
 
 class BaseExtension implements IExtension {
 
     $clickThroughDialogue: JQuery;
-    $restrictedDialogue: JQuery;
     $element: JQuery;
     $loginDialogue: JQuery;
+    $restrictedDialogue: JQuery;
     bootstrapper: BootStrapper;
-    canvasIndex: number;
     clickThroughDialogue: ClickThroughDialogue;
-    restrictedDialogue: RestrictedDialogue;
+    config: any;
+    currentRange: Manifesto.IRange;
+    domain: string;
+    embedDomain: string;
     embedHeight: number;
+    embedScriptUri: string;
     embedWidth: number;
     extensions: any;
+    helper: Manifold.IHelper;
+    isCreated: boolean = false;
+    isHomeDomain: boolean;
+    isLightbox: boolean;
+    isLoggedIn: boolean = false;
+    isOnlyInstance: boolean;
+    isReload: boolean;
+    jsonp: boolean;
+    lastCanvasIndex: number;
+    locale: string;
+    locales: any[];
     loginDialogue: LoginDialogue;
     mouseX: number;
     mouseY: number;
     name: string;
-    provider: IProvider;
+    resources: Manifesto.IExternalResource[];
+    restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
     tabbing: boolean = false;
 
     constructor(bootstrapper: BootStrapper) {
         this.bootstrapper = bootstrapper;
+        this.config = this.bootstrapper.config;
+
+        this.jsonp = this.bootstrapper.params.jsonp;
+        this.locale = this.bootstrapper.params.getLocaleName();
+        this.isHomeDomain = this.bootstrapper.params.isHomeDomain;
+        this.isReload = this.bootstrapper.params.isReload;
+        this.embedDomain = this.bootstrapper.params.embedDomain;
+        this.isOnlyInstance = this.bootstrapper.params.isOnlyInstance;
+        this.embedScriptUri = this.bootstrapper.params.embedScriptUri;
+        this.domain = this.bootstrapper.params.domain;
+        this.isLightbox = this.bootstrapper.params.isLightbox;
     }
 
     public create(overrideDependencies?: any): void {
@@ -58,12 +83,11 @@ class BaseExtension implements IExtension {
         this.$element.width(this.embedWidth);
         this.$element.height(this.embedHeight);
 
-        if (!this.provider.isReload && Utils.Documents.IsInIFrame()){
+        if (!this.isReload && Utils.Documents.isInIFrame()){
             // communication with parent frame (if it exists).
             this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message, origin) => {
                     message = $.parseJSON(message);
-                    // todo: waitFor CREATED
                     this.handleParentFrameEvent(message);
                 }
             });
@@ -71,10 +95,10 @@ class BaseExtension implements IExtension {
 
         this.triggerSocket(BaseCommands.LOAD, {
             bootstrapper: {
-                config: this.provider.bootstrapper.config,
-                params: this.provider.bootstrapper.params
+                config: this.bootstrapper.config,
+                params: this.bootstrapper.params
             },
-            settings: this.provider.getSettings(),
+            settings: this.getSettings(),
             preview: this.getSharePreview()
         });
 
@@ -83,8 +107,8 @@ class BaseExtension implements IExtension {
         this.$element.removeClass();
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
-        if (!this.provider.isHomeDomain) this.$element.addClass('embedded');
-        if (this.provider.isLightbox) this.$element.addClass('lightbox');
+        if (!this.isHomeDomain) this.$element.addClass('embedded');
+        if (this.isLightbox) this.$element.addClass('lightbox');
 
         $(document).on('mousemove', (e) => {
             this.mouseX = e.pageX;
@@ -92,7 +116,8 @@ class BaseExtension implements IExtension {
         });
 
         // events.
-        if (!this.provider.isReload){
+        if (!this.isReload){
+
             window.onresize = () => {
 
                 var $win = $(window);
@@ -101,21 +126,35 @@ class BaseExtension implements IExtension {
                 this.resize();
             };
 
-            this.$element.on('drop', (e => {
-                e.preventDefault();
-                var dropUrl = (<any>e.originalEvent).dataTransfer.getData("URL");
-                var url = Utils.Urls.GetUrlParts(dropUrl);
-                var manifestUri = Utils.Urls.GetQuerystringParameterFromString('manifest', url.search);
-                //var canvasUri = Utils.Urls.GetQuerystringParameterFromString('canvas', url.search);
+            var visibilityProp: string = Utils.Documents.getHiddenProp();
 
-                if (manifestUri){
-                    this.triggerSocket(BaseCommands.DROP, manifestUri);
+            if (visibilityProp) {
+                var evtname = visibilityProp.replace(/[H|h]idden/,'') + 'visibilitychange';
+                document.addEventListener(evtname, () => {
+                    // resize after a tab has been shown (fixes safari layout issue)
+                    if (!Utils.Documents.isHidden()){
+                        this.resize();
+                    }
+                });
+            }
 
-                    var p = new BootstrapParams();
-                    p.manifestUri = manifestUri;
-                    this.provider.reload(p);
-                }
-            }));
+            if (Utils.Bools.getBool(this.config.options.dropEnabled, true)){
+                this.$element.on('drop', (e => {
+                    e.preventDefault();
+                    var dropUrl = (<any>e.originalEvent).dataTransfer.getData("URL");
+                    var url = Utils.Urls.getUrlParts(dropUrl);
+                    var manifestUri = Utils.Urls.getQuerystringParameterFromString('manifest', url.search);
+                    //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
+
+                    if (manifestUri){
+                        this.triggerSocket(BaseCommands.DROP, manifestUri);
+
+                        var p = new BootstrapParams();
+                        p.manifestUri = manifestUri;
+                        this.reload(p);
+                    }
+                }));
+            }
 
             this.$element.on('dragover', (e => {
                 // allow drop
@@ -135,7 +174,10 @@ class BaseExtension implements IExtension {
                 var preventDefault: boolean = true;
 
                 if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
-                    if (e.keyCode === KeyCodes.KeyDown.Enter) event = BaseCommands.RETURN;
+                    if (e.keyCode === KeyCodes.KeyDown.Enter) {
+                        event = BaseCommands.RETURN;
+                        preventDefault = false;
+                    }
                     if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseCommands.ESCAPE;
                     if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseCommands.PAGE_UP;
                     if (e.keyCode === KeyCodes.KeyDown.PageDown) event = BaseCommands.PAGE_DOWN;
@@ -166,7 +208,7 @@ class BaseExtension implements IExtension {
                 }
             });
 
-            if (this.bootstrapper.params.isHomeDomain && Utils.Documents.IsInIFrame()) {
+            if (this.bootstrapper.params.isHomeDomain && Utils.Documents.isInIFrame()) {
 
                 $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, () => {
                     if (this.isOverlayActive()) {
@@ -180,6 +222,7 @@ class BaseExtension implements IExtension {
         }
 
         this.$element.append('<a href="/" id="top"></a>');
+        this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
         $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
             this.triggerSocket(BaseCommands.ACCEPT_TERMS);
@@ -187,11 +230,17 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.LOGIN_FAILED, () => {
             this.triggerSocket(BaseCommands.LOGIN_FAILED);
-            this.showMessage(this.provider.config.content.authorisationFailedMessage);
+            this.showMessage(this.config.content.authorisationFailedMessage);
         });
 
         $.subscribe(BaseCommands.LOGIN, () => {
+            this.isLoggedIn = true;
             this.triggerSocket(BaseCommands.LOGIN);
+        });
+
+        $.subscribe(BaseCommands.LOGOUT, () => {
+            this.isLoggedIn = false;
+            this.triggerSocket(BaseCommands.LOGOUT);
         });
 
         $.subscribe(BaseCommands.BOOKMARK, () => {
@@ -226,6 +275,7 @@ class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseCommands.CREATED, () => {
+            this.isCreated = true;
             this.triggerSocket(BaseCommands.CREATED);
         });
 
@@ -325,8 +375,8 @@ class BaseExtension implements IExtension {
         $.subscribe(BaseCommands.LOAD_FAILED, () => {
             this.triggerSocket(BaseCommands.LOAD_FAILED);
 
-            if (!_.isNull(that.provider.lastCanvasIndex) && that.provider.lastCanvasIndex !== that.provider.canvasIndex){
-                this.viewCanvas(that.provider.lastCanvasIndex);
+            if (!_.isNull(that.lastCanvasIndex) && that.lastCanvasIndex !== that.helper.canvasIndex){
+                this.viewCanvas(that.lastCanvasIndex);
             }
         });
 
@@ -341,7 +391,7 @@ class BaseExtension implements IExtension {
         $.subscribe(BaseCommands.OPEN, () => {
             this.triggerSocket(BaseCommands.OPEN);
 
-            var openUri: string = String.format(this.provider.config.options.openTemplate, this.provider.manifestUri);
+            var openUri: string = String.format(this.config.options.openTemplate, this.helper.iiifResourceUri);
 
             window.open(openUri);
         });
@@ -449,8 +499,8 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
-            this.triggerSocket(BaseCommands.THUMB_SELECTED, canvasIndex);
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
+            this.triggerSocket(BaseCommands.THUMB_SELECTED, thumb.index);
         });
 
         $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
@@ -460,7 +510,7 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
                 {
                     isFullScreen: this.bootstrapper.isFullScreen,
-                    overrideFullScreen: this.provider.config.options.overrideFullScreen
+                    overrideFullScreen: this.config.options.overrideFullScreen
                 });
         });
 
@@ -482,9 +532,6 @@ class BaseExtension implements IExtension {
 
         // create shell and shared views.
         this.shell = new Shell(this.$element);
-
-        // set canvasIndex to -1 (nothing selected yet).
-        this.canvasIndex = -1;
 
         // dependencies
         if (overrideDependencies){
@@ -567,16 +614,16 @@ class BaseExtension implements IExtension {
         $.publish(BaseCommands.CREATED);
         this.setParams();
         this.setDefaultFocus();
-        this.viewCanvas(this.provider.getCanvasIndexParam());
+        this.viewCanvas(this.getCanvasIndexParam());
     }
 
     setParams(): void{
-        if (!this.provider.isHomeDomain) return;
+        if (!this.isHomeDomain) return;
 
-        this.setParam(Params.collectionIndex, this.provider.collectionIndex);
-        this.setParam(Params.manifestIndex, this.provider.manifestIndex);
-        this.setParam(Params.sequenceIndex, this.provider.sequenceIndex);
-        this.setParam(Params.canvasIndex, this.provider.canvasIndex);
+        this.setParam(Params.collectionIndex, this.helper.collectionIndex);
+        this.setParam(Params.manifestIndex, this.helper.manifestIndex);
+        this.setParam(Params.sequenceIndex, this.helper.sequenceIndex);
+        this.setParam(Params.canvasIndex, this.helper.canvasIndex);
     }
 
     setDefaultFocus(): void {
@@ -613,8 +660,9 @@ class BaseExtension implements IExtension {
     }
 
     handleParentFrameEvent(message): void {
-        // todo: waitFor CREATED
-        setTimeout(() => {
+        Utils.Async.waitFor(() => {
+            return this.isCreated;
+        }, () => {
             switch (message.eventName) {
                 case BaseCommands.TOGGLE_FULLSCREEN:
                     $.publish(BaseCommands.TOGGLE_FULLSCREEN, message.eventObject);
@@ -623,22 +671,232 @@ class BaseExtension implements IExtension {
                     $.publish(BaseCommands.PARENT_EXIT_FULLSCREEN);
                     break;
             }
-        }, 1000);
+        });
+    }
+
+    // re-bootstraps the application with new querystring params
+    reload(params?: BootstrapParams): void {
+        var p = new BootstrapParams();
+
+        if (params){
+            p = $.extend(p, params);
+        }
+
+        p.isReload = true;
+        $.disposePubSub();
+        this.bootstrapper.bootstrap(p);
+    }
+
+    getCanvasIndexParam(): number {
+        return this.bootstrapper.params.getParam(Params.canvasIndex);
+    }
+
+    getSequenceIndexParam(): number {
+        return this.bootstrapper.params.getParam(Params.sequenceIndex);
+    }
+
+    isSeeAlsoEnabled(): boolean{
+        return this.config.options.seeAlsoEnabled !== false;
+    }
+
+    getShareUrl(): string {
+        // If embedded on the home domain and it's the only instance of the UV on the page
+        if (this.isDeepLinkingEnabled()){
+            // Use the current page URL with hash params
+            if (Utils.Documents.isInIFrame()){
+                return parent.document.location.href;
+            } else {
+                return document.location.href;
+            }            
+        } else {
+            // If there's a `related` property of format `text/html` in the manifest
+            if (this.helper.hasRelatedPage()){
+                // Use the `related` property in the URL box
+                var related: any = this.helper.getRelated();
+                if (related.length){
+                    related = related[0];
+                }
+                return related['@id'];
+            }
+        }
+
+        return null;
+    }
+
+    addTimestamp(uri: string): string{
+        return uri + "?t=" + Utils.Dates.getTimeStamp();
+    }
+
+    isDeepLinkingEnabled(): boolean {
+        return (this.isHomeDomain && this.isOnlyInstance);
+    }
+
+    isOnHomeDomain(): boolean {
+        return this.isDeepLinkingEnabled();
+    }
+
+    getDomain(): string{
+        var parts = Utils.Urls.getUrlParts(this.helper.iiifResourceUri);
+        return parts.host;
+    }
+
+    getEmbedDomain(): string{
+        return this.embedDomain;
+    }
+
+    getSettings(): ISettings {
+        if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+            var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+            
+            if (settings)
+                return $.extend(this.config.options, settings.value);
+        }
+        
+        return this.config.options;
+    }
+
+    updateSettings(settings: ISettings): void {
+        if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+            var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+            if (storedSettings)
+                settings = $.extend(storedSettings.value, settings);
+                
+            // store for ten years
+            Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
+        }
+        
+        this.config.options = $.extend(this.config.options, settings);
+    }
+
+    sanitize(html: string): string {
+        var elem = document.createElement('div');
+        var $elem = $(elem);
+
+        $elem.html(html);
+
+        var s = new Sanitize({
+            elements:   ['a', 'b', 'br', 'img', 'p', 'i', 'span'],
+            attributes: {
+                a: ['href'],
+                img: ['src', 'alt']
+            },
+            protocols:  {
+                a: { href: ['http', 'https'] }
+            }
+        });
+
+        $elem.html(s.clean_node(elem));
+
+        return $elem.html();
+    }
+
+    getLocales(): any[] {
+        if (this.locales) return this.locales;
+
+        // use data-locales to prioritise
+        var items = this.config.localisation.locales.clone();
+        var sorting = this.bootstrapper.params.locales;
+        var result = [];
+
+        // loop through sorting array
+        // if items contains sort item, add it to results.
+        // if sort item has a label, substitute it
+        // mark item as added.
+        // if limitLocales is disabled,
+        // loop through remaining items and add to results.
+
+        _.each(sorting, (sortItem: any) => {
+            var match = _.filter(items, (item: any) => { return item.name === sortItem.name; });
+            if (match.length){
+                var m: any = match[0];
+                if (sortItem.label) m.label = sortItem.label;
+                m.added = true;
+                result.push(m);
+            }
+        });
+
+        var limitLocales: boolean = Utils.Bools.getBool(this.config.options.limitLocales, false);
+
+        if (!limitLocales){
+            _.each(items, (item: any) => {
+                if (!item.added){
+                    result.push(item);
+                }
+                delete item.added;
+            });
+        }
+
+        return this.locales = result;
+    }
+
+    getAlternateLocale(): any {
+        var locales = this.getLocales();
+
+        var alternateLocale;
+
+        for (var i = 0; i < locales.length; i++) {
+            var l = locales[i];
+            if (l.name !== this.locale) {
+                alternateLocale = l;
+            }
+        }
+
+        return l;
+    }
+
+    changeLocale(locale: string): void {
+        // if the current locale is "en-GB:English,cy-GB:Welsh"
+        // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
+
+        // re-order locales so the passed locale is first
+        var locales = this.locales.clone();
+
+        var index = locales.indexOfTest((l: any) => {
+            return l.name === locale;
+        });
+
+        locales.move(index, 0);
+
+        // convert to comma-separated string
+        var str = this.serializeLocales(locales);
+
+        var p = new BootstrapParams();
+        p.setLocale(str);
+        this.reload(p);
+    }
+
+    serializeLocales(locales: any[]): string {
+        var str = '';
+
+        for (var i = 0; i < locales.length; i++){
+            var l = locales[i];
+            if (i > 0) str += ',';
+            str += l.name;
+            if (l.label){
+                str += ':' + l.label;
+            }
+        }
+
+        return str;
+    }
+
+    getSerializedLocales(): string {
+        return this.serializeLocales(this.locales);
     }
 
     getSharePreview(): any {
         var preview: any = {};
 
-        preview.title = this.provider.getLabel();
+        preview.title = this.helper.getLabel();
 
         // todo: use getThumb (when implemented)
 
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
 
         var thumbnail = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !_.isString(thumbnail)){
-            thumbnail = canvas.getCanonicalImageUri(this.provider.config.options.bookmarkThumbWidth);
+            thumbnail = canvas.getCanonicalImageUri(this.config.options.bookmarkThumbWidth);
         }
 
         preview.image = thumbnail;
@@ -646,14 +904,20 @@ class BaseExtension implements IExtension {
         return preview;
     }
 
+    public getPagedIndices(canvasIndex?: number): number[]{
+        if (typeof(canvasIndex) === 'undefined') canvasIndex = this.helper.canvasIndex;
+
+        return [canvasIndex];
+    }
+
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
 
-        var indices = this.provider.getPagedIndices();
+        var indices = this.getPagedIndices();
         var resourcesToLoad = [];
 
         _.each(indices, (index) => {
-            var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
-            var r: Manifesto.IExternalResource = new ExternalResource(canvas, this.provider.getInfoUri);
+            var canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
+            var r: Manifesto.IExternalResource = new Manifold.ExternalResource(canvas, this.helper.getInfoUri);
 
             // used to reload resources with isResponseHandled = true.
             if (resources){
@@ -671,7 +935,7 @@ class BaseExtension implements IExtension {
             }
         });
 
-        var storageStrategy: string = this.provider.config.options.tokenStorage;
+        var storageStrategy: string = this.config.options.tokenStorage;
 
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
             manifesto.loadExternalResources(
@@ -684,10 +948,10 @@ class BaseExtension implements IExtension {
                 this.storeAccessToken,
                 this.getStoredAccessToken,
                 this.handleExternalResourceResponse).then((r: Manifesto.IExternalResource[]) => {
-                    this.provider.resources = _.map(r, (resource: Manifesto.IExternalResource) => {
+                    this.resources = _.map(r, (resource: Manifesto.IExternalResource) => {
                         return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
                     });
-                    resolve(this.provider.resources);
+                    resolve(this.resources);
                 })['catch']((error: any) => {
                     switch(error.name){
                         case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
@@ -711,14 +975,14 @@ class BaseExtension implements IExtension {
         var value;
 
         // deep linking is only allowed when hosted on home domain.
-        if (this.provider.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()){
             // todo: use a static type on bootstrapper.params
-            value = Utils.Urls.GetHashParameter(this.provider.bootstrapper.params.paramMap[key], parent.document);
+            value = Utils.Urls.getHashParameter(this.bootstrapper.params.paramMap[key], parent.document);
         }
 
         if (!value){
             // todo: use a static type on bootstrapper.params
-            value = Utils.Urls.GetQuerystringParameter(this.provider.bootstrapper.params.paramMap[key]);
+            value = Utils.Urls.getQuerystringParameter(this.bootstrapper.params.paramMap[key]);
         }
 
         return value;
@@ -727,24 +991,22 @@ class BaseExtension implements IExtension {
     // set hash params depending on whether the UV is embedded.
     setParam(key: Params, value: any): void{
 
-        if (this.provider.isDeepLinkingEnabled()){
-            Utils.Urls.SetHashParameter(this.provider.bootstrapper.params.paramMap[key], value, parent.document);
+        if (this.isDeepLinkingEnabled()){
+            Utils.Urls.setHashParameter(this.bootstrapper.params.paramMap[key], value, parent.document);
         }
     }
 
     viewCanvas(canvasIndex: number): void {
-        if (canvasIndex === -1) return;
 
-        if (this.provider.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.provider.config.content.canvasIndexOutOfRange);
+        if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
+            this.showMessage(this.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
-        this.provider.lastCanvasIndex = this.provider.canvasIndex;
-        this.provider.canvasIndex = canvasIndex;
+        this.lastCanvasIndex = this.helper.canvasIndex;
+        this.helper.canvasIndex = canvasIndex;
 
         $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
-
         $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
 
         this.setParam(Params.canvasIndex, canvasIndex);
@@ -773,36 +1035,40 @@ class BaseExtension implements IExtension {
 
     viewManifest(manifest: Manifesto.IManifest): void{
         var p = new BootstrapParams();
-        p.manifestUri = this.provider.manifestUri;
-        p.collectionIndex = this.provider.getCollectionIndex(manifest);
+        p.manifestUri = this.helper.iiifResourceUri;
+        p.collectionIndex = this.helper.getCollectionIndex(manifest);
         p.manifestIndex = manifest.index;
         p.sequenceIndex = 0;
         p.canvasIndex = 0;
 
-        this.provider.reload(p);
+        this.reload(p);
     }
 
     viewCollection(collection: Manifesto.ICollection): void{
         var p = new BootstrapParams();
-        p.manifestUri = this.provider.manifestUri;
+        p.manifestUri = this.helper.iiifResourceUri;
         p.collectionIndex = collection.index;
         p.manifestIndex = 0;
         p.sequenceIndex = 0;
         p.canvasIndex = 0;
 
-        this.provider.reload(p);
+        this.reload(p);
     }
 
     isFullScreen(): boolean {
         return this.bootstrapper.isFullScreen;
     }
 
+    isHeaderPanelEnabled(): boolean {
+        return Utils.Bools.getBool(this.config.options.headerPanelEnabled, true);
+    }
+
     isLeftPanelEnabled(): boolean {
-        if (Utils.Bools.GetBool(this.provider.config.options.leftPanelEnabled, true)){
-            if (this.provider.hasParentCollection()){
+        if (Utils.Bools.getBool(this.config.options.leftPanelEnabled, true)){
+            if (this.helper.hasParentCollection()){
                 return true;
-            } else if (this.provider.isMultiCanvas()){
-                if (this.provider.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()){
+            } else if (this.helper.isMultiCanvas()){
+                if (this.helper.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()){
                     return true;
                 }
             }
@@ -812,11 +1078,15 @@ class BaseExtension implements IExtension {
     }
 
     isRightPanelEnabled(): boolean {
-        return  Utils.Bools.GetBool(this.provider.config.options.rightPanelEnabled, true);
+        return  Utils.Bools.getBool(this.config.options.rightPanelEnabled, true);
+    }
+
+    isFooterPanelEnabled(): boolean {
+        return Utils.Bools.getBool(this.config.options.footerPanelEnabled, true);
     }
 
     useArrowKeysToNavigate(): boolean {
-        return Utils.Bools.GetBool(this.provider.config.options.useArrowKeysToNavigate, true);
+        return Utils.Bools.getBool(this.config.options.useArrowKeysToNavigate, true);
     }
 
     bookmark(): void {
@@ -829,7 +1099,7 @@ class BaseExtension implements IExtension {
 
     getBookmarkUri(): string {
         var absUri = parent.document.URL;
-        var parts = Utils.Urls.GetUrlParts(absUri);
+        var parts = Utils.Urls.getUrlParts(absUri);
         var relUri = parts.pathname + parts.search + parent.document.location.hash;
 
         if (!relUri.startsWith("/")) {
@@ -912,8 +1182,16 @@ class BaseExtension implements IExtension {
     }
 
     getAccessToken(resource: Manifesto.IExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
+
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-            $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
+            var serviceUri: string = resource.tokenService.id;
+
+            // pick an identifier for this message. We might want to keep track of sent messages
+            var msgId = serviceUri + "|" + new Date().getTime();
+
+            var receiveAccessToken = (e) => {
+                window.removeEventListener("message", receiveAccessToken);
+                var token = e.data;
                 if (token.error){
                     if(rejectOnError) {
                         reject(token.errorDescription);
@@ -923,14 +1201,34 @@ class BaseExtension implements IExtension {
                 } else {
                     resolve(token);
                 }
-            }).fail((error) => {
-                if(rejectOnError) {
-                    reject(error);
-                } else {
-                    resolve(null);
-                }
-            });
+            };
+
+            window.addEventListener("message", receiveAccessToken, false);
+
+            var tokenUri: string = serviceUri + "?messageId=" + msgId;
+            $('#commsFrame').prop('src', tokenUri);
         });
+
+        // deprecated JSONP method - keep this around for reference
+        //return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
+        //    $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
+        //        if (token.error){
+        //            if(rejectOnError) {
+        //                reject(token.errorDescription);
+        //            } else {
+        //                resolve(null);
+        //            }
+        //        } else {
+        //            resolve(token);
+        //        }
+        //    }).fail((error) => {
+        //        if(rejectOnError) {
+        //            reject(error);
+        //        } else {
+        //            resolve(null);
+        //        }
+        //    });
+        //});
     }
 
     storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
@@ -952,14 +1250,11 @@ class BaseExtension implements IExtension {
                 item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(storageStrategy));
             }
 
-            // first try an exact match of the url
-            //var item: storage.StorageItem = Utils.Storage.get(resource.dataUri, new Utils.StorageType(storageStrategy));
-
             if (item){
                 foundItems.push(item);
             } else {
                 // find an access token for the domain
-                var domain = Utils.Urls.GetUrlParts(resource.dataUri).hostname;
+                var domain = Utils.Urls.getUrlParts(resource.dataUri).hostname;
 
                 var items: storage.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
 

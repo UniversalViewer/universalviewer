@@ -185,15 +185,33 @@
         }
 
         .rightOptions {
-            .pagingToggle{
-                margin: -1px 4px 0 0;
-                &.one-up{
+            .pagingToggleButtons{
+                float: left;
+                //margin: -1px 4px 0 0;
+                .one-up{
                     background-image: url('@{img-path}one_up.png');
                     background-repeat: no-repeat;
+                    .opacity(.75);
+                    &.on{
+                        .opacity(1);
+                    }
                 }
-                &.two-up{
+                .two-up{
                     background-image: url('@{img-path}two_up.png');
                     background-repeat: no-repeat;
+                    .opacity(.75);
+                    &.on{
+                        .opacity(1);
+                    }
+                }
+            }
+            .gallery{
+                background-image: url('@{img-path}grid.png');
+                background-repeat: no-repeat;
+                margin-right: @margin-small-horizontal;
+                .opacity(.75);
+                &.on{
+                    .opacity(1);
                 }
             }
             .localeToggle{

@@ -1,15 +1,19 @@
 class ExternalResource implements Manifesto.IExternalResource {
+    //public profile: Manifesto.ServiceProfile;
     public clickThroughService: Manifesto.IService;
-    public restrictedService: Manifesto.IService;
     public data: any;
     public dataUri: string;
     public error: any;
+    public height: number;
     public isResponseHandled: boolean = false;
     public loginService: Manifesto.IService;
     public logoutService: Manifesto.IService;
-    //public profile: Manifesto.ServiceProfile;
+    public restrictedService: Manifesto.IService;
     public status: number;
     public tokenService: Manifesto.IService;
+    public width: number;
+    public x: number;
+    public y: number;
 
     constructor(resource: Manifesto.IManifestResource, dataUriFunc: (r: Manifesto.IManifestResource) => string) {
         resource.externalResource = this;
@@ -54,7 +58,7 @@ class ExternalResource implements Manifesto.IExternalResource {
             var type: string = 'GET';
 
             // todo: use manifesto.hasServiceDescriptor
-            if (!_.endsWith(that.dataUri, 'info.json')){
+            if (!that.dataUri.endsWith('info.json')){
                 // If access control is unnecessary, short circuit the process.
                 // Note that isAccessControlled check for short-circuiting only
                 // works in the "binary resource" context, since in that case,
@@ -92,14 +96,14 @@ class ExternalResource implements Manifesto.IExternalResource {
                     that._parseAuthServices(that.data);
 
                     // remove trailing /info.json
-                    if (_.endsWith(uri, '/info.json')){
-                        uri = uri.substr(0, _.lastIndexOf(uri, '/'));
+                    if (uri.endsWith('/info.json')){
+                        uri = uri.substr(0, uri.lastIndexOf('/'));
                     }
 
                     var dataUri = that.dataUri;
 
-                    if (_.endsWith(dataUri, '/info.json')){
-                        dataUri = dataUri.substr(0, _.lastIndexOf(dataUri, '/'));
+                    if (dataUri.endsWith('/info.json')){
+                        dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
                     }
 
                     // if the request was redirected to a degraded version and there's a login service to get the full quality version

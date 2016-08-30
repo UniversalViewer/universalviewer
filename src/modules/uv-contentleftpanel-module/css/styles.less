@@ -29,6 +29,8 @@
                 width: 75px;
                 margin: 0;
                 cursor: pointer;
+                white-space: nowrap;
+                text-overflow: ellipsis;
 
                 &.first{
                     margin: 0 0 0 @margin-medium-horizontal;
@@ -51,44 +53,50 @@
             padding: @padding-medium;
 
             .options{
-                overflow: hidden;
-
                 padding: 0 0 @padding-medium-vertical 0;
 
-                .left {
-
-                    float: left;
-
-                    .treeView{
-
-                        padding: @padding-small-vertical 0 0 0;
-
-                        span{
-                            display: block;
-                            float: left;
-                            color: @text-color;
-                            padding: 5px 4px 0 0;
-                            font-size: @font-size-small;
-                        }
-
-                        select{
-                            float: left;
-                            font-size: @font-size-small;
-                        }
-                    }
+                .top {
+                    overflow: hidden;
+                    height: auto;
                 }
 
-                .right {
-                    float: right;
+                .bottom {
                     overflow: hidden;
 
-                    .multiSelect{
-                        .multiSelectAll {
-                            float: left;
-                        }
+                    .left {
+                        float: left;
 
-                        .btn{
-                            margin-left: @margin-medium-horizontal;
+                        .treeView{
+
+                            padding: @padding-small-vertical 0 0 0;
+
+                            span{
+                                display: block;
+                                float: left;
+                                color: @text-color;
+                                padding: 5px 4px 0 0;
+                                font-size: @font-size-small;
+                            }
+
+                            select{
+                                float: left;
+                                font-size: @font-size-small;
+                            }
+                        }
+                    }
+
+                    .right {
+                        float: right;
+                        overflow: hidden;
+
+                        .multiSelect{
+                            .multiSelectAll {
+                                float: left;
+                            }
+
+                            .btn{
+                                margin-left: @margin-medium-horizontal;
+                            }
                         }
                     }
                 }

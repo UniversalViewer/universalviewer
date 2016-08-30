@@ -1,34 +1,31 @@
 import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
 import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import BaseProvider = require("../../modules/uv-shared-module/BaseProvider");
 import Bookmark = require("../../modules/uv-shared-module/Bookmark");
 import BootStrapper = require("../../Bootstrapper");
 import Commands = require("./Commands");
 import DownloadDialogue = require("./DownloadDialogue");
-import EmbedDialogue = require("./EmbedDialogue");
+import ShareDialogue = require("./ShareDialogue");
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
-import IPDFProvider = require("./IPDFProvider");
-import IProvider = require("../../modules/uv-shared-module/IProvider");
+import IPDFExtension = require("./IPDFExtension");
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import Params = require("../../Params");
 import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
-import Provider = require("./Provider");
+import Params = require("../../Params");
+import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SettingsDialogue = require("./SettingsDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
-import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
 
-class Extension extends BaseExtension{
+class Extension extends BaseExtension implements IPDFExtension {
 
     $downloadDialogue: JQuery;
-    $embedDialogue: JQuery;
+    $shareDialogue: JQuery;
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: PDFCenterPanel;
     downloadDialogue: DownloadDialogue;
-    embedDialogue: EmbedDialogue;
+    shareDialogue: ShareDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
     leftPanel: ResourcesLeftPanel;
@@ -81,7 +78,11 @@ class Extension extends BaseExtension{
     createModules(): void{
         super.createModules();
 
-        this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        if (this.isHeaderPanelEnabled()){
+            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        } else {
+            Shell.$headerPanel.hide();
+        }
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
@@ -93,15 +94,19 @@ class Extension extends BaseExtension{
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        if (this.isFooterPanelEnabled()){
+            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+        } else {
+            Shell.$footerPanel.hide();
+        }
 
         this.$downloadDialogue = $('<div class="overlay download"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$embedDialogue = $('<div class="overlay embed"></div>');
-        Shell.$overlays.append(this.$embedDialogue);
-        this.embedDialogue = new EmbedDialogue(this.$embedDialogue);
+        this.$shareDialogue = $('<div class="overlay share"></div>');
+        Shell.$overlays.append(this.$shareDialogue);
+        this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
@@ -119,18 +124,24 @@ class Extension extends BaseExtension{
     bookmark() : void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+        var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
         var bookmark: Bookmark = new Bookmark();
 
-        bookmark.index = this.provider.canvasIndex;
+        bookmark.index = this.helper.canvasIndex;
         bookmark.label = canvas.getLabel();
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
-        bookmark.title = this.provider.getLabel();
+        bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
         bookmark.type = manifesto.ElementType.document().toString();
 
         this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+    }
+
+    getEmbedScript(template: string, width: number, height: number): string{
+        var configUri = this.config.uri || '';
+        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+        return script;
     }
 }
 

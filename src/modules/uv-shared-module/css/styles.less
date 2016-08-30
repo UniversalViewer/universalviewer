@@ -1,5 +1,4 @@
-﻿
-@import 'variables';
+﻿@import 'variables';
 @import 'mixins';
 @import 'mixins-extended';
 @import 'scaffolding';
@@ -13,7 +12,6 @@
 @import 'footer-panel';
 @import 'overlays';
 
-//@img-path: '../../../themes/@{theme}/img/';
 @img-path: '../../../modules/uv-shared-module/img/';
 
 #app {
@@ -43,9 +41,14 @@
         font-weight: bold;
     }
 
+    #commsFrame{
+        width: 1px;
+        height: 1px;
+        border: none;
+    }
+
     .headerPanel{
         position: relative;
-        background-color: @panel-dark-bg;
         color: #fff;
         height: 40px;
     }

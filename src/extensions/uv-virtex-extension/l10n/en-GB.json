@@ -24,15 +24,6 @@
         "title": "Download"
       }
     },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Custom Size",
-        "height": "Height",
-        "instructions": "To embed this item in your own website, copy and paste the code below.",
-        "title": "Share",
-        "width": "Width"
-      }
-    },
     "footerPanel": {
       "content": {
         "bookmark": "Add to bookmarks",
@@ -102,9 +93,20 @@
     },
     "virtexCenterPanel": {
       "content": {
-        "acknowledgements": "Attribution",
+        "attribution": "Attribution",
         "zoomIn": "Zoom In",
         "zoomOut": "Zoom Out"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "custom",
+        "height": "Height",
+        "instructions": "To embed this item in your own website, copy and paste the code below.",
+        "share": "Share",
+        "embed": "Embed",
+        "width": "Width",
+        "size": "Size:"
       }
     }
   }

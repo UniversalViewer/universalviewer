@@ -54,16 +54,8 @@
         "preview": "Preview",
         "title": "Download",
         "wholeImageHighRes": "Whole image {0} x {1}px ({2})",
+        "wholeImagesHighRes": "Whole images ({0})",
         "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)"
-      }
-    },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Custom Size",
-        "height": "Height",
-        "instructions": "To embed this item in your own website, copy and paste the code below.",
-        "title": "Share",
-        "width": "Width"
       }
     },
     "footerPanel": {
@@ -74,7 +66,8 @@
         "feedback": "Feedback",
         "exitFullScreen": "Exit Full Screen",
         "fullScreen": "Full Screen",
-        "open": "Open"
+        "open": "Open",
+        "share": "Share"
       }
     },
     "genericDialogue": {
@@ -115,7 +108,7 @@
         "more": "more",
         "noData": "No data to display",
         "title": "More Information",
-        "manifestHeader": "About the book",
+        "manifestHeader": "About the item",
         "canvasHeader": "About the image",
         "copyToClipboard": "Copy to clipboard",
         "copiedToClipboard": "Copied to clipboard"
@@ -129,6 +122,7 @@
         "firstImage": "First Image",
         "firstPage": "First Page",
         "folio": "Folio",
+        "gallery": "Gallery",
         "go": "Go",
         "help": "Help",
         "image": "Image",
@@ -150,7 +144,7 @@
     },
     "seadragonCenterPanel": {
       "content": {
-        "acknowledgements": "Attribution",
+        "attribution": "Attribution",
         "goHome": "Go Home",
         "imageUnavailable": "Image Unavailable",
         "next": "Next",
@@ -181,6 +175,7 @@
         "page": "page",
         "pageCaps": "Page",
         "previousResult": "Previous Result",
+        "print": "Print",
         "resultFoundFor": "result found for",
         "resultsFoundFor": "results found for",
         "searchWithin": "Search within this item:"
@@ -194,6 +189,17 @@
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
         "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "custom",
+        "height": "Height",
+        "instructions": "To embed this item in your own website, copy and paste the code below.",
+        "share": "Share",
+        "embed": "Embed",
+        "width": "Width",
+        "size": "Size:"
       }
     }
   }

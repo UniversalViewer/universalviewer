@@ -43,21 +43,53 @@ class DownloadDialogue extends Dialogue {
         this.$element.hide();
     }
 
-    addEntireFileDownloadOption(rendering: Manifesto.IRendering): void{
-        var fileUri = rendering.id;
-        var label = rendering.getLabel();
+    addEntireFileDownloadOptions(): void {
+        if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal)) {
+            this.$downloadOptions.empty();
+
+            // add each file src
+            var canvas = this.extension.helper.getCurrentCanvas();
+
+            var renderingFound: boolean = false;
+
+            _.each(canvas.getRenderings(), (rendering: Manifesto.IRendering) => {
+                var renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
+                var format: string = '';
+                if (renderingFormat){
+                    format = renderingFormat.toString();
+                }
+                this.addEntireFileDownloadOption(rendering.id, rendering.getLabel(), format);
+                renderingFound = true;
+            });
+
+            if (!renderingFound){
+                this.addEntireFileDownloadOption(canvas.id, null, null);
+            }
+        }
+    }
+
+    addEntireFileDownloadOption(uri: string, label: string, format: string): void{
         if (label) {
             label += " ({0})";
         } else {
             label = this.content.entireFileAsOriginal;
         }
         var fileType;
-        if (rendering.getFormat()) {
-            fileType = Utils.Files.SimplifyMimeType(rendering.getFormat().toString());
+        if (format) {
+            fileType = Utils.Files.simplifyMimeType(format);
         } else {
-            fileType = this.getFileExtension(fileUri);
+            fileType = this.getFileExtension(uri);
         }
-        this.$downloadOptions.append('<li><a href="' + fileUri + '" target="_blank" download>' + String.format(label, fileType) + '</li>');
+        this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download>' + String.format(label, fileType) + '</li>');
+    }
+
+    updateNoneAvailable(): void {
+        if (!this.$downloadOptions.find('li:visible').length){
+            this.$noneAvailable.show();
+        } else {
+            // select first option.
+            this.$noneAvailable.hide();
+        }
     }
 
     getFileExtension(fileUri: string): string{
@@ -65,8 +97,17 @@ class DownloadDialogue extends Dialogue {
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
-        // this needs to be overridden in extension-specific subclasses.
-        return false;
+        switch (option){
+            case DownloadOption.entireFileAsOriginal:
+                // check if ui-extensions disable it
+                var uiExtensions: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+
+                if (!this.extension.helper.isUIEnabled('mediaDownload')) {
+                    return false;
+                }
+        }
+
+        return true;
     }
 
     close(): void {

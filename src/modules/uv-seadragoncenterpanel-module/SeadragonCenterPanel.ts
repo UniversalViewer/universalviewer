@@ -1,11 +1,10 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import ExternalResource = Manifesto.IExternalResource;
 import Params = require("../../Params");
+import Point = require("../../modules/uv-shared-module/Point");
 import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 
@@ -18,6 +17,7 @@ class SeadragonCenterPanel extends CenterPanel {
     initialRotation: any;
     isCreated: boolean = false;
     isFirstLoad: boolean = true;
+    items: any[];
     nextButtonEnabled: boolean = false;
     pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
@@ -26,8 +26,8 @@ class SeadragonCenterPanel extends CenterPanel {
     viewer: any;
 
     $goHomeButton: JQuery;
-    $rightButton: JQuery;
-    $leftButton: JQuery;
+    $nextButton: JQuery;
+    $prevButton: JQuery;
     $rotateButton: JQuery;
     $spinner: JQuery;
     $viewer: JQuery;
@@ -49,7 +49,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$content.prepend(this.$viewer);
 
         $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
-            Utils.Async.WaitFor(() => {
+            Utils.Async.waitFor(() => {
                 return this.isResized;
             }, () => {
                 if (!this.isCreated) this.createUI();
@@ -59,13 +59,15 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     createUI(): void {
+        var that = this;
+        
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
-        this.showAttribution();
+        this.updateAttribution();
 
         // todo: use compiler flag (when available)
-        var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.provider.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
+        var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.extension.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
@@ -84,7 +86,6 @@ class SeadragonCenterPanel extends CenterPanel {
             visibilityRatio: this.config.options.visibilityRatio || 0.5,
             constrainDuringPan: this.config.options.constrainDuringPan || false,
             immediateRender: this.config.options.immediateRender || false,
-            maxZoomLevel: this.config.options.maxZoomLevel || null,
             blendTime: this.config.options.blendTime || 0,
             autoHideControls: this.config.options.autoHideControls == null ? true : this.config.options.autoHideControls,
             prefixUrl: prefixUrl,
@@ -181,11 +182,6 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }, this.config.options.controlsFadeAfterInactive);
 
-        this.viewer.addHandler('open', (viewer) => {
-            $.publish(Commands.SEADRAGON_OPEN, [viewer]);
-            this.openPagesHandler();
-        });
-
         this.viewer.addHandler('tile-drawn', () => {
             this.$spinner.hide();
         });
@@ -216,7 +212,7 @@ class SeadragonCenterPanel extends CenterPanel {
             $.publish(Commands.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
         });
 
-        this.title = (<ISeadragonProvider>this.extension.provider).getLabel();
+        this.title = this.extension.helper.getLabel();
 
         this.createNavigationButtons();
 
@@ -228,8 +224,8 @@ class SeadragonCenterPanel extends CenterPanel {
 
         //if (browser == 'Firefox') {
         //    if (this.provider.isMultiCanvas()){
-        //        this.$leftButton.hide();
-        //        this.$rightButton.hide();
+        //        this.$prevButton.hide();
+        //        this.$nextButton.hide();
         //    }
         //    this.$rotateButton.hide();
         //}
@@ -241,26 +237,37 @@ class SeadragonCenterPanel extends CenterPanel {
 
     createNavigationButtons() {
 
-        this.$leftButton = $('<div class="paging btn prev"></div>');
-        this.$leftButton.prop('title', this.content.previous);
-        this.viewer.addControl(this.$leftButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
+        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
-        this.$rightButton = $('<div class="paging btn next"></div>');
-        this.$rightButton.prop('title', this.content.next);
-        this.viewer.addControl(this.$rightButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
+        this.$prevButton = $('<div class="paging btn prev"></div>');
+        this.$prevButton.prop('title', this.content.previous);
+
+        this.$nextButton = $('<div class="paging btn next"></div>');
+        this.$nextButton.prop('title', this.content.next);
+        
+        this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
+        this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
+
+        switch (viewingDirection.toString()){
+            case manifesto.ViewingDirection.bottomToTop().toString() :
+            case manifesto.ViewingDirection.topToBottom().toString() :
+                this.$prevButton.addClass('vertical');
+                this.$nextButton.addClass('vertical');;
+                break;
+        }
 
         var that = this;
 
-        var viewingDirection: Manifesto.ViewingDirection = this.provider.getViewingDirection();
-
-        this.$leftButton.on('touchstart click', (e) => {
+        this.$prevButton.on('touchstart click', (e) => {
             e.preventDefault();
             OpenSeadragon.cancelEvent(e);
 
             if (!that.prevButtonEnabled) return;
 
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
                     $.publish(Commands.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
@@ -269,14 +276,16 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         });
 
-        this.$rightButton.on('touchstart click', (e) => {
+        this.$nextButton.on('touchstart click', (e) => {
             e.preventDefault();
             OpenSeadragon.cancelEvent(e);
 
             if (!that.nextButtonEnabled) return;
 
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
                     $.publish(Commands.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
@@ -289,125 +298,219 @@ class SeadragonCenterPanel extends CenterPanel {
     openMedia(resources?: Manifesto.IExternalResource[]): void {
 
         this.$spinner.show();
+        this.items = [];
 
         this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalResource[]) => {
             // OSD can open an array info.json objects
-            this.viewer.open(resources);
+            //this.viewer.open(resources);
+
+            this.viewer.close();
+
+            resources = this.getPagePositions(resources);
+
+            for (var i = 0; i < resources.length; i++){
+                var resource: Manifesto.IExternalResource = resources[i];
+                this.viewer.addTiledImage({
+                    tileSource: resource,
+                    x: resource.x,
+                    y: resource.y,
+                    width: resource.width,
+                    success: (item) => {
+                        this.items.push(item);
+                        if (this.items.length === resources.length) {
+                            this.viewer.viewport.maxZoomLevel = this.viewer.viewport.getZoom(true) * (this.config.options.maxZoomLevel || 8);
+                            this.openPagesHandler();
+                        }
+                    }
+                });
+            }
         });
     }
 
-    positionPages() {
-
-        var resources: Manifesto.IExternalResource[] = (<ISeadragonProvider>this.provider).resources;
-
-        var x: number;
-        var y: number;
-        var page: any;
-        var pageBounds: any;
-        var nextPage: any;
-        var nextPagePos: any;
-        var topPage: any;
-        var topPageBounds: any;
-        var bottomPage: any;
-        var bottomPagePos: any;
+    getPagePositions(resources: Manifesto.IExternalResource[]): Manifesto.IExternalResource[] {
         var leftPage: any;
-        var leftPageBounds: any;
         var rightPage: any;
-        var rightPageBounds: any;
-        var rightPagePos: any;
+        var topPage: any;
+        var bottomPage: any;
+        var page: any;
+        var nextPage: any;
 
         // if there's more than one image, determine alignment strategy
         if (resources.length > 1) {
 
             if (resources.length === 2) {
                 // recto verso
-                if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
+                if (this.extension.helper.isVerticallyAligned()) {
                     // vertical alignment
-                    topPage = this.viewer.world.getItemAt(0);
-                    topPageBounds = topPage.getBounds(true);
-                    y = topPageBounds.y + topPageBounds.height;
-                    bottomPage = this.viewer.world.getItemAt(1);
-                    bottomPagePos = bottomPage.getBounds(true).getTopLeft();
-                    bottomPagePos.y = y + this.config.options.pageGap;
-                    bottomPage.setPosition(bottomPagePos, true);
+                    topPage = resources[0];
+                    topPage.y = 0;
+                    bottomPage = resources[1];
+                    bottomPage.y = topPage.height + this.config.options.pageGap;
                 } else {
                     // horizontal alignment
-                    leftPage = this.viewer.world.getItemAt(0);
-                    leftPageBounds = leftPage.getBounds(true);
-                    x = leftPageBounds.x + leftPageBounds.width;
-                    rightPage = this.viewer.world.getItemAt(1);
-                    rightPageBounds = rightPage.getBounds(true);
-                    rightPagePos = rightPageBounds.getTopLeft();
-                    rightPagePos.x = x + this.config.options.pageGap;
-                    rightPage.setPosition(rightPagePos, true);
-
-                    if (rightPage.source.width > rightPage.source.height){
-                        rightPage.setWidth(leftPageBounds.width);
-                    } else {
-                        rightPage.setHeight(leftPageBounds.height);
-                    }
+                    leftPage = resources[0];
+                    leftPage.x = 0;
+                    rightPage = resources[1];
+                    rightPage.x = leftPage.width + this.config.options.pageGap;
                 }
             } else {
-
                 // scroll
-                if ((<ISeadragonProvider>this.provider).isVerticallyAligned()) {
+                if (this.extension.helper.isVerticallyAligned()) {
                     // vertical alignment
-                    if ((<ISeadragonProvider>this.provider).isTopToBottom()) {
+                    if (this.extension.helper.isTopToBottom()) {
                         // top to bottom
                         for (var i = 0; i < resources.length - 1; i++) {
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            y = pageBounds.y + pageBounds.height;
-                            nextPage = this.viewer.world.getItemAt(i + 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.y = y;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i + 1];
+                            nextPage.y = (page.y || 0) + page.height;;
                         }
                     } else {
                         // bottom to top
                         for (var i = resources.length; i > 0; i--) {
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            y = pageBounds.y - pageBounds.height;
-                            nextPage = this.viewer.world.getItemAt(i - 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.y = y;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i - 1];
+                            nextPage.y = (page.y || 0) - page.height;
                         }
                     }
                 } else {
                     // horizontal alignment
-                    if ((<ISeadragonProvider>this.provider).isLeftToRight()){
+                    if (this.extension.helper.isLeftToRight()){
                         // left to right
                         for (var i = 0; i < resources.length - 1; i++){
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            x = pageBounds.x + pageBounds.width;
-                            nextPage = this.viewer.world.getItemAt(i + 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.x = x;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i + 1];
+                            nextPage.x = (page.x || 0) + page.width;
                         }
                     } else {
                         // right to left
                         for (var i = resources.length - 1; i > 0; i--){
-                            page = this.viewer.world.getItemAt(i);
-                            pageBounds = page.getBounds(true);
-                            x = pageBounds.x - pageBounds.width;
-                            nextPage = this.viewer.world.getItemAt(i - 1);
-                            nextPagePos = nextPage.getBounds(true).getTopLeft();
-                            nextPagePos.x = x;
-                            nextPage.setPosition(nextPagePos, true);
+                            page = resources[i];
+                            nextPage = resources[i - 1];
+                            nextPage.x = (page.x || 0) - page.width;
                         }
                     }
                 }
             }
         }
+
+        return resources;
     }
+
+    // used with viewer.open()
+    // keeping around for reference
+    
+    // positionPages(): void {
+
+    //     var resources: Manifesto.IExternalResource[] = this.extension.resources;
+
+    //     var x: number;
+    //     var y: number;
+    //     var page: any;
+    //     var pageBounds: any;
+    //     var nextPage: any;
+    //     var nextPagePos: any;
+    //     var topPage: any;
+    //     var topPageBounds: any;
+    //     var bottomPage: any;
+    //     var bottomPagePos: any;
+    //     var leftPage: any;
+    //     var leftPageBounds: any;
+    //     var rightPage: any;
+    //     var rightPageBounds: any;
+    //     var rightPagePos: any;
+
+    //     // if there's more than one image, determine alignment strategy
+    //     if (resources.length > 1) {
+
+    //         if (resources.length === 2) {
+    //             // recto verso
+    //             if (this.extension.helper.isVerticallyAligned()) {
+    //                 // vertical alignment
+    //                 topPage = this.viewer.world.getItemAt(0);
+    //                 topPageBounds = topPage.getBounds(true);
+    //                 y = topPageBounds.y + topPageBounds.height;
+    //                 bottomPage = this.viewer.world.getItemAt(1);
+    //                 bottomPagePos = bottomPage.getBounds(true).getTopLeft();
+    //                 bottomPagePos.y = y + this.config.options.pageGap;
+    //                 bottomPage.setPosition(bottomPagePos, true);
+    //             } else {
+    //                 // horizontal alignment
+    //                 leftPage = this.viewer.world.getItemAt(0);
+    //                 leftPageBounds = leftPage.getBounds(true);
+    //                 x = leftPageBounds.x + leftPageBounds.width;
+    //                 rightPage = this.viewer.world.getItemAt(1);
+    //                 rightPageBounds = rightPage.getBounds(true);
+    //                 rightPagePos = rightPageBounds.getTopLeft();
+    //                 rightPagePos.x = x + this.config.options.pageGap;
+    //                 rightPage.setPosition(rightPagePos, true);
+
+    //                 if (rightPage.source.width > rightPage.source.height){
+    //                     rightPage.setWidth(leftPageBounds.width);
+    //                 } else {
+    //                     rightPage.setHeight(leftPageBounds.height);
+    //                 }
+    //             }
+    //         } else {
+
+    //             // scroll
+    //             if (this.extension.helper.isVerticallyAligned()) {
+    //                 // vertical alignment
+    //                 if (this.extension.helper.isTopToBottom()) {
+    //                     // top to bottom
+    //                     for (var i = 0; i < resources.length - 1; i++) {
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         y = pageBounds.y + pageBounds.height;
+    //                         nextPage = this.viewer.world.getItemAt(i + 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.y = y;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 } else {
+    //                     // bottom to top
+    //                     for (var i = resources.length; i > 0; i--) {
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         y = pageBounds.y - pageBounds.height;
+    //                         nextPage = this.viewer.world.getItemAt(i - 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.y = y;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 }
+    //             } else {
+    //                 // horizontal alignment
+    //                 if (this.extension.helper.isLeftToRight()){
+    //                     // left to right
+    //                     for (var i = 0; i < resources.length - 1; i++){
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         x = pageBounds.x + pageBounds.width;
+    //                         nextPage = this.viewer.world.getItemAt(i + 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.x = x;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 } else {
+    //                     // right to left
+    //                     for (var i = resources.length - 1; i > 0; i--){
+    //                         page = this.viewer.world.getItemAt(i);
+    //                         pageBounds = page.getBounds(true);
+    //                         x = pageBounds.x - pageBounds.width;
+    //                         nextPage = this.viewer.world.getItemAt(i - 1);
+    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
+    //                         nextPagePos.x = x;
+    //                         nextPage.setPosition(nextPagePos, true);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     openPagesHandler() {
 
-        this.positionPages();
+        $.publish(Commands.SEADRAGON_OPEN);
 
         // check for initial zoom/rotation params.
         if (this.isFirstLoad){
@@ -424,10 +527,12 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.initialBounds = this.deserialiseBounds(this.initialBounds);
                 this.currentBounds = this.initialBounds;
                 this.fitToBounds(this.currentBounds);
+            } else {
+                this.goHome();
             }
         } else {
             // it's not the first load
-            var settings: ISettings = this.provider.getSettings();
+            var settings: ISettings = this.extension.getSettings();
 
             // zoom to bounds unless setting disabled
             if (settings.preserveViewport && this.currentBounds){
@@ -437,23 +542,39 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }
 
-        if (this.provider.isMultiCanvas() && !(<ISeadragonProvider>this.provider).isContinuous()) {
+        if (this.extension.helper.isMultiCanvas() && !this.extension.helper.isContinuous()) {
 
             this.showPrevButton();
             this.showNextButton();
 
             $('.navigator').addClass('extraMargin');
 
-            if (!this.provider.isFirstCanvas()) {
-                this.enablePrevButton();
-            } else {
-                this.disablePrevButton();
-            }
+            var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
-            if (!this.provider.isLastCanvas()) {
-                this.enableNextButton();
+            if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
+                if (this.extension.helper.isFirstCanvas()) {
+                    this.disableNextButton();
+                } else {
+                    this.enableNextButton();
+                }
+
+                if (this.extension.helper.isLastCanvas()) {
+                    this.disablePrevButton();
+                } else {
+                    this.enablePrevButton();
+                }
             } else {
-                this.disableNextButton();
+                if (this.extension.helper.isFirstCanvas()) {
+                    this.disablePrevButton();                    
+                } else {
+                    this.enablePrevButton();
+                }
+
+                if (this.extension.helper.isLastCanvas()) {
+                    this.disableNextButton();
+                } else {
+                    this.enableNextButton();
+                }
             }
         }
         
@@ -464,57 +585,63 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     goHome(): void {
-        var viewingDirection: string = this.provider.getViewingDirection().toString();
+        
+        this.viewer.viewport.goHome(true);
+        
+        // used with viewer.open
+        // keeping around for reference
 
-        switch (viewingDirection.toString()){
-            case manifesto.ViewingDirection.topToBottom().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * (<ISeadragonProvider>this.provider).resources.length), true);
-                break;
-            case manifesto.ViewingDirection.leftToRight().toString():
-            case manifesto.ViewingDirection.rightToLeft().toString() :
-                this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, (<ISeadragonProvider>this.provider).resources.length, this.viewer.world.getItemAt(0).normHeight), true);
-                break;
-        }
+        // var viewingDirection: string = this.extension.helper.getViewingDirection().toString();
+
+        // switch (viewingDirection.toString()){
+        //     case manifesto.ViewingDirection.topToBottom().toString() :
+        //         this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, 1, this.viewer.world.getItemAt(0).normHeight * this.extension.resources.length), true);
+        //         break;
+        //     case manifesto.ViewingDirection.leftToRight().toString() :
+        //     case manifesto.ViewingDirection.rightToLeft().toString() :
+        //         this.viewer.viewport.fitBounds(new OpenSeadragon.Rect(0, 0, (<any>this.extension.resources[0]).width + (<any>this.extension.resources[1]).width, (<any>this.extension.resources[0]).height), true);
+        //         break;
+        // }
     }
 
     disablePrevButton(): void {
         this.prevButtonEnabled = false;
-        this.$leftButton.addClass('disabled');
+        this.$prevButton.addClass('disabled');
     }
 
     enablePrevButton(): void {
         this.prevButtonEnabled = true;
-        this.$leftButton.removeClass('disabled');
+        this.$prevButton.removeClass('disabled');
     }
 
     hidePrevButton(): void {
         this.disablePrevButton();
-        this.$leftButton.hide();
+        this.$prevButton.hide();
     }
 
     showPrevButton(): void {
         this.enablePrevButton();
-        this.$leftButton.show();
+        this.$prevButton.show();
     }
 
     disableNextButton(): void {
         this.nextButtonEnabled = false;
-        this.$rightButton.addClass('disabled');
+        this.$nextButton.addClass('disabled');
     }
 
     enableNextButton(): void {
         this.nextButtonEnabled = true;
-        this.$rightButton.removeClass('disabled');
+        this.$nextButton.removeClass('disabled');
     }
 
     hideNextButton(): void {
         this.disableNextButton();
-        this.$rightButton.hide();
+        this.$nextButton.hide();
     }
 
     showNextButton(): void {
         this.enableNextButton();
-        this.$rightButton.show();
+        this.$nextButton.show();
     }
 
     serialiseBounds(bounds): string{
@@ -572,11 +699,11 @@ class SeadragonCenterPanel extends CenterPanel {
 
     overlaySearchResults(): void {
 
-        var searchResults = (<ISeadragonProvider>this.provider).searchResults;
+        var searchResults = (<ISeadragonExtension>this.extension).searchResults;
 
         if (!searchResults.length) return;
 
-        var indices = this.provider.getPagedIndices();
+        var indices = this.extension.getPagedIndices();
 
         for (var i = 0; i < indices.length; i++){
             var canvasIndex = indices[i];
@@ -608,21 +735,20 @@ class SeadragonCenterPanel extends CenterPanel {
     getSearchOverlayRects(rects: SearchResultRect[], index: number) {
         var newRects = [];
 
-        var width = this.viewer.world.getItemAt(index).source.dimensions.x;
+        var width = this.extension.resources[index].width;
         var offsetX = 0;
 
         if (index > 0){
-            offsetX = this.viewer.world.getItemAt(index - 1).source.dimensions.x;
+            offsetX = this.extension.resources[index - 1].width;
         }
 
         for (var i = 0; i < rects.length; i++) {
             var searchRect: SearchResultRect = rects[i];
 
-            var factor = 1 / width;
-            var x = factor * (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
-            var y = factor * Number(searchRect.y);
-            var w = factor * Number(searchRect.width);
-            var h = factor * Number(searchRect.height);
+            var x = (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
+            var y = Number(searchRect.y);
+            var w = Number(searchRect.width);
+            var h = Number(searchRect.height);
 
             var rect = new OpenSeadragon.Rect(x, y, w, h);
 
@@ -645,22 +771,42 @@ class SeadragonCenterPanel extends CenterPanel {
             this.fitToBounds(this.currentBounds);
         }
 
-        this.$title.ellipsisFill(this.provider.sanitize(this.title));
+        this.$title.ellipsisFill(this.extension.sanitize(this.title));
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
-        if (this.provider.isMultiCanvas() && this.$leftButton && this.$rightButton) {
-            this.$leftButton.css('top', (this.$content.height() - this.$leftButton.height()) / 2);
-            this.$rightButton.css('top', (this.$content.height() - this.$rightButton.height()) / 2);
+        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+
+        if (this.extension.helper.isMultiCanvas() && this.$prevButton && this.$nextButton) {
+
+            var verticalButtonPos: number = Math.floor(this.$content.width() / 2);
+
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                    this.$prevButton.addClass('down');
+                    this.$nextButton.addClass('up');
+                    this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
+                    this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()));
+                    this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
+                    break;
+                case manifesto.ViewingDirection.topToBottom().toString() :
+                    this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
+                    this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
+                    this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()));
+                    break;
+                default :
+                    this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()) / 2);
+                    this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()) / 2);
+                    break;
+            }
         }
 
         // stretch navigator, allowing time for OSD to resize
         setTimeout(() => {
-            if ((<ISeadragonProvider>this.provider).isContinuous()){
-                if ((<ISeadragonProvider>this.provider).isHorizontallyAligned()){
+            if (this.extension.helper.isContinuous()){
+                if (this.extension.helper.isHorizontallyAligned()){
                     var width: number = this.$viewer.width() - this.$viewer.rightMargin();
-                    console.log(width);
                     this.$navigator.width(width);
                 } else {
                     this.$navigator.height(this.$viewer.height());
@@ -677,7 +823,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
     
     setNavigatorVisible() {
-        var navigatorEnabled = Utils.Bools.GetBool(this.provider.getSettings().navigatorEnabled, true);
+        var navigatorEnabled = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true);
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         

@@ -1,9 +1,7 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseProvider = require("../uv-shared-module/BaseProvider");
 import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
-import IMediaElementProvider = require("../../extensions/uv-mediaelement-extension/IMediaElementProvider");
-import ExternalResource = require("../../modules/uv-shared-module/ExternalResource");
+import ExternalResource = Manifesto.IExternalResource;
 import IMediaElementExtension = require("../../extensions/uv-mediaelement-extension/IMediaElementExtension");
 
 class MediaElementCenterPanel extends CenterPanel {
@@ -30,7 +28,7 @@ class MediaElementCenterPanel extends CenterPanel {
         // events.
 
         // only full screen video
-        if ((<IMediaElementProvider>this.provider).isVideo()){
+        if ((<IMediaElementExtension>this.extension).isVideo()){
             $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, (e) => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
@@ -49,7 +47,7 @@ class MediaElementCenterPanel extends CenterPanel {
         this.$container = $('<div class="container"></div>');
         this.$content.append(this.$container);
 
-        this.title = (<IMediaElementProvider>this.extension.provider).getLabel();
+        this.title = this.extension.helper.getLabel();
 
     }
 
@@ -61,15 +59,15 @@ class MediaElementCenterPanel extends CenterPanel {
 
             this.$container.empty();
 
-            var canvas: Manifesto.ICanvas = this.provider.getCurrentCanvas();
+            var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
             this.mediaHeight = this.config.defaultHeight;
             this.mediaWidth = this.config.defaultWidth;
 
             this.$container.height(this.mediaHeight);
             this.$container.width(this.mediaWidth);
 
-            var id = Utils.Dates.GetTimeStamp();
-            var poster = (<IMediaElementProvider>this.provider).getPosterImageUri();
+            var id = Utils.Dates.getTimeStamp();
+            var poster = (<IMediaElementExtension>this.extension).getPosterImageUri();
             var posterAttr: string = poster ? ' poster="' + poster + '"' : '';
 
             var sources = [];
@@ -81,7 +79,7 @@ class MediaElementCenterPanel extends CenterPanel {
                 });
             });
 
-            if ((<IMediaElementProvider>this.provider).isVideo()){
+            if ((<IMediaElementExtension>this.extension).isVideo()){
 
                 this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
 
@@ -183,7 +181,7 @@ class MediaElementCenterPanel extends CenterPanel {
             this.$container.height(this.mediaHeight);
         } else {
             // fit media to available space.
-            var size: Utils.Measurements.Size = Utils.Measurements.Dimensions.FitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+            var size: Utils.Measurements.Size = Utils.Measurements.Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
 
             this.$container.height(size.height);
             this.$container.width(size.width);

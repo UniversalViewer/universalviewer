@@ -24,15 +24,6 @@
         "title": "Lawrlwytho"
       }
     },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Maint ddewisol",
-        "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod:",
-        "title": "Rhannu",
-        "width": "Lled"
-      }
-    },
     "footerPanel": {
       "content": {
         "bookmark": "Ychwanegu at nodau tudalen",
@@ -102,9 +93,20 @@
     },
     "virtexCenterPanel": {
       "content": {
-        "acknowledgements": "Priodoliad",
+        "attribution": "Priodoliad",
         "zoomIn": "chwyddo Mewn",
         "zoomOut": "Zoom Out"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "arfer",
+        "height": "Hyd",
+        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
+        "share": "Rhannu",
+        "embed": "gwreiddio",
+        "width": "Lled",
+        "size": "maint:"
       }
     }
   }

@@ -73,7 +73,7 @@ class HeaderPanel extends BaseView {
         this.updateLocaleToggle();
 
         this.$localeToggleButton.on('click', () => {
-            this.provider.changeLocale(String(this.$localeToggleButton.data('locale')));
+            this.extension.changeLocale(String(this.$localeToggleButton.data('locale')));
         });
 
         this.$settingsButton.onPressed(() => {
@@ -91,7 +91,7 @@ class HeaderPanel extends BaseView {
             return;
         }
 
-        var alternateLocale = this.provider.getAlternateLocale();
+        var alternateLocale = this.extension.getAlternateLocale();
         var text = alternateLocale.name.split('-')[0].toUpperCase();
 
         this.$localeToggleButton.data('locale', alternateLocale.name);
@@ -100,12 +100,12 @@ class HeaderPanel extends BaseView {
     }
 
     localeToggleIsVisible(): boolean {
-        return this.provider.getLocales().length > 1 && this.options.localeToggleEnabled;
+        return this.extension.getLocales().length > 1 && this.options.localeToggleEnabled;
     }
 
     showInformation(args: InformationArgs): void {
 
-        var informationFactory: InformationFactory = new InformationFactory(this.provider);
+        var informationFactory: InformationFactory = new InformationFactory(this.extension);
 
         this.information = informationFactory.Get(args);
         var $message = this.$informationBox.find('.message');
@@ -134,11 +134,11 @@ class HeaderPanel extends BaseView {
     }
 
     getSettings(): ISettings {
-        return this.provider.getSettings();
+        return this.extension.getSettings();
     }
 
     updateSettings(settings: ISettings): void {
-        this.provider.updateSettings(settings);
+        this.extension.updateSettings(settings);
 
         $.publish(BaseCommands.UPDATE_SETTINGS, [settings]);
     }
@@ -163,7 +163,7 @@ class HeaderPanel extends BaseView {
         }
 
         // hide toggle buttons below minimum width
-        if (this.extension.width() < this.provider.config.options.minWidthBreakPoint){
+        if (this.extension.width() < this.extension.config.options.minWidthBreakPoint){
             if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
         } else {
             if (this.localeToggleIsVisible()) this.$localeToggleButton.show();

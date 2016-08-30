@@ -3,27 +3,27 @@ import Information = require("./Information");
 import InformationAction = require("./InformationAction");
 import InformationArgs = require("./InformationArgs");
 import InformationType = require("./InformationType");
-import IProvider = require("./IProvider");
+import IExtension = require("./IExtension");
 
 class InformationFactory{
 
-    provider: IProvider;
+    extension: IExtension;
 
-    constructor(provider: IProvider){
-        this.provider = provider;
+    constructor(extension: IExtension){
+        this.extension = extension;
     }
 
     public Get(args: InformationArgs): Information {
         switch(args.informationType){
             case (InformationType.AUTH_CORS_ERROR):
-                return new Information(this.provider.config.content.authCORSError, []);
+                return new Information(this.extension.config.content.authCORSError, []);
                 break;
             case (InformationType.DEGRADED_RESOURCE):
                 var actions: InformationAction[] = [];
 
                 var loginAction: InformationAction = new InformationAction();
 
-                loginAction.label = this.provider.config.content.degradedResourceLogin;
+                loginAction.label = this.extension.config.content.degradedResourceLogin;
 
                 loginAction.action = () => {
                     $.publish(BaseCommands.HIDE_INFORMATION);
@@ -32,7 +32,7 @@ class InformationFactory{
 
                 actions.push(loginAction);
 
-                return new Information(this.provider.config.content.degradedResourceMessage, actions);
+                return new Information(this.extension.config.content.degradedResourceMessage, actions);
 
                 break;
         }

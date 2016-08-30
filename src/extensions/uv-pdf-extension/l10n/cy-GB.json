@@ -24,15 +24,6 @@
         "title": "Lawrlwytho"
       }
     },
-    "embedDialogue": {
-      "content": {
-        "customSize": "Maint ddewisol",
-        "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
-        "title": "Rhannu",
-        "width": "Lled"
-      }
-    },
     "footerPanel": {
       "content": {
         "bookmark": "Ychwanegu at nodau tudalen",
@@ -95,6 +86,17 @@
         "index": "Mynegai",
         "thumbnails": "Bodluniau",
         "title": "Cynnwys"
+      }
+    },
+    "shareDialogue": {
+      "content": {
+        "customSize": "arfer",
+        "height": "Hyd",
+        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
+        "share": "Rhannu",
+        "embed": "gwreiddio",
+        "width": "Lled",
+        "size": "maint:"
       }
     }
   }

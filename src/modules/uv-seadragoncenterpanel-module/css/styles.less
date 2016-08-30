@@ -27,22 +27,61 @@
                     background-color: @body-bg;
                     background-position: 0px 50%;
                     cursor: pointer;
+                    padding: 0px;
+                    border: none;
 
                     .border-radius(0);
 
+                    &.vertical {
+                        height: 30px;
+                        width: 90px;
+                        background-position: 50% 0;
+                    }
+
                     &.prev {
-                        background-image: url('@{img-path}prev_page.png');
+                        background-image: url('@{img-path}left_arrow.png');
                         left: 0;
                         &.disabled {
-                            background-image: url('@{img-path}prev_page_disabled.png');
+                            background-image: url('@{img-path}left_arrow_disabled.png');
+                        }
+                    }
+
+                    &.prev.vertical {
+                        background-image: url('@{img-path}up_arrow.png');
+                        left: 0;
+                        top: 0;
+                        &.disabled {
+                            background-image: url('@{img-path}up_arrow_disabled.png');
+                        }
+                        &.down {
+                            background-image: url('@{img-path}down_arrow.png');
+                            &.disabled {
+                                background-image: url('@{img-path}down_arrow_disabled.png');
+                            }
                         }
                     }
 
                     &.next {
-                        background-image: url('@{img-path}next_page.png');
+                        background-image: url('@{img-path}right_arrow.png');
                         right: 0;
                         &.disabled {
-                            background-image: url('@{img-path}next_page_disabled.png');
+                            background-image: url('@{img-path}right_arrow_disabled.png');
+                        }
+                    }
+
+                    &.next.vertical {
+                        background-image: url('@{img-path}down_arrow.png');
+                        left: 0;
+                        top: 0;
+                        margin-left: 15px;
+                        &.disabled {
+                            background-image: url('@{img-path}down_arrow_disabled.png');
+                        }
+                        &.up {
+                            background-image: url('@{img-path}up_arrow.png');
+                            &.disabled {
+                                background-image: url('@{img-path}up_arrow_disabled.png');
+                            }
                         }
                     }
                 }

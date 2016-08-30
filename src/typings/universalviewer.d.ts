@@ -30,6 +30,7 @@ interface JQueryStatic {
 declare var easyXDM: any;
 declare var OpenSeadragon: any;
 declare var manifesto: IManifesto;
+declare var manifold: IManifold;
 declare var MediaElementPlayer: any;
 declare var PDFObject: any;
 declare var yepnope: any;
@@ -40,8 +41,8 @@ declare var virtex: IVirtex;
 // app
 interface Window{
     configExtensionCallback: any;
-    manifestCallback: any;
     manifesto: IManifesto;
+    manifold: IManifold;
     browserDetect: any;
     trackEvent(category: string, action: string, label: string, value?: any);
     trackVariable(slot: number, name: string, value: string, scope: number);

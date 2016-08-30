@@ -1,10 +1,9 @@
-import BaseView = require("../uv-shared-module/ThumbsView");
+import BaseThumbsView = require("../uv-shared-module/ThumbsView");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 
-class ThumbsView extends BaseView {
+class ThumbsView extends BaseThumbsView {
     create(): void {
 
         this.setConfig('contentLeftPanel');
@@ -24,17 +23,19 @@ class ThumbsView extends BaseView {
             this.searchPreviewFinish();
         });
 
-        if ((<ISeadragonProvider>this.provider).isPaged()) {
+        if (this.extension.helper.isPaged()) {
             this.$thumbs.addClass('paged');
         }
+
         var that = this;
+        
         $.views.helpers({
             separator: function(){
-                if ((<ISeadragonProvider>that.provider).isVerticallyAligned()){
+                if (that.extension.helper.isVerticallyAligned()){
                     return true; // one thumb per line
                 }
                 // two thumbs per line
-                if ((<ISeadragonProvider>that.provider).isPaged()) {
+                if (that.extension.helper.isPaged()) {
                     return ((this.data.index - 1) % 2 == 0) ? false : true;
                 }
 
@@ -44,8 +45,8 @@ class ThumbsView extends BaseView {
     }
 
     addSelectedClassToThumbs(index: number): void {
-        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled()){
-            var indices = this.provider.getPagedIndices(index);
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
+            var indices = this.extension.getPagedIndices(index);
 
             _.each(indices, (index: number) => {
                 this.getThumbByIndex(index).addClass('selected');
@@ -69,7 +70,7 @@ class ThumbsView extends BaseView {
     }
 
     searchPreviewFinish(): void {
-        this.scrollToThumb(this.provider.canvasIndex);
+        this.scrollToThumb(this.extension.helper.canvasIndex);
         this.getAllThumbs().removeClass('searchpreview');
     }
 

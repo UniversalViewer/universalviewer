@@ -4,7 +4,6 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import DownloadDialogue = require("../../extensions/uv-seadragon-extension/DownloadDialogue");
 import AutoComplete = require("../uv-shared-module/AutoComplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Params = require("../../Params");
 
@@ -19,6 +18,7 @@ class FooterPanel extends BaseFooterPanel {
     $placemarkerDetailsBottom: JQuery;
     $placemarkerDetailsTop: JQuery;
     $previousResultButton: JQuery;
+    $printButton: JQuery;
     $searchButton: JQuery;
     $searchContainer: JQuery;
     $searchLabel: JQuery;
@@ -46,6 +46,7 @@ class FooterPanel extends BaseFooterPanel {
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged();
+            this.setCurrentSearchResultPlacemarker();
         });
 
         // todo: this should be a setting
@@ -59,7 +60,11 @@ class FooterPanel extends BaseFooterPanel {
 
         $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
             this.displaySearchResults(obj.terms, obj.results);
+            this.setCurrentSearchResultPlacemarker();
         });
+
+        this.$printButton = $('<a class="print" title="' + this.content.print + '">' + this.content.print + '</a>');
+        this.$options.prepend(this.$printButton);
 
         // search input.
         this.$searchContainer = $('<div class="search"></div>');
@@ -177,7 +182,7 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         // hide search options if not enabled/supported.
-        if (!(<ISeadragonProvider>this.provider).isSearchWithinEnabled()) {
+        if (!(<ISeadragonExtension>this.extension).isSearchWithinEnabled()) {
             this.$searchContainer.hide();
             this.$searchPagerContainer.hide();
             this.$searchResultsContainer.hide();
@@ -185,7 +190,7 @@ class FooterPanel extends BaseFooterPanel {
             this.$element.addClass('min');
         }
 
-        var autocompleteService = (<ISeadragonProvider>this.provider).getAutoCompleteUri();
+        var autocompleteService = (<ISeadragonExtension>this.extension).getAutoCompleteUri();
 
         if (autocompleteService){
 
@@ -207,6 +212,30 @@ class FooterPanel extends BaseFooterPanel {
             );
 
         }
+
+        this.$printButton.onPressed(() => {
+            $.publish(Commands.PRINT);
+        });
+
+        this.updatePrintButton();
+
+        var positionMarkerEnabled: boolean = Utils.Bools.getBool(this.config.options.positionMarkerEnabled, true);
+
+        if (!positionMarkerEnabled) {
+            this.$pagePositionMarker.hide();
+            this.$pagePositionLabel.hide();
+        }
+    }
+
+    updatePrintButton(): void {
+        var configEnabled = Utils.Bools.getBool(this.options.printEnabled, false);
+        var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
+
+        if (configEnabled && printService && this.extension.isOnHomeDomain()){
+            this.$printButton.show();
+        } else {
+            this.$printButton.hide();
+        }
     }
 
     search(terms: string): void {
@@ -215,8 +244,8 @@ class FooterPanel extends BaseFooterPanel {
 
         if (this.terms === '' || this.terms === this.content.enterKeyword) {
             this.extension.showMessage(this.config.modules.genericDialogue.content.emptyValue, function(){
-                    this.$searchText.focus();
-                });
+                this.$searchText.focus();
+            });
 
             return;
         }
@@ -231,14 +260,21 @@ class FooterPanel extends BaseFooterPanel {
         return this.$searchResultsContainer.find('.searchResultPlacemarker');
     }
 
+    setCurrentSearchResultPlacemarker(): void {
+        var placemarkers: JQuery = this.getSearchResultPlacemarkers();
+        placemarkers.parent().find('.current').removeClass('current');
+        var $current = $('.searchResultPlacemarker[data-index="' + this.extension.helper.canvasIndex + '"]');
+        $current.addClass('current');
+    }
+
     positionSearchResultPlacemarkers(): void {
 
-        var results = (<ISeadragonProvider>this.provider).searchResults;
+        var results = (<ISeadragonExtension>this.extension).searchResults;
 
         if (!results.length) return;
 
         // clear all existing placemarkers
-        var placemarkers = this.getSearchResultPlacemarkers();
+        var placemarkers: JQuery = this.getSearchResultPlacemarkers();
         placemarkers.remove();
 
         var pageWidth = this.getPageLineRatio();
@@ -315,12 +351,12 @@ class FooterPanel extends BaseFooterPanel {
         var mode = that.extension.getMode();
 
         if (mode.toString() === Mode.page.toString()) {
-            var canvas: Manifesto.ICanvas = that.provider.getCanvasByIndex(canvasIndex);
+            var canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
 
             var label = canvas.getLabel();
 
             if (label === "") {
-                label = this.provider.manifest.options.defaultLabel;
+                label = this.extension.helper.manifest.options.defaultLabel;
             }
 
             title = String.format(title, that.content.pageCaps, label);
@@ -330,13 +366,13 @@ class FooterPanel extends BaseFooterPanel {
 
         that.$placemarkerDetailsTop.html(title);
 
-        var result = that.provider.searchResults[elemIndex];
+        var result = (<ISeadragonExtension>that.extension).searchResults[elemIndex];
 
-        var terms = Utils.Strings.Ellipsis(that.terms, that.options.elideDetailsTermsCount);
+        var terms = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
 
         var instancesFoundText;
 
-        if (result.rects.length == 1) {
+        if (result.rects.length === 1) {
             instancesFoundText = that.content.instanceFound;
             instancesFoundText = String.format(instancesFoundText, terms);
         } else {
@@ -382,14 +418,14 @@ class FooterPanel extends BaseFooterPanel {
 
     setPageMarkerPosition(): void {
 
-        if (this.provider.canvasIndex == null) return;
+        if (this.extension.helper.canvasIndex == null) return;
 
         // position placemarker showing current page.
         var pageLineRatio = this.getPageLineRatio();
         var lineTop = this.$line.position().top;
         var lineLeft = this.$line.position().left;
 
-        var position = this.provider.canvasIndex * pageLineRatio;
+        var position = this.extension.helper.canvasIndex * pageLineRatio;
         var top = lineTop;
         var left = lineLeft + position;
 
@@ -419,7 +455,7 @@ class FooterPanel extends BaseFooterPanel {
 
     clearSearchResults(): void {
 
-        (<ISeadragonProvider>this.provider).searchResults = [];
+        (<ISeadragonExtension>this.extension).searchResults = [];
 
         // clear all existing placemarkers
         var placemarkers = this.getSearchResultPlacemarkers();
@@ -441,9 +477,9 @@ class FooterPanel extends BaseFooterPanel {
         var lineWidth = this.$line.width();
 
         // find page/width ratio by dividing the line width by the number of pages in the book.
-        if (this.provider.getTotalCanvases() === 1) return 0;
+        if (this.extension.helper.getTotalCanvases() === 1) return 0;
 
-        return lineWidth / (this.provider.getTotalCanvases() - 1);
+        return lineWidth / (this.extension.helper.getTotalCanvases() - 1);
     }
 
     canvasIndexChanged(): void {
@@ -458,10 +494,10 @@ class FooterPanel extends BaseFooterPanel {
     setPlacemarkerLabel(): void {
 
         var displaying = this.content.displaying;
-        var index = this.provider.canvasIndex;
+        var index = this.extension.helper.canvasIndex;
 
         if (this.isPageModeEnabled()) {
-            var canvas: Manifesto.ICanvas = this.provider.getCanvasByIndex(index);
+            var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
 
             var label = canvas.getLabel();
 
@@ -469,10 +505,10 @@ class FooterPanel extends BaseFooterPanel {
                 label = this.content.defaultLabel;
             }
 
-            var lastCanvasOrderLabel = this.provider.getLastCanvasLabel(true);
+            var lastCanvasOrderLabel = this.extension.helper.getLastCanvasLabel(true);
             this.$pagePositionLabel.html(String.format(displaying, this.content.page, label, lastCanvasOrderLabel));
         } else {
-            this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.provider.getTotalCanvases()));
+            this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.extension.helper.getTotalCanvases()));
         }
     }
 
@@ -505,7 +541,7 @@ class FooterPanel extends BaseFooterPanel {
         }
 
         var $terms = this.$searchPagerContainer.find('.terms');
-        $terms.html(Utils.Strings.Ellipsis(terms, this.options.elideResultsTermsCount));
+        $terms.html(Utils.Strings.ellipsis(terms, this.options.elideResultsTermsCount));
         $terms.prop('title', terms);
 
         this.$searchPagerContainer.show();
@@ -516,7 +552,7 @@ class FooterPanel extends BaseFooterPanel {
     resize(): void {
         super.resize();
 
-        if ((<ISeadragonProvider>this.provider).searchResults.length) {
+        if ((<ISeadragonExtension>this.extension).searchResults.length) {
             this.positionSearchResultPlacemarkers();
         }
 

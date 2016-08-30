@@ -65,20 +65,20 @@ class SettingsDialogue extends Dialogue {
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
-        var locales: any[] = this.provider.getLocales();
+        var locales: any[] = this.extension.getLocales();
 
         for (var i = 0; i < locales.length; i++){
             var locale = locales[i];
             this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
         }
 
-        this.$localeDropDown.val(this.provider.locale);
+        this.$localeDropDown.val(this.extension.locale);
 
         this.$localeDropDown.change(() => {
-            this.provider.changeLocale(this.$localeDropDown.val());
+            this.extension.changeLocale(this.$localeDropDown.val());
         });
 
-        if (this.provider.getLocales().length < 2){
+        if (this.extension.getLocales().length < 2){
             this.$locale.hide();
         }
 
@@ -86,11 +86,11 @@ class SettingsDialogue extends Dialogue {
     }
 
     getSettings(): ISettings {
-        return this.provider.getSettings();
+        return this.extension.getSettings();
     }
 
     updateSettings(settings: ISettings): void {
-        this.provider.updateSettings(settings);
+        this.extension.updateSettings(settings);
 
         $.publish(Commands.UPDATE_SETTINGS, [settings]);
     }

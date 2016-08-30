@@ -3,6 +3,10 @@ var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
+var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
+var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
+var seadragonExtensionConfig = require('./src/extensions/uv-seadragon-extension/config');
+var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config');
 
 module.exports = function (grunt) {
 
@@ -35,10 +39,18 @@ module.exports = function (grunt) {
 
         clean: {
             build : ['<%= config.dirs.build %>'],
+            bundle: ['./src/lib/bundle.js', './src/lib/bundle.min.js'],
             dist: ['<%= config.dirs.dist %>'],
             examples: ['<%= config.dirs.examples %>/uv-*'],
             distexamples: ['<%= config.dirs.examples %>/uv-*.zip', '<%= config.dirs.examples %>/uv-*.tar'],
             extension: ['./src/extensions/*/build/*']
+        },
+
+        concat: {
+            bundle: {
+                src: grunt.file.expand('src/lib/*').concat(config.deps).concat(['!src/lib/embed.js']),
+                dest: 'src/lib/bundle.js'
+            }
         },
 
         copy: {
@@ -78,12 +90,7 @@ module.exports = function (grunt) {
                         cwd: '<%= config.dirs.lib %>',
                         src: [
                             'embed.js',
-                            'easyXDM.min.js',
-                            'easyxdm.swf',
-                            'json2.min.js',
-                            'require.js',
-                            'l10n.js',
-                            'base64.min.js'
+                            'bundle.min.js'
                         ],
                         dest: '<%= config.dirs.build %>/lib/'
                     },
@@ -203,96 +210,31 @@ module.exports = function (grunt) {
             bowerComponents: {
                 files: [
                     {
-                        // extensions
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        src: ['uv-*-extension/**'],
-                        dest: '<%= config.dirs.extensions %>'
-                    },
-                    {
-                        // modules
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        src: ['uv-*-module/**'],
-                        dest: '<%= config.dirs.modules %>'
-                    },
-                    {
                         // themes
                         cwd: '<%= config.dirs.bower %>',
                         expand: true,
                         src: ['uv-*-theme/**'],
                         dest: '<%= config.dirs.themes %>'
-                    },
-                    {
-                        // all js files that need to be copied from /lib to /src/lib post bower install
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'exjs/dist/ex.es3.min.js',
-                            'extensions/dist/extensions.js',
-                            'http-status-codes/dist/http-status-codes.js',
-                            'jquery-plugins/dist/jquery-plugins.js',
-                            'jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
-                            'key-codes/dist/key-codes.js',
-                            'Units/Length.min.js',
-                            'utils/dist/utils.js'
-                        ],
-                        dest: '<%= config.dirs.lib %>'
-                    },
-                    {
-                        // all d.ts files that need to be copied from /lib to /src/typings post bower install
-                        cwd: '<%= config.dirs.bower %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'exjs/dist/ex.d.ts',
-                            'extensions/typings/extensions.d.ts',
-                            'http-status-codes/dist/http-status-codes.d.ts',
-                            'jquery-plugins/typings/jquery-plugins.d.ts',
-                            'key-codes/dist/key-codes.d.ts',
-                            'manifesto/dist/manifesto.d.ts',
-                            'utils/dist/utils.d.ts'
-                        ],
-                        dest: '<%= config.dirs.typings %>'
                     }
                 ]
             },
             npmComponents: {
                 files: [
                     {
-                        // all js files that need to be copied from /node_modules to /src/lib post npm install
-                        cwd: '<%= config.dirs.npm %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'manifesto.js/dist/client/manifesto.js'
-                        ],
-                        dest: '<%= config.dirs.lib %>'
-                    },
-                    {
                         // all d.ts files that need to be copied from /node_modules to /src/typings post npm install
-                        cwd: '<%= config.dirs.npm %>',
                         expand: true,
                         flatten: true,
-                        src: [
-                            'manifesto.js/dist/manifesto.d.ts',
-                            'virtex3d/dist/virtex.d.ts'
-                        ],
+                        src: config.typings,
                         dest: '<%= config.dirs.typings %>'
                     },
-                    {
-                        // all files that need to be copied from /node_modules to /src/extensions/uv-virtex-extension/lib post npm install
-                        // todo: create a json file that lists dependencies for each extension
-                        cwd: '<%= config.dirs.npm %>',
-                        expand: true,
-                        flatten: true,
-                        src: [
-                            'virtex3d/dist/virtex.js',
-                            'three.js/build/three.min.js'
-                        ],
-                        dest: '<%= config.dirs.uvVirtexExtension %>/lib'
-                    }
+                    mediaelementExtensionConfig.sync.dependencies,
+                    mediaelementExtensionConfig.sync.typings,
+                    pdfExtensionConfig.sync.dependencies,
+                    pdfExtensionConfig.sync.typings,
+                    seadragonExtensionConfig.sync.dependencies,
+                    seadragonExtensionConfig.sync.typings,
+                    virtexExtensionConfig.sync.dependencies,
+                    virtexExtensionConfig.sync.typings
                 ]
             }
         },
@@ -339,10 +281,16 @@ module.exports = function (grunt) {
             html: {
                 src: ['<%= config.dirs.build %>/app.html'],
                 overwrite: true,
-                replacements: [{
-                    from: 'data-main="app"',
-                    to: 'data-main="lib/app"'
-                }]
+                replacements: [
+                    {
+                        from: 'data-main="app"',
+                        to: 'data-main="lib/app"'
+                    },
+                    {
+                        from: 'lib/bundle.js',
+                        to: 'lib/bundle.min.js'
+                    }
+                ]
             },
             js: {
                 // replace window.DEBUG=true
@@ -451,12 +399,25 @@ module.exports = function (grunt) {
             },
             dist: {
             }
+        },
+
+        uglify: {
+            options: {
+                mangle: false
+            },
+            bundle: {
+                files: {
+                    'src/lib/bundle.min.js': ['src/lib/bundle.js']
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-compress");
+    grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-copy");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-typescript");
     grunt.loadNpmTasks('grunt-contrib-connect');
@@ -476,6 +437,8 @@ module.exports = function (grunt) {
     grunt.registerTask('default', '', function(){
 
         grunt.task.run(
+            'clean:bundle',
+            'concat:bundle',
             'typescript:dev',
             'clean:extension',
             'configure:apply',
@@ -496,6 +459,9 @@ module.exports = function (grunt) {
         //if (minify) grunt.config.set('global.minify', '');
 
         grunt.task.run(
+            'clean:bundle',
+            'concat:bundle',
+            'uglify:bundle',
             'typescript:dist',
             'clean:extension',
             'configure:apply',
@@ -531,10 +497,9 @@ module.exports = function (grunt) {
         );
     });
 
-    grunt.registerTask('serve', '', function() {
+    grunt.registerTask('examples', '', function() {
 
         grunt.task.run(
-            'default',
             'connect'
         );
     });

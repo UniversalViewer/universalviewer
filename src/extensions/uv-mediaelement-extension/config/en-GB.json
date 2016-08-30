@@ -3,6 +3,9 @@
   {
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
+    "dropEnabled": true,
+    "footerPanelEnabled": true,
+    "headerPanelEnabled": true,
     "leftPanelEnabled": true,
     "limitLocales": false,
     "minWidthBreakPoint": 610,
@@ -13,7 +16,7 @@
   },
   "modules":
   {
-    "embedDialogue":
+    "shareDialogue":
     {
       "options":
       {
@@ -24,9 +27,11 @@
     {
       "options": {
         "bookmarkEnabled": false,
+        "embedEnabled": false,
         "feedbackEnabled": false,
         "minimiseButtons": true,
-        "openEnabled": false
+        "openEnabled": false,
+        "shareEnabled": true
       }
     },
     "genericDialogue":

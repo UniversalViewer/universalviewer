@@ -3,6 +3,9 @@
   {
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
+    "dropEnabled": true,
+    "footerPanelEnabled": true,
+    "headerPanelEnabled": true,
     "limitLocales": false,
     "minWidthBreakPoint": 610,
     "openTemplate": "http://universalviewer.io?manifest={0}",
@@ -12,7 +15,7 @@
   },
   "modules":
   {
-    "embedDialogue":
+    "shareDialogue":
     {
       "options":
       {
@@ -23,9 +26,11 @@
     {
       "options": {
         "bookmarkEnabled": false,
+        "embedEnabled": false,
         "feedbackEnabled": false,
         "minimiseButtons": true,
-        "openEnabled": false
+        "openEnabled": false,
+        "shareEnabled": true
       }
     },
     "genericDialogue":

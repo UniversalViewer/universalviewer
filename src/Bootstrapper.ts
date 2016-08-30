@@ -1,6 +1,8 @@
 import BaseCommands = require("./modules/uv-shared-module/BaseCommands");
-import BootstrapParams = require("BootstrapParams");
+import BootstrapParams = require("./BootstrapParams");
 import IExtension = require("./modules/uv-shared-module/IExtension");
+
+declare var manifold: IManifold;
 
 // The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
 // then determining which extension to use and instantiating it.
@@ -19,7 +21,7 @@ class Bootstrapper{
         this.extensions = extensions;
     }
 
-    bootStrap(params?: BootstrapParams): void {
+    bootstrap(params?: BootstrapParams): void {
 
         this.params = new BootstrapParams();
 
@@ -41,155 +43,68 @@ class Bootstrapper{
 
         jQuery.support.cors = true;
 
-        this.loadIIIFResource();
+        Manifold.loadManifest(<Manifold.IManifoldOptions>{
+            iiifResourceUri: this.params.manifestUri,
+            collectionIndex: this.params.collectionIndex,
+            manifestIndex: this.params.manifestIndex,
+            sequenceIndex: this.params.sequenceIndex,
+            canvasIndex: this.params.canvasIndex,
+            locale: this.params.localeName
+        }).then((helper: Manifold.IHelper) => {
+            
+            var trackingLabel: string = helper.getTrackingLabel();
+            trackingLabel += ', URI: ' + this.params.embedDomain;
+            window.trackingLabel = trackingLabel;
+
+            var sequence: Manifesto.ISequence = helper.getSequenceByIndex(this.params.sequenceIndex);
+
+            if (!sequence){
+                this.notFound();
+                return;
+            }
+
+            var canvas: Manifesto.ICanvas = helper.getCanvasByIndex(this.params.canvasIndex);
+
+            if (!canvas){
+                this.notFound();
+                return;
+            }
+
+            var canvasType = canvas.getType();
+
+            // try using canvasType
+            var extension: IExtension = this.extensions[canvasType.toString()];
+
+            // if there isn't an extension for the canvasType, try the format
+            if (!extension){
+                var format = canvas.getProperty('format');
+                extension = this.extensions[format];
+            }
+
+            // if there still isn't a matching extension, show an error.
+            if (!extension){
+                alert("No matching UV extension found.");
+                return;
+            }
+
+            extension.helper = helper;
+
+            this.featureDetect(() => {
+                this.configure(extension, (config) => {
+                    this.injectCss(extension, config, () => {
+                        this.createExtension(extension, config);
+                    });
+                });
+            });
+
+        }).catch(function() {
+            this.notFound();
+        });
     }
 
     isCORSEnabled(): boolean {
         // No jsonp setting? Then use autodetection. Otherwise, use explicit setting.
         return (null === this.params.jsonp) ? Modernizr.cors : !this.params.jsonp;
-    }
-
-    loadIIIFResource(): void{
-        var that = this;
-
-        if (that.isCORSEnabled()){
-            $.getJSON(that.params.manifestUri, (r) => {
-                that.iiifResource = that.parseIIIFResource(JSON.stringify(r));
-                that.loadResource().then((manifest: Manifesto.IManifest) => {
-                    if (!manifest){
-                        that.notFound();
-                        return;
-                    }
-
-                    that.manifestLoaded(manifest);
-                });
-            });
-        } else {
-            // use jsonp
-            var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
-                url: that.params.manifestUri,
-                type: 'GET',
-                dataType: 'jsonp',
-                jsonp: 'callback',
-                jsonpCallback: 'manifestCallback'
-            };
-
-            $.ajax(settings);
-
-            window.manifestCallback = (r: any) => {
-                this.iiifResource = that.parseIIIFResource(JSON.stringify(r));
-                this.loadResource().then((manifest: Manifesto.IManifest) => {
-                    if (!manifest){
-                        this.notFound();
-                        return;
-                    }
-
-                    this.manifestLoaded(manifest);
-                });
-            };
-        }
-    }
-
-    parseIIIFResource(data: string): Manifesto.IIIIFResource {
-        return manifesto.create(data,
-            <Manifesto.IManifestoOptions>{
-                locale: this.params.localeName
-            });
-    }
-
-    loadResource(): Promise<Manifesto.IManifest> {
-
-        var that = this;
-
-        return new Promise<Manifesto.IManifest>((resolve) => {
-
-            if (that.iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()){
-                // if it's a collection and has child collections, get the collection by index
-                if ((<Manifesto.ICollection>that.iiifResource).collections && (<Manifesto.ICollection>that.iiifResource).collections.length){
-
-                    (<Manifesto.ICollection>that.iiifResource).getCollectionByIndex(that.params.collectionIndex).then((collection: Manifesto.ICollection) => {
-
-                        if (!collection){
-                            that.notFound();
-                            resolve();
-                        }
-
-                        // Special case: we're trying to load the first manifest of the
-                        // collection, but the collection has no manifests but does have
-                        // subcollections. Thus, we should dive in until we find something
-                        // we can display!
-                        if (collection.getTotalManifests() == 0 && this.params.manifestIndex == 0 && collection.getTotalCollections() > 0) {
-                            that.params.collectionIndex = 0;
-                            that.params.manifestUri = collection.id;
-                            that.bootStrap(that.params);
-                        }
-
-                        collection.getManifestByIndex(that.params.manifestIndex).then((manifest: Manifesto.IManifest) => {
-                            resolve(manifest);
-                        });
-                    });
-                } else {
-                    (<Manifesto.ICollection>that.iiifResource).getManifestByIndex(that.params.manifestIndex).then((manifest: Manifesto.IManifest) => {
-                        resolve(manifest);
-                    });
-                }
-            } else {
-                resolve(<Manifesto.IManifest>that.iiifResource);
-            }
-        });
-    }
-
-    manifestLoaded(manifest: Manifesto.IManifest): void {
-
-        this.manifest = manifest;
-
-        var trackingLabel: string = manifest.getTrackingLabel();
-
-        trackingLabel += ', URI: ' + this.params.embedDomain;
-
-        window.trackingLabel = trackingLabel;
-
-        var sequence: Manifesto.ISequence;
-        var canvas: Manifesto.ICanvas;
-        var extension: IExtension;
-
-        sequence = this.manifest.getSequenceByIndex(this.params.sequenceIndex);
-
-        if (!sequence){
-            this.notFound();
-            return;
-        }
-
-        canvas = sequence.getCanvasByIndex(this.params.canvasIndex);
-
-        if (!canvas){
-            this.notFound();
-            return;
-        }
-
-        var canvasType = canvas.getType();
-
-        // try using canvasType
-        extension = this.extensions[canvasType.toString()];
-
-        // if there isn't an extension for the canvasType, try the format
-        if (!extension){
-            var format = canvas.getProperty('format');
-            extension = this.extensions[format];
-        }
-
-        // if there still isn't an extension, show an error.
-        if (!extension){
-            alert("No matching UV extension found.");
-        }
-
-        this.featureDetect(() => {
-            this.configure(extension, (config) => {
-                this.injectCss(extension, config, () => {
-                    this.createExtension(extension, config);
-                });
-            });
-        });
     }
 
     notFound(): void{
@@ -280,14 +195,11 @@ class Bootstrapper{
     }
 
     createExtension(extension: any, config: any): void{
-
         this.config = config;
-
-        var provider = new extension.provider(this);
-
+        var helper = extension.helper;
         this.extension = new extension.type(this);
+        this.extension.helper = helper;
         this.extension.name = extension.name;
-        this.extension.provider = provider;
         this.extension.create();
     }
 }

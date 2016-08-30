@@ -5,29 +5,31 @@ import HeaderPanel = require("../uv-shared-module/HeaderPanel");
 import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import ISeadragonProvider = require("../../extensions/uv-seadragon-extension/ISeadragonProvider");
 
 class PagingHeaderPanel extends HeaderPanel {
 
-    $firstButton: JQuery;
     $autoCompleteBox: JQuery;
+    $firstButton: JQuery;
+    $galleryButton: JQuery;
     $imageModeLabel: JQuery;
     $imageModeOption: JQuery;
+    $imageSelectionBox: JQuery;
     $lastButton: JQuery;
     $modeOptions: JQuery;
     $nextButton: JQuery;
     $nextOptions: JQuery;
+    $oneUpButton: JQuery;
     $pageModeLabel: JQuery;
     $pageModeOption: JQuery;
-    $pagingToggleButton: JQuery;
+    $pagingToggleButtons: JQuery;
     $prevButton: JQuery;
     $prevOptions: JQuery;
-    $selectionBoxOptions: JQuery;
-    $imageSelectionBox: JQuery;
     $search: JQuery;
     $searchButton: JQuery;
     $searchText: JQuery;
+    $selectionBoxOptions: JQuery;
     $total: JQuery;
+    $twoUpButton: JQuery;
 
     firstButtonEnabled: boolean = false;
     lastButtonEnabled: boolean = false;
@@ -54,7 +56,15 @@ class PagingHeaderPanel extends HeaderPanel {
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, (e) => {
-            this.setSearchFieldValue(this.provider.canvasIndex);
+            this.setSearchFieldValue(this.extension.helper.canvasIndex);
+        });
+        
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+            this.$galleryButton.addClass('on');
+        });
+
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
+            this.$galleryButton.removeClass('on');
         });
 
         this.$prevOptions = $('<div class="prevOptions"></div>');
@@ -93,7 +103,7 @@ class PagingHeaderPanel extends HeaderPanel {
             new AutoComplete(this.$autoCompleteBox,
                 (term: string, cb: (results: string[]) => void) => {
                     var results: string[] = [];
-                    var canvases: Manifesto.ICanvas[] = this.provider.getCanvases();
+                    var canvases: Manifesto.ICanvas[] = this.extension.helper.getCanvases();
 
                     // if in page mode, get canvases by label.
                     if (this.isPageModeEnabled()){
@@ -129,9 +139,9 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="20" ></select>');
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
-            for (var imageIndex = 0; imageIndex < this.provider.getTotalCanvases(); imageIndex++) {
-                var canvas = this.provider.getCanvasByIndex(imageIndex);
-                var label = this.provider.sanitize(canvas.getLabel());
+            for (var imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
+                var canvas = this.extension.helper.getCanvasByIndex(imageIndex);
+                var label = this.extension.sanitize(canvas.getLabel());
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
@@ -167,40 +177,60 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.addClass('disabled');
         }
 
-        if (this.provider.getManifestType().toString() === manifesto.ManifestType.manuscript().toString()){
+        if (this.extension.helper.getManifestType().toString() === manifesto.ManifestType.manuscript().toString()){
             this.$pageModeLabel.text(this.content.folio);
         } else {
             this.$pageModeLabel.text(this.content.page);
         }
 
-        this.$pagingToggleButton = $('<a class="imageBtn pagingToggle"></a>');
-        this.$rightOptions.prepend(this.$pagingToggleButton);
+        this.$galleryButton = $('<a class="imageBtn gallery" title="' + this.content.gallery + '"></a>');
+        this.$rightOptions.prepend(this.$galleryButton);
+
+        this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
+        this.$rightOptions.prepend(this.$pagingToggleButtons);
+
+        this.$oneUpButton = $('<a class="imageBtn one-up" title="' + this.content.oneUp + '"></a>');
+        this.$pagingToggleButtons.append(this.$oneUpButton);
+
+        this.$twoUpButton = $('<a class="imageBtn two-up" title="' + this.content.twoUp + '"></a>');
+        this.$pagingToggleButtons.append(this.$twoUpButton);
 
         this.updatePagingToggle();
+        this.updateGalleryButton();
 
-        this.$pagingToggleButton.on('click', () => {
-            var enabled: boolean = !this.getSettings().pagingEnabled;
-
+        this.$oneUpButton.on('click', () => {
+            var enabled: boolean = false;
             this.updateSettings({ pagingEnabled: enabled });
-
             $.publish(Commands.PAGING_TOGGLED, [enabled]);
+        });
+
+        this.$twoUpButton.on('click', () => {
+            var enabled: boolean = true;
+            this.updateSettings({ pagingEnabled: enabled });
+            $.publish(Commands.PAGING_TOGGLED, [enabled]);
+        });
+
+        this.$galleryButton.on('click', () => {
+            $.publish(BaseCommands.TOGGLE_EXPAND_LEFT_PANEL);
         });
 
         this.setTitles();
 
         this.setTotal();
 
-        var viewingDirection: Manifesto.ViewingDirection = this.provider.getViewingDirection();
+        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
         // check if the book has more than one page, otherwise hide prev/next options.
-        if (this.provider.getTotalCanvases() === 1) {
+        if (this.extension.helper.getTotalCanvases() === 1) {
             this.$centerOptions.hide();
         }
 
         // ui event handlers.
         this.$firstButton.onPressed(() => {
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
                     $.publish(Commands.FIRST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
@@ -211,7 +241,9 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.$prevButton.onPressed(() => {
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
                     $.publish(Commands.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
@@ -222,11 +254,26 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.$nextButton.onPressed(() => {
             switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
                     $.publish(Commands.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
                     $.publish(Commands.PREV);
+                    break;
+            }
+        });
+
+        this.$lastButton.onPressed(() => {
+            switch (viewingDirection.toString()){
+                case manifesto.ViewingDirection.leftToRight().toString() :
+                case manifesto.ViewingDirection.topToBottom().toString() :
+                case manifesto.ViewingDirection.bottomToTop().toString() :
+                    $.publish(Commands.LAST);
+                    break;
+                case manifesto.ViewingDirection.rightToLeft().toString() :
+                    $.publish(Commands.FIRST);
                     break;
             }
         });
@@ -267,23 +314,12 @@ class PagingHeaderPanel extends HeaderPanel {
             }
         });
 
-        this.$lastButton.onPressed(() => {
-            switch (viewingDirection.toString()){
-                case manifesto.ViewingDirection.leftToRight().toString():
-                    $.publish(Commands.LAST);
-                    break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.FIRST);
-                    break;
-            }
-        });
-
         if (this.options.modeOptionsEnabled === false){
             this.$modeOptions.hide();
             this.$centerOptions.addClass('modeOptionsDisabled');
         }
 
-        //Search is shown as default
+        // Search is shown as default
         if (this.options.imageSelectionBoxEnabled === true && this.options.autoCompleteBoxEnabled !== true){
             this.$search.hide();
         }
@@ -312,8 +348,8 @@ class PagingHeaderPanel extends HeaderPanel {
             }
         });
 
-        if (this.options.pagingToggleEnabled === false){
-            this.$pagingToggleButton.hide();
+        if (!Utils.Bools.getBool(this.options.pagingToggleEnabled, true)){
+            this.$pagingToggleButtons.hide();
         }
     }
 
@@ -340,23 +376,31 @@ class PagingHeaderPanel extends HeaderPanel {
 
     updatePagingToggle(): void {
         if (!this.pagingToggleIsVisible()){
-            this.$pagingToggleButton.hide();
+            this.$pagingToggleButtons.hide();
             return;
         }
 
-        if ((<ISeadragonProvider>this.provider).isPagingSettingEnabled()){
-            this.$pagingToggleButton.removeClass('two-up');
-            this.$pagingToggleButton.addClass('one-up');
-            this.$pagingToggleButton.prop('title', this.content.oneUp);
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
+            this.$oneUpButton.removeClass('on');
+            this.$twoUpButton.addClass('on');
         } else {
-            this.$pagingToggleButton.removeClass('one-up');
-            this.$pagingToggleButton.addClass('two-up');
-            this.$pagingToggleButton.prop('title', this.content.twoUp);
+            this.$twoUpButton.removeClass('on');
+            this.$oneUpButton.addClass('on');
         }
     }
 
     pagingToggleIsVisible(): boolean {
-        return this.options.pagingToggleEnabled && (<ISeadragonProvider>this.provider).isPagingAvailable();
+        return this.options.pagingToggleEnabled && this.extension.helper.isPagingAvailable();
+    }
+
+    updateGalleryButton(): void {
+        if (!this.galleryIsVisible()){
+            this.$galleryButton.hide();
+        }
+    }
+
+    galleryIsVisible(): boolean {
+        return this.extension.isLeftPanelEnabled();
     }
 
     setTotal(): void {
@@ -364,15 +408,15 @@ class PagingHeaderPanel extends HeaderPanel {
         var of = this.content.of;
 
         if (this.isPageModeEnabled()) {
-            this.$total.html(String.format(of, this.provider.getLastCanvasLabel(true)));
+            this.$total.html(String.format(of, this.extension.helper.getLastCanvasLabel(true)));
         } else {
-            this.$total.html(String.format(of, this.provider.getTotalCanvases()));
+            this.$total.html(String.format(of, this.extension.helper.getTotalCanvases()));
         }
     }
 
     setSearchFieldValue(index): void {
 
-        var canvas = this.provider.getCanvasByIndex(index);
+        var canvas = this.extension.helper.getCanvasByIndex(index);
         var value: string;
 
         if (this.isPageModeEnabled()) {
@@ -420,15 +464,15 @@ class PagingHeaderPanel extends HeaderPanel {
             index -= 1;
 
             if (isNaN(index)){
-                this.extension.showMessage(this.provider.config.modules.genericDialogue.content.invalidNumber);
+                this.extension.showMessage(this.extension.config.modules.genericDialogue.content.invalidNumber);
                 $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            var asset = this.provider.getCanvasByIndex(index);
+            var asset = this.extension.helper.getCanvasByIndex(index);
 
             if (!asset){
-                this.extension.showMessage(this.provider.config.modules.genericDialogue.content.pageNotFound);
+                this.extension.showMessage(this.extension.config.modules.genericDialogue.content.pageNotFound);
                 $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
@@ -437,72 +481,92 @@ class PagingHeaderPanel extends HeaderPanel {
         }
     }
 
-    canvasIndexChanged(index): void {
+    canvasIndexChanged(index: any): void {
         this.setSearchFieldValue(index);
 
         if (this.options.imageSelectionBoxEnabled === true && this.options.autoCompleteBoxEnabled !== true) {
             this.$imageSelectionBox.val(index);
         }
 
-        if (this.provider.isFirstCanvas()){
-            this.disableFirstButton();
-            this.disablePrevButton();
-        } else {
-            this.enableFirstButton();
-            this.enablePrevButton();
-        }
+        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
-        if (this.provider.isLastCanvas()){
-            this.disableLastButton();
-            this.disableNextButton();
+        if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
+            if (this.extension.helper.isFirstCanvas()){
+                this.disableLastButton();
+                this.disableNextButton();
+            } else {
+                this.enableLastButton();
+                this.enableNextButton();
+            }
+
+            if (this.extension.helper.isLastCanvas()){
+                this.disableFirstButton();
+                this.disablePrevButton();
+            } else {
+                this.enableFirstButton();
+                this.enablePrevButton();
+            }
         } else {
-            this.enableLastButton();
-            this.enableNextButton();
+            if (this.extension.helper.isFirstCanvas()){
+                this.disableFirstButton();
+                this.disablePrevButton();
+            } else {
+                this.enableFirstButton();
+                this.enablePrevButton();
+            }
+
+            if (this.extension.helper.isLastCanvas()){
+                this.disableLastButton();
+                this.disableNextButton();
+            } else {
+                this.enableLastButton();
+                this.enableNextButton();
+            }
         }
     }
 
-    disableFirstButton () {
+    disableFirstButton(): void {
         this.firstButtonEnabled = false;
         this.$firstButton.disable();
     }
 
-    enableFirstButton () {
+    enableFirstButton(): void {
         this.firstButtonEnabled = true;
         this.$firstButton.enable();
     }
 
-    disableLastButton () {
+    disableLastButton(): void {
         this.lastButtonEnabled = false;
         this.$lastButton.disable();
     }
 
-    enableLastButton () {
+    enableLastButton(): void {
         this.lastButtonEnabled = true;
         this.$lastButton.enable()
     }
 
-    disablePrevButton () {
+    disablePrevButton(): void {
         this.prevButtonEnabled = false;
         this.$prevButton.disable();
     }
 
-    enablePrevButton () {
+    enablePrevButton(): void {
         this.prevButtonEnabled = true;
         this.$prevButton.enable();
     }
 
-    disableNextButton () {
+    disableNextButton(): void {
         this.nextButtonEnabled = false;
         this.$nextButton.disable();
     }
 
-    enableNextButton () {
+    enableNextButton(): void {
         this.nextButtonEnabled = true;
         this.$nextButton.enable();
     }
 
     modeChanged(): void {
-        this.setSearchFieldValue(this.provider.canvasIndex);
+        this.setSearchFieldValue(this.extension.helper.canvasIndex);
         this.setTitles();
         this.setTotal();
     }
@@ -511,10 +575,12 @@ class PagingHeaderPanel extends HeaderPanel {
         super.resize();
 
         // hide toggle buttons below minimum width
-        if (this.extension.width() < this.provider.config.options.minWidthBreakPoint){
-            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.hide();
+        if (this.extension.width() < this.extension.config.options.minWidthBreakPoint){
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.hide();
+            if (this.galleryIsVisible()) this.$galleryButton.hide();
         } else {
-            if (this.pagingToggleIsVisible()) this.$pagingToggleButton.show();
+            if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.show();
+            if (this.galleryIsVisible()) this.$galleryButton.show();
         }
     }
 }

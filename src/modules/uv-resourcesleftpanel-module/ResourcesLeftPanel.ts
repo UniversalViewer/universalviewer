@@ -1,8 +1,5 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import IProvider = require("../uv-shared-module/IProvider");
 import LeftPanel = require("../uv-shared-module/LeftPanel");
-import IIxIFProvider = require("../uv-shared-module/IIxIFProvider");
-import IThumb = require("../uv-shared-module/IThumb");
 import ThumbsView = require("./ThumbsView");
 
 class ResourcesLeftPanel extends LeftPanel {
@@ -67,7 +64,7 @@ class ResourcesLeftPanel extends LeftPanel {
 
     dataBind(): void {
         this.dataBindThumbsView();
-        var annotations: Manifesto.IAnnotation[] = (<IIxIFProvider>this.provider).getResources();
+        var annotations: Manifesto.IAnnotation[] = this.extension.helper.getResources();
 
         if (annotations.length === 0) {
             this.$resourcesView.hide();
@@ -75,7 +72,7 @@ class ResourcesLeftPanel extends LeftPanel {
         for (var i = 0; i < annotations.length; i++){
             var annotation: Manifesto.IAnnotation = annotations[i];
             var resource: Manifesto.Resource = annotation.getResource();
-            var $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + resource.getLabel() + ' (' + Utils.Files.SimplifyMimeType(resource.getFormat().toString()) + ')' + '</li>');
+            var $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + resource.getLabel() + ' (' + Utils.Files.simplifyMimeType(resource.getFormat().toString()) + ')' + '</li>');
             this.$resources.append($listItem);
         }
     }
@@ -84,7 +81,7 @@ class ResourcesLeftPanel extends LeftPanel {
         if (!this.thumbsView) return;
         var width, height;
 
-        var viewingDirection = this.provider.getViewingDirection().toString();
+        var viewingDirection = this.extension.helper.getViewingDirection().toString();
 
         if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             width = this.config.options.oneColThumbWidth;
@@ -99,12 +96,13 @@ class ResourcesLeftPanel extends LeftPanel {
         if (typeof height === "undefined") {
             height = 100;
         }
-        this.thumbsView.thumbs = <IThumb[]>this.provider.getThumbs(width, height);
+
+        this.thumbsView.thumbs = <Manifold.IThumb[]>this.extension.helper.getThumbs(width, height);
         // hide thumb selector for single-part manifests
         if (this.thumbsView.thumbs.length < 2) {
             this.$thumbsView.hide();
         }
-        this.thumbsView.dataBind();
+        this.thumbsView.databind();
     }
 
     expandFullStart(): void {
