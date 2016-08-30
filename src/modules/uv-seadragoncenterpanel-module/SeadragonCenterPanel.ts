@@ -182,15 +182,6 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }, this.config.options.controlsFadeAfterInactive);
 
-        this.viewer.world.addHandler('add-item', (item) => {
-            that.items.push(item);
-
-            if (that.items.length === that.extension.resources.length) {
-                $.publish(Commands.SEADRAGON_OPEN);
-                that.openPagesHandler();
-            }
-        });
-
         this.viewer.addHandler('tile-drawn', () => {
             this.$spinner.hide();
         });
@@ -325,7 +316,10 @@ class SeadragonCenterPanel extends CenterPanel {
                     y: resource.y,
                     width: resource.width,
                     success: () => {
-                        this.viewer.viewport.maxZoomLevel = this.viewer.viewport.getZoom(true) * (this.config.options.maxZoomLevel || 8);
+                        if (i === resources.length - 1) {
+                            this.viewer.viewport.maxZoomLevel = this.viewer.viewport.getZoom(true) * (this.config.options.maxZoomLevel || 8);
+                            this.openPagesHandler();
+                        }
                     }
                 });
             }
