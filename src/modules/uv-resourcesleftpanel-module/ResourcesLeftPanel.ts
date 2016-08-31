@@ -24,10 +24,6 @@ class ResourcesLeftPanel extends LeftPanel {
 
         super.create();
 
-        this.$expandButton.attr('tabindex', '7');
-        this.$collapseButton.attr('tabindex', '7');
-        this.$expandFullButton.attr('tabindex', '8');
-
         this.setTitle(this.content.title);
 
         /*

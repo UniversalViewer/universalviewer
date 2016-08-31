@@ -70,10 +70,10 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$prevOptions = $('<div class="prevOptions"></div>');
         this.$centerOptions.append(this.$prevOptions);
 
-        this.$firstButton = $('<a class="imageBtn first" tabindex="15"></a>');
+        this.$firstButton = $('<a class="imageBtn first" tabindex="0"></a>');
         this.$prevOptions.append(this.$firstButton);
 
-        this.$prevButton = $('<a class="imageBtn prev" tabindex="16"></a>');
+        this.$prevButton = $('<a class="imageBtn prev" tabindex="0"></a>');
         this.$prevOptions.append(this.$prevButton);
 
         this.$modeOptions = $('<div class="mode"></div>');
@@ -81,18 +81,18 @@ class PagingHeaderPanel extends HeaderPanel {
 
         this.$imageModeLabel = $('<label for="image">' + this.content.image + '</label>');
         this.$modeOptions.append(this.$imageModeLabel);
-        this.$imageModeOption = $('<input type="radio" id="image" name="mode" tabindex="17"/>');
+        this.$imageModeOption = $('<input type="radio" id="image" name="mode" tabindex="0"/>');
         this.$modeOptions.append(this.$imageModeOption);
 
         this.$pageModeLabel = $('<label for="page"></label>');
         this.$modeOptions.append(this.$pageModeLabel);
-        this.$pageModeOption = $('<input type="radio" id="page" name="mode" tabindex="18"/>');
+        this.$pageModeOption = $('<input type="radio" id="page" name="mode" tabindex="0"/>');
         this.$modeOptions.append(this.$pageModeOption);
 
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
 
-        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="19"/>');
+        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="0"/>');
         this.$search.append(this.$searchText);
 
         if (this.options.autoCompleteBoxEnabled === true) {
@@ -136,7 +136,7 @@ class PagingHeaderPanel extends HeaderPanel {
         } else if (this.options.imageSelectionBoxEnabled === true) {
             this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
             this.$centerOptions.append(this.$selectionBoxOptions);
-            this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="20" ></select>');
+            this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="0" ></select>');
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
             for (var imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
@@ -154,16 +154,16 @@ class PagingHeaderPanel extends HeaderPanel {
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
 
-        this.$searchButton = $('<a class="go btn btn-primary" tabindex="21">' + this.content.go + '</a>');
+        this.$searchButton = $('<a class="go btn btn-primary" tabindex="0">' + this.content.go + '</a>');
         this.$search.append(this.$searchButton);
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
 
-        this.$nextButton = $('<a class="imageBtn next" tabindex="1"></a>');
+        this.$nextButton = $('<a class="imageBtn next" tabindex="0"></a>');
         this.$nextOptions.append(this.$nextButton);
 
-        this.$lastButton = $('<a class="imageBtn last" tabindex="2"></a>');
+        this.$lastButton = $('<a class="imageBtn last" tabindex="0"></a>');
         this.$nextOptions.append(this.$lastButton);
 
         if (this.isPageModeEnabled()) {
@@ -183,34 +183,34 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.text(this.content.page);
         }
 
-        this.$galleryButton = $('<a class="imageBtn gallery" title="' + this.content.gallery + '"></a>');
+        this.$galleryButton = $('<a class="imageBtn gallery" title="' + this.content.gallery + '" tabindex="0"></a>');
         this.$rightOptions.prepend(this.$galleryButton);
 
         this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
         this.$rightOptions.prepend(this.$pagingToggleButtons);
 
-        this.$oneUpButton = $('<a class="imageBtn one-up" title="' + this.content.oneUp + '"></a>');
+        this.$oneUpButton = $('<a class="imageBtn one-up" title="' + this.content.oneUp + '" tabindex="0"></a>');
         this.$pagingToggleButtons.append(this.$oneUpButton);
 
-        this.$twoUpButton = $('<a class="imageBtn two-up" title="' + this.content.twoUp + '"></a>');
+        this.$twoUpButton = $('<a class="imageBtn two-up" title="' + this.content.twoUp + '" tabindex="0"></a>');
         this.$pagingToggleButtons.append(this.$twoUpButton);
 
         this.updatePagingToggle();
         this.updateGalleryButton();
 
-        this.$oneUpButton.on('click', () => {
+        this.$oneUpButton.onPressed(() => {
             var enabled: boolean = false;
             this.updateSettings({ pagingEnabled: enabled });
             $.publish(Commands.PAGING_TOGGLED, [enabled]);
         });
 
-        this.$twoUpButton.on('click', () => {
+        this.$twoUpButton.onPressed(() => {
             var enabled: boolean = true;
             this.updateSettings({ pagingEnabled: enabled });
             $.publish(Commands.PAGING_TOGGLED, [enabled]);
         });
 
-        this.$galleryButton.on('click', () => {
+        this.$galleryButton.onPressed(() => {
             $.publish(BaseCommands.TOGGLE_EXPAND_LEFT_PANEL);
         });
 
@@ -328,25 +328,26 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$helpButton.hide();
         }
 
+        // todo: discuss on community call
         // Get visible element in centerOptions with greatest tabIndex
-        var $elementWithGreatestTabIndex: JQuery = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
+        // var $elementWithGreatestTabIndex: JQuery = this.$centerOptions.getVisibleElementWithGreatestTabIndex();
 
-        // cycle focus back to start.
-        if ($elementWithGreatestTabIndex) {
-            $elementWithGreatestTabIndex.blur(() => {
-                if (this.extension.tabbing && !this.extension.shifted) {
-                    this.$nextButton.focus();
-                }
-            });
-        }
+        // // cycle focus back to start.
+        // if ($elementWithGreatestTabIndex) {
+        //     $elementWithGreatestTabIndex.blur(() => {
+        //         if (this.extension.tabbing && !this.extension.shifted) {
+        //             this.$nextButton.focus();
+        //         }
+        //     });
+        // }
 
-        this.$nextButton.blur(() => {
-            if (this.extension.tabbing && this.extension.shifted) {
-                setTimeout(() => {
-                    $elementWithGreatestTabIndex.focus();
-                }, 100);
-            }
-        });
+        // this.$nextButton.blur(() => {
+        //     if (this.extension.tabbing && this.extension.shifted) {
+        //         setTimeout(() => {
+        //             $elementWithGreatestTabIndex.focus();
+        //         }, 100);
+        //     }
+        // });
 
         if (!Utils.Bools.getBool(this.options.pagingToggleEnabled, true)){
             this.$pagingToggleButtons.hide();

@@ -82,7 +82,7 @@ class FooterPanel extends BaseFooterPanel {
         this.$searchText = $('<input class="searchText" type="text" maxlength="100" value="' + this.content.enterKeyword + '" />');
         this.$searchTextContainer.append(this.$searchText);
 
-        this.$searchButton = $('<a class="imageButton searchButton"></a>');
+        this.$searchButton = $('<a class="imageButton searchButton" tabindex="0"></a>');
         this.$searchTextContainer.append(this.$searchButton);
 
         // search results.

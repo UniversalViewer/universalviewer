@@ -48,19 +48,19 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$imageOptions = $('<ul></ul>');
         this.$imageOptionsContainer.append(this.$imageOptions);
 
-        this.$currentViewAsJpgButton = $('<li class="option"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
+        this.$currentViewAsJpgButton = $('<li class="option"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
         this.$imageOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
-        this.$wholeImageHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
+        this.$wholeImageHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
         this.$imageOptions.append(this.$wholeImageHighResButton);
         this.$wholeImageHighResButton.hide();
 
-        this.$wholeImagesHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImagesHighRes.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.wholeImagesHighRes.toString() + 'label" for="' + DownloadOption.wholeImagesHighRes.toString() + '"></label></li>');
+        this.$wholeImagesHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImagesHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImagesHighRes.toString() + 'label" for="' + DownloadOption.wholeImagesHighRes.toString() + '"></label></li>');
         this.$imageOptions.append(this.$wholeImagesHighResButton);
         this.$wholeImageHighResButton.hide();
 
-        this.$wholeImageLowResAsJpgButton = $('<li class="option"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
+        this.$wholeImageLowResAsJpgButton = $('<li class="option"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
         this.$imageOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
@@ -74,14 +74,14 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$sequenceOptions = $('<ul></ul>');
         this.$sequenceOptionsContainer.append(this.$sequenceOptions);
 
-        this.$selectionButton = $('<li class="option"><input id="' + DownloadOption.selection.toString() + '" type="radio" name="downloadOptions" /><label id="' + DownloadOption.selection.toString() + 'label" for="' + DownloadOption.selection.toString() + '"></label></li>');
+        this.$selectionButton = $('<li class="option"><input id="' + DownloadOption.selection.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.selection.toString() + 'label" for="' + DownloadOption.selection.toString() + '"></label></li>');
         this.$sequenceOptions.append(this.$selectionButton);
         this.$selectionButton.hide();
 
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
-        this.$downloadButton = $('<a class="btn btn-primary" href="#">' + this.content.download + '</a>');
+        this.$downloadButton = $('<a class="btn btn-primary default" href="#" tabindex="0">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
 
         var that = this;
@@ -325,7 +325,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 var mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
                 label = String.format(label, mime);
                 this.renderingUrls[currentId] = rendering.id;
-                var $button = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" /><label for="' + currentId + '">' + label + '</label></li>');
+                var $button = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + currentId + '">' + label + '</label></li>');
 
                 switch (type) {
                     case DownloadOption.dynamicImageRenderings:

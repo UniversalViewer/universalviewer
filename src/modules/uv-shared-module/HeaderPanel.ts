@@ -48,10 +48,10 @@ class HeaderPanel extends BaseView {
         //this.$helpButton = $('<a href="#" class="action help">' + this.content.help + '</a>');
         //this.$rightOptions.append(this.$helpButton);
 
-        this.$localeToggleButton = $('<a class="localeToggle"></a>');
+        this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
         this.$rightOptions.append(this.$localeToggleButton);
 
-        this.$settingsButton = $('<a class="imageBtn settings" tabindex="3"></a>');
+        this.$settingsButton = $('<a class="imageBtn settings" tabindex="0"></a>');
         this.$settingsButton.attr('title', this.content.settings);
         this.$rightOptions.append(this.$settingsButton);
 
