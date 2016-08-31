@@ -1,4 +1,4 @@
-// uv-1.8.23
+// uv-1.8.24
 
 //https://raw.githubusercontent.com/jfriend00/docReady/master/docready.js
 (function(funcName, baseObj) {

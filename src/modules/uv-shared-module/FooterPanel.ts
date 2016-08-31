@@ -32,28 +32,26 @@ class FooterPanel extends BaseView {
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
-        this.$feedbackButton = $('<a class="feedback" title="' + this.content.feedback + '">' + this.content.feedback + '</a>');
+        this.$feedbackButton = $('<a class="feedback" title="' + this.content.feedback + '" tabindex="0">' + this.content.feedback + '</a>');
         this.$options.prepend(this.$feedbackButton);
 
-        this.$openButton = $('<a class="open" title="' + this.content.open + '">' + this.content.open + '</a>');
+        this.$openButton = $('<a class="open" title="' + this.content.open + '" tabindex="0">' + this.content.open + '</a>');
         this.$options.prepend(this.$openButton);
 
-        this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '">' + this.content.bookmark + '</a>');
+        this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '" tabindex="0">' + this.content.bookmark + '</a>');
         this.$options.prepend(this.$bookmarkButton);
 
-        this.$shareButton = $('<a href="#" class="share" title="' + this.content.share + '">' + this.content.share + '</a>');
+        this.$shareButton = $('<a href="#" class="share" title="' + this.content.share + '" tabindex="0">' + this.content.share + '</a>');
         this.$options.append(this.$shareButton);
-        this.$shareButton.attr('tabindex', '6');
 
-        this.$embedButton = $('<a href="#" class="embed" title="' + this.content.embed + '">' + this.content.embed + '</a>');
+        this.$embedButton = $('<a href="#" class="embed" title="' + this.content.embed + '" tabindex="0">' + this.content.embed + '</a>');
         this.$options.append(this.$embedButton);
 
-        this.$downloadButton = $('<a class="download" title="' + this.content.download + '">' + this.content.download + '</a>');
+        this.$downloadButton = $('<a class="download" title="' + this.content.download + '" tabindex="0">' + this.content.download + '</a>');
         this.$options.prepend(this.$downloadButton);
 
-        this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '">' + this.content.fullScreen + '</a>');
+        this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '" tabindex="0">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
-        this.$fullScreenBtn.attr('tabindex', '5');
         
 
         this.$openButton.onPressed(() => {
@@ -76,9 +74,8 @@ class FooterPanel extends BaseView {
             $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
         });
 
-        this.$downloadButton.on('click', (e) => {
-            e.preventDefault();
-
+        this.$downloadButton.onPressed(() => {
+            //e.preventDefault(); why was on click and preventDefault needed?
             $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
 

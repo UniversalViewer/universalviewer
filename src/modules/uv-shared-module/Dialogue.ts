@@ -46,7 +46,7 @@ class Dialogue extends BaseView {
         this.$top = $('<div class="top"></div>');
         this.$element.append(this.$top);
 
-        this.$closeButton = $('<a href="#" class="close">' + this.content.close + '</a>');
+        this.$closeButton = $('<a href="#" class="close" tabindex="0">' + this.content.close + '</a>');
         this.$top.append(this.$closeButton);
 
         this.$middle = $('<div class="middle"></div>');
@@ -82,6 +82,7 @@ class Dialogue extends BaseView {
         var paddingLeft = parseInt(this.$element.css("padding-left"));
         var pos = this.extension.mouseX - paddingLeft - 10; // 10 = 1/2 arrow width.
         if (pos < 0) pos = 0;
+        if (pos > this.$element.width() - paddingLeft - 10) pos = 0;
         this.$bottom.css('backgroundPosition', pos + 'px 0px');
     }
 
@@ -92,7 +93,12 @@ class Dialogue extends BaseView {
 
         // set the focus to the default button.
         setTimeout(() => {
-            this.$element.find('.btn.default').focus();
+            var $defaultButton = this.$element.find('.btn.default');
+            if ($defaultButton.length){
+                $defaultButton.focus();
+            } else {
+                this.$closeButton.focus();
+            }
         }, 1);
 
         $.publish(Commands.SHOW_OVERLAY);

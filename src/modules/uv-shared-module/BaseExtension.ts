@@ -628,7 +628,7 @@ class BaseExtension implements IExtension {
 
     setDefaultFocus(): void {
         setTimeout(() => {
-            $('[tabindex=1]').focus();
+            $('[tabindex=0]').focus();
         }, 1);
     }
 

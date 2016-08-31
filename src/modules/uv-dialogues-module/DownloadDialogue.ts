@@ -80,7 +80,7 @@ class DownloadDialogue extends Dialogue {
         } else {
             fileType = this.getFileExtension(uri);
         }
-        this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download>' + String.format(label, fileType) + '</li>');
+        this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download tabindex="0">' + String.format(label, fileType) + '</li>');
     }
 
     updateNoneAvailable(): void {
