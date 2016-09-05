@@ -93,7 +93,7 @@ class Dialogue extends BaseView {
 
         // set the focus to the default button.
         setTimeout(() => {
-            var $defaultButton = this.$element.find('.btn.default');
+            var $defaultButton = this.$element.find('.default').first();
             if ($defaultButton.length){
                 $defaultButton.focus();
             } else {

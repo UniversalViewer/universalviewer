@@ -11,20 +11,20 @@ import MultiSelectState = Manifold.MultiSelectState;
 
 class GalleryView extends BaseView {
 
-    // private _thumbsCache: JQuery;
-    // $header: JQuery;
-    // $main: JQuery;
-    // $selectedThumb: JQuery;
-    // $sizeDownButton: JQuery;
-    // $sizeRange: JQuery;
-    // $sizeUpButton: JQuery;
-    // $thumbs: JQuery;
-    // isOpen: boolean = false;
-    // lastThumbClickedIndex: number;
-    // multiSelectState: MultiSelectState;
-    // range: number;
+    private _thumbsCache: JQuery;
+    $header: JQuery;
+    $main: JQuery;
+    $selectedThumb: JQuery;
+    $sizeDownButton: JQuery;
+    $sizeRange: JQuery;
+    $sizeUpButton: JQuery;
+    $thumbs: JQuery;
+    isOpen: boolean = false;
+    lastThumbClickedIndex: number;
+    multiSelectState: MultiSelectState;
+    range: number;
 
-    // public thumbs: IThumb[];
+    public thumbs: IThumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -65,176 +65,176 @@ class GalleryView extends BaseView {
             this._multiSelectStateChange(state);
         });
 
-        // this.$header = $('<div class="header"></div>');
-        // this.$element.append(this.$header);
+        this.$header = $('<div class="header"></div>');
+        this.$element.append(this.$header);
 
-        // this.$sizeDownButton = $('<input class="btn btn-default size-down" type="button" value="-" />');
-        // this.$header.append(this.$sizeDownButton);
+        this.$sizeDownButton = $('<input class="btn btn-default size-down" type="button" value="-" />');
+        this.$header.append(this.$sizeDownButton);
 
-        // this.$sizeRange = $('<input type="range" name="size" min="1" max="10" value="6" />');
-        // this.$header.append(this.$sizeRange);
+        this.$sizeRange = $('<input type="range" name="size" min="1" max="10" value="6" />');
+        this.$header.append(this.$sizeRange);
 
-        // this.$sizeUpButton = $('<input class="btn btn-default size-up" type="button" value="+" />');
-        // this.$header.append(this.$sizeUpButton);
+        this.$sizeUpButton = $('<input class="btn btn-default size-up" type="button" value="+" />');
+        this.$header.append(this.$sizeUpButton);
 
-        // this.$main = $('<div class="main"></div>');
-        // this.$element.append(this.$main);
+        this.$main = $('<div class="main"></div>');
+        this.$element.append(this.$main);
 
-        // this.$thumbs = $('<div class="thumbs"></div>');
-        // this.$main.append(this.$thumbs);
+        this.$thumbs = $('<div class="thumbs"></div>');
+        this.$main.append(this.$thumbs);
 
-        // this.$thumbs.addClass(this.extension.helper.getViewingDirection().toString()); // defaults to "left-to-right"
+        this.$thumbs.addClass(this.extension.helper.getViewingDirection().toString()); // defaults to "left-to-right"
 
-        // this.$sizeDownButton.on('click', () => {
-        //     var val = Number(this.$sizeRange.val()) - 1;
+        this.$sizeDownButton.on('click', () => {
+            var val = Number(this.$sizeRange.val()) - 1;
 
-        //     if (val >= Number(this.$sizeRange.attr('min'))){
-        //         this.$sizeRange.val(val.toString());
-        //         this.$sizeRange.trigger('change');
+            if (val >= Number(this.$sizeRange.attr('min'))){
+                this.$sizeRange.val(val.toString());
+                this.$sizeRange.trigger('change');
 
-        //         $.publish(Commands.GALLERY_DECREASE_SIZE);
-        //     }
-        // });
+                $.publish(Commands.GALLERY_DECREASE_SIZE);
+            }
+        });
 
-        // this.$sizeUpButton.on('click', () => {
-        //     var val = Number(this.$sizeRange.val()) + 1;
+        this.$sizeUpButton.on('click', () => {
+            var val = Number(this.$sizeRange.val()) + 1;
 
-        //     if (val <= Number(this.$sizeRange.attr('max'))){
-        //         this.$sizeRange.val(val.toString());
-        //         this.$sizeRange.trigger('change');
+            if (val <= Number(this.$sizeRange.attr('max'))){
+                this.$sizeRange.val(val.toString());
+                this.$sizeRange.trigger('change');
 
-        //         $.publish(Commands.GALLERY_INCREASE_SIZE);
-        //     }
-        // });
+                $.publish(Commands.GALLERY_INCREASE_SIZE);
+            }
+        });
 
-        // this.$sizeRange.on('change', () => {
-        //     this.updateThumbs();
-        //     this.scrollToThumb(this.getSelectedThumbIndex());
-        // });
+        this.$sizeRange.on('change', () => {
+            this.updateThumbs();
+            this.scrollToThumb(this.getSelectedThumbIndex());
+        });
 
-        // this._setRange();
+        this._setRange();
 
-        // $.templates({
-        //     galleryThumbsTemplate: '\
-        //         <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}" data-initialwidth="{{>initialWidth}}" data-initialheight="{{>initialHeight}}">\
-        //             <div class="wrap" style="width:{{>initialWidth}}px; height:{{>initialHeight}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
-        //             {^{if multiSelectEnabled}}\
-        //                 <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
-        //             {{/if}}\
-        //             </div>\
-        //             <span class="index">{{:#index + 1}}</span>\
-        //             <span class="label" style="width:{{>initialWidth}}px" title="{{>label}}">{{>label}}&nbsp;</span>\
-        //         </div>'
-        // });
+        $.templates({
+            galleryThumbsTemplate: '\
+                <div class="{{:~className()}}" data-src="{{>uri}}" data-index="{{>index}}" data-visible="{{>visible}}" data-width="{{>width}}" data-height="{{>height}}" data-initialwidth="{{>initialWidth}}" data-initialheight="{{>initialHeight}}">\
+                    <div class="wrap" style="width:{{>initialWidth}}px; height:{{>initialHeight}}px" data-link="class{merge:multiSelected toggle=\'multiSelected\'}">\
+                    {^{if multiSelectEnabled}}\
+                        <input id="thumb-checkbox-{{>id}}" type="checkbox" data-link="checked{:multiSelected ? \'checked\' : \'\'}" class="multiSelect" />\
+                    {{/if}}\
+                    </div>\
+                    <span class="index">{{:#index + 1}}</span>\
+                    <span class="label" style="width:{{>initialWidth}}px" title="{{>label}}">{{>label}}&nbsp;</span>\
+                </div>'
+        });
 
-        // $.views.helpers({
-        //     className: function(){
-        //         var className = "thumb preLoad";
+        $.views.helpers({
+            className: function(){
+                var className = "thumb preLoad";
 
-        //         if (this.data.index === 0){
-        //             className += " first";
-        //         }
+                if (this.data.index === 0){
+                    className += " first";
+                }
 
-        //         if (!this.data.uri){
-        //             className += " placeholder";
-        //         }
+                if (!this.data.uri){
+                    className += " placeholder";
+                }
 
-        //         return className;
-        //     }
-        // });
+                return className;
+            }
+        });
 
-        // // use unevent to detect scroll stop.
-        // this.$main.on('scroll', () => {
-        //     this.updateThumbs();
-        // }, 100);
+        // use unevent to detect scroll stop.
+        this.$main.on('scroll', () => {
+            this.updateThumbs();
+        }, 100);
 
-        // if (!Modernizr.inputtypes.range){
-        //     this.$sizeRange.hide();
-        // }
+        if (!Modernizr.inputtypes.range){
+            this.$sizeRange.hide();
+        }
 
-        // this.resize();
+        this.resize();
     }
 
-    // public databind(): void{
-    //     if (!this.thumbs) return;
-    //     this._reset();
-    //     this.createThumbs();
-    // }
+    public databind(): void{
+        if (!this.thumbs) return;
+        this._reset();
+        this.createThumbs();
+    }
 
-    // createThumbs(): void{
-    //     var that = this;
+    createThumbs(): void{
+        var that = this;
 
-    //     if (!this.thumbs) return;
+        if (!this.thumbs) return;
 
-    //     if (this.isChunkedResizingEnabled()) {
-    //         this.$thumbs.addClass("chunked");
-    //     }
+        if (this.isChunkedResizingEnabled()) {
+            this.$thumbs.addClass("chunked");
+        }
 
-    //     // set initial thumb sizes
-    //     var heights = [];
+        // set initial thumb sizes
+        var heights = [];
 
-    //     for(var i = 0; i < this.thumbs.length; i++) {
-    //         var thumb: IThumb = this.thumbs[i];
-    //         var initialWidth = thumb.width;
-    //         var initialHeight = thumb.height;
-    //         thumb.initialWidth = initialWidth;
-    //         //thumb.initialHeight = initialHeight;
-    //         heights.push(initialHeight);
-    //     }
+        for(var i = 0; i < this.thumbs.length; i++) {
+            var thumb: IThumb = this.thumbs[i];
+            var initialWidth = thumb.width;
+            var initialHeight = thumb.height;
+            thumb.initialWidth = initialWidth;
+            //thumb.initialHeight = initialHeight;
+            heights.push(initialHeight);
+        }
 
-    //     var medianHeight = Math.median(heights);
+        var medianHeight = Math.median(heights);
 
-    //     for(var j = 0; j < this.thumbs.length; j++){
-    //         var thumb: IThumb = this.thumbs[j];
-    //         thumb.initialHeight = medianHeight;
-    //     }
+        for(var j = 0; j < this.thumbs.length; j++){
+            var thumb: IThumb = this.thumbs[j];
+            thumb.initialHeight = medianHeight;
+        }
 
-    //     this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
+        this.$thumbs.link($.templates.galleryThumbsTemplate, this.thumbs);
 
-    //     if (!that.multiSelectState.isEnabled){
-    //         // add a selection click event to all thumbs
-    //         this.$thumbs.delegate('.thumb', 'click', function (e) {
-    //             e.preventDefault();
-    //             var data = $.view(this).data;
-    //             that.lastThumbClickedIndex = data.index;
-    //             $.publish(BaseCommands.THUMB_SELECTED, [data]);
-    //         });
-    //     } else {
-    //         // make each thumb a checkboxButton
-    //         $.each(this.$thumbs.find('.thumb'), (index: number, thumb: any) => {
-    //             var $thumb = $(thumb);
+        if (!that.multiSelectState.isEnabled){
+            // add a selection click event to all thumbs
+            this.$thumbs.delegate('.thumb', 'click', function (e) {
+                e.preventDefault();
+                var data = $.view(this).data;
+                that.lastThumbClickedIndex = data.index;
+                $.publish(BaseCommands.THUMB_SELECTED, [data]);
+            });
+        } else {
+            // make each thumb a checkboxButton
+            $.each(this.$thumbs.find('.thumb'), (index: number, thumb: any) => {
+                var $thumb = $(thumb);
 
-    //             $thumb.checkboxButton(function(checked: boolean) {
-    //                 var data = $.view(this).data;
-    //                 that._setThumbMultiSelected(data, !data.multiSelected);
-    //                 $.publish(Commands.THUMB_MULTISELECTED, [data]);
-    //             });
-    //         })
-    //     }
+                $thumb.checkboxButton(function(checked: boolean) {
+                    var data = $.view(this).data;
+                    that._setThumbMultiSelected(data, !data.multiSelected);
+                    $.publish(Commands.THUMB_MULTISELECTED, [data]);
+                });
+            })
+        }
 
-    //     this.selectIndex(this.extension.helper.canvasIndex);
+        this.selectIndex(this.extension.helper.canvasIndex);
 
-    //     this.setLabel();
+        this.setLabel();
 
-    //     this.updateThumbs();
-    // }
+        this.updateThumbs();
+    }
 
-    // private _getThumbsByRange(range: IRange): IThumb[] {
-    //     var thumbs: IThumb[] = [];
+    private _getThumbsByRange(range: IRange): IThumb[] {
+        var thumbs: IThumb[] = [];
 
-    //     for (var i = 0; i < this.thumbs.length; i++) {
-    //         var thumb: IThumb = this.thumbs[i];
-    //         var canvas: ICanvas = thumb.data;
+        for (var i = 0; i < this.thumbs.length; i++) {
+            var thumb: IThumb = this.thumbs[i];
+            var canvas: ICanvas = thumb.data;
 
-    //         var r: IRange = <IRange>this.extension.helper.getCanvasRange(canvas, range.path);
+            var r: IRange = <IRange>this.extension.helper.getCanvasRange(canvas, range.path);
 
-    //         if (r && r.id === range.id){
-    //             thumbs.push(thumb);
-    //         }
-    //     }
+            if (r && r.id === range.id){
+                thumbs.push(thumb);
+            }
+        }
 
-    //     return thumbs;
-    // }
+        return thumbs;
+    }
 
     private _multiSelectStateChange(state: MultiSelectState): void {
 
