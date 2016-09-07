@@ -52,7 +52,6 @@ class FooterPanel extends BaseView {
 
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '" tabindex="0">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
-        
 
         this.$openButton.onPressed(() => {
             $.publish(BaseCommands.OPEN);

@@ -81,9 +81,12 @@ class Dialogue extends BaseView {
         // set bottom background position to mouse x.
         var paddingLeft = parseInt(this.$element.css("padding-left"));
         var pos = this.extension.mouseX - paddingLeft - 10; // 10 = 1/2 arrow width.
-        if (pos < 0) pos = 0;
-        if (pos > this.$element.width() - paddingLeft - 10) pos = 0;
-        this.$bottom.css('backgroundPosition', pos + 'px 0px');
+        if (pos < 0 || pos > (this.$element.width() - paddingLeft - 10)){
+            this.$bottom.hide();
+        } else {
+            this.$bottom.show();
+            this.$bottom.css('backgroundPosition', pos + 'px 0px');
+        }
     }
 
     open(): void {
@@ -93,11 +96,19 @@ class Dialogue extends BaseView {
 
         // set the focus to the default button.
         setTimeout(() => {
-            var $defaultButton = this.$element.find('.btn.default');
+            var $defaultButton = this.$element.find('.default');
             if ($defaultButton.length){
                 $defaultButton.focus();
             } else {
-                this.$closeButton.focus();
+                // if there's no default button, focus on the first visible input
+                var $input = this.$element.find('input:visible').first();
+
+                if ($input.length){
+                    $input.focus();
+                } else {
+                    // if there's no visible first input, focus on the close button
+                    this.$closeButton.focus();
+                }
             }
         }, 1);
 

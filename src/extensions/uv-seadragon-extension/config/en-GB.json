@@ -63,6 +63,7 @@
       "options":
       {
         "confinedImageSize": 1000,
+        "currentViewDisabledPercentage": 90,
         "maxImageWidth": 5000,
         "selectionEnabled": false
       }

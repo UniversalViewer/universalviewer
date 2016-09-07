@@ -625,6 +625,7 @@
   margin: 5px 10px 0 0;
   overflow: hidden;
   word-wrap: break-word;
+  line-height: 1.6em;
 }
 #app .rightPanel .main .items .item .text a.toggle {
   color: #14a4c3;

@@ -81,7 +81,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
-        this.$downloadButton = $('<a class="btn btn-primary default" href="#" tabindex="0">' + this.content.download + '</a>');
+        this.$downloadButton = $('<a class="btn btn-primary" href="#" tabindex="0">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
 
         var that = this;
@@ -176,6 +176,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 label = String.format(label, dimensions.size.width, dimensions.size.height);
                 $label.text(label);
                 $input.prop('title', label);
+                this.$currentViewAsJpgButton.data('width', dimensions.region.width);
+                this.$currentViewAsJpgButton.data('height', dimensions.region.height);
                 this.$currentViewAsJpgButton.show();
             } else {
                 this.$currentViewAsJpgButton.hide();
@@ -203,6 +205,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 var label: string = String.format(this.content.wholeImageHighRes, size.width, size.height, mime);
                 $label.text(label);
                 $input.prop('title', label);
+                this.$wholeImageHighResButton.data('width', size.width);
+                this.$wholeImageHighResButton.data('height', size.height);
                 this.$wholeImageHighResButton.show();
             }
         } else {
@@ -236,6 +240,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var label = String.format(this.content.wholeImageLowResAsJpg, size.width, size.height);
             $label.text(label);
             $input.prop('title', label);
+            this.$wholeImageLowResAsJpgButton.data('width', size.width);
+            this.$wholeImageLowResAsJpgButton.data('height', size.height);
             this.$wholeImageLowResAsJpgButton.show();
         } else {
             this.$wholeImageLowResAsJpgButton.hide();
@@ -268,6 +274,46 @@ class DownloadDialogue extends BaseDownloadDialogue {
             this.addDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
         }
 
+        // hide the current view option if it's equivalent to whole image.
+        if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
+            var currentWidth: number = parseInt(this.$currentViewAsJpgButton.data('width').toString());
+            var currentHeight: number = parseInt(this.$currentViewAsJpgButton.data('height').toString());
+            var wholeWidth: number = parseInt(this.$wholeImageHighResButton.data('width').toString());
+            var wholeHeight: number = parseInt(this.$wholeImageHighResButton.data('height').toString());
+
+            var percentageWidth: number = (currentWidth / wholeWidth) * 100;
+            var percentageHeight: number = (currentHeight / wholeHeight) * 100;
+
+            var disabledPercentage: number = this.options.currentViewDisabledPercentage;
+
+            // if over disabledPercentage of the size of whole image
+            if (percentageWidth >= disabledPercentage && percentageHeight >= disabledPercentage) {
+                this.$currentViewAsJpgButton.hide();
+            } else {
+                this.$currentViewAsJpgButton.show();
+            }
+        }
+
+        // order by image size
+        // var options = [this.$currentViewAsJpgButton, this.$wholeImageHighResButton, this.$wholeImageLowResAsJpgButton];
+
+        // options = options.sort(($a, $b) => {
+        //     var aWidth: number = $a.data('width');
+        //     var aHeight: number = $a.data('height');
+
+        //     var bWidth: number = $a.data('width');
+        //     var bHeight: number = $a.data('height');
+
+        //     if (a is less than b by some ordering criterion) {
+        //         return -1;
+        //     }
+        //     if (a is greater than b by the ordering criterion) {
+        //         return 1;
+        //     }
+        //     // a must be equal to b
+        //     return 0; 
+        // });
+
         // hide empty groups
         var $groups: JQuery = this.$downloadOptions.find('li.group');
 
@@ -284,12 +330,6 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
         this.$downloadOptions.find('li.group:visible').last().addClass('lastVisible');
 
-        // if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
-        //     this.$pagingNote.show();
-        // } else {
-        //     this.$pagingNote.hide();
-        // }
-
         if (!this.$downloadOptions.find('li.option:visible').length){
             this.$noneAvailable.show();
             this.$downloadButton.hide();
@@ -303,13 +343,13 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.resize();
     }
 
-    resetDynamicDownloadOptions() {
+    resetDynamicDownloadOptions(): void {
         this.renderingUrls = [];
         this.renderingUrlsCount = 0;
         this.$downloadOptions.find('li.dynamic').remove();
     }
 
-    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption) {
+    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption): void {
         var renderings: Manifesto.IRendering[] = resource.getRenderings();
 
         for (var i = 0; i < renderings.length; i++) {
@@ -363,7 +403,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         return '';
     }
 
-    getCanvasMimeType(canvas: Manifesto.ICanvas) {
+    getCanvasMimeType(canvas: Manifesto.ICanvas): string {
         var resource = this.getCanvasImageResource(canvas);
         var format: Manifesto.ResourceFormat = resource.getFormat();
 

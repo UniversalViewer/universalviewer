@@ -63,7 +63,7 @@ class FooterPanel extends BaseFooterPanel {
             this.setCurrentSearchResultPlacemarker();
         });
 
-        this.$printButton = $('<a class="print" title="' + this.content.print + '">' + this.content.print + '</a>');
+        this.$printButton = $('<a class="print" title="' + this.content.print + '" tabindex="0">' + this.content.print + '</a>');
         this.$options.prepend(this.$printButton);
 
         // search input.
