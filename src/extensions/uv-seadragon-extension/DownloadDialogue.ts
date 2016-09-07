@@ -48,19 +48,19 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$imageOptions = $('<ul></ul>');
         this.$imageOptionsContainer.append(this.$imageOptions);
 
-        this.$currentViewAsJpgButton = $('<li class="option"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
+        this.$currentViewAsJpgButton = $('<li class="option single"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
         this.$imageOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
-        this.$wholeImageHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
+        this.$wholeImageHighResButton = $('<li class="option single"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
         this.$imageOptions.append(this.$wholeImageHighResButton);
         this.$wholeImageHighResButton.hide();
 
-        this.$wholeImagesHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImagesHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImagesHighRes.toString() + 'label" for="' + DownloadOption.wholeImagesHighRes.toString() + '"></label></li>');
+        this.$wholeImagesHighResButton = $('<li class="option multiple"><input id="' + DownloadOption.wholeImagesHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImagesHighRes.toString() + 'label" for="' + DownloadOption.wholeImagesHighRes.toString() + '"></label></li>');
         this.$imageOptions.append(this.$wholeImagesHighResButton);
         this.$wholeImageHighResButton.hide();
 
-        this.$wholeImageLowResAsJpgButton = $('<li class="option"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
+        this.$wholeImageLowResAsJpgButton = $('<li class="option single"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
         this.$imageOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
@@ -294,25 +294,37 @@ class DownloadDialogue extends BaseDownloadDialogue {
             }
         }
 
-        // order by image size
-        // var options = [this.$currentViewAsJpgButton, this.$wholeImageHighResButton, this.$wholeImageLowResAsJpgButton];
+        // order by image area
+        var $options: any = this.$imageOptions.find('li.single');
 
-        // options = options.sort(($a, $b) => {
-        //     var aWidth: number = $a.data('width');
-        //     var aHeight: number = $a.data('height');
+        $options = $options.sort((a, b) => {
+            var aWidth: any = $(a).data('width');
+            aWidth ? aWidth = parseInt(aWidth.toString()) : 0;
 
-        //     var bWidth: number = $a.data('width');
-        //     var bHeight: number = $a.data('height');
+            var aHeight: any = $(a).data('height');
+            aHeight ? aHeight = parseInt(aHeight.toString()) : 0;
 
-        //     if (a is less than b by some ordering criterion) {
-        //         return -1;
-        //     }
-        //     if (a is greater than b by the ordering criterion) {
-        //         return 1;
-        //     }
-        //     // a must be equal to b
-        //     return 0; 
-        // });
+            var bWidth: any = $(b).data('width');
+            bWidth ? bWidth = parseInt(bWidth.toString()) : 0;
+
+            var bHeight: any = $(b).data('height');
+            bHeight ? bHeight = parseInt(bHeight.toString()) : 0;
+            
+            var aArea: number = aWidth * aHeight;
+            var bArea: number = bWidth * bHeight;
+
+            if (aArea < bArea) {
+                return -1;
+            }
+
+            if (aArea > bArea) {
+                return 1;
+            }
+
+            return 0; 
+        });
+
+        $options.detach().appendTo(this.$imageOptions);
 
         // hide empty groups
         var $groups: JQuery = this.$downloadOptions.find('li.group');
