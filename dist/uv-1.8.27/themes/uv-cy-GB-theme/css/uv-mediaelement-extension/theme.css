@@ -382,1726 +382,870 @@
 #app .rightPanel .main .items .item .text img {
   max-width: 100px;
 }
-/* Copyright 2012 Mozilla Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-* {
-  padding: 0;
-  margin: 0;
-}
-/* Font size is needed to make the activity bar the correct size. */
-body {
-  font-size: 10px;
-  height: 100%;
-  background-color: #404040;
-  background-image: url('../../img/uv-pdfcenterpanel-module/texture.png');
-}
-body,
-input,
-button,
-select {
-  font: message-box;
-  outline: none;
-}
-.hidden {
-  display: none !important;
-}
-[hidden] {
-  display: none !important;
-}
-#viewerContainer:-webkit-full-screen {
-  top: 0px;
-  border-top: 2px solid transparent;
-  background-color: #000;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: none;
-}
-#viewerContainer:-moz-full-screen {
-  top: 0px;
-  border-top: 2px solid transparent;
-  background-color: #000;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: none;
-}
-#viewerContainer:-ms-fullscreen {
-  top: 0px !important;
-  border-top: 2px solid transparent;
-  width: 100%;
-  height: 100%;
-  overflow: hidden !important;
-  cursor: none;
-}
-#viewerContainer:-ms-fullscreen::-ms-backdrop {
-  background-color: #000;
-}
-#viewerContainer:fullscreen {
-  top: 0px;
-  border-top: 2px solid transparent;
-  background-color: #000;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: none;
-}
-:-webkit-full-screen .page {
-  margin-bottom: 100%;
-  border: 0;
-}
-:-moz-full-screen .page {
-  margin-bottom: 100%;
-  border: 0;
-}
-:-ms-fullscreen .page {
-  margin-bottom: 100% !important;
-  border: 0;
-}
-:fullscreen .page {
-  margin-bottom: 100%;
-  border: 0;
-}
-:-webkit-full-screen a:not(.internalLink) {
-  display: none;
-}
-:-moz-full-screen a:not(.internalLink) {
-  display: none;
-}
-:-ms-fullscreen a:not(.internalLink) {
-  display: none !important;
-}
-:fullscreen a:not(.internalLink) {
-  display: none;
-}
-:-webkit-full-screen .textLayer > div {
-  cursor: none;
-}
-:-moz-full-screen .textLayer > div {
-  cursor: none;
-}
-:fullscreen .textLayer > div {
-  cursor: none;
-}
-#viewerContainer.presentationControls,
-#viewerContainer.presentationControls .textLayer > div {
-  cursor: default;
-}
-/* outer/inner center provides horizontal center */
-.outerCenter {
-  pointer-events: none;
+.mejs-container {
   position: relative;
-}
-#outerContainer[dir='ltr'] .outerCenter {
-  float: right;
-  right: 50%;
-}
-#outerContainer[dir='rtl'] .outerCenter {
-  float: left;
-  left: 50%;
-}
-.innerCenter {
-  pointer-events: auto;
-  position: relative;
-}
-#outerContainer[dir='ltr'] .innerCenter {
-  float: right;
-  right: -50%;
-}
-#outerContainer[dir='rtl'] .innerCenter {
-  float: left;
-  left: -50%;
-}
-#outerContainer {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-#sidebarContainer {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 200px;
-  visibility: hidden;
-  -webkit-transition-duration: 200ms;
-  -webkit-transition-timing-function: ease;
-  transition-duration: 200ms;
-  transition-timing-function: ease;
-}
-#outerContainer[dir='ltr'] #sidebarContainer {
-  -webkit-transition-property: left;
-  transition-property: left;
-  left: -200px;
-}
-#outerContainer[dir='rtl'] #sidebarContainer {
-  -webkit-transition-property: right;
-  transition-property: right;
-  right: -200px;
-}
-#outerContainer.sidebarMoving > #sidebarContainer,
-#outerContainer.sidebarOpen > #sidebarContainer {
-  visibility: visible;
-}
-#outerContainer[dir='ltr'].sidebarOpen > #sidebarContainer {
-  left: 0px;
-}
-#outerContainer[dir='rtl'].sidebarOpen > #sidebarContainer {
-  right: 0px;
-}
-#mainContainer {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  min-width: 320px;
-  -webkit-transition-duration: 200ms;
-  -webkit-transition-timing-function: ease;
-  transition-duration: 200ms;
-  transition-timing-function: ease;
-}
-#outerContainer[dir='ltr'].sidebarOpen > #mainContainer {
-  -webkit-transition-property: left;
-  transition-property: left;
-  left: 200px;
-}
-#outerContainer[dir='rtl'].sidebarOpen > #mainContainer {
-  -webkit-transition-property: right;
-  transition-property: right;
-  right: 200px;
-}
-#sidebarContent {
-  top: 32px;
-  bottom: 0;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  position: absolute;
-  width: 200px;
-  background-color: rgba(0, 0, 0, 0.1);
-}
-#outerContainer[dir='ltr'] #sidebarContent {
-  left: 0;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
-}
-#outerContainer[dir='rtl'] #sidebarContent {
-  right: 0;
-  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.25);
-}
-#viewerContainer {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  position: absolute;
-  top: 32px;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  outline: none;
-}
-#outerContainer[dir='ltr'] #viewerContainer {
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.05);
-}
-#outerContainer[dir='rtl'] #viewerContainer {
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
-}
-.toolbar {
-  position: relative;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  cursor: default;
-}
-#toolbarContainer {
-  width: 100%;
-}
-#toolbarSidebar {
-  width: 200px;
-  height: 32px;
-  background-color: #424242;
-  /* fallback */
-  background-image: url('../../img/uv-pdfcenterpanel-module/texture.png'), linear-gradient(rgba(77, 77, 77, 0.99), rgba(64, 64, 64, 0.95));
-}
-#outerContainer[dir='ltr'] #toolbarSidebar {
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
-}
-#outerContainer[dir='rtl'] #toolbarSidebar {
-  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
-}
-#toolbarContainer,
-.findbar,
-.secondaryToolbar {
-  position: relative;
-  height: 32px;
-  background-color: #474747;
-  /* fallback */
-  background-image: url('../../img/uv-pdfcenterpanel-module/texture.png'), linear-gradient(rgba(82, 82, 82, 0.99), rgba(69, 69, 69, 0.95));
-}
-#outerContainer[dir='ltr'] #toolbarContainer,
-.findbar,
-.secondaryToolbar {
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-#outerContainer[dir='rtl'] #toolbarContainer,
-.findbar,
-.secondaryToolbar {
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-#toolbarViewer {
-  height: 32px;
-}
-#loadingBar {
-  position: relative;
-  width: 100%;
-  height: 6px;
-  background-color: #333;
-  border-bottom: 1px solid #333;
-}
-#loadingBar .progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background-color: #ddd;
-  overflow: hidden;
-  -webkit-transition: width 200ms;
-  transition: width 200ms;
-}
-@-webkit-keyframes progressIndeterminate {
-  0% {
-    left: 0%;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-@keyframes progressIndeterminate {
-  0% {
-    left: 0%;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-#loadingBar .progress.indeterminate {
-  background-color: #999;
-  -webkit-transition: none;
-  transition: none;
-}
-#loadingBar .indeterminate .glimmer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 50px;
-  background-image: linear-gradient(to right, #999 0%, #fff 50%, #999 100%);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  -webkit-animation: progressIndeterminate 2s linear infinite;
-  animation: progressIndeterminate 2s linear infinite;
-}
-.findbar,
-.secondaryToolbar {
-  top: 32px;
-  position: absolute;
-  z-index: 10000;
-  height: 32px;
-  min-width: 16px;
-  padding: 0px 6px 0px 6px;
-  margin: 4px 2px 4px 2px;
-  color: #d9d9d9;
-  font-size: 12px;
-  line-height: 14px;
+  background: #000;
+  font-family: Helvetica, Arial;
   text-align: left;
-  cursor: default;
+  vertical-align: top;
 }
-#outerContainer[dir='ltr'] .findbar {
-  left: 68px;
-}
-#outerContainer[dir='rtl'] .findbar {
-  right: 68px;
-}
-.findbar label {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-}
-#findInput[data-status="pending"] {
-  background-image: url('../../img/uv-pdfcenterpanel-module/loading-small.png');
-  background-repeat: no-repeat;
-  background-position: right;
-}
-.secondaryToolbar {
-  padding: 6px;
-  height: auto;
-  z-index: 30000;
-}
-#outerContainer[dir='ltr'] .secondaryToolbar {
-  right: 4px;
-}
-#outerContainer[dir='rtl'] .secondaryToolbar {
-  left: 4px;
-}
-#secondaryToolbarButtonContainer {
-  max-width: 200px;
-  max-height: 400px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  margin-bottom: -4px;
-}
-.doorHanger,
-.doorHangerRight {
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 2px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-.doorHanger:after,
-.doorHanger:before,
-.doorHangerRight:after,
-.doorHangerRight:before {
-  bottom: 100%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
+.me-plugin {
   position: absolute;
-  pointer-events: none;
 }
-.doorHanger:after,
-.doorHangerRight:after {
-  border-bottom-color: rgba(82, 82, 82, 0.99);
-  border-width: 8px;
+.mejs-embed,
+.mejs-embed body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
 }
-.doorHanger:before,
-.doorHangerRight:before {
-  border-bottom-color: rgba(0, 0, 0, 0.5);
-  border-width: 9px;
+.mejs-container-fullscreen {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 1000;
 }
-#outerContainer[dir='ltr'] .doorHanger:after,
-#outerContainer[dir='rtl'] .doorHangerRight:after {
-  left: 13px;
-  margin-left: -8px;
+.mejs-container-fullscreen .mejs-mediaelement,
+.mejs-container-fullscreen video {
+  width: 100%;
+  height: 100%;
 }
-#outerContainer[dir='ltr'] .doorHanger:before,
-#outerContainer[dir='rtl'] .doorHangerRight:before {
-  left: 13px;
-  margin-left: -9px;
-}
-#outerContainer[dir='rtl'] .doorHanger:after,
-#outerContainer[dir='ltr'] .doorHangerRight:after {
-  right: 13px;
-  margin-right: -8px;
-}
-#outerContainer[dir='rtl'] .doorHanger:before,
-#outerContainer[dir='ltr'] .doorHangerRight:before {
-  right: 13px;
-  margin-right: -9px;
-}
-#findMsg {
-  font-style: italic;
-  color: #A6B7D0;
-}
-.notFound {
-  background-color: #ff8999;
-}
-#outerContainer[dir='ltr'] #toolbarViewerLeft {
-  margin-left: -1px;
-}
-#outerContainer[dir='rtl'] #toolbarViewerRight {
-  margin-right: -1px;
-}
-#outerContainer[dir='ltr'] #toolbarViewerLeft,
-#outerContainer[dir='rtl'] #toolbarViewerRight {
+/* Start: LAYERS */
+.mejs-background {
   position: absolute;
   top: 0;
   left: 0;
 }
-#outerContainer[dir='ltr'] #toolbarViewerRight,
-#outerContainer[dir='rtl'] #toolbarViewerLeft {
+.mejs-mediaelement {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
-#outerContainer[dir='ltr'] #toolbarViewerLeft > *,
-#outerContainer[dir='ltr'] #toolbarViewerMiddle > *,
-#outerContainer[dir='ltr'] #toolbarViewerRight > *,
-#outerContainer[dir='ltr'] .findbar > * {
-  position: relative;
-  float: left;
+.mejs-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
-#outerContainer[dir='rtl'] #toolbarViewerLeft > *,
-#outerContainer[dir='rtl'] #toolbarViewerMiddle > *,
-#outerContainer[dir='rtl'] #toolbarViewerRight > *,
-#outerContainer[dir='rtl'] .findbar > * {
-  position: relative;
-  float: right;
+.mejs-poster img {
+  padding: 0;
+  border: 0;
+  display: block;
 }
-#outerContainer[dir='ltr'] .splitToolbarButton {
-  margin: 3px 2px 4px 0;
-  display: inline-block;
+.mejs-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
-#outerContainer[dir='rtl'] .splitToolbarButton {
-  margin: 3px 0 4px 2px;
-  display: inline-block;
+.mejs-overlay-play {
+  cursor: pointer;
 }
-#outerContainer[dir='ltr'] .splitToolbarButton > .toolbarButton {
-  border-radius: 0;
-  float: left;
+.mejs-overlay-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  margin: -50px 0 0 -50px;
+  background: url('../../img/uv-mediaelementcenterpanel-module/bigplay.png') no-repeat;
 }
-#outerContainer[dir='rtl'] .splitToolbarButton > .toolbarButton {
-  border-radius: 0;
-  float: right;
+.mejs-overlay:hover .mejs-overlay-button {
+  background-position: 0 -100px;
 }
-.toolbarButton,
-.secondaryToolbarButton {
-  border: 0 none;
-  background-color: rgba(0, 0, 0, 0);
-  width: 32px;
-  height: 25px;
+.mejs-overlay-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  margin: -40px 0 0 -40px;
+  background: #333;
+  background: url(background.png);
+  background: rgba(0, 0, 0, 0.9);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50, 50, 50, 0.9)), to(rgba(0, 0, 0, 0.9)));
+  background: -webkit-linear-gradient(top, rgba(50, 50, 50, 0.9), rgba(0, 0, 0, 0.9));
+  background: -moz-linear-gradient(top, rgba(50, 50, 50, 0.9), rgba(0, 0, 0, 0.9));
+  background: -o-linear-gradient(top, rgba(50, 50, 50, 0.9), rgba(0, 0, 0, 0.9));
+  background: -ms-linear-gradient(top, rgba(50, 50, 50, 0.9), rgba(0, 0, 0, 0.9));
+  background: linear-gradient(rgba(50, 50, 50, 0.9), rgba(0, 0, 0, 0.9));
 }
-.toolbarButton > span {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+.mejs-overlay-loading span {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: transparent url('../../img/uv-mediaelementcenterpanel-module/loading.gif') 50% 50% no-repeat;
 }
-.toolbarButton[disabled],
-.secondaryToolbarButton[disabled] {
-  opacity: .5;
-}
-.toolbarButton.group {
-  margin-right: 0;
-}
-.splitToolbarButton.toggled .toolbarButton {
-  margin: 0;
-}
-.splitToolbarButton:hover > .toolbarButton,
-.splitToolbarButton:focus > .toolbarButton,
-.splitToolbarButton.toggled > .toolbarButton,
-.toolbarButton.textButton {
-  background-color: rgba(0, 0, 0, 0.12);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  border-color: rgba(0, 0, 0, 0.32) rgba(0, 0, 0, 0.38) rgba(0, 0, 0, 0.42);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.05);
-  -webkit-transition-property: background-color, border-color, box-shadow;
-  -webkit-transition-duration: 150ms;
-  -webkit-transition-timing-function: ease;
-  transition-property: background-color, border-color, box-shadow;
-  transition-duration: 150ms;
-  transition-timing-function: ease;
-}
-.splitToolbarButton > .toolbarButton:hover,
-.splitToolbarButton > .toolbarButton:focus,
-.dropdownToolbarButton:hover,
-.overlayButton:hover,
-.toolbarButton.textButton:hover,
-.toolbarButton.textButton:focus {
-  background-color: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 0 1px rgba(0, 0, 0, 0.05);
-  z-index: 199;
-}
-.splitToolbarButton > .toolbarButton {
-  position: relative;
-}
-#outerContainer[dir='ltr'] .splitToolbarButton > .toolbarButton:first-child,
-#outerContainer[dir='rtl'] .splitToolbarButton > .toolbarButton:last-child {
-  position: relative;
-  margin: 0;
-  margin-right: -1px;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-  border-right-color: transparent;
-}
-#outerContainer[dir='ltr'] .splitToolbarButton > .toolbarButton:last-child,
-#outerContainer[dir='rtl'] .splitToolbarButton > .toolbarButton:first-child {
-  position: relative;
-  margin: 0;
-  margin-left: -1px;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-left-color: transparent;
-}
-.splitToolbarButtonSeparator {
-  padding: 8px 0;
-  width: 1px;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 99;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
-  display: inline-block;
-  margin: 5px 0;
-}
-#outerContainer[dir='ltr'] .splitToolbarButtonSeparator {
-  float: left;
-}
-#outerContainer[dir='rtl'] .splitToolbarButtonSeparator {
-  float: right;
-}
-.splitToolbarButton:hover > .splitToolbarButtonSeparator,
-.splitToolbarButton.toggled > .splitToolbarButtonSeparator {
-  padding: 12px 0;
-  margin: 1px 0;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03);
-  -webkit-transition-property: padding;
-  -webkit-transition-duration: 10ms;
-  -webkit-transition-timing-function: ease;
-  transition-property: padding;
-  transition-duration: 10ms;
-  transition-timing-function: ease;
-}
-.toolbarButton,
-.dropdownToolbarButton,
-.overlayButton,
-.secondaryToolbarButton {
-  min-width: 16px;
-  padding: 2px 6px 0;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
-  line-height: 14px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  /* Opera does not support user-select, use <... unselectable="on"> instead */
-  cursor: default;
-  -webkit-transition-property: background-color, border-color, box-shadow;
-  -webkit-transition-duration: 150ms;
-  -webkit-transition-timing-function: ease;
-  transition-property: background-color, border-color, box-shadow;
-  transition-duration: 150ms;
-  transition-timing-function: ease;
-}
-#outerContainer[dir='ltr'] .toolbarButton,
-#outerContainer[dir='ltr'] .overlayButton,
-#outerContainer[dir='ltr'] .dropdownToolbarButton {
-  margin: 3px 2px 4px 0;
-}
-#outerContainer[dir='rtl'] .toolbarButton,
-#outerContainer[dir='rtl'] .overlayButton,
-#outerContainer[dir='rtl'] .dropdownToolbarButton {
-  margin: 3px 0 4px 2px;
-}
-.toolbarButton:hover,
-.toolbarButton:focus,
-.dropdownToolbarButton,
-.overlayButton,
-.secondaryToolbarButton:hover,
-.secondaryToolbarButton:focus {
-  background-color: rgba(0, 0, 0, 0.12);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  border-color: rgba(0, 0, 0, 0.32) rgba(0, 0, 0, 0.38) rgba(0, 0, 0, 0.42);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-.toolbarButton:hover:active,
-.overlayButton:hover:active,
-.dropdownToolbarButton:hover:active,
-.secondaryToolbarButton:hover:active {
-  background-color: rgba(0, 0, 0, 0.2);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  border-color: rgba(0, 0, 0, 0.35) rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.45);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset, 0 0 1px rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.05);
-  -webkit-transition-property: background-color, border-color, box-shadow;
-  -webkit-transition-duration: 10ms;
-  -webkit-transition-timing-function: linear;
-  transition-property: background-color, border-color, box-shadow;
-  transition-duration: 10ms;
-  transition-timing-function: linear;
-}
-.toolbarButton.toggled,
-.splitToolbarButton.toggled > .toolbarButton.toggled,
-.secondaryToolbarButton.toggled {
-  background-color: rgba(0, 0, 0, 0.3);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  border-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.5);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset, 0 0 1px rgba(0, 0, 0, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.05);
-  -webkit-transition-property: background-color, border-color, box-shadow;
-  -webkit-transition-duration: 10ms;
-  -webkit-transition-timing-function: linear;
-  transition-property: background-color, border-color, box-shadow;
-  transition-duration: 10ms;
-  transition-timing-function: linear;
-}
-.toolbarButton.toggled:hover:active,
-.splitToolbarButton.toggled > .toolbarButton.toggled:hover:active,
-.secondaryToolbarButton.toggled:hover:active {
-  background-color: rgba(0, 0, 0, 0.4);
-  border-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.55);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2) inset, 0 0 1px rgba(0, 0, 0, 0.3) inset, 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-.dropdownToolbarButton {
-  width: 120px;
-  max-width: 120px;
-  padding: 3px 2px 2px;
-  overflow: hidden;
-  background: url('../../img/uv-pdfcenterpanel-module/toolbarButton-menuArrows.png') no-repeat;
-}
-#outerContainer[dir='ltr'] .dropdownToolbarButton {
-  background-position: 95%;
-}
-#outerContainer[dir='rtl'] .dropdownToolbarButton {
-  background-position: 5%;
-}
-.dropdownToolbarButton > select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  /* in the future this might matter, see bugzilla bug #649849 */
-  min-width: 140px;
-  font-size: 12px;
-  color: #f2f2f2;
+/* End: LAYERS */
+/* Start: CONTROL BAR */
+.mejs-container .mejs-controls {
+  position: absolute;
+  background: none;
+  list-style-type: none;
   margin: 0;
   padding: 0;
-  border: none;
-  background: rgba(0, 0, 0, 0);
-  /* Opera does not support 'transparent' <select> background */
+  bottom: 0;
+  left: 0;
+  background: url(background.png);
+  background: rgba(0, 0, 0, 0.7);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50, 50, 50, 0.7)), to(rgba(0, 0, 0, 0.7)));
+  background: -webkit-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: -moz-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: -o-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: -ms-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: linear-gradient(rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  height: 30px;
+  width: 100%;
 }
-.dropdownToolbarButton > select > option {
-  background: #3d3d3d;
+.mejs-container .mejs-controls div {
+  list-style-type: none;
+  background-image: none;
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+  line-height: 11px;
+  background: 0;
+  font-family: Helvetica, Arial;
+  border: 0;
 }
-.overlayButton {
-  margin: 3px 2px 4px 5px !important;
-  line-height: 16px;
-  padding: 2px 6px 3px 6px;
-}
-#customScaleOption {
-  display: none;
-}
-#pageWidthOption {
-  border-bottom: 1px rgba(255, 255, 255, 0.5) solid;
-}
-#outerContainer[dir='ltr'] .splitToolbarButton:first-child,
-#outerContainer[dir='ltr'] .toolbarButton:first-child,
-#outerContainer[dir='rtl'] .splitToolbarButton:last-child,
-#outerContainer[dir='rtl'] .toolbarButton:last-child {
-  margin-left: 4px;
-}
-#outerContainer[dir='ltr'] .splitToolbarButton:last-child,
-#outerContainer[dir='ltr'] .toolbarButton:last-child,
-#outerContainer[dir='rtl'] .splitToolbarButton:first-child,
-#outerContainer[dir='rtl'] .toolbarButton:first-child {
-  margin-right: 4px;
-}
-.toolbarButtonSpacer {
-  width: 30px;
-  display: inline-block;
-  height: 1px;
-}
-.toolbarButtonFlexibleSpacer {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  min-width: 30px;
-}
-#outerContainer[dir='ltr'] #findPrevious {
-  margin-left: 3px;
-}
-#outerContainer[dir='ltr'] #findNext {
-  margin-right: 3px;
-}
-#outerContainer[dir='rtl'] #findPrevious {
-  margin-right: 3px;
-}
-#outerContainer[dir='rtl'] #findNext {
-  margin-left: 3px;
-}
-.toolbarButton::before,
-.secondaryToolbarButton::before {
-  /* All matching images have a size of 16x16
-   * All relevant containers have a size of 32x25 */
-  position: absolute;
-  display: inline-block;
-  top: 4px;
-  left: 7px;
-}
-#outerContainer[dir="ltr"] .secondaryToolbarButton::before {
-  left: 4px;
-}
-#outerContainer[dir="rtl"] .secondaryToolbarButton::before {
-  right: 4px;
-}
-#outerContainer[dir='ltr'] .toolbarButton#sidebarToggle::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-sidebarToggle.png');
-}
-#outerContainer[dir='rtl'] .toolbarButton#sidebarToggle::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-sidebarToggle-rtl.png');
-}
-#outerContainer[dir='ltr'] .toolbarButton#secondaryToolbarToggle::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-secondaryToolbarToggle.png');
-}
-#outerContainer[dir='rtl'] .toolbarButton#secondaryToolbarToggle::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-secondaryToolbarToggle-rtl.png');
-}
-#outerContainer[dir='ltr'] .toolbarButton.findPrevious::before {
-  content: url('../../img/uv-pdfcenterpanel-module/findbarButton-previous.png');
-}
-#outerContainer[dir='rtl'] .toolbarButton.findPrevious::before {
-  content: url('../../img/uv-pdfcenterpanel-module/findbarButton-previous-rtl.png');
-}
-#outerContainer[dir='ltr'] .toolbarButton.findNext::before {
-  content: url('../../img/uv-pdfcenterpanel-module/findbarButton-next.png');
-}
-#outerContainer[dir='rtl'] .toolbarButton.findNext::before {
-  content: url('../../img/uv-pdfcenterpanel-module/findbarButton-next-rtl.png');
-}
-#outerContainer[dir='ltr'] .toolbarButton.pageUp::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageUp.png');
-}
-#outerContainer[dir='rtl'] .toolbarButton.pageUp::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageUp-rtl.png');
-}
-#outerContainer[dir='ltr'] .toolbarButton.pageDown::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageDown.png');
-}
-#outerContainer[dir='rtl'] .toolbarButton.pageDown::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageDown-rtl.png');
-}
-.toolbarButton.zoomOut::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-zoomOut.png');
-}
-.toolbarButton.zoomIn::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-zoomIn.png');
-}
-.toolbarButton.presentationMode::before,
-.secondaryToolbarButton.presentationMode::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-presentationMode.png');
-}
-.toolbarButton.print::before,
-.secondaryToolbarButton.print::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-print.png');
-}
-.toolbarButton.openFile::before,
-.secondaryToolbarButton.openFile::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-openFile.png');
-}
-.toolbarButton.download::before,
-.secondaryToolbarButton.download::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-download.png');
-}
-.toolbarButton.bookmark,
-.secondaryToolbarButton.bookmark {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  outline: none;
-  padding-top: 4px;
+.mejs-controls .mejs-button button {
+  cursor: pointer;
+  display: block;
+  font-size: 0;
+  line-height: 0;
   text-decoration: none;
+  margin: 7px 5px;
+  padding: 0;
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  border: 0;
+  outline-color: transparent !important;
+  background: transparent url(controls.png) no-repeat;
 }
-.secondaryToolbarButton.bookmark {
+/* :focus for accessibility */
+.mejs-controls .mejs-button button:focus {
+  outline: solid 1px yellow;
+}
+/* End: CONTROL BAR */
+/* Start: Time (current / duration) */
+.mejs-container .mejs-controls .mejs-time {
+  color: #fff;
+  display: block;
+  height: 20px;
+  width: auto;
+  padding: 8px 3px 0 3px ;
+  overflow: hidden;
+  text-align: center;
+  padding: auto 4px;
+}
+.mejs-container .mejs-controls .mejs-time span {
+  font-size: 11px;
+  color: #fff;
+  line-height: 12px;
+  display: block;
+  float: left;
+  margin: 1px 2px 0 0;
+  width: auto;
+}
+/* End: Time (current / duration) */
+/* Start: Play/pause */
+.mejs-controls .mejs-play button {
+  background-position: 0 0;
+}
+.mejs-controls .mejs-pause button {
+  background-position: 0 -16px;
+}
+/* End: Play/pause */
+/* Stop */
+.mejs-controls .mejs-stop button {
+  background-position: -112px 0;
+}
+/* End: Play/pause */
+/* Start: Progress bar */
+.mejs-controls div.mejs-time-rail {
+  width: 200px;
   padding-top: 5px;
 }
-.bookmark[href='#'] {
-  opacity: .5;
-  pointer-events: none;
+.mejs-controls .mejs-time-rail span {
+  display: block;
+  position: absolute;
+  width: 180px;
+  height: 10px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  cursor: pointer;
 }
-.toolbarButton.bookmark::before,
-.secondaryToolbarButton.bookmark::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-bookmark.png');
+.mejs-controls .mejs-time-rail .mejs-time-total {
+  margin: 5px;
+  background: #333;
+  background: rgba(50, 50, 50, 0.8);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(30, 30, 30, 0.8)), to(rgba(60, 60, 60, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: -moz-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: -o-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: -ms-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: linear-gradient(rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
 }
-#viewThumbnail.toolbarButton::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewThumbnail.png');
+.mejs-controls .mejs-time-rail .mejs-time-loaded {
+  background: #3caac8;
+  background: rgba(60, 170, 200, 0.8);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(44, 124, 145, 0.8)), to(rgba(78, 183, 212, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(44, 124, 145, 0.8), rgba(78, 183, 212, 0.8));
+  background: -moz-linear-gradient(top, rgba(44, 124, 145, 0.8), rgba(78, 183, 212, 0.8));
+  background: -o-linear-gradient(top, rgba(44, 124, 145, 0.8), rgba(78, 183, 212, 0.8));
+  background: -ms-linear-gradient(top, rgba(44, 124, 145, 0.8), rgba(78, 183, 212, 0.8));
+  background: linear-gradient(rgba(44, 124, 145, 0.8), rgba(78, 183, 212, 0.8));
+  width: 0;
 }
-#outerContainer[dir="ltr"] #viewOutline.toolbarButton::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewOutline.png');
+.mejs-controls .mejs-time-rail .mejs-time-current {
+  width: 0;
+  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.9)), to(rgba(200, 200, 200, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: -ms-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
 }
-#outerContainer[dir="rtl"] #viewOutline.toolbarButton::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewOutline-rtl.png');
+.mejs-controls .mejs-time-rail .mejs-time-handle {
+  display: none;
+  position: absolute;
+  margin: 0;
+  width: 10px;
+  background: #fff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: solid 2px #333;
+  top: -2px;
+  text-align: center;
 }
-#viewAttachments.toolbarButton::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewAttachments.png');
+.mejs-controls .mejs-time-rail .mejs-time-float {
+  position: absolute;
+  display: none;
+  background: #eee;
+  width: 36px;
+  height: 17px;
+  /*border: solid 1px #333;*/
+  top: -26px;
+  margin-left: -18px;
+  text-align: center;
+  color: #111;
 }
-#viewFind.toolbarButton::before {
-  content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-search.png');
+.mejs-controls .mejs-time-rail .mejs-time-float-current {
+  margin: 2px;
+  width: 30px;
+  display: block;
+  text-align: center;
+  left: 0;
 }
-.secondaryToolbarButton {
+.mejs-controls .mejs-time-rail .mejs-time-float-corner {
+  /*position: absolute;*/
+  display: block;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  border: solid 5px #eee;
+  border-color: #eee transparent transparent transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  /*top: 15px;
+	left: 13px;*/
+  margin-top: -13px;
+  margin-left: 12px;
+}
+/*
+.mejs-controls .mejs-time-rail:hover .mejs-time-handle {
+	visibility:visible;
+}
+*/
+/* End: Progress bar */
+/* Start: Fullscreen */
+.mejs-controls .mejs-fullscreen-button button {
+  background-position: -32px 0;
+}
+.mejs-controls .mejs-unfullscreen button {
+  background-position: -32px -16px;
+}
+/* End: Fullscreen */
+/* Start: Mute/Volume */
+.mejs-controls .mejs-mute button {
+  background-position: -16px -16px;
+}
+.mejs-controls .mejs-unmute button {
+  background-position: -16px 0;
+}
+.mejs-controls .mejs-volume-button {
   position: relative;
-  margin: 0 0 4px 0;
-  padding: 3px 0 1px 0;
-  height: auto;
-  min-height: 25px;
-  width: auto;
-  min-width: 100%;
-  white-space: normal;
 }
-#outerContainer[dir="ltr"] .secondaryToolbarButton {
-  padding-left: 24px;
-  text-align: left;
-}
-#outerContainer[dir="rtl"] .secondaryToolbarButton {
-  padding-right: 24px;
-  text-align: right;
-}
-#outerContainer[dir="ltr"] .secondaryToolbarButton.bookmark {
-  padding-left: 27px;
-}
-#outerContainer[dir="rtl"] .secondaryToolbarButton.bookmark {
-  padding-right: 27px;
-}
-#outerContainer[dir="ltr"] .secondaryToolbarButton > span {
-  padding-right: 4px;
-}
-#outerContainer[dir="rtl"] .secondaryToolbarButton > span {
-  padding-left: 4px;
-}
-.secondaryToolbarButton.firstPage::before {
-  content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-firstPage.png');
-}
-.secondaryToolbarButton.lastPage::before {
-  content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-lastPage.png');
-}
-.secondaryToolbarButton.rotateCcw::before {
-  content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-rotateCcw.png');
-}
-.secondaryToolbarButton.rotateCw::before {
-  content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-rotateCw.png');
-}
-.secondaryToolbarButton.handTool::before {
-  content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-handTool.png');
-}
-.secondaryToolbarButton.documentProperties::before {
-  content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-documentProperties.png');
-}
-.verticalToolbarSeparator {
-  display: block;
-  padding: 8px 0;
-  margin: 8px 4px;
-  width: 1px;
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-#outerContainer[dir='ltr'] .verticalToolbarSeparator {
-  margin-left: 2px;
-}
-#outerContainer[dir='rtl'] .verticalToolbarSeparator {
-  margin-right: 2px;
-}
-.horizontalToolbarSeparator {
-  display: block;
-  margin: 0 0 4px 0;
-  height: 1px;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-.toolbarField {
-  padding: 3px 6px !important;
-  margin: 4px 0 4px 0  !important;
-  border: 1px solid transparent !important;
-  border-radius: 2px !important;
-  background-color: rgba(255, 255, 255, 0.09);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.35);
-  border-color: rgba(0, 0, 0, 0.32) rgba(0, 0, 0, 0.38) rgba(0, 0, 0, 0.42);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05) inset, 0 1px 0 rgba(255, 255, 255, 0.05);
-  color: #f2f2f2;
-  font-size: 12px !important;
-  line-height: 14px !important;
-  outline-style: none;
-  transition-property: background-color, border-color, box-shadow;
-  transition-duration: 150ms;
-  transition-timing-function: ease;
-}
-.toolbarField[type=checkbox] {
-  display: inline-block;
-  margin: 8px 0px !important;
-}
-.toolbarField.pageNumber {
-  -moz-appearance: textfield;
-  /* hides the spinner in moz */
-  min-width: 16px;
-  text-align: right;
-  width: 40px;
-}
-.toolbarField.pageNumber::-webkit-inner-spin-button,
-.toolbarField.pageNumber::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+.mejs-controls .mejs-volume-button .mejs-volume-slider {
+  display: none;
+  height: 115px;
+  width: 25px;
+  background: url(background.png);
+  background: rgba(50, 50, 50, 0.7);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  top: -115px;
+  left: 0;
+  z-index: 1;
+  position: absolute;
   margin: 0;
 }
-.toolbarField:hover {
-  background-color: rgba(255, 255, 255, 0.11);
-  border-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.43) rgba(0, 0, 0, 0.45);
+.mejs-controls .mejs-volume-button:hover {
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
 }
-.toolbarField:focus {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(77, 184, 255, 0.8) rgba(77, 184, 255, 0.85) rgba(77, 184, 255, 0.9);
+/*
+.mejs-controls .mejs-volume-button:hover .mejs-volume-slider {
+	display: block;
 }
-.toolbarLabel {
-  min-width: 16px;
-  padding: 3px 6px 3px 2px;
-  margin: 4px 2px 4px 0;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  color: #d9d9d9;
-  font-size: 12px;
-  line-height: 14px;
-  text-align: left;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  cursor: default;
-}
-#thumbnailView {
+*/
+.mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-total {
   position: absolute;
-  width: 120px;
-  top: 0;
-  bottom: 0;
-  padding: 10px 40px 0;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  left: 11px;
+  top: 8px;
+  width: 2px;
+  height: 100px;
+  background: #ddd;
+  background: rgba(255, 255, 255, 0.5);
+  margin: 0;
 }
-.thumbnail {
+.mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-current {
+  position: absolute;
+  left: 11px;
+  top: 8px;
+  width: 2px;
+  height: 100px;
+  background: #ddd;
+  background: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+.mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-handle {
+  position: absolute;
+  left: 4px;
+  top: -3px;
+  width: 16px;
+  height: 6px;
+  background: #ddd;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: N-resize;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+  margin: 0;
+}
+/* horizontal version */
+.mejs-controls div.mejs-horizontal-volume-slider {
+  height: 26px;
+  width: 60px;
+  position: relative;
+}
+.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total {
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 50px;
+  height: 8px;
+  margin: 0;
+  padding: 0;
+  font-size: 1px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #333;
+  background: rgba(50, 50, 50, 0.8);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(30, 30, 30, 0.8)), to(rgba(60, 60, 60, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: -moz-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: -o-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: -ms-linear-gradient(top, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+  background: linear-gradient(rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8));
+}
+.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current {
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 50px;
+  height: 8px;
+  margin: 0;
+  padding: 0;
+  font-size: 1px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.9)), to(rgba(200, 200, 200, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: -ms-linear-gradient(top, rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(200, 200, 200, 0.8));
+}
+.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-handle {
+  display: none;
+}
+/* End: Mute/Volume */
+/* Start: TRACK (Captions and Chapters) */
+.mejs-controls .mejs-captions-button {
+  position: relative;
+}
+.mejs-controls .mejs-captions-button button {
+  background-position: -48px 0;
+}
+.mejs-controls .mejs-captions-button .mejs-captions-selector {
+  visibility: hidden;
+  position: absolute;
+  bottom: 26px;
+  right: -10px;
+  width: 130px;
+  height: 100px;
+  background: url(background.png);
+  background: rgba(50, 50, 50, 0.7);
+  border: solid 1px transparent;
+  padding: 10px;
+  overflow: hidden;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+/*
+.mejs-controls .mejs-captions-button:hover  .mejs-captions-selector {
+	visibility: visible;
+}
+*/
+.mejs-controls .mejs-captions-button .mejs-captions-selector ul {
+  margin: 0;
+  padding: 0;
+  display: block;
+  list-style-type: none !important;
+  overflow: hidden;
+}
+.mejs-controls .mejs-captions-button .mejs-captions-selector ul li {
+  margin: 0 0 6px 0;
+  padding: 0;
+  list-style-type: none !important;
+  display: block;
+  color: #fff;
+  overflow: hidden;
+}
+.mejs-controls .mejs-captions-button .mejs-captions-selector ul li input {
+  clear: both;
   float: left;
-  margin-bottom: 5px;
+  margin: 3px 3px 0 5px;
 }
-#thumbnailView > a:last-of-type > .thumbnail {
-  margin-bottom: 10px;
-}
-.thumbnail:not([data-loaded]) {
-  border: 1px dashed rgba(255, 255, 255, 0.5);
-  margin-bottom: 10px;
-}
-.thumbnailImage {
-  transition-duration: 150ms;
-  border: 1px solid transparent;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
-  opacity: 0.8;
-  z-index: 99;
-}
-.thumbnailSelectionRing {
-  border-radius: 2px;
-  padding: 7px;
-  transition-duration: 150ms;
-}
-a:focus > .thumbnail > .thumbnailSelectionRing > .thumbnailImage,
-.thumbnail:hover > .thumbnailSelectionRing > .thumbnailImage {
-  opacity: .9;
-}
-a:focus > .thumbnail > .thumbnailSelectionRing,
-.thumbnail:hover > .thumbnailSelectionRing {
-  background-color: rgba(255, 255, 255, 0.15);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  background-clip: padding-box;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.2) inset, 0 0 1px rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.9);
-}
-.thumbnail.selected > .thumbnailSelectionRing > .thumbnailImage {
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
-  opacity: 1;
-}
-.thumbnail.selected > .thumbnailSelectionRing {
-  background-color: rgba(255, 255, 255, 0.3);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  background-clip: padding-box;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 0 1px rgba(0, 0, 0, 0.2);
-  color: #ffffff;
-}
-#outlineView,
-#attachmentsView {
-  position: absolute;
-  width: 192px;
-  top: 0;
-  bottom: 0;
-  padding: 4px 4px 0;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-}
-#outerContainer[dir='ltr'] .outlineItem > .outlineItems {
-  margin-left: 20px;
-}
-#outerContainer[dir='rtl'] .outlineItem > .outlineItems {
-  margin-right: 20px;
-}
-.outlineItem > a,
-.attachmentsItem > a {
-  text-decoration: none;
-  display: inline-block;
-  min-width: 95%;
-  height: auto;
-  margin-bottom: 1px;
-  border-radius: 2px;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 13px;
+.mejs-controls .mejs-captions-button .mejs-captions-selector ul li label {
+  width: 100px;
+  float: left;
+  padding: 4px 0 0 0;
   line-height: 15px;
-  -moz-user-select: none;
-  white-space: normal;
+  font-family: helvetica, arial;
+  font-size: 10px;
 }
-#outerContainer[dir='ltr'] .outlineItem > a,
-#outerContainer[dir='ltr'] .attachmentsItem > a {
-  padding: 2px 0 5px 10px;
+.mejs-controls .mejs-captions-button .mejs-captions-translations {
+  font-size: 10px;
+  margin: 0 0 5px 0;
 }
-#outerContainer[dir='rtl'] .outlineItem > a,
-#outerContainer[dir='rtl'] .attachmentsItem > a {
-  padding: 2px 10px 5px 0;
-}
-.outlineItem > a:hover,
-.attachmentsItem > a:hover {
-  background-color: rgba(255, 255, 255, 0.02);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  background-clip: padding-box;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.2) inset, 0 0 1px rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.9);
-}
-.outlineItem.selected {
-  background-color: rgba(255, 255, 255, 0.08);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
-  background-clip: padding-box;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 0 1px rgba(0, 0, 0, 0.2);
-  color: #ffffff;
-}
-.noResults {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.8);
-  font-style: italic;
-  cursor: default;
-}
-.canvasWrapper {
-  overflow: hidden;
-}
-canvas {
-  margin: 0;
-  display: block;
-}
-.page {
-  direction: ltr;
-  width: 816px;
-  height: 1056px;
-  margin: 1px auto -8px auto;
-  position: relative;
-  overflow: visible;
-  border: 9px solid transparent;
-  background-clip: content-box;
-  border-image: url('../../img/uv-pdfcenterpanel-module/shadow.png') 9 9 repeat;
-  background-color: white;
-}
-.annotLink > a:hover {
-  opacity: 0.2;
-  background: #ff0;
-  box-shadow: 0px 2px 10px #ff0;
-}
-.loadingIcon {
+.mejs-chapters {
   position: absolute;
-  display: block;
-  left: 0;
   top: 0;
-  right: 0;
-  bottom: 0;
-  background: url('../../img/uv-pdfcenterpanel-module/loading-icon.gif') center no-repeat;
-}
-.textLayer {
-  position: absolute;
   left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  color: #000;
-  font-family: sans-serif;
+  -xborder-right: solid 1px #fff;
+  width: 10000px;
+}
+.mejs-chapters .mejs-chapter {
+  position: absolute;
+  float: left;
+  background: #222;
+  background: rgba(0, 0, 0, 0.7);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50, 50, 50, 0.7)), to(rgba(0, 0, 0, 0.7)));
+  background: -webkit-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: -moz-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: -o-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: -ms-linear-gradient(top, rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  background: linear-gradient(rgba(50, 50, 50, 0.7), rgba(0, 0, 0, 0.7));
+  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, startColorstr=#323232, endColorstr=#000000);
   overflow: hidden;
+  border: 0;
 }
-.textLayer > div {
-  color: transparent;
-  position: absolute;
-  white-space: pre;
-  cursor: text;
-}
-.textLayer .highlight {
-  margin: -1px;
-  padding: 1px;
-  background-color: rgba(180, 0, 170, 0.2);
-  border-radius: 4px;
-}
-.textLayer .highlight.begin {
-  border-radius: 4px 0px 0px 4px;
-}
-.textLayer .highlight.end {
-  border-radius: 0px 4px 4px 0px;
-}
-.textLayer .highlight.middle {
-  border-radius: 0px;
-}
-.textLayer .highlight.selected {
-  background-color: rgba(0, 100, 0, 0.2);
-}
-/* TODO: file FF bug to support ::-moz-selection:window-inactive
-   so we can override the opaque grey background when the window is inactive;
-   see https://bugzilla.mozilla.org/show_bug.cgi?id=706209 */
-::selection {
-  background: rgba(0, 0, 255, 0.3);
-}
-::-moz-selection {
-  background: rgba(0, 0, 255, 0.3);
-}
-.annotationHighlight {
-  position: absolute;
-  border: 2px #FFFF99 solid;
-}
-.annotText > img {
-  position: absolute;
+.mejs-chapters .mejs-chapter .mejs-chapter-block {
+  font-size: 11px;
+  color: #fff;
+  padding: 5px;
+  display: block;
+  border-right: solid 1px #333;
+  border-bottom: solid 1px #333;
   cursor: pointer;
 }
-.annotTextContentWrapper {
-  position: absolute;
-  width: 20em;
+.mejs-chapters .mejs-chapter .mejs-chapter-block-last {
+  border-right: none;
 }
-.annotTextContent {
-  z-index: 200;
-  float: left;
-  max-width: 20em;
-  background-color: #FFFF99;
-  box-shadow: 0px 2px 5px #333;
-  border-radius: 2px;
-  padding: 0.6em;
-  cursor: pointer;
+.mejs-chapters .mejs-chapter .mejs-chapter-block:hover {
+  /*background: #333;*/
+  background: #666;
+  background: rgba(102, 102, 102, 0.7);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(102, 102, 102, 0.7)), to(rgba(50, 50, 50, 0.6)));
+  background: -webkit-linear-gradient(top, rgba(102, 102, 102, 0.7), rgba(50, 50, 50, 0.6));
+  background: -moz-linear-gradient(top, rgba(102, 102, 102, 0.7), rgba(50, 50, 50, 0.6));
+  background: -o-linear-gradient(top, rgba(102, 102, 102, 0.7), rgba(50, 50, 50, 0.6));
+  background: -ms-linear-gradient(top, rgba(102, 102, 102, 0.7), rgba(50, 50, 50, 0.6));
+  background: linear-gradient(rgba(102, 102, 102, 0.7), rgba(50, 50, 50, 0.6));
+  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, startColorstr=#666666, endColorstr=#323232);
 }
-.annotTextContent > h1 {
-  font-size: 1em;
-  border-bottom: 1px solid #000000;
-  padding-bottom: 0.2em;
-}
-.annotTextContent > p {
-  padding-top: 0.2em;
-}
-.annotLink > a {
-  position: absolute;
-  font-size: 1em;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-#errorWrapper {
-  background: none repeat scroll 0 0 #FF5555;
-  color: white;
-  left: 0;
-  position: absolute;
-  right: 0;
-  z-index: 1000;
-  padding: 3px;
-  font-size: 0.8em;
-}
-.loadingInProgress #errorWrapper {
-  top: 39px;
-}
-#errorMessageLeft {
-  float: left;
-}
-#errorMessageRight {
-  float: right;
-}
-#errorMoreInfo {
-  background-color: #FFFFFF;
-  color: black;
-  padding: 3px;
-  margin: 3px;
-  width: 98%;
-}
-#overlayContainer {
-  display: table;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 10000;
-}
-#overlayContainer > * {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-#promptContainer {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-}
-#promptContainer > * {
-  display: inline-block;
-}
-.prompt {
-  display: table;
-  padding: 15px;
-  border-spacing: 4px;
-  color: #d9d9d9;
-  line-height: 14px;
-  text-align: center;
-  background-color: #474747;
-  /* fallback */
-  background-image: url('../../img/uv-pdfcenterpanel-module/texture.png'), linear-gradient(rgba(82, 82, 82, 0.99), rgba(69, 69, 69, 0.95));
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-.prompt > .row {
-  display: table-row;
-}
-.prompt > .row > * {
-  display: table-cell;
-}
-.prompt .toolbarField {
-  margin: 5px 0;
-  width: 200px;
-}
-.prompt .toolbarField:hover,
-.prompt .toolbarField:focus {
-  border-color: rgba(0, 0, 0, 0.32) rgba(0, 0, 0, 0.38) rgba(0, 0, 0, 0.42);
-}
-#documentPropertiesContainer {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-}
-#documentPropertiesContainer > * {
-  display: inline-block;
-  padding: 15px;
-  border-spacing: 4px;
-  max-width: 350px;
-  max-height: 350px;
-  color: #d9d9d9;
+.mejs-chapters .mejs-chapter .mejs-chapter-block .ch-title {
   font-size: 12px;
-  line-height: 14px;
-  text-align: left;
-  cursor: default;
-  background-color: #474747;
-  /* fallback */
-  background-image: url('../../img/uv-pdfcenterpanel-module/texture.png'), linear-gradient(rgba(82, 82, 82, 0.99), rgba(69, 69, 69, 0.95));
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.08), inset 0 1px 1px rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-#documentPropertiesContainer .separator {
+  font-weight: bold;
   display: block;
-  margin: 4px 0 4px 0;
-  height: 1px;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0 0 3px 0;
+  line-height: 12px;
 }
-#documentPropertiesContainer .row {
-  display: table-row;
+.mejs-chapters .mejs-chapter .mejs-chapter-block .ch-timespan {
+  font-size: 12px;
+  line-height: 12px;
+  margin: 3px 0 4px 0;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-#outerContainer[dir='ltr'] #documentPropertiesContainer .row > * {
-  display: table-cell;
-  min-width: 100px;
-}
-#outerContainer[dir='rtl'] #documentPropertiesContainer .row > * {
-  display: table-cell;
-  min-width: 100px;
-  text-align: right;
-}
-#documentPropertiesContainer .row span {
-  width: 125px;
-  word-wrap: break-word;
-}
-#documentPropertiesContainer .row p {
-  max-width: 225px;
-  word-wrap: break-word;
-}
-#documentPropertiesContainer .buttonRow {
-  margin-top: 10px;
+.mejs-captions-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   text-align: center;
-  vertical-align: middle;
+  /*font-weight: bold;*/
+  line-height: 22px;
+  font-size: 12px;
+  color: #fff;
 }
-.clearBoth {
+.mejs-captions-layer a {
+  color: #fff;
+  text-decoration: underline;
+}
+.mejs-captions-layer[lang=ar] {
+  font-size: 20px;
+  font-weight: normal;
+}
+.mejs-captions-position {
+  position: absolute;
+  width: 100%;
+  bottom: 15px;
+  left: 0;
+}
+.mejs-captions-position-hover {
+  bottom: 45px;
+}
+.mejs-captions-text {
+  padding: 3px 5px;
+  background: url(background.png);
+  background: rgba(20, 20, 20, 0.8);
+}
+/* End: TRACK (Captions and Chapters) */
+.mejs-clear {
   clear: both;
 }
-.fileInput {
-  background: white;
-  color: black;
-  margin-top: 5px;
-  visibility: hidden;
-  position: fixed;
-  right: 0;
-  top: 0;
+/* Start: ERROR */
+.me-cannotplay {
+  padding: 20px;
+  color: #fff;
+  vertical-align: middle;
 }
-#PDFBug {
-  background: none repeat scroll 0 0 white;
-  border: 1px solid #666666;
-  position: fixed;
-  top: 32px;
-  right: 0;
-  bottom: 0;
-  font-size: 10px;
-  padding: 0;
-  width: 300px;
+.me-cannotplay p {
+  position: relative;
+  top: 50%;
+  text-align: center;
+  width: 80%;
 }
-#PDFBug .controls {
-  background: #EEEEEE;
-  border-bottom: 1px solid #666666;
-  padding: 3px;
-}
-#PDFBug .panels {
-  bottom: 0;
-  left: 0;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  position: absolute;
-  right: 0;
-  top: 27px;
-}
-#PDFBug button.active {
+.me-cannotplay a {
+  color: #fff;
   font-weight: bold;
+  text-decoration: underline;
 }
-.debuggerShowText {
-  background: none repeat scroll 0 0 yellow;
-  color: blue;
-  opacity: 0.3;
-}
-.debuggerHideText:hover {
-  background: none repeat scroll 0 0 yellow;
-  opacity: 0.3;
-}
-#PDFBug .stats {
-  font-family: courier;
-  font-size: 10px;
-  white-space: pre;
-}
-#PDFBug .stats .title {
-  font-weight: bold;
-}
-#PDFBug table {
-  font-size: 10px;
-}
-#viewer.textLayer-visible .textLayer > div,
-#viewer.textLayer-hover .textLayer > div:hover {
-  background-color: white;
-  color: black;
-}
-#viewer.textLayer-shadow .textLayer > div {
-  background-color: rgba(255, 255, 255, 0.6);
-  color: black;
-}
-.grab-to-pan-grab {
-  cursor: url('../../img/uv-pdfcenterpanel-module/grab.cur'), move !important;
-  cursor: -webkit-grab !important;
-  cursor: -moz-grab !important;
-  cursor: grab !important;
-}
-.grab-to-pan-grab *:not(input):not(textarea):not(button):not(select):not(:link) {
-  cursor: inherit !important;
-}
-.grab-to-pan-grab:active,
-.grab-to-pan-grabbing {
-  cursor: url('../../img/uv-pdfcenterpanel-module/grabbing.cur'), move !important;
-  cursor: -webkit-grabbing !important;
-  cursor: -moz-grabbing !important;
-  cursor: grabbing !important;
-  position: fixed;
-  background: transparent;
+.me-cannotplay span {
+  padding: 15px;
   display: block;
+}
+/* End: ERROR */
+/* Start: Loop */
+.mejs-controls .mejs-loop-off button {
+  background-position: -64px -16px;
+}
+.mejs-controls .mejs-loop-on button {
+  background-position: -64px 0;
+}
+/* End: Loop */
+/* Start: backlight */
+.mejs-controls .mejs-backlight-off button {
+  background-position: -80px -16px;
+}
+.mejs-controls .mejs-backlight-on button {
+  background-position: -80px 0;
+}
+/* End: backlight */
+/* Start: picture controls */
+.mejs-controls .mejs-picturecontrols-button {
+  background-position: -96px 0;
+}
+/* End: picture controls */
+/* context menu */
+.mejs-contextmenu {
+  position: absolute;
+  width: 150px;
+  padding: 10px;
+  border-radius: 4px;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  background: #fff;
+  border: solid 1px #999;
+  z-index: 1001;
+  /* make sure it shows on fullscreen */
+}
+.mejs-contextmenu .mejs-contextmenu-separator {
+  height: 1px;
+  font-size: 0;
+  margin: 5px 6px;
+  background: #333;
+}
+.mejs-contextmenu .mejs-contextmenu-item {
+  font-family: Helvetica, Arial;
+  font-size: 12px;
+  padding: 4px 6px;
+  cursor: pointer;
+  color: #333;
+}
+.mejs-contextmenu .mejs-contextmenu-item:hover {
+  background: #2C7C91;
+  color: #fff;
+}
+/* Start: SourceChooser */
+.mejs-controls .mejs-sourcechooser-button {
+  position: relative;
+}
+.mejs-controls .mejs-sourcechooser-button button {
+  background-position: -128px 0;
+}
+.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector {
+  visibility: hidden;
+  position: absolute;
+  bottom: 26px;
+  right: -10px;
+  width: 130px;
+  height: 100px;
+  background: url(background.png);
+  background: rgba(50, 50, 50, 0.7);
+  border: solid 1px transparent;
+  padding: 10px;
   overflow: hidden;
-  z-index: 50000;
-  /* should be higher than anything else in PDF.js! */
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
-@page {
+.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul {
   margin: 0;
+  padding: 0;
+  display: block;
+  list-style-type: none !important;
+  overflow: hidden;
 }
-#printContainer {
+.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li {
+  margin: 0 0 6px 0;
+  padding: 0;
+  list-style-type: none !important;
+  display: block;
+  color: #fff;
+  overflow: hidden;
+}
+.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li input {
+  clear: both;
+  float: left;
+  margin: 3px 3px 0 5px;
+}
+.mejs-controls .mejs-sourcechooser-button .mejs-sourcechooser-selector ul li label {
+  width: 100px;
+  float: left;
+  padding: 4px 0 0 0;
+  line-height: 15px;
+  font-family: helvetica, arial;
+  font-size: 10px;
+}
+/* End: SourceChooser */
+/* UV */
+.mejs-container.mejs-uv {
+  background-color: transparent;
+}
+.mejs-uv .mejs-controls {
+  height: 43px;
+  background-image: url('../../img/uv-mediaelementcenterpanel-module/controls-wellcome-bg.png');
+  background-repeat: repeat-x;
+  background-position: 0 5px;
+  margin: 0 0 0 11px;
+}
+.mejs-uv .mejs-button,
+.mejs-uv .mejs-time {
+  position: absolute;
+  background: #ddd;
+}
+.mejs-uv .mejs-controls .mejs-playpause-button {
+  width: 37px;
+  height: 37px;
+  left: -5px;
+  margin: 0;
+  border: none;
+}
+.mejs-uv .mejs-controls .mejs-playpause-button button {
+  width: 37px;
+  height: 37px;
+  background: url('../../img/uv-mediaelementcenterpanel-module/controls-wellcome.png') no-repeat -1px -18px;
+  margin: 0;
+  padding: 0;
+}
+.mejs-uv .mejs-controls .mejs-pause button {
+  background-position: -40px -18px;
+}
+.mejs-uv .mejs-controls .mejs-time-rail {
+  position: absolute;
+  margin: 6px 5px 0 0;
+}
+.mejs-uv .mejs-controls .mejs-time-rail .mejs-time-current {
+  width: 0;
+  height: 6px;
+  background: #FFB81D;
+}
+.mejs-uv .mejs-controls .mejs-currenttime-container {
+  position: absolute;
+  margin: 4px 0 0 0;
+  color: #fff;
+}
+.mejs-uv .mejs-controls .mejs-currenttime-container .slash {
+  padding: 0 0 0 3px;
+}
+.mejs-uv .mejs-controls .mejs-duration-container {
+  position: absolute;
+  margin: 4px 5px 0 0;
+  padding-left: 0;
+  color: #fff;
+}
+.mejs-uv .mejs-controls .mejs-time-rail .mejs-time-total {
+  background: #000;
+  height: 6px;
+}
+.mejs-uv .mejs-controls .mejs-time-rail .mejs-time-loaded {
+  background: #FFB81D;
+  width: 0;
+  height: 6px;
+}
+.mejs-uv .mejs-controls .mejs-time-rail .mejs-time-handle {
+  display: block;
+  margin: 0;
+  width: 15px;
+  height: 15px;
+  border: 0;
+  top: -5px;
+  left: -1px;
+  background: url('../../img/uv-mediaelementcenterpanel-module/controls-wellcome.png') no-repeat 0 0;
+}
+.mejs-uv .mejs-controls .mejs-time-rail .mejs-time-float {
   display: none;
 }
-@media screen and (min-resolution: 2dppx) {
-  /* Rules for Retina screens */
-  .toolbarButton::before {
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-    top: -5px;
-  }
-  .secondaryToolbarButton::before {
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-    top: -4px;
-  }
-  #outerContainer[dir='ltr'] .toolbarButton::before,
-  #outerContainer[dir='rtl'] .toolbarButton::before {
-    left: -1px;
-  }
-  #outerContainer[dir='ltr'] .secondaryToolbarButton::before {
-    left: -2px;
-  }
-  #outerContainer[dir='rtl'] .secondaryToolbarButton::before {
-    left: 186px;
-  }
-  .dropdownToolbarButton {
-    background: url('../../img/uv-pdfcenterpanel-module/toolbarButton-menuArrows@2x.png') no-repeat;
-    background-size: 7px 16px;
-  }
-  #outerContainer[dir='ltr'] .toolbarButton#sidebarToggle::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-sidebarToggle@2x.png');
-  }
-  #outerContainer[dir='rtl'] .toolbarButton#sidebarToggle::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-sidebarToggle-rtl@2x.png');
-  }
-  #outerContainer[dir='ltr'] .toolbarButton#secondaryToolbarToggle::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-secondaryToolbarToggle@2x.png');
-  }
-  #outerContainer[dir='rtl'] .toolbarButton#secondaryToolbarToggle::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-secondaryToolbarToggle-rtl@2x.png');
-  }
-  #outerContainer[dir='ltr'] .toolbarButton.findPrevious::before {
-    content: url('../../img/uv-pdfcenterpanel-module/findbarButton-previous@2x.png');
-  }
-  #outerContainer[dir='rtl'] .toolbarButton.findPrevious::before {
-    content: url('../../img/uv-pdfcenterpanel-module/findbarButton-previous-rtl@2x.png');
-  }
-  #outerContainer[dir='ltr'] .toolbarButton.findNext::before {
-    content: url('../../img/uv-pdfcenterpanel-module/findbarButton-next@2x.png');
-  }
-  #outerContainer[dir='rtl'] .toolbarButton.findNext::before {
-    content: url('../../img/uv-pdfcenterpanel-module/findbarButton-next-rtl@2x.png');
-  }
-  #outerContainer[dir='ltr'] .toolbarButton.pageUp::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageUp@2x.png');
-  }
-  #outerContainer[dir='rtl'] .toolbarButton.pageUp::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageUp-rtl@2x.png');
-  }
-  #outerContainer[dir='ltr'] .toolbarButton.pageDown::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageDown@2x.png');
-  }
-  #outerContainer[dir='rtl'] .toolbarButton.pageDown::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-pageDown-rtl@2x.png');
-  }
-  .toolbarButton.zoomIn::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-zoomIn@2x.png');
-  }
-  .toolbarButton.zoomOut::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-zoomOut@2x.png');
-  }
-  .toolbarButton.presentationMode::before,
-  .secondaryToolbarButton.presentationMode::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-presentationMode@2x.png');
-  }
-  .toolbarButton.print::before,
-  .secondaryToolbarButton.print::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-print@2x.png');
-  }
-  .toolbarButton.openFile::before,
-  .secondaryToolbarButton.openFile::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-openFile@2x.png');
-  }
-  .toolbarButton.download::before,
-  .secondaryToolbarButton.download::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-download@2x.png');
-  }
-  .toolbarButton.bookmark::before,
-  .secondaryToolbarButton.bookmark::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-bookmark@2x.png');
-  }
-  #viewThumbnail.toolbarButton::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewThumbnail@2x.png');
-  }
-  #outerContainer[dir="ltr"] #viewOutline.toolbarButton::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewOutline@2x.png');
-  }
-  #outerContainer[dir="rtl"] #viewOutline.toolbarButton::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewOutline-rtl@2x.png');
-  }
-  #viewAttachments.toolbarButton::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-viewAttachments@2x.png');
-  }
-  #viewFind.toolbarButton::before {
-    content: url('../../img/uv-pdfcenterpanel-module/toolbarButton-search@2x.png');
-  }
-  .secondaryToolbarButton.firstPage::before {
-    content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-firstPage@2x.png');
-  }
-  .secondaryToolbarButton.lastPage::before {
-    content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-lastPage@2x.png');
-  }
-  .secondaryToolbarButton.rotateCcw::before {
-    content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-rotateCcw@2x.png');
-  }
-  .secondaryToolbarButton.rotateCw::before {
-    content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-rotateCw@2x.png');
-  }
-  .secondaryToolbarButton.handTool::before {
-    content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-handTool@2x.png');
-  }
-  .secondaryToolbarButton.documentProperties::before {
-    content: url('../../img/uv-pdfcenterpanel-module/secondaryToolbarButton-documentProperties@2x.png');
-  }
+.mejs-uv .mejs-controls .mejs-volume-button {
+  position: absolute;
+  margin: 10px 5px 0 0;
+  width: 18px;
+  height: 17px;
 }
-@media print {
-  /* General rules for printing. */
-  body {
-    background: transparent none;
-  }
-  /* Rules for browsers that don't support mozPrintCallback. */
-  #sidebarContainer,
-  #secondaryToolbar,
-  .toolbar,
-  #loadingBox,
-  #errorWrapper,
-  .textLayer {
-    display: none;
-  }
-  #viewerContainer {
-    overflow: visible;
-  }
-  #mainContainer,
-  #viewerContainer,
-  .page,
-  .page canvas {
-    position: static;
-    padding: 0;
-    margin: 0;
-  }
-  .page {
-    float: left;
-    display: none;
-    border: none;
-    box-shadow: none;
-  }
-  .page[data-loaded] {
-    display: block;
-  }
-  .fileInput {
-    display: none;
-  }
-  /* Rules for browsers that support mozPrintCallback */
-  #outerContainer[data-mozPrintCallback] #outerContainer {
-    display: none;
-  }
-  #outerContainer[data-mozPrintCallback] #printContainer {
-    display: block;
-  }
-  #printContainer canvas {
-    position: relative;
-    top: 0;
-    left: 0;
-  }
+.mejs-uv .mejs-controls .mejs-horizontal-volume-slider {
+  position: absolute;
+  margin: 3px 5px 0 0;
 }
-.visibleLargeView,
-.visibleMediumView,
-.visibleSmallView {
+.mejs-uv .mejs-controls .mejs-mute button {
+  background: url('../../img/uv-mediaelementcenterpanel-module/controls-wellcome.png') no-repeat -19px 0;
+  width: 18px;
+  height: 17px;
+  margin: 0;
+  padding: 0;
+}
+.mejs-uv .mejs-controls .mejs-unmute button {
+  background: url('../../img/uv-mediaelementcenterpanel-module/controls-wellcome.png') no-repeat -40px 0;
+  width: 18px;
+  height: 17px;
+  margin: 0;
+  padding: 0;
+}
+.mejs-uv .mejs-controls .mejs-volume-button .mejs-volume-slider {
+  background: #525252;
+  width: 22px;
+  height: 65px;
+  top: -64px;
+  left: -4px;
+}
+.mejs-uv .mejs-controls .mejs-volume-button .mejs-volume-total {
+  background: #3e3e3e;
+  left: 8px;
+  width: 6px;
+  height: 50px;
+}
+.mejs-uv .mejs-controls .mejs-volume-button .mejs-volume-current {
+  left: 8px;
+  width: 6px;
+  background: #757575;
+  height: 70px;
+}
+.mejs-uv .mejs-controls .mejs-volume-button .mejs-volume-handle {
+  width: 14px;
+}
+.mejs-uv .mejs-controls .mejs-fullscreen-button {
+  position: absolute;
+  margin: 11px 10px 0 0;
+  width: 18px;
+  height: 17px;
+}
+.mejs-uv .mejs-controls .mejs-fullscreen-button button {
+  width: 17px;
+  height: 15px;
+  background: transparent url('../../img/uv-mediaelementcenterpanel-module/controls-wellcome.png') no-repeat -1px -58px;
+  margin: 0;
+  padding: 0;
+}
+.mejs-uv .mejs-controls .mejs-unfullscreen button {
+  width: 17px;
+  height: 15px;
+  background: transparent url('../../img/uv-mediaelementcenterpanel-module/controls-wellcome.png') no-repeat -22px -58px;
+  margin: 0;
+  padding: 0;
+}
+.mejs-uv .mejs-controls .mejs-time button {
+  color: #333;
+}
+.mejs-uv .mejs-controls .mejs-captions-button {
   display: none;
 }
-@media all and (max-width: 960px) {
-  #outerContainer[dir='ltr'] #outerContainer.sidebarMoving .outerCenter,
-  #outerContainer[dir='ltr'] #outerContainer.sidebarOpen .outerCenter {
-    float: left;
-    left: 205px;
-  }
-  #outerContainer[dir='rtl'] #outerContainer.sidebarMoving .outerCenter,
-  #outerContainer[dir='rtl'] #outerContainer.sidebarOpen .outerCenter {
-    float: right;
-    right: 205px;
-  }
+/* END: UV */
+#app .mejs-container.mejs-uv {
+  background-color: #000;
 }
-@media all and (max-width: 900px) {
-  .sidebarOpen .hiddenLargeView {
-    display: none;
-  }
-  .sidebarOpen .visibleLargeView {
-    display: inherit;
-  }
-}
-@media all and (max-width: 860px) {
-  .sidebarOpen .hiddenMediumView {
-    display: none;
-  }
-  .sidebarOpen .visibleMediumView {
-    display: inherit;
-  }
-}
-@media all and (max-width: 770px) {
-  #sidebarContainer {
-    top: 32px;
-    z-index: 100;
-  }
-  .loadingInProgress #sidebarContainer {
-    top: 39px;
-  }
-  #sidebarContent {
-    top: 32px;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  #outerContainer[dir='ltr'] #outerContainer.sidebarOpen > #mainContainer {
-    left: 0px;
-  }
-  #outerContainer[dir='rtl'] #outerContainer.sidebarOpen > #mainContainer {
-    right: 0px;
-  }
-  #outerContainer[dir='ltr'] .outerCenter {
-    float: left;
-    left: 205px;
-  }
-  #outerContainer[dir='rtl'] .outerCenter {
-    float: right;
-    right: 205px;
-  }
-  #outerContainer .hiddenLargeView,
-  #outerContainer .hiddenMediumView {
-    display: inherit;
-  }
-  #outerContainer .visibleLargeView,
-  #outerContainer .visibleMediumView {
-    display: none;
-  }
-}
-@media all and (max-width: 700px) {
-  #outerContainer .hiddenLargeView {
-    display: none;
-  }
-  #outerContainer .visibleLargeView {
-    display: inherit;
-  }
-}
-@media all and (max-width: 660px) {
-  #outerContainer .hiddenMediumView {
-    display: none;
-  }
-  #outerContainer .visibleMediumView {
-    display: inherit;
-  }
-}
-@media all and (max-width: 600px) {
-  .hiddenSmallView {
-    display: none;
-  }
-  .visibleSmallView {
-    display: inherit;
-  }
-  #outerContainer[dir='ltr'] #outerContainer.sidebarMoving .outerCenter,
-  #outerContainer[dir='ltr'] #outerContainer.sidebarOpen .outerCenter,
-  #outerContainer[dir='ltr'] .outerCenter {
-    left: 156px;
-  }
-  #outerContainer[dir='rtl'] #outerContainer.sidebarMoving .outerCenter,
-  #outerContainer[dir='rtl'] #outerContainer.sidebarOpen .outerCenter,
-  #outerContainer[dir='rtl'] .outerCenter {
-    right: 156px;
-  }
-  .toolbarButtonSpacer {
-    width: 0;
-  }
-}
-@media all and (max-width: 510px) {
-  #scaleSelectContainer,
-  #pageNumberLabel {
-    display: none;
-  }
+#app .centerPanel .content {
+  position: relative;
 }
 #app .centerPanel .content .container {
-  margin: 0 20px 0 20px;
-}
-#app .centerPanel .content #pdfContainer {
-  overflow: auto;
+  position: absolute;
 }
 *,
 *:before,
@@ -3635,15 +2779,19 @@ input[type=range]:focus::-ms-fill-upper {
   margin-bottom: 0px;
   margin-left: 8px;
 }
-#app .leftPanel .thumbsView .thumb .wrap {
-  border: none;
-}
-#app .leftPanel .thumbsView .thumb .wrap img {
-  display: block;
-  width: 90px;
-}
-#app .leftPanel .thumbsView .thumb.selected .wrap {
-  border: none;
+@media print {
+  #app .headerPanel {
+    display: none;
+  }
+  #app .leftPanel {
+    display: none;
+  }
+  #app .rightPanel {
+    display: none;
+  }
+  #app .footerPanel {
+    display: none;
+  }
 }
 #app .headerPanel .options .centerOptions {
   width: 432px;

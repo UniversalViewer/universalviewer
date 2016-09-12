@@ -3635,6 +3635,20 @@ input[type=range]:focus::-ms-fill-upper {
   margin-bottom: 0px;
   margin-left: 8px;
 }
+@media print {
+  #app .headerPanel {
+    display: none;
+  }
+  #app .leftPanel {
+    display: none;
+  }
+  #app .rightPanel {
+    display: none;
+  }
+  #app .footerPanel {
+    display: none;
+  }
+}
 #app .leftPanel .thumbsView .thumb .wrap {
   border: none;
 }
@@ -3646,8 +3660,20 @@ input[type=range]:focus::-ms-fill-upper {
   border: none;
 }
 #app .headerPanel .options .centerOptions {
-  width: 390px;
+  width: 432px;
+}
+#app .headerPanel .options .centerOptions .prevOptions {
+  margin: 0 10px 0 0;
+}
+#app .headerPanel .options .centerOptions .mode label {
+  width: 42px;
+}
+#app .headerPanel .options .centerOptions .search {
+  width: 140px;
+}
+#app .headerPanel .options .centerOptions .nextOptions {
+  margin: 0 0 0 10px;
 }
 #app .footerPanel .searchPager .controls .searchResultsInfo {
-  width: 337px;
+  width: 290px;
 }
