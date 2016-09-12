@@ -85,6 +85,12 @@
     "genericDialogue":
     {
     },
+    "headerPanel": {
+      "options": {
+        "localeToggleEnabled": false,
+        "settingsButtonEnabled": true
+      }
+    },
     "helpDialogue":
     {
     },
@@ -112,7 +118,6 @@
         "autoCompleteBoxEnabled": true,
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
-        "localeToggleEnabled": false,
         "pageModeEnabled": true,
         "pagingToggleEnabled": true
       }

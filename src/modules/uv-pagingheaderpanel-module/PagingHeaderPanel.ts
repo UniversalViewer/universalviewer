@@ -391,7 +391,7 @@ class PagingHeaderPanel extends HeaderPanel {
     }
 
     pagingToggleIsVisible(): boolean {
-        return this.options.pagingToggleEnabled && this.extension.helper.isPagingAvailable();
+        return Utils.Bools.getBool(this.options.pagingToggleEnabled, true) && this.extension.helper.isPagingAvailable();
     }
 
     updateGalleryButton(): void {
@@ -401,7 +401,7 @@ class PagingHeaderPanel extends HeaderPanel {
     }
 
     galleryIsVisible(): boolean {
-        return this.extension.isLeftPanelEnabled();
+        return Utils.Bools.getBool(this.options.galleryButtonEnabled, true) && this.extension.isLeftPanelEnabled();
     }
 
     setTotal(): void {
