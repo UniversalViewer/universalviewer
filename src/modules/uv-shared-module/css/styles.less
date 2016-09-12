@@ -85,3 +85,24 @@
         margin-left: @panel-margin;
     }
 }
+
+@media print {
+   #app {
+
+       .headerPanel {
+           display: none;
+       }
+
+       .leftPanel {
+           display: none;
+       }
+
+       .rightPanel {
+           display: none;
+       }
+
+       .footerPanel {
+           display: none;
+       }
+   }
+}
