@@ -239,10 +239,10 @@ class SeadragonCenterPanel extends CenterPanel {
 
         var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
-        this.$prevButton = $('<div class="paging btn prev"></div>');
+        this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
         this.$prevButton.prop('title', this.content.previous);
 
-        this.$nextButton = $('<div class="paging btn next"></div>');
+        this.$nextButton = $('<div class="paging btn next" tabindex="0"></div>');
         this.$nextButton.prop('title', this.content.next);
         
         this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
@@ -258,7 +258,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
         var that = this;
 
-        this.$prevButton.on('touchstart click', (e) => {
+        this.$prevButton.onPressed((e) => {
             e.preventDefault();
             OpenSeadragon.cancelEvent(e);
 
@@ -276,7 +276,7 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         });
 
-        this.$nextButton.on('touchstart click', (e) => {
+        this.$nextButton.onPressed((e) => {
             e.preventDefault();
             OpenSeadragon.cancelEvent(e);
 

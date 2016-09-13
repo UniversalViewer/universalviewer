@@ -48,19 +48,19 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$imageOptions = $('<ul></ul>');
         this.$imageOptionsContainer.append(this.$imageOptions);
 
-        this.$currentViewAsJpgButton = $('<li class="option"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
+        this.$currentViewAsJpgButton = $('<li class="option single"><input id="' + DownloadOption.currentViewAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.currentViewAsJpg.toString() + '"></label></li>');
         this.$imageOptions.append(this.$currentViewAsJpgButton);
         this.$currentViewAsJpgButton.hide();
 
-        this.$wholeImageHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
+        this.$wholeImageHighResButton = $('<li class="option single"><input id="' + DownloadOption.wholeImageHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImageHighRes.toString() + 'label" for="' + DownloadOption.wholeImageHighRes.toString() + '"></label></li>');
         this.$imageOptions.append(this.$wholeImageHighResButton);
         this.$wholeImageHighResButton.hide();
 
-        this.$wholeImagesHighResButton = $('<li class="option"><input id="' + DownloadOption.wholeImagesHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImagesHighRes.toString() + 'label" for="' + DownloadOption.wholeImagesHighRes.toString() + '"></label></li>');
+        this.$wholeImagesHighResButton = $('<li class="option multiple"><input id="' + DownloadOption.wholeImagesHighRes.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.wholeImagesHighRes.toString() + 'label" for="' + DownloadOption.wholeImagesHighRes.toString() + '"></label></li>');
         this.$imageOptions.append(this.$wholeImagesHighResButton);
         this.$wholeImageHighResButton.hide();
 
-        this.$wholeImageLowResAsJpgButton = $('<li class="option"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
+        this.$wholeImageLowResAsJpgButton = $('<li class="option single"><input id="' + DownloadOption.wholeImageLowResAsJpg.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + DownloadOption.wholeImageLowResAsJpg.toString() + '">' + this.content.wholeImageLowResAsJpg + '</label></li>');
         this.$imageOptions.append(this.$wholeImageLowResAsJpgButton);
         this.$wholeImageLowResAsJpgButton.hide();
 
@@ -81,7 +81,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$buttonsContainer = $('<div class="buttons"></div>');
         this.$content.append(this.$buttonsContainer);
 
-        this.$downloadButton = $('<a class="btn btn-primary default" href="#" tabindex="0">' + this.content.download + '</a>');
+        this.$downloadButton = $('<a class="btn btn-primary" href="#" tabindex="0">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
 
         var that = this;
@@ -176,6 +176,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 label = String.format(label, dimensions.size.width, dimensions.size.height);
                 $label.text(label);
                 $input.prop('title', label);
+                this.$currentViewAsJpgButton.data('width', dimensions.region.width);
+                this.$currentViewAsJpgButton.data('height', dimensions.region.height);
                 this.$currentViewAsJpgButton.show();
             } else {
                 this.$currentViewAsJpgButton.hide();
@@ -203,6 +205,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 var label: string = String.format(this.content.wholeImageHighRes, size.width, size.height, mime);
                 $label.text(label);
                 $input.prop('title', label);
+                this.$wholeImageHighResButton.data('width', size.width);
+                this.$wholeImageHighResButton.data('height', size.height);
                 this.$wholeImageHighResButton.show();
             }
         } else {
@@ -236,6 +240,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var label = String.format(this.content.wholeImageLowResAsJpg, size.width, size.height);
             $label.text(label);
             $input.prop('title', label);
+            this.$wholeImageLowResAsJpgButton.data('width', size.width);
+            this.$wholeImageLowResAsJpgButton.data('height', size.height);
             this.$wholeImageLowResAsJpgButton.show();
         } else {
             this.$wholeImageLowResAsJpgButton.hide();
@@ -268,6 +274,58 @@ class DownloadDialogue extends BaseDownloadDialogue {
             this.addDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
         }
 
+        // hide the current view option if it's equivalent to whole image.
+        if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
+            var currentWidth: number = parseInt(this.$currentViewAsJpgButton.data('width').toString());
+            var currentHeight: number = parseInt(this.$currentViewAsJpgButton.data('height').toString());
+            var wholeWidth: number = parseInt(this.$wholeImageHighResButton.data('width').toString());
+            var wholeHeight: number = parseInt(this.$wholeImageHighResButton.data('height').toString());
+
+            var percentageWidth: number = (currentWidth / wholeWidth) * 100;
+            var percentageHeight: number = (currentHeight / wholeHeight) * 100;
+
+            var disabledPercentage: number = this.options.currentViewDisabledPercentage;
+
+            // if over disabledPercentage of the size of whole image
+            if (percentageWidth >= disabledPercentage && percentageHeight >= disabledPercentage) {
+                this.$currentViewAsJpgButton.hide();
+            } else {
+                this.$currentViewAsJpgButton.show();
+            }
+        }
+
+        // order by image area
+        var $options: any = this.$imageOptions.find('li.single');
+
+        $options = $options.sort((a, b) => {
+            var aWidth: any = $(a).data('width');
+            aWidth ? aWidth = parseInt(aWidth.toString()) : 0;
+
+            var aHeight: any = $(a).data('height');
+            aHeight ? aHeight = parseInt(aHeight.toString()) : 0;
+
+            var bWidth: any = $(b).data('width');
+            bWidth ? bWidth = parseInt(bWidth.toString()) : 0;
+
+            var bHeight: any = $(b).data('height');
+            bHeight ? bHeight = parseInt(bHeight.toString()) : 0;
+            
+            var aArea: number = aWidth * aHeight;
+            var bArea: number = bWidth * bHeight;
+
+            if (aArea < bArea) {
+                return -1;
+            }
+
+            if (aArea > bArea) {
+                return 1;
+            }
+
+            return 0; 
+        });
+
+        $options.detach().appendTo(this.$imageOptions);
+
         // hide empty groups
         var $groups: JQuery = this.$downloadOptions.find('li.group');
 
@@ -284,12 +342,6 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
         this.$downloadOptions.find('li.group:visible').last().addClass('lastVisible');
 
-        // if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
-        //     this.$pagingNote.show();
-        // } else {
-        //     this.$pagingNote.hide();
-        // }
-
         if (!this.$downloadOptions.find('li.option:visible').length){
             this.$noneAvailable.show();
             this.$downloadButton.hide();
@@ -303,13 +355,13 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.resize();
     }
 
-    resetDynamicDownloadOptions() {
+    resetDynamicDownloadOptions(): void {
         this.renderingUrls = [];
         this.renderingUrlsCount = 0;
         this.$downloadOptions.find('li.dynamic').remove();
     }
 
-    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption) {
+    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption): void {
         var renderings: Manifesto.IRendering[] = resource.getRenderings();
 
         for (var i = 0; i < renderings.length; i++) {
@@ -363,7 +415,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         return '';
     }
 
-    getCanvasMimeType(canvas: Manifesto.ICanvas) {
+    getCanvasMimeType(canvas: Manifesto.ICanvas): string {
         var resource = this.getCanvasImageResource(canvas);
         var format: Manifesto.ResourceFormat = resource.getFormat();
 

@@ -63,6 +63,7 @@
       "options":
       {
         "confinedImageSize": 1000,
+        "currentViewDisabledPercentage": 90,
         "maxImageWidth": 5000,
         "selectionEnabled": false
       }
@@ -83,6 +84,12 @@
     },
     "genericDialogue":
     {
+    },
+    "headerPanel": {
+      "options": {
+        "localeToggleEnabled": false,
+        "settingsButtonEnabled": true
+      }
     },
     "helpDialogue":
     {
@@ -111,7 +118,6 @@
         "autoCompleteBoxEnabled": true,
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
-        "localeToggleEnabled": false,
         "pageModeEnabled": true,
         "pagingToggleEnabled": true
       }

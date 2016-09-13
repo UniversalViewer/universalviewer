@@ -184,12 +184,12 @@ class ContentLeftPanel extends LeftPanel {
         this.$multiSelectOptions = $('<div class="multiSelect"></div>');
         this.$rightOptions.append(this.$multiSelectOptions);
 
-        this.$selectAllButton = $('<div class="multiSelectAll"><input id="multiSelectAll" type="checkbox" tabindex="0" /><label for="multiSelectAll">' + this.content.selectAll + '</label></div>');
-        this.$multiSelectOptions.append(this.$selectAllButton);
-        this.$selectAllButtonCheckbox = $(this.$selectAllButton.find('input:checkbox'));
+        // this.$selectAllButton = $('<div class="multiSelectAll"><input id="multiSelectAll" type="checkbox" tabindex="0" /><label for="multiSelectAll">' + this.content.selectAll + '</label></div>');
+        // this.$multiSelectOptions.append(this.$selectAllButton);
+        // this.$selectAllButtonCheckbox = $(this.$selectAllButton.find('input:checkbox'));
 
-        this.$selectButton = $('<a class="btn btn-primary" tabindex="0">' + this.content.select + '</a>');
-        this.$multiSelectOptions.append(this.$selectButton);
+        // this.$selectButton = $('<a class="btn btn-primary" tabindex="0">' + this.content.select + '</a>');
+        // this.$multiSelectOptions.append(this.$selectButton);
 
         this.$views = $('<div class="views"></div>');
         this.$tabsContent.append(this.$views);
@@ -197,7 +197,7 @@ class ContentLeftPanel extends LeftPanel {
         this.$treeView = $('<div class="treeView"></div>');
         this.$views.append(this.$treeView);
 
-        this.$thumbsView = $('<div class="thumbsView"></div>');
+        this.$thumbsView = $('<div class="thumbsView" tabindex="0"></div>');
         this.$views.append(this.$thumbsView);
 
         this.$galleryView = $('<div class="galleryView"></div>');

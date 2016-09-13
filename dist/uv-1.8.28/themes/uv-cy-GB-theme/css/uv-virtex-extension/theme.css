@@ -625,6 +625,7 @@
   margin: 5px 10px 0 0;
   overflow: hidden;
   word-wrap: break-word;
+  line-height: 1.6em;
 }
 #app .rightPanel .main .items .item .text a.toggle {
   color: #14a4c3;
@@ -2228,6 +2229,20 @@ input[type=range]:focus::-ms-fill-upper {
   margin-right: 8px;
   margin-bottom: 0px;
   margin-left: 8px;
+}
+@media print {
+  #app .headerPanel {
+    display: none;
+  }
+  #app .leftPanel {
+    display: none;
+  }
+  #app .rightPanel {
+    display: none;
+  }
+  #app .footerPanel {
+    display: none;
+  }
 }
 #app .headerPanel .options .centerOptions {
   width: 432px;

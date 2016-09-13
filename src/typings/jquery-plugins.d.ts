@@ -19,7 +19,7 @@ interface JQuery {
     leftPadding(): number;
     on(events: string, handler: (eventObject: JQueryEventObject, ...args: any[]) => any, wait: Number): JQuery;
     onEnter(callback: () => void): any;
-    onPressed(callback: () => void): any;
+    onPressed(callback: (e: any) => void): any;
     removeLastWord(chars?: number, depth?: number): any;
     rightMargin(): number;
     rightPadding(): number;

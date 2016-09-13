@@ -63,7 +63,7 @@ class FooterPanel extends BaseFooterPanel {
             this.setCurrentSearchResultPlacemarker();
         });
 
-        this.$printButton = $('<a class="print" title="' + this.content.print + '">' + this.content.print + '</a>');
+        this.$printButton = $('<a class="print" title="' + this.content.print + '" tabindex="0">' + this.content.print + '</a>');
         this.$options.prepend(this.$printButton);
 
         // search input.
@@ -506,7 +506,7 @@ class FooterPanel extends BaseFooterPanel {
             }
 
             var lastCanvasOrderLabel = this.extension.helper.getLastCanvasLabel(true);
-            this.$pagePositionLabel.html(String.format(displaying, this.content.page, label, lastCanvasOrderLabel));
+            this.$pagePositionLabel.html(String.format(displaying, this.content.page, this.extension.sanitize(label), this.extension.sanitize(lastCanvasOrderLabel)));
         } else {
             this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.extension.helper.getTotalCanvases()));
         }
