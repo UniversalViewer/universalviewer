@@ -1,5 +1,5 @@
 @import '../../uv-shared-module/css/thumbs-view.less';
-﻿
+
 #app{
 
     .leftPanel{
@@ -189,7 +189,8 @@
             }
 
             .galleryView{
-                // iiif-gallery-component {
+                // start iiif-gallery-component
+
                 .header{
                     overflow: hidden;
                     height: 45px;
@@ -223,7 +224,7 @@
                         overflow: hidden;
                         position: relative;
 
-                        // all thumb spacing-related styles
+                        // thumb spacing-related styles
 
                         &.multiSelect{
                             .thumb {
@@ -271,7 +272,6 @@
                             }
                         }
 
-                        // all spacing-related thumb styles
                         .thumb{
                             margin: 0 7px 7px 0;
 
@@ -296,6 +296,8 @@
                                 padding: 2px 0 0 0;
                             }
                         }
+                        
+                        // end thumb spacing-related styles
 
                         .thumb{
                             float: left;
@@ -305,6 +307,7 @@
                                 overflow: hidden;
                                 text-align: center;
                                 background: none;
+                                position: relative;
 
                                 &.loading{
                                     .loading(@loader-black-bg);
@@ -316,16 +319,16 @@
 
                                 img{
                                     display: block;
-                                    float: left;
                                     max-width: 100%;
                                     max-height: 100%;
-                                    //margin: 0 auto;
                                 }
 
                                 input{
-                                    float: left;
+                                    //float: left;
+                                    position: absolute;
                                     cursor: pointer;
-                                    margin-top: -20px;
+                                    top: 10px;
+                                    left: 10px;
                                 }
                             }
 
@@ -357,6 +360,10 @@
                                         .thumbImage {
                                             .opacity(.35);
                                         }
+
+                                        input {
+
+                                        }
                                     }
                                 }
                             }
@@ -375,7 +382,8 @@
                         }
                     }
                 }
-                //}
+
+                // end iiif-gallery-component
             }
         }
 

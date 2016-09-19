@@ -59,11 +59,16 @@ var IIIFComponents;
             $.views.tags({
                 tree: {
                     toggleExpanded: function () {
-                        that._setNodeExpanded(this.data, !this.data.expanded);
+                        var node = this.data;
+                        that._setNodeExpanded(node, !node.expanded);
                     },
                     toggleMultiSelect: function () {
-                        that._setNodeMultiSelected(this.data, !!!this.data.multiSelected);
-                        that._emit(TreeComponent.Events.TREE_NODE_MULTISELECTED, this.data);
+                        var node = this.data;
+                        that._setNodeMultiSelected(node, !!!node.multiSelected);
+                        if (node.isRange()) {
+                            that._getMultiSelectState().selectRange(node.data, node.multiSelected);
+                        }
+                        that._emit(TreeComponent.Events.TREE_NODE_MULTISELECTED, node);
                     },
                     init: function (tagCtx, linkCtx, ctx) {
                         this.data = tagCtx.view.data;
@@ -76,13 +81,15 @@ var IIIFComponents;
                             self.toggleExpanded();
                         }).on('click', 'a', function (e) {
                             e.preventDefault();
-                            if (self.data.nodes.length)
+                            var node = self.data;
+                            if (node.nodes.length)
                                 self.toggleExpanded();
-                            if (self.data.multiSelectEnabled) {
+                            if (node.multiSelectEnabled) {
                                 self.toggleMultiSelect();
                             }
                             else {
-                                that._emit(TreeComponent.Events.TREE_NODE_SELECTED, self.data);
+                                that._emit(TreeComponent.Events.TREE_NODE_SELECTED, node);
+                                that.selectNode(node);
                             }
                         }).on('click', 'input.multiSelect', function (e) {
                             self.toggleMultiSelect();
@@ -93,25 +100,34 @@ var IIIFComponents;
             });
             return success;
         };
-        TreeComponent.prototype.databind = function (rootNode) {
-            this._rootNode = rootNode;
+        TreeComponent.prototype.databind = function () {
+            this._rootNode = this.options.helper.getTree(this.options.topRangeIndex, this.options.treeSortType);
             this._allNodes = null; // delete cache
             this._multiSelectableNodes = null; // delete cache
             this._$tree.link($.templates.pageTemplate, this._rootNode);
         };
-        TreeComponent.prototype._getDefaultOptions = function () {
-            return {};
-        };
-        TreeComponent.prototype.updateMultiSelectState = function (state) {
-            this._multiSelectState = state;
-            for (var i = 0; i < this._multiSelectState.ranges.length; i++) {
-                var range = this._multiSelectState.ranges[i];
+        // todo: this should be removed in order to fit with the 'reactive' pattern
+        // all changes shold be a result of calling databind() with options/props. 
+        TreeComponent.prototype.updateMultiSelectState = function () {
+            var state = this._getMultiSelectState();
+            for (var i = 0; i < state.ranges.length; i++) {
+                var range = state.ranges[i];
                 var node = this._getMultiSelectableNodes().en().where(function (n) { return n.data.id === range.id; }).first();
                 if (node) {
                     this._setNodeMultiSelectEnabled(node, range.multiSelectEnabled);
                     this._setNodeMultiSelected(node, range.multiSelected);
                 }
             }
+        };
+        TreeComponent.prototype._getMultiSelectState = function () {
+            return this.options.helper.getMultiSelectState();
+        };
+        TreeComponent.prototype._getDefaultOptions = function () {
+            return {
+                helper: null,
+                topRangeIndex: 0,
+                treeSortType: Manifold.TreeSortType.NONE
+            };
         };
         TreeComponent.prototype.allNodesSelected = function () {
             var applicableNodes = this._getMultiSelectableNodes();
@@ -223,8 +239,6 @@ var IIIFComponents;
             this.deselectCurrentNode();
             this._selectedNode = node;
             this._setNodeSelected(this._selectedNode, true);
-            // todo: rather than manipulating the tree directly, allow manifests to be multi-selectable in manifold
-            //this._updateParentNodes(this._selectedNode);
         };
         // walks down the tree using the specified path e.g. [2,2,0]
         TreeComponent.prototype.getNodeByPath = function (parentNode, path) {

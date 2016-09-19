@@ -14,8 +14,8 @@ module.exports = function (grunt) {
 
     function refresh() {
         packageJson = grunt.file.readJSON("package.json");
-        grunt.config.set('config.dirs.uvVersioned', 'uv-' + packageJson.version);
-        grunt.config.set('config.dirs.uv', 'uv');
+        grunt.config.set('config.directories.uvVersioned', 'uv-' + packageJson.version);
+        grunt.config.set('config.directories.uv', 'uv');
     }
 
     refresh();
@@ -38,17 +38,17 @@ module.exports = function (grunt) {
         },
 
         clean: {
-            build : ['<%= config.dirs.build %>'],
+            build : ['<%= config.directories.build %>'],
             bundle: ['./src/lib/bundle.js', './src/lib/bundle.min.js'],
-            dist: ['<%= config.dirs.dist %>'],
-            examples: ['<%= config.dirs.examples %>/uv-*'],
-            distexamples: ['<%= config.dirs.examples %>/uv-*.zip', '<%= config.dirs.examples %>/uv-*.tar'],
+            dist: ['<%= config.directories.dist %>'],
+            examples: ['<%= config.directories.examples %>/uv-*'],
+            distexamples: ['<%= config.directories.examples %>/uv-*.zip', '<%= config.directories.examples %>/uv-*.tar'],
             extension: ['./src/extensions/*/build/*']
         },
 
         concat: {
             bundle: {
-                src: grunt.file.expand('src/lib/*').concat(config.deps).concat(['!src/lib/embed.js']),
+                src: grunt.file.expand('src/lib/*').concat(config.dependencies.libs).concat(['!src/lib/embed.js']),
                 dest: 'src/lib/bundle.js'
             }
         },
@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/extensions/*/build/*.schema.json'],
-                        dest: '<%= config.dirs.build %>/schema/',
+                        dest: '<%= config.directories.build %>/schema/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
                             // src/extensions/[extension]/build/[locale].schema.json
@@ -81,24 +81,24 @@ module.exports = function (grunt) {
                         flatten: true,
                         cwd: 'src',
                         src: ['app.html'],
-                        dest: '<%= config.dirs.build %>'
+                        dest: '<%= config.directories.build %>'
                     },
                     // js
                     {
                         expand: true,
                         flatten: true,
-                        cwd: '<%= config.dirs.lib %>',
+                        cwd: '<%= config.directories.lib %>',
                         src: [
                             'embed.js',
                             'bundle.min.js'
                         ],
-                        dest: '<%= config.dirs.build %>/lib/'
+                        dest: '<%= config.directories.build %>/lib/'
                     },
                     // extension configuration files
                     {
                         expand: true,
                         src: ['src/extensions/**/build/*.config.json'],
-                        dest: '<%= config.dirs.build %>/lib/',
+                        dest: '<%= config.directories.build %>/lib/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -114,7 +114,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/extensions/**/dependencies.js'],
-                        dest: '<%= config.dirs.build %>/lib/',
+                        dest: '<%= config.directories.build %>/lib/',
                         rename: function(dest, src) {
 
                             // get the extension name from the src string.
@@ -129,7 +129,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: ['src/extensions/**/lib/*'],
-                        dest: '<%= config.dirs.build %>/lib/'
+                        dest: '<%= config.directories.build %>/lib/'
                     },
                     // l10n localisation files
                     {
@@ -137,7 +137,7 @@ module.exports = function (grunt) {
                         flatten: false,
                         cwd: 'src/modules/',
                         src: ['**/l10n/**/*.properties'],
-                        dest: '<%= config.dirs.build %>/l10n/',
+                        dest: '<%= config.directories.build %>/l10n/',
                         rename: function(dest, src) {
                             // get the locale and .properties files.
                             var reg = /.*\/l10n\/(.*)/;
@@ -150,7 +150,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/modules/**/html/*'],
-                        dest: '<%= config.dirs.build %>/html/',
+                        dest: '<%= config.directories.build %>/html/',
                         rename: function(dest, src) {
 
                             var fileName = src.substr(src.lastIndexOf('/'));
@@ -168,17 +168,17 @@ module.exports = function (grunt) {
                 // copy contents of /build to /examples/build.
                 files: [
                     {
-                        cwd: '<%= config.dirs.build %>',
+                        cwd: '<%= config.directories.build %>',
                         expand: true,
                         src: ['**'],
-                        dest: '<%= config.dirs.examples %>/<%= config.dirs.uv %>/'
+                        dest: '<%= config.directories.examples %>/<%= config.directories.uv %>/'
                     },
                     // misc
                     {
                         expand: true,
                         flatten: true,
                         src: ['favicon.ico'],
-                        dest: '<%= config.dirs.examples %>/'
+                        dest: '<%= config.directories.examples %>/'
                     }
                 ]
             },
@@ -186,10 +186,10 @@ module.exports = function (grunt) {
                 // copy contents of /build to /dist/build.
                 files: [
                     {
-                        cwd: '<%= config.dirs.build %>',
+                        cwd: '<%= config.directories.build %>',
                         expand: true,
                         src: ['**'],
-                        dest: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>/'
+                        dest: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>/'
                     }
                 ]
             },
@@ -197,10 +197,10 @@ module.exports = function (grunt) {
                 // copy zip archives to examples
                 files: [
                     {
-                        cwd: '<%= config.dirs.dist %>',
+                        cwd: '<%= config.directories.dist %>',
                         expand: true,
                         src: ['*.zip', '*.tar'],
-                        dest: '<%= config.dirs.examples %>/'
+                        dest: '<%= config.directories.examples %>/'
                     }
                 ]
             }
@@ -211,10 +211,10 @@ module.exports = function (grunt) {
                 files: [
                     {
                         // themes
-                        cwd: '<%= config.dirs.bower %>',
+                        cwd: '<%= config.directories.bower %>',
                         expand: true,
                         src: ['uv-*-theme/**'],
-                        dest: '<%= config.dirs.themes %>'
+                        dest: '<%= config.directories.themes %>'
                     }
                 ]
             },
@@ -224,8 +224,8 @@ module.exports = function (grunt) {
                         // all d.ts files that need to be copied from /node_modules to /src/typings post npm install
                         expand: true,
                         flatten: true,
-                        src: config.typings,
-                        dest: '<%= config.dirs.typings %>'
+                        src: config.dependencies.typings,
+                        dest: '<%= config.directories.typings %>'
                     },
                     mediaelementExtensionConfig.sync.dependencies,
                     mediaelementExtensionConfig.sync.typings,
@@ -243,13 +243,13 @@ module.exports = function (grunt) {
             zip: {
                 options: {
                     mode: 'zip',
-                    archive: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>.zip',
+                    archive: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>.zip',
                     level: 9
                 },
                 files: [
                     {
                         expand: true,
-                        cwd: '<%= config.dirs.build %>/',
+                        cwd: '<%= config.directories.build %>/',
                         src: ['**']
                     }
                 ]
@@ -257,12 +257,12 @@ module.exports = function (grunt) {
             tar: {
                 options: {
                     mode: 'tar',
-                    archive: '<%= config.dirs.dist %>/<%= config.dirs.uvVersioned %>.tar'
+                    archive: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>.tar'
                 },
                 files: [
                     {
                         expand: true,
-                        cwd: '<%= config.dirs.build %>/',
+                        cwd: '<%= config.directories.build %>/',
                         src: ['**']
                     }
                 ]
@@ -279,7 +279,7 @@ module.exports = function (grunt) {
         replace: {
 
             html: {
-                src: ['<%= config.dirs.build %>/app.html'],
+                src: ['<%= config.directories.build %>/app.html'],
                 overwrite: true,
                 replacements: [
                     {
@@ -295,7 +295,7 @@ module.exports = function (grunt) {
             js: {
                 // replace window.DEBUG=true
                 // todo: use a compiler flag when available
-                src: ['<%= config.dirs.build %>/lib/app.js'],
+                src: ['<%= config.directories.build %>/lib/app.js'],
                 overwrite: true,
                 replacements: [
                     //{
@@ -312,7 +312,7 @@ module.exports = function (grunt) {
             // ../../img/[module]/[image]
             moduleimages: {
                 // replace img srcs to point to "../../img/[module]/[img]"
-                src: ['<%= config.dirs.build %>/themes/*/css/*/theme.css'],
+                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*modules\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
@@ -324,7 +324,7 @@ module.exports = function (grunt) {
             // ../../../img/[img]
             themeimages: {
                 // replace img srcs to point to "../../img/[module]/[img]"
-                src: ['<%= config.dirs.build %>/themes/*/css/*/theme.css'],
+                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*themes\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
@@ -334,17 +334,17 @@ module.exports = function (grunt) {
             versions: {
                 // replace uv version
                 src: [
-                    //'<%= config.dirs.examples %>/index.html',
-                    //'<%= config.dirs.examples %>/noeditor.html',
-                    //'<%= config.dirs.examples %>/examples.js',
-                    //'<%= config.dirs.examples %>/uv.js',
-                    //'<%= config.dirs.examples %>/web.config',
+                    //'<%= config.directories.examples %>/index.html',
+                    //'<%= config.directories.examples %>/noeditor.html',
+                    //'<%= config.directories.examples %>/examples.js',
+                    //'<%= config.directories.examples %>/uv.js',
+                    //'<%= config.directories.examples %>/web.config',
                     './src/lib/embed.js'
                 ],
                 overwrite: true,
                 replacements: [{
                     from: /uv-\d+\.\d+\.\d+/g,
-                    to: '<%= config.dirs.uvVersioned %>'
+                    to: '<%= config.directories.uvVersioned %>'
                 }]
             }
         },
@@ -357,7 +357,7 @@ module.exports = function (grunt) {
                     directory: '.',
                     keepalive: true,
                     open: {
-                        target: 'http://localhost:<%= global.port %>/<%= config.dirs.examples %>/'
+                        target: 'http://localhost:<%= global.port %>/<%= config.directories.examples %>/'
                     }
                 }
             }

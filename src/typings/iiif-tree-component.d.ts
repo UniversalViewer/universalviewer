@@ -4,13 +4,16 @@ declare namespace IIIFComponents {
     interface ITreeComponent extends _Components.IBaseComponent {
         deselectCurrentNode(): void;
         getNodeById(id: string): Manifold.ITreeNode;
-        selectNode(node: any): void;
+        selectNode(node: Manifold.ITreeNode): void;
         updateMultiSelectState(state: Manifold.MultiSelectState): void;
     }
 }
 
 declare namespace IIIFComponents {
     interface ITreeComponentOptions extends _Components.IBaseComponentOptions {
+        helper: Manifold.IHelper;
+        topRangeIndex: number;
+        treeSortType: Manifold.TreeSortType;
     }
 }
 
@@ -21,13 +24,13 @@ declare namespace IIIFComponents {
         private _allNodes;
         private _multiSelectableNodes;
         private _selectedNode;
-        private _multiSelectState;
         private _rootNode;
         constructor(options: ITreeComponentOptions);
         protected _init(): boolean;
-        databind(rootNode: Manifold.ITreeNode): void;
+        databind(): void;
+        updateMultiSelectState(): void;
+        private _getMultiSelectState();
         protected _getDefaultOptions(): ITreeComponentOptions;
-        updateMultiSelectState(state: Manifold.MultiSelectState): void;
         allNodesSelected(): boolean;
         private _getMultiSelectableNodes();
         private _nodeIsMultiSelectable(node);
@@ -42,7 +45,7 @@ declare namespace IIIFComponents {
         private _setNodeMultiSelectEnabled(node, enabled);
         selectPath(path: string): void;
         deselectCurrentNode(): void;
-        selectNode(node: any): void;
+        selectNode(node: Manifold.ITreeNode): void;
         getNodeByPath(parentNode: Manifold.ITreeNode, path: string[]): Manifold.ITreeNode;
         show(): void;
         hide(): void;

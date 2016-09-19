@@ -159,7 +159,7 @@ module.exports = function (grunt) {
     }
 
     function getThemeDest(theme) {
-        var buildDir = grunt.config('config.dirs.build');
+        var buildDir = grunt.config('config.directories.build');
         return path.join(buildDir, 'themes', theme);
     }
 

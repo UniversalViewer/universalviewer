@@ -14029,10 +14029,12 @@ var Manifold;
             return result;
         };
         Helper.prototype.getMultiSelectState = function () {
-            var m = new Manifold.MultiSelectState();
-            m.ranges = this.getRanges().clone();
-            m.canvases = this.getCurrentSequence().getCanvases().clone();
-            return m;
+            if (!this._multiSelectState) {
+                this._multiSelectState = new Manifold.MultiSelectState();
+                this._multiSelectState.ranges = this.getRanges().clone();
+                this._multiSelectState.canvases = this.getCurrentSequence().getCanvases().clone();
+            }
+            return this._multiSelectState;
         };
         Helper.prototype.getRanges = function () {
             return this.manifest.getAllRanges();

@@ -9,29 +9,21 @@ class TreeView extends BaseView {
 
     isOpen: boolean = false;
     component: IIIFComponents.ITreeComponent;
-
-    public rootNode: ITreeNode;
+    treeOptions: IIIFComponents.ITreeComponentOptions;
 
     constructor($element: JQuery) {
         super($element, true, true);
     }
 
     create(): void {
+        this.setConfig('contentLeftPanel');
         super.create();
+    }
 
+    setup(): void {
         var that = this;
 
-        $.subscribe(Commands.ENTER_MULTISELECT_MODE, () => {
-            this.databind();
-        });
-
-        $.subscribe(Commands.MULTISELECT_CHANGE, (s, state: MultiSelectState) => {
-            this._updateMultiSelectState(state);
-        });
-
-        this.component = new IIIFComponents.TreeComponent({
-            element: ".views .treeView"
-        });
+        this.component = new IIIFComponents.TreeComponent(this.treeOptions);
 
         // todo: casting as <any> is necessary because IBaseComponent doesn't implement ITinyEmitter
         // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
@@ -46,18 +38,12 @@ class TreeView extends BaseView {
             var node = args[0];
             $.publish(Commands.TREE_NODE_MULTISELECTED, [node]);
         });
-    }        
-
-    public databind(): void {
-        if (!this.rootNode) return;
-
-        this.component.databind(this.rootNode);
-
-        this.resize();
     }
 
-    private _updateMultiSelectState(state: MultiSelectState): void {
-        this.component.updateMultiSelectState(state); 
+    public databind(): void {
+        this.component.options = this.treeOptions;
+        this.component.databind();
+        this.resize();
     }
 
     public show(): void {
@@ -70,7 +56,7 @@ class TreeView extends BaseView {
         this.$element.hide();
     }
 
-    public selectNode(node: any): void {
+    public selectNode(node: Manifold.ITreeNode): void {
         this.component.selectNode(node);
     }
 
