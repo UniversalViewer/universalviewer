@@ -1,8 +1,0 @@
-{
-    "type": "legacy-image-pyramid",
-    "levels":[{
-        "url": "lib/imageunavailable.png",
-        "height": 300,
-        "width":  300
-    }]
-}

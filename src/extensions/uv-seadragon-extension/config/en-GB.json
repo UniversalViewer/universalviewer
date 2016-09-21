@@ -1,6 +1,5 @@
 {
-  "options":
-  {
+  "options": {
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
@@ -9,6 +8,7 @@
     "leftPanelEnabled": true,
     "limitLocales": false,
     "minWidthBreakPoint": 610,
+    "multiSelectionMimeType": "application/zip",
     "navigatorEnabled": true,
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "overrideFullScreen": false,
@@ -24,12 +24,9 @@
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false
   },
-  "modules":
-  {
-    "contentLeftPanel":
-    {
-      "options":
-      {
+  "modules": {
+    "contentLeftPanel": {
+      "options": {
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
         "elideCount": 40,
@@ -58,18 +55,15 @@
     },
     "dialogue": {
     },
-    "downloadDialogue":
-    {
-      "options":
-      {
+    "downloadDialogue": {
+      "options": {
         "confinedImageSize": 1000,
         "currentViewDisabledPercentage": 90,
         "maxImageWidth": 5000,
         "selectionEnabled": false
       }
     },
-    "footerPanel":
-    {
+    "footerPanel": {
       "options":{
         "bookmarkEnabled": false,
         "downloadEnabled": true,
@@ -82,8 +76,7 @@
         "shareEnabled": true
       }
     },
-    "genericDialogue":
-    {
+    "genericDialogue": {
     },
     "headerPanel": {
       "options": {
@@ -91,13 +84,10 @@
         "settingsButtonEnabled": true
       }
     },
-    "helpDialogue":
-    {
+    "helpDialogue": {
     },
-    "moreInfoRightPanel":
-    {
-      "options":
-      {
+    "moreInfoRightPanel": {
+      "options": {
         "aggregateValues": "",
         "canvasExclude": "",
         "copyToClipboardEnabled": false,
@@ -111,21 +101,27 @@
         "textLimitType": "lines"
       }
     },
-    "pagingHeaderPanel":
-    {
-      "options":
-      {
+    "multiSelectDialogue": {
+      "options": {
+        "galleryThumbChunkedResizingEnabled": true,
+        "galleryThumbChunkedResizingThreshold": 400,
+        "galleryThumbHeight": 320,
+        "galleryThumbLoadPadding": 3,
+        "galleryThumbWidth": 200,
+        "pageModeEnabled": true
+      }
+    },
+    "pagingHeaderPanel": {
+      "options": {
         "autoCompleteBoxEnabled": true,
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
-        "pageModeEnabled": true,
+        "pageModeEnabled": false,
         "pagingToggleEnabled": true
       }
     },
-    "seadragonCenterPanel":
-    {
-      "options":
-      {
+    "seadragonCenterPanel": {
+      "options": {
         "animationTime": 0.15,
         "autoHideControls": true,
         "attributionEnabled": true,
@@ -144,17 +140,15 @@
         "visibilityRatio": 0.5
       }
     },
-    "searchFooterPanel":
-    {
-      "options":{
+    "searchFooterPanel": {
+      "options": {
         "elideDetailsTermsCount": 20,
         "elideResultsTermsCount": 10,
         "pageModeEnabled": true,
         "positionMarkerEnabled": true
       }
     },
-    "settingsDialogue":
-    {
+    "settingsDialogue": {
     },
     "shareDialogue": {
       "options": {

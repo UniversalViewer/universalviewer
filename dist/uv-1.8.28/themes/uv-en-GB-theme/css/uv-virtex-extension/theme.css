@@ -291,14 +291,14 @@
 #app .leftPanel .views .thumbsView .thumbs.right-to-left .thumb.first {
   float: left;
 }
- #app .leftPanel .top .title {
+#app .leftPanel .top .title {
   text-transform: uppercase;
 }
- #app .leftPanel .tabs {
+#app .leftPanel .tabs {
   height: 25px;
   border-bottom: 1px solid #373737;
 }
- #app .leftPanel .tabs .tab {
+#app .leftPanel .tabs .tab {
   color: #fff;
   background-color: #211f1f;
   display: inline-block;
@@ -312,10 +312,10 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
- #app .leftPanel .tabs .tab.first {
+#app .leftPanel .tabs .tab.first {
   margin: 0 0 0 10px;
 }
- #app .leftPanel .tabs .tab.on {
+#app .leftPanel .tabs .tab.on {
   border: 1px solid #373737;
   border-bottom: 1px solid #211f1f;
   color: #14a4c3;
@@ -323,233 +323,61 @@
   height: 25px;
   line-height: 25px;
 }
- #app .leftPanel .tabs .tab:focus {
+#app .leftPanel .tabs .tab:focus {
   border: 1px solid #14a4c3;
 }
- #app .leftPanel .tabsContent {
+#app .leftPanel .tabsContent {
   padding: 10px 10px 10px 10px;
 }
- #app .leftPanel .tabsContent .options {
+#app .leftPanel .tabsContent .options {
   padding: 0 0 10px 0;
 }
- #app .leftPanel .tabsContent .options .top {
+#app .leftPanel .tabsContent .options .top {
   overflow: hidden;
   height: auto;
 }
- #app .leftPanel .tabsContent .options .bottom {
+#app .leftPanel .tabsContent .options .bottom {
   overflow: hidden;
 }
- #app .leftPanel .tabsContent .options .bottom .left {
+#app .leftPanel .tabsContent .options .bottom .left {
   float: left;
 }
- #app .leftPanel .tabsContent .options .bottom .left .treeView {
+#app .leftPanel .tabsContent .options .bottom .left .treeView {
   padding: 5px 0 0 0;
 }
- #app .leftPanel .tabsContent .options .bottom .left .treeView span {
+#app .leftPanel .tabsContent .options .bottom .left .treeView span {
   display: block;
   float: left;
   color: #fff;
   padding: 5px 4px 0 0;
   font-size: 11px;
 }
- #app .leftPanel .tabsContent .options .bottom .left .treeView select {
+#app .leftPanel .tabsContent .options .bottom .left .treeView select {
   float: left;
   font-size: 11px;
 }
- #app .leftPanel .tabsContent .options .bottom .right {
+#app .leftPanel .tabsContent .options .bottom .right {
   float: right;
   overflow: hidden;
 }
- #app .leftPanel .tabsContent .options .bottom .right .multiSelect .multiSelectAll {
+#app .leftPanel .tabsContent .options .bottom .right .multiSelect .multiSelectAll {
   float: left;
 }
- #app .leftPanel .tabsContent .options .bottom .right .multiSelect .btn {
+#app .leftPanel .tabsContent .options .bottom .right .multiSelect .btn {
   margin-left: 10px;
 }
- #app .leftPanel .tabsContent .btn-group .btn {
+#app .leftPanel .tabsContent .btn-group .btn {
   padding: 0 5px 0 5px;
   background: #565656;
   color: #9a9a9a;
   width: 55px;
 }
- #app .leftPanel .tabsContent .btn-group .btn.on {
+#app .leftPanel .tabsContent .btn-group .btn.on {
   background: #DDD;
   color: #000;
 }
- #app .leftPanel .views .treeView {
-  overflow: auto;
-  color: #fff;
+#app .leftPanel .views .treeView {
   font-weight: normal;
-}
- #app .leftPanel .views .treeView .toggle {
-  cursor: pointer;
-  margin-top: 3px;
-  margin-right: 5px;
-  display: block;
-  float: left;
-  height: 10px;
-  width: 10px;
-  background-image: url('../../img/uv-contentleftpanel-module/plus.png');
-}
- #app .leftPanel .views .treeView .toggle.expanded {
-  background-image: url('../../img/uv-contentleftpanel-module/minus.png');
-}
- #app .leftPanel .views .treeView .toggle.multiSelect {
-  margin-left: 5px;
-}
- #app .leftPanel .views .treeView .spacer {
-  margin-top: 3px;
-  margin-right: 5px;
-  display: block;
-  float: left;
-  height: 10px;
-  width: 10px;
-}
- #app .leftPanel .views .treeView input.multiSelect {
-  margin-top: 0px;
-  margin-right: 5px;
-  display: block;
-  float: left;
-  height: 13px;
-  width: 13px;
-}
- #app .leftPanel .views .treeView ul.tree,
- #app .leftPanel .views .treeView ul.tree ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
- #app .leftPanel .views .treeView ul.tree ul {
-  margin-left: 15px;
-}
- #app .leftPanel .views .treeView ul.tree li {
-  margin: 0;
-  padding: 2px 0 2px 0;
-  overflow: hidden;
-}
- #app .leftPanel .views .treeView ul.tree li a {
-  display: block;
-  overflow: hidden;
-}
- #app .leftPanel .views .treeView ul a.selected {
-  color: #14a4c3;
-}
- #app .leftPanel .views .galleryView .header {
-  overflow: hidden;
-  height: 45px;
-}
- #app .leftPanel .views .galleryView .header .btn {
-  float: left;
-  width: 30px;
-  height: 30px;
-}
- #app .leftPanel .views .galleryView .header .btn.size-up {
-  margin-left: 5px;
-}
- #app .leftPanel .views .galleryView .header .btn.size-down {
-  margin-right: 5px;
-}
- #app .leftPanel .views .galleryView .header input[type="range"] {
-  float: left;
-  margin-top: 12px;
-  width: 100px;
-}
- #app .leftPanel .views .galleryView .main {
-  overflow: auto;
-}
- #app .leftPanel .views .galleryView .main .thumbs {
-  margin-right: 10px;
-  overflow: hidden;
-  position: relative;
-}
- #app .leftPanel .views .galleryView .main .thumbs.multiSelect .thumb .wrap.multiSelected {
-  border: 2px solid #14a4c3;
-}
- #app .leftPanel .views .galleryView .main .thumbs.chunked .thumb.outsideScrollArea .wrap {
-  border: 2px solid transparent;
-}
- #app .leftPanel .views .galleryView .main .thumbs.chunked .thumb.outsideScrollArea .wrap img {
-  display: none;
-}
- #app .leftPanel .views .galleryView .main .thumbs.chunked .thumb.outsideScrollArea span {
-  color: transparent;
-}
- #app .leftPanel .views .galleryView .main .thumbs.chunked .thumb.outsideScrollArea.selected .wrap {
-  border: 2px solid transparent;
-}
- #app .leftPanel .views .galleryView .main .thumbs.chunked.multiSelect .thumb.outsideScrollArea .wrap.multiSelected {
-  background: none;
-  border: 2px solid transparent;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb {
-  margin: 0 7px 7px 0;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap {
-  border: 2px solid #373737;
-  padding: 2px;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb.selected .wrap {
-  border: 2px solid #fff;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb.searchpreview .wrap {
-  border: 2px solid #26b5cc;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb span {
-  padding: 2px 0 0 0;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb {
-  float: left;
-  cursor: pointer;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap {
-  overflow: hidden;
-  text-align: center;
-  background: none;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap.loading {
-  background-image: url('data:image/gif;base64,R0lGODlhFAAUAMQSAGxsbFpaWnh4eEZGRhwcHD8/PzU1NVJSUisrKwgICH5+fkxMTGNjYyUlJXJycnt7exISEoCAgAAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1OTFjMzhjNS0xZmQyLTg5NGUtYjMyZi1kYTNkZWQ5NmQ5YjMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Qzc0OEE1NDA5OTMzMTFFNUFBRjI5MkI3NTFFODJFRTYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Qzc0OEE1M0Y5OTMzMTFFNUFBRjI5MkI3NTFFODJFRTYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NTkxYzM4YzUtMWZkMi04OTRlLWIzMmYtZGEzZGVkOTZkOWIzIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU5MWMzOGM1LTFmZDItODk0ZS1iMzJmLWRhM2RlZDk2ZDliMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAkAABIALAAAAAAUABQAAAVAoCSOZGmeaKqmSeu+LRpEdG0Hsq1H+DnvtZ7pB+TlikYfMjlcCktE4JMU3U1HVd1VlL2hCIiweExYmc/otHoUAgAh+QQJAAASACwAAAAAFAAUAAAFWqAkjmRpnmgqEgyhnkykHNA7GlEePUXyJg6dzoFQDYTI1gnyQCIVC1PA6YySGlSkwEcCZIWGEu6bA5gSCwW5gWJlAy+EV6io/QrN3MA2ShwUW3wkBGyChocSIQAh+QQFAAASACwAAAAAFAAUAAAFXKAkjmRpnmhaJsuimoYQKcQrNkCkR8wLBbsgApUYKIJBR8LUcCCfBRPh+Aw+IKZDFXkwQR7bHc1UCO96q1yYUTMhtg6DioFUDJaq6S6AtUkWEQANfiMJcoSIiSUhADs=');
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap.hidden {
-  background: url('../../img/uv-shared-module/hidden_thumb.png') no-repeat 50% 50%;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap img {
-  display: block;
-  float: left;
-  max-width: 100%;
-  max-height: 100%;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb .wrap input {
-  float: left;
-  cursor: pointer;
-  margin-top: -20px;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb span {
-  font-size: 11px;
-  color: #fff;
-  display: block;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb .label {
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
- #app .leftPanel .views .galleryView .main .thumbs .thumb.placeholder .wrap {
-  background: url('../../img/uv-shared-module/unavailable.png') no-repeat 50% 50%;
-}
- #app .leftPanel .views .galleryView .main .thumbs.multiSelect .thumb .wrap.multiSelected {
-  background: #14a4c3;
-}
- #app .leftPanel .views .galleryView .main .thumbs.multiSelect .thumb .wrap.multiSelected .thumbImage {
-  opacity: 0.35;
-  filter: alpha(opacity=35);
-}
- #app .leftPanel .views .galleryView .main .thumbs.left-to-right .thumb {
-  float: left;
-}
- #app .leftPanel .views .galleryView .main .thumbs.right-to-left .thumb {
-  float: right;
 }
 #app.browser-Explorer .leftPanel .views .galleryView .header input[type="range"] {
   margin-top: -11px;
@@ -2162,6 +1990,196 @@ input[type=range]:focus::-ms-fill-upper {
   margin: 10px 0 0 0;
   padding: 0 10px 0 0;
   overflow: auto;
+}
+.iiif-gallery-component .header {
+  overflow: hidden;
+  height: 45px;
+}
+.iiif-gallery-component .header .left {
+  float: left;
+  overflow: hidden;
+}
+.iiif-gallery-component .header .right {
+  float: right;
+  overflow: hidden;
+}
+.iiif-gallery-component .header .right .multiSelectOptions .multiSelectAll {
+  float: left;
+}
+.iiif-gallery-component .header .right .multiSelectOptions .select {
+  margin-left: 10px;
+}
+.iiif-gallery-component .header .btn {
+  float: left;
+  width: 30px;
+  height: 30px;
+}
+.iiif-gallery-component .header .btn.size-up {
+  margin-left: 5px;
+}
+.iiif-gallery-component .header .btn.size-down {
+  margin-right: 5px;
+}
+.iiif-gallery-component .header input[type="range"] {
+  float: left;
+  margin-top: 12px;
+  width: 100px;
+}
+.iiif-gallery-component .main {
+  overflow: auto;
+  overflow-x: hidden;
+}
+.iiif-gallery-component .main .thumbs {
+  margin-right: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.iiif-gallery-component .main .thumbs.multiSelect .thumb .wrap.multiSelected {
+  border: 2px solid #14a4c3;
+}
+.iiif-gallery-component .main .thumbs.chunked .thumb.outsideScrollArea .wrap {
+  border: 2px solid transparent;
+}
+.iiif-gallery-component .main .thumbs.chunked .thumb.outsideScrollArea .wrap img {
+  display: none;
+}
+.iiif-gallery-component .main .thumbs.chunked .thumb.outsideScrollArea span {
+  color: transparent;
+}
+.iiif-gallery-component .main .thumbs.chunked .thumb.outsideScrollArea.selected .wrap {
+  border: 2px solid transparent;
+}
+.iiif-gallery-component .main .thumbs.chunked.multiSelect .thumb.outsideScrollArea .wrap.multiSelected {
+  background: none;
+  border: 2px solid transparent;
+}
+.iiif-gallery-component .main .thumbs .thumb {
+  margin: 0 7px 7px 0;
+}
+.iiif-gallery-component .main .thumbs .thumb .wrap {
+  border: 2px solid #373737;
+  padding: 2px;
+}
+.iiif-gallery-component .main .thumbs .thumb.selected .wrap {
+  border: 2px solid #fff;
+}
+.iiif-gallery-component .main .thumbs .thumb.searchpreview .wrap {
+  border: 2px solid #26b5cc;
+}
+.iiif-gallery-component .main .thumbs .thumb span {
+  padding: 2px 0 0 0;
+}
+.iiif-gallery-component .main .thumbs .thumb {
+  float: left;
+  cursor: pointer;
+}
+.iiif-gallery-component .main .thumbs .thumb .wrap {
+  overflow: hidden;
+  text-align: center;
+  background: none;
+  position: relative;
+}
+.iiif-gallery-component .main .thumbs .thumb .wrap.loading {
+  background-image: url('data:image/gif;base64,R0lGODlhFAAUAMQSAGxsbFpaWnh4eEZGRhwcHD8/PzU1NVJSUisrKwgICH5+fkxMTGNjYyUlJXJycnt7exISEoCAgAAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1OTFjMzhjNS0xZmQyLTg5NGUtYjMyZi1kYTNkZWQ5NmQ5YjMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Qzc0OEE1NDA5OTMzMTFFNUFBRjI5MkI3NTFFODJFRTYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Qzc0OEE1M0Y5OTMzMTFFNUFBRjI5MkI3NTFFODJFRTYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NTkxYzM4YzUtMWZkMi04OTRlLWIzMmYtZGEzZGVkOTZkOWIzIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU5MWMzOGM1LTFmZDItODk0ZS1iMzJmLWRhM2RlZDk2ZDliMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAkAABIALAAAAAAUABQAAAVAoCSOZGmeaKqmSeu+LRpEdG0Hsq1H+DnvtZ7pB+TlikYfMjlcCktE4JMU3U1HVd1VlL2hCIiweExYmc/otHoUAgAh+QQJAAASACwAAAAAFAAUAAAFWqAkjmRpnmgqEgyhnkykHNA7GlEePUXyJg6dzoFQDYTI1gnyQCIVC1PA6YySGlSkwEcCZIWGEu6bA5gSCwW5gWJlAy+EV6io/QrN3MA2ShwUW3wkBGyChocSIQAh+QQFAAASACwAAAAAFAAUAAAFXKAkjmRpnmhaJsuimoYQKcQrNkCkR8wLBbsgApUYKIJBR8LUcCCfBRPh+Aw+IKZDFXkwQR7bHc1UCO96q1yYUTMhtg6DioFUDJaq6S6AtUkWEQANfiMJcoSIiSUhADs=');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.iiif-gallery-component .main .thumbs .thumb .wrap.hidden {
+  background: url('../../img/uv-shared-module/hidden_thumb.png') no-repeat 50% 50%;
+}
+.iiif-gallery-component .main .thumbs .thumb .wrap img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+.iiif-gallery-component .main .thumbs .thumb .wrap input {
+  position: absolute;
+  cursor: pointer;
+  top: 0px;
+  left: 0px;
+}
+.iiif-gallery-component .main .thumbs .thumb span {
+  font-size: 11px;
+  color: #fff;
+  display: block;
+}
+.iiif-gallery-component .main .thumbs .thumb .label {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.iiif-gallery-component .main .thumbs .thumb.placeholder .wrap {
+  background: url('../../img/uv-shared-module/unavailable.png') no-repeat 50% 50%;
+}
+.iiif-gallery-component .main .thumbs.multiSelect .thumb .wrap.multiSelected {
+  background: #14a4c3;
+}
+.iiif-gallery-component .main .thumbs.multiSelect .thumb .wrap.multiSelected .thumbImage {
+  opacity: 0.35;
+  filter: alpha(opacity=35);
+}
+.iiif-gallery-component .main .thumbs.left-to-right .thumb {
+  float: left;
+}
+.iiif-gallery-component .main .thumbs.right-to-left .thumb {
+  float: right;
+}
+.iiif-tree-component {
+  overflow: auto;
+  color: #fff;
+}
+.iiif-tree-component .toggle {
+  cursor: pointer;
+  margin-top: 3px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  height: 10px;
+  width: 10px;
+  background-image: url('../../img/uv-shared-module/plus.png');
+}
+.iiif-tree-component .toggle.expanded {
+  background-image: url('../../img/uv-shared-module/minus.png');
+}
+.iiif-tree-component .toggle.multiSelect {
+  margin-left: 5px;
+}
+.iiif-tree-component .spacer {
+  margin-top: 3px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  height: 10px;
+  width: 10px;
+}
+.iiif-tree-component input.multiSelect {
+  margin-top: 0px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  height: 13px;
+  width: 13px;
+}
+.iiif-tree-component ul.tree,
+.iiif-tree-component ul.tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.iiif-tree-component ul.tree ul {
+  margin-left: 15px;
+}
+.iiif-tree-component ul.tree li {
+  margin: 0;
+  padding: 2px 0 2px 0;
+  overflow: hidden;
+}
+.iiif-tree-component ul.tree li a {
+  display: block;
+  overflow: hidden;
+}
+.iiif-tree-component ul li a.selected {
+  color: #14a4c3 !important;
 }
 #app {
   background-color: #000;

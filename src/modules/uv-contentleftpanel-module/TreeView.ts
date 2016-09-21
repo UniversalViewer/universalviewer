@@ -10,6 +10,7 @@ class TreeView extends BaseView {
     isOpen: boolean = false;
     component: IIIFComponents.ITreeComponent;
     treeOptions: IIIFComponents.ITreeComponentOptions;
+    $tree: JQuery;
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -18,6 +19,9 @@ class TreeView extends BaseView {
     create(): void {
         this.setConfig('contentLeftPanel');
         super.create();
+
+        this.$tree = $('<div class="iiif-tree-component"></div>');
+        this.$element.append(this.$tree);
     }
 
     setup(): void {

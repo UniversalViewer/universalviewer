@@ -7,13 +7,13 @@ import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/IS
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import MultiSelectState = Manifold.MultiSelectState;
 
 class GalleryView extends BaseView {
 
     isOpen: boolean = false;
     component: IIIFComponents.IGalleryComponent;
     galleryOptions: IIIFComponents.IGalleryComponentOptions;
+    $gallery: JQuery;
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -22,6 +22,9 @@ class GalleryView extends BaseView {
     create(): void {
         this.setConfig('contentLeftPanel');
         super.create();
+
+        this.$gallery = $('<div class="iiif-gallery-component"></div>');
+        this.$element.append(this.$gallery);
     }
 
     public setup(): void {

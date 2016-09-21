@@ -24,9 +24,6 @@
         "expand": "Ehangu'r Cynnwys",
         "expandFull": "Ehangu'r Galeri",
         "index": "Mynegai",
-        "select": "Dewiswch",
-        "selectAll": "Dewis y cyfan",
-        "selection": "Detholiad",
         "sortBy": "Trefnu yn ôl:",
         "thumbnails": "Bodluniau",
         "title": "Cynnwys",
@@ -43,7 +40,6 @@
         "currentViewAsJpg": "Delwedd ddethol {0} x {1}px (jpg)",
         "download": "Lawrlwytho",
         "downloadSelection": "Lawrlwytho'r detholiad",
-        "downloadSelectionButton": "Lawrlwytho PDF",
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
         "entireFileAsOriginal": "Y ffeil gyfan ({0})",
@@ -110,6 +106,13 @@
         "canvasHeader": "Am y ddelwedd",
         "copyToClipboard": "Copïo i'r clipfwrdd",
         "copiedToClipboard": "Copïwyd i'r clipfwrdd"
+      }
+    },
+    "multiSelectDialogue": {
+      "content": {
+        "select": "Lawrlwytho",
+        "selectAll": "Dewis Popeth",
+        "title": "Dewiswch Tudalennau i Lawrlwytho"
       }
     },
     "pagingHeaderPanel": {

@@ -124,7 +124,11 @@ class DownloadDialogue extends BaseDownloadDialogue {
                         type = DownloadType.CURRENTVIEW;
                         break;
                     case DownloadOption.selection.toString():
-                        $.publish(Commands.ENTER_MULTISELECT_MODE, [this.content.downloadSelectionButton]);
+                        Utils.Async.waitFor(() => {
+                            return !this.isActive;
+                        }, () => {
+                            $.publish(Commands.SHOW_MULTISELECT_DIALOGUE);
+                        });
                         break;
                     case DownloadOption.wholeImageHighRes.toString():
                         window.open(this.getCanvasHighResImageUri(this.extension.helper.getCurrentCanvas()));
@@ -478,7 +482,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 }
                 return false;
             case DownloadOption.wholeImagesHighRes:
-                if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources.length > 1) {
+                if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length > 1) {
                     return true;
                 }
                 return false;

@@ -1,0 +1,216 @@
+@img-path: '../../../modules/uv-shared-module/img/';
+
+.iiif-gallery-component{
+
+    .header{
+        overflow: hidden;
+        height: 45px;
+
+        .left {
+            float: left;
+            overflow: hidden;
+        }
+
+        .right {
+            float: right;
+            overflow: hidden;
+
+            .multiSelectOptions{
+                .multiSelectAll {
+                    float: left;
+                }
+
+                .select{
+                    margin-left: @margin-medium-horizontal;
+                }
+            }
+        }
+
+        .btn {
+            float: left;
+            width: 30px;
+            height: 30px;
+
+            &.size-up{
+                margin-left: 5px;
+            }
+
+            &.size-down{
+                margin-right: 5px;
+            }
+        }
+
+        input[type="range"]{
+            float: left;
+            margin-top: 12px;
+            width: 100px;
+        }
+    }
+
+    .main{
+        overflow: auto;
+        overflow-x: hidden;
+
+        .thumbs {
+            margin-right: @margin-medium-horizontal;
+            overflow: hidden;
+            position: relative;
+
+            // thumb spacing-related styles
+
+            &.multiSelect{
+                .thumb {
+                    .wrap {
+                        &.multiSelected {
+                            border: 2px solid @brand-primary;
+                        }
+                    }
+                }
+            }
+
+            &.chunked{
+                .thumb{
+                    &.outsideScrollArea{
+                        .wrap{
+                            border: 2px solid transparent;
+                            img{
+                                display: none;
+                            }
+                        }
+
+                        span{
+                            color: transparent;
+                        }
+                    }
+
+                    &.outsideScrollArea.selected{
+                        .wrap{
+                            border: 2px solid transparent;
+                        }
+                    }
+                }
+            }
+
+            &.chunked.multiSelect{
+                .thumb {
+                    &.outsideScrollArea {
+                        .wrap {
+                            &.multiSelected {
+                                background: none;
+                                border: 2px solid transparent;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .thumb{
+                margin: 0 7px 7px 0;
+
+                .wrap{
+                    border: 2px solid @panel-border-color;
+                    padding: 2px;
+                }
+
+                &.selected{
+                    .wrap{
+                        border: 2px solid #fff;
+                    }
+                }
+
+                &.searchpreview{
+                    .wrap{
+                        border: 2px solid @link-color;
+                    }
+                }
+
+                span{
+                    padding: 2px 0 0 0;
+                }
+            }
+            
+            // end thumb spacing-related styles
+
+            .thumb{
+                float: left;
+                cursor: pointer;
+
+                .wrap{
+                    overflow: hidden;
+                    text-align: center;
+                    background: none;
+                    position: relative;
+
+                    &.loading{
+                        .loading(@loader-black-bg);
+                    }
+
+                    &.hidden{
+                        background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                    }
+
+                    img{
+                        display: block;
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+
+                    input{
+                        position: absolute;
+                        cursor: pointer;
+                        top: 0px;
+                        left: 0px;
+                    }
+                }
+
+                span{
+                    font-size: @font-size-small;
+                    color: #fff;
+                    display: block;
+                }
+
+                .label {
+                    overflow-x: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                &.placeholder{
+                    .wrap {
+                        background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                    }
+                }
+            }
+
+            &.multiSelect{
+                .thumb {
+                    .wrap {
+                        &.multiSelected {
+                            background: @brand-primary;
+
+                            .thumbImage {
+                                .opacity(.35);
+                            }
+
+                            input {
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.left-to-right{
+                .thumb{
+                    float: left;
+                }
+            }
+
+            &.right-to-left{
+                .thumb{
+                    float: right;
+                }
+            }
+        }
+    }
+}

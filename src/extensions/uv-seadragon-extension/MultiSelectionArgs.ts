@@ -1,4 +1,4 @@
-class PrintArgs {
+class MultiSelectionArgs {
     allCanvases: boolean;
     canvases: string[];
     format: string;
@@ -6,4 +6,4 @@ class PrintArgs {
     sequence: string;
 }
 
-export = PrintArgs;
+export = MultiSelectionArgs;

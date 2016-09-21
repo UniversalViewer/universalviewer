@@ -26,9 +26,6 @@
         "expand": "Expand Contents",
         "expandFull": "Expand Gallery",
         "index": "Index",
-        "select": "Select",
-        "selectAll": "Select all",
-        "selection": "Selection",
         "sortBy": "Sort By:",
         "thumbnails": "Thumbnails",
         "title": "Contents",
@@ -45,7 +42,6 @@
         "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
         "download": "Download",
         "downloadSelection": "Download Selection",
-        "downloadSelectionButton": "Download PDF",
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
         "entireFileAsOriginal": "Entire file ({0})",
@@ -112,6 +108,13 @@
         "canvasHeader": "About the image",
         "copyToClipboard": "Copy to clipboard",
         "copiedToClipboard": "Copied to clipboard"
+      }
+    },
+    "multiSelectDialogue": {
+      "content": {
+        "select": "Download",
+        "selectAll": "Select All",
+        "title": "Select Pages to Download"
       }
     },
     "pagingHeaderPanel": {

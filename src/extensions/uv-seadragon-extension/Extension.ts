@@ -18,10 +18,11 @@ import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
+import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
-import PrintArgs = require("./PrintArgs");
+import MultiSelectionArgs = require("./MultiSelectionArgs");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 import SearchResult = require("./SearchResult");
@@ -37,6 +38,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     $shareDialogue: JQuery;
     $externalContentDialogue: JQuery;
     $helpDialogue: JQuery;
+    $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: SeadragonCenterPanel;
     currentRotation: number = 0;
@@ -49,6 +51,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     iiifImageUriTemplate: string = '{0}/{1}/{2}/{3}/{4}/{5}.jpg';
     leftPanel: ContentLeftPanel;
     mode: Mode;
+    multiSelectDialogue: MultiSelectDialogue;
     rightPanel: MoreInfoRightPanel;
     searchResults: SearchResult[] = [];
     settingsDialogue: SettingsDialogue;
@@ -138,7 +141,13 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Commands.MULTISELECTION_MADE, (e, ids: string[]) => {
-            this.triggerSocket(Commands.MULTISELECTION_MADE, ids);
+            var args: MultiSelectionArgs = new MultiSelectionArgs();
+            args.manifestUri = this.helper.iiifResourceUri;
+            args.allCanvases = ids.length === this.helper.getCanvases().length;
+            args.canvases = ids;
+            args.format = this.config.options.multiSelectionMimeType;
+            args.sequence = this.helper.getCurrentSequence().id;
+            this.triggerSocket(Commands.MULTISELECTION_MADE, args);
         });
 
         $.subscribe(Commands.NEXT, (e) => {
@@ -326,6 +335,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         this.$helpDialogue = $('<div class="overlay help"></div>');
         Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
+
+        this.$multiSelectDialogue = $('<div class="overlay multiSelect"></div>');
+        Shell.$overlays.append(this.$multiSelectDialogue);
+        this.multiSelectDialogue = new MultiSelectDialogue(this.$multiSelectDialogue);
 
         this.$shareDialogue = $('<div class="overlay share"></div>');
         Shell.$overlays.append(this.$shareDialogue);
@@ -527,7 +540,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     print(): void {
-        var args: PrintArgs = new PrintArgs();
+        var args: MultiSelectionArgs = new MultiSelectionArgs();
         args.manifestUri = this.helper.iiifResourceUri;
         args.allCanvases = true;
         args.format = this.config.options.printMimeType;

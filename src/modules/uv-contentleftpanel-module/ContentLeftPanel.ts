@@ -256,7 +256,7 @@ class ContentLeftPanel extends LeftPanel {
 
     getTreeOptions(): IIIFComponents.ITreeComponentOptions {
         return <IIIFComponents.ITreeComponentOptions>{
-            element: ".views .treeView",
+            element: ".views .treeView .iiif-tree-component",
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
             treeSortType: this.treeSortType
@@ -348,13 +348,14 @@ class ContentLeftPanel extends LeftPanel {
 
     getGalleryOptions(): IIIFComponents.IGalleryComponentOptions {
         return <IIIFComponents.IGalleryComponentOptions>{
-            element: ".views .galleryView",
+            element: ".views .galleryView .iiif-gallery-component",
             helper: this.extension.helper,
             chunkedResizingEnabled: this.config.options.galleryThumbChunkedResizingEnabled,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
             debug: false,
             imageFadeInDuration: 300,
+            initialZoom: 6,
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
             sizingEnabled: true,
@@ -369,9 +370,9 @@ class ContentLeftPanel extends LeftPanel {
         // todo: checks if the panel is being used in the openseadragon extension.
         // pass a `isPageModeEnabled` function to the panel's constructor instead?
         if (typeof (<ISeadragonExtension>this.extension).getMode === "function") { 
-            return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+            return Utils.Bools.getBool(this.config.options.pageModeEnabled, true) && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
         }
-        return this.config.options.pageModeEnabled;
+        return Utils.Bools.getBool(this.config.options.pageModeEnabled, true);
     }
 
     getSelectedTree(): JQuery {
