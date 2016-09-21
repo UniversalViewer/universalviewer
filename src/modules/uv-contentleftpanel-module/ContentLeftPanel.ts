@@ -358,7 +358,7 @@ class ContentLeftPanel extends LeftPanel {
             initialZoom: 6,
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
-            sizingEnabled: true,
+            sizingEnabled: Modernizr.inputtypes.range,
             thumbHeight: this.config.options.galleryThumbHeight,
             thumbLoadPadding: this.config.options.galleryThumbLoadPadding,
             thumbWidth: this.config.options.galleryThumbWidth,
