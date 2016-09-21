@@ -1086,6 +1086,13 @@
 #app .overlays > div.multiSelect .bottom {
   background: none;
 }
+#app.browser-Explorer .overlays > div.multiSelect .content .iiif-gallery-component .header input[type="range"] {
+  margin-top: -11px;
+}
+#app.browser-Firefox .overlays > div.multiSelect .content .iiif-gallery-component .header input[type="range"] {
+  margin-top: 9px;
+  overflow: hidden;
+}
 *,
 *:before,
 *:after {
