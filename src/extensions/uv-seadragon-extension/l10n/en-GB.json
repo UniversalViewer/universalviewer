@@ -114,7 +114,7 @@
       "content": {
         "select": "Download",
         "selectAll": "Select All",
-        "title": "Select Pages to Download"
+        "title": "Select Pages for Download"
       }
     },
     "pagingHeaderPanel": {
@@ -191,7 +191,7 @@
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
+        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
       }
     },
     "shareDialogue": {
