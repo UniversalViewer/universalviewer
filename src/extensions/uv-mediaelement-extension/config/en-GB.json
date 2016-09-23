@@ -8,7 +8,6 @@
     "headerPanelEnabled": true,
     "leftPanelEnabled": true,
     "limitLocales": false,
-    "minWidthBreakPoint": 610,
     "openTemplate": "http://universalviewer.io?manifest={0}",
     "pessimisticAccessControl": false,
     "rightPanelEnabled": true,

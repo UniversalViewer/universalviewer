@@ -13,6 +13,8 @@ import InformationType = require("./InformationType");
 import IThumb = Manifold.IThumb;
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import LoginWarningMessages = require("./LoginWarningMessages");
+import Metric = require("../../modules/uv-shared-module/Metric");
+import Metrics = require("../../modules/uv-shared-module/Metrics");
 import Params = require("../../Params");
 import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
 import Shell = require("./Shell");
@@ -45,6 +47,7 @@ class BaseExtension implements IExtension {
     locale: string;
     locales: any[];
     loginDialogue: LoginDialogue;
+    metric: Metric;
     mouseX: number;
     mouseY: number;
     name: string;
@@ -655,7 +658,24 @@ class BaseExtension implements IExtension {
         this.triggerSocket(BaseCommands.REFRESH, null);
     }
 
+    private _updateMetric(): void {
+
+        var keys: string[] = Object.keys(Metrics);
+
+        for (var i = 0; i < keys.length; i++) {
+            var metric: Metric = Metrics[keys[i]];
+
+            if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
+                if (this.metric !== metric) {
+                    this.metric = metric;
+                    $.publish(BaseCommands.METRIC_CHANGED);
+                }
+            }
+        }
+    }
+
     resize(): void {
+        this._updateMetric();
         $.publish(BaseCommands.RESIZE);
     }
 
@@ -746,10 +766,12 @@ class BaseExtension implements IExtension {
 
     getSettings(): ISettings {
         if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+
             var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             
-            if (settings)
+            if (settings){
                 return $.extend(this.config.options, settings.value);
+            }
         }
         
         return this.config.options;
@@ -757,9 +779,12 @@ class BaseExtension implements IExtension {
 
     updateSettings(settings: ISettings): void {
         if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+
             var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
-            if (storedSettings)
+
+            if (storedSettings){
                 settings = $.extend(storedSettings.value, settings);
+            }
                 
             // store for ten years
             Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
@@ -904,7 +929,7 @@ class BaseExtension implements IExtension {
         return preview;
     }
 
-    public getPagedIndices(canvasIndex?: number): number[]{
+    public getPagedIndices(canvasIndex?: number): number[] {
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.helper.canvasIndex;
 
         return [canvasIndex];

@@ -7,7 +7,6 @@
     "headerPanelEnabled": true,
     "leftPanelEnabled": true,
     "limitLocales": false,
-    "minWidthBreakPoint": 610,
     "multiSelectionMimeType": "application/zip",
     "navigatorEnabled": true,
     "openTemplate": "http://universalviewer.io?manifest={0}",
@@ -71,6 +70,7 @@
         "feedbackEnabled": false,
         "fullscreenEnabled": true,
         "minimiseButtons": true,
+        "moreInfoEnabled": true,
         "openEnabled": false,
         "printEnabled": false,
         "shareEnabled": true

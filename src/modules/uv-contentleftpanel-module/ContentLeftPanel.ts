@@ -7,6 +7,7 @@ import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/IS
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../uv-shared-module/LeftPanel");
+import Metrics = require("../uv-shared-module/Metrics");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import MultiSelectState = Manifold.MultiSelectState;
 import ThumbsView = require("./ThumbsView");
@@ -61,6 +62,14 @@ class ContentLeftPanel extends LeftPanel {
 
         $.subscribe(Commands.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
+        });
+
+        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            if (this.extension.metric === Metrics.MOBILE_LANDSCAPE){
+                if (this.isFullyExpanded){
+                    this.collapseFull();
+                }
+            }
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {

@@ -1,11 +1,13 @@
 import BaseCommands = require("./BaseCommands");
 import BaseView = require("./BaseView");
+import Metrics = require("./Metrics");
 
 class FooterPanel extends BaseView {
 
     $feedbackButton: JQuery;
     $bookmarkButton: JQuery;
     $downloadButton: JQuery;
+    $moreInfoButton: JQuery;
     $shareButton: JQuery;
     $embedButton: JQuery;
     $openButton: JQuery;
@@ -31,6 +33,9 @@ class FooterPanel extends BaseView {
 
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
+
+        this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
+        this.$options.append(this.$moreInfoButton);
 
         this.$feedbackButton = $('<a class="feedback" title="' + this.content.feedback + '" tabindex="0">' + this.content.feedback + '</a>');
         this.$options.prepend(this.$feedbackButton);
@@ -74,7 +79,6 @@ class FooterPanel extends BaseView {
         });
 
         this.$downloadButton.onPressed(() => {
-            //e.preventDefault(); why was on click and preventDefault needed?
             $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
         });
 
@@ -87,6 +91,7 @@ class FooterPanel extends BaseView {
             this.$embedButton.hide();
         }
 
+        this.updateMoreInfoButton();
         this.updateOpenButton();
         this.updateFeedbackButton();
         this.updateBookmarkButton();
@@ -97,6 +102,16 @@ class FooterPanel extends BaseView {
 
         if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
+        }
+    }
+
+    updateMoreInfoButton(): void {
+        var configEnabled = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
+
+        if (configEnabled && this.extension.metric === Metrics.MOBILE_LANDSCAPE){
+            this.$moreInfoButton.show();
+        } else {
+            this.$moreInfoButton.hide();
         }
     }
 

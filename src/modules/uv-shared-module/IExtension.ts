@@ -1,5 +1,6 @@
 import Bootstrapper = require("../../Bootstrapper");
 import BootstrapParams = require("../../BootstrapParams");
+import Metric = require("./Metric");
 import Params = require("../../Params");
 
 interface IExtension{
@@ -50,6 +51,7 @@ interface IExtension{
     loadDependencies(deps: any): void;
     locale: string;
     locales: any[];
+    metric: Metric;
     mouseX: number;
     mouseY: number;
     name: string;

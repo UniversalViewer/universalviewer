@@ -16,6 +16,7 @@ import ISeadragonExtension = require("./ISeadragonExtension");
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
+import Metrics = require("../../modules/uv-shared-module/Metrics");
 import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
@@ -64,6 +65,18 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         super.create(overrideDependencies);
 
         var that = this;
+
+        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            if (this.metric === Metrics.MOBILE_LANDSCAPE) {
+                var settings: ISettings = {};
+                settings.pagingEnabled = false;
+                this.updateSettings(settings);
+                $.publish(BaseCommands.UPDATE_SETTINGS);
+                Shell.$rightPanel.hide();
+            } else {
+                Shell.$rightPanel.show();
+            }
+        });
 
         $.subscribe(Commands.CLEAR_SEARCH, (e) => {
             this.triggerSocket(Commands.CLEAR_SEARCH);
@@ -118,9 +131,14 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             }
         });
 
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
+            if (this.metric !== Metrics.LAPTOP) {
+                Shell.$rightPanel.show();
+            }
+        });
+
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
-            Shell.$centerPanel.show();
-            Shell.$rightPanel.show();
+            Shell.$centerPanel.show();            
             this.resize();
         });
 
@@ -224,8 +242,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
             this.triggerSocket(Commands.CURRENT_VIEW_URI,
                 {
-                    "cropUri": this.getCroppedImageUri(canvas, this.getViewer()),
-                    "fullUri": this.getConfinedImageUri(canvas, canvas.getWidth())
+                    cropUri: this.getCroppedImageUri(canvas, this.getViewer()),
+                    fullUri: this.getConfinedImageUri(canvas, canvas.getWidth())
                 });
         });
 

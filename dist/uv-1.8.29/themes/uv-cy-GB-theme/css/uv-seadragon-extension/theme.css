@@ -495,6 +495,11 @@
   font-size: 11px;
   overflow: hidden;
 }
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+  #app .centerPanel .title {
+    display: none;
+  }
+}
 #app .centerPanel .content {
   position: relative;
 }
@@ -802,6 +807,20 @@
 #app.browser-Firefox .leftPanel .views .galleryView .header input[type="range"] {
   margin-top: 9px;
   overflow: hidden;
+}
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+  #app .footerPanel .searchResults {
+    display: none;
+  }
+  #app .footerPanel .searchPager {
+    display: none;
+  }
+  #app .footerPanel .search {
+    display: none;
+  }
+  #app .footerPanel .options .print {
+    display: none;
+  }
 }
 #app .footerPanel .searchResults {
   position: relative;
@@ -2747,6 +2766,32 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .iiif-tree-component ul li a.selected {
   color: #14a4c3 !important;
+}
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+  #app .headerPanel {
+    display: none;
+  }
+  #app .leftPanel {
+    display: none;
+  }
+  #app .rightPanel {
+    display: none;
+  }
+  #app .footerPanel .options .bookmark {
+    display: none;
+  }
+  #app .footerPanel .options .open {
+    display: none;
+  }
+  #app .footerPanel .options .feedback {
+    display: none;
+  }
+  #app .footerPanel .options .embed {
+    display: none;
+  }
+  #app .footerPanel .options .fullScreen {
+    display: none;
+  }
 }
 #app {
   background-color: #000;

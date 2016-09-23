@@ -95,9 +95,13 @@ class CenterPanel extends BaseView {
     resize(): void {
         super.resize();
 
+        var leftPanelWidth: number = Shell.$leftPanel.is(':visible') ? Math.floor(Shell.$leftPanel.width()) : 0;
+        var rightPanelWidth: number = Shell.$rightPanel.is(':visible') ? Math.floor(Shell.$rightPanel.width()) : 0;
+        var width: number = Math.floor(this.$element.parent().width() - leftPanelWidth - rightPanelWidth)
+
         this.$element.css({
-            'left': Math.floor(Shell.$leftPanel.width()),
-            'width': Math.floor(this.$element.parent().width() - Shell.$leftPanel.width() - Shell.$rightPanel.width())
+            'left': leftPanelWidth,
+            'width': width
         });
 
         var titleHeight;
