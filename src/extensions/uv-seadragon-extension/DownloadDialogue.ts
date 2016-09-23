@@ -476,7 +476,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                     var maxSize: Size = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
                     if (maxSize && _.isUndefined(maxSize.width)){
                         return true;
-                    } else if (maxSize.width <= this.options.maxImageWidth){
+                    } else if (maxSize && maxSize.width <= this.options.maxImageWidth){
                         return true;
                     }
                 }
