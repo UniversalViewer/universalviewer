@@ -132,7 +132,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
-            if (this.metric !== Metrics.LAPTOP) {
+            if (this.metric !== Metrics.MOBILE_LANDSCAPE) {
                 Shell.$rightPanel.show();
             }
         });
