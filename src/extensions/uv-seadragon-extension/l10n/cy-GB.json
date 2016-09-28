@@ -38,8 +38,10 @@
     "downloadDialogue": {
       "content": {
         "currentViewAsJpg": "Delwedd ddethol {0} x {1}px (jpg)",
+        "currentViewAsJpgExplanation": "Opens in a new window",
         "download": "Lawrlwytho",
         "downloadSelection": "Lawrlwytho'r detholiad",
+        "downloadSelectionExplanation": "Opens a dialogue to select which pages to download.",
         "editSettings": "Golygu'r dewisiadau",
         "entireDocument": "Y Ddogfen Gyfan ({0})",
         "entireFileAsOriginal": "Y ffeil gyfan ({0})",
@@ -48,8 +50,11 @@
         "preview": "Rhagolwg",
         "title": "Lawrlwytho",
         "wholeImageHighRes": "Delwedd gyfan {0} x {1}px ({2})",
+        "wholeImageHighResExplanation": "Opens in a new window.",
         "wholeImagesHighRes": "Delweddau gyfan ({0})",
-        "wholeImageLowResAsJpg": "Delwedd gyfan {0} x {1}px (jpg)"
+        "wholeImagesHighResExplanation": "Opens in two new windows.",
+        "wholeImageLowResAsJpg": "Delwedd gyfan {0} x {1}px (jpg)",
+        "wholeImageLowResAsJpgExplanation": "Opens in a new window."
       }
     },
     "footerPanel": {
@@ -193,12 +198,14 @@
     "shareDialogue": {
       "content": {
         "customSize": "arfer",
-        "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
-        "share": "Rhannu",
         "embed": "gwreiddio",
-        "width": "Lled",
-        "size": "maint:"
+        "embedInstructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
+        "height": "Hyd",
+        "iiif": "IIIF Manifest",
+        "share": "Rhannu",
+        "shareInstructions": "I rannu yr eitem hon, copïwch y URL isod.",
+        "size": "maint:",
+        "width": "Lled"
       }
     }
   }

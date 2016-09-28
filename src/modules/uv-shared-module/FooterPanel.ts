@@ -27,6 +27,10 @@ class FooterPanel extends BaseView {
             this.updateFullScreenButton();
         });
 
+        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            this.updateMinimisedButtons();
+        });
+
         $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
             this.updateDownloadButton();
         });
@@ -99,9 +103,22 @@ class FooterPanel extends BaseView {
         this.updateDownloadButton();
         this.updateFullScreenButton();
         this.updateShareButton();
+        this.updateMinimisedButtons();
+    }
 
+    updateMinimisedButtons(): void {
+        
+        // if configured to always minimise buttons
         if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
+            return;
+        }
+
+        // otherwise, check metric
+        if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+            this.$options.addClass('minimiseButtons');
+        } else {
+            this.$options.removeClass('minimiseButtons');
         }
     }
 

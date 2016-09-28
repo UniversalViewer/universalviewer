@@ -49,7 +49,7 @@ class CenterPanel extends BaseView {
     }
 
     updateAttribution(): void {
-        var attribution = this.extension.helper.getAttribution();
+        var attribution: string = this.extension.helper.getAttribution();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 

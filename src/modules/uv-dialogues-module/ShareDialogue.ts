@@ -8,7 +8,10 @@ class ShareDialogue extends Dialogue {
     $customSizeDropDown: JQuery;
     $embedButton: JQuery;
     $embedView: JQuery;
+    $footer: JQuery;
     $heightInput: JQuery;
+    $header: JQuery;
+    $iiifButton: JQuery;
     // $image: JQuery;
     // $link: JQuery;
     $shareButton: JQuery;
@@ -19,6 +22,7 @@ class ShareDialogue extends Dialogue {
     $url: JQuery;
     $widthInput: JQuery;
     $shareFrame: JQuery;
+    $termsOfUseButton: JQuery;
     $x: JQuery;
     aspectRatio: number = .75;
     code: string;
@@ -77,6 +81,12 @@ class ShareDialogue extends Dialogue {
         this.$tabsContent = $('<div class="tabsContent"></div>');
         this.$content.append(this.$tabsContent);
 
+        this.$header = $('<div class="header"></div>');
+        this.$tabsContent.append(this.$header);
+
+        this.$footer = $('<div class="footer"></div>');
+        this.$content.append(this.$footer);
+
         this.$shareView = $('<div class="shareView"></div>');
         this.$tabsContent.append(this.$shareView);
 
@@ -120,6 +130,14 @@ class ShareDialogue extends Dialogue {
         this.$heightInput = $('<input class="height" type="text" maxlength="10" />');
         this.$customSize.append(this.$heightInput);
 
+        var iiifUrl: string = this.extension.getIIIFShareUrl();
+
+        this.$iiifButton = $('<a class="imageBtn iiif" href="' + iiifUrl + '" title="' + this.content.iiif + '" target="_blank"></a>');
+        this.$footer.append(this.$iiifButton);
+
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.config.content.termsOfUse + '</a>');
+        this.$footer.append(this.$termsOfUseButton);
+
         this.$widthInput.on('keydown', (e) => {
             return Utils.Numbers.numericalInput(e);
         });
@@ -158,8 +176,14 @@ class ShareDialogue extends Dialogue {
             this.update();
         });
 
+        this.$termsOfUseButton.onPressed(() => {
+            $.publish(BaseCommands.SHOW_TERMS_OF_USE);
+        });
+
         this.$element.hide();
+        this.updateInstructions();
         this.updateShareFrame();
+        this.updateTermsOfUseButton();
     }
 
     open(): void {
@@ -198,6 +222,21 @@ class ShareDialogue extends Dialogue {
             this.currentHeight = Number($selected.data('height'));
             this.$widthInput.val(String(this.currentWidth));
             this.$heightInput.val(String(this.currentHeight));
+        }
+    }
+
+    updateInstructions(): void {
+        if (Utils.Bools.getBool(this.options.instructionsEnabled, false)) {
+            this.$header.show();
+
+            if (this.isShareViewVisible) {
+                this.$header.text(this.content.shareInstructions);
+            } else {
+                this.$header.text(this.content.embedInstructions);
+            }
+            
+        } else {
+            this.$header.hide();
         }
     }
 
@@ -257,7 +296,18 @@ class ShareDialogue extends Dialogue {
         }
     }
 
+    updateTermsOfUseButton(): void {
+        var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        
+        if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
+            this.$termsOfUseButton.show();
+        } else {
+            this.$termsOfUseButton.hide();
+        }
+    }
+
     openShareView(): void {
+
         this.isShareViewVisible = true;
         this.isEmbedViewVisible = false;
 
@@ -266,11 +316,14 @@ class ShareDialogue extends Dialogue {
 
         this.$shareButton.addClass('on');
         this.$embedButton.removeClass('on');
+
+        this.updateInstructions();
         
         this.resize();
     }
 
     openEmbedView(): void {
+
         this.isShareViewVisible = false;
         this.isEmbedViewVisible = true;
 
@@ -279,6 +332,8 @@ class ShareDialogue extends Dialogue {
 
         this.$shareButton.removeClass('on');
         this.$embedButton.addClass('on');
+
+        this.updateInstructions();
 
         this.resize();
     }

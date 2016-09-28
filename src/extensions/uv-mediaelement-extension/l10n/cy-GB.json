@@ -96,12 +96,14 @@
     "shareDialogue": {
       "content": {
         "customSize": "arfer",
-        "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
-        "share": "Rhannu",
         "embed": "gwreiddio",
-        "width": "Lled",
-        "size": "maint:"
+        "embedInstructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
+        "height": "Hyd",
+        "iiif": "IIIF Manifest",
+        "share": "Rhannu",
+        "shareInstructions": "I rannu yr eitem hon, copïwch y URL isod.",
+        "size": "maint:",
+        "width": "Lled"
       }
     }
   }

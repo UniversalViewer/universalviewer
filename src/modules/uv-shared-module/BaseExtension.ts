@@ -118,7 +118,7 @@ class BaseExtension implements IExtension {
             this.mouseY = e.pageY;
         });
 
-        // events.
+        // events
         if (!this.isReload){
 
             window.onresize = () => {
@@ -502,6 +502,15 @@ class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.SHOW_SETTINGS_DIALOGUE);
         });
 
+        $.subscribe(BaseCommands.SHOW_TERMS_OF_USE, () => {
+            this.triggerSocket(BaseCommands.SHOW_TERMS_OF_USE);
+            
+            // todo: Eventually this should be replaced with a suitable IIIF Presentation API field - until then, use attribution
+            var terms: string = this.helper.getAttribution();
+
+            this.showMessage(terms);
+        });
+
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
             this.triggerSocket(BaseCommands.THUMB_SELECTED, thumb.index);
         });
@@ -741,6 +750,10 @@ class BaseExtension implements IExtension {
         }
 
         return null;
+    }
+
+    getIIIFShareUrl(): string {
+        return this.helper.iiifResourceUri + "?manifest=" + this.helper.iiifResourceUri;
     }
 
     addTimestamp(uri: string): string{

@@ -7,6 +7,8 @@ class DownloadDialogue extends Dialogue {
     $downloadOptions: JQuery;
     $noneAvailable: JQuery;
     $title: JQuery;
+    $footer: JQuery;
+    $termsOfUseButton: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -39,8 +41,19 @@ class DownloadDialogue extends Dialogue {
         this.$downloadOptions = $('<ol class="options"></ol>');
         this.$content.append(this.$downloadOptions);
 
+        this.$footer = $('<div class="footer"></div>');
+        this.$content.append(this.$footer);
+
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.config.content.termsOfUse + '</a>');
+        this.$footer.append(this.$termsOfUseButton);
+
+        this.$termsOfUseButton.onPressed(() => {
+            $.publish(BaseCommands.SHOW_TERMS_OF_USE);
+        });
+
         // hide
         this.$element.hide();
+        this.updateTermsOfUseButton();
     }
 
     addEntireFileDownloadOptions(): void {
@@ -89,6 +102,16 @@ class DownloadDialogue extends Dialogue {
         } else {
             // select first option.
             this.$noneAvailable.hide();
+        }
+    }
+
+    updateTermsOfUseButton(): void {
+        var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        
+        if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
+            this.$termsOfUseButton.show();
+        } else {
+            this.$termsOfUseButton.hide();
         }
     }
 

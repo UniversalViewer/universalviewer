@@ -558,12 +558,13 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     print(): void {
-        var args: MultiSelectionArgs = new MultiSelectionArgs();
-        args.manifestUri = this.helper.iiifResourceUri;
-        args.allCanvases = true;
-        args.format = this.config.options.printMimeType;
-        args.sequence = this.helper.getCurrentSequence().id;
-        this.triggerSocket(Commands.PRINT, args);
+        // var args: MultiSelectionArgs = new MultiSelectionArgs();
+        // args.manifestUri = this.helper.iiifResourceUri;
+        // args.allCanvases = true;
+        // args.format = this.config.options.printMimeType;
+        // args.sequence = this.helper.getCurrentSequence().id;
+        window.print();
+        this.triggerSocket(Commands.PRINT);
     }
 
     getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions {

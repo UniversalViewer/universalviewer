@@ -22,6 +22,7 @@ interface IExtension{
     getDomain(): string;
     getEmbedDomain(): string;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
+    getIIIFShareUrl(): string;
     getLocales(): any[];
     getPagedIndices(canvasIndex?: number): number[];
     getParam(key: Params): any;

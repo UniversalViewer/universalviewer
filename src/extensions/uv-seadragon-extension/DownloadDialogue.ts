@@ -14,6 +14,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
     $canvasOptions: JQuery;
     $currentViewAsJpgButton: JQuery;
     $downloadButton: JQuery;
+    $explanatoryTextTemplate: JQuery;
     $imageOptionsContainer: JQuery;
     $imageOptions: JQuery;
     //$pagingNote: JQuery;
@@ -84,6 +85,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$downloadButton = $('<a class="btn btn-primary" href="#" tabindex="0">' + this.content.download + '</a>');
         this.$buttonsContainer.append(this.$downloadButton);
 
+        this.$explanatoryTextTemplate = $('<span class="explanatory"></span>');
+
         var that = this;
 
         this.$downloadButton.on('click', (e) => {
@@ -107,14 +110,14 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 }
 
                 if (type = DownloadType.ENTIREDOCUMENTASPDF){
-                    var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
+                    //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
                     
                     // if downloading a pdf - if there's a print service, generate an event instead of opening a new window.
-                    if (printService && this.extension.isOnHomeDomain()){
-                        $.publish(Commands.PRINT);
-                    } else {
+                    // if (printService && this.extension.isOnHomeDomain()){
+                    //     $.publish(Commands.PRINT);
+                    // } else {
                         window.open(this.renderingUrls[id]);
-                    }
+                    //}
                 }
             } else {
                 switch (id){
@@ -172,10 +175,12 @@ class DownloadDialogue extends BaseDownloadDialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
             var $input: JQuery = this.$currentViewAsJpgButton.find('input');
             var $label: JQuery = this.$currentViewAsJpgButton.find('label');
+
             var label: string = this.content.currentViewAsJpg;
             var viewer = (<ISeadragonExtension>this.extension).getViewer();
             var dimensions: CroppedImageDimensions = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, viewer);
 
+            // dimensions
             if (dimensions){
                 label = String.format(label, dimensions.size.width, dimensions.size.height);
                 $label.text(label);
@@ -185,6 +190,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 this.$currentViewAsJpgButton.show();
             } else {
                 this.$currentViewAsJpgButton.hide();
+            }
+
+            // explanatory text
+            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+                var text: string = this.content.currentViewAsJpgExplanation;
+                if (text) {
+                    var $span = this.$explanatoryTextTemplate.clone();
+                    $span.text(text);
+                    $label.append($span);
+                }                
             }
         } else {
             this.$currentViewAsJpgButton.hide();
@@ -201,6 +216,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 mime = '?';
             }
 
+            // dimensions
             var size: Size = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
             if (!size){
@@ -212,6 +228,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
                 this.$wholeImageHighResButton.data('width', size.width);
                 this.$wholeImageHighResButton.data('height', size.height);
                 this.$wholeImageHighResButton.show();
+            }
+
+            // explanatory text
+            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+                var text: string = this.content.wholeImageHighResExplanation;
+                if (text) {
+                    var $span = this.$explanatoryTextTemplate.clone();
+                    $span.text(text);
+                    $label.append($span);
+                }                
             }
         } else {
             this.$wholeImageHighResButton.hide();
@@ -233,6 +259,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
             $input.prop('title', label);
 
             this.$wholeImagesHighResButton.show();
+
+            // explanatory text
+            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+                var text: string = this.content.wholeImagesHighResExplanation;
+                if (text) {
+                    var $span = this.$explanatoryTextTemplate.clone();
+                    $span.text(text);
+                    $label.append($span);
+                }                
+            }
         } else {
             this.$wholeImagesHighResButton.hide();
         }
@@ -247,6 +283,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
             this.$wholeImageLowResAsJpgButton.data('width', size.width);
             this.$wholeImageLowResAsJpgButton.data('height', size.height);
             this.$wholeImageLowResAsJpgButton.show();
+
+            // explanatory text
+            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+                var text: string = this.content.wholeImageLowResAsJpgExplanation;
+                if (text) {
+                    var $span = this.$explanatoryTextTemplate.clone();
+                    $span.text(text);
+                    $label.append($span);
+                }                
+            }
         } else {
             this.$wholeImageLowResAsJpgButton.hide();
         }
@@ -257,6 +303,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
             $label.text(this.content.downloadSelection);
             $input.prop('title', this.content.downloadSelection);
             this.$selectionButton.show();
+
+            // explanatory text
+            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+                var text: string = this.content.selectionExplanation;
+                if (text) {
+                    var $span = this.$explanatoryTextTemplate.clone();
+                    $span.text(text);
+                    $label.append($span);
+                }                
+            }
         } else {
             this.$selectionButton.hide();
         }
@@ -431,11 +487,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getCanvasDimensions(canvas: Manifesto.ICanvas): Size {
-        return new Size(canvas.externalResource.data.width, canvas.externalResource.data.height);
+        // externalResource may not have loaded yet
+        if (canvas.externalResource.data){
+            return new Size(canvas.externalResource.data.width, canvas.externalResource.data.height);
+        }
+        
+        return new Size(0, 0);
     }
 
     getCanvasMaxDimensions(canvas: Manifesto.ICanvas): Size {
-        if (canvas.externalResource.data.profile[1]){
+        if (canvas.externalResource.data && canvas.externalResource.data.profile[1]){
             return new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
         }
         return null;

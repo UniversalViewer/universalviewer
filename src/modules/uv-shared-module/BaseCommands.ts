@@ -77,6 +77,7 @@ class Commands {
     static SHOW_RESTRICTED_DIALOGUE: string         = Commands.namespace + 'onShowRestrictedDialogue';
     static SHOW_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onShowSettingsDialogue';
     static SHOW_SHARE_DIALOGUE: string              = Commands.namespace + 'onShowShareDialogue';
+    static SHOW_TERMS_OF_USE: string                = Commands.namespace + 'onShowTermsOfUse';
     static THUMB_SELECTED: string                   = Commands.namespace + 'onThumbSelected';
     static TOGGLE_EXPAND_LEFT_PANEL: string         = Commands.namespace + 'onToggleExpandLeftPanel';
     static TOGGLE_EXPAND_RIGHT_PANEL: string        = Commands.namespace + 'onToggleExpandRightPanel';

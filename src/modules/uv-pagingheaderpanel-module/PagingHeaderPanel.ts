@@ -60,11 +60,11 @@ class PagingHeaderPanel extends HeaderPanel {
         });
         
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
-            this.$galleryButton.addClass('on');
+            this.openGallery();
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
-            this.$galleryButton.removeClass('on');
+            this.closeGallery();
         });
 
         this.$prevOptions = $('<div class="prevOptions"></div>');
@@ -352,6 +352,17 @@ class PagingHeaderPanel extends HeaderPanel {
         if (!Utils.Bools.getBool(this.options.pagingToggleEnabled, true)){
             this.$pagingToggleButtons.hide();
         }
+    }
+
+    openGallery(): void {
+        this.$oneUpButton.removeClass('on');
+        this.$twoUpButton.removeClass('on');
+        this.$galleryButton.addClass('on');
+    }
+
+    closeGallery(): void {
+        this.updatePagingToggle();
+        this.$galleryButton.removeClass('on');
     }
 
     isPageModeEnabled(): boolean {

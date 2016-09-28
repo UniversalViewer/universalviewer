@@ -94,12 +94,14 @@
     "shareDialogue": {
       "content": {
         "customSize": "custom",
-        "height": "Height",
-        "instructions": "To embed this item in your own website, copy and paste the code below.",
-        "share": "Share",
         "embed": "Embed",
-        "width": "Width",
-        "size": "Size:"
+        "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
+        "height": "Height",
+        "iiif": "IIIF Manifest",
+        "share": "Share",
+        "shareInstructions": "To share this item, copy the URL below.",
+        "size": "Size:",
+        "width": "Width"
       }
     }
   }

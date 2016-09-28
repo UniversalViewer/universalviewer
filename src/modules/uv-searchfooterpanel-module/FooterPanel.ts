@@ -229,9 +229,10 @@ class FooterPanel extends BaseFooterPanel {
 
     updatePrintButton(): void {
         var configEnabled = Utils.Bools.getBool(this.options.printEnabled, false);
-        var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
+        //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
 
-        if (configEnabled && printService && this.extension.isOnHomeDomain()){
+        //if (configEnabled && printService && this.extension.isOnHomeDomain()){
+        if (configEnabled){
             this.$printButton.show();
         } else {
             this.$printButton.hide();
