@@ -6,7 +6,6 @@ import Commands = require("./Commands");
 import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
 import CroppedImageDimensions = require("./CroppedImageDimensions");
 import DownloadDialogue = require("./DownloadDialogue");
-import ShareDialogue = require("./ShareDialogue");
 import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
 import ExternalResource = Manifesto.IExternalResource;
 import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
@@ -17,19 +16,21 @@ import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import Metrics = require("../../modules/uv-shared-module/Metrics");
+import MobileFooterPanel = require("../../modules/uv-osdmobilefooterpanel-module/MobileFooter");
 import Mode = require("./Mode");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
+import MultiSelectionArgs = require("./MultiSelectionArgs");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
-import MultiSelectionArgs = require("./MultiSelectionArgs");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
 import SearchResult = require("./SearchResult");
 import SearchResultRect = require("./SearchResultRect");
 import Settings = require("../../modules/uv-shared-module/Settings");
 import SettingsDialogue = require("./SettingsDialogue");
+import ShareDialogue = require("./ShareDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import Size = Utils.Measurements.Size;
 
@@ -51,6 +52,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     helpDialogue: HelpDialogue;
     iiifImageUriTemplate: string = '{0}/{1}/{2}/{3}/{4}/{5}.jpg';
     leftPanel: ContentLeftPanel;
+    mobileFooterPanel: MobileFooterPanel;
     mode: Mode;
     multiSelectDialogue: MultiSelectDialogue;
     rightPanel: MoreInfoRightPanel;
@@ -346,6 +348,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         if (this.isFooterPanelEnabled()){
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
         } else {
             Shell.$footerPanel.hide();
         }

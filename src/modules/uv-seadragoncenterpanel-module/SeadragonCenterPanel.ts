@@ -60,6 +60,30 @@ class SeadragonCenterPanel extends CenterPanel {
             });
         });
 
+        $.subscribe(Commands.ZOOM_IN, () => {
+            Utils.Async.waitFor(() => {
+                return this.isCreated;
+            }, () => {
+                this.zoomIn();
+            });
+        });
+
+        $.subscribe(Commands.ZOOM_OUT, () => {
+            Utils.Async.waitFor(() => {
+                return this.isCreated;
+            }, () => {
+                this.zoomOut();
+            });
+        });
+
+        $.subscribe(Commands.ROTATE, () => {
+            Utils.Async.waitFor(() => {
+                return this.isCreated;
+            }, () => {
+                this.rotateRight();
+            });
+        });
+
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
             Utils.Async.waitFor(() => {
                 return this.isCreated;
@@ -67,6 +91,18 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.updateResponsiveView();
             });
         });
+    }
+
+    zoomIn(): void {
+        this.viewer.viewport.zoomTo(this.viewer.viewport.getZoom(true) * 2);
+    }
+
+    zoomOut(): void {
+        this.viewer.viewport.zoomTo(this.viewer.viewport.getZoom(true) * 0.5);
+    }
+
+    rotateRight(): void {
+        this.viewer.viewport.setRotation(this.viewer.viewport.getRotation() + 90);
     }
 
     updateResponsiveView(): void {

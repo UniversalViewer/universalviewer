@@ -92,6 +92,14 @@
         "cancel": "Canslo"
       }
     },
+    "mobileFooterPanel": {
+      "content": {
+        "rotateRight": "Cylchdroi i'r dde",
+        "moreInfo": "Mwy o Wybodaeth",
+        "zoomIn": "Closio",
+        "zoomOut": "Gwrthglosio"
+      }
+    },
     "moreInfoRightPanel": {
       "content": {
         "attribution": "Priodoledd",

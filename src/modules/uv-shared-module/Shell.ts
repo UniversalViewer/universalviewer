@@ -10,6 +10,7 @@ class Shell extends BaseView {
     static $headerPanel: JQuery;
     static $leftPanel: JQuery;
     static $mainPanel: JQuery;
+    static $mobileFooterPanel: JQuery;
     static $overlays: JQuery;
     static $rightPanel: JQuery;
 
@@ -47,6 +48,9 @@ class Shell extends BaseView {
         Shell.$footerPanel = $('<div class="footerPanel"></div>');
         Shell.$element.append(Shell.$footerPanel);
 
+        Shell.$mobileFooterPanel = $('<div class="footerPanel mobile"></div>');
+        Shell.$element.append(Shell.$mobileFooterPanel);
+
         Shell.$overlays = $('<div class="overlays"></div>');
         Shell.$element.append(Shell.$overlays);
 
@@ -54,7 +58,6 @@ class Shell extends BaseView {
         Shell.$overlays.append(Shell.$genericDialogue);
 
         Shell.$overlays.on('click', (e) => {
-
             if ($(e.target).hasClass('overlays')) {
                 e.preventDefault();
                 $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
@@ -73,7 +76,8 @@ class Shell extends BaseView {
 
         var mainHeight: number = this.$element.height() - parseInt(Shell.$mainPanel.css('marginTop')) 
             - (Shell.$headerPanel.is(':visible') ? Shell.$headerPanel.height() : 0)
-            - (Shell.$footerPanel.is(':visible') ? Shell.$footerPanel.height() : 0);
+            - (Shell.$footerPanel.is(':visible') ? Shell.$footerPanel.height() : 0)
+            - (Shell.$mobileFooterPanel.is(':visible') ? Shell.$mobileFooterPanel.height() : 0);
         
         Shell.$mainPanel.height(mainHeight);
     }

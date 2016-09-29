@@ -22,6 +22,7 @@ class Commands {
     static PREV_SEARCH_RESULT: string                   = Commands.namespace + 'onPrevSearchResult';
     static PREV: string                                 = Commands.namespace + 'onPrev';
     static PRINT: string                                = Commands.namespace + 'onPrint';
+    static ROTATE: string                               = Commands.namespace + 'onRotate';
     static SEADRAGON_ANIMATION_FINISH: string           = Commands.namespace + 'onAnimationfinish';
     static SEADRAGON_ANIMATION_START: string            = Commands.namespace + 'onAnimationStart';
     static SEADRAGON_ANIMATION: string                  = Commands.namespace + 'onAnimation';
@@ -38,6 +39,8 @@ class Commands {
     static TREE_NODE_MULTISELECTED: string              = Commands.namespace + 'onTreeNodeMultiSelected';
     static TREE_NODE_SELECTED: string                   = Commands.namespace + 'onTreeNodeSelected';
     static VIEW_PAGE: string                            = Commands.namespace + 'onViewPage';
+    static ZOOM_IN: string                              = Commands.namespace + 'onZoomIn';
+    static ZOOM_OUT: string                             = Commands.namespace + 'onZoomOut';
 }
 
 export = Commands;

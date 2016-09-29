@@ -95,6 +95,14 @@
         "cancel": "Cancel"
       }
     },
+    "mobileFooterPanel": {
+      "content": {
+        "rotateRight": "Rotate Right",
+        "moreInfo": "More Information",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out"
+      }
+    },
     "moreInfoRightPanel": {
       "content": {
         "attribution": "Attribution",
