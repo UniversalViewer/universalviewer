@@ -23,8 +23,8 @@ class DownloadDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_DOWNLOAD_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_DOWNLOAD_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
-            this.open();
+        $.subscribe(this.openCommand, (e, $triggerButton) => {
+            this.open($triggerButton);
         });
 
         $.subscribe(this.closeCommand, (e) => {
@@ -138,10 +138,7 @@ class DownloadDialogue extends Dialogue {
     }
 
     resize(): void {
-
-        this.$element.css({
-            'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
-        });
+        this.setDockedPosition();
     }
 }
 

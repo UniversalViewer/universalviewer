@@ -75,15 +75,15 @@ class FooterPanel extends BaseView {
         });
 
         this.$shareButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_SHARE_DIALOGUE);
+            $.publish(BaseCommands.SHOW_SHARE_DIALOGUE, [this.$shareButton]);
         });
 
         this.$embedButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
+            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE, [this.$embedButton]);
         });
 
         this.$downloadButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
+            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, [this.$downloadButton]);
         });
 
         this.$fullScreenBtn.on('click', (e) => {

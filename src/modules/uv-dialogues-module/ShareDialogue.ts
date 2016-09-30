@@ -7,22 +7,22 @@ class ShareDialogue extends Dialogue {
     $customSize: JQuery;
     $customSizeDropDown: JQuery;
     $embedButton: JQuery;
+    $embedHeader: JQuery;
     $embedView: JQuery;
     $footer: JQuery;
     $heightInput: JQuery;
-    $header: JQuery;
     $iiifButton: JQuery;
-    // $image: JQuery;
-    // $link: JQuery;
     $shareButton: JQuery;
+    $shareFrame: JQuery;
+    $shareHeader: JQuery;
+    $shareInput: JQuery;
+    $shareLink: JQuery;
     $shareView: JQuery;
     $size: JQuery;
     $tabs: JQuery;
     $tabsContent: JQuery;
-    $url: JQuery;
-    $widthInput: JQuery;
-    $shareFrame: JQuery;
     $termsOfUseButton: JQuery;
+    $widthInput: JQuery;
     $x: JQuery;
     aspectRatio: number = .75;
     code: string;
@@ -30,10 +30,10 @@ class ShareDialogue extends Dialogue {
     currentWidth: number;
     isEmbedViewVisible: boolean = false;
     isShareViewVisible: boolean = false;
-    minWidth: number = 200;
-    minHeight: number = this.minWidth * this.aspectRatio;
-    maxWidth: number = 8000;
     maxHeight: number = this.maxWidth * this.aspectRatio;
+    maxWidth: number = 8000;
+    minHeight: number = this.minWidth * this.aspectRatio;
+    minWidth: number = 200;
 
     constructor($element: JQuery) {
         super($element);
@@ -48,8 +48,8 @@ class ShareDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_SHARE_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_SHARE_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
-            this.open();
+        $.subscribe(this.openCommand, (e, $triggerButton) => {
+            this.open($triggerButton);
 
             if (this.isShareAvailable()){
                 this.openShareView();
@@ -81,23 +81,29 @@ class ShareDialogue extends Dialogue {
         this.$tabsContent = $('<div class="tabsContent"></div>');
         this.$content.append(this.$tabsContent);
 
-        this.$header = $('<div class="header"></div>');
-        this.$tabsContent.append(this.$header);
-
         this.$footer = $('<div class="footer"></div>');
         this.$content.append(this.$footer);
 
-        this.$shareView = $('<div class="shareView"></div>');
+        this.$shareView = $('<div class="shareView view"></div>');
         this.$tabsContent.append(this.$shareView);
 
-        this.$url = $('<input class="url" type="text" readonly="true" />');
-        this.$shareView.append(this.$url);
+        this.$shareHeader = $('<div class="header"></div>');
+        this.$shareView.append(this.$shareHeader);
+
+        this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
+        this.$shareView.append(this.$shareLink);
+
+        this.$shareInput = $('<input class="shareInput" type="text" readonly="true" />');
+        this.$shareView.append(this.$shareInput);
 
         this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
         this.$shareView.append(this.$shareFrame);
 
-        this.$embedView = $('<div class="embedView"></div>');
+        this.$embedView = $('<div class="embedView view"></div>');
         this.$tabsContent.append(this.$embedView);
+
+        this.$embedHeader = $('<div class="header"></div>');
+        this.$embedView.append(this.$embedHeader);
 
         // this.$link = $('<a target="_blank"></a>');
         // this.$embedView.find('.leftCol').append(this.$link);
@@ -146,7 +152,7 @@ class ShareDialogue extends Dialogue {
             return Utils.Numbers.numericalInput(e);
         });
 
-        this.$url.focus(function() {
+        this.$shareInput.focus(function() {
             $(this).select();
         });
 
@@ -182,12 +188,13 @@ class ShareDialogue extends Dialogue {
 
         this.$element.hide();
         this.updateInstructions();
+        this.updateShareOptions();
         this.updateShareFrame();
         this.updateTermsOfUseButton();
     }
 
-    open(): void {
-        super.open();
+    open($triggerButton?: JQuery): void {
+        super.open($triggerButton);
         this.update();
     }
 
@@ -203,7 +210,6 @@ class ShareDialogue extends Dialogue {
 
         if (this.isShareAvailable()){
             this.$shareButton.show();
-            this.$url.val(this.getShareUrl());
         } else {
             this.$shareButton.hide();
         }
@@ -225,18 +231,30 @@ class ShareDialogue extends Dialogue {
         }
     }
 
+    updateShareOptions(): void {
+        
+        this.$shareInput.val(this.getShareUrl());
+        this.$shareLink.prop('href', this.getShareUrl());
+        this.$shareLink.text(this.getShareUrl());
+        
+        if ($.browser.mobile){
+            this.$shareInput.hide();
+            this.$shareLink.show();
+        } else {
+            this.$shareInput.show();
+            this.$shareLink.hide();
+        }
+    }
+
     updateInstructions(): void {
         if (Utils.Bools.getBool(this.options.instructionsEnabled, false)) {
-            this.$header.show();
-
-            if (this.isShareViewVisible) {
-                this.$header.text(this.content.shareInstructions);
-            } else {
-                this.$header.text(this.content.embedInstructions);
-            }
-            
+            this.$shareHeader.show();
+            this.$embedHeader.show();
+            this.$shareHeader.text(this.content.shareInstructions);
+            this.$embedHeader.text(this.content.embedInstructions);
         } else {
-            this.$header.hide();
+            this.$shareHeader.hide();
+            this.$embedHeader.hide();
         }
     }
 
@@ -317,8 +335,6 @@ class ShareDialogue extends Dialogue {
         this.$shareButton.addClass('on');
         this.$embedButton.removeClass('on');
 
-        this.updateInstructions();
-        
         this.resize();
     }
 
@@ -333,8 +349,6 @@ class ShareDialogue extends Dialogue {
         this.$shareButton.removeClass('on');
         this.$embedButton.addClass('on');
 
-        this.updateInstructions();
-
         this.resize();
     }
 
@@ -342,10 +356,17 @@ class ShareDialogue extends Dialogue {
         super.close();
     }
 
+    getViews(): JQuery {
+        return this.$tabsContent.find('.view');
+    }
+
+    equaliseViewHeights(): void {
+        this.getViews().equaliseHeight(true);
+    }
+
     resize(): void {
-        this.$element.css({
-            'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
-        });
+        this.equaliseViewHeights();
+        this.setDockedPosition();
     }
 }
 

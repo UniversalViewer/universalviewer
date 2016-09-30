@@ -55,11 +55,17 @@
   margin-bottom: 5px;
   font-size: 11px;
 }
-#app .overlay.share .middle .content .tabsContent .shareView .url {
+#app .overlay.share .middle .content .tabsContent .shareView .shareInput {
   width: 100%;
   background: #efefef;
   border: 1px solid #9a9a9a;
   font-size: 11px;
+}
+#app .overlay.share .middle .content .tabsContent .shareView .shareLink {
+  display: block;
+  overflow: hidden;
+  height: 18px;
+  text-overflow: ellipsis;
 }
 #app .overlay.share .middle .content .tabsContent .shareView .shareFrame {
   width: 240px;
@@ -249,6 +255,14 @@
 }
 #app .overlay.login .bottom {
   background: none;
+}
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+  #app .overlay.share {
+    padding: 0 0 45px 8px;
+  }
+  #app .overlay.download {
+    padding: 0 0 45px 8px;
+  }
 }
 #app .rightPanel .top .title {
   text-transform: uppercase;
@@ -1138,127 +1152,6 @@
 #app.browser-Firefox .overlays > div.multiSelect .content .iiif-gallery-component .header input[type="range"] {
   margin-top: 9px;
   overflow: hidden;
-}
-@media only screen and (min-width: 0px) and (max-width: 480px) {
-  #app .footerPanel.mobile {
-    display: block !important;
-    position: relative;
-    height: 41px;
-  }
-  #app .footerPanel.mobile .options {
-    position: absolute;
-    width: 290px;
-  }
-  #app .footerPanel.mobile .options .spacer {
-    float: left;
-    width: 50px;
-    height: 41px;
-  }
-  #app .footerPanel.mobile .options a {
-    margin-right: 10px;
-  }
-  #app .footerPanel.mobile .options a.zoomIn {
-    background-image: url('../../img/uv-osdmobilefooterpanel-module/zoom_in.png');
-    background-repeat: no-repeat;
-    height: 21px;
-    line-height: 21px;
-    cursor: pointer;
-    color: #fff;
-    text-decoration: none;
-    background-position: left center;
-    padding-left: 35px;
-    padding-right: 10px;
-    line-height: 22px;
-    font: 0/0 a;
-    text-shadow: none;
-    background-color: transparent;
-    border: 0;
-    line-height: 0;
-    font-size: 0;
-    color: transparent;
-    width: 27px;
-    padding: 0;
-  }
-  #app .footerPanel.mobile .options a.zoomIn:link,
-  #app .footerPanel.mobile .options a.zoomIn:visited,
-  #app .footerPanel.mobile .options a.zoomIn:hover,
-  #app .footerPanel.mobile .options a.zoomIn:active {
-    color: #fff;
-    text-decoration: none;
-  }
-  #app .footerPanel.mobile .options a.zoomOut {
-    background-image: url('../../img/uv-osdmobilefooterpanel-module/zoom_out.png');
-    background-repeat: no-repeat;
-    height: 21px;
-    line-height: 21px;
-    cursor: pointer;
-    color: #fff;
-    text-decoration: none;
-    background-position: left center;
-    padding-left: 35px;
-    padding-right: 10px;
-    line-height: 22px;
-    font: 0/0 a;
-    text-shadow: none;
-    background-color: transparent;
-    border: 0;
-    line-height: 0;
-    font-size: 0;
-    color: transparent;
-    width: 27px;
-    padding: 0;
-  }
-  #app .footerPanel.mobile .options a.zoomOut:link,
-  #app .footerPanel.mobile .options a.zoomOut:visited,
-  #app .footerPanel.mobile .options a.zoomOut:hover,
-  #app .footerPanel.mobile .options a.zoomOut:active {
-    color: #fff;
-    text-decoration: none;
-  }
-  #app .footerPanel.mobile .options a.rotate {
-    background-image: url('../../img/uv-osdmobilefooterpanel-module/rotate_right.png');
-    background-repeat: no-repeat;
-    height: 21px;
-    line-height: 21px;
-    cursor: pointer;
-    color: #fff;
-    text-decoration: none;
-    background-position: left center;
-    padding-left: 35px;
-    padding-right: 10px;
-    line-height: 22px;
-    font: 0/0 a;
-    text-shadow: none;
-    background-color: transparent;
-    border: 0;
-    line-height: 0;
-    font-size: 0;
-    color: transparent;
-    width: 27px;
-    padding: 0;
-  }
-  #app .footerPanel.mobile .options a.rotate:link,
-  #app .footerPanel.mobile .options a.rotate:visited,
-  #app .footerPanel.mobile .options a.rotate:hover,
-  #app .footerPanel.mobile .options a.rotate:active {
-    color: #fff;
-    text-decoration: none;
-  }
-  #app .footerPanel.mobile .options a.bookmark {
-    display: none;
-  }
-  #app .footerPanel.mobile .options a.open {
-    display: none;
-  }
-  #app .footerPanel.mobile .options a.feedback {
-    display: none;
-  }
-  #app .footerPanel.mobile .options a.embed {
-    display: none;
-  }
-  #app .footerPanel.mobile .options a.fullScreen {
-    display: none;
-  }
 }
 *,
 *:before,
@@ -3033,6 +2926,127 @@ input[type=range]:focus::-ms-fill-upper {
     display: none;
   }
   #app .mobileFooter {
+    display: none;
+  }
+}
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+  #app .footerPanel.mobile {
+    display: block;
+    position: relative;
+    height: 50px;
+  }
+  #app .footerPanel.mobile .options {
+    position: absolute;
+    width: 290px;
+  }
+  #app .footerPanel.mobile .options .spacer {
+    float: left;
+    width: 50px;
+    height: 41px;
+  }
+  #app .footerPanel.mobile .options a {
+    margin-right: 15px;
+  }
+  #app .footerPanel.mobile .options a.zoomIn {
+    background-image: url('../../img/uv-osdmobilefooterpanel-module/zoom_in.png');
+    background-repeat: no-repeat;
+    height: 21px;
+    line-height: 21px;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    background-position: left center;
+    padding-left: 35px;
+    padding-right: 10px;
+    line-height: 22px;
+    font: 0/0 a;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+    line-height: 0;
+    font-size: 0;
+    color: transparent;
+    width: 27px;
+    padding: 0;
+  }
+  #app .footerPanel.mobile .options a.zoomIn:link,
+  #app .footerPanel.mobile .options a.zoomIn:visited,
+  #app .footerPanel.mobile .options a.zoomIn:hover,
+  #app .footerPanel.mobile .options a.zoomIn:active {
+    color: #fff;
+    text-decoration: none;
+  }
+  #app .footerPanel.mobile .options a.zoomOut {
+    background-image: url('../../img/uv-osdmobilefooterpanel-module/zoom_out.png');
+    background-repeat: no-repeat;
+    height: 21px;
+    line-height: 21px;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    background-position: left center;
+    padding-left: 35px;
+    padding-right: 10px;
+    line-height: 22px;
+    font: 0/0 a;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+    line-height: 0;
+    font-size: 0;
+    color: transparent;
+    width: 27px;
+    padding: 0;
+  }
+  #app .footerPanel.mobile .options a.zoomOut:link,
+  #app .footerPanel.mobile .options a.zoomOut:visited,
+  #app .footerPanel.mobile .options a.zoomOut:hover,
+  #app .footerPanel.mobile .options a.zoomOut:active {
+    color: #fff;
+    text-decoration: none;
+  }
+  #app .footerPanel.mobile .options a.rotate {
+    background-image: url('../../img/uv-osdmobilefooterpanel-module/rotate_right.png');
+    background-repeat: no-repeat;
+    height: 21px;
+    line-height: 21px;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    background-position: left center;
+    padding-left: 35px;
+    padding-right: 10px;
+    line-height: 22px;
+    font: 0/0 a;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+    line-height: 0;
+    font-size: 0;
+    color: transparent;
+    width: 27px;
+    padding: 0;
+  }
+  #app .footerPanel.mobile .options a.rotate:link,
+  #app .footerPanel.mobile .options a.rotate:visited,
+  #app .footerPanel.mobile .options a.rotate:hover,
+  #app .footerPanel.mobile .options a.rotate:active {
+    color: #fff;
+    text-decoration: none;
+  }
+  #app .footerPanel.mobile .options a.bookmark {
+    display: none;
+  }
+  #app .footerPanel.mobile .options a.open {
+    display: none;
+  }
+  #app .footerPanel.mobile .options a.feedback {
+    display: none;
+  }
+  #app .footerPanel.mobile .options a.embed {
+    display: none;
+  }
+  #app .footerPanel.mobile .options a.fullScreen {
     display: none;
   }
 }

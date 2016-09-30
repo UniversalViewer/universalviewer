@@ -24,6 +24,9 @@ interface JQueryStatic {
     templates: any;
     views: any;
     view: any;
+
+    // detect mobile browser
+    browser: any;
 }
 
 // libs

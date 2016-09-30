@@ -1,5 +1,4 @@
-﻿
-#app{
+﻿#app{
 
     .overlay{
 
@@ -68,8 +67,14 @@
                         }
 
                         .shareView{
-                            .url {
+                            .shareInput {
                                 .single-line-code();
+                            }
+                            .shareLink {
+                                display: block;
+                                overflow: hidden;
+                                height: 18px;
+                                text-overflow: ellipsis;
                             }
                             .shareFrame{
                                 width: 240px;
@@ -318,3 +323,5 @@
     }
 
 }
+
+@import 'mobile';

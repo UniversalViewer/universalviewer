@@ -167,8 +167,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
         // });
     }
 
-    open() {
-        super.open();
+    open($triggerButton?: JQuery) {
+        super.open($triggerButton);
 
         var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
