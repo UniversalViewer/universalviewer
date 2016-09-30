@@ -44,9 +44,6 @@
   height: 23px;
   line-height: 23px;
 }
-#app .overlay.share .middle .content .tabs .tab:focus {
-  border: 1px solid #14a4c3;
-}
 #app .overlay.share .middle .content .tabsContent {
   padding: 10px 0 5px 0;
   border-top: 1px solid #efefef;
@@ -2195,12 +2192,6 @@ input[type=range]:focus::-ms-fill-upper {
   margin: 7px 5px 0 0;
   display: block;
 }
-#app .leftPanel .closed .expandButton:focus {
-  border: 1px solid #14a4c3;
-}
-#app .leftPanel .closed .expandFullButton:focus {
-  border: 1px solid #14a4c3;
-}
 #app.browser-Explorer.browser-version-8 .leftPanel .closed .title {
   writing-mode: tb-lr;
 }
@@ -2264,12 +2255,6 @@ input[type=range]:focus::-ms-fill-upper {
   cursor: pointer;
   margin: 7px 0 0 5px;
   display: block;
-}
-#app .rightPanel .closed .expandButton:focus {
-  border: 1px solid #14a4c3;
-}
-#app .rightPanel .closed .expandFullButton:focus {
-  border: 1px solid #14a4c3;
 }
 #app .rightPanel .main {
   margin-right: 10px;
@@ -3013,9 +2998,6 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #app .imageBtn {
   cursor: pointer;
-}
-#app .imageBtn:focus {
-  border: 1px solid #14a4c3;
 }
 #app .action,
 #app a.action.black,

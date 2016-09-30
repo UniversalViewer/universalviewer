@@ -62,8 +62,8 @@ class ShareDialogue extends Dialogue {
             this.close();
         });
 
-        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, (e, params) => {
-            this.open();
+        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, (e, $triggerButton) => {
+            this.open($triggerButton);
             this.openEmbedView();
         });
 
@@ -332,8 +332,8 @@ class ShareDialogue extends Dialogue {
         this.$embedView.hide();
         this.$shareView.show();
 
-        this.$shareButton.addClass('on');
-        this.$embedButton.removeClass('on');
+        this.$shareButton.addClass('on default');
+        this.$embedButton.removeClass('on default');
 
         this.resize();
     }
@@ -346,8 +346,8 @@ class ShareDialogue extends Dialogue {
         this.$embedView.show();
         this.$shareView.hide();
 
-        this.$shareButton.removeClass('on');
-        this.$embedButton.addClass('on');
+        this.$shareButton.removeClass('on default');
+        this.$embedButton.addClass('on default');
 
         this.resize();
     }
