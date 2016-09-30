@@ -837,6 +837,7 @@
 }
 #app .leftPanel .views .treeView {
   font-weight: normal;
+  overflow: auto;
 }
 #app.browser-Explorer .leftPanel .views .galleryView .header input[type="range"] {
   margin-top: -11px;
