@@ -320,6 +320,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             return this.centerPanel && this.centerPanel.isCreated;
         }, () => {
             this.checkForSearchParam();
+            this.checkForRotationParam();
         });
     }
 
@@ -404,6 +405,17 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             if (highlight){
                 highlight.replace(/\+/g, " ").replace(/"/g, "");
                 $.publish(Commands.SEARCH, [highlight]);
+            }
+        }
+    }
+    checkForRotationParam(): void{
+        // if a rotation value is in the hash params, set currentRotation
+        if (this.isDeepLinkingEnabled()){
+
+            var rotation: number = Number(this.getParam(Params.rotation));
+
+            if (rotation){
+                $.publish(Commands.SEADRAGON_ROTATION, [rotation]);
             }
         }
     }
@@ -709,7 +721,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         var id = this.getImageId(canvas);
         var region = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
         var size = dimensions.size.width + ',' + dimensions.size.height;
-        var rotation = 0;
+        var rotation = this.getViewerRotation();
         var quality = 'default';
         return String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
     }
@@ -730,7 +742,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         var region = 'full';
         var dimensions = this.getConfinedImageDimensions(canvas, width);
         var size: string = dimensions.width + ',' + dimensions.height;
-        var rotation = 0;
+        var rotation = this.getViewerRotation();
         var quality = 'default';
         var uri = String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
         return uri;
