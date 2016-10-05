@@ -709,7 +709,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         var id = this.getImageId(canvas);
         var region = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
         var size = dimensions.size.width + ',' + dimensions.size.height;
-        var rotation = 0;
+        var rotation = this.getViewerRotation();
         var quality = 'default';
         return String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
     }
@@ -730,7 +730,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         var region = 'full';
         var dimensions = this.getConfinedImageDimensions(canvas, width);
         var size: string = dimensions.width + ',' + dimensions.height;
-        var rotation = 0;
+        var rotation = this.getViewerRotation();
         var quality = 'default';
         var uri = String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
         return uri;
