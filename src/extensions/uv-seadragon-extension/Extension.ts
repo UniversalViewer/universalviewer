@@ -320,6 +320,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             return this.centerPanel && this.centerPanel.isCreated;
         }, () => {
             this.checkForSearchParam();
+            this.checkForRotationParam();
         });
     }
 
@@ -404,6 +405,17 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             if (highlight){
                 highlight.replace(/\+/g, " ").replace(/"/g, "");
                 $.publish(Commands.SEARCH, [highlight]);
+            }
+        }
+    }
+    checkForRotationParam(): void{
+        // if a rotation value is in the hash params, set currentRotation
+        if (this.isDeepLinkingEnabled()){
+
+            var rotation: number = Number(this.getParam(Params.rotation));
+
+            if (rotation){
+                $.publish(Commands.SEADRAGON_ROTATION, [rotation]);
             }
         }
     }
