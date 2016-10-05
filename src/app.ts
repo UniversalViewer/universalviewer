@@ -1,4 +1,4 @@
-if (typeof jQuery == "function") {
+if (typeof jQuery === "function") {
     define('jquery', [], function() {
         return jQuery;
     });
