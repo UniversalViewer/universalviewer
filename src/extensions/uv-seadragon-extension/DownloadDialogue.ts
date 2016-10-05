@@ -172,6 +172,9 @@ class DownloadDialogue extends BaseDownloadDialogue {
 
         var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
+        var rotation: number = (<ISeadragonExtension>this.extension).getViewerRotation();
+        var hasNormalDimensions: boolean = rotation % 180 == 0;
+
         if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
             var $input: JQuery = this.$currentViewAsJpgButton.find('input');
             var $label: JQuery = this.$currentViewAsJpgButton.find('label');
@@ -180,9 +183,12 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var viewer = (<ISeadragonExtension>this.extension).getViewer();
             var dimensions: CroppedImageDimensions = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, viewer);
 
+
             // dimensions
             if (dimensions){
-                label = String.format(label, dimensions.size.width, dimensions.size.height);
+                label = hasNormalDimensions ?
+                  String.format(label, dimensions.size.width, dimensions.size.height) :
+                  String.format(label, dimensions.size.height, dimensions.size.width);
                 $label.text(label);
                 $input.prop('title', label);
                 this.$currentViewAsJpgButton.data('width', dimensions.region.width);
@@ -219,10 +225,13 @@ class DownloadDialogue extends BaseDownloadDialogue {
             // dimensions
             var size: Size = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
+
             if (!size){
                 this.$wholeImageHighResButton.hide();
             } else {
-                var label: string = String.format(this.content.wholeImageHighRes, size.width, size.height, mime);
+                var label: string = hasNormalDimensions ?
+                  String.format(this.content.wholeImageHighRes, size.width, size.height, mime) :
+                  String.format(this.content.wholeImageHighRes, size.height, size.width, mime);
                 $label.text(label);
                 $input.prop('title', label);
                 this.$wholeImageHighResButton.data('width', size.width);
@@ -277,7 +286,9 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var $input: JQuery = this.$wholeImageLowResAsJpgButton.find('input');
             var $label: JQuery = this.$wholeImageLowResAsJpgButton.find('label');
             var size: Size = (<ISeadragonExtension>this.extension).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
-            var label = String.format(this.content.wholeImageLowResAsJpg, size.width, size.height);
+            var label = hasNormalDimensions ?
+              String.format(this.content.wholeImageLowResAsJpg, size.width, size.height) :
+              String.format(this.content.wholeImageLowResAsJpg, size.height, size.width);
             $label.text(label);
             $input.prop('title', label);
             this.$wholeImageLowResAsJpgButton.data('width', size.width);
@@ -470,7 +481,12 @@ class DownloadDialogue extends BaseDownloadDialogue {
         var size: Size = this.getCanvasComputedDimensions(canvas);
         if (size){
             var width: number = size.width;
-            return canvas.getCanonicalImageUri(width);
+            var uri: string = canvas.getCanonicalImageUri(width);
+            var uri_parts: string [] = uri.split('/');
+            var rotation: number = (<ISeadragonExtension>this.extension).getViewerRotation();
+            uri_parts[ uri_parts.length - 2 ] = String(rotation);
+            uri = uri_parts.join('/');
+            return uri;
         }
         return '';
     }
