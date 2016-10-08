@@ -143,6 +143,24 @@
             }
         }
 
+        &.moreInfo{
+            width: 260px;
+            padding: 0 0 30px 8px;
+
+            .content {
+                .iiif-metadata-component {
+                    height: 200px;
+                    overflow: auto;
+                    .items {
+                        padding-left: 0px;
+                        .item .text {
+                            color: @text-secondary-color;
+                        }
+                    }
+                }
+            }
+        }
+
         &.download{
             width: 260px;
             padding: 0 0 30px 8px;

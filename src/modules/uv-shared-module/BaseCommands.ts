@@ -26,6 +26,7 @@ class Commands {
     static HIDE_HELP_DIALOGUE: string               = Commands.namespace + 'onHideHelpDialogue';
     static HIDE_INFORMATION: string                 = Commands.namespace + 'onHideInformation';
     static HIDE_LOGIN_DIALOGUE: string              = Commands.namespace + 'onHideLoginDialogue';
+    static HIDE_MOREINFO_DIALOGUE: string           = Commands.namespace + 'onHideMoreInfoDialogue';
     static HIDE_OVERLAY: string                     = Commands.namespace + 'onHideOverlay';
     static HIDE_RESTRICTED_DIALOGUE: string         = Commands.namespace + 'onHideRestrictedDialogue';
     static HIDE_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onHideSettingsDialogue';
@@ -73,6 +74,7 @@ class Commands {
     static SHOW_HELP_DIALOGUE: string               = Commands.namespace + 'onShowHelpDialogue';
     static SHOW_INFORMATION: string                 = Commands.namespace + 'onShowInformation';
     static SHOW_LOGIN_DIALOGUE: string              = Commands.namespace + 'onShowLoginDialogue';
+    static SHOW_MOREINFO_DIALOGUE: string           = Commands.namespace + 'onShowMoreInfoDialogue';
     static SHOW_OVERLAY: string                     = Commands.namespace + 'onShowOverlay';
     static SHOW_RESTRICTED_DIALOGUE: string         = Commands.namespace + 'onShowRestrictedDialogue';
     static SHOW_SETTINGS_DIALOGUE: string           = Commands.namespace + 'onShowSettingsDialogue';

@@ -7,6 +7,7 @@ module.exports = {
             flatten: true,
             src: [
                 'iiif-gallery-component/dist/iiif-gallery-component.js',
+                'iiif-metadata-component/dist/iiif-metadata-component.js',
                 'iiif-tree-component/dist/iiif-tree-component.js',
                 'openseadragon/build/openseadragon/openseadragon.min.js'
             ],
@@ -19,6 +20,7 @@ module.exports = {
             flatten: true,
             src: [
                 'iiif-gallery-component/dist/iiif-gallery-component.d.ts',
+                'iiif-metadata-component/dist/iiif-metadata-component.d.ts',
                 'iiif-tree-component/dist/iiif-tree-component.d.ts'
             ],
             dest: '<%= config.directories.typings %>'
