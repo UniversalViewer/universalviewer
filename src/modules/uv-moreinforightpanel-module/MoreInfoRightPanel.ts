@@ -48,11 +48,11 @@ class MoreInfoRightPanel extends RightPanel {
             aggregateValues: this.config.options.aggregateValues,
             canvasExclude: this.config.options.canvasExclude,
             content: this.config.content,
-            copyToClipboardEnabled: this.config.options.copyToClipboardEnabled,
+            copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
             displayOrder: this.config.options.displayOrder,
             element: ".rightPanel .iiif-metadata-component",
             helper: this.extension.helper,
-            limit: this.config.options.textLimit,
+            limit: this.config.options.textLimit || 4,
             limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
             manifestExclude: this.config.options.manifestExclude,
             sanitizer: function(html) { return html }
