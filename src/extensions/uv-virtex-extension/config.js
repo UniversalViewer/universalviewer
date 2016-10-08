@@ -7,7 +7,8 @@ module.exports = {
             flatten: true,
             src: [
                 'virtex3d/dist/virtex.js',
-                'three.js/build/three.min.js'
+                'three.js/build/three.min.js',
+                'iiif-metadata-component/dist/iiif-metadata-component.js'
             ],
             dest: '<%= config.directories.uvVirtexExtension %>/lib'
         },
@@ -17,7 +18,8 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-                'virtex3d/dist/virtex.d.ts'
+                'virtex3d/dist/virtex.d.ts',
+                'iiif-metadata-component/dist/iiif-metadata-component.d.ts'
             ],
             dest: '<%= config.directories.typings %>'
         }
