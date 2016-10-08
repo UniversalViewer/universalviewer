@@ -18,6 +18,7 @@ import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import Metrics = require("../../modules/uv-shared-module/Metrics");
 import MobileFooterPanel = require("../../modules/uv-osdmobilefooterpanel-module/MobileFooter");
 import Mode = require("./Mode");
+import MoreInfoDialogue = require("../../modules/uv-dialogues-module/MoreInfoDialogue");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
 import MultiSelectionArgs = require("./MultiSelectionArgs");
@@ -37,15 +38,15 @@ import Size = Utils.Measurements.Size;
 class Extension extends BaseExtension implements ISeadragonExtension {
 
     $downloadDialogue: JQuery;
-    $shareDialogue: JQuery;
     $externalContentDialogue: JQuery;
     $helpDialogue: JQuery;
+    $moreInfoDialogue: JQuery;
     $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
+    $shareDialogue: JQuery;
     centerPanel: SeadragonCenterPanel;
     currentRotation: number = 0;
     downloadDialogue: DownloadDialogue;
-    shareDialogue: ShareDialogue;
     externalContentDialogue: ExternalContentDialogue;
     footerPanel: FooterPanel;
     headerPanel: PagingHeaderPanel;
@@ -54,10 +55,12 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     leftPanel: ContentLeftPanel;
     mobileFooterPanel: MobileFooterPanel;
     mode: Mode;
+    moreInfoDialogue: MoreInfoDialogue;
     multiSelectDialogue: MultiSelectDialogue;
     rightPanel: MoreInfoRightPanel;
     searchResults: SearchResult[] = [];
     settingsDialogue: SettingsDialogue;
+    shareDialogue: ShareDialogue;
 
     constructor(bootstrapper: BootStrapper) {
         super(bootstrapper);
@@ -356,6 +359,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         this.$helpDialogue = $('<div class="overlay help"></div>');
         Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
+
+        this.$moreInfoDialogue = $('<div class="overlay moreInfo"></div>');
+        Shell.$overlays.append(this.$moreInfoDialogue);
+        this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
         this.$multiSelectDialogue = $('<div class="overlay multiSelect"></div>');
         Shell.$overlays.append(this.$multiSelectDialogue);
