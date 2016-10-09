@@ -29,6 +29,7 @@ class FooterPanel extends BaseView {
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
             this.updateMinimisedButtons();
+            this.updateMoreInfoButton();
         });
 
         $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
@@ -37,9 +38,6 @@ class FooterPanel extends BaseView {
 
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
-
-        this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
-        this.$options.append(this.$moreInfoButton);
 
         this.$feedbackButton = $('<a class="feedback" title="' + this.content.feedback + '" tabindex="0">' + this.content.feedback + '</a>');
         this.$options.prepend(this.$feedbackButton);
@@ -58,6 +56,9 @@ class FooterPanel extends BaseView {
 
         this.$downloadButton = $('<a class="download" title="' + this.content.download + '" tabindex="0">' + this.content.download + '</a>');
         this.$options.prepend(this.$downloadButton);
+
+        this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
+        this.$options.prepend(this.$moreInfoButton);
 
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '" tabindex="0">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
@@ -84,6 +85,10 @@ class FooterPanel extends BaseView {
 
         this.$downloadButton.onPressed(() => {
             $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, [this.$downloadButton]);
+        });
+
+        this.$moreInfoButton.onPressed(() => {
+            $.publish(BaseCommands.SHOW_MOREINFO_DIALOGUE, [this.$moreInfoButton]);
         });
 
         this.$fullScreenBtn.on('click', (e) => {

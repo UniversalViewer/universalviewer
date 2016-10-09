@@ -6,7 +6,7 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-
+                'iiif-metadata-component/dist/iiif-metadata-component.js'
             ],
             dest: '<%= config.directories.uvPdfExtension %>/lib'
         },
