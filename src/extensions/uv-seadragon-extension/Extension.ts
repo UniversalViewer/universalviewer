@@ -630,17 +630,17 @@ class Extension extends BaseExtension implements ISeadragonExtension {
           var maxSize: Size =  new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
           if (!_.isUndefined(maxSize.width) && !_.isUndefined(maxSize.height)){
 
-            var maxAxis: number = Math.max( maxSize.width, maxSize.height );
+            if( width > maxSize.width ){
 
-            if( width > maxAxis ){
-
-              var newWidth: number = maxAxis;
+              var newWidth: number = maxSize.width;
               height = Math.round( newWidth * (height / width) );
               width = newWidth;
 
-            }else{
+            }
 
-                var newHeight: number = maxAxis;
+            if ( height > maxSize.height ) {
+
+                var newHeight: number = maxSize.height;
                 width = Math.round( (width / height) * newHeight );
                 height = newHeight;
 
