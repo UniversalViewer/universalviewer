@@ -253,20 +253,20 @@ module.exports = function (grunt) {
                         src: ['**']
                     }
                 ]
-            },
-            tar: {
-                options: {
-                    mode: 'tar',
-                    archive: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>.tar'
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= config.directories.build %>/',
-                        src: ['**']
-                    }
-                ]
-            }
+            }//,
+            // tar: {
+            //     options: {
+            //         mode: 'tar',
+            //         archive: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>.tar'
+            //     },
+            //     files: [
+            //         {
+            //             expand: true,
+            //             cwd: '<%= config.directories.build %>/',
+            //             src: ['**']
+            //         }
+            //     ]
+            // }
         },
 
         exec: {
@@ -491,7 +491,7 @@ module.exports = function (grunt) {
             'clean:dist',
             'copy:dist',
             'compress:zip',
-            'compress:tar',
+            //'compress:tar',
             'clean:distexamples',
             'copy:distexamples'
         );
