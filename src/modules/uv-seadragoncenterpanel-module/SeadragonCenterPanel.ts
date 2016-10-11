@@ -270,8 +270,8 @@ class SeadragonCenterPanel extends CenterPanel {
             $.publish(Commands.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
 
-        this.$rotateButton.on('click', () => {
-            $.publish(Commands.SEADRAGON_ROTATION, [this.viewer.viewport.getRotation()]);
+        this.viewer.addHandler('rotate', (args) => {
+            $.publish(Commands.SEADRAGON_ROTATION, [args.degrees]);
         });
 
         this.title = this.extension.helper.getLabel();
