@@ -16,7 +16,6 @@ class ShareDialogue extends Dialogue {
     $shareFrame: JQuery;
     $shareHeader: JQuery;
     $shareInput: JQuery;
-    $shareLink: JQuery;
     $shareView: JQuery;
     $size: JQuery;
     $tabs: JQuery;
@@ -90,10 +89,7 @@ class ShareDialogue extends Dialogue {
         this.$shareHeader = $('<div class="header"></div>');
         this.$shareView.append(this.$shareHeader);
 
-        this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
-        this.$shareView.append(this.$shareLink);
-
-        this.$shareInput = $('<input class="shareInput" type="text" readonly="true" />');
+        this.$shareInput = $('<textarea class="shareInput" readonly="true"></textarea>');
         this.$shareView.append(this.$shareInput);
 
         this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
@@ -111,7 +107,7 @@ class ShareDialogue extends Dialogue {
         // this.$image = $('<img class="share" />');
         // this.$embedView.append(this.$image);
 
-        this.$code = $('<input class="code" type="text" readonly="true" />');
+        this.$code = $('<textarea class="code" readonly="true"></textarea>');
         this.$embedView.append(this.$code);
 
         this.$customSize = $('<div class="customSize"></div>');
@@ -234,16 +230,8 @@ class ShareDialogue extends Dialogue {
     updateShareOptions(): void {
         
         this.$shareInput.val(this.getShareUrl());
-        this.$shareLink.prop('href', this.getShareUrl());
-        this.$shareLink.text(this.getShareUrl());
-        
-        if ($.browser.mobile){
-            this.$shareInput.hide();
-            this.$shareLink.show();
-        } else {
-            this.$shareInput.show();
-            this.$shareLink.hide();
-        }
+        this.$shareInput.show();
+
     }
 
     updateInstructions(): void {
