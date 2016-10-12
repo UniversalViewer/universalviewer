@@ -137,7 +137,7 @@ class ShareDialogue extends Dialogue {
         this.$iiifButton = $('<a class="imageBtn iiif" href="' + iiifUrl + '" title="' + this.content.iiif + '" target="_blank"></a>');
         this.$footer.append(this.$iiifButton);
 
-        this.$termsOfUseButton = $('<a href="#">' + this.extension.config.content.termsOfUse + '</a>');
+        this.$termsOfUseButton = $('<a href="#">' + this.content.termsOfUse + '</a>');
         this.$footer.append(this.$termsOfUseButton);
 
         this.$widthInput.on('keydown', (e) => {
@@ -294,7 +294,7 @@ class ShareDialogue extends Dialogue {
     updateShareFrame(): void {
         var shareUrl: string = this.extension.helper.getShareServiceUrl();
 
-        if (Utils.Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
+        if (Utils.Bools.getBool(this.options.shareFrameEnabled, true) && shareUrl) {
             this.$shareFrame.prop('src', shareUrl);
             this.$shareFrame.show();
         } else {
@@ -305,7 +305,7 @@ class ShareDialogue extends Dialogue {
     updateTermsOfUseButton(): void {
         var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
-        if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
+        if (Utils.Bools.getBool(this.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();
