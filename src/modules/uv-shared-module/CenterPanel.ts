@@ -1,5 +1,6 @@
 import Shell = require("./Shell");
 import BaseView = require("./BaseView");
+import BaseCommands = require("./BaseCommands");
 
 class CenterPanel extends BaseView {
 
@@ -75,9 +76,20 @@ class CenterPanel extends BaseView {
 
         $attribution.targetBlank();
 
-        $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
-            this.resize();
-        });
+        if ( $attribution.html().length > this.options.trimAttributionCount ){
+
+          var collapsedText = $attribution.html().substr(0, this.options.trimAttributionCount);
+          collapsedText = collapsedText.substr(0, Math.min(collapsedText.length, collapsedText.lastIndexOf(" ")));
+
+          var $toggleButton = $('<a href="#" class="toggle more">'+this.content.trimAttributionMore+'</a>');
+          $toggleButton.on('click',(e) => {
+            e.preventDefault();
+            $.publish(BaseCommands.SHOW_TERMS_OF_USE);
+          });
+          $attribution.html( collapsedText + "&hellip;&nbsp;" );
+          $attribution.append($toggleButton);
+
+        }
 
         //if (license){
         //    $license.append('<a href="' + license + '">' + license + '</a>');
