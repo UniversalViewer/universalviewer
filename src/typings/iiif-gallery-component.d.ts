@@ -1,4 +1,4 @@
-// iiif-gallery-component v0.0.1 https://github.com/viewdir/iiif-gallery-component#readme
+// iiif-gallery-component v1.0.0 https://github.com/viewdir/iiif-gallery-component#readme
 declare namespace IIIFComponents {
     class GalleryComponent extends _Components.BaseComponent implements IGalleryComponent {
         options: IGalleryComponentOptions;

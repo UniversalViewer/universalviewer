@@ -22,21 +22,30 @@
                 .loading(@loader-black-bg);
             }
 
-            .items{
+            .noData{
+                padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
+            }
 
-                .header {
-                    font-size: @font-size-small;
-                    text-transform: uppercase;
-                }
+            .groups {
+                padding: @padding-medium-vertical @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
 
-                .item {
+                .items{
 
-                    .header{
+                    .header {
                         font-size: @font-size-small;
                         text-transform: uppercase;
                     }
+
+                    .item {
+
+                        .header{
+                            font-size: @font-size-small;
+                            text-transform: uppercase;
+                        }
+                    }
                 }
             }
+            
         }
     }
 }

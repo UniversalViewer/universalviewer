@@ -1,4 +1,4 @@
-// manifesto.js v0.2.1 https://github.com/viewdir/manifesto
+// manifesto.js v0.2.4 https://github.com/viewdir/manifesto
 declare module exjs {
     var version: string;
 }
@@ -480,14 +480,18 @@ declare module Manifesto {
 
 declare module Manifesto {
     class IIIFResourceType extends StringValue {
+        static ANNOTATION: IIIFResourceType;
         static CANVAS: IIIFResourceType;
         static COLLECTION: IIIFResourceType;
         static MANIFEST: IIIFResourceType;
         static RANGE: IIIFResourceType;
+        static SEQUENCE: IIIFResourceType;
+        annotation(): IIIFResourceType;
         canvas(): IIIFResourceType;
         collection(): IIIFResourceType;
         manifest(): IIIFResourceType;
         range(): IIIFResourceType;
+        sequence(): IIIFResourceType;
     }
 }
 
@@ -642,14 +646,18 @@ declare module Manifesto {
         options: IManifestoOptions;
         constructor(jsonld?: any, options?: IManifestoOptions);
         getIIIFResourceType(): IIIFResourceType;
-        getLabel(): string;
-        getMetadata(): any;
+        getLabel(): TranslationCollection;
+        getMetadata(): MetadataItem[];
         getRendering(format: RenderingFormat | string): IRendering;
         getRenderings(): IRendering[];
         getService(profile: ServiceProfile | string): IService;
         getServices(): IService[];
+        isAnnotation(): boolean;
         isCanvas(): boolean;
+        isCollection(): boolean;
+        isManifest(): boolean;
         isRange(): boolean;
+        isSequence(): boolean;
     }
 }
 
@@ -686,15 +694,15 @@ declare module Manifesto {
         parentCollection: ICollection;
         parentLabel: string;
         constructor(jsonld?: any, options?: IManifestoOptions);
-        getAttribution(): string;
-        getDescription(): string;
+        getAttribution(): TranslationCollection;
+        getDescription(): TranslationCollection;
         getIIIFResourceType(): IIIFResourceType;
         getLogo(): string;
         getLicense(): string;
         getNavDate(): Date;
         getRelated(): any;
         getSeeAlso(): any;
-        getLabel(): string;
+        getLabel(): TranslationCollection;
         getDefaultTree(): ITreeNode;
         isCollection(): boolean;
         isManifest(): boolean;
@@ -915,6 +923,7 @@ declare var manifesto: IManifesto;
 declare module Manifesto {
     class Utils {
         static getImageQuality(profile: Manifesto.ServiceProfile): string;
+        static getInexactLocale(locale: string): string;
         static getLocalisedValue(resource: any, locale: string): string;
         static generateTreeNodeIds(treeNode: ITreeNode, index?: number): void;
         static loadResource(uri: string): Promise<string>;
@@ -930,6 +939,36 @@ declare module Manifesto {
         static getResourceById(parentResource: IJSONLDResource, id: string): IJSONLDResource;
         static getAllArrays(obj: any): exjs.IEnumerable<any>;
         static getServices(resource: any): IService[];
+    }
+}
+
+declare module Manifesto {
+    class MetadataItem {
+        label: TranslationCollection;
+        value: TranslationCollection;
+        defaultLocale: string;
+        resource: any;
+        constructor(defaultLocale: string);
+        parse(resource: any): void;
+        getLabel(): string;
+        setLabel(value: string): void;
+        getValue(): string;
+        setValue(value: string): void;
+    }
+}
+
+declare module Manifesto {
+    class Translation {
+        value: string;
+        locale: string;
+        constructor(value: string, locale: string);
+    }
+}
+
+declare module Manifesto {
+    class TranslationCollection extends Array<Translation> {
+        static parse(translation: any, defaultLocale: string): TranslationCollection;
+        static getValue(translationCollection: TranslationCollection, locale?: string): string;
     }
 }
 
@@ -963,6 +1002,9 @@ declare module Manifesto {
 /// <reference path="TreeNode.d.ts" />
 /// <reference path="TreeNodeType.d.ts" />
 /// <reference path="Utils.d.ts" />
+/// <reference path="MetadataItem.d.ts" />
+/// <reference path="Translation.d.ts" />
+/// <reference path="TranslationCollection.d.ts" />
 /// <reference path="Manifesto.d.ts" />
 
 declare module Manifesto {
@@ -985,7 +1027,7 @@ declare module Manifesto {
 }
 
 declare module Manifesto {
-    interface IAnnotation extends IJSONLDResource {
+    interface IAnnotation extends IManifestResource {
         getMotivation(): AnnotationMotivation;
         getOn(): string;
         getResource(): Resource;
@@ -1047,11 +1089,11 @@ declare module Manifesto {
 declare module Manifesto {
     interface IIIIFResource extends IManifestResource {
         defaultTree: ITreeNode;
-        getAttribution(): string;
+        getAttribution(): TranslationCollection;
         getDefaultTree(): ITreeNode;
-        getDescription(): string;
+        getDescription(): TranslationCollection;
         getIIIFResourceType(): IIIFResourceType;
-        getLabel(): string;
+        getLabel(): TranslationCollection;
         getLicense(): string;
         getLogo(): string;
         getNavDate(): Date;
@@ -1108,12 +1150,16 @@ interface IManifesto {
     loadExternalResources: (resources: Manifesto.IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, restricted: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource, rejectOnError: boolean) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource, tokenStorageStrategy: string) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
     loadManifest: (uri: string) => Promise<string>;
     ManifestType: Manifesto.ManifestType;
+    MetadataItem: any;
     RenderingFormat: Manifesto.RenderingFormat;
     ResourceFormat: Manifesto.ResourceFormat;
     ResourceType: Manifesto.ResourceType;
     ServiceProfile: Manifesto.ServiceProfile;
     StatusCodes: Manifesto.IStatusCodes;
+    Translation: any;
+    TranslationCollection: any;
     TreeNodeType: Manifesto.TreeNodeType;
+    Utils: any;
     ViewingDirection: Manifesto.ViewingDirection;
     ViewingHint: Manifesto.ViewingHint;
 }
@@ -1133,14 +1179,17 @@ declare module Manifesto {
     interface IManifestResource extends IJSONLDResource {
         externalResource: Manifesto.IExternalResource;
         options: IManifestoOptions;
-        getLabel(): string;
-        getMetadata(): any;
+        getLabel(): TranslationCollection;
+        getMetadata(): MetadataItem[];
         getRendering(format: RenderingFormat | string): IRendering;
         getRenderings(): IRendering[];
         getService(profile: ServiceProfile | string): IService;
         getServices(): IService[];
+        isAnnotation(): boolean;
         isCanvas(): boolean;
+        isManifest(): boolean;
         isRange(): boolean;
+        isSequence(): boolean;
     }
 }
 
@@ -1289,12 +1338,13 @@ declare namespace Manifold {
 declare namespace Manifold {
     class Helper implements IHelper {
         private _multiSelectState;
+        canvasIndex: number;
+        collectionIndex: number;
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
-        collectionIndex: number;
         manifestIndex: number;
-        canvasIndex: number;
+        options: IManifoldOptions;
         sequenceIndex: number;
         constructor(options: IManifoldOptions);
         getAutoCompleteService(): Manifesto.IService;
@@ -1305,7 +1355,6 @@ declare namespace Manifold {
         getCanvasByIndex(index: number): Manifesto.ICanvas;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string): number;
-        getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[];
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
@@ -1321,7 +1370,9 @@ declare namespace Manifold {
         getLicense(): string;
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;
-        getMetadata(licenseFormatter?: Manifold.UriLabeller): Manifold.IMetadataItem[];
+        getMetadata(options?: MetadataOptions): MetadataGroup[];
+        private _parseMetadataOptions(options, metadataGroups);
+        private _getRangeMetadata(metadataGroups, range);
         getMultiSelectState(): Manifold.MultiSelectState;
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
@@ -1387,12 +1438,13 @@ declare namespace Manifold {
 
 declare namespace Manifold {
     interface IHelper {
+        canvasIndex: number;
+        collectionIndex: number;
         iiifResource: Manifesto.IIIIFResource;
         iiifResourceUri: string;
         manifest: Manifesto.IManifest;
-        collectionIndex: number;
         manifestIndex: number;
-        canvasIndex: number;
+        options: IManifoldOptions;
         sequenceIndex: number;
         getAutoCompleteService(): Manifesto.IService;
         getAttribution(): string;
@@ -1402,7 +1454,6 @@ declare namespace Manifold {
         getCanvasByIndex(index: number): Manifesto.ICanvas;
         getCanvasIndexById(id: string): number;
         getCanvasIndexByLabel(label: string): number;
-        getCanvasMetadata(canvas: Manifesto.ICanvas): Manifold.IMetadataItem[];
         getCanvasRange(canvas: Manifesto.ICanvas, path?: string): Manifesto.IRange;
         getCanvasRanges(canvas: Manifesto.ICanvas): Manifesto.IRange[];
         getCollectionIndex(iiifResource: Manifesto.IIIIFResource): number;
@@ -1418,7 +1469,7 @@ declare namespace Manifold {
         getLicense(): string;
         getLogo(): string;
         getManifestType(): Manifesto.ManifestType;
-        getMetadata(): Manifold.IMetadataItem[];
+        getMetadata(options?: MetadataOptions): Manifold.MetadataGroup[];
         getMultiSelectState(): Manifold.MultiSelectState;
         getRanges(): IRange[];
         getRangeByPath(path: string): any;
@@ -1480,9 +1531,7 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
-    interface IMetadataItem {
-        label: string;
-        value: string | IMetadataItem[];
+    interface IMetadataItem extends Manifesto.MetadataItem {
         isRootLevel: boolean;
     }
 }
@@ -1516,6 +1565,25 @@ declare namespace Manifold {
 }
 
 declare namespace Manifold {
+    class MetadataGroup {
+        resource: Manifesto.IManifestResource;
+        label: string;
+        items: Manifold.IMetadataItem[];
+        constructor(resource: Manifesto.IManifestResource, label?: string);
+        addItem(item: Manifold.IMetadataItem): void;
+        addMetadata(metadata: Manifesto.MetadataItem[], isRootLevel?: boolean): void;
+    }
+}
+
+declare namespace Manifold {
+    class MetadataOptions {
+        canvases: Manifesto.ICanvas[];
+        licenseFormatter: Manifold.UriLabeller;
+        range: Manifesto.IRange;
+    }
+}
+
+declare namespace Manifold {
     class MultiSelectState {
         isEnabled: boolean;
         ranges: IRange[];
@@ -1537,6 +1605,14 @@ declare namespace Manifold {
         selectAllRanges(selected: boolean): void;
         selectRanges(ranges: IRange[], selected: boolean): void;
         setEnabled(enabled: boolean): void;
+    }
+}
+
+declare namespace Manifold {
+    class Translation {
+        value: string;
+        locale: string;
+        constructor(value: string, locale: string);
     }
 }
 

@@ -45,17 +45,26 @@ class MoreInfoRightPanel extends RightPanel {
 
     private _getOptions(): IIIFComponents.IMetadataComponentOptions {
         return <IIIFComponents.IMetadataComponentOptions>{
-            aggregateValues: this.config.options.aggregateValues,
+            canvasDisplayOrder: this.config.options.canvasDisplayOrder,
+            canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
+            canvasLabels: this.extension.getCanvasLabels(this.content.page),
             content: this.config.content,
+            copiedMessageDuration: 2000,
             copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
-            displayOrder: this.config.options.displayOrder,
             element: ".rightPanel .iiif-metadata-component",
             helper: this.extension.helper,
+            licenseFormatter: null,
             limit: this.config.options.textLimit || 4,
             limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+            manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
-            sanitizer: function(html) { return html }
+            range: this.extension.currentRange,
+            rtlLanguageCodes: this.config.options.rtlLanguageCodes,
+            sanitizer: (html) => {
+                return this.extension.sanitize(html);
+            },
+            showAllLanguages: this.config.options.showAllLanguages
         };
     }
 

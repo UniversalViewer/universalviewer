@@ -109,8 +109,9 @@ class PagingHeaderPanel extends HeaderPanel {
                     if (this.isPageModeEnabled()){
                         for (var i = 0; i < canvases.length; i++){
                             var canvas: Manifesto.ICanvas = canvases[i];
-                            if (canvas.getLabel().startsWith(term)){
-                                results.push(canvas.getLabel());
+                            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+                            if (label.startsWith(term)){
+                                results.push(label);
                             }
                         }
                     } else {
@@ -140,8 +141,8 @@ class PagingHeaderPanel extends HeaderPanel {
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
             for (var imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
-                var canvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                var label = this.extension.sanitize(canvas.getLabel());
+                var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
+                var label: string = this.extension.sanitize(Manifesto.TranslationCollection.getValue(canvas.getLabel()));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
@@ -428,12 +429,12 @@ class PagingHeaderPanel extends HeaderPanel {
 
     setSearchFieldValue(index): void {
 
-        var canvas = this.extension.helper.getCanvasByIndex(index);
+        var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
         var value: string;
 
         if (this.isPageModeEnabled()) {
 
-            var orderLabel = canvas.getLabel();
+            var orderLabel: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
             if (orderLabel === "-") {
                 value = "";

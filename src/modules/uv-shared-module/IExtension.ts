@@ -18,6 +18,8 @@ interface IExtension{
     embedWidth: number;
     getAlternateLocale(): any;
     getCanvasIndexParam(): number;
+    getCanvasLabels(label: string): string;
+    getCurrentCanvases(): Manifesto.ICanvas[];
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
     getEmbedDomain(): string;

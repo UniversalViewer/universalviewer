@@ -71,11 +71,11 @@ class DownloadDialogue extends Dialogue {
                 if (renderingFormat){
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, rendering.getLabel(), format);
+                this.addEntireFileDownloadOption(rendering.id, Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
                 renderingFound = true;
             });
 
-            if (!renderingFound){
+            if (!renderingFound) {
                 this.addEntireFileDownloadOption(canvas.id, null, null);
             }
         }

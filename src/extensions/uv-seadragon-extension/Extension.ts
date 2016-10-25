@@ -569,7 +569,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         var bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = canvas.getLabel();
+        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = this.getCroppedImageUri(canvas, this.getViewer());
         bookmark.thumb = canvas.getCanonicalImageUri(this.config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();

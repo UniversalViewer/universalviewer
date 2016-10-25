@@ -51,6 +51,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var MetadataGroup = Manifold.MetadataGroup;
 var IIIFComponents;
 (function (IIIFComponents) {
     var MetadataComponent = (function (_super) {
@@ -65,82 +66,112 @@ var IIIFComponents;
             if (!success) {
                 console.error("Component failed to initialise");
             }
-            this._$moreInfoItemTemplate = $('<div class="item">\
+            this._$metadataGroupTemplate = $('<div class="group">\
                                                    <div class="header"></div>\
-                                                   <div class="text"></div>\
+                                                   <div class="items"></div>\
                                                </div>');
+            this._$metadataItemTemplate = $('<div class="item">\
+                                                   <div class="label"></div>\
+                                                   <div class="values"></div>\
+                                               </div>');
+            this._$metadataItemValueTemplate = $('<div class="value"></div>');
             this._$copyTextTemplate = $('<div class="copyText" alt="' + this.options.content.copyToClipboard + '" title="' + this.options.content.copyToClipboard + '">\
                                                    <div class="copiedText">' + this.options.content.copiedToClipboard + ' </div>\
                                                </div>');
-            this._$items = $('<div class="items"></div>');
-            this._$element.append(this._$items);
-            this._$canvasItems = $('<div class="items"></div>');
-            this._$element.append(this._$canvasItems);
+            this._$metadataGroups = $('<div class="groups"></div>');
+            this._$element.append(this._$metadataGroups);
             this._$noData = $('<div class="noData">' + this.options.content.noData + '</div>');
             this._$element.append(this._$noData);
-            this._aggregateValues = this._readCSV(this.options.aggregateValues);
-            this._canvasExclude = this._readCSV(this.options.canvasExclude);
             return success;
         };
         MetadataComponent.prototype._getDefaultOptions = function () {
             return {
                 aggregateValues: "",
+                canvases: null,
+                canvasDisplayOrder: "",
                 canvasExclude: "",
+                canvasLabels: "",
                 content: {
                     attribution: "Attribution",
-                    canvasHeader: "About the image",
+                    canvasHeader: "About the canvas",
                     copiedToClipboard: "Copied to clipboard",
                     copyToClipboard: "Copy to clipboard",
                     description: "Description",
+                    imageHeader: "About the image",
                     less: "less",
                     license: "License",
                     logo: "Logo",
                     manifestHeader: "About the item",
                     more: "more",
-                    noData: "No data to display"
+                    noData: "No data to display",
+                    rangeHeader: "About the range",
+                    sequenceHeader: "About the sequence"
                 },
+                copiedMessageDuration: 2000,
                 copyToClipboardEnabled: false,
-                displayOrder: "",
                 helper: null,
+                licenseFormatter: null,
                 limit: 4,
                 limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+                manifestDisplayOrder: "",
                 manifestExclude: "",
-                sanitizer: function (html) { return html; }
+                range: null,
+                rtlLanguageCodes: "ar, ara, dv, div, he, heb, ur, urd",
+                sanitizer: function (html) { return html; },
+                showAllLanguages: false
             };
         };
+        MetadataComponent.prototype._getManifestGroup = function () {
+            return this._metadataGroups.en().where(function (x) { return x.resource.isManifest(); }).first();
+        };
+        MetadataComponent.prototype._getCanvasGroups = function () {
+            return this._metadataGroups.en().where(function (x) { return x.resource.isCanvas(); }).toArray();
+        };
         MetadataComponent.prototype.databind = function () {
-            // todo
-            // if (this.extension.config.licenseMap){
-            //     data = this.extension.helper.getMetadata(new Manifold.UriLabeller(this.extension.config.licenseMap));
-            // } else {
-            this._manifestMetadata = this.options.helper.getMetadata();
-            //}
-            if (this.options.displayOrder) {
-                this._manifestMetadata = this._sort(this._manifestMetadata[0].value, this._readCSV(this.options.displayOrder));
+            var _this = this;
+            this._$metadataGroups.empty();
+            var options = {
+                canvases: this.options.canvases,
+                licenseFormatter: this.options.licenseFormatter,
+                range: this.options.range
+            };
+            this._metadataGroups = this.options.helper.getMetadata(options);
+            if (this.options.manifestDisplayOrder) {
+                var manifestGroup = this._getManifestGroup();
+                manifestGroup.items = this._sort(manifestGroup.items, this._readCSV(this.options.manifestDisplayOrder));
+            }
+            if (this.options.canvasDisplayOrder) {
+                var canvasGroups = this._getCanvasGroups();
+                $.each(canvasGroups, function (index, canvasGroup) {
+                    canvasGroup.items = _this._sort(canvasGroup.items, _this._readCSV(_this.options.canvasDisplayOrder));
+                });
+            }
+            if (this.options.canvasLabels) {
+                this._label(this._getCanvasGroups(), this._readCSV(this.options.canvasLabels, false));
             }
             if (this.options.manifestExclude) {
-                this._manifestMetadata = this._exclude(this._manifestMetadata[0].value, this._readCSV(this.options.manifestExclude));
+                var manifestGroup = this._getManifestGroup();
+                manifestGroup.items = this._exclude(manifestGroup.items, this._readCSV(this.options.manifestExclude));
             }
-            this._manifestMetadata = this._flatten(this._manifestMetadata);
-            this._canvasMetadata = this._getCanvasData(this.options.helper.getCurrentCanvas());
-            if (this._manifestMetadata.length === 0 && this._canvasMetadata.length === 0) {
+            if (this.options.canvasExclude) {
+                var canvasGroups = this._getCanvasGroups();
+                $.each(canvasGroups, function (index, canvasGroup) {
+                    canvasGroup.items = _this._exclude(canvasGroup.items, _this._readCSV(_this.options.canvasExclude));
+                });
+            }
+            if (!this._metadataGroups.length) {
                 this._$noData.show();
                 return;
             }
             this._$noData.hide();
-            //var manifestRenderData: JQuery = $.extend(true, [], this._manifestMetadata);
-            //var canvasRenderData: JQuery = $.extend(true, [], this._canvasMetadata);
-            this._aggregate(this._manifestMetadata, this._canvasMetadata);
-            this._renderElement(this._$items, this._manifestMetadata, this.options.content.manifestHeader, this._canvasMetadata.length !== 0);
-            this._renderElement(this._$canvasItems, this._canvasMetadata, this.options.content.canvasHeader, this._manifestMetadata.length !== 0);
+            this._render();
         };
-        MetadataComponent.prototype._sort = function (data, displayOrder) {
+        MetadataComponent.prototype._sort = function (items, displayOrder) {
             var _this = this;
-            // sort items
             var sorted = [];
-            var unsorted = data.clone();
+            var unsorted = items.clone();
             $.each(displayOrder, function (index, item) {
-                var match = unsorted.en().where((function (x) { return _this._normalise(x.label) === item; })).first();
+                var match = unsorted.en().where((function (x) { return _this._normalise(x.getLabel()) === item; })).first();
                 if (match) {
                     sorted.push(match);
                     unsorted.remove(match);
@@ -152,112 +183,175 @@ var IIIFComponents;
             });
             return sorted;
         };
-        MetadataComponent.prototype._exclude = function (data, excludeConfig) {
+        MetadataComponent.prototype._label = function (groups, labels) {
+            $.each(groups, function (index, group) {
+                group.label = labels[index];
+            });
+        };
+        MetadataComponent.prototype._exclude = function (items, excludeConfig) {
             var _this = this;
             $.each(excludeConfig, function (index, item) {
-                var match = data.en().where((function (x) { return _this._normalise(x.label) === item; })).first();
+                var match = items.en().where((function (x) { return _this._normalise(x.getLabel()) === item; })).first();
                 if (match) {
-                    data.remove(match);
+                    items.remove(match);
                 }
             });
-            return data;
+            return items;
         };
-        MetadataComponent.prototype._flatten = function (data) {
-            // flatten metadata into array.
-            var flattened = [];
-            $.each(data, function (index, item) {
-                if (Array.isArray(item.value)) {
-                    flattened = flattened.concat(item.value);
-                }
-                else {
-                    flattened.push(item);
-                }
-            });
-            return flattened;
-        };
+        // private _flatten(items: MetadataItem[]): MetadataItem[] {
+        //     // flatten metadata into array.
+        //     var flattened: MetadataItem[] = [];
+        //     $.each(items, (index: number, item: any) => {
+        //         if (Array.isArray(item.value)){
+        //             flattened = flattened.concat(<MetadataItem[]>item.value);
+        //         } else {
+        //             flattened.push(item);
+        //         }
+        //     });
+        //     return flattened;
+        // }
         // merge any duplicate items into canvas metadata
         // todo: needs to be more generic taking a single concatenated array
-        MetadataComponent.prototype._aggregate = function (manifestMetadata, canvasMetadata) {
-            var _this = this;
-            if (this._aggregateValues.length) {
-                $.each(canvasMetadata, function (index, canvasItem) {
-                    $.each(_this._aggregateValues, function (index, value) {
-                        value = _this._normalise(value);
-                        if (_this._normalise(canvasItem.label) === value) {
-                            var manifestItem = manifestMetadata.en().where(function (x) { return _this._normalise(x.label) === value; }).first();
-                            if (manifestItem) {
-                                canvasItem.value = manifestItem.value + canvasItem.value;
-                                manifestMetadata.remove(manifestItem);
-                            }
-                        }
-                    });
-                });
-            }
-        };
+        // private _aggregate(manifestMetadata: any[], canvasMetadata: any[]) {
+        //     if (this._aggregateValues.length) {
+        //         $.each(canvasMetadata, (index: number, canvasItem: any) => {
+        //             $.each(this._aggregateValues, (index: number, value: string) => {
+        //                 value = this._normalise(value);
+        //                 if (this._normalise(canvasItem.label) === value) {
+        //                     var manifestItem = manifestMetadata.en().where(x => this._normalise(x.label) === value).first();
+        //                     if (manifestItem) {
+        //                         canvasItem.value = manifestItem.value + canvasItem.value;
+        //                         manifestMetadata.remove(manifestItem);
+        //                     }
+        //                 }  
+        //             });
+        //         });
+        //     }
+        // }
         MetadataComponent.prototype._normalise = function (value) {
-            return value.toLowerCase().replace(/ /g, "");
-        };
-        MetadataComponent.prototype._renderElement = function (element, data, header, renderHeader) {
-            var _this = this;
-            element.empty();
-            if (data.length !== 0) {
-                if (renderHeader && header) {
-                    element.append(this._buildHeader(header));
-                }
-                $.each(data, function (index, item) {
-                    var $built = _this._buildItem(item);
-                    element.append($built);
-                    if (_this.options.limitType === IIIFComponents.MetadataComponentOptions.LimitType.LINES) {
-                        $built.find('.text').toggleExpandTextByLines(_this.options.limit, _this.options.content.less, _this.options.content.more, function () { });
-                    }
-                    else if (_this.options.limitType === IIIFComponents.MetadataComponentOptions.LimitType.CHARS) {
-                        $built.find('.text').ellipsisHtmlFixed(_this.options.limit, null);
-                    }
-                });
+            if (value) {
+                return value.toLowerCase().replace(/ /g, "");
             }
+            return null;
         };
-        MetadataComponent.prototype._buildHeader = function (label) {
-            var $header = $('<div class="header"></div>');
-            $header.html(this._sanitize(label));
-            return $header;
+        MetadataComponent.prototype._render = function () {
+            var _this = this;
+            $.each(this._metadataGroups, function (index, metadataGroup) {
+                var $metadataGroup = _this._buildMetadataGroup(metadataGroup);
+                _this._$metadataGroups.append($metadataGroup);
+                if (_this.options.limitType === IIIFComponents.MetadataComponentOptions.LimitType.LINES) {
+                    $metadataGroup.find('.value').toggleExpandTextByLines(_this.options.limit, _this.options.content.less, _this.options.content.more, function () { });
+                }
+                else if (_this.options.limitType === IIIFComponents.MetadataComponentOptions.LimitType.CHARS) {
+                    $metadataGroup.find('.value').ellipsisHtmlFixed(_this.options.limit, null);
+                }
+            });
         };
-        MetadataComponent.prototype._buildItem = function (item) {
-            var $elem = this._$moreInfoItemTemplate.clone();
-            var $header = $elem.find('.header');
-            var $text = $elem.find('.text');
-            item.label = this._sanitize(item.label);
-            item.value = this._sanitize(item.value);
-            if (item.isRootLevel) {
-                switch (item.label.toLowerCase()) {
+        MetadataComponent.prototype._buildMetadataGroup = function (metadataGroup) {
+            var $metadataGroup = this._$metadataGroupTemplate.clone();
+            var $header = $metadataGroup.find('>.header');
+            // add group header
+            if (metadataGroup.resource.isManifest() && this.options.content.manifestHeader) {
+                $header.html(this._sanitize(this.options.content.manifestHeader));
+            }
+            else if (metadataGroup.resource.isSequence() && this.options.content.sequenceHeader) {
+                $header.html(this._sanitize(this.options.content.sequenceHeader));
+            }
+            else if (metadataGroup.resource.isRange() && this.options.content.rangeHeader) {
+                $header.html(this._sanitize(this.options.content.rangeHeader));
+            }
+            else if (metadataGroup.resource.isCanvas() && (metadataGroup.label || this.options.content.canvasHeader)) {
+                var header = metadataGroup.label || this.options.content.canvasHeader;
+                $header.html(this._sanitize(header));
+            }
+            else if (metadataGroup.resource.isAnnotation() && this.options.content.imageHeader) {
+                $header.html(this._sanitize(this.options.content.imageHeader));
+            }
+            if (!$header.text()) {
+                $header.hide();
+            }
+            var $items = $metadataGroup.find('.items');
+            for (var i = 0; i < metadataGroup.items.length; i++) {
+                var item = metadataGroup.items[i];
+                var $metadataItem = this._buildMetadataItem(item);
+                $items.append($metadataItem);
+            }
+            return $metadataGroup;
+        };
+        MetadataComponent.prototype._buildMetadataItem = function (item) {
+            var $metadataItem = this._$metadataItemTemplate.clone();
+            var $label = $metadataItem.find('.label');
+            var $values = $metadataItem.find('.values');
+            var label = item.getLabel();
+            if (label && item.isRootLevel) {
+                switch (label.toLowerCase()) {
                     case "attribution":
-                        item.label = this.options.content.attribution;
+                        label = this.options.content.attribution;
                         break;
                     case "description":
-                        item.label = this.options.content.description;
+                        label = this.options.content.description;
                         break;
                     case "license":
-                        item.label = this.options.content.license;
+                        label = this.options.content.license;
                         break;
                     case "logo":
-                        item.label = this.options.content.logo;
+                        label = this.options.content.logo;
                         break;
                 }
             }
-            // replace \n with <br>
-            item.value = item.value.replace('\n', '<br>');
-            $header.html(item.label);
-            $text.html(item.value);
-            $text.targetBlank();
-            item.label = item.label.trim();
-            item.label = item.label.toLowerCase();
-            $elem.addClass(item.label.toCssClass());
-            if (this.options.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $text.text() && $header.text()) {
-                this._addCopyButton($elem, $header);
+            label = this._sanitize(label);
+            $label.html(label);
+            // rtl?
+            this._addReadingDirection($label, this._getItemLocale(item));
+            $metadataItem.addClass(label.toCssClass());
+            var value;
+            var $value;
+            if (this.options.showAllLanguages && item.value && item.value.length > 1) {
+                for (var i = 0; i < item.value.length; i++) {
+                    var translation = item.value[i];
+                    $value = this._buildMetadataItemValue(translation.value, translation.locale);
+                    $values.append($value);
+                }
             }
-            return $elem;
+            else {
+                $value = this._buildMetadataItemValue(item.getValue(), this._getItemLocale(item));
+                $values.append($value);
+            }
+            if (this.options.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $value.text() && $label.text()) {
+                this._addCopyButton($metadataItem, $label);
+            }
+            return $metadataItem;
+        };
+        MetadataComponent.prototype._getItemLocale = function (item) {
+            if (item.value && item.value.length) {
+                return item.value[0].locale;
+            }
+            else {
+                return item.defaultLocale || this.options.helper.options.locale;
+            }
+        };
+        MetadataComponent.prototype._buildMetadataItemValue = function (value, locale) {
+            value = this._sanitize(value);
+            value = value.replace('\n', '<br>'); // replace \n with <br>
+            var $value = this._$metadataItemValueTemplate.clone();
+            $value.html(value);
+            $value.targetBlank();
+            // rtl?
+            if (locale) {
+                this._addReadingDirection($value, locale);
+            }
+            return $value;
+        };
+        MetadataComponent.prototype._addReadingDirection = function ($elem, locale) {
+            locale = Manifesto.Utils.getInexactLocale(locale);
+            var rtlLanguages = this._readCSV(this.options.rtlLanguageCodes);
+            var match = rtlLanguages.en().where(function (x) { return x === locale; }).toArray().length > 0;
+            if (match) {
+                $elem.prop('dir', 'rtl');
+                $elem.addClass('rtl');
+            }
         };
         MetadataComponent.prototype._addCopyButton = function ($elem, $header) {
-            var _this = this;
             var $copyBtn = this._$copyTextTemplate.clone();
             var $copiedText = $copyBtn.children();
             $header.append($copyBtn);
@@ -275,42 +369,39 @@ var IIIFComponents;
                     $copiedText.hide();
                 });
             }
+            var that = this;
             $copyBtn.on('click', function (e) {
-                var imgElement = e.target;
-                var headerText = imgElement.previousSibling.textContent || imgElement.previousSibling.nodeValue;
-                _this._copyValueForLabel(headerText);
+                var $this = $(this);
+                var $item = $this.closest('.item');
+                that._copyItemValues($this, $item);
             });
         };
-        MetadataComponent.prototype._copyValueForLabel = function (label) {
-            var manifestItems = this._flatten(this._manifestMetadata);
-            var canvasItems = this._flatten(this._canvasMetadata);
-            var $matchingItems = $(manifestItems.concat(canvasItems))
-                .filter(function (i, md) { return md.label && label && md.label.toLowerCase() === label.toLowerCase(); });
-            var text = $matchingItems.map(function (i, md) { return md.value; }).get().join('');
-            if (!text)
-                return;
-            Utils.Clipboard.copy(text);
-            var $copiedText = $('.items .item .header:contains(' + label + ') .copiedText');
+        MetadataComponent.prototype._copyItemValues = function ($copyButton, $item) {
+            var $values = $item.find('.value');
+            var values = "";
+            for (var i = 0; i < $values.length; i++) {
+                var value = $($values[i]).text();
+                values.length ? values += '\n' + value : values += value;
+            }
+            Utils.Clipboard.copy(values);
+            var $copiedText = $copyButton.find('.copiedText');
             $copiedText.show();
             setTimeout(function () {
                 $copiedText.hide();
-            }, 2000);
+            }, this.options.copiedMessageDuration);
         };
-        MetadataComponent.prototype._getCanvasData = function (canvas) {
-            var data = this.options.helper.getCanvasMetadata(canvas);
-            if (this._canvasExclude.length !== 0) {
-                this._exclude(data[0].value, this._canvasExclude);
-            }
-            return this._flatten(data);
-        };
-        MetadataComponent.prototype._readCSV = function (config) {
+        MetadataComponent.prototype._readCSV = function (config, normalise) {
+            if (normalise === void 0) { normalise = true; }
+            var csv = [];
             if (config) {
-                return config
-                    .toLowerCase()
-                    .replace(/ /g, "")
-                    .split(',');
+                csv = config.split(',');
+                if (normalise) {
+                    for (var i = 0; i < csv.length; i++) {
+                        csv[i] = this._normalise(csv[i]);
+                    }
+                }
             }
-            return [];
+            return csv;
         };
         MetadataComponent.prototype._sanitize = function (html) {
             return this.options.sanitizer(html);

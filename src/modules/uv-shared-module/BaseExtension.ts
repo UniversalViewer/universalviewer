@@ -948,7 +948,36 @@ class BaseExtension implements IExtension {
         return [canvasIndex];
     }
 
-    getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
+    public getCurrentCanvases(): Manifesto.ICanvas[] {
+        var indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
+        var canvases: Manifesto.ICanvas[] = [];
+        
+        for (var i = 0; i < indices.length; i++) {
+            var index: number = indices[i];
+            var canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
+            canvases.push(canvas);
+        }
+        
+        return canvases;
+    }
+
+    public getCanvasLabels(label: string): string {
+        var indices: number[] = this.getPagedIndices();
+        var labels: string = "";
+
+        if (indices.length === 1) {
+            labels = label;
+        } else {
+            for (var i = 1; i <= indices.length; i++) {
+                if (labels.length) labels += ",";
+                labels += label + " " + i;
+            }
+        }
+
+        return labels;
+    }
+
+    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
 
         var indices = this.getPagedIndices();
         var resourcesToLoad = [];

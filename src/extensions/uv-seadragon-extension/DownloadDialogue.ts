@@ -438,7 +438,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         for (var i = 0; i < renderings.length; i++) {
             var rendering: Manifesto.IRendering = renderings[i];
             if (rendering) {
-                var label: string = rendering.getLabel();
+                var label: string = Manifesto.TranslationCollection.getValue(rendering.getLabel());
                 var currentId: string = "downloadOption" + ++this.renderingUrlsCount;
                 if (label) {
                     label += " ({0})";

@@ -278,7 +278,7 @@ class ContentLeftPanel extends LeftPanel {
         if (topRanges.length > 1){
             var index: number = this.getCurrentCanvasTopRangeIndex();
             var currentRange: Manifesto.IRange = topRanges[index];
-            this.setTreeTabTitle(currentRange.getLabel());
+            this.setTreeTabTitle(Manifesto.TranslationCollection.getValue(currentRange.getLabel()));
         } else {
             this.setTreeTabTitle(this.content.index);
         }
@@ -297,7 +297,7 @@ class ContentLeftPanel extends LeftPanel {
             if (this.treeView){
                 title = this.getSelectedTree().text();
             } else {
-                title = topRanges[0].getLabel();
+                title = Manifesto.TranslationCollection.getValue(topRanges[0].getLabel());
             }
         }
 

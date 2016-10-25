@@ -354,7 +354,7 @@ class FooterPanel extends BaseFooterPanel {
         if (mode.toString() === Mode.page.toString()) {
             var canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
 
-            var label = canvas.getLabel();
+            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
             if (label === "") {
                 label = this.extension.helper.manifest.options.defaultLabel;
@@ -500,7 +500,7 @@ class FooterPanel extends BaseFooterPanel {
         if (this.isPageModeEnabled()) {
             var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
 
-            var label = canvas.getLabel();
+            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
             if (label === "") {
                 label = this.content.defaultLabel;
