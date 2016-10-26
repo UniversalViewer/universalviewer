@@ -191,8 +191,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
                   String.format(label, dimensions.size.height, dimensions.size.width);
                 $label.text(label);
                 $input.prop('title', label);
-                this.$currentViewAsJpgButton.data('width', dimensions.region.width);
-                this.$currentViewAsJpgButton.data('height', dimensions.region.height);
+                this.$currentViewAsJpgButton.data('width', dimensions.size.width);
+                this.$currentViewAsJpgButton.data('height', dimensions.size.height);
                 this.$currentViewAsJpgButton.show();
             } else {
                 this.$currentViewAsJpgButton.hide();

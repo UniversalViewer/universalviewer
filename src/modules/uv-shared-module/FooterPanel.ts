@@ -169,7 +169,10 @@ class FooterPanel extends BaseView {
 
     updateEmbedButton(): void {
         if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)){
-            this.$embedButton.show();
+            //current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
+            if ( ! $.browser.mobile ){
+              this.$embedButton.show();
+            }
         } else {
             this.$embedButton.hide();
         }
