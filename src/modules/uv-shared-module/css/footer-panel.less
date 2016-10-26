@@ -14,6 +14,11 @@
                 margin-top: 10px;
                 margin-right: 15px;
 
+                &.moreInfo{
+                    .icon-left(url('@{img-path}moreinfo.png'), 21px, 35px);
+                    line-height: 22px;
+                }
+
                 &.open{
                     .icon-left(url('@{img-path}open.png'), 21px, 35px);
                     line-height: 22px;
@@ -74,6 +79,12 @@
 
                 a{
 
+                    &.moreInfo{
+                        .hide-text();
+                        width: 27px;
+                        padding: 0;
+                    }
+                    
                     &.open{
                         .hide-text();
                         width: 27px;

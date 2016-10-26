@@ -1,0 +1,87 @@
+.iiif-metadata-component{
+
+    .noData{
+
+    }
+
+    .groups {
+
+        .group {
+
+            .header {
+                font-weight: bold;
+            }
+
+            .items{
+
+                .header {
+                    color: @brand-secondary;
+                    border-bottom: 1px solid @brand-secondary;
+                    margin: @margin-large-vertical @margin-medium-horizontal 0 0;   
+                }
+
+                .item {
+                    padding: 0;
+                    margin: 0 0 @margin-xlarge-vertical 0;
+
+                    .label{
+                        color: @gray-light;
+                        border-bottom: 1px solid @gray-dark;
+                        margin: @margin-large-vertical @margin-medium-horizontal 0 0;
+                        
+                        .copyText {
+                            position: relative;
+                            float: right;
+                            display: none;
+                            width: 15px;
+                            height: 15px;
+                            cursor: pointer;
+                            background-image: url('@{img-path}copy.png');
+                        }
+                        .copiedText {
+                            display: none;
+                            position: absolute;
+                            top: 18px;
+                            right: -10px;
+                            white-space: nowrap;
+                            padding: 4px;
+                            text-transform: none;
+                            background-color: @gray-dark;
+                            z-index: 1;
+                            border: 1px solid @gray-light;
+                            border-radius: 2px;
+                            color: @text-color;
+                        }
+                        
+                    }
+
+                    .value{
+                        color: @text-color;
+                        margin: @margin-small-vertical @margin-medium-horizontal 0 0;
+                        overflow: hidden;
+                        word-wrap: break-word;
+                        line-height: 1.6em;
+
+                        a.toggle{
+                            color: @link-secondary-color;
+                            font-weight: normal;
+
+                            &:hover{
+                                color: @link-secondary-hover-color;
+                            }
+                        }
+
+                        a.toggle.more,
+                        a.toggle.less {
+                            font-variant: small-caps;
+                        }
+
+                        img {
+                            max-width: 100px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

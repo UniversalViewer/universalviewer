@@ -3,9 +3,12 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import GalleryView = require("./GalleryView");
 import ICanvas = Manifold.ICanvas;
 import IRange = Manifold.IRange;
+import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../uv-shared-module/LeftPanel");
+import Metrics = require("../uv-shared-module/Metrics");
+import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import MultiSelectState = Manifold.MultiSelectState;
 import ThumbsView = require("./ThumbsView");
 import TreeSortType = Manifold.TreeSortType;
@@ -16,12 +19,8 @@ class ContentLeftPanel extends LeftPanel {
     $bottomOptions: JQuery;
     $galleryView: JQuery;
     $leftOptions: JQuery;
-    $multiSelectOptions: JQuery;
     $options: JQuery;
     $rightOptions: JQuery;
-    $selectAllButton: JQuery;
-    $selectAllButtonCheckbox: JQuery;
-    $selectButton: JQuery;
     $sortButtonGroup: JQuery;
     $sortByDateButton: JQuery;
     $sortByLabel: JQuery;
@@ -40,9 +39,9 @@ class ContentLeftPanel extends LeftPanel {
     galleryView: GalleryView;
     isThumbsViewOpen: boolean = false;
     isTreeViewOpen: boolean = false;
-    multiSelectState: MultiSelectState;
     thumbsView: ThumbsView;
     treeData: Manifesto.ITreeNode;
+    treeSortType: Manifold.TreeSortType = Manifold.TreeSortType.NONE;
     treeView: TreeView;
 
     constructor($element: JQuery) {
@@ -65,6 +64,14 @@ class ContentLeftPanel extends LeftPanel {
             this.collapseFull();
         });
 
+        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            if (this.extension.metric === Metrics.MOBILE_LANDSCAPE){
+                if (this.isFullyExpanded){
+                    this.collapseFull();
+                }
+            }
+        });
+
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
             if (this.isFullyExpanded){
                 this.collapseFull();
@@ -72,67 +79,6 @@ class ContentLeftPanel extends LeftPanel {
 
             this.selectCurrentTreeNode();
             this.updateTreeTabBySelection();
-        });
-
-        $.subscribe(Commands.ENTER_MULTISELECT_MODE, (s, e) => {
-
-            that.multiSelectState.setEnabled(true);
-
-            that.setTitle(that.content.selection);
-
-            if (!that.isFullyExpanded){
-                that.expandFull();
-            } else {
-                that._showMultiSelectOptions();
-            }
-
-            that.$selectButton.text(e);
-
-            that.updateMultiSelectState();
-        });
-
-        $.subscribe(Commands.EXIT_MULTISELECT_MODE, () => {
-
-            that.multiSelectState.setEnabled(false);
-
-            $.publish(Commands.MULTISELECT_CHANGE, [that.multiSelectState]);
-
-            that.setTitle(that.content.title);
-            that.$multiSelectOptions.hide();
-
-            that.updateMultiSelectState();
-        });
-
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            if (that.multiSelectState.isEnabled) {
-                $.publish(Commands.EXIT_MULTISELECT_MODE);
-            }
-        });
-
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
-            if (that.multiSelectState.isEnabled) {
-                that._showMultiSelectOptions();
-            }
-        });
-
-        $.subscribe(Commands.TREE_NODE_MULTISELECTED, (s, node: ITreeNode) => {
-            if (node.isRange()){
-                this.multiSelectState.selectRange(<IRange>node.data, node.multiSelected);                    
-                //console.log('multi-selected: ' + node.label);                    
-                this.updateMultiSelectState();
-            }
-        });
-
-        $.subscribe(Commands.THUMB_MULTISELECTED, (s, thumb: IThumb) => {
-            var range: IRange = <IRange>this.extension.helper.getCanvasRange(thumb.data);
-
-            if (range){
-                this.multiSelectState.selectRange(<IRange>range, thumb.multiSelected);
-            } else {
-                this.multiSelectState.selectCanvas(<ICanvas>thumb.data, thumb.multiSelected);
-            }
-
-            this.updateMultiSelectState();
         });
 
         this.$tabs = $('<div class="tabs"></div>');
@@ -181,16 +127,6 @@ class ContentLeftPanel extends LeftPanel {
         this.$sortByVolumeButton = $('<button class="btn" tabindex="0">' + this.content.volume + '</button>');
         this.$sortButtonGroup.append(this.$sortByVolumeButton);
 
-        this.$multiSelectOptions = $('<div class="multiSelect"></div>');
-        this.$rightOptions.append(this.$multiSelectOptions);
-
-        this.$selectAllButton = $('<div class="multiSelectAll"><input id="multiSelectAll" type="checkbox" tabindex="0" /><label for="multiSelectAll">' + this.content.selectAll + '</label></div>');
-        this.$multiSelectOptions.append(this.$selectAllButton);
-        this.$selectAllButtonCheckbox = $(this.$selectAllButton.find('input:checkbox'));
-
-        this.$selectButton = $('<a class="btn btn-primary" tabindex="0">' + this.content.select + '</a>');
-        this.$multiSelectOptions.append(this.$selectButton);
-
         this.$views = $('<div class="views"></div>');
         this.$tabsContent.append(this.$views);
 
@@ -210,8 +146,6 @@ class ContentLeftPanel extends LeftPanel {
             this.selectCurrentTreeNode()
             this.updateTreeTabBySelection();
         });
-
-        this.$multiSelectOptions.hide();
 
         this.$sortByDateButton.on('click', () => {
             this.sortByDate();
@@ -235,25 +169,6 @@ class ContentLeftPanel extends LeftPanel {
             $.publish(Commands.OPEN_THUMBS_VIEW);
         });
 
-        this.$selectAllButton.checkboxButton((checked: boolean) => {
-            if (checked) {
-                this.multiSelectState.selectAll(true);
-            } else {
-                this.multiSelectState.selectAll(false);
-            }
-  
-            this.updateMultiSelectState();
-        });
-        
-        this.$selectButton.on('click', () => {
-
-            var ids: string[] = _.map(this.multiSelectState.getAllSelectedCanvases(), (canvas: ICanvas) => {
-                return canvas.id;
-            });
-
-            $.publish(Commands.MULTISELECTION_MADE, [ids]);
-        });
-
         this.setTitle(this.content.title);
 
         this.$sortByVolumeButton.addClass('on');
@@ -273,12 +188,12 @@ class ContentLeftPanel extends LeftPanel {
                 this.$treeButton.addClass('first');
             }
         }
-
-        this.multiSelectState = this.extension.helper.getMultiSelectState();
     }
 
     createTreeView(): void {
         this.treeView = new TreeView(this.$treeView);
+        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.setup();
         this.databindTreeView();
 
         // populate the tree select drop down when there are multiple top-level ranges
@@ -287,7 +202,7 @@ class ContentLeftPanel extends LeftPanel {
         if (topRanges.length > 1){            
             for (var i = 0; i < topRanges.length; i++){
                 var range: Manifesto.IRange = topRanges[i];
-                this.$treeSelect.append('<option value="' + range.id + '">' + range.getLabel() + '</option>');
+                this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.TranslationCollection.getValue(range.getLabel()) + '</option>');
             }
         }
 
@@ -298,11 +213,6 @@ class ContentLeftPanel extends LeftPanel {
         this.databindThumbsView();
         this.databindTreeView();
         this.databindGalleryView();
-    }
-
-    private _showMultiSelectOptions(): void {
-        this.$multiSelectOptions.show();
-        this.resize();
     }
 
     updateTreeViewOptions(): void {
@@ -321,13 +231,9 @@ class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    updateMultiSelectState(): void {
-        this.$selectAllButtonCheckbox.prop('checked', this.multiSelectState.allRangesSelected() && this.multiSelectState.allCanvasesSelected());
-        $.publish(Commands.MULTISELECT_CHANGE, [this.multiSelectState]);
-    }
-
     sortByDate(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(this.getSelectedTopRangeIndex(), Manifold.TreeSortType.DATE);
+        this.treeSortType = Manifold.TreeSortType.DATE;
+        this.treeView.treeOptions = this.getTreeOptions();
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -336,7 +242,8 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     sortByVolume(): void {
-        this.treeView.rootNode = this.extension.helper.getTree(this.getSelectedTopRangeIndex(), Manifold.TreeSortType.NONE);
+        this.treeSortType = Manifold.TreeSortType.NONE;
+        this.treeView.treeOptions = this.getTreeOptions();
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -351,10 +258,18 @@ class ContentLeftPanel extends LeftPanel {
 
     databindTreeView(): void{
         if (!this.treeView) return;
-        this.treeView.rootNode = this.getTreeData();
+        this.treeView.treeOptions = this.getTreeOptions();
         this.treeView.databind();
-        // ensure tree has current multiselect state
-        this.updateMultiSelectState();
+        this.selectCurrentTreeNode();
+    }
+
+    getTreeOptions(): IIIFComponents.ITreeComponentOptions {
+        return <IIIFComponents.ITreeComponentOptions>{
+            element: ".views .treeView .iiif-tree-component",
+            helper: this.extension.helper,
+            topRangeIndex: this.getSelectedTopRangeIndex(),
+            treeSortType: this.treeSortType
+        };
     }
 
     updateTreeTabByCanvasIndex(): void {
@@ -363,7 +278,7 @@ class ContentLeftPanel extends LeftPanel {
         if (topRanges.length > 1){
             var index: number = this.getCurrentCanvasTopRangeIndex();
             var currentRange: Manifesto.IRange = topRanges[index];
-            this.setTreeTabTitle(currentRange.getLabel());
+            this.setTreeTabTitle(Manifesto.TranslationCollection.getValue(currentRange.getLabel()));
         } else {
             this.setTreeTabTitle(this.content.index);
         }
@@ -382,7 +297,7 @@ class ContentLeftPanel extends LeftPanel {
             if (this.treeView){
                 title = this.getSelectedTree().text();
             } else {
-                title = topRanges[0].getLabel();
+                title = Manifesto.TranslationCollection.getValue(topRanges[0].getLabel());
             }
         }
 
@@ -393,8 +308,8 @@ class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    getViewingDirection(): string {
-        return this.extension.helper.getViewingDirection().toString();
+    getViewingDirection(): Manifesto.ViewingDirection {
+        return this.extension.helper.getViewingDirection();
     }
 
     createThumbsView(): void {
@@ -406,7 +321,7 @@ class ContentLeftPanel extends LeftPanel {
         if (!this.thumbsView) return;
         var width, height;
 
-        var viewingDirection: string = this.getViewingDirection();
+        var viewingDirection: string = this.getViewingDirection().toString();
 
         if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             width = this.config.options.oneColThumbWidth;
@@ -429,28 +344,44 @@ class ContentLeftPanel extends LeftPanel {
 
     createGalleryView(): void {
         this.galleryView = new GalleryView(this.$galleryView);
-        this.galleryView.multiSelectState = this.multiSelectState;
+        this.galleryView.galleryOptions = this.getGalleryOptions();
+        this.galleryView.setup();
         this.databindGalleryView();
     }
 
     databindGalleryView(): void{
         if (!this.galleryView) return;
-        var width = this.config.options.galleryThumbWidth;
-        var height = this.config.options.galleryThumbHeight;
-
-        var thumbs: IThumb[] = <IThumb[]>this.extension.helper.getThumbs(width, height);
-
-        var viewingDirection: string = this.getViewingDirection();
-
-        if (viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
-            thumbs.reverse();
-        }
-
-        this.galleryView.thumbs = thumbs;
-
+        this.galleryView.galleryOptions = this.getGalleryOptions();
         this.galleryView.databind();
-        // ensure gallery has current multiselect state
-        this.updateMultiSelectState();
+    }
+
+    getGalleryOptions(): IIIFComponents.IGalleryComponentOptions {
+        return <IIIFComponents.IGalleryComponentOptions>{
+            element: ".views .galleryView .iiif-gallery-component",
+            helper: this.extension.helper,
+            chunkedResizingEnabled: this.config.options.galleryThumbChunkedResizingEnabled,
+            chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
+            content: this.config.content,
+            debug: false,
+            imageFadeInDuration: 300,
+            initialZoom: 6,
+            pageModeEnabled: this.isPageModeEnabled(),
+            scrollStopDuration: 100,
+            sizingEnabled: Modernizr.inputtypes.range,
+            thumbHeight: this.config.options.galleryThumbHeight,
+            thumbLoadPadding: this.config.options.galleryThumbLoadPadding,
+            thumbWidth: this.config.options.galleryThumbWidth,
+            viewingDirection: this.getViewingDirection()
+        };
+    }
+
+    isPageModeEnabled(): boolean {
+        // todo: checks if the panel is being used in the openseadragon extension.
+        // pass a `isPageModeEnabled` function to the panel's constructor instead?
+        if (typeof (<ISeadragonExtension>this.extension).getMode === "function") { 
+            return Utils.Bools.getBool(this.config.options.pageModeEnabled, true) && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        }
+        return Utils.Bools.getBool(this.config.options.pageModeEnabled, true);
     }
 
     getSelectedTree(): JQuery {
@@ -509,17 +440,6 @@ class ContentLeftPanel extends LeftPanel {
         }
 
         return true;
-
-        //var manifestType: string = (<ISeadragonProvider>this.provider).getManifestType().toString();
-        //
-        //switch (manifestType){
-        //    case manifesto.ManifestType.monograph().toString():
-        //        if (!(<ISeadragonProvider>this.provider).isMultiSequence()) defaultToThumbs = true;
-        //        break;
-        //    case manifesto.ManifestType.manuscript().toString():
-        //        if (!(<ISeadragonProvider>this.provider).isMultiSequence()) defaultToThumbs = true;
-        //        break;
-        //}
     }
 
     expandFullStart(): void {
@@ -618,16 +538,10 @@ class ContentLeftPanel extends LeftPanel {
         this.$treeSelect.prop('selectedIndex', index);
     }
 
-    getCurrentCanvasRange(): Manifesto.IRange {
-        var rangePath: string = this.extension.currentRange ? this.extension.currentRange.path : '';
-        var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas(), rangePath);
-        return range;
-    }
-
     getCurrentCanvasTopRangeIndex(): number {
         var topRangeIndex: number = -1;
         
-        var range: Manifesto.IRange = this.getCurrentCanvasRange();
+        var range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
         
         if (range){
             topRangeIndex = Number(range.path.split('/')[0]);
@@ -648,15 +562,7 @@ class ContentLeftPanel extends LeftPanel {
 
             if (currentCanvasTopRangeIndex != -1){
 
-                // if the current selected top range isn't the correct one
-                // update the drop down and tree            
-
-                //if (!usingCorrectTree){
-                    //this.selectTopRangeIndex(topRangeIndex);
-                    //this.databindTreeView();
-                //}
-
-                var range: Manifesto.IRange = this.getCurrentCanvasRange();
+                var range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
 
                 if (range && range.treeNode){
                     node = this.treeView.getNodeById(range.treeNode.id);
@@ -670,7 +576,7 @@ class ContentLeftPanel extends LeftPanel {
             // }
 
             if (node && usingCorrectTree){
-                this.treeView.selectNode(node);
+                this.treeView.selectNode(<Manifold.ITreeNode>node);
             } else {
                 this.treeView.deselectCurrentNode();
             }

@@ -110,7 +110,7 @@ class Extension extends BaseExtension implements IVirtexExtension {
         var bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = canvas.getLabel();
+        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();

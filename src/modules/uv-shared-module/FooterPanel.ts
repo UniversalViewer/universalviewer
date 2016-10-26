@@ -1,11 +1,13 @@
 import BaseCommands = require("./BaseCommands");
 import BaseView = require("./BaseView");
+import Metrics = require("./Metrics");
 
 class FooterPanel extends BaseView {
 
     $feedbackButton: JQuery;
     $bookmarkButton: JQuery;
     $downloadButton: JQuery;
+    $moreInfoButton: JQuery;
     $shareButton: JQuery;
     $embedButton: JQuery;
     $openButton: JQuery;
@@ -23,6 +25,11 @@ class FooterPanel extends BaseView {
 
         $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
             this.updateFullScreenButton();
+        });
+
+        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            this.updateMinimisedButtons();
+            this.updateMoreInfoButton();
         });
 
         $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
@@ -50,6 +57,9 @@ class FooterPanel extends BaseView {
         this.$downloadButton = $('<a class="download" title="' + this.content.download + '" tabindex="0">' + this.content.download + '</a>');
         this.$options.prepend(this.$downloadButton);
 
+        this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
+        this.$options.prepend(this.$moreInfoButton);
+
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '" tabindex="0">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
 
@@ -66,16 +76,19 @@ class FooterPanel extends BaseView {
         });
 
         this.$shareButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_SHARE_DIALOGUE);
+            $.publish(BaseCommands.SHOW_SHARE_DIALOGUE, [this.$shareButton]);
         });
 
         this.$embedButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE);
+            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE, [this.$embedButton]);
         });
 
         this.$downloadButton.onPressed(() => {
-            //e.preventDefault(); why was on click and preventDefault needed?
-            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
+            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, [this.$downloadButton]);
+        });
+
+        this.$moreInfoButton.onPressed(() => {
+            $.publish(BaseCommands.SHOW_MOREINFO_DIALOGUE, [this.$moreInfoButton]);
         });
 
         this.$fullScreenBtn.on('click', (e) => {
@@ -87,6 +100,7 @@ class FooterPanel extends BaseView {
             this.$embedButton.hide();
         }
 
+        this.updateMoreInfoButton();
         this.updateOpenButton();
         this.updateFeedbackButton();
         this.updateBookmarkButton();
@@ -94,9 +108,32 @@ class FooterPanel extends BaseView {
         this.updateDownloadButton();
         this.updateFullScreenButton();
         this.updateShareButton();
+        this.updateMinimisedButtons();
+    }
 
+    updateMinimisedButtons(): void {
+        
+        // if configured to always minimise buttons
         if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
             this.$options.addClass('minimiseButtons');
+            return;
+        }
+
+        // otherwise, check metric
+        if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+            this.$options.addClass('minimiseButtons');
+        } else {
+            this.$options.removeClass('minimiseButtons');
+        }
+    }
+
+    updateMoreInfoButton(): void {
+        var configEnabled = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
+
+        if (configEnabled && this.extension.metric === Metrics.MOBILE_LANDSCAPE){
+            this.$moreInfoButton.show();
+        } else {
+            this.$moreInfoButton.hide();
         }
     }
 
@@ -132,7 +169,10 @@ class FooterPanel extends BaseView {
 
     updateEmbedButton(): void {
         if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)){
-            this.$embedButton.show();
+            //current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
+            if ( ! $.browser.mobile ){
+              this.$embedButton.show();
+            }
         } else {
             this.$embedButton.hide();
         }

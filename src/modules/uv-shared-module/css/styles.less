@@ -11,10 +11,19 @@
 @import 'center-panel';
 @import 'footer-panel';
 @import 'overlays';
+@import 'iiif-gallery-component';
+@import 'iiif-tree-component';
+@import 'iiif-metadata-component';
+@import 'mobile';
 
 @img-path: '../../../modules/uv-shared-module/img/';
 
 #app {
+
+    :focus {
+        //outline: 1px dotted @btn-focused-border;
+    }
+
     background-color: @body-bg;
     position: relative;
 
@@ -84,6 +93,10 @@
         margin-bottom: 0px;
         margin-left: @panel-margin;
     }
+
+    .footerPanel.mobile {
+        display: none;
+    }
 }
 
 @media print {
@@ -102,6 +115,10 @@
        }
 
        .footerPanel {
+           display: none;
+       }
+
+       .mobileFooter {
            display: none;
        }
    }

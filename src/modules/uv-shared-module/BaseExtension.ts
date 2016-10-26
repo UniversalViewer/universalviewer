@@ -13,6 +13,8 @@ import InformationType = require("./InformationType");
 import IThumb = Manifold.IThumb;
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import LoginWarningMessages = require("./LoginWarningMessages");
+import Metric = require("../../modules/uv-shared-module/Metric");
+import Metrics = require("../../modules/uv-shared-module/Metrics");
 import Params = require("../../Params");
 import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
 import Shell = require("./Shell");
@@ -26,7 +28,7 @@ class BaseExtension implements IExtension {
     bootstrapper: BootStrapper;
     clickThroughDialogue: ClickThroughDialogue;
     config: any;
-    currentRange: Manifesto.IRange;
+    //currentRangePath: string;
     domain: string;
     embedDomain: string;
     embedHeight: number;
@@ -45,6 +47,7 @@ class BaseExtension implements IExtension {
     locale: string;
     locales: any[];
     loginDialogue: LoginDialogue;
+    metric: Metric;
     mouseX: number;
     mouseY: number;
     name: string;
@@ -115,7 +118,7 @@ class BaseExtension implements IExtension {
             this.mouseY = e.pageY;
         });
 
-        // events.
+        // events
         if (!this.isReload){
 
             window.onresize = () => {
@@ -299,6 +302,10 @@ class BaseExtension implements IExtension {
             }
         });
 
+        $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, (e, url) => {
+            this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
+        });
+
         $.subscribe(BaseCommands.FEEDBACK, () => {
             this.feedback();
         });
@@ -378,10 +385,6 @@ class BaseExtension implements IExtension {
             if (!_.isNull(that.lastCanvasIndex) && that.lastCanvasIndex !== that.helper.canvasIndex){
                 this.viewCanvas(that.lastCanvasIndex);
             }
-        });
-
-        $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, (e, url) => {
-            this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
         });
 
         $.subscribe(BaseCommands.NOT_FOUND, () => {
@@ -497,6 +500,15 @@ class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.SHOW_SETTINGS_DIALOGUE, () => {
             this.triggerSocket(BaseCommands.SHOW_SETTINGS_DIALOGUE);
+        });
+
+        $.subscribe(BaseCommands.SHOW_TERMS_OF_USE, () => {
+            this.triggerSocket(BaseCommands.SHOW_TERMS_OF_USE);
+            
+            // todo: Eventually this should be replaced with a suitable IIIF Presentation API field - until then, use attribution
+            var terms: string = this.helper.getAttribution();
+
+            this.showMessage(terms);
         });
 
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
@@ -655,7 +667,24 @@ class BaseExtension implements IExtension {
         this.triggerSocket(BaseCommands.REFRESH, null);
     }
 
+    private _updateMetric(): void {
+
+        var keys: string[] = Object.keys(Metrics);
+
+        for (var i = 0; i < keys.length; i++) {
+            var metric: Metric = Metrics[keys[i]];
+
+            if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
+                if (this.metric !== metric) {
+                    this.metric = metric;
+                    $.publish(BaseCommands.METRIC_CHANGED);
+                }
+            }
+        }
+    }
+
     resize(): void {
+        this._updateMetric();
         $.publish(BaseCommands.RESIZE);
     }
 
@@ -723,6 +752,10 @@ class BaseExtension implements IExtension {
         return null;
     }
 
+    getIIIFShareUrl(): string {
+        return this.helper.iiifResourceUri + "?manifest=" + this.helper.iiifResourceUri;
+    }
+
     addTimestamp(uri: string): string{
         return uri + "?t=" + Utils.Dates.getTimeStamp();
     }
@@ -746,10 +779,12 @@ class BaseExtension implements IExtension {
 
     getSettings(): ISettings {
         if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+
             var settings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             
-            if (settings)
+            if (settings){
                 return $.extend(this.config.options, settings.value);
+            }
         }
         
         return this.config.options;
@@ -757,9 +792,12 @@ class BaseExtension implements IExtension {
 
     updateSettings(settings: ISettings): void {
         if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+
             var storedSettings = Utils.Storage.get("uv.settings", Utils.StorageType.local);
-            if (storedSettings)
+
+            if (storedSettings){
                 settings = $.extend(storedSettings.value, settings);
+            }
                 
             // store for ten years
             Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
@@ -904,13 +942,49 @@ class BaseExtension implements IExtension {
         return preview;
     }
 
-    public getPagedIndices(canvasIndex?: number): number[]{
+    public getPagedIndices(canvasIndex?: number): number[] {
         if (typeof(canvasIndex) === 'undefined') canvasIndex = this.helper.canvasIndex;
 
         return [canvasIndex];
     }
 
-    getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
+    public getCurrentCanvases(): Manifesto.ICanvas[] {
+        var indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
+        var canvases: Manifesto.ICanvas[] = [];
+        
+        for (var i = 0; i < indices.length; i++) {
+            var index: number = indices[i];
+            var canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
+            canvases.push(canvas);
+        }
+        
+        return canvases;
+    }
+
+    public getCanvasLabels(label: string): string {
+        var indices: number[] = this.getPagedIndices();
+        var labels: string = "";
+
+        if (indices.length === 1) {
+            labels = label;
+        } else {
+            for (var i = 1; i <= indices.length; i++) {
+                if (labels.length) labels += ",";
+                labels += label + " " + i;
+            }
+        }
+
+        return labels;
+    }
+
+    public getCurrentCanvasRange(): Manifesto.IRange {
+        //var rangePath: string = this.currentRangePath ? this.currentRangePath : '';
+        //var range: Manifesto.IRange = this.helper.getCanvasRange(this.helper.getCurrentCanvas(), rangePath);
+        var range: Manifesto.IRange = this.helper.getCanvasRange(this.helper.getCurrentCanvas());
+        return range;
+    }
+
+    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
 
         var indices = this.getPagedIndices();
         var resourcesToLoad = [];

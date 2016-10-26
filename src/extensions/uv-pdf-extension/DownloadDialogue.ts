@@ -14,8 +14,8 @@ class DownloadDialogue extends BaseDownloadDialogue {
         super.create();
     }
 
-    open() {
-        super.open();
+    open($triggerButton: JQuery) {
+        super.open($triggerButton);
 
         this.addEntireFileDownloadOptions();
 

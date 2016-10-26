@@ -3,4 +3,3 @@ class LoginWarningMessages {
 }
 
 export = LoginWarningMessages;
-

@@ -10,7 +10,8 @@
     "canvasIndexOutOfRange": "Canvas index out of range.",
     "degradedResourceMessage": "Please log in to view at full quality.",
     "degradedResourceLogin": "log in",
-    "forbiddenResourceMessage": "Your current access rights are insufficient to view this image"
+    "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
+    "termsOfUse": "Terms of Use"
   },
   "modules": {
     "clickThroughDialogue": {
@@ -26,9 +27,6 @@
         "expand": "Expand Contents",
         "expandFull": "Expand Gallery",
         "index": "Index",
-        "select": "Select",
-        "selectAll": "Select all",
-        "selection": "Selection",
         "sortBy": "Sort By:",
         "thumbnails": "Thumbnails",
         "title": "Contents",
@@ -43,9 +41,10 @@
     "downloadDialogue": {
       "content": {
         "currentViewAsJpg": "Current view {0} x {1}px (jpg)",
+        "currentViewAsJpgExplanation": "Opens in a new window",
         "download": "Download",
         "downloadSelection": "Download Selection",
-        "downloadSelectionButton": "Download PDF",
+        "downloadSelectionExplanation": "Opens a dialogue to select which pages to download.",
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
         "entireFileAsOriginal": "Entire file ({0})",
@@ -54,15 +53,18 @@
         "preview": "Preview",
         "title": "Download",
         "wholeImageHighRes": "Whole image {0} x {1}px ({2})",
+        "wholeImageHighResExplanation": "Opens in a new window.",
         "wholeImagesHighRes": "Whole images ({0})",
-        "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)"
+        "wholeImagesHighResExplanation": "Opens in two new windows.",
+        "wholeImageLowResAsJpg": "Whole image {0} x {1}px (jpg)",
+        "wholeImageLowResAsJpgExplanation": "Opens in a new window."
       }
     },
     "footerPanel": {
       "content": {
         "bookmark": "Add to bookmarks",
         "download": "Download",
-        "embed": "Share",
+        "embed": "Embed",
         "feedback": "Feedback",
         "exitFullScreen": "Exit Full Screen",
         "fullScreen": "Full Screen",
@@ -93,6 +95,14 @@
         "cancel": "Cancel"
       }
     },
+    "mobileFooterPanel": {
+      "content": {
+        "rotateRight": "Rotate Right",
+        "moreInfo": "More Information",
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out"
+      }
+    },
     "moreInfoRightPanel": {
       "content": {
         "attribution": "Attribution",
@@ -107,11 +117,19 @@
         "logo": "Logo",
         "more": "more",
         "noData": "No data to display",
+        "page": "Page",
         "title": "More Information",
         "manifestHeader": "About the item",
         "canvasHeader": "About the image",
         "copyToClipboard": "Copy to clipboard",
         "copiedToClipboard": "Copied to clipboard"
+      }
+    },
+    "multiSelectDialogue": {
+      "content": {
+        "select": "Download",
+        "selectAll": "Select All",
+        "title": "Select Pages for Download"
       }
     },
     "pagingHeaderPanel": {
@@ -188,18 +206,20 @@
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer'>more info</a>"
+        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
       }
     },
     "shareDialogue": {
       "content": {
         "customSize": "custom",
-        "height": "Height",
-        "instructions": "To embed this item in your own website, copy and paste the code below.",
-        "share": "Share",
         "embed": "Embed",
-        "width": "Width",
-        "size": "Size:"
+        "embedInstructions": "To embed this item in your own website, copy and paste the code below.",
+        "height": "Height",
+        "iiif": "IIIF Manifest",
+        "share": "Share",
+        "shareInstructions": "To share this item, copy the URL below.",
+        "size": "Size:",
+        "width": "Width"
       }
     }
   }

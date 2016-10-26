@@ -7,6 +7,8 @@ class DownloadDialogue extends Dialogue {
     $downloadOptions: JQuery;
     $noneAvailable: JQuery;
     $title: JQuery;
+    $footer: JQuery;
+    $termsOfUseButton: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -21,8 +23,8 @@ class DownloadDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_DOWNLOAD_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_DOWNLOAD_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
-            this.open();
+        $.subscribe(this.openCommand, (e, $triggerButton) => {
+            this.open($triggerButton);
         });
 
         $.subscribe(this.closeCommand, (e) => {
@@ -39,8 +41,19 @@ class DownloadDialogue extends Dialogue {
         this.$downloadOptions = $('<ol class="options"></ol>');
         this.$content.append(this.$downloadOptions);
 
+        this.$footer = $('<div class="footer"></div>');
+        this.$content.append(this.$footer);
+
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.config.content.termsOfUse + '</a>');
+        this.$footer.append(this.$termsOfUseButton);
+
+        this.$termsOfUseButton.onPressed(() => {
+            $.publish(BaseCommands.SHOW_TERMS_OF_USE);
+        });
+
         // hide
         this.$element.hide();
+        this.updateTermsOfUseButton();
     }
 
     addEntireFileDownloadOptions(): void {
@@ -58,11 +71,11 @@ class DownloadDialogue extends Dialogue {
                 if (renderingFormat){
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, rendering.getLabel(), format);
+                this.addEntireFileDownloadOption(rendering.id, Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
                 renderingFound = true;
             });
 
-            if (!renderingFound){
+            if (!renderingFound) {
                 this.addEntireFileDownloadOption(canvas.id, null, null);
             }
         }
@@ -92,6 +105,16 @@ class DownloadDialogue extends Dialogue {
         }
     }
 
+    updateTermsOfUseButton(): void {
+        var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        
+        if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
+            this.$termsOfUseButton.show();
+        } else {
+            this.$termsOfUseButton.hide();
+        }
+    }
+
     getFileExtension(fileUri: string): string{
         return fileUri.split('.').pop();
     }
@@ -115,10 +138,7 @@ class DownloadDialogue extends Dialogue {
     }
 
     resize(): void {
-
-        this.$element.css({
-            'top': Math.floor(this.extension.height() - this.$element.outerHeight(true))
-        });
+        this.setDockedPosition();
     }
 }
 

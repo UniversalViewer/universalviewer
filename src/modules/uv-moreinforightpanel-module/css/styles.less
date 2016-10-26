@@ -26,81 +26,26 @@
                 padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
             }
 
-            .items{
-                padding: 0 @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
+            .groups {
+                padding: @padding-medium-vertical @padding-medium-horizontal (@padding-medium-vertical * 2) @padding-medium-horizontal;
 
-                .header {
-                    color: @brand-secondary;
-                    border-bottom: 1px solid @brand-secondary;
-                    font-size: @font-size-small;
-                    margin: @margin-large-vertical @margin-medium-horizontal 0 0;
-                    text-transform: uppercase;
-                }
+                .items{
 
-                .item {
-                    padding: 0;
-                    margin: 0 0 @margin-xlarge-vertical 0;
-
-                    .header{
-                        color: @gray-light;
-                        border-bottom: 1px solid @gray-dark;
+                    .header {
                         font-size: @font-size-small;
-                        margin: @margin-large-vertical @margin-medium-horizontal 0 0;
                         text-transform: uppercase;
-                        
-                        .copyText {
-                            position: relative;
-                            float: right;
-                            display: none;
-                            width: 15px;
-                            height: 15px;
-                            cursor: pointer;
-                            background-image: url('@{img-path}copy.png');
-                        }
-                        .copiedText {
-                            display: none;
-                            position: absolute;
-                            top: 18px;
-                            right: -10px;
-                            white-space: nowrap;
-                            padding: 4px;
-                            text-transform: none;
-                            background-color: @gray-dark;
-                            z-index: 1;
-                            border: 1px solid @gray-light;
-                            border-radius: 2px;
-                            color: @text-color;
-                        }
-                        
                     }
 
-                    .text{
-                        color: @text-color;
-                        margin: @margin-small-vertical @margin-medium-horizontal 0 0;
-                        overflow: hidden;
-                        word-wrap: break-word;
-                        line-height: 1.6em;
+                    .item {
 
-                        a.toggle{
-                            color: @link-secondary-color;
-                            font-weight: normal;
-
-                            &:hover{
-                                color: @link-secondary-hover-color;
-                            }
-                        }
-
-                        a.toggle.more,
-                        a.toggle.less {
-                            font-variant: small-caps;
-                        }
-
-                        img {
-                            max-width: 100px;
+                        .header{
+                            font-size: @font-size-small;
+                            text-transform: uppercase;
                         }
                     }
                 }
             }
+            
         }
     }
 }

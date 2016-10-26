@@ -229,9 +229,10 @@ class FooterPanel extends BaseFooterPanel {
 
     updatePrintButton(): void {
         var configEnabled = Utils.Bools.getBool(this.options.printEnabled, false);
-        var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
+        //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
 
-        if (configEnabled && printService && this.extension.isOnHomeDomain()){
+        //if (configEnabled && printService && this.extension.isOnHomeDomain()){
+        if (configEnabled){
             this.$printButton.show();
         } else {
             this.$printButton.hide();
@@ -353,7 +354,7 @@ class FooterPanel extends BaseFooterPanel {
         if (mode.toString() === Mode.page.toString()) {
             var canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
 
-            var label = canvas.getLabel();
+            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
             if (label === "") {
                 label = this.extension.helper.manifest.options.defaultLabel;
@@ -499,14 +500,14 @@ class FooterPanel extends BaseFooterPanel {
         if (this.isPageModeEnabled()) {
             var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
 
-            var label = canvas.getLabel();
+            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
             if (label === "") {
                 label = this.content.defaultLabel;
             }
 
             var lastCanvasOrderLabel = this.extension.helper.getLastCanvasLabel(true);
-            this.$pagePositionLabel.html(String.format(displaying, this.content.page, label, lastCanvasOrderLabel));
+            this.$pagePositionLabel.html(String.format(displaying, this.content.page, this.extension.sanitize(label), this.extension.sanitize(lastCanvasOrderLabel)));
         } else {
             this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.extension.helper.getTotalCanvases()));
         }

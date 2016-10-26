@@ -53,19 +53,24 @@
     },
     "moreInfoRightPanel": {
       "content": {
-        "attribution": "priodoliad",
-        "collapse": "Cuddio Mwy o Wybodaeth",
+        "attribution": "Priodoledd",
+        "collapse": "Lleihau'r Wybodaeth",
         "collapseFull": "Cuddio'r Galeri",
-        "description": "disgrifiad",
-        "expand": "Ehangu Fwy o Wybodaeth",
+        "description": "Disgrifiad",
+        "expand": "Ehangu'r Wybodaeth",
         "expandFull": "Ehangu'r Galeri",
         "holdingText": "Eich modiwl fan hyn!",
         "less": "llai",
-        "license": "trwydded",
-        "logo": "logo",
+        "license": "Trwydded",
+        "logo": "Logo",
         "more": "mwy",
         "noData": "Nid oes data i'w arddangos",
-        "title": "gwybodaeth"
+        "page": "tudalen",
+        "title": "Mwy o Wybodaeth",
+        "manifestHeader": "Am yr eitem",
+        "canvasHeader": "Am y ddelwedd",
+        "copyToClipboard": "Copïo i'r clipfwrdd",
+        "copiedToClipboard": "Copïwyd i'r clipfwrdd"
       }
     },
     "settingsDialogue": {
@@ -91,12 +96,14 @@
     "shareDialogue": {
       "content": {
         "customSize": "arfer",
-        "height": "Hyd",
-        "instructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
-        "share": "Rhannu",
         "embed": "gwreiddio",
-        "width": "Lled",
-        "size": "maint:"
+        "embedInstructions": "Er mwyn ymgorffori'r eitem hon ar eich gwefan, cop�wch a gosodwch y cod isod.",
+        "height": "Hyd",
+        "iiif": "IIIF Manifest",
+        "share": "Rhannu",
+        "shareInstructions": "I rannu yr eitem hon, copïwch y URL isod.",
+        "size": "maint:",
+        "width": "Lled"
       }
     }
   }

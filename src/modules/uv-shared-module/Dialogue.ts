@@ -11,6 +11,7 @@ class Dialogue extends BaseView {
     returnFunc: any;
 
     $bottom: JQuery;
+    $triggerButton: JQuery;
     $closeButton: JQuery;
     $content: JQuery;
     $middle: JQuery;
@@ -77,21 +78,37 @@ class Dialogue extends BaseView {
         this.$closeButton.hide();
     }
 
-    setArrowPosition(): void {
-        // set bottom background position to mouse x.
-        var paddingLeft = parseInt(this.$element.css("padding-left"));
-        var pos = this.extension.mouseX - paddingLeft - 10; // 10 = 1/2 arrow width.
-        if (pos < 0 || pos > (this.$element.width() - paddingLeft - 10)){
-            this.$bottom.hide();
-        } else {
-            this.$bottom.show();
-            this.$bottom.css('backgroundPosition', pos + 'px 0px');
+    setDockedPosition(): void {
+
+        var top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
+        var left: number = 0;
+        var arrowLeft: number = 0;
+
+        if (this.$triggerButton) {
+            // get the normalised position of the button
+            var buttonPos: number = Math.normalise(this.$triggerButton.offset().left, 0, this.extension.width());
+            left = Math.floor((this.extension.width() * buttonPos) - (this.$element.width() * buttonPos));
+            arrowLeft = (this.$element.width() * buttonPos);
         }
+
+        this.$bottom.css('backgroundPosition', arrowLeft + 'px 0px');
+
+        this.$element.css({
+            'top': top,
+            'left': left
+        });
     }
 
-    open(): void {
+    open($triggerButton?: JQuery): void {
         this.$element.show();
-        this.setArrowPosition();
+
+        if ($triggerButton && $triggerButton.length) {
+            this.$triggerButton = $triggerButton;
+            this.$bottom.show();
+        } else {
+            this.$bottom.hide();
+        }
+        
         this.isActive = true;
 
         // set the focus to the default button.

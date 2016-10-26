@@ -43,7 +43,7 @@ class AutoComplete{
             this.$element.parent().append(this.$searchResultsList);
         }
 
-        this.$searchResultTemplate = $('<li class="result"><a href="#"></a></li>');
+        this.$searchResultTemplate = $('<li class="result"><a href="#" tabindex="-1"></a></li>');
 
         // init ui.
 

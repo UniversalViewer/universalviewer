@@ -1,12 +1,11 @@
-﻿
-#app{
+﻿#app{
 
     .overlay{
 
         color: @text-secondary-color;
 
         &.share{
-            width: 260px;
+            width: 270px;
             padding: 0 0 30px 8px;
 
             .middle{
@@ -28,6 +27,7 @@
                             width: 75px;
                             margin: 0;
                             cursor: pointer;
+                            text-decoration: none;
 
                             &:hover {
                                 border-bottom: 1px solid @brand-primary;
@@ -52,7 +52,10 @@
                                 line-height: 23px;
                             }
 
-                            .btn-focus();
+                            // &:focus{
+                            //     outline: 0;
+                            //     border: 1px dotted @btn-focused-border;
+                            // }
                         }
                     }
 
@@ -60,12 +63,23 @@
                         padding: @padding-medium-vertical 0 @padding-small-vertical 0;
                         border-top: 1px solid @gray-lighter;
 
+                        .header {
+                            margin-bottom: @margin-small-vertical;
+                            font-size: @font-size-small;
+                        }
+
                         .shareView{
-                            .url {
+                            .shareInput {
                                 .single-line-code();
                             }
+                            .shareLink {
+                                display: block;
+                                overflow: hidden;
+                                height: 18px;
+                                text-overflow: ellipsis;
+                            }
                             .shareFrame{
-                                width: 232px;
+                                width: 240px;
                                 border: none;
                                 height: 30px;
                                 margin-top: @margin-small-vertical;
@@ -104,12 +118,51 @@
                             }
                         }
                     }
+
+                    .footer {
+                        overflow: hidden;
+                        a {
+                            font-size: @font-size-small;
+                            display: block;
+                            float: left;
+                            line-height: 30px;
+
+                            &.imageBtn {
+                                width: 30px;
+                                height: 30px;
+                            }
+
+                            &.iiif{
+                                background-image: url('@{img-path}iiif.png');
+                                background-repeat: no-repeat;
+                                margin-right: @margin-small-horizontal;
+                            }
+                        }
+                    }
                 }                
             }
         }
 
+        &.moreInfo{
+            width: 260px;
+            padding: 0 0 30px 8px;
+
+            .content {
+                .iiif-metadata-component {
+                    height: 200px;
+                    overflow: auto;
+                    .items {
+                        padding-left: 0px;
+                        .item .value {
+                            color: @text-secondary-color;
+                        }
+                    }
+                }
+            }
+        }
+
         &.download{
-            width: 250px;
+            width: 260px;
             padding: 0 0 30px 8px;
 
             .middle{
@@ -137,7 +190,36 @@
                             list-style-type: none;
                             margin: 0;
                             padding: 0;
+
+                            li {
+                                overflow: hidden;
+
+                                input {
+                                    float: left;
+                                    display: block;
+                                }
+
+                                label {
+                                    float: left;
+                                    width: 190px;
+                                    line-height: 1.2em;
+                                    span.explanatory { // explanatory text
+                                        display: block;
+                                        font-size: 11px;
+                                        margin: 4px 0 4px 0;
+                                        color: @text-tertiary-color;
+                                    }
+                                }
+                            }
                         }
+                    }
+                }
+
+                .footer {
+                    a {
+                        margin-top: @margin-small-vertical;
+                        font-size: @font-size-small;
+                        display: block;
                     }
                 }
             }
@@ -261,3 +343,5 @@
     }
 
 }
+
+@import 'mobile';

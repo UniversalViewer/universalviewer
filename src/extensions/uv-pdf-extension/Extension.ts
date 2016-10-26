@@ -8,6 +8,7 @@ import ShareDialogue = require("./ShareDialogue");
 import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
 import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
 import IPDFExtension = require("./IPDFExtension");
+import IThumb = Manifold.IThumb;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
@@ -39,8 +40,8 @@ class Extension extends BaseExtension implements IPDFExtension {
     create(overrideDependencies?: any): void {
         super.create();
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
-            this.viewCanvas(canvasIndex);
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
+            this.viewCanvas(thumb.index);
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
@@ -128,7 +129,7 @@ class Extension extends BaseExtension implements IPDFExtension {
         var bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = canvas.getLabel();
+        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();

@@ -48,12 +48,19 @@
     {
       "options":
       {
+        "canvasDisplayOrder": "",
         "canvasExclude": "",
-        "displayOrder": "",
+        "copyToClipboardEnabled": false,
+        "manifestDisplayOrder": "",
         "manifestExclude": "",
         "panelAnimationDuration": 250,
         "panelCollapsedWidth": 30,
-        "panelExpandedWidth": 255
+        "panelExpandedWidth": 255,
+        "panelOpen": false,
+        "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
+        "showAllLanguages": false,
+        "textLimit": 4,
+        "textLimitType": "lines"
       }
     },
     "contentLeftPanel": {
