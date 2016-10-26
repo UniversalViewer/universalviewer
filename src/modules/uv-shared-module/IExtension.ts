@@ -10,7 +10,7 @@ interface IExtension{
     config: any;
     create(): void;
     createModules(): void;
-    currentRange: Manifesto.IRange;
+    //currentRangePath: string;
     dependenciesLoaded(): void;
     domain: string;
     embedDomain: string;
@@ -20,6 +20,7 @@ interface IExtension{
     getCanvasIndexParam(): number;
     getCanvasLabels(label: string): string;
     getCurrentCanvases(): Manifesto.ICanvas[];
+    getCurrentCanvasRange(): Manifesto.IRange;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
     getEmbedDomain(): string;

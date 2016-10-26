@@ -448,9 +448,6 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
 
         this.viewCanvas(canvasIndex);
-
-        // reset currentRange
-        this.currentRange = null;
     }
 
     getViewer() {
@@ -485,9 +482,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     viewRange(path: string): void {
-        var range = this.helper.getRangeByPath(path);
+        //this.currentRangePath = path;
+        var range: Manifesto.IRange = this.helper.getRangeByPath(path);
         if (!range) return;
-        this.currentRange = range;
         var canvasId: string = range.getCanvasIds()[0];
         var index: number = this.helper.getCanvasIndexById(canvasId);
         this.viewPage(index);

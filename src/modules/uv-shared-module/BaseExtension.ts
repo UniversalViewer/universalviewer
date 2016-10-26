@@ -28,7 +28,7 @@ class BaseExtension implements IExtension {
     bootstrapper: BootStrapper;
     clickThroughDialogue: ClickThroughDialogue;
     config: any;
-    currentRange: Manifesto.IRange;
+    //currentRangePath: string;
     domain: string;
     embedDomain: string;
     embedHeight: number;
@@ -975,6 +975,13 @@ class BaseExtension implements IExtension {
         }
 
         return labels;
+    }
+
+    public getCurrentCanvasRange(): Manifesto.IRange {
+        //var rangePath: string = this.currentRangePath ? this.currentRangePath : '';
+        //var range: Manifesto.IRange = this.helper.getCanvasRange(this.helper.getCurrentCanvas(), rangePath);
+        var range: Manifesto.IRange = this.helper.getCanvasRange(this.helper.getCurrentCanvas());
+        return range;
     }
 
     public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {

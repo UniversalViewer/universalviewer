@@ -65,7 +65,7 @@ class MoreInfoDialogue extends Dialogue {
             limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
-            range: this.extension.currentRange,
+            range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html) => {
                 return this.extension.sanitize(html);

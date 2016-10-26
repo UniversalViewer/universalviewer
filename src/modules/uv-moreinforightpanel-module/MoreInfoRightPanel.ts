@@ -32,10 +32,7 @@ class MoreInfoRightPanel extends RightPanel {
 
     toggleFinish(): void {
         super.toggleFinish();
-
-        if (this.isUnopened) {
-            this.databind();
-        }
+        this.databind();
     }
 
     databind(): void {
@@ -59,7 +56,7 @@ class MoreInfoRightPanel extends RightPanel {
             limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
-            range: this.extension.currentRange,
+            range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html) => {
                 return this.extension.sanitize(html);

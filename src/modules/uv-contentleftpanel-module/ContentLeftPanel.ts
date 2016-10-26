@@ -202,7 +202,7 @@ class ContentLeftPanel extends LeftPanel {
         if (topRanges.length > 1){            
             for (var i = 0; i < topRanges.length; i++){
                 var range: Manifesto.IRange = topRanges[i];
-                this.$treeSelect.append('<option value="' + range.id + '">' + range.getLabel() + '</option>');
+                this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.TranslationCollection.getValue(range.getLabel()) + '</option>');
             }
         }
 
@@ -538,16 +538,10 @@ class ContentLeftPanel extends LeftPanel {
         this.$treeSelect.prop('selectedIndex', index);
     }
 
-    getCurrentCanvasRange(): Manifesto.IRange {
-        var rangePath: string = this.extension.currentRange ? this.extension.currentRange.path : '';
-        var range: Manifesto.IRange = this.extension.helper.getCanvasRange(this.extension.helper.getCurrentCanvas(), rangePath);
-        return range;
-    }
-
     getCurrentCanvasTopRangeIndex(): number {
         var topRangeIndex: number = -1;
         
-        var range: Manifesto.IRange = this.getCurrentCanvasRange();
+        var range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
         
         if (range){
             topRangeIndex = Number(range.path.split('/')[0]);
@@ -568,7 +562,7 @@ class ContentLeftPanel extends LeftPanel {
 
             if (currentCanvasTopRangeIndex != -1){
 
-                var range: Manifesto.IRange = this.getCurrentCanvasRange();
+                var range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
 
                 if (range && range.treeNode){
                     node = this.treeView.getNodeById(range.treeNode.id);
