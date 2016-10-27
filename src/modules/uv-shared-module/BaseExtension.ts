@@ -1012,7 +1012,7 @@ class BaseExtension implements IExtension {
         var storageStrategy: string = this.config.options.tokenStorage;
 
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-            manifesto.loadExternalResources(
+            manifesto.Utils.loadExternalResources(
                 resourcesToLoad,
                 storageStrategy,
                 this.clickThrough,

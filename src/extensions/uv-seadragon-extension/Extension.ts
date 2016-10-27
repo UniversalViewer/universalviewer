@@ -794,7 +794,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
                     id += '/';
                 }
 
-                if (manifesto.isImageProfile(service.getProfile())){
+                if (manifesto.Utils.isImageProfile(service.getProfile())){
                     infoUri = id + 'info.json';
                 }
             }
