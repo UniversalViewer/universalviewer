@@ -138,6 +138,7 @@ class SeadragonCenterPanel extends CenterPanel {
             showHomeControl: Utils.Bools.getBool(this.config.options.showHomeControl, false),
             showFullPageControl: false,
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
+            maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 1.0,
             controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
             controlsFadeLength: this.config.options.controlsFadeLength || 250,
             navigatorPosition: this.config.options.navigatorPosition || "BOTTOM_RIGHT",
@@ -370,7 +371,6 @@ class SeadragonCenterPanel extends CenterPanel {
                     success: (item) => {
                         this.items.push(item);
                         if (this.items.length === resources.length) {
-                            this.viewer.viewport.maxZoomLevel = this.viewer.viewport.getZoom(true) * (this.config.options.maxZoomLevel || 8);
                             this.openPagesHandler();
                         }
                     }
