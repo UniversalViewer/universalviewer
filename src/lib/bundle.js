@@ -573,14 +573,10 @@ module.exports = E;
             var $this = $(this);
             $this.on('click', function (e) {
                 var tagName = e.target.tagName;
-                var $checkbox;
+                var $checkbox = $(this).find(':checkbox');
                 if (tagName !== "INPUT") {
                     e.preventDefault();
-                    $checkbox = $(this).find(':checkbox');
                     $checkbox.prop('checked', !$checkbox.prop('checked'));
-                }
-                else {
-                    $checkbox = $(this);
                 }
                 var checked = $checkbox.is(':checked');
                 onClick.call(this, checked);
