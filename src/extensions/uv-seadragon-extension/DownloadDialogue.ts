@@ -551,10 +551,12 @@ class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.wholeImageHighRes:
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
                     var maxSize: Size = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
-                    if (maxSize && _.isUndefined(maxSize.width)){
-                        return true;
-                    } else if (maxSize.width <= this.options.maxImageWidth){
-                        return true;
+                    if (maxSize) {
+                        if (_.isUndefined(maxSize.width)){
+                            return true;
+                        } else if (maxSize.width <= this.options.maxImageWidth){
+                            return true;
+                        }
                     }
                 }
                 return false;
