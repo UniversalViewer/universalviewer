@@ -406,8 +406,8 @@ class ContentLeftPanel extends LeftPanel {
 
         if (this.isUnopened) {
 
-            var treeEnabled = Utils.Bools.getBool(this.config.options.treeEnabled, true);
-            var thumbsEnabled = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
+            var treeEnabled: boolean = Utils.Bools.getBool(this.config.options.treeEnabled, true);
+            var thumbsEnabled: boolean = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
             var treeData: ITreeNode = this.getTreeData();
 

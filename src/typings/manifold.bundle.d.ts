@@ -1,4 +1,4 @@
-// manifesto.js v1.0.0 https://github.com/viewdir/manifesto
+// manifesto.js v2.0.1 https://github.com/viewdir/manifesto
 declare module exjs {
     var version: string;
 }

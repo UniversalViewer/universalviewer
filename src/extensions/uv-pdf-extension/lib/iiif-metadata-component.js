@@ -1,4 +1,4 @@
-// iiif-metadata-component v1.0.0 https://github.com/viewdir/iiif-metadata-component#readme
+// iiif-metadata-component v1.0.2 https://github.com/viewdir/iiif-metadata-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifMetadataComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var IIIFComponents;
 (function (IIIFComponents) {
@@ -307,6 +307,7 @@ var IIIFComponents;
             var value;
             var $value;
             if (this.options.showAllLanguages && item.value && item.value.length > 1) {
+                // display all values in each locale
                 for (var i = 0; i < item.value.length; i++) {
                     var translation = item.value[i];
                     $value = this._buildMetadataItemValue(translation.value, translation.locale);
@@ -314,21 +315,32 @@ var IIIFComponents;
                 }
             }
             else {
-                $value = this._buildMetadataItemValue(item.getValue(), this._getItemLocale(item));
-                $values.append($value);
+                var itemLocale = this._getItemLocale(item);
+                var valueFound = false;
+                // display all values in the item's locale
+                for (var i = 0; i < item.value.length; i++) {
+                    var translation = item.value[i];
+                    if (itemLocale === translation.locale) {
+                        valueFound = true;
+                        $value = this._buildMetadataItemValue(translation.value, translation.locale);
+                        $values.append($value);
+                    }
+                }
+                // if no values were found in the current locale, default to the first.
+                if (!valueFound) {
+                    var translation = item.value[0];
+                    $value = this._buildMetadataItemValue(translation.value, translation.locale);
+                    $values.append($value);
+                }
             }
-            if (this.options.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $value.text() && $label.text()) {
+            if (this.options.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $label.text()) {
                 this._addCopyButton($metadataItem, $label);
             }
             return $metadataItem;
         };
         MetadataComponent.prototype._getItemLocale = function (item) {
-            if (item.value && item.value.length) {
-                return item.value[0].locale;
-            }
-            else {
-                return item.defaultLocale || this.options.helper.options.locale;
-            }
+            // the item's label locale takes precedence
+            return (item.label.length && item.label[0].locale) ? item.label[0].locale : item.defaultLocale || this.options.helper.options.locale;
         };
         MetadataComponent.prototype._buildMetadataItemValue = function (value, locale) {
             value = this._sanitize(value);

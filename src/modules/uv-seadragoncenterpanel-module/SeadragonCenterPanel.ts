@@ -138,7 +138,7 @@ class SeadragonCenterPanel extends CenterPanel {
             showHomeControl: Utils.Bools.getBool(this.config.options.showHomeControl, false),
             showFullPageControl: false,
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
-            maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 1.0,
+            maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
             controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
             controlsFadeLength: this.config.options.controlsFadeLength || 250,
             navigatorPosition: this.config.options.navigatorPosition || "BOTTOM_RIGHT",

@@ -1,4 +1,4 @@
-// iiif-metadata-component v1.0.0 https://github.com/viewdir/iiif-metadata-component#readme
+// iiif-metadata-component v1.0.2 https://github.com/viewdir/iiif-metadata-component#readme
 declare namespace IIIFComponents {
     class StringValue {
         value: string;
