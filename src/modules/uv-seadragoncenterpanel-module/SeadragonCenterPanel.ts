@@ -703,7 +703,7 @@ class SeadragonCenterPanel extends CenterPanel {
         rect.width = bounds.width;
         rect.height = bounds.height;
 
-        this.viewer.viewport.fitBounds(rect, true);
+        this.viewer.viewport.fitBoundsWithConstraints(rect, true);
     }
 
     getBounds(): any {
