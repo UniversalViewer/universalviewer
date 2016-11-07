@@ -17,9 +17,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
     $explanatoryTextTemplate: JQuery;
     $imageOptionsContainer: JQuery;
     $imageOptions: JQuery;
-    //$pagingNote: JQuery;
     $selectionButton: JQuery;
-    //$settingsButton: JQuery;
     $sequenceOptionsContainer: JQuery;
     $sequenceOptions: JQuery;
     $wholeImageHighResButton: JQuery;
