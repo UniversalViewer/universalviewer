@@ -62,14 +62,14 @@ class SeadragonCenterPanel extends CenterPanel {
 
         $.subscribe(Commands.CLEAR_SEARCH, () => {
             this.whenCreated(() => {
-                this.currentSearchResultRect = null;
+                (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
                 this.clearSearchResults();
             });
         });
 
         $.subscribe(Commands.VIEW_PAGE, () => {
-            this.previousSearchResultRect = null;
-            this.currentSearchResultRect = null;
+            (<ISeadragonExtension>this.extension).previousSearchResultRect = null;
+            (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
         });
 
         $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
@@ -668,8 +668,8 @@ class SeadragonCenterPanel extends CenterPanel {
 
         let searchResultRect: SearchResultRect = this.getInitialSearchResultRect();
 
-        this.previousSearchResultRect = null;
-        this.currentSearchResultRect = null;
+        (<ISeadragonExtension>this.extension).previousSearchResultRect = null;
+        (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
 
         if (searchResultRect) {
             this.zoomToSearchResult(searchResultRect);
@@ -843,7 +843,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
     nextSearchResult(): void {
         const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
-        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex(this.currentSearchResultRect);
+        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex((<ISeadragonExtension>this.extension).currentSearchResultRect);
         let foundRect: SearchResultRect;
 
         // find the first non-visible rect following the current one
@@ -861,19 +861,19 @@ class SeadragonCenterPanel extends CenterPanel {
         if (foundRect) {
             // if the rect's canvasIndex is greater than the current canvasIndex
             if (rect.canvasIndex > this.extension.helper.canvasIndex) {
-                this.currentSearchResultRect = rect;
+                (<ISeadragonExtension>this.extension).currentSearchResultRect = rect;
                 $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [rect]);
             } else {
                 this.zoomToSearchResult(rect);
             }
         } else {
-            $.publish(Commands.NO_NEXT_IMAGE_SEARCH_RESULT);
+            $.publish(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
     prevSearchResult(): void {
         const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
-        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex(this.currentSearchResultRect);
+        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex((<ISeadragonExtension>this.extension).currentSearchResultRect);
         let foundRect: SearchResultRect;
 
         // find the first non-visible rect preceding the current one   
@@ -891,13 +891,13 @@ class SeadragonCenterPanel extends CenterPanel {
         if (foundRect) {
             // if the rect's canvasIndex is less than the current canvasIndex
             if (rect.canvasIndex < this.extension.helper.canvasIndex) {
-                this.currentSearchResultRect = rect;
+                (<ISeadragonExtension>this.extension).currentSearchResultRect = rect;
                 $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [rect]);
             } else {
                 this.zoomToSearchResult(rect);
             }
         } else {
-            $.publish(Commands.NO_PREV_IMAGE_SEARCH_RESULT);
+            $.publish(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
@@ -912,7 +912,7 @@ class SeadragonCenterPanel extends CenterPanel {
         if (!searchResultRects.length) return null;
 
         // if the previous SearchResultRect had a canvasIndex higher than the current canvasIndex
-        if (this.previousSearchResultRect && this.previousSearchResultRect.canvasIndex > this.extension.helper.canvasIndex) {
+        if ((<ISeadragonExtension>this.extension).previousSearchResultRect && (<ISeadragonExtension>this.extension).previousSearchResultRect.canvasIndex > this.extension.helper.canvasIndex) {
             return searchResultRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
         }
 
@@ -921,8 +921,8 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     zoomToSearchResult(searchResultRect: SearchResultRect): void {
-        this.previousSearchResultRect = this.currentSearchResultRect || searchResultRect;
-        this.currentSearchResultRect = searchResultRect;
+        (<ISeadragonExtension>this.extension).previousSearchResultRect = (<ISeadragonExtension>this.extension).currentSearchResultRect || searchResultRect;
+        (<ISeadragonExtension>this.extension).currentSearchResultRect = searchResultRect;
 
         this.fitToBounds({
             x: searchResultRect.viewportX,
@@ -930,6 +930,8 @@ class SeadragonCenterPanel extends CenterPanel {
             width: searchResultRect.width,
             height: searchResultRect.height
         }, false);
+
+        $.publish(Commands.SEARCH_RESULT_RECT_CHANGED);
     }
 
     getSearchOverlayRects(rects: SearchResultRect[], index: number): any[] {

@@ -46,6 +46,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     $shareDialogue: JQuery;
     centerPanel: SeadragonCenterPanel;
     currentRotation: number = 0;
+    currentSearchResultRect: SearchResultRect;
     downloadDialogue: DownloadDialogue;
     externalContentDialogue: ExternalContentDialogue;
     footerPanel: FooterPanel;
@@ -57,6 +58,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     mode: Mode;
     moreInfoDialogue: MoreInfoDialogue;
     multiSelectDialogue: MultiSelectDialogue;
+    previousSearchResultRect: SearchResultRect;
     rightPanel: MoreInfoRightPanel;
     searchResults: SearchResult[] = [];
     settingsDialogue: SettingsDialogue;
@@ -182,13 +184,13 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.triggerSocket(Commands.NEXT_SEARCH_RESULT);
         });
 
-        $.subscribe(Commands.NO_NEXT_IMAGE_SEARCH_RESULT, () => {
-            this.triggerSocket(Commands.NO_NEXT_IMAGE_SEARCH_RESULT);
+        $.subscribe(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+            this.triggerSocket(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.nextSearchResult();
         });
 
-        $.subscribe(Commands.NO_PREV_IMAGE_SEARCH_RESULT, () => {
-            this.triggerSocket(Commands.NO_PREV_IMAGE_SEARCH_RESULT);
+        $.subscribe(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+            this.triggerSocket(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.prevSearchResult();
         });
 
@@ -547,23 +549,29 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     prevSearchResult(): void {
+        let foundResult: SearchResult; 
+
         // get the first result with a canvasIndex less than the current index.
         for (let i = this.searchResults.length - 1; i >= 0; i--) {
             const result: SearchResult = this.searchResults[i];
 
             if (result.canvasIndex <= this.getPrevPageIndex()) {
-                this.viewPage(result.canvasIndex);
+                foundResult = result;
+                this.viewPage(foundResult.canvasIndex);
                 break;
             }
         }
     }
 
     nextSearchResult(): void {
+        let foundResult: SearchResult; 
+        
         // get the first result with an index greater than the current index.
         for (let i = 0; i < this.searchResults.length; i++) {
             const result: SearchResult = this.searchResults[i];
 
             if (result.canvasIndex >= this.getNextPageIndex()) {
+                foundResult = result;
                 this.viewPage(result.canvasIndex);
                 break;
             }
@@ -974,6 +982,28 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
         return null;
     }
+
+    getSearchResultRects(): SearchResultRect[] {
+        return this.searchResults.en().selectMany(x => x.rects).toArray();
+    }
+
+    getCurrentSearchResultRectIndex(): number {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRects();
+        return searchResultRects.indexOf(this.currentSearchResultRect);
+    }
+
+    getTotalSearchResultRects(): number {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRects();
+        return searchResultRects.length;
+    }
+
+    isFirstSearchResultRect(): boolean {
+        return this.getCurrentSearchResultRectIndex() === 0;
+    } 
+
+    isLastSearchResultRect(): boolean {
+        return this.getCurrentSearchResultRectIndex() === this.getTotalSearchResultRects() - 1;
+    } 
 
     getPagedIndices(canvasIndex?: number): number[]{
         if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;

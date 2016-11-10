@@ -1,11 +1,12 @@
+import AutoComplete = require("../uv-shared-module/AutoComplete");
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseFooterPanel = require("../uv-shared-module/FooterPanel");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import DownloadDialogue = require("../../extensions/uv-seadragon-extension/DownloadDialogue");
-import AutoComplete = require("../uv-shared-module/AutoComplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Params = require("../../Params");
+import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 
 class FooterPanel extends BaseFooterPanel {
 
@@ -61,6 +62,11 @@ class FooterPanel extends BaseFooterPanel {
         $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
             this.displaySearchResults(obj.terms, obj.results);
             this.setCurrentSearchResultPlacemarker();
+        });
+
+        $.subscribe(Commands.SEARCH_RESULT_RECT_CHANGED, () => {
+            this.updatePrevButton();
+            this.updateNextButton();
         });
 
         this.$printButton = $('<a class="print" title="' + this.content.print + '" tabindex="0">' + this.content.print + '</a>');
@@ -230,6 +236,22 @@ class FooterPanel extends BaseFooterPanel {
         if (!positionMarkerEnabled) {
             this.$pagePositionMarker.hide();
             this.$pagePositionLabel.hide();
+        }
+    }
+
+    updateNextButton(): void {
+        if ((<ISeadragonExtension>this.extension).isLastSearchResultRect()) {
+            this.$nextResultButton.addClass('disabled');
+        } else {
+            this.$nextResultButton.removeClass('disabled');
+        }
+    }
+
+    updatePrevButton(): void {
+        if ((<ISeadragonExtension>this.extension).isFirstSearchResultRect()) {
+            this.$previousResultButton.addClass('disabled');
+        } else {
+            this.$previousResultButton.removeClass('disabled');
         }
     }
 

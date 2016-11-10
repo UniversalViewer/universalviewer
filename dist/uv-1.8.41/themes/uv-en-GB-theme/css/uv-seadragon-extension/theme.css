@@ -1000,6 +1000,10 @@
   color: #fff;
   text-decoration: none;
 }
+#app .footerPanel .searchPager .controls a.previousResult.disabled {
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+}
 #app .footerPanel .searchPager .controls a.nextResult {
   -webkit-touch-callout: none;
   /* iOS Safari */
@@ -1033,6 +1037,10 @@
 #app .footerPanel .searchPager .controls a.nextResult:active {
   color: #fff;
   text-decoration: none;
+}
+#app .footerPanel .searchPager .controls a.nextResult.disabled {
+  opacity: 0.25;
+  filter: alpha(opacity=25);
 }
 #app .footerPanel .searchPager .controls a.clearSearch {
   -webkit-touch-callout: none;
