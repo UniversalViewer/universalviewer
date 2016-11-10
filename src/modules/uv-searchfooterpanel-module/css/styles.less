@@ -191,6 +191,7 @@
                 width: 585px;
 
                 a.previousResult{
+                    .noselect();
                     .icon-left(url('@{img-path}prev.png'), 30px, 25px);
                     line-height: 30px;
                     float: left;
@@ -198,6 +199,7 @@
                 }
 
                 a.nextResult{
+                    .noselect();
                     .icon-right(url('@{img-path}next.png'), 30px, 25px);
                     line-height: 30px;
                     float: right;
@@ -205,6 +207,7 @@
                 }
 
                 a.clearSearch{
+                    .noselect();
                     cursor: pointer;
                     color: @link-color;
                     text-decoration: none;

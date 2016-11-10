@@ -135,7 +135,7 @@
         "controlsFadeLength": 250,
         "defaultZoomLevel": 0,
         "immediateRender": false,
-        "maxZoomPixelRatio": 2,
+        "maxZoomPixelRatio": 1.25,
         "navigatorPosition": "BOTTOM_RIGHT",
         "pageGap": 50,
         "showHomeControl": false,

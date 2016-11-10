@@ -211,6 +211,12 @@ class FooterPanel extends BaseFooterPanel {
                 300, 2, true
             );
 
+        } else {
+            this.$searchText.on("keyup", (e) => {
+                if (e.keyCode === KeyCodes.KeyDown.Enter) {
+                    that.search(that.$searchText.val());
+                }
+            });
         }
 
         this.$printButton.onPressed(() => {

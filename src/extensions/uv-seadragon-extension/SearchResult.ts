@@ -10,7 +10,8 @@ class SearchResult {
     }
 
     addRect(resource: any): void {
-        var rect = new SearchResultRect(resource);
+        var rect: SearchResultRect = new SearchResultRect(resource);
+        rect.canvasIndex = this.canvasIndex;
         this.rects.push(rect);
         // sort ascending
         this.rects.sort(function(a, b) {

@@ -69,7 +69,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     create(overrideDependencies?: any): void {
         super.create(overrideDependencies);
 
-        var that = this;
+        const that = this;
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
             if (this.metric === Metrics.MOBILE_LANDSCAPE) {
@@ -180,7 +180,16 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
             this.triggerSocket(Commands.NEXT_SEARCH_RESULT);
+        });
+
+        $.subscribe(Commands.NO_NEXT_IMAGE_SEARCH_RESULT, () => {
+            this.triggerSocket(Commands.NO_NEXT_IMAGE_SEARCH_RESULT);
             this.nextSearchResult();
+        });
+
+        $.subscribe(Commands.NO_PREV_IMAGE_SEARCH_RESULT, () => {
+            this.triggerSocket(Commands.NO_PREV_IMAGE_SEARCH_RESULT);
+            this.prevSearchResult();
         });
 
         $.subscribe(Commands.OPEN_THUMBS_VIEW, (e) => {
@@ -219,7 +228,6 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
             this.triggerSocket(Commands.PREV_SEARCH_RESULT);
-            this.prevSearchResult();
         });
 
         $.subscribe(Commands.PRINT, () => {
@@ -289,6 +297,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.triggerSocket(Commands.SEARCH_RESULTS, obj);
         });
 
+        $.subscribe(Commands.SEARCH_RESULT_CANVAS_CHANGED, (e, rect: SearchResultRect) => {
+            this.viewPage(rect.canvasIndex);
+        });
+
         $.subscribe(Commands.SEARCH_RESULTS_EMPTY, (e) => {
             this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
         });
@@ -327,7 +339,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         });
     }
 
-    createModules(): void{
+    createModules(): void {
         super.createModules();
 
         if (this.isHeaderPanelEnabled()){
@@ -415,6 +427,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             }
         }
     }
+
     checkForRotationParam(): void{
         // if a rotation value is in the hash params, set currentRotation
         if (this.isDeepLinkingEnabled()){
@@ -438,7 +451,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
 
         if (this.isPagingSettingEnabled() && !isReload){
-            var indices = this.getPagedIndices(canvasIndex);
+            var indices: number[] = this.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.
             if (indices.contains(this.helper.canvasIndex)) {
@@ -509,7 +522,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     treeNodeSelected(node: ITreeNode): void{
-        var data: any = node.data;
+        const data: any = node.data;
         
         if (!data.type) return;
 
@@ -534,12 +547,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     prevSearchResult(): void {
-
         // get the first result with a canvasIndex less than the current index.
-        for (var i = this.searchResults.length - 1; i >= 0; i--) {
-            var result = this.searchResults[i];
+        for (let i = this.searchResults.length - 1; i >= 0; i--) {
+            const result: SearchResult = this.searchResults[i];
 
-            if (result.canvasIndex < this.helper.canvasIndex) {
+            if (result.canvasIndex <= this.getPrevPageIndex()) {
                 this.viewPage(result.canvasIndex);
                 break;
             }
@@ -547,12 +559,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     nextSearchResult(): void {
-
         // get the first result with an index greater than the current index.
-        for (var i = 0; i < this.searchResults.length; i++) {
-            var result = this.searchResults[i];
+        for (let i = 0; i < this.searchResults.length; i++) {
+            const result: SearchResult = this.searchResults[i];
 
-            if (result.canvasIndex > this.helper.canvasIndex) {
+            if (result.canvasIndex >= this.getNextPageIndex()) {
                 this.viewPage(result.canvasIndex);
                 break;
             }
@@ -562,8 +573,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     bookmark(): void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
-        var bookmark: Bookmark = new Bookmark();
+        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
         bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
@@ -594,14 +605,14 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             return null;
         }
 
-        var bounds = viewer.viewport.getBounds(true);
+        const bounds = viewer.viewport.getBounds(true);
 
-        var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
+        const dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
-        var width: number = Math.floor(bounds.width);
-        var height: number = Math.floor(bounds.height);
-        var x: number = Math.floor(bounds.x);
-        var y: number = Math.floor(bounds.y);
+        let width: number = Math.floor(bounds.width);
+        let height: number = Math.floor(bounds.height);
+        let x: number = Math.floor(bounds.x);
+        let y: number = Math.floor(bounds.y);
 
         // constrain to image bounds
         if (x + width > canvas.getWidth()) {
@@ -620,29 +631,26 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         
         width = Math.min(width, canvas.getWidth());
         height = Math.min(height, canvas.getHeight());       
-        var regionWidth: number = width;
-        var regionHeight: number = height;
+        let regionWidth: number = width;
+        let regionHeight: number = height;
 
-        if (canvas.externalResource.data && canvas.externalResource.data.profile[1]){
-          var maxSize: Size =  new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
+        if (canvas.externalResource.data && canvas.externalResource.data.profile[1]) {
+
+          const maxSize: Size =  new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
+
           if (!_.isUndefined(maxSize.width) && !_.isUndefined(maxSize.height)){
 
-            if( width > maxSize.width ){
-
-              var newWidth: number = maxSize.width;
-              height = Math.round( newWidth * (height / width) );
-              width = newWidth;
-
+            if (width > maxSize.width) {
+                let newWidth: number = maxSize.width;
+                height = Math.round(newWidth * (height / width));
+                width = newWidth;
             }
 
-            if ( height > maxSize.height ) {
-
-                var newHeight: number = maxSize.height;
-                width = Math.round( (width / height) * newHeight );
+            if (height > maxSize.height) {
+                let newHeight: number = maxSize.height;
+                width = Math.round((width / height) * newHeight);
                 height = newHeight;
-
             }
-
           } 
         }
 
@@ -726,69 +734,69 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
-        var dimensions: CroppedImageDimensions = this.getCroppedImageDimensions(canvas, viewer);
+        const dimensions: CroppedImageDimensions = this.getCroppedImageDimensions(canvas, viewer);
 
         // construct uri
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
 
-        var baseUri = this.getImageBaseUri(canvas);
-        var id = this.getImageId(canvas);
-        var region = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
-        var size = dimensions.size.width + ',' + dimensions.size.height;
-        var rotation = this.getViewerRotation();
-        var quality = 'default';
+        const baseUri: string = this.getImageBaseUri(canvas);
+        const id: string = this.getImageId(canvas);
+        const region: string = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
+        const size: string = dimensions.size.width + ',' + dimensions.size.height;
+        const rotation: number = this.getViewerRotation();
+        const quality: string = 'default';
         return String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
     }
 
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
-        var dimensions: Size = new Size(0, 0);
+        const dimensions: Size = new Size(0, 0);
         dimensions.width = width;
-        var normWidth = Math.normalise(width, 0, canvas.getWidth());
+        const normWidth = Math.normalise(width, 0, canvas.getWidth());
         dimensions.height = Math.floor(canvas.getHeight() * normWidth);
         return dimensions;
     }
 
     getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string {
-        var baseUri = this.getImageBaseUri(canvas);
+        const baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
-        var id = this.getImageId(canvas);
-        var region = 'full';
-        var dimensions = this.getConfinedImageDimensions(canvas, width);
-        var size: string = dimensions.width + ',' + dimensions.height;
-        var rotation = this.getViewerRotation();
-        var quality = 'default';
-        var uri = String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
+        const id: string = this.getImageId(canvas);
+        const region: string = 'full';
+        const dimensions: Size = this.getConfinedImageDimensions(canvas, width);
+        const size: string = dimensions.width + ',' + dimensions.height;
+        const rotation: number = this.getViewerRotation();
+        const quality: string = 'default';
+        const uri: string = String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
         return uri;
     }
 
     getImageId(canvas: Manifesto.ICanvas): string {
-        var id = this.getInfoUri(canvas);
+        let id = this.getInfoUri(canvas);
         // First trim off info.json, then extract ID:
         id = id.substr(0, id.lastIndexOf("/"));
         return id.substr(id.lastIndexOf("/") + 1);
     }
 
     getImageBaseUri(canvas: Manifesto.ICanvas): string {
-        var uri = this.getInfoUri(canvas);
+        let uri = this.getInfoUri(canvas);
         // First trim off info.json, then trim off ID....
         uri = uri.substr(0, uri.lastIndexOf("/"));
         return uri.substr(0, uri.lastIndexOf("/"));
     }
 
     getInfoUri(canvas: Manifesto.ICanvas): string{
-        var infoUri: string;
+        let infoUri: string;
 
-        var images: Manifesto.IAnnotation[] = canvas.getImages();
+        const images: Manifesto.IAnnotation[] = canvas.getImages();
 
         if (images && images.length) {
-            var firstImage = images[0];
-            var resource: Manifesto.IResource = firstImage.getResource();
-            var services: Manifesto.IService[] = resource.getServices();
+            let firstImage = images[0];
+            let resource: Manifesto.IResource = firstImage.getResource();
+            let services: Manifesto.IService[] = resource.getServices();
 
-            for (var i = 0; i < services.length; i++) {
-                var service: Manifesto.IService = services[i];
-                var id = service.id;
+            for (let i = 0; i < services.length; i++) {
+                let service: Manifesto.IService = services[i];
+                let id = service.id;
 
                 if (!_.endsWith(id, '/')) {
                     id += '/';
@@ -809,18 +817,18 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string{
-        var configUri = this.config.uri || '';
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
+        const configUri = this.config.uri || '';
+        let script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
         return script;
     }
 
     getPrevPageIndex(canvasIndex?: number): number {
         if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
 
-        var index;
+        let index: number;
 
         if (this.isPagingSettingEnabled()){
-            var indices = this.getPagedIndices(canvasIndex);
+            let indices: number[] = this.getPagedIndices(canvasIndex);
 
             if (this.helper.isRightToLeft()){
                 index = indices.last() - 1;
@@ -858,10 +866,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     getNextPageIndex(canvasIndex?: number): number {
        if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
     
-       var index;
+       let index: number;
     
        if (this.isPagingSettingEnabled()){
-           var indices = this.getPagedIndices(canvasIndex);
+           let indices: number[] = this.getPagedIndices(canvasIndex);
     
            if (this.helper.isRightToLeft()){
                index = indices[0] + 1;
@@ -881,30 +889,30 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
     
     getAutoCompleteService(): Manifesto.IService {
-       var service: Manifesto.IService = this.helper.getSearchWithinService();
+       const service: Manifesto.IService = this.helper.getSearchWithinService();
        if (!service) return null;
        return service.getService(manifesto.ServiceProfile.autoComplete());
     }
 
     getAutoCompleteUri(): string{
-        var service = this.getAutoCompleteService();
+        const service = this.getAutoCompleteService();
         if (!service) return null;
         return service.id + '?q={0}';
     }
 
     getSearchWithinServiceUri(): string {
-        var service: Manifesto.IService = this.helper.getSearchWithinService();
+        const service: Manifesto.IService = this.helper.getSearchWithinService();
 
         if (!service) return null;
 
-        var uri = service.id;
+        let uri: string = service.id;
         uri = uri + "?q={0}";
         return uri;
     }
 
-    searchWithin(terms): void {
+    searchWithin(terms: string): void {
 
-        var that = this;
+        const that = this;
 
         this.doSearchWithin(terms, (results: any) => {
             if (results.resources && results.resources.length) {
@@ -921,9 +929,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     doSearchWithin(terms: string, cb: (results: any) => void): void {
-        var that = this;
+        const that = this;
 
-        var searchUri = this.getSearchWithinServiceUri();
+        let searchUri: string = this.getSearchWithinServiceUri();
         searchUri = String.format(searchUri, terms);
 
         $.getJSON(searchUri, (results: any) => {
@@ -938,24 +946,28 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     parseSearchWithinResults(results: any): void {
         this.searchResults = [];
 
-        for (var i = 0; i < results.resources.length; i++) {
-            var r = results.resources[i];
+        for (let i = 0; i < results.resources.length; i++) {
+            let r = results.resources[i];
+            let sr: SearchResult = new SearchResult(r, this.helper);
+            let match: SearchResult = this.getSearchResultByCanvasIndex(sr.canvasIndex);
 
-            var sr: SearchResult = new SearchResult(r, this.helper);
-
-            var match = this.getSearchResultByCanvasIndex(sr.canvasIndex);
-
+            // if there's already a SearchResult for the canvas index, add a rect to it, otherwise create a new SearchResult
             if (match){
                 match.addRect(r);
             } else {
                 this.searchResults.push(sr);
             }
         }
+
+        // sort by canvasIndex
+        this.searchResults.sort((a, b) => {
+            return a.canvasIndex - b.canvasIndex;
+        });
     }
 
     getSearchResultByCanvasIndex(canvasIndex: number): SearchResult {
-        for (var i = 0; i < this.searchResults.length; i++) {
-            var r = this.searchResults[i];
+        for (let i = 0; i < this.searchResults.length; i++) {
+            let r: SearchResult = this.searchResults[i];
             if (r.canvasIndex === canvasIndex){
                 return r;
             }
@@ -966,7 +978,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     getPagedIndices(canvasIndex?: number): number[]{
         if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
 
-        var indices = [];
+        let indices: number[] = [];
 
         // if it's a continuous manifest, get all resources.
         if (this.helper.isContinuous()){

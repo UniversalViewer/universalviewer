@@ -15,6 +15,8 @@ class Commands {
     static MULTISELECTION_MADE: string                  = Commands.namespace + 'onMultiSelectionMade';
     static NEXT_SEARCH_RESULT: string                   = Commands.namespace + 'onNextSearchResult';
     static NEXT: string                                 = Commands.namespace + 'onNext';
+    static NO_NEXT_IMAGE_SEARCH_RESULT: string          = Commands.namespace + 'onNoNextImageSearchResult';
+    static NO_PREV_IMAGE_SEARCH_RESULT: string          = Commands.namespace + 'onNoPrevImageSearchResult';
     static OPEN_THUMBS_VIEW: string                     = Commands.namespace + 'onOpenThumbsView';
     static OPEN_TREE_VIEW: string                       = Commands.namespace + 'onOpenTreeView';
     static PAGE_SEARCH: string                          = Commands.namespace + 'onPageSearch';
@@ -31,6 +33,7 @@ class Commands {
     static SEADRAGON_ROTATION: string                   = Commands.namespace + 'onRotation';
     static SEARCH_PREVIEW_FINISH: string                = Commands.namespace + 'onSearchPreviewFinish';
     static SEARCH_PREVIEW_START: string                 = Commands.namespace + 'onSearchPreviewStart';
+    static SEARCH_RESULT_CANVAS_CHANGED: string         = Commands.namespace + 'onSearchResultCanvasChanged';
     static SEARCH_RESULTS_EMPTY: string                 = Commands.namespace + 'onSearchResultsEmpty';
     static SEARCH_RESULTS: string                       = Commands.namespace + 'onSearchResults';
     static SEARCH: string                               = Commands.namespace + 'onSearch';

@@ -967,6 +967,19 @@
   width: 585px;
 }
 #app .footerPanel .searchPager .controls a.previousResult {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */
   background-image: url('../../img/uv-searchfooterpanel-module/prev.png');
   background-repeat: no-repeat;
   height: 30px;
@@ -988,6 +1001,19 @@
   text-decoration: none;
 }
 #app .footerPanel .searchPager .controls a.nextResult {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */
   background-image: url('../../img/uv-searchfooterpanel-module/next.png');
   background-repeat: no-repeat;
   height: 30px;
@@ -1009,6 +1035,19 @@
   text-decoration: none;
 }
 #app .footerPanel .searchPager .controls a.clearSearch {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */
   cursor: pointer;
   color: #26b5cc;
   text-decoration: none;

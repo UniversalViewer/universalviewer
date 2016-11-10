@@ -13,6 +13,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
     currentBounds: any;
+    currentSearchResultRect: SearchResultRect;
     handler: any;
     initialBounds: any;
     initialRotation: any;
@@ -22,6 +23,7 @@ class SeadragonCenterPanel extends CenterPanel {
     nextButtonEnabled: boolean = false;
     pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
+    previousSearchResultRect: SearchResultRect;
     title: string;
     userData: any;
     viewer: any;
@@ -52,45 +54,71 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$content.prepend(this.$viewer);
 
         $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
-            Utils.Async.waitFor(() => {
-                return this.isResized;
-            }, () => {
+            this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
+            })
+        });
+
+        $.subscribe(Commands.CLEAR_SEARCH, () => {
+            this.whenCreated(() => {
+                this.currentSearchResultRect = null;
+                this.clearSearchResults();
+            });
+        });
+
+        $.subscribe(Commands.VIEW_PAGE, () => {
+            this.previousSearchResultRect = null;
+            this.currentSearchResultRect = null;
+        });
+
+        $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
+            this.whenCreated(() => {
+                this.nextSearchResult();
+            });
+        });
+
+        $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
+            this.whenCreated(() => {
+                this.prevSearchResult();
             });
         });
 
         $.subscribe(Commands.ZOOM_IN, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.zoomIn();
             });
         });
 
         $.subscribe(Commands.ZOOM_OUT, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.zoomOut();
             });
         });
 
         $.subscribe(Commands.ROTATE, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.rotateRight();
             });
         });
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.updateResponsiveView();
             });
         });
+    }
+
+    whenResized(cb: () => void): void {
+        Utils.Async.waitFor(() => {
+            return this.isResized;
+        }, cb);
+    }
+
+    whenCreated(cb: () => void): void {
+        Utils.Async.waitFor(() => {
+            return this.isCreated;
+        }, cb);
     }
 
     zoomIn(): void {
@@ -267,6 +295,8 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.viewer.addHandler('animation-finish', (viewer) => {
             this.currentBounds = this.getBounds();
+
+            this.updateVisibleSearchResultRects();
 
             $.publish(Commands.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
@@ -633,7 +663,17 @@ class SeadragonCenterPanel extends CenterPanel {
         this.setNavigatorVisible();
 
         this.isFirstLoad = false;
+
         this.overlaySearchResults();
+
+        let searchResultRect: SearchResultRect = this.getInitialSearchResultRect();
+
+        this.previousSearchResultRect = null;
+        this.currentSearchResultRect = null;
+
+        if (searchResultRect) {
+            this.zoomToSearchResult(searchResultRect);
+        }
     }
 
     goHome(): void {        
@@ -696,14 +736,14 @@ class SeadragonCenterPanel extends CenterPanel {
         };
     }
 
-    fitToBounds(bounds): void {
+    fitToBounds(bounds, immediate: boolean = true): void {
         var rect = new OpenSeadragon.Rect();
-        rect.x = bounds.x;
-        rect.y = bounds.y;
-        rect.width = bounds.width;
-        rect.height = bounds.height;
+        rect.x = Number(bounds.x);
+        rect.y = Number(bounds.y);
+        rect.width = Number(bounds.width);
+        rect.height = Number(bounds.height);
 
-        this.viewer.viewport.fitBounds(rect, true);
+        this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
     }
 
     getBounds(): any {
@@ -724,7 +764,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
         if (!viewer.viewport) return;
 
-        var center = viewer.viewport.getCenter(true);
+        const center = viewer.viewport.getCenter(true);
         if (!center) return;
 
         // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
@@ -733,60 +773,186 @@ class SeadragonCenterPanel extends CenterPanel {
         }, 1);
     }
 
+    clearSearchResults(): void {
+        const $canvas: JQuery = $(this.viewer.canvas);
+        $canvas.find('.searchOverlay').hide();
+    }
+
     overlaySearchResults(): void {
+        const searchResults: SearchResult[] = this.getSearchResultsForCurrentImages();
 
-        var searchResults = (<ISeadragonExtension>this.extension).searchResults;
+        for (let i = 0; i < searchResults.length; i++) {
 
-        if (!searchResults.length) return;
+            const searchResult: SearchResult = searchResults[i];
+            const overlayRects: any[] = this.getSearchOverlayRects(searchResult.rects, i);
 
-        var indices = this.extension.getPagedIndices();
+            for (let k = 0; k < overlayRects.length; k++) {
+                const overlayRect = overlayRects[k];
 
-        for (var i = 0; i < indices.length; i++){
-            var canvasIndex = indices[i];
-
-            var searchHit: SearchResult = null;
-
-            for (var j = 0; j < searchResults.length; j++) {
-                if (searchResults[j].canvasIndex === canvasIndex) {
-                    searchHit = searchResults[j];
-                    break;
-                }
-            }
-
-            if (!searchHit) continue;
-
-            var rects = this.getSearchOverlayRects(searchHit.rects, i);
-
-            for (var k = 0; k < rects.length; k++) {
-                var rect = rects[k];
-
-                var div = document.createElement("div");
+                const div = document.createElement("div");
                 div.className = "searchOverlay";
 
-                this.viewer.addOverlay(div, rect);
+                this.viewer.addOverlay(div, overlayRect);
             }
         }
     }
 
-    getSearchOverlayRects(rects: SearchResultRect[], index: number) {
-        var newRects = [];
+    getSearchResultsForCurrentImages(): SearchResult[] {
+        let searchResultsForCurrentImages: SearchResult[] = [];
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
 
-        var width = this.extension.resources[index].width;
-        var offsetX = 0;
+        if (!searchResults.length) return searchResultsForCurrentImages;
+
+        const indices: number[] = this.extension.getPagedIndices();
+
+        for (let i = 0; i < indices.length; i++){
+            const canvasIndex = indices[i];
+
+            for (let j = 0; j < searchResults.length; j++) {
+                if (searchResults[j].canvasIndex === canvasIndex) {
+                    searchResultsForCurrentImages.push(searchResults[j]);
+                    break;
+                }
+            }
+        }
+
+        return searchResultsForCurrentImages;
+    }
+
+    getSearchResultRectsForCurrentImages(): SearchResultRect[] {
+        const searchResults: SearchResult[] = this.getSearchResultsForCurrentImages();
+        return searchResults.en().selectMany(x => x.rects).toArray();
+    }
+
+    updateVisibleSearchResultRects(): void {
+        // after animating, loop through all search result rects and flag their visibility based on whether they are inside the current viewport.
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+
+        for (let i = 0; i < searchResultRects.length; i++) {
+            let rect: SearchResultRect = searchResultRects[i];
+            let viewportBounds: any = this.viewer.viewport.getBounds();
+
+            rect.isVisible = Utils.Measurements.Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
+        }
+    }
+
+    getSearchResultRectIndex(searchResultRect: SearchResultRect): number {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        return searchResultRects.indexOf(searchResultRect);
+    }
+
+    nextSearchResult(): void {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex(this.currentSearchResultRect);
+        let foundRect: SearchResultRect;
+
+        // find the first non-visible rect following the current one
+        for (let i = currentSearchResultRectIndex + 1; i < searchResultRects.length; i++) {
+            var rect: SearchResultRect = searchResultRects[i];
+
+            if (rect.isVisible) {
+                continue;
+            } else {
+                foundRect = rect;
+                break;
+            }
+        }
+
+        if (foundRect) {
+            // if the rect's canvasIndex is greater than the current canvasIndex
+            if (rect.canvasIndex > this.extension.helper.canvasIndex) {
+                this.currentSearchResultRect = rect;
+                $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [rect]);
+            } else {
+                this.zoomToSearchResult(rect);
+            }
+        } else {
+            $.publish(Commands.NO_NEXT_IMAGE_SEARCH_RESULT);
+        }
+    }
+
+    prevSearchResult(): void {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex(this.currentSearchResultRect);
+        let foundRect: SearchResultRect;
+
+        // find the first non-visible rect preceding the current one   
+        for (let i = currentSearchResultRectIndex - 1; i >= 0; i--) {
+            var rect: SearchResultRect = searchResultRects[i];
+
+            if (rect.isVisible) {
+                continue;
+            } else {
+                foundRect = rect;
+                break;
+            }
+        }
+
+        if (foundRect) {
+            // if the rect's canvasIndex is less than the current canvasIndex
+            if (rect.canvasIndex < this.extension.helper.canvasIndex) {
+                this.currentSearchResultRect = rect;
+                $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [rect]);
+            } else {
+                this.zoomToSearchResult(rect);
+            }
+        } else {
+            $.publish(Commands.NO_PREV_IMAGE_SEARCH_RESULT);
+        }
+    }
+
+    getSearchResultRectByIndex(index: number): SearchResultRect {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        if (!searchResultRects.length) return null;
+        return searchResultRects[index];
+    }
+
+    getInitialSearchResultRect(): SearchResultRect {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        if (!searchResultRects.length) return null;
+
+        // if the previous SearchResultRect had a canvasIndex higher than the current canvasIndex
+        if (this.previousSearchResultRect && this.previousSearchResultRect.canvasIndex > this.extension.helper.canvasIndex) {
+            return searchResultRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
+        }
+
+        // get the first rect with the current canvasindex.
+        return searchResultRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).first();
+    }
+
+    zoomToSearchResult(searchResultRect: SearchResultRect): void {
+        this.previousSearchResultRect = this.currentSearchResultRect || searchResultRect;
+        this.currentSearchResultRect = searchResultRect;
+
+        this.fitToBounds({
+            x: searchResultRect.viewportX,
+            y: searchResultRect.viewportY,
+            width: searchResultRect.width,
+            height: searchResultRect.height
+        }, false);
+    }
+
+    getSearchOverlayRects(rects: SearchResultRect[], index: number): any[] {
+        let newRects: any[] = [];
+
+        const width = this.extension.resources[index].width;
+        let offsetX = 0;
 
         if (index > 0){
             offsetX = this.extension.resources[index - 1].width;
         }
 
-        for (var i = 0; i < rects.length; i++) {
-            var searchRect: SearchResultRect = rects[i];
+        for (let i = 0; i < rects.length; i++) {
+            const searchRect: SearchResultRect = rects[i];
 
-            var x = (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
-            var y = Number(searchRect.y);
-            var w = Number(searchRect.width);
-            var h = Number(searchRect.height);
+            const x: number = (searchRect.x + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
+            const y: number = searchRect.y;
+            const w: number = searchRect.width;
+            const h: number = searchRect.height;
 
-            var rect = new OpenSeadragon.Rect(x, y, w, h);
+            const rect = new OpenSeadragon.Rect(x, y, w, h);
+            searchRect.viewportX = x;
+            searchRect.viewportY = y;
 
             newRects.push(rect);
         }
@@ -854,8 +1020,9 @@ class SeadragonCenterPanel extends CenterPanel {
     setFocus(): void {
         var $canvas = $(this.viewer.canvas);
 
-        if (!$canvas.is(":focus"))
+        if (!$canvas.is(":focus")) {
             $canvas.focus();
+        }
     }
     
     setNavigatorVisible(): void {

@@ -2,6 +2,7 @@ import CroppedImageDimensions = require("./CroppedImageDimensions");
 import IExtension = require("../../modules/uv-shared-module/IExtension");
 import Mode = require("./Mode");
 import SearchResult = require("./SearchResult");
+import SearchResultRect = require("./SearchResultRect");
 import Size = Utils.Measurements.Size;
 
 interface ISeadragonExtension extends IExtension{
