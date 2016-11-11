@@ -250,7 +250,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             if (this.centerPanel && this.centerPanel.currentBounds){
-                this.setParam(Params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
+                //this.setParam(Params.zoom, this.centerPanel.serialiseBounds(this.centerPanel.currentBounds));
+                this.setParam(Params.xywh, this.centerPanel.getBounds());
             }
 
             var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
@@ -484,11 +485,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    getViewerBounds(): string{
+    getViewerBounds(): string {
         if (!this.centerPanel) return null;
-        var bounds = this.centerPanel.getBounds();
-        if (bounds) return this.centerPanel.serialiseBounds(bounds);
-        return "";
+        const bounds = this.centerPanel.getBounds();
+        console.log(bounds);
+        return bounds;
     }
 
     getViewerRotation(): number{
@@ -1005,13 +1006,13 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return this.getCurrentSearchResultRectIndex() === this.getTotalSearchResultRects() - 1;
     } 
 
-    getPagedIndices(canvasIndex?: number): number[]{
+    getPagedIndices(canvasIndex?: number): number[] {
         if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
 
         let indices: number[] = [];
 
         // if it's a continuous manifest, get all resources.
-        if (this.helper.isContinuous()){
+        if (this.helper.isContinuous()) {
             indices = _.map(this.helper.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
                 return index;
             });
@@ -1019,15 +1020,15 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             if (!this.isPagingSettingEnabled()) {
                 indices.push(this.helper.canvasIndex);
             } else {
-                if (this.helper.isFirstCanvas(canvasIndex) || (this.helper.isLastCanvas(canvasIndex) && this.helper.isTotalCanvasesEven())){
+                if (this.helper.isFirstCanvas(canvasIndex) || (this.helper.isLastCanvas(canvasIndex) && this.helper.isTotalCanvasesEven())) {
                     indices = [canvasIndex];
-                } else if (canvasIndex % 2){
+                } else if (canvasIndex % 2) {
                     indices = [canvasIndex, canvasIndex + 1];
                 } else {
                     indices = [canvasIndex - 1, canvasIndex];
                 }
 
-                if (this.helper.isRightToLeft()){
+                if (this.helper.isRightToLeft()) {
                     indices = indices.reverse();
                 }
             }

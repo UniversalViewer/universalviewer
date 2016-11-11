@@ -6,6 +6,7 @@ import DownloadDialogue = require("../../extensions/uv-seadragon-extension/Downl
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Params = require("../../Params");
+import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 
 class FooterPanel extends BaseFooterPanel {
@@ -48,6 +49,8 @@ class FooterPanel extends BaseFooterPanel {
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged();
             this.setCurrentSearchResultPlacemarker();
+            this.updatePrevButton();
+            this.updateNextButton();
         });
 
         // todo: this should be a setting
@@ -239,19 +242,57 @@ class FooterPanel extends BaseFooterPanel {
         }
     }
 
+    isZoomToSearchResultEnabled(): boolean {
+        return Utils.Bools.getBool(this.extension.config.options.zoomToSearchResultEnabled, true);
+    }
+
+    isPreviousButtonDisabled(): boolean {
+        
+        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentSearchResultRect) {
+            return (<ISeadragonExtension>this.extension).isFirstSearchResultRect();
+        }
+        
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        return this.extension.helper.canvasIndex <= searchResults[0].canvasIndex;
+    }
+
+    isNextButtonDisabled(): boolean {
+
+        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentSearchResultRect) {
+            return (<ISeadragonExtension>this.extension).isLastSearchResultRect();
+        }
+
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        let lastSearchResultCanvasIndex: number = searchResults[searchResults.length - 1].canvasIndex;
+
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
+            lastSearchResultCanvasIndex -= 1;
+        }
+
+        return this.extension.helper.canvasIndex >= lastSearchResultCanvasIndex; 
+    }
+
     updateNextButton(): void {
-        if ((<ISeadragonExtension>this.extension).isLastSearchResultRect()) {
-            this.$nextResultButton.addClass('disabled');
-        } else {
-            this.$nextResultButton.removeClass('disabled');
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        
+        if (searchResults && searchResults.length) {
+            if (this.isNextButtonDisabled()) {
+                this.$nextResultButton.addClass('disabled');
+            } else {
+                this.$nextResultButton.removeClass('disabled');
+            }
         }
     }
 
     updatePrevButton(): void {
-        if ((<ISeadragonExtension>this.extension).isFirstSearchResultRect()) {
-            this.$previousResultButton.addClass('disabled');
-        } else {
-            this.$previousResultButton.removeClass('disabled');
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        
+        if (searchResults && searchResults.length) {       
+            if (this.isPreviousButtonDisabled()) {
+                this.$previousResultButton.addClass('disabled');
+            } else {
+                this.$previousResultButton.removeClass('disabled');
+            }
         }
     }
 

@@ -1,12 +1,12 @@
 enum Params {
-    collectionIndex,
-    manifestIndex,
-    sequenceIndex,
+    anchor,
     canvasIndex,
-    zoom,
-    rotation,
+    collectionIndex,
     highlight,
-    anchor
+    manifestIndex,
+    rotation,
+    sequenceIndex,
+    xywh
 }
 
 export = Params;

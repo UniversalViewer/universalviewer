@@ -21,7 +21,8 @@
     "termsOfUseEnabled": false,
     "theme": "uv-en-GB-theme",
     "tokenStorage": "session",
-    "useArrowKeysToNavigate": false
+    "useArrowKeysToNavigate": false,
+    "zoomToSearchResultEnabled": true
   },
   "modules": {
     "contentLeftPanel": {

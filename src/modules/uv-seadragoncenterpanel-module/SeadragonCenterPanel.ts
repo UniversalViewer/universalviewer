@@ -1,6 +1,7 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
+import CroppedImageDimensions = require("../../extensions/uv-seadragon-extension/CroppedImageDimensions");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import ExternalResource = Manifesto.IExternalResource;
 import Metrics = require("../uv-shared-module/Metrics");
@@ -346,7 +347,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.prevButtonEnabled) return;
 
-            switch (viewingDirection.toString()){
+            switch (viewingDirection.toString()) {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
@@ -603,7 +604,7 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.viewer.viewport.setRotation(parseInt(this.initialRotation));
             }
 
-            this.initialBounds = this.extension.getParam(Params.zoom);
+            this.initialBounds = this.extension.getParam(Params.xywh);
 
             if (this.initialBounds){
                 this.initialBounds = this.deserialiseBounds(this.initialBounds);
@@ -671,7 +672,7 @@ class SeadragonCenterPanel extends CenterPanel {
         (<ISeadragonExtension>this.extension).previousSearchResultRect = null;
         (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
 
-        if (searchResultRect) {
+        if (searchResultRect && this.isZoomToSearchResultEnabled()) {
             this.zoomToSearchResult(searchResultRect);
         }
     }
@@ -720,7 +721,7 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$nextButton.show();
     }
 
-    serialiseBounds(bounds): string{
+    serialiseBounds(bounds): string {
         return bounds.x + ',' + bounds.y + ',' + bounds.width + ',' + bounds.height;
     }
 
@@ -731,8 +732,8 @@ class SeadragonCenterPanel extends CenterPanel {
         return {
             x: Number(boundsArr[0]),
             y: Number(boundsArr[1]),
-            width: Number(boundsArr[2]),
-            height: Number(boundsArr[3])
+            w: Number(boundsArr[2]),
+            h: Number(boundsArr[3])
         };
     }
 
@@ -746,18 +747,14 @@ class SeadragonCenterPanel extends CenterPanel {
         this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
     }
 
-    getBounds(): any {
+    getBounds(): string {
 
         if (!this.viewer || !this.viewer.viewport) return null;
 
-        var bounds = this.viewer.viewport.getBounds(true);
+        let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        let dimensions: CroppedImageDimensions = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
 
-        return {
-            x: Math.roundToDecimalPlace(bounds.x, 4),
-            y: Math.roundToDecimalPlace(bounds.y, 4),
-            width: Math.roundToDecimalPlace(bounds.width, 4),
-            height: Math.roundToDecimalPlace(bounds.height, 4)
-        };
+        return `${dimensions.regionPos.x}, ${dimensions.regionPos.y}, ${dimensions.region.width}, ${dimensions.region.height}`;
     }
 
     viewerResize(viewer: any): void {
@@ -841,6 +838,10 @@ class SeadragonCenterPanel extends CenterPanel {
         return searchResultRects.indexOf(searchResultRect);
     }
 
+    isZoomToSearchResultEnabled(): boolean {
+        return Utils.Bools.getBool(this.extension.config.options.zoomToSearchResultEnabled, true);
+    }
+
     nextSearchResult(): void {
         const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
         const currentSearchResultRectIndex: number = this.getSearchResultRectIndex((<ISeadragonExtension>this.extension).currentSearchResultRect);
@@ -858,7 +859,7 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }
 
-        if (foundRect) {
+        if (foundRect && this.isZoomToSearchResultEnabled()) {
             // if the rect's canvasIndex is greater than the current canvasIndex
             if (rect.canvasIndex > this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentSearchResultRect = rect;
@@ -888,7 +889,7 @@ class SeadragonCenterPanel extends CenterPanel {
             }
         }
 
-        if (foundRect) {
+        if (foundRect && this.isZoomToSearchResultEnabled()) {
             // if the rect's canvasIndex is less than the current canvasIndex
             if (rect.canvasIndex < this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentSearchResultRect = rect;
