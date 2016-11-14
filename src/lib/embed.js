@@ -207,7 +207,7 @@ docReady(function() {
         }
 
         function app(element, isHomeDomain, isOnlyInstance) {
-            var socket, $app, $img, $appFrame, manifestUri, collectionIndex, manifestIndex, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, zoom, rotation, config, jsonp, locale, isFullScreen, dimensions, top, left, lastScroll, reload;
+            var socket, $app, $img, $appFrame, manifestUri, collectionIndex, manifestIndex, sequenceIndex, canvasIndex, defaultToFullScreen, isLightbox, xywh, rotation, config, jsonp, locale, isFullScreen, dimensions, top, left, lastScroll, reload;
 
             $app = $(element);
 
@@ -234,7 +234,7 @@ docReady(function() {
             manifestIndex = $app.attr('data-manifestindex');
             sequenceIndex = $app.attr('data-sequenceindex');
             canvasIndex = $app.attr('data-canvasindex');
-            zoom = $app.attr('data-zoom');
+            xywh = $app.attr('data-xywh');
             rotation = $app.attr('data-rotation');
             config = $app.attr('data-config');
             jsonp = $app.attr('data-jsonp');
@@ -489,7 +489,7 @@ docReady(function() {
                 if (manifestIndex) uri += "&m=" + manifestIndex;
                 if (sequenceIndex) uri += "&s=" + sequenceIndex;
                 if (canvasIndex) uri += "&cv=" + canvasIndex;
-                if (zoom) uri += "&z=" + zoom;
+                if (xywh) uri += "&xywh=" + xywh;
                 if (rotation) uri += "&r=" + rotation;
 
                 socket = new easyXDM.Socket({

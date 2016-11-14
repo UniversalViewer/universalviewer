@@ -24,7 +24,7 @@ interface ISeadragonExtension extends IExtension{
     getSearchWithinServiceUri(): string;
     getTotalSearchResultRects(): number;
     getViewer(): any;
-    getViewerBounds(): string;
+    getViewportBounds(): string;
     getViewerRotation(): number;
     isFirstSearchResultRect(): boolean;
     isLastSearchResultRect(): boolean;

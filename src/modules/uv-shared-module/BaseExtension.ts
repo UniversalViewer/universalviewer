@@ -203,7 +203,7 @@ class BaseExtension implements IExtension {
                     }
                 }
 
-                if (event){
+                if (event) {
                     if (preventDefault) {
                         e.preventDefault();
                     }

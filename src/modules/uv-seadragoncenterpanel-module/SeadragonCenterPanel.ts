@@ -295,7 +295,7 @@ class SeadragonCenterPanel extends CenterPanel {
         });
 
         this.viewer.addHandler('animation-finish', (viewer) => {
-            this.currentBounds = this.getBounds();
+            this.currentBounds = this.getViewportBounds();
 
             this.updateVisibleSearchResultRects();
 
@@ -741,20 +741,29 @@ class SeadragonCenterPanel extends CenterPanel {
         var rect = new OpenSeadragon.Rect();
         rect.x = Number(bounds.x);
         rect.y = Number(bounds.y);
-        rect.width = Number(bounds.width);
-        rect.height = Number(bounds.height);
+        rect.width = Number(bounds.w);
+        rect.height = Number(bounds.h);
 
         this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
     }
 
-    getBounds(): string {
+    getCroppedImageBounds(): string {
 
         if (!this.viewer || !this.viewer.viewport) return null;
 
         let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
         let dimensions: CroppedImageDimensions = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
 
-        return `${dimensions.regionPos.x}, ${dimensions.regionPos.y}, ${dimensions.region.width}, ${dimensions.region.height}`;
+        return `${dimensions.regionPos.x},${dimensions.regionPos.y},${dimensions.region.width},${dimensions.region.height}`;
+    }
+
+    getViewportBounds(): string {
+
+        if (!this.viewer || !this.viewer.viewport) return null;
+
+        const bounds = this.viewer.viewport.getBounds(true);
+
+        return `${Math.floor(bounds.x)},${Math.floor(bounds.y)},${Math.floor(bounds.width)},${Math.floor(bounds.height)}`;
     }
 
     viewerResize(viewer: any): void {
@@ -973,7 +982,7 @@ class SeadragonCenterPanel extends CenterPanel {
         if (!this.isCreated) return;
 
         if (this.currentBounds) {
-            this.fitToBounds(this.currentBounds);
+            this.fitToBounds(this.deserialiseBounds(this.currentBounds))
         }
 
         this.$title.ellipsisFill(this.extension.sanitize(this.title));

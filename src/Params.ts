@@ -1,12 +1,14 @@
+
+// do not change order, index is important!
 enum Params {
-    anchor,
-    canvasIndex,
     collectionIndex,
-    highlight,
     manifestIndex,
-    rotation,
     sequenceIndex,
-    xywh
+    canvasIndex,
+    xywh,
+    rotation,
+    highlight,
+    anchor
 }
 
 export = Params;
