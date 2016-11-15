@@ -2,7 +2,7 @@ import BaseCommands = require("./BaseCommands");
 import BootstrapParams = require("../../BootstrapParams");
 import BootStrapper = require("../../Bootstrapper");
 import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
-import ExternalResource = Manifesto.IExternalResource;
+import ExternalResource = Manifold.ExternalResource;
 import IAccessToken = Manifesto.IAccessToken;
 import IExtension = require("./IExtension");
 import ILoginDialogueOptions = require("./ILoginDialogueOptions");
@@ -51,7 +51,7 @@ class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifesto.IExternalResource[];
+    resources: Manifold.ExternalResource[];
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -984,18 +984,19 @@ class BaseExtension implements IExtension {
         return range;
     }
 
-    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
+    public getExternalResources(resources?: Manifold.ExternalResource[]): Promise<Manifold.ExternalResource[]> {
 
         var indices = this.getPagedIndices();
         var resourcesToLoad = [];
 
         _.each(indices, (index) => {
             var canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
-            var r: Manifesto.IExternalResource = new Manifold.ExternalResource(canvas, this.helper.getInfoUri);
+            var r: Manifold.ExternalResource = new Manifold.ExternalResource(canvas, this.helper.getInfoUri);
+            r.index = index;
 
             // used to reload resources with isResponseHandled = true.
             if (resources){
-                var found: Manifesto.IExternalResource = _.find(resources, (f: Manifesto.IExternalResource) => {
+                var found: Manifold.ExternalResource = _.find(resources, (f: Manifold.ExternalResource) => {
                     return f.dataUri === r.dataUri;
                 });
 
@@ -1011,7 +1012,7 @@ class BaseExtension implements IExtension {
 
         var storageStrategy: string = this.config.options.tokenStorage;
 
-        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+        return new Promise<Manifold.ExternalResource[]>((resolve) => {
             manifesto.Utils.loadExternalResources(
                 resourcesToLoad,
                 storageStrategy,
@@ -1021,9 +1022,10 @@ class BaseExtension implements IExtension {
                 this.getAccessToken,
                 this.storeAccessToken,
                 this.getStoredAccessToken,
-                this.handleExternalResourceResponse).then((r: Manifesto.IExternalResource[]) => {
-                    this.resources = _.map(r, (resource: Manifesto.IExternalResource) => {
-                        return <Manifesto.IExternalResource>_.toPlainObject(resource.data);
+                this.handleExternalResourceResponse).then((r: Manifold.ExternalResource[]) => {
+                    this.resources = _.map(r, (resource: Manifold.ExternalResource) => {
+                        resource.data.index = resource.index;
+                        return <Manifold.ExternalResource>_.toPlainObject(resource.data);
                     });
                     resolve(this.resources);
                 })['catch']((error: any) => {
@@ -1185,7 +1187,7 @@ class BaseExtension implements IExtension {
 
     // auth
 
-    clickThrough(resource: Manifesto.IExternalResource): Promise<void> {
+    clickThrough(resource: Manifold.ExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
             $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [{
@@ -1205,7 +1207,7 @@ class BaseExtension implements IExtension {
         });
     }
 
-    restricted(resource: Manifesto.IExternalResource): Promise<void> {
+    restricted(resource: Manifold.ExternalResource): Promise<void> {
         return new Promise<void>((resolve, reject) => {
 
             $.publish(BaseCommands.SHOW_RESTRICTED_DIALOGUE, [{
@@ -1218,7 +1220,7 @@ class BaseExtension implements IExtension {
         });
     }
 
-    login(resource: Manifesto.IExternalResource): Promise<void> {
+    login(resource: Manifold.ExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
             var options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
@@ -1255,7 +1257,7 @@ class BaseExtension implements IExtension {
         });
     }
 
-    getAccessToken(resource: Manifesto.IExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
+    getAccessToken(resource: Manifold.ExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
             var serviceUri: string = resource.tokenService.id;
@@ -1305,14 +1307,14 @@ class BaseExtension implements IExtension {
         //});
     }
 
-    storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
+    storeAccessToken(resource: Manifold.ExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
             resolve();
         });
     }
 
-    getStoredAccessToken(resource: Manifesto.IExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
+    getStoredAccessToken(resource: Manifold.ExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
@@ -1356,7 +1358,7 @@ class BaseExtension implements IExtension {
         });
     }
 
-    handleExternalResourceResponse(resource: Manifesto.IExternalResource): Promise<any> {
+    handleExternalResourceResponse(resource: Manifold.ExternalResource): Promise<any> {
 
         return new Promise<any>((resolve, reject) => {
             resource.isResponseHandled = true;
@@ -1390,7 +1392,7 @@ class BaseExtension implements IExtension {
         });
     }
 
-    handleDegraded(resource: Manifesto.IExternalResource): void {
+    handleDegraded(resource: Manifold.ExternalResource): void {
         var informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
         $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
     }

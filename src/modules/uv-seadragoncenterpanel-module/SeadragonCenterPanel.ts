@@ -790,7 +790,7 @@ class SeadragonCenterPanel extends CenterPanel {
         for (let i = 0; i < searchResults.length; i++) {
 
             const searchResult: SearchResult = searchResults[i];
-            const overlayRects: any[] = this.getSearchOverlayRects(searchResult.rects, i);
+            const overlayRects: any[] = this.getSearchOverlayRects(searchResult);
 
             for (let k = 0; k < overlayRects.length; k++) {
                 const overlayRect = overlayRects[k];
@@ -944,8 +944,10 @@ class SeadragonCenterPanel extends CenterPanel {
         $.publish(Commands.SEARCH_RESULT_RECT_CHANGED);
     }
 
-    getSearchOverlayRects(rects: SearchResultRect[], index: number): any[] {
+    getSearchOverlayRects(searchResult: SearchResult): any[] {
         let newRects: any[] = [];
+
+        let index: number = this.extension.resources.indexOf(this.extension.resources.en().where(x => x.index === searchResult.canvasIndex).first());
 
         const width = this.extension.resources[index].width;
         let offsetX = 0;
@@ -954,8 +956,8 @@ class SeadragonCenterPanel extends CenterPanel {
             offsetX = this.extension.resources[index - 1].width;
         }
 
-        for (let i = 0; i < rects.length; i++) {
-            const searchRect: SearchResultRect = rects[i];
+        for (let i = 0; i < searchResult.rects.length; i++) {
+            const searchRect: SearchResultRect = searchResult.rects[i];
 
             const x: number = (searchRect.x + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
             const y: number = searchRect.y;

@@ -1316,6 +1316,7 @@ declare namespace Manifold {
         dataUri: string;
         error: any;
         height: number;
+        index: number;
         isResponseHandled: boolean;
         loginService: Manifesto.IService;
         logoutService: Manifesto.IService;
