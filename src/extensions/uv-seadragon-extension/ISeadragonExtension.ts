@@ -19,7 +19,6 @@ interface ISeadragonExtension extends IExtension{
     getMode(): Mode;
     getNextPageIndex(index?: number): number;
     getPrevPageIndex(index?: number): number;
-    getSearchResultByCanvasIndex(index: number): SearchResult;
     getSearchResultRects(): SearchResultRect[];
     getSearchWithinServiceUri(): string;
     getTotalSearchResultRects(): number;
@@ -30,7 +29,6 @@ interface ISeadragonExtension extends IExtension{
     isLastSearchResultRect(): boolean;
     isPagingSettingEnabled(): boolean;
     isSearchWithinEnabled(): boolean;
-    parseSearchWithinResults(results: any);
     previousSearchResultRect: SearchResultRect;
     searchResults: SearchResult[];
     searchWithin(terms: string, callback: (results: any) => void): void;
