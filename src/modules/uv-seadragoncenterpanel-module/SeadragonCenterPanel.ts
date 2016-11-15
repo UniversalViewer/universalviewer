@@ -835,7 +835,7 @@ class SeadragonCenterPanel extends CenterPanel {
     getSearchOverlayRects(searchResult: SearchResult): any[] {
         let newRects: any[] = [];
 
-        let index: number = this.extension.resources.indexOf(this.extension.resources.en().where(x => x.index === searchResult.canvasIndex).first());
+        let index: number = this.extension.resources.en().firstIndex(x => x.index === searchResult.canvasIndex);
 
         const width = this.extension.resources[index].width;
         let offsetX = 0;
