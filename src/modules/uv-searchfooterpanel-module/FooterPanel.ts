@@ -586,7 +586,7 @@ class FooterPanel extends BaseFooterPanel {
         return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
-    displaySearchResults(terms, results): void {
+    displaySearchResults(terms: string, results: SearchResult[]): void {
 
         if (!results) return;
 
@@ -600,11 +600,11 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         var $number = this.$searchPagerContainer.find('.number');
-        $number.text(results.resources.length);
+        $number.text(results.length);
 
         var foundFor = this.$searchResultsInfo.find('.foundFor');
 
-        if (results.resources.length === 1) {
+        if (results.length === 1) {
             foundFor.html(this.content.resultFoundFor);
         } else {
             foundFor.html(this.content.resultsFoundFor);

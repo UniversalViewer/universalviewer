@@ -35,19 +35,6 @@ import ShareDialogue = require("./ShareDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import Size = Utils.Measurements.Size;
 
-type Helper = Manifold.IHelper;
-
-type getSearchResultsFunc = (searchUri: string, 
-                    terms: string,
-                    searchResults: SearchResult[],
-                    getSearchResults: getSearchResultsFunc,
-                    getJson: getJsonFunc,
-                    parseJson: parseJsonFunc,
-                    helper: Helper) => Promise<SearchResult[]>;
-
-type getJsonFunc = (uri: string) => Promise<any>;
-type parseJsonFunc = (resultsToParse: any, searchResults: SearchResult[], helper: Helper) => SearchResult[];
-
 class Extension extends BaseExtension implements ISeadragonExtension {
 
     $downloadDialogue: JQuery;
@@ -940,15 +927,12 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         let searchUri: string = this.getSearchWithinServiceUri();
         searchUri = String.format(searchUri, terms);
 
-        this.getSearchResults(searchUri, 
-                            terms, 
-                            this.searchResults, 
-                            this.getSearchResults,
-                            this.getSearchJson,
-                            this.parseSearchJson,
-                            this.helper).then((results: SearchResult[]) => {
-
+        this.getSearchResults(searchUri, terms, this.searchResults, (results: SearchResult[]) => {
             if (results.length) {
+                this.searchResults = results.sort((a, b) => {
+                    return a.canvasIndex - b.canvasIndex;
+                });
+                
                 $.publish(Commands.SEARCH_RESULTS, [{terms, results}]);
 
                 // reload current index as it may contain results.
@@ -964,55 +948,34 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     getSearchResults(searchUri: string, 
                     terms: string,
                     searchResults: SearchResult[],
-                    getSearchResults: getSearchResultsFunc,
-                    getJson: getJsonFunc,
-                    parseJson: parseJsonFunc,
-                    helper: Helper): Promise<SearchResult[]> {
+                    cb: (results: SearchResult[]) => void): void {
 
-        return new Promise<SearchResult[]>((resolve) => {
+        $.getJSON(searchUri, (results: any) => {
             
-            console.log("loading json");
+            if (results.resources && results.resources.length) {
+                searchResults = searchResults.concat(this.parseSearchJson(results, searchResults));
+            }
 
-            getJson(searchUri).then((results: any) => {
-                
-                console.log("json loaded");
-                
-                if (results.resources && results.resources.length) {
-                    searchResults = searchResults.concat(parseJson(results, searchResults, helper));
-                }
-
-                // if more pages to get
-                if (results.next) {
-                    return getSearchResults(results.next, terms, searchResults, getSearchResults, getJson, parseJson, helper);
-                } else {
-                    resolve(searchResults);
-                }
-            });
-
+            if (results.next) {
+                this.getSearchResults(results.next, terms, searchResults, cb);
+            } else {
+                cb(searchResults);
+            }
         });
     }
 
-    getSearchJson(uri: string): Promise<any> {
-        
-        return new Promise<any>((resolve) => {
-            $.getJSON(uri, (results: any) => {
-                resolve(results);
-            });
-        })
-    }
-
-    parseSearchJson(resultsToParse: any, searchResults: SearchResult[], helper: Helper): SearchResult[] {
+    parseSearchJson(resultsToParse: any, searchResults: SearchResult[]): SearchResult[] {
 
         const parsedResults: SearchResult[] = [];
 
         for (let i = 0; i < resultsToParse.resources.length; i++) {
             const resource: any = resultsToParse.resources[i];
-            const canvasIndex: number = helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
+            const canvasIndex: number = this.helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
             var searchResult: SearchResult = new SearchResult(resource, canvasIndex);
-            const match: SearchResult = searchResults.en().where(x => x.canvasIndex === searchResult.canvasIndex).first();
+            const match: SearchResult = parsedResults.en().where(x => x.canvasIndex === searchResult.canvasIndex).first();
 
             // if there's already a SearchResult for the canvas index, add a rect to it, otherwise create a new SearchResult
-            if (match){
+            if (match) {
                 match.addRect(resource);
             } else {
                 parsedResults.push(searchResult);
