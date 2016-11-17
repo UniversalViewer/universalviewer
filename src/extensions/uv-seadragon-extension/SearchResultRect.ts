@@ -11,7 +11,6 @@ class SearchResultRect {
     public y: number;
 
     constructor(result: any) {
-        this.index = result.resource.resultIndex;
         var xywh = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
         this.x = Number(xywh[1]);
         this.y = Number(xywh[2]);

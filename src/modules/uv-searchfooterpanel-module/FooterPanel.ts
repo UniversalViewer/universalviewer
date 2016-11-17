@@ -323,6 +323,8 @@ class FooterPanel extends BaseFooterPanel {
         // blur search field
         this.$searchText.blur();
 
+        this.$searchText.addClass('searching');
+
         $.publish(Commands.SEARCH, [this.terms]);
     }
 
@@ -480,7 +482,7 @@ class FooterPanel extends BaseFooterPanel {
 
         var isChild = $(newElement).closest(that.$placemarkerDetails).length;
 
-        if (newElement != that.$placemarkerDetails.get(0) && isChild == 0) {
+        if (newElement != that.$placemarkerDetails.get(0) && isChild === 0) {
             that.$placemarkerDetails.hide();
             $placemarker.removeClass('hover');
         }
@@ -589,6 +591,8 @@ class FooterPanel extends BaseFooterPanel {
     displaySearchResults(terms: string, results: SearchResult[]): void {
 
         if (!results) return;
+
+        this.$searchText.removeClass('searching');
 
         this.positionSearchResultPlacemarkers();
 

@@ -626,6 +626,9 @@
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
+#app .centerPanel .content .searchOverlay.current {
+  border: 3px solid #fff;
+}
 #app .openseadragon-canvas {
   outline: none;
 }

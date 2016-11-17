@@ -59,7 +59,7 @@ class SeadragonCenterPanel extends CenterPanel {
             this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
-            })
+            });
         });
 
         $.subscribe(Commands.CLEAR_SEARCH, () => {
@@ -498,7 +498,9 @@ class SeadragonCenterPanel extends CenterPanel {
             if (this.initialBounds) {
                 this.initialBounds = Bounds.fromString(this.initialBounds);
                 this.currentBounds = this.initialBounds;
+
                 this.fitToBounds(this.currentBounds);
+ 
             } else {
                 this.goHome();
             }
@@ -674,8 +676,9 @@ class SeadragonCenterPanel extends CenterPanel {
             for (let k = 0; k < overlayRects.length; k++) {
                 const overlayRect = overlayRects[k];
 
-                const div = document.createElement("div");
-                div.className = "searchOverlay";
+                const div: HTMLElement = document.createElement('div');
+                div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
+                div.className = 'searchOverlay';
 
                 this.viewer.addOverlay(div, overlayRect);
             }
@@ -817,24 +820,26 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.fitToBounds(new Bounds(searchResultRect.viewportX, searchResultRect.viewportY, searchResultRect.width, searchResultRect.height), false);
 
-        this.highlightCurrentSearchResultRect();
+        this.highlightSearchResultRect(searchResultRect);
 
         $.publish(Commands.SEARCH_RESULT_RECT_CHANGED);
     }
 
-    highlightCurrentSearchResultRect(): void {
-
+    highlightSearchResultRect(searchResultRect: SearchResultRect): void {
+        const $rect = $('#searchResult-' + searchResultRect.canvasIndex + '-' + searchResultRect.index);
+        $rect.addClass('current');
+        $('.searchOverlay').not($rect).removeClass('current');
     }
 
     getSearchOverlayRects(searchResult: SearchResult): any[] {
         let newRects: any[] = [];
+        let resource: any = this.extension.resources.en().where(x => x.index === searchResult.canvasIndex).first();
+        let index: number = this.extension.resources.indexOf(resource);
 
-        let index: number = this.extension.resources.en().firstIndex(x => x.index === searchResult.canvasIndex);
+        const width: number = this.extension.resources[index].width;
+        let offsetX: number = 0;
 
-        const width = this.extension.resources[index].width;
-        let offsetX = 0;
-
-        if (index > 0){
+        if (index > 0) {
             offsetX = this.extension.resources[index - 1].width;
         }
 
@@ -849,6 +854,8 @@ class SeadragonCenterPanel extends CenterPanel {
             const rect = new OpenSeadragon.Rect(x, y, w, h);
             searchRect.viewportX = x;
             searchRect.viewportY = y;
+            rect.canvasIndex = searchRect.canvasIndex;
+            rect.resultIndex = searchRect.index;
 
             newRects.push(rect);
         }
@@ -880,7 +887,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
             var verticalButtonPos: number = Math.floor(this.$content.width() / 2);
 
-            switch (viewingDirection.toString()){
+            switch (viewingDirection.toString()) {
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                     this.$prevButton.addClass('down');
                     this.$nextButton.addClass('up');

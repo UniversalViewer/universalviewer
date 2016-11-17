@@ -52,7 +52,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     footerPanel: FooterPanel;
     headerPanel: PagingHeaderPanel;
     helpDialogue: HelpDialogue;
-    iiifImageUriTemplate: string = '{0}/{1}/{2}/{3}/{4}/{5}.jpg';
+    isSearching: boolean = false;
     leftPanel: ContentLeftPanel;
     mobileFooterPanel: MobileFooterPanel;
     mode: Mode;
@@ -752,7 +752,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         const size: string = dimensions.size.width + ',' + dimensions.size.height;
         const rotation: number = this.getViewerRotation();
         const quality: string = 'default';
-        return String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
+        return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
@@ -773,8 +773,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         const size: string = dimensions.width + ',' + dimensions.height;
         const rotation: number = this.getViewerRotation();
         const quality: string = 'default';
-        const uri: string = String.format(this.iiifImageUriTemplate, baseUri, id, region, size, rotation, quality);
-        return uri;
+        return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
     getImageId(canvas: Manifesto.ICanvas): string {
@@ -919,6 +918,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
     searchWithin(terms: string): void {
 
+        if (this.isSearching) return;
+
+        this.isSearching = true;
+
         // clear search results
         this.searchResults = [];
 
@@ -928,6 +931,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         searchUri = String.format(searchUri, terms);
 
         this.getSearchResults(searchUri, terms, this.searchResults, (results: SearchResult[]) => {
+            
+            this.isSearching = false;
+
             if (results.length) {
                 this.searchResults = results.sort((a, b) => {
                     return a.canvasIndex - b.canvasIndex;
