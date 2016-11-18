@@ -532,6 +532,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
                 this.viewManifest(data);
                 break;
             case manifesto.IIIFResourceType.collection().toString():
+                // note: this won't get called as the tree component now has branchNodesSelectable = false
+                // useful to keep around for reference
                 this.viewCollection(data);
                 break;
             default:

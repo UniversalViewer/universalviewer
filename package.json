@@ -43,7 +43,7 @@
     "http-status-codes": "edsilv/http-status-codes",
     "iiif-gallery-component": "viewdir/iiif-gallery-component#v1.0.0",
     "iiif-metadata-component": "viewdir/iiif-metadata-component#v1.0.2",
-    "iiif-tree-component": "viewdir/iiif-tree-component#v1.0.2",
+    "iiif-tree-component": "viewdir/iiif-tree-component#v1.0.5",
     "jquery-plugins": "edsilv/jquery-plugins",
     "jquery-tiny-pubsub": "edsilv/jquery-tiny-pubsub",
     "json-schema-generator": "krg7880/json-schema-generator",
