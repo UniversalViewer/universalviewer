@@ -938,6 +938,10 @@
   float: left;
   border: none;
 }
+#app .footerPanel .search .searchTextContainer .searchText.searching {
+  background: url('../../img/uv-searchfooterpanel-module/spinner.gif') no-repeat;
+  background-position: right 3px;
+}
 #app .footerPanel .search .searchTextContainer a.imageButton.searchButton {
   background: url('../../img/uv-searchfooterpanel-module/search.png') no-repeat;
   height: 18px;

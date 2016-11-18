@@ -1,5 +1,6 @@
 {
   "options": {
+    "allowStealFocus": false,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,

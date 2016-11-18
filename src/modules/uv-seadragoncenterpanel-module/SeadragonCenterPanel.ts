@@ -924,7 +924,9 @@ class SeadragonCenterPanel extends CenterPanel {
         var $canvas = $(this.viewer.canvas);
 
         if (!$canvas.is(":focus")) {
-            $canvas.focus();
+            if (this.extension.config.options.allowStealFocus) {
+                $canvas.focus();
+            }
         }
     }
     

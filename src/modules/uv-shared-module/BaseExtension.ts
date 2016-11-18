@@ -640,7 +640,9 @@ class BaseExtension implements IExtension {
 
     setDefaultFocus(): void {
         setTimeout(() => {
-            $('[tabindex=0]').focus();
+            if (this.config.options.allowStealFocus) {
+                $('[tabindex=0]').focus();
+            }
         }, 1);
     }
 
