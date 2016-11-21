@@ -30,6 +30,7 @@ class SeadragonCenterPanel extends CenterPanel {
     userData: any;
     viewer: any;
 
+    $canvas: JQuery;
     $goHomeButton: JQuery;
     $navigator: JQuery;
     $nextButton: JQuery;
@@ -247,6 +248,10 @@ class SeadragonCenterPanel extends CenterPanel {
         
         this.$viewportNavButtonsContainer = this.$viewer.find('.openseadragon-container > div:not(.openseadragon-canvas):first');
         this.$viewportNavButtons = this.$viewportNavButtonsContainer.find('.viewportNavButton');
+
+        this.$canvas = $(this.viewer.canvas);
+
+        this.$canvas.on('contextmenu', (e) => { return false; });
 
         this.$navigator = this.$viewer.find(".navigator");
         this.setNavigatorVisible();
@@ -661,8 +666,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     clearSearchResults(): void {
-        const $canvas: JQuery = $(this.viewer.canvas);
-        $canvas.find('.searchOverlay').hide();
+        this.$canvas.find('.searchOverlay').hide();
     }
 
     overlaySearchResults(): void {
@@ -921,11 +925,9 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     setFocus(): void {
-        var $canvas = $(this.viewer.canvas);
-
-        if (!$canvas.is(":focus")) {
+        if (!this.$canvas.is(":focus")) {
             if (this.extension.config.options.allowStealFocus) {
-                $canvas.focus();
+                this.$canvas.focus();
             }
         }
     }
