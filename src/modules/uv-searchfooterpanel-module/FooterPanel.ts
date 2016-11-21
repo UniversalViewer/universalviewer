@@ -67,6 +67,10 @@ class FooterPanel extends BaseFooterPanel {
             this.setCurrentSearchResultPlacemarker();
         });
 
+        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
+            this.hideSearchSpinner();
+        });
+
         $.subscribe(Commands.SEARCH_RESULT_RECT_CHANGED, () => {
             this.updatePrevButton();
             this.updateNextButton();
@@ -323,7 +327,7 @@ class FooterPanel extends BaseFooterPanel {
         // blur search field
         this.$searchText.blur();
 
-        this.$searchText.addClass('searching');
+        this.showSearchSpinner();
 
         $.publish(Commands.SEARCH, [this.terms]);
     }
@@ -588,11 +592,19 @@ class FooterPanel extends BaseFooterPanel {
         return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
+    showSearchSpinner(): void {
+        this.$searchText.addClass('searching');
+    }
+
+    hideSearchSpinner(): void {
+        this.$searchText.removeClass('searching');
+    }
+
     displaySearchResults(terms: string, results: SearchResult[]): void {
 
         if (!results) return;
 
-        this.$searchText.removeClass('searching');
+        this.hideSearchSpinner();
 
         this.positionSearchResultPlacemarkers();
 

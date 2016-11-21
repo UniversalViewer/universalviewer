@@ -139,6 +139,10 @@ class BaseExpandPanel extends BaseView {
     }
 
     expandFull(): void {
+        if (!this.isExpanded) {
+            this.toggled();
+        }        
+        
         var targetWidth: number = this.getFullTargetWidth();
         var targetLeft: number = this.getFullTargetLeft();
 
