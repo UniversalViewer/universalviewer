@@ -39,15 +39,6 @@ class SettingsDialogue extends BaseSettingsDialogue {
         this.$navigatorEnabledLabel = $('<label for="navigatorEnabled">' + this.content.navigatorEnabled + '</label>');
         this.$navigatorEnabled.append(this.$navigatorEnabledLabel);
         
-        this.$clickToZoomEnabled = $('<div class="setting clickToZoom"></div>');
-        this.$scroll.append(this.$clickToZoomEnabled);
-
-        this.$clickToZoomEnabledCheckbox = $('<input id="clickToZoomEnabled" type="checkbox" />');
-        this.$clickToZoomEnabled.append(this.$clickToZoomEnabledCheckbox);
-
-        this.$clickToZoomEnabledLabel = $('<label for="clickToZoomEnabled">' + this.content.clickToZoomEnabled + '</label>');
-        this.$clickToZoomEnabled.append(this.$clickToZoomEnabledLabel);        
-        
         this.$pagingEnabled = $('<div class="setting pagingEnabled"></div>');
         this.$scroll.append(this.$pagingEnabled);
 
@@ -66,6 +57,15 @@ class SettingsDialogue extends BaseSettingsDialogue {
         this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
         this.$preserveViewport.append(this.$preserveViewportLabel);
 
+        this.$clickToZoomEnabled = $('<div class="setting clickToZoom"></div>');
+        this.$scroll.append(this.$clickToZoomEnabled);
+
+        this.$clickToZoomEnabledCheckbox = $('<input id="clickToZoomEnabled" type="checkbox" />');
+        this.$clickToZoomEnabled.append(this.$clickToZoomEnabledCheckbox);
+
+        this.$clickToZoomEnabledLabel = $('<label for="clickToZoomEnabled">' + this.content.clickToZoomEnabled + '</label>');
+        this.$clickToZoomEnabled.append(this.$clickToZoomEnabledLabel);        
+        
         this.$navigatorEnabledCheckbox.change(() => {
             var settings: ISettings = {};
 
