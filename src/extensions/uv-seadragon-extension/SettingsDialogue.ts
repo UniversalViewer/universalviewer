@@ -48,15 +48,6 @@ class SettingsDialogue extends BaseSettingsDialogue {
         this.$pagingEnabledLabel = $('<label for="pagingEnabled">' + this.content.pagingEnabled + '</label>');
         this.$pagingEnabled.append(this.$pagingEnabledLabel);
 
-        this.$preserveViewport = $('<div class="setting preserveViewport"></div>');
-        this.$scroll.append(this.$preserveViewport);
-
-        this.$preserveViewportCheckbox = $('<input id="preserveViewport" type="checkbox" tabindex="0" />');
-        this.$preserveViewport.append(this.$preserveViewportCheckbox);
-
-        this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
-        this.$preserveViewport.append(this.$preserveViewportLabel);
-
         this.$clickToZoomEnabled = $('<div class="setting clickToZoom"></div>');
         this.$scroll.append(this.$clickToZoomEnabled);
 
@@ -66,6 +57,15 @@ class SettingsDialogue extends BaseSettingsDialogue {
         this.$clickToZoomEnabledLabel = $('<label for="clickToZoomEnabled">' + this.content.clickToZoomEnabled + '</label>');
         this.$clickToZoomEnabled.append(this.$clickToZoomEnabledLabel);        
         
+        this.$preserveViewport = $('<div class="setting preserveViewport"></div>');
+        this.$scroll.append(this.$preserveViewport);
+
+        this.$preserveViewportCheckbox = $('<input id="preserveViewport" type="checkbox" tabindex="0" />');
+        this.$preserveViewport.append(this.$preserveViewportCheckbox);
+
+        this.$preserveViewportLabel = $('<label for="preserveViewport">' + this.content.preserveViewport + '</label>');
+        this.$preserveViewport.append(this.$preserveViewportLabel);
+
         this.$navigatorEnabledCheckbox.change(() => {
             var settings: ISettings = {};
 
