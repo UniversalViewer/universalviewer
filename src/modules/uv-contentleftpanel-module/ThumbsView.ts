@@ -30,8 +30,8 @@ class ThumbsView extends BaseThumbsView {
         var that = this;
         
         $.views.helpers({
-            separator: function(){
-                if (that.extension.helper.isVerticallyAligned()){
+            separator: function() {
+                if (that.extension.helper.isVerticallyAligned()) {
                     return true; // one thumb per line
                 }
                 // two thumbs per line
@@ -45,7 +45,7 @@ class ThumbsView extends BaseThumbsView {
     }
 
     addSelectedClassToThumbs(index: number): void {
-        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
             var indices = this.extension.getPagedIndices(index);
 
             _.each(indices, (index: number) => {

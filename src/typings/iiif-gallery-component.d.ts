@@ -1,4 +1,4 @@
-// iiif-gallery-component v1.0.0 https://github.com/viewdir/iiif-gallery-component#readme
+// iiif-gallery-component v1.0.2 https://github.com/viewdir/iiif-gallery-component#readme
 declare namespace IIIFComponents {
     class GalleryComponent extends _Components.BaseComponent implements IGalleryComponent {
         options: IGalleryComponentOptions;
@@ -30,7 +30,7 @@ declare namespace IIIFComponents {
         private _sizeThumb($thumb);
         private _loadThumb($thumb, cb?);
         private _getThumbsByRange(range);
-        _updateThumbs(): void;
+        private _updateThumbs();
         private _isChunkedResizingEnabled();
         private _getSelectedThumbIndex();
         private _getAllThumbs();

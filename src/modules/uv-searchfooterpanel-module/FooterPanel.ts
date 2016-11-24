@@ -616,7 +616,7 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         var $number = this.$searchPagerContainer.find('.number');
-        $number.text(results.length);
+        $number.text((<ISeadragonExtension>this.extension).getTotalSearchResultRects());
 
         var foundFor = this.$searchResultsInfo.find('.foundFor');
 

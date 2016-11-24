@@ -251,7 +251,9 @@ class SeadragonCenterPanel extends CenterPanel {
 
         this.$canvas = $(this.viewer.canvas);
 
-        this.$canvas.on('contextmenu', (e) => { return false; });
+        if (!window.DEBUG) {
+            this.$canvas.on('contextmenu', (e) => { return false; });
+        }
 
         this.$navigator = this.$viewer.find(".navigator");
         this.setNavigatorVisible();
@@ -683,6 +685,7 @@ class SeadragonCenterPanel extends CenterPanel {
                 const div: HTMLElement = document.createElement('div');
                 div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
                 div.className = 'searchOverlay';
+                div.title = this.extension.sanitize(overlayRect.chars);
 
                 this.viewer.addOverlay(div, overlayRect);
             }
@@ -860,6 +863,7 @@ class SeadragonCenterPanel extends CenterPanel {
             searchRect.viewportY = y;
             rect.canvasIndex = searchRect.canvasIndex;
             rect.resultIndex = searchRect.index;
+            rect.chars = searchRect.chars;
 
             newRects.push(rect);
         }

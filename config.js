@@ -16,6 +16,8 @@ var Config = (function () {
             ],
             typings: [
                 'node_modules/base-component/dist/base-component.d.ts',
+                'node_modules/base-component/typings/corejs.d.ts',
+                'node_modules/base-component/typings/jquery.d.ts',
                 'node_modules/jquery-plugins/typings/jquery-plugins.d.ts',
                 'node_modules/key-codes/dist/key-codes.d.ts',
                 'node_modules/manifold/dist/manifold.bundle.d.ts',

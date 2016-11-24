@@ -10,6 +10,7 @@ import LeftPanel = require("../uv-shared-module/LeftPanel");
 import Metrics = require("../uv-shared-module/Metrics");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import MultiSelectState = Manifold.MultiSelectState;
+import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
 import ThumbsView = require("./ThumbsView");
 import TreeSortType = Manifold.TreeSortType;
 import TreeView = require("./TreeView");
@@ -70,6 +71,14 @@ class ContentLeftPanel extends LeftPanel {
                     this.collapseFull();
                 }
             }
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS, () => {
+            this.databindThumbsView();
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
+            this.databindThumbsView();
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
@@ -336,6 +345,22 @@ class ContentLeftPanel extends LeftPanel {
 
         if (viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             thumbs.reverse();
+        }
+
+        // add a search result icon for pages with results
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        
+        if (searchResults && searchResults.length) {
+
+            for (let i = 0; i < searchResults.length; i++) {
+                var searchResult: SearchResult = searchResults[i];
+
+                // find the thumb with the same canvasIndex and add the searchResult
+                let thumb: IThumb = thumbs.en().where(t => t.index === searchResult.canvasIndex).first();
+
+                thumb.data.searchResults = searchResult.rects.length;
+            }
+
         }
 
         this.thumbsView.thumbs = thumbs;
