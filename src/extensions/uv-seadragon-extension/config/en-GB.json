@@ -32,7 +32,6 @@
         "defaultToTreeIfGreaterThan": 0,
         "elideCount": 40,
         "expandFullEnabled": true,
-        "galleryThumbChunkedResizingEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,

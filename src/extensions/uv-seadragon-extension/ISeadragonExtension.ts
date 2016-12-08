@@ -1,8 +1,8 @@
 import CroppedImageDimensions = require("./CroppedImageDimensions");
 import IExtension = require("../../modules/uv-shared-module/IExtension");
 import Mode = require("./Mode");
-import SearchResult = require("./SearchResult");
-import SearchResultRect = require("./SearchResultRect");
+import SearchResult = Manifold.SearchResult;
+import SearchResultRect = Manifold.SearchResultRect;
 import Size = Utils.Measurements.Size;
 
 interface ISeadragonExtension extends IExtension{
@@ -16,6 +16,7 @@ interface ISeadragonExtension extends IExtension{
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string;
     getImageBaseUri(canvas: Manifesto.ICanvas): string;
     getImageId(canvas: Manifesto.ICanvas): string;
+    getLastSearchResultRectIndex(): number;
     getMode(): Mode;
     getNextPageIndex(index?: number): number;
     getPrevPageIndex(index?: number): number;
@@ -23,10 +24,9 @@ interface ISeadragonExtension extends IExtension{
     getSearchWithinServiceUri(): string;
     getTotalSearchResultRects(): number;
     getViewer(): any;
-    getViewportBounds(): string;
     getViewerRotation(): number;
+    getViewportBounds(): string;
     isFirstSearchResultRect(): boolean;
-    isLastSearchResultRect(): boolean;
     isPagingSettingEnabled(): boolean;
     isSearchWithinEnabled(): boolean;
     previousSearchResultRect: SearchResultRect;

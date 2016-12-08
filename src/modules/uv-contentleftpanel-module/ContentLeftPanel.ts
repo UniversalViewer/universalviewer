@@ -10,7 +10,8 @@ import LeftPanel = require("../uv-shared-module/LeftPanel");
 import Metrics = require("../uv-shared-module/Metrics");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import MultiSelectState = Manifold.MultiSelectState;
-import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
+import SearchResult = Manifold.SearchResult;
+import SearchResultRect = Manifold.SearchResultRect;
 import ThumbsView = require("./ThumbsView");
 import TreeSortType = Manifold.TreeSortType;
 import TreeView = require("./TreeView");
@@ -66,8 +67,8 @@ class ContentLeftPanel extends LeftPanel {
         });
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
-            if (this.extension.metric === Metrics.MOBILE_LANDSCAPE){
-                if (this.isFullyExpanded){
+            if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+                if (this.isFullyExpanded) {
                     this.collapseFull();
                 }
             }
@@ -75,10 +76,17 @@ class ContentLeftPanel extends LeftPanel {
 
         $.subscribe(Commands.SEARCH_RESULTS, () => {
             this.databindThumbsView();
+            this.databindGalleryView();
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS_CLEARED, () => {
+            this.databindThumbsView();
+            this.databindGalleryView();
         });
 
         $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
             this.databindThumbsView();
+            this.databindGalleryView();
         });
 
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
@@ -341,7 +349,7 @@ class ContentLeftPanel extends LeftPanel {
             height = this.config.options.twoColThumbHeight;
         }
 
-        var thumbs: IThumb[] = <IThumb[]>this.extension.helper.getThumbs(width, height);
+        const thumbs: IThumb[] = <IThumb[]>this.extension.helper.getThumbs(width, height);
 
         if (viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             thumbs.reverse();
@@ -358,7 +366,10 @@ class ContentLeftPanel extends LeftPanel {
                 // find the thumb with the same canvasIndex and add the searchResult
                 let thumb: IThumb = thumbs.en().where(t => t.index === searchResult.canvasIndex).first();
 
-                thumb.data.searchResults = searchResult.rects.length;
+                // clone the data so searchResults isn't persisted on the canvas.
+                let data = $.extend(true, {}, thumb.data);
+                data.searchResults = searchResult.rects.length;
+                thumb.data = data;
             }
 
         }
@@ -385,14 +396,15 @@ class ContentLeftPanel extends LeftPanel {
         return <IIIFComponents.IGalleryComponentOptions>{
             element: ".views .galleryView .iiif-gallery-component",
             helper: this.extension.helper,
-            chunkedResizingEnabled: this.config.options.galleryThumbChunkedResizingEnabled,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
             debug: false,
             imageFadeInDuration: 300,
             initialZoom: 6,
+            minLabelWidth: 20,
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
+            searchResults: (<ISeadragonExtension>this.extension).searchResults,
             sizingEnabled: Modernizr.inputtypes.range,
             thumbHeight: this.config.options.galleryThumbHeight,
             thumbLoadPadding: this.config.options.galleryThumbLoadPadding,

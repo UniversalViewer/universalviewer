@@ -37,6 +37,7 @@ class Commands {
     static SEARCH_RESULT_RECT_CHANGED: string                   = Commands.namespace + 'onSearchResultRectChanged';
     static SEARCH_RESULTS_EMPTY: string                         = Commands.namespace + 'onSearchResultsEmpty';
     static SEARCH_RESULTS: string                               = Commands.namespace + 'onSearchResults';
+    static SEARCH_RESULTS_CLEARED: string                       = Commands.namespace + 'onSearchResultsCleared';
     static SEARCH: string                                       = Commands.namespace + 'onSearch';
     static SHOW_MULTISELECT_DIALOGUE: string                    = Commands.namespace + 'onShowMultiSelectDialogue';
     static THUMB_MULTISELECTED: string                          = Commands.namespace + 'onThumbMultiSelected';

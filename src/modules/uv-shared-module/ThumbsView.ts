@@ -42,7 +42,7 @@ class ThumbsView extends BaseView {
         var that = this;
 
         $.templates({
-            thumbsTemplate: '<div class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-index="{{>index}}">\
+            thumbsTemplate: '<div id="thumb{{>index}}" class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-index="{{>index}}">\
                                 <div class="wrap" style="height:{{>height + ~extraHeight()}}px"></div>\
                                 <div class="info">\
                                     <span class="index">{{:#index + 1}}</span>\
@@ -86,7 +86,16 @@ class ThumbsView extends BaseView {
                 return className;
             },
             searchResultsTitle: function() {
-                return String.format(that.content.searchResults, this.data.data.searchResults);
+                const searchResults = Number(this.data.data.searchResults);
+
+                if (searchResults) {
+
+                    if (searchResults > 1) {
+                        return String.format(that.content.searchResults, searchResults);
+                    }
+
+                    return String.format(that.content.searchResult, searchResults);
+                }
             }
         });
 
@@ -102,6 +111,9 @@ class ThumbsView extends BaseView {
         if (!this.thumbs) return;
         this._thumbsCache = null; // delete cache
         this.createThumbs();
+        // do initial load to show padlocks
+        this.loadThumbs(0);
+        this.selectIndex(this.extension.helper.canvasIndex);
     }
 
     createThumbs(): void{
@@ -117,7 +129,7 @@ class ThumbsView extends BaseView {
             heights.push(thumb.height);
         }
 
-        const medianHeight = Math.median(heights);
+        const medianHeight: number = Math.median(heights);
 
         for (let i = 0; i < this.thumbs.length; i++) {
             const thumb: IThumb = this.thumbs[i];
@@ -138,12 +150,7 @@ class ThumbsView extends BaseView {
             $.publish(BaseCommands.THUMB_SELECTED, [data]);
         });
 
-        this.selectIndex(this.extension.helper.canvasIndex);
-
         this.setLabel();
-
-        // do initial load to show padlocks
-        this.loadThumbs(0);
 
         this.isCreated = true;
     }
@@ -246,7 +253,7 @@ class ThumbsView extends BaseView {
     selectIndex(index: number): void {
 
         // may be authenticating
-        if (index == -1) return;
+        if (index === -1) return;
 
         if (!this.thumbs || !this.thumbs.length) return;
 
@@ -256,9 +263,11 @@ class ThumbsView extends BaseView {
 
         this.addSelectedClassToThumbs(index);
 
+        const indices: number[] = this.extension.getPagedIndices(index);
+
         // scroll to thumb if the index change didn't originate
         // within the thumbs view.
-        if (this.lastThumbClickedIndex != index) {
+        if (!~indices.indexOf(this.lastThumbClickedIndex)) {
             this.$element.scrollTop(this.$selectedThumb.position().top);
         }
 

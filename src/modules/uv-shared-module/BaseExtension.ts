@@ -1031,7 +1031,7 @@ class BaseExtension implements IExtension {
                     });
                     resolve(this.resources);
                 })['catch']((error: any) => {
-                    switch(error.name){
+                    switch(error.name) {
                         case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
                             $.publish(BaseCommands.LOGIN_FAILED);
                             break;
@@ -1049,16 +1049,16 @@ class BaseExtension implements IExtension {
     }
 
     // get hash or data-attribute params depending on whether the UV is embedded.
-    getParam(key: Params): any{
+    getParam(key: Params): any {
         var value;
 
         // deep linking is only allowed when hosted on home domain.
-        if (this.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()) {
             // todo: use a static type on bootstrapper.params
             value = Utils.Urls.getHashParameter(this.bootstrapper.params.paramMap[key], parent.document);
         }
 
-        if (!value){
+        if (!value) {
             // todo: use a static type on bootstrapper.params
             value = Utils.Urls.getQuerystringParameter(this.bootstrapper.params.paramMap[key]);
         }
@@ -1067,9 +1067,9 @@ class BaseExtension implements IExtension {
     }
 
     // set hash params depending on whether the UV is embedded.
-    setParam(key: Params, value: any): void{
+    setParam(key: Params, value: any): void {
 
-        if (this.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()) {
             Utils.Urls.setHashParameter(this.bootstrapper.params.paramMap[key], value, parent.document);
         }
     }

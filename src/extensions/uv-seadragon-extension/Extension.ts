@@ -27,8 +27,8 @@ import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
 import RightPanel = require("../../modules/uv-shared-module/RightPanel");
 import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
-import SearchResult = require("./SearchResult");
-import SearchResultRect = require("./SearchResultRect");
+import SearchResult = Manifold.SearchResult;
+import SearchResultRect = Manifold.SearchResultRect;
 import Settings = require("../../modules/uv-shared-module/Settings");
 import SettingsDialogue = require("./SettingsDialogue");
 import ShareDialogue = require("./ShareDialogue");
@@ -86,6 +86,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Commands.CLEAR_SEARCH, (e) => {
+            this.searchResults = null;
+            $.publish(Commands.SEARCH_RESULTS_CLEARED);
             this.triggerSocket(Commands.CLEAR_SEARCH);
         });
 
@@ -643,7 +645,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         let regionWidth: number = width;
         let regionHeight: number = height;
 
-        if (canvas.externalResource.data && canvas.externalResource.data.profile[1]) {
+        if (canvas.externalResource.data && canvas.externalResource.data.profile && canvas.externalResource.data.profile[1]) {
 
           const maxSize: Size =  new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
 
@@ -1016,8 +1018,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return this.getCurrentSearchResultRectIndex() === 0;
     } 
 
-    isLastSearchResultRect(): boolean {
-        return this.getCurrentSearchResultRectIndex() === this.getTotalSearchResultRects() - 1;
+    getLastSearchResultRectIndex(): number {
+        return this.getTotalSearchResultRects() - 1;
     } 
 
     getPagedIndices(canvasIndex?: number): number[] {

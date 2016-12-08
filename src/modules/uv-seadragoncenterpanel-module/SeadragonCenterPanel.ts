@@ -8,8 +8,8 @@ import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/IS
 import Metrics = require("../uv-shared-module/Metrics");
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
-import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
-import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
+import SearchResult = Manifold.SearchResult;
+import SearchResultRect = Manifold.SearchResultRect;
 
 class SeadragonCenterPanel extends CenterPanel {
 

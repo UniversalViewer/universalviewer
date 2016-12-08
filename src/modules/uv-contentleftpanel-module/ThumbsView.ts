@@ -46,11 +46,12 @@ class ThumbsView extends BaseThumbsView {
 
     addSelectedClassToThumbs(index: number): void {
         if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
-            var indices = this.extension.getPagedIndices(index);
+            const indices: number[] = this.extension.getPagedIndices(index);
 
-            _.each(indices, (index: number) => {
-                this.getThumbByIndex(index).addClass('selected');
-            });
+            for (let i = 0; i < indices.length; i++) {
+                this.getThumbByIndex(indices[i]).addClass('selected');
+            }
+
         } else {
             this.getThumbByIndex(index).addClass('selected');
         }
@@ -65,7 +66,7 @@ class ThumbsView extends BaseThumbsView {
 
     searchPreviewStart(canvasIndex: number): void {
         this.scrollToThumb(canvasIndex);
-        var $thumb = this.getThumbByIndex(canvasIndex);
+        var $thumb: JQuery = this.getThumbByIndex(canvasIndex);
         $thumb.addClass('searchpreview');
     }
 
@@ -76,7 +77,7 @@ class ThumbsView extends BaseThumbsView {
 
     setLabel(): void {
 
-        if (this.isPDF()){
+        if (this.isPDF()) {
             $(this.$thumbs).find('span.index').hide();
             $(this.$thumbs).find('span.label').hide();
         } else {
