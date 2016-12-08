@@ -1,11 +1,13 @@
+import AutoComplete = require("../uv-shared-module/AutoComplete");
 import BaseCommands = require("../uv-shared-module/BaseCommands");
 import BaseFooterPanel = require("../uv-shared-module/FooterPanel");
 import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import DownloadDialogue = require("../../extensions/uv-seadragon-extension/DownloadDialogue");
-import AutoComplete = require("../uv-shared-module/AutoComplete");
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import Params = require("../../Params");
+import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
+import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
 
 class FooterPanel extends BaseFooterPanel {
 
@@ -47,6 +49,8 @@ class FooterPanel extends BaseFooterPanel {
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
             this.canvasIndexChanged();
             this.setCurrentSearchResultPlacemarker();
+            this.updatePrevButton();
+            this.updateNextButton();
         });
 
         // todo: this should be a setting
@@ -61,6 +65,15 @@ class FooterPanel extends BaseFooterPanel {
         $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
             this.displaySearchResults(obj.terms, obj.results);
             this.setCurrentSearchResultPlacemarker();
+        });
+
+        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
+            this.hideSearchSpinner();
+        });
+
+        $.subscribe(Commands.SEARCH_RESULT_RECT_CHANGED, () => {
+            this.updatePrevButton();
+            this.updateNextButton();
         });
 
         this.$printButton = $('<a class="print" title="' + this.content.print + '" tabindex="0">' + this.content.print + '</a>');
@@ -211,6 +224,12 @@ class FooterPanel extends BaseFooterPanel {
                 300, 2, true
             );
 
+        } else {
+            this.$searchText.on("keyup", (e) => {
+                if (e.keyCode === KeyCodes.KeyDown.Enter) {
+                    that.search(that.$searchText.val());
+                }
+            });
         }
 
         this.$printButton.onPressed(() => {
@@ -224,6 +243,60 @@ class FooterPanel extends BaseFooterPanel {
         if (!positionMarkerEnabled) {
             this.$pagePositionMarker.hide();
             this.$pagePositionLabel.hide();
+        }
+    }
+
+    isZoomToSearchResultEnabled(): boolean {
+        return Utils.Bools.getBool(this.extension.config.options.zoomToSearchResultEnabled, true);
+    }
+
+    isPreviousButtonDisabled(): boolean {
+        
+        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentSearchResultRect) {
+            return (<ISeadragonExtension>this.extension).isFirstSearchResultRect();
+        }
+        
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        return this.extension.helper.canvasIndex <= searchResults[0].canvasIndex;
+    }
+
+    isNextButtonDisabled(): boolean {
+
+        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentSearchResultRect) {
+            return (<ISeadragonExtension>this.extension).isLastSearchResultRect();
+        }
+
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        let lastSearchResultCanvasIndex: number = searchResults[searchResults.length - 1].canvasIndex;
+
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
+            lastSearchResultCanvasIndex -= 1;
+        }
+
+        return this.extension.helper.canvasIndex >= lastSearchResultCanvasIndex; 
+    }
+
+    updateNextButton(): void {
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        
+        if (searchResults && searchResults.length) {
+            if (this.isNextButtonDisabled()) {
+                this.$nextResultButton.addClass('disabled');
+            } else {
+                this.$nextResultButton.removeClass('disabled');
+            }
+        }
+    }
+
+    updatePrevButton(): void {
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        
+        if (searchResults && searchResults.length) {       
+            if (this.isPreviousButtonDisabled()) {
+                this.$previousResultButton.addClass('disabled');
+            } else {
+                this.$previousResultButton.removeClass('disabled');
+            }
         }
     }
 
@@ -253,6 +326,8 @@ class FooterPanel extends BaseFooterPanel {
 
         // blur search field
         this.$searchText.blur();
+
+        this.showSearchSpinner();
 
         $.publish(Commands.SEARCH, [this.terms]);
     }
@@ -411,7 +486,7 @@ class FooterPanel extends BaseFooterPanel {
 
         var isChild = $(newElement).closest(that.$placemarkerDetails).length;
 
-        if (newElement != that.$placemarkerDetails.get(0) && isChild == 0) {
+        if (newElement != that.$placemarkerDetails.get(0) && isChild === 0) {
             that.$placemarkerDetails.hide();
             $placemarker.removeClass('hover');
         }
@@ -517,9 +592,19 @@ class FooterPanel extends BaseFooterPanel {
         return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
-    displaySearchResults(terms, results): void {
+    showSearchSpinner(): void {
+        this.$searchText.addClass('searching');
+    }
+
+    hideSearchSpinner(): void {
+        this.$searchText.removeClass('searching');
+    }
+
+    displaySearchResults(terms: string, results: SearchResult[]): void {
 
         if (!results) return;
+
+        this.hideSearchSpinner();
 
         this.positionSearchResultPlacemarkers();
 
@@ -531,11 +616,11 @@ class FooterPanel extends BaseFooterPanel {
         });
 
         var $number = this.$searchPagerContainer.find('.number');
-        $number.text(results.resources.length);
+        $number.text(results.length);
 
         var foundFor = this.$searchResultsInfo.find('.foundFor');
 
-        if (results.resources.length === 1) {
+        if (results.length === 1) {
             foundFor.html(this.content.resultFoundFor);
         } else {
             foundFor.html(this.content.resultsFoundFor);

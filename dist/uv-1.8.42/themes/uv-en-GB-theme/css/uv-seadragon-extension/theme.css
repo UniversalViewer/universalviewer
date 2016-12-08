@@ -626,6 +626,9 @@
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
+#app .centerPanel .content .searchOverlay.current {
+  border: 3px solid #fff;
+}
 #app .openseadragon-canvas {
   outline: none;
 }
@@ -935,6 +938,10 @@
   float: left;
   border: none;
 }
+#app .footerPanel .search .searchTextContainer .searchText.searching {
+  background: url('../../img/uv-searchfooterpanel-module/spinner.gif') no-repeat;
+  background-position: right 3px;
+}
 #app .footerPanel .search .searchTextContainer a.imageButton.searchButton {
   background: url('../../img/uv-searchfooterpanel-module/search.png') no-repeat;
   height: 18px;
@@ -967,6 +974,19 @@
   width: 585px;
 }
 #app .footerPanel .searchPager .controls a.previousResult {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */
   background-image: url('../../img/uv-searchfooterpanel-module/prev.png');
   background-repeat: no-repeat;
   height: 30px;
@@ -987,7 +1007,24 @@
   color: #fff;
   text-decoration: none;
 }
+#app .footerPanel .searchPager .controls a.previousResult.disabled {
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+}
 #app .footerPanel .searchPager .controls a.nextResult {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */
   background-image: url('../../img/uv-searchfooterpanel-module/next.png');
   background-repeat: no-repeat;
   height: 30px;
@@ -1008,7 +1045,24 @@
   color: #fff;
   text-decoration: none;
 }
+#app .footerPanel .searchPager .controls a.nextResult.disabled {
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+}
 #app .footerPanel .searchPager .controls a.clearSearch {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                  not supported by any browser */
   cursor: pointer;
   color: #26b5cc;
   text-decoration: none;
@@ -3054,20 +3108,8 @@ input[type=range]:focus::-ms-fill-upper {
   }
 }
 #app .headerPanel .options .centerOptions {
-  width: 432px;
-}
-#app .headerPanel .options .centerOptions .prevOptions {
-  margin: 0 10px 0 0;
-}
-#app .headerPanel .options .centerOptions .mode label {
-  width: 42px;
-}
-#app .headerPanel .options .centerOptions .search {
-  width: 140px;
-}
-#app .headerPanel .options .centerOptions .nextOptions {
-  margin: 0 0 0 10px;
+  width: 390px;
 }
 #app .footerPanel .searchPager .controls .searchResultsInfo {
-  width: 290px;
+  width: 337px;
 }

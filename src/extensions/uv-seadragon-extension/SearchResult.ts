@@ -4,16 +4,18 @@ class SearchResult {
     public canvasIndex: number;
     public rects: SearchResultRect[] = [];
 
-    constructor(resource: any, helper: Manifold.IHelper) {
-        this.canvasIndex = helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
+    constructor(resource: any, canvasIndex: number) {
+        this.canvasIndex = canvasIndex;
         this.addRect(resource);
     }
 
     addRect(resource: any): void {
-        var rect = new SearchResultRect(resource);
+        const rect: SearchResultRect = new SearchResultRect(resource);
+        rect.canvasIndex = this.canvasIndex;
+        rect.index = this.rects.length;
         this.rects.push(rect);
         // sort ascending
-        this.rects.sort(function(a, b) {
+        this.rects.sort((a, b) => {
             return a.index - b.index;
         });
     }

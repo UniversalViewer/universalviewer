@@ -265,6 +265,7 @@ class ContentLeftPanel extends LeftPanel {
 
     getTreeOptions(): IIIFComponents.ITreeComponentOptions {
         return <IIIFComponents.ITreeComponentOptions>{
+            branchNodesSelectable: false,
             element: ".views .treeView .iiif-tree-component",
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
