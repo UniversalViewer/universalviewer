@@ -877,7 +877,9 @@ class SeadragonCenterPanel extends CenterPanel {
         if (!this.isCreated) return;
 
         if (this.currentBounds) {
-            this.fitToBounds(Bounds.fromString(this.currentBounds))
+            this.fitToBounds(
+              typeof(this.currentBounds) == "string" ? Bounds.fromString(this.currentBounds) : this.currentBounds
+            );
         }
 
         this.$title.ellipsisFill(this.extension.sanitize(this.title));
