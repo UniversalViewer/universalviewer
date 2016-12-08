@@ -1,7 +1,7 @@
 interface ISettings {
     navigatorEnabled?: boolean;
     pagingEnabled?: boolean;
-    panelOpenLeftPanel?: boolean;
-    panelOpenRightPanel?: boolean;
+    leftPanelOpen?: boolean;
+    rightPanelOpen?: boolean;
     preserveViewport?: boolean;
 }
