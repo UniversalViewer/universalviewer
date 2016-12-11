@@ -1,4 +1,4 @@
-// manifesto.js v2.0.6 https://github.com/viewdir/manifesto
+// manifesto.js v2.0.7 https://github.com/viewdir/manifesto
 declare module exjs {
 }
 declare module exjs {
@@ -724,6 +724,7 @@ declare module Manifesto {
         getManifestType(): ManifestType;
         getTrackingLabel(): string;
         isMultiSequence(): boolean;
+        isPagingEnabled(): boolean;
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
     }
@@ -1126,6 +1127,7 @@ declare module Manifesto {
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): ViewingHint;
         isMultiSequence(): boolean;
+        isPagingEnabled(): boolean;
     }
 }
 
