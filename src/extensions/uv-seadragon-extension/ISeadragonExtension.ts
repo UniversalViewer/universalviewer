@@ -15,17 +15,20 @@ interface ISeadragonExtension extends IExtension{
     getImageId(canvas: Manifesto.ICanvas): string;
     getMode(): Mode;
     getNextPageIndex(index?: number): number;
+    getOcrService(): Manifesto.IService;
+    getOcrServiceUri(): string;
     getPrevPageIndex(index?: number): number;
     getSearchResultByCanvasIndex(index: number): SearchResult;
     getSearchWithinServiceUri(): string;
     getViewer(): any;
     getViewerBounds(): string;
     getViewerRotation(): number;
+    isOcrRightPanelEnabled(): boolean;
     isPagingSettingEnabled(): boolean;
     isSearchWithinEnabled(): boolean;
     parseSearchWithinResults(results: any);
     searchResults: SearchResult[];
-    searchWithin(terms: string, callback: (results: any) => void): void;
+    searchWithin(terms: string, callback: (results: any) => void): void;    
 }
 
 export = ISeadragonExtension;

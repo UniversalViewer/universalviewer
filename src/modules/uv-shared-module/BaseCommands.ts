@@ -18,6 +18,7 @@ class Commands {
     static EXTERNAL_LINK_CLICKED: string            = Commands.namespace + 'onExternalLinkClicked';
     static FEEDBACK: string                         = Commands.namespace + 'onFeedback';
     static FORBIDDEN: string                        = Commands.namespace + 'onForbidden';
+    static GET_OCR: string                          = Commands.namespace + 'onGetOcr';
     static HIDE_CLICKTHROUGH_DIALOGUE: string       = Commands.namespace + 'onHideClickthroughDialogue';
     static HIDE_DOWNLOAD_DIALOGUE: string           = Commands.namespace + 'onHideDownloadDialogue';
     static HIDE_EMBED_DIALOGUE: string              = Commands.namespace + 'onHideEmbedDialogue';

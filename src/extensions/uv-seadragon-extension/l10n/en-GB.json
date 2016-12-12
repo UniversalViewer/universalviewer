@@ -79,7 +79,8 @@
         "noMatches": "No matches were found.",
         "ok": "OK",
         "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "wrongSelection": "Wrong selection. You can't select items outside text area of OCR panel"
       }
     },
     "helpDialogue": {
@@ -130,6 +131,14 @@
         "select": "Download",
         "selectAll": "Select All",
         "title": "Select Pages for Download"
+      }
+    },
+    "ocrRightPanel": {
+      "content": {
+        "clearSelection": "Clear selected text",
+        "collapse": "Collapse Ocr",
+        "expand": "Expand Ocr",
+        "title": "Ocr"
       }
     },
     "pagingHeaderPanel": {

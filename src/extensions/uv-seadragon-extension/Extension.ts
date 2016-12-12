@@ -22,6 +22,7 @@ import MoreInfoDialogue = require("../../modules/uv-dialogues-module/MoreInfoDia
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
 import MultiSelectionArgs = require("./MultiSelectionArgs");
+import OcrRightPanel = require("../../modules/uv-ocrrightpanel-module/OcrRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
@@ -57,6 +58,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     mode: Mode;
     moreInfoDialogue: MoreInfoDialogue;
     multiSelectDialogue: MultiSelectDialogue;
+    ocrRightPanel: OcrRightPanel;
     rightPanel: MoreInfoRightPanel;
     searchResults: SearchResult[] = [];
     settingsDialogue: SettingsDialogue;
@@ -85,6 +87,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Commands.CLEAR_SEARCH, (e) => {
             this.triggerSocket(Commands.CLEAR_SEARCH);
+            this.clearSearch();
         });
 
         $.subscribe(BaseCommands.DOWN_ARROW, (e) => {
@@ -276,6 +279,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.triggerSocket(Commands.SEARCH, terms);
             this.searchWithin(terms);
         });
+        
+        $.subscribe(Commands.SEARCH_IN_CANVAS, (e, obj) => {
+            this.triggerSocket(Commands.SEARCH_IN_CANVAS, obj);
+            this.searchWithinCanvas(obj.terms);
+        });        
 
         $.subscribe(Commands.SEARCH_PREVIEW_FINISH, (e) => {
             this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
@@ -344,6 +352,12 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
 
+        if (this.isOcrRightPanelEnabled()){
+            this.ocrRightPanel = new OcrRightPanel(Shell.$ocrRightPanel);
+        } else {
+            Shell.$ocrRightPanel.hide();
+        }
+
         if (this.isRightPanelEnabled()){
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         } else {
@@ -392,6 +406,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         }
+
+        if (this.isOcrRightPanelEnabled()){
+            this.ocrRightPanel.init();
+        }   
 
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
@@ -847,6 +865,18 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return true;
     }
 
+    isOcrRightPanelEnabled(): boolean {
+        if (!Utils.Bools.getBool(this.config.options.ocrRightPanelEnabled, false)){
+            return false;
+        }
+        
+        if (!this.getOcrService()) {
+            return false;
+        }
+                
+        return true;
+    } 
+
     isPagingSettingEnabled(): boolean {
         if (this.helper.isPagingAvailable()){
             return this.getSettings().pagingEnabled;
@@ -868,7 +898,6 @@ class Extension extends BaseExtension implements ISeadragonExtension {
            } else {
                index = indices.last() + 1;
            }
-    
        } else {
            index = canvasIndex + 1;
        }
@@ -891,6 +920,30 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         if (!service) return null;
         return service.id + '?q={0}';
     }
+    
+    getOcrService(): Manifesto.IService {
+        var services: Manifesto.IService[] = this.helper.manifest.getServices();
+       
+        var findService = false;
+        for (var i = 0; i < services.length; i++) {
+            var service: Manifesto.IService = services[i];
+            var profile = service.getProfile().value;
+
+            if (_.includes(profile, '/api/ocr/')) {
+                findService = true;
+            } 
+        }
+        
+        if (!findService) return null;
+
+        return service;        
+    }
+
+    getOcrServiceUri(): string{
+        var service = this.getOcrService();
+        if (!service) return null;
+        return service.id;
+    }    
 
     getSearchWithinServiceUri(): string {
         var service: Manifesto.IService = this.helper.getSearchWithinService();
@@ -934,6 +987,56 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             cb(results);
         });
     }
+    
+    searchWithinCanvas(terms): void {
+        var that = this;
+
+        this.doSearchWithinCanvas(terms, (results: any) => {
+            if (results.resources && results.resources.length) {
+                $.publish(Commands.SEARCH_RESULTS_EMPTY);
+
+                // reload current index as it may contain results.
+                that.viewPage(that.helper.canvasIndex, true);
+            } else {
+                that.showMessage(that.config.modules.genericDialogue.content.noMatches, () => {
+                    $.publish(Commands.SEARCH_RESULTS_EMPTY);
+                });
+            } 
+        });
+    }
+
+    doSearchWithinCanvas(terms: any, cb: (results: any) => void): void {
+        var that = this;
+        var results = {resources : Array()};
+        
+        var canvasId = this.helper.getCurrentCanvas().id;
+        //searchUri = String.format(searchUri, canvasId, wordId);
+        for (var i = 0; i < terms.length; i++) {
+            var xywh = $('#'+terms[i].id).attr('data-xywh');
+            var text = $('#'+terms[i].id).html();
+            
+            var termObj = {
+                           '@type' : 'oa:Annotation', 
+                           motivation : 'sc:painting', 
+                           on: canvasId + '#xywh=' + xywh, 
+                           resource : {
+                                        '@type' : 'cnt:ContentAsText', 
+                                        chars : text
+                                      }
+                          };
+            results.resources.push(termObj);
+        }
+        that.parseSearchWithinResults(results);
+        
+        cb(results);
+        /*$.getJSON(searchUri, (results: any) => {
+            if (results.resources && results.resources.length) {
+                that.parseSearchWithinResults(results);
+            }
+
+            cb(results);
+        });*/
+    }    
 
     parseSearchWithinResults(results: any): void {
         this.searchResults = [];

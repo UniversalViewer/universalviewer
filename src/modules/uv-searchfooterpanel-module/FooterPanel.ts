@@ -48,6 +48,14 @@ class FooterPanel extends BaseFooterPanel {
             this.canvasIndexChanged();
             this.setCurrentSearchResultPlacemarker();
         });
+        
+        $.subscribe(Commands.CLEAR_SEARCH, (e, index) => {
+            this.clearSearchResults();
+        });        
+        
+        $.subscribe(Commands.CLEAR_SEARCH_PANEL, (e, index) => {
+            this.clearSearchPanel();
+        });        
 
         // todo: this should be a setting
         $.subscribe(Commands.MODE_CHANGED, (e, mode) => {
@@ -254,6 +262,7 @@ class FooterPanel extends BaseFooterPanel {
         // blur search field
         this.$searchText.blur();
 
+        $.publish(Commands.CLEAR_OCR_PANEL);
         $.publish(Commands.SEARCH, [this.terms]);
     }
 
@@ -454,6 +463,20 @@ class FooterPanel extends BaseFooterPanel {
         });
     }
 
+    clearSearchPanel(): void {
+
+        // clear all existing placemarkers
+        var placemarkers = this.getSearchResultPlacemarkers();
+        placemarkers.remove();
+
+        // clear search input field.
+        this.$searchText.val(this.content.enterKeyword);
+
+        // hide pager.
+        this.$searchContainer.show();
+        this.$searchPagerContainer.hide();
+    }    
+    
     clearSearchResults(): void {
 
         (<ISeadragonExtension>this.extension).searchResults = [];

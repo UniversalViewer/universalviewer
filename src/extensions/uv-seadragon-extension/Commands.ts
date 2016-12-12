@@ -2,6 +2,8 @@ class Commands {
     static namespace: string = 'seadragonExtension.';
 
     static CLEAR_SEARCH: string                         = Commands.namespace + 'onClearSearch';
+    static CLEAR_SEARCH_PANEL: string                   = Commands.namespace + 'onClearSearchPanel';
+    static CLEAR_OCR_PANEL: string                      = Commands.namespace + 'onClearOcrPanel';
     static CURRENT_VIEW_URI: string                     = Commands.namespace + 'onCurrentViewUri';
     static FIRST: string                                = Commands.namespace + 'onFirst';
     static GALLERY_DECREASE_SIZE: string                = Commands.namespace + 'onGalleryDecreaseSize';
@@ -29,6 +31,7 @@ class Commands {
     static SEADRAGON_OPEN: string                       = Commands.namespace + 'onOpen';
     static SEADRAGON_RESIZE: string                     = Commands.namespace + 'onResize';
     static SEADRAGON_ROTATION: string                   = Commands.namespace + 'onRotation';
+    static SEARCH_IN_CANVAS: string                     = Commands.namespace + 'onSearchInCanvas';
     static SEARCH_PREVIEW_FINISH: string                = Commands.namespace + 'onSearchPreviewFinish';
     static SEARCH_PREVIEW_START: string                 = Commands.namespace + 'onSearchPreviewStart';
     static SEARCH_RESULTS_EMPTY: string                 = Commands.namespace + 'onSearchResultsEmpty';
