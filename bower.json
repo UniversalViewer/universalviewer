@@ -15,12 +15,9 @@
     "tasks",
     "tests"
   ],
-  "dependencies": {
-    "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
-    "uv-en-GB-theme": "4Science/uv-en-GB-theme"
-  },
+  "dependencies": {},
   "devDependencies": {
     "uv-cy-GB-theme": "universalviewer/uv-cy-GB-theme",
-    "uv-en-GB-theme": "4Science/uv-en-GB-theme"
+    "uv-en-GB-theme": "universalviewer/uv-en-GB-theme"
   }
 }
