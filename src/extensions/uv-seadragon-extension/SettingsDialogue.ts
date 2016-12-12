@@ -88,8 +88,6 @@ class SettingsDialogue extends BaseSettingsDialogue {
             }
 
             this.updateSettings(settings);
-            var viewer = (<ISeadragonExtension>this.extension).getViewer();
-            viewer.gestureSettingsMouse.clickToZoom = settings.clickToZoomEnabled;
         });        
 
         this.$pagingEnabledCheckbox.change(() => {
