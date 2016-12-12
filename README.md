@@ -75,7 +75,8 @@ The server response is parsed by the new module and showed as a text rapresentat
 
 - Enable editing of each single annotation (eg. single word recognized by the OCR software) from the user interface;
 - Create a new annotation by drawing it over the image. 
- 
+
+# Universal Viewer 
 
 [![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UniversalViewer/universalviewer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
