@@ -25,7 +25,8 @@ class LeftPanel extends BaseExpandPanel {
     init(): void{
         super.init();
 
-        if (this.options.panelOpen) {
+        var shouldOpenPanel = Utils.Bools.getBool(this.extension.getSettings().leftPanelOpen, this.options.panelOpen);
+        if (shouldOpenPanel) {
             this.toggle(true);
         }
     }
@@ -45,11 +46,12 @@ class LeftPanel extends BaseExpandPanel {
     toggleFinish(): void {
         super.toggleFinish();
 
-        if (this.isExpanded){
+        if (this.isExpanded) {
             $.publish(BaseCommands.OPEN_LEFT_PANEL);
-        } else {
+        } else {           
             $.publish(BaseCommands.CLOSE_LEFT_PANEL);
         }
+        this.extension.updateSettings({leftPanelOpen: this.isExpanded});
     }
 
     resize(): void {
