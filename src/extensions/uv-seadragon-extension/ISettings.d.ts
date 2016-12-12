@@ -4,4 +4,5 @@ interface ISettings {
     leftPanelOpen?: boolean;
     rightPanelOpen?: boolean;
     preserveViewport?: boolean;
+    clickToZoomEnabled?: boolean;
 }
