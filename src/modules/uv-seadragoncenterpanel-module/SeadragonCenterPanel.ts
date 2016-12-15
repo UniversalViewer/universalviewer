@@ -56,6 +56,10 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, args) => {
+            this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
+        });
+
         $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifold.ExternalResource[]) => {
             this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
@@ -180,6 +184,9 @@ class SeadragonCenterPanel extends CenterPanel {
             blendTime: this.config.options.blendTime || 0,
             autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: prefixUrl,
+            gestureSettingsMouse: {
+                clickToZoom: !!this.extension.config.options.clickToZoomEnabled
+            },
             navImages: {
                 zoomIn: {
                     REST:   'zoom_in.png',
