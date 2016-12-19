@@ -171,7 +171,8 @@
         "previous": "Previous",
         "rotateRight": "Rotate Right",
         "zoomIn": "Zoom In",
-        "zoomOut": "Zoom Out"
+        "zoomOut": "Zoom Out",
+        "trimAttributionMore": "more"
       }
     },
     "restrictedDialogue": {
