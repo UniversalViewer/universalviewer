@@ -12,6 +12,8 @@ OCR module allows to show, in a new right panel, the text extracted from the vie
 Moreover you can highlight the text within the OCR panel finding it on the image. 
 The highlighted text is rendered like searching with the footer panel search.
 
+![Demo Screenshot](http://uvdemo.4science.it/screenShotDemo01.jpg "Demo Screenshot")
+
 ## Examples
 
 Try a live demo here : http://uvdemo.4science.it
