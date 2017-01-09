@@ -1446,6 +1446,13 @@ input[type=range]:focus::-ms-fill-upper {
   cursor: pointer;
   left: 35px;
 }
+#app .rightPanel .top .clearSel {
+  position: absolute;
+  height: 20px;
+  margin-top: 9px;
+  cursor: pointer;
+  right: 5px;
+}
 #app .rightPanel .top .collapseButton {
   position: absolute;
   background: url('../../img/uv-shared-module/arrows_right.png') no-repeat;
@@ -1499,6 +1506,10 @@ input[type=range]:focus::-ms-fill-upper {
 #app .rightPanel .main {
   margin-right: 10px;
   margin-bottom: 10px;
+}
+#app .rightPanel .main .wordHighlightDiv {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 #app.browser-Explorer.browser-version-8 .rightPanel .closed .title {
   writing-mode: tb-lr;
