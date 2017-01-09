@@ -187,10 +187,7 @@ class ShareDialogue extends Dialogue {
         });
 
         this.$element.hide();
-        this.updateInstructions();
-        this.updateShareOptions();
-        this.updateShareFrame();
-        this.updateTermsOfUseButton();
+        this.update();
     }
 
     open($triggerButton?: JQuery): void {
@@ -229,6 +226,11 @@ class ShareDialogue extends Dialogue {
             this.$widthInput.val(String(this.currentWidth));
             this.$heightInput.val(String(this.currentHeight));
         }
+
+        this.updateInstructions();
+        this.updateShareOptions();
+        this.updateShareFrame();
+        this.updateTermsOfUseButton();
     }
 
     updateShareOptions(): void {

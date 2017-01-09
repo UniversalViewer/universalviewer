@@ -236,7 +236,7 @@ class ThumbsView extends BaseView {
         this.$element.hide();
     }
 
-    isPDF(): boolean{
+    isPDF(): boolean {
         // todo: use constants
         return (this.extension.helper.getElementType().toString().contains("pdf"));
     }

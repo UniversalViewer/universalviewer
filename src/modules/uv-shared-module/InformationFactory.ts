@@ -17,7 +17,6 @@ class InformationFactory{
         switch(args.informationType){
             case (InformationType.AUTH_CORS_ERROR):
                 return new Information(this.extension.config.content.authCORSError, []);
-                break;
             case (InformationType.DEGRADED_RESOURCE):
                 var actions: InformationAction[] = [];
 
@@ -33,8 +32,6 @@ class InformationFactory{
                 actions.push(loginAction);
 
                 return new Information(this.extension.config.content.degradedResourceMessage, actions);
-
-                break;
         }
     }
 }
