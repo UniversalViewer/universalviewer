@@ -42,7 +42,7 @@
     "hooker": "^0.2.3",
     "http-status-codes": "edsilv/http-status-codes",
     "iiif-gallery-component": "viewdir/iiif-gallery-component#v1.0.6",
-    "iiif-metadata-component": "viewdir/iiif-metadata-component#v1.0.5",
+    "iiif-metadata-component": "viewdir/iiif-metadata-component#v1.0.10",
     "iiif-tree-component": "viewdir/iiif-tree-component#v1.0.7",
     "jquery-plugins": "edsilv/jquery-plugins",
     "jquery-tiny-pubsub": "edsilv/jquery-tiny-pubsub",
