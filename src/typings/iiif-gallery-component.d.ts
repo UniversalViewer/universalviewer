@@ -1,4 +1,4 @@
-// iiif-gallery-component v1.0.5 https://github.com/viewdir/iiif-gallery-component#readme
+// iiif-gallery-component v1.0.6 https://github.com/viewdir/iiif-gallery-component#readme
 
 declare namespace IIIFComponents {
     class GalleryComponent extends _Components.BaseComponent implements IGalleryComponent {
@@ -25,6 +25,7 @@ declare namespace IIIFComponents {
         protected _init(): boolean;
         protected _getDefaultOptions(): IGalleryComponentOptions;
         databind(): void;
+        private _update();
         private _getMultiSelectState();
         private _createThumbs();
         private _getThumbByCanvas(canvas);

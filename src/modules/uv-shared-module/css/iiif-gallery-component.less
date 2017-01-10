@@ -66,12 +66,18 @@
 
             &.multiSelect {
                 .thumb {
+                    input {
+                        display: none;
+                    }
                     .wrap.multiSelected {
                         background: none;
                         border: 2px solid transparent;
                     }
                 }
                 .thumb.insideScrollArea {
+                    input {
+                        display: block;
+                    }
                     .wrap.multiSelected {
                         border: 2px solid @brand-primary;
                     }

@@ -41,7 +41,7 @@
     "grunt-typescript": "^0.8.0",
     "hooker": "^0.2.3",
     "http-status-codes": "edsilv/http-status-codes",
-    "iiif-gallery-component": "viewdir/iiif-gallery-component#v1.0.5",
+    "iiif-gallery-component": "viewdir/iiif-gallery-component#v1.0.6",
     "iiif-metadata-component": "viewdir/iiif-metadata-component#v1.0.5",
     "iiif-tree-component": "viewdir/iiif-tree-component#v1.0.7",
     "jquery-plugins": "edsilv/jquery-plugins",
