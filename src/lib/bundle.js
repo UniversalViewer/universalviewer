@@ -1130,6 +1130,7 @@ var KeyCodes;
         KeyPress.Hash = 35;
         KeyPress.GraveAccent = 39;
         KeyPress.ForwardSlash = 32;
+        KeyPress.DoubleQuote = 34;
         KeyPress.Asterisk = 42;
         KeyPress.Plus = 43;
         KeyPress.Comma = 44;

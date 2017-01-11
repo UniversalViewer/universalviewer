@@ -115,6 +115,7 @@ declare module KeyCodes.KeyPress {
     var Hash: number;
     var GraveAccent: number;
     var ForwardSlash: number;
+    var DoubleQuote: number;
     var Asterisk: number;
     var Plus: number;
     var Comma: number;
