@@ -1,4 +1,4 @@
-// iiif-gallery-component v1.0.5 https://github.com/viewdir/iiif-gallery-component#readme
+// iiif-gallery-component v1.0.6 https://github.com/viewdir/iiif-gallery-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifGalleryComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -193,6 +193,21 @@ var IIIFComponents;
                 this._$multiSelectOptions.hide();
                 this._$thumbs.removeClass("multiSelect");
             }
+            this._update();
+        };
+        GalleryComponent.prototype._update = function () {
+            var multiSelectState = this._getMultiSelectState();
+            if (multiSelectState.isEnabled) {
+                // check/uncheck Select All checkbox
+                this._$selectAllButtonCheckbox.prop("checked", multiSelectState.allSelected());
+                var anySelected = multiSelectState.getAll().en().where(function (t) { return t.multiSelected; }).toArray().length > 0;
+                if (!anySelected) {
+                    this._$selectButton.hide();
+                }
+                else {
+                    this._$selectButton.show();
+                }
+            }
         };
         GalleryComponent.prototype._getMultiSelectState = function () {
             return this.options.helper.getMultiSelectState();
@@ -247,6 +262,7 @@ var IIIFComponents;
                         else {
                             multiSelectState.selectCanvas(thumb.data, thumb.multiSelected);
                         }
+                        that._update();
                         that._emit(GalleryComponent.Events.THUMB_MULTISELECTED, thumb);
                     });
                 });
