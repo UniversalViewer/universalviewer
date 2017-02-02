@@ -27,6 +27,8 @@
         "expand": "Expand Contents",
         "expandFull": "Expand Gallery",
         "index": "Index",
+        "searchResult": "{0} search result",
+        "searchResults": "{0} search results",
         "sortBy": "Sort By:",
         "thumbnails": "Thumbnails",
         "title": "Contents",
@@ -203,6 +205,7 @@
       "content": {
         "locale": "Locale",
         "navigatorEnabled": "Navigator Enabled",
+        "clickToZoomEnabled": "Mouse Click To Zoom",
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",

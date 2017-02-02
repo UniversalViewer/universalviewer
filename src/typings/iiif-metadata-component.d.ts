@@ -1,4 +1,4 @@
-// iiif-metadata-component v1.0.0 https://github.com/viewdir/iiif-metadata-component#readme
+// iiif-metadata-component v1.0.10 https://github.com/viewdir/iiif-metadata-component#readme
 declare namespace IIIFComponents {
     class StringValue {
         value: string;
@@ -70,6 +70,7 @@ declare namespace IIIFComponents {
         private _$metadataGroupTemplate;
         private _$metadataItemTemplate;
         private _$metadataItemValueTemplate;
+        private _$metadataItemURIValueTemplate;
         private _$noData;
         private _metadataGroups;
         constructor(options: IMetadataComponentOptions);
@@ -87,9 +88,10 @@ declare namespace IIIFComponents {
         private _buildMetadataItem(item);
         private _getItemLocale(item);
         private _buildMetadataItemValue(value, locale);
+        private _buildMetadataItemURIValue(value);
         private _addReadingDirection($elem, locale);
-        private _addCopyButton($elem, $header);
-        private _copyItemValues($copyButton, $item);
+        private _addCopyButton($elem, $header, $values);
+        private _copyItemValues($copyButton, originalValue);
         private _readCSV(config, normalise?);
         private _sanitize(html);
         protected _resize(): void;

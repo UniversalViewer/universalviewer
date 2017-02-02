@@ -23,6 +23,16 @@ class GalleryView extends BaseView {
         this.setConfig('contentLeftPanel');
         super.create();
 
+        // search preview doesn't work well with the gallery because it loads thumbs in "chunks"
+
+        // $.subscribe(Commands.SEARCH_PREVIEW_START, (e, canvasIndex) => {
+        //     this.component.searchPreviewStart(canvasIndex);
+        // });
+
+        // $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
+        //     this.component.searchPreviewFinish();
+        // });
+
         this.$gallery = $('<div class="iiif-gallery-component"></div>');
         this.$element.append(this.$gallery);
     }

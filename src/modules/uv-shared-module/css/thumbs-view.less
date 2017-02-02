@@ -59,17 +59,37 @@
                             }
                         }
 
-                        span {
-                            font-size: @font-size-small;
-                            color: #fff;
-                            display: block;
-                            padding: 2px 0 0 0;
-                        }
+                        .info {
 
-                        .label {
-                            overflow-x: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
+                            overflow: hidden;
+
+                            span {
+                                font-size: @font-size-small;
+                                color: #fff;
+                                display: block;
+                                padding: 2px 0 0 0;
+                            }
+
+                            .index {
+                                float: left;
+                            }
+
+                            .label {
+                                float: left;
+                                overflow-x: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+
+                            .searchResults {
+                                float: right;
+                                width: 35px;
+                                overflow-x: hidden;
+                                text-overflow: ellipsis;
+                                color: @brand-primary;
+                                padding-left: 14px;
+                                background: url('@{img-path}search_result.png') no-repeat 0px 3px;
+                            }
                         }
 
                         &.placeholder {
@@ -80,8 +100,10 @@
 
                         &.oneCol{
                             margin: 0 0 7px 0;
-                            .wrap,
                             .label {
+                                width: 178px;
+                            }
+                            .wrap {
                                 width: 208px;
                                 max-height: 373px;
                             }
@@ -89,8 +111,10 @@
 
                         &.twoCol{
                             margin: 0 7px 7px 0;
-                            .wrap,
                             .label {
+                                width: 63px;
+                            }
+                            .wrap {
                                 width: 98px;
                                 max-height: 182px;
                             }

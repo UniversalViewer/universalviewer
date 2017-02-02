@@ -63,7 +63,7 @@ interface IExtension{
     refresh(): void;
     reload(params?: BootstrapParams);
     resize(): void;
-    resources: Manifesto.IExternalResource[];
+    resources: Manifold.ExternalResource[];
     sanitize(html: string): string;
     serializeLocales(locales: any[]): string;
     shifted: boolean;

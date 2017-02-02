@@ -1,8 +1,13 @@
-@img-path: '../../../modules/uv-shared-module/img/';
+.iiif-gallery-component {
 
-.iiif-gallery-component{
+    // Reset the box-sizing
+    *,
+    *:before,
+    *:after {
+        .box-sizing(border-box);
+    }
 
-    .header{
+    .header {
         overflow: hidden;
         height: 45px;
 
@@ -47,9 +52,10 @@
         }
     }
 
-    .main{
+    .main {
         overflow: auto;
         overflow-x: hidden;
+        height: 1000px; // main must have a default height, otherwise all thumbs will be initially loaded
 
         .thumbs {
             margin-right: @margin-medium-horizontal;
@@ -58,104 +64,116 @@
 
             // thumb spacing-related styles
 
-            &.multiSelect{
+            &.multiSelect {
                 .thumb {
-                    .wrap {
-                        &.multiSelected {
-                            border: 2px solid @brand-primary;
-                        }
+                    input {
+                        display: none;
+                    }
+                    .wrap.multiSelected {
+                        background: none;
+                        border: 2px solid transparent;
+                    }
+                }
+                .thumb.insideScrollArea {
+                    input {
+                        display: block;
+                    }
+                    .wrap.multiSelected {
+                        border: 2px solid @brand-primary;
                     }
                 }
             }
 
-            &.chunked{
-                .thumb{
-                    &.outsideScrollArea{
-                        .wrap{
-                            border: 2px solid transparent;
-                            img{
-                                display: none;
-                            }
-                        }
+            .thumb {
 
-                        span{
-                            color: transparent;
-                        }
-                    }
-
-                    &.outsideScrollArea.selected{
-                        .wrap{
-                            border: 2px solid transparent;
-                        }
-                    }
-                }
-            }
-
-            &.chunked.multiSelect{
-                .thumb {
-                    &.outsideScrollArea {
-                        .wrap {
-                            &.multiSelected {
-                                background: none;
-                                border: 2px solid transparent;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .thumb{
                 margin: 0 7px 7px 0;
 
                 .wrap{
-                    border: 2px solid @panel-border-color;
+                    //border: 2px dotted grey; // debug
+                    border: 2px solid transparent;
                     padding: 2px;
+
+                    img {
+                        display: none;
+                    }
                 }
 
-                &.selected{
-                    .wrap{
+                .info {
+                    span {
+                        color: transparent;
+                        padding: 2px 0 0 0;
+                    }
+
+                    .searchResults {
+                        background: none;
+                    }
+                }
+
+                &.selected {
+                    .wrap {
+                        border: 2px solid transparent;
+                    }
+                }
+            }
+
+            .thumb.insideScrollArea {
+
+                .wrap {
+                    border: 2px solid @panel-border-color;
+
+                    img {
+                        display: block;
+                    }
+                }
+
+                .info {
+                    span {
+                        color: #fff;
+                    }
+
+                    .searchResults {
+                        color: @brand-primary;
+                        background: url('@{img-path}search_result.png') no-repeat 0px 3px;
+                    }
+                }
+
+                &.selected {
+                    .wrap {
                         border: 2px solid #fff;
                     }
                 }
 
-                &.searchpreview{
+                &.searchpreview {
                     .wrap{
                         border: 2px solid @link-color;
                     }
                 }
-
-                span{
-                    padding: 2px 0 0 0;
-                }
             }
-            
-            // end thumb spacing-related styles
 
-            .thumb{
+            .thumb {
                 float: left;
                 cursor: pointer;
 
-                .wrap{
+                .wrap {
                     overflow: hidden;
                     text-align: center;
                     background: none;
                     position: relative;
 
-                    &.loading{
+                    &.loading {
                         .loading(@loader-black-bg);
                     }
 
-                    &.hidden{
+                    &.hidden {
                         background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
                     }
 
-                    img{
-                        display: block;
+                    img {
                         max-width: 100%;
                         max-height: 100%;
                     }
 
-                    input{
+                    input {
                         position: absolute;
                         cursor: pointer;
                         top: 0px;
@@ -163,16 +181,28 @@
                     }
                 }
 
-                span{
-                    font-size: @font-size-small;
-                    color: #fff;
-                    display: block;
-                }
+                .info {
 
-                .label {
-                    overflow-x: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
+                    overflow: hidden;
+
+                    span {
+                        font-size: @font-size-small;
+                        display: block;
+                        overflow-x: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+
+                    .index, .label {
+                        float: left;
+                    }
+
+                    .searchResults {
+                        display: none;
+                        float: right;
+                        width: 32px;
+                        padding-left: 14px;
+                    }
                 }
 
                 &.placeholder{
@@ -182,25 +212,19 @@
                 }
             }
 
-            &.multiSelect{
+            &.multiSelect {
                 .thumb {
-                    .wrap {
-                        &.multiSelected {
-                            background: @brand-primary;
+                    .wrap.multiSelected {
+                        background: @brand-primary;
 
-                            .thumbImage {
-                                .opacity(.35);
-                            }
-
-                            input {
-
-                            }
+                        .thumbImage {
+                            .opacity(.35);
                         }
                     }
                 }
             }
 
-            &.left-to-right{
+            &.left-to-right {
                 .thumb{
                     float: left;
                 }

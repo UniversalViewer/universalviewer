@@ -1,4 +1,5 @@
-// iiif-gallery-component v1.0.0 https://github.com/viewdir/iiif-gallery-component#readme
+// iiif-gallery-component v1.0.6 https://github.com/viewdir/iiif-gallery-component#readme
+
 declare namespace IIIFComponents {
     class GalleryComponent extends _Components.BaseComponent implements IGalleryComponent {
         options: IGalleryComponentOptions;
@@ -24,22 +25,19 @@ declare namespace IIIFComponents {
         protected _init(): boolean;
         protected _getDefaultOptions(): IGalleryComponentOptions;
         databind(): void;
+        private _update();
         private _getMultiSelectState();
         private _createThumbs();
         private _getThumbByCanvas(canvas);
         private _sizeThumb($thumb);
         private _loadThumb($thumb, cb?);
         private _getThumbsByRange(range);
-        _updateThumbs(): void;
-        private _isChunkedResizingEnabled();
+        private _updateThumbs();
         private _getSelectedThumbIndex();
         private _getAllThumbs();
         private _getThumbByIndex(canvasIndex);
         private _scrollToThumb(canvasIndex);
-        private _searchPreviewStart(canvasIndex);
-        private _searchPreviewFinish();
         selectIndex(index: number): void;
-        private _setLabel();
         private _setRange();
         private _setThumbMultiSelected(thumb, selected);
         protected _resize(): void;
@@ -63,18 +61,21 @@ declare namespace IIIFComponents {
 
 declare namespace IIIFComponents {
     interface IContent {
+        searchResult: string;
+        searchResults: string;
         select: string;
         selectAll: string;
     }
     interface IGalleryComponentOptions extends _Components.IBaseComponentOptions {
-        chunkedResizingEnabled: boolean;
         chunkedResizingThreshold: number;
         content: IContent;
         debug: boolean;
         helper: Manifold.IHelper;
         imageFadeInDuration: number;
         initialZoom: number;
+        minLabelWidth: number;
         pageModeEnabled: boolean;
+        searchResults: Manifold.SearchResult[];
         scrollStopDuration: number;
         sizingEnabled: boolean;
         thumbHeight: number;

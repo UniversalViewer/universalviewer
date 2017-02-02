@@ -1,5 +1,6 @@
 {
   "options": {
+    "allowStealFocus": false,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
@@ -17,11 +18,13 @@
     "preserveViewport": false,
     "rightPanelEnabled": true,
     "saveUserSettings": false,
+    "clickToZoomEnabled": true,
     "searchWithinEnabled": true,
     "termsOfUseEnabled": false,
     "theme": "uv-en-GB-theme",
     "tokenStorage": "session",
-    "useArrowKeysToNavigate": false
+    "useArrowKeysToNavigate": false,
+    "zoomToSearchResultEnabled": true
   },
   "modules": {
     "contentLeftPanel": {
@@ -30,7 +33,6 @@
         "defaultToTreeIfGreaterThan": 0,
         "elideCount": 40,
         "expandFullEnabled": true,
-        "galleryThumbChunkedResizingEnabled": true,
         "galleryThumbChunkedResizingThreshold": 400,
         "galleryThumbHeight": 320,
         "galleryThumbLoadPadding": 3,
@@ -135,7 +137,7 @@
         "controlsFadeLength": 250,
         "defaultZoomLevel": 0,
         "immediateRender": false,
-        "maxZoomLevel": 8,
+        "maxZoomPixelRatio": 1.25,
         "navigatorPosition": "BOTTOM_RIGHT",
         "pageGap": 50,
         "showHomeControl": false,
@@ -155,7 +157,7 @@
     },
     "shareDialogue": {
       "options": {
-        "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-collectionindex=\"{3}\" data-manifestindex=\"{4}\" data-sequenceindex=\"{5}\" data-canvasindex=\"{6}\" data-zoom=\"{7}\" data-rotation=\"{8}\" style=\"width:{9}px; height:{10}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{11}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>",
+        "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-collectionindex=\"{3}\" data-manifestindex=\"{4}\" data-sequenceindex=\"{5}\" data-canvasindex=\"{6}\" data-xywh=\"{7}\" data-rotation=\"{8}\" style=\"width:{9}px; height:{10}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{11}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>",
         "instructionsEnabled": false,
         "shareFrameEnabled": true
       }

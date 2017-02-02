@@ -1,12 +1,10 @@
 # Universal Viewer
 
-[![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/UniversalViewer/universalviewer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) 
+&nbsp;&nbsp;
+<a href="https://universalviewerinvite.herokuapp.com"><img src="https://worldvectorlogo.com/logos/slack.svg" width="60" /></a>
 
-    npm install universalviewer
-
-or
-
-    bower install uv
+    npm install universalviewer --save
 
 [Examples](http://universalviewer.io/examples/)
 
@@ -16,25 +14,20 @@ or
 
 ## Contributors
 
-![Wellcome Library](https://raw.githubusercontent.com/UniversalViewer/assets/master/wellcome_logo.png "Wellcome Library")
-![British Library](https://raw.githubusercontent.com/UniversalViewer/assets/master/bl_logo.png "British Library")
-![National Library of Wales](https://raw.githubusercontent.com/UniversalViewer/assets/master/nlw_logo.png "National Library of Wales")
-![Villanova University, Falvey Memorial Library](https://raw.githubusercontent.com/UniversalViewer/assets/master/vufalvey_logo.png "Villanova University, Falvey Memorial Library")
-![Riksarkivet](https://raw.githubusercontent.com/Riksarkivet/assets/master/logo-en.png "Riksarkivet, The Swedish National Archives")
+![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/logos.jpg "Contributors")
 
-## About
+## Features:
 
-The Universal Viewer is an [open source](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt) project to enable cultural heritage institutions to present their digital artifacts in an [IIIF-compliant](http://iiif.io/) and highly customisable user interface. 
-
-Features:
-
-- [OpenSeadragon](https://openseadragon.github.io/) image zooming using the [IIIF image API](http://iiif.io/api/image/2.0/).
-- YouTube-style embedding with deep links to specific pages/zoom regions.
-- [Themable](https://universalviewer.gitbooks.io/custom-themes/content/), fork the [UV theme](https://github.com/UniversalViewer/uv-en-GB-theme) on github to create your own.
-- Highly [configurable](https://github.com/UniversalViewer/universalviewer/wiki/Configuration) and [extensible](http://universalviewer.gitbooks.io/custom-extensions/content/).
-- Supports "IxIF" out of the box, allowing [3D](http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json), [audio](http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest), [video](http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest), and [pdf](http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest) viewing experiences.
-- Supports search and autocomplete service integration with overlayed search results.
-- Internationalised UI using [transifex.com](https://www.transifex.com/) (currently supports English and Welsh. Volunteers for more translations gratefully accepted!)
+- ### Zoomable
+  <p><a href="https://openseadragon.github.io/">OpenSeadragon</a> image zooming using the <a href="http://iiif.io/api/image/2.0/">IIIF image API</a></p>
+- ### Embeddable
+  <p>YouTube-style embedding with deep links to specific pages/zoom regions.</p>
+- ### Themable
+  <p>Fork the <a href="https://github.com/UniversalViewer/uv-en-GB-theme">UV theme</a> on github to create your own.</p>
+- ### Configurable
+  <p>The UV has its own visual configuration editor allowing all settings to be customised.</p>
+- ### Extensible
+  <p>Supports "IxIF" out of the box, allowing <a href="http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json">3D</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest">audio</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest">video</a>, and <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest">pdf</a> viewing experiences.</p>
 
 [More about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
@@ -89,11 +82,9 @@ To build the distribution version of the UV, just run (on the command line, in t
 
 A versioned `uv-major.minor.patch` folder along with compressed .zip and .tar files will appear in the `/dist` folder. Use these in your website, or alternatively use:
  
-    bower install uv --save
+    npm install universalviewer --save
     
-which will download the distribution folder to `bower_components`.
-
-See https://github.com/UniversalViewer/demo-site for examples.
+which will download the distribution folder to `node_modules`.
 
 ### Examples
 

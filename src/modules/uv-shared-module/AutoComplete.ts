@@ -1,22 +1,24 @@
 
 class AutoComplete{
 
-	results: any;
-	selectedResultIndex: number;
-    $element: JQuery;
-    autoCompleteFunc: (terms: string, cb: (results: string[]) => void) => void;
-    delay: number;
-    minChars: number;
-    onSelect: (terms: string) => void;
-    parseResultsFunc: (results: string[]) => string[];
-    positionAbove: boolean;
+	private _results: any;
+	private _selectedResultIndex: number;
+    private _$element: JQuery;
+    private _autoCompleteFunc: (terms: string, cb: (results: string[]) => void) => void;
+    private _delay: number;
+    private _minChars: number;
+    private _onSelect: (terms: string) => void;
+    private _parseResultsFunc: (results: string[]) => string[];
+    private _positionAbove: boolean;
 
-	$searchResultsList: JQuery;
-	$searchResultTemplate: JQuery;
-	element: HTMLInputElement;
+	private _$searchResultsList: JQuery;
+	private _$searchResultTemplate: JQuery;
+	private _element: HTMLInputElement;
 
-    validKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
-    lastKeyDownWasValid: boolean = false;
+    // valid keys that are not 
+    private _validKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
+    private _validKeyPressCodes: number[] = [KeyCodes.KeyPress.GraveAccent, KeyCodes.KeyPress.DoubleQuote];
+    private _lastKeyDownWasValid: boolean = false;
 
     constructor(element: JQuery,
                 autoCompleteFunc: (terms: string, cb: (results: string[]) => void) => void,
@@ -24,31 +26,31 @@ class AutoComplete{
                 onSelect: (terms: string) => void,
                 delay: number = 300,
                 minChars: number = 2,
-                positionAbove: boolean = false){
+                positionAbove: boolean = false) {
 
-        this.$element = element;
-        this.autoCompleteFunc = autoCompleteFunc;
-        this.delay = delay;
-        this.minChars = minChars;
-        this.onSelect = onSelect;
-        this.parseResultsFunc = parseResultsFunc;
-        this.positionAbove = positionAbove;
+        this._$element = element;
+        this._autoCompleteFunc = autoCompleteFunc;
+        this._delay = delay;
+        this._minChars = minChars;
+        this._onSelect = onSelect;
+        this._parseResultsFunc = parseResultsFunc;
+        this._positionAbove = positionAbove;
 
         // create ui.
-        this.$searchResultsList = $('<ul class="autocomplete"></ul>');
+        this._$searchResultsList = $('<ul class="autocomplete"></ul>');
 
-        if (this.positionAbove){
-            this.$element.parent().prepend(this.$searchResultsList);
+        if (this._positionAbove) {
+            this._$element.parent().prepend(this._$searchResultsList);
         } else {
-            this.$element.parent().append(this.$searchResultsList);
+            this._$element.parent().append(this._$searchResultsList);
         }
 
-        this.$searchResultTemplate = $('<li class="result"><a href="#" tabindex="-1"></a></li>');
+        this._$searchResultTemplate = $('<li class="result"><a href="#" tabindex="-1"></a></li>');
 
         // init ui.
 
         // callback after set period.
-        var typewatch = (function () {
+        const typewatch = (function () {
             var timer = 0;
             return function (callback, ms) {
                 clearTimeout(timer);
@@ -56,19 +58,16 @@ class AutoComplete{
             };
         })();
 
-        var that = this;
+        const that = this;
 
         // validate
 
-        this.$element.on("keydown", function(e: JQueryEventObject) {
+        this._$element.on("keydown", function(e: JQueryEventObject) {
 
-            var originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
-
-            that.lastKeyDownWasValid = that.isValidKeyDown(originalEvent);
-
-            var charCode = Utils.Keyboard.getCharCode(originalEvent);
-
-            var cancelEvent: boolean = false;
+            const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
+            that._lastKeyDownWasValid = that._isValidKeyDown(originalEvent);
+            const charCode: number = Utils.Keyboard.getCharCode(originalEvent);
+            let cancelEvent: boolean = false;
 
             if (charCode === KeyCodes.KeyDown.LeftArrow){
                 cancelEvent = true;
@@ -83,11 +82,11 @@ class AutoComplete{
         });
 
         // prevent invalid characters being entered
-        this.$element.on("keypress", function(e: JQueryEventObject) {
+        this._$element.on("keypress", function(e: JQueryEventObject) {
 
-            var isValidKeyPress: boolean = that.isValidKeyPress(<KeyboardEvent>e.originalEvent);
+            const isValidKeyPress: boolean = that._isValidKeyPress(<KeyboardEvent>e.originalEvent);
 
-            if (!(that.lastKeyDownWasValid || isValidKeyPress)){
+            if (!(that._lastKeyDownWasValid || isValidKeyPress)){
                 e.preventDefault();
                 return false;
             }
@@ -96,83 +95,86 @@ class AutoComplete{
         });
 
         // auto complete
-        this.$element.on("keyup", function(e) {
+        this._$element.on("keyup", function(e) {
 
             // if pressing enter without a list item selected
-            if (!that.getSelectedListItem().length && e.keyCode === KeyCodes.KeyDown.Enter) { // enter
-                that.onSelect(that.getTerms());
+            if (!that._getSelectedListItem().length && e.keyCode === KeyCodes.KeyDown.Enter) { // enter
+                that._onSelect(that._getTerms());
                 return;
             }
 
             // If there are search results
-            if (that.$searchResultsList.is(':visible') && that.results.length) {
+            if (that._$searchResultsList.is(':visible') && that._results.length) {
                 if (e.keyCode === KeyCodes.KeyDown.Enter) {
-                    that.searchForItem(that.getSelectedListItem());
+                    that._searchForItem(that._getSelectedListItem());
                 } else if (e.keyCode === KeyCodes.KeyDown.DownArrow) {
-                    that.setSelectedResultIndex(1);
+                    that._setSelectedResultIndex(1);
                     return;
                 } else if (e.keyCode === KeyCodes.KeyDown.UpArrow) {
-                    that.setSelectedResultIndex(-1);
+                    that._setSelectedResultIndex(-1);
                     return;
                 }
             }
 
-            if (e.keyCode !== KeyCodes.KeyDown.Enter){
+            if (e.keyCode !== KeyCodes.KeyDown.Enter) {
                 // after a delay, show autocomplete list.
                 typewatch(() => {
 
-                    var val = that.getTerms();
+                    const val = that._getTerms();
 
                     // if there are more than x chars and no spaces
                     // update the autocomplete list.
-                    if (val && val.length > that.minChars && !val.contains(' ')) {
-                        that.search(val);
+                    if (val && val.length > that._minChars && !val.contains(' ')) {
+                        that._search(val);
                     } else {
                         // otherwise, hide the autocomplete list.
-                        that.clearResults();
-                        that.hideResults();
+                        that._clearResults();
+                        that._hideResults();
                     }
 
-                }, that.delay);
+                }, that._delay);
             }
 
         });
 
         // hide results if clicked outside.
         $(document).on('mouseup', (e) => {
-            if (this.$searchResultsList.parent().has($(e.target)[0]).length === 0) {
-                this.clearResults();
-                this.hideResults();
+            if (this._$searchResultsList.parent().has($(e.target)[0]).length === 0) {
+                this._clearResults();
+                this._hideResults();
             }
         });
 
-        this.hideResults();
+        this._hideResults();
     }
 
-    isValidKeyDown(e: KeyboardEvent): boolean {
-        return this.validKeyDownCodes.contains(Utils.Keyboard.getCharCode(e));
+    private _isValidKeyDown(e: KeyboardEvent): boolean {
+        const isValid: boolean = this._validKeyDownCodes.contains(Utils.Keyboard.getCharCode(e));
+        return isValid;
     }
 
-    isValidKeyPress(e: KeyboardEvent): boolean {
-        var key: string = String.fromCharCode(Utils.Keyboard.getCharCode(e));
-        return key.isAlphanumeric();
+    private _isValidKeyPress(e: KeyboardEvent): boolean {
+        const charCode: number = Utils.Keyboard.getCharCode(e);
+        const key: string = String.fromCharCode(charCode);
+        const isValid: boolean = key.isAlphanumeric() || this._validKeyPressCodes.contains(charCode);
+        return isValid;
     }
 
-    getTerms(): string {
-        return this.$element.val().trim();
+    private _getTerms(): string {
+        return this._$element.val().trim();
     }
 
-    setSelectedResultIndex(direction): void {
+    private _setSelectedResultIndex(direction): void {
 
-        var nextIndex;
+        let nextIndex: number;
 
         if (direction === 1) {
-            nextIndex = this.selectedResultIndex + 1;
+            nextIndex = this._selectedResultIndex + 1;
         } else {
-            nextIndex = this.selectedResultIndex - 1;
+            nextIndex = this._selectedResultIndex - 1;
         }
 
-        var $items = this.$searchResultsList.find('li');
+        const $items: JQuery = this._$searchResultsList.find('li');
 
         if (nextIndex < 0) {
             nextIndex = $items.length - 1;
@@ -180,113 +182,105 @@ class AutoComplete{
             nextIndex = 0;
         }
 
-        this.selectedResultIndex = nextIndex;
+        this._selectedResultIndex = nextIndex;
 
         $items.removeClass('selected');
 
-        var selectedItem = $items.eq(this.selectedResultIndex);
+        const $selectedItem: JQuery = $items.eq(this._selectedResultIndex);
 
-        selectedItem.addClass('selected');
+        $selectedItem.addClass('selected');
 
         //var top = selectedItem.offset().top;
-        var top = selectedItem.outerHeight(true) * this.selectedResultIndex;
+        const top = $selectedItem.outerHeight(true) * this._selectedResultIndex;
 
-        this.$searchResultsList.scrollTop(top);
+        this._$searchResultsList.scrollTop(top);
     }
 
-    search(term: string): void {
+    private _search(term: string): void {
 
-        this.results = [];
+        this._results = [];
 
-        this.clearResults();
-        this.showResults();
-        this.$searchResultsList.append('<li class="loading"></li>');
+        this._clearResults();
+        this._showResults();
+        this._$searchResultsList.append('<li class="loading"></li>');
 
-        this.updateListPosition();
+        this._updateListPosition();
 
-        var that = this;
+        const that = this;
 
-        this.autoCompleteFunc(term, (results: string[]) => {
-           that.listResults(results);
+        this._autoCompleteFunc(term, (results: string[]) => {
+           that._listResults(results);
         });
     }
 
-    clearResults(): void {
-        this.$searchResultsList.empty();
+    private _clearResults(): void {
+        this._$searchResultsList.empty();
     }
 
-    hideResults(): void {
-        this.$searchResultsList.hide();
+    private _hideResults(): void {
+        this._$searchResultsList.hide();
     }
 
-    showResults(): void {
-        this.selectedResultIndex = -1;
-        this.$searchResultsList.show();
+    private _showResults(): void {
+        this._selectedResultIndex = -1;
+        this._$searchResultsList.show();
     }
 
-    updateListPosition(): void {
-        if (this.positionAbove){
-            this.$searchResultsList.css({
-                'top': this.$searchResultsList.outerHeight(true) * -1
+    private _updateListPosition(): void {
+        if (this._positionAbove) {
+            this._$searchResultsList.css({
+                'top': this._$searchResultsList.outerHeight(true) * -1
             });
         } else {
-            this.$searchResultsList.css({
-                'top': this.$element.outerHeight(true)
+            this._$searchResultsList.css({
+                'top': this._$element.outerHeight(true)
             });
         }
     }
 
-    listResults(results: string[]): void {
+    private _listResults(results: string[]): void {
         // get an array of strings
-        this.results = this.parseResultsFunc(results);
+        this._results = this._parseResultsFunc(results);
 
-        this.clearResults();
+        this._clearResults();
 
-        if (!this.results.length) {
+        if (!this._results.length) {
             // don't do this, because there still may be results for the PHRASE but not the word.
             // they won't know until they do the search.
             //this.searchResultsList.append('<li>no results</li>');
-            this.hideResults();
+            this._hideResults();
             return;
         }
 
-        for (var i = 0; i < this.results.length; i++) {
-            var result = this.results[i];
-
-            var $resultItem = this.$searchResultTemplate.clone();
-
-            var $a = $resultItem.find('a');
-
+        for (let i = 0; i < this._results.length; i++) {
+            const result = this._results[i];
+            const $resultItem = this._$searchResultTemplate.clone();
+            const $a = $resultItem.find('a');
             $a.text(result);
-
-            this.$searchResultsList.append($resultItem);
+            this._$searchResultsList.append($resultItem);
         }
 
-        this.updateListPosition();
+        this._updateListPosition();
 
-        var that = this;
+        const that = this;
 
-        this.$searchResultsList.find('li').on('click', function (e) {
+        this._$searchResultsList.find('li').on('click', function (e) {
             e.preventDefault();
-
-            that.searchForItem($(this));
+            that._searchForItem($(this));
         });
     }
 
-    searchForItem($item): void {
-        var term = $item.find('a').text();
-
-        this.$element.val(term);
-        this.hideResults();
-
-        this.onSelect(term);
-
-        this.clearResults();
-        this.hideResults();
+    private _searchForItem($item): void {
+        const term: string = $item.find('a').text();
+        this._$element.val(term);
+        this._hideResults();
+        this._onSelect(term);
+        this._clearResults();
+        this._hideResults();
     }
 
-    getSelectedListItem() {
-        return this.$searchResultsList.find('li.selected');
+    private _getSelectedListItem() {
+        return this._$searchResultsList.find('li.selected');
     }
 
 }
