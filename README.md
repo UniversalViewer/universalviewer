@@ -18,15 +18,15 @@
 
 ## Features:
 
-- ### Zoomable
+- ###Zoomable
   <p><a href="https://openseadragon.github.io/">OpenSeadragon</a> image zooming using the <a href="http://iiif.io/api/image/2.0/">IIIF image API</a></p>
-- ### Embeddable
+- ###Embeddable
   <p>YouTube-style embedding with deep links to specific pages/zoom regions.</p>
-- ### Themable
+- ###Themable
   <p>Fork the <a href="https://github.com/UniversalViewer/uv-en-GB-theme">UV theme</a> on github to create your own.</p>
-- ### Configurable
+- ###Configurable
   <p>The UV has its own visual configuration editor allowing all settings to be customised.</p>
-- ### Extensible
+- ###Extensible
   <p>Supports "IxIF" out of the box, allowing <a href="http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json">3D</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest">audio</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest">video</a>, and <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest">pdf</a> viewing experiences.</p>
 
 [More about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
