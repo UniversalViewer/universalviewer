@@ -419,6 +419,7 @@ class SeadragonCenterPanel extends CenterPanel {
                         if (this.items.length === resources.length) {
                             this.openPagesHandler();
                         }
+                        this.resize();
                     }
                 });
             }
