@@ -17,9 +17,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
     $explanatoryTextTemplate: JQuery;
     $imageOptionsContainer: JQuery;
     $imageOptions: JQuery;
-    //$pagingNote: JQuery;
     $selectionButton: JQuery;
-    //$settingsButton: JQuery;
     $sequenceOptionsContainer: JQuery;
     $sequenceOptions: JQuery;
     $wholeImageHighResButton: JQuery;
@@ -92,7 +90,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
 
-            var $selectedOption = that.getSelectedOption();
+            var $selectedOption: JQuery = that.getSelectedOption();
 
             var id: string = $selectedOption.attr('id');
             var label: string = $selectedOption.attr('title');
@@ -101,15 +99,15 @@ class DownloadDialogue extends BaseDownloadDialogue {
             var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
             if (this.renderingUrls[id]) {
-                if (mime){
-                    if (mime.toLowerCase().indexOf('pdf') !== -1){
+                if (mime) {
+                    if (mime.toLowerCase().indexOf('pdf') !== -1) {
                         type = DownloadType.ENTIREDOCUMENTASPDF;
-                    } else if (mime.toLowerCase().indexOf('txt') !== -1){
+                    } else if (mime.toLowerCase().indexOf('txt') !== -1) {
                         type = DownloadType.ENTIREDOCUMENTASTEXT;
                     }
                 }
 
-                if (type = DownloadType.ENTIREDOCUMENTASPDF){
+                if (type = DownloadType.ENTIREDOCUMENTASPDF) {
                     //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
                     
                     // if downloading a pdf - if there's a print service, generate an event instead of opening a new window.
@@ -120,7 +118,7 @@ class DownloadDialogue extends BaseDownloadDialogue {
                     //}
                 }
             } else {
-                switch (id){
+                switch (id) {
                     case DownloadOption.currentViewAsJpg.toString():
                         var viewer = (<ISeadragonExtension>that.extension).getViewer();
                         window.open((<ISeadragonExtension>that.extension).getCroppedImageUri(canvas, viewer));
@@ -549,12 +547,16 @@ class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.dynamicCanvasRenderings:
             case DownloadOption.dynamicImageRenderings:
             case DownloadOption.wholeImageHighRes:
-                if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled()){
+                // if in one-up mode, or in two-up mode with a single page being shown
+                if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
+                    (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
                     var maxSize: Size = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
-                    if (maxSize && _.isUndefined(maxSize.width)){
-                        return true;
-                    } else if (maxSize.width <= this.options.maxImageWidth){
-                        return true;
+                    if (maxSize) {
+                        if (_.isUndefined(maxSize.width)) {
+                            return true;
+                        } else if (maxSize.width <= this.options.maxImageWidth) {
+                            return true;
+                        }
                     }
                 }
                 return false;

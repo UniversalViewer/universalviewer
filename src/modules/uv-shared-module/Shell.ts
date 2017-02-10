@@ -72,7 +72,7 @@ class Shell extends BaseView {
         new GenericDialogue(Shell.$genericDialogue);
     }
     
-    resize(): void{
+    resize(): void {
         super.resize();
 
         Shell.$overlays.width(this.extension.width());

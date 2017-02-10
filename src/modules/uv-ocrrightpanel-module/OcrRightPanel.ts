@@ -31,8 +31,8 @@ class OcrRightPanel extends RightPanel {
         
         this.$clear.onPressed(() => {
             this.clearSelection();
-        });        
-                
+        });
+
         $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
             if (!_.isNull(this.lastCanvasIndex) && this.lastCanvasIndex !== index){
                 this.getOCR(parseInt(index));
@@ -45,14 +45,15 @@ class OcrRightPanel extends RightPanel {
         
         $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e, index) => {
             this.clearSelection();
-            settings.preserveViewport = this.defaultPreserveViewport;
+            //settings.preserveViewport = this.defaultPreserveViewport;
         });        
         
         $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e, index) => {
-            this.defaultPreserveViewport = settings.preserveViewport;
-            settings.preserveViewport = true;
-        });        
-        
+            //this.defaultPreserveViewport = settings.preserveViewport;
+            //settings.preserveViewport = true;
+            //$.publish(Commands.SEARCH, ["hamlet"]);
+        });
+
         this.setTitle(this.content.title);
 
     }   
@@ -97,7 +98,7 @@ class OcrRightPanel extends RightPanel {
             var paragraphId = '';
             var style = '';
             var targets;
-            
+
             var idParts = response.first.id.split("#");
             if (idParts[1] == 'rtl') {
                 style = 'style="direction:rtl"';
@@ -178,6 +179,7 @@ class OcrRightPanel extends RightPanel {
                             if (listNode.length > 0) {
                                 that.isTextSelected = true;
                                 $.publish(Commands.SEARCH_IN_CANVAS, [{terms: listNode, canvasId: currentCanvasId}]);
+                                //$.publish(Commands.SEARCH, ["hamlet"]);
                             } else {
                                 that.isTextSelected = false;
                                 that.extension.showMessage(that.extension.config.modules.genericDialogue.content.wrongSelection);

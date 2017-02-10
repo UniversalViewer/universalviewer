@@ -17,7 +17,7 @@ class BootstrapParams {
     locales: any[];
     manifestIndex: number;
     manifestUri: string;
-    paramMap: string[] = ['c', 'm', 's', 'cv', 'z', 'r', 'h', 'a']; // todo: move z, r, h, a to their respective extensions
+    paramMap: string[] = ['c', 'm', 's', 'cv', 'xywh', 'r', 'h', 'a']; // todo: move xywh, r, h, a to their respective extensions
     sequenceIndex: number;
 
     constructor() {
@@ -46,7 +46,7 @@ class BootstrapParams {
     }
 
     getParam(param: Params): any {
-        if (this.hashParamsAvailable()){
+        if (this.hashParamsAvailable()) {
             // get param from parent document
             var p = parseInt(Utils.Urls.getHashParameter(this.paramMap[param], parent.document));
             if (p || p === 0) return p;

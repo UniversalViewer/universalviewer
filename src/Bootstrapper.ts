@@ -58,14 +58,14 @@ class Bootstrapper{
 
             var sequence: Manifesto.ISequence = helper.getSequenceByIndex(this.params.sequenceIndex);
 
-            if (!sequence){
+            if (!sequence) {
                 this.notFound();
                 return;
             }
 
             var canvas: Manifesto.ICanvas = helper.getCanvasByIndex(this.params.canvasIndex);
 
-            if (!canvas){
+            if (!canvas) {
                 this.notFound();
                 return;
             }
@@ -76,13 +76,13 @@ class Bootstrapper{
             var extension: IExtension = this.extensions[canvasType.toString()];
 
             // if there isn't an extension for the canvasType, try the format
-            if (!extension){
+            if (!extension) {
                 var format = canvas.getProperty('format');
                 extension = this.extensions[format];
             }
 
             // if there still isn't a matching extension, show an error.
-            if (!extension){
+            if (!extension) {
                 alert("No matching UV extension found.");
                 return;
             }
@@ -107,7 +107,7 @@ class Bootstrapper{
         return (null === this.params.jsonp) ? Modernizr.cors : !this.params.jsonp;
     }
 
-    notFound(): void{
+    notFound(): void {
         try{
             parent.$(parent.document).trigger(BaseCommands.NOT_FOUND);
             return;
@@ -189,12 +189,12 @@ class Bootstrapper{
         // todo: use a compiler flag when available
         var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
 
-        yepnope.injectCss(cssPath, function () {
+        yepnope.injectCss(cssPath, function() {
             cb();
         });
     }
 
-    createExtension(extension: any, config: any): void{
+    createExtension(extension: any, config: any): void {
         this.config = config;
         var helper = extension.helper;
         this.extension = new extension.type(this);

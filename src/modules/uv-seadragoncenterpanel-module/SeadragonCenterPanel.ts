@@ -1,18 +1,21 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
+import Bounds = require("../../extensions/uv-seadragon-extension/Bounds");
 import CenterPanel = require("../uv-shared-module/CenterPanel");
+import Commands = require("../../extensions/uv-seadragon-extension/Commands");
+import CroppedImageDimensions = require("../../extensions/uv-seadragon-extension/CroppedImageDimensions");
+import ExternalResource = Manifold.ExternalResource;
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import ExternalResource = Manifesto.IExternalResource;
 import Metrics = require("../uv-shared-module/Metrics");
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
-import SearchResult = require("../../extensions/uv-seadragon-extension/SearchResult");
-import SearchResultRect = require("../../extensions/uv-seadragon-extension/SearchResultRect");
+import SearchResult = Manifold.SearchResult;
+import SearchResultRect = Manifold.SearchResultRect;
 
 class SeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
     currentBounds: any;
+    currentSearchResultRect: SearchResultRect;
     handler: any;
     initialBounds: any;
     initialRotation: any;
@@ -20,12 +23,14 @@ class SeadragonCenterPanel extends CenterPanel {
     isFirstLoad: boolean = true;
     items: any[];
     nextButtonEnabled: boolean = false;
-    pages: Manifesto.IExternalResource[];
+    pages: Manifold.ExternalResource[];
     prevButtonEnabled: boolean = false;
+    previousSearchResultRect: SearchResultRect;
     title: string;
     userData: any;
     viewer: any;
 
+    $canvas: JQuery;
     $goHomeButton: JQuery;
     $navigator: JQuery;
     $nextButton: JQuery;
@@ -51,46 +56,76 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
-            Utils.Async.waitFor(() => {
-                return this.isResized;
-            }, () => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e, args) => {
+            this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
+        });
+
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifold.ExternalResource[]) => {
+            this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
             });
         });
 
+        $.subscribe(Commands.CLEAR_SEARCH, () => {
+            this.whenCreated(() => {
+                (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
+                this.clearSearchResults();
+            });
+        });
+
+        $.subscribe(Commands.VIEW_PAGE, () => {
+            (<ISeadragonExtension>this.extension).previousSearchResultRect = null;
+            (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
+        });
+
+        $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
+            this.whenCreated(() => {
+                this.nextSearchResult();
+            });
+        });
+
+        $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
+            this.whenCreated(() => {
+                this.prevSearchResult();
+            });
+        });
+
         $.subscribe(Commands.ZOOM_IN, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.zoomIn();
             });
         });
 
         $.subscribe(Commands.ZOOM_OUT, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.zoomOut();
             });
         });
 
         $.subscribe(Commands.ROTATE, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.rotateRight();
             });
         });
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
-            Utils.Async.waitFor(() => {
-                return this.isCreated;
-            }, () => {
+            this.whenCreated(() => {
                 this.updateResponsiveView();
             });
         });
+    }
+
+    whenResized(cb: () => void): void {
+        Utils.Async.waitFor(() => {
+            return this.isResized;
+        }, cb);
+    }
+
+    whenCreated(cb: () => void): void {
+        Utils.Async.waitFor(() => {
+            return this.isCreated;
+        }, cb);
     }
 
     zoomIn(): void {
@@ -138,6 +173,7 @@ class SeadragonCenterPanel extends CenterPanel {
             showHomeControl: Utils.Bools.getBool(this.config.options.showHomeControl, false),
             showFullPageControl: false,
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
+            maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
             controlsFadeDelay: this.config.options.controlsFadeDelay || 250,
             controlsFadeLength: this.config.options.controlsFadeLength || 250,
             navigatorPosition: this.config.options.navigatorPosition || "BOTTOM_RIGHT",
@@ -148,6 +184,9 @@ class SeadragonCenterPanel extends CenterPanel {
             blendTime: this.config.options.blendTime || 0,
             autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: prefixUrl,
+            gestureSettingsMouse: {
+                clickToZoom: !!this.extension.config.options.clickToZoomEnabled
+            },
             navImages: {
                 zoomIn: {
                     REST:   'zoom_in.png',
@@ -217,6 +256,12 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$viewportNavButtonsContainer = this.$viewer.find('.openseadragon-container > div:not(.openseadragon-canvas):first');
         this.$viewportNavButtons = this.$viewportNavButtonsContainer.find('.viewportNavButton');
 
+        this.$canvas = $(this.viewer.canvas);
+
+        if (!window.DEBUG) {
+            this.$canvas.on('contextmenu', (e) => { return false; });
+        }
+
         this.$navigator = this.$viewer.find(".navigator");
         this.setNavigatorVisible();
 
@@ -265,7 +310,9 @@ class SeadragonCenterPanel extends CenterPanel {
         });
 
         this.viewer.addHandler('animation-finish', (viewer) => {
-            this.currentBounds = this.getBounds();
+            this.currentBounds = this.getViewportBounds();
+
+            this.updateVisibleSearchResultRects();
 
             $.publish(Commands.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
@@ -315,7 +362,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.prevButtonEnabled) return;
 
-            switch (viewingDirection.toString()){
+            switch (viewingDirection.toString()) {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
@@ -346,13 +393,13 @@ class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    openMedia(resources?: Manifesto.IExternalResource[]): void {
+    openMedia(resources?: Manifold.ExternalResource[]): void {
 
         this.$spinner.show();
         this.items = [];
 
         // todo: this should be a more specific Manifold.IImageResource
-        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalResource[]) => {
+        this.extension.getExternalResources(resources).then((resources: Manifold.ExternalResource[]) => {
             // OSD can open an array info.json objects
             //this.viewer.open(resources);
 
@@ -360,8 +407,8 @@ class SeadragonCenterPanel extends CenterPanel {
 
             resources = this.getPagePositions(resources);
 
-            for (var i = 0; i < resources.length; i++){
-                var resource: Manifesto.IExternalResource = resources[i];
+            for (var i = 0; i < resources.length; i++) {
+                var resource: Manifold.ExternalResource = resources[i];
                 this.viewer.addTiledImage({
                     tileSource: resource,
                     x: resource.x,
@@ -370,7 +417,6 @@ class SeadragonCenterPanel extends CenterPanel {
                     success: (item) => {
                         this.items.push(item);
                         if (this.items.length === resources.length) {
-                            this.viewer.viewport.maxZoomLevel = this.viewer.viewport.getZoom(true) * (this.config.options.maxZoomLevel || 8);
                             this.openPagesHandler();
                         }
                     }
@@ -379,7 +425,7 @@ class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    getPagePositions(resources: Manifesto.IExternalResource[]): Manifesto.IExternalResource[] {
+    getPagePositions(resources: Manifold.ExternalResource[]): Manifold.ExternalResource[] {
         var leftPage: any;
         var rightPage: any;
         var topPage: any;
@@ -448,124 +494,12 @@ class SeadragonCenterPanel extends CenterPanel {
         return resources;
     }
 
-    // used with viewer.open()
-    // keeping around for reference
-    
-    // positionPages(): void {
-
-    //     var resources: Manifesto.IExternalResource[] = this.extension.resources;
-
-    //     var x: number;
-    //     var y: number;
-    //     var page: any;
-    //     var pageBounds: any;
-    //     var nextPage: any;
-    //     var nextPagePos: any;
-    //     var topPage: any;
-    //     var topPageBounds: any;
-    //     var bottomPage: any;
-    //     var bottomPagePos: any;
-    //     var leftPage: any;
-    //     var leftPageBounds: any;
-    //     var rightPage: any;
-    //     var rightPageBounds: any;
-    //     var rightPagePos: any;
-
-    //     // if there's more than one image, determine alignment strategy
-    //     if (resources.length > 1) {
-
-    //         if (resources.length === 2) {
-    //             // recto verso
-    //             if (this.extension.helper.isVerticallyAligned()) {
-    //                 // vertical alignment
-    //                 topPage = this.viewer.world.getItemAt(0);
-    //                 topPageBounds = topPage.getBounds(true);
-    //                 y = topPageBounds.y + topPageBounds.height;
-    //                 bottomPage = this.viewer.world.getItemAt(1);
-    //                 bottomPagePos = bottomPage.getBounds(true).getTopLeft();
-    //                 bottomPagePos.y = y + this.config.options.pageGap;
-    //                 bottomPage.setPosition(bottomPagePos, true);
-    //             } else {
-    //                 // horizontal alignment
-    //                 leftPage = this.viewer.world.getItemAt(0);
-    //                 leftPageBounds = leftPage.getBounds(true);
-    //                 x = leftPageBounds.x + leftPageBounds.width;
-    //                 rightPage = this.viewer.world.getItemAt(1);
-    //                 rightPageBounds = rightPage.getBounds(true);
-    //                 rightPagePos = rightPageBounds.getTopLeft();
-    //                 rightPagePos.x = x + this.config.options.pageGap;
-    //                 rightPage.setPosition(rightPagePos, true);
-
-    //                 if (rightPage.source.width > rightPage.source.height){
-    //                     rightPage.setWidth(leftPageBounds.width);
-    //                 } else {
-    //                     rightPage.setHeight(leftPageBounds.height);
-    //                 }
-    //             }
-    //         } else {
-
-    //             // scroll
-    //             if (this.extension.helper.isVerticallyAligned()) {
-    //                 // vertical alignment
-    //                 if (this.extension.helper.isTopToBottom()) {
-    //                     // top to bottom
-    //                     for (var i = 0; i < resources.length - 1; i++) {
-    //                         page = this.viewer.world.getItemAt(i);
-    //                         pageBounds = page.getBounds(true);
-    //                         y = pageBounds.y + pageBounds.height;
-    //                         nextPage = this.viewer.world.getItemAt(i + 1);
-    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
-    //                         nextPagePos.y = y;
-    //                         nextPage.setPosition(nextPagePos, true);
-    //                     }
-    //                 } else {
-    //                     // bottom to top
-    //                     for (var i = resources.length; i > 0; i--) {
-    //                         page = this.viewer.world.getItemAt(i);
-    //                         pageBounds = page.getBounds(true);
-    //                         y = pageBounds.y - pageBounds.height;
-    //                         nextPage = this.viewer.world.getItemAt(i - 1);
-    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
-    //                         nextPagePos.y = y;
-    //                         nextPage.setPosition(nextPagePos, true);
-    //                     }
-    //                 }
-    //             } else {
-    //                 // horizontal alignment
-    //                 if (this.extension.helper.isLeftToRight()){
-    //                     // left to right
-    //                     for (var i = 0; i < resources.length - 1; i++){
-    //                         page = this.viewer.world.getItemAt(i);
-    //                         pageBounds = page.getBounds(true);
-    //                         x = pageBounds.x + pageBounds.width;
-    //                         nextPage = this.viewer.world.getItemAt(i + 1);
-    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
-    //                         nextPagePos.x = x;
-    //                         nextPage.setPosition(nextPagePos, true);
-    //                     }
-    //                 } else {
-    //                     // right to left
-    //                     for (var i = resources.length - 1; i > 0; i--){
-    //                         page = this.viewer.world.getItemAt(i);
-    //                         pageBounds = page.getBounds(true);
-    //                         x = pageBounds.x - pageBounds.width;
-    //                         nextPage = this.viewer.world.getItemAt(i - 1);
-    //                         nextPagePos = nextPage.getBounds(true).getTopLeft();
-    //                         nextPagePos.x = x;
-    //                         nextPage.setPosition(nextPagePos, true);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    openPagesHandler() {
+    openPagesHandler(): void {
 
         $.publish(Commands.SEADRAGON_OPEN);
 
         // check for initial zoom/rotation params.
-        if (this.isFirstLoad){
+        if (this.isFirstLoad) {
 
             this.initialRotation = this.extension.getParam(Params.rotation);
 
@@ -573,12 +507,14 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.viewer.viewport.setRotation(parseInt(this.initialRotation));
             }
 
-            this.initialBounds = this.extension.getParam(Params.zoom);
+            this.initialBounds = this.extension.getParam(Params.xywh);
 
-            if (this.initialBounds){
-                this.initialBounds = this.deserialiseBounds(this.initialBounds);
+            if (this.initialBounds) {
+                this.initialBounds = Bounds.fromString(this.initialBounds);
                 this.currentBounds = this.initialBounds;
+
                 this.fitToBounds(this.currentBounds);
+ 
             } else {
                 this.goHome();
             }
@@ -633,7 +569,17 @@ class SeadragonCenterPanel extends CenterPanel {
         this.setNavigatorVisible();
 
         this.isFirstLoad = false;
+
         this.overlaySearchResults();
+
+        let searchResultRect: SearchResultRect = this.getInitialSearchResultRect();
+
+        (<ISeadragonExtension>this.extension).previousSearchResultRect = null;
+        (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
+
+        if (searchResultRect && this.isZoomToSearchResultEnabled()) {
+            this.zoomToSearchResult(searchResultRect);
+        }
     }
 
     goHome(): void {        
@@ -680,51 +626,46 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$nextButton.show();
     }
 
-    serialiseBounds(bounds): string{
+    serialiseBounds(bounds): string {
         return bounds.x + ',' + bounds.y + ',' + bounds.width + ',' + bounds.height;
     }
 
-    deserialiseBounds(bounds: string): any {
-
-        var boundsArr = bounds.split(',');
-
-        return {
-            x: Number(boundsArr[0]),
-            y: Number(boundsArr[1]),
-            width: Number(boundsArr[2]),
-            height: Number(boundsArr[3])
-        };
-    }
-
-    fitToBounds(bounds): void {
+    fitToBounds(bounds: Bounds, immediate: boolean = true): void {
         var rect = new OpenSeadragon.Rect();
-        rect.x = bounds.x;
-        rect.y = bounds.y;
-        rect.width = bounds.width;
-        rect.height = bounds.height;
+        rect.x = Number(bounds.x);
+        rect.y = Number(bounds.y);
+        rect.width = Number(bounds.w);
+        rect.height = Number(bounds.h);
 
-        this.viewer.viewport.fitBounds(rect, true);
+        this.viewer.viewport.fitBoundsWithConstraints(rect, immediate);
     }
 
-    getBounds(): any {
+    getCroppedImageBounds(): string {
 
         if (!this.viewer || !this.viewer.viewport) return null;
 
-        var bounds = this.viewer.viewport.getBounds(true);
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const dimensions: CroppedImageDimensions = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
+        const bounds: Bounds = new Bounds(dimensions.regionPos.x, dimensions.regionPos.y, dimensions.region.width, dimensions.region.height);
 
-        return {
-            x: Math.roundToDecimalPlace(bounds.x, 4),
-            y: Math.roundToDecimalPlace(bounds.y, 4),
-            width: Math.roundToDecimalPlace(bounds.width, 4),
-            height: Math.roundToDecimalPlace(bounds.height, 4)
-        };
+        return bounds.toString();
+    }
+
+    getViewportBounds(): string {
+
+        if (!this.viewer || !this.viewer.viewport) return null;
+
+        const b: any = this.viewer.viewport.getBounds(true);
+        const bounds: Bounds = new Bounds(Math.floor(b.x), Math.floor(b.y), Math.floor(b.width), Math.floor(b.height));
+
+        return bounds.toString();
     }
 
     viewerResize(viewer: any): void {
 
         if (!viewer.viewport) return;
 
-        var center = viewer.viewport.getCenter(true);
+        const center = viewer.viewport.getCenter(true);
         if (!center) return;
 
         // postpone pan for a millisecond - fixes iPad image stretching/squashing issue.
@@ -733,60 +674,203 @@ class SeadragonCenterPanel extends CenterPanel {
         }, 1);
     }
 
+    clearSearchResults(): void {
+        this.$canvas.find('.searchOverlay').hide();
+    }
+
     overlaySearchResults(): void {
+        const searchResults: SearchResult[] = this.getSearchResultsForCurrentImages();
 
-        var searchResults = (<ISeadragonExtension>this.extension).searchResults;
+        for (let i = 0; i < searchResults.length; i++) {
 
-        if (!searchResults.length) return;
+            const searchResult: SearchResult = searchResults[i];
+            const overlayRects: any[] = this.getSearchOverlayRects(searchResult);
 
-        var indices = this.extension.getPagedIndices();
+            for (let k = 0; k < overlayRects.length; k++) {
+                const overlayRect = overlayRects[k];
 
-        for (var i = 0; i < indices.length; i++){
-            var canvasIndex = indices[i];
+                const div: HTMLElement = document.createElement('div');
+                div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
+                div.className = 'searchOverlay';
+                div.title = this.extension.sanitize(overlayRect.chars);
 
-            var searchHit: SearchResult = null;
-
-            for (var j = 0; j < searchResults.length; j++) {
-                if (searchResults[j].canvasIndex === canvasIndex) {
-                    searchHit = searchResults[j];
-                    break;
-                }
-            }
-
-            if (!searchHit) continue;
-
-            var rects = this.getSearchOverlayRects(searchHit.rects, i);
-
-            for (var k = 0; k < rects.length; k++) {
-                var rect = rects[k];
-
-                var div = document.createElement("div");
-                div.className = "searchOverlay";
-
-                this.viewer.addOverlay(div, rect);
+                this.viewer.addOverlay(div, overlayRect);
             }
         }
     }
 
-    getSearchOverlayRects(rects: SearchResultRect[], index: number) {
-        var newRects = [];
+    getSearchResultsForCurrentImages(): SearchResult[] {
+        let searchResultsForCurrentImages: SearchResult[] = [];
+        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
 
-        var width = this.extension.resources[index].width;
-        var offsetX = 0;
+        if (!searchResults.length) return searchResultsForCurrentImages;
 
-        if (index > 0){
+        const indices: number[] = this.extension.getPagedIndices();
+
+        for (let i = 0; i < indices.length; i++){
+            const canvasIndex = indices[i];
+
+            for (let j = 0; j < searchResults.length; j++) {
+                if (searchResults[j].canvasIndex === canvasIndex) {
+                    searchResultsForCurrentImages.push(searchResults[j]);
+                    break;
+                }
+            }
+        }
+
+        return searchResultsForCurrentImages;
+    }
+
+    getSearchResultRectsForCurrentImages(): SearchResultRect[] {
+        const searchResults: SearchResult[] = this.getSearchResultsForCurrentImages();
+        return searchResults.en().selectMany(x => x.rects).toArray();
+    }
+
+    updateVisibleSearchResultRects(): void {
+        // after animating, loop through all search result rects and flag their visibility based on whether they are inside the current viewport.
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+
+        for (let i = 0; i < searchResultRects.length; i++) {
+            let rect: SearchResultRect = searchResultRects[i];
+            let viewportBounds: any = this.viewer.viewport.getBounds();
+
+            rect.isVisible = Utils.Measurements.Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
+        }
+    }
+
+    getSearchResultRectIndex(searchResultRect: SearchResultRect): number {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        return searchResultRects.indexOf(searchResultRect);
+    }
+
+    isZoomToSearchResultEnabled(): boolean {
+        return Utils.Bools.getBool(this.extension.config.options.zoomToSearchResultEnabled, true);
+    }
+
+    nextSearchResult(): void {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex((<ISeadragonExtension>this.extension).currentSearchResultRect);
+        let foundRect: SearchResultRect;
+
+        for (let i = currentSearchResultRectIndex + 1; i < searchResultRects.length; i++) {
+            var rect: SearchResultRect = searchResultRects[i];
+
+            // this was removed as users found it confusing.
+            // find the next visible or non-visible rect.
+            //if (rect.isVisible) {
+            //    continue;
+            //} else {
+                foundRect = rect;
+                break;
+            //}
+        }
+
+        if (foundRect && this.isZoomToSearchResultEnabled()) {
+            // if the rect's canvasIndex is greater than the current canvasIndex
+            if (rect.canvasIndex > this.extension.helper.canvasIndex) {
+                (<ISeadragonExtension>this.extension).currentSearchResultRect = rect;
+                $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [rect]);
+            } else {
+                this.zoomToSearchResult(rect);
+            }
+        } else {
+            $.publish(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+        }
+    }
+
+    prevSearchResult(): void {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        const currentSearchResultRectIndex: number = this.getSearchResultRectIndex((<ISeadragonExtension>this.extension).currentSearchResultRect);
+        let foundRect: SearchResultRect;
+   
+        for (let i = currentSearchResultRectIndex - 1; i >= 0; i--) {
+            var rect: SearchResultRect = searchResultRects[i];
+
+            // this was removed as users found it confusing.
+            // find the prev visible or non-visible rect.
+            //if (rect.isVisible) {
+            //    continue;
+            //} else {
+                foundRect = rect;
+                break;
+            //}
+        }
+
+        if (foundRect && this.isZoomToSearchResultEnabled()) {
+            // if the rect's canvasIndex is less than the current canvasIndex
+            if (rect.canvasIndex < this.extension.helper.canvasIndex) {
+                (<ISeadragonExtension>this.extension).currentSearchResultRect = rect;
+                $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [rect]);
+            } else {
+                this.zoomToSearchResult(rect);
+            }
+        } else {
+            $.publish(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+        }
+    }
+
+    getSearchResultRectByIndex(index: number): SearchResultRect {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        if (!searchResultRects.length) return null;
+        return searchResultRects[index];
+    }
+
+    getInitialSearchResultRect(): SearchResultRect {
+        const searchResultRects: SearchResultRect[] = this.getSearchResultRectsForCurrentImages();
+        if (!searchResultRects.length) return null;
+
+        // if the previous SearchResultRect had a canvasIndex higher than the current canvasIndex
+        if ((<ISeadragonExtension>this.extension).previousSearchResultRect && (<ISeadragonExtension>this.extension).previousSearchResultRect.canvasIndex > this.extension.helper.canvasIndex) {
+            return searchResultRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
+        }
+
+        // get the first rect with the current canvasindex.
+        return searchResultRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).first();
+    }
+
+    zoomToSearchResult(searchResultRect: SearchResultRect): void {
+        (<ISeadragonExtension>this.extension).previousSearchResultRect = (<ISeadragonExtension>this.extension).currentSearchResultRect || searchResultRect;
+        (<ISeadragonExtension>this.extension).currentSearchResultRect = searchResultRect;
+
+        this.fitToBounds(new Bounds(searchResultRect.viewportX, searchResultRect.viewportY, searchResultRect.width, searchResultRect.height), false);
+
+        this.highlightSearchResultRect(searchResultRect);
+
+        $.publish(Commands.SEARCH_RESULT_RECT_CHANGED);
+    }
+
+    highlightSearchResultRect(searchResultRect: SearchResultRect): void {
+        const $rect = $('#searchResult-' + searchResultRect.canvasIndex + '-' + searchResultRect.index);
+        $rect.addClass('current');
+        $('.searchOverlay').not($rect).removeClass('current');
+    }
+
+    getSearchOverlayRects(searchResult: SearchResult): any[] {
+        let newRects: any[] = [];
+        let resource: any = this.extension.resources.en().where(x => x.index === searchResult.canvasIndex).first();
+        let index: number = this.extension.resources.indexOf(resource);
+
+        const width: number = this.extension.resources[index].width;
+        let offsetX: number = 0;
+
+        if (index > 0) {
             offsetX = this.extension.resources[index - 1].width;
         }
 
-        for (var i = 0; i < rects.length; i++) {
-            var searchRect: SearchResultRect = rects[i];
+        for (let i = 0; i < searchResult.rects.length; i++) {
+            const searchRect: SearchResultRect = searchResult.rects[i];
 
-            var x = (Number(searchRect.x) + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
-            var y = Number(searchRect.y);
-            var w = Number(searchRect.width);
-            var h = Number(searchRect.height);
+            const x: number = (searchRect.x + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
+            const y: number = searchRect.y;
+            const w: number = searchRect.width;
+            const h: number = searchRect.height;
 
-            var rect = new OpenSeadragon.Rect(x, y, w, h);
+            const rect = new OpenSeadragon.Rect(x, y, w, h);
+            searchRect.viewportX = x;
+            searchRect.viewportY = y;
+            rect.canvasIndex = searchRect.canvasIndex;
+            rect.resultIndex = searchRect.index;
+            rect.chars = searchRect.chars;
 
             newRects.push(rect);
         }
@@ -804,7 +888,9 @@ class SeadragonCenterPanel extends CenterPanel {
         if (!this.isCreated) return;
 
         if (this.currentBounds) {
-            this.fitToBounds(this.currentBounds);
+            this.fitToBounds(
+              typeof(this.currentBounds) == "string" ? Bounds.fromString(this.currentBounds) : this.currentBounds
+            );
         }
 
         this.$title.ellipsisFill(this.extension.sanitize(this.title));
@@ -818,7 +904,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
             var verticalButtonPos: number = Math.floor(this.$content.width() / 2);
 
-            switch (viewingDirection.toString()){
+            switch (viewingDirection.toString()) {
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                     this.$prevButton.addClass('down');
                     this.$nextButton.addClass('up');
@@ -852,10 +938,11 @@ class SeadragonCenterPanel extends CenterPanel {
     }
 
     setFocus(): void {
-        var $canvas = $(this.viewer.canvas);
-
-        if (!$canvas.is(":focus"))
-            $canvas.focus();
+        if (!this.$canvas.is(":focus")) {
+            if (this.extension.config.options.allowStealFocus) {
+                this.$canvas.focus();
+            }
+        }
     }
     
     setNavigatorVisible(): void {

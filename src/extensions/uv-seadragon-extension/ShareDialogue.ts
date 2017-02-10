@@ -27,14 +27,14 @@ class ShareDialogue extends BaseShareDialogue {
 
         super.update();
 
-        var zoom = (<ISeadragonExtension>this.extension).getViewerBounds();
-        var rotation = (<ISeadragonExtension>this.extension).getViewerRotation();
+        var xywh: string = (<ISeadragonExtension>this.extension).getViewportBounds();
+        var rotation: number = (<ISeadragonExtension>this.extension).getViewerRotation();
 
         this.code = (<ISeadragonExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight,
-            zoom,
+            xywh,
             rotation);
 
         this.$code.val(this.code);
