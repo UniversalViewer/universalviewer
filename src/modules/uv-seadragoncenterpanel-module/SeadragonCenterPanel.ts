@@ -419,7 +419,6 @@ class SeadragonCenterPanel extends CenterPanel {
                         if (this.items.length === resources.length) {
                             this.openPagesHandler();
                         }
-                        this.resize();
                     }
                 });
             }
@@ -499,37 +498,7 @@ class SeadragonCenterPanel extends CenterPanel {
 
         $.publish(Commands.SEADRAGON_OPEN);
 
-        // check for initial zoom/rotation params.
-        if (this.isFirstLoad) {
-
-            this.initialRotation = this.extension.getParam(Params.rotation);
-
-            if (this.initialRotation){
-                this.viewer.viewport.setRotation(parseInt(this.initialRotation));
-            }
-
-            this.initialBounds = this.extension.getParam(Params.xywh);
-
-            if (this.initialBounds) {
-                this.initialBounds = Bounds.fromString(this.initialBounds);
-                this.currentBounds = this.initialBounds;
-
-                this.fitToBounds(this.currentBounds);
- 
-            } else {
-                this.goHome();
-            }
-        } else {
-            // it's not the first load
-            var settings: ISettings = this.extension.getSettings();
-
-            // zoom to bounds unless setting disabled
-            if (settings.preserveViewport && this.currentBounds){
-                this.fitToBounds(this.currentBounds);
-            } else {
-                this.goHome();
-            }
-        }
+        
 
         if (this.extension.helper.isMultiCanvas() && !this.extension.helper.isContinuous()) {
 
@@ -568,10 +537,8 @@ class SeadragonCenterPanel extends CenterPanel {
         }
         
         this.setNavigatorVisible();
-
-        this.isFirstLoad = false;
-
         this.overlaySearchResults();
+        this.updateBounds();
 
         let searchResultRect: SearchResultRect = this.getInitialSearchResultRect();
 
@@ -580,6 +547,39 @@ class SeadragonCenterPanel extends CenterPanel {
 
         if (searchResultRect && this.isZoomToSearchResultEnabled()) {
             this.zoomToSearchResult(searchResultRect);
+        }
+
+        this.isFirstLoad = false;
+    }
+
+    updateBounds(): void {
+
+        const settings: ISettings = this.extension.getSettings();
+        const hasSearchResults: boolean = !!this.getSearchResultsForCurrentImages().length;
+
+        // if this is the first load and there are initial bounds, fit to those.
+        if (this.isFirstLoad) {
+
+            this.initialRotation = this.extension.getParam(Params.rotation);
+
+            if (this.initialRotation) {
+                this.viewer.viewport.setRotation(parseInt(this.initialRotation));
+            }
+
+            this.initialBounds = this.extension.getParam(Params.xywh);
+
+            if (this.initialBounds) {
+                this.initialBounds = Bounds.fromString(this.initialBounds);
+                this.currentBounds = this.initialBounds;
+                this.fitToBounds(this.currentBounds);
+                console.log("zoom to initial bounds");
+            }
+        } else if (settings.preserveViewport) { // if this isn't the first load, preserveViewport is enabled, and there are no search results to zoom to, fit to the current bounds.
+            this.fitToBounds(this.currentBounds);
+            console.log("zoom to current bounds");
+        } else {
+            this.goHome();
+            console.log("go home");
         }
     }
 
@@ -652,14 +652,14 @@ class SeadragonCenterPanel extends CenterPanel {
         return bounds.toString();
     }
 
-    getViewportBounds(): string {
+    getViewportBounds(): Bounds {
 
         if (!this.viewer || !this.viewer.viewport) return null;
 
         const b: any = this.viewer.viewport.getBounds(true);
         const bounds: Bounds = new Bounds(Math.floor(b.x), Math.floor(b.y), Math.floor(b.width), Math.floor(b.height));
 
-        return bounds.toString();
+        return bounds;
     }
 
     viewerResize(viewer: any): void {
@@ -887,12 +887,6 @@ class SeadragonCenterPanel extends CenterPanel {
         this.$viewer.width(this.$content.width() - this.$viewer.horizontalMargins());
 
         if (!this.isCreated) return;
-
-        if (this.currentBounds) {
-            this.fitToBounds(
-              typeof(this.currentBounds) == "string" ? Bounds.fromString(this.currentBounds) : this.currentBounds
-            );
-        }
 
         this.$title.ellipsisFill(this.extension.sanitize(this.title));
 
