@@ -555,7 +555,6 @@ class SeadragonCenterPanel extends CenterPanel {
     updateBounds(): void {
 
         const settings: ISettings = this.extension.getSettings();
-        const hasSearchResults: boolean = !!this.getSearchResultsForCurrentImages().length;
 
         // if this is the first load and there are initial bounds, fit to those.
         if (this.isFirstLoad) {
@@ -573,7 +572,7 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.currentBounds = this.initialBounds;
                 this.fitToBounds(this.currentBounds);
             }
-        } else if (settings.preserveViewport) { // if this isn't the first load, preserveViewport is enabled, and there are no search results to zoom to, fit to the current bounds.
+        } else if (settings.preserveViewport) { // if this isn't the first load and preserveViewport is enabled, fit to the current bounds.
             this.fitToBounds(this.currentBounds);
         } else {
             this.goHome();
