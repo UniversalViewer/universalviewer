@@ -572,14 +572,11 @@ class SeadragonCenterPanel extends CenterPanel {
                 this.initialBounds = Bounds.fromString(this.initialBounds);
                 this.currentBounds = this.initialBounds;
                 this.fitToBounds(this.currentBounds);
-                console.log("zoom to initial bounds");
             }
         } else if (settings.preserveViewport) { // if this isn't the first load, preserveViewport is enabled, and there are no search results to zoom to, fit to the current bounds.
             this.fitToBounds(this.currentBounds);
-            console.log("zoom to current bounds");
         } else {
             this.goHome();
-            console.log("go home");
         }
     }
 
