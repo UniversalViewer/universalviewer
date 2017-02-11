@@ -147,7 +147,7 @@ class ThumbsView extends BaseView {
 
             that.lastThumbClickedIndex = data.index;
 
-            $.publish(BaseCommands.THUMB_SELECTED, [data]);
+            $.publish(BaseCommands.THUMB_SELECTED, [data.index]);
         });
 
         this.setLabel();
