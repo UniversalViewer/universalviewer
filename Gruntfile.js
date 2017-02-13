@@ -75,6 +75,14 @@ module.exports = function (grunt) {
             },
             build: {
                 files: [
+                    // package.json
+                    {
+                        expand: true,
+                        flatten: true,
+                        cwd: '.',
+                        src: ['package.json'],
+                        dest: '<%= config.directories.build %>'
+                    },
                     // html
                     {
                         expand: true,
