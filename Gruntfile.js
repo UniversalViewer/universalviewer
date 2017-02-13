@@ -1,4 +1,3 @@
-var version = require('./tasks/version');
 var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
@@ -282,9 +281,6 @@ module.exports = function (grunt) {
             build: {
                 cmd: 'node node_modules/requirejs/bin/r.js -o app.build.js' // optimize=none'
             },
-            version: {
-                cmd: 'tasks/version.js'
-            }
         },
 
         replace: {
@@ -382,13 +378,6 @@ module.exports = function (grunt) {
             }
         },
 
-        version: {
-            apply: {
-                src: './VersionTemplate.ts',
-                dest: './src/_Version.ts'
-            }
-        },
-
         configure: {
             apply: {
                 options: {
@@ -434,14 +423,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-text-replace');
 
-    version(grunt);
     configure(grunt);
     theme(grunt);
-
-    // to change version manually, edit package.json
-    //grunt.registerTask('bump:patch', ['version:bump', 'version:apply']);
-    //grunt.registerTask('bump:minor', ['version:bump:minor', 'version:apply']);
-    //grunt.registerTask('bump:major', ['version:bump:major', 'version:apply']);
 
     grunt.registerTask('default', '', function(){
 
@@ -518,6 +501,4 @@ module.exports = function (grunt) {
             'protractor:dev'
         );
     });
-
-    grunt.registerTask('publish', ['version:apply']);
 };
