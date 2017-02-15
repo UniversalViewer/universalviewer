@@ -1,11 +1,13 @@
-// todo: in the process of migrating to gulp. continue using grunt for now
+const gulp = require('gulp');
+const metadata = require('./package');
+const tasks = require('gulp-tasks');
 
-var gulp = require('gulp');
-var ts = require('gulp-typescript');
-var c = require('./config');
-var config = new c();
-
-gulp.task('build:dev', function() {
-    return gulp.src(config.typescript.dev.src)
-        .pipe(ts(config.typescript.dev.options));
+tasks.init({
+    metadata: metadata,
+    // libs that MUST be included in a consuming app for this component to work
+    libs: [
+        'node_modules/base-component/dist/base-component.bundle.js'
+    ],
+    // libs that MAY be included in a consuming app but are used here for example purposes
+    examples: []
 });
