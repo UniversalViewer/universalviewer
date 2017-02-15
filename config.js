@@ -13,15 +13,6 @@ var Config = (function () {
                 'node_modules/manifold/dist/manifold.bundle.js',
                 'node_modules/units/Length.min.js',
                 'node_modules/utils/dist/utils.js'
-            ],
-            typings: [
-                'node_modules/base-component/dist/base-component.d.ts',
-                'node_modules/base-component/typings/corejs.d.ts',
-                'node_modules/base-component/typings/jquery.d.ts',
-                'node_modules/jquery-plugins/typings/jquery-plugins.d.ts',
-                'node_modules/key-codes/dist/key-codes.d.ts',
-                'node_modules/manifold/dist/manifold.bundle.d.ts',
-                'node_modules/utils/dist/utils.d.ts'
             ]
         };
         this.directories = {
@@ -42,7 +33,7 @@ var Config = (function () {
         };
         this.typescript = {
             dev: {
-                src: ['./src/**/*.ts'],
+                src: ['./src/**/*.ts', 'typings/**/*'],
                 options: {
                     target: 'es3',
                     module: 'amd',

@@ -13,6 +13,7 @@ src/lib/bundle.min.js
 #################
 
 .tscache
+typings
 
 #################
 ## Webstorm
