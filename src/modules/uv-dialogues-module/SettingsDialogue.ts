@@ -57,20 +57,14 @@ class SettingsDialogue extends Dialogue {
         this.$locale.append(this.$localeDropDown);
 
         // initialise ui.
-        this.$title.text(this.content.title);
-
-        var pjsonUrl: string = window.location.href.split('?')[0] + "/../package.json";
-        var $version: JQuery = this.$version;
-        $.getJSON(pjsonUrl, (pjson: any) => {
-            $version.text("v" + pjson.version);
-        });
+        this.$title.text(this.content.title);       
 
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
         var locales: any[] = this.extension.getLocales();
 
-        for (var i = 0; i < locales.length; i++){
+        for (var i = 0; i < locales.length; i++) {
             var locale = locales[i];
             this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
         }
@@ -100,6 +94,12 @@ class SettingsDialogue extends Dialogue {
 
     open(): void {
         super.open();
+
+        if (!window.DEBUG) {
+            $.getJSON("package.json", (pjson: any) => {
+                this.$version.text("v" + pjson.version);
+            });
+        }
     }
 
     resize(): void {
