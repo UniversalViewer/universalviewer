@@ -3,7 +3,6 @@ import BootstrapParams = require("../../BootstrapParams");
 import Commands = require("../uv-shared-module/BaseCommands");
 import Dialogue = require("../uv-shared-module/Dialogue");
 import Shell = require("../uv-shared-module/Shell");
-import Version = require("../../_Version");
 
 class SettingsDialogue extends Dialogue {
 
@@ -60,7 +59,11 @@ class SettingsDialogue extends Dialogue {
         // initialise ui.
         this.$title.text(this.content.title);
 
-        this.$version.text("v" + Version.Version);
+        var pjsonUrl: string = window.location.href.split('?')[0] + "/../package.json";
+        var $version: JQuery = this.$version;
+        $.getJSON(pjsonUrl, (pjson: any) => {
+            $version.text("v" + pjson.version);
+        });
 
         this.$website.html(this.content.website);
         this.$website.targetBlank();
