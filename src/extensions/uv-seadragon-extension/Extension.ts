@@ -252,7 +252,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
             if (this.centerPanel && this.centerPanel.currentBounds){
-                this.setParam(Params.xywh, this.centerPanel.getViewportBounds());
+                this.setParam(Params.xywh, this.centerPanel.getViewportBounds().toString());
             }
 
             var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
@@ -489,7 +489,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     getViewportBounds(): string {
         if (!this.centerPanel) return null;
         const bounds = this.centerPanel.getViewportBounds();
-        return bounds;
+        if (bounds) {
+            return bounds.toString();
+        }
+        return null;
     }
 
     getViewerRotation(): number{
