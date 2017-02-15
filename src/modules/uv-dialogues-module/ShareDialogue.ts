@@ -16,7 +16,6 @@ class ShareDialogue extends Dialogue {
     $shareFrame: JQuery;
     $shareHeader: JQuery;
     $shareInput: JQuery;
-    $shareLink: JQuery;
     $shareView: JQuery;
     $size: JQuery;
     $tabs: JQuery;
@@ -90,10 +89,7 @@ class ShareDialogue extends Dialogue {
         this.$shareHeader = $('<div class="header"></div>');
         this.$shareView.append(this.$shareHeader);
 
-        this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
-        this.$shareView.append(this.$shareLink);
-
-        this.$shareInput = $('<input class="shareInput" type="text" readonly="true" />');
+        this.$shareInput = $('<textarea class="shareInput" readonly="true"></textarea>');
         this.$shareView.append(this.$shareInput);
 
         this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
@@ -111,7 +107,7 @@ class ShareDialogue extends Dialogue {
         // this.$image = $('<img class="share" />');
         // this.$embedView.append(this.$image);
 
-        this.$code = $('<input class="code" type="text" readonly="true" />');
+        this.$code = $('<textarea class="code" readonly="true"></textarea>');
         this.$embedView.append(this.$code);
 
         this.$customSize = $('<div class="customSize"></div>');
@@ -141,7 +137,7 @@ class ShareDialogue extends Dialogue {
         this.$iiifButton = $('<a class="imageBtn iiif" href="' + iiifUrl + '" title="' + this.content.iiif + '" target="_blank"></a>');
         this.$footer.append(this.$iiifButton);
 
-        this.$termsOfUseButton = $('<a href="#">' + this.extension.config.content.termsOfUse + '</a>');
+        this.$termsOfUseButton = $('<a href="#">' + this.content.termsOfUse + '</a>');
         this.$footer.append(this.$termsOfUseButton);
 
         this.$widthInput.on('keydown', (e) => {
@@ -236,16 +232,8 @@ class ShareDialogue extends Dialogue {
     updateShareOptions(): void {
         
         this.$shareInput.val(this.getShareUrl());
-        this.$shareLink.prop('href', this.getShareUrl());
-        this.$shareLink.text(this.getShareUrl());
-        
-        if ($.browser.mobile){
-            this.$shareInput.hide();
-            this.$shareLink.show();
-        } else {
-            this.$shareInput.show();
-            this.$shareLink.hide();
-        }
+        this.$shareInput.show();
+
     }
 
     updateInstructions(): void {
@@ -308,7 +296,7 @@ class ShareDialogue extends Dialogue {
     updateShareFrame(): void {
         var shareUrl: string = this.extension.helper.getShareServiceUrl();
 
-        if (Utils.Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
+        if (Utils.Bools.getBool(this.options.shareFrameEnabled, true) && shareUrl) {
             this.$shareFrame.prop('src', shareUrl);
             this.$shareFrame.show();
         } else {
@@ -319,7 +307,7 @@ class ShareDialogue extends Dialogue {
     updateTermsOfUseButton(): void {
         var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
-        if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
+        if (Utils.Bools.getBool(this.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();
