@@ -1,4 +1,4 @@
-// iiif-tree-component v1.0.1 https://github.com/viewdir/iiif-tree-component#readme
+// iiif-tree-component v1.0.7 https://github.com/viewdir/iiif-tree-component#readme
 
 declare namespace IIIFComponents {
     interface ITreeComponent extends _Components.IBaseComponent {
@@ -11,6 +11,7 @@ declare namespace IIIFComponents {
 
 declare namespace IIIFComponents {
     interface ITreeComponentOptions extends _Components.IBaseComponentOptions {
+        branchNodesSelectable: boolean;
         helper: Manifold.IHelper;
         topRangeIndex: number;
         treeSortType: Manifold.TreeSortType;

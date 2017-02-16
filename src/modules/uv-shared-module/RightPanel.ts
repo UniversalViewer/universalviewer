@@ -15,7 +15,8 @@ class RightPanel extends BaseExpandPanel {
     init(): void{
         super.init();
 
-        if (this.options.panelOpen) {
+        var shouldOpenPanel = Utils.Bools.getBool(this.extension.getSettings().rightPanelOpen, this.options.panelOpen);
+        if (shouldOpenPanel) {
             this.toggle(true);
         }
 
@@ -39,11 +40,12 @@ class RightPanel extends BaseExpandPanel {
     toggleFinish(): void {
         super.toggleFinish();
 
-        if (this.isExpanded){
+        if (this.isExpanded) {
             $.publish(BaseCommands.OPEN_RIGHT_PANEL);
-        } else {
+        } else {            
             $.publish(BaseCommands.CLOSE_RIGHT_PANEL);
         }
+        this.extension.updateSettings({rightPanelOpen: this.isExpanded});
     }
 
     resize(): void {

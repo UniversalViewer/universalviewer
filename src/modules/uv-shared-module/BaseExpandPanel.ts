@@ -139,8 +139,12 @@ class BaseExpandPanel extends BaseView {
     }
 
     expandFull(): void {
-        var targetWidth = this.getFullTargetWidth();
-        var targetLeft = this.getFullTargetLeft();
+        if (!this.isExpanded) {
+            this.toggled();
+        }        
+        
+        var targetWidth: number = this.getFullTargetWidth();
+        var targetLeft: number = this.getFullTargetLeft();
 
         this.expandFullStart();
 
@@ -155,8 +159,8 @@ class BaseExpandPanel extends BaseView {
     }
 
     collapseFull(): void {
-        var targetWidth = this.getTargetWidth();
-        var targetLeft = this.getTargetLeft();
+        var targetWidth: number = this.getTargetWidth();
+        var targetLeft: number = this.getTargetLeft();
 
         this.collapseFullStart();
 

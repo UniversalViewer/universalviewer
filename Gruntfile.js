@@ -1,4 +1,3 @@
-var version = require('./tasks/version');
 var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
@@ -75,6 +74,14 @@ module.exports = function (grunt) {
             },
             build: {
                 files: [
+                    // package.json
+                    {
+                        expand: true,
+                        flatten: true,
+                        cwd: '.',
+                        src: ['package.json'],
+                        dest: '<%= config.directories.build %>'
+                    },
                     // html
                     {
                         expand: true,
@@ -273,7 +280,7 @@ module.exports = function (grunt) {
             // concatenate and compress with r.js
             build: {
                 cmd: 'node node_modules/requirejs/bin/r.js -o app.build.js' // optimize=none'
-            }
+            },
         },
 
         replace: {
@@ -371,15 +378,6 @@ module.exports = function (grunt) {
             }
         },
 
-        version: {
-            bump: {
-            },
-            apply: {
-                src: './VersionTemplate.ts',
-                dest: './src/_Version.ts'
-            }
-        },
-
         configure: {
             apply: {
                 options: {
@@ -425,14 +423,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-text-replace');
 
-    version(grunt);
     configure(grunt);
     theme(grunt);
-
-    // to change version manually, edit package.json
-    grunt.registerTask('bump:patch', ['version:bump', 'version:apply']);
-    grunt.registerTask('bump:minor', ['version:bump:minor', 'version:apply']);
-    grunt.registerTask('bump:major', ['version:bump:major', 'version:apply']);
 
     grunt.registerTask('default', '', function(){
 

@@ -151,6 +151,11 @@
                     padding: 0;
                     float: left;
                     border: none;
+
+                    &.searching {
+                        background: url('@{img-path}spinner.gif') no-repeat;
+                        background-position: right 3px;
+                    }
                 }
 
                 a.imageButton.searchButton{
@@ -191,20 +196,31 @@
                 width: 585px;
 
                 a.previousResult{
+                    .noselect();
                     .icon-left(url('@{img-path}prev.png'), 30px, 25px);
                     line-height: 30px;
                     float: left;
                     margin: 0 @margin-medium-horizontal 0 0;
+
+                    &.disabled {
+                        .opacity(.25);
+                    }
                 }
 
                 a.nextResult{
+                    .noselect();
                     .icon-right(url('@{img-path}next.png'), 30px, 25px);
                     line-height: 30px;
                     float: right;
                     margin: 0 0 0 @margin-medium-horizontal;
+
+                    &.disabled {
+                        .opacity(.25);
+                    }
                 }
 
                 a.clearSearch{
+                    .noselect();
                     cursor: pointer;
                     color: @link-color;
                     text-decoration: none;

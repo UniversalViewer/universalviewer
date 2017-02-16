@@ -1,7 +1,4 @@
-// manifesto.js v0.2.4 https://github.com/viewdir/manifesto
-declare module exjs {
-    var version: string;
-}
+// manifesto.js v2.0.7 https://github.com/viewdir/manifesto
 declare module exjs {
 }
 declare module exjs {
@@ -174,14 +171,6 @@ declare module exjs {
         zip<TSecond, TResult>(second: TSecond[], resultSelector: (f: T, s: TSecond) => TResult): IEnumerableEx<TResult>;
     }
 }
-declare var Symbol: any;
-interface Iterator<T> {
-    next(): IteratorResult<T>;
-}
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
-}
 declare module exjs {
 }
 declare var global: any;
@@ -307,6 +296,7 @@ declare var ex: typeof exjs.en;
 declare module exjs {
 }
 
+// extensions v0.1.11 https://github.com/edsilv/extensions
 declare function escape(s: string): any;
 declare function unescape(s: string): any;
 
@@ -734,6 +724,7 @@ declare module Manifesto {
         getManifestType(): ManifestType;
         getTrackingLabel(): string;
         isMultiSequence(): boolean;
+        isPagingEnabled(): boolean;
         getViewingDirection(): ViewingDirection;
         getViewingHint(): ViewingHint;
     }
@@ -926,6 +917,10 @@ declare module Manifesto {
         static getInexactLocale(locale: string): string;
         static getLocalisedValue(resource: any, locale: string): string;
         static generateTreeNodeIds(treeNode: ITreeNode, index?: number): void;
+        static isImageProfile(profile: Manifesto.ServiceProfile): boolean;
+        static isLevel0ImageProfile(profile: Manifesto.ServiceProfile): boolean;
+        static isLevel1ImageProfile(profile: Manifesto.ServiceProfile): boolean;
+        static isLevel2ImageProfile(profile: Manifesto.ServiceProfile): boolean;
         static loadResource(uri: string): Promise<string>;
         static loadExternalResource(resource: IExternalResource, tokenStorageStrategy: string, clickThrough: (resource: IExternalResource) => Promise<void>, restricted: (resource: IExternalResource) => Promise<void>, login: (resource: IExternalResource) => Promise<void>, getAccessToken: (resource: IExternalResource, rejectOnError: boolean) => Promise<IAccessToken>, storeAccessToken: (resource: IExternalResource, token: IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: IExternalResource, tokenStorageStrategy: string) => Promise<IAccessToken>, handleResourceResponse: (resource: IExternalResource) => Promise<any>, options?: IManifestoOptions): Promise<IExternalResource>;
         static createError(name: string, message: string): Error;
@@ -1132,6 +1127,7 @@ declare module Manifesto {
         getViewingDirection(): Manifesto.ViewingDirection;
         getViewingHint(): ViewingHint;
         isMultiSequence(): boolean;
+        isPagingEnabled(): boolean;
     }
 }
 
@@ -1139,15 +1135,7 @@ interface IManifesto {
     AnnotationMotivation: Manifesto.AnnotationMotivation;
     create: (manifest: string, options?: Manifesto.IManifestoOptions) => Manifesto.IIIIFResource;
     ElementType: Manifesto.ElementType;
-    getRenderings(resource: any): Manifesto.IRendering[];
-    getService: (resource: any, profile: Manifesto.ServiceProfile | string) => Manifesto.IService;
-    getTreeNode(): Manifesto.ITreeNode;
     IIIFResourceType: Manifesto.IIIFResourceType;
-    isImageProfile(profile: Manifesto.ServiceProfile): boolean;
-    isLevel0ImageProfile(profile: Manifesto.ServiceProfile): boolean;
-    isLevel1ImageProfile(profile: Manifesto.ServiceProfile): boolean;
-    isLevel2ImageProfile(profile: Manifesto.ServiceProfile): boolean;
-    loadExternalResources: (resources: Manifesto.IExternalResource[], tokenStorageStrategy: string, clickThrough: (resource: Manifesto.IExternalResource) => Promise<void>, restricted: (resource: Manifesto.IExternalResource) => Promise<void>, login: (resource: Manifesto.IExternalResource) => Promise<void>, getAccessToken: (resource: Manifesto.IExternalResource, rejectOnError: boolean) => Promise<Manifesto.IAccessToken>, storeAccessToken: (resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, tokenStorageStrategy: string) => Promise<void>, getStoredAccessToken: (resource: Manifesto.IExternalResource, tokenStorageStrategy: string) => Promise<Manifesto.IAccessToken>, handleResourceResponse: (resource: Manifesto.IExternalResource) => Promise<any>, options?: Manifesto.IManifestoOptions) => Promise<Manifesto.IExternalResource[]>;
     loadManifest: (uri: string) => Promise<string>;
     ManifestType: Manifesto.ManifestType;
     MetadataItem: any;
@@ -1158,6 +1146,7 @@ interface IManifesto {
     StatusCodes: Manifesto.IStatusCodes;
     Translation: any;
     TranslationCollection: any;
+    TreeNode: any;
     TreeNodeType: Manifesto.TreeNodeType;
     Utils: any;
     ViewingDirection: Manifesto.ViewingDirection;
@@ -1318,6 +1307,7 @@ declare namespace Manifold {
         dataUri: string;
         error: any;
         height: number;
+        index: number;
         isResponseHandled: boolean;
         loginService: Manifesto.IService;
         logoutService: Manifesto.IService;
@@ -1605,6 +1595,31 @@ declare namespace Manifold {
         selectAllRanges(selected: boolean): void;
         selectRanges(ranges: IRange[], selected: boolean): void;
         setEnabled(enabled: boolean): void;
+    }
+}
+
+declare namespace Manifold {
+    class SearchResult {
+        canvasIndex: number;
+        rects: SearchResultRect[];
+        constructor(resource: any, canvasIndex: number);
+        addRect(resource: any): void;
+    }
+}
+
+declare namespace Manifold {
+    class SearchResultRect {
+        canvasIndex: number;
+        chars: string;
+        height: number;
+        index: number;
+        isVisible: boolean;
+        viewportX: number;
+        viewportY: number;
+        width: number;
+        x: number;
+        y: number;
+        constructor(result: any);
     }
 }
 

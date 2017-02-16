@@ -1,6 +1,6 @@
 {
   "name": "Universal Viewer",
-  "version": "1.8.38",
+  "version": "2.0.1",
   "description": "The Universal Viewer is an open source project to enable cultural heritage institutions to present their digital artifacts in an IIIF-compliant and highly customisable user interface.",
   "repository": {
     "type": "git",

@@ -1,9 +1,11 @@
+
+// do not change order, index is important!
 enum Params {
     collectionIndex,
     manifestIndex,
     sequenceIndex,
     canvasIndex,
-    zoom,
+    xywh,
     rotation,
     highlight,
     anchor

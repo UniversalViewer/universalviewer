@@ -1,8 +1,9 @@
 #################
-## Bower Components
+## libs
 #################
 
 lib
+src/lib/bundle.min.js
 !src/lib
 !src/extensions/**/lib
 !dist/**/lib
@@ -18,12 +19,6 @@ lib
 #################
 
 .idea
-
-#################
-## VSCode
-#################
-
-##.vscode
 
 #################
 ## Node
