@@ -8,7 +8,7 @@ class MultiSelectDialogue extends Dialogue {
     $title: JQuery;
     $gallery: JQuery;
     component: IIIFComponents.IGalleryComponent;
-    options: IIIFComponents.IGalleryComponentOptions;
+    data: IIIFComponents.IGalleryComponentData;
 
     constructor($element: JQuery) {
         super($element);
@@ -29,7 +29,7 @@ class MultiSelectDialogue extends Dialogue {
             this.open();
             var multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(true);
-            this.component.databind();
+            this.component.set(null); // todo: should be passing data
         });
 
         $.subscribe(this.closeCommand, (e) => {
@@ -45,8 +45,7 @@ class MultiSelectDialogue extends Dialogue {
         this.$gallery = $('<div class="iiif-gallery-component"></div>');
         this.$content.append(this.$gallery);
 
-        this.options = <IIIFComponents.IGalleryComponentOptions>{
-            element: ".overlay.multiSelect .iiif-gallery-component",
+        this.data = <IIIFComponents.IGalleryComponentData>{
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
@@ -64,9 +63,12 @@ class MultiSelectDialogue extends Dialogue {
             viewingDirection: this.extension.helper.getViewingDirection()
         };
 
-        this.component = new IIIFComponents.GalleryComponent(this.options);
+        this.component = new IIIFComponents.GalleryComponent({
+            target: this.$gallery[0],
+            data: this.data
+        });
 
-        var $selectButton: JQuery = $(this.options.element).find('a.select');
+        var $selectButton: JQuery = this.$gallery.find('a.select');
         $selectButton.addClass('btn btn-primary');
 
         (<any>this.component).on('multiSelectionMade', (args) => {
@@ -93,9 +95,8 @@ class MultiSelectDialogue extends Dialogue {
     resize(): void {
         super.resize();
 
-        var $galleryElement = $(this.options.element);
-        var $main: JQuery = $galleryElement.find('.main');
-        var $header: JQuery = $galleryElement.find('.header');
+        var $main: JQuery = this.$gallery.find('.main');
+        var $header: JQuery = this.$gallery.find('.header');
         $main.height(this.$content.height() - this.$title.outerHeight() - this.$title.verticalMargins() - $header.height());
     }
 }

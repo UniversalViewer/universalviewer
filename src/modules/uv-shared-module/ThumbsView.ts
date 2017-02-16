@@ -2,6 +2,7 @@ import BaseCommands = require("./BaseCommands");
 import BaseView = require("./BaseView");
 import IThumb = Manifold.IThumb;
 import Shell = require("./Shell");
+declare var _: any; // todo: remove lodash
 
 class ThumbsView extends BaseView {
 

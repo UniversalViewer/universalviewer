@@ -27,7 +27,10 @@ class MoreInfoRightPanel extends RightPanel {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$main.append(this.$metadata);
 
-        this.component = new IIIFComponents.MetadataComponent(this._getOptions());
+        this.component = new IIIFComponents.MetadataComponent({
+            target: this.$metadata[0],
+            data: this._getData()
+        });
     }
 
     toggleFinish(): void {
@@ -36,12 +39,12 @@ class MoreInfoRightPanel extends RightPanel {
     }
 
     databind(): void {
-        this.component.options = this._getOptions();
-        this.component.databind();
+        this.component.options.data = this._getData();
+        this.component.set(null); // todo: should be passing data
     }
 
-    private _getOptions(): IIIFComponents.IMetadataComponentOptions {
-        return <IIIFComponents.IMetadataComponentOptions>{
+    private _getData(): IIIFComponents.IMetadataComponentData {
+        return <IIIFComponents.IMetadataComponentData>{
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
@@ -49,7 +52,6 @@ class MoreInfoRightPanel extends RightPanel {
             content: this.config.content,
             copiedMessageDuration: 2000,
             copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
-            element: ".rightPanel .iiif-metadata-component",
             helper: this.extension.helper,
             licenseFormatter: null,
             limit: this.config.options.textLimit || 4,

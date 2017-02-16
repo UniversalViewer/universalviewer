@@ -19,6 +19,8 @@ import Params = require("../../Params");
 import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
 import Shell = require("./Shell");
 
+declare var _: any; // todo: remove lodash
+
 class BaseExtension implements IExtension {
 
     $clickThroughDialogue: JQuery;
@@ -845,7 +847,7 @@ class BaseExtension implements IExtension {
         // if limitLocales is disabled,
         // loop through remaining items and add to results.
 
-        _.each(sorting, (sortItem: any) => {
+        $.each(sorting, (index: number, sortItem: any) => {
             var match = _.filter(items, (item: any) => { return item.name === sortItem.name; });
             if (match.length){
                 var m: any = match[0];
@@ -858,7 +860,7 @@ class BaseExtension implements IExtension {
         var limitLocales: boolean = Utils.Bools.getBool(this.config.options.limitLocales, false);
 
         if (!limitLocales){
-            _.each(items, (item: any) => {
+            $.each(items, (index: number, item: any) => {
                 if (!item.added){
                     result.push(item);
                 }
@@ -1025,7 +1027,7 @@ class BaseExtension implements IExtension {
                 this.storeAccessToken,
                 this.getStoredAccessToken,
                 this.handleExternalResourceResponse).then((r: Manifold.ExternalResource[]) => {
-                    this.resources = _.map(r, (resource: Manifold.ExternalResource) => {
+                    this.resources = $.map(r, (resource: Manifold.ExternalResource) => {
                         resource.data.index = resource.index;
                         return <Manifold.ExternalResource>_.toPlainObject(resource.data);
                     });
@@ -1320,9 +1322,9 @@ class BaseExtension implements IExtension {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
-            var foundItems: storage.StorageItem[] = [];
+            var foundItems: Utils.StorageItem[] = [];
 
-            var item: storage.StorageItem;
+            var item: Utils.StorageItem;
             // try to match on the tokenService, if the resource has one:
             if(resource.tokenService) {
                 item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(storageStrategy));
@@ -1334,7 +1336,7 @@ class BaseExtension implements IExtension {
                 // find an access token for the domain
                 var domain = Utils.Urls.getUrlParts(resource.dataUri).hostname;
 
-                var items: storage.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
+                var items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
 
                 for(var i = 0; i < items.length; i++) {
                     item = items[i];
@@ -1346,7 +1348,7 @@ class BaseExtension implements IExtension {
             }
 
             // sort by expiresAt
-            foundItems = _.sortBy(foundItems, (item: storage.StorageItem) => {
+            foundItems = _.sortBy(foundItems, (item: Utils.StorageItem) => {
                 return item.expiresAt;
             });
 

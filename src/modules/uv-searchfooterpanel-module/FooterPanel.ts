@@ -218,7 +218,7 @@ class FooterPanel extends BaseFooterPanel {
                     });
                 },
                 (results: any) => {
-                    return _.map(results.terms, (result: any) => {
+                    return $.map(results.terms, (result: any) => {
                         return result.match;
                     });
                 },

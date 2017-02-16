@@ -38,7 +38,10 @@ class MoreInfoDialogue extends Dialogue {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$content.append(this.$metadata);
 
-        this.component = new IIIFComponents.MetadataComponent(this._getOptions());
+        this.component = new IIIFComponents.MetadataComponent({
+            target: this.$metadata[0],
+            data: this._getData()
+        });
 
         // hide
         this.$element.hide();
@@ -46,19 +49,18 @@ class MoreInfoDialogue extends Dialogue {
 
     open($triggerButton?: JQuery): void {
         super.open($triggerButton);
-        this.component.databind();
+        this.component.set(null); // todo: should be passing data
     }
 
-    private _getOptions(): IIIFComponents.IMetadataComponentOptions {
-        return <IIIFComponents.IMetadataComponentOptions>{
+    private _getData(): IIIFComponents.IMetadataComponentData {
+        return <IIIFComponents.IMetadataComponentData>{
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
-            canvasLabels: "Left Page, Right Page",
+            canvasLabels: this.extension.getCanvasLabels(this.content.page),
             content: this.config.content,
             copiedMessageDuration: 2000,
             copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
-            element: ".overlay.moreInfo .iiif-metadata-component",
             helper: this.extension.helper,
             licenseFormatter: null,
             limit: this.config.options.textLimit || 4,

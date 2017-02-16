@@ -12,7 +12,7 @@ class GalleryView extends BaseView {
 
     isOpen: boolean = false;
     component: IIIFComponents.IGalleryComponent;
-    galleryOptions: IIIFComponents.IGalleryComponentOptions;
+    galleryData: IIIFComponents.IGalleryComponentData;
     $gallery: JQuery;
 
     constructor($element: JQuery) {
@@ -38,7 +38,10 @@ class GalleryView extends BaseView {
     }
 
     public setup(): void {
-        this.component = new IIIFComponents.GalleryComponent(this.galleryOptions);
+        this.component = new IIIFComponents.GalleryComponent({
+            target: this.$gallery[0], 
+            data: this.galleryData
+        });
 
         (<any>this.component).on('thumbSelected', function(args) {
             var thumb = args[0];
@@ -56,8 +59,8 @@ class GalleryView extends BaseView {
     }
 
     public databind(): void {
-        this.component.options = this.galleryOptions;
-        this.component.databind();
+        this.component.options.data = this.galleryData;
+        this.component.set(null); // todo: should be passing options.data
         this.resize();
     }
 
@@ -78,9 +81,8 @@ class GalleryView extends BaseView {
 
     resize(): void {
         super.resize();
-        var $galleryElement = $(this.galleryOptions.element);
-        var $main: JQuery = $galleryElement.find('.main');
-        var $header: JQuery = $galleryElement.find('.header');
+        var $main: JQuery = this.$gallery.find('.main');
+        var $header: JQuery = this.$gallery.find('.header');
         $main.height(this.$element.height() - $header.height());
     }
 }

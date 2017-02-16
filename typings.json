@@ -4,7 +4,7 @@
   "globalDependencies": {
     "base-component": "github:viewdir/base-component/dist/base-component.d.ts#v1.0.9",
     "core-js": "registry:dt/core-js#0.9.7+20161130133742",
-    "iiif-gallery-component": "github:viewdir/iiif-gallery-component/dist/iiif-gallery-component.d.ts#v1.0.7",
+    "iiif-gallery-component": "github:viewdir/iiif-gallery-component/dist/iiif-gallery-component.d.ts#v1.0.8",
     "iiif-metadata-component": "github:viewdir/iiif-metadata-component/dist/iiif-metadata-component.d.ts#v1.0.11",
     "iiif-tree-component": "github:viewdir/iiif-tree-component/dist/iiif-tree-component.d.ts#v1.0.8",
     "jquery": "registry:dt/jquery#1.10.0+20170123093700",

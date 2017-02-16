@@ -6,6 +6,7 @@ import DownloadOption = require("../../modules/uv-shared-module/DownloadOption")
 import DownloadType = require("./DownloadType");
 import ISeadragonExtension = require("./ISeadragonExtension");
 import Size = Utils.Measurements.Size;
+declare var _: any; // todo: remove lodash
 
 class DownloadDialogue extends BaseDownloadDialogue {
 

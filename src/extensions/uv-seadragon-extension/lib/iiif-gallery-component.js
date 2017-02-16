@@ -1,5 +1,7 @@
-// iiif-gallery-component v1.0.6 https://github.com/viewdir/iiif-gallery-component#readme
+// iiif-gallery-component v1.0.7 https://github.com/viewdir/iiif-gallery-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifGalleryComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
+
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -10,10 +12,10 @@ var IIIFComponents;
     var GalleryComponent = (function (_super) {
         __extends(GalleryComponent, _super);
         function GalleryComponent(options) {
-            _super.call(this, options);
-            this._scrollStopDuration = 100;
-            this._init();
-            this._resize();
+            var _this = _super.call(this, options) || this;
+            _this._init();
+            _this._resize();
+            return _this;
         }
         GalleryComponent.prototype._init = function () {
             var _this = this;
@@ -29,28 +31,28 @@ var IIIFComponents;
             this._$header.append(this._$rightOptions);
             this._$sizeDownButton = $('<input class="btn btn-default size-down" type="button" value="-" />');
             this._$leftOptions.append(this._$sizeDownButton);
-            this._$sizeRange = $('<input type="range" name="size" min="1" max="10" value="' + this.options.initialZoom + '" />');
+            this._$sizeRange = $('<input type="range" name="size" min="1" max="10" value="' + this.options.data.initialZoom + '" />');
             this._$leftOptions.append(this._$sizeRange);
             this._$sizeUpButton = $('<input class="btn btn-default size-up" type="button" value="+" />');
             this._$leftOptions.append(this._$sizeUpButton);
             this._$multiSelectOptions = $('<div class="multiSelectOptions"></div>');
             this._$rightOptions.append(this._$multiSelectOptions);
-            this._$selectAllButton = $('<div class="multiSelectAll"><input id="multiSelectAll" type="checkbox" tabindex="0" /><label for="multiSelectAll">' + this.options.content.selectAll + '</label></div>');
+            this._$selectAllButton = $('<div class="multiSelectAll"><input id="multiSelectAll" type="checkbox" tabindex="0" /><label for="multiSelectAll">' + this.options.data.content.selectAll + '</label></div>');
             this._$multiSelectOptions.append(this._$selectAllButton);
             this._$selectAllButtonCheckbox = $(this._$selectAllButton.find('input:checkbox'));
-            this._$selectButton = $('<a class="select" href="#">' + this.options.content.select + '</a>');
+            this._$selectButton = $('<a class="select" href="#">' + this.options.data.content.select + '</a>');
             this._$multiSelectOptions.append(this._$selectButton);
             this._$main = $('<div class="main"></div>');
             this._$element.append(this._$main);
             this._$thumbs = $('<div class="thumbs"></div>');
             this._$main.append(this._$thumbs);
-            this._$thumbs.addClass(this.options.helper.getViewingDirection().toString()); // defaults to "left-to-right"
+            this._$thumbs.addClass(this.options.data.helper.getViewingDirection().toString()); // defaults to "left-to-right"
             this._$sizeDownButton.on('click', function () {
                 var val = Number(_this._$sizeRange.val()) - 1;
                 if (val >= Number(_this._$sizeRange.attr('min'))) {
                     _this._$sizeRange.val(val.toString());
                     _this._$sizeRange.trigger('change');
-                    _this._emit(GalleryComponent.Events.DECREASE_SIZE);
+                    _this.fire(GalleryComponent.Events.DECREASE_SIZE);
                 }
             });
             this._$sizeUpButton.on('click', function () {
@@ -58,7 +60,7 @@ var IIIFComponents;
                 if (val <= Number(_this._$sizeRange.attr('max'))) {
                     _this._$sizeRange.val(val.toString());
                     _this._$sizeRange.trigger('change');
-                    _this._emit(GalleryComponent.Events.INCREASE_SIZE);
+                    _this.fire(GalleryComponent.Events.INCREASE_SIZE);
                 }
             });
             this._$sizeRange.on('change', function () {
@@ -72,13 +74,13 @@ var IIIFComponents;
                 else {
                     _this._getMultiSelectState().selectAll(false);
                 }
-                _this.databind();
+                _this.set();
             });
             this._$selectButton.on('click', function () {
                 var ids = _this._getMultiSelectState().getAllSelectedCanvases().map(function (canvas) {
                     return canvas.id;
                 });
-                _this._emit(GalleryComponent.Events.MULTISELECTION_MADE, ids);
+                _this.fire(GalleryComponent.Events.MULTISELECTION_MADE, ids);
             });
             this._setRange();
             $.templates({
@@ -112,22 +114,23 @@ var IIIFComponents;
                     var searchResults = Number(this.data.data.searchResults);
                     if (searchResults) {
                         if (searchResults > 1) {
-                            return String.format(that.options.content.searchResults, searchResults);
+                            return String.format(that.options.data.content.searchResults, searchResults);
                         }
-                        return String.format(that.options.content.searchResult, searchResults);
+                        return String.format(that.options.data.content.searchResult, searchResults);
                     }
+                    return null;
                 }
             });
             // use unevent to detect scroll stop.
             this._$main.on('scroll', function () {
                 _this._updateThumbs();
-            }, this.options.scrollStopDuration);
-            if (!this.options.sizingEnabled) {
+            }, this.options.data.scrollStopDuration);
+            if (!this.options.data.sizingEnabled) {
                 this._$sizeRange.hide();
             }
             return success;
         };
-        GalleryComponent.prototype._getDefaultOptions = function () {
+        GalleryComponent.prototype.data = function () {
             return {
                 chunkedResizingThreshold: 400,
                 content: {
@@ -151,14 +154,14 @@ var IIIFComponents;
                 viewingDirection: manifesto.ViewingDirection.leftToRight()
             };
         };
-        GalleryComponent.prototype.databind = function () {
-            this._thumbs = this.options.helper.getThumbs(this.options.thumbWidth, this.options.thumbHeight);
-            if (this.options.viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString()) {
+        GalleryComponent.prototype.set = function () {
+            this._thumbs = this.options.data.helper.getThumbs(this.options.data.thumbWidth, this.options.data.thumbHeight);
+            if (this.options.data.viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString()) {
                 this._thumbs.reverse();
             }
-            if (this.options.searchResults && this.options.searchResults.length) {
-                for (var i = 0; i < this.options.searchResults.length; i++) {
-                    var searchResult = this.options.searchResults[i];
+            if (this.options.data.searchResults && this.options.data.searchResults.length) {
+                for (var i = 0; i < this.options.data.searchResults.length; i++) {
+                    var searchResult = this.options.data.searchResults[i];
                     // find the thumb with the same canvasIndex and add the searchResult
                     var thumb = this._thumbs.en().where(function (t) { return t.index === searchResult.canvasIndex; }).first();
                     // clone the data so searchResults isn't persisted on the canvas.
@@ -169,7 +172,7 @@ var IIIFComponents;
             }
             this._thumbsCache = null; // delete cache
             this._createThumbs();
-            this.selectIndex(this.options.helper.canvasIndex);
+            this.selectIndex(this.options.data.helper.canvasIndex);
             var multiSelectState = this._getMultiSelectState();
             if (multiSelectState.isEnabled) {
                 this._$multiSelectOptions.show();
@@ -210,7 +213,7 @@ var IIIFComponents;
             }
         };
         GalleryComponent.prototype._getMultiSelectState = function () {
-            return this.options.helper.getMultiSelectState();
+            return this.options.data.helper.getMultiSelectState();
         };
         GalleryComponent.prototype._createThumbs = function () {
             var _this = this;
@@ -243,7 +246,7 @@ var IIIFComponents;
                     e.preventDefault();
                     var thumb = $.view(this).data;
                     that._lastThumbClickedIndex = thumb.index;
-                    that._emit(GalleryComponent.Events.THUMB_SELECTED, thumb);
+                    that.fire(GalleryComponent.Events.THUMB_SELECTED, thumb);
                 });
             }
             else {
@@ -254,7 +257,7 @@ var IIIFComponents;
                     $thumb.checkboxButton(function (checked) {
                         var thumb = $.view(this).data;
                         that._setThumbMultiSelected(thumb, !thumb.multiSelected);
-                        var range = that.options.helper.getCanvasRange(thumb.data);
+                        var range = that.options.data.helper.getCanvasRange(thumb.data);
                         var multiSelectState = that._getMultiSelectState();
                         if (range) {
                             multiSelectState.selectRange(range, thumb.multiSelected);
@@ -263,7 +266,7 @@ var IIIFComponents;
                             multiSelectState.selectCanvas(thumb.data, thumb.multiSelected);
                         }
                         that._update();
-                        that._emit(GalleryComponent.Events.THUMB_MULTISELECTED, thumb);
+                        that.fire(GalleryComponent.Events.THUMB_MULTISELECTED, thumb);
                     });
                 });
             }
@@ -285,10 +288,10 @@ var IIIFComponents;
             var newLabelWidth = newWidth;
             // if search results are visible, size index/label to accommodate it.
             // if the resulting size is below options.minLabelWidth, hide search results.
-            if (this.options.searchResults && this.options.searchResults.length) {
+            if (this.options.data.searchResults && this.options.data.searchResults.length) {
                 $searchResults.show();
                 newLabelWidth = newWidth - $searchResults.outerWidth();
-                if (newLabelWidth < this.options.minLabelWidth) {
+                if (newLabelWidth < this.options.data.minLabelWidth) {
                     $searchResults.hide();
                     newLabelWidth = newWidth;
                 }
@@ -296,7 +299,7 @@ var IIIFComponents;
                     $searchResults.show();
                 }
             }
-            if (this.options.pageModeEnabled) {
+            if (this.options.data.pageModeEnabled) {
                 $index.hide();
                 $label.show();
             }
@@ -316,7 +319,7 @@ var IIIFComponents;
             $thumb.removeClass('preLoad');
             // if no img has been added yet
             var visible = $thumb.attr('data-visible');
-            var fadeDuration = this.options.imageFadeInDuration;
+            var fadeDuration = this.options.data.imageFadeInDuration;
             if (visible !== "false") {
                 $wrap.addClass('loading');
                 var src = $thumb.attr('data-src');
@@ -340,7 +343,7 @@ var IIIFComponents;
             for (var i = 0; i < this._thumbs.length; i++) {
                 var thumb = this._thumbs[i];
                 var canvas = thumb.data;
-                var r = this.options.helper.getCanvasRange(canvas, range.path);
+                var r = this.options.data.helper.getCanvasRange(canvas, range.path);
                 if (r && r.id === range.id) {
                     thumbs.push(thumb);
                 }
@@ -348,7 +351,7 @@ var IIIFComponents;
             return thumbs;
         };
         GalleryComponent.prototype._updateThumbs = function () {
-            var debug = this.options.debug;
+            var debug = this.options.data.debug;
             // cache range size
             this._setRange();
             var scrollTop = this._$main.scrollTop();
@@ -365,11 +368,11 @@ var IIIFComponents;
                 var thumbTop = $thumb.position().top;
                 var thumbHeight = $thumb.outerHeight();
                 var thumbBottom = thumbTop + thumbHeight;
-                var padding = thumbHeight * this.options.thumbLoadPadding;
+                var padding = thumbHeight * this.options.data.thumbLoadPadding;
                 // check all thumbs to see if they are within the scroll area plus padding
                 if (thumbTop <= scrollBottom + padding && thumbBottom >= scrollTop - padding) {
                     numToUpdate += 1;
-                    var $label = $thumb.find('span:visible').not('.searchResults');
+                    //let $label: JQuery = $thumb.find('span:visible').not('.searchResults');
                     // if (debug) {
                     //     $thumb.addClass('debug');
                     //     $label.empty().append('t: ' + thumbTop + ', b: ' + thumbBottom);
@@ -414,7 +417,7 @@ var IIIFComponents;
         //     $thumb.addClass('searchpreview');
         // }
         // public searchPreviewFinish(): void {
-        //     this._scrollToThumb(this.options.helper.canvasIndex);
+        //     this._scrollToThumb(this.options.data.helper.canvasIndex);
         //     this._getAllThumbs().removeClass('searchpreview');
         // }
         GalleryComponent.prototype.selectIndex = function (index) {
@@ -440,35 +443,33 @@ var IIIFComponents;
     }(_Components.BaseComponent));
     IIIFComponents.GalleryComponent = GalleryComponent;
 })(IIIFComponents || (IIIFComponents = {}));
-var IIIFComponents;
 (function (IIIFComponents) {
     var GalleryComponent;
     (function (GalleryComponent) {
         var Events = (function () {
             function Events() {
             }
-            Events.DECREASE_SIZE = 'decreaseSize';
-            Events.INCREASE_SIZE = 'increaseSize';
-            Events.MULTISELECTION_MADE = 'multiSelectionMade';
-            Events.THUMB_SELECTED = 'thumbSelected';
-            Events.THUMB_MULTISELECTED = 'thumbMultiSelected';
             return Events;
         }());
+        Events.DECREASE_SIZE = 'decreaseSize';
+        Events.INCREASE_SIZE = 'increaseSize';
+        Events.MULTISELECTION_MADE = 'multiSelectionMade';
+        Events.THUMB_SELECTED = 'thumbSelected';
+        Events.THUMB_MULTISELECTED = 'thumbMultiSelected';
         GalleryComponent.Events = Events;
     })(GalleryComponent = IIIFComponents.GalleryComponent || (IIIFComponents.GalleryComponent = {}));
 })(IIIFComponents || (IIIFComponents = {}));
-(function (w) {
-    if (!w.IIIFComponents) {
-        w.IIIFComponents = IIIFComponents;
+(function (g) {
+    if (!g.IIIFComponents) {
+        g.IIIFComponents = IIIFComponents;
     }
     else {
-        w.IIIFComponents.GalleryComponent = IIIFComponents.GalleryComponent;
+        g.IIIFComponents.GalleryComponent = IIIFComponents.GalleryComponent;
     }
-})(window);
+})(global);
 
 
 
-
-
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])(1)
 });

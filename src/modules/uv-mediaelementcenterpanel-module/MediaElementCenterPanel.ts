@@ -72,7 +72,7 @@ class MediaElementCenterPanel extends CenterPanel {
 
             var sources = [];
 
-            _.each(canvas.getRenderings(), (rendering: Manifesto.IRendering) => {
+            $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
                 sources.push({
                     type: rendering.getFormat().toString(),
                     src: rendering.id
@@ -120,7 +120,7 @@ class MediaElementCenterPanel extends CenterPanel {
             } else {
 
                 // Try to find an MP3, since this is most likely to work:
-                var preferredSource = 0;
+                var preferredSource: any = 0;
                 for (var i in sources) {
                     if (sources[i].type === "audio/mp3") {
                         preferredSource = i;

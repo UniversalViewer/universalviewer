@@ -209,7 +209,7 @@ class ContentLeftPanel extends LeftPanel {
 
     createTreeView(): void {
         this.treeView = new TreeView(this.$treeView);
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.setup();
         this.databindTreeView();
 
@@ -233,7 +233,7 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     updateTreeViewOptions(): void {
-        var treeData: ITreeNode = this.getTreeData();
+        var treeData: ITreeNode = this.getTree();
         
         if (this.isCollection() && this.extension.helper.treeHasNavDates(treeData)){
             this.$treeViewOptions.show();
@@ -250,7 +250,7 @@ class ContentLeftPanel extends LeftPanel {
 
     sortByDate(): void {
         this.treeSortType = Manifold.TreeSortType.DATE;
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -260,7 +260,7 @@ class ContentLeftPanel extends LeftPanel {
 
     sortByVolume(): void {
         this.treeSortType = Manifold.TreeSortType.NONE;
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -269,21 +269,20 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     isCollection(): boolean {
-        var treeData: ITreeNode = this.getTreeData();
+        var treeData: ITreeNode = this.getTree();
         return treeData.data.type === manifesto.TreeNodeType.collection().toString();
     }
 
     databindTreeView(): void{
         if (!this.treeView) return;
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
     }
 
-    getTreeOptions(): IIIFComponents.ITreeComponentOptions {
-        return <IIIFComponents.ITreeComponentOptions>{
+    getTreeData(): IIIFComponents.ITreeComponentData {
+        return <IIIFComponents.ITreeComponentData>{
             branchNodesSelectable: false,
-            element: ".views .treeView .iiif-tree-component",
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
             treeSortType: this.treeSortType
@@ -381,20 +380,19 @@ class ContentLeftPanel extends LeftPanel {
 
     createGalleryView(): void {
         this.galleryView = new GalleryView(this.$galleryView);
-        this.galleryView.galleryOptions = this.getGalleryOptions();
+        this.galleryView.galleryData = this.getGalleryData();
         this.galleryView.setup();
         this.databindGalleryView();
     }
 
     databindGalleryView(): void{
         if (!this.galleryView) return;
-        this.galleryView.galleryOptions = this.getGalleryOptions();
+        this.galleryView.galleryData = this.getGalleryData();
         this.galleryView.databind();
     }
 
-    getGalleryOptions(): IIIFComponents.IGalleryComponentOptions {
-        return <IIIFComponents.IGalleryComponentOptions>{
-            element: ".views .galleryView .iiif-gallery-component",
+    getGalleryData(): IIIFComponents.IGalleryComponentData {
+        return <IIIFComponents.IGalleryComponentData>{
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
@@ -434,7 +432,7 @@ class ContentLeftPanel extends LeftPanel {
         return topRangeIndex;
     }
 
-    getTreeData(): ITreeNode {
+    getTree(): ITreeNode {
         var topRangeIndex: number = this.getSelectedTopRangeIndex();
         return this.extension.helper.getTree(topRangeIndex, Manifold.TreeSortType.NONE);
     }
@@ -447,7 +445,7 @@ class ContentLeftPanel extends LeftPanel {
             var treeEnabled: boolean = Utils.Bools.getBool(this.config.options.treeEnabled, true);
             var thumbsEnabled: boolean = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
-            var treeData: ITreeNode = this.getTreeData();
+            var treeData: ITreeNode = this.getTree();
 
             if (!treeData || !treeData.nodes.length) {
                 treeEnabled = false;
@@ -469,7 +467,7 @@ class ContentLeftPanel extends LeftPanel {
         var defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
         var defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
 
-        var treeData: ITreeNode = this.getTreeData();
+        var treeData: ITreeNode = this.getTree();
 
         if (defaultToTreeEnabled){
             if (treeData.nodes.length > defaultToTreeIfGreaterThan){
@@ -598,7 +596,7 @@ class ContentLeftPanel extends LeftPanel {
             var selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
             var usingCorrectTree: boolean = currentCanvasTopRangeIndex === selectedTopRangeIndex;
 
-            if (currentCanvasTopRangeIndex != -1){
+            if (currentCanvasTopRangeIndex != -1) {
 
                 var range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
 

@@ -9,7 +9,7 @@ class TreeView extends BaseView {
 
     isOpen: boolean = false;
     component: IIIFComponents.ITreeComponent;
-    treeOptions: IIIFComponents.ITreeComponentOptions;
+    treeData: IIIFComponents.ITreeComponentData;
     $tree: JQuery;
 
     constructor($element: JQuery) {
@@ -27,7 +27,10 @@ class TreeView extends BaseView {
     setup(): void {
         var that = this;
 
-        this.component = new IIIFComponents.TreeComponent(this.treeOptions);
+        this.component = new IIIFComponents.TreeComponent({
+            target: this.$tree[0], 
+            data: this.treeData
+        });
 
         // todo: casting as <any> is necessary because IBaseComponent doesn't implement ITinyEmitter
         // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
@@ -45,8 +48,8 @@ class TreeView extends BaseView {
     }
 
     public databind(): void {
-        this.component.options = this.treeOptions;
-        this.component.databind();
+        this.component.options.data = this.treeData;
+        this.component.set(null); // todo: should be passing options.data
         this.resize();
     }
 

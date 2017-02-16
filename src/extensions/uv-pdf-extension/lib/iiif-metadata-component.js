@@ -1,5 +1,7 @@
-// iiif-metadata-component v1.0.10 https://github.com/viewdir/iiif-metadata-component#readme
+// iiif-metadata-component v1.0.11 https://github.com/viewdir/iiif-metadata-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifMetadataComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
+
 var IIIFComponents;
 (function (IIIFComponents) {
     var StringValue = (function () {
@@ -29,20 +31,15 @@ var IIIFComponents;
         var LimitType = (function (_super) {
             __extends(LimitType, _super);
             function LimitType() {
-                _super.apply(this, arguments);
+                return _super !== null && _super.apply(this, arguments) || this;
             }
-            LimitType.LINES = new LimitType("lines");
-            LimitType.CHARS = new LimitType("chars");
             return LimitType;
         }(IIIFComponents.StringValue));
+        LimitType.LINES = new LimitType("lines");
+        LimitType.CHARS = new LimitType("chars");
         MetadataComponentOptions.LimitType = LimitType;
     })(MetadataComponentOptions = IIIFComponents.MetadataComponentOptions || (IIIFComponents.MetadataComponentOptions = {}));
 })(IIIFComponents || (IIIFComponents = {}));
-
-/// <reference path="./StringValue.ts" />
-/// <reference path="./LimitType.ts" /> 
-
-
 
 
 
@@ -57,9 +54,10 @@ var IIIFComponents;
     var MetadataComponent = (function (_super) {
         __extends(MetadataComponent, _super);
         function MetadataComponent(options) {
-            _super.call(this, options);
-            this._init();
-            this._resize();
+            var _this = _super.call(this, options) || this;
+            _this._init();
+            _this._resize();
+            return _this;
         }
         MetadataComponent.prototype._init = function () {
             var success = _super.prototype._init.call(this);
@@ -76,16 +74,16 @@ var IIIFComponents;
                                                </div>');
             this._$metadataItemValueTemplate = $('<div class="value"></div>');
             this._$metadataItemURIValueTemplate = $('<a class="value" href="" target="_blank"></a>');
-            this._$copyTextTemplate = $('<div class="copyText" alt="' + this.options.content.copyToClipboard + '" title="' + this.options.content.copyToClipboard + '">\
-                                                   <div class="copiedText">' + this.options.content.copiedToClipboard + ' </div>\
+            this._$copyTextTemplate = $('<div class="copyText" alt="' + this.options.data.content.copyToClipboard + '" title="' + this.options.data.content.copyToClipboard + '">\
+                                                   <div class="copiedText">' + this.options.data.content.copiedToClipboard + ' </div>\
                                                </div>');
             this._$metadataGroups = $('<div class="groups"></div>');
             this._$element.append(this._$metadataGroups);
-            this._$noData = $('<div class="noData">' + this.options.content.noData + '</div>');
+            this._$noData = $('<div class="noData">' + this.options.data.content.noData + '</div>');
             this._$element.append(this._$noData);
             return success;
         };
-        MetadataComponent.prototype._getDefaultOptions = function () {
+        MetadataComponent.prototype.data = function () {
             return {
                 aggregateValues: "",
                 canvases: null,
@@ -128,36 +126,36 @@ var IIIFComponents;
         MetadataComponent.prototype._getCanvasGroups = function () {
             return this._metadataGroups.en().where(function (x) { return x.resource.isCanvas(); }).toArray();
         };
-        MetadataComponent.prototype.databind = function () {
+        MetadataComponent.prototype.set = function () {
             var _this = this;
             this._$metadataGroups.empty();
             var options = {
-                canvases: this.options.canvases,
-                licenseFormatter: this.options.licenseFormatter,
-                range: this.options.range
+                canvases: this.options.data.canvases,
+                licenseFormatter: this.options.data.licenseFormatter,
+                range: this.options.data.range
             };
-            this._metadataGroups = this.options.helper.getMetadata(options);
-            if (this.options.manifestDisplayOrder) {
+            this._metadataGroups = this.options.data.helper.getMetadata(options);
+            if (this.options.data.manifestDisplayOrder) {
                 var manifestGroup = this._getManifestGroup();
-                manifestGroup.items = this._sort(manifestGroup.items, this._readCSV(this.options.manifestDisplayOrder));
+                manifestGroup.items = this._sort(manifestGroup.items, this._readCSV(this.options.data.manifestDisplayOrder));
             }
-            if (this.options.canvasDisplayOrder) {
+            if (this.options.data.canvasDisplayOrder) {
                 var canvasGroups = this._getCanvasGroups();
                 $.each(canvasGroups, function (index, canvasGroup) {
-                    canvasGroup.items = _this._sort(canvasGroup.items, _this._readCSV(_this.options.canvasDisplayOrder));
+                    canvasGroup.items = _this._sort(canvasGroup.items, _this._readCSV(_this.options.data.canvasDisplayOrder));
                 });
             }
-            if (this.options.canvasLabels) {
-                this._label(this._getCanvasGroups(), this._readCSV(this.options.canvasLabels, false));
+            if (this.options.data.canvasLabels) {
+                this._label(this._getCanvasGroups(), this._readCSV(this.options.data.canvasLabels, false));
             }
-            if (this.options.manifestExclude) {
+            if (this.options.data.manifestExclude) {
                 var manifestGroup = this._getManifestGroup();
-                manifestGroup.items = this._exclude(manifestGroup.items, this._readCSV(this.options.manifestExclude));
+                manifestGroup.items = this._exclude(manifestGroup.items, this._readCSV(this.options.data.manifestExclude));
             }
-            if (this.options.canvasExclude) {
+            if (this.options.data.canvasExclude) {
                 var canvasGroups = this._getCanvasGroups();
                 $.each(canvasGroups, function (index, canvasGroup) {
-                    canvasGroup.items = _this._exclude(canvasGroup.items, _this._readCSV(_this.options.canvasExclude));
+                    canvasGroup.items = _this._exclude(canvasGroup.items, _this._readCSV(_this.options.data.canvasExclude));
                 });
             }
             if (!this._metadataGroups.length) {
@@ -240,11 +238,11 @@ var IIIFComponents;
             $.each(this._metadataGroups, function (index, metadataGroup) {
                 var $metadataGroup = _this._buildMetadataGroup(metadataGroup);
                 _this._$metadataGroups.append($metadataGroup);
-                if (_this.options.limitType === IIIFComponents.MetadataComponentOptions.LimitType.LINES) {
-                    $metadataGroup.find('.value').toggleExpandTextByLines(_this.options.limit, _this.options.content.less, _this.options.content.more, function () { });
+                if (_this.options.data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.LINES) {
+                    $metadataGroup.find('.value').toggleExpandTextByLines(_this.options.data.limit, _this.options.data.content.less, _this.options.data.content.more, function () { });
                 }
-                else if (_this.options.limitType === IIIFComponents.MetadataComponentOptions.LimitType.CHARS) {
-                    $metadataGroup.find('.value').ellipsisHtmlFixed(_this.options.limit, null);
+                else if (_this.options.data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.CHARS) {
+                    $metadataGroup.find('.value').ellipsisHtmlFixed(_this.options.data.limit, function () { });
                 }
             });
         };
@@ -252,21 +250,21 @@ var IIIFComponents;
             var $metadataGroup = this._$metadataGroupTemplate.clone();
             var $header = $metadataGroup.find('>.header');
             // add group header
-            if (metadataGroup.resource.isManifest() && this.options.content.manifestHeader) {
-                $header.html(this._sanitize(this.options.content.manifestHeader));
+            if (metadataGroup.resource.isManifest() && this.options.data.content.manifestHeader) {
+                $header.html(this._sanitize(this.options.data.content.manifestHeader));
             }
-            else if (metadataGroup.resource.isSequence() && this.options.content.sequenceHeader) {
-                $header.html(this._sanitize(this.options.content.sequenceHeader));
+            else if (metadataGroup.resource.isSequence() && this.options.data.content.sequenceHeader) {
+                $header.html(this._sanitize(this.options.data.content.sequenceHeader));
             }
-            else if (metadataGroup.resource.isRange() && this.options.content.rangeHeader) {
-                $header.html(this._sanitize(this.options.content.rangeHeader));
+            else if (metadataGroup.resource.isRange() && this.options.data.content.rangeHeader) {
+                $header.html(this._sanitize(this.options.data.content.rangeHeader));
             }
-            else if (metadataGroup.resource.isCanvas() && (metadataGroup.label || this.options.content.canvasHeader)) {
-                var header = metadataGroup.label || this.options.content.canvasHeader;
+            else if (metadataGroup.resource.isCanvas() && (metadataGroup.label || this.options.data.content.canvasHeader)) {
+                var header = metadataGroup.label || this.options.data.content.canvasHeader;
                 $header.html(this._sanitize(header));
             }
-            else if (metadataGroup.resource.isAnnotation() && this.options.content.imageHeader) {
-                $header.html(this._sanitize(this.options.content.imageHeader));
+            else if (metadataGroup.resource.isAnnotation() && this.options.data.content.imageHeader) {
+                $header.html(this._sanitize(this.options.data.content.imageHeader));
             }
             if (!$header.text()) {
                 $header.hide();
@@ -288,16 +286,16 @@ var IIIFComponents;
             if (label && item.isRootLevel) {
                 switch (label.toLowerCase()) {
                     case "attribution":
-                        label = this.options.content.attribution;
+                        label = this.options.data.content.attribution;
                         break;
                     case "description":
-                        label = this.options.content.description;
+                        label = this.options.data.content.description;
                         break;
                     case "license":
-                        label = this.options.content.license;
+                        label = this.options.data.content.license;
                         break;
                     case "logo":
-                        label = this.options.content.logo;
+                        label = this.options.data.content.logo;
                         break;
                 }
             }
@@ -306,7 +304,6 @@ var IIIFComponents;
             // rtl?
             this._addReadingDirection($label, this._getItemLocale(item));
             $metadataItem.addClass(label.toCssClass());
-            var value;
             var $value;
             // if the value is a URI
             if (originalLabel && originalLabel.toLowerCase() === "license") {
@@ -314,7 +311,7 @@ var IIIFComponents;
                 $values.append($value);
             }
             else {
-                if (this.options.showAllLanguages && item.value && item.value.length > 1) {
+                if (this.options.data.showAllLanguages && item.value && item.value.length > 1) {
                     // display all values in each locale
                     for (var i = 0; i < item.value.length; i++) {
                         var translation = item.value[i];
@@ -344,14 +341,14 @@ var IIIFComponents;
                     }
                 }
             }
-            if (this.options.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $label.text()) {
+            if (this.options.data.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $label.text()) {
                 this._addCopyButton($metadataItem, $label, $values);
             }
             return $metadataItem;
         };
         MetadataComponent.prototype._getItemLocale = function (item) {
             // the item's label locale takes precedence
-            return (item.label.length && item.label[0].locale) ? item.label[0].locale : item.defaultLocale || this.options.helper.options.locale;
+            return (item.label.length && item.label[0].locale) ? item.label[0].locale : item.defaultLocale || this.options.data.helper.options.locale;
         };
         MetadataComponent.prototype._buildMetadataItemValue = function (value, locale) {
             value = this._sanitize(value);
@@ -374,7 +371,7 @@ var IIIFComponents;
         };
         MetadataComponent.prototype._addReadingDirection = function ($elem, locale) {
             locale = Manifesto.Utils.getInexactLocale(locale);
-            var rtlLanguages = this._readCSV(this.options.rtlLanguageCodes);
+            var rtlLanguages = this._readCSV(this.options.data.rtlLanguageCodes);
             var match = rtlLanguages.en().where(function (x) { return x === locale; }).toArray().length > 0;
             if (match) {
                 $elem.prop('dir', 'rtl');
@@ -411,7 +408,7 @@ var IIIFComponents;
             $copiedText.show();
             setTimeout(function () {
                 $copiedText.hide();
-            }, this.options.copiedMessageDuration);
+            }, this.options.data.copiedMessageDuration);
         };
         MetadataComponent.prototype._readCSV = function (config, normalise) {
             if (normalise === void 0) { normalise = true; }
@@ -427,7 +424,7 @@ var IIIFComponents;
             return csv;
         };
         MetadataComponent.prototype._sanitize = function (html) {
-            return this.options.sanitizer(html);
+            return this.options.data.sanitizer(html);
         };
         MetadataComponent.prototype._resize = function () {
         };
@@ -435,7 +432,6 @@ var IIIFComponents;
     }(_Components.BaseComponent));
     IIIFComponents.MetadataComponent = MetadataComponent;
 })(IIIFComponents || (IIIFComponents = {}));
-var IIIFComponents;
 (function (IIIFComponents) {
     var MetadataComponent;
     (function (MetadataComponent) {
@@ -447,15 +443,16 @@ var IIIFComponents;
         MetadataComponent.Events = Events;
     })(MetadataComponent = IIIFComponents.MetadataComponent || (IIIFComponents.MetadataComponent = {}));
 })(IIIFComponents || (IIIFComponents = {}));
-(function (w) {
-    if (!w.IIIFComponents) {
-        w.IIIFComponents = IIIFComponents;
+(function (g) {
+    if (!g.IIIFComponents) {
+        g.IIIFComponents = IIIFComponents;
     }
     else {
-        w.IIIFComponents.MetadataComponent = IIIFComponents.MetadataComponent;
-        w.IIIFComponents.MetadataComponentOptions = IIIFComponents.MetadataComponentOptions;
+        g.IIIFComponents.MetadataComponent = IIIFComponents.MetadataComponent;
+        g.IIIFComponents.MetadataComponentOptions = IIIFComponents.MetadataComponentOptions;
     }
-})(window);
+})(global);
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])(1)
 });

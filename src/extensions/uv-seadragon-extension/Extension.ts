@@ -34,6 +34,7 @@ import SettingsDialogue = require("./SettingsDialogue");
 import ShareDialogue = require("./ShareDialogue");
 import Shell = require("../../modules/uv-shared-module/Shell");
 import Size = Utils.Measurements.Size;
+declare var _: any; // todo: remove lodash
 
 class Extension extends BaseExtension implements ISeadragonExtension {
 
@@ -477,10 +478,8 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         switch (this.helper.getManifestType().toString()) {
             case manifesto.ManifestType.monograph().toString():
                 return Mode.page;
-                break;
             case manifesto.ManifestType.manuscript().toString():
                 return Mode.page;
-                break;
             default:
                 return Mode.image;
         }
@@ -1032,7 +1031,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         // if it's a continuous manifest, get all resources.
         if (this.helper.isContinuous()) {
-            indices = _.map(this.helper.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
+            indices = $.map(this.helper.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
                 return index;
             });
         } else {

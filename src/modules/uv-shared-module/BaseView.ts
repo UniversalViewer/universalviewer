@@ -12,14 +12,15 @@ class BaseView extends Panel{
     options: any;
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
-        this.modules = [];
-        this.bootstrapper = $("body > #app").data("bootstrapper");
         super($element, fitToParentWidth, fitToParentHeight);
     }
 
     create(): void {
 
+        this.bootstrapper = $("body > #app").data("bootstrapper");
+
         super.create();
+        
         this.extension = (<Bootstrapper>this.bootstrapper).extension;
 
         this.config = {};
@@ -31,9 +32,9 @@ class BaseView extends Panel{
         var that = this;
 
         // build config inheritance chain
-        if (that.modules.length) {
+        if (that.modules && that.modules.length) {
             that.modules = that.modules.reverse();
-            _.each(that.modules, (moduleName: string) => {
+            $.each(that.modules, (index: number, moduleName: string) => {
                 that.config = $.extend(true, that.config, that.extension.config.modules[moduleName]);
             });
         }
@@ -44,6 +45,9 @@ class BaseView extends Panel{
     }
 
     setConfig(moduleName: string): void {
+        if (!this.modules) {
+            this.modules = [];
+        }
         this.modules.push(moduleName);
     }
 

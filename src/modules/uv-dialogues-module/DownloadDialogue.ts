@@ -65,7 +65,7 @@ class DownloadDialogue extends Dialogue {
 
             var renderingFound: boolean = false;
 
-            _.each(canvas.getRenderings(), (rendering: Manifesto.IRendering) => {
+            $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
                 var renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
                 var format: string = '';
                 if (renderingFormat){
