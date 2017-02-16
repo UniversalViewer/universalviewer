@@ -25,6 +25,7 @@ module.exports = function (grunt) {
 
         global:
         {
+            bases: [__dirname],
             hostname: 'localhost',
             minify: 'optimize=none',
             port: '8001'
@@ -362,8 +363,8 @@ module.exports = function (grunt) {
                 options: {
                     port: '<%= global.port %>',
                     hostname: '<%= global.hostname %>',
-                    base: '.',
-                    directory: '.',
+                    base: '<%= global.bases %>',
+                    directory: '<%= global.bases %>',
                     keepalive: true,
                     open: {
                         target: 'http://localhost:<%= global.port %>/<%= config.directories.examples %>/'
