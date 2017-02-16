@@ -45,13 +45,12 @@ class OcrRightPanel extends RightPanel {
         
         $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, (e, index) => {
             this.clearSelection();
-            //settings.preserveViewport = this.defaultPreserveViewport;
+            settings.preserveViewport = this.defaultPreserveViewport;
         });        
         
         $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, (e, index) => {
-            //this.defaultPreserveViewport = settings.preserveViewport;
-            //settings.preserveViewport = true;
-            //$.publish(Commands.SEARCH, ["hamlet"]);
+            this.defaultPreserveViewport = settings.preserveViewport;
+            settings.preserveViewport = true;
         });
 
         this.setTitle(this.content.title);
