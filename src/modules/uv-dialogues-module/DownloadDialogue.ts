@@ -1,8 +1,8 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
-import DownloadOption = require("../uv-shared-module/DownloadOption");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Dialogue} from "../uv-shared-module/Dialogue";
+import {DownloadOption} from "../uv-shared-module/DownloadOption";
 
-class DownloadDialogue extends Dialogue {
+export class DownloadDialogue extends Dialogue {
 
     $downloadOptions: JQuery;
     $noneAvailable: JQuery;
@@ -141,5 +141,3 @@ class DownloadDialogue extends Dialogue {
         this.setDockedPosition();
     }
 }
-
-export = DownloadDialogue;

@@ -1,33 +1,33 @@
-import BaseCommands = require("./BaseCommands");
-import BootstrapParams = require("../../BootstrapParams");
-import BootStrapper = require("../../Bootstrapper");
-import ClickThroughDialogue = require("../../modules/uv-dialogues-module/ClickThroughDialogue");
+import {BaseCommands} from "./BaseCommands";
+import {BootstrapParams} from "../../BootstrapParams";
+import Bootstrapper from "../../Bootstrapper";
+import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
 import ExternalResource = Manifold.ExternalResource;
 import IAccessToken = Manifesto.IAccessToken;
-import IExtension = require("./IExtension");
-import ILoginDialogueOptions = require("./ILoginDialogueOptions");
-import Information = require("./Information");
-import InformationAction = require("./InformationAction");
-import InformationArgs = require("./InformationArgs");
-import InformationType = require("./InformationType");
+import {IExtension} from "./IExtension";
+import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
+import {Information} from "./Information";
+import {InformationAction} from "./InformationAction";
+import {InformationArgs} from "./InformationArgs";
+import {InformationType} from "./InformationType";
 import IThumb = Manifold.IThumb;
-import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
-import LoginWarningMessages = require("./LoginWarningMessages");
-import Metric = require("../../modules/uv-shared-module/Metric");
-import Metrics = require("../../modules/uv-shared-module/Metrics");
-import Params = require("../../Params");
-import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
-import Shell = require("./Shell");
+import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
+import {LoginWarningMessages} from "./LoginWarningMessages";
+import {Metric} from "../../modules/uv-shared-module/Metric";
+import {Metrics} from "../../modules/uv-shared-module/Metrics";
+import {Params} from "../../Params";
+import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
+import {Shell} from "./Shell";
 
 declare var _: any; // todo: remove lodash
 
-class BaseExtension implements IExtension {
+export class BaseExtension implements IExtension {
 
     $clickThroughDialogue: JQuery;
     $element: JQuery;
     $loginDialogue: JQuery;
     $restrictedDialogue: JQuery;
-    bootstrapper: BootStrapper;
+    bootstrapper: Bootstrapper;
     clickThroughDialogue: ClickThroughDialogue;
     config: any;
     //currentRangePath: string;
@@ -59,7 +59,7 @@ class BaseExtension implements IExtension {
     shifted: boolean = false;
     tabbing: boolean = false;
 
-    constructor(bootstrapper: BootStrapper) {
+    constructor(bootstrapper: Bootstrapper) {
         this.bootstrapper = bootstrapper;
         this.config = this.bootstrapper.config;
 
@@ -1401,5 +1401,3 @@ class BaseExtension implements IExtension {
         $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
     }
 }
-
-export = BaseExtension;

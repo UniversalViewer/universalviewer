@@ -1,8 +1,8 @@
-import BaseCommands = require("./BaseCommands");
-import BaseView = require("./BaseView");
-import GenericDialogue = require("./GenericDialogue");
+import {BaseCommands} from "./BaseCommands";
+import {BaseView} from "./BaseView";
+import {GenericDialogue} from "./GenericDialogue";
 
-class Shell extends BaseView {
+export class Shell extends BaseView {
     static $centerPanel: JQuery;
     static $element: JQuery;
     static $footerPanel: JQuery;
@@ -82,5 +82,3 @@ class Shell extends BaseView {
         Shell.$mainPanel.height(mainHeight);
     }
 }
-
-export = Shell;

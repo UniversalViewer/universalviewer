@@ -1,14 +1,14 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
-import Commands = require("./Commands");
-import CroppedImageDimensions = require("./CroppedImageDimensions");
-import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
-import DownloadType = require("./DownloadType");
-import ISeadragonExtension = require("./ISeadragonExtension");
+import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
+import {Commands} from "./Commands";
+import {CroppedImageDimensions} from "./CroppedImageDimensions";
+import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
+import {DownloadType} from "./DownloadType";
+import {ISeadragonExtension} from "./ISeadragonExtension";
 import Size = Utils.Measurements.Size;
 declare var _: any; // todo: remove lodash
 
-class DownloadDialogue extends BaseDownloadDialogue {
+export class DownloadDialogue extends BaseDownloadDialogue {
 
     $buttonsContainer: JQuery;
     $canvasOptionsContainer: JQuery;
@@ -578,5 +578,3 @@ class DownloadDialogue extends BaseDownloadDialogue {
         }
     }
 }
-
-export = DownloadDialogue;

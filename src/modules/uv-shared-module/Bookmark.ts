@@ -1,4 +1,4 @@
-class Bookmark {
+export class Bookmark {
     public path: string;
     public index: number;
     public label: string;
@@ -11,5 +11,3 @@ class Bookmark {
 
     }
 }
-
-export = Bookmark;

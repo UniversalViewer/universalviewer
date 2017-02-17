@@ -1,6 +1,6 @@
-import BaseCommands = require("./BaseCommands");
+import {BaseCommands} from "./BaseCommands";
 
-class Panel {
+export class Panel {
 
     $element: JQuery;
     fitToParentWidth: boolean;
@@ -35,5 +35,3 @@ class Panel {
         this.isResized = true;
     }
 }
-
-export = Panel;

@@ -1,4 +1,4 @@
-class Mode {
+export class Mode {
     static image = new Mode("image");
     static page = new Mode("page");
 
@@ -9,5 +9,3 @@ class Mode {
         return this.value;
     }
 }
-
-export = Mode;

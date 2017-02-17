@@ -1,7 +1,7 @@
-import BaseShareDialogue = require("../../modules/uv-dialogues-module/ShareDialogue");
-import IMediaElementExtension = require("./IMediaElementExtension");
+import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
+import {IMediaElementExtension} from "./IMediaElementExtension";
 
-class ShareDialogue extends BaseShareDialogue {
+export class ShareDialogue extends BaseShareDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -30,5 +30,3 @@ class ShareDialogue extends BaseShareDialogue {
         super.resize();
     }
 }
-
-export = ShareDialogue;

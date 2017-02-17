@@ -1,10 +1,9 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BootstrapParams = require("../../BootstrapParams");
-import Commands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
-import Shell = require("../uv-shared-module/Shell");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BootstrapParams} from "../../BootstrapParams";
+import {Dialogue} from "../uv-shared-module/Dialogue";
+import {Shell} from "../uv-shared-module/Shell";
 
-class SettingsDialogue extends Dialogue {
+export class SettingsDialogue extends Dialogue {
 
     $locale: JQuery;
     $localeDropDown: JQuery;
@@ -89,7 +88,7 @@ class SettingsDialogue extends Dialogue {
     updateSettings(settings: ISettings): void {
         this.extension.updateSettings(settings);
 
-        $.publish(Commands.UPDATE_SETTINGS, [settings]);
+        $.publish(BaseCommands.UPDATE_SETTINGS, [settings]);
     }
 
     open(): void {
@@ -106,5 +105,3 @@ class SettingsDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = SettingsDialogue;

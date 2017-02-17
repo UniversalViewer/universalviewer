@@ -1,7 +1,7 @@
-import BaseView = require("./BaseView");
-import Shell = require("./Shell");
+import {BaseView} from "./BaseView";
+import {Shell} from "./Shell";
 
-class BaseExpandPanel extends BaseView {
+export class BaseExpandPanel extends BaseView {
 
     isExpanded: boolean = false;
     isFullyExpanded: boolean = false;
@@ -251,5 +251,3 @@ class BaseExpandPanel extends BaseView {
         this.$main.height(this.$element.parent().height() - this.$top.outerHeight(true));
     }
 }
-
-export = BaseExpandPanel;

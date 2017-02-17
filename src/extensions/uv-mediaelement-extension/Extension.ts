@@ -1,26 +1,26 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Bookmark = require("../../modules/uv-shared-module/Bookmark");
-import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
-import DownloadDialogue = require("./DownloadDialogue");
-import ShareDialogue = require("./ShareDialogue");
+import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
+import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
+import Bootstrapper from "../../Bootstrapper";
+import {Commands} from "./Commands";
+import {DownloadDialogue} from "./DownloadDialogue";
+import {ShareDialogue} from "./ShareDialogue";
 import ExternalResource = Manifesto.IExternalResource;
-import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
-import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
-import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
-import IMediaElementExtension = require("./IMediaElementExtension");
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import MediaElementCenterPanel = require("../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import Params = require("../../Params");
-import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
-import SettingsDialogue = require("./SettingsDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
-import TreeView = require("../../modules/uv-contentleftpanel-module/TreeView");
+import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
+import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
+import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
+import {IMediaElementExtension} from "./IMediaElementExtension";
+import {LeftPanel} from "../../modules/uv-shared-module/LeftPanel";
+import {MediaElementCenterPanel} from "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel";
+import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import {Params} from "../../Params";
+import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
+import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
+import {SettingsDialogue} from "./SettingsDialogue";
+import {Shell} from "../../modules/uv-shared-module/Shell";
+import {TreeView} from "../../modules/uv-contentleftpanel-module/TreeView";
 
-class Extension extends BaseExtension implements IMediaElementExtension {
+export default class Extension extends BaseExtension implements IMediaElementExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -36,7 +36,7 @@ class Extension extends BaseExtension implements IMediaElementExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor(bootstrapper: BootStrapper) {
+    constructor(bootstrapper: Bootstrapper) {
         super(bootstrapper);
     }
 
@@ -173,5 +173,3 @@ class Extension extends BaseExtension implements IMediaElementExtension {
         return elementType.toString() === manifesto.ElementType.movingimage().toString();
     }
 }
-
-export = Extension;

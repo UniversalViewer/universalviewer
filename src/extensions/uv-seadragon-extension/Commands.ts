@@ -1,4 +1,4 @@
-class Commands {
+export class Commands {
     static namespace: string = 'seadragonExtension.';
 
     static CLEAR_SEARCH: string                                 = Commands.namespace + 'onClearSearch';
@@ -47,5 +47,3 @@ class Commands {
     static ZOOM_IN: string                                      = Commands.namespace + 'onZoomIn';
     static ZOOM_OUT: string                                     = Commands.namespace + 'onZoomOut';
 }
-
-export = Commands;

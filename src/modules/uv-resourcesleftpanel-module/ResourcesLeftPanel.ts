@@ -1,8 +1,8 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import LeftPanel = require("../uv-shared-module/LeftPanel");
-import ThumbsView = require("./ThumbsView");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {LeftPanel} from "../uv-shared-module/LeftPanel";
+import {ThumbsView} from "./ThumbsView";
 
-class ResourcesLeftPanel extends LeftPanel {
+export class ResourcesLeftPanel extends LeftPanel {
 
     $resources: JQuery;
     $resourcesButton: JQuery;
@@ -131,5 +131,3 @@ class ResourcesLeftPanel extends LeftPanel {
         this.$resources.height(this.$main.height());
     }
 }
-
-export = ResourcesLeftPanel;

@@ -1,6 +1,6 @@
-import Params = require("./Params");
+import {Params} from "./Params";
 
-class BootstrapParams {
+export class BootstrapParams {
     canvasIndex: number;
     collectionIndex: number;
     config: string;
@@ -77,5 +77,3 @@ class BootstrapParams {
         this.localeName = this.locales[0].name;
     }
 }
-
-export = BootstrapParams;

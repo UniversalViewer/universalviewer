@@ -1,15 +1,15 @@
-import AutoComplete = require("../uv-shared-module/AutoComplete");
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseFooterPanel = require("../uv-shared-module/FooterPanel");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import DownloadDialogue = require("../../extensions/uv-seadragon-extension/DownloadDialogue");
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import Params = require("../../Params");
+import {AutoComplete} from "../uv-shared-module/AutoComplete";
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {DownloadDialogue} from "../../extensions/uv-seadragon-extension/DownloadDialogue";
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {Params} from "../../Params";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
 
-class FooterPanel extends BaseFooterPanel {
+export class FooterPanel extends BaseFooterPanel {
 
     $clearSearchResultsButton: JQuery;
     $line: JQuery;
@@ -714,5 +714,3 @@ class FooterPanel extends BaseFooterPanel {
         });
     }
 }
-
-export = FooterPanel;

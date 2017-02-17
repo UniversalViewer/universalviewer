@@ -1,9 +1,9 @@
-import BaseThumbsView = require("../uv-shared-module/ThumbsView");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import {ThumbsView as BaseThumbsView} from "../uv-shared-module/ThumbsView";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 
-class ThumbsView extends BaseThumbsView {
+export class ThumbsView extends BaseThumbsView {
     create(): void {
 
         this.setConfig('contentLeftPanel');
@@ -91,5 +91,3 @@ class ThumbsView extends BaseThumbsView {
         }
     }
 }
-
-export = ThumbsView;

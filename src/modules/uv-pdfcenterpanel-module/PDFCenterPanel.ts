@@ -1,10 +1,10 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import CenterPanel = require("../uv-shared-module/CenterPanel");
-import Params = require("../../Params");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import {Params} from "../../Params";
 
 declare var PDFView: any;
 
-class PDFCenterPanel extends CenterPanel {
+export class PDFCenterPanel extends CenterPanel {
 
     constructor($element: JQuery) {
         super($element);
@@ -77,5 +77,3 @@ class PDFCenterPanel extends CenterPanel {
         super.resize();
     }
 }
-
-export = PDFCenterPanel;

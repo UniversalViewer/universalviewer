@@ -1,8 +1,8 @@
-import Panel = require("./Panel");
-import Bootstrapper = require("../../Bootstrapper");
-import IExtension = require("./IExtension");
+import {Panel} from "./Panel";
+import Bootstrapper from "../../Bootstrapper";
+import {IExtension} from "./IExtension";
 
-class BaseView extends Panel{
+export class BaseView extends Panel{
 
     bootstrapper: any;
     config: any;
@@ -55,5 +55,3 @@ class BaseView extends Panel{
         super.resize();
     }
 }
-
-export = BaseView;

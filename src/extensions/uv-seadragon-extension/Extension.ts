@@ -1,42 +1,41 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Bookmark = require("../../modules/uv-shared-module/Bookmark");
-import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
-import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
-import CroppedImageDimensions = require("./CroppedImageDimensions");
-import DownloadDialogue = require("./DownloadDialogue");
-import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
+import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
+import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
+import Bootstrapper from "../../Bootstrapper";
+import {Commands} from "./Commands";
+import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
+import {CroppedImageDimensions} from "./CroppedImageDimensions";
+import {DownloadDialogue} from "./DownloadDialogue";
+import {ExternalContentDialogue} from "../../modules/uv-dialogues-module/ExternalContentDialogue";
 import ExternalResource = Manifesto.IExternalResource;
-import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
-import GalleryView = require("../../modules/uv-contentleftpanel-module/GalleryView");
-import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
-import ISeadragonExtension = require("./ISeadragonExtension");
+import {FooterPanel} from "../../modules/uv-searchfooterpanel-module/FooterPanel";
+import {GalleryView} from "../../modules/uv-contentleftpanel-module/GalleryView";
+import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
+import {ISeadragonExtension} from "./ISeadragonExtension";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import Metrics = require("../../modules/uv-shared-module/Metrics");
-import MobileFooterPanel = require("../../modules/uv-osdmobilefooterpanel-module/MobileFooter");
-import Mode = require("./Mode");
-import MoreInfoDialogue = require("../../modules/uv-dialogues-module/MoreInfoDialogue");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
-import MultiSelectionArgs = require("./MultiSelectionArgs");
-import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
-import Params = require("../../Params");
-import Point = require("../../modules/uv-shared-module/Point");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
-import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
+import {LeftPanel} from "../../modules/uv-shared-module/LeftPanel";
+import {Metrics} from "../../modules/uv-shared-module/Metrics";
+import {FooterPanel as MobileFooterPanel} from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
+import {Mode} from "./Mode";
+import {MoreInfoDialogue} from "../../modules/uv-dialogues-module/MoreInfoDialogue";
+import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import {MultiSelectDialogue} from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
+import {MultiSelectionArgs} from "./MultiSelectionArgs";
+import {PagingHeaderPanel} from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
+import {Params} from "../../Params";
+import {Point} from "../../modules/uv-shared-module/Point";
+import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
+import {SeadragonCenterPanel} from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
-import Settings = require("../../modules/uv-shared-module/Settings");
-import SettingsDialogue = require("./SettingsDialogue");
-import ShareDialogue = require("./ShareDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
+import {SettingsDialogue} from "./SettingsDialogue";
+import {ShareDialogue} from "./ShareDialogue";
+import {Shell} from "../../modules/uv-shared-module/Shell";
 import Size = Utils.Measurements.Size;
 declare var _: any; // todo: remove lodash
 
-class Extension extends BaseExtension implements ISeadragonExtension {
+export default class Extension extends BaseExtension implements ISeadragonExtension {
 
     $downloadDialogue: JQuery;
     $externalContentDialogue: JQuery;
@@ -65,7 +64,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
 
-    constructor(bootstrapper: BootStrapper) {
+    constructor(bootstrapper: Bootstrapper) {
         super(bootstrapper);
     }
 
@@ -1055,5 +1054,3 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return indices;
     }
 }
-
-export = Extension;

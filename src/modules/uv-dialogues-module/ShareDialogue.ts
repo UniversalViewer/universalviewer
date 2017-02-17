@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class ShareDialogue extends Dialogue {
+export class ShareDialogue extends Dialogue {
 
     $code: JQuery;
     $customSize: JQuery;
@@ -371,5 +371,3 @@ class ShareDialogue extends Dialogue {
         this.setDockedPosition();
     }
 }
-
-export = ShareDialogue;

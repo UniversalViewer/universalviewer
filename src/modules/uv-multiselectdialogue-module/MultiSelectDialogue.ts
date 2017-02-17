@@ -1,9 +1,9 @@
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import Dialogue = require("../../modules/uv-shared-module/Dialogue");
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 
-class MultiSelectDialogue extends Dialogue {
+export class MultiSelectDialogue extends Dialogue {
 
     $title: JQuery;
     $gallery: JQuery;
@@ -100,5 +100,3 @@ class MultiSelectDialogue extends Dialogue {
         $main.height(this.$content.height() - this.$title.outerHeight() - this.$title.verticalMargins() - $header.height());
     }
 }
-
-export = MultiSelectDialogue;

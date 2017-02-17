@@ -1,7 +1,7 @@
-import BaseFooterPanel = require("../uv-shared-module/FooterPanel");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
+import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
 
-class FooterPanel extends BaseFooterPanel {
+export class FooterPanel extends BaseFooterPanel {
 
     $rotateButton: JQuery;
     $spacer: JQuery;
@@ -49,5 +49,3 @@ class FooterPanel extends BaseFooterPanel {
         this.$options.css('left', Math.floor((this.$element.width() / 2) - (this.$options.width() / 2)));
     }
 }
-
-export = FooterPanel;

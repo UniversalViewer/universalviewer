@@ -1,7 +1,7 @@
-import BaseCommands = require("./BaseCommands");
-import BaseExpandPanel = require("./BaseExpandPanel");
+import {BaseCommands} from "./BaseCommands";
+import {BaseExpandPanel} from "./BaseExpandPanel";
 
-class RightPanel extends BaseExpandPanel {
+export class RightPanel extends BaseExpandPanel {
 
     constructor($element: JQuery) {
         super($element);
@@ -56,5 +56,3 @@ class RightPanel extends BaseExpandPanel {
         });
     }
 }
-
-export = RightPanel;

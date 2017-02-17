@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class MoreInfoDialogue extends Dialogue {
+export class MoreInfoDialogue extends Dialogue {
 
     $title: JQuery;
     component: IIIFComponents.IMetadataComponent;
@@ -84,5 +84,3 @@ class MoreInfoDialogue extends Dialogue {
         this.setDockedPosition();
     }
 }
-
-export = MoreInfoDialogue;

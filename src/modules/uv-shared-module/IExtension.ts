@@ -1,9 +1,9 @@
-import Bootstrapper = require("../../Bootstrapper");
-import BootstrapParams = require("../../BootstrapParams");
-import Metric = require("./Metric");
-import Params = require("../../Params");
+import Bootstrapper from "../../Bootstrapper";
+import {BootstrapParams} from "../../BootstrapParams";
+import {Metric} from "./Metric";
+import {Params} from "../../Params";
 
-interface IExtension{
+export interface IExtension{
     addTimestamp(uri: string): string;
     bootstrapper: Bootstrapper;
     changeLocale(locale: string): void;
@@ -76,5 +76,3 @@ interface IExtension{
     viewManifest(manifest: Manifesto.IManifest): void;
     width(): number;
 }
-
-export = IExtension;

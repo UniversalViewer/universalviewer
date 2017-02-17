@@ -1,8 +1,8 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
-import ILoginDialogueOptions = require("../uv-shared-module/ILoginDialogueOptions");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Dialogue} from "../uv-shared-module/Dialogue";
+import {ILoginDialogueOptions} from "../uv-shared-module/ILoginDialogueOptions";
 
-class LoginDialogue extends Dialogue {
+export class LoginDialogue extends Dialogue {
 
     loginCallback: any;
     logoutCallback: any;
@@ -128,5 +128,3 @@ class LoginDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = LoginDialogue;

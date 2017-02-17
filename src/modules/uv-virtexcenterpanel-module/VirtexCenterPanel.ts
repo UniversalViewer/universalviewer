@@ -1,9 +1,9 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
-import CenterPanel = require("../uv-shared-module/CenterPanel");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Commands} from "../../extensions/uv-mediaelement-extension/Commands";
+import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import ExternalResource = Manifesto.IExternalResource;
 
-class VirtexCenterPanel extends CenterPanel {
+export class VirtexCenterPanel extends CenterPanel {
 
     $navigation: JQuery;
     $viewport: JQuery;
@@ -82,5 +82,3 @@ class VirtexCenterPanel extends CenterPanel {
         this.$viewport.height(this.$content.height());
     }
 }
-
-export = VirtexCenterPanel;

@@ -1,11 +1,11 @@
-import BaseCommands = require("./BaseCommands");
-import Information = require("./Information");
-import InformationAction = require("./InformationAction");
-import InformationArgs = require("./InformationArgs");
-import InformationType = require("./InformationType");
-import IExtension = require("./IExtension");
+import {BaseCommands} from "./BaseCommands";
+import {Information} from "./Information";
+import {InformationAction} from "./InformationAction";
+import {InformationArgs} from "./InformationArgs";
+import {InformationType} from "./InformationType";
+import {IExtension} from "./IExtension";
 
-class InformationFactory{
+export class InformationFactory{
 
     extension: IExtension;
 
@@ -35,5 +35,3 @@ class InformationFactory{
         }
     }
 }
-
-export = InformationFactory;

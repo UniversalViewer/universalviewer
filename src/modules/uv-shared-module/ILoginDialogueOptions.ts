@@ -1,6 +1,4 @@
-interface ILoginDialogueOptions {
+export interface ILoginDialogueOptions {
     showCancelButton: boolean;
     warningMessage: string;
 }
-
-export = ILoginDialogueOptions;

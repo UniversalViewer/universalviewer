@@ -1,4 +1,4 @@
-class DownloadOption {
+export class DownloadOption {
     static currentViewAsJpg = new DownloadOption("currentViewAsJpg");
     static dynamicCanvasRenderings = new DownloadOption("dynamicCanvasRenderings");
     static dynamicImageRenderings = new DownloadOption("dynamicImageRenderings");
@@ -16,5 +16,3 @@ class DownloadOption {
         return this.value;
     }
 }
-
-export = DownloadOption;

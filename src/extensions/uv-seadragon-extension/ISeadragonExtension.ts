@@ -1,11 +1,11 @@
-import CroppedImageDimensions = require("./CroppedImageDimensions");
-import IExtension = require("../../modules/uv-shared-module/IExtension");
-import Mode = require("./Mode");
+import {CroppedImageDimensions} from "./CroppedImageDimensions";
+import {IExtension} from "../../modules/uv-shared-module/IExtension";
+import {Mode} from "./Mode";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
 import Size = Utils.Measurements.Size;
 
-interface ISeadragonExtension extends IExtension{
+export interface ISeadragonExtension extends IExtension{
     currentSearchResultRect: SearchResultRect;
     getAutoCompleteUri(): string;
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size;
@@ -33,5 +33,3 @@ interface ISeadragonExtension extends IExtension{
     searchResults: SearchResult[];
     searchWithin(terms: string, callback: (results: any) => void): void;
 }
-
-export = ISeadragonExtension;

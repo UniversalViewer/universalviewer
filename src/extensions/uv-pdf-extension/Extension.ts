@@ -1,24 +1,24 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Bookmark = require("../../modules/uv-shared-module/Bookmark");
-import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
-import DownloadDialogue = require("./DownloadDialogue");
-import ShareDialogue = require("./ShareDialogue");
-import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
-import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
-import IPDFExtension = require("./IPDFExtension");
+import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
+import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
+import Bootstrapper from "../../Bootstrapper";
+import {Commands} from "./Commands";
+import {DownloadDialogue} from "./DownloadDialogue";
+import {ShareDialogue} from "./ShareDialogue";
+import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
+import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
+import {IPDFExtension} from "./IPDFExtension";
 import IThumb = Manifold.IThumb;
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
-import Params = require("../../Params");
-import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
-import SettingsDialogue = require("./SettingsDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
+import {LeftPanel} from "../../modules/uv-shared-module/LeftPanel";
+import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import {PDFCenterPanel} from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
+import {Params} from "../../Params";
+import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
+import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
+import {SettingsDialogue} from "./SettingsDialogue";
+import {Shell} from "../../modules/uv-shared-module/Shell";
 
-class Extension extends BaseExtension implements IPDFExtension {
+export default class Extension extends BaseExtension implements IPDFExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -33,7 +33,7 @@ class Extension extends BaseExtension implements IPDFExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor(bootstrapper: BootStrapper) {
+    constructor(bootstrapper: Bootstrapper) {
         super(bootstrapper);
     }
 
@@ -145,5 +145,3 @@ class Extension extends BaseExtension implements IPDFExtension {
         return script;
     }
 }
-
-export = Extension;

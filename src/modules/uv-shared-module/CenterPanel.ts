@@ -1,7 +1,7 @@
-import Shell = require("./Shell");
-import BaseView = require("./BaseView");
+import {Shell} from "./Shell";
+import {BaseView} from "./BaseView";
 
-class CenterPanel extends BaseView {
+export class CenterPanel extends BaseView {
 
     $attribution: JQuery;
     $closeAttributionButton: JQuery;
@@ -120,5 +120,3 @@ class CenterPanel extends BaseView {
         }
     }
 }
-
-export = CenterPanel;

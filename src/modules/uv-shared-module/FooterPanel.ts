@@ -1,8 +1,8 @@
-import BaseCommands = require("./BaseCommands");
-import BaseView = require("./BaseView");
-import Metrics = require("./Metrics");
+import {BaseCommands} from "./BaseCommands";
+import {BaseView} from "./BaseView";
+import {Metrics} from "./Metrics";
 
-class FooterPanel extends BaseView {
+export class FooterPanel extends BaseView {
 
     $feedbackButton: JQuery;
     $bookmarkButton: JQuery;
@@ -220,5 +220,3 @@ class FooterPanel extends BaseView {
         super.resize();
     }
 }
-
-export = FooterPanel;

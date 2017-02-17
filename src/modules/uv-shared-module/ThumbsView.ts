@@ -1,10 +1,10 @@
-import BaseCommands = require("./BaseCommands");
-import BaseView = require("./BaseView");
+import {BaseCommands} from "./BaseCommands";
+import {BaseView} from "./BaseView";
 import IThumb = Manifold.IThumb;
-import Shell = require("./Shell");
+import {Shell} from "./Shell";
 declare var _: any; // todo: remove lodash
 
-class ThumbsView extends BaseView {
+export class ThumbsView extends BaseView {
 
     private _thumbsCache: JQuery;
     $selectedThumb: JQuery;
@@ -296,5 +296,3 @@ class ThumbsView extends BaseView {
         super.resize();
     }
 }
-
-export = ThumbsView;

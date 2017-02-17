@@ -1,6 +1,6 @@
-import BaseSettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
+import {SettingsDialogue as BaseSettingsDialogue} from "../../modules/uv-dialogues-module/SettingsDialogue";
 
-class SettingsDialogue extends BaseSettingsDialogue {
+export class SettingsDialogue extends BaseSettingsDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -12,5 +12,3 @@ class SettingsDialogue extends BaseSettingsDialogue {
         super.create();
     }
 }
-
-export = SettingsDialogue;

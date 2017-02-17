@@ -1,13 +1,13 @@
-import BaseCommands = require("./BaseCommands");
-import BaseView = require("./BaseView");
-import BootstrapParams = require("../../BootstrapParams");
-import Information = require("../uv-shared-module/Information");
-import InformationAction = require("../uv-shared-module/InformationAction");
-import InformationArgs = require("../uv-shared-module/InformationArgs");
-import InformationFactory = require("../uv-shared-module/InformationFactory");
-import SettingsDialogue = require("../uv-dialogues-module/SettingsDialogue");
+import {BaseCommands} from "./BaseCommands";
+import {BaseView} from "./BaseView";
+import {BootstrapParams} from "../../BootstrapParams";
+import {Information} from "../uv-shared-module/Information";
+import {InformationAction} from "../uv-shared-module/InformationAction";
+import {InformationArgs} from "../uv-shared-module/InformationArgs";
+import {InformationFactory} from "../uv-shared-module/InformationFactory";
+import {SettingsDialogue} from "../uv-dialogues-module/SettingsDialogue";
 
-class HeaderPanel extends BaseView {
+export class HeaderPanel extends BaseView {
 
     $centerOptions: JQuery;
     $helpButton: JQuery;
@@ -176,5 +176,3 @@ class HeaderPanel extends BaseView {
         }
     }
 }
-
-export = HeaderPanel;

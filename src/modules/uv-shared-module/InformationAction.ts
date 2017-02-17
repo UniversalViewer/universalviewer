@@ -1,4 +1,4 @@
-class InformationAction {
+export class InformationAction {
     public label: string;
     public action: () => void;
 
@@ -6,5 +6,3 @@ class InformationAction {
 
     }
 }
-
-export = InformationAction;

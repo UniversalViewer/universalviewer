@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import RightPanel = require("../uv-shared-module/RightPanel");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {RightPanel} from "../uv-shared-module/RightPanel";
 
-class MoreInfoRightPanel extends RightPanel {
+export class MoreInfoRightPanel extends RightPanel {
 
     component: IIIFComponents.IMetadataComponent;
     $metadata: JQuery;
@@ -73,5 +73,3 @@ class MoreInfoRightPanel extends RightPanel {
         this.$main.height(this.$element.height() - this.$top.height() - this.$main.verticalMargins());
     }
 }
-
-export = MoreInfoRightPanel;

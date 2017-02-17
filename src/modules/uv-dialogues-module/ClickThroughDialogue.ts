@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class ClickThroughDialogue extends Dialogue {
+export class ClickThroughDialogue extends Dialogue {
 
     acceptCallback: any;
     $acceptTermsButton: JQuery;
@@ -79,5 +79,3 @@ class ClickThroughDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = ClickThroughDialogue;

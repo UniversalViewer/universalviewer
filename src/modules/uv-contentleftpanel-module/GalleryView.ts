@@ -1,14 +1,14 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseView = require("../uv-shared-module/BaseView");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseView} from "../uv-shared-module/BaseView";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
 import ICanvas = Manifold.ICanvas;
 import IRange = Manifold.IRange;
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 
-class GalleryView extends BaseView {
+export class GalleryView extends BaseView {
 
     isOpen: boolean = false;
     component: IIIFComponents.IGalleryComponent;
@@ -86,5 +86,3 @@ class GalleryView extends BaseView {
         $main.height(this.$element.height() - $header.height());
     }
 }
-
-export = GalleryView;

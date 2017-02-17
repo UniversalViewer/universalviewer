@@ -1,10 +1,10 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseShareDialogue = require("../../modules/uv-dialogues-module/ShareDialogue");
-import Commands = require("./Commands");
-import ISeadragonExtension = require("./ISeadragonExtension");
-import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
+import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
+import {Commands} from "./Commands";
+import {ISeadragonExtension} from "./ISeadragonExtension";
+import {SeadragonCenterPanel} from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
 
-class ShareDialogue extends BaseShareDialogue {
+export class ShareDialogue extends BaseShareDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -44,5 +44,3 @@ class ShareDialogue extends BaseShareDialogue {
         super.resize();
     }
 }
-
-export = ShareDialogue;

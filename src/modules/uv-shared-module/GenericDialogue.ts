@@ -1,7 +1,7 @@
-import BaseCommands = require("./BaseCommands");
-import Dialogue = require("./Dialogue");
+import {BaseCommands} from "./BaseCommands";
+import {Dialogue} from "./Dialogue";
 
-class GenericDialogue extends Dialogue {
+export class GenericDialogue extends Dialogue {
 
     acceptCallback: any;
     $acceptButton: JQuery;
@@ -77,5 +77,3 @@ class GenericDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = GenericDialogue;

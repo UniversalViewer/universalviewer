@@ -1,5 +1,3 @@
-class LoginWarningMessages {
+export class LoginWarningMessages {
     static FORBIDDEN: string = "forbiddenResourceMessage";
 }
-
-export = LoginWarningMessages;

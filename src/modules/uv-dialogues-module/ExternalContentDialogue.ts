@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class ExternalContentDialogue extends Dialogue {
+export class ExternalContentDialogue extends Dialogue {
 
     $iframe: JQuery;
 
@@ -40,5 +40,3 @@ class ExternalContentDialogue extends Dialogue {
         this.$iframe.height(this.$content.height());
     }
 }
-
-export = ExternalContentDialogue;

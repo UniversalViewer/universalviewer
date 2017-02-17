@@ -1,8 +1,6 @@
-import Metric = require("./Metric");
+import {Metric} from "./Metric";
 
-class Metrics {
+export class Metrics {
     static MOBILE_LANDSCAPE: Metric = new Metric(0, 640);
     static LAPTOP: Metric = new Metric(640, Infinity);
 }
-
-export = Metrics;

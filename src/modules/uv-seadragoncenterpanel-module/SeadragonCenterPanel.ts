@@ -1,17 +1,17 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Bounds = require("../../extensions/uv-seadragon-extension/Bounds");
-import CenterPanel = require("../uv-shared-module/CenterPanel");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import CroppedImageDimensions = require("../../extensions/uv-seadragon-extension/CroppedImageDimensions");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Bounds} from "../../extensions/uv-seadragon-extension/Bounds";
+import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
 import ExternalResource = Manifold.ExternalResource;
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import Metrics = require("../uv-shared-module/Metrics");
-import Params = require("../../Params");
-import Point = require("../../modules/uv-shared-module/Point");
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {Metrics} from "../uv-shared-module/Metrics";
+import {Params} from "../../Params";
+import {Point} from "../../modules/uv-shared-module/Point";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
 
-class SeadragonCenterPanel extends CenterPanel {
+export class SeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
     currentBounds: any;
@@ -947,4 +947,3 @@ class SeadragonCenterPanel extends CenterPanel {
         }
     }
 }
-export = SeadragonCenterPanel;

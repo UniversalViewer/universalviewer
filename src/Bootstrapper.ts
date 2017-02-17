@@ -1,12 +1,12 @@
-import BaseCommands = require("./modules/uv-shared-module/BaseCommands");
-import BootstrapParams = require("./BootstrapParams");
-import IExtension = require("./modules/uv-shared-module/IExtension");
+import {BaseCommands} from "./modules/uv-shared-module/BaseCommands";
+import {BootstrapParams} from "./BootstrapParams";
+import {IExtension} from "./modules/uv-shared-module/IExtension";
 
 declare var manifold: IManifold;
 
 // The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
 // then determining which extension to use and instantiating it.
-class Bootstrapper{
+export default class Bootstrapper{
 
     config: any;
     extension: IExtension;
@@ -197,11 +197,9 @@ class Bootstrapper{
     createExtension(extension: any, config: any): void {
         this.config = config;
         var helper = extension.helper;
-        this.extension = new extension.type(this);
+        this.extension = new extension.type.default(this);
         this.extension.helper = helper;
         this.extension.name = extension.name;
         this.extension.create();
     }
 }
-
-export = Bootstrapper;

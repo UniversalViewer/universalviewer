@@ -1,26 +1,26 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Bookmark = require("../../modules/uv-shared-module/Bookmark");
-import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
-import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
-import DownloadDialogue = require("./DownloadDialogue");
-import ShareDialogue = require("./ShareDialogue");
+import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
+import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
+import Bootstrapper from "../../Bootstrapper";
+import {Commands} from "./Commands";
+import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
+import {DownloadDialogue} from "./DownloadDialogue";
+import {ShareDialogue} from "./ShareDialogue";
 import ExternalResource = Manifesto.IExternalResource;
-import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
-import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
-import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
-import IVirtexExtension = require("./IVirtexExtension");
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import Params = require("../../Params");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
-import SettingsDialogue = require("./SettingsDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
-import TreeView = require("../../modules/uv-contentleftpanel-module/TreeView");
-import VirtexCenterPanel = require("../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel");
+import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
+import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
+import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
+import {IVirtexExtension} from "./IVirtexExtension";
+import {LeftPanel} from "../../modules/uv-shared-module/LeftPanel";
+import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import {Params} from "../../Params";
+import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
+import {SettingsDialogue} from "./SettingsDialogue";
+import {Shell} from "../../modules/uv-shared-module/Shell";
+import {TreeView} from "../../modules/uv-contentleftpanel-module/TreeView";
+import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
 
-class Extension extends BaseExtension implements IVirtexExtension {
+export default class Extension extends BaseExtension implements IVirtexExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -36,7 +36,7 @@ class Extension extends BaseExtension implements IVirtexExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor(bootstrapper: BootStrapper) {
+    constructor(bootstrapper: Bootstrapper) {
         super(bootstrapper);
     }
 
@@ -126,5 +126,3 @@ class Extension extends BaseExtension implements IVirtexExtension {
         return script;
     }
 }
-
-export = Extension;

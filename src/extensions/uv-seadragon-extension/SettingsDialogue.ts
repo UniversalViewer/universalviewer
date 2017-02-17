@@ -1,7 +1,7 @@
-import BaseSettingsDialogue = require("../../modules/uv-dialogues-module/SettingsDialogue");
-import ISeadragonExtension = require("./ISeadragonExtension");
+import {SettingsDialogue as BaseSettingsDialogue} from "../../modules/uv-dialogues-module/SettingsDialogue";
+import {ISeadragonExtension} from "./ISeadragonExtension";
 
-class SettingsDialogue extends BaseSettingsDialogue {
+export class SettingsDialogue extends BaseSettingsDialogue {
 
     $navigatorEnabled: JQuery;
     $navigatorEnabledCheckbox: JQuery;
@@ -150,5 +150,3 @@ class SettingsDialogue extends BaseSettingsDialogue {
     }
 
 }
-
-export = SettingsDialogue;

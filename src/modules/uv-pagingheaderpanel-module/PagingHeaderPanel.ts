@@ -1,12 +1,12 @@
-import AutoComplete = require("../uv-shared-module/AutoComplete");
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import HeaderPanel = require("../uv-shared-module/HeaderPanel");
-import HelpDialogue = require("../uv-dialogues-module/HelpDialogue");
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import {AutoComplete} from "../uv-shared-module/AutoComplete";
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
+import {HelpDialogue} from "../uv-dialogues-module/HelpDialogue";
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 
-class PagingHeaderPanel extends HeaderPanel {
+export class PagingHeaderPanel extends HeaderPanel {
 
     $autoCompleteBox: JQuery;
     $firstButton: JQuery;
@@ -597,5 +597,3 @@ class PagingHeaderPanel extends HeaderPanel {
         }
     }
 }
-
-export = PagingHeaderPanel;

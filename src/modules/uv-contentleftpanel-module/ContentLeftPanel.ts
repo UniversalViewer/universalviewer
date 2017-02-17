@@ -1,22 +1,22 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import GalleryView = require("./GalleryView");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {GalleryView} from "./GalleryView";
 import ICanvas = Manifold.ICanvas;
 import IRange = Manifold.IRange;
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
-import LeftPanel = require("../uv-shared-module/LeftPanel");
-import Metrics = require("../uv-shared-module/Metrics");
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import {LeftPanel} from "../uv-shared-module/LeftPanel";
+import {Metrics} from "../uv-shared-module/Metrics";
+import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import MultiSelectState = Manifold.MultiSelectState;
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
-import ThumbsView = require("./ThumbsView");
+import {ThumbsView} from "./ThumbsView";
 import TreeSortType = Manifold.TreeSortType;
-import TreeView = require("./TreeView");
+import {TreeView} from "./TreeView";
 
-class ContentLeftPanel extends LeftPanel {
+export class ContentLeftPanel extends LeftPanel {
 
     $bottomOptions: JQuery;
     $galleryView: JQuery;
@@ -626,5 +626,3 @@ class ContentLeftPanel extends LeftPanel {
         this.$views.height(this.$tabsContent.height() - this.$options.outerHeight());
     }
 }
-
-export = ContentLeftPanel;

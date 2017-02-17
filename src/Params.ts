@@ -1,6 +1,6 @@
 
 // do not change order, index is important!
-enum Params {
+export enum Params {
     collectionIndex,
     manifestIndex,
     sequenceIndex,
@@ -10,5 +10,3 @@ enum Params {
     highlight,
     anchor
 }
-
-export = Params;

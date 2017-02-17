@@ -1,10 +1,10 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Commands = require("../../extensions/uv-mediaelement-extension/Commands");
-import CenterPanel = require("../uv-shared-module/CenterPanel");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {Commands} from "../../extensions/uv-mediaelement-extension/Commands";
+import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import ExternalResource = Manifesto.IExternalResource;
-import IMediaElementExtension = require("../../extensions/uv-mediaelement-extension/IMediaElementExtension");
+import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 
-class MediaElementCenterPanel extends CenterPanel {
+export class MediaElementCenterPanel extends CenterPanel {
 
     $container: JQuery;
     media: any;
@@ -202,5 +202,3 @@ class MediaElementCenterPanel extends CenterPanel {
         this.$title.ellipsisFill(this.title);
     }
 }
-
-export = MediaElementCenterPanel;

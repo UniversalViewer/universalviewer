@@ -1,11 +1,11 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseView = require("../uv-shared-module/BaseView");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
+import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseView} from "../uv-shared-module/BaseView";
+import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
 import IRange = Manifold.IRange;
 import ITreeNode = Manifold.ITreeNode;
 import MultiSelectState = Manifold.MultiSelectState;
 
-class TreeView extends BaseView {
+export class TreeView extends BaseView {
 
     isOpen: boolean = false;
     component: IIIFComponents.ITreeComponent;
@@ -79,5 +79,3 @@ class TreeView extends BaseView {
         super.resize();
     }
 }
-
-export = TreeView;

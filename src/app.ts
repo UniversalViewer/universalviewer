@@ -48,7 +48,7 @@ require([
         name: 'uv-pdf-extension'
     };
 
-    var bs = new bootstrapper(extensions);
+    var bs = new bootstrapper.default(extensions);
 
     bs.bootstrap();
 });

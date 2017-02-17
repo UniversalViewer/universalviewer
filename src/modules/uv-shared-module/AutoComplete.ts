@@ -1,5 +1,5 @@
 
-class AutoComplete{
+export class AutoComplete {
 
 	private _results: any;
 	private _selectedResultIndex: number;
@@ -284,5 +284,3 @@ class AutoComplete{
     }
 
 }
-
-export = AutoComplete;
