@@ -181,8 +181,8 @@ docReady(function() {
             document.cookie = name + "=" + value + expires + "; path=/";
         }
 
-        // get the part preceding 'lib/embed.js'
-        var baseUri = (/(.*)lib\/embed.js/).exec(scriptUri)[1];
+        // get the part preceding 'embed.js'
+        var baseUri = (/(.*)embed.js/).exec(scriptUri)[1];
         appUri = baseUri + 'app.html';
         easyXDMUri = 'https://cdnjs.cloudflare.com/ajax/libs/easyXDM/2.4.17.1/easyXDM.min.js';
         json2Uri = 'https://cdnjs.cloudflare.com/ajax/libs/easyXDM/2.4.17.1/json2.min.js';

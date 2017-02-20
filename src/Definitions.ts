@@ -56,6 +56,7 @@ interface Window{
     webViewerLoad: any; // pdfjs
     IEXMLHttpRequest: any;
     openSeadragonViewer: any; // for testing convenience
+    UV: any; // todo: implement interface
 }
 
 interface Document{

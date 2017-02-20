@@ -5,7 +5,7 @@
     },
     mainConfigFile: "src/app.js",
     name: "app",
-    out: "build/lib/app.js",
+    out: "build/app.js",
     preserveLicenseComments: false,
     include: ["requireLib"],
     uglify: {

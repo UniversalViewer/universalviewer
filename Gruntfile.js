@@ -38,17 +38,17 @@ module.exports = function (grunt) {
 
         clean: {
             build : ['<%= config.directories.build %>'],
-            bundle: ['./src/lib/bundle.js', './src/lib/bundle.min.js'],
+            bundle: ['<%= config.directories.src %>/lib/bundle.js', '<%= config.directories.src %>/lib/bundle.min.js'],
             dist: ['<%= config.directories.dist %>'],
-            examples: ['<%= config.directories.examples %>/uv-*'],
+            examples: ['<%= config.directories.examples %>/uv/'],
             distexamples: ['<%= config.directories.examples %>/uv-*.zip', '<%= config.directories.examples %>/uv-*.tar'],
-            extension: ['./src/extensions/*/build/*']
+            extension: ['<%= config.directories.src %>/extensions/*/build/*']
         },
 
         concat: {
             bundle: {
-                src: grunt.file.expand('src/lib/*').concat(config.dependencies.libs).concat(['!src/lib/embed.js']),
-                dest: 'src/lib/bundle.js'
+                src: grunt.file.expand('<%= config.directories.src %>/lib/*').concat(config.dependencies.libs),
+                dest: '<%= config.directories.src %>/lib/bundle.js'
             }
         },
 
@@ -93,9 +93,18 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
+                        cwd: '<%= config.directories.src %>',
+                        src: [
+                            'embed.js'
+                        ],
+                        dest: '<%= config.directories.build %>'
+                    },
+                    // js
+                    {
+                        expand: true,
+                        flatten: true,
                         cwd: '<%= config.directories.lib %>',
                         src: [
-                            'embed.js',
                             'bundle.min.js'
                         ],
                         dest: '<%= config.directories.build %>/lib/'
@@ -276,10 +285,6 @@ module.exports = function (grunt) {
                 overwrite: true,
                 replacements: [
                     {
-                        from: 'data-main="app"',
-                        to: 'data-main="lib/app"'
-                    },
-                    {
                         from: 'lib/bundle.js',
                         to: 'lib/bundle.min.js'
                     }
@@ -288,7 +293,7 @@ module.exports = function (grunt) {
             js: {
                 // replace window.DEBUG=true
                 // todo: use a compiler flag when available
-                src: ['<%= config.directories.build %>/lib/app.js'],
+                src: ['<%= config.directories.build %>/app.js'],
                 overwrite: true,
                 replacements: [
                     //{
@@ -332,7 +337,7 @@ module.exports = function (grunt) {
                     //'<%= config.directories.examples %>/examples.js',
                     //'<%= config.directories.examples %>/uv.js',
                     //'<%= config.directories.examples %>/web.config',
-                    './src/lib/embed.js'
+                    '<%= config.directories.src %>/embed.js'
                 ],
                 overwrite: true,
                 replacements: [{

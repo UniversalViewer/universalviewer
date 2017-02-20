@@ -23,6 +23,7 @@ module.exports = function () {
         lib: './src/lib',
         modules: './src/modules',
         npm: './node_modules',
+        src: './src',
         themes: './src/themes',
         uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
         uvPdfExtension: './src/extensions/uv-pdf-extension',
