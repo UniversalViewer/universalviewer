@@ -39,7 +39,7 @@ module.exports = function (grunt) {
             var regex = (/(.*)\/l10n\/(.*).json/).exec(localeFile);
 
             var extensionDir = regex[1];
-            var buildDir = path.join(extensionDir, '/build/');
+            var buildDir = path.join(extensionDir, '/.build/');
             var configDir = path.join(extensionDir, '/config/');
             var locale = regex[2];
             var configFile = path.join(configDir, locale + '.json');

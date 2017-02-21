@@ -46,7 +46,7 @@ module.exports = function (grunt) {
             async.eachSeries(that.files, function (f, nextFileObj) {
                 var parent = path.dirname(f.dest);
                 parent = parent.substring(0, parent.lastIndexOf('/'));
-                parent = path.join(parent, 'build/');
+                parent = path.join(parent, '.build/');
 
                 var destFile = path.join(parent, theme + '.css');
 
@@ -124,11 +124,11 @@ module.exports = function (grunt) {
             // ./src/extensions/*/build/[theme].css
             // goes to
             // [global.buildDir]/themes/[theme]/css/[extension]/theme.css'
-            copyFiles('./src/extensions/*/build/' + theme + '.css', path.join(getThemeDest(theme), 'css'), function(src, dest) {
+            copyFiles('./src/extensions/*/.build/' + theme + '.css', path.join(getThemeDest(theme), 'css'), function(src, dest) {
 
                 // get the extension name from the src string.
                 // ./src/extensions/[extension]/build/[theme].css
-                var extensionName = src.match(/extensions\/(.*)\/build/)[1];
+                var extensionName = src.match(/extensions\/(.*)\/.build/)[1];
 
                 return path.join(dest, extensionName, 'theme.css');
             });
