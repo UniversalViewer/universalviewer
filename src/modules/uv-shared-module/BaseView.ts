@@ -1,5 +1,5 @@
 import {Panel} from "./Panel";
-import Bootstrapper from "../../Bootstrapper";
+import {Bootstrapper} from "../../Bootstrapper";
 import {IExtension} from "./IExtension";
 
 export class BaseView extends Panel{

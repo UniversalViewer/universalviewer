@@ -23,23 +23,36 @@ module.exports = function (grunt) {
 
         config: config,
 
-        global:
-        {
-            minify: 'optimize=none',
-            port: '8001'
-        },
-
         pkg: packageJson,
 
         ts: {
-            dev: config.ts.dev,
-            dist: config.ts.dist
+            dev: {
+                src: ['./src/**/*.ts', 'typings/**/*.ts'],
+                options: {
+                    target: 'es3',
+                    module: 'amd',
+                    sourceMap: true,
+                    declarations: false,
+                    noLib: false,
+                    comments: true
+                }
+            },
+            dist: {
+                src: ['./src/**/*.ts', 'typings/**/*.ts'],
+                options: {
+                    target: 'es3',
+                    module: 'amd',
+                    sourceMap: false,
+                    declarations: false,
+                    noLib: false,
+                    comments: false
+                }
+            }
         },
 
         clean: {
             build : ['<%= config.directories.build %>'],
             bundle: ['<%= config.directories.src %>/lib/bundle.js', '<%= config.directories.src %>/lib/bundle.min.js'],
-            dist: ['<%= config.directories.dist %>'],
             examples: ['<%= config.directories.examples %>/uv/'],
             distexamples: ['<%= config.directories.examples %>/uv-*.zip', '<%= config.directories.examples %>/uv-*.tar'],
             extension: ['<%= config.directories.src %>/extensions/*/.build/*']
@@ -47,8 +60,8 @@ module.exports = function (grunt) {
 
         concat: {
             bundle: {
-                src: grunt.file.expand('<%= config.directories.src %>/lib/*').concat(config.dependencies.libs),
-                dest: '<%= config.directories.src %>/lib/bundle.js'
+                src: grunt.file.expand('src/lib/*').concat(config.dependencies.libs).concat(['!src/lib/README.md']),
+                dest: 'src/lib/bundle.js'
             }
         },
 
@@ -195,28 +208,6 @@ module.exports = function (grunt) {
                     }
                 ]
             }
-            // dist: {
-            //     // copy contents of /.build to /examples/uv-m.m.p.
-            //     files: [
-            //         {
-            //             cwd: '<%= config.directories.build %>',
-            //             expand: true,
-            //             src: ['**'],
-            //             dest: '<%= config.directories.examples %>/<%= config.directories.uvVersioned %>/'
-            //         }
-            //     ]
-            // }
-            // distexamples: {
-            //     // copy zip archives to examples
-            //     files: [
-            //         {
-            //             cwd: '<%= config.directories.dist %>',
-            //             expand: true,
-            //             src: ['*.zip', '*.tar'],
-            //             dest: '<%= config.directories.examples %>/'
-            //         }
-            //     ]
-            // }
         },
 
         sync: {
@@ -261,7 +252,7 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             devbuild: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js'
+                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js' // todo: use https://github.com/Rich-Harris/sorcery
             },
             distbuild: {
                 cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js'
@@ -270,31 +261,6 @@ module.exports = function (grunt) {
 
         replace: {
 
-            html: {
-                src: ['<%= config.directories.build %>/app.html'],
-                overwrite: true,
-                replacements: [
-                    {
-                        from: 'lib/bundle.js',
-                        to: 'lib/bundle.min.js'
-                    }
-                ]
-            },
-            js: {
-                // replace window.DEBUG=true
-                // todo: use a compiler flag when available
-                src: ['<%= config.directories.build %>/app.js'],
-                overwrite: true,
-                replacements: [
-                    //{
-                    //    from: /window.DEBUG.*=.*true;/g,
-                    //    to: ''
-                    //},
-                    {
-                        from: /window.DEBUG=!0;/g,
-                        to: ''
-                    }]
-            },
             // ../../../modules/[module]/img/[image]
             // becomes
             // ../../img/[module]/[image]
@@ -340,12 +306,12 @@ module.exports = function (grunt) {
         connect: {
             dev: {
                 options: {
-                    port: '<%= global.port %>',
+                    port: '<%= config.examplesPort %>',
                     base: '.',
                     directory: '.',
                     keepalive: true,
                     open: {
-                        target: 'http://localhost:<%= global.port %>/<%= config.directories.examples %>/'
+                        target: 'http://localhost:<%= config.examplesPort %>/<%= config.directories.examples %>/'
                     }
                 }
             }
@@ -407,29 +373,9 @@ module.exports = function (grunt) {
     configure(grunt);
     theme(grunt);
 
-    // grunt.registerTask('default', '', function(){
-
-    //     grunt.task.run(
-    //         'clean:bundle',
-    //         'concat:bundle',
-    //         'ts:dev',
-    //         'clean:extension',
-    //         'configure:apply',
-    //         'theme:create'
-    //     );
-    // });
-
     grunt.registerTask('build', '', function() {
 
-        // grunt build --buildDir=myDir
-        // or prepend / to target relative to system root.
-        //var buildDir = grunt.option('buildDir');
-
         refresh();
-
-        // grunt build --dev
-        //var minify = grunt.option('minify');
-        //if (minify) grunt.config.set('global.minify', '');
 
         var tsType = (grunt.option('dev')) ? 'ts:dev' : 'ts:build';
         var execType = (grunt.option('dev')) ? 'exec:devbuild' : 'exec:distbuild';
@@ -445,8 +391,6 @@ module.exports = function (grunt) {
             'copy:schema',
             'copy:build',
             execType,
-            'replace:html',
-            'replace:js',
             'theme:create',
             'theme:dist',
             'replace:moduleimages',
@@ -455,21 +399,6 @@ module.exports = function (grunt) {
             'clean:examples',
             'copy:examples',
             'compress:zip'
-        );
-    });
-
-    // compress .build into .zip
-    grunt.registerTask('dist', '', function() {
-
-        refresh();
-
-        grunt.task.run(
-            'clean:dist',
-            'copy:dist',
-            'compress:zip',
-            //'compress:tar',
-            'clean:distexamples',
-            'copy:distexamples'
         );
     });
 

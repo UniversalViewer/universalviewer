@@ -1,6 +1,6 @@
 import {BaseCommands} from "./BaseCommands";
 import {BootstrapParams} from "../../BootstrapParams";
-import Bootstrapper from "../../Bootstrapper";
+import {Bootstrapper} from "../../Bootstrapper";
 import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
 import ExternalResource = Manifold.ExternalResource;
 import IAccessToken = Manifesto.IAccessToken;
@@ -74,7 +74,7 @@ export class BaseExtension implements IExtension {
         this.isLightbox = this.bootstrapper.params.isLightbox;
     }
 
-    public create(overrideDependencies?: any): void {
+    public create(): void {
 
         var that = this;
 
@@ -548,13 +548,9 @@ export class BaseExtension implements IExtension {
         this.shell = new Shell(this.$element);
 
         // dependencies
-        if (overrideDependencies){
-            this.loadDependencies(overrideDependencies);
-        } else {
-            this.getDependencies((deps: any) => {
-                this.loadDependencies(deps);
-            });
-        }
+        this.getDependencies((deps: any) => {
+            this.loadDependencies(deps);
+        });
     }
 
     createModules(): void {
@@ -579,7 +575,7 @@ export class BaseExtension implements IExtension {
         var that = this;
 
         // todo: use compiler flag (when available)
-        var depsUri = (window.DEBUG) ? '../../extensions/' + this.name + '/dependencies' : this.name + '-dependencies';
+        const depsUri: string = 'lib/' + this.name + '-dependencies';
 
         // check if the deps are already loaded
         var scripts = $('script[data-requiremodule]')
@@ -591,14 +587,11 @@ export class BaseExtension implements IExtension {
         if (!scripts.length) {
 
             require([depsUri], function (deps) {
-                // if debugging, set the base uri to the extension's directory.
-                // otherwise set it to the current directory (where app.js is hosted).
 
-                // todo: use compiler flag (when available)
-                var baseUri = (window.DEBUG) ? '../../extensions/' + that.name + '/lib/' : '';
+                const baseUri: string = 'lib/';
 
                 // for each dependency, prepend baseUri.
-                for (var i = 0; i < deps.dependencies.length; i++) {
+                for (let i = 0; i < deps.dependencies.length; i++) {
                     deps.dependencies[i] = baseUri + deps.dependencies[i];
                 }
 

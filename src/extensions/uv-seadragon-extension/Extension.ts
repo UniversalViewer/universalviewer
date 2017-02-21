@@ -1,6 +1,7 @@
 import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
+import {Bootstrapper} from "../../Bootstrapper";
 import {Commands} from "./Commands";
 import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
@@ -26,7 +27,6 @@ import {SeadragonCenterPanel} from "../../modules/uv-seadragoncenterpanel-module
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
-import Bootstrapper from "../../Bootstrapper";
 import ExternalResource = Manifesto.IExternalResource;
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
@@ -35,7 +35,7 @@ import SearchResultRect = Manifold.SearchResultRect;
 import Size = Utils.Measurements.Size;
 declare var _: any; // todo: remove lodash
 
-export default class Extension extends BaseExtension implements ISeadragonExtension {
+export class Extension extends BaseExtension implements ISeadragonExtension {
 
     $downloadDialogue: JQuery;
     $externalContentDialogue: JQuery;
@@ -68,8 +68,8 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
         super(bootstrapper);
     }
 
-    create(overrideDependencies?: any): void {
-        super.create(overrideDependencies);
+    create(): void {
+        super.create();
 
         const that = this;
 
@@ -821,7 +821,7 @@ export default class Extension extends BaseExtension implements ISeadragonExtens
 
         if (!infoUri){
             // todo: use compiler flag (when available)
-            infoUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'lib/imageunavailable.json';
+            infoUri = 'lib/imageunavailable.json';
         }
 
         return infoUri;

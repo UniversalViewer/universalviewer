@@ -1,3 +1,9 @@
+import {Bootstrapper} from "./Bootstrapper";
+import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
+import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
+import {Extension as PDFExtension} from "./extensions/uv-pdf-extension/Extension";
+import {Extension as VirtexExtension} from "./extensions/uv-virtex-extension/Extension";
+
 export default class UV extends _Components.BaseComponent {
 
     constructor(options: _Components.IBaseComponentOptions) {
@@ -15,10 +21,38 @@ export default class UV extends _Components.BaseComponent {
         var success: boolean = super._init();
 
         if (!success){
-            console.error("Component failed to initialise");
+            console.error("UV failed to initialise");
         }
         
-        this._$element.append("I am the UV");
+        const extensions: Object = {};
+
+        extensions[manifesto.ElementType.canvas().toString()] = {
+            type: OpenSeadragonExtension,
+            name: 'uv-seadragon-extension'
+        };
+
+        extensions[manifesto.ElementType.movingimage().toString()] = {
+            type: MediaElementExtension,
+            name: 'uv-mediaelement-extension'
+        };
+
+        extensions[manifesto.ElementType.physicalobject().toString()] = {
+            type: VirtexExtension,
+            name: 'uv-virtex-extension'
+        };
+
+        extensions[manifesto.ElementType.sound().toString()] = {
+            type: MediaElementExtension,
+            name: 'uv-mediaelement-extension'
+        };
+
+        extensions[manifesto.RenderingFormat.pdf().toString()] = {
+            type: PDFExtension,
+            name: 'uv-pdf-extension'
+        };
+
+        const bootstrapper = new Bootstrapper(extensions);
+        bootstrapper.bootstrap();
 
         return success;
     }

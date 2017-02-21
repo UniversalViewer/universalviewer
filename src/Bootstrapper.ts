@@ -6,7 +6,7 @@ declare var manifold: IManifold;
 
 // The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
 // then determining which extension to use and instantiating it.
-export default class Bootstrapper{
+export class Bootstrapper{
 
     config: any;
     extension: IExtension;
@@ -130,7 +130,7 @@ export default class Bootstrapper{
         this.getConfigExtension(extension, (configExtension: any) => {
 
             // todo: use a compiler flag when available
-            var configPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + that.params.getLocaleName() + '.config.json' : 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.json';
+            const configPath: string = 'lib/' + extension.name + '.' + that.params.getLocaleName() + '.config.json';
 
             $.getJSON(configPath, (config) => {
                 this.extendConfig(extension, config, configExtension, cb);
@@ -187,7 +187,7 @@ export default class Bootstrapper{
 
     injectCss(extension: any, config: any, cb: () => void): void {
         // todo: use a compiler flag when available
-        var cssPath = (window.DEBUG)? 'extensions/' + extension.name + '/build/' + config.options.theme + '.css' : 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
+        const cssPath: string = 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
 
         yepnope.injectCss(cssPath, function() {
             cb();
@@ -197,7 +197,7 @@ export default class Bootstrapper{
     createExtension(extension: any, config: any): void {
         this.config = config;
         var helper = extension.helper;
-        this.extension = new extension.type.default(this);
+        this.extension = new extension.type(this);
         this.extension.helper = helper;
         this.extension.name = extension.name;
         this.extension.create();

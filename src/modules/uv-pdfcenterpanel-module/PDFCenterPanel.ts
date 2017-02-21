@@ -42,23 +42,11 @@ export class PDFCenterPanel extends CenterPanel {
 
             } else {
 
-                var viewerPath;
-
-                // todo: use compiler conditional
-                if (window.DEBUG){
-                    viewerPath = 'modules/uv-pdfcenterpanel-module/html/viewer.html';
-                } else {
-                    viewerPath = 'html/uv-pdfcenterpanel-module/viewer.html';
-                }
+                const viewerPath: string = 'html/uv-pdfcenterpanel-module/viewer.html';
 
                 // load viewer.html
                 this.$content.load(viewerPath, () => {
-                    if (window.DEBUG){
-                        PDFJS.workerSrc = 'extensions/uv-pdf-extension/lib/pdf.worker.min.js';
-                    } else {
-                        PDFJS.workerSrc = 'lib/pdf.worker.min.js';
-                    }
-
+                    PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                     PDFJS.DEFAULT_URL = pdfUri;
 
                     var anchorIndex = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;

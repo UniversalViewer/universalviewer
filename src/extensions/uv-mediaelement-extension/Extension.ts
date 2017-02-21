@@ -1,7 +1,7 @@
 import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import Bootstrapper from "../../Bootstrapper";
+import {Bootstrapper} from "../../Bootstrapper";
 import {Commands} from "./Commands";
 import {DownloadDialogue} from "./DownloadDialogue";
 import {ShareDialogue} from "./ShareDialogue";
@@ -20,7 +20,7 @@ import {SettingsDialogue} from "./SettingsDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
 import {TreeView} from "../../modules/uv-contentleftpanel-module/TreeView";
 
-export default class Extension extends BaseExtension implements IMediaElementExtension {
+export class Extension extends BaseExtension implements IMediaElementExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -40,8 +40,8 @@ export default class Extension extends BaseExtension implements IMediaElementExt
         super(bootstrapper);
     }
 
-    create(overrideDependencies?: any): void {
-        super.create(overrideDependencies);
+    create(): void {
+        super.create();
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {

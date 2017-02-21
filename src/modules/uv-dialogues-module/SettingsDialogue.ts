@@ -94,11 +94,9 @@ export class SettingsDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        if (!window.DEBUG) {
-            $.getJSON("package.json", (pjson: any) => {
-                this.$version.text("v" + pjson.version);
-            });
-        }
+        $.getJSON("package.json", (pjson: any) => {
+            this.$version.text("v" + pjson.version);
+        });
     }
 
     resize(): void {

@@ -1,7 +1,7 @@
 import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import Bootstrapper from "../../Bootstrapper";
+import {Bootstrapper} from "../../Bootstrapper";
 import {Commands} from "./Commands";
 import {DownloadDialogue} from "./DownloadDialogue";
 import {ShareDialogue} from "./ShareDialogue";
@@ -18,7 +18,7 @@ import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
 
-export default class Extension extends BaseExtension implements IPDFExtension {
+export class Extension extends BaseExtension implements IPDFExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -37,7 +37,7 @@ export default class Extension extends BaseExtension implements IPDFExtension {
         super(bootstrapper);
     }
 
-    create(overrideDependencies?: any): void {
+    create(): void {
         super.create();
 
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {

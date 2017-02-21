@@ -161,7 +161,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.updateAttribution();
 
         // todo: use compiler flag (when available)
-        var prefixUrl = (window.DEBUG)? 'modules/uv-seadragoncenterpanel-module/img/' : 'themes/' + this.extension.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
+        const prefixUrl: string = 'themes/' + this.extension.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
@@ -258,9 +258,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.$canvas = $(this.viewer.canvas);
 
-        if (!window.DEBUG) {
-            this.$canvas.on('contextmenu', (e) => { return false; });
-        }
+        this.$canvas.on('contextmenu', (e) => { return false; });
 
         this.$navigator = this.$viewer.find(".navigator");
         this.setNavigatorVisible();

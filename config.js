@@ -30,28 +30,4 @@ module.exports = function () {
         uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
         uvVirtexExtension: './src/extensions/uv-virtex-extension'
     };
-    this.ts = {
-        dev: {
-            src: ['./src/**/*.ts', 'typings/**/*.ts'],
-            options: {
-                target: 'es3',
-                module: 'amd',
-                sourceMap: true,
-                declarations: false,
-                noLib: false,
-                comments: true
-            }
-        },
-        dist: {
-            src: ['./src/**/*.ts', 'typings/**/*.ts'],
-            options: {
-                target: 'es3',
-                module: 'amd',
-                sourceMap: false,
-                declarations: false,
-                noLib: false,
-                comments: false
-            }
-        }
-    }
 }

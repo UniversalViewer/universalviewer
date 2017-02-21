@@ -1,4 +1,4 @@
-import Bootstrapper from "../../Bootstrapper";
+import {Bootstrapper} from "../../Bootstrapper";
 import {BootstrapParams} from "../../BootstrapParams";
 import {Metric} from "./Metric";
 import {Params} from "../../Params";

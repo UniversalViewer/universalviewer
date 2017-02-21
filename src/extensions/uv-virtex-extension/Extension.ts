@@ -1,7 +1,7 @@
 import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import Bootstrapper from "../../Bootstrapper";
+import {Bootstrapper} from "../../Bootstrapper";
 import {Commands} from "./Commands";
 import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import {DownloadDialogue} from "./DownloadDialogue";
@@ -20,7 +20,7 @@ import {Shell} from "../../modules/uv-shared-module/Shell";
 import {TreeView} from "../../modules/uv-contentleftpanel-module/TreeView";
 import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
 
-export default class Extension extends BaseExtension implements IVirtexExtension {
+export class Extension extends BaseExtension implements IVirtexExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -40,8 +40,8 @@ export default class Extension extends BaseExtension implements IVirtexExtension
         super(bootstrapper);
     }
 
-    create(overrideDependencies?: any): void {
-        super.create(overrideDependencies);
+    create(): void {
+        super.create();
 
         $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
