@@ -16,7 +16,7 @@ module.exports = function () {
     };
     this.directories = {
         bower: './lib',
-        build: './build',
+        build: './.build',
         dist: './dist',
         examples: './examples',
         extensions: './src/extensions',

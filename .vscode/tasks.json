@@ -6,8 +6,8 @@
     "isShellCommand": true,
     "tasks": [
         {
-            "taskName": "default",
-            "args": [],
+            "taskName": "build",
+            "args": ["--dev"],
             "isBuildCommand": true,
             "isWatching": false,
             "problemMatcher": [

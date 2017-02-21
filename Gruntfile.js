@@ -42,7 +42,7 @@ module.exports = function (grunt) {
             dist: ['<%= config.directories.dist %>'],
             examples: ['<%= config.directories.examples %>/uv/'],
             distexamples: ['<%= config.directories.examples %>/uv-*.zip', '<%= config.directories.examples %>/uv-*.tar'],
-            extension: ['<%= config.directories.src %>/extensions/*/build/*']
+            extension: ['<%= config.directories.src %>/extensions/*/.build/*']
         },
 
         concat: {
@@ -58,12 +58,12 @@ module.exports = function (grunt) {
                     // extension schema files
                     {
                         expand: true,
-                        src: ['src/extensions/*/build/*.schema.json'],
+                        src: ['src/extensions/*/.build/*.schema.json'],
                         dest: '<%= config.directories.build %>/schema/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
-                            // src/extensions/[extension]/build/[locale].schema.json
-                            var reg = /extensions\/(.*)\/build\/(.*.schema.json)/;
+                            // src/extensions/[extension]/.build/[locale].schema.json
+                            var reg = /extensions\/(.*)\/.build\/(.*.schema.json)/;
                             var extensionName = src.match(reg)[1];
                             var fileName = src.match(reg)[2];
                             return dest + extensionName + '.' + fileName;
@@ -112,12 +112,12 @@ module.exports = function (grunt) {
                     // extension configuration files
                     {
                         expand: true,
-                        src: ['src/extensions/**/build/*.config.json'],
+                        src: ['src/extensions/**/.build/*.config.json'],
                         dest: '<%= config.directories.build %>/lib/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
                             // src/extensions/[extension]/[locale].config.json
-                            var reg = /extensions\/(.*)\/build\/(.*.config.json)/;
+                            var reg = /extensions\/(.*)\/.build\/(.*.config.json)/;
                             var extensionName = src.match(reg)[1];
                             var fileName = src.match(reg)[2];
 
@@ -178,7 +178,7 @@ module.exports = function (grunt) {
                 ]
             },
             examples: {
-                // copy contents of /build to /examples/build.
+                // copy contents of /.build to /examples/uv.
                 files: [
                     {
                         cwd: '<%= config.directories.build %>',
@@ -194,29 +194,29 @@ module.exports = function (grunt) {
                         dest: '<%= config.directories.examples %>/'
                     }
                 ]
-            },
-            dist: {
-                // copy contents of /build to /dist/build.
-                files: [
-                    {
-                        cwd: '<%= config.directories.build %>',
-                        expand: true,
-                        src: ['**'],
-                        dest: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>/'
-                    }
-                ]
-            },
-            distexamples: {
-                // copy zip archives to examples
-                files: [
-                    {
-                        cwd: '<%= config.directories.dist %>',
-                        expand: true,
-                        src: ['*.zip', '*.tar'],
-                        dest: '<%= config.directories.examples %>/'
-                    }
-                ]
             }
+            // dist: {
+            //     // copy contents of /.build to /examples/uv-m.m.p.
+            //     files: [
+            //         {
+            //             cwd: '<%= config.directories.build %>',
+            //             expand: true,
+            //             src: ['**'],
+            //             dest: '<%= config.directories.examples %>/<%= config.directories.uvVersioned %>/'
+            //         }
+            //     ]
+            // }
+            // distexamples: {
+            //     // copy zip archives to examples
+            //     files: [
+            //         {
+            //             cwd: '<%= config.directories.dist %>',
+            //             expand: true,
+            //             src: ['*.zip', '*.tar'],
+            //             dest: '<%= config.directories.examples %>/'
+            //         }
+            //     ]
+            // }
         },
 
         sync: {
@@ -245,7 +245,7 @@ module.exports = function (grunt) {
             zip: {
                 options: {
                     mode: 'zip',
-                    archive: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>.zip',
+                    archive: '<%= config.directories.examples %>/<%= config.directories.uvVersioned %>.zip',
                     level: 9
                 },
                 files: [
@@ -255,26 +255,16 @@ module.exports = function (grunt) {
                         src: ['**']
                     }
                 ]
-            }//,
-            // tar: {
-            //     options: {
-            //         mode: 'tar',
-            //         archive: '<%= config.directories.dist %>/<%= config.directories.uvVersioned %>.tar'
-            //     },
-            //     files: [
-            //         {
-            //             expand: true,
-            //             cwd: '<%= config.directories.build %>/',
-            //             src: ['**']
-            //         }
-            //     ]
-            // }
+            }
         },
 
         exec: {
             // concatenate and compress with r.js
-            build: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o app.build.js' // optimize=none'
+            devbuild: {
+                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js'
+            },
+            distbuild: {
+                cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js'
             },
         },
 
@@ -417,17 +407,17 @@ module.exports = function (grunt) {
     configure(grunt);
     theme(grunt);
 
-    grunt.registerTask('default', '', function(){
+    // grunt.registerTask('default', '', function(){
 
-        grunt.task.run(
-            'clean:bundle',
-            'concat:bundle',
-            'ts:dev',
-            'clean:extension',
-            'configure:apply',
-            'theme:create'
-        );
-    });
+    //     grunt.task.run(
+    //         'clean:bundle',
+    //         'concat:bundle',
+    //         'ts:dev',
+    //         'clean:extension',
+    //         'configure:apply',
+    //         'theme:create'
+    //     );
+    // });
 
     grunt.registerTask('build', '', function() {
 
@@ -437,21 +427,24 @@ module.exports = function (grunt) {
 
         refresh();
 
-        // grunt build --minify
+        // grunt build --dev
         //var minify = grunt.option('minify');
         //if (minify) grunt.config.set('global.minify', '');
+
+        var tsType = (grunt.option('dev')) ? 'ts:dev' : 'ts:build';
+        var execType = (grunt.option('dev')) ? 'exec:devbuild' : 'exec:distbuild';
 
         grunt.task.run(
             'clean:bundle',
             'concat:bundle',
             'uglify:bundle',
-            'ts:dist',
+            tsType,
             'clean:extension',
             'configure:apply',
             'clean:build',
             'copy:schema',
             'copy:build',
-            'exec:build',
+            execType,
             'replace:html',
             'replace:js',
             'theme:create',
@@ -461,11 +454,11 @@ module.exports = function (grunt) {
             'replace:versions',
             'clean:examples',
             'copy:examples',
-            'dist'
+            'compress:zip'
         );
     });
 
-    // compress build into .zip and .tar
+    // compress .build into .zip
     grunt.registerTask('dist', '', function() {
 
         refresh();

@@ -63,8 +63,8 @@ node_modules
 ## Build
 #################
 
-build/
-src/extensions/*/build
+.build/
+src/extensions/*/.build
 
 #################
 ## Dist

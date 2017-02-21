@@ -11,8 +11,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/yepnope/1.5.4/yepnope.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash-compat/3.10.2/lodash.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js"></script>
-    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js"></script>-->
     <script type="text/javascript" src="lib/bundle.min.js"></script>
+    <!--<script data-main="app" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>-->
     <script type="text/javascript" src="app.js"></script>
 
     <style type="text/css">
@@ -35,9 +35,9 @@
         app.setAttribute("style", "width:" + width + "px");
         app.setAttribute("style", "height:" + height + "px");
 
-        document.addEventListener('uvReady', function (e) { 
+        window.addEventListener('uvReady', function (e) { 
 
-            var uv = new document.UV({
+            var uv = new UV({
                 target: document.querySelector('#app'),
                 data: {
                     iiifResourceURI: "uri"
