@@ -252,7 +252,7 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             devbuild: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js' // todo: use https://github.com/Rich-Harris/sorcery
+                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none' // todo: use https://github.com/Rich-Harris/sorcery https://github.com/requirejs/r.js/issues/799
             },
             distbuild: {
                 cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js'

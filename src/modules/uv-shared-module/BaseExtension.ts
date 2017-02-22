@@ -901,10 +901,12 @@ export class BaseExtension implements IExtension {
     }
 
     serializeLocales(locales: any[]): string {
-        var str = '';
+        var str: string = '';
+        
+        if (!locales) return str;
 
-        for (var i = 0; i < locales.length; i++){
-            var l = locales[i];
+        for (let i = 0; i < locales.length; i++) {
+            const l = locales[i];
             if (i > 0) str += ',';
             str += l.name;
             if (l.label){
