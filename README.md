@@ -46,31 +46,35 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
 1. Install [Node.js](http://nodejs.org), if you haven't already
 
-1. Install the grunt command line interface (if you haven't already); on the command line, run:
+1. Install the grunt command line interface:
 
-	    npm install -g grunt-cli
+    npm install -g grunt-cli
 
-1. Install bower (if you haven't already)
+1. Install bower:
 
-        npm install -g bower
+    npm install -g bower
+
+1. Install [Sorcery](https://github.com/Rich-Harris/sorcery):
+
+    npm install -g sorcery
 
 1. Clone the `universalviewer` repository and sub modules:
 
-	    git clone https://github.com/UniversalViewer/universalviewer.git --recursive
+    git clone https://github.com/UniversalViewer/universalviewer.git --recursive
 
 1. On the command line, go in to the `universalviewer` folder
 
 1. Run
 
-        npm install
-        bower install
-        grunt sync
+    npm install
+    bower install
+    grunt sync
 
 ### Debug Builds
 
 To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
 
-	grunt
+	  grunt build --dev
 
 This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with source maps to aid in debugging.
 
@@ -78,9 +82,9 @@ This will compile the [.less](http://lesscss.org) files into .css and [.ts](http
 
 To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
-	grunt build
+	  grunt build
 
-A versioned `uv-major.minor.patch` folder along with compressed .zip and .tar files will appear in the `/dist` folder. Use these in your website, or alternatively use:
+This will create a `uv.m.m.p.zip` in the `examples` respository. Alternatively use:
  
     npm install universalviewer --save
     

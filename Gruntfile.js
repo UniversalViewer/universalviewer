@@ -106,6 +106,23 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
+                        src: ['<%= config.directories.src %>/build.js'],
+                        dest: '<%= config.directories.build %>',
+                        rename: function(dest, src) {
+                            return dest + '/app.js';
+                        }
+                    },
+                    // js
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['<%= config.directories.src %>/build.js.map'],
+                        dest: '<%= config.directories.build %>'
+                    },
+                    // js
+                    {
+                        expand: true,
+                        flatten: true,
                         cwd: '<%= config.directories.src %>',
                         src: [
                             'embed.js'
@@ -252,7 +269,7 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             devbuild: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none' // todo: use https://github.com/Rich-Harris/sorcery https://github.com/requirejs/r.js/issues/799
+                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none && sorcery -i src/build.js' // todo: use https://github.com/Rich-Harris/sorcery https://github.com/requirejs/r.js/issues/799
             },
             distbuild: {
                 cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js'
@@ -389,8 +406,8 @@ module.exports = function (grunt) {
             'configure:apply',
             'clean:build',
             'copy:schema',
-            'copy:build',
             execType,
+            'copy:build',
             'theme:create',
             'theme:dist',
             'replace:moduleimages',
