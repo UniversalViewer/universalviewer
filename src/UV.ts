@@ -18,7 +18,7 @@ export default class UV extends _Components.BaseComponent {
     }
 
     protected _init(): boolean {
-        var success: boolean = super._init();
+        const success: boolean = super._init();
 
         if (!success){
             console.error("UV failed to initialise");
