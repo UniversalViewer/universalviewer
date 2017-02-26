@@ -1,7 +1,7 @@
 import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
-import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {Commands} from "./Commands";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
+import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import {DownloadType} from "./DownloadType";
 import {ISeadragonExtension} from "./ISeadragonExtension";
@@ -86,20 +86,20 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         this.$explanatoryTextTemplate = $('<span class="explanatory"></span>');
 
-        var that = this;
+        const that = this;
 
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
 
-            var $selectedOption: JQuery = that.getSelectedOption();
+            const $selectedOption: JQuery = that.getSelectedOption();
 
-            var id: string = $selectedOption.attr('id');
-            var label: string = $selectedOption.attr('title');
-            var mime: any = $selectedOption.data('mime');
-            var type: string = DownloadType.UNKNOWN;
-            var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const id: string = $selectedOption.attr('id');
+            const label: string = $selectedOption.attr('title');
+            const mime: any = $selectedOption.data('mime');
+            let type: string = DownloadType.UNKNOWN;
+            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-            if (this.renderingUrls[id]) {
+            if (this.renderingUrls[<any>id]) {
                 if (mime) {
                     if (mime.toLowerCase().indexOf('pdf') !== -1) {
                         type = DownloadType.ENTIREDOCUMENTASPDF;
@@ -115,14 +115,14 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                     // if (printService && this.extension.isOnHomeDomain()){
                     //     $.publish(Commands.PRINT);
                     // } else {
-                        window.open(this.renderingUrls[id]);
+                        window.open(this.renderingUrls[<any>id]);
                     //}
                 }
             } else {
                 switch (id) {
                     case DownloadOption.currentViewAsJpg.toString():
-                        var viewer = (<ISeadragonExtension>that.extension).getViewer();
-                        window.open((<ISeadragonExtension>that.extension).getCroppedImageUri(canvas, viewer));
+                        const viewer: any = (<ISeadragonExtension>that.extension).getViewer();
+                        window.open(<string>(<ISeadragonExtension>that.extension).getCroppedImageUri(canvas, viewer));
                         type = DownloadType.CURRENTVIEW;
                         break;
                     case DownloadOption.selection.toString():
@@ -137,9 +137,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                         type = DownloadType.WHOLEIMAGEHIGHRES;
                         break;
                     case DownloadOption.wholeImagesHighRes.toString():
-                        var indices: number[] = this.extension.getPagedIndices();
+                        const indices: number[] = this.extension.getPagedIndices();
 
-                        for (var i = 0; i < indices.length; i++) {
+                        for (let i = 0; i < indices.length; i++) {
                             window.open(this.getCanvasHighResImageUri(this.extension.helper.getCanvasByIndex(indices[i])));
                         }
 
@@ -169,22 +169,21 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     open($triggerButton?: JQuery) {
         super.open($triggerButton);
 
-        var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-        var rotation: number = (<ISeadragonExtension>this.extension).getViewerRotation();
-        var hasNormalDimensions: boolean = rotation % 180 == 0;
+        const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
+        const hasNormalDimensions: boolean = rotation % 180 == 0;
 
         if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
-            var $input: JQuery = this.$currentViewAsJpgButton.find('input');
-            var $label: JQuery = this.$currentViewAsJpgButton.find('label');
+            const $input: JQuery = this.$currentViewAsJpgButton.find('input');
+            const $label: JQuery = this.$currentViewAsJpgButton.find('label');
 
-            var label: string = this.content.currentViewAsJpg;
-            var viewer = (<ISeadragonExtension>this.extension).getViewer();
-            var dimensions: CroppedImageDimensions = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, viewer);
-
+            let label: string = this.content.currentViewAsJpg;
+            const viewer = (<ISeadragonExtension>this.extension).getViewer();
+            const dimensions: CroppedImageDimensions | null = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, viewer);
 
             // dimensions
-            if (dimensions){
+            if (dimensions) {
                 label = hasNormalDimensions ?
                   String.format(label, dimensions.size.width, dimensions.size.height) :
                   String.format(label, dimensions.size.height, dimensions.size.width);
@@ -199,9 +198,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             // explanatory text
             if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
-                var text: string = this.content.currentViewAsJpgExplanation;
+                const text: string = this.content.currentViewAsJpgExplanation;
                 if (text) {
-                    var $span = this.$explanatoryTextTemplate.clone();
+                    const $span = this.$explanatoryTextTemplate.clone();
                     $span.text(text);
                     $label.append($span);
                 }                
@@ -211,9 +210,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.wholeImageHighRes)) {
-            var $input: JQuery = this.$wholeImageHighResButton.find('input');
-            var $label: JQuery = this.$wholeImageHighResButton.find('label');
-            var mime = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
+            const $input: JQuery = this.$wholeImageHighResButton.find('input');
+            const $label: JQuery = this.$wholeImageHighResButton.find('label');
+            let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
             if (mime){
                 mime = Utils.Files.simplifyMimeType(mime);
@@ -222,13 +221,13 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             }
 
             // dimensions
-            var size: Size = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
+            const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
 
             if (!size){
                 this.$wholeImageHighResButton.hide();
             } else {
-                var label: string = hasNormalDimensions ?
+                const label: string = hasNormalDimensions ?
                   String.format(this.content.wholeImageHighRes, size.width, size.height, mime) :
                   String.format(this.content.wholeImageHighRes, size.height, size.width, mime);
                 $label.text(label);
@@ -240,9 +239,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             // explanatory text
             if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
-                var text: string = this.content.wholeImageHighResExplanation;
+                const text: string = this.content.wholeImageHighResExplanation;
                 if (text) {
-                    var $span = this.$explanatoryTextTemplate.clone();
+                    const $span: JQuery = this.$explanatoryTextTemplate.clone();
                     $span.text(text);
                     $label.append($span);
                 }                
@@ -252,9 +251,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.wholeImagesHighRes)) {
-            var $input: JQuery = this.$wholeImagesHighResButton.find('input');
-            var $label: JQuery = this.$wholeImagesHighResButton.find('label');
-            var mime = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
+            const $input: JQuery = this.$wholeImagesHighResButton.find('input');
+            const $label: JQuery = this.$wholeImagesHighResButton.find('label');
+            let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
             if (mime){
                 mime = Utils.Files.simplifyMimeType(mime);
@@ -262,7 +261,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 mime = '?';
             }
             
-            var label: string = String.format(this.content.wholeImagesHighRes, mime);
+            const label: string = String.format(this.content.wholeImagesHighRes, mime);
             $label.text(label);
             $input.prop('title', label);
 
@@ -270,9 +269,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             // explanatory text
             if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
-                var text: string = this.content.wholeImagesHighResExplanation;
+                const text: string = this.content.wholeImagesHighResExplanation;
                 if (text) {
-                    var $span = this.$explanatoryTextTemplate.clone();
+                    const $span: JQuery = this.$explanatoryTextTemplate.clone();
                     $span.text(text);
                     $label.append($span);
                 }                
@@ -282,10 +281,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.wholeImageLowResAsJpg)) {
-            var $input: JQuery = this.$wholeImageLowResAsJpgButton.find('input');
-            var $label: JQuery = this.$wholeImageLowResAsJpgButton.find('label');
-            var size: Size = (<ISeadragonExtension>this.extension).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
-            var label = hasNormalDimensions ?
+            const $input: JQuery = this.$wholeImageLowResAsJpgButton.find('input');
+            const $label: JQuery = this.$wholeImageLowResAsJpgButton.find('label');
+            const size: Size | null = (<ISeadragonExtension>this.extension).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
+            const label = hasNormalDimensions ?
               String.format(this.content.wholeImageLowResAsJpg, size.width, size.height) :
               String.format(this.content.wholeImageLowResAsJpg, size.height, size.width);
             $label.text(label);
@@ -296,9 +295,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             // explanatory text
             if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
-                var text: string = this.content.wholeImageLowResAsJpgExplanation;
+                const text: string = this.content.wholeImageLowResAsJpgExplanation;
                 if (text) {
-                    var $span = this.$explanatoryTextTemplate.clone();
+                    const $span = this.$explanatoryTextTemplate.clone();
                     $span.text(text);
                     $label.append($span);
                 }                
@@ -308,17 +307,17 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.selection)) {
-            var $input: JQuery = this.$selectionButton.find('input');
-            var $label: JQuery = this.$selectionButton.find('label');
+            const $input: JQuery = this.$selectionButton.find('input');
+            const $label: JQuery = this.$selectionButton.find('label');
             $label.text(this.content.downloadSelection);
             $input.prop('title', this.content.downloadSelection);
             this.$selectionButton.show();
 
             // explanatory text
             if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
-                var text: string = this.content.selectionExplanation;
+                const text: string = this.content.selectionExplanation;
                 if (text) {
-                    var $span = this.$explanatoryTextTemplate.clone();
+                    const $span = this.$explanatoryTextTemplate.clone();
                     $span.text(text);
                     $label.append($span);
                 }                
@@ -330,8 +329,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.resetDynamicDownloadOptions();
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
-            var images = canvas.getImages();
-            for (var i = 0; i < images.length; i++) {
+            const images: Manifesto.IAnnotation[] = canvas.getImages();
+            for (let i = 0; i < images.length; i++) {
                 this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.dynamicImageRenderings);
             }
         }
@@ -346,15 +345,15 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         // hide the current view option if it's equivalent to whole image.
         if (this.isDownloadOptionAvailable(DownloadOption.currentViewAsJpg)) {
-            var currentWidth: number = parseInt(this.$currentViewAsJpgButton.data('width').toString());
-            var currentHeight: number = parseInt(this.$currentViewAsJpgButton.data('height').toString());
-            var wholeWidth: number = parseInt(this.$wholeImageHighResButton.data('width').toString());
-            var wholeHeight: number = parseInt(this.$wholeImageHighResButton.data('height').toString());
+            const currentWidth: number = parseInt(this.$currentViewAsJpgButton.data('width').toString());
+            const currentHeight: number = parseInt(this.$currentViewAsJpgButton.data('height').toString());
+            const wholeWidth: number = parseInt(this.$wholeImageHighResButton.data('width').toString());
+            const wholeHeight: number = parseInt(this.$wholeImageHighResButton.data('height').toString());
 
-            var percentageWidth: number = (currentWidth / wholeWidth) * 100;
-            var percentageHeight: number = (currentHeight / wholeHeight) * 100;
+            const percentageWidth: number = (currentWidth / wholeWidth) * 100;
+            const percentageHeight: number = (currentHeight / wholeHeight) * 100;
 
-            var disabledPercentage: number = this.options.currentViewDisabledPercentage;
+            const disabledPercentage: number = this.options.currentViewDisabledPercentage;
 
             // if over disabledPercentage of the size of whole image
             if (percentageWidth >= disabledPercentage && percentageHeight >= disabledPercentage) {
@@ -365,23 +364,23 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         // order by image area
-        var $options: any = this.$imageOptions.find('li.single');
+        let $options: JQuery = this.$imageOptions.find('li.single');
 
-        $options = $options.sort((a, b) => {
-            var aWidth: any = $(a).data('width');
+        $options = $options.sort((a: any, b: any) => {
+            let aWidth: any = $(a).data('width');
             aWidth ? aWidth = parseInt(aWidth.toString()) : 0;
 
-            var aHeight: any = $(a).data('height');
+            let aHeight: any = $(a).data('height');
             aHeight ? aHeight = parseInt(aHeight.toString()) : 0;
 
-            var bWidth: any = $(b).data('width');
+            let bWidth: any = $(b).data('width');
             bWidth ? bWidth = parseInt(bWidth.toString()) : 0;
 
-            var bHeight: any = $(b).data('height');
+            let bHeight: any = $(b).data('height');
             bHeight ? bHeight = parseInt(bHeight.toString()) : 0;
             
-            var aArea: number = aWidth * aHeight;
-            var bArea: number = bWidth * bHeight;
+            const aArea: number = aWidth * aHeight;
+            const bArea: number = bWidth * bHeight;
 
             if (aArea < bArea) {
                 return -1;
@@ -397,10 +396,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         $options.detach().appendTo(this.$imageOptions);
 
         // hide empty groups
-        var $groups: JQuery = this.$downloadOptions.find('li.group');
+        const $groups: JQuery = this.$downloadOptions.find('li.group');
 
-        $groups.each((index, group) => {
-            var $group: JQuery = $(group);
+        $groups.each((index: number, group: Element) => {
+            const $group: JQuery = $(group);
 
             $group.show();
 
@@ -432,22 +431,22 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption): void {
-        var renderings: Manifesto.IRendering[] = resource.getRenderings();
+        const renderings: Manifesto.IRendering[] = resource.getRenderings();
 
-        for (var i = 0; i < renderings.length; i++) {
-            var rendering: Manifesto.IRendering = renderings[i];
+        for (let i = 0; i < renderings.length; i++) {
+            const rendering: Manifesto.IRendering = renderings[i];
             if (rendering) {
-                var label: string = Manifesto.TranslationCollection.getValue(rendering.getLabel());
-                var currentId: string = "downloadOption" + ++this.renderingUrlsCount;
+                let label: string | null = Manifesto.TranslationCollection.getValue(rendering.getLabel());
+                const currentId: string = "downloadOption" + ++this.renderingUrlsCount;
                 if (label) {
                     label += " ({0})";
                 } else {
                     label = defaultLabel;
                 }
-                var mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
+                const mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
                 label = String.format(label, mime);
-                this.renderingUrls[currentId] = rendering.id;
-                var $button = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + currentId + '">' + label + '</label></li>');
+                this.renderingUrls[<any>currentId] = rendering.id;
+                const $button: JQuery = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + currentId + '">' + label + '</label></li>');
 
                 switch (type) {
                     case DownloadOption.dynamicImageRenderings:
@@ -468,8 +467,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return this.$downloadOptions.find("li.option input:checked");
     }
 
-    getCanvasImageResource(canvas: Manifesto.ICanvas) {
-        var images = canvas.getImages();
+    getCanvasImageResource(canvas: Manifesto.ICanvas): Manifesto.IResource | null {
+        const images: Manifesto.IAnnotation[] = canvas.getImages();
         if (images[0]) {
             return images[0].getResource();
         }
@@ -477,12 +476,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getCanvasHighResImageUri(canvas: Manifesto.ICanvas): string {
-        var size: Size = this.getCanvasComputedDimensions(canvas);
+        const size: Size | null = this.getCanvasComputedDimensions(canvas);
         if (size){
-            var width: number = size.width;
-            var uri: string = canvas.getCanonicalImageUri(width);
-            var uri_parts: string [] = uri.split('/');
-            var rotation: number = (<ISeadragonExtension>this.extension).getViewerRotation();
+            const width: number = size.width;
+            let uri: string = canvas.getCanonicalImageUri(width);
+            const uri_parts: string [] = uri.split('/');
+            const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
             uri_parts[ uri_parts.length - 2 ] = String(rotation);
             uri = uri_parts.join('/');
             return uri;
@@ -490,12 +489,15 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return '';
     }
 
-    getCanvasMimeType(canvas: Manifesto.ICanvas): string {
-        var resource = this.getCanvasImageResource(canvas);
-        var format: Manifesto.ResourceFormat = resource.getFormat();
+    getCanvasMimeType(canvas: Manifesto.ICanvas): string | null {
+        const resource: Manifesto.IResource | null = this.getCanvasImageResource(canvas);
 
-        if (format){
-            return format.toString();
+        if (resource) {
+            const format: Manifesto.ResourceFormat | null = resource.getFormat();
+
+            if (format){
+                return format.toString();
+            }
         }
 
         return null;
@@ -510,31 +512,31 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return new Size(0, 0);
     }
 
-    getCanvasMaxDimensions(canvas: Manifesto.ICanvas): Size {
+    getCanvasMaxDimensions(canvas: Manifesto.ICanvas): Size | null {
         if (canvas.externalResource.data && canvas.externalResource.data.profile[1]){
             return new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
         }
         return null;
     }
 
-    getCanvasComputedDimensions(canvas: Manifesto.ICanvas): Size {
-        var size: Size = this.getCanvasDimensions(canvas);
-        var maxSize: Size =  this.getCanvasMaxDimensions(canvas);
+    getCanvasComputedDimensions(canvas: Manifesto.ICanvas): Size | null {
+        const size: Size = this.getCanvasDimensions(canvas);
+        const maxSize: Size | null =  this.getCanvasMaxDimensions(canvas);
 
         if (!maxSize) return null;
 
-        var finalWidth: number = size.width;
-        var finalHeight: number = size.height;
+        let finalWidth: number = size.width;
+        let finalHeight: number = size.height;
 
         // if the maxWidth is less than the advertised width
-        if (!_.isUndefined(maxSize.width) && maxSize.width < size.width){
+        if (!_.isUndefined(maxSize.width) && maxSize.width < size.width) {
             finalWidth = maxSize.width;
 
-            if (!_.isUndefined(maxSize.height)){
+            if (!_.isUndefined(maxSize.height)) {
                 finalHeight = maxSize.height;
             } else {
                 // calculate finalHeight
-                var ratio: number = Math.normalise(maxSize.width, 0, size.width);
+                const ratio: number = Math.normalise(maxSize.width, 0, size.width);
                 finalHeight = Math.floor(size.height * ratio);
             }
         }
@@ -551,7 +553,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 // if in one-up mode, or in two-up mode with a single page being shown
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
                     (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
-                    var maxSize: Size = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
+                    const maxSize: Size | null = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
                     if (maxSize) {
                         if (_.isUndefined(maxSize.width)) {
                             return true;
@@ -568,7 +570,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return false;
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
-                var size: Size = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
+                const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
                 if (!size) return false;
                 return (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.selection:

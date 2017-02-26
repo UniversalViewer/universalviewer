@@ -2,22 +2,16 @@ import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
-import {Commands} from "./Commands";
 import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import {DownloadDialogue} from "./DownloadDialogue";
-import {ShareDialogue} from "./ShareDialogue";
-import ExternalResource = Manifesto.IExternalResource;
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
 import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
 import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
 import {IVirtexExtension} from "./IVirtexExtension";
-import {LeftPanel} from "../../modules/uv-shared-module/LeftPanel";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import {Params} from "../../Params";
-import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
+import {ShareDialogue} from "./ShareDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
-import {TreeView} from "../../modules/uv-contentleftpanel-module/TreeView";
 import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
 
 export class Extension extends BaseExtension implements IVirtexExtension {
@@ -43,7 +37,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
     }
@@ -110,7 +104,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         var bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
@@ -121,8 +115,8 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number): string{
-        var configUri = this.config.uri || '';
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+        const configUri: string = this.config.uri || '';
+        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
         return script;
     }
 }

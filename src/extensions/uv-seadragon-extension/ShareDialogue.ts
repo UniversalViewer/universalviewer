@@ -1,8 +1,6 @@
-import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
-import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
 import {Commands} from "./Commands";
 import {ISeadragonExtension} from "./ISeadragonExtension";
-import {SeadragonCenterPanel} from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
+import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
 
 export class ShareDialogue extends BaseShareDialogue {
 
@@ -27,8 +25,8 @@ export class ShareDialogue extends BaseShareDialogue {
 
         super.update();
 
-        var xywh: string = (<ISeadragonExtension>this.extension).getViewportBounds();
-        var rotation: number = (<ISeadragonExtension>this.extension).getViewerRotation();
+        const xywh: string = <string>(<ISeadragonExtension>this.extension).getViewportBounds();
+        const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
 
         this.code = (<ISeadragonExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,

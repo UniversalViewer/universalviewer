@@ -20,21 +20,21 @@ export class MultiSelectDialogue extends Dialogue {
         
         super.create();
 
-        var that = this;
+        const that = this;
 
         this.openCommand = Commands.SHOW_MULTISELECT_DIALOGUE;
         this.closeCommand = Commands.HIDE_MULTISELECT_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, () => {
             this.open();
-            var multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
+            const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(true);
-            this.component.set(null); // todo: should be passing data
+            this.component.set(new Object()); // todo: should be passing data
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
-            var multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
+            const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(false);
         });
 
@@ -68,11 +68,10 @@ export class MultiSelectDialogue extends Dialogue {
             data: this.data
         });
 
-        var $selectButton: JQuery = this.$gallery.find('a.select');
+        const $selectButton: JQuery = this.$gallery.find('a.select');
         $selectButton.addClass('btn btn-primary');
 
-        (<any>this.component).on('multiSelectionMade', (args) => {
-            var ids = args[0];
+        (<any>this.component).on('multiSelectionMade', (ids: string[]) => {
             $.publish(Commands.MULTISELECTION_MADE, [ids]);
             that.close();
         });
@@ -95,8 +94,8 @@ export class MultiSelectDialogue extends Dialogue {
     resize(): void {
         super.resize();
 
-        var $main: JQuery = this.$gallery.find('.main');
-        var $header: JQuery = this.$gallery.find('.header');
+        const $main: JQuery = this.$gallery.find('.main');
+        const $header: JQuery = this.$gallery.find('.header');
         $main.height(this.$content.height() - this.$title.outerHeight() - this.$title.verticalMargins() - $header.height());
     }
 }

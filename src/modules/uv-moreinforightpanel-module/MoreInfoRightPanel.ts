@@ -18,7 +18,7 @@ export class MoreInfoRightPanel extends RightPanel {
 
         super.create();
         
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, () => {
             this.databind();
         });
 
@@ -40,7 +40,7 @@ export class MoreInfoRightPanel extends RightPanel {
 
     databind(): void {
         this.component.options.data = this._getData();
-        this.component.set(null); // todo: should be passing data
+        this.component.set(new Object()); // todo: should be passing data
     }
 
     private _getData(): IIIFComponents.IMetadataComponentData {

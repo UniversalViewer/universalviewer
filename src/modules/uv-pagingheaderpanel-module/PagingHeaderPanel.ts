@@ -2,7 +2,6 @@ import {AutoComplete} from "../uv-shared-module/AutoComplete";
 import {BaseCommands} from "../uv-shared-module/BaseCommands";
 import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
-import {HelpDialogue} from "../uv-dialogues-module/HelpDialogue";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 
@@ -46,24 +45,24 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e) => {
+        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
             this.modeChanged();
             this.updatePagingToggle();
         });
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, (e) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, () => {
             this.setSearchFieldValue(this.extension.helper.canvasIndex);
         });
         
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
             this.openGallery();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
             this.closeGallery();
         });
 
@@ -102,22 +101,22 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             new AutoComplete(this.$autoCompleteBox,
                 (term: string, cb: (results: string[]) => void) => {
-                    var results: string[] = [];
-                    var canvases: Manifesto.ICanvas[] = this.extension.helper.getCanvases();
+                    const results: string[] = [];
+                    const canvases: Manifesto.ICanvas[] = this.extension.helper.getCanvases();
 
                     // if in page mode, get canvases by label.
                     if (this.isPageModeEnabled()){
-                        for (var i = 0; i < canvases.length; i++){
-                            var canvas: Manifesto.ICanvas = canvases[i];
-                            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
-                            if (label.startsWith(term)){
+                        for (let i = 0; i < canvases.length; i++){
+                            const canvas: Manifesto.ICanvas = canvases[i];
+                            const label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+                            if (label.startsWith(term)) {
                                 results.push(label);
                             }
                         }
                     } else {
                         // get canvas by index
-                        for (var i = 0; i < canvases.length; i++){
-                            var canvas: Manifesto.ICanvas = canvases[i];
+                        for (let i = 0; i < canvases.length; i++){
+                            const canvas: Manifesto.ICanvas = canvases[i];
                             if (canvas.index.toString().startsWith(term)){
                                 results.push(canvas.index.toString());
                             }
@@ -140,14 +139,14 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="0" ></select>');
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
-            for (var imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
-                var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                var label: string = this.extension.sanitize(Manifesto.TranslationCollection.getValue(canvas.getLabel()));
+            for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
+                const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
+                const label: string = this.extension.sanitize(<string>Manifesto.TranslationCollection.getValue(canvas.getLabel()));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
             this.$imageSelectionBox.change(() => {
-                var imageIndex = parseInt(this.$imageSelectionBox.val());
+                const imageIndex: number = parseInt(this.$imageSelectionBox.val());
                 $.publish(Commands.IMAGE_SEARCH, [imageIndex]);
             });
         }
@@ -200,13 +199,13 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.updateGalleryButton();
 
         this.$oneUpButton.onPressed(() => {
-            var enabled: boolean = false;
+            const enabled: boolean = false;
             this.updateSettings({ pagingEnabled: enabled });
             $.publish(Commands.PAGING_TOGGLED, [enabled]);
         });
 
         this.$twoUpButton.onPressed(() => {
-            var enabled: boolean = true;
+            const enabled: boolean = true;
             this.updateSettings({ pagingEnabled: enabled });
             $.publish(Commands.PAGING_TOGGLED, [enabled]);
         });
@@ -219,7 +218,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         this.setTotal();
 
-        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
         // check if the book has more than one page, otherwise hide prev/next options.
         if (this.extension.helper.getTotalCanvases() === 1) {
@@ -418,7 +417,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     setTotal(): void {
 
-        var of = this.content.of;
+        const of: string = this.content.of;
 
         if (this.isPageModeEnabled()) {
             this.$total.html(String.format(of, this.extension.helper.getLastCanvasLabel(true)));
@@ -427,14 +426,14 @@ export class PagingHeaderPanel extends HeaderPanel {
         }
     }
 
-    setSearchFieldValue(index): void {
+    setSearchFieldValue(index: number): void {
 
-        var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
-        var value: string;
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+        let value: string | null = null;
 
         if (this.isPageModeEnabled()) {
 
-            var orderLabel: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+            const orderLabel: string = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
             if (orderLabel === "-") {
                 value = "";
@@ -466,7 +465,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         if (this.isPageModeEnabled()) {
             $.publish(Commands.PAGE_SEARCH, [value]);
         } else {
-            var index: number;
+            let index: number;
 
             if (this.options.autoCompleteBoxEnabled){
                 index = parseInt(this.$autoCompleteBox.val(), 10);
@@ -482,7 +481,7 @@ export class PagingHeaderPanel extends HeaderPanel {
                 return;
             }
 
-            var asset = this.extension.helper.getCanvasByIndex(index);
+            const asset = this.extension.helper.getCanvasByIndex(index);
 
             if (!asset){
                 this.extension.showMessage(this.extension.config.modules.genericDialogue.content.pageNotFound);
@@ -501,7 +500,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox.val(index);
         }
 
-        var viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
         if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
             if (this.extension.helper.isFirstCanvas()){

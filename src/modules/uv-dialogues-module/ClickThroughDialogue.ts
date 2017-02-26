@@ -22,13 +22,13 @@ export class ClickThroughDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_CLICKTHROUGH_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, (e: any, params: any) => {
             this.acceptCallback = params.acceptCallback;
             this.resource = params.resource;
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 

@@ -1,18 +1,13 @@
 import {SettingsDialogue as BaseSettingsDialogue} from "../../modules/uv-dialogues-module/SettingsDialogue";
-import {ISeadragonExtension} from "./ISeadragonExtension";
 
 export class SettingsDialogue extends BaseSettingsDialogue {
-
-    $navigatorEnabled: JQuery;
-    $navigatorEnabledCheckbox: JQuery;
-    $navigatorEnabledLabel: JQuery;
 
     $clickToZoomEnabled: JQuery;
     $clickToZoomEnabledCheckbox: JQuery;
     $clickToZoomEnabledLabel: JQuery;
-
-
-
+    $navigatorEnabled: JQuery;
+    $navigatorEnabledCheckbox: JQuery;
+    $navigatorEnabledLabel: JQuery;
     $pagingEnabled: JQuery;
     $pagingEnabledCheckbox: JQuery;
     $pagingEnabledLabel: JQuery;
@@ -67,7 +62,7 @@ export class SettingsDialogue extends BaseSettingsDialogue {
         this.$preserveViewport.append(this.$preserveViewportLabel);
 
         this.$navigatorEnabledCheckbox.change(() => {
-            var settings: ISettings = {};
+            const settings: ISettings = {};
 
             if(this.$navigatorEnabledCheckbox.is(":checked")) {
                 settings.navigatorEnabled = true;
@@ -79,7 +74,7 @@ export class SettingsDialogue extends BaseSettingsDialogue {
         });
         
         this.$clickToZoomEnabledCheckbox.change(() => {
-            var settings: ISettings = {};
+            const settings: ISettings = {};
 
             if(this.$clickToZoomEnabledCheckbox.is(":checked")) {
                 settings.clickToZoomEnabled = true;
@@ -91,7 +86,7 @@ export class SettingsDialogue extends BaseSettingsDialogue {
         });        
 
         this.$pagingEnabledCheckbox.change(() => {
-            var settings: ISettings = {};
+            const settings: ISettings = {};
 
             if(this.$pagingEnabledCheckbox.is(":checked")) {
                 settings.pagingEnabled = true;
@@ -103,7 +98,7 @@ export class SettingsDialogue extends BaseSettingsDialogue {
         });
 
         this.$preserveViewportCheckbox.change(() => {
-            var settings: ISettings = {};
+            const settings: ISettings = {};
 
             if(this.$preserveViewportCheckbox.is(":checked")) {
                 settings.preserveViewport = true;
@@ -118,7 +113,7 @@ export class SettingsDialogue extends BaseSettingsDialogue {
     open(): void {
         super.open();
 
-        var settings: ISettings = this.getSettings();
+        const settings: ISettings = this.getSettings();
         
         if (settings.navigatorEnabled){
             this.$navigatorEnabledCheckbox.prop("checked", true);

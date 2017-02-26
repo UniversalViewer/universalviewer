@@ -2,21 +2,17 @@ import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
-import {Commands} from "./Commands";
 import {DownloadDialogue} from "./DownloadDialogue";
-import {ShareDialogue} from "./ShareDialogue";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
 import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
 import {IPDFExtension} from "./IPDFExtension";
-import IThumb = Manifold.IThumb;
-import {LeftPanel} from "../../modules/uv-shared-module/LeftPanel";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import {PDFCenterPanel} from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
-import {Params} from "../../Params";
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
-import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
+import {ShareDialogue} from "./ShareDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
+import IThumb = Manifold.IThumb;
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -40,28 +36,28 @@ export class Extension extends BaseExtension implements IPDFExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, thumb: IThumb) => {
             this.viewCanvas(thumb.index);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(BaseCommands.SHOW_OVERLAY, (e, params) => {
+        $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.hide();
             }
         });
 
-        $.subscribe(BaseCommands.HIDE_OVERLAY, (e, params) => {
+        $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
             }
@@ -69,8 +65,8 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     IsOldIE(): boolean {
-        var browser = window.browserDetect.browser;
-        var version = window.browserDetect.version;
+        const browser: string = window.browserDetect.browser;
+        const version: number = window.browserDetect.version;
 
         if (browser === 'Explorer' && version <= 9) return true;
         return false;
@@ -129,7 +125,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
         var bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();

@@ -11,11 +11,11 @@ export class ThumbsView extends BaseThumbsView {
         super.create();
 
         // todo: this should be a setting
-        $.subscribe(Commands.MODE_CHANGED, (e, mode) => {
+        $.subscribe(Commands.MODE_CHANGED, () => {
             this.setLabel();
         });
 
-        $.subscribe(Commands.SEARCH_PREVIEW_START, (e, canvasIndex) => {
+        $.subscribe(Commands.SEARCH_PREVIEW_START, (e: any, canvasIndex: number) => {
             this.searchPreviewStart(canvasIndex);
         });
 

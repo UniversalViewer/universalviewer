@@ -1,12 +1,6 @@
 import {BaseCommands} from "../uv-shared-module/BaseCommands";
 import {BaseView} from "../uv-shared-module/BaseView";
 import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
-import ICanvas = Manifold.ICanvas;
-import IRange = Manifold.IRange;
-import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
-import IThumb = Manifold.IThumb;
-import ITreeNode = Manifold.ITreeNode;
-import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 
 export class GalleryView extends BaseView {
 
@@ -43,7 +37,7 @@ export class GalleryView extends BaseView {
             data: this.galleryData
         });
 
-        (<any>this.component).on('thumbSelected', function(args) {
+        (<any>this.component).on('thumbSelected', function(args: any) {
             var thumb = args[0];
             $.publish(Commands.GALLERY_THUMB_SELECTED, [thumb]);
             $.publish(BaseCommands.THUMB_SELECTED, [thumb]);
@@ -60,7 +54,7 @@ export class GalleryView extends BaseView {
 
     public databind(): void {
         this.component.options.data = this.galleryData;
-        this.component.set(null); // todo: should be passing options.data
+        this.component.set(new Object()); // todo: should be passing options.data
         this.resize();
     }
 
@@ -81,8 +75,8 @@ export class GalleryView extends BaseView {
 
     resize(): void {
         super.resize();
-        var $main: JQuery = this.$gallery.find('.main');
-        var $header: JQuery = this.$gallery.find('.header');
+        const $main: JQuery = this.$gallery.find('.main');
+        const $header: JQuery = this.$gallery.find('.header');
         $main.height(this.$element.height() - $header.height());
     }
 }

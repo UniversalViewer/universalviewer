@@ -1,9 +1,6 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
 import {BaseView} from "../uv-shared-module/BaseView";
 import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
-import IRange = Manifold.IRange;
 import ITreeNode = Manifold.ITreeNode;
-import MultiSelectState = Manifold.MultiSelectState;
 
 export class TreeView extends BaseView {
 
@@ -25,7 +22,6 @@ export class TreeView extends BaseView {
     }
 
     setup(): void {
-        var that = this;
 
         this.component = new IIIFComponents.TreeComponent({
             target: this.$tree[0], 
@@ -36,20 +32,18 @@ export class TreeView extends BaseView {
         // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
         // to implement it in BaseComponent.
 
-        (<any>this.component).on('treeNodeSelected', function(args) {
-            var node = args[0];
+        (<any>this.component).on('treeNodeSelected', function(node: ITreeNode) {
             $.publish(Commands.TREE_NODE_SELECTED, [node]);
         });
 
-        (<any>this.component).on('treeNodeMultiSelected', function(args) {
-            var node = args[0];
+        (<any>this.component).on('treeNodeMultiSelected', function(node: ITreeNode) {
             $.publish(Commands.TREE_NODE_MULTISELECTED, [node]);
         });
     }
 
     public databind(): void {
         this.component.options.data = this.treeData;
-        this.component.set(null); // todo: should be passing options.data
+        this.component.set(new Object()); // todo: should be passing options.data
         this.resize();
     }
 

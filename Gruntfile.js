@@ -29,23 +29,29 @@ module.exports = function (grunt) {
             dev: {
                 src: ['./src/**/*.ts', 'typings/**/*.ts'],
                 options: {
-                    target: 'es3',
                     module: 'amd',
                     sourceMap: true,
                     declarations: false,
                     noLib: false,
-                    comments: true
+                    comments: true,
+                    lib: ['es6'],
+                    noImplicitAny: true,
+                    noImplicitReturns: true,
+                    noImplicitThis: true,
+                    noUnusedLocals: true,
+                    noUnusedParameters: false,
+                    strictNullChecks: true
                 }
             },
             dist: {
                 src: ['./src/**/*.ts', 'typings/**/*.ts'],
                 options: {
-                    target: 'es3',
                     module: 'amd',
                     sourceMap: false,
                     declarations: false,
                     noLib: false,
-                    comments: false
+                    comments: false,
+                    lib: ['es6']
                 }
             }
         },

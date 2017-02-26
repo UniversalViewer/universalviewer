@@ -1,7 +1,6 @@
 import {BaseCommands} from "../uv-shared-module/BaseCommands";
 import {Commands} from "../../extensions/uv-mediaelement-extension/Commands";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import ExternalResource = Manifesto.IExternalResource;
 import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 
 export class MediaElementCenterPanel extends CenterPanel {
@@ -23,13 +22,13 @@ export class MediaElementCenterPanel extends CenterPanel {
 
         super.create();
 
-        var that = this;
+        const that = this;
 
         // events.
 
         // only full screen video
         if ((<IMediaElementExtension>this.extension).isVideo()){
-            $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, (e) => {
+            $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
                 if (that.bootstrapper.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
                     that.player.enterFullScreen(false);
@@ -40,7 +39,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -70,7 +69,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             var poster = (<IMediaElementExtension>this.extension).getPosterImageUri();
             var posterAttr: string = poster ? ' poster="' + poster + '"' : '';
 
-            var sources = [];
+            var sources: any[] = [];
 
             $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
                 sources.push({
@@ -88,23 +87,23 @@ export class MediaElementCenterPanel extends CenterPanel {
                     plugins: ['flash'],
                     alwaysShowControls: false,
                     autosizeProgress: false,
-                    success: function (media) {
-                        media.addEventListener('canplay', (e) => {
+                    success: function (media: any) {
+                        media.addEventListener('canplay', () => {
                             that.resize();
                         });
 
-                        media.addEventListener('play', (e) => {
+                        media.addEventListener('play', () => {
                             $.publish(Commands.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                         });
 
-                        media.addEventListener('pause', (e) => {
+                        media.addEventListener('pause', () => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
                                 $.publish(Commands.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                             }
                         });
 
-                        media.addEventListener('ended', (e) => {
+                        media.addEventListener('ended', () => {
                             $.publish(Commands.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                         });
 
@@ -136,23 +135,23 @@ export class MediaElementCenterPanel extends CenterPanel {
                     autosizeProgress: false,
                     defaultVideoWidth: that.mediaWidth,
                     defaultVideoHeight: that.mediaHeight,
-                    success: function (media) {
-                        media.addEventListener('canplay', (e) => {
+                    success: function (media: any) {
+                        media.addEventListener('canplay', () => {
                             that.resize();
                         });
 
-                        media.addEventListener('play', (e) => {
+                        media.addEventListener('play', () => {
                             $.publish(Commands.MEDIA_PLAYED, [Math.floor(that.player.media.currentTime)]);
                         });
 
-                        media.addEventListener('pause', (e) => {
+                        media.addEventListener('pause', () => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(that.player.media.currentTime) != Math.floor(that.player.media.duration)) {
                                 $.publish(Commands.MEDIA_PAUSED, [Math.floor(that.player.media.currentTime)]);
                             }
                         });
 
-                        media.addEventListener('ended', (e) => {
+                        media.addEventListener('ended', () => {
                             $.publish(Commands.MEDIA_ENDED, [Math.floor(that.player.media.duration)]);
                         });
 
@@ -181,7 +180,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             this.$container.height(this.mediaHeight);
         } else {
             // fit media to available space.
-            var size: Utils.Measurements.Size = Utils.Measurements.Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+            const size: Utils.Measurements.Size = Utils.Measurements.Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
 
             this.$container.height(size.height);
             this.$container.width(size.width);
@@ -191,8 +190,8 @@ export class MediaElementCenterPanel extends CenterPanel {
             this.player.resize();
         }
 
-        var left = Math.floor((this.$content.width() - this.$container.width()) / 2);
-        var top = Math.floor((this.$content.height() - this.$container.height()) / 2);
+        const left: number = Math.floor((this.$content.width() - this.$container.width()) / 2);
+        const top: number = Math.floor((this.$content.height() - this.$container.height()) / 2);
 
         this.$container.css({
             'left': left,

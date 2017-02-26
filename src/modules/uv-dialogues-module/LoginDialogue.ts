@@ -27,7 +27,7 @@ export class LoginDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_LOGIN_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_LOGIN_DIALOGUE;
 
-        $.subscribe(this.openCommand, (s, e: any) => {
+        $.subscribe(this.openCommand, (s: any, e: any) => {
             this.loginCallback = e.loginCallback;
             this.logoutCallback = e.logoutCallback;
             this.options = e.options;
@@ -35,7 +35,7 @@ export class LoginDialogue extends Dialogue {
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 

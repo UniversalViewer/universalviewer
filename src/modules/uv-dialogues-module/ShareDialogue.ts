@@ -30,10 +30,10 @@ export class ShareDialogue extends Dialogue {
     currentWidth: number;
     isEmbedViewVisible: boolean = false;
     isShareViewVisible: boolean = false;
-    maxHeight: number = this.maxWidth * this.aspectRatio;
     maxWidth: number = 8000;
-    minHeight: number = this.minWidth * this.aspectRatio;
+    maxHeight: number = this.maxWidth * this.aspectRatio;
     minWidth: number = 200;
+    minHeight: number = this.minWidth * this.aspectRatio;
 
     constructor($element: JQuery) {
         super($element);
@@ -48,7 +48,7 @@ export class ShareDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_SHARE_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_SHARE_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, $triggerButton) => {
+        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
 
             if (this.isShareAvailable()){
@@ -58,11 +58,11 @@ export class ShareDialogue extends Dialogue {
             }
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
-        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, (e, $triggerButton) => {
+        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
             this.openEmbedView();
         });
@@ -211,7 +211,7 @@ export class ShareDialogue extends Dialogue {
             this.$shareButton.hide();
         }
 
-        var $selected: JQuery = this.getSelectedSize();
+        const $selected: JQuery = this.getSelectedSize();
 
         if ($selected.val() === 'custom') {
             this.$widthInput.show();
@@ -306,7 +306,9 @@ export class ShareDialogue extends Dialogue {
     }
 
     updateShareFrame(): void {
-        var shareUrl: string = this.extension.helper.getShareServiceUrl();
+        const shareUrl: string | null = this.extension.helper.getShareServiceUrl();
+
+        if (!shareUrl) return;
 
         if (Utils.Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
             this.$shareFrame.prop('src', shareUrl);
@@ -317,7 +319,7 @@ export class ShareDialogue extends Dialogue {
     }
 
     updateTermsOfUseButton(): void {
-        var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        const attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
         if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();

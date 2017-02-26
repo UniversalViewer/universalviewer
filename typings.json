@@ -2,19 +2,18 @@
   "name": "universalviewer",
   "dependencies": {},
   "globalDependencies": {
-    "base-component": "github:viewdir/base-component/dist/base-component.d.ts#v1.0.9",
-    "core-js": "registry:dt/core-js#0.9.7+20161130133742",
-    "iiif-gallery-component": "github:viewdir/iiif-gallery-component/dist/iiif-gallery-component.d.ts#v1.0.8",
-    "iiif-metadata-component": "github:viewdir/iiif-metadata-component/dist/iiif-metadata-component.d.ts#v1.0.11",
-    "iiif-tree-component": "github:viewdir/iiif-tree-component/dist/iiif-tree-component.d.ts#v1.0.8",
-    "jquery": "registry:dt/jquery#1.10.0+20170123093700",
-    "jquery-plugins": "github:edsilv/jquery-plugins/dist/jquery-plugins.d.ts",
-    "key-codes": "github:edsilv/key-codes/dist/key-codes.d.ts",
-    "manifold.bundle": "github:viewdir/manifold/dist/manifold.bundle.d.ts",
-    "modernizr": "registry:dt/modernizr#3.2.0+20170120190809",
-    "requirejs": "registry:dt/requirejs#2.1.20+20160921164505",
-    "three": "registry:dt/three#0.83.0+20170208025302",
-    "utils": "github:edsilv/utils/dist/utils.d.ts",
-    "virtex": "github:edsilv/virtex/dist/virtex.d.ts#v0.2.7"
+    "base-component": "github:viewdir/base-component/dist/base-component.d.ts#es6",
+    "ex": "github:BSick7/exjs/dist/ex.d.ts",
+    "extensions": "github:edsilv/extensions/dist/extensions.d.ts#es6",
+    "http-status-codes": "github:edsilv/http-status-codes/dist/http-status-codes.d.ts#v0.0.3",
+    "iiif-gallery-component": "github:viewdir/iiif-gallery-component/dist/iiif-gallery-component.d.ts#es6",
+    "iiif-metadata-component": "github:viewdir/iiif-metadata-component/dist/iiif-metadata-component.d.ts#es6",
+    "iiif-tree-component": "github:viewdir/iiif-tree-component/dist/iiif-tree-component.d.ts#es6",
+    "jquery-plugins": "github:edsilv/jquery-plugins/dist/jquery-plugins.d.ts#es6",
+    "key-codes": "github:edsilv/key-codes/dist/key-codes.d.ts#v0.0.5",
+    "manifesto": "github:viewdir/manifesto/dist/manifesto.d.ts#es6",
+    "manifold": "github:viewdir/manifold/dist/manifold.d.ts#es6",
+    "utils": "github:edsilv/utils/dist/utils.d.ts#es6",
+    "virtex": "github:edsilv/virtex/dist/virtex.d.ts#dev"
   }
 }

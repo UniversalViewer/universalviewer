@@ -7,11 +7,11 @@ import Size = Utils.Measurements.Size;
 
 export interface ISeadragonExtension extends IExtension{
     currentSearchResultRect: SearchResultRect;
-    getAutoCompleteUri(): string;
+    getAutoCompleteUri(): string | null;
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size;
     getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string;
-    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions;
-    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string;
+    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null;
+    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string | null;
     getCurrentSearchResultRectIndex(): number;
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string;
     getImageBaseUri(canvas: Manifesto.ICanvas): string;
@@ -21,15 +21,15 @@ export interface ISeadragonExtension extends IExtension{
     getNextPageIndex(index?: number): number;
     getPrevPageIndex(index?: number): number;
     getSearchResultRects(): SearchResultRect[];
-    getSearchWithinServiceUri(): string;
+    getSearchWithinServiceUri(): string | null;
     getTotalSearchResultRects(): number;
     getViewer(): any;
-    getViewerRotation(): number;
-    getViewportBounds(): string;
+    getViewerRotation(): number | null;
+    getViewportBounds(): string | null;
     isFirstSearchResultRect(): boolean;
     isPagingSettingEnabled(): boolean;
     isSearchWithinEnabled(): boolean;
     previousSearchResultRect: SearchResultRect;
-    searchResults: SearchResult[];
+    searchResults: SearchResult[] | null;
     searchWithin(terms: string, callback: (results: any) => void): void;
 }

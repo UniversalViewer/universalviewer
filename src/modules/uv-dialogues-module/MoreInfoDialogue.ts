@@ -20,11 +20,11 @@ export class MoreInfoDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_MOREINFO_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_MOREINFO_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, $triggerButton) => {
+        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -49,7 +49,7 @@ export class MoreInfoDialogue extends Dialogue {
 
     open($triggerButton?: JQuery): void {
         super.open($triggerButton);
-        this.component.set(null); // todo: should be passing data
+        this.component.set(new Object()); // todo: should be passing data
     }
 
     private _getData(): IIIFComponents.IMetadataComponentData {

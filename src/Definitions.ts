@@ -1,3 +1,4 @@
+///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/>  
 
 interface HTMLElement{
     ontouchstart: any;
@@ -39,7 +40,7 @@ declare var PDFObject: any;
 declare var yepnope: any;
 declare var PDFJS: any;
 declare var Sanitize: any;
-declare var virtex: IVirtex;
+declare var virtex: Virtex;
 
 // app
 interface Window{

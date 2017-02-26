@@ -23,11 +23,11 @@ export class DownloadDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_DOWNLOAD_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_DOWNLOAD_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, $triggerButton) => {
+        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -61,22 +61,22 @@ export class DownloadDialogue extends Dialogue {
             this.$downloadOptions.empty();
 
             // add each file src
-            var canvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-            var renderingFound: boolean = false;
+            let renderingFound: boolean = false;
 
             $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
-                var renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
-                var format: string = '';
+                const renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
+                let format: string = '';
                 if (renderingFormat){
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
+                this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
                 renderingFound = true;
             });
 
             if (!renderingFound) {
-                this.addEntireFileDownloadOption(canvas.id, null, null);
+                this.addEntireFileDownloadOption(canvas.id, '', '');
             }
         }
     }
@@ -87,7 +87,7 @@ export class DownloadDialogue extends Dialogue {
         } else {
             label = this.content.entireFileAsOriginal;
         }
-        var fileType;
+        let fileType: string;
         if (format) {
             fileType = Utils.Files.simplifyMimeType(format);
         } else {
@@ -106,7 +106,7 @@ export class DownloadDialogue extends Dialogue {
     }
 
     updateTermsOfUseButton(): void {
-        var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        const attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
         if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
@@ -115,17 +115,17 @@ export class DownloadDialogue extends Dialogue {
         }
     }
 
-    getFileExtension(fileUri: string): string{
-        return fileUri.split('.').pop();
+    getFileExtension(fileUri: string): string {
+        return <string>fileUri.split('.').pop();
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
         switch (option){
             case DownloadOption.entireFileAsOriginal:
                 // check if ui-extensions disable it
-                var uiExtensions: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+                const uiExtensions: Manifesto.IService | null = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
 
-                if (!this.extension.helper.isUIEnabled('mediaDownload')) {
+                if (uiExtensions && !this.extension.helper.isUIEnabled('mediaDownload')) {
                     return false;
                 }
         }

@@ -65,7 +65,7 @@ export class VirtexCenterPanel extends CenterPanel {
 
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-            this.viewport = virtex.create(<Virtex.IOptions>{
+            this.viewport = virtex.create(<Virtex.IVirtexData>{
                 element: "#content .virtex",
                 object: canvas.id,
                 showStats: this.options.showStats

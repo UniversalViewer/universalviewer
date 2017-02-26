@@ -4,21 +4,16 @@ import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
 import {Commands} from "./Commands";
 import {DownloadDialogue} from "./DownloadDialogue";
-import {ShareDialogue} from "./ShareDialogue";
-import ExternalResource = Manifesto.IExternalResource;
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
 import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
 import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
 import {IMediaElementExtension} from "./IMediaElementExtension";
-import {LeftPanel} from "../../modules/uv-shared-module/LeftPanel";
 import {MediaElementCenterPanel} from "../../modules/uv-mediaelementcenterpanel-module/MediaElementCenterPanel";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import {Params} from "../../Params";
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
-import {RightPanel} from "../../modules/uv-shared-module/RightPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
+import {ShareDialogue} from "./ShareDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
-import {TreeView} from "../../modules/uv-contentleftpanel-module/TreeView";
 
 export class Extension extends BaseExtension implements IMediaElementExtension {
 
@@ -52,30 +47,30 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             $.publish(BaseCommands.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
+        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(Commands.MEDIA_ENDED, (e) => {
+        $.subscribe(Commands.MEDIA_ENDED, () => {
             this.triggerSocket(Commands.MEDIA_ENDED);
         });
 
-        $.subscribe(Commands.MEDIA_PAUSED, (e) => {
+        $.subscribe(Commands.MEDIA_PAUSED, () => {
             this.triggerSocket(Commands.MEDIA_PAUSED);
         });
 
-        $.subscribe(Commands.MEDIA_PLAYED, (e) => {
+        $.subscribe(Commands.MEDIA_PLAYED, () => {
             this.triggerSocket(Commands.MEDIA_PLAYED);
         });
     }
@@ -142,7 +137,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         var bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();

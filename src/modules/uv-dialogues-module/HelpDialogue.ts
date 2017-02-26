@@ -20,11 +20,11 @@ export class HelpDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_HELP_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_HELP_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, () => {
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 

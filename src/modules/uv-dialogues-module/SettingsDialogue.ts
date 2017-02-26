@@ -1,7 +1,5 @@
 import {BaseCommands} from "../uv-shared-module/BaseCommands";
-import {BootstrapParams} from "../../BootstrapParams";
 import {Dialogue} from "../uv-shared-module/Dialogue";
-import {Shell} from "../uv-shared-module/Shell";
 
 export class SettingsDialogue extends Dialogue {
 
@@ -26,11 +24,11 @@ export class SettingsDialogue extends Dialogue {
         this.openCommand = BaseCommands.SHOW_SETTINGS_DIALOGUE;
         this.closeCommand = BaseCommands.HIDE_SETTINGS_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, () => {
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
