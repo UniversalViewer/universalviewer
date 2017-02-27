@@ -108,16 +108,16 @@ export class PagingHeaderPanel extends HeaderPanel {
                     if (this.isPageModeEnabled()){
                         for (let i = 0; i < canvases.length; i++){
                             const canvas: Manifesto.ICanvas = canvases[i];
-                            const label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
-                            if (label.startsWith(term)) {
+                            const label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+                            if (label && label.startsWith(term)) {
                                 results.push(label);
                             }
                         }
                     } else {
                         // get canvas by index
-                        for (let i = 0; i < canvases.length; i++){
+                        for (let i = 0; i < canvases.length; i++) {
                             const canvas: Manifesto.ICanvas = canvases[i];
-                            if (canvas.index.toString().startsWith(term)){
+                            if (canvas.index.toString().startsWith(term)) {
                                 results.push(canvas.index.toString());
                             }
                         }
@@ -215,7 +215,6 @@ export class PagingHeaderPanel extends HeaderPanel {
         });
 
         this.setTitles();
-
         this.setTotal();
 
         const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
@@ -442,10 +441,10 @@ export class PagingHeaderPanel extends HeaderPanel {
             }
         } else {
             index += 1;
-            value = index;
+            value = index.toString();
         }
 
-        if (this.options.autoCompleteBoxEnabled){
+        if (this.options.autoCompleteBoxEnabled) {
             this.$autoCompleteBox.val(value);
         } else {
             this.$searchText.val(value);
@@ -475,15 +474,15 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             index -= 1;
 
-            if (isNaN(index)){
+            if (isNaN(index)) {
                 this.extension.showMessage(this.extension.config.modules.genericDialogue.content.invalidNumber);
                 $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            const asset = this.extension.helper.getCanvasByIndex(index);
+            const asset: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
 
-            if (!asset){
+            if (!asset) {
                 this.extension.showMessage(this.extension.config.modules.genericDialogue.content.pageNotFound);
                 $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
                 return;

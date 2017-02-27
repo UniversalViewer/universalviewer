@@ -37,10 +37,11 @@ module.exports = function (grunt) {
                     lib: ['es6'],
                     noImplicitAny: true,
                     noImplicitReturns: true,
-                    noImplicitThis: true,
+                    noImplicitThis: false,
                     noUnusedLocals: true,
                     noUnusedParameters: false,
-                    strictNullChecks: true
+                    strictNullChecks: true,
+                    suppressImplicitAnyIndexErrors: true
                 }
             },
             dist: {
@@ -51,7 +52,14 @@ module.exports = function (grunt) {
                     declarations: false,
                     noLib: false,
                     comments: false,
-                    lib: ['es6']
+                    lib: ['es6'],
+                    noImplicitAny: true,
+                    noImplicitReturns: true,
+                    noImplicitThis: true,
+                    noUnusedLocals: true,
+                    noUnusedParameters: false,
+                    strictNullChecks: true,
+                    suppressImplicitAnyIndexErrors: true
                 }
             }
         },

@@ -16,21 +16,21 @@ export class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
         });
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
 
-        var that = this;
+        const that = this;
 
         this.extension.getExternalResources(resources).then(() => {
-            var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-            var pdfUri = canvas.id;
-            var browser = window.browserDetect.browser;
-            var version = window.browserDetect.version;
+            const pdfUri: string = canvas.id;
+            const browser: string = window.browserDetect.browser;
+            const version: number = window.browserDetect.version;
 
             if ((browser === 'Explorer' && version < 10) || !this.config.options.usePdfJs) {
 
@@ -49,7 +49,7 @@ export class PDFCenterPanel extends CenterPanel {
                     PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                     PDFJS.DEFAULT_URL = pdfUri;
 
-                    var anchorIndex = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;
+                    const anchorIndex: number = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;
 
                     PDFView.initialBookmark = "page=" + anchorIndex;
 

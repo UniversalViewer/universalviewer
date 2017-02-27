@@ -3,27 +3,26 @@ import {BootstrapParams} from "../../BootstrapParams";
 import {Metric} from "./Metric";
 import {Params} from "../../Params";
 
-export interface IExtension{
+export interface IExtension {
     addTimestamp(uri: string): string;
     bootstrapper: Bootstrapper;
     changeLocale(locale: string): void;
     config: any;
     create(): void;
     createModules(): void;
-    //currentRangePath: string;
     dependenciesLoaded(): void;
-    domain: string;
-    embedDomain: string;
+    domain: string | null;
+    embedDomain: string | null;
     embedHeight: number;
     embedWidth: number;
     getAlternateLocale(): any;
     getCanvasIndexParam(): number;
     getCanvasLabels(label: string): string;
     getCurrentCanvases(): Manifesto.ICanvas[];
-    getCurrentCanvasRange(): Manifesto.IRange;
+    getCurrentCanvasRange(): Manifesto.IRange | null;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
-    getEmbedDomain(): string;
+    getEmbedDomain(): string | null;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getIIIFShareUrl(): string;
     getLocales(): any[];
@@ -32,7 +31,7 @@ export interface IExtension{
     getSequenceIndexParam(): number;
     getSerializedLocales(): string;
     getSettings(): ISettings;
-    getShareUrl(): string;
+    getShareUrl(): string | null;
     height(): number;
     helper: Manifold.IHelper;
     isCreated: boolean;
@@ -61,7 +60,7 @@ export interface IExtension{
     name: string;
     redirect(uri: string): void;
     refresh(): void;
-    reload(params?: BootstrapParams);
+    reload(params?: BootstrapParams): void;
     resize(): void;
     resources: Manifold.ExternalResource[];
     sanitize(html: string): string;
@@ -71,7 +70,7 @@ export interface IExtension{
     tabbing: boolean;
     triggerSocket(eventName: string, eventObject?: any): void;
     updateSettings(settings: ISettings): void;
-    viewCanvas(canvasIndex): void;
+    viewCanvas(canvasIndex: number): void;
     viewCollection(collection: Manifesto.ICollection): void;
     viewManifest(manifest: Manifesto.IManifest): void;
     width(): number;

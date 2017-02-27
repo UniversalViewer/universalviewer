@@ -121,8 +121,8 @@ export class Extension extends BaseExtension implements IPDFExtension {
     bookmark() : void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
-        var bookmark: Bookmark = new Bookmark();
+        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
         bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
@@ -136,8 +136,8 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number): string{
-        var configUri = this.config.uri || '';
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+        const configUri = this.config.uri || '';
+        const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
         return script;
     }
 }

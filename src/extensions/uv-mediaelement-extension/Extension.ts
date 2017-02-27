@@ -78,13 +78,13 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     createModules(): void{
         super.createModules();
 
-        if (this.isHeaderPanelEnabled()){
+        if (this.isHeaderPanelEnabled()) {
             this.headerPanel = new HeaderPanel(Shell.$headerPanel);
         } else {
             Shell.$headerPanel.hide();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
         }
 
@@ -133,8 +133,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     bookmark(): void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.extensions.helper.getCurrentCanvas();
-        var bookmark: Bookmark = new Bookmark();
+        const canvas: Manifesto.ICanvas = this.extensions.helper.getCurrentCanvas();
+        const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
         bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
@@ -152,19 +152,19 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
     }
 
-    getEmbedScript(template: string, width: number, height: number): string{
-        var configUri = this.config.uri || '';
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+    getEmbedScript(template: string, width: number, height: number): string {
+        const configUri: string = this.config.uri || '';
+        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
         return script;
     }
 
     // todo: use canvas.getThumbnail()
-    getPosterImageUri(): string{
+    getPosterImageUri(): string {
         return this.helper.getCurrentCanvas().getProperty('thumbnail');
     }
 
     isVideo(): boolean {
-        var elementType: Manifesto.ElementType = this.helper.getElementType();
+        const elementType: Manifesto.ElementType = this.helper.getElementType();
         return elementType.toString() === manifesto.ElementType.movingimage().toString();
     }
 }

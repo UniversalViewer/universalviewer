@@ -12,11 +12,11 @@ interface JQuery {
 
 interface JQueryStatic {
     // pubsub
-    publish(event: string, eventObj?: any[]);
-    subscribe(event: string, handler: Function);
-    unsubscribe(event: string);
-    initPubSub();
-    disposePubSub();
+    publish(event: string, eventObj?: any[]): void;
+    subscribe(event: string, handler: Function): void;
+    unsubscribe(event: string): void;
+    initPubSub(): void;
+    disposePubSub(): void;
 
     //cookie(name: string);
 
@@ -33,14 +33,11 @@ interface JQueryStatic {
 // libs
 declare var easyXDM: any;
 declare var OpenSeadragon: any;
-declare var manifesto: IManifesto;
-declare var manifold: IManifold;
 declare var MediaElementPlayer: any;
 declare var PDFObject: any;
 declare var yepnope: any;
 declare var PDFJS: any;
 declare var Sanitize: any;
-declare var virtex: Virtex;
 
 // app
 interface Window{
@@ -48,8 +45,8 @@ interface Window{
     manifesto: IManifesto;
     manifold: IManifold;
     browserDetect: any;
-    trackEvent(category: string, action: string, label: string, value?: any);
-    trackVariable(slot: number, name: string, value: string, scope: number);
+    trackEvent(category: string, action: string, label: string, value?: any): void;
+    trackVariable(slot: number, name: string, value: string, scope: number): void;
     trackingLabel: string;
     $: any;
     _: any;
@@ -57,10 +54,10 @@ interface Window{
     webViewerLoad: any; // pdfjs
     IEXMLHttpRequest: any;
     openSeadragonViewer: any; // for testing convenience
-    UV: any; // todo: implement interface
+    UV: _Components.IBaseComponent;
 }
 
-interface Document{
+interface Document {
     mozFullScreen: boolean;
     msFullscreenElement: any;
 }

@@ -3,20 +3,19 @@ import {Params} from "./Params";
 export class BootstrapParams {
     canvasIndex: number;
     collectionIndex: number;
-    config: string;
-    domain: string;
-    embedDomain: string;
-    embedScriptUri: string;
+    config: string | null;
+    domain: string | null;
+    embedDomain: string | null;
+    embedScriptUri: string | null;
     isHomeDomain: boolean;
     isLightbox: boolean;
     isOnlyInstance: boolean;
     isReload: boolean;
-    jsonp: boolean;
     locale: string;
     localeName: string;
     locales: any[];
     manifestIndex: number;
-    manifestUri: string;
+    manifestUri: string | null;
     paramMap: string[] = ['c', 'm', 's', 'cv', 'xywh', 'r', 'h', 'a']; // todo: move xywh, r, h, a to their respective extensions
     sequenceIndex: number;
 
@@ -29,10 +28,8 @@ export class BootstrapParams {
         this.isLightbox = Utils.Urls.getQuerystringParameter('isLightbox') === 'true';
         this.isOnlyInstance = Utils.Urls.getQuerystringParameter('isOnlyInstance') === 'true';
         this.isReload = Utils.Urls.getQuerystringParameter('isReload') === 'true';
-        var jsonpParam = Utils.Urls.getQuerystringParameter('jsonp');
-        this.jsonp = jsonpParam === null ? null : !(jsonpParam === 'false' || jsonpParam === '0');
         this.manifestUri = Utils.Urls.getQuerystringParameter('manifestUri');
-        var locale = Utils.Urls.getQuerystringParameter('locale') || 'en-GB';
+        const locale: string = Utils.Urls.getQuerystringParameter('locale') || 'en-GB';
         this.setLocale(locale);
 
         this.collectionIndex = this.getParam(Params.collectionIndex);
@@ -45,15 +42,19 @@ export class BootstrapParams {
         return this.localeName;
     }
 
-    getParam(param: Params): any {
+    getParam(param: Params): number {
         if (this.hashParamsAvailable()) {
             // get param from parent document
-            var p = parseInt(Utils.Urls.getHashParameter(this.paramMap[param], parent.document));
-            if (p || p === 0) return p;
+            let p: any = Utils.Urls.getHashParameter(this.paramMap[param], parent.document);
+            if (p) return parseInt(p);
         }
 
         // get param from iframe querystring
-        return parseInt(Utils.Urls.getQuerystringParameter(this.paramMap[param])) || 0;
+        const p: string | null = Utils.Urls.getQuerystringParameter(this.paramMap[param]);
+
+        if (p) return parseInt(p)
+
+        return 0;
     }
 
     hashParamsAvailable(): boolean {
@@ -64,10 +65,10 @@ export class BootstrapParams {
     setLocale(locale: string): void {
         this.locale = locale;
         this.locales = [];
-        var l = this.locale.split(',');
+        const l: string[] = this.locale.split(',');
 
-        for (var i = 0; i < l.length; i++) {
-            var v = l[i].split(':');
+        for (let i = 0; i < l.length; i++) {
+            const v: string[] = l[i].split(':');
             this.locales.push({
                 name: v[0].trim(),
                 label: (v[1]) ? v[1].trim() : ""

@@ -1,13 +1,10 @@
 import {AutoComplete} from "../uv-shared-module/AutoComplete";
 import {BaseCommands} from "../uv-shared-module/BaseCommands";
-import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
 import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
-import {DownloadDialogue} from "../../extensions/uv-seadragon-extension/DownloadDialogue";
+import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
-import {Params} from "../../Params";
 import SearchResult = Manifold.SearchResult;
-import SearchResultRect = Manifold.SearchResultRect;
 
 export class FooterPanel extends BaseFooterPanel {
 
@@ -46,7 +43,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, canvasIndex) => {
+        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, () => {
             this.canvasIndexChanged();
             this.setCurrentSearchResultPlacemarker();
             this.updatePrevButton();
@@ -54,15 +51,15 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         // todo: this should be a setting
-        $.subscribe(Commands.MODE_CHANGED, (e, mode) => {
+        $.subscribe(Commands.MODE_CHANGED, () => {
             this.settingsChanged();
         });
 
-        $.subscribe(Commands.SEARCH, (e, terms) => {
+        $.subscribe(Commands.SEARCH, (e: any, terms: string) => {
             this.terms = terms;
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
+        $.subscribe(Commands.SEARCH_RESULTS, (e: any, obj: any) => {
             this.displaySearchResults(obj.terms, obj.results);
             this.setCurrentSearchResultPlacemarker();
         });
@@ -146,9 +143,8 @@ export class FooterPanel extends BaseFooterPanel {
         // ui event handlers.
         var that = this;
 
-        this.$searchButton.on('click', (e) => {
+        this.$searchButton.on('click', (e: any) => {
             e.preventDefault();
-
             this.search(this.$searchText.val());
         });
 
@@ -171,25 +167,22 @@ export class FooterPanel extends BaseFooterPanel {
             placemarkers.removeClass('hover');
         });
 
-        this.$placemarkerDetails.on('click', (e) => {
+        this.$placemarkerDetails.on('click', () => {
             $.publish(Commands.VIEW_PAGE, [this.currentPlacemarkerIndex]);
         });
 
-        this.$previousResultButton.on('click', (e) => {
+        this.$previousResultButton.on('click', (e: any) => {
             e.preventDefault();
-
             $.publish(Commands.PREV_SEARCH_RESULT);
         });
 
-        this.$nextResultButton.on('click', (e) => {
+        this.$nextResultButton.on('click', (e: any) => {
             e.preventDefault();
-
             $.publish(Commands.NEXT_SEARCH_RESULT);
         });
 
-        this.$clearSearchResultsButton.on('click', (e) => {
+        this.$clearSearchResultsButton.on('click', (e: any) => {
             e.preventDefault();
-
             $.publish(Commands.CLEAR_SEARCH);
             this.clearSearchResults();
         });
@@ -199,7 +192,6 @@ export class FooterPanel extends BaseFooterPanel {
             this.$searchContainer.hide();
             this.$searchPagerContainer.hide();
             this.$searchResultsContainer.hide();
-
             this.$element.addClass('min');
         }
 
@@ -207,7 +199,7 @@ export class FooterPanel extends BaseFooterPanel {
             this.$searchResultsContainer.hide();
         }
 
-        var autocompleteService: string = (<ISeadragonExtension>this.extension).getAutoCompleteUri();
+        const autocompleteService: string | null = (<ISeadragonExtension>this.extension).getAutoCompleteUri();
 
         if (autocompleteService) {
 
@@ -277,11 +269,6 @@ export class FooterPanel extends BaseFooterPanel {
         return (currentCanvasIndex > firstSearchResultCanvasIndex);
     }
 
-    isCanvasIndexLessThanFirstSearchResultIndex(): boolean {
-        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
-        return this.extension.helper.canvasIndex <= searchResults[0].canvasIndex;
-    }
-
     isNextButtonEnabled(): boolean {
 
         const currentCanvasIndex: number = this.extension.helper.canvasIndex;
@@ -305,7 +292,7 @@ export class FooterPanel extends BaseFooterPanel {
         return (currentCanvasIndex < lastSearchResultCanvasIndex); 
     }
 
-    getSearchResults(): SearchResult[] {
+    getSearchResults(): SearchResult[] | null {
         return (<ISeadragonExtension>this.extension).searchResults;
     }
 
@@ -314,13 +301,15 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     getFirstSearchResultCanvasIndex(): number {
-        const searchResults: SearchResult[] = this.getSearchResults();
+        const searchResults: SearchResult[] | null = this.getSearchResults();
+        if (!searchResults) return -1;
         let firstSearchResultCanvasIndex: number = searchResults[0].canvasIndex;
         return firstSearchResultCanvasIndex;
     }
 
     getLastSearchResultCanvasIndex(): number {
-        const searchResults: SearchResult[] = this.getSearchResults();        
+        const searchResults: SearchResult[] | null = this.getSearchResults();        
+        if (!searchResults) return -1;
         let lastSearchResultCanvasIndex: number = searchResults[searchResults.length - 1].canvasIndex;
         return lastSearchResultCanvasIndex;
     }
@@ -330,7 +319,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     updateNextButton(): void {
-        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        const searchResults: SearchResult[] | null = this.getSearchResults();
         
         if (searchResults && searchResults.length) {
             if (this.isNextButtonEnabled()) {
@@ -342,7 +331,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     updatePrevButton(): void {
-        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        const searchResults: SearchResult[] | null = this.getSearchResults();
         
         if (searchResults && searchResults.length) {       
             if (this.isPreviousButtonEnabled()) {
@@ -354,7 +343,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     updatePrintButton(): void {
-        var configEnabled = Utils.Bools.getBool(this.options.printEnabled, false);
+        const configEnabled: boolean = Utils.Bools.getBool(this.options.printEnabled, false);
         //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
 
         //if (configEnabled && printService && this.extension.isOnHomeDomain()){
@@ -390,45 +379,43 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     setCurrentSearchResultPlacemarker(): void {
-        var placemarkers: JQuery = this.getSearchResultPlacemarkers();
+        const placemarkers: JQuery = this.getSearchResultPlacemarkers();
         placemarkers.parent().find('.current').removeClass('current');
-        var $current = $('.searchResultPlacemarker[data-index="' + this.extension.helper.canvasIndex + '"]');
+        const $current: JQuery = $('.searchResultPlacemarker[data-index="' + this.extension.helper.canvasIndex + '"]');
         $current.addClass('current');
     }
 
     positionSearchResultPlacemarkers(): void {
 
-        var results = (<ISeadragonExtension>this.extension).searchResults;
+        const searchResults: SearchResult[] | null = this.getSearchResults();
 
-        if (!results.length) return;
+        if (!searchResults || !searchResults.length) return;
 
         // clear all existing placemarkers
-        var placemarkers: JQuery = this.getSearchResultPlacemarkers();
+        const placemarkers: JQuery = this.getSearchResultPlacemarkers();
         placemarkers.remove();
 
-        var pageWidth = this.getPageLineRatio();
-        var lineTop = this.$line.position().top;
-        var lineLeft = this.$line.position().left;
+        const pageWidth = this.getPageLineRatio();
+        const lineTop = this.$line.position().top;
+        const lineLeft = this.$line.position().left;
 
-        var that = this;
+        const that = this;
 
         // for each page with a result, place a marker along the line.
-        for (var i = 0; i < results.length; i++) {
-            var result = results[i];
+        for (let i = 0; i < searchResults.length; i++) {
+            const result: SearchResult = searchResults[i];
+            const distance: number = result.canvasIndex * pageWidth;
+            const $placemarker: JQuery = $('<div class="searchResultPlacemarker" data-index="' + result.canvasIndex + '"></div>');
 
-            var distance = result.canvasIndex * pageWidth;
-
-            var $placemarker = $('<div class="searchResultPlacemarker" data-index="' + result.canvasIndex + '"></div>');
-
-            $placemarker[0].ontouchstart = function (e) { that.onPlacemarkerTouchStart.call(this, that) };
-            $placemarker.click(function (e) { that.onPlacemarkerClick.call(this, that) });
-            $placemarker.mouseenter(function (e) { that.onPlacemarkerMouseEnter.call(this, that) });
-            $placemarker.mouseleave(function (e) { that.onPlacemarkerMouseLeave.call(this, e, that) });
+            $placemarker[0].ontouchstart = function (e: any) { that.onPlacemarkerTouchStart.call(this, that) };
+            $placemarker.click(function (e: any) { that.onPlacemarkerClick.call(this, that) });
+            $placemarker.mouseenter(function (e: any) { that.onPlacemarkerMouseEnter.call(this, that) });
+            $placemarker.mouseleave(function (e: any) { that.onPlacemarkerMouseLeave.call(this, e, that) });
 
             this.$searchResultsContainer.append($placemarker);
 
-            var top = lineTop - $placemarker.height();
-            var left = lineLeft + distance - ($placemarker.width() / 2);
+            const top: number = lineTop - $placemarker.height();
+            const left: number = lineLeft + distance - ($placemarker.width() / 2);
 
             $placemarker.css({
                 top: top,
@@ -437,54 +424,52 @@ export class FooterPanel extends BaseFooterPanel {
         }
     }
 
-    onPlacemarkerTouchStart(that): void {
+    onPlacemarkerTouchStart(that: any): void {
         that.placemarkerTouched = true;
 
-        var $placemarker = $(this);
-        var index = parseInt($placemarker.attr('data-index'));
+        const $placemarker: JQuery = $(this);
+        const index: number = parseInt($placemarker.attr('data-index'));
 
         $.publish(Commands.VIEW_PAGE, [index]);
     }
 
-    onPlacemarkerClick(that): void {
+    onPlacemarkerClick(that: any): void {
         if (that.placemarkerTouched) return;
 
         that.placemarkerTouched = false;
 
-        var $placemarker = $(this);
-        var index = parseInt($placemarker.attr('data-index'));
+        const $placemarker: JQuery = $(this);
+        const index: number = parseInt($placemarker.attr('data-index'));
 
         $.publish(Commands.VIEW_PAGE, [index]);
     }
 
-    onPlacemarkerMouseEnter(that): void {
+    onPlacemarkerMouseEnter(that: any): void {
         if (that.placemarkerTouched) return;
 
-        var $placemarker = $(this);
+        const $placemarker: JQuery = $(this);
 
         $placemarker.addClass('hover');
 
-        var canvasIndex = parseInt($placemarker.attr('data-index'));
+        const canvasIndex: number = parseInt($placemarker.attr('data-index'));
 
         $.publish(Commands.SEARCH_PREVIEW_START, [canvasIndex]);
 
-        var placemarkers = that.getSearchResultPlacemarkers();
-        var elemIndex = placemarkers.index($placemarker[0]);
+        const $placemarkers: JQuery = that.getSearchResultPlacemarkers();
+        const elemIndex: number = $placemarkers.index($placemarker[0]);
 
         that.currentPlacemarkerIndex = canvasIndex;
 
         that.$placemarkerDetails.show();
 
-        var title = "{0} {1}";
-
-        var mode = that.extension.getMode();
+        let title: string = "{0} {1}";
+        const mode: Mode = that.extension.getMode();
 
         if (mode.toString() === Mode.page.toString()) {
-            var canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
+            const canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
+            let label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
-            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
-
-            if (label === "") {
+            if (!label) {
                 label = this.extension.helper.manifest.options.defaultLabel;
             }
 
@@ -495,26 +480,26 @@ export class FooterPanel extends BaseFooterPanel {
 
         that.$placemarkerDetailsTop.html(title);
 
-        var result = (<ISeadragonExtension>that.extension).searchResults[elemIndex];
+        const searchResults: SearchResult[] | null = this.getSearchResults();
 
-        var terms = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
+        if (searchResults) {
+            const result: SearchResult = searchResults[elemIndex];
+            const terms: string = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
+            let instancesFoundText: string = that.content.instanceFound;
 
-        var instancesFoundText;
+            if (result.rects.length === 1) {
+                instancesFoundText = String.format(instancesFoundText, terms);
+            } else {
+                instancesFoundText = String.format(instancesFoundText, result.rects.length, terms);
+            }
 
-        if (result.rects.length === 1) {
-            instancesFoundText = that.content.instanceFound;
-            instancesFoundText = String.format(instancesFoundText, terms);
-        } else {
-            instancesFoundText = that.content.instancesFound;
-            instancesFoundText = String.format(instancesFoundText, result.rects.length, terms);
+            that.$placemarkerDetailsBottom.html(instancesFoundText);
         }
 
-        that.$placemarkerDetailsBottom.html(instancesFoundText);
+        const pos: any = $placemarker.position();
 
-        var pos = $placemarker.position();
-
-        var top = pos.top - that.$placemarkerDetails.height();
-        var left = pos.left;
+        let top: number = pos.top - that.$placemarkerDetails.height();
+        let left: number = pos.left;
 
         if (left < that.$placemarkerDetails.width() / 2) {
             left = 0 - ($placemarker.width() / 2);
@@ -530,14 +515,12 @@ export class FooterPanel extends BaseFooterPanel {
         });
     }
 
-    onPlacemarkerMouseLeave(e, that): void {
+    onPlacemarkerMouseLeave(e: any, that: any): void {
         $.publish(Commands.SEARCH_PREVIEW_FINISH);
 
-        var $placemarker = $(this);
-
-        var newElement = e.toElement || e.relatedTarget;
-
-        var isChild = $(newElement).closest(that.$placemarkerDetails).length;
+        const $placemarker: JQuery = $(this);
+        const newElement: Element = e.toElement || e.relatedTarget;
+        const isChild: number = $(newElement).closest(that.$placemarkerDetails).length;
 
         if (newElement != that.$placemarkerDetails.get(0) && isChild === 0) {
             that.$placemarkerDetails.hide();
@@ -547,16 +530,16 @@ export class FooterPanel extends BaseFooterPanel {
 
     setPageMarkerPosition(): void {
 
-        if (this.extension.helper.canvasIndex == null) return;
+        if (this.extension.helper.canvasIndex === null) return;
 
         // position placemarker showing current page.
-        var pageLineRatio = this.getPageLineRatio();
-        var lineTop = this.$line.position().top;
-        var lineLeft = this.$line.position().left;
+        const pageLineRatio: number = this.getPageLineRatio();
+        const lineTop: number = this.$line.position().top;
+        const lineLeft: number = this.$line.position().left;
 
-        var position = this.extension.helper.canvasIndex * pageLineRatio;
-        var top = lineTop;
-        var left = lineLeft + position;
+        const position: number = this.extension.helper.canvasIndex * pageLineRatio;
+        const top: number = lineTop;
+        let left: number = lineLeft + position;
 
         this.$pagePositionMarker.css({
             top: top,
@@ -565,7 +548,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         // if the remaining distance to the right is less than the width of the label
         // shift it to the left.
-        var lineWidth = this.$line.width();
+        const lineWidth: number = this.$line.width();
 
         if (left + this.$pagePositionLabel.outerWidth(true) > lineWidth) {
             left -= this.$pagePositionLabel.outerWidth(true);
@@ -587,8 +570,8 @@ export class FooterPanel extends BaseFooterPanel {
         (<ISeadragonExtension>this.extension).searchResults = [];
 
         // clear all existing placemarkers
-        var placemarkers = this.getSearchResultPlacemarkers();
-        placemarkers.remove();
+        const $placemarkers: JQuery = this.getSearchResultPlacemarkers();
+        $placemarkers.remove();
 
         // clear search input field.
         this.$searchText.val(this.content.enterKeyword);
@@ -603,7 +586,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     getPageLineRatio(): number {
 
-        var lineWidth = this.$line.width();
+        const lineWidth: number = this.$line.width();
 
         // find page/width ratio by dividing the line width by the number of pages in the book.
         if (this.extension.helper.getTotalCanvases() === 1) return 0;
@@ -622,20 +605,23 @@ export class FooterPanel extends BaseFooterPanel {
 
     setPlacemarkerLabel(): void {
 
-        var displaying = this.content.displaying;
-        var index = this.extension.helper.canvasIndex;
+        const displaying: string = this.content.displaying;
+        const index: number = this.extension.helper.canvasIndex;
 
         if (this.isPageModeEnabled()) {
-            var canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+            const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+            let label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
-            var label: string = Manifesto.TranslationCollection.getValue(canvas.getLabel());
-
-            if (label === "") {
+            if (!label) {
                 label = this.content.defaultLabel;
             }
 
-            var lastCanvasOrderLabel = this.extension.helper.getLastCanvasLabel(true);
-            this.$pagePositionLabel.html(String.format(displaying, this.content.page, this.extension.sanitize(label), this.extension.sanitize(lastCanvasOrderLabel)));
+            const lastCanvasOrderLabel: string | null = this.extension.helper.getLastCanvasLabel(true);
+
+            if (lastCanvasOrderLabel) {
+                this.$pagePositionLabel.html(String.format(displaying, this.content.page, this.extension.sanitize(<string>label), this.extension.sanitize(<string>lastCanvasOrderLabel)));
+            }
+
         } else {
             this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.extension.helper.getTotalCanvases()));
         }
@@ -658,7 +644,6 @@ export class FooterPanel extends BaseFooterPanel {
         if (!results) return;
 
         this.hideSearchSpinner();
-
         this.positionSearchResultPlacemarkers();
 
         // show pager.
@@ -668,18 +653,18 @@ export class FooterPanel extends BaseFooterPanel {
             'left': 0
         });
 
-        var $number = this.$searchPagerContainer.find('.number');
+        const $number: JQuery = this.$searchPagerContainer.find('.number');
         $number.text((<ISeadragonExtension>this.extension).getTotalSearchResultRects());
 
-        var foundFor = this.$searchResultsInfo.find('.foundFor');
+        const $foundFor: JQuery = this.$searchResultsInfo.find('.foundFor');
 
         if (results.length === 1) {
-            foundFor.html(this.content.resultFoundFor);
+            $foundFor.html(this.content.resultFoundFor);
         } else {
-            foundFor.html(this.content.resultsFoundFor);
+            $foundFor.html(this.content.resultsFoundFor);
         }
 
-        var $terms = this.$searchPagerContainer.find('.terms');
+        const $terms: JQuery = this.$searchPagerContainer.find('.terms');
         $terms.html(Utils.Strings.ellipsis(terms, this.options.elideResultsTermsCount));
         $terms.prop('title', terms);
 
@@ -691,7 +676,7 @@ export class FooterPanel extends BaseFooterPanel {
     resize(): void {
         super.resize();
 
-        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        const searchResults: SearchResult[] | null = this.getSearchResults();
 
         if (searchResults && searchResults.length) {
             this.positionSearchResultPlacemarkers();
@@ -701,7 +686,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         this.$searchPagerContainer.width(this.$element.width());
 
-        var center = this.$element.width() / 2;
+        const center: number = this.$element.width() / 2;
 
         // position search pager controls.
         this.$searchPagerControls.css({

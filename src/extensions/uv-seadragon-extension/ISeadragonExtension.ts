@@ -6,7 +6,7 @@ import SearchResultRect = Manifold.SearchResultRect;
 import Size = Utils.Measurements.Size;
 
 export interface ISeadragonExtension extends IExtension{
-    currentSearchResultRect: SearchResultRect;
+    currentSearchResultRect: SearchResultRect | null;
     getAutoCompleteUri(): string | null;
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size;
     getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string;
@@ -29,7 +29,7 @@ export interface ISeadragonExtension extends IExtension{
     isFirstSearchResultRect(): boolean;
     isPagingSettingEnabled(): boolean;
     isSearchWithinEnabled(): boolean;
-    previousSearchResultRect: SearchResultRect;
+    previousSearchResultRect: SearchResultRect | null;
     searchResults: SearchResult[] | null;
     searchWithin(terms: string, callback: (results: any) => void): void;
 }

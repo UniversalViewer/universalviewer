@@ -2,6 +2,7 @@ import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
+import {Bounds} from "./Bounds";
 import {Commands} from "./Commands";
 import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
@@ -245,8 +246,11 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (e: any, viewer: any) => {
-            if (this.centerPanel && this.centerPanel.currentBounds){
-                this.setParam(Params.xywh, this.centerPanel.getViewportBounds().toString());
+            
+            const bounds: Bounds | null = this.centerPanel.getViewportBounds();
+            
+            if (this.centerPanel && bounds){
+                this.setParam(Params.xywh, bounds.toString());
             }
 
             const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
@@ -275,7 +279,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         $.subscribe(Commands.SEADRAGON_ROTATION, (e: any, rotation: number) => {
             this.triggerSocket(Commands.SEADRAGON_ROTATION);
             this.currentRotation = rotation;
-            this.setParam(Params.rotation, rotation);
+            this.setParam(Params.rotation, rotation.toString());
         });
 
         $.subscribe(Commands.SEARCH, (e: any, terms: string) => {
@@ -320,7 +324,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(BaseCommands.UPDATE_SETTINGS, () => {
             this.viewPage(this.helper.canvasIndex, true);
-            var settings: ISettings = this.getSettings();
+            const settings: ISettings = this.getSettings();
             $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
         });
 
@@ -417,9 +421,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isDeepLinkingEnabled()){
 
             // if a highlight param is set, use it to search.
-            var highlight: string = this.getParam(Params.highlight);
+            const highlight: string | null = this.getParam(Params.highlight);
 
-            if (highlight){
+            if (highlight) {
                 highlight.replace(/\+/g, " ").replace(/"/g, "");
                 $.publish(Commands.SEARCH, [highlight]);
             }
@@ -430,7 +434,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         // if a rotation value is in the hash params, set currentRotation
         if (this.isDeepLinkingEnabled()){
 
-            var rotation: number = Number(this.getParam(Params.rotation));
+            const rotation: number = Number(this.getParam(Params.rotation));
 
             if (rotation){
                 $.publish(Commands.SEADRAGON_ROTATION, [rotation]);
@@ -449,7 +453,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         }
 
         if (this.isPagingSettingEnabled() && !isReload){
-            var indices: number[] = this.getPagedIndices(canvasIndex);
+            const indices: number[] = this.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.
             if (indices.includes(this.helper.canvasIndex)) {
@@ -980,7 +984,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         for (let i = 0; i < resultsToParse.resources.length; i++) {
             const resource: any = resultsToParse.resources[i];
             const canvasIndex: number = this.helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
-            var searchResult: SearchResult = new SearchResult(resource, canvasIndex);
+            const searchResult: SearchResult = new SearchResult(resource, canvasIndex);
             const match: SearchResult = parsedResults.en().where(x => x.canvasIndex === searchResult.canvasIndex).first();
 
             // if there's already a SearchResult for the canvas index, add a rect to it, otherwise create a new SearchResult

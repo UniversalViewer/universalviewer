@@ -1,11 +1,9 @@
 import {BaseCommands} from "./BaseCommands";
 import {BaseView} from "./BaseView";
-import {BootstrapParams} from "../../BootstrapParams";
 import {Information} from "../uv-shared-module/Information";
 import {InformationAction} from "../uv-shared-module/InformationAction";
 import {InformationArgs} from "../uv-shared-module/InformationArgs";
 import {InformationFactory} from "../uv-shared-module/InformationFactory";
-import {SettingsDialogue} from "../uv-dialogues-module/SettingsDialogue";
 
 export class HeaderPanel extends BaseView {
 
@@ -28,7 +26,7 @@ export class HeaderPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_INFORMATION, (e, args: InformationArgs) => {
+        $.subscribe(BaseCommands.SHOW_INFORMATION, (e: any, args: InformationArgs) => {
             this.showInformation(args);
         });
 
@@ -83,13 +81,13 @@ export class HeaderPanel extends BaseView {
     }
 
     updateLocaleToggle(): void {
-        if (!this.localeToggleIsVisible()){
+        if (!this.localeToggleIsVisible()) {
             this.$localeToggleButton.hide();
             return;
         }
 
-        var alternateLocale = this.extension.getAlternateLocale();
-        var text = alternateLocale.name.split('-')[0].toUpperCase();
+        const alternateLocale: any = this.extension.getAlternateLocale();
+        const text: string = alternateLocale.name.split('-')[0].toUpperCase();
 
         this.$localeToggleButton.data('locale', alternateLocale.name);
         this.$localeToggleButton.attr('title', alternateLocale.label);
@@ -97,7 +95,7 @@ export class HeaderPanel extends BaseView {
     }
 
     updateSettingsButton(): void {
-        var settingsEnabled: boolean = Utils.Bools.getBool(this.options.settingsButtonEnabled, true);
+        const settingsEnabled: boolean = Utils.Bools.getBool(this.options.settingsButtonEnabled, true);
         if (!settingsEnabled){
             this.$settingsButton.hide();
         } else {
@@ -110,21 +108,17 @@ export class HeaderPanel extends BaseView {
     }
 
     showInformation(args: InformationArgs): void {
-
-        var informationFactory: InformationFactory = new InformationFactory(this.extension);
-
+        const informationFactory: InformationFactory = new InformationFactory(this.extension);
         this.information = informationFactory.Get(args);
         var $message = this.$informationBox.find('.message');
         $message.html(this.information.message).find('a').attr('target', '_top');
         var $actions = this.$informationBox.find('.actions');
         $actions.empty();
 
-        for (var i = 0; i < this.information.actions.length; i++) {
-            var action: InformationAction = this.information.actions[i];
-
-            var $action = $('<a href="#" class="btn btn-default">' + action.label + '</a>');
+        for (let i = 0; i < this.information.actions.length; i++) {
+            const action: InformationAction = this.information.actions[i];
+            const $action: JQuery = $('<a href="#" class="btn btn-default">' + action.label + '</a>');
             $action.on('click', action.action);
-
             $actions.append($action);
         }
 
@@ -145,25 +139,24 @@ export class HeaderPanel extends BaseView {
 
     updateSettings(settings: ISettings): void {
         this.extension.updateSettings(settings);
-
         $.publish(BaseCommands.UPDATE_SETTINGS, [settings]);
     }
 
     resize(): void {
         super.resize();
 
-        var headerWidth = this.$element.width();
-        var center = headerWidth / 2;
-        var containerWidth = this.$centerOptions.outerWidth();
-        var pos = center - (containerWidth / 2);
+        const headerWidth: number = this.$element.width();
+        const center: number = headerWidth / 2;
+        const containerWidth: number = this.$centerOptions.outerWidth();
+        const pos: number = center - (containerWidth / 2);
 
         this.$centerOptions.css({
             left: pos
         });
 
         if (this.$informationBox.is(':visible')){
-            var $actions = this.$informationBox.find('.actions');
-            var $message = this.$informationBox.find('.message');
+            const $actions = this.$informationBox.find('.actions');
+            const $message = this.$informationBox.find('.message');
             $message.width(this.$element.width() - $message.horizontalMargins() - $actions.outerWidth(true) - this.$informationBox.find('.close').outerWidth(true) - 1);
             $message.ellipsisFill(this.information.message);
         }

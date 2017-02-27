@@ -2,8 +2,6 @@ import {BaseCommands} from "./modules/uv-shared-module/BaseCommands";
 import {BootstrapParams} from "./BootstrapParams";
 import {IExtension} from "./modules/uv-shared-module/IExtension";
 
-declare var manifold: IManifold;
-
 // The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
 // then determining which extension to use and instantiating it.
 export class Bootstrapper{
@@ -52,32 +50,32 @@ export class Bootstrapper{
             locale: this.params.localeName
         }).then((helper: Manifold.IHelper) => {
             
-            var trackingLabel: string = helper.getTrackingLabel();
+            let trackingLabel: string = helper.getTrackingLabel();
             trackingLabel += ', URI: ' + this.params.embedDomain;
             window.trackingLabel = trackingLabel;
 
-            var sequence: Manifesto.ISequence = helper.getSequenceByIndex(this.params.sequenceIndex);
+            const sequence: Manifesto.ISequence = helper.getSequenceByIndex(this.params.sequenceIndex);
 
             if (!sequence) {
                 this.notFound();
                 return;
             }
 
-            var canvas: Manifesto.ICanvas = helper.getCanvasByIndex(this.params.canvasIndex);
+            const canvas: Manifesto.ICanvas = helper.getCanvasByIndex(this.params.canvasIndex);
 
             if (!canvas) {
                 this.notFound();
                 return;
             }
 
-            var canvasType = canvas.getType();
+            const canvasType: Manifesto.ElementType = canvas.getType();
 
             // try using canvasType
-            var extension: IExtension = this.extensions[canvasType.toString()];
+            let extension: IExtension | null = this.extensions[canvasType.toString()];
 
             // if there isn't an extension for the canvasType, try the format
             if (!extension) {
-                var format = canvas.getProperty('format');
+                const format: any = canvas.getProperty('format');
                 extension = this.extensions[format];
             }
 
@@ -90,7 +88,7 @@ export class Bootstrapper{
             extension.helper = helper;
 
             this.featureDetect(() => {
-                this.configure(extension, (config) => {
+                this.configure(extension, (config: any) => {
                     this.injectCss(extension, config, () => {
                         this.createExtension(extension, config);
                     });
@@ -103,8 +101,7 @@ export class Bootstrapper{
     }
 
     isCORSEnabled(): boolean {
-        // No jsonp setting? Then use autodetection. Otherwise, use explicit setting.
-        return (null === this.params.jsonp) ? Modernizr.cors : !this.params.jsonp;
+        return Modernizr.cors;
     }
 
     notFound(): void {
@@ -124,8 +121,8 @@ export class Bootstrapper{
         });
     }
 
-    configure(extension, cb: (config: any) => void): void {
-        var that = this;
+    configure(extension: any, cb: (config: any) => void): void {
+        const that = this;
 
         this.getConfigExtension(extension, (configExtension: any) => {
 
@@ -142,7 +139,7 @@ export class Bootstrapper{
         config.name = extension.name;
 
         // if data-config has been set, extend the existing config object.
-        if (configExtension){
+        if (configExtension) {
             // save a reference to the config extension uri.
             config.uri = this.params.config;
 
@@ -154,13 +151,13 @@ export class Bootstrapper{
 
     getConfigExtension(extension: any, cb: (configExtension: any) => void): void {
 
-        var sessionConfig = sessionStorage.getItem(extension.name + '.' + this.params.localeName);
+        const sessionConfig: string | null = sessionStorage.getItem(extension.name + '.' + this.params.localeName);
 
         if (sessionConfig) { // if config is stored in sessionstorage
             cb(JSON.parse(sessionConfig));
-        } else if (this.params.config){ // if data-config has been set
+        } else if (this.params.config) { // if data-config has been set
 
-            if (this.isCORSEnabled()){
+            if (this.isCORSEnabled()) {
                 $.getJSON(this.params.config, (configExtension) => {
                     cb(configExtension);
                 });
@@ -176,7 +173,7 @@ export class Bootstrapper{
 
                 $.ajax(settings);
 
-                window.configExtensionCallback = (configExtension) => {
+                window.configExtensionCallback = (configExtension: any) => {
                     cb(configExtension);
                 };
             }

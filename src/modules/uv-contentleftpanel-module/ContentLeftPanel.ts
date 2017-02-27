@@ -572,7 +572,7 @@ export class ContentLeftPanel extends LeftPanel {
     getCurrentCanvasTopRangeIndex(): number {
         let topRangeIndex: number = -1;
         
-        const range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
+        const range: Manifesto.IRange | null = this.extension.getCurrentCanvasRange();
         
         if (range) {
             topRangeIndex = Number(range.path.split('/')[0]);
@@ -591,7 +591,7 @@ export class ContentLeftPanel extends LeftPanel {
 
             if (currentCanvasTopRangeIndex != -1) {
 
-                const range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
+                const range: Manifesto.IRange | null = this.extension.getCurrentCanvasRange();
 
                 if (range && range.treeNode){
                     node = this.treeView.getNodeById(range.treeNode.id);

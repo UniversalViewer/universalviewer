@@ -100,8 +100,8 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     bookmark(): void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
-        var bookmark: Bookmark = new Bookmark();
+        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
         bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());

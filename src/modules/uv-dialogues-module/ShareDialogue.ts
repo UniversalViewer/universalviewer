@@ -136,7 +136,7 @@ export class ShareDialogue extends Dialogue {
         this.$heightInput = $('<input class="height" type="text" maxlength="10" />');
         this.$customSize.append(this.$heightInput);
 
-        var iiifUrl: string = this.extension.getIIIFShareUrl();
+        const iiifUrl: string = this.extension.getIIIFShareUrl();
 
         this.$iiifButton = $('<a class="imageBtn iiif" href="' + iiifUrl + '" title="' + this.content.iiif + '" target="_blank"></a>');
         this.$footer.append(this.$iiifButton);
@@ -195,7 +195,7 @@ export class ShareDialogue extends Dialogue {
         this.update();
     }
 
-    getShareUrl(): string {
+    getShareUrl(): string | null {
         return this.extension.getShareUrl();
     }
 
@@ -235,10 +235,14 @@ export class ShareDialogue extends Dialogue {
 
     updateShareOptions(): void {
         
-        this.$shareInput.val(this.getShareUrl());
-        this.$shareLink.prop('href', this.getShareUrl());
-        this.$shareLink.text(this.getShareUrl());
-        
+        const shareUrl: string | null = this.getShareUrl();
+
+        if (shareUrl) {
+            this.$shareInput.val(shareUrl);
+            this.$shareLink.prop('href', shareUrl);
+            this.$shareLink.text(shareUrl);
+        }
+
         if ($.browser.mobile){
             this.$shareInput.hide();
             this.$shareLink.show();

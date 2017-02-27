@@ -1,5 +1,4 @@
 import {BaseView} from "./BaseView";
-import {Shell} from "./Shell";
 
 export class BaseExpandPanel extends BaseView {
 
@@ -9,14 +8,14 @@ export class BaseExpandPanel extends BaseView {
     autoToggled: boolean = false;
     expandFullEnabled: boolean = true;
 
-    $top: JQuery;
-    $title: JQuery;
-    $collapseButton: JQuery;
-    $main: JQuery;
     $closed: JQuery;
+    $closedTitle: JQuery;
+    $collapseButton: JQuery;
     $expandButton: JQuery;
     $expandFullButton: JQuery;
-    $closedTitle: JQuery;
+    $main: JQuery;
+    $title: JQuery;
+    $top: JQuery;
 
     constructor($element: JQuery) {
         super($element, false, true);
@@ -91,7 +90,7 @@ export class BaseExpandPanel extends BaseView {
         this.$main.hide();
     }
 
-    init(): void{
+    init(): void {
         super.init();
     }
 

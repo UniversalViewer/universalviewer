@@ -60,36 +60,46 @@ export class ResourcesLeftPanel extends LeftPanel {
 
     dataBind(): void {
         this.dataBindThumbsView();
-        var annotations: Manifesto.IAnnotation[] = this.extension.helper.getResources();
+        const annotations: Manifesto.IAnnotation[] = this.extension.helper.getResources();
 
         if (annotations.length === 0) {
             this.$resourcesView.hide();
         }
-        for (var i = 0; i < annotations.length; i++){
-            var annotation: Manifesto.IAnnotation = annotations[i];
-            var resource: Manifesto.Resource = annotation.getResource();
-            var $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + Manifesto.TranslationCollection.getValue(resource.getLabel()) + ' (' + Utils.Files.simplifyMimeType(resource.getFormat().toString()) + ')' + '</li>');
-            this.$resources.append($listItem);
+
+        for (let i = 0; i < annotations.length; i++) {
+            const annotation: Manifesto.IAnnotation = annotations[i];
+            const resource: Manifesto.Resource = annotation.getResource();
+            if (resource) {
+                const label: string | null = Manifesto.TranslationCollection.getValue(<Manifesto.TranslationCollection>resource.getLabel());
+
+                if (label) {
+                    const mime: string = Utils.Files.simplifyMimeType((<Manifesto.ResourceFormat>resource.getFormat()).toString());
+                    const $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + label + ' (' + mime + ')' + '</li>');
+                    this.$resources.append($listItem);
+                }
+            }
         }
     }
 
     dataBindThumbsView(): void{
         if (!this.thumbsView) return;
-        var width, height;
+        
+        let width: number;
+        let height: number;
 
-        var viewingDirection = this.extension.helper.getViewingDirection().toString();
+        const viewingDirection: string = this.extension.helper.getViewingDirection().toString();
 
-        if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
+        if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
             width = this.config.options.oneColThumbWidth;
             height = this.config.options.oneColThumbHeight;
         } else {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
         }
-        if (typeof width === "undefined") {
+        if (typeof(width) === "undefined") {
             width = 100;
         }
-        if (typeof height === "undefined") {
+        if (typeof(height) === "undefined") {
             height = 100;
         }
 

@@ -6,10 +6,10 @@ if (typeof jQuery === "function") {
 
 var uvReady = new Event('uvReady');
 
-require([
+requirejs([
     'UV'
 ], (
-    UV
+    UV: any
 ) => {
     if (!window.UV) {
         window.UV = UV.default;

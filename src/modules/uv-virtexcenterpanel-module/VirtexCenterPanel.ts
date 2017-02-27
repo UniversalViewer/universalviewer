@@ -1,7 +1,5 @@
 import {BaseCommands} from "../uv-shared-module/BaseCommands";
-import {Commands} from "../../extensions/uv-mediaelement-extension/Commands";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import ExternalResource = Manifesto.IExternalResource;
 
 export class VirtexCenterPanel extends CenterPanel {
 
@@ -22,9 +20,9 @@ export class VirtexCenterPanel extends CenterPanel {
 
         super.create();
 
-        var that = this;
+        const that = this;
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
+        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -44,15 +42,13 @@ export class VirtexCenterPanel extends CenterPanel {
 
         this.updateAttribution();
 
-        this.$zoomInButton.on('click', (e) => {
+        this.$zoomInButton.on('click', (e: any) => {
             e.preventDefault();
-
             this.viewport.zoomIn();
         });
 
-        this.$zoomOutButton.on('click', (e) => {
+        this.$zoomOutButton.on('click', (e: any) => {
             e.preventDefault();
-
             this.viewport.zoomOut();
         });
     }
@@ -62,13 +58,16 @@ export class VirtexCenterPanel extends CenterPanel {
         this.extension.getExternalResources(resources).then(() => {
 
             this.$viewport.empty();
-
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const $element: JQuery = $("#content .virtex");
 
-            this.viewport = virtex.create(<Virtex.IVirtexData>{
-                element: "#content .virtex",
-                object: canvas.id,
-                showStats: this.options.showStats
+            this.viewport = new Virtex.Viewport({
+                target: $element[0],
+                data: {
+                    file: canvas.id,
+                    type: new Virtex.FileType("application/vnd.threejs+json"),
+                    showStats: this.options.showStats
+                }
             });
 
             this.resize();
