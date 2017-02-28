@@ -480,7 +480,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         that.$placemarkerDetailsTop.html(title);
 
-        const searchResults: SearchResult[] | null = this.getSearchResults();
+        const searchResults: SearchResult[] | null = that.getSearchResults();
 
         if (searchResults) {
             const result: SearchResult = searchResults[elemIndex];

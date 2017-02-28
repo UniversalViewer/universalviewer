@@ -825,7 +825,7 @@ export class BaseExtension implements IExtension {
         if (this.locales) return this.locales;
 
         // use data-locales to prioritise
-        const items: any[] = this.config.localisation.locales.clone();
+        const items: any[] = this.config.localisation.locales.slice(0);
         const sorting: any[] = this.bootstrapper.params.locales;
         const result: any[] = [];
 

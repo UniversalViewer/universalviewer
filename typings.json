@@ -5,7 +5,7 @@
     "base-component": "github:viewdir/base-component/dist/base-component.d.ts#es6",
     "ex": "github:BSick7/exjs/dist/ex.d.ts",
     "extensions": "github:edsilv/extensions/dist/extensions.d.ts#es6",
-    "http-status-codes": "github:edsilv/http-status-codes/dist/http-status-codes.d.ts#v0.0.3",
+    "http-status-codes": "github:edsilv/http-status-codes/dist/http-status-codes.d.ts#v0.0.4",
     "iiif-gallery-component": "github:viewdir/iiif-gallery-component/dist/iiif-gallery-component.d.ts#es6",
     "iiif-metadata-component": "github:viewdir/iiif-metadata-component/dist/iiif-metadata-component.d.ts#es6",
     "iiif-tree-component": "github:viewdir/iiif-tree-component/dist/iiif-tree-component.d.ts#es6",

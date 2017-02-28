@@ -41,7 +41,8 @@ module.exports = function (grunt) {
                     noUnusedLocals: true,
                     noUnusedParameters: false,
                     strictNullChecks: true,
-                    suppressImplicitAnyIndexErrors: true
+                    suppressImplicitAnyIndexErrors: true,
+                    types: ['requirejs', 'jquery', 'modernizr', 'three']
                 }
             },
             dist: {
@@ -55,31 +56,34 @@ module.exports = function (grunt) {
                     lib: ['es6'],
                     noImplicitAny: true,
                     noImplicitReturns: true,
-                    noImplicitThis: true,
+                    noImplicitThis: false,
                     noUnusedLocals: true,
                     noUnusedParameters: false,
                     strictNullChecks: true,
-                    suppressImplicitAnyIndexErrors: true
+                    suppressImplicitAnyIndexErrors: true,
+                    types: ['requirejs', 'jquery', 'modernizr', 'three']
                 }
             }
         },
 
         clean: {
             build : ['<%= config.directories.build %>'],
-            bundle: ['<%= config.directories.src %>/lib/bundle.js', '<%= config.directories.src %>/lib/bundle.min.js'],
             examples: ['<%= config.directories.examples %>/uv/'],
-            distexamples: ['<%= config.directories.examples %>/uv-*.zip', '<%= config.directories.examples %>/uv-*.tar'],
             extension: ['<%= config.directories.src %>/extensions/*/.build/*']
         },
 
-        concat: {
-            bundle: {
-                src: grunt.file.expand('src/lib/*').concat(config.dependencies.libs).concat(['!src/lib/README.md']),
-                dest: 'src/lib/bundle.js'
-            }
-        },
-
         copy: {
+            deps: {
+                files: [
+                    // node modules
+                    {
+                        expand: true,
+                        cwd: '.',
+                        src: config.dependencies.libs,
+                        dest: '<%= config.directories.lib %>/'
+                    }
+                ]
+            }
             schema: {
                 files: [
                     // extension schema files
@@ -143,16 +147,6 @@ module.exports = function (grunt) {
                         ],
                         dest: '<%= config.directories.build %>'
                     },
-                    // js
-                    {
-                        expand: true,
-                        flatten: true,
-                        cwd: '<%= config.directories.lib %>',
-                        src: [
-                            'bundle.min.js'
-                        ],
-                        dest: '<%= config.directories.build %>/lib/'
-                    },
                     // extension configuration files
                     {
                         expand: true,
@@ -164,7 +158,6 @@ module.exports = function (grunt) {
                             var reg = /extensions\/(.*)\/.build\/(.*.config.json)/;
                             var extensionName = src.match(reg)[1];
                             var fileName = src.match(reg)[2];
-
                             return dest + extensionName + '.' + fileName;
                         }
                     },
@@ -177,7 +170,6 @@ module.exports = function (grunt) {
                             // get the extension name from the src string.
                             var reg = /extensions\/(.*)\/dependencies.js/;
                             var extensionName = src.match(reg)[1];
-
                             return dest + extensionName + '-dependencies.js';
                         }
                     },
@@ -283,7 +275,9 @@ module.exports = function (grunt) {
         exec: {
             // concatenate and compress with r.js
             devbuild: {
-                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none && sorcery -i src/build.js' // todo: use https://github.com/Rich-Harris/sorcery https://github.com/requirejs/r.js/issues/799
+                // todo: https://github.com/Rich-Harris/sorcery
+                //cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none && sorcery -i src/build.js'
+                cmd: 'node node_modules/requirejs/bin/r.js -o dev.build.js optimize=none'
             },
             distbuild: {
                 cmd: 'node node_modules/requirejs/bin/r.js -o dist.build.js'
@@ -292,11 +286,11 @@ module.exports = function (grunt) {
 
         replace: {
 
-            // ../../../modules/[module]/img/[image]
+            // ../../../modules/<module>/img/<image>
             // becomes
-            // ../../img/[module]/[image]
+            // ../../img/<module>/<image>
             moduleimages: {
-                // replace img srcs to point to "../../img/[module]/[img]"
+                // replace img srcs to point to "../../img/<module>/<img>"
                 src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
@@ -304,11 +298,11 @@ module.exports = function (grunt) {
                     to: '\(\'../../img/$1/$2\'\)'
                 }]
             },
-            // ../../../themes/uv-default-theme/img/[img]
+            // ../../../themes/uv-default-theme/img/<img>
             // becomes
-            // ../../../img/[img]
+            // ../../../img/<img>
             themeimages: {
-                // replace img srcs to point to "../../img/[module]/[img]"
+                // replace img srcs to point to "../../img/<module>/<img>"
                 src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
@@ -380,11 +374,6 @@ module.exports = function (grunt) {
         uglify: {
             options: {
                 mangle: false
-            },
-            bundle: {
-                files: {
-                    'src/lib/bundle.min.js': ['src/lib/bundle.js']
-                }
             }
         }
     });
@@ -408,13 +397,11 @@ module.exports = function (grunt) {
 
         refresh();
 
-        var tsType = (grunt.option('dev')) ? 'ts:dev' : 'ts:build';
+        var tsType = (grunt.option('dev')) ? 'ts:dev' : 'ts:dist';
         var execType = (grunt.option('dev')) ? 'exec:devbuild' : 'exec:distbuild';
 
         grunt.task.run(
-            'clean:bundle',
-            'concat:bundle',
-            'uglify:bundle',
+            'copy:deps',
             tsType,
             'clean:extension',
             'configure:apply',

@@ -42,17 +42,12 @@ declare var Sanitize: any;
 // app
 interface Window{
     configExtensionCallback: any;
-    manifesto: IManifesto;
-    manifold: IManifold;
     browserDetect: any;
     trackEvent(category: string, action: string, label: string, value?: any): void;
     trackVariable(slot: number, name: string, value: string, scope: number): void;
     trackingLabel: string;
-    $: any;
-    _: any;
-    DEBUG: boolean;
+    $: JQueryStatic;
     webViewerLoad: any; // pdfjs
-    IEXMLHttpRequest: any;
     openSeadragonViewer: any; // for testing convenience
     UV: _Components.IBaseComponent;
 }
