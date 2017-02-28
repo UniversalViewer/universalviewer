@@ -13,7 +13,7 @@ module.exports = function () {
             'node_modules/jquery-plugins/dist/jquery-plugins.min.js',
             'node_modules/jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
             'node_modules/key-codes/dist/key-codes.min.js',
-            'node_modules/manifesto/dist/manifesto.min.js',
+            'node_modules/manifesto.js/dist/client/manifesto.min.js',
             'node_modules/manifold/dist/manifold.min.js',
             'node_modules/utils/dist/utils.min.js'
         ]

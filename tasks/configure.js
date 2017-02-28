@@ -1,8 +1,8 @@
 var _ = require('lodash'),
-    glob = require('glob'),
-    globArray = require('glob-array'),
-    jsonSchemaGenerator = require('json-schema-generator'),
-    path = require('path');
+glob = require('glob'),
+globArray = require('glob-array'),
+jsonSchemaGenerator = require('json-schema-generator'),
+path = require('path');
 
 module.exports = function (grunt) {
 

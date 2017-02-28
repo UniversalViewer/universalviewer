@@ -78,12 +78,13 @@ module.exports = function (grunt) {
                     // node modules
                     {
                         expand: true,
+                        flatten: true,
                         cwd: '.',
                         src: config.dependencies.libs,
                         dest: '<%= config.directories.lib %>/'
                     }
                 ]
-            }
+            },
             schema: {
                 files: [
                     // extension schema files
