@@ -87,11 +87,9 @@ export class Bootstrapper{
 
             extension.helper = helper;
 
-            this.featureDetect(() => {
-                this.configure(extension, (config: any) => {
-                    this.injectCss(extension, config, () => {
-                        this.createExtension(extension, config);
-                    });
+            this.configure(extension, (config: any) => {
+                this.injectCss(extension, config, () => {
+                    this.createExtension(extension, config);
                 });
             });
 
@@ -109,16 +107,6 @@ export class Bootstrapper{
             parent.$(parent.document).trigger(BaseCommands.NOT_FOUND);
             return;
         } catch (e) {}
-    }
-
-    featureDetect(cb: () => void): void {
-        yepnope({
-            test: window.btoa && window.atob,
-            nope: 'lib/base64.min.js',
-            complete: function () {
-                cb();
-            }
-        });
     }
 
     configure(extension: any, cb: (config: any) => void): void {
@@ -183,7 +171,6 @@ export class Bootstrapper{
     }
 
     injectCss(extension: any, config: any, cb: () => void): void {
-        // todo: use a compiler flag when available
         const cssPath: string = 'themes/' + config.options.theme + '/css/' + extension.name + '/theme.css';
 
         yepnope.injectCss(cssPath, function() {

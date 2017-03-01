@@ -38,6 +38,7 @@ declare var PDFObject: any;
 declare var yepnope: any;
 declare var PDFJS: any;
 declare var Sanitize: any;
+declare var _: any;
 
 // app
 interface Window{

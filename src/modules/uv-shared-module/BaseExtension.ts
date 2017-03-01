@@ -17,8 +17,6 @@ import {Params} from "../../Params";
 import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import {Shell} from "./Shell";
 
-declare var _: any; // todo: remove lodash
-
 export class BaseExtension implements IExtension {
 
     $clickThroughDialogue: JQuery;
@@ -381,7 +379,7 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseCommands.LOAD_FAILED, () => {
             this.triggerSocket(BaseCommands.LOAD_FAILED);
 
-            if (!_.isNull(that.lastCanvasIndex) && that.lastCanvasIndex !== that.helper.canvasIndex){
+            if (!that.lastCanvasIndex == null && that.lastCanvasIndex !== that.helper.canvasIndex){
                 this.viewCanvas(that.lastCanvasIndex);
             }
         });
@@ -837,7 +835,7 @@ export class BaseExtension implements IExtension {
         // loop through remaining items and add to results.
 
         $.each(sorting, (index: number, sortItem: any) => {
-            const match = _.filter(items, (item: any) => { return item.name === sortItem.name; });
+            const match = items.filter((item: any) => { return item.name === sortItem.name; });
             if (match.length){
                 var m: any = match[0];
                 if (sortItem.label) m.label = sortItem.label;
@@ -1014,7 +1012,7 @@ export class BaseExtension implements IExtension {
                 this.storeAccessToken,
                 this.getStoredAccessToken,
                 this.handleExternalResourceResponse).then((r: Manifold.ExternalResource[]) => {
-                    this.resources = $.map(r, (resource: Manifold.ExternalResource) => {
+                    this.resources = r.map((resource: Manifold.ExternalResource) => {
                         resource.data.index = resource.index;
                         return <Manifold.ExternalResource>_.toPlainObject(resource.data);
                     });
@@ -1323,23 +1321,23 @@ export class BaseExtension implements IExtension {
                 const domain: string = Utils.Urls.getUrlParts(resource.dataUri).hostname;
                 const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
 
-                for(let i = 0; i < items.length; i++) {
+                for (let i = 0; i < items.length; i++) {
                     item = items[i];
 
-                    if(item.key.includes(domain)) {
+                    if (item.key.includes(domain)) {
                         foundItems.push(item);
                     }
                 }
             }
 
-            // sort by expiresAt
+            // sort by expiresAt, earliest to most recent.
             foundItems = _.sortBy(foundItems, (item: Utils.StorageItem) => {
                 return item.expiresAt;
             });
 
             let foundToken: IAccessToken | undefined;
 
-            if (foundItems.length){
+            if (foundItems.length) {
                 foundToken = <Manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
             }
 
@@ -1369,7 +1367,7 @@ export class BaseExtension implements IExtension {
                     } else {
                         reject(resource.error.statusText);
                     }
-                } else if (resource.error.status === HTTPStatusCode.FORBIDDEN){
+                } else if (resource.error.status === HTTPStatusCode.FORBIDDEN) {
                     const error: Error = new Error();
                     error.message = "Forbidden";
                     error.name = manifesto.StatusCodes.FORBIDDEN.toString();

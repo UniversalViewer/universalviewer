@@ -30,7 +30,6 @@ import ITreeNode = Manifold.ITreeNode;
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
 import Size = Utils.Measurements.Size;
-declare var _: any; // todo: remove lodash
 
 export class Extension extends BaseExtension implements ISeadragonExtension {
 
@@ -650,7 +649,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
           const maxSize: Size =  new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
 
-          if (!_.isUndefined(maxSize.width) && !_.isUndefined(maxSize.height)){
+          if (!(typeof(maxSize.width) === 'undefined') && !(typeof(maxSize.height) === 'undefined')) {
 
             if (width > maxSize.width) {
                 let newWidth: number = maxSize.width;
@@ -811,7 +810,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 let service: Manifesto.IService = services[i];
                 let id = service.id;
 
-                if (!_.endsWith(id, '/')) {
+                if (!id.endsWith('/')) {
                     id += '/';
                 }
 

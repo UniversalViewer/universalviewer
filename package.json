@@ -65,7 +65,7 @@
     "virtex3d": "edsilv/virtex#dev"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.52",
+    "@types/lodash": "^4.14.53",
     "@types/modernizr": "^3.2.29",
     "@types/requirejs": "^2.1.28",
     "@types/three": "^0.83.4"

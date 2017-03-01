@@ -5,6 +5,7 @@ if (typeof jQuery === "function") {
 }
 
 requirejs([
+    './lib/base64.min.js',
     './lib/browserdetect.js',
     './lib/detectmobilebrowser.js',
     './lib/jquery.xdomainrequest.js',
@@ -23,6 +24,7 @@ requirejs([
     './lib/utils.min.js',
     'UV'
 ], (
+    base64: any,
     browserdetect: any,
     detectmobilebrowser: any,
     xdomainrequest: any,

@@ -6,7 +6,6 @@ import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import {DownloadType} from "./DownloadType";
 import {ISeadragonExtension} from "./ISeadragonExtension";
 import Size = Utils.Measurements.Size;
-declare var _: any; // todo: remove lodash
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
@@ -529,10 +528,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         let finalHeight: number = size.height;
 
         // if the maxWidth is less than the advertised width
-        if (!_.isUndefined(maxSize.width) && maxSize.width < size.width) {
+        if (!(typeof(maxSize.width) === 'undefined') && maxSize.width < size.width) {
             finalWidth = maxSize.width;
 
-            if (!_.isUndefined(maxSize.height)) {
+            if (!(typeof(maxSize.height) === 'undefined')) {
                 finalHeight = maxSize.height;
             } else {
                 // calculate finalHeight
@@ -555,7 +554,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                     (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
                     const maxSize: Size | null = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
                     if (maxSize) {
-                        if (_.isUndefined(maxSize.width)) {
+                        if (typeof(maxSize.width) === 'undefined') {
                             return true;
                         } else if (maxSize.width <= this.options.maxImageWidth) {
                             return true;
