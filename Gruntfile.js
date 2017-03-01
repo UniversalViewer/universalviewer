@@ -73,7 +73,7 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            deps: {
+            bundle: {
                 files: [
                     // node modules
                     {
@@ -137,6 +137,13 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['<%= config.directories.src %>/build.js.map'],
                         dest: '<%= config.directories.build %>'
+                    },
+                    // js
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['<%= config.directories.lib %>/offline.js'],
+                        dest: '<%= config.directories.build %>/lib'
                     },
                     // js
                     {
@@ -273,6 +280,14 @@ module.exports = function (grunt) {
             }
         },
 
+        concat: {
+            offline: {
+                cwd: '.',
+                src: config.dependencies.offline,
+                dest: '<%= config.directories.lib %>/offline.js'
+            }
+        },
+
         exec: {
             // concatenate and compress with r.js
             devbuild: {
@@ -402,7 +417,8 @@ module.exports = function (grunt) {
         var execType = (grunt.option('dev')) ? 'exec:devbuild' : 'exec:distbuild';
 
         grunt.task.run(
-            'copy:deps',
+            'copy:bundle',
+            'concat:offline',
             tsType,
             'clean:extension',
             'configure:apply',

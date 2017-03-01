@@ -20,7 +20,7 @@ module.exports = function () {
         offline: [ // when offline, make these libs available as they can't be loaded from a cdn
             'node_modules/jquery/dist/jquery.min.js',
             'node_modules/jsviews/jsviews.min.js',
-            'node_modules/core-js/library/shim.js'
+            'node_modules/core-js/client/shim.min.js'
         ]
     };
     this.directories = {
