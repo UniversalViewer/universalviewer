@@ -5,7 +5,7 @@ module.exports = function () {
     this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
     this.examplesPort = 8001;
     this.dependencies = {
-        libs: [
+        bundle: [
             'node_modules/base-component/dist/base-component.js',
             'node_modules/exjs/dist/ex.es3.min.js',
             'node_modules/extensions/dist/extensions.min.js',
@@ -16,6 +16,11 @@ module.exports = function () {
             'node_modules/manifesto.js/dist/client/manifesto.min.js',
             'node_modules/manifold/dist/manifold.min.js',
             'node_modules/utils/dist/utils.min.js'
+        ],
+        offline: [ // when offline, make these libs available as they can't be loaded from a cdn
+            'node_modules/jquery/dist/jquery.min.js',
+            'node_modules/jsviews/jsviews.min.js',
+            'node_modules/core-js/library/shim.js'
         ]
     };
     this.directories = {

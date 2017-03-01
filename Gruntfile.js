@@ -80,7 +80,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         cwd: '.',
-                        src: config.dependencies.libs,
+                        src: config.dependencies.bundle,
                         dest: '<%= config.directories.lib %>/'
                     }
                 ]
