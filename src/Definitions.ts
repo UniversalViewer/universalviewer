@@ -38,7 +38,7 @@ declare var PDFObject: any;
 declare var yepnope: any;
 declare var PDFJS: any;
 declare var Sanitize: any;
-declare var _: any;
+declare var WEBVR: any;
 
 // app
 interface Window{
@@ -51,6 +51,7 @@ interface Window{
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience
     UV: _Components.IBaseComponent;
+    THREE: any;
 }
 
 interface Document {

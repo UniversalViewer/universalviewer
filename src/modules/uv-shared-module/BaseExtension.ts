@@ -575,7 +575,7 @@ export class BaseExtension implements IExtension {
         const scripts: JQuery = $('script[data-requiremodule]')
             .filter(function() {
                 const attr: string = $(this).attr('data-requiremodule');
-                return (attr.indexOf(that.name) != -1 && attr.indexOf('dependencies') != -1)
+                return (attr.indexOf(that.name) !== -1 && attr.indexOf('dependencies') !== -1)
             });
 
         if (!scripts.length) {
@@ -601,14 +601,14 @@ export class BaseExtension implements IExtension {
 
         if (deps) {
             requirejs(deps.dependencies, function() {
-                that.dependenciesLoaded();
+                that.dependenciesLoaded(arguments);
             });
         } else {
             that.dependenciesLoaded();
         }
     }
 
-    dependenciesLoaded(): void {
+    dependenciesLoaded(args: any[]): void {
         this.createModules();
         this.modulesCreated();
         $.publish(BaseCommands.RESIZE); // initial sizing
@@ -978,7 +978,7 @@ export class BaseExtension implements IExtension {
         const indices: number[] = this.getPagedIndices();
         const resourcesToLoad: Manifold.ExternalResource[] = [];
 
-        $.each(indices, (index: number, item: any) => {
+        $.each(indices, (i: number, index: number) => {
             const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
             const r: Manifold.ExternalResource = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
             r.index = index;
@@ -1014,7 +1014,7 @@ export class BaseExtension implements IExtension {
                 this.handleExternalResourceResponse).then((r: Manifold.ExternalResource[]) => {
                     this.resources = r.map((resource: Manifold.ExternalResource) => {
                         resource.data.index = resource.index;
-                        return <Manifold.ExternalResource>_.toPlainObject(resource.data);
+                        return <Manifold.ExternalResource>Utils.Objects.toPlainObject(resource.data);
                     });
                     resolve(this.resources);
                 })['catch']((error: any) => {
@@ -1331,8 +1331,8 @@ export class BaseExtension implements IExtension {
             }
 
             // sort by expiresAt, earliest to most recent.
-            foundItems = _.sortBy(foundItems, (item: Utils.StorageItem) => {
-                return item.expiresAt;
+            foundItems = foundItems.sort((a: Utils.StorageItem, b: Utils.StorageItem) => {
+                return a.expiresAt - b.expiresAt;
             });
 
             let foundToken: IAccessToken | undefined;

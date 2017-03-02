@@ -10,7 +10,7 @@ export interface IExtension {
     config: any;
     create(): void;
     createModules(): void;
-    dependenciesLoaded(): void;
+    dependenciesLoaded(args: any[]): void;
     domain: string | null;
     embedDomain: string | null;
     embedHeight: number;

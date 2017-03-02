@@ -37,8 +37,7 @@ export class GalleryView extends BaseView {
             data: this.galleryData
         });
 
-        (<any>this.component).on('thumbSelected', function(args: any) {
-            var thumb = args[0];
+        (<any>this.component).on('thumbSelected', function(thumb: any) {
             $.publish(Commands.GALLERY_THUMB_SELECTED, [thumb]);
             $.publish(BaseCommands.THUMB_SELECTED, [thumb]);
         });

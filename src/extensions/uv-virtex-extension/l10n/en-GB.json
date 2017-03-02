@@ -100,7 +100,8 @@
       "content": {
         "attribution": "Attribution",
         "zoomIn": "Zoom In",
-        "zoomOut": "Zoom Out"
+        "zoomOut": "Zoom Out",
+        "vr": "VR"
       }
     },
     "shareDialogue": {

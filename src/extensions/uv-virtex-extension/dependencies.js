@@ -1,5 +1,5 @@
 define(function() {
     return {
-        dependencies: ['virtex', 'three.min', 'Detector', 'stats.min', 'iiif-metadata-component']
+        dependencies: ['three.min', 'VRControls', 'VREffect', 'stats.min', 'draco_decoder', 'DRACOLoader', 'GLTFLoader', 'Detector', 'WebVR', 'virtex.min', 'iiif-metadata-component']
     };
 });

@@ -69,13 +69,12 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
     npm install
     bower install
-    grunt sync
 
 ### Debug Builds
 
 To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
 
-	  grunt build --dev
+    grunt build
 
 This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with source maps to aid in debugging.
 
@@ -83,19 +82,12 @@ This will compile the [.less](http://lesscss.org) files into .css and [.ts](http
 
 To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
-	  grunt build
-
-This will create a `uv.m.m.p.zip` in the `examples` respository. Alternatively use:
- 
-    npm install universalviewer --save
-    
-which will download the distribution folder to `node_modules`.
+    grunt build --dist
 
 ### Examples
 
 To view the examples run:
 
-    grunt
     grunt examples
 
 ## License

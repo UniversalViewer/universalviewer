@@ -92,6 +92,11 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         }
     }
 
+    dependenciesLoaded(args: any[]): void {
+        window.THREE = args[0]; //https://github.com/mrdoob/three.js/issues/9602
+        super.dependenciesLoaded(args);
+    }
+
     isLeftPanelEnabled(): boolean{
         return Utils.Bools.getBool(this.config.options.leftPanelEnabled, true)
                 && (this.helper.isMultiCanvas() || this.helper.isMultiSequence());

@@ -100,7 +100,8 @@
       "content": {
         "attribution": "Priodoliad",
         "zoomIn": "chwyddo Mewn",
-        "zoomOut": "Zoom Out"
+        "zoomOut": "Zoom Out",
+        "vr": "VR"
       }
     },
     "shareDialogue": {

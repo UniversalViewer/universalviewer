@@ -409,14 +409,17 @@ module.exports = function (grunt) {
     configure(grunt);
     theme(grunt);
 
+    grunt.registerTask('default', ['build']);
+
     grunt.registerTask('build', '', function() {
 
         refresh();
 
-        var tsType = (grunt.option('dev')) ? 'ts:dev' : 'ts:dist';
-        var execType = (grunt.option('dev')) ? 'exec:devbuild' : 'exec:distbuild';
+        var tsType = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
+        var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
 
         grunt.task.run(
+            'sync',
             'copy:bundle',
             'concat:offline',
             tsType,

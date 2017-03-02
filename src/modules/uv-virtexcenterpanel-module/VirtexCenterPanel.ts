@@ -7,6 +7,7 @@ export class VirtexCenterPanel extends CenterPanel {
     $viewport: JQuery;
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
+    $vrButton: JQuery;
     title: string;
     viewport: Virtex.Viewport;
 
@@ -35,6 +36,9 @@ export class VirtexCenterPanel extends CenterPanel {
         this.$zoomOutButton = $('<a class="imageBtn zoomOut" title="' + this.content.zoomOut + '"></a>');
         this.$navigation.append(this.$zoomOutButton);
 
+        this.$vrButton = $('<a class="imageBtn vr" title="' + this.content.vr + '"></a>');
+        this.$navigation.append(this.$vrButton);
+
         this.$viewport = $('<div class="virtex"></div>');
         this.$content.prepend(this.$viewport);
 
@@ -51,6 +55,15 @@ export class VirtexCenterPanel extends CenterPanel {
             e.preventDefault();
             this.viewport.zoomOut();
         });
+
+        this.$vrButton.on('click', (e: any) => {
+            e.preventDefault();
+            this.viewport.toggleVR();
+        });
+
+        if (!WEBVR.isAvailable()) {
+            this.$vrButton.hide();
+        }
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {

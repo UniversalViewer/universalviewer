@@ -26,8 +26,6 @@ export class BaseView extends Panel{
         this.config = {};
         this.config.content = {};
         this.config.options = {};
-        this.content = this.config.content;
-        this.options = this.config.options;
 
         var that = this;
 
@@ -38,6 +36,9 @@ export class BaseView extends Panel{
                 that.config = $.extend(true, that.config, that.extension.config.modules[moduleName]);
             });
         }
+
+        this.content = this.config.content;
+        this.options = this.config.options;
     }
 
     init(): void{
