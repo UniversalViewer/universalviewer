@@ -92,9 +92,10 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         }
     }
 
-    dependenciesLoaded(args: any[]): void {
-        window.THREE = args[0]; //https://github.com/mrdoob/three.js/issues/9602
-        super.dependenciesLoaded(args);
+    dependencyLoaded(index: number, dep: any): void {
+        if (index === 0) {
+            window.THREE = dep; //https://github.com/mrdoob/three.js/issues/9602
+        }
     }
 
     isLeftPanelEnabled(): boolean{

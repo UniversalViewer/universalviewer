@@ -4,6 +4,26 @@ if (typeof jQuery === "function") {
     });
 }
 
+// IE CustomEvent Polyfill
+// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+(function () {
+
+  if ( typeof window.CustomEvent === "function" ) return false;
+
+  function CustomEvent ( event: any, params: any ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+
+  return;
+})();
+
 requirejs([
     './lib/base64.min.js',
     './lib/browserdetect.js',
@@ -44,6 +64,6 @@ requirejs([
     UV: any
 ) => {
     window.UV = UV.default;
-    var uvReady = new Event('uvReady');
+    var uvReady = new CustomEvent('uvReady');
     window.dispatchEvent(uvReady);
 });

@@ -2,13 +2,10 @@ import {BaseCommands} from "./BaseCommands";
 import {BootstrapParams} from "../../BootstrapParams";
 import {Bootstrapper} from "../../Bootstrapper";
 import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
-import ExternalResource = Manifold.ExternalResource;
-import IAccessToken = Manifesto.IAccessToken;
 import {IExtension} from "./IExtension";
 import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
-import IThumb = Manifold.IThumb;
 import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
 import {LoginWarningMessages} from "./LoginWarningMessages";
 import {Metric} from "../../modules/uv-shared-module/Metric";
@@ -16,6 +13,10 @@ import {Metrics} from "../../modules/uv-shared-module/Metrics";
 import {Params} from "../../Params";
 import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import {Shell} from "./Shell";
+import {SynchronousRequire} from "../../SynchronousRequire";
+import ExternalResource = Manifold.ExternalResource;
+import IAccessToken = Manifesto.IAccessToken;
+import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
 
@@ -585,10 +586,18 @@ export class BaseExtension implements IExtension {
                 const baseUri: string = 'lib/';
 
                 // for each dependency, prepend baseUri.
-                for (let i = 0; i < deps.dependencies.length; i++) {
-                    deps.dependencies[i] = baseUri + deps.dependencies[i];
+                if (deps.sync) {                    
+                    for (let i = 0; i < deps.sync.length; i++) {
+                        deps.sync[i] = baseUri + deps.sync[i];
+                    }
                 }
 
+                if (deps.async) {                    
+                    for (let i = 0; i < deps.async.length; i++) {
+                        deps.async[i] = baseUri + deps.async[i];
+                    }
+                }
+                
                 cb(deps);
             });
         } else {
@@ -599,8 +608,21 @@ export class BaseExtension implements IExtension {
     loadDependencies(deps: any): void {
         const that = this;
 
-        if (deps) {
-            requirejs(deps.dependencies, function() {
+        if (!deps) {
+            that.dependenciesLoaded();
+        } else if (deps.sync) {
+            // load each script synchronously.
+            // necessary for cases like this: https://github.com/mrdoob/three.js/issues/9602
+            // then load the async scripts
+            SynchronousRequire.load(deps.sync, that.dependencyLoaded).then(() => {
+                if (deps.async) {
+                    requirejs(deps.async, function() {
+                        that.dependenciesLoaded(arguments);
+                    });
+                }
+            });
+        } else if (deps.async) {
+            requirejs(deps.async, function() {
                 that.dependenciesLoaded(arguments);
             });
         } else {
@@ -608,7 +630,11 @@ export class BaseExtension implements IExtension {
         }
     }
 
-    dependenciesLoaded(args: any[]): void {
+    dependencyLoaded(index: number, dep: any): void {
+        
+    }
+
+    dependenciesLoaded(...args: any[]): void {
         this.createModules();
         this.modulesCreated();
         $.publish(BaseCommands.RESIZE); // initial sizing

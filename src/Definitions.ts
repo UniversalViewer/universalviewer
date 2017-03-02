@@ -52,6 +52,8 @@ interface Window{
     openSeadragonViewer: any; // for testing convenience
     UV: _Components.IBaseComponent;
     THREE: any;
+    Event: any;
+    CustomEvent: any;
 }
 
 interface Document {
