@@ -57,8 +57,10 @@ export default class UV extends _Components.BaseComponent {
         return success;
     }
     
-    public data(): Object {
-        return {};
+    public data(): IUVData {
+        return <IUVData>{
+
+        };
     }
     
     protected _resize(): void {
