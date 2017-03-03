@@ -32,18 +32,20 @@
 
         window.addEventListener('uvReady', function(e) { 
 
+            // create URLDataProvider
+            var urlDataProvider = new UV.URLDataProvider();
+
             var uv = new UV({
                 target: document.querySelector('#app'),
-                data: {
-                    iiifResourceURI: "uri"
-                }
+                data: urlDataProvider.data()
             });
             
-            // uv.on('ready', function(args) {
-            //     alert(args);
-            // });
-            
-            // uv.loadManifest();
+            uv.on('reload', function(data) {
+                urlDataProvider.assign(data);
+                data.isReload = true;
+                uv.data(data);
+            });
+
         }, false);
     </script>
 

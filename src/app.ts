@@ -8,20 +8,18 @@ if (typeof jQuery === "function") {
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
 (function () {
 
-  if ( typeof window.CustomEvent === "function" ) return false;
+    if ( typeof window.CustomEvent === "function" ) return false;
 
-  function CustomEvent ( event: any, params: any ) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-   }
+    function CustomEvent ( event: any, params: any ) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent( 'CustomEvent' );
+        evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+        return evt;
+    }
 
-  CustomEvent.prototype = window.Event.prototype;
-
-  window.CustomEvent = CustomEvent;
-
-  return;
+    CustomEvent.prototype = window.Event.prototype;
+    window.CustomEvent = CustomEvent;
+    return;
 })();
 
 requirejs([
@@ -42,6 +40,7 @@ requirejs([
     './lib/manifesto.min.js',
     './lib/manifold.min.js',
     './lib/utils.min.js',
+    'URLDataProvider',
     'UV'
 ], (
     base64: any,
@@ -61,9 +60,10 @@ requirejs([
     manifesto: any,
     manifold: any,
     utils: any,
+    URLDataProvider: any,
     UV: any
 ) => {
     window.UV = UV.default;
-    var uvReady = new CustomEvent('uvReady');
-    window.dispatchEvent(uvReady);
+    window.UV.URLDataProvider = URLDataProvider;
+    window.dispatchEvent(new CustomEvent('uvReady'));
 });

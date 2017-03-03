@@ -66,7 +66,7 @@ export class SettingsDialogue extends Dialogue {
             this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
         }
 
-        this.$localeDropDown.val(this.extension.locale);
+        this.$localeDropDown.val(this.extension.getStore().locale);
 
         this.$localeDropDown.change(() => {
             this.extension.changeLocale(this.$localeDropDown.val());

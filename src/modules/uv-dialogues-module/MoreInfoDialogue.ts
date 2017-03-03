@@ -28,8 +28,8 @@ export class MoreInfoDialogue extends Dialogue {
             this.close();
         });
 
-        this.config.content = this.extension.config.modules.moreInfoRightPanel.content;
-        this.config.options = this.extension.config.modules.moreInfoRightPanel.options;
+        this.config.content = this.extension.getStore().config.modules.moreInfoRightPanel.content;
+        this.config.options = this.extension.getStore().config.modules.moreInfoRightPanel.options;
 
         // create ui
         this.$title = $('<h1>' + this.config.content.title + '</h1>');

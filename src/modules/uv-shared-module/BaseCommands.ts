@@ -59,6 +59,7 @@ export class BaseCommands {
     static RESOURCE_DEGRADED: string                = BaseCommands.namespace + 'onResourceDegraded';
     static RETRY: string                            = BaseCommands.namespace + 'onRetry';
     static RETURN: string                           = BaseCommands.namespace + 'onReturn';
+    static RELOAD: string                           = BaseCommands.namespace + 'onReload';
     static RIGHT_ARROW: string                      = BaseCommands.namespace + 'onRightArrow';
     static RIGHTPANEL_COLLAPSE_FULL_FINISH: string  = BaseCommands.namespace + 'onRightPanelCollapseFullFinish';
     static RIGHTPANEL_COLLAPSE_FULL_START: string   = BaseCommands.namespace + 'onRightPanelCollapseFullStart';

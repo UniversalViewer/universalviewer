@@ -243,7 +243,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.config.options.zoomToSearchResultEnabled, true);
+        return Utils.Bools.getBool(this.extension.getStore().config.options.zoomToSearchResultEnabled, true);
     }
 
     isPreviousButtonEnabled(): boolean {

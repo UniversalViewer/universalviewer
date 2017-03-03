@@ -41,7 +41,7 @@ declare var Sanitize: any;
 declare var WEBVR: any;
 
 // app
-interface Window{
+interface Window {
     configExtensionCallback: any;
     browserDetect: any;
     trackEvent(category: string, action: string, label: string, value?: any): void;
@@ -49,8 +49,8 @@ interface Window{
     trackingLabel: string;
     $: JQueryStatic;
     webViewerLoad: any; // pdfjs
-    openSeadragonViewer: any; // for testing convenience
-    UV: _Components.IBaseComponent;
+    openSeadragonViewer: any; // for testing convenience (make this generic)
+    UV: IUVComponent;
     THREE: any;
     Event: any;
     CustomEvent: any;

@@ -126,7 +126,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     }
 
     isLeftPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.config.options.leftPanelEnabled, true)
+        return Utils.Bools.getBool(this.getStore().config.options.leftPanelEnabled, true)
                 && ((this.helper.isMultiCanvas() || this.helper.isMultiSequence()) || this.helper.hasResources());
     }
 
@@ -153,8 +153,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number): string {
-        const configUri: string = this.config.uri || '';
-        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+        const configUri: string = this.getStore().config.uri || '';
+        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getStore().embedScriptUri);
         return script;
     }
 

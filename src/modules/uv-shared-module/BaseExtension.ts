@@ -1,11 +1,11 @@
 import {BaseCommands} from "./BaseCommands";
-import {BootstrapParams} from "../../BootstrapParams";
 import {Bootstrapper} from "../../Bootstrapper";
 import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
 import {IExtension} from "./IExtension";
 import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
+import {IUVData} from "../../IUVData";
 import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
 import {LoginWarningMessages} from "./LoginWarningMessages";
 import {Metric} from "../../modules/uv-shared-module/Metric";
@@ -26,25 +26,14 @@ export class BaseExtension implements IExtension {
     $restrictedDialogue: JQuery;
     bootstrapper: Bootstrapper;
     clickThroughDialogue: ClickThroughDialogue;
-    config: any;
-    //currentRangePath: string;
-    domain: string | null;
-    embedDomain: string | null;
     embedHeight: number;
-    embedScriptUri: string | null;
     embedWidth: number;
     extensions: any;
     helper: Manifold.IHelper;
     isCreated: boolean = false;
-    isHomeDomain: boolean;
-    isLightbox: boolean;
     isLoggedIn: boolean = false;
-    isOnlyInstance: boolean;
-    isReload: boolean;
     jsonp: boolean;
     lastCanvasIndex: number;
-    locale: string;
-    locales: any[];
     loginDialogue: LoginDialogue;
     metric: Metric;
     mouseX: number;
@@ -58,16 +47,6 @@ export class BaseExtension implements IExtension {
 
     constructor(bootstrapper: Bootstrapper) {
         this.bootstrapper = bootstrapper;
-        this.config = this.bootstrapper.config;
-
-        this.locale = this.bootstrapper.params.getLocaleName();
-        this.isHomeDomain = this.bootstrapper.params.isHomeDomain;
-        this.isReload = this.bootstrapper.params.isReload;
-        this.embedDomain = this.bootstrapper.params.embedDomain;
-        this.isOnlyInstance = this.bootstrapper.params.isOnlyInstance;
-        this.embedScriptUri = this.bootstrapper.params.embedScriptUri;
-        this.domain = this.bootstrapper.params.domain;
-        this.isLightbox = this.bootstrapper.params.isLightbox;
     }
 
     public create(): void {
@@ -84,7 +63,7 @@ export class BaseExtension implements IExtension {
         this.$element.width(this.embedWidth);
         this.$element.height(this.embedHeight);
 
-        if (!this.isReload && Utils.Documents.isInIFrame()) {
+        if (!this.getStore().isReload && Utils.Documents.isInIFrame()) {
             // communication with parent frame (if it exists).
             this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message: any, origin: any) => {
@@ -96,8 +75,7 @@ export class BaseExtension implements IExtension {
 
         this.triggerSocket(BaseCommands.LOAD, {
             bootstrapper: {
-                config: this.bootstrapper.config,
-                params: this.bootstrapper.params
+                store: this.getStore()
             },
             settings: this.getSettings(),
             preview: this.getSharePreview()
@@ -108,8 +86,8 @@ export class BaseExtension implements IExtension {
         this.$element.removeClass();
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
-        if (!this.isHomeDomain) this.$element.addClass('embedded');
-        if (this.isLightbox) this.$element.addClass('lightbox');
+        if (!this.getStore().isHomeDomain) this.$element.addClass('embedded');
+        if (this.getStore().isLightbox) this.$element.addClass('lightbox');
 
         $(document).on('mousemove', (e) => {
             this.mouseX = e.pageX;
@@ -117,7 +95,7 @@ export class BaseExtension implements IExtension {
         });
 
         // events
-        if (!this.isReload) {
+        if (!this.getStore().isReload) {
 
             window.onresize = () => {
 
@@ -139,20 +117,19 @@ export class BaseExtension implements IExtension {
                 });
             }
 
-            if (Utils.Bools.getBool(this.config.options.dropEnabled, true)) {
+            if (Utils.Bools.getBool(this.getStore().config.options.dropEnabled, true)) {
                 this.$element.on('drop', (e => {
                     e.preventDefault();
                     const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData("URL");
                     const a: HTMLAnchorElement = Utils.Urls.getUrlParts(dropUrl);
-                    const manifestUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
+                    const iiifResourceUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
                     //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
 
-                    if (manifestUri) {
-                        this.triggerSocket(BaseCommands.DROP, manifestUri);
-
-                        const p: BootstrapParams = new BootstrapParams();
-                        p.manifestUri = manifestUri;
-                        this.reload(p);
+                    if (iiifResourceUri) {
+                        this.triggerSocket(BaseCommands.DROP, iiifResourceUri);
+                        const data: IUVData = <IUVData>{};
+                        data.iiifResourceUri = iiifResourceUri;
+                        this.reload(data);
                     }
                 }));
             }
@@ -209,7 +186,7 @@ export class BaseExtension implements IExtension {
                 }
             });
 
-            if (this.bootstrapper.params.isHomeDomain && Utils.Documents.isInIFrame()) {
+            if (this.getStore().isHomeDomain && Utils.Documents.isInIFrame()) {
 
                 $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, () => {
                     if (this.isOverlayActive()) {
@@ -231,7 +208,7 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseCommands.LOGIN_FAILED, () => {
             this.triggerSocket(BaseCommands.LOGIN_FAILED);
-            this.showMessage(this.config.content.authorisationFailedMessage);
+            this.showMessage(this.getStore().config.content.authorisationFailedMessage);
         });
 
         $.subscribe(BaseCommands.LOGIN, () => {
@@ -392,7 +369,7 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseCommands.OPEN, () => {
             this.triggerSocket(BaseCommands.OPEN);
 
-            const openUri: string = String.format(this.config.options.openTemplate, this.helper.iiifResourceUri);
+            const openUri: string = String.format(this.getStore().config.options.openTemplate, this.helper.iiifResourceUri);
 
             window.open(openUri);
         });
@@ -520,7 +497,7 @@ export class BaseExtension implements IExtension {
             this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
                 {
                     isFullScreen: this.bootstrapper.isFullScreen,
-                    overrideFullScreen: this.config.options.overrideFullScreen
+                    overrideFullScreen: this.getStore().config.options.overrideFullScreen
                 });
         });
 
@@ -611,7 +588,7 @@ export class BaseExtension implements IExtension {
         if (!deps) {
             that.dependenciesLoaded();
         } else if (deps.sync) {
-            // load each script synchronously.
+            // load each sync script.
             // necessary for cases like this: https://github.com/mrdoob/three.js/issues/9602
             // then load the async scripts
             SynchronousRequire.load(deps.sync, that.dependencyLoaded).then(() => {
@@ -619,6 +596,8 @@ export class BaseExtension implements IExtension {
                     requirejs(deps.async, function() {
                         that.dependenciesLoaded(arguments);
                     });
+                } else {
+                    that.dependenciesLoaded();
                 }
             });
         } else if (deps.async) {
@@ -645,7 +624,7 @@ export class BaseExtension implements IExtension {
     }
 
     setParams(): void{
-        if (!this.isHomeDomain) return;
+        if (!this.getStore().isHomeDomain) return;
 
         this.setParam(Params.collectionIndex, this.helper.collectionIndex.toString());
         this.setParam(Params.manifestIndex, this.helper.manifestIndex.toString());
@@ -655,7 +634,7 @@ export class BaseExtension implements IExtension {
 
     setDefaultFocus(): void {
         setTimeout(() => {
-            if (this.config.options.allowStealFocus) {
+            if (this.getStore().config.options.allowStealFocus) {
                 $('[tabindex=0]').focus();
             }
         }, 1);
@@ -721,28 +700,21 @@ export class BaseExtension implements IExtension {
     }
 
     // re-bootstraps the application with new querystring params
-    reload(params?: BootstrapParams): void {
-        let p: BootstrapParams = new BootstrapParams();
-
-        if (params) {
-            p = $.extend(p, params);
-        }
-
-        p.isReload = true;
+    reload(data?: IUVData): void {
         $.disposePubSub();
-        this.bootstrapper.bootstrap(p);
+        $.publish(BaseCommands.RELOAD, [data]);
     }
 
     getCanvasIndexParam(): number {
-        return this.bootstrapper.params.getParam(Params.canvasIndex);
+        return this.getParam(Params.canvasIndex);
     }
 
     getSequenceIndexParam(): number {
-        return this.bootstrapper.params.getParam(Params.sequenceIndex);
+        return this.getParam(Params.sequenceIndex);
     }
 
     isSeeAlsoEnabled(): boolean{
-        return this.config.options.seeAlsoEnabled !== false;
+        return this.getStore().config.options.seeAlsoEnabled !== false;
     }
 
     getShareUrl(): string | null {
@@ -778,7 +750,12 @@ export class BaseExtension implements IExtension {
     }
 
     isDeepLinkingEnabled(): boolean {
-        return (this.isHomeDomain && this.isOnlyInstance);
+        return this.bootstrapper.dataProvider.isDeepLinkingEnabled();
+    }
+
+    // get hash or data-attribute params depending on whether the UV is embedded.
+    getParam(key: Params): string | null {
+        return this.bootstrapper.dataProvider.getParam(key);
     }
 
     isOnHomeDomain(): boolean {
@@ -791,24 +768,24 @@ export class BaseExtension implements IExtension {
     }
 
     getEmbedDomain(): string | null {
-        return this.embedDomain;
+        return this.getStore().embedDomain;
     }
 
     getSettings(): ISettings {
-        if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.getStore().config.options.saveUserSettings, false)) {
 
             const settings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             
             if (settings) {
-                return $.extend(this.config.options, settings.value);
+                return $.extend(this.getStore().config.options, settings.value);
             }
         }
         
-        return this.config.options;
+        return this.getStore().config.options;
     }
 
     updateSettings(settings: ISettings): void {
-        if (Utils.Bools.getBool(this.config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.getStore().config.options.saveUserSettings, false)) {
 
             const storedSettings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
 
@@ -820,7 +797,7 @@ export class BaseExtension implements IExtension {
             Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
         }
         
-        this.config.options = $.extend(this.config.options, settings);
+        this.getStore().config.options = $.extend(this.getStore().config.options, settings);
     }
 
     sanitize(html: string): string {
@@ -849,7 +826,7 @@ export class BaseExtension implements IExtension {
         if (this.locales) return this.locales;
 
         // use data-locales to prioritise
-        const items: any[] = this.config.localisation.locales.slice(0);
+        const items: any[] = this.getStore().config.localisation.locales.slice(0);
         const sorting: any[] = this.bootstrapper.params.locales;
         const result: any[] = [];
 
@@ -870,7 +847,7 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        const limitLocales: boolean = Utils.Bools.getBool(this.config.options.limitLocales, false);
+        const limitLocales: boolean = Utils.Bools.getBool(this.getStore().config.options.limitLocales, false);
 
         if (!limitLocales) {
             $.each(items, (index: number, item: any) => {
@@ -951,7 +928,7 @@ export class BaseExtension implements IExtension {
         let thumbnail: string = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !(typeof(thumbnail) === 'string')) {
-            thumbnail = canvas.getCanonicalImageUri(this.config.options.bookmarkThumbWidth);
+            thumbnail = canvas.getCanonicalImageUri(this.getStore().config.options.bookmarkThumbWidth);
         }
 
         preview.image = thumbnail;
@@ -1025,7 +1002,7 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        const storageStrategy: string = this.config.options.tokenStorage;
+        const storageStrategy: string = this.getStore().config.options.tokenStorage;
 
         return new Promise<Manifold.ExternalResource[]>((resolve) => {
             manifesto.Utils.loadExternalResources(
@@ -1061,24 +1038,6 @@ export class BaseExtension implements IExtension {
         });
     }
 
-    // get hash or data-attribute params depending on whether the UV is embedded.
-    getParam(key: Params): string | null {
-        let value: string | null = null;
-
-        // deep linking is only allowed when hosted on home domain.
-        if (this.isDeepLinkingEnabled()) {
-            // todo: use a static type on bootstrapper.params
-            value = Utils.Urls.getHashParameter(this.bootstrapper.params.paramMap[key], parent.document);
-        }
-
-        if (!value) {
-            // todo: use a static type on bootstrapper.params
-            value = Utils.Urls.getQuerystringParameter(this.bootstrapper.params.paramMap[key]);
-        }
-
-        return value;
-    }
-
     // set hash params depending on whether the UV is embedded.
     setParam(key: Params, value: string): void {
         if (this.isDeepLinkingEnabled()) {
@@ -1089,7 +1048,7 @@ export class BaseExtension implements IExtension {
     viewCanvas(canvasIndex: number): void {
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.config.content.canvasIndexOutOfRange);
+            this.showMessage(this.getStore().config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
@@ -1124,25 +1083,25 @@ export class BaseExtension implements IExtension {
     }
 
     viewManifest(manifest: Manifesto.IManifest): void{
-        const p: BootstrapParams = new BootstrapParams();
-        p.manifestUri = this.helper.iiifResourceUri;
-        p.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
-        p.manifestIndex = <number>manifest.index;
-        p.sequenceIndex = 0;
-        p.canvasIndex = 0;
+        const data: IUVData = <IUVData>{};
+        data.iiifResourceUri = this.helper.iiifResourceUri;
+        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
+        data.manifestIndex = <number>manifest.index;
+        data.sequenceIndex = 0;
+        data.canvasIndex = 0;
 
-        this.reload(p);
+        this.reload(data);
     }
 
     viewCollection(collection: Manifesto.ICollection): void{
-        const p: BootstrapParams = new BootstrapParams();
-        p.manifestUri = this.helper.iiifResourceUri;
-        p.collectionIndex = collection.index;
-        p.manifestIndex = 0;
-        p.sequenceIndex = 0;
-        p.canvasIndex = 0;
+        const data: IUVData = <IUVData>{};
+        data.iiifResourceUri = this.helper.iiifResourceUri;
+        data.collectionIndex = collection.index;
+        data.manifestIndex = 0;
+        data.sequenceIndex = 0;
+        data.canvasIndex = 0;
 
-        this.reload(p);
+        this.reload(data);
     }
 
     isFullScreen(): boolean {
@@ -1150,11 +1109,11 @@ export class BaseExtension implements IExtension {
     }
 
     isHeaderPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.config.options.headerPanelEnabled, true);
+        return Utils.Bools.getBool(this.getStore().config.options.headerPanelEnabled, true);
     }
 
     isLeftPanelEnabled(): boolean {
-        if (Utils.Bools.getBool(this.config.options.leftPanelEnabled, true)) {
+        if (Utils.Bools.getBool(this.getStore().config.options.leftPanelEnabled, true)) {
             if (this.helper.hasParentCollection()) {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
@@ -1168,15 +1127,15 @@ export class BaseExtension implements IExtension {
     }
 
     isRightPanelEnabled(): boolean {
-        return  Utils.Bools.getBool(this.config.options.rightPanelEnabled, true);
+        return  Utils.Bools.getBool(this.getStore().config.options.rightPanelEnabled, true);
     }
 
     isFooterPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.config.options.footerPanelEnabled, true);
+        return Utils.Bools.getBool(this.getStore().config.options.footerPanelEnabled, true);
     }
 
     useArrowKeysToNavigate(): boolean {
-        return Utils.Bools.getBool(this.config.options.useArrowKeysToNavigate, true);
+        return Utils.Bools.getBool(this.getStore().config.options.useArrowKeysToNavigate, true);
     }
 
     bookmark(): void {
@@ -1326,6 +1285,10 @@ export class BaseExtension implements IExtension {
             Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
             resolve();
         });
+    }
+
+    getStore(): IUVData {
+        return this.bootstrapper.store;
     }
 
     getStoredAccessToken(resource: Manifold.ExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {

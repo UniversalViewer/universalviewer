@@ -49,12 +49,14 @@ export class PDFCenterPanel extends CenterPanel {
                     PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                     PDFJS.DEFAULT_URL = pdfUri;
 
-                    const anchorIndex: number = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;
+                    const anchorParam: string | null = that.extension.getParam(Params.anchor);
 
-                    PDFView.initialBookmark = "page=" + anchorIndex;
+                    if (anchorParam) {
+                        const anchorIndex: number = (1 + parseInt(anchorParam)) || 0;
+                        PDFView.initialBookmark = "page=" + anchorIndex;
+                    }
 
                     window.webViewerLoad();
-
                     this.resize();
                 });
             }

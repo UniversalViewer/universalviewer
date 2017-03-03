@@ -1,10 +1,17 @@
+import {BaseCommands} from "./modules/uv-shared-module/BaseCommands";
 import {Bootstrapper} from "./Bootstrapper";
-import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
 import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
+import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
 import {Extension as PDFExtension} from "./extensions/uv-pdf-extension/Extension";
 import {Extension as VirtexExtension} from "./extensions/uv-virtex-extension/Extension";
+import {IUVComponent} from "./IUVComponent";
+import {IUVData} from "./IUVData";
+import {IUVDataProvider} from "./IUVDataProvider";
+import {URLDataProvider} from "./URLDataProvider";
 
-export default class UV extends _Components.BaseComponent {
+export default class UV extends _Components.BaseComponent implements IUVComponent {
+
+    public URLDataProvider: IUVDataProvider;
 
     constructor(options: _Components.IBaseComponentOptions) {
         super(options);
@@ -13,17 +20,17 @@ export default class UV extends _Components.BaseComponent {
         this._resize();
     }
 
-    public message(): void {
-        //this.fire(UV.Events.MESSAGE, this.options.data.message);
-    }
-
     protected _init(): boolean {
         const success: boolean = super._init();
 
-        if (!success){
+        if (!success) {
             console.error("UV failed to initialise");
         }
         
+        $.subscribe(BaseCommands.RELOAD, (e: any, data?: IUVData) => {
+            this.fire(BaseCommands.RELOAD, data);
+        });
+
         const extensions: Object = {};
 
         extensions[manifesto.ElementType.canvas().toString()] = {
@@ -51,8 +58,8 @@ export default class UV extends _Components.BaseComponent {
             name: 'uv-pdf-extension'
         };
 
-        const bootstrapper = new Bootstrapper(extensions);
-        bootstrapper.bootstrap();
+        const bootstrapper: Bootstrapper = new Bootstrapper(extensions);
+        bootstrapper.bootstrap(this.data);
 
         return success;
     }
@@ -67,10 +74,3 @@ export default class UV extends _Components.BaseComponent {
         
     }
 }
-
-
-// namespace UV {
-//     export class Events {
-//         static MESSAGE: string = 'message';
-//     }
-// }

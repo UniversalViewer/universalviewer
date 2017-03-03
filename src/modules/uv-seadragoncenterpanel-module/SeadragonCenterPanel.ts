@@ -158,7 +158,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.updateAttribution();
 
         // todo: use compiler flag (when available)
-        const prefixUrl: string = 'themes/' + this.extension.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
+        const prefixUrl: string = 'themes/' + this.extension.getStore().config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
@@ -182,7 +182,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: prefixUrl,
             gestureSettingsMouse: {
-                clickToZoom: !!this.extension.config.options.clickToZoomEnabled
+                clickToZoom: !!this.extension.getStore().config.options.clickToZoomEnabled
             },
             navImages: {
                 zoomIn: {
@@ -734,7 +734,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.config.options.zoomToSearchResultEnabled, true);
+        return Utils.Bools.getBool(this.extension.getStore().config.options.zoomToSearchResultEnabled, true);
     }
 
     nextSearchResult(): void {
@@ -931,7 +931,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     setFocus(): void {
         if (!this.$canvas.is(":focus")) {
-            if (this.extension.config.options.allowStealFocus) {
+            if (this.extension.getStore().config.options.allowStealFocus) {
                 this.$canvas.focus();
             }
         }
