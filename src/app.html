@@ -32,7 +32,6 @@
 
         window.addEventListener('uvReady', function(e) { 
 
-            // create URLDataProvider
             var urlDataProvider = new UV.URLDataProvider();
 
             var uv = new UV({
@@ -40,10 +39,18 @@
                 data: urlDataProvider.data()
             });
             
+            uv.on('openseadragonExtension.xywhChanged', function(xywh) {
+                urlDataProvider.setParam('xywh', xywh);
+            });
+
+            uv.on('openseadragonExtension.rotationChanged', function(xywh) {
+                urlDataProvider.setParam('xywh', xywh);
+            });
+
             uv.on('reload', function(data) {
-                urlDataProvider.assign(data);
                 data.isReload = true;
-                uv.data(data);
+                urlDataProvider.assign(data);
+                uv.set(urlDataProvider.data());
             });
 
         }, false);

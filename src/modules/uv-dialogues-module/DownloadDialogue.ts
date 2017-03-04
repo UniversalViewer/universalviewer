@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 import {DownloadOption} from "../uv-shared-module/DownloadOption";
 
@@ -20,8 +20,8 @@ export class DownloadDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_DOWNLOAD_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_DOWNLOAD_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_DOWNLOAD_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
 
         $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
@@ -44,11 +44,11 @@ export class DownloadDialogue extends Dialogue {
         this.$footer = $('<div class="footer"></div>');
         this.$content.append(this.$footer);
 
-        this.$termsOfUseButton = $('<a href="#">' + this.extension.getStore().config.content.termsOfUse + '</a>');
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.getData().config.content.termsOfUse + '</a>');
         this.$footer.append(this.$termsOfUseButton);
 
         this.$termsOfUseButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_TERMS_OF_USE);
+            $.publish(BaseEvents.SHOW_TERMS_OF_USE);
         });
 
         // hide
@@ -108,7 +108,7 @@ export class DownloadDialogue extends Dialogue {
     updateTermsOfUseButton(): void {
         const attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
-        if (Utils.Bools.getBool(this.extension.getStore().config.options.termsOfUseEnabled, false) && attribution) {
+        if (Utils.Bools.getBool(this.extension.getData().config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();

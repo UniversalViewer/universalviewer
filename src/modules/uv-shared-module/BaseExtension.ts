@@ -1,7 +1,8 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 import {Bootstrapper} from "../../Bootstrapper";
 import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
 import {IExtension} from "./IExtension";
+import {ILocale} from "../../ILocale";
 import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
@@ -10,7 +11,6 @@ import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
 import {LoginWarningMessages} from "./LoginWarningMessages";
 import {Metric} from "../../modules/uv-shared-module/Metric";
 import {Metrics} from "../../modules/uv-shared-module/Metrics";
-import {Params} from "../../Params";
 import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import {Shell} from "./Shell";
 import {SynchronousRequire} from "../../SynchronousRequire";
@@ -63,7 +63,7 @@ export class BaseExtension implements IExtension {
         this.$element.width(this.embedWidth);
         this.$element.height(this.embedHeight);
 
-        if (!this.getStore().isReload && Utils.Documents.isInIFrame()) {
+        if (!this.getData().isReload && Utils.Documents.isInIFrame()) {
             // communication with parent frame (if it exists).
             this.bootstrapper.socket = new easyXDM.Socket({
                 onMessage: (message: any, origin: any) => {
@@ -73,9 +73,9 @@ export class BaseExtension implements IExtension {
             });
         }
 
-        this.triggerSocket(BaseCommands.LOAD, {
+        this.triggerSocket(BaseEvents.LOAD, {
             bootstrapper: {
-                store: this.getStore()
+                store: this.getData()
             },
             settings: this.getSettings(),
             preview: this.getSharePreview()
@@ -86,8 +86,8 @@ export class BaseExtension implements IExtension {
         this.$element.removeClass();
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
-        if (!this.getStore().isHomeDomain) this.$element.addClass('embedded');
-        if (this.getStore().isLightbox) this.$element.addClass('lightbox');
+        if (!this.getData().isHomeDomain) this.$element.addClass('embedded');
+        if (this.getData().isLightbox) this.$element.addClass('lightbox');
 
         $(document).on('mousemove', (e) => {
             this.mouseX = e.pageX;
@@ -95,7 +95,7 @@ export class BaseExtension implements IExtension {
         });
 
         // events
-        if (!this.getStore().isReload) {
+        if (!this.getData().isReload) {
 
             window.onresize = () => {
 
@@ -117,7 +117,7 @@ export class BaseExtension implements IExtension {
                 });
             }
 
-            if (Utils.Bools.getBool(this.getStore().config.options.dropEnabled, true)) {
+            if (Utils.Bools.getBool(this.getData().config.options.dropEnabled, true)) {
                 this.$element.on('drop', (e => {
                     e.preventDefault();
                     const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData("URL");
@@ -126,7 +126,7 @@ export class BaseExtension implements IExtension {
                     //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
 
                     if (iiifResourceUri) {
-                        this.triggerSocket(BaseCommands.DROP, iiifResourceUri);
+                        this.triggerSocket(BaseEvents.DROP, iiifResourceUri);
                         const data: IUVData = <IUVData>{};
                         data.iiifResourceUri = iiifResourceUri;
                         this.reload(data);
@@ -153,28 +153,28 @@ export class BaseExtension implements IExtension {
 
                 if (!e.ctrlKey && !e.altKey && !e.shiftKey) {
                     if (e.keyCode === KeyCodes.KeyDown.Enter) {
-                        event = BaseCommands.RETURN;
+                        event = BaseEvents.RETURN;
                         preventDefault = false;
                     }
-                    if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseCommands.ESCAPE;
-                    if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseCommands.PAGE_UP;
-                    if (e.keyCode === KeyCodes.KeyDown.PageDown) event = BaseCommands.PAGE_DOWN;
-                    if (e.keyCode === KeyCodes.KeyDown.End) event = BaseCommands.END;
-                    if (e.keyCode === KeyCodes.KeyDown.Home) event = BaseCommands.HOME;
+                    if (e.keyCode === KeyCodes.KeyDown.Escape) event = BaseEvents.ESCAPE;
+                    if (e.keyCode === KeyCodes.KeyDown.PageUp) event = BaseEvents.PAGE_UP;
+                    if (e.keyCode === KeyCodes.KeyDown.PageDown) event = BaseEvents.PAGE_DOWN;
+                    if (e.keyCode === KeyCodes.KeyDown.End) event = BaseEvents.END;
+                    if (e.keyCode === KeyCodes.KeyDown.Home) event = BaseEvents.HOME;
                     if (e.keyCode === KeyCodes.KeyDown.NumpadPlus || e.keyCode === 171 || e.keyCode === KeyCodes.KeyDown.Equals) {
-                        event = BaseCommands.PLUS;
+                        event = BaseEvents.PLUS;
                         preventDefault = false;  
                     } 
                     if (e.keyCode === KeyCodes.KeyDown.NumpadMinus || e.keyCode === 173 || e.keyCode === KeyCodes.KeyDown.Dash) {
-                        event = BaseCommands.MINUS;
+                        event = BaseEvents.MINUS;
                         preventDefault = false;
                     } 
 
                     if (that.useArrowKeysToNavigate()) {
-                        if (e.keyCode === KeyCodes.KeyDown.LeftArrow) event = BaseCommands.LEFT_ARROW;
-                        if (e.keyCode === KeyCodes.KeyDown.UpArrow) event = BaseCommands.UP_ARROW;
-                        if (e.keyCode === KeyCodes.KeyDown.RightArrow) event = BaseCommands.RIGHT_ARROW;
-                        if (e.keyCode === KeyCodes.KeyDown.DownArrow) event = BaseCommands.DOWN_ARROW;
+                        if (e.keyCode === KeyCodes.KeyDown.LeftArrow) event = BaseEvents.LEFT_ARROW;
+                        if (e.keyCode === KeyCodes.KeyDown.UpArrow) event = BaseEvents.UP_ARROW;
+                        if (e.keyCode === KeyCodes.KeyDown.RightArrow) event = BaseEvents.RIGHT_ARROW;
+                        if (e.keyCode === KeyCodes.KeyDown.DownArrow) event = BaseEvents.DOWN_ARROW;
                     }
                 }
 
@@ -186,15 +186,15 @@ export class BaseExtension implements IExtension {
                 }
             });
 
-            if (this.getStore().isHomeDomain && Utils.Documents.isInIFrame()) {
+            if (this.getData().isHomeDomain && Utils.Documents.isInIFrame()) {
 
-                $.subscribe(BaseCommands.PARENT_EXIT_FULLSCREEN, () => {
+                $.subscribe(BaseEvents.PARENT_EXIT_FULLSCREEN, () => {
                     if (this.isOverlayActive()) {
-                        $.publish(BaseCommands.ESCAPE);
+                        $.publish(BaseEvents.ESCAPE);
                     }
 
-                    $.publish(BaseCommands.ESCAPE);
-                    $.publish(BaseCommands.RESIZE);
+                    $.publish(BaseEvents.ESCAPE);
+                    $.publish(BaseEvents.RESIZE);
                 });
             }
         }
@@ -202,283 +202,283 @@ export class BaseExtension implements IExtension {
         this.$element.append('<a href="/" id="top"></a>');
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
-        $.subscribe(BaseCommands.ACCEPT_TERMS, () => {
-            this.triggerSocket(BaseCommands.ACCEPT_TERMS);
+        $.subscribe(BaseEvents.ACCEPT_TERMS, () => {
+            this.triggerSocket(BaseEvents.ACCEPT_TERMS);
         });
 
-        $.subscribe(BaseCommands.LOGIN_FAILED, () => {
-            this.triggerSocket(BaseCommands.LOGIN_FAILED);
-            this.showMessage(this.getStore().config.content.authorisationFailedMessage);
+        $.subscribe(BaseEvents.LOGIN_FAILED, () => {
+            this.triggerSocket(BaseEvents.LOGIN_FAILED);
+            this.showMessage(this.getData().config.content.authorisationFailedMessage);
         });
 
-        $.subscribe(BaseCommands.LOGIN, () => {
+        $.subscribe(BaseEvents.LOGIN, () => {
             this.isLoggedIn = true;
-            this.triggerSocket(BaseCommands.LOGIN);
+            this.triggerSocket(BaseEvents.LOGIN);
         });
 
-        $.subscribe(BaseCommands.LOGOUT, () => {
+        $.subscribe(BaseEvents.LOGOUT, () => {
             this.isLoggedIn = false;
-            this.triggerSocket(BaseCommands.LOGOUT);
+            this.triggerSocket(BaseEvents.LOGOUT);
         });
 
-        $.subscribe(BaseCommands.BOOKMARK, () => {
+        $.subscribe(BaseEvents.BOOKMARK, () => {
             this.bookmark();
-            this.triggerSocket(BaseCommands.BOOKMARK);
+            this.triggerSocket(BaseEvents.BOOKMARK);
         });
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, () => {
-            this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
+            this.triggerSocket(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         });
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            this.triggerSocket(BaseCommands.CANVAS_INDEX_CHANGED, canvasIndex);
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+            this.triggerSocket(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
         });
 
-        $.subscribe(BaseCommands.CLICKTHROUGH, () => {
-            this.triggerSocket(BaseCommands.CLICKTHROUGH);
+        $.subscribe(BaseEvents.CLICKTHROUGH, () => {
+            this.triggerSocket(BaseEvents.CLICKTHROUGH);
         });
 
-        $.subscribe(BaseCommands.CLOSE_ACTIVE_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
+        $.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.CLOSE_LEFT_PANEL, () => {
-            this.triggerSocket(BaseCommands.CLOSE_LEFT_PANEL);
+        $.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
+            this.triggerSocket(BaseEvents.CLOSE_LEFT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseCommands.CLOSE_RIGHT_PANEL, () => {
-            this.triggerSocket(BaseCommands.CLOSE_RIGHT_PANEL);
+        $.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
+            this.triggerSocket(BaseEvents.CLOSE_RIGHT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseCommands.CREATED, () => {
+        $.subscribe(BaseEvents.CREATED, () => {
             this.isCreated = true;
-            this.triggerSocket(BaseCommands.CREATED);
+            this.triggerSocket(BaseEvents.CREATED);
         });
 
-        $.subscribe(BaseCommands.DOWN_ARROW, () => {
-            this.triggerSocket(BaseCommands.DOWN_ARROW);
+        $.subscribe(BaseEvents.DOWN_ARROW, () => {
+            this.triggerSocket(BaseEvents.DOWN_ARROW);
         });
 
-        $.subscribe(BaseCommands.DOWNLOAD, (e: any, obj: any) => {
-            this.triggerSocket(BaseCommands.DOWNLOAD, obj);
+        $.subscribe(BaseEvents.DOWNLOAD, (e: any, obj: any) => {
+            this.triggerSocket(BaseEvents.DOWNLOAD, obj);
         });
 
-        $.subscribe(BaseCommands.END, () => {
-            this.triggerSocket(BaseCommands.END);
+        $.subscribe(BaseEvents.END, () => {
+            this.triggerSocket(BaseEvents.END);
         });
 
-        $.subscribe(BaseCommands.ESCAPE, () => {
-            this.triggerSocket(BaseCommands.ESCAPE);
+        $.subscribe(BaseEvents.ESCAPE, () => {
+            this.triggerSocket(BaseEvents.ESCAPE);
 
             if (this.isFullScreen() && !this.isOverlayActive()) {
-                $.publish(BaseCommands.TOGGLE_FULLSCREEN);
+                $.publish(BaseEvents.TOGGLE_FULLSCREEN);
             }
         });
 
-        $.subscribe(BaseCommands.EXTERNAL_LINK_CLICKED, (e: any, url: string) => {
-            this.triggerSocket(BaseCommands.EXTERNAL_LINK_CLICKED, url);
+        $.subscribe(BaseEvents.EXTERNAL_LINK_CLICKED, (e: any, url: string) => {
+            this.triggerSocket(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
-        $.subscribe(BaseCommands.FEEDBACK, () => {
+        $.subscribe(BaseEvents.FEEDBACK, () => {
             this.feedback();
         });
 
-        $.subscribe(BaseCommands.FORBIDDEN, () => {
-            this.triggerSocket(BaseCommands.FORBIDDEN);
-            $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
+        $.subscribe(BaseEvents.FORBIDDEN, () => {
+            this.triggerSocket(BaseEvents.FORBIDDEN);
+            $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
-        $.subscribe(BaseCommands.HIDE_DOWNLOAD_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_DOWNLOAD_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HIDE_EMBED_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_EMBED_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_EMBED_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_EMBED_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HIDE_GENERIC_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_GENERIC_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_GENERIC_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_GENERIC_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HIDE_HELP_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_HELP_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_HELP_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_HELP_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HIDE_INFORMATION, () => {
-            this.triggerSocket(BaseCommands.HIDE_INFORMATION);
+        $.subscribe(BaseEvents.HIDE_INFORMATION, () => {
+            this.triggerSocket(BaseEvents.HIDE_INFORMATION);
         });
 
-        $.subscribe(BaseCommands.HIDE_LOGIN_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_LOGIN_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_LOGIN_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_LOGIN_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
-            this.triggerSocket(BaseCommands.HIDE_OVERLAY);
+        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+            this.triggerSocket(BaseEvents.HIDE_OVERLAY);
         });
 
-        $.subscribe(BaseCommands.HIDE_RESTRICTED_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_RESTRICTED_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_RESTRICTED_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_RESTRICTED_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HIDE_SETTINGS_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.HIDE_SETTINGS_DIALOGUE);
+        $.subscribe(BaseEvents.HIDE_SETTINGS_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.HIDE_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.HOME, () => {
-            this.triggerSocket(BaseCommands.HOME);
+        $.subscribe(BaseEvents.HOME, () => {
+            this.triggerSocket(BaseEvents.HOME);
         });
 
-        $.subscribe(BaseCommands.LEFT_ARROW, () => {
-            this.triggerSocket(BaseCommands.LEFT_ARROW);
+        $.subscribe(BaseEvents.LEFT_ARROW, () => {
+            this.triggerSocket(BaseEvents.LEFT_ARROW);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            this.triggerSocket(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.triggerSocket(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            this.triggerSocket(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+            this.triggerSocket(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH, () => {
-            this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH, () => {
+            this.triggerSocket(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
-            this.triggerSocket(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+            this.triggerSocket(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
         });
 
-        $.subscribe(BaseCommands.LOAD_FAILED, () => {
-            this.triggerSocket(BaseCommands.LOAD_FAILED);
+        $.subscribe(BaseEvents.LOAD_FAILED, () => {
+            this.triggerSocket(BaseEvents.LOAD_FAILED);
 
             if (!that.lastCanvasIndex == null && that.lastCanvasIndex !== that.helper.canvasIndex){
                 this.viewCanvas(that.lastCanvasIndex);
             }
         });
 
-        $.subscribe(BaseCommands.NOT_FOUND, () => {
-            this.triggerSocket(BaseCommands.NOT_FOUND);
+        $.subscribe(BaseEvents.NOT_FOUND, () => {
+            this.triggerSocket(BaseEvents.NOT_FOUND);
         });
 
-        $.subscribe(BaseCommands.OPEN, () => {
-            this.triggerSocket(BaseCommands.OPEN);
+        $.subscribe(BaseEvents.OPEN, () => {
+            this.triggerSocket(BaseEvents.OPEN);
 
-            const openUri: string = String.format(this.getStore().config.options.openTemplate, this.helper.iiifResourceUri);
+            const openUri: string = String.format(this.getData().config.options.openTemplate, this.helper.iiifResourceUri);
 
             window.open(openUri);
         });
 
-        $.subscribe(BaseCommands.OPEN_LEFT_PANEL, () => {
-            this.triggerSocket(BaseCommands.OPEN_LEFT_PANEL);
+        $.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+            this.triggerSocket(BaseEvents.OPEN_LEFT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, () => {
-            this.triggerSocket(BaseCommands.OPEN_EXTERNAL_RESOURCE);
+        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
+            this.triggerSocket(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
-        $.subscribe(BaseCommands.OPEN_RIGHT_PANEL, () => {
-            this.triggerSocket(BaseCommands.OPEN_RIGHT_PANEL);
+        $.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+            this.triggerSocket(BaseEvents.OPEN_RIGHT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseCommands.PAGE_DOWN, () => {
-            this.triggerSocket(BaseCommands.PAGE_DOWN);
+        $.subscribe(BaseEvents.PAGE_DOWN, () => {
+            this.triggerSocket(BaseEvents.PAGE_DOWN);
         });
 
-        $.subscribe(BaseCommands.PAGE_UP, () => {
-            this.triggerSocket(BaseCommands.PAGE_UP);
+        $.subscribe(BaseEvents.PAGE_UP, () => {
+            this.triggerSocket(BaseEvents.PAGE_UP);
         });
 
-        $.subscribe(BaseCommands.RESOURCE_DEGRADED, (e: any, resource: ExternalResource) => {
-            this.triggerSocket(BaseCommands.RESOURCE_DEGRADED);
+        $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: ExternalResource) => {
+            this.triggerSocket(BaseEvents.RESOURCE_DEGRADED);
             this.handleDegraded(resource)
         });
 
-        $.subscribe(BaseCommands.RETURN, () => {
-            this.triggerSocket(BaseCommands.RETURN);
+        $.subscribe(BaseEvents.RETURN, () => {
+            this.triggerSocket(BaseEvents.RETURN);
         });
 
-        $.subscribe(BaseCommands.RIGHT_ARROW, () => {
-            this.triggerSocket(BaseCommands.RIGHT_ARROW);
+        $.subscribe(BaseEvents.RIGHT_ARROW, () => {
+            this.triggerSocket(BaseEvents.RIGHT_ARROW);
         });
 
-        $.subscribe(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
-            this.triggerSocket(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_FINISH);
+        $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.triggerSocket(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH);
         });
 
-        $.subscribe(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_START, () => {
-            this.triggerSocket(BaseCommands.RIGHTPANEL_COLLAPSE_FULL_START);
+        $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START, () => {
+            this.triggerSocket(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START);
         });
 
-        $.subscribe(BaseCommands.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
-            this.triggerSocket(BaseCommands.RIGHTPANEL_EXPAND_FULL_FINISH);
+        $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
+            this.triggerSocket(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH);
         });
 
-        $.subscribe(BaseCommands.RIGHTPANEL_EXPAND_FULL_START, () => {
-            this.triggerSocket(BaseCommands.RIGHTPANEL_EXPAND_FULL_START);
+        $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_START, () => {
+            this.triggerSocket(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
         });
 
-        $.subscribe(BaseCommands.SEQUENCE_INDEX_CHANGED, () => {
-            this.triggerSocket(BaseCommands.SEQUENCE_INDEX_CHANGED);
+        $.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, () => {
+            this.triggerSocket(BaseEvents.SEQUENCE_INDEX_CHANGED);
         });
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e: any, args: any) => {
-            this.triggerSocket(BaseCommands.SETTINGS_CHANGED, args);
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
+            this.triggerSocket(BaseEvents.SETTINGS_CHANGED, args);
         });
 
-        $.subscribe(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_DOWNLOAD_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_EMBED_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_GENERIC_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_GENERIC_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_GENERIC_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_GENERIC_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_HELP_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_HELP_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_HELP_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_HELP_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_INFORMATION, () => {
-            this.triggerSocket(BaseCommands.SHOW_INFORMATION);
+        $.subscribe(BaseEvents.SHOW_INFORMATION, () => {
+            this.triggerSocket(BaseEvents.SHOW_INFORMATION);
         });
 
-        $.subscribe(BaseCommands.SHOW_LOGIN_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_LOGIN_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_LOGIN_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_LOGIN_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_RESTRICTED_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_RESTRICTED_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_RESTRICTED_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
-            this.triggerSocket(BaseCommands.SHOW_OVERLAY);
+        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+            this.triggerSocket(BaseEvents.SHOW_OVERLAY);
         });
 
-        $.subscribe(BaseCommands.SHOW_SETTINGS_DIALOGUE, () => {
-            this.triggerSocket(BaseCommands.SHOW_SETTINGS_DIALOGUE);
+        $.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
+            this.triggerSocket(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseCommands.SHOW_TERMS_OF_USE, () => {
-            this.triggerSocket(BaseCommands.SHOW_TERMS_OF_USE);
+        $.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
+            this.triggerSocket(BaseEvents.SHOW_TERMS_OF_USE);
             
             // todo: Eventually this should be replaced with a suitable IIIF Presentation API field - until then, use attribution
             const terms: string = this.helper.getAttribution();
@@ -486,35 +486,35 @@ export class BaseExtension implements IExtension {
             this.showMessage(terms);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            this.triggerSocket(BaseCommands.THUMB_SELECTED, thumb.index);
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+            this.triggerSocket(BaseEvents.THUMB_SELECTED, thumb.index);
         });
 
-        $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
             $('#top').focus();
             this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
 
-            this.triggerSocket(BaseCommands.TOGGLE_FULLSCREEN,
+            this.triggerSocket(BaseEvents.TOGGLE_FULLSCREEN,
                 {
                     isFullScreen: this.bootstrapper.isFullScreen,
-                    overrideFullScreen: this.getStore().config.options.overrideFullScreen
+                    overrideFullScreen: this.getData().config.options.overrideFullScreen
                 });
         });
 
-        $.subscribe(BaseCommands.UP_ARROW, () => {
-            this.triggerSocket(BaseCommands.UP_ARROW);
+        $.subscribe(BaseEvents.UP_ARROW, () => {
+            this.triggerSocket(BaseEvents.UP_ARROW);
         });
 
-        $.subscribe(BaseCommands.UPDATE_SETTINGS, () => {
-            this.triggerSocket(BaseCommands.UPDATE_SETTINGS);
+        $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
+            this.triggerSocket(BaseEvents.UPDATE_SETTINGS);
         });
 
-        $.subscribe(BaseCommands.VIEW_FULL_TERMS, () => {
-            this.triggerSocket(BaseCommands.VIEW_FULL_TERMS);
+        $.subscribe(BaseEvents.VIEW_FULL_TERMS, () => {
+            this.triggerSocket(BaseEvents.VIEW_FULL_TERMS);
         });
 
-        $.subscribe(BaseCommands.WINDOW_UNLOAD, () => {
-            this.triggerSocket(BaseCommands.WINDOW_UNLOAD);
+        $.subscribe(BaseEvents.WINDOW_UNLOAD, () => {
+            this.triggerSocket(BaseEvents.WINDOW_UNLOAD);
         });
 
         // create shell and shared views.
@@ -616,25 +616,25 @@ export class BaseExtension implements IExtension {
     dependenciesLoaded(...args: any[]): void {
         this.createModules();
         this.modulesCreated();
-        $.publish(BaseCommands.RESIZE); // initial sizing
-        $.publish(BaseCommands.CREATED);
+        $.publish(BaseEvents.RESIZE); // initial sizing
+        $.publish(BaseEvents.CREATED);
         this.setParams();
         this.setDefaultFocus();
-        this.viewCanvas(this.getCanvasIndexParam());
+        this.viewCanvas(this.helper.canvasIndex);
     }
 
-    setParams(): void{
-        if (!this.getStore().isHomeDomain) return;
+    setParams(): void {
+        if (!this.getData().isHomeDomain) return;
 
-        this.setParam(Params.collectionIndex, this.helper.collectionIndex.toString());
-        this.setParam(Params.manifestIndex, this.helper.manifestIndex.toString());
-        this.setParam(Params.sequenceIndex, this.helper.sequenceIndex.toString());
-        this.setParam(Params.canvasIndex, this.helper.canvasIndex.toString());
+        $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.helper.collectionIndex.toString()]);
+        $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.helper.manifestIndex.toString()]);
+        $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.helper.sequenceIndex.toString()]);
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex.toString()]);
     }
 
     setDefaultFocus(): void {
         setTimeout(() => {
-            if (this.getStore().config.options.allowStealFocus) {
+            if (this.getData().config.options.allowStealFocus) {
                 $('[tabindex=0]').focus();
             }
         }, 1);
@@ -656,11 +656,11 @@ export class BaseExtension implements IExtension {
     }
 
     redirect(uri: string): void {
-        this.triggerSocket(BaseCommands.REDIRECT, uri);
+        this.triggerSocket(BaseEvents.REDIRECT, uri);
     }
 
     refresh(): void {
-        this.triggerSocket(BaseCommands.REFRESH, null);
+        this.triggerSocket(BaseEvents.REFRESH, null);
     }
 
     private _updateMetric(): void {
@@ -673,7 +673,7 @@ export class BaseExtension implements IExtension {
             if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
                 if (this.metric !== metric) {
                     this.metric = metric;
-                    $.publish(BaseCommands.METRIC_CHANGED);
+                    $.publish(BaseEvents.METRIC_CHANGED);
                 }
             }
         }
@@ -681,7 +681,7 @@ export class BaseExtension implements IExtension {
 
     resize(): void {
         this._updateMetric();
-        $.publish(BaseCommands.RESIZE);
+        $.publish(BaseEvents.RESIZE);
     }
 
     handleParentFrameEvent(message: any): void {
@@ -689,11 +689,11 @@ export class BaseExtension implements IExtension {
             return this.isCreated;
         }, () => {
             switch (message.eventName) {
-                case BaseCommands.TOGGLE_FULLSCREEN:
-                    $.publish(BaseCommands.TOGGLE_FULLSCREEN, message.eventObject);
+                case BaseEvents.TOGGLE_FULLSCREEN:
+                    $.publish(BaseEvents.TOGGLE_FULLSCREEN, message.eventObject);
                     break;
-                case BaseCommands.PARENT_EXIT_FULLSCREEN:
-                    $.publish(BaseCommands.PARENT_EXIT_FULLSCREEN);
+                case BaseEvents.PARENT_EXIT_FULLSCREEN:
+                    $.publish(BaseEvents.PARENT_EXIT_FULLSCREEN);
                     break;
             }
         });
@@ -702,19 +702,11 @@ export class BaseExtension implements IExtension {
     // re-bootstraps the application with new querystring params
     reload(data?: IUVData): void {
         $.disposePubSub();
-        $.publish(BaseCommands.RELOAD, [data]);
+        $.publish(BaseEvents.RELOAD, [data]);
     }
 
-    getCanvasIndexParam(): number {
-        return this.getParam(Params.canvasIndex);
-    }
-
-    getSequenceIndexParam(): number {
-        return this.getParam(Params.sequenceIndex);
-    }
-
-    isSeeAlsoEnabled(): boolean{
-        return this.getStore().config.options.seeAlsoEnabled !== false;
+    isSeeAlsoEnabled(): boolean {
+        return this.getData().config.options.seeAlsoEnabled !== false;
     }
 
     getShareUrl(): string | null {
@@ -750,12 +742,7 @@ export class BaseExtension implements IExtension {
     }
 
     isDeepLinkingEnabled(): boolean {
-        return this.bootstrapper.dataProvider.isDeepLinkingEnabled();
-    }
-
-    // get hash or data-attribute params depending on whether the UV is embedded.
-    getParam(key: Params): string | null {
-        return this.bootstrapper.dataProvider.getParam(key);
+        return (this.getData().isHomeDomain && this.getData().isOnlyInstance);
     }
 
     isOnHomeDomain(): boolean {
@@ -768,24 +755,24 @@ export class BaseExtension implements IExtension {
     }
 
     getEmbedDomain(): string | null {
-        return this.getStore().embedDomain;
+        return this.getData().embedDomain;
     }
 
     getSettings(): ISettings {
-        if (Utils.Bools.getBool(this.getStore().config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.getData().config.options.saveUserSettings, false)) {
 
             const settings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             
             if (settings) {
-                return $.extend(this.getStore().config.options, settings.value);
+                return $.extend(this.getData().config.options, settings.value);
             }
         }
         
-        return this.getStore().config.options;
+        return this.getData().config.options;
     }
 
     updateSettings(settings: ISettings): void {
-        if (Utils.Bools.getBool(this.getStore().config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.getData().config.options.saveUserSettings, false)) {
 
             const storedSettings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
 
@@ -797,7 +784,7 @@ export class BaseExtension implements IExtension {
             Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
         }
         
-        this.getStore().config.options = $.extend(this.getStore().config.options, settings);
+        this.getData().config.options = $.extend(this.getData().config.options, settings);
     }
 
     sanitize(html: string): string {
@@ -822,101 +809,6 @@ export class BaseExtension implements IExtension {
         return $elem.html();
     }
 
-    getLocales(): any[] {
-        if (this.locales) return this.locales;
-
-        // use data-locales to prioritise
-        const items: any[] = this.getStore().config.localisation.locales.slice(0);
-        const sorting: any[] = this.bootstrapper.params.locales;
-        const result: any[] = [];
-
-        // loop through sorting array
-        // if items contains sort item, add it to results.
-        // if sort item has a label, substitute it
-        // mark item as added.
-        // if limitLocales is disabled,
-        // loop through remaining items and add to results.
-
-        $.each(sorting, (index: number, sortItem: any) => {
-            const match = items.filter((item: any) => { return item.name === sortItem.name; });
-            if (match.length){
-                var m: any = match[0];
-                if (sortItem.label) m.label = sortItem.label;
-                m.added = true;
-                result.push(m);
-            }
-        });
-
-        const limitLocales: boolean = Utils.Bools.getBool(this.getStore().config.options.limitLocales, false);
-
-        if (!limitLocales) {
-            $.each(items, (index: number, item: any) => {
-                if (!item.added){
-                    result.push(item);
-                }
-                delete item.added;
-            });
-        }
-
-        return this.locales = result;
-    }
-
-    getAlternateLocale(): any {
-        const locales: any[] = this.getLocales();
-        let alternateLocale: any;
-        let locale: any;
-
-        for (let i = 0; i < locales.length; i++) {
-            locale = locales[i];
-            if (locale.name !== this.locale) {
-                alternateLocale = locale;
-            }
-        }
-
-        return locale;
-    }
-
-    changeLocale(locale: string): void {
-        // if the current locale is "en-GB:English,cy-GB:Welsh"
-        // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
-
-        // re-order locales so the passed locale is first
-        const locales: any[] = this.locales.clone();
-
-        const index: number = locales.findIndex((l: any) => {
-            return l.name === locale;
-        });
-
-        locales.move(index, 0);
-
-        // convert to comma-separated string
-        const l: string = this.serializeLocales(locales);
-        const p: BootstrapParams = new BootstrapParams();
-        p.setLocale(l);
-        this.reload(p);
-    }
-
-    serializeLocales(locales: any[]): string {
-        let str: string = '';
-        
-        if (!locales) return str;
-
-        for (let i = 0; i < locales.length; i++) {
-            const l = locales[i];
-            if (i > 0) str += ',';
-            str += l.name;
-            if (l.label){
-                str += ':' + l.label;
-            }
-        }
-
-        return str;
-    }
-
-    getSerializedLocales(): string {
-        return this.serializeLocales(this.locales);
-    }
-
     getSharePreview(): any {
         const preview: any = {};
 
@@ -928,7 +820,7 @@ export class BaseExtension implements IExtension {
         let thumbnail: string = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !(typeof(thumbnail) === 'string')) {
-            thumbnail = canvas.getCanonicalImageUri(this.getStore().config.options.bookmarkThumbWidth);
+            thumbnail = canvas.getCanonicalImageUri(this.getData().config.options.bookmarkThumbWidth);
         }
 
         preview.image = thumbnail;
@@ -1002,7 +894,7 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        const storageStrategy: string = this.getStore().config.options.tokenStorage;
+        const storageStrategy: string = this.getData().config.options.tokenStorage;
 
         return new Promise<Manifold.ExternalResource[]>((resolve) => {
             manifesto.Utils.loadExternalResources(
@@ -1023,10 +915,10 @@ export class BaseExtension implements IExtension {
                 })['catch']((error: any) => {
                     switch(error.name) {
                         case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
-                            $.publish(BaseCommands.LOGIN_FAILED);
+                            $.publish(BaseEvents.LOGIN_FAILED);
                             break;
                         case manifesto.StatusCodes.FORBIDDEN.toString():
-                            $.publish(BaseCommands.FORBIDDEN);
+                            $.publish(BaseEvents.FORBIDDEN);
                             break;
                         case manifesto.StatusCodes.RESTRICTED.toString():
                             // do nothing
@@ -1038,34 +930,25 @@ export class BaseExtension implements IExtension {
         });
     }
 
-    // set hash params depending on whether the UV is embedded.
-    setParam(key: Params, value: string): void {
-        if (this.isDeepLinkingEnabled()) {
-            Utils.Urls.setHashParameter(this.bootstrapper.params.paramMap[key], value, parent.document);
-        }
-    }
-
     viewCanvas(canvasIndex: number): void {
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.getStore().config.content.canvasIndexOutOfRange);
+            this.showMessage(this.getData().config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
         this.lastCanvasIndex = this.helper.canvasIndex;
         this.helper.canvasIndex = canvasIndex;
 
-        $.publish(BaseCommands.CANVAS_INDEX_CHANGED, [canvasIndex]);
-        $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE);
-
-        this.setParam(Params.canvasIndex, canvasIndex.toString());
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     }
 
     showMessage(message: string, acceptCallback?: Function, buttonText?: string, allowClose?: boolean): void {
 
         this.closeActiveDialogue();
 
-        $.publish(BaseCommands.SHOW_GENERIC_DIALOGUE, [
+        $.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, [
             {
                 message: message,
                 acceptCallback: acceptCallback,
@@ -1075,7 +958,7 @@ export class BaseExtension implements IExtension {
     }
 
     closeActiveDialogue(): void{
-        $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
+        $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
     }
 
     isOverlayActive(): boolean{
@@ -1109,11 +992,11 @@ export class BaseExtension implements IExtension {
     }
 
     isHeaderPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.getStore().config.options.headerPanelEnabled, true);
+        return Utils.Bools.getBool(this.getData().config.options.headerPanelEnabled, true);
     }
 
     isLeftPanelEnabled(): boolean {
-        if (Utils.Bools.getBool(this.getStore().config.options.leftPanelEnabled, true)) {
+        if (Utils.Bools.getBool(this.getData().config.options.leftPanelEnabled, true)) {
             if (this.helper.hasParentCollection()) {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
@@ -1127,15 +1010,15 @@ export class BaseExtension implements IExtension {
     }
 
     isRightPanelEnabled(): boolean {
-        return  Utils.Bools.getBool(this.getStore().config.options.rightPanelEnabled, true);
+        return  Utils.Bools.getBool(this.getData().config.options.rightPanelEnabled, true);
     }
 
     isFooterPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.getStore().config.options.footerPanelEnabled, true);
+        return Utils.Bools.getBool(this.getData().config.options.footerPanelEnabled, true);
     }
 
     useArrowKeysToNavigate(): boolean {
-        return Utils.Bools.getBool(this.getStore().config.options.useArrowKeysToNavigate, true);
+        return Utils.Bools.getBool(this.getData().config.options.useArrowKeysToNavigate, true);
     }
 
     bookmark(): void {
@@ -1143,7 +1026,7 @@ export class BaseExtension implements IExtension {
     }
 
     feedback(): void {
-        this.triggerSocket(BaseCommands.FEEDBACK, new BootstrapParams());
+        this.triggerSocket(BaseEvents.FEEDBACK, this.getData());
     }
 
     getBookmarkUri(): string {
@@ -1158,12 +1041,80 @@ export class BaseExtension implements IExtension {
         return relUri;
     }
 
+    getData(): IUVData {
+        return this.bootstrapper.data;
+    }
+
+    getAlternateLocale(): ILocale | null {
+        const locales: ILocale[] | null = this.getLocales();
+        let alternateLocale: ILocale | null = null;
+
+        if (locales) {
+            for (let i = 0; i < locales.length; i++) {
+                const locale: ILocale = locales[i];
+                if (locale.name !== this.getData().locale) {
+                    alternateLocale = locale;
+                }
+            }
+        }
+
+        return alternateLocale;
+    }
+
+    getLocales(): ILocale[] | null {
+        return this.getData().locales;
+    }
+
+    getSerializedLocales(): string {
+        return this.serializeLocales(this.getData().locales);
+    }
+
+    serializeLocales(locales: ILocale[] | null): string {
+        let serializedLocales: string = '';
+        
+        if (!locales) return serializedLocales;
+
+        for (let i = 0; i < locales.length; i++) {
+            const l = locales[i];
+            if (i > 0) serializedLocales += ',';
+            serializedLocales += l.name;
+            if (l.label) {
+                serializedLocales += ':' + l.label;
+            }
+        }
+
+        return serializedLocales;
+    }
+
+    changeLocale(locale: string): void {
+        // if the current locale is "en-GB:English,cy-GB:Welsh"
+        // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
+
+        // re-order locales so the passed locale is first
+        let locales: ILocale[] | null = this.getData().locales;
+
+        if (locales) {
+            locales = locales.clone();
+
+            const index: number = locales.findIndex((l: any) => {
+                return l.name === locale;
+            });
+
+            locales.move(index, 0);
+
+            const data: IUVData = <IUVData>{};
+            data.locale = this.serializeLocales(locales);
+
+            this.reload(data);
+        }
+    }
+
     // auth
 
     clickThrough(resource: Manifold.ExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
-            $.publish(BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE, [{
+            $.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
                     const win: Window = window.open(resource.clickThroughService.id);
@@ -1171,7 +1122,7 @@ export class BaseExtension implements IExtension {
                     const pollTimer: number = window.setInterval(() => {
                         if (win.closed) {
                             window.clearInterval(pollTimer);
-                            $.publish(BaseCommands.CLICKTHROUGH);
+                            $.publish(BaseEvents.CLICKTHROUGH);
                             resolve();
                         }
                     }, 500);
@@ -1183,10 +1134,10 @@ export class BaseExtension implements IExtension {
     restricted(resource: Manifold.ExternalResource): Promise<void> {
         return new Promise<void>((resolve, reject) => {
 
-            $.publish(BaseCommands.SHOW_RESTRICTED_DIALOGUE, [{
+            $.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
-                    $.publish(BaseCommands.LOAD_FAILED);
+                    $.publish(BaseEvents.LOAD_FAILED);
                     reject(resource);
                 }
             }]);
@@ -1203,14 +1154,14 @@ export class BaseExtension implements IExtension {
                 options.showCancelButton = true;
             }
 
-            $.publish(BaseCommands.SHOW_LOGIN_DIALOGUE, [{
+            $.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
                 loginCallback: () => {
                     const win: Window = window.open(resource.loginService.id + "?t=" + new Date().getTime());
                     const pollTimer: number = window.setInterval(function () {
                         if (win.closed) {
                             window.clearInterval(pollTimer);
-                            $.publish(BaseCommands.LOGIN);
+                            $.publish(BaseEvents.LOGIN);
                             resolve();
                         }
                     }, 500);
@@ -1220,7 +1171,7 @@ export class BaseExtension implements IExtension {
                     const pollTimer: number = window.setInterval(function () {
                         if (win.closed) {
                             window.clearInterval(pollTimer);
-                            $.publish(BaseCommands.LOGOUT);
+                            $.publish(BaseEvents.LOGOUT);
                             resolve();
                         }
                     }, 500);
@@ -1287,10 +1238,6 @@ export class BaseExtension implements IExtension {
         });
     }
 
-    getStore(): IUVData {
-        return this.bootstrapper.store;
-    }
-
     getStoredAccessToken(resource: Manifold.ExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
@@ -1343,7 +1290,7 @@ export class BaseExtension implements IExtension {
                 resolve(resource);
             } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                 resolve(resource);
-                $.publish(BaseCommands.RESOURCE_DEGRADED, [resource]);
+                $.publish(BaseEvents.RESOURCE_DEGRADED, [resource]);
             } else {
 
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
@@ -1351,7 +1298,7 @@ export class BaseExtension implements IExtension {
                     // if the browser doesn't support CORS
                     if (!Modernizr.cors) {
                         const informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
-                        $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
+                        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
                         resolve(resource);
                     } else {
                         reject(resource.error.statusText);
@@ -1370,6 +1317,6 @@ export class BaseExtension implements IExtension {
 
     handleDegraded(resource: Manifold.ExternalResource): void {
         const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
-        $.publish(BaseCommands.SHOW_INFORMATION, [informationArgs]);
+        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }
 }

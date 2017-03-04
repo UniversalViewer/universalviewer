@@ -1,5 +1,5 @@
 import {BaseView} from "./BaseView";
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 
 export class Dialogue extends BaseView {
 
@@ -28,7 +28,7 @@ export class Dialogue extends BaseView {
         super.create();
 
         // events.
-        $.subscribe(BaseCommands.CLOSE_ACTIVE_DIALOGUE, () => {
+        $.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -36,7 +36,7 @@ export class Dialogue extends BaseView {
             }
         });
 
-        $.subscribe(BaseCommands.ESCAPE, () => {
+        $.subscribe(BaseEvents.ESCAPE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -129,7 +129,7 @@ export class Dialogue extends BaseView {
             }
         }, 1);
 
-        $.publish(BaseCommands.SHOW_OVERLAY);
+        $.publish(BaseEvents.SHOW_OVERLAY);
 
         if (this.isUnopened){
             this.isUnopened = false;
@@ -150,7 +150,7 @@ export class Dialogue extends BaseView {
         this.isActive = false;
 
         $.publish(this.closeCommand);
-        $.publish(BaseCommands.HIDE_OVERLAY);
+        $.publish(BaseEvents.HIDE_OVERLAY);
     }
 
     resize(): void {

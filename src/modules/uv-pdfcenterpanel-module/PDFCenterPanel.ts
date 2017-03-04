@@ -1,6 +1,5 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import {Params} from "../../Params";
 
 declare var PDFView: any;
 
@@ -16,7 +15,7 @@ export class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
         });
     }
@@ -49,7 +48,7 @@ export class PDFCenterPanel extends CenterPanel {
                     PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                     PDFJS.DEFAULT_URL = pdfUri;
 
-                    const anchorParam: string | null = that.extension.getParam(Params.anchor);
+                    const anchorParam: string | null = that.extension.getData().anchor;
 
                     if (anchorParam) {
                         const anchorIndex: number = (1 + parseInt(anchorParam)) || 0;

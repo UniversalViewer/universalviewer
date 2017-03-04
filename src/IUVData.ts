@@ -10,6 +10,5 @@ export interface IUVData extends Manifold.IManifoldOptions {
     isLightbox: boolean;
     isOnlyInstance: boolean;
     isReload: boolean;
-    locales: ILocale[];
-    paramMap: string[];
+    locales: ILocale[] | null;
 }

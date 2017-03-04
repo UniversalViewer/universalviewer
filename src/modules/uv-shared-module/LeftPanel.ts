@@ -1,4 +1,4 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 import {BaseExpandPanel} from "./BaseExpandPanel";
 
 export class LeftPanel extends BaseExpandPanel {
@@ -13,7 +13,7 @@ export class LeftPanel extends BaseExpandPanel {
 
         this.$element.width(this.options.panelCollapsedWidth);
 
-        $.subscribe(BaseCommands.TOGGLE_EXPAND_LEFT_PANEL, () => {
+        $.subscribe(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
             if (this.isFullyExpanded){
                 this.collapseFull();
             } else {
@@ -48,9 +48,9 @@ export class LeftPanel extends BaseExpandPanel {
         super.toggleFinish();
 
         if (this.isExpanded) {
-            $.publish(BaseCommands.OPEN_LEFT_PANEL);
+            $.publish(BaseEvents.OPEN_LEFT_PANEL);
         } else {           
-            $.publish(BaseCommands.CLOSE_LEFT_PANEL);
+            $.publish(BaseEvents.CLOSE_LEFT_PANEL);
         }
         this.extension.updateSettings({leftPanelOpen: this.isExpanded});
     }

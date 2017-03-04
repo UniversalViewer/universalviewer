@@ -1,4 +1,4 @@
-import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
@@ -22,8 +22,8 @@ export class MultiSelectDialogue extends Dialogue {
 
         const that = this;
 
-        this.openCommand = Commands.SHOW_MULTISELECT_DIALOGUE;
-        this.closeCommand = Commands.HIDE_MULTISELECT_DIALOGUE;
+        this.openCommand = Events.SHOW_MULTISELECT_DIALOGUE;
+        this.closeCommand = Events.HIDE_MULTISELECT_DIALOGUE;
 
         $.subscribe(this.openCommand, () => {
             this.open();
@@ -72,7 +72,7 @@ export class MultiSelectDialogue extends Dialogue {
         $selectButton.addClass('btn btn-primary');
 
         (<any>this.component).on('multiSelectionMade', (ids: string[]) => {
-            $.publish(Commands.MULTISELECTION_MADE, [ids]);
+            $.publish(Events.MULTISELECTION_MADE, [ids]);
             that.close();
         });
 

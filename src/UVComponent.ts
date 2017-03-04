@@ -1,4 +1,4 @@
-import {BaseCommands} from "./modules/uv-shared-module/BaseCommands";
+import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
 import {Bootstrapper} from "./Bootstrapper";
 import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
 import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
@@ -7,10 +7,10 @@ import {Extension as VirtexExtension} from "./extensions/uv-virtex-extension/Ext
 import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
-import {URLDataProvider} from "./URLDataProvider";
 
-export default class UV extends _Components.BaseComponent implements IUVComponent {
+export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
+    private _extensions: any;
     public URLDataProvider: IUVDataProvider;
 
     constructor(options: _Components.IBaseComponentOptions) {
@@ -27,39 +27,38 @@ export default class UV extends _Components.BaseComponent implements IUVComponen
             console.error("UV failed to initialise");
         }
         
-        $.subscribe(BaseCommands.RELOAD, (e: any, data?: IUVData) => {
-            this.fire(BaseCommands.RELOAD, data);
+        $.subscribe(BaseEvents.RELOAD, (e: any, data?: IUVData) => {
+            this.fire(BaseEvents.RELOAD, data);
         });
 
-        const extensions: Object = {};
+        this._extensions = {};
 
-        extensions[manifesto.ElementType.canvas().toString()] = {
+        this._extensions[manifesto.ElementType.canvas().toString()] = {
             type: OpenSeadragonExtension,
             name: 'uv-seadragon-extension'
         };
 
-        extensions[manifesto.ElementType.movingimage().toString()] = {
+        this._extensions[manifesto.ElementType.movingimage().toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
         };
 
-        extensions[manifesto.ElementType.physicalobject().toString()] = {
+        this._extensions[manifesto.ElementType.physicalobject().toString()] = {
             type: VirtexExtension,
             name: 'uv-virtex-extension'
         };
 
-        extensions[manifesto.ElementType.sound().toString()] = {
+        this._extensions[manifesto.ElementType.sound().toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
         };
 
-        extensions[manifesto.RenderingFormat.pdf().toString()] = {
+        this._extensions[manifesto.RenderingFormat.pdf().toString()] = {
             type: PDFExtension,
             name: 'uv-pdf-extension'
         };
 
-        const bootstrapper: Bootstrapper = new Bootstrapper(extensions);
-        bootstrapper.bootstrap(this.data);
+        this.set(this.options.data);
 
         return success;
     }
@@ -68,6 +67,11 @@ export default class UV extends _Components.BaseComponent implements IUVComponen
         return <IUVData>{
 
         };
+    }
+
+    public set(data: IUVData): void {
+        const bootstrapper: Bootstrapper = new Bootstrapper(this._dataProvider, this._extensions);
+        bootstrapper.bootstrap();
     }
     
     protected _resize(): void {

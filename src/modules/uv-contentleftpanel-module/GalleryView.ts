@@ -1,6 +1,6 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {BaseView} from "../uv-shared-module/BaseView";
-import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {Events} from "../../extensions/uv-seadragon-extension/Events";
 
 export class GalleryView extends BaseView {
 
@@ -19,11 +19,11 @@ export class GalleryView extends BaseView {
 
         // search preview doesn't work well with the gallery because it loads thumbs in "chunks"
 
-        // $.subscribe(Commands.SEARCH_PREVIEW_START, (e, canvasIndex) => {
+        // $.subscribe(Events.SEARCH_PREVIEW_START, (e, canvasIndex) => {
         //     this.component.searchPreviewStart(canvasIndex);
         // });
 
-        // $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
+        // $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
         //     this.component.searchPreviewFinish();
         // });
 
@@ -38,16 +38,16 @@ export class GalleryView extends BaseView {
         });
 
         (<any>this.component).on('thumbSelected', function(thumb: any) {
-            $.publish(Commands.GALLERY_THUMB_SELECTED, [thumb]);
-            $.publish(BaseCommands.THUMB_SELECTED, [thumb]);
+            $.publish(Events.GALLERY_THUMB_SELECTED, [thumb]);
+            $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
         });
 
         (<any>this.component).on('decreaseSize', function() {
-            $.publish(Commands.GALLERY_DECREASE_SIZE);
+            $.publish(Events.GALLERY_DECREASE_SIZE);
         });
 
         (<any>this.component).on('increaseSize', function() {
-            $.publish(Commands.GALLERY_INCREASE_SIZE);
+            $.publish(Events.GALLERY_INCREASE_SIZE);
         });
     }
 

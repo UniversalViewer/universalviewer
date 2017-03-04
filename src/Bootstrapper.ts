@@ -1,6 +1,5 @@
-import {BaseCommands} from "./modules/uv-shared-module/BaseCommands";
+import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
 import {IUVData} from "./IUVData";
-import {IUVDataProvider} from "./IUVDataProvider";
 import {IExtension} from "./modules/uv-shared-module/IExtension";
 
 // The Bootstrapper is concerned with loading the manifest/collection (iiifResource)
@@ -12,9 +11,8 @@ export class Bootstrapper {
     iiifResource: Manifesto.IIIIFResource;
     isFullScreen: boolean = false;
     manifest: Manifesto.IManifest;
-    dataProvider: IUVDataProvider;
     socket: any;
-    store: IUVData;
+    data: IUVData;
 
     constructor(extensions: any) {
         this.extensions = extensions;
@@ -22,9 +20,9 @@ export class Bootstrapper {
 
     bootstrap(data: IUVData): void {
 
-        this.store = data;
+        this.data = data;
 
-        if (!this.store.iiifResourceUri) return;
+        if (!this.data.iiifResourceUri) return;
 
         // empty app div
         $('#app').empty();
@@ -33,31 +31,31 @@ export class Bootstrapper {
         $('#app').addClass('loading');
 
         // remove any existing css
-        $('link[type*="text/css"]').remove();
+        $('link[type*="text/css"]').remove(); // todo: replace any inline styles with id #uvcomponent
 
         jQuery.support.cors = true;
 
         Manifold.loadManifest(<Manifold.IManifoldOptions>{
-            iiifResourceUri: this.store.iiifResourceUri,
-            collectionIndex: this.store.collectionIndex,
-            manifestIndex: this.store.manifestIndex,
-            sequenceIndex: this.store.sequenceIndex,
-            canvasIndex: this.store.canvasIndex,
-            locale: this.store.locale
+            iiifResourceUri: this.data.iiifResourceUri,
+            collectionIndex: this.data.collectionIndex,
+            manifestIndex: this.data.manifestIndex,
+            sequenceIndex: this.data.sequenceIndex,
+            canvasIndex: this.data.canvasIndex,
+            locale: this.data.locale
         }).then((helper: Manifold.IHelper) => {
             
             let trackingLabel: string = helper.getTrackingLabel();
-            trackingLabel += ', URI: ' + this.store.embedDomain;
+            trackingLabel += ', URI: ' + this.data.embedDomain;
             window.trackingLabel = trackingLabel;
 
-            const sequence: Manifesto.ISequence = helper.getSequenceByIndex(this.store.sequenceIndex);
+            const sequence: Manifesto.ISequence = helper.getSequenceByIndex(this.data.sequenceIndex);
 
             if (!sequence) {
                 this.notFound();
                 return;
             }
 
-            const canvas: Manifesto.ICanvas = helper.getCanvasByIndex(this.store.canvasIndex);
+            const canvas: Manifesto.ICanvas = helper.getCanvasByIndex(this.data.canvasIndex);
 
             if (!canvas) {
                 this.notFound();
@@ -84,7 +82,7 @@ export class Bootstrapper {
             extension.helper = helper;
 
             this.configure(extension, (config: any) => {
-                this.store.config = config;
+                this.data.config = config;
                 this.injectCss(extension, () => {
                     this.createExtension(extension);
                 });
@@ -101,7 +99,7 @@ export class Bootstrapper {
 
     notFound(): void {
         try{
-            parent.$(parent.document).trigger(BaseCommands.NOT_FOUND);
+            parent.$(parent.document).trigger(BaseEvents.NOT_FOUND);
             return;
         } catch (e) {}
     }
@@ -112,7 +110,7 @@ export class Bootstrapper {
         this.getConfigExtension(extension, (configExtension: any) => {
 
             // todo: use a compiler flag when available
-            const configUri: string = 'lib/' + extension.name + '.' + that.store.locale + '.config.json';
+            const configUri: string = 'lib/' + extension.name + '.' + that.data.locale + '.config.json';
 
             $.getJSON(configUri, (config) => {
                 this.extendConfig(extension, config, configExtension, cb);
@@ -126,8 +124,7 @@ export class Bootstrapper {
         // if data-config has been set, extend the existing config object.
         if (configExtension) {
             // save a reference to the config extension uri.
-            config.uri = this.store.configUri;
-
+            config.uri = this.data.configUri;
             $.extend(true, config, configExtension);
         }
 
@@ -136,20 +133,20 @@ export class Bootstrapper {
 
     getConfigExtension(extension: any, cb: (configExtension: any) => void): void {
 
-        const sessionConfig: string | null = sessionStorage.getItem(extension.name + '.' + this.store.locale);
+        const sessionConfig: string | null = sessionStorage.getItem(extension.name + '.' + this.data.locale);
 
         if (sessionConfig) { // if config is stored in sessionstorage
             cb(JSON.parse(sessionConfig));
-        } else if (this.store.configUri) { // if data-config has been set
+        } else if (this.data.configUri) { // if data-config has been set
 
             if (this.isCORSEnabled()) {
-                $.getJSON(this.store.configUri, (configExtension) => {
+                $.getJSON(this.data.configUri, (configExtension) => {
                     cb(configExtension);
                 });
             } else {
                 // use jsonp
                 var settings: JQueryAjaxSettings = <JQueryAjaxSettings>{
-                    url: this.store.configUri,
+                    url: this.data.configUri,
                     type: 'GET',
                     dataType: 'jsonp',
                     jsonp: 'callback',
@@ -168,7 +165,7 @@ export class Bootstrapper {
     }
 
     injectCss(extension: any, cb: () => void): void {
-        const cssPath: string = 'themes/' + this.store.config.options.theme + '/css/' + extension.name + '/theme.css';
+        const cssPath: string = 'themes/' + this.data.config.options.theme + '/css/' + extension.name + '/theme.css';
 
         yepnope.injectCss(cssPath, function() {
             cb();

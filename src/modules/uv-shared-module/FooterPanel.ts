@@ -1,4 +1,4 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
 import {Metrics} from "./Metrics";
 
@@ -23,16 +23,16 @@ export class FooterPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
+        $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
             this.updateFullScreenButton();
         });
 
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.updateMinimisedButtons();
             this.updateMoreInfoButton();
         });
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.updateDownloadButton();
         });
 
@@ -64,36 +64,36 @@ export class FooterPanel extends BaseView {
         this.$options.append(this.$fullScreenBtn);
 
         this.$openButton.onPressed(() => {
-            $.publish(BaseCommands.OPEN);
+            $.publish(BaseEvents.OPEN);
         });
 
         this.$feedbackButton.onPressed(() => {
-            $.publish(BaseCommands.FEEDBACK);
+            $.publish(BaseEvents.FEEDBACK);
         });
 
         this.$bookmarkButton.onPressed(() => {
-            $.publish(BaseCommands.BOOKMARK);
+            $.publish(BaseEvents.BOOKMARK);
         });
 
         this.$shareButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_SHARE_DIALOGUE, [this.$shareButton]);
+            $.publish(BaseEvents.SHOW_SHARE_DIALOGUE, [this.$shareButton]);
         });
 
         this.$embedButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_EMBED_DIALOGUE, [this.$embedButton]);
+            $.publish(BaseEvents.SHOW_EMBED_DIALOGUE, [this.$embedButton]);
         });
 
         this.$downloadButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_DOWNLOAD_DIALOGUE, [this.$downloadButton]);
+            $.publish(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, [this.$downloadButton]);
         });
 
         this.$moreInfoButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_MOREINFO_DIALOGUE, [this.$moreInfoButton]);
+            $.publish(BaseEvents.SHOW_MOREINFO_DIALOGUE, [this.$moreInfoButton]);
         });
 
         this.$fullScreenBtn.on('click', (e) => {
             e.preventDefault();
-            $.publish(BaseCommands.TOGGLE_FULLSCREEN);
+            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
         if (!Utils.Bools.getBool(this.options.embedEnabled, true)){
@@ -140,7 +140,7 @@ export class FooterPanel extends BaseView {
     updateOpenButton(): void {
         var configEnabled = Utils.Bools.getBool(this.options.openEnabled, false);
 
-        if (configEnabled && !this.extension.isHomeDomain){
+        if (configEnabled && !this.extension.getData().isHomeDomain){
             this.$openButton.show();
         } else {
             this.$openButton.hide();
@@ -152,7 +152,7 @@ export class FooterPanel extends BaseView {
             this.$fullScreenBtn.hide();
         }
 
-        if (this.extension.isLightbox){
+        if (this.extension.getData().isLightbox){
             this.$fullScreenBtn.addClass('lightbox');
         }
 
@@ -170,7 +170,7 @@ export class FooterPanel extends BaseView {
     updateEmbedButton(): void {
         if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)){
             //current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
-            if ( ! $.browser.mobile ){
+            if (!$.browser.mobile){
               this.$embedButton.show();
             }
         } else {

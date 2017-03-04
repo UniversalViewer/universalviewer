@@ -1,6 +1,6 @@
 import {AutoComplete} from "../uv-shared-module/AutoComplete";
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
-import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
@@ -43,7 +43,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, () => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             this.canvasIndexChanged();
             this.setCurrentSearchResultPlacemarker();
             this.updatePrevButton();
@@ -51,24 +51,24 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         // todo: this should be a setting
-        $.subscribe(Commands.MODE_CHANGED, () => {
+        $.subscribe(Events.MODE_CHANGED, () => {
             this.settingsChanged();
         });
 
-        $.subscribe(Commands.SEARCH, (e: any, terms: string) => {
+        $.subscribe(Events.SEARCH, (e: any, terms: string) => {
             this.terms = terms;
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, (e: any, obj: any) => {
+        $.subscribe(Events.SEARCH_RESULTS, (e: any, obj: any) => {
             this.displaySearchResults(obj.terms, obj.results);
             this.setCurrentSearchResultPlacemarker();
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
+        $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
             this.hideSearchSpinner();
         });
 
-        $.subscribe(Commands.SEARCH_RESULT_RECT_CHANGED, () => {
+        $.subscribe(Events.SEARCH_RESULT_RECT_CHANGED, () => {
             this.updatePrevButton();
             this.updateNextButton();
         });
@@ -154,13 +154,13 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         this.$placemarkerDetails.on('mouseover', () => {
-            $.publish(Commands.SEARCH_PREVIEW_START, [this.currentPlacemarkerIndex]);
+            $.publish(Events.SEARCH_PREVIEW_START, [this.currentPlacemarkerIndex]);
         });
 
         this.$placemarkerDetails.on('mouseleave', function() {
             $(this).hide();
 
-            $.publish(Commands.SEARCH_PREVIEW_FINISH);
+            $.publish(Events.SEARCH_PREVIEW_FINISH);
 
             // reset all placemarkers.
             var placemarkers = that.getSearchResultPlacemarkers();
@@ -168,22 +168,22 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         this.$placemarkerDetails.on('click', () => {
-            $.publish(Commands.VIEW_PAGE, [this.currentPlacemarkerIndex]);
+            $.publish(Events.VIEW_PAGE, [this.currentPlacemarkerIndex]);
         });
 
         this.$previousResultButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Commands.PREV_SEARCH_RESULT);
+            $.publish(Events.PREV_SEARCH_RESULT);
         });
 
         this.$nextResultButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Commands.NEXT_SEARCH_RESULT);
+            $.publish(Events.NEXT_SEARCH_RESULT);
         });
 
         this.$clearSearchResultsButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Commands.CLEAR_SEARCH);
+            $.publish(Events.CLEAR_SEARCH);
             this.clearSearchResults();
         });
 
@@ -229,7 +229,7 @@ export class FooterPanel extends BaseFooterPanel {
         }
 
         this.$printButton.onPressed(() => {
-            $.publish(Commands.PRINT);
+            $.publish(Events.PRINT);
         });
 
         this.updatePrintButton();
@@ -243,7 +243,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.getStore().config.options.zoomToSearchResultEnabled, true);
+        return Utils.Bools.getBool(this.extension.getData().config.options.zoomToSearchResultEnabled, true);
     }
 
     isPreviousButtonEnabled(): boolean {
@@ -371,7 +371,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         this.showSearchSpinner();
 
-        $.publish(Commands.SEARCH, [this.terms]);
+        $.publish(Events.SEARCH, [this.terms]);
     }
 
     getSearchResultPlacemarkers(): JQuery {
@@ -430,7 +430,7 @@ export class FooterPanel extends BaseFooterPanel {
         const $placemarker: JQuery = $(this);
         const index: number = parseInt($placemarker.attr('data-index'));
 
-        $.publish(Commands.VIEW_PAGE, [index]);
+        $.publish(Events.VIEW_PAGE, [index]);
     }
 
     onPlacemarkerClick(that: any): void {
@@ -441,7 +441,7 @@ export class FooterPanel extends BaseFooterPanel {
         const $placemarker: JQuery = $(this);
         const index: number = parseInt($placemarker.attr('data-index'));
 
-        $.publish(Commands.VIEW_PAGE, [index]);
+        $.publish(Events.VIEW_PAGE, [index]);
     }
 
     onPlacemarkerMouseEnter(that: any): void {
@@ -453,7 +453,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         const canvasIndex: number = parseInt($placemarker.attr('data-index'));
 
-        $.publish(Commands.SEARCH_PREVIEW_START, [canvasIndex]);
+        $.publish(Events.SEARCH_PREVIEW_START, [canvasIndex]);
 
         const $placemarkers: JQuery = that.getSearchResultPlacemarkers();
         const elemIndex: number = $placemarkers.index($placemarker[0]);
@@ -516,7 +516,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     onPlacemarkerMouseLeave(e: any, that: any): void {
-        $.publish(Commands.SEARCH_PREVIEW_FINISH);
+        $.publish(Events.SEARCH_PREVIEW_FINISH);
 
         const $placemarker: JQuery = $(this);
         const newElement: Element = e.toElement || e.relatedTarget;

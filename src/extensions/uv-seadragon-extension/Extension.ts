@@ -1,9 +1,9 @@
-import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
 import {Bounds} from "./Bounds";
-import {Commands} from "./Commands";
+import {Events} from "./Events";
 import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {DownloadDialogue} from "./DownloadDialogue";
@@ -19,7 +19,6 @@ import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/Mor
 import {MultiSelectDialogue} from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
 import {MultiSelectionArgs} from "./MultiSelectionArgs";
 import {PagingHeaderPanel} from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
-import {Params} from "../../Params";
 import {Point} from "../../modules/uv-shared-module/Point";
 import {SeadragonCenterPanel} from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
@@ -67,66 +66,66 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             if (this.metric === Metrics.MOBILE_LANDSCAPE) {
                 const settings: ISettings = {};
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
-                $.publish(BaseCommands.UPDATE_SETTINGS);
+                $.publish(BaseEvents.UPDATE_SETTINGS);
                 Shell.$rightPanel.hide();
             } else {
                 Shell.$rightPanel.show();
             }
         });
 
-        $.subscribe(Commands.CLEAR_SEARCH, () => {
+        $.subscribe(Events.CLEAR_SEARCH, () => {
             this.searchResults = null;
-            $.publish(Commands.SEARCH_RESULTS_CLEARED);
-            this.triggerSocket(Commands.CLEAR_SEARCH);
+            $.publish(Events.SEARCH_RESULTS_CLEARED);
+            this.triggerSocket(Events.CLEAR_SEARCH);
         });
 
-        $.subscribe(BaseCommands.DOWN_ARROW, () => {
+        $.subscribe(BaseEvents.DOWN_ARROW, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseCommands.END, () => {
+        $.subscribe(BaseEvents.END, () => {
             this.viewPage(this.helper.getLastPageIndex());
         });
 
-        $.subscribe(Commands.FIRST, () => {
-            this.triggerSocket(Commands.FIRST);
+        $.subscribe(Events.FIRST, () => {
+            this.triggerSocket(Events.FIRST);
             this.viewPage(this.helper.getFirstPageIndex());
         });
 
-        $.subscribe(Commands.GALLERY_DECREASE_SIZE, () => {
-            this.triggerSocket(Commands.GALLERY_DECREASE_SIZE);
+        $.subscribe(Events.GALLERY_DECREASE_SIZE, () => {
+            this.triggerSocket(Events.GALLERY_DECREASE_SIZE);
         });
 
-        $.subscribe(Commands.GALLERY_INCREASE_SIZE, () => {
-            this.triggerSocket(Commands.GALLERY_INCREASE_SIZE);
+        $.subscribe(Events.GALLERY_INCREASE_SIZE, () => {
+            this.triggerSocket(Events.GALLERY_INCREASE_SIZE);
         });
 
-        $.subscribe(Commands.GALLERY_THUMB_SELECTED, () => {
-            this.triggerSocket(Commands.GALLERY_THUMB_SELECTED);
+        $.subscribe(Events.GALLERY_THUMB_SELECTED, () => {
+            this.triggerSocket(Events.GALLERY_THUMB_SELECTED);
         });
 
-        $.subscribe(BaseCommands.HOME, () => {
+        $.subscribe(BaseEvents.HOME, () => {
             this.viewPage(this.helper.getFirstPageIndex());
         });
 
-        $.subscribe(Commands.IMAGE_SEARCH, (e: any, index: number) => {
-            this.triggerSocket(Commands.IMAGE_SEARCH, index);
+        $.subscribe(Events.IMAGE_SEARCH, (e: any, index: number) => {
+            this.triggerSocket(Events.IMAGE_SEARCH, index);
             this.viewPage(index);
         });
 
-        $.subscribe(Commands.LAST, () => {
-            this.triggerSocket(Commands.LAST);
+        $.subscribe(Events.LAST, () => {
+            this.triggerSocket(Events.LAST);
             this.viewPage(this.helper.getLastPageIndex());
         });
 
-        $.subscribe(BaseCommands.LEFT_ARROW, () => {
+        $.subscribe(BaseEvents.LEFT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
                 this.viewPage(this.getPrevPageIndex());
             } else {
@@ -134,105 +133,105 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             }
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             if (this.metric !== Metrics.MOBILE_LANDSCAPE) {
                 Shell.$rightPanel.show();
             }
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             Shell.$centerPanel.show();            
             this.resize();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.MINUS, () => {
+        $.subscribe(BaseEvents.MINUS, () => {
             this.centerPanel.setFocus();
         });
 
-        $.subscribe(Commands.MODE_CHANGED, (e: any, mode: string) => {
-            this.triggerSocket(Commands.MODE_CHANGED, mode);
+        $.subscribe(Events.MODE_CHANGED, (e: any, mode: string) => {
+            this.triggerSocket(Events.MODE_CHANGED, mode);
             this.mode = new Mode(mode);
             const settings: ISettings = this.getSettings();
-            $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
+            $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Commands.MULTISELECTION_MADE, (e: any, ids: string[]) => {
+        $.subscribe(Events.MULTISELECTION_MADE, (e: any, ids: string[]) => {
             const args: MultiSelectionArgs = new MultiSelectionArgs();
             args.manifestUri = this.helper.iiifResourceUri;
             args.allCanvases = ids.length === this.helper.getCanvases().length;
             args.canvases = ids;
-            args.format = this.getStore().config.options.multiSelectionMimeType;
+            args.format = this.getData().config.options.multiSelectionMimeType;
             args.sequence = this.helper.getCurrentSequence().id;
-            this.triggerSocket(Commands.MULTISELECTION_MADE, args);
+            this.triggerSocket(Events.MULTISELECTION_MADE, args);
         });
 
-        $.subscribe(Commands.NEXT, () => {
-            this.triggerSocket(Commands.NEXT);
+        $.subscribe(Events.NEXT, () => {
+            this.triggerSocket(Events.NEXT);
             this.viewPage(this.getNextPageIndex());
         });
 
-        $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
-            this.triggerSocket(Commands.NEXT_SEARCH_RESULT);
+        $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
+            this.triggerSocket(Events.NEXT_SEARCH_RESULT);
         });
 
-        $.subscribe(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
-            this.triggerSocket(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+        $.subscribe(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+            this.triggerSocket(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.nextSearchResult();
         });
 
-        $.subscribe(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
-            this.triggerSocket(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+        $.subscribe(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+            this.triggerSocket(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.prevSearchResult();
         });
 
-        $.subscribe(Commands.OPEN_THUMBS_VIEW, () => {
-            this.triggerSocket(Commands.OPEN_THUMBS_VIEW);
+        $.subscribe(Events.OPEN_THUMBS_VIEW, () => {
+            this.triggerSocket(Events.OPEN_THUMBS_VIEW);
         });
 
-        $.subscribe(Commands.OPEN_TREE_VIEW, () => {
-            this.triggerSocket(Commands.OPEN_TREE_VIEW);
+        $.subscribe(Events.OPEN_TREE_VIEW, () => {
+            this.triggerSocket(Events.OPEN_TREE_VIEW);
         });
 
-        $.subscribe(BaseCommands.PAGE_DOWN, () => {
+        $.subscribe(BaseEvents.PAGE_DOWN, () => {
             this.viewPage(this.getNextPageIndex());
         });
 
-        $.subscribe(Commands.PAGE_SEARCH, (e: any, value: string) => {
-            this.triggerSocket(Commands.PAGE_SEARCH, value);
+        $.subscribe(Events.PAGE_SEARCH, (e: any, value: string) => {
+            this.triggerSocket(Events.PAGE_SEARCH, value);
             this.viewLabel(value);
         });
 
-        $.subscribe(BaseCommands.PAGE_UP, () => {
+        $.subscribe(BaseEvents.PAGE_UP, () => {
             this.viewPage(this.getPrevPageIndex());
         });
 
-        $.subscribe(Commands.PAGING_TOGGLED, (e: any, obj: any) => {
-            this.triggerSocket(Commands.PAGING_TOGGLED, obj);
+        $.subscribe(Events.PAGING_TOGGLED, (e: any, obj: any) => {
+            this.triggerSocket(Events.PAGING_TOGGLED, obj);
         });
 
-        $.subscribe(BaseCommands.PLUS, () => {
+        $.subscribe(BaseEvents.PLUS, () => {
             this.centerPanel.setFocus();
         });
 
-        $.subscribe(Commands.PREV, () => {
-            this.triggerSocket(Commands.PREV);
+        $.subscribe(Events.PREV, () => {
+            this.triggerSocket(Events.PREV);
             this.viewPage(this.getPrevPageIndex());
         });
 
-        $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
-            this.triggerSocket(Commands.PREV_SEARCH_RESULT);
+        $.subscribe(Events.PREV_SEARCH_RESULT, () => {
+            this.triggerSocket(Events.PREV_SEARCH_RESULT);
         });
 
-        $.subscribe(Commands.PRINT, () => {
+        $.subscribe(Events.PRINT, () => {
             this.print();
         });
 
-        $.subscribe(BaseCommands.RIGHT_ARROW, () => {
+        $.subscribe(BaseEvents.RIGHT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
                 this.viewPage(this.getNextPageIndex());
             } else {
@@ -240,95 +239,94 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             }
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION, () => {
-            this.triggerSocket(Commands.SEADRAGON_ANIMATION);
+        $.subscribe(Events.SEADRAGON_ANIMATION, () => {
+            this.triggerSocket(Events.SEADRAGON_ANIMATION);
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (e: any, viewer: any) => {
+        $.subscribe(Events.SEADRAGON_ANIMATION_FINISH, (e: any, viewer: any) => {
             
             const bounds: Bounds | null = this.centerPanel.getViewportBounds();
             
-            if (this.centerPanel && bounds){
-                this.setParam(Params.xywh, bounds.toString());
+            if (this.centerPanel && bounds) {
+                $.publish(Events.XYWH_CHANGED, [bounds.toString()]);
             }
 
             const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
 
-            this.triggerSocket(Commands.CURRENT_VIEW_URI,
+            this.triggerSocket(Events.CURRENT_VIEW_URI,
                 {
                     cropUri: this.getCroppedImageUri(canvas, this.getViewer()),
                     fullUri: this.getConfinedImageUri(canvas, canvas.getWidth())
                 });
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION_START, () => {
-            this.triggerSocket(Commands.SEADRAGON_ANIMATION_START);
+        $.subscribe(Events.SEADRAGON_ANIMATION_START, () => {
+            this.triggerSocket(Events.SEADRAGON_ANIMATION_START);
         });
 
-        $.subscribe(Commands.SEADRAGON_OPEN, () => {
+        $.subscribe(Events.SEADRAGON_OPEN, () => {
             if (!this.useArrowKeysToNavigate()){
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(Commands.SEADRAGON_RESIZE, () => {
-            this.triggerSocket(Commands.SEADRAGON_RESIZE);
+        $.subscribe(Events.SEADRAGON_RESIZE, () => {
+            this.triggerSocket(Events.SEADRAGON_RESIZE);
         });
 
-        $.subscribe(Commands.SEADRAGON_ROTATION, (e: any, rotation: number) => {
-            this.triggerSocket(Commands.SEADRAGON_ROTATION);
+        $.subscribe(Events.SEADRAGON_ROTATION, (e: any, rotation: number) => {
+            this.triggerSocket(Events.SEADRAGON_ROTATION);
             this.currentRotation = rotation;
-            this.setParam(Params.rotation, rotation.toString());
         });
 
-        $.subscribe(Commands.SEARCH, (e: any, terms: string) => {
-            this.triggerSocket(Commands.SEARCH, terms);
+        $.subscribe(Events.SEARCH, (e: any, terms: string) => {
+            this.triggerSocket(Events.SEARCH, terms);
             this.searchWithin(terms);
         });
 
-        $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
-            this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
+        $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
+            this.triggerSocket(Events.SEARCH_PREVIEW_FINISH);
         });
 
-        $.subscribe(Commands.SEARCH_PREVIEW_START, () => {
-            this.triggerSocket(Commands.SEARCH_PREVIEW_START);
+        $.subscribe(Events.SEARCH_PREVIEW_START, () => {
+            this.triggerSocket(Events.SEARCH_PREVIEW_START);
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, (e: any, obj: any) => {
-            this.triggerSocket(Commands.SEARCH_RESULTS, obj);
+        $.subscribe(Events.SEARCH_RESULTS, (e: any, obj: any) => {
+            this.triggerSocket(Events.SEARCH_RESULTS, obj);
         });
 
-        $.subscribe(Commands.SEARCH_RESULT_CANVAS_CHANGED, (e: any, rect: SearchResultRect) => {
+        $.subscribe(Events.SEARCH_RESULT_CANVAS_CHANGED, (e: any, rect: SearchResultRect) => {
             this.viewPage(rect.canvasIndex);
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
-            this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
+        $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
+            this.triggerSocket(Events.SEARCH_RESULTS_EMPTY);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
             this.viewPage(thumb.index);
         });
 
-        $.subscribe(Commands.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
-            this.triggerSocket(Commands.TREE_NODE_SELECTED, node.data.path);
+        $.subscribe(Events.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+            this.triggerSocket(Events.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
-        $.subscribe(BaseCommands.UP_ARROW, () => {
+        $.subscribe(BaseEvents.UP_ARROW, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseCommands.UPDATE_SETTINGS, () => {
+        $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
             this.viewPage(this.helper.canvasIndex, true);
             const settings: ISettings = this.getSettings();
-            $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
+            $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Commands.VIEW_PAGE, (e: any, index: number) => {
-            this.triggerSocket(Commands.VIEW_PAGE, index);
+        $.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
+            this.triggerSocket(Events.VIEW_PAGE, index);
             this.viewPage(index);
         });
 
@@ -420,11 +418,11 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isDeepLinkingEnabled()){
 
             // if a highlight param is set, use it to search.
-            const highlight: string | null = this.getParam(Params.highlight);
+            const highlight: string | null = this.getData().highlight;
 
             if (highlight) {
                 highlight.replace(/\+/g, " ").replace(/"/g, "");
-                $.publish(Commands.SEARCH, [highlight]);
+                $.publish(Events.SEARCH, [highlight]);
             }
         }
     }
@@ -433,10 +431,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         // if a rotation value is in the hash params, set currentRotation
         if (this.isDeepLinkingEnabled()){
 
-            const rotation: number = Number(this.getParam(Params.rotation));
+            const rotation: number = Number(this.getData().rotation);
 
-            if (rotation){
-                $.publish(Commands.SEADRAGON_ROTATION, [rotation]);
+            if (rotation) {
+                $.publish(Events.SEADRAGON_ROTATION, [rotation]);
             }
         }
     }
@@ -447,7 +445,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (canvasIndex === -1) return;
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.getStore().config.content.canvasIndexOutOfRange);
+            this.showMessage(this.getData().config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
@@ -507,8 +505,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     viewLabel(label: string): void {
 
         if (!label) {
-            this.showMessage(this.getStore().config.modules.genericDialogue.content.emptyValue);
-            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+            this.showMessage(this.getData().config.modules.genericDialogue.content.emptyValue);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
 
@@ -517,8 +515,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (index != -1) {
             this.viewPage(index);
         } else {
-            this.showMessage(this.getStore().config.modules.genericDialogue.content.pageNotFound);
-            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+            this.showMessage(this.getData().config.modules.genericDialogue.content.pageNotFound);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         }
     }
 
@@ -590,22 +588,22 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         bookmark.index = this.helper.canvasIndex;
         bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = <string>this.getCroppedImageUri(canvas, this.getViewer());
-        bookmark.thumb = canvas.getCanonicalImageUri(this.getStore().config.options.bookmarkThumbWidth);
+        bookmark.thumb = canvas.getCanonicalImageUri(this.getData().config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
         bookmark.type = manifesto.ElementType.image().toString();
 
-        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        this.triggerSocket(BaseEvents.BOOKMARK, bookmark);
     }
 
     print(): void {
         // var args: MultiSelectionArgs = new MultiSelectionArgs();
         // args.manifestUri = this.helper.iiifResourceUri;
         // args.allCanvases = true;
-        // args.format = this.getStore().config.options.printMimeType;
+        // args.format = this.getData().config.options.printMimeType;
         // args.sequence = this.helper.getCurrentSequence().id;
         window.print();
-        this.triggerSocket(Commands.PRINT);
+        this.triggerSocket(Events.PRINT);
     }
 
     getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null {
@@ -829,8 +827,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string{
-        const configUri = this.getStore().config.uri || '';
-        let script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.getStore().embedScriptUri);
+        const configUri = this.getData().config.uri || '';
+        let script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.getData().embedScriptUri);
         return script;
     }
 
@@ -854,7 +852,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     isSearchWithinEnabled(): boolean {
-        if (!Utils.Bools.getBool(this.getStore().config.options.searchWithinEnabled, false)){
+        if (!Utils.Bools.getBool(this.getData().config.options.searchWithinEnabled, false)){
             return false;
         }
 
@@ -945,13 +943,13 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                     return a.canvasIndex - b.canvasIndex;
                 });
                 
-                $.publish(Commands.SEARCH_RESULTS, [{terms, results}]);
+                $.publish(Events.SEARCH_RESULTS, [{terms, results}]);
 
                 // reload current index as it may contain results.
                 that.viewPage(that.helper.canvasIndex, true);
             } else {
-                that.showMessage(that.getStore().config.modules.genericDialogue.content.noMatches, () => {
-                    $.publish(Commands.SEARCH_RESULTS_EMPTY);
+                that.showMessage(that.getData().config.modules.genericDialogue.content.noMatches, () => {
+                    $.publish(Events.SEARCH_RESULTS_EMPTY);
                 });
             }
         });

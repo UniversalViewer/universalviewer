@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 
 export class RestrictedDialogue extends Dialogue {
@@ -21,8 +21,8 @@ export class RestrictedDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_RESTRICTED_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_RESTRICTED_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_RESTRICTED_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_RESTRICTED_DIALOGUE;
 
         $.subscribe(this.openCommand, (s: any, e: any) => {
             this.acceptCallback = e.acceptCallback;
@@ -79,7 +79,7 @@ export class RestrictedDialogue extends Dialogue {
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
         });
 
         this.resize();

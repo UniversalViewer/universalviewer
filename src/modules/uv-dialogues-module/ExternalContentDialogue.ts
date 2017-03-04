@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 
 export class ExternalContentDialogue extends Dialogue {
@@ -15,8 +15,8 @@ export class ExternalContentDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE;
 
         $.subscribe(this.openCommand, (e: any, params: any) => {
             this.open();

@@ -1,4 +1,4 @@
-import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
@@ -37,7 +37,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, canvasIndex: number) => {
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
     }
@@ -99,7 +99,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     }
 
     isLeftPanelEnabled(): boolean{
-        return Utils.Bools.getBool(this.getStore().config.options.leftPanelEnabled, true)
+        return Utils.Bools.getBool(this.getData().config.options.leftPanelEnabled, true)
                 && (this.helper.isMultiCanvas() || this.helper.isMultiSequence());
     }
 
@@ -117,12 +117,12 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         bookmark.trackingLabel = window.trackingLabel;
         bookmark.type = manifesto.ElementType.physicalobject().toString();
 
-        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        this.triggerSocket(BaseEvents.BOOKMARK, bookmark);
     }
 
     getEmbedScript(template: string, width: number, height: number): string{
-        const configUri: string = this.getStore().config.uri || '';
-        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getStore().embedScriptUri);
+        const configUri: string = this.getData().config.uri || '';
+        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getData().embedScriptUri);
         return script;
     }
 }

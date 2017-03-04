@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 
 export class VirtexCenterPanel extends CenterPanel {
@@ -23,7 +23,7 @@ export class VirtexCenterPanel extends CenterPanel {
 
         const that = this;
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 

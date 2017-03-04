@@ -1,4 +1,4 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
 import {GenericDialogue} from "./GenericDialogue";
 
@@ -22,11 +22,11 @@ export class Shell extends BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
+        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             Shell.$overlays.show();
         });
 
-        $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
+        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             Shell.$overlays.hide();
         });
 
@@ -60,7 +60,7 @@ export class Shell extends BaseView {
         Shell.$overlays.on('click', (e) => {
             if ($(e.target).hasClass('overlays')) {
                 e.preventDefault();
-                $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
+                $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
             }
         });
 

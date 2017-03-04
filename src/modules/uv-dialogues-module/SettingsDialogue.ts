@@ -1,5 +1,6 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
+import {ILocale} from "../../ILocale";
 
 export class SettingsDialogue extends Dialogue {
 
@@ -21,8 +22,8 @@ export class SettingsDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_SETTINGS_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_SETTINGS_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_SETTINGS_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_SETTINGS_DIALOGUE;
 
         $.subscribe(this.openCommand, () => {
             this.open();
@@ -59,20 +60,22 @@ export class SettingsDialogue extends Dialogue {
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
-        var locales: any[] = this.extension.getLocales();
+        const locales: ILocale[] | null = this.extension.getLocales();
 
-        for (var i = 0; i < locales.length; i++) {
-            var locale = locales[i];
-            this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
+        if (locales) {
+            for (let i = 0; i < locales.length; i++) {
+                const locale = locales[i];
+                this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
+            }
         }
 
-        this.$localeDropDown.val(this.extension.getStore().locale);
+        this.$localeDropDown.val(this.extension.getData().locale);
 
         this.$localeDropDown.change(() => {
             this.extension.changeLocale(this.$localeDropDown.val());
         });
 
-        if (this.extension.getLocales().length < 2){
+        if (locales && locales.length < 2){
             this.$locale.hide();
         }
 
@@ -86,7 +89,7 @@ export class SettingsDialogue extends Dialogue {
     updateSettings(settings: ISettings): void {
         this.extension.updateSettings(settings);
 
-        $.publish(BaseCommands.UPDATE_SETTINGS, [settings]);
+        $.publish(BaseEvents.UPDATE_SETTINGS, [settings]);
     }
 
     open(): void {

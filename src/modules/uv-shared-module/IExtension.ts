@@ -1,7 +1,7 @@
 import {Bootstrapper} from "../../Bootstrapper";
-import {BootstrapParams} from "../../BootstrapParams";
 import {Metric} from "./Metric";
-import {Params} from "../../Params";
+import {ILocale} from "../../ILocale";
+import {IUVData} from "../../IUVData";
 
 export interface IExtension {
     addTimestamp(uri: string): string;
@@ -9,28 +9,25 @@ export interface IExtension {
     changeLocale(locale: string): void;
     create(): void;
     createModules(): void;
-    dependencyLoaded(index: number, dep: any): void;
     dependenciesLoaded(...args: any[]): void;
+    dependencyLoaded(index: number, dep: any): void;
     embedHeight: number;
     embedWidth: number;
-    getAlternateLocale(): any;
-    getCanvasIndexParam(): number;
+    getAlternateLocale(): ILocale | null;
     getCanvasLabels(label: string): string;
     getCurrentCanvases(): Manifesto.ICanvas[];
     getCurrentCanvasRange(): Manifesto.IRange | null;
+    getData(): IUVData;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
     getEmbedDomain(): string | null;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getIIIFShareUrl(): string;
-    getLocales(): any[];
+    getLocales(): ILocale[] | null;
     getPagedIndices(canvasIndex?: number): number[];
-    getParam(key: Params): string | null;
-    getSequenceIndexParam(): number;
     getSerializedLocales(): string;
     getSettings(): ISettings;
     getShareUrl(): string | null;
-    getStore(): IUVData;
     height(): number;
     helper: Manifold.IHelper;
     isCreated: boolean;
@@ -53,15 +50,14 @@ export interface IExtension {
     name: string;
     redirect(uri: string): void;
     refresh(): void;
-    reload(params?: BootstrapParams): void;
+    reload(data?: IUVData): void;
     resize(): void;
     resources: Manifold.ExternalResource[];
     sanitize(html: string): string;
-    serializeLocales(locales: any[]): string;
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
-    triggerSocket(eventName: string, eventObject?: any): void;
+    triggerSocket(eventName: string, eventObject?: any): void; // todo: can eventObject always be a IUVData?
     updateSettings(settings: ISettings): void;
     viewCanvas(canvasIndex: number): void;
     viewCollection(collection: Manifesto.ICollection): void;

@@ -1,6 +1,6 @@
 import {AutoComplete} from "../uv-shared-module/AutoComplete";
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
-import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
@@ -45,24 +45,24 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.modeChanged();
             this.updatePagingToggle();
         });
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGE_FAILED, () => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
             this.setSearchFieldValue(this.extension.helper.canvasIndex);
         });
         
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             this.openGallery();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             this.closeGallery();
         });
 
@@ -147,7 +147,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             this.$imageSelectionBox.change(() => {
                 const imageIndex: number = parseInt(this.$imageSelectionBox.val());
-                $.publish(Commands.IMAGE_SEARCH, [imageIndex]);
+                $.publish(Events.IMAGE_SEARCH, [imageIndex]);
             });
         }
 
@@ -201,17 +201,17 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$oneUpButton.onPressed(() => {
             const enabled: boolean = false;
             this.updateSettings({ pagingEnabled: enabled });
-            $.publish(Commands.PAGING_TOGGLED, [enabled]);
+            $.publish(Events.PAGING_TOGGLED, [enabled]);
         });
 
         this.$twoUpButton.onPressed(() => {
             const enabled: boolean = true;
             this.updateSettings({ pagingEnabled: enabled });
-            $.publish(Commands.PAGING_TOGGLED, [enabled]);
+            $.publish(Events.PAGING_TOGGLED, [enabled]);
         });
 
         this.$galleryButton.onPressed(() => {
-            $.publish(BaseCommands.TOGGLE_EXPAND_LEFT_PANEL);
+            $.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
         });
 
         this.setTitles();
@@ -230,10 +230,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(Commands.FIRST);
+                    $.publish(Events.FIRST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.LAST);
+                    $.publish(Events.LAST);
                     break;
             }
         });
@@ -243,10 +243,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Commands.PREV);
+                    $.publish(Events.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.NEXT);
+                    $.publish(Events.NEXT);
                     break;
             }
         });
@@ -256,10 +256,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Commands.NEXT);
+                    $.publish(Events.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.PREV);
+                    $.publish(Events.PREV);
                     break;
             }
         });
@@ -269,10 +269,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(Commands.LAST);
+                    $.publish(Events.LAST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.FIRST);
+                    $.publish(Events.FIRST);
                     break;
             }
         });
@@ -288,11 +288,11 @@ export class PagingHeaderPanel extends HeaderPanel {
             // visible, since otherwise, clicking on the "Image" label can
             // trigger unexpected/undesired side effects.
             this.$imageModeOption.on('click', (e) => {
-                $.publish(Commands.MODE_CHANGED, [Mode.image.toString()]);
+                $.publish(Events.MODE_CHANGED, [Mode.image.toString()]);
             });
 
             this.$pageModeOption.on('click', (e) => {
-                $.publish(Commands.MODE_CHANGED, [Mode.page.toString()]);
+                $.publish(Events.MODE_CHANGED, [Mode.page.toString()]);
             });
         }
 
@@ -456,13 +456,13 @@ export class PagingHeaderPanel extends HeaderPanel {
         if (!value) {
 
             this.extension.showMessage(this.content.emptyValue);
-            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
 
             return;
         }
 
         if (this.isPageModeEnabled()) {
-            $.publish(Commands.PAGE_SEARCH, [value]);
+            $.publish(Events.PAGE_SEARCH, [value]);
         } else {
             let index: number;
 
@@ -475,20 +475,20 @@ export class PagingHeaderPanel extends HeaderPanel {
             index -= 1;
 
             if (isNaN(index)) {
-                this.extension.showMessage(this.extension.getStore().config.modules.genericDialogue.content.invalidNumber);
-                $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+                this.extension.showMessage(this.extension.getData().config.modules.genericDialogue.content.invalidNumber);
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
             const asset: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
 
             if (!asset) {
-                this.extension.showMessage(this.extension.getStore().config.modules.genericDialogue.content.pageNotFound);
-                $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+                this.extension.showMessage(this.extension.getData().config.modules.genericDialogue.content.pageNotFound);
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            $.publish(Commands.IMAGE_SEARCH, [index]);
+            $.publish(Events.IMAGE_SEARCH, [index]);
         }
     }
 
@@ -586,7 +586,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         super.resize();
 
         // hide toggle buttons below minimum width
-        if (this.extension.width() < this.extension.getStore().config.options.minWidthBreakPoint){
+        if (this.extension.width() < this.extension.getData().config.options.minWidthBreakPoint){
             if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.hide();
             if (this.galleryIsVisible()) this.$galleryButton.hide();
         } else {

@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {RightPanel} from "../uv-shared-module/RightPanel";
 
 export class MoreInfoRightPanel extends RightPanel {
@@ -18,7 +18,7 @@ export class MoreInfoRightPanel extends RightPanel {
 
         super.create();
         
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, () => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             this.databind();
         });
 

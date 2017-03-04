@@ -50,7 +50,7 @@ interface Window {
     $: JQueryStatic;
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience (make this generic)
-    UV: IUVComponent;
+    UV: any;
     THREE: any;
     Event: any;
     CustomEvent: any;

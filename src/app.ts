@@ -61,9 +61,9 @@ requirejs([
     manifold: any,
     utils: any,
     URLDataProvider: any,
-    UV: any
+    UVComponent: any
 ) => {
-    window.UV = UV.default;
-    window.UV.URLDataProvider = URLDataProvider;
+    window.UV = UVComponent.default;
+    window.UV.URLDataProvider = URLDataProvider.default;
     window.dispatchEvent(new CustomEvent('uvReady'));
 });

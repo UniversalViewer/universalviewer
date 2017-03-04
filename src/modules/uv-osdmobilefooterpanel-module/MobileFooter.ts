@@ -1,5 +1,5 @@
 import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
-import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {Events} from "../../extensions/uv-seadragon-extension/Events";
 
 export class FooterPanel extends BaseFooterPanel {
 
@@ -31,15 +31,15 @@ export class FooterPanel extends BaseFooterPanel {
         this.$options.prepend(this.$zoomInButton);
 
         this.$zoomInButton.onPressed(() => {
-            $.publish(Commands.ZOOM_IN);
+            $.publish(Events.ZOOM_IN);
         });
 
         this.$zoomOutButton.onPressed(() => {
-            $.publish(Commands.ZOOM_OUT);
+            $.publish(Events.ZOOM_OUT);
         });
 
         this.$rotateButton.onPressed(() => {
-            $.publish(Commands.ROTATE);
+            $.publish(Events.ROTATE);
         });
     }
 

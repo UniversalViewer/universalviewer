@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 
 export class ClickThroughDialogue extends Dialogue {
@@ -19,8 +19,8 @@ export class ClickThroughDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_CLICKTHROUGH_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_CLICKTHROUGH_DIALOGUE;
 
         $.subscribe(this.openCommand, (e: any, params: any) => {
             this.acceptCallback = params.acceptCallback;
@@ -55,7 +55,7 @@ export class ClickThroughDialogue extends Dialogue {
         this.$acceptTermsButton.on('click', (e) => {
             e.preventDefault();
             this.close();
-            $.publish(BaseCommands.ACCEPT_TERMS);
+            $.publish(BaseEvents.ACCEPT_TERMS);
             if (this.acceptCallback) this.acceptCallback();
         });
     }
@@ -69,7 +69,7 @@ export class ClickThroughDialogue extends Dialogue {
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
         });
 
         this.resize();

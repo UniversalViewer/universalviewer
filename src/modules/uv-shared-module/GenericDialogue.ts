@@ -1,4 +1,4 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 import {Dialogue} from "./Dialogue";
 
 export class GenericDialogue extends Dialogue {
@@ -17,8 +17,8 @@ export class GenericDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_GENERIC_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_GENERIC_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_GENERIC_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_GENERIC_DIALOGUE;
 
         $.subscribe(this.openCommand, (e: any, params: any) => {
             this.acceptCallback = params.acceptCallback;
@@ -50,7 +50,7 @@ export class GenericDialogue extends Dialogue {
     }
 
     accept(): void {
-        $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
+        $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
         if (this.acceptCallback) this.acceptCallback();
     }
 

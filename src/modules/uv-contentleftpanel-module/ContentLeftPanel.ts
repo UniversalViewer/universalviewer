@@ -1,5 +1,5 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
-import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {GalleryView} from "./GalleryView";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
@@ -51,15 +51,15 @@ export class ContentLeftPanel extends LeftPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(Commands.GALLERY_THUMB_SELECTED, () => {
+        $.subscribe(Events.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
                 if (this.isFullyExpanded) {
                     this.collapseFull();
@@ -67,22 +67,22 @@ export class ContentLeftPanel extends LeftPanel {
             }
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, () => {
+        $.subscribe(Events.SEARCH_RESULTS, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_CLEARED, () => {
+        $.subscribe(Events.SEARCH_RESULTS_CLEARED, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
+        $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, () => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             if (this.isFullyExpanded){
                 this.collapseFull();
             }
@@ -170,13 +170,13 @@ export class ContentLeftPanel extends LeftPanel {
         this.$treeButton.onPressed(() => {
             this.openTreeView();
 
-            $.publish(Commands.OPEN_TREE_VIEW);
+            $.publish(Events.OPEN_TREE_VIEW);
         });
 
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
-            $.publish(Commands.OPEN_THUMBS_VIEW);
+            $.publish(Events.OPEN_THUMBS_VIEW);
         });
 
         this.setTitle(this.content.title);
@@ -475,7 +475,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
@@ -487,13 +487,13 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
+        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
+        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
@@ -506,7 +506,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     openTreeView(): void {

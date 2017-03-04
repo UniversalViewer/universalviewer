@@ -1,4 +1,4 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 
 export class Panel {
 
@@ -16,7 +16,7 @@ export class Panel {
     }
 
     create(): void {
-        $.subscribe(BaseCommands.RESIZE, () => {
+        $.subscribe(BaseEvents.RESIZE, () => {
             this.resize();
         });
     }

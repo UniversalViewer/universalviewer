@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 
 export class MoreInfoDialogue extends Dialogue {
@@ -17,8 +17,8 @@ export class MoreInfoDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_MOREINFO_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_MOREINFO_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
 
         $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
@@ -28,8 +28,8 @@ export class MoreInfoDialogue extends Dialogue {
             this.close();
         });
 
-        this.config.content = this.extension.getStore().config.modules.moreInfoRightPanel.content;
-        this.config.options = this.extension.getStore().config.modules.moreInfoRightPanel.options;
+        this.config.content = this.extension.getData().config.modules.moreInfoRightPanel.content;
+        this.config.options = this.extension.getData().config.modules.moreInfoRightPanel.options;
 
         // create ui
         this.$title = $('<h1>' + this.config.content.title + '</h1>');

@@ -1,4 +1,4 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
 import IThumb = Manifold.IThumb;
 
@@ -21,15 +21,15 @@ export class ThumbsView extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e: any, index: any) => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, index: any) => {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(BaseCommands.LOGIN, () => {
+        $.subscribe(BaseEvents.LOGIN, () => {
             this.loadThumbs();
         });
 
-        $.subscribe(BaseCommands.CLICKTHROUGH, () => {
+        $.subscribe(BaseEvents.CLICKTHROUGH, () => {
             this.loadThumbs();
         });
 
@@ -145,7 +145,7 @@ export class ThumbsView extends BaseView {
             e.preventDefault();
             const data = $.view(this).data;
             that.lastThumbClickedIndex = data.index;
-            $.publish(BaseCommands.THUMB_SELECTED, [data]);
+            $.publish(BaseEvents.THUMB_SELECTED, [data]);
         });
 
         this.setLabel();

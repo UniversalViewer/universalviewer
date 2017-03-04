@@ -1,9 +1,9 @@
-import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
-import {Commands} from "./Commands";
 import {DownloadDialogue} from "./DownloadDialogue";
+import {Events} from "./Events";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
 import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
 import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
@@ -40,38 +40,38 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
-            $.publish(BaseCommands.TOGGLE_FULLSCREEN);
+            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
         $(window).bind('exitfullscreen', () => {
-            $.publish(BaseCommands.TOGGLE_FULLSCREEN);
+            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, canvasIndex: number) => {
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(Commands.MEDIA_ENDED, () => {
-            this.triggerSocket(Commands.MEDIA_ENDED);
+        $.subscribe(Events.MEDIA_ENDED, () => {
+            this.triggerSocket(Events.MEDIA_ENDED);
         });
 
-        $.subscribe(Commands.MEDIA_PAUSED, () => {
-            this.triggerSocket(Commands.MEDIA_PAUSED);
+        $.subscribe(Events.MEDIA_PAUSED, () => {
+            this.triggerSocket(Events.MEDIA_PAUSED);
         });
 
-        $.subscribe(Commands.MEDIA_PLAYED, () => {
-            this.triggerSocket(Commands.MEDIA_PLAYED);
+        $.subscribe(Events.MEDIA_PLAYED, () => {
+            this.triggerSocket(Events.MEDIA_PLAYED);
         });
     }
 
@@ -126,7 +126,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     }
 
     isLeftPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.getStore().config.options.leftPanelEnabled, true)
+        return Utils.Bools.getBool(this.getData().config.options.leftPanelEnabled, true)
                 && ((this.helper.isMultiCanvas() || this.helper.isMultiSequence()) || this.helper.hasResources());
     }
 
@@ -149,12 +149,12 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             bookmark.type = manifesto.ElementType.sound().toString();
         }
 
-        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        this.triggerSocket(BaseEvents.BOOKMARK, bookmark);
     }
 
     getEmbedScript(template: string, width: number, height: number): string {
-        const configUri: string = this.getStore().config.uri || '';
-        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getStore().embedScriptUri);
+        const configUri: string = this.getData().config.uri || '';
+        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getData().embedScriptUri);
         return script;
     }
 

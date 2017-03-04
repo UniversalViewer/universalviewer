@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {ThumbsView} from "./ThumbsView";
 
@@ -113,25 +113,25 @@ export class ResourcesLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
         super.expandFullFinish();
 
-        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
+        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
+        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
         super.collapseFullFinish();
 
-        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     resize(): void {

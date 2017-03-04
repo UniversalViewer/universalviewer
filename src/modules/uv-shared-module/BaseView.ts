@@ -33,7 +33,7 @@ export class BaseView extends Panel{
         if (that.modules && that.modules.length) {
             that.modules = that.modules.reverse();
             $.each(that.modules, (index: number, moduleName: string) => {
-                that.config = $.extend(true, that.config, that.extension.config.modules[moduleName]);
+                that.config = $.extend(true, that.config, that.extension.getData().config.modules[moduleName]);
             });
         }
 

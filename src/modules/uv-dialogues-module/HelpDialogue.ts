@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 
 export class HelpDialogue extends Dialogue {
@@ -17,8 +17,8 @@ export class HelpDialogue extends Dialogue {
         
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_HELP_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_HELP_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_HELP_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_HELP_DIALOGUE;
 
         $.subscribe(this.openCommand, () => {
             this.open();

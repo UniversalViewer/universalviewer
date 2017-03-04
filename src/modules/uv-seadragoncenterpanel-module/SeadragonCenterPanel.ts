@@ -1,11 +1,10 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Bounds} from "../../extensions/uv-seadragon-extension/Bounds";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import {Commands} from "../../extensions/uv-seadragon-extension/Commands";
+import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Metrics} from "../uv-shared-module/Metrics";
-import {Params} from "../../Params";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
 
@@ -54,60 +53,60 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, (e: any, args: any) => {
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifold.ExternalResource[]) => {
+        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifold.ExternalResource[]) => {
             this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
             });
         });
 
-        $.subscribe(Commands.CLEAR_SEARCH, () => {
+        $.subscribe(Events.CLEAR_SEARCH, () => {
             this.whenCreated(() => {
                 (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
                 this.clearSearchResults();
             });
         });
 
-        $.subscribe(Commands.VIEW_PAGE, () => {
+        $.subscribe(Events.VIEW_PAGE, () => {
             (<ISeadragonExtension>this.extension).previousSearchResultRect = null;
             (<ISeadragonExtension>this.extension).currentSearchResultRect = null;
         });
 
-        $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
+        $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
             this.whenCreated(() => {
                 this.nextSearchResult();
             });
         });
 
-        $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
+        $.subscribe(Events.PREV_SEARCH_RESULT, () => {
             this.whenCreated(() => {
                 this.prevSearchResult();
             });
         });
 
-        $.subscribe(Commands.ZOOM_IN, () => {
+        $.subscribe(Events.ZOOM_IN, () => {
             this.whenCreated(() => {
                 this.zoomIn();
             });
         });
 
-        $.subscribe(Commands.ZOOM_OUT, () => {
+        $.subscribe(Events.ZOOM_OUT, () => {
             this.whenCreated(() => {
                 this.zoomOut();
             });
         });
 
-        $.subscribe(Commands.ROTATE, () => {
+        $.subscribe(Events.ROTATE, () => {
             this.whenCreated(() => {
                 this.rotateRight();
             });
         });
 
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.whenCreated(() => {
                 this.updateResponsiveView();
             });
@@ -158,7 +157,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.updateAttribution();
 
         // todo: use compiler flag (when available)
-        const prefixUrl: string = 'themes/' + this.extension.getStore().config.options.theme + '/img/uv-seadragoncenterpanel-module/';
+        const prefixUrl: string = 'themes/' + this.extension.getData().config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
@@ -182,7 +181,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: prefixUrl,
             gestureSettingsMouse: {
-                clickToZoom: !!this.extension.getStore().config.options.clickToZoomEnabled
+                clickToZoom: !!this.extension.getData().config.options.clickToZoomEnabled
             },
             navImages: {
                 zoomIn: {
@@ -292,16 +291,16 @@ export class SeadragonCenterPanel extends CenterPanel {
         //});
 
         this.viewer.addHandler('resize', (viewer: any) => {
-            $.publish(Commands.SEADRAGON_RESIZE, [viewer]);
+            $.publish(Events.SEADRAGON_RESIZE, [viewer]);
             this.viewerResize(viewer);
         });
 
         this.viewer.addHandler('animation-start', (viewer: any) => {
-            $.publish(Commands.SEADRAGON_ANIMATION_START, [viewer]);
+            $.publish(Events.SEADRAGON_ANIMATION_START, [viewer]);
         });
 
         this.viewer.addHandler('animation', (viewer: any) => {
-            $.publish(Commands.SEADRAGON_ANIMATION, [viewer]);
+            $.publish(Events.SEADRAGON_ANIMATION, [viewer]);
         });
 
         this.viewer.addHandler('animation-finish', (viewer: any) => {
@@ -309,11 +308,11 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             this.updateVisibleSearchResultRects();
 
-            $.publish(Commands.SEADRAGON_ANIMATION_FINISH, [viewer]);
+            $.publish(Events.SEADRAGON_ANIMATION_FINISH, [viewer]);
         });
 
         this.viewer.addHandler('rotate', (args: any) => {
-            $.publish(Commands.SEADRAGON_ROTATION, [args.degrees]);
+            $.publish(Events.SEADRAGON_ROTATION, [args.degrees]);
         });
 
         this.title = this.extension.helper.getLabel();
@@ -360,10 +359,10 @@ export class SeadragonCenterPanel extends CenterPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Commands.PREV);
+                    $.publish(Events.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.NEXT);
+                    $.publish(Events.NEXT);
                     break;
             }
         });
@@ -378,10 +377,10 @@ export class SeadragonCenterPanel extends CenterPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Commands.NEXT);
+                    $.publish(Events.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Commands.PREV);
+                    $.publish(Events.PREV);
                     break;
             }
         });
@@ -491,7 +490,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     openPagesHandler(): void {
 
-        $.publish(Commands.SEADRAGON_OPEN);
+        $.publish(Events.SEADRAGON_OPEN);
 
         if (this.extension.helper.isMultiCanvas() && !this.extension.helper.isContinuous()) {
 
@@ -552,13 +551,13 @@ export class SeadragonCenterPanel extends CenterPanel {
         // if this is the first load and there are initial bounds, fit to those.
         if (this.isFirstLoad) {
 
-            this.initialRotation = this.extension.getParam(Params.rotation);
+            this.initialRotation = this.extension.getData().rotation;
 
             if (this.initialRotation) {
                 this.viewer.viewport.setRotation(parseInt(this.initialRotation));
             }
 
-            this.initialBounds = this.extension.getParam(Params.xywh);
+            this.initialBounds = this.extension.getData().xywh;
 
             if (this.initialBounds) {
                 this.initialBounds = Bounds.fromString(this.initialBounds);
@@ -734,7 +733,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.getStore().config.options.zoomToSearchResultEnabled, true);
+        return Utils.Bools.getBool(this.extension.getData().config.options.zoomToSearchResultEnabled, true);
     }
 
     nextSearchResult(): void {
@@ -763,12 +762,12 @@ export class SeadragonCenterPanel extends CenterPanel {
             // if the rect's canvasIndex is greater than the current canvasIndex
             if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentSearchResultRect = foundRect;
-                $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [foundRect]);
+                $.publish(Events.SEARCH_RESULT_CANVAS_CHANGED, [foundRect]);
             } else {
                 this.zoomToSearchResult(<SearchResultRect>foundRect);
             }
         } else {
-            $.publish(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            $.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
@@ -798,12 +797,12 @@ export class SeadragonCenterPanel extends CenterPanel {
             // if the rect's canvasIndex is less than the current canvasIndex
             if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentSearchResultRect = foundRect;
-                $.publish(Commands.SEARCH_RESULT_CANVAS_CHANGED, [foundRect]);
+                $.publish(Events.SEARCH_RESULT_CANVAS_CHANGED, [foundRect]);
             } else {
                 this.zoomToSearchResult(foundRect);
             }
         } else {
-            $.publish(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            $.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
@@ -836,7 +835,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.highlightSearchResultRect(searchResultRect);
 
-        $.publish(Commands.SEARCH_RESULT_RECT_CHANGED);
+        $.publish(Events.SEARCH_RESULT_RECT_CHANGED);
     }
 
     highlightSearchResultRect(searchResultRect: SearchResultRect): void {
@@ -931,7 +930,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     setFocus(): void {
         if (!this.$canvas.is(":focus")) {
-            if (this.extension.getStore().config.options.allowStealFocus) {
+            if (this.extension.getData().config.options.allowStealFocus) {
                 this.$canvas.focus();
             }
         }

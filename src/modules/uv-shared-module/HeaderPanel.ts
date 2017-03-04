@@ -1,5 +1,6 @@
-import {BaseCommands} from "./BaseCommands";
+import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
+import {ILocale} from "../../ILocale";
 import {Information} from "../uv-shared-module/Information";
 import {InformationAction} from "../uv-shared-module/InformationAction";
 import {InformationArgs} from "../uv-shared-module/InformationArgs";
@@ -26,11 +27,11 @@ export class HeaderPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_INFORMATION, (e: any, args: InformationArgs) => {
+        $.subscribe(BaseEvents.SHOW_INFORMATION, (e: any, args: InformationArgs) => {
             this.showInformation(args);
         });
 
-        $.subscribe(BaseCommands.HIDE_INFORMATION, () => {
+        $.subscribe(BaseEvents.HIDE_INFORMATION, () => {
             this.hideInformation();
         });
 
@@ -65,7 +66,7 @@ export class HeaderPanel extends BaseView {
         this.$informationBox.find('.close').attr('title', this.content.close);
         this.$informationBox.find('.close').on('click', (e) => {
             e.preventDefault();
-            $.publish(BaseCommands.HIDE_INFORMATION);
+            $.publish(BaseEvents.HIDE_INFORMATION);
         });
 
         this.$localeToggleButton.on('click', () => {
@@ -73,7 +74,7 @@ export class HeaderPanel extends BaseView {
         });
 
         this.$settingsButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_SETTINGS_DIALOGUE);
+            $.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
         this.updateLocaleToggle();
@@ -104,7 +105,13 @@ export class HeaderPanel extends BaseView {
     }
 
     localeToggleIsVisible(): boolean {
-        return this.extension.getLocales().length > 1 && Utils.Bools.getBool(this.options.localeToggleEnabled, false);
+        const locales: ILocale[] | null = this.extension.getLocales();
+
+        if (locales) {
+            return locales.length > 1 && Utils.Bools.getBool(this.options.localeToggleEnabled, false);
+        }
+        
+        return false;
     }
 
     showInformation(args: InformationArgs): void {
@@ -139,7 +146,7 @@ export class HeaderPanel extends BaseView {
 
     updateSettings(settings: ISettings): void {
         this.extension.updateSettings(settings);
-        $.publish(BaseCommands.UPDATE_SETTINGS, [settings]);
+        $.publish(BaseEvents.UPDATE_SETTINGS, [settings]);
     }
 
     resize(): void {
@@ -162,7 +169,7 @@ export class HeaderPanel extends BaseView {
         }
 
         // hide toggle buttons below minimum width
-        if (this.extension.width() < this.extension.config.options.minWidthBreakPoint){
+        if (this.extension.width() < this.extension.getData().config.options.minWidthBreakPoint){
             if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
         } else {
             if (this.localeToggleIsVisible()) this.$localeToggleButton.show();

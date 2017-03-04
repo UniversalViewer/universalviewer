@@ -1,4 +1,4 @@
-import {BaseCommands} from "../uv-shared-module/BaseCommands";
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
 import {ILoginDialogueOptions} from "../uv-shared-module/ILoginDialogueOptions";
 
@@ -24,8 +24,8 @@ export class LoginDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_LOGIN_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_LOGIN_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_LOGIN_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_LOGIN_DIALOGUE;
 
         $.subscribe(this.openCommand, (s: any, e: any) => {
             this.loginCallback = e.loginCallback;
@@ -94,7 +94,7 @@ export class LoginDialogue extends Dialogue {
         var message: string = this.resource.loginService.getProperty('description');
 
         if (this.options.warningMessage){
-            message = '<span class="warning">' + this.extension.getStore().config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
+            message = '<span class="warning">' + this.extension.getData().config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
         }
 
         this.updateLogoutButton();
@@ -104,7 +104,7 @@ export class LoginDialogue extends Dialogue {
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
         });
 
         if (this.options.showCancelButton){

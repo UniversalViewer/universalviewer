@@ -1,4 +1,4 @@
-import {BaseCommands} from "../../modules/uv-shared-module/BaseCommands";
+import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {Bootstrapper} from "../../Bootstrapper";
@@ -36,28 +36,28 @@ export class Extension extends BaseExtension implements IPDFExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
             this.viewCanvas(thumb.index);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
+        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.hide();
             }
         });
 
-        $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
+        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
             }
@@ -132,12 +132,12 @@ export class Extension extends BaseExtension implements IPDFExtension {
         bookmark.trackingLabel = window.trackingLabel;
         bookmark.type = manifesto.ElementType.document().toString();
 
-        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        this.triggerSocket(BaseEvents.BOOKMARK, bookmark);
     }
 
     getEmbedScript(template: string, width: number, height: number): string{
-        const configUri = this.getStore().config.uri || '';
-        const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getStore().embedScriptUri);
+        const configUri = this.getData().config.uri || '';
+        const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getData().embedScriptUri);
         return script;
     }
 }

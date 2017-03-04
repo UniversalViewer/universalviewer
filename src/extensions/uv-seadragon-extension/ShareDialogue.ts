@@ -1,4 +1,4 @@
-import {Commands} from "./Commands";
+import {Events} from "./Events";
 import {ISeadragonExtension} from "./ISeadragonExtension";
 import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
 
@@ -7,11 +7,11 @@ export class ShareDialogue extends BaseShareDialogue {
     constructor($element: JQuery) {
         super($element);
 
-        $.subscribe(Commands.SEADRAGON_OPEN, () => {
+        $.subscribe(Events.SEADRAGON_OPEN, () => {
             this.update();
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, () => {
+        $.subscribe(Events.SEADRAGON_ANIMATION_FINISH, () => {
             this.update();
         });
     }
