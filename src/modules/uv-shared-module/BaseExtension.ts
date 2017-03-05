@@ -1046,33 +1046,26 @@ export class BaseExtension implements IExtension {
     }
 
     getAlternateLocale(): ILocale | null {
-        const locales: ILocale[] | null = this.getLocales();
+        const locales: ILocale[] = this.getLocales();
         let alternateLocale: ILocale | null = null;
 
-        if (locales) {
-            for (let i = 0; i < locales.length; i++) {
-                const locale: ILocale = locales[i];
-                if (locale.name !== this.getData().locale) {
-                    alternateLocale = locale;
-                }
-            }
+        if (locales.length > 1) {
+            alternateLocale = locales[1];
         }
 
         return alternateLocale;
     }
 
-    getLocales(): ILocale[] | null {
+    getLocales(): ILocale[] {
         return this.getData().locales;
     }
 
     getSerializedLocales(): string {
-        return this.serializeLocales(this.getData().locales);
+        return this.serializeLocales(this.getLocales());
     }
 
-    serializeLocales(locales: ILocale[] | null): string {
+    serializeLocales(locales: ILocale[]): string {
         let serializedLocales: string = '';
-        
-        if (!locales) return serializedLocales;
 
         for (let i = 0; i < locales.length; i++) {
             const l = locales[i];
@@ -1091,22 +1084,20 @@ export class BaseExtension implements IExtension {
         // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
 
         // re-order locales so the passed locale is first
-        let locales: ILocale[] | null = this.getData().locales;
+        let locales: ILocale[] = this.getLocales();
 
-        if (locales) {
-            locales = locales.clone();
+        locales = locales.clone();
 
-            const index: number = locales.findIndex((l: any) => {
-                return l.name === locale;
-            });
+        const index: number = locales.findIndex((l: any) => {
+            return l.name === locale;
+        });
 
-            locales.move(index, 0);
+        locales.move(index, 0);
 
-            const data: IUVData = <IUVData>{};
-            data.locale = this.serializeLocales(locales);
+        const data: IUVData = <IUVData>{};
+        data.locales = locales;
 
-            this.reload(data);
-        }
+        this.reload(data);
     }
 
     // auth

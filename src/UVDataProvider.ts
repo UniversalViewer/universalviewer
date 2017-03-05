@@ -1,40 +1,29 @@
-//import {ILocale} from "./ILocale";
+import {ILocale} from "./ILocale";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
-import {Params} from "./Params";
 
 export class UVDataProvider implements IUVDataProvider {
     
-    public data: IUVData = <IUVData>{};
-
     constructor() {
 
     }
 
-    public assign(data: IUVData): void {
-        this.data = Object.assign(this.data, data);
+    // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' and return ILocale array.
+    public parseLocales(locales: string): ILocale[] {
+
+        const parsedLocales: ILocale[] = [];
+        const l: string[] = locales.split(',');
+
+        for (let i = 0; i < l.length; i++) {
+            const v: string[] = l[i].split(':');
+            parsedLocales.push(<ILocale>{
+                name: v[0].trim(),
+                label: (v[1]) ? v[1].trim() : ""
+            });
+        }
+
+        return parsedLocales;
     }
-
-    // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' into array
-    // private _parseLocale(locale: string | null): void {
-        
-    //     if (!locale) {
-    //         return;
-    //     }
-        
-    //     this.data.locales = [];
-    //     const l: string[] = locale.split(',');
-
-    //     for (let i = 0; i < l.length; i++) {
-    //         const v: string[] = l[i].split(':');
-    //         this.data.locales.push(<ILocale>{
-    //             name: v[0].trim(),
-    //             label: (v[1]) ? v[1].trim() : ""
-    //         });
-    //     }
-
-    //     this.data.locale = this.data.locales[0].name;
-    // }
 
     // private _parseLocales(): void {
 
@@ -73,11 +62,15 @@ export class UVDataProvider implements IUVDataProvider {
 
     // }
 
-    public getParam(key: Params): string | null {
-        return null;
+    public data(): IUVData {
+        return <IUVData>{};
     }
 
-    public setParam(key: Params, value: string): void {
+    public get<T>(key: string, defaultValue: T): T {
+        return <T>new Object();
+    }
+
+    public set<T>(key: string, value: T): void {
 
     }
 }

@@ -12,6 +12,7 @@ import {FooterPanel as MobileFooterPanel} from "../../modules/uv-osdmobilefooter
 import {FooterPanel} from "../../modules/uv-searchfooterpanel-module/FooterPanel";
 import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
 import {ISeadragonExtension} from "./ISeadragonExtension";
+import {ISeadragonExtensionData} from "./ISeadragonExtensionData";
 import {Metrics} from "../../modules/uv-shared-module/Metrics";
 import {Mode} from "./Mode";
 import {MoreInfoDialogue} from "../../modules/uv-dialogues-module/MoreInfoDialogue";
@@ -418,7 +419,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isDeepLinkingEnabled()){
 
             // if a highlight param is set, use it to search.
-            const highlight: string | null = this.getData().highlight;
+            const highlight: string | null = (<ISeadragonExtensionData>this.getData()).highlight;
 
             if (highlight) {
                 highlight.replace(/\+/g, " ").replace(/"/g, "");
@@ -431,7 +432,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         // if a rotation value is in the hash params, set currentRotation
         if (this.isDeepLinkingEnabled()){
 
-            const rotation: number = Number(this.getData().rotation);
+            const rotation: number | null = (<ISeadragonExtensionData>this.getData()).rotation;
 
             if (rotation) {
                 $.publish(Events.SEADRAGON_ROTATION, [rotation]);

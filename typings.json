@@ -3,7 +3,7 @@
   "dependencies": {},
   "globalDependencies": {
     "base-component": "github:viewdir/base-component/dist/base-component.d.ts#es6",
-    "ex": "github:BSick7/exjs/dist/ex.d.ts",
+    "exjs": "github:BSick7/exjs/dist/ex.d.ts#0.5.0",
     "extensions": "github:edsilv/extensions/dist/extensions.d.ts#es6",
     "http-status-codes": "github:edsilv/http-status-codes/dist/http-status-codes.d.ts#v0.0.4",
     "iiif-gallery-component": "github:viewdir/iiif-gallery-component/dist/iiif-gallery-component.d.ts#es6",

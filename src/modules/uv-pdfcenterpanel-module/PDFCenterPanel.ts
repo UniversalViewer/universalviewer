@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import {IPDFExtensionData} from "../../extensions/uv-pdf-extension/IPDFExtensionData";
 
 declare var PDFView: any;
 
@@ -48,10 +49,10 @@ export class PDFCenterPanel extends CenterPanel {
                     PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                     PDFJS.DEFAULT_URL = pdfUri;
 
-                    const anchorParam: string | null = that.extension.getData().anchor;
+                    const anchor: string | null = (<IPDFExtensionData>that.extension.getData()).anchor;
 
-                    if (anchorParam) {
-                        const anchorIndex: number = (1 + parseInt(anchorParam)) || 0;
+                    if (anchor) {
+                        const anchorIndex: number = (1 + parseInt(anchor)) || 0;
                         PDFView.initialBookmark = "page=" + anchorIndex;
                     }
 

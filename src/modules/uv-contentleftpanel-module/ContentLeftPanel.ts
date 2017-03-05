@@ -226,8 +226,12 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     updateTreeViewOptions(): void {
-        const treeData: ITreeNode = this.getTree();
+        const treeData: ITreeNode | null = this.getTree();
         
+        if (!treeData) {
+            return;
+        }
+
         if (this.isCollection() && this.extension.helper.treeHasNavDates(treeData)){
             this.$treeViewOptions.show();
         } else {
@@ -262,8 +266,13 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     isCollection(): boolean {
-        var treeData: ITreeNode = this.getTree();
-        return treeData.data.type === manifesto.TreeNodeType.collection().toString();
+        var treeData: ITreeNode | null = this.getTree();
+
+        if (treeData) {
+            return treeData.data.type === manifesto.TreeNodeType.collection().toString();
+        }
+        
+        throw new Error("Tree not available");
     }
 
     databindTreeView(): void {
@@ -427,7 +436,7 @@ export class ContentLeftPanel extends LeftPanel {
         return topRangeIndex;
     }
 
-    getTree(): ITreeNode {
+    getTree(): ITreeNode | null {
         const topRangeIndex: number = this.getSelectedTopRangeIndex();
         return this.extension.helper.getTree(topRangeIndex, Manifold.TreeSortType.NONE);
     }
@@ -440,7 +449,7 @@ export class ContentLeftPanel extends LeftPanel {
             let treeEnabled: boolean = Utils.Bools.getBool(this.config.options.treeEnabled, true);
             const thumbsEnabled: boolean = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
-            const treeData: ITreeNode = this.getTree();
+            const treeData: ITreeNode | null = this.getTree();
 
             if (!treeData || !treeData.nodes.length) {
                 treeEnabled = false;
@@ -462,10 +471,10 @@ export class ContentLeftPanel extends LeftPanel {
         const defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
         const defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
 
-        const treeData: ITreeNode = this.getTree();
+        const treeData: ITreeNode | null = this.getTree();
 
         if (defaultToTreeEnabled){
-            if (treeData.nodes.length > defaultToTreeIfGreaterThan){
+            if (treeData && treeData.nodes.length > defaultToTreeIfGreaterThan){
                 return false;
             }
         }

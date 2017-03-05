@@ -42,6 +42,7 @@ module.exports = function (grunt) {
                     noUnusedParameters: false,
                     strictNullChecks: true,
                     suppressImplicitAnyIndexErrors: true,
+                    target: "es3",
                     types: ['requirejs', 'jquery', 'modernizr', 'three']
                 }
             },
@@ -61,6 +62,7 @@ module.exports = function (grunt) {
                     noUnusedParameters: false,
                     strictNullChecks: true,
                     suppressImplicitAnyIndexErrors: true,
+                    target: "es3",
                     types: ['requirejs', 'jquery', 'modernizr', 'three']
                 }
             }

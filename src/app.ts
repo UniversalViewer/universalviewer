@@ -41,7 +41,7 @@ requirejs([
     './lib/manifold.min.js',
     './lib/utils.min.js',
     'URLDataProvider',
-    'UV'
+    'UVComponent'
 ], (
     base64: any,
     browserdetect: any,

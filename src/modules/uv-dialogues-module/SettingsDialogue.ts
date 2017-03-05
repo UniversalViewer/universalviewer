@@ -60,7 +60,7 @@ export class SettingsDialogue extends Dialogue {
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
-        const locales: ILocale[] | null = this.extension.getLocales();
+        const locales: ILocale[] = this.extension.getLocales();
 
         if (locales) {
             for (let i = 0; i < locales.length; i++) {
@@ -69,7 +69,7 @@ export class SettingsDialogue extends Dialogue {
             }
         }
 
-        this.$localeDropDown.val(this.extension.getData().locale);
+        this.$localeDropDown.val(locales[0].name);
 
         this.$localeDropDown.change(() => {
             this.extension.changeLocale(this.$localeDropDown.val());

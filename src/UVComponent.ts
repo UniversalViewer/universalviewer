@@ -70,8 +70,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     }
 
     public set(data: IUVData): void {
-        const bootstrapper: Bootstrapper = new Bootstrapper(this._dataProvider, this._extensions);
-        bootstrapper.bootstrap();
+        const bootstrapper: Bootstrapper = new Bootstrapper(this._extensions);
+        bootstrapper.bootstrap(data);
     }
     
     protected _resize(): void {

@@ -24,11 +24,11 @@
     <div id="app"></div>
 
     <script type="text/javascript">
-        var app = document.getElementById("app");
+        var app = document.getElementById('app');
         var width = window.innerWidth || document.documentElement.clientWidth;
         var height = window.innerHeight || document.documentElement.clientHeight;
-        app.setAttribute("style", "width:" + width + "px");
-        app.setAttribute("style", "height:" + height + "px");
+        app.setAttribute('style', 'width:' + width + 'px');
+        app.setAttribute('style', 'height:' + height + 'px');
 
         window.addEventListener('uvReady', function(e) { 
 
@@ -39,18 +39,21 @@
                 data: urlDataProvider.data()
             });
             
-            uv.on('openseadragonExtension.xywhChanged', function(xywh) {
-                urlDataProvider.setParam('xywh', xywh);
+            uv.on('canvasIndexChanged', function(index) {
+                urlDataProvider.set('cv', index);
             });
 
-            uv.on('openseadragonExtension.rotationChanged', function(xywh) {
-                urlDataProvider.setParam('xywh', xywh);
+            uv.on('openseadragonExtension.rotationChanged', function(rotation) {
+                urlDataProvider.set('r', rotation);
+            });
+
+            uv.on('openseadragonExtension.xywhChanged', function(xywh) {
+                urlDataProvider.set('xywh', xywh);
             });
 
             uv.on('reload', function(data) {
                 data.isReload = true;
-                urlDataProvider.assign(data);
-                uv.set(urlDataProvider.data());
+                uv.set(Object.assign(urlDataProvider.data(), data));
             });
 
         }, false);

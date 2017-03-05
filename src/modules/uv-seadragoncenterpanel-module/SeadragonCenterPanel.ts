@@ -4,6 +4,7 @@ import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
 import {Metrics} from "../uv-shared-module/Metrics";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
@@ -551,13 +552,13 @@ export class SeadragonCenterPanel extends CenterPanel {
         // if this is the first load and there are initial bounds, fit to those.
         if (this.isFirstLoad) {
 
-            this.initialRotation = this.extension.getData().rotation;
+            this.initialRotation = (<ISeadragonExtensionData>this.extension.getData()).rotation;
 
             if (this.initialRotation) {
                 this.viewer.viewport.setRotation(parseInt(this.initialRotation));
             }
 
-            this.initialBounds = this.extension.getData().xywh;
+            this.initialBounds = (<ISeadragonExtensionData>this.extension.getData()).xywh;
 
             if (this.initialBounds) {
                 this.initialBounds = Bounds.fromString(this.initialBounds);

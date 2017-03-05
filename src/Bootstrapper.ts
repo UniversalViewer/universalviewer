@@ -41,7 +41,7 @@ export class Bootstrapper {
             manifestIndex: this.data.manifestIndex,
             sequenceIndex: this.data.sequenceIndex,
             canvasIndex: this.data.canvasIndex,
-            locale: this.data.locale
+            locale: this.data.locales[0].name
         }).then((helper: Manifold.IHelper) => {
             
             let trackingLabel: string = helper.getTrackingLabel();
@@ -110,7 +110,7 @@ export class Bootstrapper {
         this.getConfigExtension(extension, (configExtension: any) => {
 
             // todo: use a compiler flag when available
-            const configUri: string = 'lib/' + extension.name + '.' + that.data.locale + '.config.json';
+            const configUri: string = 'lib/' + extension.name + '.' + that.data.locales[0].name + '.config.json';
 
             $.getJSON(configUri, (config) => {
                 this.extendConfig(extension, config, configExtension, cb);
@@ -133,7 +133,7 @@ export class Bootstrapper {
 
     getConfigExtension(extension: any, cb: (configExtension: any) => void): void {
 
-        const sessionConfig: string | null = sessionStorage.getItem(extension.name + '.' + this.data.locale);
+        const sessionConfig: string | null = sessionStorage.getItem(extension.name + '.' + this.data.locales[0].name);
 
         if (sessionConfig) { // if config is stored in sessionstorage
             cb(JSON.parse(sessionConfig));
