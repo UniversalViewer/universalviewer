@@ -1,5 +1,4 @@
 import {BaseEvents} from "./BaseEvents";
-import {Bootstrapper} from "../../Bootstrapper";
 import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
 import {IExtension} from "./IExtension";
 import {ILocale} from "../../ILocale";
@@ -17,6 +16,7 @@ import {SynchronousRequire} from "../../SynchronousRequire";
 import ExternalResource = Manifold.ExternalResource;
 import IAccessToken = Manifesto.IAccessToken;
 import IThumb = Manifold.IThumb;
+import UVComponent from "../../UVComponent";
 
 export class BaseExtension implements IExtension {
 
@@ -24,8 +24,9 @@ export class BaseExtension implements IExtension {
     $element: JQuery;
     $loginDialogue: JQuery;
     $restrictedDialogue: JQuery;
-    bootstrapper: Bootstrapper;
     clickThroughDialogue: ClickThroughDialogue;
+    component: UVComponent;
+    data: IUVData;
     embedHeight: number;
     embedWidth: number;
     extensions: any;
@@ -45,8 +46,8 @@ export class BaseExtension implements IExtension {
     shifted: boolean = false;
     tabbing: boolean = false;
 
-    constructor(bootstrapper: Bootstrapper) {
-        this.bootstrapper = bootstrapper;
+    constructor() {
+
     }
 
     public create(): void {
@@ -54,7 +55,7 @@ export class BaseExtension implements IExtension {
         const that = this;
 
         this.$element = $('#app');
-        this.$element.data("bootstrapper", this.bootstrapper);
+        this.$element.data("component", this.component);
 
         // initial sizing.
         const $win: JQuery = $(window);
@@ -65,7 +66,7 @@ export class BaseExtension implements IExtension {
 
         if (!this.getData().isReload && Utils.Documents.isInIFrame()) {
             // communication with parent frame (if it exists).
-            this.bootstrapper.socket = new easyXDM.Socket({
+            this.component.socket = new easyXDM.Socket({
                 onMessage: (message: any, origin: any) => {
                     message = $.parseJSON(message);
                     this.handleParentFrameEvent(message);
@@ -73,7 +74,7 @@ export class BaseExtension implements IExtension {
             });
         }
 
-        this.triggerSocket(BaseEvents.LOAD, {
+        this.fire(BaseEvents.LOAD, {
             bootstrapper: {
                 store: this.getData()
             },
@@ -126,7 +127,7 @@ export class BaseExtension implements IExtension {
                     //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
 
                     if (iiifResourceUri) {
-                        this.triggerSocket(BaseEvents.DROP, iiifResourceUri);
+                        this.fire(BaseEvents.DROP, iiifResourceUri);
                         const data: IUVData = <IUVData>{};
                         data.iiifResourceUri = iiifResourceUri;
                         this.reload(data);
@@ -203,74 +204,74 @@ export class BaseExtension implements IExtension {
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
         $.subscribe(BaseEvents.ACCEPT_TERMS, () => {
-            this.triggerSocket(BaseEvents.ACCEPT_TERMS);
+            this.fire(BaseEvents.ACCEPT_TERMS);
         });
 
         $.subscribe(BaseEvents.LOGIN_FAILED, () => {
-            this.triggerSocket(BaseEvents.LOGIN_FAILED);
+            this.fire(BaseEvents.LOGIN_FAILED);
             this.showMessage(this.getData().config.content.authorisationFailedMessage);
         });
 
         $.subscribe(BaseEvents.LOGIN, () => {
             this.isLoggedIn = true;
-            this.triggerSocket(BaseEvents.LOGIN);
+            this.fire(BaseEvents.LOGIN);
         });
 
         $.subscribe(BaseEvents.LOGOUT, () => {
             this.isLoggedIn = false;
-            this.triggerSocket(BaseEvents.LOGOUT);
+            this.fire(BaseEvents.LOGOUT);
         });
 
         $.subscribe(BaseEvents.BOOKMARK, () => {
             this.bookmark();
-            this.triggerSocket(BaseEvents.BOOKMARK);
+            this.fire(BaseEvents.BOOKMARK);
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
-            this.triggerSocket(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+            this.fire(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            this.triggerSocket(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
+            this.fire(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
         });
 
         $.subscribe(BaseEvents.CLICKTHROUGH, () => {
-            this.triggerSocket(BaseEvents.CLICKTHROUGH);
+            this.fire(BaseEvents.CLICKTHROUGH);
         });
 
         $.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+            this.fire(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
-            this.triggerSocket(BaseEvents.CLOSE_LEFT_PANEL);
+            this.fire(BaseEvents.CLOSE_LEFT_PANEL);
             this.resize();
         });
 
         $.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
-            this.triggerSocket(BaseEvents.CLOSE_RIGHT_PANEL);
+            this.fire(BaseEvents.CLOSE_RIGHT_PANEL);
             this.resize();
         });
 
         $.subscribe(BaseEvents.CREATED, () => {
             this.isCreated = true;
-            this.triggerSocket(BaseEvents.CREATED);
+            this.fire(BaseEvents.CREATED);
         });
 
         $.subscribe(BaseEvents.DOWN_ARROW, () => {
-            this.triggerSocket(BaseEvents.DOWN_ARROW);
+            this.fire(BaseEvents.DOWN_ARROW);
         });
 
         $.subscribe(BaseEvents.DOWNLOAD, (e: any, obj: any) => {
-            this.triggerSocket(BaseEvents.DOWNLOAD, obj);
+            this.fire(BaseEvents.DOWNLOAD, obj);
         });
 
         $.subscribe(BaseEvents.END, () => {
-            this.triggerSocket(BaseEvents.END);
+            this.fire(BaseEvents.END);
         });
 
         $.subscribe(BaseEvents.ESCAPE, () => {
-            this.triggerSocket(BaseEvents.ESCAPE);
+            this.fire(BaseEvents.ESCAPE);
 
             if (this.isFullScreen() && !this.isOverlayActive()) {
                 $.publish(BaseEvents.TOGGLE_FULLSCREEN);
@@ -278,7 +279,7 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.EXTERNAL_LINK_CLICKED, (e: any, url: string) => {
-            this.triggerSocket(BaseEvents.EXTERNAL_LINK_CLICKED, url);
+            this.fire(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
         $.subscribe(BaseEvents.FEEDBACK, () => {
@@ -286,76 +287,76 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.FORBIDDEN, () => {
-            this.triggerSocket(BaseEvents.FORBIDDEN);
+            this.fire(BaseEvents.FORBIDDEN);
             $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
         $.subscribe(BaseEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
+            this.fire(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HIDE_EMBED_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_EMBED_DIALOGUE);
+            this.fire(BaseEvents.HIDE_EMBED_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE);
+            this.fire(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HIDE_GENERIC_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_GENERIC_DIALOGUE);
+            this.fire(BaseEvents.HIDE_GENERIC_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HIDE_HELP_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_HELP_DIALOGUE);
+            this.fire(BaseEvents.HIDE_HELP_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HIDE_INFORMATION, () => {
-            this.triggerSocket(BaseEvents.HIDE_INFORMATION);
+            this.fire(BaseEvents.HIDE_INFORMATION);
         });
 
         $.subscribe(BaseEvents.HIDE_LOGIN_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_LOGIN_DIALOGUE);
+            this.fire(BaseEvents.HIDE_LOGIN_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
-            this.triggerSocket(BaseEvents.HIDE_OVERLAY);
+            this.fire(BaseEvents.HIDE_OVERLAY);
         });
 
         $.subscribe(BaseEvents.HIDE_RESTRICTED_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_RESTRICTED_DIALOGUE);
+            this.fire(BaseEvents.HIDE_RESTRICTED_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HIDE_SETTINGS_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.HIDE_SETTINGS_DIALOGUE);
+            this.fire(BaseEvents.HIDE_SETTINGS_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.HOME, () => {
-            this.triggerSocket(BaseEvents.HOME);
+            this.fire(BaseEvents.HOME);
         });
 
         $.subscribe(BaseEvents.LEFT_ARROW, () => {
-            this.triggerSocket(BaseEvents.LEFT_ARROW);
+            this.fire(BaseEvents.LEFT_ARROW);
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            this.triggerSocket(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+            this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            this.triggerSocket(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+            this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH, () => {
-            this.triggerSocket(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+            this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-            this.triggerSocket(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+            this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
         });
 
         $.subscribe(BaseEvents.LOAD_FAILED, () => {
-            this.triggerSocket(BaseEvents.LOAD_FAILED);
+            this.fire(BaseEvents.LOAD_FAILED);
 
             if (!that.lastCanvasIndex == null && that.lastCanvasIndex !== that.helper.canvasIndex){
                 this.viewCanvas(that.lastCanvasIndex);
@@ -363,11 +364,11 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.NOT_FOUND, () => {
-            this.triggerSocket(BaseEvents.NOT_FOUND);
+            this.fire(BaseEvents.NOT_FOUND);
         });
 
         $.subscribe(BaseEvents.OPEN, () => {
-            this.triggerSocket(BaseEvents.OPEN);
+            this.fire(BaseEvents.OPEN);
 
             const openUri: string = String.format(this.getData().config.options.openTemplate, this.helper.iiifResourceUri);
 
@@ -375,110 +376,110 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
-            this.triggerSocket(BaseEvents.OPEN_LEFT_PANEL);
+            this.fire(BaseEvents.OPEN_LEFT_PANEL);
             this.resize();
         });
 
         $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
-            this.triggerSocket(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+            this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
         $.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
-            this.triggerSocket(BaseEvents.OPEN_RIGHT_PANEL);
+            this.fire(BaseEvents.OPEN_RIGHT_PANEL);
             this.resize();
         });
 
         $.subscribe(BaseEvents.PAGE_DOWN, () => {
-            this.triggerSocket(BaseEvents.PAGE_DOWN);
+            this.fire(BaseEvents.PAGE_DOWN);
         });
 
         $.subscribe(BaseEvents.PAGE_UP, () => {
-            this.triggerSocket(BaseEvents.PAGE_UP);
+            this.fire(BaseEvents.PAGE_UP);
         });
 
         $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: ExternalResource) => {
-            this.triggerSocket(BaseEvents.RESOURCE_DEGRADED);
+            this.fire(BaseEvents.RESOURCE_DEGRADED);
             this.handleDegraded(resource)
         });
 
         $.subscribe(BaseEvents.RETURN, () => {
-            this.triggerSocket(BaseEvents.RETURN);
+            this.fire(BaseEvents.RETURN);
         });
 
         $.subscribe(BaseEvents.RIGHT_ARROW, () => {
-            this.triggerSocket(BaseEvents.RIGHT_ARROW);
+            this.fire(BaseEvents.RIGHT_ARROW);
         });
 
         $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
-            this.triggerSocket(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH);
+            this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH);
         });
 
         $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START, () => {
-            this.triggerSocket(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START);
+            this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START);
         });
 
         $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
-            this.triggerSocket(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH);
+            this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH);
         });
 
         $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_START, () => {
-            this.triggerSocket(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
+            this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
         });
 
         $.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, () => {
-            this.triggerSocket(BaseEvents.SEQUENCE_INDEX_CHANGED);
+            this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED);
         });
 
         $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
-            this.triggerSocket(BaseEvents.SETTINGS_CHANGED, args);
+            this.fire(BaseEvents.SETTINGS_CHANGED, args);
         });
 
         $.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_DOWNLOAD_DIALOGUE);
+            this.fire(BaseEvents.SHOW_DOWNLOAD_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_EMBED_DIALOGUE);
+            this.fire(BaseEvents.SHOW_EMBED_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE);
+            this.fire(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_GENERIC_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_GENERIC_DIALOGUE);
+            this.fire(BaseEvents.SHOW_GENERIC_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_HELP_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_HELP_DIALOGUE);
+            this.fire(BaseEvents.SHOW_HELP_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_INFORMATION, () => {
-            this.triggerSocket(BaseEvents.SHOW_INFORMATION);
+            this.fire(BaseEvents.SHOW_INFORMATION);
         });
 
         $.subscribe(BaseEvents.SHOW_LOGIN_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_LOGIN_DIALOGUE);
+            this.fire(BaseEvents.SHOW_LOGIN_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE);
+            this.fire(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_RESTRICTED_DIALOGUE);
+            this.fire(BaseEvents.SHOW_RESTRICTED_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
-            this.triggerSocket(BaseEvents.SHOW_OVERLAY);
+            this.fire(BaseEvents.SHOW_OVERLAY);
         });
 
         $.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
-            this.triggerSocket(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+            this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
         $.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
-            this.triggerSocket(BaseEvents.SHOW_TERMS_OF_USE);
+            this.fire(BaseEvents.SHOW_TERMS_OF_USE);
             
             // todo: Eventually this should be replaced with a suitable IIIF Presentation API field - until then, use attribution
             const terms: string = this.helper.getAttribution();
@@ -487,34 +488,34 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            this.triggerSocket(BaseEvents.THUMB_SELECTED, thumb.index);
+            this.fire(BaseEvents.THUMB_SELECTED, thumb.index);
         });
 
         $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
             $('#top').focus();
-            this.bootstrapper.isFullScreen = !this.bootstrapper.isFullScreen;
+            this.component.isFullScreen = !this.component.isFullScreen;
 
-            this.triggerSocket(BaseEvents.TOGGLE_FULLSCREEN,
+            this.fire(BaseEvents.TOGGLE_FULLSCREEN,
                 {
-                    isFullScreen: this.bootstrapper.isFullScreen,
+                    isFullScreen: this.component.isFullScreen,
                     overrideFullScreen: this.getData().config.options.overrideFullScreen
                 });
         });
 
         $.subscribe(BaseEvents.UP_ARROW, () => {
-            this.triggerSocket(BaseEvents.UP_ARROW);
+            this.fire(BaseEvents.UP_ARROW);
         });
 
         $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
-            this.triggerSocket(BaseEvents.UPDATE_SETTINGS);
+            this.fire(BaseEvents.UPDATE_SETTINGS);
         });
 
         $.subscribe(BaseEvents.VIEW_FULL_TERMS, () => {
-            this.triggerSocket(BaseEvents.VIEW_FULL_TERMS);
+            this.fire(BaseEvents.VIEW_FULL_TERMS);
         });
 
         $.subscribe(BaseEvents.WINDOW_UNLOAD, () => {
-            this.triggerSocket(BaseEvents.WINDOW_UNLOAD);
+            this.fire(BaseEvents.WINDOW_UNLOAD);
         });
 
         // create shell and shared views.
@@ -648,19 +649,16 @@ export class BaseExtension implements IExtension {
         return $(window).height();
     }
 
-    triggerSocket(eventName: string, eventObject?: any): void {
-        jQuery(document).trigger(eventName, [eventObject]);
-        if (this.bootstrapper.socket) {
-            this.bootstrapper.socket.postMessage(JSON.stringify({ eventName: eventName, eventObject: eventObject }));
-        }
+    fire(name: string, ...args: any[]): void {
+        this.component.fire(name, args);
     }
 
     redirect(uri: string): void {
-        this.triggerSocket(BaseEvents.REDIRECT, uri);
+        this.fire(BaseEvents.REDIRECT, uri);
     }
 
     refresh(): void {
-        this.triggerSocket(BaseEvents.REFRESH, null);
+        this.fire(BaseEvents.REFRESH, null);
     }
 
     private _updateMetric(): void {
@@ -988,7 +986,7 @@ export class BaseExtension implements IExtension {
     }
 
     isFullScreen(): boolean {
-        return this.bootstrapper.isFullScreen;
+        return this.component.isFullScreen;
     }
 
     isHeaderPanelEnabled(): boolean {
@@ -1026,7 +1024,7 @@ export class BaseExtension implements IExtension {
     }
 
     feedback(): void {
-        this.triggerSocket(BaseEvents.FEEDBACK, this.getData());
+        this.fire(BaseEvents.FEEDBACK, this.getData());
     }
 
     getBookmarkUri(): string {
@@ -1042,7 +1040,7 @@ export class BaseExtension implements IExtension {
     }
 
     getData(): IUVData {
-        return this.bootstrapper.data;
+        return this.data;
     }
 
     getAlternateLocale(): ILocale | null {

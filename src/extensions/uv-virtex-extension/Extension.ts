@@ -1,7 +1,6 @@
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import {Bootstrapper} from "../../Bootstrapper";
 import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import {DownloadDialogue} from "./DownloadDialogue";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
@@ -30,8 +29,8 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor(bootstrapper: Bootstrapper) {
-        super(bootstrapper);
+    constructor() {
+        super();
     }
 
     create(): void {
@@ -117,7 +116,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         bookmark.trackingLabel = window.trackingLabel;
         bookmark.type = manifesto.ElementType.physicalobject().toString();
 
-        this.triggerSocket(BaseEvents.BOOKMARK, bookmark);
+        this.fire(BaseEvents.BOOKMARK, bookmark);
     }
 
     getEmbedScript(template: string, width: number, height: number): string{

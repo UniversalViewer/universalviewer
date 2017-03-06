@@ -5,7 +5,7 @@ import ITreeNode = Manifold.ITreeNode;
 export class TreeView extends BaseView {
 
     isOpen: boolean = false;
-    component: IIIFComponents.ITreeComponent;
+    treeComponent: IIIFComponents.ITreeComponent;
     treeData: IIIFComponents.ITreeComponentData;
     $tree: JQuery;
 
@@ -23,7 +23,7 @@ export class TreeView extends BaseView {
 
     setup(): void {
 
-        this.component = new IIIFComponents.TreeComponent({
+        this.treeComponent = new IIIFComponents.TreeComponent({
             target: this.$tree[0], 
             data: this.treeData
         });
@@ -32,18 +32,18 @@ export class TreeView extends BaseView {
         // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
         // to implement it in BaseComponent.
 
-        (<any>this.component).on('treeNodeSelected', function(node: ITreeNode) {
+        (<any>this.treeComponent).on('treeNodeSelected', function(node: ITreeNode) {
             $.publish(Events.TREE_NODE_SELECTED, [node]);
         });
 
-        (<any>this.component).on('treeNodeMultiSelected', function(node: ITreeNode) {
+        (<any>this.treeComponent).on('treeNodeMultiSelected', function(node: ITreeNode) {
             $.publish(Events.TREE_NODE_MULTISELECTED, [node]);
         });
     }
 
     public databind(): void {
-        this.component.options.data = this.treeData;
-        this.component.set(new Object()); // todo: should be passing options.data
+        this.treeComponent.options.data = this.treeData;
+        this.treeComponent.set(new Object()); // todo: should be passing options.data
         this.resize();
     }
 
@@ -58,15 +58,15 @@ export class TreeView extends BaseView {
     }
 
     public selectNode(node: Manifold.ITreeNode): void {
-        this.component.selectNode(node);
+        this.treeComponent.selectNode(node);
     }
 
     public deselectCurrentNode(): void {
-        this.component.deselectCurrentNode();
+        this.treeComponent.deselectCurrentNode();
     }
 
     public getNodeById(id: string): ITreeNode {
-        return this.component.getNodeById(id);
+        return this.treeComponent.getNodeById(id);
     }
 
     resize(): void {

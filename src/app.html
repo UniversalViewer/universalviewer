@@ -40,6 +40,9 @@
             });
             
             uv.on('canvasIndexChanged', function(index) {
+                if (uv.socket) { // todo extend to other events
+                    uv.socket.postMessage(JSON.stringify({ eventName: 'canvasIndexChanged', eventObject: index }));
+                }
                 urlDataProvider.set('cv', index);
             });
 

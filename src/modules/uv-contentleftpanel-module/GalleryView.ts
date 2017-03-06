@@ -5,7 +5,7 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 export class GalleryView extends BaseView {
 
     isOpen: boolean = false;
-    component: IIIFComponents.IGalleryComponent;
+    galleryComponent: IIIFComponents.IGalleryComponent;
     galleryData: IIIFComponents.IGalleryComponentData;
     $gallery: JQuery;
 
@@ -20,11 +20,11 @@ export class GalleryView extends BaseView {
         // search preview doesn't work well with the gallery because it loads thumbs in "chunks"
 
         // $.subscribe(Events.SEARCH_PREVIEW_START, (e, canvasIndex) => {
-        //     this.component.searchPreviewStart(canvasIndex);
+        //     this.galleryComponent.searchPreviewStart(canvasIndex);
         // });
 
         // $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
-        //     this.component.searchPreviewFinish();
+        //     this.galleryComponent.searchPreviewFinish();
         // });
 
         this.$gallery = $('<div class="iiif-gallery-component"></div>');
@@ -32,28 +32,28 @@ export class GalleryView extends BaseView {
     }
 
     public setup(): void {
-        this.component = new IIIFComponents.GalleryComponent({
+        this.galleryComponent = new IIIFComponents.GalleryComponent({
             target: this.$gallery[0], 
             data: this.galleryData
         });
 
-        (<any>this.component).on('thumbSelected', function(thumb: any) {
+        (<any>this.galleryComponent).on('thumbSelected', function(thumb: any) {
             $.publish(Events.GALLERY_THUMB_SELECTED, [thumb]);
             $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
         });
 
-        (<any>this.component).on('decreaseSize', function() {
+        (<any>this.galleryComponent).on('decreaseSize', function() {
             $.publish(Events.GALLERY_DECREASE_SIZE);
         });
 
-        (<any>this.component).on('increaseSize', function() {
+        (<any>this.galleryComponent).on('increaseSize', function() {
             $.publish(Events.GALLERY_INCREASE_SIZE);
         });
     }
 
     public databind(): void {
-        this.component.options.data = this.galleryData;
-        this.component.set(new Object()); // todo: should be passing options.data
+        this.galleryComponent.options.data = this.galleryData;
+        this.galleryComponent.set(new Object()); // todo: should be passing options.data
         this.resize();
     }
 
@@ -63,7 +63,7 @@ export class GalleryView extends BaseView {
 
         // todo: would be better to have no imperative methods on components and use a reactive pattern
         setTimeout(() => {
-            this.component.selectIndex(this.extension.helper.canvasIndex);
+            this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
         }, 10);
     }
 

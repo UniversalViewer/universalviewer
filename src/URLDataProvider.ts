@@ -32,24 +32,24 @@ export default class URLDataProvider extends UVDataProvider {
             embedDomain: this.get<string | null>('embedDomain', null),
             embedScriptUri: this.get<string | null>('embedScriptUri', null),
             isHomeDomain: this._isHomeDomain(),
-            isLightbox: this.get<boolean>('isLightbox', false),
+            isLightbox: Boolean(this.get<boolean>('isLightbox', false)),
             isOnlyInstance: this._isOnlyInstance(),
             isReload: this._isReload(),
             iiifResourceUri: this.get<string | null>('manifestUri', null),
             locales: locales,
-            collectionIndex: this.get<number>('c', 0),
-            manifestIndex: this.get<number>('m', 0),
-            sequenceIndex: this.get<number>('s', 0),
-            canvasIndex: this.get<number>('cv', 0)
+            collectionIndex: Number(this.get<number>('c', 0)),
+            manifestIndex: Number(this.get<number>('m', 0)),
+            sequenceIndex: Number(this.get<number>('s', 0)),
+            canvasIndex: Number(this.get<number>('cv', 0))
         }
     }
 
     private _isHomeDomain(): boolean {
-        return !!Utils.Urls.getQuerystringParameter('isHomeDomain');
+        return Boolean(Utils.Urls.getQuerystringParameter('isHomeDomain'));
     }
 
     private _isOnlyInstance(): boolean {
-        return !!Utils.Urls.getQuerystringParameter('isOnlyInstance');
+        return Boolean(Utils.Urls.getQuerystringParameter('isOnlyInstance'));
     }
 
     private _isReload(): boolean {

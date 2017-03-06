@@ -1,12 +1,11 @@
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import {Bootstrapper} from "../../Bootstrapper";
 import {Bounds} from "./Bounds";
-import {Events} from "./Events";
 import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {DownloadDialogue} from "./DownloadDialogue";
+import {Events} from "./Events";
 import {ExternalContentDialogue} from "../../modules/uv-dialogues-module/ExternalContentDialogue";
 import {FooterPanel as MobileFooterPanel} from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
 import {FooterPanel} from "../../modules/uv-searchfooterpanel-module/FooterPanel";
@@ -60,8 +59,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
 
-    constructor(bootstrapper: Bootstrapper) {
-        super(bootstrapper);
+    constructor() {
+        super();
     }
 
     create(): void {
@@ -82,7 +81,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         $.subscribe(Events.CLEAR_SEARCH, () => {
             this.searchResults = null;
             $.publish(Events.SEARCH_RESULTS_CLEARED);
-            this.triggerSocket(Events.CLEAR_SEARCH);
+            this.fire(Events.CLEAR_SEARCH);
         });
 
         $.subscribe(BaseEvents.DOWN_ARROW, () => {
@@ -96,20 +95,20 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.FIRST, () => {
-            this.triggerSocket(Events.FIRST);
+            this.fire(Events.FIRST);
             this.viewPage(this.helper.getFirstPageIndex());
         });
 
         $.subscribe(Events.GALLERY_DECREASE_SIZE, () => {
-            this.triggerSocket(Events.GALLERY_DECREASE_SIZE);
+            this.fire(Events.GALLERY_DECREASE_SIZE);
         });
 
         $.subscribe(Events.GALLERY_INCREASE_SIZE, () => {
-            this.triggerSocket(Events.GALLERY_INCREASE_SIZE);
+            this.fire(Events.GALLERY_INCREASE_SIZE);
         });
 
         $.subscribe(Events.GALLERY_THUMB_SELECTED, () => {
-            this.triggerSocket(Events.GALLERY_THUMB_SELECTED);
+            this.fire(Events.GALLERY_THUMB_SELECTED);
         });
 
         $.subscribe(BaseEvents.HOME, () => {
@@ -117,12 +116,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.IMAGE_SEARCH, (e: any, index: number) => {
-            this.triggerSocket(Events.IMAGE_SEARCH, index);
+            this.fire(Events.IMAGE_SEARCH, index);
             this.viewPage(index);
         });
 
         $.subscribe(Events.LAST, () => {
-            this.triggerSocket(Events.LAST);
+            this.fire(Events.LAST);
             this.viewPage(this.helper.getLastPageIndex());
         });
 
@@ -155,7 +154,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.MODE_CHANGED, (e: any, mode: string) => {
-            this.triggerSocket(Events.MODE_CHANGED, mode);
+            this.fire(Events.MODE_CHANGED, mode);
             this.mode = new Mode(mode);
             const settings: ISettings = this.getSettings();
             $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
@@ -168,34 +167,34 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             args.canvases = ids;
             args.format = this.getData().config.options.multiSelectionMimeType;
             args.sequence = this.helper.getCurrentSequence().id;
-            this.triggerSocket(Events.MULTISELECTION_MADE, args);
+            this.fire(Events.MULTISELECTION_MADE, args);
         });
 
         $.subscribe(Events.NEXT, () => {
-            this.triggerSocket(Events.NEXT);
+            this.fire(Events.NEXT);
             this.viewPage(this.getNextPageIndex());
         });
 
         $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
-            this.triggerSocket(Events.NEXT_SEARCH_RESULT);
+            this.fire(Events.NEXT_SEARCH_RESULT);
         });
 
         $.subscribe(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
-            this.triggerSocket(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            this.fire(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.nextSearchResult();
         });
 
         $.subscribe(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
-            this.triggerSocket(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            this.fire(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.prevSearchResult();
         });
 
         $.subscribe(Events.OPEN_THUMBS_VIEW, () => {
-            this.triggerSocket(Events.OPEN_THUMBS_VIEW);
+            this.fire(Events.OPEN_THUMBS_VIEW);
         });
 
         $.subscribe(Events.OPEN_TREE_VIEW, () => {
-            this.triggerSocket(Events.OPEN_TREE_VIEW);
+            this.fire(Events.OPEN_TREE_VIEW);
         });
 
         $.subscribe(BaseEvents.PAGE_DOWN, () => {
@@ -203,7 +202,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.PAGE_SEARCH, (e: any, value: string) => {
-            this.triggerSocket(Events.PAGE_SEARCH, value);
+            this.fire(Events.PAGE_SEARCH, value);
             this.viewLabel(value);
         });
 
@@ -212,7 +211,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.PAGING_TOGGLED, (e: any, obj: any) => {
-            this.triggerSocket(Events.PAGING_TOGGLED, obj);
+            this.fire(Events.PAGING_TOGGLED, obj);
         });
 
         $.subscribe(BaseEvents.PLUS, () => {
@@ -220,12 +219,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.PREV, () => {
-            this.triggerSocket(Events.PREV);
+            this.fire(Events.PREV);
             this.viewPage(this.getPrevPageIndex());
         });
 
         $.subscribe(Events.PREV_SEARCH_RESULT, () => {
-            this.triggerSocket(Events.PREV_SEARCH_RESULT);
+            this.fire(Events.PREV_SEARCH_RESULT);
         });
 
         $.subscribe(Events.PRINT, () => {
@@ -241,7 +240,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEADRAGON_ANIMATION, () => {
-            this.triggerSocket(Events.SEADRAGON_ANIMATION);
+            this.fire(Events.SEADRAGON_ANIMATION);
         });
 
         $.subscribe(Events.SEADRAGON_ANIMATION_FINISH, (e: any, viewer: any) => {
@@ -254,7 +253,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
             const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
 
-            this.triggerSocket(Events.CURRENT_VIEW_URI,
+            this.fire(Events.CURRENT_VIEW_URI,
                 {
                     cropUri: this.getCroppedImageUri(canvas, this.getViewer()),
                     fullUri: this.getConfinedImageUri(canvas, canvas.getWidth())
@@ -262,7 +261,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEADRAGON_ANIMATION_START, () => {
-            this.triggerSocket(Events.SEADRAGON_ANIMATION_START);
+            this.fire(Events.SEADRAGON_ANIMATION_START);
         });
 
         $.subscribe(Events.SEADRAGON_OPEN, () => {
@@ -272,29 +271,29 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEADRAGON_RESIZE, () => {
-            this.triggerSocket(Events.SEADRAGON_RESIZE);
+            this.fire(Events.SEADRAGON_RESIZE);
         });
 
         $.subscribe(Events.SEADRAGON_ROTATION, (e: any, rotation: number) => {
-            this.triggerSocket(Events.SEADRAGON_ROTATION);
+            this.fire(Events.SEADRAGON_ROTATION);
             this.currentRotation = rotation;
         });
 
         $.subscribe(Events.SEARCH, (e: any, terms: string) => {
-            this.triggerSocket(Events.SEARCH, terms);
+            this.fire(Events.SEARCH, terms);
             this.searchWithin(terms);
         });
 
         $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
-            this.triggerSocket(Events.SEARCH_PREVIEW_FINISH);
+            this.fire(Events.SEARCH_PREVIEW_FINISH);
         });
 
         $.subscribe(Events.SEARCH_PREVIEW_START, () => {
-            this.triggerSocket(Events.SEARCH_PREVIEW_START);
+            this.fire(Events.SEARCH_PREVIEW_START);
         });
 
         $.subscribe(Events.SEARCH_RESULTS, (e: any, obj: any) => {
-            this.triggerSocket(Events.SEARCH_RESULTS, obj);
+            this.fire(Events.SEARCH_RESULTS, obj);
         });
 
         $.subscribe(Events.SEARCH_RESULT_CANVAS_CHANGED, (e: any, rect: SearchResultRect) => {
@@ -302,7 +301,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
-            this.triggerSocket(Events.SEARCH_RESULTS_EMPTY);
+            this.fire(Events.SEARCH_RESULTS_EMPTY);
         });
 
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
@@ -310,7 +309,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
-            this.triggerSocket(Events.TREE_NODE_SELECTED, node.data.path);
+            this.fire(Events.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
@@ -327,7 +326,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
-            this.triggerSocket(Events.VIEW_PAGE, index);
+            this.fire(Events.VIEW_PAGE, index);
             this.viewPage(index);
         });
 
@@ -594,7 +593,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         bookmark.trackingLabel = window.trackingLabel;
         bookmark.type = manifesto.ElementType.image().toString();
 
-        this.triggerSocket(BaseEvents.BOOKMARK, bookmark);
+        this.fire(BaseEvents.BOOKMARK, bookmark);
     }
 
     print(): void {
@@ -604,7 +603,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         // args.format = this.getData().config.options.printMimeType;
         // args.sequence = this.helper.getCurrentSequence().id;
         window.print();
-        this.triggerSocket(Events.PRINT);
+        this.fire(Events.PRINT);
     }
 
     getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null {

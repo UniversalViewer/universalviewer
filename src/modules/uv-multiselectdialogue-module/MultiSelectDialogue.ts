@@ -7,7 +7,7 @@ export class MultiSelectDialogue extends Dialogue {
 
     $title: JQuery;
     $gallery: JQuery;
-    component: IIIFComponents.IGalleryComponent;
+    galleryComponent: IIIFComponents.IGalleryComponent;
     data: IIIFComponents.IGalleryComponentData;
 
     constructor($element: JQuery) {
@@ -29,7 +29,7 @@ export class MultiSelectDialogue extends Dialogue {
             this.open();
             const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(true);
-            this.component.set(new Object()); // todo: should be passing data
+            this.galleryComponent.set(new Object()); // todo: should be passing data
         });
 
         $.subscribe(this.closeCommand, () => {
@@ -63,7 +63,7 @@ export class MultiSelectDialogue extends Dialogue {
             viewingDirection: this.extension.helper.getViewingDirection()
         };
 
-        this.component = new IIIFComponents.GalleryComponent({
+        this.galleryComponent = new IIIFComponents.GalleryComponent({
             target: this.$gallery[0],
             data: this.data
         });
@@ -71,7 +71,7 @@ export class MultiSelectDialogue extends Dialogue {
         const $selectButton: JQuery = this.$gallery.find('a.select');
         $selectButton.addClass('btn btn-primary');
 
-        (<any>this.component).on('multiSelectionMade', (ids: string[]) => {
+        (<any>this.galleryComponent).on('multiSelectionMade', (ids: string[]) => {
             $.publish(Events.MULTISELECTION_MADE, [ids]);
             that.close();
         });

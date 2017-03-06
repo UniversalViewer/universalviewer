@@ -1,7 +1,6 @@
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import {Bootstrapper} from "../../Bootstrapper";
 import {DownloadDialogue} from "./DownloadDialogue";
 import {Events} from "./Events";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
@@ -31,8 +30,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor(bootstrapper: Bootstrapper) {
-        super(bootstrapper);
+    constructor() {
+        super();
     }
 
     create(): void {
@@ -63,15 +62,15 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         });
 
         $.subscribe(Events.MEDIA_ENDED, () => {
-            this.triggerSocket(Events.MEDIA_ENDED);
+            this.fire(Events.MEDIA_ENDED);
         });
 
         $.subscribe(Events.MEDIA_PAUSED, () => {
-            this.triggerSocket(Events.MEDIA_PAUSED);
+            this.fire(Events.MEDIA_PAUSED);
         });
 
         $.subscribe(Events.MEDIA_PLAYED, () => {
-            this.triggerSocket(Events.MEDIA_PLAYED);
+            this.fire(Events.MEDIA_PLAYED);
         });
     }
 
@@ -149,7 +148,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             bookmark.type = manifesto.ElementType.sound().toString();
         }
 
-        this.triggerSocket(BaseEvents.BOOKMARK, bookmark);
+        this.fire(BaseEvents.BOOKMARK, bookmark);
     }
 
     getEmbedScript(template: string, width: number, height: number): string {

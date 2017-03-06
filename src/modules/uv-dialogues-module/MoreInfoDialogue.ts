@@ -4,7 +4,7 @@ import {Dialogue} from "../uv-shared-module/Dialogue";
 export class MoreInfoDialogue extends Dialogue {
 
     $title: JQuery;
-    component: IIIFComponents.IMetadataComponent;
+    metadataComponent: IIIFComponents.IMetadataComponent;
     $metadata: JQuery;
 
     constructor($element: JQuery) {
@@ -38,7 +38,7 @@ export class MoreInfoDialogue extends Dialogue {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$content.append(this.$metadata);
 
-        this.component = new IIIFComponents.MetadataComponent({
+        this.metadataComponent = new IIIFComponents.MetadataComponent({
             target: this.$metadata[0],
             data: this._getData()
         });
@@ -49,7 +49,7 @@ export class MoreInfoDialogue extends Dialogue {
 
     open($triggerButton?: JQuery): void {
         super.open($triggerButton);
-        this.component.set(new Object()); // todo: should be passing data
+        this.metadataComponent.set(new Object()); // todo: should be passing data
     }
 
     private _getData(): IIIFComponents.IMetadataComponentData {

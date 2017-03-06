@@ -1,10 +1,10 @@
 import {Panel} from "./Panel";
-import {Bootstrapper} from "../../Bootstrapper";
 import {IExtension} from "./IExtension";
+import UVComponent from "../../UVComponent";
 
 export class BaseView extends Panel{
 
-    bootstrapper: any;
+    component: UVComponent;
     config: any;
     content: any;
     extension: IExtension;
@@ -17,11 +17,11 @@ export class BaseView extends Panel{
 
     create(): void {
 
-        this.bootstrapper = $("body > #app").data("bootstrapper");
+        this.component = $("body > #app").data("component");
 
         super.create();
         
-        this.extension = (<Bootstrapper>this.bootstrapper).extension;
+        this.extension = (<UVComponent>this.component).extension;
 
         this.config = {};
         this.config.content = {};

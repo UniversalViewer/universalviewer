@@ -1,18 +1,20 @@
-import {Bootstrapper} from "../../Bootstrapper";
 import {Metric} from "./Metric";
 import {ILocale} from "../../ILocale";
 import {IUVData} from "../../IUVData";
+import UVComponent from "../../UVComponent";
 
 export interface IExtension {
     addTimestamp(uri: string): string;
-    bootstrapper: Bootstrapper;
     changeLocale(locale: string): void;
+    component: UVComponent;
+    data: IUVData;
     create(): void;
     createModules(): void;
     dependenciesLoaded(...args: any[]): void;
     dependencyLoaded(index: number, dep: any): void;
     embedHeight: number;
     embedWidth: number;
+    fire(name: string, ...args: any[]): void;
     getAlternateLocale(): ILocale | null;
     getCanvasLabels(label: string): string;
     getCurrentCanvases(): Manifesto.ICanvas[];
@@ -57,7 +59,6 @@ export interface IExtension {
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
-    triggerSocket(eventName: string, eventObject?: any): void; // todo: can eventObject always be a IUVData?
     updateSettings(settings: ISettings): void;
     viewCanvas(canvasIndex: number): void;
     viewCollection(collection: Manifesto.ICollection): void;

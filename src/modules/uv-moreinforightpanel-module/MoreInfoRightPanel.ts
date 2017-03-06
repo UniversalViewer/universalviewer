@@ -3,7 +3,7 @@ import {RightPanel} from "../uv-shared-module/RightPanel";
 
 export class MoreInfoRightPanel extends RightPanel {
 
-    component: IIIFComponents.IMetadataComponent;
+    metadataComponent: IIIFComponents.IMetadataComponent;
     $metadata: JQuery;
     limitType: IIIFComponents.MetadataComponentOptions.LimitType;
     limit: number;
@@ -27,7 +27,7 @@ export class MoreInfoRightPanel extends RightPanel {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$main.append(this.$metadata);
 
-        this.component = new IIIFComponents.MetadataComponent({
+        this.metadataComponent = new IIIFComponents.MetadataComponent({
             target: this.$metadata[0],
             data: this._getData()
         });
@@ -39,8 +39,8 @@ export class MoreInfoRightPanel extends RightPanel {
     }
 
     databind(): void {
-        this.component.options.data = this._getData();
-        this.component.set(new Object()); // todo: should be passing data
+        this.metadataComponent.options.data = this._getData();
+        this.metadataComponent.set(new Object()); // todo: should be passing data
     }
 
     private _getData(): IIIFComponents.IMetadataComponentData {

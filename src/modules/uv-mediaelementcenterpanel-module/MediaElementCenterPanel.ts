@@ -29,7 +29,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         // only full screen video
         if ((<IMediaElementExtension>this.extension).isVideo()){
             $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
-                if (that.bootstrapper.isFullScreen) {
+                if (that.component.isFullScreen) {
                     that.$container.css('backgroundColor', '#000');
                     that.player.enterFullScreen(false);
                 } else {
