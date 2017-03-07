@@ -475,7 +475,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             index -= 1;
 
             if (isNaN(index)) {
-                this.extension.showMessage(this.extension.getData().config.modules.genericDialogue.content.invalidNumber);
+                this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.invalidNumber);
                 $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
@@ -483,7 +483,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             const asset: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
 
             if (!asset) {
-                this.extension.showMessage(this.extension.getData().config.modules.genericDialogue.content.pageNotFound);
+                this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.pageNotFound);
                 $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
@@ -586,7 +586,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         super.resize();
 
         // hide toggle buttons below minimum width
-        if (this.extension.width() < this.extension.getData().config.options.minWidthBreakPoint){
+        if (this.extension.width() < this.extension.data.config.options.minWidthBreakPoint){
             if (this.pagingToggleIsVisible()) this.$pagingToggleButtons.hide();
             if (this.galleryIsVisible()) this.$galleryButton.hide();
         } else {

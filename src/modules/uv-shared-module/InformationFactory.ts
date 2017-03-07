@@ -16,11 +16,11 @@ export class InformationFactory {
     public Get(args: InformationArgs): Information {
         switch(args.informationType){
             case (InformationType.AUTH_CORS_ERROR):
-                return new Information(this.extension.getData().config.content.authCORSError, []);
+                return new Information(this.extension.data.config.content.authCORSError, []);
             case (InformationType.DEGRADED_RESOURCE):
                 const actions: InformationAction[] = [];
                 const loginAction: InformationAction = new InformationAction();
-                loginAction.label = this.extension.getData().config.content.degradedResourceLogin;
+                loginAction.label = this.extension.data.config.content.degradedResourceLogin;
 
                 loginAction.action = () => {
                     $.publish(BaseEvents.HIDE_INFORMATION);
@@ -28,7 +28,7 @@ export class InformationFactory {
                 };
 
                 actions.push(loginAction);
-                return new Information(this.extension.getData().config.content.degradedResourceMessage, actions);
+                return new Information(this.extension.data.config.content.degradedResourceMessage, actions);
         }
     }
 }

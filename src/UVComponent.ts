@@ -10,8 +10,9 @@ import {IExtension} from "./modules/uv-shared-module/IExtension";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
-    public extension: IExtension;
     private _extensions: IExtension[];
+    //private _uvScriptUri: string = '';
+    public extension: IExtension;
     public isFullScreen: boolean = false;
     public socket: any;
     public URLDataProvider: IUVDataProvider;
@@ -33,6 +34,17 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         $.subscribe(BaseEvents.RELOAD, (e: any, data?: IUVData) => {
             this.fire(BaseEvents.RELOAD, data);
         });
+
+        // get the path to uv.js
+        // const $scripts: JQuery = $('script');
+
+        // $scripts.each((index: number, script: Element) => {
+        //     const src: string = $(script).prop('src');
+
+        //     if (src.endsWith('uv.js')) {
+        //         this._uvScriptUri = src;
+        //     }
+        // });
 
         this._extensions = <IExtension[]>{};
 
@@ -68,13 +80,19 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     
     public data(): IUVData {
         return <IUVData>{
-
+            assetRoot: "./uv"
         };
     }
 
     public set(data: IUVData): void {
-        
-        if (!data.iiifResourceUri) return;
+
+        if (!data.iiifResourceUri) {
+            return;
+        }
+
+        if (data.assetRoot && data.assetRoot.endsWith('/')) {
+            data.assetRoot = data.assetRoot.substring(0, data.assetRoot.length - 1);
+        }
 
         // empty app div
         $('#app').empty();
@@ -160,10 +178,9 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         this._getConfigExtension(data, extension, (configExtension: any) => {
 
-            // todo: use a compiler flag when available
-            const configUri: string = 'lib/' + extension.name + '.' + data.locales[0].name + '.config.json';
+            const configPath: string = data.assetRoot + '/lib/' + extension.name + '.' + data.locales[0].name + '.config.json';
 
-            $.getJSON(configUri, (config) => {
+            $.getJSON(configPath, (config) => {
                 this._extendConfig(data, extension, config, configExtension, cb);
             });
         });
@@ -217,7 +234,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     }
 
     private _injectCss(data: IUVData, extension: any, cb: () => void): void {
-        const cssPath: string = 'themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
+        const cssPath: string = data.assetRoot + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
 
         yepnope.injectCss(cssPath, function() {
             cb();
@@ -232,8 +249,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         this.extension.name = extension.name;
         this.extension.create();
     }
-    
-    protected _resize(): void {
-        
+
+    public resize(): void {
+        this.extension.resize();
     }
 }

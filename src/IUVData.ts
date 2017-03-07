@@ -1,6 +1,7 @@
 import {ILocale} from "./ILocale";
 
 export interface IUVData {
+    assetRoot: string | null;
     canvasIndex: number;
     collectionIndex: number;
     config: any;

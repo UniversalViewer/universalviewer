@@ -28,10 +28,6 @@ export class Extension extends BaseExtension implements IPDFExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor() {
-        super();
-    }
-
     create(): void {
         super.create();
 
@@ -125,7 +121,6 @@ export class Extension extends BaseExtension implements IPDFExtension {
 
         bookmark.index = this.helper.canvasIndex;
         bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
-        bookmark.path = this.getBookmarkUri();
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
@@ -135,8 +130,8 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number): string{
-        const configUri = this.getData().config.uri || '';
-        const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.getData().embedScriptUri);
+        const configUri = this.data.config.uri || '';
+        const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         return script;
     }
 }

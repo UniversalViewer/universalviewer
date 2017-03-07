@@ -44,7 +44,7 @@ export class DownloadDialogue extends Dialogue {
         this.$footer = $('<div class="footer"></div>');
         this.$content.append(this.$footer);
 
-        this.$termsOfUseButton = $('<a href="#">' + this.extension.getData().config.content.termsOfUse + '</a>');
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.data.config.content.termsOfUse + '</a>');
         this.$footer.append(this.$termsOfUseButton);
 
         this.$termsOfUseButton.onPressed(() => {
@@ -108,7 +108,7 @@ export class DownloadDialogue extends Dialogue {
     updateTermsOfUseButton(): void {
         const attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
-        if (Utils.Bools.getBool(this.extension.getData().config.options.termsOfUseEnabled, false) && attribution) {
+        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();

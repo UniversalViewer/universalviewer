@@ -9,6 +9,7 @@ export class BaseEvents {
     static CLOSE_LEFT_PANEL: string                 = 'closeLeftPanel';
     static CLOSE_RIGHT_PANEL: string                = 'closeRightPanel';
     static COLLECTION_INDEX_CHANGED: string         = 'collectionIndexChanged';
+    static CREATE: string                           = 'create';
     static CREATED: string                          = 'created';
     static DOWN_ARROW: string                       = 'downArrow';
     static DOWNLOAD: string                         = 'download';
@@ -38,7 +39,6 @@ export class BaseEvents {
     static LEFTPANEL_EXPAND_FULL_FINISH: string     = 'leftPanelExpandFullFinish';
     static LEFTPANEL_EXPAND_FULL_START: string      = 'leftPanelExpandFullStart';
     static LOAD_FAILED: string                      = 'loadFailed';
-    static LOAD: string                             = 'load';
     static LOGIN_FAILED: string                     = 'loginFailed';
     static LOGIN: string                            = 'login';
     static LOGOUT: string                           = 'logout';

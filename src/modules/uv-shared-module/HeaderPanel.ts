@@ -169,7 +169,7 @@ export class HeaderPanel extends BaseView {
         }
 
         // hide toggle buttons below minimum width
-        if (this.extension.width() < this.extension.getData().config.options.minWidthBreakPoint){
+        if (this.extension.width() < this.extension.data.config.options.minWidthBreakPoint){
             if (this.localeToggleIsVisible()) this.$localeToggleButton.hide();
         } else {
             if (this.localeToggleIsVisible()) this.$localeToggleButton.show();

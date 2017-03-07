@@ -5,6 +5,8 @@ import {ILocale} from "../../ILocale";
 import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
+import {ISharePreview} from "./ISharePreview";
+import {IUVComponent} from "../../IUVComponent";
 import {IUVData} from "../../IUVData";
 import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
 import {LoginWarningMessages} from "./LoginWarningMessages";
@@ -16,7 +18,6 @@ import {SynchronousRequire} from "../../SynchronousRequire";
 import ExternalResource = Manifold.ExternalResource;
 import IAccessToken = Manifesto.IAccessToken;
 import IThumb = Manifold.IThumb;
-import UVComponent from "../../UVComponent";
 
 export class BaseExtension implements IExtension {
 
@@ -25,10 +26,8 @@ export class BaseExtension implements IExtension {
     $loginDialogue: JQuery;
     $restrictedDialogue: JQuery;
     clickThroughDialogue: ClickThroughDialogue;
-    component: UVComponent;
+    component: IUVComponent;
     data: IUVData;
-    embedHeight: number;
-    embedWidth: number;
     extensions: any;
     helper: Manifold.IHelper;
     isCreated: boolean = false;
@@ -46,38 +45,15 @@ export class BaseExtension implements IExtension {
     shifted: boolean = false;
     tabbing: boolean = false;
 
-    constructor() {
-
-    }
-
     public create(): void {
 
         const that = this;
 
-        this.$element = $('#app');
+        this.$element = $(this.component.options.target);
         this.$element.data("component", this.component);
 
-        // initial sizing.
-        const $win: JQuery = $(window);
-        this.embedWidth = $win.width();
-        this.embedHeight = $win.height();
-        this.$element.width(this.embedWidth);
-        this.$element.height(this.embedHeight);
-
-        if (!this.getData().isReload && Utils.Documents.isInIFrame()) {
-            // communication with parent frame (if it exists).
-            this.component.socket = new easyXDM.Socket({
-                onMessage: (message: any, origin: any) => {
-                    message = $.parseJSON(message);
-                    this.handleParentFrameEvent(message);
-                }
-            });
-        }
-
-        this.fire(BaseEvents.LOAD, {
-            bootstrapper: {
-                store: this.getData()
-            },
+        this.fire(BaseEvents.CREATE, {
+            data: this.data,
             settings: this.getSettings(),
             preview: this.getSharePreview()
         });
@@ -85,10 +61,11 @@ export class BaseExtension implements IExtension {
         // add/remove classes.
         this.$element.empty();
         this.$element.removeClass();
+        this.$element.addClass('universalviewer');
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
-        if (!this.getData().isHomeDomain) this.$element.addClass('embedded');
-        if (this.getData().isLightbox) this.$element.addClass('lightbox');
+        if (!this.data.isHomeDomain) this.$element.addClass('embedded');
+        if (this.data.isLightbox) this.$element.addClass('lightbox');
 
         $(document).on('mousemove', (e) => {
             this.mouseX = e.pageX;
@@ -96,15 +73,7 @@ export class BaseExtension implements IExtension {
         });
 
         // events
-        if (!this.getData().isReload) {
-
-            window.onresize = () => {
-
-                const $win: JQuery = $(window);
-                $('body').height($win.height());
-
-                this.resize();
-            };
+        if (!this.data.isReload) {
 
             const visibilityProp: string | null = Utils.Documents.getHiddenProp();
 
@@ -118,10 +87,10 @@ export class BaseExtension implements IExtension {
                 });
             }
 
-            if (Utils.Bools.getBool(this.getData().config.options.dropEnabled, true)) {
+            if (Utils.Bools.getBool(this.data.config.options.dropEnabled, true)) {
                 this.$element.on('drop', (e => {
                     e.preventDefault();
-                    const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData("URL");
+                    const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData('URL');
                     const a: HTMLAnchorElement = Utils.Urls.getUrlParts(dropUrl);
                     const iiifResourceUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
                     //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
@@ -187,7 +156,7 @@ export class BaseExtension implements IExtension {
                 }
             });
 
-            if (this.getData().isHomeDomain && Utils.Documents.isInIFrame()) {
+            if (this.data.isHomeDomain && Utils.Documents.isInIFrame()) {
 
                 $.subscribe(BaseEvents.PARENT_EXIT_FULLSCREEN, () => {
                     if (this.isOverlayActive()) {
@@ -209,7 +178,7 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseEvents.LOGIN_FAILED, () => {
             this.fire(BaseEvents.LOGIN_FAILED);
-            this.showMessage(this.getData().config.content.authorisationFailedMessage);
+            this.showMessage(this.data.config.content.authorisationFailedMessage);
         });
 
         $.subscribe(BaseEvents.LOGIN, () => {
@@ -251,6 +220,10 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
             this.fire(BaseEvents.CLOSE_RIGHT_PANEL);
             this.resize();
+        });
+
+        $.subscribe(BaseEvents.COLLECTION_INDEX_CHANGED, (e: any, collectionIndex: number) => {
+            this.fire(BaseEvents.COLLECTION_INDEX_CHANGED, collectionIndex);
         });
 
         $.subscribe(BaseEvents.CREATED, () => {
@@ -363,6 +336,10 @@ export class BaseExtension implements IExtension {
             }
         });
 
+        $.subscribe(BaseEvents.MANIFEST_INDEX_CHANGED, (e: any, manifestIndex: number) => {
+            this.fire(BaseEvents.MANIFEST_INDEX_CHANGED, manifestIndex);
+        });
+
         $.subscribe(BaseEvents.NOT_FOUND, () => {
             this.fire(BaseEvents.NOT_FOUND);
         });
@@ -370,7 +347,7 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
 
-            const openUri: string = String.format(this.getData().config.options.openTemplate, this.helper.iiifResourceUri);
+            const openUri: string = String.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
 
             window.open(openUri);
         });
@@ -426,8 +403,8 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
         });
 
-        $.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, () => {
-            this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED);
+        $.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, (e: any, sequenceIndex: number) => {
+            this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED, sequenceIndex);
         });
 
         $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
@@ -498,7 +475,7 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.TOGGLE_FULLSCREEN,
                 {
                     isFullScreen: this.component.isFullScreen,
-                    overrideFullScreen: this.getData().config.options.overrideFullScreen
+                    overrideFullScreen: this.data.config.options.overrideFullScreen
                 });
         });
 
@@ -548,7 +525,7 @@ export class BaseExtension implements IExtension {
     getDependencies(cb: (deps: any) => void): any {
         const that = this;
 
-        const depsUri: string = 'lib/' + this.name + '-dependencies';
+        const depsUri: string = this.data.assetRoot + '/lib/' + this.name + '-dependencies';
 
         // check if the deps are already loaded
         const scripts: JQuery = $('script[data-requiremodule]')
@@ -561,7 +538,7 @@ export class BaseExtension implements IExtension {
 
             requirejs([depsUri], function(deps: any) {
 
-                const baseUri: string = 'lib/';
+                const baseUri: string = that.data.assetRoot + '/lib/';
 
                 // for each dependency, prepend baseUri.
                 if (deps.sync) {                    
@@ -625,7 +602,7 @@ export class BaseExtension implements IExtension {
     }
 
     setParams(): void {
-        if (!this.getData().isHomeDomain) return;
+        if (!this.data.isHomeDomain) return;
 
         $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.helper.collectionIndex.toString()]);
         $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.helper.manifestIndex.toString()]);
@@ -635,22 +612,22 @@ export class BaseExtension implements IExtension {
 
     setDefaultFocus(): void {
         setTimeout(() => {
-            if (this.getData().config.options.allowStealFocus) {
+            if (this.data.config.options.allowStealFocus) {
                 $('[tabindex=0]').focus();
             }
         }, 1);
     }
 
     width(): number {
-        return $(window).width();
+        return this.$element.width();
     }
 
     height(): number {
-        return $(window).height();
+        return this.$element.height();
     }
 
     fire(name: string, ...args: any[]): void {
-        this.component.fire(name, args);
+        this.component.fire(name, arguments[1]);
     }
 
     redirect(uri: string): void {
@@ -682,21 +659,6 @@ export class BaseExtension implements IExtension {
         $.publish(BaseEvents.RESIZE);
     }
 
-    handleParentFrameEvent(message: any): void {
-        Utils.Async.waitFor(() => {
-            return this.isCreated;
-        }, () => {
-            switch (message.eventName) {
-                case BaseEvents.TOGGLE_FULLSCREEN:
-                    $.publish(BaseEvents.TOGGLE_FULLSCREEN, message.eventObject);
-                    break;
-                case BaseEvents.PARENT_EXIT_FULLSCREEN:
-                    $.publish(BaseEvents.PARENT_EXIT_FULLSCREEN);
-                    break;
-            }
-        });
-    }
-
     // re-bootstraps the application with new querystring params
     reload(data?: IUVData): void {
         $.disposePubSub();
@@ -704,12 +666,12 @@ export class BaseExtension implements IExtension {
     }
 
     isSeeAlsoEnabled(): boolean {
-        return this.getData().config.options.seeAlsoEnabled !== false;
+        return this.data.config.options.seeAlsoEnabled !== false;
     }
 
     getShareUrl(): string | null {
         // If embedded on the home domain and it's the only instance of the UV on the page
-        if (this.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()) {
             // Use the current page URL with hash params
             if (Utils.Documents.isInIFrame()) {
                 return parent.document.location.href;
@@ -740,7 +702,7 @@ export class BaseExtension implements IExtension {
     }
 
     isDeepLinkingEnabled(): boolean {
-        return (this.getData().isHomeDomain && this.getData().isOnlyInstance);
+        return (this.data.isHomeDomain && this.data.isOnlyInstance);
     }
 
     isOnHomeDomain(): boolean {
@@ -753,24 +715,24 @@ export class BaseExtension implements IExtension {
     }
 
     getEmbedDomain(): string | null {
-        return this.getData().embedDomain;
+        return this.data.embedDomain;
     }
 
     getSettings(): ISettings {
-        if (Utils.Bools.getBool(this.getData().config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.data.config.options.saveUserSettings, false)) {
 
             const settings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
             
             if (settings) {
-                return $.extend(this.getData().config.options, settings.value);
+                return $.extend(this.data.config.options, settings.value);
             }
         }
         
-        return this.getData().config.options;
+        return this.data.config.options;
     }
 
     updateSettings(settings: ISettings): void {
-        if (Utils.Bools.getBool(this.getData().config.options.saveUserSettings, false)) {
+        if (Utils.Bools.getBool(this.data.config.options.saveUserSettings, false)) {
 
             const storedSettings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
 
@@ -782,7 +744,7 @@ export class BaseExtension implements IExtension {
             Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
         }
         
-        this.getData().config.options = $.extend(this.getData().config.options, settings);
+        this.data.config.options = $.extend(this.data.config.options, settings);
     }
 
     sanitize(html: string): string {
@@ -807,10 +769,9 @@ export class BaseExtension implements IExtension {
         return $elem.html();
     }
 
-    getSharePreview(): any {
-        const preview: any = {};
+    getSharePreview(): ISharePreview {
 
-        preview.title = this.helper.getLabel();
+        const title: string = this.helper.getLabel();
 
         // todo: use getThumb (when implemented)
 
@@ -818,12 +779,13 @@ export class BaseExtension implements IExtension {
         let thumbnail: string = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !(typeof(thumbnail) === 'string')) {
-            thumbnail = canvas.getCanonicalImageUri(this.getData().config.options.bookmarkThumbWidth);
+            thumbnail = canvas.getCanonicalImageUri(this.data.config.options.bookmarkThumbWidth);
         }
 
-        preview.image = thumbnail;
-
-        return preview;
+        return <ISharePreview>{
+            title: title,
+            image: thumbnail
+        }
     }
 
     public getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
@@ -866,6 +828,7 @@ export class BaseExtension implements IExtension {
         return range;
     }
 
+    // todo: move to manifold
     public getExternalResources(resources?: Manifold.ExternalResource[]): Promise<Manifold.ExternalResource[]> {
 
         const indices: number[] = this.getPagedIndices();
@@ -892,7 +855,7 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        const storageStrategy: string = this.getData().config.options.tokenStorage;
+        const storageStrategy: string = this.data.config.options.tokenStorage;
 
         return new Promise<Manifold.ExternalResource[]>((resolve) => {
             manifesto.Utils.loadExternalResources(
@@ -931,7 +894,7 @@ export class BaseExtension implements IExtension {
     viewCanvas(canvasIndex: number): void {
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.getData().config.content.canvasIndexOutOfRange);
+            this.showMessage(this.data.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
@@ -990,11 +953,11 @@ export class BaseExtension implements IExtension {
     }
 
     isHeaderPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.getData().config.options.headerPanelEnabled, true);
+        return Utils.Bools.getBool(this.data.config.options.headerPanelEnabled, true);
     }
 
     isLeftPanelEnabled(): boolean {
-        if (Utils.Bools.getBool(this.getData().config.options.leftPanelEnabled, true)) {
+        if (Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)) {
             if (this.helper.hasParentCollection()) {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
@@ -1008,15 +971,15 @@ export class BaseExtension implements IExtension {
     }
 
     isRightPanelEnabled(): boolean {
-        return  Utils.Bools.getBool(this.getData().config.options.rightPanelEnabled, true);
+        return  Utils.Bools.getBool(this.data.config.options.rightPanelEnabled, true);
     }
 
     isFooterPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.getData().config.options.footerPanelEnabled, true);
+        return Utils.Bools.getBool(this.data.config.options.footerPanelEnabled, true);
     }
 
     useArrowKeysToNavigate(): boolean {
-        return Utils.Bools.getBool(this.getData().config.options.useArrowKeysToNavigate, true);
+        return Utils.Bools.getBool(this.data.config.options.useArrowKeysToNavigate, true);
     }
 
     bookmark(): void {
@@ -1024,23 +987,7 @@ export class BaseExtension implements IExtension {
     }
 
     feedback(): void {
-        this.fire(BaseEvents.FEEDBACK, this.getData());
-    }
-
-    getBookmarkUri(): string {
-        const absUri: string = parent.document.URL;
-        const parts: HTMLAnchorElement = Utils.Urls.getUrlParts(absUri);
-        let relUri: string = parts.pathname + parts.search + parent.document.location.hash;
-
-        if (!relUri.startsWith("/")) {
-            relUri = "/" + relUri;
-        }
-
-        return relUri;
-    }
-
-    getData(): IUVData {
-        return this.data;
+        this.fire(BaseEvents.FEEDBACK, this.data);
     }
 
     getAlternateLocale(): ILocale | null {
@@ -1055,7 +1002,7 @@ export class BaseExtension implements IExtension {
     }
 
     getLocales(): ILocale[] {
-        return this.getData().locales;
+        return this.data.locales;
     }
 
     getSerializedLocales(): string {

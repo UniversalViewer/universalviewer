@@ -49,7 +49,7 @@ export class PDFCenterPanel extends CenterPanel {
                     PDFJS.workerSrc = 'lib/pdf.worker.min.js';
                     PDFJS.DEFAULT_URL = pdfUri;
 
-                    const anchor: string | null = (<IPDFExtensionData>that.extension.getData()).anchor;
+                    const anchor: string | null = (<IPDFExtensionData>that.extension.data).anchor;
 
                     if (anchor) {
                         const anchorIndex: number = (1 + parseInt(anchor)) || 0;

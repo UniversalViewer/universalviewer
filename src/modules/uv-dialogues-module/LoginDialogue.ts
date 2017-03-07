@@ -94,7 +94,7 @@ export class LoginDialogue extends Dialogue {
         var message: string = this.resource.loginService.getProperty('description');
 
         if (this.options.warningMessage){
-            message = '<span class="warning">' + this.extension.getData().config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
+            message = '<span class="warning">' + this.extension.data.config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
         }
 
         this.updateLogoutButton();

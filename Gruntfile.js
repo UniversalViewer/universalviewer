@@ -115,14 +115,6 @@ module.exports = function (grunt) {
                         src: ['package.json'],
                         dest: '<%= config.directories.build %>'
                     },
-                    // html
-                    {
-                        expand: true,
-                        flatten: true,
-                        cwd: 'src',
-                        src: ['app.html'],
-                        dest: '<%= config.directories.build %>'
-                    },
                     // js
                     {
                         expand: true,
@@ -130,7 +122,7 @@ module.exports = function (grunt) {
                         src: ['<%= config.directories.src %>/build.js'],
                         dest: '<%= config.directories.build %>',
                         rename: function(dest, src) {
-                            return dest + '/app.js';
+                            return dest + '/uv.js';
                         }
                     },
                     // js

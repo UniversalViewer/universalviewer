@@ -1,10 +1,10 @@
 import {Panel} from "./Panel";
 import {IExtension} from "./IExtension";
-import UVComponent from "../../UVComponent";
+import {IUVComponent} from "../../IUVComponent";
 
 export class BaseView extends Panel{
 
-    component: UVComponent;
+    component: IUVComponent;
     config: any;
     content: any;
     extension: IExtension;
@@ -17,11 +17,11 @@ export class BaseView extends Panel{
 
     create(): void {
 
-        this.component = $("body > #app").data("component");
+        this.component = this.$element.closest('.universalviewer').data("component");
 
         super.create();
         
-        this.extension = (<UVComponent>this.component).extension;
+        this.extension = (<IUVComponent>this.component).extension;
 
         this.config = {};
         this.config.content = {};
@@ -33,7 +33,7 @@ export class BaseView extends Panel{
         if (that.modules && that.modules.length) {
             that.modules = that.modules.reverse();
             $.each(that.modules, (index: number, moduleName: string) => {
-                that.config = $.extend(true, that.config, that.extension.getData().config.modules[moduleName]);
+                that.config = $.extend(true, that.config, that.extension.data.config.modules[moduleName]);
             });
         }
 

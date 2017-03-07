@@ -4,12 +4,6 @@ import {UVDataProvider} from "./UVDataProvider";
 
 export default class URLDataProvider extends UVDataProvider {
 
-    //private _paramMap: string[] = ['c', 'm', 's', 'cv', 'xywh', 'r', 'h', 'a']; // todo: move xywh, r, h, a to OSDUrlDataProvider?
-
-    constructor() {
-        super();
-    }
-
     public data(): IUVData {
 
         let locales: ILocale[] = [
@@ -26,6 +20,7 @@ export default class URLDataProvider extends UVDataProvider {
         }
 
         return <IUVData>{
+            assetRoot: './uv/',
             config: {},
             configUri: this.get<string | null>('config', null),
             domain: this.get<string | null>('domain', null),
@@ -35,12 +30,15 @@ export default class URLDataProvider extends UVDataProvider {
             isLightbox: Boolean(this.get<boolean>('isLightbox', false)),
             isOnlyInstance: this._isOnlyInstance(),
             isReload: this._isReload(),
-            iiifResourceUri: this.get<string | null>('manifestUri', null),
+            iiifResourceUri: this.get<string | null>('iiifResourceUri', null),
             locales: locales,
             collectionIndex: Number(this.get<number>('c', 0)),
             manifestIndex: Number(this.get<number>('m', 0)),
             sequenceIndex: Number(this.get<number>('s', 0)),
-            canvasIndex: Number(this.get<number>('cv', 0))
+            canvasIndex: Number(this.get<number>('cv', 0)),
+            // non-generic params, move these to extension-specific data providers
+            rotation: Number(this.get<number>('r', 0)),
+            xywh: this.get<string | null>('xywh', '')
         }
     }
 
@@ -53,7 +51,7 @@ export default class URLDataProvider extends UVDataProvider {
     }
 
     private _isReload(): boolean {
-        return !!Utils.Urls.getQuerystringParameter('isReload');
+        return Boolean(Utils.Urls.getQuerystringParameter('isReload'));
     }
 
     // get hash or data-attribute params depending on whether the UV is embedded.

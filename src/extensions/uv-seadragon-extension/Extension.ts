@@ -59,10 +59,6 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
 
-    constructor() {
-        super();
-    }
-
     create(): void {
         super.create();
 
@@ -165,7 +161,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             args.manifestUri = this.helper.iiifResourceUri;
             args.allCanvases = ids.length === this.helper.getCanvases().length;
             args.canvases = ids;
-            args.format = this.getData().config.options.multiSelectionMimeType;
+            args.format = this.data.config.options.multiSelectionMimeType;
             args.sequence = this.helper.getCurrentSequence().id;
             this.fire(Events.MULTISELECTION_MADE, args);
         });
@@ -249,6 +245,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             
             if (this.centerPanel && bounds) {
                 $.publish(Events.XYWH_CHANGED, [bounds.toString()]);
+                this.fire(Events.XYWH_CHANGED, bounds.toString());
             }
 
             const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
@@ -275,7 +272,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEADRAGON_ROTATION, (e: any, rotation: number) => {
-            this.fire(Events.SEADRAGON_ROTATION);
+            this.fire(Events.SEADRAGON_ROTATION, rotation);
             this.currentRotation = rotation;
         });
 
@@ -418,7 +415,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isDeepLinkingEnabled()){
 
             // if a highlight param is set, use it to search.
-            const highlight: string | null = (<ISeadragonExtensionData>this.getData()).highlight;
+            const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
 
             if (highlight) {
                 highlight.replace(/\+/g, " ").replace(/"/g, "");
@@ -431,7 +428,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         // if a rotation value is in the hash params, set currentRotation
         if (this.isDeepLinkingEnabled()){
 
-            const rotation: number | null = (<ISeadragonExtensionData>this.getData()).rotation;
+            const rotation: number | null = (<ISeadragonExtensionData>this.data).rotation;
 
             if (rotation) {
                 $.publish(Events.SEADRAGON_ROTATION, [rotation]);
@@ -445,7 +442,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (canvasIndex === -1) return;
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.getData().config.content.canvasIndexOutOfRange);
+            this.showMessage(this.data.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
@@ -505,7 +502,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     viewLabel(label: string): void {
 
         if (!label) {
-            this.showMessage(this.getData().config.modules.genericDialogue.content.emptyValue);
+            this.showMessage(this.data.config.modules.genericDialogue.content.emptyValue);
             $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
@@ -515,7 +512,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (index != -1) {
             this.viewPage(index);
         } else {
-            this.showMessage(this.getData().config.modules.genericDialogue.content.pageNotFound);
+            this.showMessage(this.data.config.modules.genericDialogue.content.pageNotFound);
             $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         }
     }
@@ -588,7 +585,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         bookmark.index = this.helper.canvasIndex;
         bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.path = <string>this.getCroppedImageUri(canvas, this.getViewer());
-        bookmark.thumb = canvas.getCanonicalImageUri(this.getData().config.options.bookmarkThumbWidth);
+        bookmark.thumb = canvas.getCanonicalImageUri(this.data.config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
         bookmark.type = manifesto.ElementType.image().toString();
@@ -600,7 +597,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         // var args: MultiSelectionArgs = new MultiSelectionArgs();
         // args.manifestUri = this.helper.iiifResourceUri;
         // args.allCanvases = true;
-        // args.format = this.getData().config.options.printMimeType;
+        // args.format = this.data.config.options.printMimeType;
         // args.sequence = this.helper.getCurrentSequence().id;
         window.print();
         this.fire(Events.PRINT);
@@ -827,8 +824,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string{
-        const configUri = this.getData().config.uri || '';
-        let script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.getData().embedScriptUri);
+        const configUri = this.data.config.uri || '';
+        let script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.data.embedScriptUri);
         return script;
     }
 
@@ -852,7 +849,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     isSearchWithinEnabled(): boolean {
-        if (!Utils.Bools.getBool(this.getData().config.options.searchWithinEnabled, false)){
+        if (!Utils.Bools.getBool(this.data.config.options.searchWithinEnabled, false)){
             return false;
         }
 
@@ -948,7 +945,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 // reload current index as it may contain results.
                 that.viewPage(that.helper.canvasIndex, true);
             } else {
-                that.showMessage(that.getData().config.modules.genericDialogue.content.noMatches, () => {
+                that.showMessage(that.data.config.modules.genericDialogue.content.noMatches, () => {
                     $.publish(Events.SEARCH_RESULTS_EMPTY);
                 });
             }

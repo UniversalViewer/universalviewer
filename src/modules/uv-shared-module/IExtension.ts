@@ -1,25 +1,22 @@
-import {Metric} from "./Metric";
 import {ILocale} from "../../ILocale";
+import {IUVComponent} from "../../IUVComponent";
 import {IUVData} from "../../IUVData";
-import UVComponent from "../../UVComponent";
+import {Metric} from "./Metric";
 
 export interface IExtension {
     addTimestamp(uri: string): string;
     changeLocale(locale: string): void;
-    component: UVComponent;
+    component: IUVComponent;
     data: IUVData;
     create(): void;
     createModules(): void;
     dependenciesLoaded(...args: any[]): void;
     dependencyLoaded(index: number, dep: any): void;
-    embedHeight: number;
-    embedWidth: number;
     fire(name: string, ...args: any[]): void;
     getAlternateLocale(): ILocale | null;
     getCanvasLabels(label: string): string;
     getCurrentCanvases(): Manifesto.ICanvas[];
     getCurrentCanvasRange(): Manifesto.IRange | null;
-    getData(): IUVData;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
     getEmbedDomain(): string | null;

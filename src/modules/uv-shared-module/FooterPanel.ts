@@ -140,7 +140,7 @@ export class FooterPanel extends BaseView {
     updateOpenButton(): void {
         var configEnabled = Utils.Bools.getBool(this.options.openEnabled, false);
 
-        if (configEnabled && !this.extension.getData().isHomeDomain){
+        if (configEnabled && !this.extension.data.isHomeDomain){
             this.$openButton.show();
         } else {
             this.$openButton.hide();
@@ -152,7 +152,7 @@ export class FooterPanel extends BaseView {
             this.$fullScreenBtn.hide();
         }
 
-        if (this.extension.getData().isLightbox){
+        if (this.extension.data.isLightbox){
             this.$fullScreenBtn.addClass('lightbox');
         }
 

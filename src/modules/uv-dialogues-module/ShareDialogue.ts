@@ -141,7 +141,7 @@ export class ShareDialogue extends Dialogue {
         this.$iiifButton = $('<a class="imageBtn iiif" href="' + iiifUrl + '" title="' + this.content.iiif + '" target="_blank"></a>');
         this.$footer.append(this.$iiifButton);
 
-        this.$termsOfUseButton = $('<a href="#">' + this.extension.getData().config.content.termsOfUse + '</a>');
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.data.config.content.termsOfUse + '</a>');
         this.$footer.append(this.$termsOfUseButton);
 
         this.$widthInput.on('keydown', (e) => {
@@ -272,7 +272,7 @@ export class ShareDialogue extends Dialogue {
     //     var thumbnail = canvas.getProperty('thumbnail');
 
     //     if (!thumbnail || !_.isString(thumbnail)){
-    //         thumbnail = canvas.getCanonicalImageUri(this.extension.getData().config.options.bookmarkThumbWidth);
+    //         thumbnail = canvas.getCanonicalImageUri(this.extension.data.config.options.bookmarkThumbWidth);
     //     }
 
     //     this.$link.attr('href', thumbnail);
@@ -325,7 +325,7 @@ export class ShareDialogue extends Dialogue {
     updateTermsOfUseButton(): void {
         const attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
-        if (Utils.Bools.getBool(this.extension.getData().config.options.termsOfUseEnabled, false) && attribution) {
+        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();

@@ -157,8 +157,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.updateAttribution();
 
-        // todo: use compiler flag (when available)
-        const prefixUrl: string = 'themes/' + this.extension.getData().config.options.theme + '/img/uv-seadragoncenterpanel-module/';
+        const prefixUrl: string = this.extension.data.assetRoot + '/themes/' + this.extension.data.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
@@ -182,7 +181,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: prefixUrl,
             gestureSettingsMouse: {
-                clickToZoom: !!this.extension.getData().config.options.clickToZoomEnabled
+                clickToZoom: !!this.extension.data.config.options.clickToZoomEnabled
             },
             navImages: {
                 zoomIn: {
@@ -340,7 +339,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
         this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
 
-        switch (viewingDirection.toString()){
+        switch (viewingDirection.toString()) {
             case manifesto.ViewingDirection.bottomToTop().toString() :
             case manifesto.ViewingDirection.topToBottom().toString() :
                 this.$prevButton.addClass('vertical');
@@ -374,7 +373,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.nextButtonEnabled) return;
 
-            switch (viewingDirection.toString()){
+            switch (viewingDirection.toString()) {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
@@ -467,16 +466,16 @@ export class SeadragonCenterPanel extends CenterPanel {
                     }
                 } else {
                     // horizontal alignment
-                    if (this.extension.helper.isLeftToRight()){
+                    if (this.extension.helper.isLeftToRight()) {
                         // left to right
-                        for (let i = 0; i < resources.length - 1; i++){
+                        for (let i = 0; i < resources.length - 1; i++) {
                             page = resources[i];
                             nextPage = resources[i + 1];
                             nextPage.x = (page.x || 0) + page.width;
                         }
                     } else {
                         // right to left
-                        for (let i = resources.length - 1; i > 0; i--){
+                        for (let i = resources.length - 1; i > 0; i--) {
                             page = resources[i];
                             nextPage = resources[i - 1];
                             nextPage.x = (page.x || 0) - page.width;
@@ -552,13 +551,13 @@ export class SeadragonCenterPanel extends CenterPanel {
         // if this is the first load and there are initial bounds, fit to those.
         if (this.isFirstLoad) {
 
-            this.initialRotation = (<ISeadragonExtensionData>this.extension.getData()).rotation;
+            this.initialRotation = (<ISeadragonExtensionData>this.extension.data).rotation;
 
             if (this.initialRotation) {
                 this.viewer.viewport.setRotation(parseInt(this.initialRotation));
             }
 
-            this.initialBounds = (<ISeadragonExtensionData>this.extension.getData()).xywh;
+            this.initialBounds = (<ISeadragonExtensionData>this.extension.data).xywh;
 
             if (this.initialBounds) {
                 this.initialBounds = Bounds.fromString(this.initialBounds);
@@ -734,7 +733,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.getData().config.options.zoomToSearchResultEnabled, true);
+        return Utils.Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
     }
 
     nextSearchResult(): void {
@@ -931,7 +930,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     setFocus(): void {
         if (!this.$canvas.is(":focus")) {
-            if (this.extension.getData().config.options.allowStealFocus) {
+            if (this.extension.data.config.options.allowStealFocus) {
                 this.$canvas.focus();
             }
         }
