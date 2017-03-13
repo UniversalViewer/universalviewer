@@ -62,6 +62,7 @@ export class BaseExtension implements IExtension {
         this.$element.empty();
         this.$element.removeClass();
         this.$element.addClass('uv');
+        this.$element.addClass(this.data.locales[0].name);
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         if (!this.data.isHomeDomain) this.$element.addClass('embedded');
@@ -991,22 +992,17 @@ export class BaseExtension implements IExtension {
     }
 
     getAlternateLocale(): ILocale | null {
-        const locales: ILocale[] = this.getLocales();
         let alternateLocale: ILocale | null = null;
 
-        if (locales.length > 1) {
-            alternateLocale = locales[1];
+        if (this.data.locales.length > 1) {
+            alternateLocale = this.data.locales[1];
         }
 
         return alternateLocale;
     }
 
-    getLocales(): ILocale[] {
-        return this.data.locales;
-    }
-
     getSerializedLocales(): string {
-        return this.serializeLocales(this.getLocales());
+        return this.serializeLocales(this.data.locales);
     }
 
     serializeLocales(locales: ILocale[]): string {
@@ -1029,9 +1025,7 @@ export class BaseExtension implements IExtension {
         // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
 
         // re-order locales so the passed locale is first
-        let locales: ILocale[] = this.getLocales();
-
-        locales = locales.clone();
+        let locales: ILocale[] = this.data.locales.clone();
 
         const index: number = locales.findIndex((l: any) => {
             return l.name === locale;

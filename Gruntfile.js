@@ -243,11 +243,10 @@ module.exports = function (grunt) {
         },
 
         sync: {
-            bowerComponents: {
+            themes: {
                 files: [
                     {
-                        // themes
-                        cwd: '<%= config.directories.bower %>',
+                        cwd: '<%= config.directories.npm %>',
                         expand: true,
                         src: ['uv-*-theme/**'],
                         dest: '<%= config.directories.themes %>'

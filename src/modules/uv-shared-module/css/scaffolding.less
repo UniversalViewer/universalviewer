@@ -5,144 +5,139 @@
 
 // Reset the box-sizing
 
-*,
-*:before,
-*:after {
-    .box-sizing(border-box);
-}
+.uv {
 
-::-webkit-scrollbar {
-    width: @scrollbar-width;
-    height: @scrollbar-width;
-}
+    *,
+    *:before,
+    *:after {
+        .box-sizing(border-box);
+    }
 
-::-webkit-scrollbar-track {
-    background: @scrollbar-track-color;
-}
+    ::-webkit-scrollbar {
+        width: @scrollbar-width;
+        height: @scrollbar-width;
+    }
 
-::-webkit-scrollbar-thumb {
-    background: @scrollbar-thumb-color;
-}
+    ::-webkit-scrollbar-track {
+        background: @scrollbar-track-color;
+    }
 
-// Body reset
+    ::-webkit-scrollbar-thumb {
+        background: @scrollbar-thumb-color;
+    }
 
-html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-}
 
-html {
-    font-size: 12px;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
 
-body {
     font-family: @font-family-base;
     font-size: @font-size-base;
     line-height: @line-height-base;
     color: @text-color;
     background-color: @body-bg;
-}
 
-// Reset fonts for relevant elements
-input,
-button,
-select,
-textarea {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-}
-
-// Reset unusual Firefox-on-Android default style.
-//
-// See https://github.com/necolas/normalize.css/issues/214
-
-button,
-input,
-select[multiple],
-textarea {
-    background-image: none;
-}
-
-
-// Links
-
-a {
-    color: @link-color;
-    text-decoration: none;
-
-    &:hover,
-    &:focus {
-        color: @link-hover-color;
-        text-decoration: underline;
+    // Reset fonts for relevant elements
+    input,
+    button,
+    select,
+    textarea {
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
     }
 
-    &:focus {
-        .tab-focus();
+    // Reset unusual Firefox-on-Android default style.
+    //
+    // See https://github.com/necolas/normalize.css/issues/214
+
+    button,
+    input,
+    select[multiple],
+    textarea {
+        background-image: none;
     }
-}
 
 
-// Images
+    // Links
 
-img {
-    vertical-align: middle;
-}
+    a {
+        color: @link-color;
+        text-decoration: none;
 
-// Responsive images (ensure images don't scale beyond their parents)
-.img-responsive {
-    .img-responsive();
-}
+        &:hover,
+        &:focus {
+            color: @link-hover-color;
+            text-decoration: underline;
+        }
 
-// Rounded corners
-.img-rounded {
-    border-radius: @border-radius-large;
-}
-
-// Image thumbnails
-//
-// Heads up! This is mixin-ed into thumbnails.less for `.thumbnail`.
-.img-thumbnail {
-    padding: @thumbnail-padding;
-    line-height: @line-height-base;
-    background-color: @thumbnail-bg;
-    border: 1px solid @thumbnail-border;
-    border-radius: @thumbnail-border-radius;
-    .transition(all .2s ease-in-out);
-
-    // Keep them at most 100% wide
-    .img-responsive(inline-block);
-}
-
-// Perfect circle
-.img-circle {
-    border-radius: 50%; // set radius in percents
-}
+        &:focus {
+            .tab-focus();
+        }
+    }
 
 
-// Horizontal rules
+    // Images
 
-hr {
-    margin-top:    @line-height-computed;
-    margin-bottom: @line-height-computed;
-    border: 0;
-    border-top: 1px solid @hr-border;
-}
+    img {
+        vertical-align: middle;
+    }
+
+    // Responsive images (ensure images don't scale beyond their parents)
+    .img-responsive {
+        .img-responsive();
+    }
+
+    // Rounded corners
+    .img-rounded {
+        border-radius: @border-radius-large;
+    }
+
+    // Image thumbnails
+    //
+    // Heads up! This is mixin-ed into thumbnails.less for `.thumbnail`.
+    .img-thumbnail {
+        padding: @thumbnail-padding;
+        line-height: @line-height-base;
+        background-color: @thumbnail-bg;
+        border: 1px solid @thumbnail-border;
+        border-radius: @thumbnail-border-radius;
+        .transition(all .2s ease-in-out);
+
+        // Keep them at most 100% wide
+        .img-responsive(inline-block);
+    }
+
+    // Perfect circle
+    .img-circle {
+        border-radius: 50%; // set radius in percents
+    }
 
 
-// Only display content to screen readers
-//
-// See: http://a11yproject.com/posts/how-to-hide-content/
+    // Horizontal rules
 
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    border: 0;
+    hr {
+        margin-top:    @line-height-computed;
+        margin-bottom: @line-height-computed;
+        border: 0;
+        border-top: 1px solid @hr-border;
+    }
+
+
+    // Only display content to screen readers
+    //
+    // See: http://a11yproject.com/posts/how-to-hide-content/
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        border: 0;
+    }
+
 }

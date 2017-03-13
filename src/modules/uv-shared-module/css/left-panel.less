@@ -1,26 +1,26 @@
-#app{
+.uv {
 
     @expandFullEnabled: false;
 
     .leftPanel {
 
-        a{
+        a {
             color: @text-color;
             text-decoration: none;
         }
 
-        .top{
+        .top {
             height: 35px;
             position: relative;
 
-            .title{
+            .title {
                 height: 20px;
                 margin: 9px 0 0 10px;
                 float: left;
                 cursor: pointer;
             }
 
-            .collapseButton{
+            .collapseButton {
                 float: right;
                 background: data-uri('@{img-path}arrows_left.png');
                 background-repeat: no-repeat;
@@ -31,7 +31,7 @@
                 display: block;
             }
 
-            .expandFullButton{
+            .expandFullButton {
                 float: right;
                 background: data-uri('@{img-path}arrows_right.png');
                 background-repeat: no-repeat;
@@ -45,11 +45,11 @@
             .expandFull();
         }
 
-        .closed{
+        .closed {
             width: 25px;
             float: right;
 
-            .title{
+            .title {
                 .link-color-decoration(@text-color, none);
                 white-space: nowrap;
                 display: block;
@@ -59,7 +59,7 @@
                 .rotate(90deg);
             }
 
-            .expandButton{
+            .expandButton {
                 background: data-uri('@{img-path}arrows_right.png');
                 background-repeat: no-repeat;
                 width: 20px;
@@ -70,7 +70,7 @@
                 .btn-focus();
             }
 
-            .expandFullButton{
+            .expandFullButton {
                 .btn-focus();
             }
         }
@@ -84,9 +84,9 @@
 }
 
 // ie8
-#app.browser-Explorer.browser-version-8 {
-    .leftPanel{
-        .closed{
+.uv.browser-Explorer.browser-version-8 {
+    .leftPanel {
+        .closed {
             .title{
                 //                filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
                 //                width: 250px;

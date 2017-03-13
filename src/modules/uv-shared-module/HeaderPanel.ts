@@ -105,7 +105,7 @@ export class HeaderPanel extends BaseView {
     }
 
     localeToggleIsVisible(): boolean {
-        const locales: ILocale[] | null = this.extension.getLocales();
+        const locales: ILocale[] | null = this.extension.data.locales;
 
         if (locales) {
             return locales.length > 1 && Utils.Bools.getBool(this.options.localeToggleEnabled, false);

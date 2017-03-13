@@ -18,7 +18,7 @@
 
 @img-path: '../../../modules/uv-shared-module/img/';
 
-#app {
+.uv {
 
     :focus {
         //outline: 1px dotted @btn-focused-border;
@@ -37,7 +37,7 @@
         .border-radius(0);
     }
 
-    .imageBtn{
+    .imageBtn {
         cursor: pointer;
         .btn-focus();
     }
@@ -53,19 +53,19 @@
         font-weight: bold;
     }
 
-    #commsFrame{
+    #commsFrame {
         width: 1px;
         height: 1px;
         border: none;
     }
 
-    .headerPanel{
+    .headerPanel {
         position: relative;
         color: #fff;
         height: 40px;
     }
 
-    .mainPanel{
+    .mainPanel {
         position: relative;
         margin-top: @panel-margin;
         margin-right: @panel-margin;
@@ -73,23 +73,23 @@
         margin-left: @panel-margin;
     }
 
-    .leftPanel{
+    .leftPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
     }
 
-    .centerPanel{
+    .centerPanel {
         position: absolute;
     }
 
-    .rightPanel{
+    .rightPanel {
         position: absolute;
         background: @panel-dark-bg;
         border: @panel-border;
     }
 
-    .footerPanel{
+    .footerPanel {
         position: relative;
         margin-top: 0;
         margin-right: @panel-margin;
@@ -103,7 +103,7 @@
 }
 
 @media print {
-   #app {
+   .uv {
 
        .headerPanel {
            display: none;

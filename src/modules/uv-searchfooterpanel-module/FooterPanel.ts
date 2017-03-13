@@ -485,15 +485,17 @@ export class FooterPanel extends BaseFooterPanel {
         if (searchResults) {
             const result: SearchResult = searchResults[elemIndex];
             const terms: string = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
-            let instancesFoundText: string = that.content.instanceFound;
+            let instanceFoundText: string = that.content.instanceFound;
+            let instancesFoundText: string = that.content.instancesFound;
+            let text: string = '';
 
             if (result.rects.length === 1) {
-                instancesFoundText = String.format(instancesFoundText, terms);
+                text = String.format(instanceFoundText, terms);
+                that.$placemarkerDetailsBottom.html(text);
             } else {
-                instancesFoundText = String.format(instancesFoundText, result.rects.length, terms);
+                text = String.format(instancesFoundText, result.rects.length, terms);
+                that.$placemarkerDetailsBottom.html(text);
             }
-
-            that.$placemarkerDetailsBottom.html(instancesFoundText);
         }
 
         const pos: any = $placemarker.position();

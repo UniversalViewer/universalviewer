@@ -60,7 +60,7 @@ export class SettingsDialogue extends Dialogue {
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
-        const locales: ILocale[] = this.extension.getLocales();
+        const locales: ILocale[] = this.extension.data.locales;
 
         if (locales) {
             for (let i = 0; i < locales.length; i++) {

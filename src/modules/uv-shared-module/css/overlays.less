@@ -1,6 +1,6 @@
-#app {
+.uv {
 
-    .overlays{
+    .overlays {
         position: absolute;
         top: 0;
         left: 0;
@@ -9,14 +9,14 @@
         display: none;
     }
 
-    .overlay{
+    .overlay {
         position: absolute;
 
-        .top{
+        .top {
             width: 100%;
             overflow: auto;
 
-            .close{
+            .close {
                 .hide-text();
                 background-image: data-uri('@{img-path}close.png');
                 width: 24px;
@@ -26,27 +26,27 @@
             }
         }
 
-        .middle{
+        .middle {
             width: 100%;
             background: @overlay-bg;
 
-            .content{
+            .content {
                 padding-right: @padding-medium-horizontal;
                 padding-bottom: @padding-medium-vertical;
                 padding-left: @padding-medium-horizontal;
 
                 overflow: auto;
 
-                .buttons{
+                .buttons {
                     padding: @padding-medium-vertical 0 0 0;
                     float: right;
 
-                    .btn{
+                    .btn {
                         margin: 0 0 0 @margin-medium-horizontal;
                     }
                 }
 
-                h1{
+                h1 {
                     color: @headings-color;
                     font-size: @headings-size-large;
                     font-weight: @headings-font-weight;
@@ -54,7 +54,7 @@
                     padding: 0 0 @padding-medium-vertical 0;
                 }
 
-                h2{
+                h2 {
                     color: @headings-color;
                     font-size: @headings-size-small;
                     font-weight: @headings-font-weight;
@@ -62,27 +62,27 @@
                     padding: @padding-large-vertical 0 @padding-medium-vertical 0;
                 }
 
-                p{
+                p {
                     margin: 0;
                     padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
 
-                    p{
+                    p {
                         padding-top: 0;
                     }
                 }
 
-                ol.options{
+                ol.options {
                     list-style-image: none;
                     list-style-position: inside;
                     list-style-type: none;
                     margin: 0;
 
-                    li{
+                    li {
                         //background: @gray-lighter;
                         margin: 2px 0 0 0;
                         padding: 4px;
 
-                        input{
+                        input {
                             margin: 0;
                             padding: 0;
                             width: auto;
@@ -90,7 +90,7 @@
                             display: inline;
                         }
 
-                        label{
+                        label {
                             display: inline;
                             margin: 0 0 0 @margin-small-horizontal;
                             padding: 0;
@@ -105,30 +105,30 @@
             }
         }
 
-        .bottom{
+        .bottom {
             height: 11px;
             background-image: data-uri('@{img-path}dialogue_arrow.png');
             background-repeat: no-repeat;
         }
 
-        &.genericDialogue{
+        &.genericDialogue {
             width: 250px;
 
-            .bottom{
+            .bottom {
                 background: none;
             }
 
-            .message{
+            .message {
                 color: #000;
                 padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
             }
 
-            .accept{
+            .accept {
                 float: right;
             }
         }
 
-        .scroll{
+        .scroll {
             margin: @margin-medium-vertical 0 0 0;
             padding: 0 @padding-medium-horizontal 0 0;
             overflow: auto;

@@ -50,10 +50,6 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
     npm install -g grunt-cli
 
-1. Install bower:
-
-    npm install -g bower
-
 <!--
 1. Install [Sorcery](https://github.com/Rich-Harris/sorcery):
 
@@ -68,7 +64,6 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 1. Run
 
     npm install
-    bower install
 
 ### Debug Builds
 

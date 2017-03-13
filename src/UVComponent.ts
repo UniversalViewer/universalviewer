@@ -123,9 +123,6 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         // add loading class
         $elem.addClass('loading');
 
-        // remove any existing css
-        //$('link[type*="text/css"]').remove(); // todo: replace any inline styles with id #uvcomponent
-
         jQuery.support.cors = true;
 
         var that = this;
@@ -255,10 +252,21 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
     private _injectCss(data: IUVData, extension: any, cb: () => void): void {
         const cssPath: string = data.assetRoot + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
+        const locale: string = data.locales[0].name;
+        const themeName: string = 'uv-theme-' + locale;
+        const $existingCSS: JQuery = $('#' + themeName);
 
-        yepnope.injectCss(cssPath, function() {
+        if (!$existingCSS.length) {
+            $.ajax({
+                url: cssPath,
+                success: (data) => {
+                    $('body').append('<style id="' + themeName + '">' + data + '</style>');
+                    cb();
+                }
+            });
+        } else {
             cb();
-        });
+        }
     }
 
     private _createExtension(extension: any, data: IUVData, helper: Manifold.IHelper): void {

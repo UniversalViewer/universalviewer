@@ -39,4 +39,7 @@ module.exports = function () {
         uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
         uvVirtexExtension: './src/extensions/uv-virtex-extension'
     };
+    this.themes = {
+        
+    }
 }
