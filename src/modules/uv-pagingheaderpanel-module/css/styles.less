@@ -6,7 +6,7 @@
     &.embedded{
 
 //        .headerPanel {
-//            background-image: url('@{img-path}logo.png');
+//            background-image: data-uri('@{img-path}logo.png');
 //            background-repeat: no-repeat;
 //            background-position: 8px 8px;
 //        }
@@ -20,7 +20,7 @@
 
             &.first{
                 background-color: @gray;
-                background-image: url('@{img-path}first.png');
+                background-image: data-uri('@{img-path}first.png');
                 background-repeat: no-repeat;
                 margin: 0 0 0 0;
                 &:hover{
@@ -30,7 +30,7 @@
 
             &.prev{
                 background-color: @gray;
-                background-image: url('@{img-path}prev.png');
+                background-image: data-uri('@{img-path}prev.png');
                 background-repeat: no-repeat;
                 margin: 0 0 0 5px;
                 &:hover{
@@ -40,7 +40,7 @@
 
             &.next{
                 background-color: @gray;
-                background-image: url('@{img-path}next.png');
+                background-image: data-uri('@{img-path}next.png');
                 background-repeat: no-repeat;
                 margin: 0 5px 0 0;
                 &:hover{
@@ -50,7 +50,7 @@
 
             &.last{
                 background-color: @gray;
-                background-image: url('@{img-path}last.png') ;
+                background-image: data-uri('@{img-path}last.png') ;
                 background-repeat: no-repeat;
                 margin: 0 0 0 0;
                 &:hover{
@@ -59,7 +59,8 @@
             }
 
             &.go{
-                background: url('@{img-path}go.png') no-repeat;
+                background: data-uri('@{img-path}go.png');
+                background-repeat: no-repeat;
                 width: 28px;
                 line-height: 24px;
             }
@@ -171,7 +172,7 @@
                     overflow: hidden;
 
                     &.loading{
-                        background-image: url(@loader-white-bg);
+                        background-image: data-uri(@loader-white-bg);
                         background-repeat: no-repeat;
                         background-position: 4px 4px;
                         height: 25px;
@@ -189,7 +190,7 @@
                 float: left;
                 //margin: -1px 4px 0 0;
                 .one-up{
-                    background-image: url('@{img-path}one_up.png');
+                    background-image: data-uri('@{img-path}one_up.png');
                     background-repeat: no-repeat;
                     .opacity(1);
                     &.on{
@@ -197,7 +198,7 @@
                     }
                 }
                 .two-up{
-                    background-image: url('@{img-path}two_up.png');
+                    background-image: data-uri('@{img-path}two_up.png');
                     background-repeat: no-repeat;
                     .opacity(1);
                     &.on{
@@ -206,7 +207,7 @@
                 }
             }
             .gallery{
-                background-image: url('@{img-path}grid.png');
+                background-image: data-uri('@{img-path}grid.png');
                 background-repeat: no-repeat;
                 margin-right: @margin-small-horizontal;
                 .opacity(1);

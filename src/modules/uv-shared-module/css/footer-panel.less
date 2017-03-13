@@ -15,47 +15,47 @@
                 margin-right: 15px;
 
                 &.moreInfo{
-                    .icon-left(url('@{img-path}moreinfo.png'), 21px, 35px);
+                    .icon-left('@{img-path}moreinfo.png', 21px, 35px);
                     line-height: 22px;
                 }
 
                 &.open{
-                    .icon-left(url('@{img-path}open.png'), 21px, 35px);
+                    .icon-left('@{img-path}open.png', 21px, 35px);
                     line-height: 22px;
                 }
 
                 &.share{
-                    .icon-left(url('@{img-path}share.png'), 21px, 35px);
+                    .icon-left('@{img-path}share.png', 21px, 35px);
                     line-height: 22px;
                 }
 
                 &.embed{
-                    .icon-left(url('@{img-path}embed.png'), 21px, 35px);
+                    .icon-left('@{img-path}embed.png', 21px, 35px);
                     line-height: 22px;
                 }
 
                 &.download{
-                    .icon-left(url('@{img-path}download.png'), 21px, 30px);
+                    .icon-left('@{img-path}download.png', 21px, 30px);
                     line-height: 22px;
                 }
 
                 &.bookmark{
-                    .icon-left(url('@{img-path}bookmark.png'), 21px, 30px);
+                    .icon-left('@{img-path}bookmark.png', 21px, 30px);
                     line-height: 22px;
                 }
 
                 &.feedback{
-                    .icon-left(url('@{img-path}feedback.png'), 21px, 30px);
+                    .icon-left('@{img-path}feedback.png', 21px, 30px);
                     line-height: 22px;
                 }
 
                 &.print{
-                    .icon-left(url('@{img-path}print.png'), 21px, 30px);
+                    .icon-left('@{img-path}print.png', 21px, 30px);
                     line-height: 22px;
                 }
 
                 &.fullScreen{
-                    .icon-right(url('@{img-path}fullscreen.png'), 21px, 30px);
+                    .icon-right('@{img-path}fullscreen.png', 21px, 30px);
                     line-height: 22px;
                     min-width: 25px;
                     float: right;
@@ -63,7 +63,7 @@
                 }
 
                 &.exitFullscreen{
-                    .icon-right(url('@{img-path}exit_fullscreen.png'), 21px, 30px);
+                    .icon-right('@{img-path}exit_fullscreen.png', 21px, 30px);
                     line-height: 22px;
                     min-width: 25px;
                     float: right;
@@ -158,7 +158,8 @@
         .options{
             a.imageBtn{
                 &.normal{
-                    background: url('@{img-path}close_lightbox.png') no-repeat;
+                    background: data-uri('@{img-path}close_lightbox.png');
+                    background-repeat: no-repeat;
                 }
             }
         }

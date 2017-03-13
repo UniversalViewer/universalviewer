@@ -25,16 +25,16 @@
 
                 a.imageBtn {
                     &.zoomIn{
-                        background-image: url('@{img-path}zoom_in.png');
+                        background-image: data-uri('@{img-path}zoom_in.png');
                     }
 
                     &.zoomOut {
-                        background-image: url('@{img-path}zoom_out.png');
+                        background-image: data-uri('@{img-path}zoom_out.png');
                     }
 
                     &.vr {
                         margin-left: @margin-medium-horizontal;
-                        background-image: url('@{img-path}vr.png');
+                        background-image: data-uri('@{img-path}vr.png');
                     }
                 }
 

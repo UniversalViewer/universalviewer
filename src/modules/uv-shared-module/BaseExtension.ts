@@ -61,7 +61,7 @@ export class BaseExtension implements IExtension {
         // add/remove classes.
         this.$element.empty();
         this.$element.removeClass();
-        this.$element.addClass('universalviewer');
+        this.$element.addClass('uv');
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         if (!this.data.isHomeDomain) this.$element.addClass('embedded');

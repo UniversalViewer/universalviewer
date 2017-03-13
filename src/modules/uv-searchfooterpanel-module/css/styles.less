@@ -17,24 +17,24 @@
 
             .searchResultPlacemarker{
                 position: absolute;
-                background: url('@{img-path}placemarker_down.png');
+                background: data-uri('@{img-path}placemarker_down.png');
                 height: 24px;
                 width: 18px;
                 cursor: pointer;
                 margin: -24 0 0 -9;
 
                 &.hover{
-                    background: url('@{img-path}placemarker_down_hover.png');
+                    background: data-uri('@{img-path}placemarker_down_hover.png');
                 }
 
                 &.current{
-                    background: url('@{img-path}placemarker_down_hover.png');
+                    background: data-uri('@{img-path}placemarker_down_hover.png');
                 }
             }
 
             .positionPlacemarker{
                 position: absolute;
-                background: url('@{img-path}placemarker_up.png');
+                background: data-uri('@{img-path}placemarker_up.png');
                 height: 24px;
                 width: 18px;
                 margin: 2px 0 0 -9px;
@@ -130,7 +130,7 @@
                         overflow: hidden;
 
                         &.loading{
-                            background-image: url(@loader-white-bg);
+                            background-image: data-uri(@loader-white-bg);
                             background-repeat: no-repeat;
                             background-position: 4px 4px;
                             height: 25px;
@@ -153,13 +153,15 @@
                     border: none;
 
                     &.searching {
-                        background: url('@{img-path}spinner.gif') no-repeat;
+                        background: data-uri('@{img-path}spinner.gif');
+                        background-repeat: no-repeat;
                         background-position: right 3px;
                     }
                 }
 
                 a.imageButton.searchButton{
-                    background: url('@{img-path}search.png') no-repeat;
+                    background: data-uri('@{img-path}search.png');
+                    background-repeat: no-repeat;
                     height: 18px;
                     width: 18px;
                     margin: 2px 2px 0 0;
@@ -197,7 +199,7 @@
 
                 a.previousResult{
                     .noselect();
-                    .icon-left(url('@{img-path}prev.png'), 30px, 25px);
+                    .icon-left('@{img-path}prev.png', 30px, 25px);
                     line-height: 30px;
                     float: left;
                     margin: 0 @margin-medium-horizontal 0 0;
@@ -209,7 +211,7 @@
 
                 a.nextResult{
                     .noselect();
-                    .icon-right(url('@{img-path}next.png'), 30px, 25px);
+                    .icon-right('@{img-path}next.png', 30px, 25px);
                     line-height: 30px;
                     float: right;
                     margin: 0 0 0 @margin-medium-horizontal;

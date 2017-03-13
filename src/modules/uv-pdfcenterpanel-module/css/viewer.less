@@ -28,7 +28,7 @@ body {
   font-size: 10px;
   height: 100%;
   background-color: #404040;
-  background-image: url(../../../modules/uv-pdfcenterpanel-module/img/texture.png);
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/texture.png');
 }
 
 body,
@@ -282,7 +282,7 @@ select {
   width: 200px;
   height: 32px;
   background-color: #424242; /* fallback */
-  background-image: url(../../../modules/uv-pdfcenterpanel-module/img/texture.png),
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/texture.png'),
                     linear-gradient(hsla(0,0%,30%,.99), hsla(0,0%,25%,.95));
 }
 #outerContainer[dir='ltr'] #toolbarSidebar {
@@ -302,7 +302,7 @@ select {
   position: relative;
   height: 32px;
   background-color: #474747; /* fallback */
-  background-image: url(../../../modules/uv-pdfcenterpanel-module/img/texture.png),
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/texture.png'),
                     linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
 }
 #outerContainer[dir='ltr'] #toolbarContainer, .findbar, .secondaryToolbar {
@@ -407,7 +407,7 @@ select {
 }
 
 #findInput[data-status="pending"] {
-  background-image: url(../../../modules/uv-pdfcenterpanel-module/img/loading-small.png);
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/loading-small.png');
   background-repeat: no-repeat;
   background-position: right;
 }
@@ -753,7 +753,8 @@ select {
   max-width: 120px;
   padding: 3px 2px 2px;
   overflow: hidden;
-  background: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-menuArrows.png) no-repeat;
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-menuArrows.png');
+  background-repeat: no-repeat;
 }
 #outerContainer[dir='ltr'] .dropdownToolbarButton {
   background-position: 95%;
@@ -849,73 +850,73 @@ select {
 }
 
 #outerContainer[dir='ltr'] .toolbarButton#sidebarToggle::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle.png');
 }
 #outerContainer[dir='rtl'] .toolbarButton#sidebarToggle::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle-rtl.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle-rtl.png');
 }
 
 #outerContainer[dir='ltr'] .toolbarButton#secondaryToolbarToggle::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle.png');
 }
 #outerContainer[dir='rtl'] .toolbarButton#secondaryToolbarToggle::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle-rtl.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle-rtl.png');
 }
 
 #outerContainer[dir='ltr'] .toolbarButton.findPrevious::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous.png');
 }
 #outerContainer[dir='rtl'] .toolbarButton.findPrevious::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous-rtl.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous-rtl.png');
 }
 
 #outerContainer[dir='ltr'] .toolbarButton.findNext::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next.png');
 }
 #outerContainer[dir='rtl'] .toolbarButton.findNext::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next-rtl.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next-rtl.png');
 }
 
 #outerContainer[dir='ltr'] .toolbarButton.pageUp::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp.png');
 }
 #outerContainer[dir='rtl'] .toolbarButton.pageUp::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp-rtl.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp-rtl.png');
 }
 
 #outerContainer[dir='ltr'] .toolbarButton.pageDown::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown.png');
 }
 #outerContainer[dir='rtl'] .toolbarButton.pageDown::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown-rtl.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown-rtl.png');
 }
 
 .toolbarButton.zoomOut::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomOut.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomOut.png');
 }
 
 .toolbarButton.zoomIn::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomIn.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomIn.png');
 }
 
 .toolbarButton.presentationMode::before,
 .secondaryToolbarButton.presentationMode::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-presentationMode.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-presentationMode.png');
 }
 
 .toolbarButton.print::before,
 .secondaryToolbarButton.print::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-print.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-print.png');
 }
 
 .toolbarButton.openFile::before,
 .secondaryToolbarButton.openFile::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-openFile.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-openFile.png');
 }
 
 .toolbarButton.download::before,
 .secondaryToolbarButton.download::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-download.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-download.png');
 }
 
 .toolbarButton.bookmark,
@@ -938,26 +939,26 @@ select {
 
 .toolbarButton.bookmark::before,
 .secondaryToolbarButton.bookmark::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-bookmark.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-bookmark.png');
 }
 
 #viewThumbnail.toolbarButton::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewThumbnail.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewThumbnail.png');
 }
 
 #outerContainer[dir="ltr"] #viewOutline.toolbarButton::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline.png');
 }
 #outerContainer[dir="rtl"] #viewOutline.toolbarButton::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline-rtl.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline-rtl.png');
 }
 
 #viewAttachments.toolbarButton::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewAttachments.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewAttachments.png');
 }
 
 #viewFind.toolbarButton::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-search.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-search.png');
 }
 
 .secondaryToolbarButton {
@@ -993,27 +994,27 @@ select {
 }
 
 .secondaryToolbarButton.firstPage::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-firstPage.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-firstPage.png');
 }
 
 .secondaryToolbarButton.lastPage::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-lastPage.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-lastPage.png');
 }
 
 .secondaryToolbarButton.rotateCcw::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCcw.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCcw.png');
 }
 
 .secondaryToolbarButton.rotateCw::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCw.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCw.png');
 }
 
 .secondaryToolbarButton.handTool::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-handTool.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-handTool.png');
 }
 
 .secondaryToolbarButton.documentProperties::before {
-  content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-documentProperties.png);
+  content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-documentProperties.png');
 }
 
 .verticalToolbarSeparator {
@@ -1265,7 +1266,10 @@ canvas {
   overflow: visible;
   border: 9px solid transparent;
   background-clip: content-box;
-  border-image: url(../../../modules/uv-pdfcenterpanel-module/img/shadow.png) 9 9 repeat;
+  border-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/shadow.png');
+  background-position-x: 9;
+  background-position-y: 9;
+  background-repeat: repeat;
   background-color: white;
 }
 
@@ -1282,7 +1286,9 @@ canvas {
   top: 0;
   right: 0;
   bottom: 0;
-  background: url('../../../modules/uv-pdfcenterpanel-module/img/loading-icon.gif') center no-repeat;
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/loading-icon.gif');
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .textLayer {
@@ -1439,7 +1445,7 @@ canvas {
   line-height: 14px;
   text-align: center;
   background-color: #474747; /* fallback */
-  background-image: url(../../../modules/uv-pdfcenterpanel-module/img/texture.png),
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/texture.png'),
                     linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
   box-shadow: inset 1px 0 0 hsla(0,0%,100%,.08),
               inset 0 1px 1px hsla(0,0%,0%,.15),
@@ -1484,7 +1490,7 @@ canvas {
   text-align: left;
   cursor: default;
   background-color: #474747; /* fallback */
-  background-image: url(../../../modules/uv-pdfcenterpanel-module/img/texture.png),
+  background-image: data-uri('../../../modules/uv-pdfcenterpanel-module/img/texture.png'),
                     linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
   box-shadow: inset 1px 0 0 hsla(0,0%,100%,.08),
               inset 0 1px 1px hsla(0,0%,0%,.15),
@@ -1669,126 +1675,127 @@ canvas {
   }
 
   .dropdownToolbarButton {
-    background: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-menuArrows@2x.png) no-repeat;
+    background: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-menuArrows@2x.png');
+    background-repeat: no-repeat;
     background-size: 7px 16px;
   }
 
   #outerContainer[dir='ltr'] .toolbarButton#sidebarToggle::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle@2x.png');
   }
   #outerContainer[dir='rtl'] .toolbarButton#sidebarToggle::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle-rtl@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-sidebarToggle-rtl@2x.png');
   }
 
   #outerContainer[dir='ltr'] .toolbarButton#secondaryToolbarToggle::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle@2x.png');
   }
   #outerContainer[dir='rtl'] .toolbarButton#secondaryToolbarToggle::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle-rtl@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-secondaryToolbarToggle-rtl@2x.png');
   }
 
   #outerContainer[dir='ltr'] .toolbarButton.findPrevious::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous@2x.png');
   }
   #outerContainer[dir='rtl'] .toolbarButton.findPrevious::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous-rtl@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-previous-rtl@2x.png');
   }
 
   #outerContainer[dir='ltr'] .toolbarButton.findNext::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next@2x.png');
   }
   #outerContainer[dir='rtl'] .toolbarButton.findNext::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next-rtl@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/findbarButton-next-rtl@2x.png');
   }
 
   #outerContainer[dir='ltr'] .toolbarButton.pageUp::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp@2x.png');
   }
   #outerContainer[dir='rtl'] .toolbarButton.pageUp::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp-rtl@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageUp-rtl@2x.png');
   }
 
   #outerContainer[dir='ltr'] .toolbarButton.pageDown::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown@2x.png');
   }
   #outerContainer[dir='rtl'] .toolbarButton.pageDown::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown-rtl@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-pageDown-rtl@2x.png');
   }
 
   .toolbarButton.zoomIn::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomIn@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomIn@2x.png');
   }
 
   .toolbarButton.zoomOut::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomOut@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-zoomOut@2x.png');
   }
 
   .toolbarButton.presentationMode::before,
   .secondaryToolbarButton.presentationMode::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-presentationMode@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-presentationMode@2x.png');
   }
 
   .toolbarButton.print::before,
   .secondaryToolbarButton.print::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-print@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-print@2x.png');
   }
 
   .toolbarButton.openFile::before,
   .secondaryToolbarButton.openFile::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-openFile@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-openFile@2x.png');
   }
 
   .toolbarButton.download::before,
   .secondaryToolbarButton.download::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-download@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-download@2x.png');
   }
 
   .toolbarButton.bookmark::before,
   .secondaryToolbarButton.bookmark::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-bookmark@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-bookmark@2x.png');
   }
 
   #viewThumbnail.toolbarButton::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewThumbnail@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewThumbnail@2x.png');
   }
 
   #outerContainer[dir="ltr"] #viewOutline.toolbarButton::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline@2x.png');
   }
   #outerContainer[dir="rtl"] #viewOutline.toolbarButton::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline-rtl@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewOutline-rtl@2x.png');
   }
 
   #viewAttachments.toolbarButton::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewAttachments@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-viewAttachments@2x.png');
   }
 
   #viewFind.toolbarButton::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-search@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/toolbarButton-search@2x.png');
   }
 
   .secondaryToolbarButton.firstPage::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-firstPage@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-firstPage@2x.png');
   }
 
   .secondaryToolbarButton.lastPage::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-lastPage@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-lastPage@2x.png');
   }
 
   .secondaryToolbarButton.rotateCcw::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCcw@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCcw@2x.png');
   }
 
   .secondaryToolbarButton.rotateCw::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCw@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-rotateCw@2x.png');
   }
 
   .secondaryToolbarButton.handTool::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-handTool@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-handTool@2x.png');
   }
 
   .secondaryToolbarButton.documentProperties::before {
-    content: url(../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-documentProperties@2x.png);
+    content: data-uri('../../../modules/uv-pdfcenterpanel-module/img/secondaryToolbarButton-documentProperties@2x.png');
   }
 }
 

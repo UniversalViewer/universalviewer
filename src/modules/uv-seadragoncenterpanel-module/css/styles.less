@@ -40,48 +40,48 @@
                     }
 
                     &.prev {
-                        background-image: url('@{img-path}left_arrow.png');
+                        background-image: data-uri('@{img-path}left_arrow.png');
                         left: 0;
                         &.disabled {
-                            background-image: url('@{img-path}left_arrow_disabled.png');
+                            background-image: data-uri('@{img-path}left_arrow_disabled.png');
                         }
                     }
 
                     &.prev.vertical {
-                        background-image: url('@{img-path}up_arrow.png');
+                        background-image: data-uri('@{img-path}up_arrow.png');
                         left: 0;
                         top: 0;
                         &.disabled {
-                            background-image: url('@{img-path}up_arrow_disabled.png');
+                            background-image: data-uri('@{img-path}up_arrow_disabled.png');
                         }
                         &.down {
-                            background-image: url('@{img-path}down_arrow.png');
+                            background-image: data-uri('@{img-path}down_arrow.png');
                             &.disabled {
-                                background-image: url('@{img-path}down_arrow_disabled.png');
+                                background-image: data-uri('@{img-path}down_arrow_disabled.png');
                             }
                         }
                     }
 
                     &.next {
-                        background-image: url('@{img-path}right_arrow.png');
+                        background-image: data-uri('@{img-path}right_arrow.png');
                         right: 0;
                         &.disabled {
-                            background-image: url('@{img-path}right_arrow_disabled.png');
+                            background-image: data-uri('@{img-path}right_arrow_disabled.png');
                         }
                     }
 
                     &.next.vertical {
-                        background-image: url('@{img-path}down_arrow.png');
+                        background-image: data-uri('@{img-path}down_arrow.png');
                         left: 0;
                         top: 0;
                         margin-left: 15px;
                         &.disabled {
-                            background-image: url('@{img-path}down_arrow_disabled.png');
+                            background-image: data-uri('@{img-path}down_arrow_disabled.png');
                         }
                         &.up {
-                            background-image: url('@{img-path}up_arrow.png');
+                            background-image: data-uri('@{img-path}up_arrow.png');
                             &.disabled {
-                                background-image: url('@{img-path}up_arrow_disabled.png');
+                                background-image: data-uri('@{img-path}up_arrow_disabled.png');
                             }
                         }
                     }
@@ -89,11 +89,23 @@
 
                 .zoomIn{
                     cursor: pointer !important;
+                    background-image: data-uri('@{img-path}zoom_in.png') !important;
+                    width: 28px;
+                    height: 28px;
+                    img {
+                        display: none;
+                    }
                     .btn-focus() !important;
                 }
 
                 .zoomOut{
                     cursor: pointer !important;
+                    background-image: data-uri('@{img-path}zoom_out.png') !important;
+                    width: 28px;
+                    height: 28px;
+                    img {
+                        display: none;
+                    }
                     .btn-focus() !important;
                 }
 
@@ -108,6 +120,12 @@
 
                 .rotate{
                     cursor: pointer !important;
+                    background-image: data-uri('@{img-path}rotate_right.png') !important;
+                    width: 28px;
+                    height: 28px;
+                    img {
+                        display: none;
+                    }
                     .btn-focus() !important;
                 }
 

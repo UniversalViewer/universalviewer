@@ -70,7 +70,7 @@ module.exports = function (grunt) {
 
         clean: {
             build : ['<%= config.directories.build %>'],
-            examples: ['<%= config.directories.examples %>/uv/'],
+            examples: ['<%= config.directories.examples %>/uv/*'],
             extension: ['<%= config.directories.src %>/extensions/*/.build/*']
         },
 
@@ -212,6 +212,13 @@ module.exports = function (grunt) {
 
                             return dest + moduleName + fileName;
                         }
+                    },
+                    // images
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: 'src/img/*',
+                        dest: '<%= config.directories.build %>/img/'
                     }
                 ]
             },
@@ -295,39 +302,9 @@ module.exports = function (grunt) {
         },
 
         replace: {
-
-            // ../../../modules/<module>/img/<image>
-            // becomes
-            // ../../img/<module>/<image>
-            moduleimages: {
-                // replace img srcs to point to "../../img/<module>/<img>"
-                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
-                overwrite: true,
-                replacements: [{
-                    from: /\((?:'|"|)(?:.*modules\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
-                    to: '\(\'../../img/$1/$2\'\)'
-                }]
-            },
-            // ../../../themes/uv-default-theme/img/<img>
-            // becomes
-            // ../../../img/<img>
-            themeimages: {
-                // replace img srcs to point to "../../img/<module>/<img>"
-                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
-                overwrite: true,
-                replacements: [{
-                    from: /\((?:'|"|)(?:.*themes\/(.*)\/img\/(.*.\w{3,}))(?:'|"|)\)/g,
-                    to: '\(\'../../img/$2\'\)'
-                }]
-            },
             versions: {
                 // replace uv version
                 src: [
-                    //'<%= config.directories.examples %>/index.html',
-                    //'<%= config.directories.examples %>/noeditor.html',
-                    //'<%= config.directories.examples %>/examples.js',
-                    //'<%= config.directories.examples %>/uv.js',
-                    //'<%= config.directories.examples %>/web.config',
                     '<%= config.directories.src %>/embed.js'
                 ],
                 overwrite: true,
@@ -425,8 +402,6 @@ module.exports = function (grunt) {
             'copy:build',
             'theme:create',
             'theme:dist',
-            'replace:moduleimages',
-            'replace:themeimages',
             'replace:versions',
             'clean:examples',
             'copy:examples',

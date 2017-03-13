@@ -157,8 +157,6 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.updateAttribution();
 
-        const prefixUrl: string = this.extension.data.assetRoot + '/themes/' + this.extension.data.config.options.theme + '/img/uv-seadragoncenterpanel-module/';
-
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({
             id: "viewer",
@@ -179,34 +177,34 @@ export class SeadragonCenterPanel extends CenterPanel {
             immediateRender: Utils.Bools.getBool(this.config.options.immediateRender, false),
             blendTime: this.config.options.blendTime || 0,
             autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
-            prefixUrl: prefixUrl,
+            prefixUrl: this.extension.data.assetRoot + '/img/',
             gestureSettingsMouse: {
-                clickToZoom: !!this.extension.data.config.options.clickToZoomEnabled
+                clickToZoom: Utils.Bools.getBool(this.extension.data.config.options.clickToZoomEnabled, true)
             },
             navImages: {
                 zoomIn: {
-                    REST:   'zoom_in.png',
-                    GROUP:  'zoom_in.png',
-                    HOVER:  'zoom_in.png',
-                    DOWN:   'zoom_in.png'
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 },
                 zoomOut: {
-                    REST:   'zoom_out.png',
-                    GROUP:  'zoom_out.png',
-                    HOVER:  'zoom_out.png',
-                    DOWN:   'zoom_out.png'
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 },
                 home: {
-                    REST:   'home.png',
-                    GROUP:  'home.png',
-                    HOVER:  'home.png',
-                    DOWN:   'home.png'
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 },
                 rotateright: {
-                    REST:   'rotate_right.png',
-                    GROUP:  'rotate_right.png',
-                    HOVER:  'rotate_right.png',
-                    DOWN:   'rotate_right.png'
+                    REST:   'pixel.gif',
+                    GROUP:  'pixel.gif',
+                    HOVER:  'pixel.gif',
+                    DOWN:   'pixel.gif'
                 },
                 rotateleft: {
                     REST:   'pixel.gif',

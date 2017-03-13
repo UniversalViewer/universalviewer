@@ -17,7 +17,7 @@ export class BaseView extends Panel{
 
     create(): void {
 
-        this.component = this.$element.closest('.universalviewer').data("component");
+        this.component = this.$element.closest('.uv').data("component");
 
         super.create();
         

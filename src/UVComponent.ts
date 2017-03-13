@@ -11,7 +11,6 @@ import {IExtension} from "./modules/uv-shared-module/IExtension";
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
     private _extensions: IExtension[];
-    //private _uvScriptUri: string = '';
     public extension: IExtension;
     public isFullScreen: boolean = false;
     public socket: any;
@@ -80,7 +79,29 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     
     public data(): IUVData {
         return <IUVData>{
-            assetRoot: "./uv"
+            assetRoot: "./uv",
+            canvasIndex: 0,
+            collectionIndex: 0,
+            config: null,
+            configUri: null,
+            domain: null,
+            embedDomain: null,
+            embedScriptUri: null,
+            iiifResourceUri: '',
+            isHomeDomain: true,
+            isLightbox: false,
+            isOnlyInstance: true,
+            isReload: false,
+            locales: [
+                {
+                    name: 'en-GB',
+                    label: 'English'
+                }
+            ],
+            manifestIndex: 0,
+            rotation: 0,
+            sequenceIndex: 0,
+            xywh: ''
         };
     }
 
@@ -94,14 +115,16 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             data.assetRoot = data.assetRoot.substring(0, data.assetRoot.length - 1);
         }
 
+        const $elem: JQuery = $(this.options.target);
+
         // empty app div
-        $('#app').empty();
+        $elem.empty();
 
         // add loading class
-        $('#app').addClass('loading');
+        $elem.addClass('loading');
 
         // remove any existing css
-        $('link[type*="text/css"]').remove(); // todo: replace any inline styles with id #uvcomponent
+        //$('link[type*="text/css"]').remove(); // todo: replace any inline styles with id #uvcomponent
 
         jQuery.support.cors = true;
 
@@ -123,14 +146,14 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             const sequence: Manifesto.ISequence = helper.getSequenceByIndex(data.sequenceIndex);
 
             if (!sequence) {
-                that._notFound();
+                that._error(`Sequence ${data.sequenceIndex} not found.`);
                 return;
             }
 
             const canvas: Manifesto.ICanvas = helper.getCanvasByIndex(data.canvasIndex);
 
             if (!canvas) {
-                that._notFound();
+                that._error(`Canvas ${data.canvasIndex} not found.`);
                 return;
             }
 
@@ -147,7 +170,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
             // if there still isn't a matching extension, show an error.
             if (!extension) {
-                alert("No matching UV extension found.");
+                this._error('No matching UV extension found.');
                 return;
             }
 
@@ -159,7 +182,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             });
 
         }).catch(function() {
-            that._notFound();
+            that._error('Failed to load manifest.');
         });
     }
 
@@ -167,11 +190,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         return Modernizr.cors;
     }
 
-    private _notFound(): void {
-        try{
-            this.fire(BaseEvents.NOT_FOUND);
-            return;
-        } catch (e) {}
+    private _error(message: string): void {
+        this.fire(BaseEvents.ERROR, message);
     }
 
     private _configure(data: IUVData, extension: any, cb: (config: any) => void): void {

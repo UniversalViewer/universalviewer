@@ -5,7 +5,7 @@
         top: 0;
         left: 0;
         background: @overlay-modal-bg;
-        background-image: url('@{img-path}modal_bg.gif');
+        background-image: data-uri('@{img-path}modal_bg.gif');
         display: none;
     }
 
@@ -18,8 +18,7 @@
 
             .close{
                 .hide-text();
-                //.icon-right(url('@{img-path}close.png'), 24px, 30px);
-                background-image: url('@{img-path}close.png');
+                background-image: data-uri('@{img-path}close.png');
                 width: 24px;
                 height: 24px;
                 float: right;
@@ -108,7 +107,8 @@
 
         .bottom{
             height: 11px;
-            background: url('@{img-path}dialogue_arrow.png') no-repeat;
+            background-image: data-uri('@{img-path}dialogue_arrow.png');
+            background-repeat: no-repeat;
         }
 
         &.genericDialogue{

@@ -1,12 +1,7 @@
 import {ILocale} from "./ILocale";
-import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
 
 export class UVDataProvider implements IUVDataProvider {
-    
-    constructor() {
-
-    }
 
     // parse string 'en-GB' or 'en-GB:English,cy-GB:Welsh' and return ILocale array.
     public parseLocales(locales: string): ILocale[] {
@@ -61,10 +56,6 @@ export class UVDataProvider implements IUVDataProvider {
     //     }
 
     // }
-
-    public data(): IUVData {
-        return <IUVData>{};
-    }
 
     public get<T>(key: string, defaultValue: T): T {
         return <T>new Object();

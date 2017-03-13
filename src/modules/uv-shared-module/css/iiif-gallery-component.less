@@ -133,7 +133,10 @@
 
                     .searchResults {
                         color: @brand-primary;
-                        background: url('@{img-path}search_result.png') no-repeat 0px 3px;
+                        background-image: data-uri('@{img-path}search_result.png');
+                        background-repeat: no-repeat;
+                        background-position-x: 0px;
+                        background-position-y: 3px;
                     }
                 }
 
@@ -165,7 +168,10 @@
                     }
 
                     &.hidden {
-                        background: url('@{img-path}hidden_thumb.png') no-repeat 50% 50%;
+                        background-image: data-uri('@{img-path}hidden_thumb.png');
+                        background-repeat: no-repeat;
+                        background-position-x: 50%;
+                        background-position-y: 50%;
                     }
 
                     img {
@@ -207,7 +213,10 @@
 
                 &.placeholder{
                     .wrap {
-                        background: url('@{img-path}unavailable.png') no-repeat 50% 50%;
+                        background-image: data-uri('@{img-path}unavailable.png');
+                        background-repeat: no-repeat;
+                        background-position-x: 50%;
+                        background-position-y: 50%;
                     }
                 }
             }

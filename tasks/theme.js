@@ -119,7 +119,7 @@ module.exports = function (grunt) {
             // ./src/themes/[theme]/img/[image]
             // goes to
             // [global.buildDir]/themes/[theme]/img/[image]
-            copyFiles('./src/themes/' + theme + '/img/*', path.join(getThemeDest(theme), 'img'));
+            //copyFiles('./src/themes/' + theme + '/img/*', path.join(getThemeDest(theme), 'img'));
 
             // ./src/extensions/*/build/[theme].css
             // goes to
@@ -136,15 +136,15 @@ module.exports = function (grunt) {
             // ./src/modules/*/img/*
             // goes to
             // [global.buildDir]/themes/[theme]/img/[module]/',
-            copyFiles('./src/modules/*/img/*', path.join(getThemeDest(theme), 'img'), function(src, dest) {
-                var fileName = path.basename(src);
+            // copyFiles('./src/modules/*/img/*', path.join(getThemeDest(theme), 'img'), function(src, dest) {
+            //     var fileName = path.basename(src);
 
-                // get the module name from the src string.
-                // ./src/modules/[module]/img
-                var moduleName = src.match(/modules\/(.*)\/img/)[1];
+            //     // get the module name from the src string.
+            //     // ./src/modules/[module]/img
+            //     var moduleName = src.match(/modules\/(.*)\/img/)[1];
 
-                return path.join(dest, moduleName, fileName);
-            });
+            //     return path.join(dest, moduleName, fileName);
+            // });
         });
 
         //async.eachSeries(dirs, function (d, nextDirObj) {

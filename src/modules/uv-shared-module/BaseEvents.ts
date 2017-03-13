@@ -15,6 +15,7 @@ export class BaseEvents {
     static DOWNLOAD: string                         = 'download';
     static DROP: string                             = 'drop';
     static END: string                              = 'end';
+    static ERROR: string                            = 'error';
     static ESCAPE: string                           = 'escape';
     static EXTERNAL_LINK_CLICKED: string            = 'externalLinkClicked';
     static FEEDBACK: string                         = 'feedback';

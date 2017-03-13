@@ -1,6 +1,6 @@
 .mejs-container {
 	position: relative;
-	background: #000;
+	background-color: #000;
 	font-family: Helvetica, Arial;
 	text-align: left;
 	vertical-align: top;
@@ -15,7 +15,7 @@
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	background: #000;
+	background-color: #000;
 	overflow: hidden;
 }
 
@@ -73,7 +73,8 @@
 	width: 100px;
 	height: 100px;
 	margin: -50px 0 0 -50px;
-	background: url('../../../modules/uv-mediaelementcenterpanel-module/img/bigplay.png') no-repeat;
+	background-image: data-uri('../../../modules/uv-mediaelementcenterpanel-module/img/bigplay.png');
+	background-repeat: no-repeat;
 }
 .mejs-overlay:hover .mejs-overlay-button{
 	background-position: 0 -100px ;
@@ -86,7 +87,7 @@
 	height: 80px;
 	margin: -40px 0 0 -40px;
 	background: #333;
-	background: url(background.png);
+	background: data-uri('background.png');
 	background: rgba(0, 0, 0, 0.9);
 	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50,50,50,0.9)), to(rgba(0,0,0,0.9))); 
 	background: -webkit-linear-gradient(top, rgba(50,50,50,0.9), rgba(0,0,0,0.9));
@@ -96,10 +97,14 @@
 	background: linear-gradient(rgba(50,50,50,0.9), rgba(0,0,0,0.9));
 }
 .mejs-overlay-loading span {
-	display:block;
+	display: block;
 	width: 80px;
 	height: 80px;
-	background: transparent url('../../../modules/uv-mediaelementcenterpanel-module/img/loading.gif') 50% 50% no-repeat;
+	background-color: transparent;
+	background-image: data-uri('../../../modules/uv-mediaelementcenterpanel-module/img/loading.gif');
+	background-position-x: 50%;
+	background-position-y: 50%;
+	background-repeat: no-repeat;
 }
 
 /* End: LAYERS */
@@ -113,7 +118,7 @@
 	padding: 0;
 	bottom: 0;
 	left: 0;
-	background: url(background.png);
+	background: data-uri('background.png');
 	background: rgba(0, 0, 0, 0.7);
 	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50,50,50,0.7)), to(rgba(0,0,0,0.7)));
 	background: -webkit-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7)); 
@@ -124,6 +129,7 @@
 	height: 30px;
 	width: 100%;
 }
+
 .mejs-container .mejs-controls  div {
 	list-style-type: none;
 	background-image: none;
@@ -152,8 +158,10 @@
 	height: 16px;
 	width: 16px;
 	border: 0;
-	outline-color: transparent !important; 
-	background: transparent url(controls.png) no-repeat;
+	outline-color: transparent !important;
+	background-color: transparent;
+	background-image: data-uri('controls.png');
+	background-repeat: no-repeat;
 }
 
 /* :focus for accessibility */
@@ -344,8 +352,8 @@
 	display: none;
 	height: 115px;
 	width: 25px;
-	background: url(background.png);
-	background: rgba(50, 50, 50, 0.7);
+	background-image: data-uri('background.png');
+	background-color: rgba(50, 50, 50, 0.7);
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	border-radius: 0;
@@ -487,8 +495,8 @@
 	right: -10px;
 	width: 130px;
 	height: 100px;
-	background: url(background.png);
-	background: rgba(50,50,50,0.7);
+	background-image: data-uri('background.png');
+	background-color: rgba(50,50,50,0.7);
 	border: solid 1px transparent;
 	padding: 10px;
 	overflow: hidden;
@@ -635,8 +643,8 @@
 
 .mejs-captions-text {
 	padding: 3px 5px;
-	background: url(background.png);
-	background: rgba(20, 20, 20, 0.8);
+	background-image: data-uri('background.png');
+	background-color: rgba(20, 20, 20, 0.8);
 
 }
 /* End: TRACK (Captions and Chapters) */
@@ -747,8 +755,8 @@
 	right: -10px;
 	width: 130px;
 	height: 100px;
-	background: url(background.png);
-	background: rgba(50,50,50,0.7);
+	background-image: data-uri('background.png');
+	background-color: rgba(50,50,50,0.7);
 	border: solid 1px transparent;
 	padding: 10px;
 	overflow: hidden;

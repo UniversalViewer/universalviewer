@@ -44,7 +44,10 @@
 
     .action, a.action.black, input.action {
         display: inline-block;
-        background: url('@{img-path}sprite.png') 0 -1000px no-repeat;
+        background-image: data-uri('@{img-path}sprite.png');
+        background-position-x: 0;
+        background-position-y: -1000px;
+        background-repeat: no-repeat;
         text-transform: none;
         padding: 0 0 0 16px;
         font-weight: bold;
