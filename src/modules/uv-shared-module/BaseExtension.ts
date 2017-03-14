@@ -63,6 +63,7 @@ export class BaseExtension implements IExtension {
         this.$element.removeClass();
         this.$element.addClass('uv');
         this.$element.addClass(this.data.locales[0].name);
+        this.$element.addClass(this.name);
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         this.$element.prop('tabindex', 0);
@@ -667,7 +668,6 @@ export class BaseExtension implements IExtension {
 
     // re-bootstraps the application with new querystring params
     reload(data?: IUVData): void {
-        $.disposePubSub();
         $.publish(BaseEvents.RELOAD, [data]);
     }
 

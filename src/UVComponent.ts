@@ -30,6 +30,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             console.error("UV failed to initialise");
         }
         
+        $.disposePubSub(); // remove any existing event listeners
+
         $.subscribe(BaseEvents.RELOAD, (e: any, data?: IUVData) => {
             this.fire(BaseEvents.RELOAD, data);
         });
@@ -117,7 +119,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         const $elem: JQuery = $(this.options.target);
 
-        // empty app div
+        // empty .uv div
         $elem.empty();
 
         // add loading class
@@ -253,7 +255,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     private _injectCss(data: IUVData, extension: any, cb: () => void): void {
         const cssPath: string = data.assetRoot + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
         const locale: string = data.locales[0].name;
-        const themeName: string = 'uv-theme-' + locale;
+        const themeName: string = extension.name + '-theme-' + locale;
         const $existingCSS: JQuery = $('#' + themeName);
 
         if (!$existingCSS.length) {

@@ -21,7 +21,7 @@ export class BaseView extends Panel{
 
         super.create();
         
-        this.extension = (<IUVComponent>this.component).extension;
+        this.extension = <IExtension>(<IUVComponent>this.component).extension;
 
         this.config = {};
         this.config.content = {};
