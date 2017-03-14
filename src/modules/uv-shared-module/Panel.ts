@@ -22,7 +22,7 @@ export class Panel {
     }
 
     resize(): void {
-        var $parent = this.$element.parent();
+        const $parent: JQuery = this.$element.parent();
 
         if (this.fitToParentWidth) {
             this.$element.width($parent.width());

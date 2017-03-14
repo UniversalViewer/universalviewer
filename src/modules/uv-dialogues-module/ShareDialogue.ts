@@ -285,10 +285,10 @@ export class ShareDialogue extends Dialogue {
 
     updateWidthRatio(): void {        
         this.currentHeight = Number(this.$heightInput.val());
-        if (this.currentHeight < this.minHeight){
+        if (this.currentHeight < this.minHeight) {
             this.currentHeight = this.minHeight;
             this.$heightInput.val(String(this.currentHeight));
-        } else if (this.currentHeight > this.maxHeight){
+        } else if (this.currentHeight > this.maxHeight) {
             this.currentHeight = this.maxHeight;
             this.$heightInput.val(String(this.currentHeight));
         } 
@@ -298,10 +298,10 @@ export class ShareDialogue extends Dialogue {
 
     updateHeightRatio(): void {
         this.currentWidth = Number(this.$widthInput.val());
-        if (this.currentWidth < this.minWidth){
+        if (this.currentWidth < this.minWidth) {
             this.currentWidth = this.minWidth;
             this.$widthInput.val(String(this.currentWidth));
-        } else if (this.currentWidth > this.maxWidth){
+        } else if (this.currentWidth > this.maxWidth) {
             this.currentWidth = this.maxWidth;
             this.$widthInput.val(String(this.currentWidth));
         }
@@ -312,7 +312,9 @@ export class ShareDialogue extends Dialogue {
     updateShareFrame(): void {
         const shareUrl: string | null = this.extension.helper.getShareServiceUrl();
 
-        if (!shareUrl) return;
+        if (!shareUrl) { 
+            return;
+        }
 
         if (Utils.Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
             this.$shareFrame.prop('src', shareUrl);

@@ -65,10 +65,11 @@ export class BaseExtension implements IExtension {
         this.$element.addClass(this.data.locales[0].name);
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
+        this.$element.prop('tabindex', 0);
         if (!this.data.isHomeDomain) this.$element.addClass('embedded');
         if (this.data.isLightbox) this.$element.addClass('lightbox');
 
-        $(document).on('mousemove', (e) => {
+        this.$element.on('mousemove', (e) => {
             this.mouseX = e.pageX;
             this.mouseY = e.pageY;
         });
@@ -112,12 +113,12 @@ export class BaseExtension implements IExtension {
 
             // keyboard events.
 
-            $(document).on('keyup keydown', (e: any) => {
+            this.$element.on('keyup keydown', (e: any) => {
                 this.shifted = e.shiftKey;
                 this.tabbing = e.keyCode === KeyCodes.KeyDown.Tab;
             });
 
-            $(document).keydown((e: any) => {
+            this.$element.on('keydown', (e: any) => {
 
                 let event: string | null = null;
                 let preventDefault: boolean = true;
@@ -157,9 +158,9 @@ export class BaseExtension implements IExtension {
                 }
             });
 
-            if (this.data.isHomeDomain && Utils.Documents.isInIFrame()) {
+            if (this.data.isHomeDomain) {
 
-                $.subscribe(BaseEvents.PARENT_EXIT_FULLSCREEN, () => {
+                $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
                     if (this.isOverlayActive()) {
                         $.publish(BaseEvents.ESCAPE);
                     }
@@ -625,6 +626,10 @@ export class BaseExtension implements IExtension {
 
     height(): number {
         return this.$element.height();
+    }
+
+    exitFullScreen(): void {
+        $.publish(BaseEvents.EXIT_FULLSCREEN);
     }
 
     fire(name: string, ...args: any[]): void {

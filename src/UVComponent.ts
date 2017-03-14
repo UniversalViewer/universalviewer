@@ -278,6 +278,10 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         this.extension.create();
     }
 
+    public exitFullScreen(): void {
+        this.extension.exitFullScreen();
+    }
+
     public resize(): void {
         this.extension.resize();
     }

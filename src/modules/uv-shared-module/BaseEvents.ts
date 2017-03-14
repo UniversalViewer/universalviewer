@@ -17,6 +17,7 @@ export class BaseEvents {
     static END: string                              = 'end';
     static ERROR: string                            = 'error';
     static ESCAPE: string                           = 'escape';
+    static EXIT_FULLSCREEN: string                  = 'exitFullScreen';
     static EXTERNAL_LINK_CLICKED: string            = 'externalLinkClicked';
     static FEEDBACK: string                         = 'feedback';
     static FORBIDDEN: string                        = 'forbidden';
@@ -53,7 +54,6 @@ export class BaseEvents {
     static OPEN: string                             = 'open';
     static PAGE_DOWN: string                        = 'pageDown';
     static PAGE_UP: string                          = 'pageUp';
-    static PARENT_EXIT_FULLSCREEN: string           = 'parentExitFullScreen';
     static PLUS: string                             = 'plus';
     static REDIRECT: string                         = 'redirect';
     static REFRESH: string                          = 'refresh';
