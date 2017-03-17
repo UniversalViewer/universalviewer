@@ -80,13 +80,13 @@ export class Dialogue extends BaseView {
 
     setDockedPosition(): void {
 
-        var top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
-        var left: number = 0;
-        var arrowLeft: number = 0;
+        const top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
+        let left: number = 0;
+        let arrowLeft: number = 0;
 
         if (this.$triggerButton) {
             // get the normalised position of the button
-            var buttonPos: number = Math.normalise(this.$triggerButton.offset().left, 0, this.extension.width());
+            const buttonPos: number = Math.normalise(this.$triggerButton.position().left, 0, this.extension.width());
             left = Math.floor((this.extension.width() * buttonPos) - (this.$element.width() * buttonPos));
             arrowLeft = (this.$element.width() * buttonPos);
         }
@@ -113,14 +113,14 @@ export class Dialogue extends BaseView {
 
         // set the focus to the default button.
         setTimeout(() => {
-            var $defaultButton = this.$element.find('.default');
-            if ($defaultButton.length){
+            const $defaultButton: JQuery = this.$element.find('.default');
+            if ($defaultButton.length) {
                 $defaultButton.focus();
             } else {
                 // if there's no default button, focus on the first visible input
-                var $input = this.$element.find('input:visible').first();
+                const $input: JQuery = this.$element.find('input:visible').first();
 
-                if ($input.length){
+                if ($input.length) {
                     $input.focus();
                 } else {
                     // if there's no visible first input, focus on the close button
@@ -131,7 +131,7 @@ export class Dialogue extends BaseView {
 
         $.publish(BaseEvents.SHOW_OVERLAY);
 
-        if (this.isUnopened){
+        if (this.isUnopened) {
             this.isUnopened = false;
             this.afterFirstOpen();
         }

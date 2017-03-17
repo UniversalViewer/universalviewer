@@ -128,7 +128,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateMoreInfoButton(): void {
-        var configEnabled = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
+        const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
 
         if (configEnabled && this.extension.metric === Metrics.MOBILE_LANDSCAPE){
             this.$moreInfoButton.show();
@@ -138,7 +138,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateOpenButton(): void {
-        var configEnabled = Utils.Bools.getBool(this.options.openEnabled, false);
+        const configEnabled: boolean = Utils.Bools.getBool(this.options.openEnabled, false);
 
         if (configEnabled && !this.extension.data.isHomeDomain){
             this.$openButton.show();
@@ -187,7 +187,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateDownloadButton(): void {
-        var configEnabled = Utils.Bools.getBool(this.options.downloadEnabled, true);
+        const configEnabled: boolean = Utils.Bools.getBool(this.options.downloadEnabled, true);
 
         if (configEnabled){
             this.$downloadButton.show();
@@ -197,7 +197,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateFeedbackButton(): void {
-        var configEnabled = Utils.Bools.getBool(this.options.feedbackEnabled, false);
+        const configEnabled: boolean = Utils.Bools.getBool(this.options.feedbackEnabled, false);
 
         if (configEnabled){
             this.$feedbackButton.show();
@@ -207,9 +207,9 @@ export class FooterPanel extends BaseView {
     }
 
     updateBookmarkButton(): void {
-        var configEnabled = Utils.Bools.getBool(this.options.bookmarkEnabled, false);
+        const configEnabled: boolean = Utils.Bools.getBool(this.options.bookmarkEnabled, false);
 
-        if (configEnabled){
+        if (configEnabled) {
             this.$bookmarkButton.show();
         } else {
             this.$bookmarkButton.hide();
