@@ -78,7 +78,7 @@ export class MediaElementCenterPanel extends CenterPanel {
                 });
             });
 
-            if ((<IMediaElementExtension>this.extension).isVideo()){
+            if ((<IMediaElementExtension>this.extension).isVideo()) {
 
                 this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
 
