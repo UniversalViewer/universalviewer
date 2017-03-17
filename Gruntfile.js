@@ -71,7 +71,8 @@ module.exports = function (grunt) {
         clean: {
             build : ['<%= config.directories.build %>'],
             examples: ['<%= config.directories.examples %>/uv/*'],
-            extension: ['<%= config.directories.src %>/extensions/*/.build/*']
+            extension: ['<%= config.directories.src %>/extensions/*/.build/*'],
+            libs: ['<%= config.directories.src %>/extensions/*/lib/*']
         },
 
         copy: {
@@ -389,6 +390,7 @@ module.exports = function (grunt) {
         var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
 
         grunt.task.run(
+            'clean:libs',
             'sync',
             'copy:bundle',
             'concat:offline',

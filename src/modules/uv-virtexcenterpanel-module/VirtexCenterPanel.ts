@@ -9,7 +9,7 @@ export class VirtexCenterPanel extends CenterPanel {
     $zoomOutButton: JQuery;
     $vrButton: JQuery;
     title: string;
-    viewport: Virtex.Viewport;
+    viewport: Virtex.Viewport | null;
 
     constructor($element: JQuery) {
         super($element);
@@ -48,17 +48,23 @@ export class VirtexCenterPanel extends CenterPanel {
 
         this.$zoomInButton.on('click', (e: any) => {
             e.preventDefault();
-            this.viewport.zoomIn();
+            if (this.viewport) {
+                this.viewport.zoomIn();
+            }
         });
 
         this.$zoomOutButton.on('click', (e: any) => {
             e.preventDefault();
-            this.viewport.zoomOut();
+            if (this.viewport) {
+                this.viewport.zoomOut();
+            }
         });
 
         this.$vrButton.on('click', (e: any) => {
             e.preventDefault();
-            this.viewport.toggleVR();
+            if (this.viewport) {
+                this.viewport.toggleVR();
+            }
         });
 
         if (!WEBVR.isAvailable()) {
@@ -92,5 +98,8 @@ export class VirtexCenterPanel extends CenterPanel {
         this.$title.ellipsisFill(this.title);
         this.$viewport.width(this.$content.width());
         this.$viewport.height(this.$content.height());
+        if (this.viewport) {
+            this.viewport.resize();
+        }
     }
 }

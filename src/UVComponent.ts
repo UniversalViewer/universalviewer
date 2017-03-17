@@ -260,9 +260,9 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         if (!$existingCSS.length) {
             $.ajax({
-                url: cssPath,
+                url: cssPath.toLowerCase(),
                 success: (data) => {
-                    $('body').append('<style id="' + themeName + '">' + data + '</style>');
+                    $('body').append('<style id="' + themeName.toLowerCase() + '">' + data + '</style>');
                     cb();
                 }
             });

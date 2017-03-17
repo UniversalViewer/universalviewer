@@ -6,7 +6,7 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-                'virtex3d/dist/virtex.bundle.js',
+                'virtex3d/dist/virtex.js',
                 'iiif-metadata-component/dist/iiif-metadata-component.js',
                 'three/examples/js/controls/VRControls.js',
                 'three/examples/js/effects/VREffect.js',
