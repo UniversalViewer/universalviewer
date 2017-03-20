@@ -78,12 +78,12 @@ export class VirtexCenterPanel extends CenterPanel {
 
             this.$viewport.empty();
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-            const $element: JQuery = $("#content .virtex");
 
             this.viewport = new Virtex.Viewport({
-                target: $element[0],
+                target: this.$viewport[0],
                 data: {
                     file: canvas.id,
+                    fullscreenEnabled: false,
                     type: new Virtex.FileType("application/vnd.threejs+json"),
                     showStats: this.options.showStats
                 }

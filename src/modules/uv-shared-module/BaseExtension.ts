@@ -62,7 +62,7 @@ export class BaseExtension implements IExtension {
         this.$element.empty();
         this.$element.removeClass();
         this.$element.addClass('uv');
-        this.$element.addClass(this.data.locales[0].name);
+        this.$element.addClass(this.data.locales[0].name.toLowerCase());
         this.$element.addClass(this.name);
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);

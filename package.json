@@ -69,11 +69,11 @@
     "manifesto.js": "viewdir/manifesto#es6",
     "manifold": "viewdir/manifold#es6",
     "openseadragon": "^2.2.1",
-    "requirejs": "2.2.0", 
-    "three": "edsilv/three.js#draco",
-    "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme#component",
-    "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme#component",
+    "requirejs": "2.2.0",
+    "three": "mrdoob/three.js#dev",
     "utils": "edsilv/utils#es6",
+    "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme#component",
+    "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme#component",
     "virtex3d": "edsilv/virtex#dev"
   }
 }

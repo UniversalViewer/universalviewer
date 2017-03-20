@@ -8,6 +8,7 @@ module.exports = {
             src: [
                 'virtex3d/dist/virtex.js',
                 'iiif-metadata-component/dist/iiif-metadata-component.js',
+                'three/build/three.min.js',
                 'three/examples/js/controls/VRControls.js',
                 'three/examples/js/effects/VREffect.js',
                 'three/examples/js/libs/stats.min.js',
