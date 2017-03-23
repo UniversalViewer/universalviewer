@@ -1,6 +1,8 @@
+import {MetricType} from "./MetricType";
+
 class Metric {
 
-    constructor(public minWidth: number, public maxWidth: number) {
+    constructor(public type: MetricType, public minWidth: number, public maxWidth: number) {
 
     }
 }

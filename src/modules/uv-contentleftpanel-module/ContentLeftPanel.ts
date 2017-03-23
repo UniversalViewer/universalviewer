@@ -7,7 +7,7 @@ import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/IS
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../uv-shared-module/LeftPanel");
-import Metrics = require("../uv-shared-module/Metrics");
+import {MetricType} from "../uv-shared-module/MetricType";
 import Mode = require("../../extensions/uv-seadragon-extension/Mode");
 import MultiSelectState = Manifold.MultiSelectState;
 import SearchResult = Manifold.SearchResult;
@@ -67,7 +67,7 @@ class ContentLeftPanel extends LeftPanel {
         });
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
-            if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+            if (this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
                 if (this.isFullyExpanded) {
                     this.collapseFull();
                 }
