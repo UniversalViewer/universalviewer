@@ -11,7 +11,6 @@ import {IUVData} from "../../IUVData";
 import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
 import {LoginWarningMessages} from "./LoginWarningMessages";
 import {Metric} from "../../modules/uv-shared-module/Metric";
-import {Metrics} from "../../modules/uv-shared-module/Metrics";
 import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import {Shell} from "./Shell";
@@ -37,7 +36,7 @@ export class BaseExtension implements IExtension {
     lastCanvasIndex: number;
     loginDialogue: LoginDialogue;
     metric: MetricType = MetricType.LAPTOP;
-    metrics: Metric[];
+    metrics: Metric[] = [];
     mouseX: number;
     mouseY: number;
     name: string;
@@ -650,8 +649,7 @@ export class BaseExtension implements IExtension {
     }
 
     private _parseMetrics(): void {
-        this.metrics = [];
-        const metrics: any[] = this.config.options.metrics;
+        const metrics: any[] = this.data.config.options.metrics;
 
         if (metrics) {
             for (let i = 0; i < metrics.length; i++) {
@@ -670,7 +668,7 @@ export class BaseExtension implements IExtension {
             if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
                 if (this.metric !== metric.type) {
                     this.metric = metric.type;
-                    $.publish(BaseCommands.METRIC_CHANGED);
+                    $.publish(BaseEvents.METRIC_CHANGED);
                 }
             }
         }

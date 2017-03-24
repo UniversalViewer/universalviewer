@@ -59,13 +59,8 @@ export class ContentLeftPanel extends LeftPanel {
             this.collapseFull();
         });
 
-<<<<<<< HEAD
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
-=======
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
             if (this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
->>>>>>> master
                 if (this.isFullyExpanded) {
                     this.collapseFull();
                 }

@@ -43,8 +43,6 @@ export interface IExtension {
     jsonp: boolean;
     lastCanvasIndex: number;
     loadDependencies(deps: any): void;
-    locale: string;
-    locales: any[];
     metric: MetricType;
     mouseX: number;
     mouseY: number;

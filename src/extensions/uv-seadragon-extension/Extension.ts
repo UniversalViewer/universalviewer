@@ -62,15 +62,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     create(): void {
         super.create();
 
-<<<<<<< HEAD
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            if (this.metric === Metrics.MOBILE_LANDSCAPE) {
-                const settings: ISettings = {};
-=======
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
             if (this.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
-                var settings: ISettings = {};
->>>>>>> master
+                const settings: ISettings = {};
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
                 $.publish(BaseEvents.UPDATE_SETTINGS);
@@ -135,13 +129,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             }
         });
 
-<<<<<<< HEAD
         $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            if (this.metric !== Metrics.MOBILE_LANDSCAPE) {
-=======
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
             if (this.metric.toString() !== MetricType.MOBILELANDSCAPE.toString()) {
->>>>>>> master
                 Shell.$rightPanel.show();
             }
         });
