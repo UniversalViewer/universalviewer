@@ -1,6 +1,6 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
-import {Metrics} from "./Metrics";
+import {MetricType} from "./MetricType";
 
 export class FooterPanel extends BaseView {
 
@@ -120,7 +120,7 @@ export class FooterPanel extends BaseView {
         }
 
         // otherwise, check metric
-        if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+        if (this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
             this.$options.addClass('minimiseButtons');
         } else {
             this.$options.removeClass('minimiseButtons');
@@ -130,7 +130,7 @@ export class FooterPanel extends BaseView {
     updateMoreInfoButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
 
-        if (configEnabled && this.extension.metric === Metrics.MOBILE_LANDSCAPE){
+        if (configEnabled && this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()){
             this.$moreInfoButton.show();
         } else {
             this.$moreInfoButton.hide();

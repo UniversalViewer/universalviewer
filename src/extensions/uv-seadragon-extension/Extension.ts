@@ -12,7 +12,7 @@ import {FooterPanel} from "../../modules/uv-searchfooterpanel-module/FooterPanel
 import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
 import {ISeadragonExtension} from "./ISeadragonExtension";
 import {ISeadragonExtensionData} from "./ISeadragonExtensionData";
-import {Metrics} from "../../modules/uv-shared-module/Metrics";
+import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import {Mode} from "./Mode";
 import {MoreInfoDialogue} from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
@@ -62,9 +62,15 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     create(): void {
         super.create();
 
+<<<<<<< HEAD
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             if (this.metric === Metrics.MOBILE_LANDSCAPE) {
                 const settings: ISettings = {};
+=======
+        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            if (this.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
+                var settings: ISettings = {};
+>>>>>>> master
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
                 $.publish(BaseEvents.UPDATE_SETTINGS);
@@ -129,8 +135,13 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             }
         });
 
+<<<<<<< HEAD
         $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             if (this.metric !== Metrics.MOBILE_LANDSCAPE) {
+=======
+        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
+            if (this.metric.toString() !== MetricType.MOBILELANDSCAPE.toString()) {
+>>>>>>> master
                 Shell.$rightPanel.show();
             }
         });

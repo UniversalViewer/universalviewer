@@ -3,7 +3,7 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {GalleryView} from "./GalleryView";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
-import {Metrics} from "../uv-shared-module/Metrics";
+import {MetricType} from "../uv-shared-module/MetricType";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {ThumbsView} from "./ThumbsView";
 import {TreeView} from "./TreeView";
@@ -59,8 +59,13 @@ export class ContentLeftPanel extends LeftPanel {
             this.collapseFull();
         });
 
+<<<<<<< HEAD
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+=======
+        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            if (this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
+>>>>>>> master
                 if (this.isFullyExpanded) {
                     this.collapseFull();
                 }

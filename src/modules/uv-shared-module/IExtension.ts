@@ -1,7 +1,7 @@
 import {ILocale} from "../../ILocale";
 import {IUVComponent} from "../../IUVComponent";
 import {IUVData} from "../../IUVData";
-import {Metric} from "./Metric";
+import {MetricType} from "./MetricType";
 
 export interface IExtension {
     addTimestamp(uri: string): string;
@@ -43,7 +43,9 @@ export interface IExtension {
     jsonp: boolean;
     lastCanvasIndex: number;
     loadDependencies(deps: any): void;
-    metric: Metric;
+    locale: string;
+    locales: any[];
+    metric: MetricType;
     mouseX: number;
     mouseY: number;
     name: string;

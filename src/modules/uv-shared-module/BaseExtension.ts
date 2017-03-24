@@ -12,6 +12,7 @@ import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
 import {LoginWarningMessages} from "./LoginWarningMessages";
 import {Metric} from "../../modules/uv-shared-module/Metric";
 import {Metrics} from "../../modules/uv-shared-module/Metrics";
+import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import {Shell} from "./Shell";
 import {SynchronousRequire} from "../../SynchronousRequire";
@@ -35,7 +36,8 @@ export class BaseExtension implements IExtension {
     jsonp: boolean;
     lastCanvasIndex: number;
     loginDialogue: LoginDialogue;
-    metric: Metric;
+    metric: MetricType = MetricType.LAPTOP;
+    metrics: Metric[];
     mouseX: number;
     mouseY: number;
     name: string;
@@ -57,6 +59,8 @@ export class BaseExtension implements IExtension {
             settings: this.getSettings(),
             preview: this.getSharePreview()
         });
+
+        this._parseMetrics();
 
         // add/remove classes.
         this.$element.empty();
@@ -645,17 +649,28 @@ export class BaseExtension implements IExtension {
         this.fire(BaseEvents.REFRESH, null);
     }
 
+    private _parseMetrics(): void {
+        this.metrics = [];
+        const metrics: any[] = this.config.options.metrics;
+
+        if (metrics) {
+            for (let i = 0; i < metrics.length; i++) {
+                const m: any = metrics[i];
+                m.type = new MetricType(m.type);
+                this.metrics.push(m);
+            }
+        }
+    }
+
     private _updateMetric(): void {
 
-        const keys: string[] = Object.keys(Metrics);
-
-        for (let i = 0; i < keys.length; i++) {
-            const metric: Metric = Metrics[keys[i]];
+        for (let i = 0; i < this.metrics.length; i++) {
+            const metric: Metric = this.metrics[i];
 
             if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
-                if (this.metric !== metric) {
-                    this.metric = metric;
-                    $.publish(BaseEvents.METRIC_CHANGED);
+                if (this.metric !== metric.type) {
+                    this.metric = metric.type;
+                    $.publish(BaseCommands.METRIC_CHANGED);
                 }
             }
         }

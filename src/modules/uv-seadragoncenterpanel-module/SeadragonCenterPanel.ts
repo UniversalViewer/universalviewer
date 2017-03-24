@@ -5,7 +5,7 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
-import {Metrics} from "../uv-shared-module/Metrics";
+import {MetricType} from "../uv-shared-module/MetricType";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
 
@@ -141,7 +141,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     updateResponsiveView(): void {
         this.setNavigatorVisible();
         
-        if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+        if (this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
             this.viewer.autoHideControls = false;
             this.$viewportNavButtons.hide();
         } else {
@@ -935,7 +935,9 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
     
     setNavigatorVisible(): void {
-        const navigatorEnabled: boolean = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.metric !== Metrics.MOBILE_LANDSCAPE;
+
+        const navigatorEnabled: boolean = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.metric.toString() !== MetricType.MOBILELANDSCAPE.toString();
+
         this.viewer.navigator.setVisible(navigatorEnabled);
         
         if (navigatorEnabled) {
