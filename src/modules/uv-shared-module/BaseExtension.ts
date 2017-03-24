@@ -48,7 +48,7 @@ class BaseExtension implements IExtension {
     locales: any[];
     loginDialogue: LoginDialogue;
     metric: MetricType = MetricType.LAPTOP;
-    metrics: Metric[];
+    metrics: Metric[] = [];
     mouseX: number;
     mouseY: number;
     name: string;
@@ -673,7 +673,6 @@ class BaseExtension implements IExtension {
     }
 
     private _parseMetrics(): void {
-        this.metrics = [];
         const metrics: any[] = this.config.options.metrics;
 
         if (metrics) {
