@@ -676,10 +676,12 @@ class BaseExtension implements IExtension {
         this.metrics = [];
         const metrics: any[] = this.config.options.metrics;
 
-        for (let i = 0; i < metrics.length; i++) {
-            const m: any = metrics[i];
-            m.type = new MetricType(m.type);
-            this.metrics.push(m);
+        if (metrics) {
+            for (let i = 0; i < metrics.length; i++) {
+                const m: any = metrics[i];
+                m.type = new MetricType(m.type);
+                this.metrics.push(m);
+            }
         }
     }
 
