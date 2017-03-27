@@ -59,6 +59,8 @@ node_modules
 !src/extensions/*/dependencies.js
 !dist/**/*.js
 !src/embed.js
+!dev.build.js
+!dist.build.js
 
 #################
 ## Build
