@@ -66,8 +66,7 @@
     "pdfCenterPanel":
     {
       "options":{
-        "titleEnabled": false,
-        "usePdfJs": true
+        "titleEnabled": false
       }
     },
     "resourcesLeftPanel":{

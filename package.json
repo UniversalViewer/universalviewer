@@ -69,6 +69,7 @@
     "manifesto.js": "viewdir/manifesto#es6",
     "manifold": "viewdir/manifold#es6",
     "openseadragon": "^2.2.1",
+    "pdfobject": "^2.0",
     "requirejs": "2.2.0",
     "three": "mrdoob/three.js#dev",
     "utils": "edsilv/utils#es6",
