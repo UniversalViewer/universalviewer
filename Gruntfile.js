@@ -70,7 +70,7 @@ module.exports = function (grunt) {
 
         clean: {
             build : ['<%= config.directories.build %>'],
-            examples: ['<%= config.directories.examples %>/uv/*'],
+            dist: ['<%= config.directories.examples %>/uv/*'],
             extension: ['<%= config.directories.src %>/extensions/*/.build/*'],
             libs: ['<%= config.directories.src %>/extensions/*/lib/*']
         },
@@ -183,37 +183,6 @@ module.exports = function (grunt) {
                         src: ['src/extensions/**/lib/*'],
                         dest: '<%= config.directories.build %>/lib/'
                     },
-                    // l10n localisation files
-                    {
-                        expand: true,
-                        flatten: false,
-                        cwd: 'src/modules/',
-                        src: ['**/l10n/**/*.properties'],
-                        dest: '<%= config.directories.build %>/l10n/',
-                        rename: function(dest, src) {
-                            // get the locale and .properties files.
-                            var reg = /.*\/l10n\/(.*)/;
-                            var locale = src.match(reg)[1];
-                            var path = dest + locale;
-                            return path;
-                        }
-                    },
-                    // module html
-                    {
-                        expand: true,
-                        src: ['src/modules/**/html/*'],
-                        dest: '<%= config.directories.build %>/html/',
-                        rename: function(dest, src) {
-
-                            var fileName = src.substr(src.lastIndexOf('/'));
-
-                            // get the module name from the src string.
-                            // src/modules/modulename/img
-                            var moduleName = src.match(/modules\/(.*)\/html/)[1];
-
-                            return dest + moduleName + fileName;
-                        }
-                    },
                     // images
                     {
                         expand: true,
@@ -223,7 +192,7 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            examples: {
+            dist: {
                 // copy contents of /.build to /examples/uv.
                 files: [
                     {
@@ -302,6 +271,30 @@ module.exports = function (grunt) {
         },
 
         replace: {
+            // ../../../modules/<module>/assets/<asset>
+            // becomes
+            // %assets%/<module>/<asset>
+            moduleassets: {
+                // replace asset srcs to point to "../../assets/<module>/<asset>"
+                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
+                overwrite: true,
+                replacements: [{
+                    from: /\((?:'|"|)(?:.*modules\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
+                    to: '\(\'%assets%/$1/$2\'\)' // '\(\'../../assets/$1/$2\'\)'
+                }]
+            },
+            // ../../../themes/uv-default-theme/assets/<asset>
+            // becomes
+            // %assets%/<asset>
+            themeassets: {
+                // replace asset srcs to point to "../../assets/<module>/<asset>"
+                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
+                overwrite: true,
+                replacements: [{
+                    from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
+                    to: '\(\'%assets%/$2\'\)' //'\(\'../../assets/$2\'\)'
+                }]
+            },
             versions: {
                 // replace uv version
                 src: [
@@ -403,9 +396,11 @@ module.exports = function (grunt) {
             'copy:build',
             'theme:create',
             'theme:dist',
+            'replace:moduleassets',
+            'replace:themeassets',
             'replace:versions',
-            'clean:examples',
-            'copy:examples',
+            'clean:dist',
+            'copy:dist',
             'compress:zip'
         );
     });

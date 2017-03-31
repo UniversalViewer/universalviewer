@@ -6,7 +6,8 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-                'iiif-metadata-component/dist/iiif-metadata-component.js'
+                'iiif-metadata-component/dist/iiif-metadata-component.js',
+                'mediaelement/build/mediaelement-and-player.js'
             ],
             dest: '<%= config.directories.uvMediaElementExtension %>/lib'
         }

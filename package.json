@@ -68,6 +68,7 @@
     "key-codes": "edsilv/key-codes#v0.0.6",
     "manifesto.js": "viewdir/manifesto#es6",
     "manifold": "viewdir/manifold#es6",
+    "mediaelement": "^4.0.2",
     "openseadragon": "^2.2.1",
     "requirejs": "2.2.0",
     "three": "mrdoob/three.js#dev",
