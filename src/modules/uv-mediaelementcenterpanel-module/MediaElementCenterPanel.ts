@@ -1,16 +1,17 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
-//import {Events} from "../../extensions/uv-mediaelement-extension/Events";
+import {Events} from "../../extensions/uv-mediaelement-extension/Events";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
 
 export class MediaElementCenterPanel extends CenterPanel {
 
     $container: JQuery;
-    media: any;
+    $media: JQuery;
     mediaHeight: number;
     mediaWidth: number;
     player: any;
     title: string;
+    justResized: boolean = false;
 
     constructor($element: JQuery) {
         super($element);
@@ -52,7 +53,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
     openMedia(resources: Manifesto.IExternalResource[]) {
 
-        //var that = this;
+        const that = this;
 
         this.extension.getExternalResources(resources).then(() => {
 
@@ -60,13 +61,12 @@ export class MediaElementCenterPanel extends CenterPanel {
 
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-            // this.mediaHeight = this.config.defaultHeight;
-            // this.mediaWidth = this.config.defaultWidth;
+            this.mediaHeight = this.config.defaultHeight;
+            this.mediaWidth = this.config.defaultWidth;
 
-            // this.$container.height(this.mediaHeight);
-            // this.$container.width(this.mediaWidth);
+            this.$container.height(this.mediaHeight);
+            this.$container.width(this.mediaWidth);
 
-            const id: number = Utils.Dates.getTimeStamp();
             const poster: string = (<IMediaElementExtension>this.extension).getPosterImageUri();
             const posterAttr: string = poster ? ' poster="' + poster + '"' : '';
 
@@ -79,17 +79,37 @@ export class MediaElementCenterPanel extends CenterPanel {
                 });
             });
 
-            // if ((<IMediaElementExtension>this.extension).isVideo()) {
+            if ((<IMediaElementExtension>this.extension).isVideo()) {
 
-            //     this.media = this.$container.append('<video id="' + id + '" type="video/mp4" class="mejs-uv" controls="controls" preload="none"' + posterAttr + '></video>');
+                this.$media = $('<video controls="controls" preload="none"' + posterAttr + '></video>');
+                this.$container.append(this.$media);
 
-            this.media = this.$container.append('<video width="800" height="600" id="' + id + '" type="video/mp4" controls="controls" preload="none"' + posterAttr + '></video>');
+                this.player = new MediaElementPlayer($('video')[0], {
+                    //pluginPath: this.extension.data.root + 'lib/mediaelement/',
+                    success: function(mediaElement: any, originalNode: any) {
+                        
+                        mediaElement.addEventListener('canplay', () => {
+                            that.resize();
+                        });
 
-            this.player = new MediaElementPlayer($('video')[0], {
-                success: function(mediaElement: any, originalNode: any) {
-                    mediaElement.setSrc(sources);
-                }
-            });
+                        mediaElement.addEventListener('play', () => {
+                            $.publish(Events.MEDIA_PLAYED, [Math.floor(mediaElement.currentTime)]);
+                        });
+
+                        mediaElement.addEventListener('pause', () => {
+                            // mediaelement creates a pause event before the ended event. ignore this.
+                            if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
+                                $.publish(Events.MEDIA_PAUSED, [Math.floor(mediaElement.currentTime)]);
+                            }
+                        });
+
+                        mediaElement.addEventListener('ended', () => {
+                            $.publish(Events.MEDIA_ENDED, [Math.floor(mediaElement.duration)]);
+                        });
+
+                        mediaElement.setSrc(sources);
+                    }
+                });
 
             //     this.player = new MediaElementPlayer("#" + id, {
             //         type: ['video/mp4', 'video/webm', 'video/flv'],
@@ -125,7 +145,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             //             }
             //         }
             //     });
-            // } else {
+            } else {
 
             //     // Try to find an MP3, since this is most likely to work:
             //     var preferredSource: any = 0;
@@ -173,7 +193,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             //             }
             //         }
             //     });
-            // }
+            }
 
             this.resize();
         });
@@ -183,30 +203,43 @@ export class MediaElementCenterPanel extends CenterPanel {
 
         super.resize();
 
-        // // if in Firefox < v13 don't resize the media container.
-        // if (window.browserDetect.browser === 'Firefox' && window.browserDetect.version < 13) {
-        //     this.$container.width(this.mediaWidth);
-        //     this.$container.height(this.mediaHeight);
-        // } else {
-        //     // fit media to available space.
-        //     const size: Utils.Measurements.Size = Utils.Measurements.Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+        // if in Firefox < v13 don't resize the media container.
+        if (window.browserDetect.browser === 'Firefox' && window.browserDetect.version < 13) {
+            this.$container.width(this.mediaWidth);
+            this.$container.height(this.mediaHeight);
+        } else {
+            // fit media to available space.
+            const size: Utils.Measurements.Size = Utils.Measurements.Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
 
-        //     this.$container.height(size.height);
-        //     this.$container.width(size.width);
-        // }
+            this.$container.height(size.height);
+            this.$container.width(size.width);
 
-        // if (this.player && !this.extension.isFullScreen()){
-        //     this.player.resize();
-        // }
+            if (this.player && !this.extension.isFullScreen()) {
+                this.$media.width(size.width);
+                this.$media.height(size.height);
+            }
+        }
 
-        // const left: number = Math.floor((this.$content.width() - this.$container.width()) / 2);
-        // const top: number = Math.floor((this.$content.height() - this.$container.height()) / 2);
+        const left: number = Math.floor((this.$content.width() - this.$container.width()) / 2);
+        const top: number = Math.floor((this.$content.height() - this.$container.height()) / 2);
 
-        // this.$container.css({
-        //     'left': left,
-        //     'top': top
-        // });
+        this.$container.css({
+            'left': left,
+            'top': top
+        });
 
-        // this.$title.ellipsisFill(this.title);
+        this.$title.ellipsisFill(this.title);
+
+        if (this.player && !this.extension.isFullScreen()) {
+            this.player.setPlayerSize();
+            this.player.setControlsSize();
+
+            const $mejs: JQuery = $('.mejs__container');
+
+            $mejs.css({
+                'margin-top': (this.$container.height() - $mejs.height()) / 2
+            });
+        }
+        
     }
 }

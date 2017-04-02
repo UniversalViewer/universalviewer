@@ -1,7 +1,6 @@
 import {ILocale} from "./ILocale";
 
 export interface IUVData {
-    assetRoot: string | null;
     canvasIndex: number;
     collectionIndex: number;
     config: any;
@@ -16,5 +15,6 @@ export interface IUVData {
     isReload: boolean;
     locales: ILocale[];
     manifestIndex: number;
+    root: string | null;
     sequenceIndex: number;
 }

@@ -273,26 +273,24 @@ module.exports = function (grunt) {
         replace: {
             // ../../../modules/<module>/assets/<asset>
             // becomes
-            // %assets%/<module>/<asset>
+            // ../../../<module>/<asset>
             moduleassets: {
-                // replace asset srcs to point to "../../assets/<module>/<asset>"
                 src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*modules\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
-                    to: '\(\'%assets%/$1/$2\'\)' // '\(\'../../assets/$1/$2\'\)'
+                    to: '\(\'../../assets/$1/$2\'\)'
                 }]
             },
             // ../../../themes/uv-default-theme/assets/<asset>
             // becomes
-            // %assets%/<asset>
+            // ../../assets/<asset>
             themeassets: {
-                // replace asset srcs to point to "../../assets/<module>/<asset>"
                 src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
-                    to: '\(\'%assets%/$2\'\)' //'\(\'../../assets/$2\'\)'
+                    to: '\(\'../../assets/$2\'\)'
                 }]
             },
             versions: {

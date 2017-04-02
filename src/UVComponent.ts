@@ -81,7 +81,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     
     public data(): IUVData {
         return <IUVData>{
-            assetRoot: "./uv",
+            root: "./uv",
             canvasIndex: 0,
             collectionIndex: 0,
             config: null,
@@ -113,8 +113,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             return;
         }
 
-        if (data.assetRoot && data.assetRoot.endsWith('/')) {
-            data.assetRoot = data.assetRoot.substring(0, data.assetRoot.length - 1);
+        if (data.root && data.root.endsWith('/')) {
+            data.root = data.root.substring(0, data.root.length - 1);
         }
 
         const $elem: JQuery = $(this.options.target);
@@ -197,7 +197,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         this._getConfigExtension(data, extension, (configExtension: any) => {
 
-            const configPath: string = data.assetRoot + '/lib/' + extension.name + '.' + data.locales[0].name + '.config.json';
+            const configPath: string = data.root + '/lib/' + extension.name + '.' + data.locales[0].name + '.config.json';
 
             $.getJSON(configPath, (config) => {
                 this._extendConfig(data, extension, config, configExtension, cb);
@@ -253,19 +253,14 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     }
 
     private _injectCss(data: IUVData, extension: any, cb: () => void): void {
-        const cssPath: string = data.assetRoot + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
+        const cssPath: string = data.root + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
         const locale: string = data.locales[0].name;
-        const themeName: string = extension.name + '-theme-' + locale;
-        const $existingCSS: JQuery = $('#' + themeName);
+        const themeName: string = extension.name.toLowerCase() + '-theme-' + locale.toLowerCase();
+        const $existingCSS: JQuery = $('#' + themeName.toLowerCase());
 
         if (!$existingCSS.length) {
-            $.ajax({
-                url: cssPath.toLowerCase(),
-                success: (data) => {
-                    $('body').append('<style id="' + themeName.toLowerCase() + '">' + data + '</style>');
-                    cb();
-                }
-            });
+            $('head').append('<link rel="stylesheet" id="' + themeName + '" href="' + cssPath.toLowerCase() + '" />');
+            cb();
         } else {
             cb();
         }

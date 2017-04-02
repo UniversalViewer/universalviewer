@@ -95,7 +95,7 @@ export class SettingsDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        $.getJSON(this.extension.data.assetRoot + "/package.json", (pjson: any) => {
+        $.getJSON(this.extension.data.root + "/package.json", (pjson: any) => {
             this.$version.text("v" + pjson.version);
         });
     }

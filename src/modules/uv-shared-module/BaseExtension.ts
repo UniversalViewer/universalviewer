@@ -531,7 +531,7 @@ export class BaseExtension implements IExtension {
     getDependencies(cb: (deps: any) => void): any {
         const that = this;
 
-        const depsUri: string = this.data.assetRoot + '/lib/' + this.name + '-dependencies';
+        const depsUri: string = this.data.root + '/lib/' + this.name + '-dependencies';
 
         // check if the deps are already loaded
         const scripts: JQuery = $('script[data-requiremodule]')
@@ -544,7 +544,7 @@ export class BaseExtension implements IExtension {
 
             requirejs([depsUri], function(deps: any) {
 
-                const baseUri: string = that.data.assetRoot + '/lib/';
+                const baseUri: string = that.data.root + '/lib/';
 
                 // for each dependency, prepend baseUri.
                 if (deps.sync) {                    
