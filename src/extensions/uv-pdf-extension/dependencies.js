@@ -1,5 +1,6 @@
 define(function() {
     return {
-        async: ['l10n', 'pdf_combined', 'pdfobject', 'iiif-metadata-component']
+        sync: ['pdfobject'],
+        async: ['iiif-metadata-component']
     };
 });

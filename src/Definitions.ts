@@ -34,7 +34,6 @@ interface JQueryStatic {
 declare var easyXDM: any;
 declare var OpenSeadragon: any;
 declare var MediaElementPlayer: any;
-declare var PDFObject: any;
 declare var yepnope: any;
 declare var PDFJS: any;
 declare var Sanitize: any;
@@ -50,6 +49,7 @@ interface Window {
     $: JQueryStatic;
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience (make this generic)
+    PDFObject: any;
     UV: any;
     THREE: any;
     Event: any;

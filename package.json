@@ -70,6 +70,7 @@
     "manifold": "viewdir/manifold#es6",
     "mediaelement": "^4.0.2",
     "openseadragon": "^2.2.1",
+    "pdfobject": "^2.0",
     "requirejs": "2.2.0",
     "three": "mrdoob/three.js#dev",
     "utils": "edsilv/utils#es6",
