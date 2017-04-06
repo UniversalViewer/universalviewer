@@ -47,8 +47,8 @@
     },
     "mediaelementCenterPanel":
     {
-      "defaultHeight": 576,
-      "defaultWidth": 720
+      "defaultHeight": 420,
+      "defaultWidth": 560
     },
     "moreInfoRightPanel":
     {
