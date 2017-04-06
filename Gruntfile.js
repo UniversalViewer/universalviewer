@@ -140,16 +140,6 @@ module.exports = function (grunt) {
                         src: ['<%= config.directories.lib %>/offline.js'],
                         dest: '<%= config.directories.build %>/lib'
                     },
-                    // js
-                    {
-                        expand: true,
-                        flatten: true,
-                        cwd: '<%= config.directories.src %>',
-                        src: [
-                            'embed.js'
-                        ],
-                        dest: '<%= config.directories.build %>'
-                    },
                     // extension configuration files
                     {
                         expand: true,
@@ -296,7 +286,7 @@ module.exports = function (grunt) {
             versions: {
                 // replace uv version
                 src: [
-                    '<%= config.directories.src %>/embed.js'
+                    '<%= config.directories.examples %>/embed.js'
                 ],
                 overwrite: true,
                 replacements: [{
