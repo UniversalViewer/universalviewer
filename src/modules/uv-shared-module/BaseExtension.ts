@@ -14,7 +14,7 @@ import IThumb = Manifold.IThumb;
 import LoginDialogue = require("../../modules/uv-dialogues-module/LoginDialogue");
 import LoginWarningMessages = require("./LoginWarningMessages");
 import Metric = require("../../modules/uv-shared-module/Metric");
-import Metrics = require("../../modules/uv-shared-module/Metrics");
+import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import Params = require("../../Params");
 import RestrictedDialogue = require("../../modules/uv-dialogues-module/RestrictedDialogue");
 import Shell = require("./Shell");
@@ -47,7 +47,8 @@ class BaseExtension implements IExtension {
     locale: string;
     locales: any[];
     loginDialogue: LoginDialogue;
-    metric: Metric;
+    metric: MetricType = MetricType.LAPTOP;
+    metrics: Metric[] = [];
     mouseX: number;
     mouseY: number;
     name: string;
@@ -85,6 +86,8 @@ class BaseExtension implements IExtension {
         this.embedHeight = $win.height();
         this.$element.width(this.embedWidth);
         this.$element.height(this.embedHeight);
+
+        this._parseMetrics();
 
         if (!this.isReload && Utils.Documents.isInIFrame()){
             // communication with parent frame (if it exists).
@@ -669,16 +672,26 @@ class BaseExtension implements IExtension {
         this.triggerSocket(BaseCommands.REFRESH, null);
     }
 
+    private _parseMetrics(): void {
+        const metrics: any[] = this.config.options.metrics;
+
+        if (metrics) {
+            for (let i = 0; i < metrics.length; i++) {
+                const m: any = metrics[i];
+                m.type = new MetricType(m.type);
+                this.metrics.push(m);
+            }
+        }
+    }
+
     private _updateMetric(): void {
 
-        var keys: string[] = Object.keys(Metrics);
-
-        for (var i = 0; i < keys.length; i++) {
-            var metric: Metric = Metrics[keys[i]];
+        for (let i = 0; i < this.metrics.length; i++) {
+            const metric: Metric = this.metrics[i];
 
             if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
-                if (this.metric !== metric) {
-                    this.metric = metric;
+                if (this.metric !== metric.type) {
+                    this.metric = metric.type;
                     $.publish(BaseCommands.METRIC_CHANGED);
                 }
             }
