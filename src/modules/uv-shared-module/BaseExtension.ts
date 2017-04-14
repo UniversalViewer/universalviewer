@@ -32,7 +32,6 @@ export class BaseExtension implements IExtension {
     helper: Manifold.IHelper;
     isCreated: boolean = false;
     isLoggedIn: boolean = false;
-    jsonp: boolean;
     lastCanvasIndex: number;
     loginDialogue: LoginDialogue;
     metric: MetricType = MetricType.LAPTOP;
@@ -60,6 +59,7 @@ export class BaseExtension implements IExtension {
         });
 
         this._parseMetrics();
+        this._initLocales();
 
         // add/remove classes.
         this.$element.empty();
@@ -602,12 +602,12 @@ export class BaseExtension implements IExtension {
         this.modulesCreated();
         $.publish(BaseEvents.RESIZE); // initial sizing
         $.publish(BaseEvents.CREATED);
-        this.setParams();
-        this.setDefaultFocus();
+        this._setParams();
+        this._setDefaultFocus();
         this.viewCanvas(this.helper.canvasIndex);
     }
 
-    setParams(): void {
+    private _setParams(): void {
         if (!this.data.isHomeDomain) return;
 
         $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.helper.collectionIndex.toString()]);
@@ -616,7 +616,7 @@ export class BaseExtension implements IExtension {
         $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex.toString()]);
     }
 
-    setDefaultFocus(): void {
+    private _setDefaultFocus(): void {
         setTimeout(() => {
             if (this.data.config.options.allowStealFocus) {
                 $('[tabindex=0]').focus();
@@ -646,6 +646,42 @@ export class BaseExtension implements IExtension {
 
     refresh(): void {
         this.fire(BaseEvents.REFRESH, null);
+    }
+
+    private _initLocales(): void {
+        const availableLocales: any[] = this.data.config.localisation.locales.slice(0);
+        const configuredLocales: ILocale[] = this.data.locales;
+        const finalLocales: ILocale[] = [];
+
+        // loop through configuredLocales array (those passed in when initialising the UV component)
+        // if availableLocales (those available in each extension's l10n directory) contains a configured locale, add it to finalLocales.
+        // if the configured locale has a label, substitute it
+        // mark locale as added.
+        // if limitLocales is disabled,
+        // loop through remaining availableLocales and add to finalLocales.
+
+        $.each(configuredLocales, (index: number, configuredLocale: ILocale) => {
+            const match: any[] = availableLocales.filter((item: any) => { return item.name === configuredLocale.name; });
+            if (match.length) {
+                var m: any = match[0];
+                if (configuredLocale.label) m.label = configuredLocale.label;
+                m.added = true;
+                finalLocales.push(m);
+            }
+        });
+
+        const limitLocales: boolean = Utils.Bools.getBool(this.data.config.options.limitLocales, false);
+
+        if (!limitLocales) {
+            $.each(availableLocales, (index: number, availableLocale: any) => {
+                if (!availableLocale.added) {
+                    finalLocales.push(availableLocale);
+                }
+                delete availableLocale.added;
+            });
+        }
+
+        this.data.locales = finalLocales;
     }
 
     private _parseMetrics(): void {
@@ -1039,20 +1075,17 @@ export class BaseExtension implements IExtension {
     }
 
     changeLocale(locale: string): void {
-        // if the current locale is "en-GB:English,cy-GB:Welsh"
-        // and "cy-GB" is passed, it becomes "cy-GB:Welsh,en-GB:English"
 
         // re-order locales so the passed locale is first
-        let locales: ILocale[] = this.data.locales.clone();
 
-        const index: number = locales.findIndex((l: any) => {
+        const data: IUVData = <IUVData>{};
+        data.locales = this.data.locales.clone();
+
+        const index: number = data.locales.findIndex((l: any) => {
             return l.name === locale;
         });
 
-        locales.move(index, 0);
-
-        const data: IUVData = <IUVData>{};
-        data.locales = locales;
+        data.locales.move(index, 0);
 
         this.reload(data);
     }

@@ -60,24 +60,7 @@ export class SettingsDialogue extends Dialogue {
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
-        const locales: ILocale[] = this.extension.data.locales;
-
-        if (locales) {
-            for (let i = 0; i < locales.length; i++) {
-                const locale = locales[i];
-                this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
-            }
-        }
-
-        this.$localeDropDown.val(locales[0].name);
-
-        this.$localeDropDown.change(() => {
-            this.extension.changeLocale(this.$localeDropDown.val());
-        });
-
-        if (locales && locales.length < 2){
-            this.$locale.hide();
-        }
+        this._createLocalesMenu();
 
         this.$element.hide();
     }
@@ -97,6 +80,27 @@ export class SettingsDialogue extends Dialogue {
 
         $.getJSON(this.extension.data.root + "/package.json", (pjson: any) => {
             this.$version.text("v" + pjson.version);
+        });
+    }
+
+    private _createLocalesMenu(): void {
+
+        const locales: ILocale[] = this.extension.data.locales;
+
+        if (locales && locales.length > 1) {
+            
+            for (let i = 0; i < locales.length; i++) {
+                const locale: ILocale = locales[i];
+                this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
+            }
+
+            this.$localeDropDown.val(locales[0].name);
+        } else {
+            this.$locale.hide();
+        }
+
+        this.$localeDropDown.change(() => {
+            this.extension.changeLocale(this.$localeDropDown.val());
         });
     }
 

@@ -40,7 +40,6 @@ export interface IExtension {
     isOverlayActive(): boolean;
     isRightPanelEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
-    jsonp: boolean;
     lastCanvasIndex: number;
     loadDependencies(deps: any): void;
     metric: MetricType;

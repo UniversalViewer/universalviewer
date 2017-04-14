@@ -36,17 +36,6 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             this.fire(BaseEvents.RELOAD, data);
         });
 
-        // get the path to uv.js
-        // const $scripts: JQuery = $('script');
-
-        // $scripts.each((index: number, script: Element) => {
-        //     const src: string = $(script).prop('src');
-
-        //     if (src.endsWith('uv.js')) {
-        //         this._uvScriptUri = src;
-        //     }
-        // });
-
         this._extensions = <IExtension[]>{};
 
         this._extensions[manifesto.ElementType.canvas().toString()] = {
@@ -94,10 +83,10 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             isLightbox: false,
             isOnlyInstance: true,
             isReload: false,
+            limitLocales: false,
             locales: [
                 {
-                    name: 'en-GB',
-                    label: 'English'
+                    name: 'en-GB'
                 }
             ],
             manifestIndex: 0,
