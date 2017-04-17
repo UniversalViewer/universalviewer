@@ -98,14 +98,54 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
     public set(data: IUVData): void {
 
-        if (!data.iiifResourceUri) {
-            return;
-        }
+        // if this is the first set
+        if (!this.extension) {
 
-        if (data.root && data.root.endsWith('/')) {
-            data.root = data.root.substring(0, data.root.length - 1);
-        }
+            if (!data.iiifResourceUri) {
+                this._error(`iiifResourceUri is required.`);
+                return;
+            }
 
+            // remove '/' from root
+            if (data.root && data.root.endsWith('/')) {
+                data.root = data.root.substring(0, data.root.length - 1);
+            }
+
+            this._reload(data);
+
+        } else {
+
+            // changing any of these data properties forces the UV to reload.
+            if (!!data.collectionIndex && this.extension.data.collectionIndex !== data.collectionIndex ||
+                !!data.manifestIndex && this.extension.data.manifestIndex !== data.manifestIndex ||
+                !!data.config && this.extension.data.config !== data.config ||
+                !!data.configUri && this.extension.data.configUri !== data.configUri ||
+                !!data.domain && this.extension.data.domain !== data.domain ||
+                !!data.embedDomain && this.extension.data.embedDomain !== data.embedDomain ||
+                !!data.embedScriptUri && this.extension.data.embedScriptUri !== data.embedScriptUri ||
+                !!data.iiifResourceUri && this.extension.data.iiifResourceUri !== data.iiifResourceUri ||
+                !!data.isHomeDomain && this.extension.data.isHomeDomain !== data.isHomeDomain ||
+                !!data.isLightbox && this.extension.data.isLightbox !== data.isLightbox ||
+                !!data.isOnlyInstance && this.extension.data.isOnlyInstance !== data.isOnlyInstance ||
+                !!data.isReload && this.extension.data.isReload !== data.isReload ||
+                !!data.locales && this.extension.data.locales !== data.locales ||
+                !!data.root && this.extension.data.root !== data.root) {
+                $.extend(this.extension.data, data);
+                this._reload(this.extension.data);
+            } else {
+                // no need to reload, just update.
+                $.extend(this.extension.data, data);
+                this.extension.update();
+            }
+        }       
+    }
+
+    public get(key: string): any {
+        return this.extension.data[key];
+    }
+
+    private _reload(data: IUVData): void {
+        
         const $elem: JQuery = $(this.options.target);
 
         // empty .uv div
@@ -116,7 +156,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         jQuery.support.cors = true;
 
-        var that = this;
+        const that = this;
 
         Manifold.loadManifest(<Manifold.IManifoldOptions>{
             iiifResourceUri: data.iiifResourceUri,

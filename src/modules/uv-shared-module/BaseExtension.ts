@@ -602,18 +602,18 @@ export class BaseExtension implements IExtension {
         this.modulesCreated();
         $.publish(BaseEvents.RESIZE); // initial sizing
         $.publish(BaseEvents.CREATED);
-        this._setParams();
+        this.update();
         this._setDefaultFocus();
         this.viewCanvas(this.helper.canvasIndex);
     }
 
-    private _setParams(): void {
+    public update(): void {
         if (!this.data.isHomeDomain) return;
 
-        $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.helper.collectionIndex.toString()]);
-        $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.helper.manifestIndex.toString()]);
-        $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.helper.sequenceIndex.toString()]);
-        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex.toString()]);
+        $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.data.collectionIndex.toString()]);
+        $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.data.manifestIndex.toString()]);
+        $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.data.sequenceIndex.toString()]);
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex.toString()]);
     }
 
     private _setDefaultFocus(): void {
