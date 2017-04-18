@@ -171,6 +171,14 @@
       }
     },
     "settingsDialogue": {
+      "options": {
+        "contributedByEnabled" : true,
+        "contributedByOptions" : {
+          "contributor" : "4Science",
+          "website" : "http://www.4science.it"
+        }
+
+      }
     },
     "shareDialogue": {
       "options": {

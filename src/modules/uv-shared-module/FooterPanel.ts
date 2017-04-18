@@ -62,10 +62,10 @@ class FooterPanel extends BaseView {
         this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
         this.$options.prepend(this.$moreInfoButton);
 
-        this.$logoButton = $('<a href="' + this.options.logoOptions.url + '" class="logo" title="' + this.content.logo + '" tabindex="0" target="_blank">' + this.content.logo + '</a>');
+        this.$logoButton = $('<a href="' + this.options.logoOptions.url + '" class="logo" title="' + this.content.logo + '" tabindex="0">' + this.content.logo + '</a>');
 
         // Detecting real image width
-        let logoImage = new Image();
+        var logoImage = new Image();
         logoImage.src = 'themes/' + this.extension.config.options.theme + '/img/' + this.options.logoOptions.image;
         this.$logoImageWidth = logoImage.width;
 

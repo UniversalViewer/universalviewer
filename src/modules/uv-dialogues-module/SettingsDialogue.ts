@@ -6,6 +6,7 @@ import Shell = require("../uv-shared-module/Shell");
 
 class SettingsDialogue extends Dialogue {
 
+    $contributedBy: JQuery;
     $locale: JQuery;
     $localeDropDown: JQuery;
     $localeLabel: JQuery;
@@ -44,6 +45,14 @@ class SettingsDialogue extends Dialogue {
         this.$version = $('<div class="version"></div>');
         this.$content.append(this.$version);
 
+        // Adding contributed by text
+        var contributedByText = this.content.contributedBy;
+        var contributedByLink = '<a href="' + this.options.contributedByOptions.website + '" title="' + this.options.contributedByOptions.contributor + '" tabindex="0" target="_blank">' + this.options.contributedByOptions.contributor + '</a>';
+        contributedByText = String.format(contributedByText, contributedByLink);
+
+        this.$contributedBy = $('<div class="version">' + contributedByText + '</div>');
+        this.$content.append(this.$contributedBy);
+
         this.$website = $('<div class="website"></div>');
         this.$content.append(this.$website);
 
@@ -79,11 +88,23 @@ class SettingsDialogue extends Dialogue {
             this.$locale.hide();
         }
 
+        this.updateContributedBy();
+
         this.$element.hide();
     }
 
     getSettings(): ISettings {
         return this.extension.getSettings();
+    }
+
+    updateContributedBy(): void {
+        var configEnabled = Utils.Bools.getBool(this.options.contributedByEnabled, false);
+
+        if (configEnabled){
+            this.$contributedBy.show();
+        } else {
+            this.$contributedBy.hide();
+        }
     }
 
     updateSettings(settings: ISettings): void {
@@ -105,6 +126,7 @@ class SettingsDialogue extends Dialogue {
     resize(): void {
         super.resize();
     }
+
 }
 
 export = SettingsDialogue;
