@@ -12,6 +12,8 @@ class FooterPanel extends BaseView {
     $embedButton: JQuery;
     $openButton: JQuery;
     $fullScreenBtn: JQuery;
+    $logoButton: JQuery;
+    $logoImageWidth: number;
     $options: JQuery;
 
     constructor($element: JQuery) {
@@ -60,6 +62,15 @@ class FooterPanel extends BaseView {
         this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
         this.$options.prepend(this.$moreInfoButton);
 
+        this.$logoButton = $('<a href="' + this.options.logoOptions.url + '" class="logo" title="' + this.content.logo + '" tabindex="0" target="_blank">' + this.content.logo + '</a>');
+
+        // Detecting real image width
+        let logoImage = new Image();
+        logoImage.src = 'themes/' + this.extension.config.options.theme + '/img/' + this.options.logoOptions.image;
+        this.$logoImageWidth = logoImage.width;
+
+        this.$options.append(this.$logoButton);
+
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '" tabindex="0">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
 
@@ -101,6 +112,7 @@ class FooterPanel extends BaseView {
         }
 
         this.updateMoreInfoButton();
+        this.updateLogoButton();
         this.updateOpenButton();
         this.updateFeedbackButton();
         this.updateBookmarkButton();
@@ -124,6 +136,16 @@ class FooterPanel extends BaseView {
             this.$options.addClass('minimiseButtons');
         } else {
             this.$options.removeClass('minimiseButtons');
+        }
+    }
+
+    updateLogoButton(): void {
+        var configEnabled = Utils.Bools.getBool(this.options.logoEnabled, false);
+
+        if (configEnabled && this.extension.metric.toString() !== MetricType.MOBILELANDSCAPE.toString()){
+            this.$logoButton.show();
+        } else {
+            this.$logoButton.hide();
         }
     }
 
@@ -218,6 +240,13 @@ class FooterPanel extends BaseView {
 
     resize(): void {
         super.resize();
+
+        var center = this.$element.width() / 2;
+        // position logo image.
+        this.$logoButton.css({
+            'left': center - (this.$logoButton.outerWidth() / 2),
+            'width': this.$logoImageWidth
+        });
     }
 }
 
