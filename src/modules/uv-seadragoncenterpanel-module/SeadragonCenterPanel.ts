@@ -5,7 +5,7 @@ import Commands = require("../../extensions/uv-seadragon-extension/Commands");
 import CroppedImageDimensions = require("../../extensions/uv-seadragon-extension/CroppedImageDimensions");
 import ExternalResource = Manifold.ExternalResource;
 import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import Metrics = require("../uv-shared-module/Metrics");
+import {MetricType} from "../uv-shared-module/MetricType";
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
 import SearchResult = Manifold.SearchResult;
@@ -143,7 +143,7 @@ class SeadragonCenterPanel extends CenterPanel {
     updateResponsiveView(): void {
         this.setNavigatorVisible();
         
-        if (this.extension.metric === Metrics.MOBILE_LANDSCAPE) {
+        if (this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
             this.viewer.autoHideControls = false;
             this.$viewportNavButtons.hide();
         } else {
@@ -938,7 +938,7 @@ class SeadragonCenterPanel extends CenterPanel {
     }
     
     setNavigatorVisible(): void {
-        var navigatorEnabled = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.metric !== Metrics.MOBILE_LANDSCAPE;
+        var navigatorEnabled = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.metric.toString() !== MetricType.MOBILELANDSCAPE.toString();
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         

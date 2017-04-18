@@ -15,7 +15,7 @@ import ISeadragonExtension = require("./ISeadragonExtension");
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import Metrics = require("../../modules/uv-shared-module/Metrics");
+import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import MobileFooterPanel = require("../../modules/uv-osdmobilefooterpanel-module/MobileFooter");
 import Mode = require("./Mode");
 import MoreInfoDialogue = require("../../modules/uv-dialogues-module/MoreInfoDialogue");
@@ -76,7 +76,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         const that = this;
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
-            if (this.metric === Metrics.MOBILE_LANDSCAPE) {
+            if (this.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
                 var settings: ISettings = {};
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
@@ -144,7 +144,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
-            if (this.metric !== Metrics.MOBILE_LANDSCAPE) {
+            if (this.metric.toString() !== MetricType.MOBILELANDSCAPE.toString()) {
                 Shell.$rightPanel.show();
             }
         });
