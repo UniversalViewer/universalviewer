@@ -438,15 +438,15 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     viewPage(canvasIndex: number, isReload?: boolean): void {
 
-        // if it's a valid canvas index.
+        // if it's an invalid canvas index.
         if (canvasIndex === -1) return;
 
-        if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
+        if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
             this.showMessage(this.data.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
-        if (this.isPagingSettingEnabled() && !isReload){
+        if (this.isPagingSettingEnabled() && !isReload) {
             const indices: number[] = this.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.

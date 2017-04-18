@@ -948,7 +948,7 @@ export class BaseExtension implements IExtension {
 
     viewCanvas(canvasIndex: number): void {
 
-        if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
+        if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
             this.showMessage(this.data.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
