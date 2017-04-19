@@ -130,6 +130,7 @@ class FooterPanel extends BaseView {
         this.$logoButton.css({
             'width': logoImage.width
         });
+        this.updateLogoButtonPosition();
     }
 
     updateMinimisedButtons(): void {
@@ -156,6 +157,15 @@ class FooterPanel extends BaseView {
         } else {
             this.$logoButton.hide();
         }
+    }
+
+    updateLogoButtonPosition(): void {
+        var center = this.$element.width() / 2;
+        // position logo image.
+        this.$logoButton.css({
+            'left': center - (this.$logoButton.outerWidth() / 2),
+            'width': this.$logoImageWidth
+        });
     }
 
     updateMoreInfoButton(): void {
@@ -250,11 +260,7 @@ class FooterPanel extends BaseView {
     resize(): void {
         super.resize();
 
-        var center = this.$element.width() / 2;
-        // position logo image.
-        this.$logoButton.css({
-            'left': center - (this.$logoButton.outerWidth() / 2)
-        });
+        this.updateLogoButtonPosition();
     }
 }
 
