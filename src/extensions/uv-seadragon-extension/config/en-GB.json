@@ -87,8 +87,7 @@
         "fullscreenEnabled": true,
         "logoEnabled": true,
         "logoOptions": {
-          "image": "4science_logo.png",
-          "url": "http://www.4science.it"
+          "website": "http://www.4science.it"
         },
         "minimiseButtons": true,
         "moreInfoEnabled": true,
@@ -180,6 +179,14 @@
       }
     },
     "settingsDialogue": {
+      "options": {
+        "contributedByEnabled" : true,
+        "contributedByOptions" : {
+          "contributor" : "4Science",
+          "website" : "http://www.4science.it"
+        }
+
+      }
     },
     "shareDialogue": {
       "options": {

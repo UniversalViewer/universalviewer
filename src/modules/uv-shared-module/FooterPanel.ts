@@ -25,6 +25,8 @@ class FooterPanel extends BaseView {
 
         super.create();
 
+        const that = this;
+
         $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
             this.updateFullScreenButton();
         });
@@ -62,12 +64,12 @@ class FooterPanel extends BaseView {
         this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
         this.$options.prepend(this.$moreInfoButton);
 
-        this.$logoButton = $('<a href="' + this.options.logoOptions.url + '" class="logo" title="' + this.content.logo + '" tabindex="0" target="_blank">' + this.content.logo + '</a>');
+        this.$logoButton = $('<a href="' + this.options.logoOptions.website + '" class="logo" title="' + this.content.logo + '" tabindex="0">' + this.content.logo + '</a>');
 
         // Detecting real image width
-        let logoImage = new Image();
-        logoImage.src = 'themes/' + this.extension.config.options.theme + '/img/' + this.options.logoOptions.image;
-        this.$logoImageWidth = logoImage.width;
+        var logoImage = new Image();
+        logoImage.onload = (() => this.imageReady(logoImage));
+        logoImage.src = 'themes/' + this.extension.config.options.theme + '/img/footer_logo.png';
 
         this.$options.append(this.$logoButton);
 
@@ -121,6 +123,12 @@ class FooterPanel extends BaseView {
         this.updateFullScreenButton();
         this.updateShareButton();
         this.updateMinimisedButtons();
+    }
+
+    imageReady(logoImage): void {
+        this.$logoButton.css({
+            'width': logoImage.width
+        });
     }
 
     updateMinimisedButtons(): void {

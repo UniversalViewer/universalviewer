@@ -216,6 +216,7 @@
         "locale": "Locale",
         "navigatorEnabled": "Navigator Enabled",
         "clickToZoomEnabled": "Mouse Click To Zoom",
+        "contributedBy": " enhanced by {0}",
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
