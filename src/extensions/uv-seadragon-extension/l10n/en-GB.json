@@ -220,7 +220,7 @@
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
+        "website": "<a href='{0}'>more info</a>"
       }
     },
     "shareDialogue": {

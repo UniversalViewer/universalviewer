@@ -184,6 +184,9 @@
         "contributedByOptions" : {
           "contributor" : "4Science",
           "website" : "http://www.4science.it"
+        },
+        "moreInfo": {
+          "website": "https://github.com/4Science/universalviewer/tree/ocr"
         }
 
       }
