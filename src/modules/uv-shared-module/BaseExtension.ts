@@ -338,7 +338,7 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.LOAD_FAILED);
 
             if (!that.lastCanvasIndex == null && that.lastCanvasIndex !== that.helper.canvasIndex){
-                this.viewCanvas(that.lastCanvasIndex);
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [that.lastCanvasIndex]);
             }
         });
 
@@ -604,16 +604,18 @@ export class BaseExtension implements IExtension {
         $.publish(BaseEvents.CREATED);
         this.update();
         this._setDefaultFocus();
-        this.viewCanvas(this.helper.canvasIndex);
     }
 
     public update(): void {
-        if (!this.data.isHomeDomain) return;
 
-        $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.data.collectionIndex.toString()]);
-        $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.data.manifestIndex.toString()]);
-        $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.data.sequenceIndex.toString()]);
-        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex.toString()]);
+        // allow 1ms for subclasses to subscribe to events.
+        setTimeout(() => {
+            $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.data.collectionIndex]);
+            $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.data.manifestIndex]);
+            $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.data.sequenceIndex]);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex]);
+        }, 1);
+
     }
 
     private _setDefaultFocus(): void {
@@ -956,7 +958,6 @@ export class BaseExtension implements IExtension {
         this.lastCanvasIndex = this.helper.canvasIndex;
         this.helper.canvasIndex = canvasIndex;
 
-        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
         $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     }
 

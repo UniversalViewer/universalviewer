@@ -32,8 +32,12 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
+        });
+
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
         });
     }
 
@@ -85,6 +89,10 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         } else {
             Shell.$rightPanel.hide();
         }
+    }
+
+    update(): void {
+        super.update();
     }
 
     dependencyLoaded(index: number, dep: any): void {

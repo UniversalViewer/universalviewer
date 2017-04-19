@@ -31,8 +31,12 @@ export class Extension extends BaseExtension implements IPDFExtension {
     create(): void {
         super.create();
 
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+            this.viewCanvas(canvasIndex);
+        });
+
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            this.viewCanvas(thumb.index);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
@@ -57,6 +61,10 @@ export class Extension extends BaseExtension implements IPDFExtension {
                 this.centerPanel.$element.show();
             }
         });
+    }
+
+    update(): void {
+        super.update();
     }
 
     IsOldIE(): boolean {

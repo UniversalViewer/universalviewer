@@ -74,6 +74,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             }
         });
 
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+            this.viewPage(canvasIndex);
+        });
+
         $.subscribe(Events.CLEAR_SEARCH, () => {
             this.searchResults = null;
             $.publish(Events.SEARCH_RESULTS_CLEARED);
@@ -87,12 +91,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.END, () => {
-            this.viewPage(this.helper.getLastPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
         });
 
         $.subscribe(Events.FIRST, () => {
             this.fire(Events.FIRST);
-            this.viewPage(this.helper.getFirstPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getFirstPageIndex()]);
         });
 
         $.subscribe(Events.GALLERY_DECREASE_SIZE, () => {
@@ -108,22 +112,22 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.HOME, () => {
-            this.viewPage(this.helper.getFirstPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getFirstPageIndex()]);
         });
 
         $.subscribe(Events.IMAGE_SEARCH, (e: any, index: number) => {
             this.fire(Events.IMAGE_SEARCH, index);
-            this.viewPage(index);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
         });
 
         $.subscribe(Events.LAST, () => {
             this.fire(Events.LAST);
-            this.viewPage(this.helper.getLastPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
         });
 
         $.subscribe(BaseEvents.LEFT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.getPrevPageIndex());
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
             } else {
                 this.centerPanel.setFocus();
             }
@@ -168,7 +172,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Events.NEXT, () => {
             this.fire(Events.NEXT);
-            this.viewPage(this.getNextPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
         });
 
         $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
@@ -194,7 +198,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.PAGE_DOWN, () => {
-            this.viewPage(this.getNextPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
         });
 
         $.subscribe(Events.PAGE_SEARCH, (e: any, value: string) => {
@@ -203,7 +207,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.PAGE_UP, () => {
-            this.viewPage(this.getPrevPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
         });
 
         $.subscribe(Events.PAGING_TOGGLED, (e: any, obj: any) => {
@@ -216,7 +220,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Events.PREV, () => {
             this.fire(Events.PREV);
-            this.viewPage(this.getPrevPageIndex());
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
         });
 
         $.subscribe(Events.PREV_SEARCH_RESULT, () => {
@@ -229,7 +233,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(BaseEvents.RIGHT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.getNextPageIndex());
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
             } else {
                 this.centerPanel.setFocus();
             }
@@ -294,7 +298,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEARCH_RESULT_CANVAS_CHANGED, (e: any, rect: SearchResultRect) => {
-            this.viewPage(rect.canvasIndex);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [rect.canvasIndex]);
         });
 
         $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
@@ -302,7 +306,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            this.viewPage(thumb.index);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
         });
 
         $.subscribe(Events.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
@@ -317,21 +321,14 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
-            this.viewPage(this.helper.canvasIndex, true);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
             const settings: ISettings = this.getSettings();
             $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
         });
 
         $.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
             this.fire(Events.VIEW_PAGE, index);
-            this.viewPage(index);
-        });
-
-        Utils.Async.waitFor(() => {
-            return this.centerPanel && this.centerPanel.isCreated;
-        }, () => {
-            this.checkForSearchParam();
-            this.checkForRotationParam();
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
         });
     }
 
@@ -410,9 +407,20 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
+    update(): void {
+        super.update();
+
+        Utils.Async.waitFor(() => {
+            return this.centerPanel && this.centerPanel.isCreated;
+        }, () => {
+            this.checkForSearchParam();
+            this.checkForRotationParam();
+        });
+    }
+
     checkForSearchParam(): void{
         // if a h value is in the hash params, do a search.
-        if (this.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()) {
 
             // if a highlight param is set, use it to search.
             const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
@@ -436,10 +444,16 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    viewPage(canvasIndex: number, isReload?: boolean): void {
+    viewPage(canvasIndex: number): void {
 
         // if it's an invalid canvas index.
         if (canvasIndex === -1) return;
+
+        let isReload: boolean = false;
+
+        if (canvasIndex === this.helper.canvasIndex) {
+            isReload = true;
+        }
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
             this.showMessage(this.data.config.content.canvasIndexOutOfRange);
@@ -449,9 +463,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isPagingSettingEnabled() && !isReload) {
             const indices: number[] = this.getPagedIndices(canvasIndex);
 
-            // if the page is already displayed, only advance canvasIndex.
+            // if the page is already displayed, do nothing.
             if (indices.includes(this.helper.canvasIndex)) {
-                this.viewCanvas(canvasIndex);
                 return;
             }
         }
@@ -496,7 +509,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (!range) return;
         const canvasId: string = range.getCanvasIds()[0];
         const index: number = this.helper.getCanvasIndexById(canvasId);
-        this.viewPage(index);
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
     }
 
     viewLabel(label: string): void {
@@ -510,7 +523,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const index: number = this.helper.getCanvasIndexByLabel(label);
 
         if (index != -1) {
-            this.viewPage(index);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
         } else {
             this.showMessage(this.data.config.modules.genericDialogue.content.pageNotFound);
             $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
@@ -541,7 +554,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         this.searchResults = [];
 
         // reload current index as it may contain results.
-        this.viewPage(this.helper.canvasIndex);
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
     }
 
     prevSearchResult(): void {
@@ -554,7 +567,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
             if (result.canvasIndex <= this.getPrevPageIndex()) {
                 foundResult = result;
-                this.viewPage(foundResult.canvasIndex);
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [foundResult.canvasIndex]);
                 break;
             }
         }
@@ -570,7 +583,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
             if (result && result.canvasIndex >= this.getNextPageIndex()) {
                 foundResult = result;
-                this.viewPage(result.canvasIndex);
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [result.canvasIndex]);
                 break;
             }
         }
@@ -943,7 +956,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 $.publish(Events.SEARCH_RESULTS, [{terms, results}]);
 
                 // reload current index as it may contain results.
-                that.viewPage(that.helper.canvasIndex, true);
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [that.helper.canvasIndex]);
             } else {
                 that.showMessage(that.data.config.modules.genericDialogue.content.noMatches, () => {
                     $.publish(Events.SEARCH_RESULTS_EMPTY);

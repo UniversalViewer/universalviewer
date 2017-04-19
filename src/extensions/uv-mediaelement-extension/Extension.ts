@@ -42,8 +42,12 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             $.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
+        });
+
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
@@ -118,6 +122,10 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
         }
+    }
+
+    update(): void {
+        super.update();
     }
 
     isLeftPanelEnabled(): boolean {
