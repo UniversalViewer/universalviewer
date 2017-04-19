@@ -22,6 +22,7 @@ import MoreInfoDialogue = require("../../modules/uv-dialogues-module/MoreInfoDia
 import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
 import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
 import MultiSelectionArgs = require("./MultiSelectionArgs");
+import OcrRightPanel = require("../../modules/uv-ocrrightpanel-module/OcrRightPanel");
 import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
 import Params = require("../../Params");
 import Point = require("../../modules/uv-shared-module/Point");
@@ -58,6 +59,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     mode: Mode;
     moreInfoDialogue: MoreInfoDialogue;
     multiSelectDialogue: MultiSelectDialogue;
+    ocrRightPanel: OcrRightPanel;
     previousSearchResultRect: SearchResultRect;
     rightPanel: MoreInfoRightPanel;
     searchResults: SearchResult[] = [];
@@ -89,6 +91,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.searchResults = null;
             $.publish(Commands.SEARCH_RESULTS_CLEARED);
             this.triggerSocket(Commands.CLEAR_SEARCH);
+            //this.clearSearch();
         });
 
         $.subscribe(BaseCommands.DOWN_ARROW, (e) => {
@@ -289,6 +292,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             this.searchWithin(terms);
         });
 
+        $.subscribe(Commands.SEARCH_IN_CANVAS, (e, obj) => {
+            this.triggerSocket(Commands.SEARCH_IN_CANVAS, obj);
+            this.searchWithinCanvas(obj.terms);
+        });
+        
         $.subscribe(Commands.SEARCH_PREVIEW_FINISH, (e) => {
             this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
         });
@@ -360,6 +368,12 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
 
+        if (this.isOcrRightPanelEnabled()){
+            this.ocrRightPanel = new OcrRightPanel(Shell.$ocrRightPanel);
+        } else {
+            Shell.$ocrRightPanel.hide();
+        }
+
         if (this.isRightPanelEnabled()){
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         } else {
@@ -408,6 +422,10 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         }
+
+        if (this.isOcrRightPanelEnabled()){
+            this.ocrRightPanel.init();
+        }   
 
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
@@ -868,6 +886,18 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return true;
     }
 
+    isOcrRightPanelEnabled(): boolean {
+        if (!Utils.Bools.getBool(this.config.options.ocrRightPanelEnabled, false)){
+            return false;
+        }
+        
+        if (!this.getOcrService()) {
+            return false;
+        }
+                
+        return true;
+    } 
+
     isPagingSettingEnabled(): boolean {
         if (this.helper.isPagingAvailable()){
             return this.getSettings().pagingEnabled;
@@ -913,6 +943,30 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return service.id + '?q={0}';
     }
 
+    getOcrService(): Manifesto.IService {
+        var services: Manifesto.IService[] = this.helper.manifest.getServices();
+       
+        var findService = false;
+        for (var i = 0; i < services.length; i++) {
+            var service: Manifesto.IService = services[i];
+            var profile = service.getProfile().value;
+
+            if (_.includes(profile, '/api/ocr/')) {
+                findService = true;
+            } 
+        }
+        
+        if (!findService) return null;
+
+        return service;        
+    }
+
+    getOcrServiceUri(): string{
+        var service = this.getOcrService();
+        if (!service) return null;
+        return service.id;
+    }
+    
     getSearchWithinServiceUri(): string {
         const service: Manifesto.IService = this.helper.getSearchWithinService();
 
@@ -975,6 +1029,70 @@ class Extension extends BaseExtension implements ISeadragonExtension {
                 cb(searchResults);
             }
         });
+    }
+
+    searchWithinCanvas(terms): void {
+
+        if (this.isSearching) return;
+
+        this.isSearching = true;
+
+        // clear search results
+        this.searchResults = [];
+
+        const that = this;
+
+        this.getSearchWithinCanvasResults(terms, this.searchResults, (results: SearchResult[]) => {
+
+            this.isSearching = false;
+
+            if (results.length) {
+                this.searchResults = results.sort((a, b) => {
+                    return a.canvasIndex - b.canvasIndex;
+                });
+
+                $.publish(Commands.SEARCH_RESULTS_EMPTY);
+
+                // reload current index as it may contain results.
+                that.viewPage(that.helper.canvasIndex, true);
+            } else {
+                that.showMessage(that.config.modules.genericDialogue.content.noMatches, () => {
+                    $.publish(Commands.SEARCH_RESULTS_EMPTY);
+                });
+            } 
+        });
+    }
+
+    getSearchWithinCanvasResults(terms: any,
+                                searchResults: SearchResult[],
+                                cb: (results: SearchResult[]) => void): void {
+
+        const that = this;
+        let results = {resources : Array()};
+
+        let canvasId = this.helper.getCurrentCanvas().id;
+
+        for (let i = 0; i < terms.length; i++) {
+            let xywh = $('#'+terms[i].id).attr('data-xywh');
+            let text = $('#'+terms[i].id).html();
+
+            let termObj = {
+                '@type' : 'oa:Annotation',
+                motivation : 'sc:painting',
+                on: canvasId + '#xywh=' + xywh,
+                resource : {
+                    '@type' : 'cnt:ContentAsText',
+                    chars : text
+                }
+            };
+            results.resources.push(termObj);
+        }
+
+        if (results.resources && results.resources.length) {
+            searchResults = searchResults.concat(this.parseSearchJson(results, searchResults));
+        }
+
+        cb(searchResults);
     }
 
     parseSearchJson(resultsToParse: any, searchResults: SearchResult[]): SearchResult[] {

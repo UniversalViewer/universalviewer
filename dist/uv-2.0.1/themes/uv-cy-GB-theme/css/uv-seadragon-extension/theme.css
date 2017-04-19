@@ -2075,6 +2075,13 @@ input[type=range]:focus::-ms-fill-upper {
   cursor: pointer;
   left: 35px;
 }
+#app .rightPanel .top .clearSel {
+  position: absolute;
+  height: 20px;
+  margin-top: 9px;
+  cursor: pointer;
+  right: 5px;
+}
 #app .rightPanel .top .collapseButton {
   position: absolute;
   background: url('../../img/uv-shared-module/arrows_right.png') no-repeat;
@@ -2128,6 +2135,10 @@ input[type=range]:focus::-ms-fill-upper {
 #app .rightPanel .main {
   margin-right: 10px;
   margin-bottom: 10px;
+}
+#app .rightPanel .main .wordHighlightDiv {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 #app.browser-Explorer.browser-version-8 .rightPanel .closed .title {
   writing-mode: tb-lr;
@@ -2348,6 +2359,27 @@ input[type=range]:focus::-ms-fill-upper {
   color: #fff;
   text-decoration: none;
 }
+#app .footerPanel .options a.logo {
+  background-image: url('../../img/footer_logo.png');
+  background-repeat: no-repeat;
+  height: 21px;
+  line-height: 21px;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  background-position: left center;
+  padding-left: 0;
+  padding-right: 10px;
+  line-height: 22px;
+  position: absolute;
+}
+#app .footerPanel .options a.logo:link,
+#app .footerPanel .options a.logo:visited,
+#app .footerPanel .options a.logo:hover,
+#app .footerPanel .options a.logo:active {
+  color: #fff;
+  text-decoration: none;
+}
 #app .footerPanel .options a.print {
   background-image: url('../../img/uv-shared-module/print.png');
   background-repeat: no-repeat;
@@ -2470,6 +2502,16 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 0;
   color: transparent;
   width: 27px;
+  padding: 0;
+}
+#app .footerPanel .options.minimiseButtons a.logo {
+  font: 0/0 a;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+  line-height: 0;
+  font-size: 0;
+  color: transparent;
   padding: 0;
 }
 #app .footerPanel .options.minimiseButtons a.print {

@@ -12,6 +12,7 @@ class Shell extends BaseView {
     static $mainPanel: JQuery;
     static $mobileFooterPanel: JQuery;
     static $overlays: JQuery;
+    static $ocrRightPanel: JQuery;
     static $rightPanel: JQuery;
 
     constructor($element: JQuery) {
@@ -41,6 +42,9 @@ class Shell extends BaseView {
 
         Shell.$leftPanel = $('<div class="leftPanel"></div>');
         Shell.$mainPanel.append(Shell.$leftPanel);
+
+        Shell.$ocrRightPanel = $('<div class="rightPanel"></div>');
+        Shell.$mainPanel.append(Shell.$ocrRightPanel);
 
         Shell.$rightPanel = $('<div class="rightPanel"></div>');
         Shell.$mainPanel.append(Shell.$rightPanel);

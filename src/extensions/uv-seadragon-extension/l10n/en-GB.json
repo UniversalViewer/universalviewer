@@ -70,6 +70,7 @@
         "feedback": "Feedback",
         "exitFullScreen": "Exit Full Screen",
         "fullScreen": "Full Screen",
+        "logo": "Logo",
         "open": "Open",
         "share": "Share"
       }
@@ -81,7 +82,8 @@
         "noMatches": "No matches were found.",
         "ok": "OK",
         "pageNotFound": "This item does not contain a page with the number you entered. Try switching the numbering mode to 'image'.",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "wrongSelection": "Wrong selection. You can't select items outside text area of OCR panel"
       }
     },
     "helpDialogue": {
@@ -132,6 +134,14 @@
         "select": "Download",
         "selectAll": "Select All",
         "title": "Select Pages for Download"
+      }
+    },
+    "ocrRightPanel": {
+      "content": {
+        "clearSelection": "Clear selected text",
+        "collapse": "Collapse Ocr",
+        "expand": "Expand Ocr",
+        "title": "Ocr"
       }
     },
     "pagingHeaderPanel": {
@@ -206,10 +216,11 @@
         "locale": "Locale",
         "navigatorEnabled": "Navigator Enabled",
         "clickToZoomEnabled": "Mouse Click To Zoom",
+        "contributedBy": " enhanced by {0}",
         "pagingEnabled": "Two Page View",
         "preserveViewport": "Preserve Zoom",
         "title": "Settings",
-        "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>more info</a>"
+        "website": "<a href='{0}'>more info</a>"
       }
     },
     "shareDialogue": {

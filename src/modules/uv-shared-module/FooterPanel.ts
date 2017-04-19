@@ -12,6 +12,8 @@ class FooterPanel extends BaseView {
     $embedButton: JQuery;
     $openButton: JQuery;
     $fullScreenBtn: JQuery;
+    $logoButton: JQuery;
+    $logoImageWidth: number;
     $options: JQuery;
 
     constructor($element: JQuery) {
@@ -23,11 +25,14 @@ class FooterPanel extends BaseView {
 
         super.create();
 
+        const that = this;
+
         $.subscribe(BaseCommands.TOGGLE_FULLSCREEN, () => {
             this.updateFullScreenButton();
         });
 
         $.subscribe(BaseCommands.METRIC_CHANGED, () => {
+            this.updateLogoButton();
             this.updateMinimisedButtons();
             this.updateMoreInfoButton();
         });
@@ -59,6 +64,15 @@ class FooterPanel extends BaseView {
 
         this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
         this.$options.prepend(this.$moreInfoButton);
+
+        this.$logoButton = $('<a href="' + this.options.logoOptions.website + '" class="logo" title="' + this.content.logo + '" tabindex="0">' + this.content.logo + '</a>');
+
+        // Detecting real image width
+        var logoImage = new Image();
+        logoImage.onload = (() => this.imageReady(logoImage));
+        logoImage.src = 'themes/' + this.extension.config.options.theme + '/img/footer_logo.png';
+
+        this.$options.append(this.$logoButton);
 
         this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '" tabindex="0">' + this.content.fullScreen + '</a>');
         this.$options.append(this.$fullScreenBtn);
@@ -101,6 +115,7 @@ class FooterPanel extends BaseView {
         }
 
         this.updateMoreInfoButton();
+        this.updateLogoButton();
         this.updateOpenButton();
         this.updateFeedbackButton();
         this.updateBookmarkButton();
@@ -109,6 +124,13 @@ class FooterPanel extends BaseView {
         this.updateFullScreenButton();
         this.updateShareButton();
         this.updateMinimisedButtons();
+    }
+
+    imageReady(logoImage): void {
+        this.$logoButton.css({
+            'width': logoImage.width
+        });
+        this.updateLogoButtonPosition();
     }
 
     updateMinimisedButtons(): void {
@@ -125,6 +147,25 @@ class FooterPanel extends BaseView {
         } else {
             this.$options.removeClass('minimiseButtons');
         }
+    }
+
+    updateLogoButton(): void {
+        var configEnabled = Utils.Bools.getBool(this.options.logoEnabled, false);
+
+        if (configEnabled && this.extension.metric.toString() !== MetricType.MOBILELANDSCAPE.toString()){
+            this.$logoButton.show();
+        } else {
+            this.$logoButton.hide();
+        }
+    }
+
+    updateLogoButtonPosition(): void {
+        var center = this.$element.width() / 2;
+        // position logo image.
+        this.$logoButton.css({
+            'left': center - (this.$logoButton.outerWidth() / 2),
+            'width': this.$logoImageWidth
+        });
     }
 
     updateMoreInfoButton(): void {
@@ -218,6 +259,8 @@ class FooterPanel extends BaseView {
 
     resize(): void {
         super.resize();
+
+        this.updateLogoButtonPosition();
     }
 }
 

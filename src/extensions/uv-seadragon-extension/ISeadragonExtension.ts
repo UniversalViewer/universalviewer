@@ -19,6 +19,8 @@ interface ISeadragonExtension extends IExtension{
     getLastSearchResultRectIndex(): number;
     getMode(): Mode;
     getNextPageIndex(index?: number): number;
+    getOcrService(): Manifesto.IService;
+    getOcrServiceUri(): string;
     getPrevPageIndex(index?: number): number;
     getSearchResultRects(): SearchResultRect[];
     getSearchWithinServiceUri(): string;
@@ -27,11 +29,12 @@ interface ISeadragonExtension extends IExtension{
     getViewerRotation(): number;
     getViewportBounds(): string;
     isFirstSearchResultRect(): boolean;
+    isOcrRightPanelEnabled(): boolean;
     isPagingSettingEnabled(): boolean;
     isSearchWithinEnabled(): boolean;
     previousSearchResultRect: SearchResultRect;
     searchResults: SearchResult[];
-    searchWithin(terms: string, callback: (results: any) => void): void;
+    searchWithin(terms: string, callback: (results: any) => void): void;    
 }
 
 export = ISeadragonExtension;

@@ -1,5 +1,7 @@
 import BaseCommands = require("../uv-shared-module/BaseCommands");
+import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
 import RightPanel = require("../uv-shared-module/RightPanel");
+import Shell = require("../../modules/uv-shared-module/Shell");
 
 class MoreInfoRightPanel extends RightPanel {
 
@@ -68,7 +70,23 @@ class MoreInfoRightPanel extends RightPanel {
     resize(): void {
         super.resize();
 
-        this.$main.height(this.$element.height() - this.$top.height() - this.$main.verticalMargins());
+        if ((<ISeadragonExtension>this.extension).isOcrRightPanelEnabled()) {
+            if (this.isExpanded){
+                //this.$main.height(this.$element.height() - this.$top.height() - this.$main.verticalMargins());            
+                this.$element.css({
+                    'left'  : Math.floor(this.$element.parent().width() - this.$element.outerWidth())
+                });
+                Shell.$ocrRightPanel.hide();
+            } else {
+                this.$element.css({
+                    'height': Math.floor(this.$element.height() / 2),
+                    'left'  : Math.floor(this.$element.parent().width() - this.$element.outerWidth())
+                });
+                Shell.$ocrRightPanel.show();
+            }
+        } else {
+            this.$main.height(this.$element.height() - this.$top.height() - this.$main.verticalMargins());
+        }  
     }
 }
 
