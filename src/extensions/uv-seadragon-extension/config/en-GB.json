@@ -85,6 +85,11 @@
         "embedEnabled": false,
         "feedbackEnabled": false,
         "fullscreenEnabled": true,
+        "logoEnabled": true,
+        "logoOptions": {
+          "image": "4science_logo.png",
+          "url": "http://www.4science.it"
+        },
         "minimiseButtons": true,
         "moreInfoEnabled": true,
         "openEnabled": false,

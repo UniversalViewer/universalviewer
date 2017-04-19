@@ -49,6 +49,12 @@
                     line-height: 22px;
                 }
 
+                &.logo{
+                    .icon-left(url('@{theme-img-path}4science_logo.png'), 21px, 30px);
+                    line-height: 22px;
+                    position: absolute;
+                }
+
                 &.print{
                     .icon-left(url('@{img-path}print.png'), 21px, 30px);
                     line-height: 22px;
@@ -106,6 +112,11 @@
                     &.feedback{
                         .hide-text();
                         width: 27px;
+                        padding: 0;
+                    }
+
+                    &.logo{
+                        .hide-text();
                         padding: 0;
                     }
                     
