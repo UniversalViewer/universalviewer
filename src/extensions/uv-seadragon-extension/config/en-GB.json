@@ -29,6 +29,7 @@
     "pessimisticAccessControl": false,
     "preserveViewport": false,
     "rightPanelEnabled": true,
+    "ocrRightPanelEnabled": true,
     "saveUserSettings": false,
     "clickToZoomEnabled": true,
     "searchWithinEnabled": true,
@@ -132,6 +133,14 @@
         "pageModeEnabled": true
       }
     },
+    "ocrRightPanel": {
+      "options": {
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 300,
+        "panelOpen": false
+      }
+    },
     "pagingHeaderPanel": {
       "options": {
         "autoCompleteBoxEnabled": true,
@@ -175,6 +184,9 @@
         "contributedByOptions" : {
           "contributor" : "4Science",
           "website" : "http://www.4science.it"
+        },
+        "moreInfo": {
+          "website": "https://github.com/universalviewer/universalviewer#contributors"
         }
 
       }

@@ -66,9 +66,10 @@ class SettingsDialogue extends Dialogue {
         this.$locale.append(this.$localeDropDown);
 
         // initialise ui.
-        this.$title.text(this.content.title);       
+        this.$title.text(this.content.title);
 
-        this.$website.html(this.content.website);
+        var moreInfoWebsite = String.format(this.content.website, this.options.moreInfo.website);
+        this.$website.html(moreInfoWebsite);
         this.$website.targetBlank();
 
         var locales: any[] = this.extension.getLocales();
