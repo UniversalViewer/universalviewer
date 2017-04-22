@@ -85,6 +85,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             ],
             manifestIndex: 0,
             rotation: 0,
+            searchResults: null,
             sequenceIndex: 0,
             xywh: ''
         };

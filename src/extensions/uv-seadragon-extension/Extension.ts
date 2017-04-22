@@ -413,6 +413,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         Utils.Async.waitFor(() => {
             return this.centerPanel && this.centerPanel.isCreated;
         }, () => {
+            $.publish(Events.SEARCH_RESULTS, [this.data.searchResults]);
             this.checkForSearchParam();
             this.checkForRotationParam();
         });
@@ -973,7 +974,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         $.getJSON(searchUri, (results: any) => {
             
             if (results.resources && results.resources.length) {
-                searchResults = searchResults.concat(this.parseSearchJson(results, searchResults));
+                searchResults = searchResults.concat(UVUtils.parseAnnotationList(results, searchResults));
             }
 
             if (results.next) {

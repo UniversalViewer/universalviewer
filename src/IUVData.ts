@@ -16,5 +16,6 @@ export interface IUVData {
     locales: ILocale[];
     manifestIndex: number;
     root: string | null;
+    searchResults: string | null;
     sequenceIndex: number;
 }
