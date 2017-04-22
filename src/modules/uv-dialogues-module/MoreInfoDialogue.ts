@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
+import {UVUtils} from "../uv-shared-module/Utils";
 
 export class MoreInfoDialogue extends Dialogue {
 
@@ -70,7 +71,7 @@ export class MoreInfoDialogue extends Dialogue {
             range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html) => {
-                return this.extension.sanitize(html);
+                return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages
         };

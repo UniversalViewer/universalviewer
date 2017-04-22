@@ -1,22 +1,19 @@
+import {Auth09} from "./Auth09";
+import {Auth1} from "./Auth1";
 import {BaseEvents} from "./BaseEvents";
 import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
 import {IExtension} from "./IExtension";
 import {ILocale} from "../../ILocale";
-import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
-import {InformationArgs} from "./InformationArgs";
-import {InformationType} from "./InformationType";
 import {ISharePreview} from "./ISharePreview";
 import {IUVComponent} from "../../IUVComponent";
 import {IUVData} from "../../IUVData";
 import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
-import {LoginWarningMessages} from "./LoginWarningMessages";
 import {Metric} from "../../modules/uv-shared-module/Metric";
 import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import {Shell} from "./Shell";
 import {SynchronousRequire} from "../../SynchronousRequire";
 import ExternalResource = Manifold.ExternalResource;
-import IAccessToken = Manifesto.IAccessToken;
 import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
@@ -382,7 +379,7 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: ExternalResource) => {
             this.fire(BaseEvents.RESOURCE_DEGRADED);
-            this.handleDegraded(resource)
+            Auth09.handleDegraded(resource)
         });
 
         $.subscribe(BaseEvents.RETURN, () => {
@@ -447,6 +444,10 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE);
+        });
+
+        $.subscribe(BaseEvents.SHOW_MESSAGE, (e: any, message: string) => {
+            this.showMessage(message);
         });
 
         $.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
@@ -804,28 +805,6 @@ export class BaseExtension implements IExtension {
         this.data.config.options = $.extend(this.data.config.options, settings);
     }
 
-    sanitize(html: string): string {
-        const elem: Element = document.createElement('div');
-        const $elem: JQuery = $(elem);
-
-        $elem.html(html);
-
-        const s: any = new Sanitize({
-            elements:   ['a', 'b', 'br', 'img', 'p', 'i', 'span'],
-            attributes: {
-                a: ['href'],
-                img: ['src', 'alt']
-            },
-            protocols:  {
-                a: { href: ['http', 'https'] }
-            }
-        });
-
-        $elem.html(s.clean_node(elem));
-
-        return $elem.html();
-    }
-
     getSharePreview(): ISharePreview {
 
         const title: string = this.helper.getLabel();
@@ -897,7 +876,8 @@ export class BaseExtension implements IExtension {
             r.index = index;
 
             // used to reload resources with isResponseHandled = true.
-            if (resources){
+            if (resources) {
+
                 const found: Manifold.ExternalResource | undefined = resources.find((f: Manifold.ExternalResource) => {
                     return f.dataUri === r.dataUri;
                 });
@@ -913,37 +893,31 @@ export class BaseExtension implements IExtension {
         });
 
         const storageStrategy: string = this.data.config.options.tokenStorage;
+        const authAPIVersion: number = this.data.config.options.authAPIVersion;
 
-        return new Promise<Manifold.ExternalResource[]>((resolve) => {
-            manifesto.Utils.loadExternalResources(
-                resourcesToLoad,
-                storageStrategy,
-                this.clickThrough,
-                this.restricted,
-                this.login,
-                this.getAccessToken,
-                this.storeAccessToken,
-                this.getStoredAccessToken,
-                this.handleExternalResourceResponse).then((r: Manifold.ExternalResource[]) => {
+        // if using auth api v1
+        if (authAPIVersion === 1) {
+            console.log("not implemented yet!");
+            return new Promise<Manifold.ExternalResource[]>((resolve) => {
+                Auth1.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifold.ExternalResource[]) => {
                     this.resources = r.map((resource: Manifold.ExternalResource) => {
                         resource.data.index = resource.index;
                         return <Manifold.ExternalResource>Utils.Objects.toPlainObject(resource.data);
                     });
+
                     resolve(this.resources);
-                })['catch']((error: any) => {
-                    switch(error.name) {
-                        case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
-                            $.publish(BaseEvents.LOGIN_FAILED);
-                            break;
-                        case manifesto.StatusCodes.FORBIDDEN.toString():
-                            $.publish(BaseEvents.FORBIDDEN);
-                            break;
-                        case manifesto.StatusCodes.RESTRICTED.toString():
-                            // do nothing
-                            break;
-                        default:
-                            this.showMessage(error.message || error);
-                    }
+                });
+            });
+        }
+        
+        return new Promise<Manifold.ExternalResource[]>((resolve) => {
+            Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifold.ExternalResource[]) => {
+                this.resources = r.map((resource: Manifold.ExternalResource) => {
+                    resource.data.index = resource.index;
+                    return <Manifold.ExternalResource>Utils.Objects.toPlainObject(resource.data);
+                });
+
+                resolve(this.resources);
             });
         });
     }
@@ -1093,212 +1067,5 @@ export class BaseExtension implements IExtension {
 
     // auth
 
-    clickThrough(resource: Manifold.ExternalResource): Promise<void> {
-        return new Promise<void>((resolve) => {
-
-            $.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
-                resource: resource,
-                acceptCallback: () => {
-                    const win: Window = window.open(resource.clickThroughService.id);
-
-                    const pollTimer: number = window.setInterval(() => {
-                        if (win.closed) {
-                            window.clearInterval(pollTimer);
-                            $.publish(BaseEvents.CLICKTHROUGH);
-                            resolve();
-                        }
-                    }, 500);
-                }
-            }]);
-        });
-    }
-
-    restricted(resource: Manifold.ExternalResource): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-
-            $.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
-                resource: resource,
-                acceptCallback: () => {
-                    $.publish(BaseEvents.LOAD_FAILED);
-                    reject(resource);
-                }
-            }]);
-        });
-    }
-
-    login(resource: Manifold.ExternalResource): Promise<void> {
-        return new Promise<void>((resolve) => {
-
-            const options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
-
-            if (resource.status === HTTPStatusCode.FORBIDDEN){
-                options.warningMessage = LoginWarningMessages.FORBIDDEN;
-                options.showCancelButton = true;
-            }
-
-            $.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [{
-                resource: resource,
-                loginCallback: () => {
-                    const win: Window = window.open(resource.loginService.id + "?t=" + new Date().getTime());
-                    const pollTimer: number = window.setInterval(function () {
-                        if (win.closed) {
-                            window.clearInterval(pollTimer);
-                            $.publish(BaseEvents.LOGIN);
-                            resolve();
-                        }
-                    }, 500);
-                },
-                logoutCallback: () => {
-                    const win: Window = window.open(resource.logoutService.id + "?t=" + new Date().getTime());
-                    const pollTimer: number = window.setInterval(function () {
-                        if (win.closed) {
-                            window.clearInterval(pollTimer);
-                            $.publish(BaseEvents.LOGOUT);
-                            resolve();
-                        }
-                    }, 500);
-                },
-                options: options
-            }]);
-        });
-    }
-
-    getAccessToken(resource: Manifold.ExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
-
-        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-            const serviceUri: string = resource.tokenService.id;
-
-            // pick an identifier for this message. We might want to keep track of sent messages
-            const msgId: string = serviceUri + "|" + new Date().getTime();
-
-            const receiveAccessToken: EventListenerOrEventListenerObject = (e: any) => {
-                window.removeEventListener("message", receiveAccessToken);
-                const token: any = e.data;
-                if (token.error){
-                    if(rejectOnError) {
-                        reject(token.errorDescription);
-                    } else {
-                        resolve(undefined);
-                    }
-                } else {
-                    resolve(token);
-                }
-            };
-
-            window.addEventListener("message", receiveAccessToken, false);
-
-            const tokenUri: string = serviceUri + "?messageId=" + msgId;
-            $('#commsFrame').prop('src', tokenUri);
-        });
-
-        // deprecated JSONP method - keep this around for reference
-        //return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-        //    $.getJSON(resource.tokenService.id + "?callback=?", (token: Manifesto.IAccessToken) => {
-        //        if (token.error){
-        //            if(rejectOnError) {
-        //                reject(token.errorDescription);
-        //            } else {
-        //                resolve(null);
-        //            }
-        //        } else {
-        //            resolve(token);
-        //        }
-        //    }).fail((error) => {
-        //        if(rejectOnError) {
-        //            reject(error);
-        //        } else {
-        //            resolve(null);
-        //        }
-        //    });
-        //});
-    }
-
-    storeAccessToken(resource: Manifold.ExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
-            resolve();
-        });
-    }
-
-    getStoredAccessToken(resource: Manifold.ExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
-
-        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-
-            let foundItems: Utils.StorageItem[] = [];
-            let item: Utils.StorageItem | null = null;
-
-            // try to match on the tokenService, if the resource has one:
-            if(resource.tokenService) {
-                item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(storageStrategy));
-            }
-
-            if (item) {
-                foundItems.push(item);
-            } else {
-                // find an access token for the domain
-                const domain: string = Utils.Urls.getUrlParts(resource.dataUri).hostname;
-                const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
-
-                for (let i = 0; i < items.length; i++) {
-                    item = items[i];
-
-                    if (item.key.includes(domain)) {
-                        foundItems.push(item);
-                    }
-                }
-            }
-
-            // sort by expiresAt, earliest to most recent.
-            foundItems = foundItems.sort((a: Utils.StorageItem, b: Utils.StorageItem) => {
-                return a.expiresAt - b.expiresAt;
-            });
-
-            let foundToken: IAccessToken | undefined;
-
-            if (foundItems.length) {
-                foundToken = <Manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
-            }
-
-            resolve(foundToken);
-        });
-    }
-
-    handleExternalResourceResponse(resource: Manifold.ExternalResource): Promise<any> {
-
-        return new Promise<any>((resolve, reject) => {
-            resource.isResponseHandled = true;
-
-            if (resource.status === HTTPStatusCode.OK) {
-                resolve(resource);
-            } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
-                resolve(resource);
-                $.publish(BaseEvents.RESOURCE_DEGRADED, [resource]);
-            } else {
-
-                if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
-                    resource.error.status === HTTPStatusCode.INTERNAL_SERVER_ERROR) {
-                    // if the browser doesn't support CORS
-                    if (!Modernizr.cors) {
-                        const informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
-                        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
-                        resolve(resource);
-                    } else {
-                        reject(resource.error.statusText);
-                    }
-                } else if (resource.error.status === HTTPStatusCode.FORBIDDEN) {
-                    const error: Error = new Error();
-                    error.message = "Forbidden";
-                    error.name = manifesto.StatusCodes.FORBIDDEN.toString();
-                    reject(error);
-                } else {
-                    reject(resource.error.statusText);
-                }
-            }
-        });
-    }
-
-    handleDegraded(resource: Manifold.ExternalResource): void {
-        const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
-        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
-    }
+    
 }

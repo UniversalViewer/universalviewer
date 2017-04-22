@@ -1,5 +1,6 @@
 import {Shell} from "./Shell";
 import {BaseView} from "./BaseView";
+import {UVUtils} from "./Utils";
 
 export class CenterPanel extends BaseView {
 
@@ -43,29 +44,29 @@ export class CenterPanel extends BaseView {
             this.$attribution.hide();
         });
 
-        if (!Utils.Bools.getBool(this.options.titleEnabled, true)){
+        if (!Utils.Bools.getBool(this.options.titleEnabled, true)) {
             this.$title.hide();
         }
     }
 
     updateAttribution(): void {
-        var attribution: string = this.extension.helper.getAttribution();
+        const attribution: string = this.extension.helper.getAttribution();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 
-        var enabled: boolean = Utils.Bools.getBool(this.options.attributionEnabled, true);
+        const enabled: boolean = Utils.Bools.getBool(this.options.attributionEnabled, true);
 
-        if (!attribution || !enabled){
+        if (!attribution || !enabled) {
             return;
         }
 
         this.$attribution.show();
 
-        var $attribution = this.$attribution.find('.attribution-text');
-        var $license = this.$attribution.find('.license');
-        var $logo = this.$attribution.find('.logo');
+        const $attribution = this.$attribution.find('.attribution-text');
+        const $license = this.$attribution.find('.license');
+        const $logo = this.$attribution.find('.logo');
 
-        $attribution.html(this.extension.sanitize(attribution));
+        $attribution.html(UVUtils.sanitize(attribution));
 
         $attribution.find('img').one("load", () => {
             this.resize();
@@ -95,18 +96,18 @@ export class CenterPanel extends BaseView {
     resize(): void {
         super.resize();
 
-        var leftPanelWidth: number = Shell.$leftPanel.is(':visible') ? Math.floor(Shell.$leftPanel.width()) : 0;
-        var rightPanelWidth: number = Shell.$rightPanel.is(':visible') ? Math.floor(Shell.$rightPanel.width()) : 0;
-        var width: number = Math.floor(this.$element.parent().width() - leftPanelWidth - rightPanelWidth)
+        const leftPanelWidth: number = Shell.$leftPanel.is(':visible') ? Math.floor(Shell.$leftPanel.width()) : 0;
+        const rightPanelWidth: number = Shell.$rightPanel.is(':visible') ? Math.floor(Shell.$rightPanel.width()) : 0;
+        const width: number = Math.floor(this.$element.parent().width() - leftPanelWidth - rightPanelWidth)
 
         this.$element.css({
             'left': leftPanelWidth,
             'width': width
         });
 
-        var titleHeight;
+        let titleHeight: number;
 
-        if (this.options && this.options.titleEnabled === false){
+        if (this.options && this.options.titleEnabled === false) {
             titleHeight = 0;
         } else {
             titleHeight = this.$title.height();
@@ -115,7 +116,7 @@ export class CenterPanel extends BaseView {
         this.$content.height(this.$element.height() - titleHeight);
         this.$content.width(this.$element.width());
 
-        if (this.$attribution && this.$attribution.is(':visible')){
+        if (this.$attribution && this.$attribution.is(':visible')) {
             this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
         }
     }

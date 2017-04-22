@@ -69,6 +69,7 @@ export class BaseEvents {
     static RIGHTPANEL_EXPAND_FULL_START: string     = 'rightPanelExpandFullStart';
     static SEQUENCE_INDEX_CHANGED: string           = 'sequenceIndexChanged';
     static SETTINGS_CHANGED: string                 = 'settingsChanged';
+    static SHOW_AUTH_DIALOGUE: string               = 'showAuthDialogue';
     static SHOW_CLICKTHROUGH_DIALOGUE: string       = 'showClickThroughDialogue';
     static SHOW_DOWNLOAD_DIALOGUE: string           = 'showDownloadDialogue';
     static SHOW_EMBED_DIALOGUE: string              = 'showEmbedDialogue';
@@ -77,6 +78,7 @@ export class BaseEvents {
     static SHOW_HELP_DIALOGUE: string               = 'showHelpDialogue';
     static SHOW_INFORMATION: string                 = 'showInformation';
     static SHOW_LOGIN_DIALOGUE: string              = 'showLoginDialogue';
+    static SHOW_MESSAGE: string                     = 'showMessage';
     static SHOW_MOREINFO_DIALOGUE: string           = 'showMoreInfoDialogue';
     static SHOW_OVERLAY: string                     = 'showOverlay';
     static SHOW_RESTRICTED_DIALOGUE: string         = 'showRestrictedDialogue';

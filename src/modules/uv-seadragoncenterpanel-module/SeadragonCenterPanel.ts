@@ -6,6 +6,7 @@ import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/Cr
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
 import {MetricType} from "../uv-shared-module/MetricType";
+import {UVUtils} from "../uv-shared-module/Utils";
 import SearchResult = Manifold.SearchResult;
 import SearchResultRect = Manifold.SearchResultRect;
 
@@ -679,7 +680,7 @@ export class SeadragonCenterPanel extends CenterPanel {
                 const div: HTMLElement = document.createElement('div');
                 div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
                 div.className = 'searchOverlay';
-                div.title = this.extension.sanitize(overlayRect.chars);
+                div.title = UVUtils.sanitize(overlayRect.chars);
 
                 this.viewer.addOverlay(div, overlayRect);
             }
@@ -882,7 +883,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         if (!this.isCreated) return;
 
-        this.$title.ellipsisFill(this.extension.sanitize(this.title));
+        this.$title.ellipsisFill(UVUtils.sanitize(this.title));
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
