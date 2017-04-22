@@ -4,6 +4,7 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {UVUtils} from "../uv-shared-module/Utils";
 
 export class PagingHeaderPanel extends HeaderPanel {
 
@@ -141,7 +142,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
                 const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                const label: string = this.extension.sanitize(<string>Manifesto.TranslationCollection.getValue(canvas.getLabel()));
+                const label: string = UVUtils.sanitize(<string>Manifesto.TranslationCollection.getValue(canvas.getLabel()));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 

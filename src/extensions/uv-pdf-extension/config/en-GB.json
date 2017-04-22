@@ -1,6 +1,7 @@
 {
   "options":
   {
+    "authAPIVersion": 0.9,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,

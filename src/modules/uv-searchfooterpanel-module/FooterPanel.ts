@@ -4,6 +4,7 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {UVUtils} from "../uv-shared-module/Utils";
 import SearchResult = Manifold.SearchResult;
 
 export class FooterPanel extends BaseFooterPanel {
@@ -621,7 +622,7 @@ export class FooterPanel extends BaseFooterPanel {
             const lastCanvasOrderLabel: string | null = this.extension.helper.getLastCanvasLabel(true);
 
             if (lastCanvasOrderLabel) {
-                this.$pagePositionLabel.html(String.format(displaying, this.content.page, this.extension.sanitize(<string>label), this.extension.sanitize(<string>lastCanvasOrderLabel)));
+                this.$pagePositionLabel.html(String.format(displaying, this.content.page, UVUtils.sanitize(<string>label), UVUtils.sanitize(<string>lastCanvasOrderLabel)));
             }
 
         } else {

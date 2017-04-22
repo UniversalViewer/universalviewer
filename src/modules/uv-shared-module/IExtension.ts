@@ -51,7 +51,6 @@ export interface IExtension {
     reload(data?: IUVData): void;
     resize(): void;
     resources: Manifold.ExternalResource[];
-    sanitize(html: string): string;
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;

@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {RightPanel} from "../uv-shared-module/RightPanel";
+import {UVUtils} from "../uv-shared-module/Utils";
 
 export class MoreInfoRightPanel extends RightPanel {
 
@@ -61,7 +62,7 @@ export class MoreInfoRightPanel extends RightPanel {
             range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html) => {
-                return this.extension.sanitize(html);
+                return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages
         };
