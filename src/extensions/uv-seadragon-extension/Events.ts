@@ -1,7 +1,6 @@
 export class Events {
     static namespace: string = 'openseadragonExtension.';
 
-    static CLEAR_SEARCH: string                                 = Events.namespace + 'clearSearch';
     static CURRENT_VIEW_URI: string                             = Events.namespace + 'currentViewUri';
     static FIRST: string                                        = Events.namespace + 'first';
     static GALLERY_DECREASE_SIZE: string                        = Events.namespace + 'galleryDecreaseSize';
@@ -33,11 +32,6 @@ export class Events {
     static SEADRAGON_ROTATION: string                           = Events.namespace + 'rotationChanged';
     static SEARCH_PREVIEW_FINISH: string                        = Events.namespace + 'searchPreviewFinish';
     static SEARCH_PREVIEW_START: string                         = Events.namespace + 'searchPreviewStart';
-    static SEARCH_RESULT_CANVAS_CHANGED: string                 = Events.namespace + 'searchResultCanvasChanged';
-    static SEARCH_RESULT_RECT_CHANGED: string                   = Events.namespace + 'searchResultRectChanged';
-    static SEARCH_RESULTS_EMPTY: string                         = Events.namespace + 'searchResultsEmpty';
-    static SEARCH_RESULTS: string                               = Events.namespace + 'searchResults';
-    static SEARCH_RESULTS_CLEARED: string                       = Events.namespace + 'searchResultsCleared';
     static SEARCH: string                                       = Events.namespace + 'search';
     static SHOW_MULTISELECT_DIALOGUE: string                    = Events.namespace + 'showMultiSelectDialogue';
     static THUMB_MULTISELECTED: string                          = Events.namespace + 'thumbMultiSelected';

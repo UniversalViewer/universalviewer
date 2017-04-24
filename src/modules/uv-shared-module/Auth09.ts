@@ -7,9 +7,9 @@ import IAccessToken = Manifesto.IAccessToken;
 
 export class Auth09 {
 
-    static loadExternalResources(resourcesToLoad: Manifold.ExternalResource[], storageStrategy: string): Promise<Manifold.ExternalResource[]> {
-        return new Promise<Manifold.ExternalResource[]>((resolve) => {
-            manifesto.Utils.loadExternalResources(
+    static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string): Promise<Manifesto.IExternalResource[]> {
+        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+            manifesto.Utils.loadExternalResourcesAuth09(
                 resourcesToLoad,
                 storageStrategy,
                 Auth09.clickThrough,
@@ -18,7 +18,7 @@ export class Auth09 {
                 Auth09.getAccessToken,
                 Auth09.storeAccessToken,
                 Auth09.getStoredAccessToken,
-                Auth09.handleExternalResourceResponse).then((r: Manifold.ExternalResource[]) => {
+                Auth09.handleExternalResourceResponse).then((r: Manifesto.IExternalResource[]) => {
                     resolve(r);
                 })['catch']((error: any) => {
                     switch(error.name) {
@@ -38,27 +38,31 @@ export class Auth09 {
         });
     }
 
-    static clickThrough(resource: Manifold.ExternalResource): Promise<void> {
+    static clickThrough(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
             $.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
-                    const win: Window = window.open(resource.clickThroughService.id);
 
-                    const pollTimer: number = window.setInterval(() => {
-                        if (win.closed) {
-                            window.clearInterval(pollTimer);
-                            $.publish(BaseEvents.CLICKTHROUGH);
-                            resolve();
-                        }
-                    }, 500);
+                    if (resource.clickThroughService) {
+                        const win: Window = window.open(resource.clickThroughService.id);
+
+                        const pollTimer: number = window.setInterval(() => {
+                            if (win.closed) {
+                                window.clearInterval(pollTimer);
+                                $.publish(BaseEvents.CLICKTHROUGH);
+                                resolve();
+                            }
+                        }, 500);
+                    }
+
                 }
             }]);
         });
     }
 
-    static restricted(resource: Manifold.ExternalResource): Promise<void> {
+    static restricted(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve, reject) => {
 
             $.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
@@ -71,7 +75,7 @@ export class Auth09 {
         });
     }
 
-    static login(resource: Manifold.ExternalResource): Promise<void> {
+    static login(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
             const options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
@@ -84,67 +88,80 @@ export class Auth09 {
             $.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
                 loginCallback: () => {
-                    const win: Window = window.open(resource.loginService.id + "?t=" + new Date().getTime());
-                    const pollTimer: number = window.setInterval(function () {
-                        if (win.closed) {
-                            window.clearInterval(pollTimer);
-                            $.publish(BaseEvents.LOGIN);
-                            resolve();
-                        }
-                    }, 500);
+                    if (resource.loginService) {
+                        const win: Window = window.open(resource.loginService.id + "?t=" + new Date().getTime());
+                        const pollTimer: number = window.setInterval(function () {
+                            if (win.closed) {
+                                window.clearInterval(pollTimer);
+                                $.publish(BaseEvents.LOGIN);
+                                resolve();
+                            }
+                        }, 500);
+                    }
                 },
                 logoutCallback: () => {
-                    const win: Window = window.open(resource.logoutService.id + "?t=" + new Date().getTime());
-                    const pollTimer: number = window.setInterval(function () {
-                        if (win.closed) {
-                            window.clearInterval(pollTimer);
-                            $.publish(BaseEvents.LOGOUT);
-                            resolve();
-                        }
-                    }, 500);
+                    if (resource.logoutService) {
+                        const win: Window = window.open(resource.logoutService.id + "?t=" + new Date().getTime());
+                        const pollTimer: number = window.setInterval(function () {
+                            if (win.closed) {
+                                window.clearInterval(pollTimer);
+                                $.publish(BaseEvents.LOGOUT);
+                                resolve();
+                            }
+                        }, 500);
+                    }
                 },
                 options: options
             }]);
         });
     }
 
-    static getAccessToken(resource: Manifold.ExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
+    static getAccessToken(resource: Manifesto.IExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
-            const serviceUri: string = resource.tokenService.id;
 
-            // pick an identifier for this message. We might want to keep track of sent messages
-            const msgId: string = serviceUri + "|" + new Date().getTime();
+            if (resource.tokenService) {
+                const serviceUri: string = resource.tokenService.id;
 
-            const receiveAccessToken: EventListenerOrEventListenerObject = (e: any) => {
-                window.removeEventListener("message", receiveAccessToken);
-                const token: any = e.data;
-                if (token.error){
-                    if(rejectOnError) {
-                        reject(token.errorDescription);
+                // pick an identifier for this message. We might want to keep track of sent messages
+                const msgId: string = serviceUri + "|" + new Date().getTime();
+
+                const receiveAccessToken: EventListenerOrEventListenerObject = (e: any) => {
+                    window.removeEventListener("message", receiveAccessToken);
+                    const token: any = e.data;
+                    if (token.error) {
+                        if (rejectOnError) {
+                            reject(token.errorDescription);
+                        } else {
+                            resolve(undefined);
+                        }
                     } else {
-                        resolve(undefined);
+                        resolve(token);
                     }
-                } else {
-                    resolve(token);
-                }
-            };
+                };
 
-            window.addEventListener("message", receiveAccessToken, false);
+                window.addEventListener("message", receiveAccessToken, false);
 
-            const tokenUri: string = serviceUri + "?messageId=" + msgId;
-            $('#commsFrame').prop('src', tokenUri);
+                const tokenUri: string = serviceUri + "?messageId=" + msgId;
+                $('#commsFrame').prop('src', tokenUri);
+            } else {
+                reject('Token service not found');
+            }
         });
     }
 
-    static storeAccessToken(resource: Manifold.ExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
+    static storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
-            resolve();
+            if (resource.tokenService) {
+                Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
+                resolve();
+            } else {
+                reject('Token service not found');
+            } 
         });
     }
 
-    static getStoredAccessToken(resource: Manifold.ExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
+    static getStoredAccessToken(resource: Manifesto.IExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
 
         return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
 
@@ -187,7 +204,7 @@ export class Auth09 {
         });
     }
 
-    static handleExternalResourceResponse(resource: Manifold.ExternalResource): Promise<any> {
+    static handleExternalResourceResponse(resource: Manifesto.IExternalResource): Promise<any> {
 
         return new Promise<any>((resolve, reject) => {
             resource.isResponseHandled = true;
@@ -221,7 +238,7 @@ export class Auth09 {
         });
     }
 
-    static handleDegraded(resource: Manifold.ExternalResource): void {
+    static handleDegraded(resource: Manifesto.IExternalResource): void {
         const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
         $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }

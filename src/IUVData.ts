@@ -1,6 +1,7 @@
 import {ILocale} from "./ILocale";
 
 export interface IUVData {
+    annotations: string | null;
     canvasIndex: number;
     collectionIndex: number;
     config: any;
@@ -16,6 +17,5 @@ export interface IUVData {
     locales: ILocale[];
     manifestIndex: number;
     root: string | null;
-    searchResults: string | null;
     sequenceIndex: number;
 }

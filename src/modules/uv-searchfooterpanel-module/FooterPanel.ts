@@ -4,8 +4,9 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {AnnotationResults} from "../uv-shared-module/AnnotationResults";
 import {UVUtils} from "../uv-shared-module/Utils";
-import SearchResult = Manifold.SearchResult;
+import AnnotationGroup = Manifold.AnnotationGroup;
 
 export class FooterPanel extends BaseFooterPanel {
 
@@ -51,6 +52,10 @@ export class FooterPanel extends BaseFooterPanel {
             this.updateNextButton();
         });
 
+        $.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+            this.clearSearchResults();
+        });
+
         // todo: this should be a setting
         $.subscribe(Events.MODE_CHANGED, () => {
             this.settingsChanged();
@@ -60,16 +65,16 @@ export class FooterPanel extends BaseFooterPanel {
             this.terms = terms;
         });
 
-        $.subscribe(Events.SEARCH_RESULTS, (e: any, obj: any) => {
-            this.displaySearchResults(obj.terms, obj.results);
+        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, annotationResults: AnnotationResults) => {
+            this.displaySearchResults(annotationResults.annotations, annotationResults.terms);
             this.setCurrentSearchResultPlacemarker();
         });
 
-        $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
+        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
             this.hideSearchSpinner();
         });
 
-        $.subscribe(Events.SEARCH_RESULT_RECT_CHANGED, () => {
+        $.subscribe(BaseEvents.ANNOTATION_CHANGED, () => {
             this.updatePrevButton();
             this.updateNextButton();
         });
@@ -106,7 +111,7 @@ export class FooterPanel extends BaseFooterPanel {
         this.$previousResultButton = $('<a class="previousResult" title="' + this.content.previousResult + '">' + this.content.previousResult + '</a>');
         this.$searchPagerControls.append(this.$previousResultButton);
 
-        this.$searchResultsInfo = $('<div class="searchResultsInfo"><span class="number">x</span> <span class="foundFor"></span> \'<span class="terms">y</span>\'</div>');
+        this.$searchResultsInfo = $('<div class="searchResultsInfo"><span class="info"><span class="number">x</span> <span class="foundFor"></span> \'<span class="terms">y</span>\'<?span></div>');
         this.$searchPagerControls.append(this.$searchResultsInfo);
 
         this.$clearSearchResultsButton = $('<a class="clearSearch" title="' + this.content.clearSearch + '">' + this.content.clearSearch + '</a>');
@@ -184,12 +189,11 @@ export class FooterPanel extends BaseFooterPanel {
 
         this.$clearSearchResultsButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Events.CLEAR_SEARCH);
-            this.clearSearchResults();
+            $.publish(BaseEvents.CLEAR_ANNOTATIONS);
         });
 
         // hide search options if not enabled/supported.
-        if (!(<ISeadragonExtension>this.extension).isSearchWithinEnabled()) {
+        if (!(<ISeadragonExtension>this.extension).isSearchEnabled()) {
             this.$searchContainer.hide();
             this.$searchPagerContainer.hide();
             this.$searchResultsContainer.hide();
@@ -254,7 +258,7 @@ export class FooterPanel extends BaseFooterPanel {
         const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
 
         // if zoom to search result is enabled and there is a highlighted search result.
-        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentSearchResultRect) {
+        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentAnnotationRect) {
             
             if (currentCanvasIndex < firstSearchResultCanvasIndex) {
                 return false;
@@ -277,7 +281,7 @@ export class FooterPanel extends BaseFooterPanel {
         const currentSearchResultRectIndex: number = this.getCurrentSearchResultRectIndex();
 
         // if zoom to search result is enabled and there is a highlighted search result.
-        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentSearchResultRect) {
+        if (this.isZoomToSearchResultEnabled() && (<ISeadragonExtension>this.extension).currentAnnotationRect) {
 
             if (currentCanvasIndex > lastSearchResultCanvasIndex) {
                 return false;
@@ -293,34 +297,34 @@ export class FooterPanel extends BaseFooterPanel {
         return (currentCanvasIndex < lastSearchResultCanvasIndex); 
     }
 
-    getSearchResults(): SearchResult[] | null {
-        return (<ISeadragonExtension>this.extension).searchResults;
+    getSearchResults(): AnnotationGroup[] | null {
+        return (<ISeadragonExtension>this.extension).annotations;
     }
 
     getCurrentSearchResultRectIndex(): number {
-        return (<ISeadragonExtension>this.extension).getCurrentSearchResultRectIndex();
+        return (<ISeadragonExtension>this.extension).getCurrentAnnotationRectIndex();
     }
 
     getFirstSearchResultCanvasIndex(): number {
-        const searchResults: SearchResult[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
         if (!searchResults) return -1;
         let firstSearchResultCanvasIndex: number = searchResults[0].canvasIndex;
         return firstSearchResultCanvasIndex;
     }
 
     getLastSearchResultCanvasIndex(): number {
-        const searchResults: SearchResult[] | null = this.getSearchResults();        
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();        
         if (!searchResults) return -1;
         let lastSearchResultCanvasIndex: number = searchResults[searchResults.length - 1].canvasIndex;
         return lastSearchResultCanvasIndex;
     }
 
     getLastSearchResultRectIndex(): number {
-        return (<ISeadragonExtension>this.extension).getLastSearchResultRectIndex();
+        return (<ISeadragonExtension>this.extension).getLastAnnotationRectIndex();
     }
 
     updateNextButton(): void {
-        const searchResults: SearchResult[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
         
         if (searchResults && searchResults.length) {
             if (this.isNextButtonEnabled()) {
@@ -332,7 +336,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     updatePrevButton(): void {
-        const searchResults: SearchResult[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
         
         if (searchResults && searchResults.length) {       
             if (this.isPreviousButtonEnabled()) {
@@ -388,7 +392,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     positionSearchResultPlacemarkers(): void {
 
-        const searchResults: SearchResult[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
 
         if (!searchResults || !searchResults.length) return;
 
@@ -404,7 +408,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         // for each page with a result, place a marker along the line.
         for (let i = 0; i < searchResults.length; i++) {
-            const result: SearchResult = searchResults[i];
+            const result: AnnotationGroup = searchResults[i];
             const distance: number = result.canvasIndex * pageWidth;
             const $placemarker: JQuery = $('<div class="searchResultPlacemarker" data-index="' + result.canvasIndex + '"></div>');
 
@@ -481,10 +485,10 @@ export class FooterPanel extends BaseFooterPanel {
 
         that.$placemarkerDetailsTop.html(title);
 
-        const searchResults: SearchResult[] | null = that.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = that.getSearchResults();
 
         if (searchResults) {
-            const result: SearchResult = searchResults[elemIndex];
+            const result: AnnotationGroup = searchResults[elemIndex];
             const terms: string = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
             let instanceFoundText: string = that.content.instanceFound;
             let instancesFoundText: string = that.content.instancesFound;
@@ -570,7 +574,7 @@ export class FooterPanel extends BaseFooterPanel {
 
     clearSearchResults(): void {
 
-        (<ISeadragonExtension>this.extension).searchResults = [];
+        (<ISeadragonExtension>this.extension).annotations = [];
 
         // clear all existing placemarkers
         const $placemarkers: JQuery = this.getSearchResultPlacemarkers();
@@ -642,9 +646,7 @@ export class FooterPanel extends BaseFooterPanel {
         this.$searchText.removeClass('searching');
     }
 
-    displaySearchResults(terms: string, results: SearchResult[]): void {
-
-        if (!results) return;
+    displaySearchResults(results: AnnotationGroup[], terms?: string): void {
 
         this.hideSearchSpinner();
         this.positionSearchResultPlacemarkers();
@@ -656,20 +658,29 @@ export class FooterPanel extends BaseFooterPanel {
             'left': 0
         });
 
-        const $number: JQuery = this.$searchPagerContainer.find('.number');
-        $number.text((<ISeadragonExtension>this.extension).getTotalSearchResultRects());
+        const $info: JQuery = this.$searchResultsInfo.find('.info');
+        const $number: JQuery = $info.find('.number');
+        const $foundFor: JQuery = $info.find('.foundFor');
+        const $terms: JQuery = $info.find('.terms');
 
-        const $foundFor: JQuery = this.$searchResultsInfo.find('.foundFor');
+        if (terms) {
 
-        if (results.length === 1) {
-            $foundFor.html(this.content.resultFoundFor);
+            $info.show();
+
+            $number.text((<ISeadragonExtension>this.extension).getTotalAnnotationRects());
+
+            if (results.length === 1) {
+                $foundFor.html(this.content.resultFoundFor);
+            } else {
+                $foundFor.html(this.content.resultsFoundFor);
+            }
+            
+            $terms.html(Utils.Strings.ellipsis(terms, this.options.elideResultsTermsCount));
+            $terms.prop('title', terms);
+
         } else {
-            $foundFor.html(this.content.resultsFoundFor);
-        }
-
-        const $terms: JQuery = this.$searchPagerContainer.find('.terms');
-        $terms.html(Utils.Strings.ellipsis(terms, this.options.elideResultsTermsCount));
-        $terms.prop('title', terms);
+            $info.hide();
+        } 
 
         this.$searchPagerContainer.show();
 
@@ -679,7 +690,7 @@ export class FooterPanel extends BaseFooterPanel {
     resize(): void {
         super.resize();
 
-        const searchResults: SearchResult[] | null = this.getSearchResults();
+        const searchResults: AnnotationGroup[] | null = this.getSearchResults();
 
         if (searchResults && searchResults.length) {
             this.positionSearchResultPlacemarkers();

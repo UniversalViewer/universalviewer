@@ -8,7 +8,7 @@ export class VirtexCenterPanel extends CenterPanel {
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
     $vrButton: JQuery;
-    title: string;
+    title: string | null;
     viewport: Virtex.Viewport | null;
 
     constructor($element: JQuery) {
@@ -95,9 +95,14 @@ export class VirtexCenterPanel extends CenterPanel {
 
     resize() {
         super.resize();
-        this.$title.ellipsisFill(this.title);
+
+        if (this.title) {
+            this.$title.ellipsisFill(this.title);
+        }
+        
         this.$viewport.width(this.$content.width());
         this.$viewport.height(this.$content.height());
+        
         if (this.viewport) {
             this.viewport.resize();
         }

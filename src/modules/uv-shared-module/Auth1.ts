@@ -5,8 +5,8 @@ export class Auth1 {
 
     static messages: any = {}
 
-    static loadExternalResources(resourcesToLoad: Manifold.ExternalResource[], storageStrategy: string): Promise<Manifold.ExternalResource[]> {
-        return new Promise<Manifold.ExternalResource[]>((resolve) => {
+    static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string): Promise<Manifesto.IExternalResource[]> {
+        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
             resolve(resourcesToLoad);
         });
     }
@@ -88,12 +88,12 @@ export class Auth1 {
 
         let errorMessage: string = "";
 
-        if (service.failureHeader) {
-            errorMessage += service.failureHeader + '\n';
+        if (service.getFailureHeader()) {
+            errorMessage += service.getFailureHeader() + '\n';
         }
 
-        if (service.failureDescription) {
-           errorMessage += service.failureDescription;
+        if (service.getFailureDescription()) {
+           errorMessage += service.getFailureDescription();
         }
 
         $.publish(BaseEvents.SHOW_MESSAGE, [UVUtils.sanitize(errorMessage)]);

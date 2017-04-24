@@ -89,10 +89,13 @@ export class LoginDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        this.$title.text(this.resource.loginService.getProperty('label'));
+        let message: string = "";
 
-        var message: string = this.resource.loginService.getProperty('description');
-
+        if (this.resource.loginService) {
+            this.$title.text(this.resource.loginService.getProperty('label'));
+            message = this.resource.loginService.getProperty('description');
+        }
+    
         if (this.options.warningMessage){
             message = '<span class="warning">' + this.extension.data.config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
         }

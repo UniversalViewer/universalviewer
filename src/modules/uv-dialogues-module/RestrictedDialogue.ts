@@ -70,9 +70,12 @@ export class RestrictedDialogue extends Dialogue {
 
         this.isAccepted = false;
 
-        this.$title.text(this.resource.restrictedService.getProperty('label'));
+        let message: string = "";
 
-        const message: string = this.resource.restrictedService.getProperty('description');
+        if (this.resource.restrictedService) {
+            this.$title.text(this.resource.restrictedService.getProperty('label'));
+            message = this.resource.restrictedService.getProperty('description');
+        }
 
         this.$message.html(message);
         this.$message.targetBlank();

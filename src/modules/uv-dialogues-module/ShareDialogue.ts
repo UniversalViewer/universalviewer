@@ -325,7 +325,7 @@ export class ShareDialogue extends Dialogue {
     }
 
     updateTermsOfUseButton(): void {
-        const attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        const attribution: string | null = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
         if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();

@@ -22,6 +22,7 @@ if (typeof jQuery === "function") {
     return;
 })();
 
+// things in src/lib that are generic to all extensions
 requirejs([
     './lib/base64.min.js',
     './lib/browserdetect.js',
@@ -31,14 +32,14 @@ requirejs([
     './lib/sanitize.js',
     './lib/ex.es3.min.js',
     './lib/base-component.js',
-    './lib/key-codes.min.js',
-    './lib/extensions.min.js',
-    './lib/http-status-codes.min.js',
-    './lib/jquery-plugins.min.js',
-    './lib/ba-tiny-pubsub.min.js',
-    './lib/manifesto.min.js',
-    './lib/manifold.min.js',
-    './lib/utils.min.js',
+    './lib/key-codes.js',
+    './lib/extensions.js',
+    './lib/http-status-codes.js',
+    './lib/jquery-plugins.js',
+    './lib/ba-tiny-pubsub.js',
+    './lib/manifesto.js',
+    './lib/manifold.js',
+    './lib/utils.js',
     'URLDataProvider',
     'UVComponent'
 ], (

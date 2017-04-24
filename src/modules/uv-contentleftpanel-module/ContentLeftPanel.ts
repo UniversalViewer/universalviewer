@@ -7,9 +7,9 @@ import {MetricType} from "../uv-shared-module/MetricType";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {ThumbsView} from "./ThumbsView";
 import {TreeView} from "./TreeView";
+import AnnotationGroup = Manifold.AnnotationGroup;
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
-import SearchResult = Manifold.SearchResult;
 
 export class ContentLeftPanel extends LeftPanel {
 
@@ -67,17 +67,17 @@ export class ContentLeftPanel extends LeftPanel {
             }
         });
 
-        $.subscribe(Events.SEARCH_RESULTS, () => {
+        $.subscribe(BaseEvents.ANNOTATIONS, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(Events.SEARCH_RESULTS_CLEARED, () => {
+        $.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
+        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
@@ -359,12 +359,12 @@ export class ContentLeftPanel extends LeftPanel {
         }
 
         // add a search result icon for pages with results
-        const searchResults: SearchResult[] | null = (<ISeadragonExtension>this.extension).searchResults;
+        const searchResults: AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
         
         if (searchResults && searchResults.length) {
 
             for (let i = 0; i < searchResults.length; i++) {
-                const searchResult: SearchResult = searchResults[i];
+                const searchResult: AnnotationGroup = searchResults[i];
 
                 // find the thumb with the same canvasIndex and add the searchResult
                 let thumb: IThumb = thumbs.en().where(t => t.index === searchResult.canvasIndex).first();
@@ -406,7 +406,7 @@ export class ContentLeftPanel extends LeftPanel {
             minLabelWidth: 20,
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
-            searchResults: (<ISeadragonExtension>this.extension).searchResults,
+            searchResults: (<ISeadragonExtension>this.extension).annotations,
             sizingEnabled: Modernizr.inputtypes.range,
             thumbHeight: this.config.options.galleryThumbHeight,
             thumbLoadPadding: this.config.options.galleryThumbLoadPadding,

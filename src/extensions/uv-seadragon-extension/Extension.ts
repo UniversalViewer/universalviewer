@@ -1,3 +1,4 @@
+import {AnnotationResults} from "../../modules/uv-shared-module/AnnotationResults";
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
@@ -26,8 +27,8 @@ import {ShareDialogue} from "./ShareDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
-import SearchResult = Manifold.SearchResult;
-import SearchResultRect = Manifold.SearchResultRect;
+import AnnotationGroup = Manifold.AnnotationGroup;
+import AnnotationRect = Manifold.AnnotationRect;
 import Size = Utils.Measurements.Size;
 
 export class Extension extends BaseExtension implements ISeadragonExtension {
@@ -39,23 +40,23 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
     $shareDialogue: JQuery;
+    annotations: AnnotationGroup[] | null = [];
     centerPanel: SeadragonCenterPanel;
+    currentAnnotationRect: AnnotationRect;
     currentRotation: number = 0;
-    currentSearchResultRect: SearchResultRect;
     downloadDialogue: DownloadDialogue;
     externalContentDialogue: ExternalContentDialogue;
     footerPanel: FooterPanel;
     headerPanel: PagingHeaderPanel;
     helpDialogue: HelpDialogue;
-    isSearching: boolean = false;
+    isAnnotating: boolean = false;
     leftPanel: ContentLeftPanel;
     mobileFooterPanel: MobileFooterPanel;
     mode: Mode;
     moreInfoDialogue: MoreInfoDialogue;
     multiSelectDialogue: MultiSelectDialogue;
-    previousSearchResultRect: SearchResultRect;
+    previousAnnotationRect: AnnotationRect;
     rightPanel: MoreInfoRightPanel;
-    searchResults: SearchResult[] | null = [];
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
 
@@ -78,10 +79,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             this.viewPage(canvasIndex);
         });
 
-        $.subscribe(Events.CLEAR_SEARCH, () => {
-            this.searchResults = null;
-            $.publish(Events.SEARCH_RESULTS_CLEARED);
-            this.fire(Events.CLEAR_SEARCH);
+        $.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+            this.annotations = null;
+            $.publish(BaseEvents.ANNOTATIONS_CLEARED);
+            this.fire(BaseEvents.CLEAR_ANNOTATIONS);
         });
 
         $.subscribe(BaseEvents.DOWN_ARROW, () => {
@@ -282,7 +283,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         $.subscribe(Events.SEARCH, (e: any, terms: string) => {
             this.fire(Events.SEARCH, terms);
-            this.searchWithin(terms);
+            this.search(terms);
         });
 
         $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
@@ -293,16 +294,16 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             this.fire(Events.SEARCH_PREVIEW_START);
         });
 
-        $.subscribe(Events.SEARCH_RESULTS, (e: any, obj: any) => {
-            this.fire(Events.SEARCH_RESULTS, obj);
+        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, obj: any) => {
+            this.fire(BaseEvents.ANNOTATIONS, obj);
         });
 
-        $.subscribe(Events.SEARCH_RESULT_CANVAS_CHANGED, (e: any, rect: SearchResultRect) => {
+        $.subscribe(BaseEvents.ANNOTATION_CANVAS_CHANGED, (e: any, rect: AnnotationRect) => {
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [rect.canvasIndex]);
         });
 
-        $.subscribe(Events.SEARCH_RESULTS_EMPTY, () => {
-            this.fire(Events.SEARCH_RESULTS_EMPTY);
+        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+            this.fire(BaseEvents.ANNOTATIONS_EMPTY);
         });
 
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
@@ -413,13 +414,21 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         Utils.Async.waitFor(() => {
             return this.centerPanel && this.centerPanel.isCreated;
         }, () => {
-            $.publish(Events.SEARCH_RESULTS, [this.data.searchResults]);
+            this.checkForAnnotations();
             this.checkForSearchParam();
             this.checkForRotationParam();
         });
     }
 
-    checkForSearchParam(): void{
+    checkForAnnotations(): void {
+        if (this.data.annotations) {
+            const annotations: AnnotationGroup[] = this.parseAnnotationList(this.data.annotations);
+            $.publish(BaseEvents.CLEAR_ANNOTATIONS);
+            this.annotate(annotations);
+        }
+    }
+
+    checkForSearchParam(): void {
         // if a h value is in the hash params, do a search.
         if (this.isDeepLinkingEnabled()) {
 
@@ -464,8 +473,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isPagingSettingEnabled() && !isReload) {
             const indices: number[] = this.getPagedIndices(canvasIndex);
 
-            // if the page is already displayed, do nothing.
+            // if the page is already displayed, only advance canvasIndex.
             if (indices.includes(this.helper.canvasIndex)) {
+                this.viewCanvas(canvasIndex);
                 return;
             }
         }
@@ -509,7 +519,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const range: Manifesto.IRange = this.helper.getRangeByPath(path);
         if (!range) return;
         const canvasId: string = range.getCanvasIds()[0];
-        const index: number = this.helper.getCanvasIndexById(canvasId);
+        const index: number | null = this.helper.getCanvasIndexById(canvasId);
         $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
     }
 
@@ -552,19 +562,19 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     clearSearch(): void {
-        this.searchResults = [];
+        this.annotations = [];
 
         // reload current index as it may contain results.
         $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
     }
 
     prevSearchResult(): void {
-        let foundResult: SearchResult; 
-        if (!this.searchResults) return;
+        let foundResult: AnnotationGroup; 
+        if (!this.annotations) return;
 
         // get the first result with a canvasIndex less than the current index.
-        for (let i = this.searchResults.length - 1; i >= 0; i--) {
-            const result: SearchResult = this.searchResults[i];
+        for (let i = this.annotations.length - 1; i >= 0; i--) {
+            const result: AnnotationGroup = this.annotations[i];
 
             if (result.canvasIndex <= this.getPrevPageIndex()) {
                 foundResult = result;
@@ -575,12 +585,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     nextSearchResult(): void {
-        let foundResult: SearchResult; 
-        if (!this.searchResults) return;
+        let foundResult: AnnotationGroup; 
+        if (!this.annotations) return;
         
         // get the first result with an index greater than the current index.
-        for (let i = 0; i < this.searchResults.length; i++) {
-            const result: SearchResult = this.searchResults[i];
+        for (let i = 0; i < this.annotations.length; i++) {
+            const result: AnnotationGroup = this.annotations[i];
 
             if (result && result.canvasIndex >= this.getNextPageIndex()) {
                 foundResult = result;
@@ -862,12 +872,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return index;
     }
 
-    isSearchWithinEnabled(): boolean {
+    isSearchEnabled(): boolean {
         if (!Utils.Bools.getBool(this.data.config.options.searchWithinEnabled, false)){
             return false;
         }
 
-        if (!this.helper.getSearchWithinService()) {
+        if (!this.helper.getSearchService()) {
             return false;
         }
 
@@ -907,7 +917,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
     
     getAutoCompleteService(): Manifesto.IService | null {
-       const service: Manifesto.IService = this.helper.getSearchWithinService();
+       const service: Manifesto.IService | null = this.helper.getSearchService();
        if (!service) return null;
        return service.getService(manifesto.ServiceProfile.autoComplete());
     }
@@ -918,9 +928,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return service.id + '?q={0}';
     }
 
-    getSearchWithinServiceUri(): string | null {
-        const service: Manifesto.IService = this.helper.getSearchWithinService();
-
+    getSearchServiceUri(): string | null {
+        const service: Manifesto.IService | null = this.helper.getSearchService();
         if (!service) return null;
 
         let uri: string = service.id;
@@ -928,53 +937,66 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return uri;
     }
 
-    searchWithin(terms: string): void {
+    search(terms: string): void {
 
-        if (this.isSearching) return;
+        if (this.isAnnotating) return;
 
-        this.isSearching = true;
+        this.isAnnotating = true;
 
         // clear search results
-        this.searchResults = [];
+        this.annotations = [];
 
         const that = this;
 
-        let searchUri: string | null = this.getSearchWithinServiceUri();
+        // searching
+
+        let searchUri: string | null = this.getSearchServiceUri();
 
         if (!searchUri) return;
 
         searchUri = String.format(searchUri, terms);
 
-        this.getSearchResults(searchUri, terms, this.searchResults, (results: SearchResult[]) => {
+        this.getSearchResults(searchUri, terms, this.annotations, (annotations: AnnotationGroup[]) => {
             
-            this.isSearching = false;
+            that.isAnnotating = false;
 
-            if (results.length) {
-                this.searchResults = results.sort((a, b) => {
-                    return a.canvasIndex - b.canvasIndex;
-                });
-                
-                $.publish(Events.SEARCH_RESULTS, [{terms, results}]);
-
-                // reload current index as it may contain results.
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [that.helper.canvasIndex]);
+            if (annotations.length) {
+                that.annotate(annotations, terms);
             } else {
                 that.showMessage(that.data.config.modules.genericDialogue.content.noMatches, () => {
-                    $.publish(Events.SEARCH_RESULTS_EMPTY);
+                    $.publish(BaseEvents.ANNOTATIONS_EMPTY);
                 });
             }
         });
     }
 
+    annotate(annotations: AnnotationGroup[], terms?: string): void {
+        this.annotations = annotations;
+
+        // sort the annotations by canvasIndex
+        this.annotations = annotations.sort((a: AnnotationGroup, b: AnnotationGroup) => {
+            return a.canvasIndex - b.canvasIndex;
+        });
+        
+        const annotationResults: AnnotationResults = new AnnotationResults();
+        annotationResults.terms = terms;
+        annotationResults.annotations = <AnnotationGroup[]>this.annotations;
+
+        $.publish(BaseEvents.ANNOTATIONS, [annotationResults]);
+
+        // reload current index as it may contain annotations.
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
+    }
+
     getSearchResults(searchUri: string, 
                     terms: string,
-                    searchResults: SearchResult[],
-                    cb: (results: SearchResult[]) => void): void {
+                    searchResults: AnnotationGroup[],
+                    cb: (results: AnnotationGroup[]) => void): void {
 
         $.getJSON(searchUri, (results: any) => {
             
             if (results.resources && results.resources.length) {
-                searchResults = searchResults.concat(UVUtils.parseAnnotationList(results, searchResults));
+                searchResults = searchResults.concat(this.parseAnnotationList(results));
             }
 
             if (results.next) {
@@ -985,55 +1007,55 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
     }
 
-    parseSearchJson(resultsToParse: any, searchResults: SearchResult[]): SearchResult[] {
+    parseAnnotationList(annotations: any): AnnotationGroup[] {
 
-        const parsedResults: SearchResult[] = [];
+        const parsed: AnnotationGroup[] = [];
 
-        for (let i = 0; i < resultsToParse.resources.length; i++) {
-            const resource: any = resultsToParse.resources[i];
-            const canvasIndex: number = this.helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
-            const searchResult: SearchResult = new SearchResult(resource, canvasIndex);
-            const match: SearchResult = parsedResults.en().where(x => x.canvasIndex === searchResult.canvasIndex).first();
+        for (let i = 0; i < annotations.resources.length; i++) {
+            const resource: any = annotations.resources[i];
+            const canvasIndex: number | null = this.helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
+            const annotationGroup: AnnotationGroup = new AnnotationGroup(resource, <number>canvasIndex);
+            const match: AnnotationGroup = parsed.en().where(x => x.canvasIndex === annotationGroup.canvasIndex).first();
 
-            // if there's already a SearchResult for the canvas index, add a rect to it, otherwise create a new SearchResult
+            // if there's already an annotation for the canvas index, add a rect to it, otherwise create a new AnnotationGroup
             if (match) {
                 match.addRect(resource);
             } else {
-                parsedResults.push(searchResult);
+                parsed.push(annotationGroup);
             }
         }
 
         // sort by canvasIndex
-        parsedResults.sort((a, b) => {
+        parsed.sort((a, b) => {
             return a.canvasIndex - b.canvasIndex;
         });
 
-        return parsedResults;
+        return parsed;
     }
 
-    getSearchResultRects(): SearchResultRect[] {
-        if (this.searchResults) {
-            return this.searchResults.en().selectMany(x => x.rects).toArray();
+    getAnnotationRects(): AnnotationRect[] {
+        if (this.annotations) {
+            return this.annotations.en().selectMany(x => x.rects).toArray();
         }
         return [];
     }
 
-    getCurrentSearchResultRectIndex(): number {
-        const searchResultRects: SearchResultRect[] = this.getSearchResultRects();
-        return searchResultRects.indexOf(this.currentSearchResultRect);
+    getCurrentAnnotationRectIndex(): number {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRects();
+        return annotationRects.indexOf(this.currentAnnotationRect);
     }
 
-    getTotalSearchResultRects(): number {
-        const searchResultRects: SearchResultRect[] = this.getSearchResultRects();
-        return searchResultRects.length;
+    getTotalAnnotationRects(): number {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRects();
+        return annotationRects.length;
     }
 
-    isFirstSearchResultRect(): boolean {
-        return this.getCurrentSearchResultRectIndex() === 0;
+    isFirstAnnotationRect(): boolean {
+        return this.getCurrentAnnotationRectIndex() === 0;
     } 
 
-    getLastSearchResultRectIndex(): number {
-        return this.getTotalSearchResultRects() - 1;
+    getLastAnnotationRectIndex(): number {
+        return this.getTotalAnnotationRects() - 1;
     } 
 
     getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {

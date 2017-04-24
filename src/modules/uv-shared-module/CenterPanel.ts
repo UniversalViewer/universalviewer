@@ -50,7 +50,7 @@ export class CenterPanel extends BaseView {
     }
 
     updateAttribution(): void {
-        const attribution: string = this.extension.helper.getAttribution();
+        const attribution: string | null = this.extension.helper.getAttribution();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 

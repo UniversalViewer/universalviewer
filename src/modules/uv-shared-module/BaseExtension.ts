@@ -13,7 +13,6 @@ import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import {Shell} from "./Shell";
 import {SynchronousRequire} from "../../SynchronousRequire";
-import ExternalResource = Manifold.ExternalResource;
 import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
@@ -36,7 +35,7 @@ export class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifold.ExternalResource[];
+    resources: Manifesto.IExternalResource[];
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -377,7 +376,7 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.PAGE_UP);
         });
 
-        $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: ExternalResource) => {
+        $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: Manifesto.IExternalResource) => {
             this.fire(BaseEvents.RESOURCE_DEGRADED);
             Auth09.handleDegraded(resource)
         });
@@ -466,9 +465,11 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.SHOW_TERMS_OF_USE);
             
             // todo: Eventually this should be replaced with a suitable IIIF Presentation API field - until then, use attribution
-            const terms: string = this.helper.getAttribution();
-
-            this.showMessage(terms);
+            const terms: string | null = this.helper.getAttribution();
+            
+            if (terms) {
+                this.showMessage(terms);
+            }
         });
 
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
@@ -807,7 +808,7 @@ export class BaseExtension implements IExtension {
 
     getSharePreview(): ISharePreview {
 
-        const title: string = this.helper.getLabel();
+        const title: string | null = this.helper.getLabel();
 
         // todo: use getThumb (when implemented)
 
@@ -865,20 +866,20 @@ export class BaseExtension implements IExtension {
     }
 
     // todo: move to manifold
-    public getExternalResources(resources?: Manifold.ExternalResource[]): Promise<Manifold.ExternalResource[]> {
+    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
 
         const indices: number[] = this.getPagedIndices();
-        const resourcesToLoad: Manifold.ExternalResource[] = [];
+        const resourcesToLoad: Manifesto.IExternalResource[] = [];
 
         $.each(indices, (i: number, index: number) => {
             const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
-            const r: Manifold.ExternalResource = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
+            const r: Manifesto.IExternalResource = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
             r.index = index;
 
             // used to reload resources with isResponseHandled = true.
             if (resources) {
 
-                const found: Manifold.ExternalResource | undefined = resources.find((f: Manifold.ExternalResource) => {
+                const found: Manifesto.IExternalResource | undefined = resources.find((f: Manifesto.IExternalResource) => {
                     return f.dataUri === r.dataUri;
                 });
 
@@ -898,11 +899,11 @@ export class BaseExtension implements IExtension {
         // if using auth api v1
         if (authAPIVersion === 1) {
             console.log("not implemented yet!");
-            return new Promise<Manifold.ExternalResource[]>((resolve) => {
-                Auth1.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifold.ExternalResource[]) => {
-                    this.resources = r.map((resource: Manifold.ExternalResource) => {
+            return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+                Auth1.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifesto.IExternalResource[]) => {
+                    this.resources = r.map((resource: Manifesto.IExternalResource) => {
                         resource.data.index = resource.index;
-                        return <Manifold.ExternalResource>Utils.Objects.toPlainObject(resource.data);
+                        return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
                     });
 
                     resolve(this.resources);
@@ -910,11 +911,11 @@ export class BaseExtension implements IExtension {
             });
         }
         
-        return new Promise<Manifold.ExternalResource[]>((resolve) => {
-            Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifold.ExternalResource[]) => {
-                this.resources = r.map((resource: Manifold.ExternalResource) => {
+        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+            Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifesto.IExternalResource[]) => {
+                this.resources = r.map((resource: Manifesto.IExternalResource) => {
                     resource.data.index = resource.index;
-                    return <Manifold.ExternalResource>Utils.Objects.toPlainObject(resource.data);
+                    return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
                 });
 
                 resolve(this.resources);

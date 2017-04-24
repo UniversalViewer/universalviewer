@@ -1,3 +1,3 @@
-export class Commands {
+export class Events {
     static namespace: string = 'virtexExtension.';
 }

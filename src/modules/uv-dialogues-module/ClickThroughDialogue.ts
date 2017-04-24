@@ -63,9 +63,11 @@ export class ClickThroughDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        this.$title.text(this.resource.clickThroughService.getProperty('label'));
-        this.$message.html(this.resource.clickThroughService.getProperty('description'));
-        this.$message.targetBlank();
+        if (this.resource.clickThroughService) {
+            this.$title.text(this.resource.clickThroughService.getProperty('label'));
+            this.$message.html(this.resource.clickThroughService.getProperty('description'));
+            this.$message.targetBlank();
+        }
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');

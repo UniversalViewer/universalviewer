@@ -10,7 +10,7 @@ export class MediaElementCenterPanel extends CenterPanel {
     mediaHeight: number;
     mediaWidth: number;
     player: any;
-    title: string;
+    title: string | null;
 
     constructor($element: JQuery) {
         super($element);
@@ -192,7 +192,9 @@ export class MediaElementCenterPanel extends CenterPanel {
             'top': top
         });
 
-        this.$title.ellipsisFill(this.title);
+        if (this.title) {
+            this.$title.ellipsisFill(this.title);
+        }
 
         if (this.player) {
 

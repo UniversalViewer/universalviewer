@@ -64,6 +64,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     
     public data(): IUVData {
         return <IUVData>{
+            annotations: null,
             root: "./uv",
             canvasIndex: 0,
             collectionIndex: 0,
@@ -85,7 +86,6 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             ],
             manifestIndex: 0,
             rotation: 0,
-            searchResults: null,
             sequenceIndex: 0,
             xywh: ''
         };

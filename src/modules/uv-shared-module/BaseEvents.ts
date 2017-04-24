@@ -1,9 +1,15 @@
 export class BaseEvents {
 
     static ACCEPT_TERMS: string                     = 'acceptTerms';
+    static ANNOTATION_CANVAS_CHANGED: string        = 'annotationCanvasChanged';
+    static ANNOTATION_CHANGED: string               = 'annotationChanged';
+    static ANNOTATIONS_CLEARED: string              = 'annotationsCleared';
+    static ANNOTATIONS_EMPTY: string                = 'annotationsEmpty';
+    static ANNOTATIONS: string                      = 'annotations';
     static BOOKMARK: string                         = 'bookmark';
     static CANVAS_INDEX_CHANGE_FAILED: string       = 'canvasIndexChangeFailed';
     static CANVAS_INDEX_CHANGED: string             = 'canvasIndexChanged';
+    static CLEAR_ANNOTATIONS: string                = 'clearAnnotations';
     static CLICKTHROUGH: string                     = 'clickthrough';
     static CLOSE_ACTIVE_DIALOGUE: string            = 'closeActiveDialogue';
     static CLOSE_LEFT_PANEL: string                 = 'closeLeftPanel';

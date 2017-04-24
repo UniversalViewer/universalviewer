@@ -1,4 +1,3 @@
-
 export class UVUtils {
     static sanitize(html: string): string {
         const elem: Element = document.createElement('div');
