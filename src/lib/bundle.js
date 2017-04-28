@@ -13983,6 +13983,7 @@ function extend() {
 },{}]},{},[1])(1)
 });
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
 var Manifold;
 (function (Manifold) {
     var StringValue = (function () {
@@ -14039,33 +14040,35 @@ var Manifold;
         Bootstrapper.prototype.bootstrap = function () {
             var that = this;
             return new Promise(function (resolve, reject) {
-                var msie = that._msieversion();
-                // if not a recent version of IE
-                if (msie > 0 && msie < 11) {
-                    if (msie === 9) {
-                        // CORS not available, use jsonp
-                        var settings = {
-                            url: that._options.iiifResourceUri,
-                            type: 'GET',
-                            dataType: 'jsonp',
-                            jsonp: 'callback',
-                            jsonpCallback: 'manifestCallback'
-                        };
-                        $.ajax(settings);
-                        window.manifestCallback = function (json) {
-                            that._loaded(that, JSON.stringify(json), resolve, reject);
-                        };
-                    }
-                    else if (msie === 10) {
-                        $.getJSON(that._options.iiifResourceUri, function (json) {
-                            that._loaded(that, JSON.stringify(json), resolve, reject);
-                        });
-                    }
-                }
-                else {
+                var msie = that._detectIE();
+                if (msie === false) {
                     manifesto.loadManifest(that._options.iiifResourceUri).then(function (json) {
                         that._loaded(that, json, resolve, reject);
                     });
+                }
+                else {
+                    // if not a recent version of IE
+                    if (msie > 0) {
+                        if (msie === 9) {
+                            // CORS not available, use jsonp
+                            var settings = {
+                                url: that._options.iiifResourceUri,
+                                type: 'GET',
+                                dataType: 'jsonp',
+                                jsonp: 'callback',
+                                jsonpCallback: 'manifestCallback'
+                            };
+                            $.ajax(settings);
+                            global.manifestCallback = function (json) {
+                                that._loaded(that, JSON.stringify(json), resolve, reject);
+                            };
+                        }
+                        else {
+                            $.getJSON(that._options.iiifResourceUri, function (json) {
+                                that._loaded(that, JSON.stringify(json), resolve, reject);
+                            });
+                        }
+                    }
                 }
             });
         };
@@ -14115,15 +14118,35 @@ var Manifold;
                 resolve(helper);
             }
         };
-        Bootstrapper.prototype._msieversion = function () {
+        Bootstrapper.prototype._detectIE = function () {
             var ua = window.navigator.userAgent;
-            var msie = ua.indexOf("MSIE ");
+            // Test values; Uncomment to check result …
+            // IE 10
+            // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+            // IE 11
+            // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+            // Edge 12 (Spartan)
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+            // Edge 13
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+            var msie = ua.indexOf('MSIE ');
             if (msie > 0) {
-                return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
+                // IE 10 or older => return version number
+                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
             }
-            else {
-                return 0;
+            var trident = ua.indexOf('Trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
             }
+            var edge = ua.indexOf('Edge/');
+            if (edge > 0) {
+                // Edge (IE 12+) => return version number
+                return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+            }
+            // other browser
+            return false;
         };
         return Bootstrapper;
     }());
@@ -15093,6 +15116,7 @@ var Manifold;
     Manifold.UriLabeller = UriLabeller;
 })(Manifold || (Manifold = {}));
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])(1)
 });
 (function(t,e,o){"use strict";function r(t,e,r,p){r=r||"width";var n,l,m,c=(e.match(s)||[])[2],f="px"===c?1:d[c+"toPx"],u=/r?em/i;if(f||u.test(c)&&!p)t=f?t:"rem"===c?i:"fontSize"===r?t.parentNode||t:t,f=f||parseFloat(a(t,"fontSize")),m=parseFloat(e)*f;else{n=t.style,l=n[r];try{n[r]=e}catch(x){return 0}m=n[r]?parseFloat(a(t,r)):0,n[r]=l!==o?l:null}return m}function a(t,e){var o,n,i,l,d,c=/^top|bottom/,f=["paddingTop","paddingBottom","borderTop","borderBottom"],u=4;if(o=m?m(t)[e]:(n=t.style["pixel"+e.charAt(0).toUpperCase()+e.slice(1)])?n+"px":"fontSize"===e?r(t,"1em","left",1)+"px":t.currentStyle[e],i=(o.match(s)||[])[2],"%"===i&&p)if(c.test(e)){for(l=(d=t.parentNode||t).offsetHeight;u--;)l-=parseFloat(a(d,f[u]));o=parseFloat(o)/100*l+"px"}else o=r(t,o);else("auto"===o||i&&"px"!==i)&&m?o=0:i&&"px"!==i&&!m&&(o=r(t,o)+"px");return o}var p,n=e.createElement("test"),i=e.documentElement,l=e.defaultView,m=l&&l.getComputedStyle,s=/^(-?[\d+\.\-]+)([a-z]+|%)$/i,d={},c=[1/25.4,1/2.54,1/72,1/6],f=["mm","cm","pt","pc","in","mozmm"],u=6;for(i.appendChild(n),m&&(n.style.marginTop="1%",p="1%"===m(n).marginTop);u--;)d[f[u]+"toPx"]=c[u]?c[u]*d.inToPx:r(n,"1"+f[u]);i.removeChild(n),n=o,t.Length={toPx:r}})(this,this.document);
