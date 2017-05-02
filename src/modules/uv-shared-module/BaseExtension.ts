@@ -1,5 +1,6 @@
 import {Auth09} from "./Auth09";
 import {Auth1} from "./Auth1";
+import {AuthDialogue} from "../../modules/uv-dialogues-module/AuthDialogue";
 import {BaseEvents} from "./BaseEvents";
 import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
 import {IExtension} from "./IExtension";
@@ -17,10 +18,12 @@ import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
 
+    $authDialogue: JQuery;
     $clickThroughDialogue: JQuery;
     $element: JQuery;
     $loginDialogue: JQuery;
     $restrictedDialogue: JQuery;
+    authDialogue: AuthDialogue;
     clickThroughDialogue: ClickThroughDialogue;
     component: IUVComponent;
     data: IUVData;
@@ -513,6 +516,10 @@ export class BaseExtension implements IExtension {
     }
 
     createModules(): void {
+        this.$authDialogue = $('<div class="overlay auth"></div>');
+        Shell.$overlays.append(this.$authDialogue);
+        this.authDialogue = new AuthDialogue(this.$authDialogue);
+        
         this.$clickThroughDialogue = $('<div class="overlay clickthrough"></div>');
         Shell.$overlays.append(this.$clickThroughDialogue);
         this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
@@ -898,9 +905,25 @@ export class BaseExtension implements IExtension {
 
         // if using auth api v1
         if (authAPIVersion === 1) {
-            console.log("not implemented yet!");
             return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-                Auth1.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifesto.IExternalResource[]) => {
+
+                const options: Manifesto.IManifestoOptions = <Manifesto.IManifestoOptions>{
+                    locale: this.helper.options.locale
+                }
+
+                Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
+                    this.resources = r.map((resource: Manifesto.IExternalResource) => {
+                        resource.data.index = resource.index;
+                        return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
+                    });
+
+                    resolve(this.resources);
+                });
+            });
+        } else {
+        
+            return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+                Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifesto.IExternalResource[]) => {
                     this.resources = r.map((resource: Manifesto.IExternalResource) => {
                         resource.data.index = resource.index;
                         return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
@@ -910,17 +933,6 @@ export class BaseExtension implements IExtension {
                 });
             });
         }
-        
-        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-            Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifesto.IExternalResource[]) => {
-                this.resources = r.map((resource: Manifesto.IExternalResource) => {
-                    resource.data.index = resource.index;
-                    return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
-                });
-
-                resolve(this.resources);
-            });
-        });
     }
 
     viewCanvas(canvasIndex: number): void {

@@ -37,7 +37,6 @@ export class Events {
     static THUMB_MULTISELECTED: string                          = Events.namespace + 'thumbMultiSelected';
     static TREE_NODE_MULTISELECTED: string                      = Events.namespace + 'treeNodeMultiSelected';
     static TREE_NODE_SELECTED: string                           = Events.namespace + 'treeNodeSelected';
-    static VIEW_PAGE: string                                    = Events.namespace + 'viewPage';
     static XYWH_CHANGED: string                                 = Events.namespace + 'xywhChanged';
     static ZOOM_IN: string                                      = Events.namespace + 'zoomIn';
     static ZOOM_OUT: string                                     = Events.namespace + 'zoomOut';

@@ -73,11 +73,6 @@ export class SeadragonCenterPanel extends CenterPanel {
             });
         });
 
-        $.subscribe(Events.VIEW_PAGE, () => {
-            (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
-            (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
-        });
-
         $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
             this.whenCreated(() => {
                 this.nextAnnotation();

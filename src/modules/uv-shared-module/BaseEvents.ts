@@ -27,6 +27,7 @@ export class BaseEvents {
     static EXTERNAL_LINK_CLICKED: string            = 'externalLinkClicked';
     static FEEDBACK: string                         = 'feedback';
     static FORBIDDEN: string                        = 'forbidden';
+    static HIDE_AUTH_DIALOGUE                       = 'hideAuthDialogue';
     static HIDE_CLICKTHROUGH_DIALOGUE: string       = 'hideClickthroughDialogue';
     static HIDE_DOWNLOAD_DIALOGUE: string           = 'hideDownloadDialogue';
     static HIDE_EMBED_DIALOGUE: string              = 'hideEmbedDialogue';

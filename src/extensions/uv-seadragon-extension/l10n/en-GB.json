@@ -14,6 +14,12 @@
     "termsOfUse": "Terms of Use"
   },
   "modules": {
+    "authDialogue": {
+      "content": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      }
+    },
     "clickThroughDialogue": {
       "content": {
         "viewTerms": "Read Full Terms and Conditions"

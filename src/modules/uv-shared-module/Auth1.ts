@@ -5,13 +5,44 @@ export class Auth1 {
 
     static messages: any = {}
 
-    static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string): Promise<Manifesto.IExternalResource[]> {
+    static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string, options: Manifesto.IManifestoOptions): Promise<Manifesto.IExternalResource[]> {
+        
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-            resolve(resourcesToLoad);
+
+            // set all resources to Auth API V1
+            resourcesToLoad = resourcesToLoad.map((resource: Manifesto.IExternalResource) => {
+                resource.authAPIVersion = 1;
+                resource.options = options;
+                return resource;
+            });
+
+            manifesto.Utils.loadExternalResourcesAuth1(
+                resourcesToLoad,
+                Auth1.openContentProviderInteraction,
+                Auth1.openTokenService,
+                Auth1.userInteractedWithContentProvider,
+                Auth1.getContentProviderInteraction,
+                Auth1.showOutOfOptionsMessages).then((r: Manifesto.IExternalResource[]) => {
+                    resolve(r);
+                })['catch']((error: any) => {
+                    switch(error.name) {
+                        case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
+                            $.publish(BaseEvents.LOGIN_FAILED);
+                            break;
+                        case manifesto.StatusCodes.FORBIDDEN.toString():
+                            $.publish(BaseEvents.FORBIDDEN);
+                            break;
+                        case manifesto.StatusCodes.RESTRICTED.toString():
+                            // do nothing
+                            break;
+                        default:
+                            $.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
+                    }
+            });
         });
     }
     
-    static openContentProviderWindow(service: Manifesto.IService): Window {
+    static openContentProviderInteraction(service: Manifesto.IService): Window {
         let cookieServiceUrl: string = service.id + "?origin=" + Auth1.getOrigin();
         return window.open(cookieServiceUrl);
     }
@@ -26,28 +57,28 @@ export class Auth1 {
         return urlHolder.protocol + "//" + urlHolder.hostname + (urlHolder.port ? ':' + urlHolder.port: '');
     }
 
-    static userInteractionWithContentProvider(contentProviderWindow: Window): Promise<void> {
-        return new Promise<void>((resolve) => {
+    static userInteractedWithContentProvider(contentProviderWindow: Window): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
             // What happens here is forever a mystery to a client application.
             // It can but wait.
             const poll: number = window.setInterval(() => {
                 if (contentProviderWindow.closed) {
                     window.clearInterval(poll);
-                    resolve();
+                    resolve(true);
                 }
             }, 500);
         });
     }
 
-    static getContentProviderWindow(service: Manifesto.IService): Promise<Window | null> {
-        return new Promise<Window | null>(resolve => {
+    static getContentProviderInteraction(service: Manifesto.IService): Promise<Window | null> {
+        return new Promise<Window | null>((resolve) => {
             $.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
                 service: service,
                 closeCallback: () => {
                     resolve(null);
                 },
                 confirmCallback: () => {
-                    const win: Window = Auth1.openContentProviderWindow(service);
+                    const win: Window = Auth1.openContentProviderInteraction(service);
                     resolve(win);
                 },
                 cancelCallback: () => {
@@ -68,6 +99,9 @@ export class Auth1 {
                 "reject": reject,
                 "serviceOrigin": serviceOrigin
             };
+
+            window.addEventListener("message", Auth1.receiveMessage, false);
+
             const tokenUrl: string = tokenService.id + "?messageId=" + messageId + "&origin=" + Auth1.getOrigin();
             $('#commsFrame').prop('src', tokenUrl);
 
@@ -75,7 +109,7 @@ export class Auth1 {
             const postMessageTimeout = 5000;
 
             setTimeout(() => {
-                if(Auth1.messages[messageId]){
+                if (Auth1.messages[messageId]) {
                     Auth1.messages[messageId].reject(
                         "Message unhandled after " + postMessageTimeout + "ms, rejecting");
                     delete Auth1.messages[messageId];
@@ -97,5 +131,19 @@ export class Auth1 {
         }
 
         $.publish(BaseEvents.SHOW_MESSAGE, [UVUtils.sanitize(errorMessage)]);
+    }
+
+    static receiveMessage(event: any): void {    
+        if (event.data.hasOwnProperty("messageId")) {
+
+            var message = Auth1.messages[event.data.messageId];
+
+            if (message && event.origin == message.serviceOrigin) {
+                // Any message with a messageId is a success
+                message.resolve(event.data);
+                delete Auth1.messages[event.data.messageId];
+                return;
+            }    
+        }
     }
 }

@@ -174,7 +174,7 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         this.$placemarkerDetails.on('click', () => {
-            $.publish(Events.VIEW_PAGE, [this.currentPlacemarkerIndex]);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.currentPlacemarkerIndex]);
         });
 
         this.$previousResultButton.on('click', (e: any) => {
@@ -193,7 +193,7 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         // hide search options if not enabled/supported.
-        if (!(<ISeadragonExtension>this.extension).isSearchEnabled()) {
+        if (!this.isSearchEnabled()) {
             this.$searchContainer.hide();
             this.$searchPagerContainer.hide();
             this.$searchResultsContainer.hide();
@@ -245,6 +245,10 @@ export class FooterPanel extends BaseFooterPanel {
             this.$pagePositionMarker.hide();
             this.$pagePositionLabel.hide();
         }
+    }
+
+    isSearchEnabled(): boolean {
+        return (<ISeadragonExtension>this.extension).isSearchEnabled();
     }
 
     isZoomToSearchResultEnabled(): boolean {
@@ -432,10 +436,10 @@ export class FooterPanel extends BaseFooterPanel {
     onPlacemarkerTouchStart(that: any): void {
         that.placemarkerTouched = true;
 
-        const $placemarker: JQuery = $(this);
-        const index: number = parseInt($placemarker.attr('data-index'));
+        //const $placemarker: JQuery = $(this);
+        //const index: number = parseInt($placemarker.attr('data-index'));
 
-        $.publish(Events.VIEW_PAGE, [index]);
+        //$.publish(Events.VIEW_PAGE, [index]);
     }
 
     onPlacemarkerClick(that: any): void {
@@ -443,10 +447,10 @@ export class FooterPanel extends BaseFooterPanel {
 
         that.placemarkerTouched = false;
 
-        const $placemarker: JQuery = $(this);
-        const index: number = parseInt($placemarker.attr('data-index'));
+        //const $placemarker: JQuery = $(this);
+        //const index: number = parseInt($placemarker.attr('data-index'));
 
-        $.publish(Events.VIEW_PAGE, [index]);
+        //$.publish(Events.VIEW_PAGE, [index]);
     }
 
     onPlacemarkerMouseEnter(that: any): void {
@@ -489,7 +493,13 @@ export class FooterPanel extends BaseFooterPanel {
 
         if (searchResults) {
             const result: AnnotationGroup = searchResults[elemIndex];
-            const terms: string = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
+
+            let terms: string = "";
+
+            if (that.terms) {
+                terms = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
+            }
+
             let instanceFoundText: string = that.content.instanceFound;
             let instancesFoundText: string = that.content.instancesFound;
             let text: string = '';
@@ -574,7 +584,9 @@ export class FooterPanel extends BaseFooterPanel {
 
     clearSearchResults(): void {
 
-        (<ISeadragonExtension>this.extension).annotations = [];
+        if (!this.isSearchEnabled()) {
+            return;
+        }
 
         // clear all existing placemarkers
         const $placemarkers: JQuery = this.getSearchResultPlacemarkers();
@@ -647,6 +659,10 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     displaySearchResults(results: AnnotationGroup[], terms?: string): void {
+
+        if (!this.isSearchEnabled()) {
+            return;
+        }
 
         this.hideSearchSpinner();
         this.positionSearchResultPlacemarkers();

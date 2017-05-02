@@ -5,83 +5,67 @@
 
 var Manifesto;
 (function (Manifesto) {
-    var StringValue = (function () {
-        function StringValue(value) {
+    class StringValue {
+        constructor(value) {
             this.value = "";
             if (value) {
                 this.value = value.toLowerCase();
             }
         }
-        StringValue.prototype.toString = function () {
+        toString() {
             return this.value;
-        };
-        return StringValue;
-    }());
+        }
+    }
     Manifesto.StringValue = StringValue;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var AnnotationMotivation = (function (_super) {
-        __extends(AnnotationMotivation, _super);
-        function AnnotationMotivation() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class AnnotationMotivation extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        AnnotationMotivation.prototype.bookmarking = function () {
+        bookmarking() {
             return new AnnotationMotivation(AnnotationMotivation.BOOKMARKING.toString());
-        };
-        AnnotationMotivation.prototype.classifying = function () {
+        }
+        classifying() {
             return new AnnotationMotivation(AnnotationMotivation.CLASSIFYING.toString());
-        };
-        AnnotationMotivation.prototype.commenting = function () {
+        }
+        commenting() {
             return new AnnotationMotivation(AnnotationMotivation.COMMENTING.toString());
-        };
-        AnnotationMotivation.prototype.describing = function () {
+        }
+        describing() {
             return new AnnotationMotivation(AnnotationMotivation.DESCRIBING.toString());
-        };
-        AnnotationMotivation.prototype.editing = function () {
+        }
+        editing() {
             return new AnnotationMotivation(AnnotationMotivation.EDITING.toString());
-        };
-        AnnotationMotivation.prototype.highlighting = function () {
+        }
+        highlighting() {
             return new AnnotationMotivation(AnnotationMotivation.HIGHLIGHTING.toString());
-        };
-        AnnotationMotivation.prototype.identifying = function () {
+        }
+        identifying() {
             return new AnnotationMotivation(AnnotationMotivation.IDENTIFYING.toString());
-        };
-        AnnotationMotivation.prototype.linking = function () {
+        }
+        linking() {
             return new AnnotationMotivation(AnnotationMotivation.LINKING.toString());
-        };
-        AnnotationMotivation.prototype.moderating = function () {
+        }
+        moderating() {
             return new AnnotationMotivation(AnnotationMotivation.MODERATING.toString());
-        };
-        AnnotationMotivation.prototype.painting = function () {
+        }
+        painting() {
             return new AnnotationMotivation(AnnotationMotivation.PAINTING.toString());
-        };
-        AnnotationMotivation.prototype.questioning = function () {
+        }
+        questioning() {
             return new AnnotationMotivation(AnnotationMotivation.QUESTIONING.toString());
-        };
-        AnnotationMotivation.prototype.replying = function () {
+        }
+        replying() {
             return new AnnotationMotivation(AnnotationMotivation.REPLYING.toString());
-        };
-        AnnotationMotivation.prototype.tagging = function () {
+        }
+        tagging() {
             return new AnnotationMotivation(AnnotationMotivation.TAGGING.toString());
-        };
-        AnnotationMotivation.prototype.transcribing = function () {
+        }
+        transcribing() {
             return new AnnotationMotivation(AnnotationMotivation.TRANSCRIBING.toString());
-        };
-        return AnnotationMotivation;
-    }(Manifesto.StringValue));
+        }
+    }
     AnnotationMotivation.BOOKMARKING = new AnnotationMotivation("oa:bookmarking");
     AnnotationMotivation.CLASSIFYING = new AnnotationMotivation("oa:classifying");
     AnnotationMotivation.COMMENTING = new AnnotationMotivation("oa:commenting");
@@ -99,44 +83,29 @@ var Manifesto;
     Manifesto.AnnotationMotivation = AnnotationMotivation;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ElementType = (function (_super) {
-        __extends(ElementType, _super);
-        function ElementType() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class ElementType extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        ElementType.prototype.canvas = function () {
+        canvas() {
             return new ElementType(ElementType.CANVAS.toString());
-        };
-        ElementType.prototype.document = function () {
+        }
+        document() {
             return new ElementType(ElementType.DOCUMENT.toString());
-        };
-        ElementType.prototype.image = function () {
+        }
+        image() {
             return new ElementType(ElementType.IMAGE.toString());
-        };
-        ElementType.prototype.movingimage = function () {
+        }
+        movingimage() {
             return new ElementType(ElementType.MOVINGIMAGE.toString());
-        };
-        ElementType.prototype.physicalobject = function () {
+        }
+        physicalobject() {
             return new ElementType(ElementType.PHYSICALOBJECT.toString());
-        };
-        ElementType.prototype.sound = function () {
+        }
+        sound() {
             return new ElementType(ElementType.SOUND.toString());
-        };
-        return ElementType;
-    }(Manifesto.StringValue));
+        }
+    }
     ElementType.CANVAS = new ElementType("sc:canvas");
     ElementType.DOCUMENT = new ElementType("foaf:document");
     ElementType.IMAGE = new ElementType("dcTypes:image");
@@ -146,44 +115,29 @@ var Manifesto;
     Manifesto.ElementType = ElementType;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var IIIFResourceType = (function (_super) {
-        __extends(IIIFResourceType, _super);
-        function IIIFResourceType() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class IIIFResourceType extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        IIIFResourceType.prototype.annotation = function () {
+        annotation() {
             return new IIIFResourceType(IIIFResourceType.ANNOTATION.toString());
-        };
-        IIIFResourceType.prototype.canvas = function () {
+        }
+        canvas() {
             return new IIIFResourceType(IIIFResourceType.CANVAS.toString());
-        };
-        IIIFResourceType.prototype.collection = function () {
+        }
+        collection() {
             return new IIIFResourceType(IIIFResourceType.COLLECTION.toString());
-        };
-        IIIFResourceType.prototype.manifest = function () {
+        }
+        manifest() {
             return new IIIFResourceType(IIIFResourceType.MANIFEST.toString());
-        };
-        IIIFResourceType.prototype.range = function () {
+        }
+        range() {
             return new IIIFResourceType(IIIFResourceType.RANGE.toString());
-        };
-        IIIFResourceType.prototype.sequence = function () {
+        }
+        sequence() {
             return new IIIFResourceType(IIIFResourceType.SEQUENCE.toString());
-        };
-        return IIIFResourceType;
-    }(Manifesto.StringValue));
+        }
+    }
     IIIFResourceType.ANNOTATION = new IIIFResourceType("oa:annotation");
     IIIFResourceType.CANVAS = new IIIFResourceType("sc:canvas");
     IIIFResourceType.COLLECTION = new IIIFResourceType("sc:collection");
@@ -193,247 +147,184 @@ var Manifesto;
     Manifesto.IIIFResourceType = IIIFResourceType;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ManifestType = (function (_super) {
-        __extends(ManifestType, _super);
-        function ManifestType() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class ManifestType extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        ManifestType.prototype.empty = function () {
+        empty() {
             return new ManifestType(ManifestType.EMPTY.toString());
-        };
-        ManifestType.prototype.manuscript = function () {
+        }
+        manuscript() {
             return new ManifestType(ManifestType.MANUSCRIPT.toString());
-        };
-        ManifestType.prototype.monograph = function () {
+        }
+        monograph() {
             return new ManifestType(ManifestType.MONOGRAPH.toString());
-        };
-        return ManifestType;
-    }(Manifesto.StringValue));
+        }
+    }
     ManifestType.EMPTY = new ManifestType("");
     ManifestType.MANUSCRIPT = new ManifestType("manuscript");
     ManifestType.MONOGRAPH = new ManifestType("monograph");
     Manifesto.ManifestType = ManifestType;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var RenderingFormat = (function (_super) {
-        __extends(RenderingFormat, _super);
-        function RenderingFormat() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class RenderingFormat extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        RenderingFormat.prototype.pdf = function () {
+        pdf() {
             return new RenderingFormat(RenderingFormat.PDF.toString());
-        };
-        RenderingFormat.prototype.doc = function () {
+        }
+        doc() {
             return new RenderingFormat(RenderingFormat.DOC.toString());
-        };
-        RenderingFormat.prototype.docx = function () {
+        }
+        docx() {
             return new RenderingFormat(RenderingFormat.DOCX.toString());
-        };
-        return RenderingFormat;
-    }(Manifesto.StringValue));
+        }
+    }
     RenderingFormat.PDF = new RenderingFormat("application/pdf");
     RenderingFormat.DOC = new RenderingFormat("application/msword");
     RenderingFormat.DOCX = new RenderingFormat("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     Manifesto.RenderingFormat = RenderingFormat;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ResourceFormat = (function (_super) {
-        __extends(ResourceFormat, _super);
-        function ResourceFormat() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class ResourceFormat extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        ResourceFormat.prototype.jpgimage = function () {
-            return new ResourceFormat(ResourceFormat.JPGIMAGE.toString());
-        };
-        ResourceFormat.prototype.pdf = function () {
+        jpg() {
+            return new ResourceFormat(ResourceFormat.JPG.toString());
+        }
+        mp4() {
+            return new ResourceFormat(ResourceFormat.MP4.toString());
+        }
+        pdf() {
             return new ResourceFormat(ResourceFormat.PDF.toString());
-        };
-        return ResourceFormat;
-    }(Manifesto.StringValue));
-    ResourceFormat.JPGIMAGE = new ResourceFormat("image/jpeg");
+        }
+        threejs() {
+            return new ResourceFormat(ResourceFormat.THREEJS.toString());
+        }
+        webm() {
+            return new ResourceFormat(ResourceFormat.WEBM.toString());
+        }
+    }
+    ResourceFormat.JPG = new ResourceFormat("image/jpeg");
+    ResourceFormat.MP4 = new ResourceFormat("video/mp4");
     ResourceFormat.PDF = new ResourceFormat("application/pdf");
+    ResourceFormat.THREEJS = new ResourceFormat("application/vnd.threejs+json");
+    ResourceFormat.WEBM = new ResourceFormat("video/webm");
     Manifesto.ResourceFormat = ResourceFormat;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ResourceType = (function (_super) {
-        __extends(ResourceType, _super);
-        function ResourceType() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class ResourceType extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        ResourceType.prototype.image = function () {
+        image() {
             return new ResourceType(ResourceType.IMAGE.toString());
-        };
-        return ResourceType;
-    }(Manifesto.StringValue));
+        }
+    }
     ResourceType.IMAGE = new ResourceType("dctypes:image");
     Manifesto.ResourceType = ResourceType;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ServiceProfile = (function (_super) {
-        __extends(ServiceProfile, _super);
-        function ServiceProfile() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class ServiceProfile extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        ServiceProfile.prototype.auth1Clickthrough = function () {
+        auth1Clickthrough() {
             return new ServiceProfile(ServiceProfile.AUTH1CLICKTHROUGH.toString());
-        };
-        ServiceProfile.prototype.auth1External = function () {
+        }
+        auth1External() {
             return new ServiceProfile(ServiceProfile.AUTH1EXTERNAL.toString());
-        };
-        ServiceProfile.prototype.auth1Kiosk = function () {
+        }
+        auth1Kiosk() {
             return new ServiceProfile(ServiceProfile.AUTH1KIOSK.toString());
-        };
-        ServiceProfile.prototype.auth1Login = function () {
+        }
+        auth1Login() {
             return new ServiceProfile(ServiceProfile.AUTH1LOGIN.toString());
-        };
-        ServiceProfile.prototype.auth1Logout = function () {
+        }
+        auth1Logout() {
             return new ServiceProfile(ServiceProfile.AUTH1LOGOUT.toString());
-        };
-        ServiceProfile.prototype.auth1Token = function () {
+        }
+        auth1Token() {
             return new ServiceProfile(ServiceProfile.AUTH1TOKEN.toString());
-        };
-        ServiceProfile.prototype.autoComplete = function () {
+        }
+        autoComplete() {
             return new ServiceProfile(ServiceProfile.AUTOCOMPLETE.toString());
-        };
-        ServiceProfile.prototype.iiif1ImageLevel1 = function () {
+        }
+        iiif1ImageLevel1() {
             return new ServiceProfile(ServiceProfile.IIIF1IMAGELEVEL1.toString());
-        };
-        ServiceProfile.prototype.iiif1ImageLevel2 = function () {
+        }
+        iiif1ImageLevel2() {
             return new ServiceProfile(ServiceProfile.IIIF1IMAGELEVEL2.toString());
-        };
-        ServiceProfile.prototype.iiif2ImageLevel1 = function () {
+        }
+        iiif2ImageLevel1() {
             return new ServiceProfile(ServiceProfile.IIIF2IMAGELEVEL1.toString());
-        };
-        ServiceProfile.prototype.iiif2ImageLevel2 = function () {
+        }
+        iiif2ImageLevel2() {
             return new ServiceProfile(ServiceProfile.IIIF2IMAGELEVEL2.toString());
-        };
-        ServiceProfile.prototype.ixif = function () {
+        }
+        ixif() {
             return new ServiceProfile(ServiceProfile.IXIF.toString());
-        };
-        ServiceProfile.prototype.login = function () {
+        }
+        login() {
             return new ServiceProfile(ServiceProfile.AUTHLOGIN.toString());
-        };
-        ServiceProfile.prototype.clickThrough = function () {
+        }
+        clickThrough() {
             return new ServiceProfile(ServiceProfile.AUTHCLICKTHROUGH.toString());
-        };
-        ServiceProfile.prototype.restricted = function () {
+        }
+        restricted() {
             return new ServiceProfile(ServiceProfile.AUTHRESTRICTED.toString());
-        };
-        ServiceProfile.prototype.logout = function () {
+        }
+        logout() {
             return new ServiceProfile(ServiceProfile.AUTHLOGOUT.toString());
-        };
-        ServiceProfile.prototype.otherManifestations = function () {
+        }
+        otherManifestations() {
             return new ServiceProfile(ServiceProfile.OTHERMANIFESTATIONS.toString());
-        };
-        ServiceProfile.prototype.search = function () {
+        }
+        search() {
             return new ServiceProfile(ServiceProfile.SEARCH.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIFImageCompliance1 = function () {
+        }
+        stanfordIIIFImageCompliance1() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIFImageCompliance2 = function () {
+        }
+        stanfordIIIFImageCompliance2() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIFImageConformance1 = function () {
+        }
+        stanfordIIIFImageConformance1() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIFImageConformance2 = function () {
+        }
+        stanfordIIIFImageConformance2() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIF1ImageCompliance1 = function () {
+        }
+        stanfordIIIF1ImageCompliance1() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIF1ImageCompliance2 = function () {
+        }
+        stanfordIIIF1ImageCompliance2() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIF1ImageConformance1 = function () {
+        }
+        stanfordIIIF1ImageConformance1() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE1.toString());
-        };
-        ServiceProfile.prototype.stanfordIIIF1ImageConformance2 = function () {
+        }
+        stanfordIIIF1ImageConformance2() {
             return new ServiceProfile(ServiceProfile.STANFORDIIIF1IMAGECONFORMANCE2.toString());
-        };
-        ServiceProfile.prototype.token = function () {
+        }
+        token() {
             return new ServiceProfile(ServiceProfile.AUTHTOKEN.toString());
-        };
-        ServiceProfile.prototype.trackingExtensions = function () {
+        }
+        trackingExtensions() {
             return new ServiceProfile(ServiceProfile.TRACKINGEXTENSIONS.toString());
-        };
-        ServiceProfile.prototype.uiExtensions = function () {
+        }
+        uiExtensions() {
             return new ServiceProfile(ServiceProfile.UIEXTENSIONS.toString());
-        };
-        ServiceProfile.prototype.printExtensions = function () {
+        }
+        printExtensions() {
             return new ServiceProfile(ServiceProfile.PRINTEXTENSIONS.toString());
-        };
-        ServiceProfile.prototype.shareExtensions = function () {
+        }
+        shareExtensions() {
             return new ServiceProfile(ServiceProfile.SHAREEXTENSIONS.toString());
-        };
-        return ServiceProfile;
-    }(Manifesto.StringValue));
+        }
+    }
     // image api
     ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/compliance.html#level0");
     ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1 = new ServiceProfile("http://library.stanford.edu/iiif/image-api/compliance.html#level1");
@@ -460,17 +351,17 @@ var Manifesto;
     ServiceProfile.IIIF2IMAGELEVEL2 = new ServiceProfile("http://iiif.io/api/image/2/level2.json");
     ServiceProfile.IIIF2IMAGELEVEL2PROFILE = new ServiceProfile("http://iiif.io/api/image/2/profiles/level2.json");
     // auth api
+    ServiceProfile.AUTHCLICKTHROUGH = new ServiceProfile("http://iiif.io/api/auth/0/login/clickthrough");
+    ServiceProfile.AUTHLOGIN = new ServiceProfile("http://iiif.io/api/auth/0/login");
+    ServiceProfile.AUTHLOGOUT = new ServiceProfile("http://iiif.io/api/auth/0/logout");
+    ServiceProfile.AUTHRESTRICTED = new ServiceProfile("http://iiif.io/api/auth/0/login/restricted");
+    ServiceProfile.AUTHTOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
     ServiceProfile.AUTH1CLICKTHROUGH = new ServiceProfile("http://iiif.io/api/auth/1/login/clickthrough");
     ServiceProfile.AUTH1EXTERNAL = new ServiceProfile("http://iiif.io/api/auth/1/external");
     ServiceProfile.AUTH1KIOSK = new ServiceProfile("http://iiif.io/api/auth/1/kiosk");
     ServiceProfile.AUTH1LOGIN = new ServiceProfile("http://iiif.io/api/auth/1/login");
     ServiceProfile.AUTH1LOGOUT = new ServiceProfile("http://iiif.io/api/auth/1/logout");
     ServiceProfile.AUTH1TOKEN = new ServiceProfile("http://iiif.io/api/auth/1/token");
-    ServiceProfile.AUTHCLICKTHROUGH = new ServiceProfile("http://iiif.io/api/auth/0/login/clickthrough");
-    ServiceProfile.AUTHLOGIN = new ServiceProfile("http://iiif.io/api/auth/0/login");
-    ServiceProfile.AUTHLOGOUT = new ServiceProfile("http://iiif.io/api/auth/0/logout");
-    ServiceProfile.AUTHRESTRICTED = new ServiceProfile("http://iiif.io/api/auth/0/login/restricted");
-    ServiceProfile.AUTHTOKEN = new ServiceProfile("http://iiif.io/api/auth/0/token");
     // search api
     ServiceProfile.AUTOCOMPLETE = new ServiceProfile("http://iiif.io/api/search/0/autocomplete");
     ServiceProfile.SEARCH = new ServiceProfile("http://iiif.io/api/search/0/search");
@@ -485,38 +376,23 @@ var Manifesto;
     Manifesto.ServiceProfile = ServiceProfile;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ViewingDirection = (function (_super) {
-        __extends(ViewingDirection, _super);
-        function ViewingDirection() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class ViewingDirection extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        ViewingDirection.prototype.leftToRight = function () {
+        leftToRight() {
             return new ViewingDirection(ViewingDirection.LEFTTORIGHT.toString());
-        };
-        ViewingDirection.prototype.rightToLeft = function () {
+        }
+        rightToLeft() {
             return new ViewingDirection(ViewingDirection.RIGHTTOLEFT.toString());
-        };
-        ViewingDirection.prototype.topToBottom = function () {
+        }
+        topToBottom() {
             return new ViewingDirection(ViewingDirection.TOPTOBOTTOM.toString());
-        };
-        ViewingDirection.prototype.bottomToTop = function () {
+        }
+        bottomToTop() {
             return new ViewingDirection(ViewingDirection.BOTTOMTOTOP.toString());
-        };
-        return ViewingDirection;
-    }(Manifesto.StringValue));
+        }
+    }
     ViewingDirection.LEFTTORIGHT = new ViewingDirection("left-to-right");
     ViewingDirection.RIGHTTOLEFT = new ViewingDirection("right-to-left");
     ViewingDirection.TOPTOBOTTOM = new ViewingDirection("top-to-bottom");
@@ -524,44 +400,29 @@ var Manifesto;
     Manifesto.ViewingDirection = ViewingDirection;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ViewingHint = (function (_super) {
-        __extends(ViewingHint, _super);
-        function ViewingHint() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class ViewingHint extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        ViewingHint.prototype.continuous = function () {
+        continuous() {
             return new ViewingHint(ViewingHint.CONTINUOUS.toString());
-        };
-        ViewingHint.prototype.empty = function () {
+        }
+        empty() {
             return new ViewingHint(ViewingHint.EMPTY.toString());
-        };
-        ViewingHint.prototype.individuals = function () {
+        }
+        individuals() {
             return new ViewingHint(ViewingHint.INDIVIDUALS.toString());
-        };
-        ViewingHint.prototype.nonPaged = function () {
+        }
+        nonPaged() {
             return new ViewingHint(ViewingHint.NONPAGED.toString());
-        };
-        ViewingHint.prototype.paged = function () {
+        }
+        paged() {
             return new ViewingHint(ViewingHint.PAGED.toString());
-        };
-        ViewingHint.prototype.top = function () {
+        }
+        top() {
             return new ViewingHint(ViewingHint.TOP.toString());
-        };
-        return ViewingHint;
-    }(Manifesto.StringValue));
+        }
+    }
     ViewingHint.CONTINUOUS = new ViewingHint("continuous");
     ViewingHint.EMPTY = new ViewingHint("");
     ViewingHint.INDIVIDUALS = new ViewingHint("individuals");
@@ -573,77 +434,69 @@ var Manifesto;
 
 var Manifesto;
 (function (Manifesto) {
-    var JSONLDResource = (function () {
-        function JSONLDResource(jsonld) {
+    class JSONLDResource {
+        constructor(jsonld) {
             this.__jsonld = jsonld;
-            this.context = this.getProperty('@context');
-            this.id = this.getProperty('@id');
+            this.context = this.getProperty('context');
+            this.id = this.getProperty('id');
         }
-        JSONLDResource.prototype.getProperty = function (name) {
+        getProperty(name) {
+            let prop = null;
             if (this.__jsonld) {
-                return this.__jsonld[name];
+                prop = this.__jsonld[name];
+                if (!prop) {
+                    // property may have a prepended '@'
+                    prop = this.__jsonld['@' + name];
+                }
             }
-            return null;
-        };
-        return JSONLDResource;
-    }());
+            return prop;
+        }
+    }
     Manifesto.JSONLDResource = JSONLDResource;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var ManifestResource = (function (_super) {
-        __extends(ManifestResource, _super);
-        function ManifestResource(jsonld, options) {
-            var _this = _super.call(this, jsonld) || this;
-            _this.options = options;
-            return _this;
+    class ManifestResource extends Manifesto.JSONLDResource {
+        constructor(jsonld, options) {
+            super(jsonld);
+            this.options = options;
         }
-        ManifestResource.prototype.getIIIFResourceType = function () {
+        getIIIFResourceType() {
             return new Manifesto.IIIFResourceType(this.getProperty('@type'));
-        };
-        ManifestResource.prototype.getLabel = function () {
+        }
+        getLabel() {
             return Manifesto.TranslationCollection.parse(this.getProperty('label'), this.options.locale);
-        };
-        ManifestResource.prototype.getMetadata = function () {
-            var _metadata = this.getProperty('metadata');
-            var metadata = [];
+        }
+        getMetadata() {
+            const _metadata = this.getProperty('metadata');
+            const metadata = [];
             if (!_metadata)
                 return metadata;
-            for (var i = 0; i < _metadata.length; i++) {
+            for (let i = 0; i < _metadata.length; i++) {
                 var item = _metadata[i];
                 var metadataItem = new Manifesto.MetadataItem(this.options.locale);
                 metadataItem.parse(item);
                 metadata.push(metadataItem);
             }
             return metadata;
-        };
-        ManifestResource.prototype.getRendering = function (format) {
-            var renderings = this.getRenderings();
+        }
+        getRendering(format) {
+            const renderings = this.getRenderings();
             // normalise format to string
             if (typeof (format) !== 'string') {
                 format = format.toString();
             }
-            for (var i = 0; i < renderings.length; i++) {
-                var rendering = renderings[i];
+            for (let i = 0; i < renderings.length; i++) {
+                const rendering = renderings[i];
                 if (rendering.getFormat().toString() === format) {
                     return rendering;
                 }
             }
             return null;
-        };
-        ManifestResource.prototype.getRenderings = function () {
-            var rendering;
+        }
+        getRenderings() {
+            let rendering;
             // if passing a manifesto-parsed object, use the __jsonld.rendering property,
             // otherwise look for a rendering property
             if (this.__jsonld) {
@@ -652,108 +505,84 @@ var Manifesto;
             else {
                 rendering = this.rendering;
             }
-            var renderings = [];
+            const renderings = [];
             if (!rendering)
                 return renderings;
             // coerce to array
             if (!Array.isArray(rendering)) {
                 rendering = [rendering];
             }
-            for (var i = 0; i < rendering.length; i++) {
-                var r = rendering[i];
+            for (let i = 0; i < rendering.length; i++) {
+                const r = rendering[i];
                 renderings.push(new Manifesto.Rendering(r, this.options));
             }
             return renderings;
-        };
-        ManifestResource.prototype.getService = function (profile) {
+        }
+        getService(profile) {
             return Manifesto.Utils.getService(this, profile);
-        };
-        ManifestResource.prototype.getServices = function () {
+        }
+        getServices() {
             return Manifesto.Utils.getServices(this);
-        };
-        ManifestResource.prototype.isAnnotation = function () {
+        }
+        isAnnotation() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.ANNOTATION.toString();
-        };
-        ManifestResource.prototype.isCanvas = function () {
+        }
+        isCanvas() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.CANVAS.toString();
-        };
-        ManifestResource.prototype.isCollection = function () {
+        }
+        isCollection() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.COLLECTION.toString();
-        };
-        ManifestResource.prototype.isManifest = function () {
+        }
+        isManifest() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.MANIFEST.toString();
-        };
-        ManifestResource.prototype.isRange = function () {
+        }
+        isRange() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.RANGE.toString();
-        };
-        ManifestResource.prototype.isSequence = function () {
+        }
+        isSequence() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.SEQUENCE.toString();
-        };
-        return ManifestResource;
-    }(Manifesto.JSONLDResource));
+        }
+    }
     Manifesto.ManifestResource = ManifestResource;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Element = (function (_super) {
-        __extends(Element, _super);
-        function Element(jsonld, options) {
-            return _super.call(this, jsonld, options) || this;
+    class Element extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
         }
-        Element.prototype.getResources = function () {
-            var resources = [];
+        getResources() {
+            const resources = [];
             if (!this.__jsonld.resources)
                 return resources;
-            for (var i = 0; i < this.__jsonld.resources.length; i++) {
-                var a = this.__jsonld.resources[i];
-                var annotation = new Manifesto.Annotation(a, this.options);
+            for (let i = 0; i < this.__jsonld.resources.length; i++) {
+                const a = this.__jsonld.resources[i];
+                const annotation = new Manifesto.Annotation(a, this.options);
                 resources.push(annotation);
             }
             return resources;
-        };
-        Element.prototype.getType = function () {
-            return new Manifesto.ElementType(this.getProperty('@type'));
-        };
-        return Element;
-    }(Manifesto.ManifestResource));
+        }
+        getType() {
+            return new Manifesto.ElementType(this.getProperty('type'));
+        }
+    }
     Manifesto.Element = Element;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Canvas = (function (_super) {
-        __extends(Canvas, _super);
-        function Canvas(jsonld, options) {
-            return _super.call(this, jsonld, options) || this;
+    class Canvas extends Manifesto.Element {
+        constructor(jsonld, options) {
+            super(jsonld, options);
         }
         // http://iiif.io/api/image/2.1/#canonical-uri-syntax
-        Canvas.prototype.getCanonicalImageUri = function (w) {
-            var id = null;
-            var region = 'full';
-            var rotation = 0;
-            var quality = 'default';
-            var width = w;
+        getCanonicalImageUri(w) {
+            let id = null;
+            const region = 'full';
+            const rotation = 0;
+            let quality = 'default';
+            let width = w;
             var size;
             // if an info.json has been loaded
             if (this.externalResource && this.externalResource.data && this.externalResource.data['@id']) {
@@ -794,21 +623,42 @@ var Manifesto;
             size = width + ',';
             var uri = [id, region, size, rotation, quality + '.jpg'].join('/');
             return uri;
-        };
-        Canvas.prototype.getImages = function () {
-            var images = [];
+        }
+        // Presentation API 3.0
+        getContent() {
+            const content = [];
+            if (!this.__jsonld.content)
+                return content;
+            // should be contained in an AnnotationPage
+            let annotationPage = null;
+            if (this.__jsonld.content.length) {
+                annotationPage = new Manifesto.AnnotationPage(this.__jsonld.content[0], this.options);
+            }
+            if (!annotationPage) {
+                return content;
+            }
+            const annotations = annotationPage.getItems();
+            for (let i = 0; i < annotations.length; i++) {
+                var a = annotations[i];
+                var annotation = new Manifesto.Annotation(a, this.options);
+                content.push(annotation);
+            }
+            return content;
+        }
+        getImages() {
+            const images = [];
             if (!this.__jsonld.images)
                 return images;
-            for (var i = 0; i < this.__jsonld.images.length; i++) {
+            for (let i = 0; i < this.__jsonld.images.length; i++) {
                 var a = this.__jsonld.images[i];
                 var annotation = new Manifesto.Annotation(a, this.options);
                 images.push(annotation);
             }
             return images;
-        };
-        Canvas.prototype.getIndex = function () {
+        }
+        getIndex() {
             return this.getProperty('index');
-        };
+        }
         // Prefer thumbnail service to image service if supplied and if
         // the thumbnail service can provide a satisfactory size +/- x pixels.
         // this is used to get thumb URIs *before* the info.json has been requested
@@ -841,102 +691,89 @@ var Manifesto;
         //getType(): CanvasType {
         //    return new CanvasType(this.getProperty('@type').toLowerCase());
         //}
-        Canvas.prototype.getWidth = function () {
+        getWidth() {
             return this.getProperty('width');
-        };
-        Canvas.prototype.getHeight = function () {
+        }
+        getHeight() {
             return this.getProperty('height');
-        };
-        return Canvas;
-    }(Manifesto.Element));
+        }
+    }
     Manifesto.Canvas = Canvas;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var IIIFResource = (function (_super) {
-        __extends(IIIFResource, _super);
-        function IIIFResource(jsonld, options) {
-            var _this = _super.call(this, jsonld, options) || this;
-            _this.index = -1;
-            _this.isLoaded = false;
-            var defaultOptions = {
+    class IIIFResource extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
+            this.index = -1;
+            this.isLoaded = false;
+            const defaultOptions = {
                 defaultLabel: '-',
                 locale: 'en-GB',
-                resource: _this,
+                resource: this,
                 pessimisticAccessControl: false
             };
-            _this.options = Object.assign(defaultOptions, options);
-            return _this;
+            this.options = Object.assign(defaultOptions, options);
         }
-        IIIFResource.prototype.getAttribution = function () {
-            var attribution = this.getProperty('attribution');
+        getAttribution() {
+            const attribution = this.getProperty('attribution');
             if (attribution) {
                 return Manifesto.TranslationCollection.parse(attribution, this.options.locale);
             }
             return [];
-        };
-        IIIFResource.prototype.getDescription = function () {
-            var description = this.getProperty('description');
+        }
+        getDescription() {
+            const description = this.getProperty('description');
             if (description) {
                 return Manifesto.TranslationCollection.parse(description, this.options.locale);
             }
             return [];
-        };
-        IIIFResource.prototype.getIIIFResourceType = function () {
+        }
+        getIIIFResourceType() {
             return new Manifesto.IIIFResourceType(this.getProperty('@type'));
-        };
-        IIIFResource.prototype.getLogo = function () {
-            var logo = this.getProperty('logo');
+        }
+        getLogo() {
+            const logo = this.getProperty('logo');
             if (!logo)
                 return null;
             if (typeof (logo) === 'string')
                 return logo;
             return logo['@id'];
-        };
-        IIIFResource.prototype.getLicense = function () {
+        }
+        getLicense() {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('license'), this.options.locale);
-        };
-        IIIFResource.prototype.getNavDate = function () {
+        }
+        getNavDate() {
             return new Date(this.getProperty('navDate'));
-        };
-        IIIFResource.prototype.getRelated = function () {
+        }
+        getRelated() {
             return this.getProperty('related');
-        };
-        IIIFResource.prototype.getSeeAlso = function () {
+        }
+        getSeeAlso() {
             return this.getProperty('seeAlso');
-        };
-        IIIFResource.prototype.getLabel = function () {
-            var label = this.getProperty('label');
+        }
+        getLabel() {
+            const label = this.getProperty('label');
             if (label) {
                 return Manifesto.TranslationCollection.parse(label, this.options.locale);
             }
             return [];
-        };
-        IIIFResource.prototype.getDefaultTree = function () {
+        }
+        getDefaultTree() {
             this.defaultTree = new Manifesto.TreeNode('root');
             this.defaultTree.data = this;
             return this.defaultTree;
-        };
-        IIIFResource.prototype.isCollection = function () {
+        }
+        isCollection() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.COLLECTION.toString();
-        };
-        IIIFResource.prototype.isManifest = function () {
+        }
+        isManifest() {
             return this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.MANIFEST.toString();
-        };
-        IIIFResource.prototype.load = function () {
-            var that = this;
-            return new Promise(function (resolve, reject) {
+        }
+        load() {
+            let that = this;
+            return new Promise((resolve, reject) => {
                 if (that.isLoaded) {
                     resolve(that);
                 }
@@ -952,95 +789,82 @@ var Manifesto;
                     });
                 }
             });
-        };
-        return IIIFResource;
-    }(Manifesto.ManifestResource));
+        }
+    }
     Manifesto.IIIFResource = IIIFResource;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Manifest = (function (_super) {
-        __extends(Manifest, _super);
-        function Manifest(jsonld, options) {
-            var _this = _super.call(this, jsonld, options) || this;
-            _this.index = 0;
-            _this._allRanges = null;
-            _this._sequences = null;
-            _this._topRanges = [];
-            if (_this.__jsonld.structures && _this.__jsonld.structures.length) {
-                var topRanges = _this._getTopRanges();
-                for (var i = 0; i < topRanges.length; i++) {
-                    var range = topRanges[i];
-                    _this._parseRanges(range, String(i));
+    class Manifest extends Manifesto.IIIFResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
+            this.index = 0;
+            this._allRanges = null;
+            this._sequences = null;
+            this._topRanges = [];
+            if (this.__jsonld.structures && this.__jsonld.structures.length) {
+                const topRanges = this._getTopRanges();
+                for (let i = 0; i < topRanges.length; i++) {
+                    const range = topRanges[i];
+                    this._parseRanges(range, String(i));
                 }
             }
-            return _this;
         }
-        Manifest.prototype.getDefaultTree = function () {
-            _super.prototype.getDefaultTree.call(this);
+        getDefaultTree() {
+            super.getDefaultTree();
             this.defaultTree.data.type = Manifesto.TreeNodeType.MANIFEST.toString();
             if (!this.isLoaded) {
                 return this.defaultTree;
             }
-            var topRanges = this.getTopRanges();
+            const topRanges = this.getTopRanges();
             // if there are any ranges in the manifest, default to the first 'top' range or generated placeholder
             if (topRanges.length) {
                 topRanges[0].getTree(this.defaultTree);
             }
             Manifesto.Utils.generateTreeNodeIds(this.defaultTree);
             return this.defaultTree;
-        };
-        Manifest.prototype._getTopRanges = function () {
-            var topRanges = [];
+        }
+        _getTopRanges() {
+            const topRanges = [];
             if (this.__jsonld.structures && this.__jsonld.structures.length) {
-                for (var i = 0; i < this.__jsonld.structures.length; i++) {
-                    var json = this.__jsonld.structures[i];
+                for (let i = 0; i < this.__jsonld.structures.length; i++) {
+                    const json = this.__jsonld.structures[i];
                     if (json.viewingHint === Manifesto.ViewingHint.TOP.toString()) {
                         topRanges.push(json);
                     }
                 }
                 // if no viewingHint="top" range was found, create a default one
                 if (!topRanges.length) {
-                    var range = {};
+                    const range = {};
                     range.ranges = this.__jsonld.structures;
                     topRanges.push(range);
                 }
             }
             return topRanges;
-        };
-        Manifest.prototype.getTopRanges = function () {
+        }
+        getTopRanges() {
             return this._topRanges;
-        };
-        Manifest.prototype._getRangeById = function (id) {
+        }
+        _getRangeById(id) {
             if (this.__jsonld.structures && this.__jsonld.structures.length) {
-                for (var i = 0; i < this.__jsonld.structures.length; i++) {
-                    var r = this.__jsonld.structures[i];
+                for (let i = 0; i < this.__jsonld.structures.length; i++) {
+                    const r = this.__jsonld.structures[i];
                     if (r['@id'] === id) {
                         return r;
                     }
                 }
             }
             return null;
-        };
+        }
         //private _parseRangeCanvas(json: any, range: IRange): void {
         // todo: currently this isn't needed
         //var canvas: IJSONLDResource = new JSONLDResource(json);
         //range.members.push(<IManifestResource>canvas);
         //}
-        Manifest.prototype._parseRanges = function (r, path, parentRange) {
-            var range;
-            var id = null;
+        _parseRanges(r, path, parentRange) {
+            let range;
+            let id = null;
             if (typeof (r) === 'string') {
                 id = r;
                 r = this._getRangeById(id);
@@ -1059,188 +883,171 @@ var Manifesto;
                 parentRange.members.push(range);
             }
             if (r.ranges) {
-                for (var i = 0; i < r.ranges.length; i++) {
+                for (let i = 0; i < r.ranges.length; i++) {
                     this._parseRanges(r.ranges[i], path + '/' + i, range);
                 }
             }
             if (r.members) {
-                var _loop_1 = function (i) {
-                    var child = r.members[i];
+                for (let i = 0; i < r.members.length; i++) {
+                    const child = r.members[i];
                     // only add to members if not already parsed from backwards-compatible ranges/canvases arrays
-                    if (r.members.en().where(function (m) { return m.id === child.id; }).first()) {
-                        return "continue";
+                    if (r.members.en().where(m => m.id === child.id).first()) {
+                        continue;
                     }
                     if (child['@type'].toLowerCase() === 'sc:range') {
-                        this_1._parseRanges(child, path + '/' + i, range);
+                        this._parseRanges(child, path + '/' + i, range);
                     }
-                };
-                var this_1 = this;
-                for (var i = 0; i < r.members.length; i++) {
-                    _loop_1(i);
                 }
             }
-        };
-        Manifest.prototype.getAllRanges = function () {
+        }
+        getAllRanges() {
             if (this._allRanges != null)
                 return this._allRanges;
             this._allRanges = [];
-            var topRanges = this.getTopRanges();
-            for (var i = 0; i < topRanges.length; i++) {
-                var topRange = topRanges[i];
+            const topRanges = this.getTopRanges();
+            for (let i = 0; i < topRanges.length; i++) {
+                const topRange = topRanges[i];
                 if (topRange.id) {
                     this._allRanges.push(topRange); // it might be a placeholder root range
                 }
-                var subRanges = topRange.getRanges();
-                this._allRanges = this._allRanges.concat(subRanges.en().traverseUnique(function (range) { return range.getRanges(); }).toArray());
+                const subRanges = topRange.getRanges();
+                this._allRanges = this._allRanges.concat(subRanges.en().traverseUnique(range => range.getRanges()).toArray());
             }
             return this._allRanges;
-        };
-        Manifest.prototype.getRangeById = function (id) {
-            var ranges = this.getAllRanges();
-            for (var i = 0; i < ranges.length; i++) {
-                var range = ranges[i];
+        }
+        getRangeById(id) {
+            const ranges = this.getAllRanges();
+            for (let i = 0; i < ranges.length; i++) {
+                const range = ranges[i];
                 if (range.id === id) {
                     return range;
                 }
             }
             return null;
-        };
-        Manifest.prototype.getRangeByPath = function (path) {
-            var ranges = this.getAllRanges();
-            for (var i = 0; i < ranges.length; i++) {
-                var range = ranges[i];
+        }
+        getRangeByPath(path) {
+            const ranges = this.getAllRanges();
+            for (let i = 0; i < ranges.length; i++) {
+                const range = ranges[i];
                 if (range.path === path) {
                     return range;
                 }
             }
             return null;
-        };
-        Manifest.prototype.getSequences = function () {
+        }
+        getSequences() {
             if (this._sequences !== null)
                 return this._sequences;
             this._sequences = [];
             // if IxIF mediaSequences is present, use that. Otherwise fall back to IIIF sequences.
-            var children = this.__jsonld.mediaSequences || this.__jsonld.sequences;
+            const children = this.__jsonld.mediaSequences || this.__jsonld.sequences;
             if (children) {
-                for (var i = 0; i < children.length; i++) {
-                    var s = children[i];
-                    var sequence = new Manifesto.Sequence(s, this.options);
+                for (let i = 0; i < children.length; i++) {
+                    const s = children[i];
+                    const sequence = new Manifesto.Sequence(s, this.options);
                     this._sequences.push(sequence);
                 }
             }
             return this._sequences;
-        };
-        Manifest.prototype.getSequenceByIndex = function (sequenceIndex) {
+        }
+        getSequenceByIndex(sequenceIndex) {
             return this.getSequences()[sequenceIndex];
-        };
-        Manifest.prototype.getTotalSequences = function () {
+        }
+        getTotalSequences() {
             return this.getSequences().length;
-        };
-        Manifest.prototype.getManifestType = function () {
-            var service = this.getService(Manifesto.ServiceProfile.UIEXTENSIONS);
+        }
+        getManifestType() {
+            const service = this.getService(Manifesto.ServiceProfile.UIEXTENSIONS);
             if (service) {
                 return new Manifesto.ManifestType(service.getProperty('manifestType'));
             }
             return new Manifesto.ManifestType('');
-        };
-        Manifest.prototype.getTrackingLabel = function () {
-            var service = this.getService(Manifesto.ServiceProfile.TRACKINGEXTENSIONS);
+        }
+        getTrackingLabel() {
+            const service = this.getService(Manifesto.ServiceProfile.TRACKINGEXTENSIONS);
             if (service) {
                 return service.getProperty('trackingLabel');
             }
             return '';
-        };
-        Manifest.prototype.isMultiSequence = function () {
+        }
+        isMultiSequence() {
             return this.getTotalSequences() > 1;
-        };
-        Manifest.prototype.isPagingEnabled = function () {
+        }
+        isPagingEnabled() {
             return this.getViewingHint().toString() === Manifesto.ViewingHint.PAGED.toString();
-        };
-        Manifest.prototype.getViewingDirection = function () {
+        }
+        getViewingDirection() {
             if (this.getProperty('viewingDirection')) {
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
             }
             return Manifesto.ViewingDirection.LEFTTORIGHT;
-        };
-        Manifest.prototype.getViewingHint = function () {
+        }
+        getViewingHint() {
             if (this.getProperty('viewingHint')) {
                 return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
             }
             return Manifesto.ViewingHint.EMPTY;
-        };
-        return Manifest;
-    }(Manifesto.IIIFResource));
+        }
+    }
     Manifesto.Manifest = Manifest;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Collection = (function (_super) {
-        __extends(Collection, _super);
-        function Collection(jsonld, options) {
-            var _this = _super.call(this, jsonld, options) || this;
-            _this.members = [];
-            _this._collections = null;
-            _this._manifests = null;
-            jsonld.__collection = _this;
-            return _this;
+    class Collection extends Manifesto.IIIFResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
+            this.members = [];
+            this._collections = null;
+            this._manifests = null;
+            jsonld.__collection = this;
         }
-        Collection.prototype.getCollections = function () {
+        getCollections() {
             if (this._collections) {
                 return this._collections;
             }
-            return this._collections = this.members.en().where(function (m) { return m.isCollection(); }).toArray();
-        };
-        Collection.prototype.getManifests = function () {
+            return this._collections = this.members.en().where(m => m.isCollection()).toArray();
+        }
+        getManifests() {
             if (this._manifests) {
                 return this._manifests;
             }
-            return this._manifests = this.members.en().where(function (m) { return m.isManifest(); }).toArray();
-        };
-        Collection.prototype.getCollectionByIndex = function (collectionIndex) {
-            var collection = this.getCollections()[collectionIndex];
+            return this._manifests = this.members.en().where(m => m.isManifest()).toArray();
+        }
+        getCollectionByIndex(collectionIndex) {
+            const collection = this.getCollections()[collectionIndex];
             collection.options.index = collectionIndex;
             // id for collection MUST be dereferenceable
             return collection.load();
-        };
-        Collection.prototype.getManifestByIndex = function (manifestIndex) {
-            var manifest = this.getManifests()[manifestIndex];
+        }
+        getManifestByIndex(manifestIndex) {
+            const manifest = this.getManifests()[manifestIndex];
             manifest.options.index = manifestIndex;
             return manifest.load();
-        };
-        Collection.prototype.getTotalCollections = function () {
+        }
+        getTotalCollections() {
             return this.getCollections().length;
-        };
-        Collection.prototype.getTotalManifests = function () {
+        }
+        getTotalManifests() {
             return this.getManifests().length;
-        };
-        Collection.prototype.getTotalMembers = function () {
+        }
+        getTotalMembers() {
             return this.members.length;
-        };
+        }
         /**
          * Get a tree of sub collections and manifests, using each child manifest's first 'top' range.
          */
-        Collection.prototype.getDefaultTree = function () {
-            _super.prototype.getDefaultTree.call(this);
+        getDefaultTree() {
+            super.getDefaultTree();
             this.defaultTree.data.type = Manifesto.TreeNodeType.COLLECTION.toString();
             this._parseManifests(this);
             this._parseCollections(this);
             Manifesto.Utils.generateTreeNodeIds(this.defaultTree);
             return this.defaultTree;
-        };
-        Collection.prototype._parseManifests = function (parentCollection) {
+        }
+        _parseManifests(parentCollection) {
             if (parentCollection.getManifests() && parentCollection.getManifests().length) {
-                for (var i = 0; i < parentCollection.getManifests().length; i++) {
+                for (let i = 0; i < parentCollection.getManifests().length; i++) {
                     var manifest = parentCollection.getManifests()[i];
                     var tree = manifest.getDefaultTree();
                     tree.label = manifest.parentLabel || Manifesto.TranslationCollection.getValue(manifest.getLabel(), this.options.locale) || 'manifest ' + (i + 1);
@@ -1250,10 +1057,10 @@ var Manifesto;
                     parentCollection.defaultTree.addNode(tree);
                 }
             }
-        };
-        Collection.prototype._parseCollections = function (parentCollection) {
+        }
+        _parseCollections(parentCollection) {
             if (parentCollection.getCollections() && parentCollection.getCollections().length) {
-                for (var i = 0; i < parentCollection.getCollections().length; i++) {
+                for (let i = 0; i < parentCollection.getCollections().length; i++) {
                     var collection = parentCollection.getCollections()[i];
                     var tree = collection.getDefaultTree();
                     tree.label = collection.parentLabel || Manifesto.TranslationCollection.getValue(collection.getLabel(), this.options.locale) || 'collection ' + (i + 1);
@@ -1264,150 +1071,112 @@ var Manifesto;
                     this._parseCollections(collection);
                 }
             }
-        };
-        return Collection;
-    }(Manifesto.IIIFResource));
+        }
+    }
     Manifesto.Collection = Collection;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Range = (function (_super) {
-        __extends(Range, _super);
-        function Range(jsonld, options) {
-            var _this = _super.call(this, jsonld, options) || this;
-            _this._canvases = null;
-            _this._ranges = null;
-            _this.members = [];
-            return _this;
+    class Range extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
+            this._canvases = null;
+            this._ranges = null;
+            this.members = [];
         }
-        Range.prototype.getCanvasIds = function () {
+        getCanvasIds() {
             if (this.__jsonld.canvases) {
                 return this.__jsonld.canvases;
             }
             return [];
-        };
-        Range.prototype.getCanvases = function () {
+        }
+        getCanvases() {
             if (this._canvases) {
                 return this._canvases;
             }
-            return this._canvases = this.members.en().where(function (m) { return m.isCanvas(); }).toArray();
-        };
-        Range.prototype.getRanges = function () {
+            return this._canvases = this.members.en().where(m => m.isCanvas()).toArray();
+        }
+        getRanges() {
             if (this._ranges) {
                 return this._ranges;
             }
-            return this._ranges = this.members.en().where(function (m) { return m.isRange(); }).toArray();
-        };
-        Range.prototype.getViewingDirection = function () {
+            return this._ranges = this.members.en().where(m => m.isRange()).toArray();
+        }
+        getViewingDirection() {
             if (this.getProperty('viewingDirection')) {
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
             }
             return null;
-        };
-        Range.prototype.getViewingHint = function () {
+        }
+        getViewingHint() {
             if (this.getProperty('viewingHint')) {
                 return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
             }
             return null;
-        };
-        Range.prototype.getTree = function (treeRoot) {
+        }
+        getTree(treeRoot) {
             treeRoot.data = this;
             this.treeNode = treeRoot;
             var ranges = this.getRanges();
             if (ranges && ranges.length) {
-                for (var i = 0; i < ranges.length; i++) {
-                    var range = ranges[i];
-                    var node = new Manifesto.TreeNode();
+                for (let i = 0; i < ranges.length; i++) {
+                    const range = ranges[i];
+                    const node = new Manifesto.TreeNode();
                     treeRoot.addNode(node);
                     this._parseTreeNode(node, range);
                 }
             }
             Manifesto.Utils.generateTreeNodeIds(treeRoot);
             return treeRoot;
-        };
-        Range.prototype._parseTreeNode = function (node, range) {
+        }
+        _parseTreeNode(node, range) {
             node.label = Manifesto.TranslationCollection.getValue(range.getLabel(), this.options.locale);
             node.data = range;
             node.data.type = Manifesto.TreeNodeType.RANGE.toString();
             range.treeNode = node;
-            var ranges = range.getRanges();
+            const ranges = range.getRanges();
             if (ranges && ranges.length) {
-                for (var i = 0; i < ranges.length; i++) {
-                    var childRange = ranges[i];
-                    var childNode = new Manifesto.TreeNode();
+                for (let i = 0; i < ranges.length; i++) {
+                    const childRange = ranges[i];
+                    const childNode = new Manifesto.TreeNode();
                     node.addNode(childNode);
                     this._parseTreeNode(childNode, childRange);
                 }
             }
-        };
-        return Range;
-    }(Manifesto.ManifestResource));
+        }
+    }
     Manifesto.Range = Range;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Rendering = (function (_super) {
-        __extends(Rendering, _super);
-        function Rendering(jsonld, options) {
-            return _super.call(this, jsonld, options) || this;
+    class Rendering extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
         }
-        Rendering.prototype.getFormat = function () {
+        getFormat() {
             return new Manifesto.RenderingFormat(this.getProperty('format'));
-        };
-        return Rendering;
-    }(Manifesto.ManifestResource));
+        }
+    }
     Manifesto.Rendering = Rendering;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Sequence = (function (_super) {
-        __extends(Sequence, _super);
-        function Sequence(jsonld, options) {
-            var _this = _super.call(this, jsonld, options) || this;
-            _this.canvases = null;
-            return _this;
+    class Sequence extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
+            this.canvases = null;
         }
-        Sequence.prototype.getCanvases = function () {
+        getCanvases() {
             if (this.canvases != null)
                 return this.canvases;
             this.canvases = [];
             // if IxIF elements are present, use them. Otherwise fall back to IIIF canvases.
-            var children = this.__jsonld.elements || this.__jsonld.canvases;
+            const children = this.__jsonld.elements || this.__jsonld.canvases;
             if (children) {
-                for (var i = 0; i < children.length; i++) {
+                for (let i = 0; i < children.length; i++) {
                     var c = children[i];
                     var canvas = new Manifesto.Canvas(c, this.options);
                     canvas.index = i;
@@ -1415,29 +1184,29 @@ var Manifesto;
                 }
             }
             return this.canvases;
-        };
-        Sequence.prototype.getCanvasById = function (id) {
-            for (var i = 0; i < this.getTotalCanvases(); i++) {
-                var canvas = this.getCanvasByIndex(i);
+        }
+        getCanvasById(id) {
+            for (let i = 0; i < this.getTotalCanvases(); i++) {
+                const canvas = this.getCanvasByIndex(i);
                 if (canvas.id === id) {
                     return canvas;
                 }
             }
             return null;
-        };
-        Sequence.prototype.getCanvasByIndex = function (canvasIndex) {
+        }
+        getCanvasByIndex(canvasIndex) {
             return this.getCanvases()[canvasIndex];
-        };
-        Sequence.prototype.getCanvasIndexById = function (id) {
-            for (var i = 0; i < this.getTotalCanvases(); i++) {
-                var canvas = this.getCanvasByIndex(i);
+        }
+        getCanvasIndexById(id) {
+            for (let i = 0; i < this.getTotalCanvases(); i++) {
+                const canvas = this.getCanvasByIndex(i);
                 if (canvas.id === id) {
                     return i;
                 }
             }
             return null;
-        };
-        Sequence.prototype.getCanvasIndexByLabel = function (label, foliated) {
+        }
+        getCanvasIndexByLabel(label, foliated) {
             label = label.trim();
             if (!isNaN(label)) {
                 label = parseInt(label, 10).toString(); // trim any preceding zeros.
@@ -1446,8 +1215,8 @@ var Manifesto;
             }
             var doublePageRegExp = /(\d*)\D+(\d*)/;
             var match, regExp, regStr, labelPart1, labelPart2;
-            for (var i = 0; i < this.getTotalCanvases(); i++) {
-                var canvas = this.getCanvasByIndex(i);
+            for (let i = 0; i < this.getTotalCanvases(); i++) {
+                const canvas = this.getCanvasByIndex(i);
                 // check if there's a literal match
                 if (Manifesto.TranslationCollection.getValue(canvas.getLabel(), this.options.locale) === label) {
                     return i;
@@ -1467,11 +1236,11 @@ var Manifesto;
                 }
             }
             return -1;
-        };
-        Sequence.prototype.getLastCanvasLabel = function (alphanumeric) {
-            for (var i = this.getTotalCanvases() - 1; i >= 0; i--) {
-                var canvas = this.getCanvasByIndex(i);
-                var label = Manifesto.TranslationCollection.getValue(canvas.getLabel(), this.options.locale);
+        }
+        getLastCanvasLabel(alphanumeric) {
+            for (let i = this.getTotalCanvases() - 1; i >= 0; i--) {
+                const canvas = this.getCanvasByIndex(i);
+                const label = Manifesto.TranslationCollection.getValue(canvas.getLabel(), this.options.locale);
                 if (alphanumeric) {
                     var regExp = /^[a-zA-Z0-9]*$/;
                     if (regExp.test(label)) {
@@ -1483,14 +1252,14 @@ var Manifesto;
                 }
             }
             return this.options.defaultLabel;
-        };
-        Sequence.prototype.getLastPageIndex = function () {
+        }
+        getLastPageIndex() {
             return this.getTotalCanvases() - 1;
-        };
-        Sequence.prototype.getNextPageIndex = function (canvasIndex, pagingEnabled) {
-            var index;
+        }
+        getNextPageIndex(canvasIndex, pagingEnabled) {
+            let index;
             if (pagingEnabled) {
-                var indices = this.getPagedIndices(canvasIndex);
+                const indices = this.getPagedIndices(canvasIndex);
                 if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
                     index = indices[0] + 1;
                 }
@@ -1505,9 +1274,9 @@ var Manifesto;
                 return -1;
             }
             return index;
-        };
-        Sequence.prototype.getPagedIndices = function (canvasIndex, pagingEnabled) {
-            var indices = [];
+        }
+        getPagedIndices(canvasIndex, pagingEnabled) {
+            let indices = [];
             if (!pagingEnabled) {
                 indices.push(canvasIndex);
             }
@@ -1526,11 +1295,11 @@ var Manifesto;
                 }
             }
             return indices;
-        };
-        Sequence.prototype.getPrevPageIndex = function (canvasIndex, pagingEnabled) {
-            var index;
+        }
+        getPrevPageIndex(canvasIndex, pagingEnabled) {
+            let index;
             if (pagingEnabled) {
-                var indices = this.getPagedIndices(canvasIndex);
+                const indices = this.getPagedIndices(canvasIndex);
                 if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
                     index = indices[indices.length - 1] - 1;
                 }
@@ -1542,12 +1311,12 @@ var Manifesto;
                 index = canvasIndex - 1;
             }
             return index;
-        };
-        Sequence.prototype.getStartCanvasIndex = function () {
-            var startCanvas = this.getStartCanvas();
+        }
+        getStartCanvasIndex() {
+            const startCanvas = this.getStartCanvas();
             if (startCanvas) {
                 // if there's a startCanvas attribute, loop through the canvases and return the matching index.
-                for (var i = 0; i < this.getTotalCanvases(); i++) {
+                for (let i = 0; i < this.getTotalCanvases(); i++) {
                     var canvas = this.getCanvasByIndex(i);
                     if (canvas.id === startCanvas)
                         return i;
@@ -1555,23 +1324,23 @@ var Manifesto;
             }
             // default to first canvas.
             return 0;
-        };
-        Sequence.prototype.getThumbs = function (width, height) {
-            var thumbs = [];
-            var totalCanvases = this.getTotalCanvases();
-            for (var i = 0; i < totalCanvases; i++) {
+        }
+        getThumbs(width, height) {
+            const thumbs = [];
+            const totalCanvases = this.getTotalCanvases();
+            for (let i = 0; i < totalCanvases; i++) {
                 var canvas = this.getCanvasByIndex(i);
                 thumbs.push(new Manifesto.Thumb(width, canvas));
             }
             return thumbs;
-        };
-        Sequence.prototype.getStartCanvas = function () {
+        }
+        getStartCanvas() {
             return this.getProperty('startCanvas');
-        };
-        Sequence.prototype.getTotalCanvases = function () {
+        }
+        getTotalCanvases() {
             return this.getCanvases().length;
-        };
-        Sequence.prototype.getViewingDirection = function () {
+        }
+        getViewingDirection() {
             if (this.getProperty('viewingDirection')) {
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
             }
@@ -1579,73 +1348,85 @@ var Manifesto;
                 return this.options.resource.getViewingDirection();
             }
             return Manifesto.ViewingDirection.LEFTTORIGHT;
-        };
-        Sequence.prototype.getViewingHint = function () {
+        }
+        getViewingHint() {
             if (this.getProperty('viewingHint')) {
                 return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
             }
             return Manifesto.ViewingHint.EMPTY;
-        };
-        Sequence.prototype.isCanvasIndexOutOfRange = function (canvasIndex) {
+        }
+        isCanvasIndexOutOfRange(canvasIndex) {
             return canvasIndex > this.getTotalCanvases() - 1;
-        };
-        Sequence.prototype.isFirstCanvas = function (canvasIndex) {
+        }
+        isFirstCanvas(canvasIndex) {
             return canvasIndex === 0;
-        };
-        Sequence.prototype.isLastCanvas = function (canvasIndex) {
+        }
+        isLastCanvas(canvasIndex) {
             return canvasIndex === this.getTotalCanvases() - 1;
-        };
-        Sequence.prototype.isMultiCanvas = function () {
+        }
+        isMultiCanvas() {
             return this.getTotalCanvases() > 1;
-        };
-        Sequence.prototype.isPagingEnabled = function () {
+        }
+        isPagingEnabled() {
             return this.getViewingHint().toString() === Manifesto.ViewingHint.PAGED.toString();
-        };
+        }
         // checks if the number of canvases is even - therefore has a front and back cover
-        Sequence.prototype.isTotalCanvasesEven = function () {
+        isTotalCanvasesEven() {
             return this.getTotalCanvases() % 2 === 0;
-        };
-        return Sequence;
-    }(Manifesto.ManifestResource));
+        }
+    }
     Manifesto.Sequence = Sequence;
 })(Manifesto || (Manifesto = {}));
 
 var Manifesto;
 (function (Manifesto) {
-    var Deserialiser = (function () {
-        function Deserialiser() {
-        }
-        Deserialiser.parse = function (manifest, options) {
+    class Deserialiser {
+        static parse(manifest, options) {
             if (typeof manifest === 'string') {
                 manifest = JSON.parse(manifest);
             }
             return this.parseJson(manifest, options);
-        };
-        Deserialiser.parseJson = function (json, options) {
-            var resource;
+        }
+        static parseJson(json, options) {
+            let resource;
             // have options been passed for the manifest to inherit?
             if (options) {
                 if (options.navDate && !isNaN(options.navDate.getTime())) {
                     json.navDate = options.navDate.toString();
                 }
             }
-            switch (json['@type']) {
-                case 'sc:Collection':
-                    resource = this.parseCollection(json, options);
-                    break;
-                case 'sc:Manifest':
-                    resource = this.parseManifest(json, options);
-                    break;
-                default:
-                    return null;
+            if (json['@type']) {
+                switch (json['@type']) {
+                    case 'sc:Collection':
+                        resource = this.parseCollection(json, options);
+                        break;
+                    case 'sc:Manifest':
+                        resource = this.parseManifest(json, options);
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else {
+                // presentation 3
+                switch (json['type']) {
+                    case 'Collection':
+                        resource = this.parseCollection(json, options);
+                        break;
+                    case 'Manifest':
+                        resource = this.parseManifest(json, options);
+                        break;
+                    default:
+                        return null;
+                }
             }
             // Top-level resource was loaded from a URI, so flag it to prevent
             // unnecessary reload:
             resource.isLoaded = true;
             return resource;
-        };
-        Deserialiser.parseCollection = function (json, options) {
-            var collection = new Manifesto.Collection(json, options);
+        }
+        static parseCollection(json, options) {
+            const collection = new Manifesto.Collection(json, options);
             if (options) {
                 collection.index = options.index || 0;
             }
@@ -1656,37 +1437,37 @@ var Manifesto;
             this.parseManifests(collection, options);
             this.parseMembers(collection, options);
             return collection;
-        };
-        Deserialiser.parseCollections = function (collection, options) {
-            var children = collection.__jsonld.collections;
+        }
+        static parseCollections(collection, options) {
+            const children = collection.__jsonld.collections;
             if (children) {
-                for (var i = 0; i < children.length; i++) {
+                for (let i = 0; i < children.length; i++) {
                     if (options) {
                         options.index = i;
                     }
-                    var child = this.parseCollection(children[i], options);
+                    const child = this.parseCollection(children[i], options);
                     child.index = i;
                     child.parentCollection = collection;
                     collection.members.push(child);
                 }
             }
-        };
-        Deserialiser.parseManifest = function (json, options) {
-            var manifest = new Manifesto.Manifest(json, options);
+        }
+        static parseManifest(json, options) {
+            const manifest = new Manifesto.Manifest(json, options);
             return manifest;
-        };
-        Deserialiser.parseManifests = function (collection, options) {
-            var children = collection.__jsonld.manifests;
+        }
+        static parseManifests(collection, options) {
+            const children = collection.__jsonld.manifests;
             if (children) {
-                for (var i = 0; i < children.length; i++) {
-                    var child = this.parseManifest(children[i], options);
+                for (let i = 0; i < children.length; i++) {
+                    const child = this.parseManifest(children[i], options);
                     child.index = i;
                     child.parentCollection = collection;
                     collection.members.push(child);
                 }
             }
-        };
-        Deserialiser.parseMember = function (json, options) {
+        }
+        static parseMember(json, options) {
             if (json['@type'].toLowerCase() === 'sc:manifest') {
                 return this.parseManifest(json, options);
             }
@@ -1694,11 +1475,11 @@ var Manifesto;
                 return this.parseCollection(json, options);
             }
             return null;
-        };
-        Deserialiser.parseMembers = function (collection, options) {
-            var children = collection.__jsonld.members;
+        }
+        static parseMembers(collection, options) {
+            const children = collection.__jsonld.members;
             if (children) {
-                for (var i = 0; i < children.length; i++) {
+                for (let i = 0; i < children.length; i++) {
                     if (options) {
                         options.index = i;
                     }
@@ -1706,7 +1487,7 @@ var Manifesto;
                     if (!child)
                         return;
                     // only add to members if not already parsed from backwards-compatible collections/manifests arrays
-                    if (collection.members.en().where(function (m) { return m.id === child.id; }).first()) {
+                    if (collection.members.en().where(m => m.id === child.id).first()) {
                         continue;
                     }
                     child.index = i;
@@ -1714,41 +1495,26 @@ var Manifesto;
                     collection.members.push(child);
                 }
             }
-        };
-        return Deserialiser;
-    }());
-    Manifesto.Deserialiser = Deserialiser;
-    var Serialiser = (function () {
-        function Serialiser() {
         }
-        Serialiser.serialise = function (manifest) {
+    }
+    Manifesto.Deserialiser = Deserialiser;
+    class Serialiser {
+        static serialise(manifest) {
             // todo
             return "";
-        };
-        return Serialiser;
-    }());
+        }
+    }
     Manifesto.Serialiser = Serialiser;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Service = (function (_super) {
-        __extends(Service, _super);
-        function Service(jsonld, options) {
-            return _super.call(this, jsonld, options) || this;
+    class Service extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
         }
-        Service.prototype.getProfile = function () {
-            var profile = this.getProperty('profile');
+        getProfile() {
+            let profile = this.getProperty('profile');
             if (!profile) {
                 profile = this.getProperty('dcterms:conformsTo');
             }
@@ -1756,38 +1522,46 @@ var Manifesto;
                 return new Manifesto.ServiceProfile(profile[0]);
             }
             return new Manifesto.ServiceProfile(profile);
-        };
-        Service.prototype.getDescription = function () {
+        }
+        getConfirmLabel() {
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('confirmLabel'), this.options.locale);
+        }
+        getDescription() {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('description'), this.options.locale);
-        };
-        Service.prototype.getFailureHeader = function () {
-            return Manifesto.Utils.getLocalisedValue(this.getProperty('failureHeader'), this.options.locale);
-        };
-        Service.prototype.getFailureDescription = function () {
+        }
+        getFailureDescription() {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('failureDescription'), this.options.locale);
-        };
-        Service.prototype.getInfoUri = function () {
-            var infoUri = this.id;
+        }
+        getFailureHeader() {
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('failureHeader'), this.options.locale);
+        }
+        getHeader() {
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('header'), this.options.locale);
+        }
+        getServiceLabel() {
+            return Manifesto.Utils.getLocalisedValue(this.getProperty('label'), this.options.locale);
+        }
+        getInfoUri() {
+            let infoUri = this.id;
             if (!infoUri.endsWith('/')) {
                 infoUri += '/';
             }
             infoUri += 'info.json';
             return infoUri;
-        };
-        return Service;
-    }(Manifesto.ManifestResource));
+        }
+    }
     Manifesto.Service = Service;
 })(Manifesto || (Manifesto = {}));
 
 
 var Manifesto;
 (function (Manifesto) {
-    var Thumb = (function () {
-        function Thumb(width, canvas) {
+    class Thumb {
+        constructor(width, canvas) {
             this.data = canvas;
             this.index = canvas.index;
             this.width = width;
-            var heightRatio = canvas.getHeight() / canvas.getWidth();
+            const heightRatio = canvas.getHeight() / canvas.getWidth();
             if (heightRatio) {
                 this.height = Math.floor(this.width * heightRatio);
             }
@@ -1797,67 +1571,50 @@ var Manifesto;
             this.uri = canvas.getCanonicalImageUri(width);
             this.label = Manifesto.TranslationCollection.getValue(canvas.getLabel()); // todo: pass locale?
         }
-        return Thumb;
-    }());
+    }
     Manifesto.Thumb = Thumb;
 })(Manifesto || (Manifesto = {}));
 
 
 var Manifesto;
 (function (Manifesto) {
-    var TreeNode = (function () {
-        function TreeNode(label, data) {
+    class TreeNode {
+        constructor(label, data) {
             this.label = label;
             this.data = data || {};
             this.nodes = [];
         }
-        TreeNode.prototype.addNode = function (node) {
+        addNode(node) {
             this.nodes.push(node);
             node.parentNode = this;
-        };
-        TreeNode.prototype.isCollection = function () {
+        }
+        isCollection() {
             return this.data.type === Manifesto.TreeNodeType.COLLECTION.toString();
-        };
-        TreeNode.prototype.isManifest = function () {
+        }
+        isManifest() {
             return this.data.type === Manifesto.TreeNodeType.MANIFEST.toString();
-        };
-        TreeNode.prototype.isRange = function () {
+        }
+        isRange() {
             return this.data.type === Manifesto.TreeNodeType.RANGE.toString();
-        };
-        return TreeNode;
-    }());
+        }
+    }
     Manifesto.TreeNode = TreeNode;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var TreeNodeType = (function (_super) {
-        __extends(TreeNodeType, _super);
-        function TreeNodeType() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
+    class TreeNodeType extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
-        TreeNodeType.prototype.collection = function () {
+        collection() {
             return new TreeNodeType(TreeNodeType.COLLECTION.toString());
-        };
-        TreeNodeType.prototype.manifest = function () {
+        }
+        manifest() {
             return new TreeNodeType(TreeNodeType.MANIFEST.toString());
-        };
-        TreeNodeType.prototype.range = function () {
+        }
+        range() {
             return new TreeNodeType(TreeNodeType.RANGE.toString());
-        };
-        return TreeNodeType;
-    }(Manifesto.StringValue));
+        }
+    }
     TreeNodeType.COLLECTION = new TreeNodeType("sc:collection");
     TreeNodeType.MANIFEST = new TreeNodeType("sc:manifest");
     TreeNodeType.RANGE = new TreeNodeType("sc:range");
@@ -1872,43 +1629,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
-    return { next: verb(0), "throw": verb(1), "return": verb(2) };
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var http = require("http");
 var https = require("https");
 var url = require("url");
 var Manifesto;
 (function (Manifesto) {
-    var Utils = (function () {
-        function Utils() {
+    class Utils {
+        static getResourceFormat(format) {
+            format = format.toLowerCase();
+            format = format.split(';')[0];
+            return format.trim();
         }
-        Utils.getImageQuality = function (profile) {
-            var p = profile.toString();
+        static getImageQuality(profile) {
+            const p = profile.toString();
             if (p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
                 p === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
                 p === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
@@ -1924,29 +1657,29 @@ var Manifesto;
                 return 'native';
             }
             return 'default';
-        };
-        Utils.getInexactLocale = function (locale) {
+        }
+        static getInexactLocale(locale) {
             if (locale.indexOf('-') !== -1) {
                 return locale.substr(0, locale.indexOf('-'));
             }
             return locale;
-        };
-        Utils.getLocalisedValue = function (resource, locale) {
+        }
+        static getLocalisedValue(resource, locale) {
             // if the resource is not an array of translations, return the string.
             if (!Array.isArray(resource)) {
                 return resource;
             }
             // test for exact match
-            for (var i = 0; i < resource.length; i++) {
-                var value_1 = resource[i];
-                var language_1 = value_1['@language'];
-                if (locale === language_1) {
-                    return value_1['@value'];
+            for (let i = 0; i < resource.length; i++) {
+                const value = resource[i];
+                const language = value['@language'];
+                if (locale === language) {
+                    return value['@value'];
                 }
             }
             // test for inexact match
-            var match = locale.substr(0, locale.indexOf('-'));
-            for (var i = 0; i < resource.length; i++) {
+            const match = locale.substr(0, locale.indexOf('-'));
+            for (let i = 0; i < resource.length; i++) {
                 var value = resource[i];
                 var language = value['@language'];
                 if (language === match) {
@@ -1954,10 +1687,9 @@ var Manifesto;
                 }
             }
             return null;
-        };
-        Utils.generateTreeNodeIds = function (treeNode, index) {
-            if (index === void 0) { index = 0; }
-            var id;
+        }
+        static generateTreeNodeIds(treeNode, index = 0) {
+            let id;
             if (!treeNode.parentNode) {
                 id = '0';
             }
@@ -1965,12 +1697,12 @@ var Manifesto;
                 id = treeNode.parentNode.id + "-" + index;
             }
             treeNode.id = id;
-            for (var i = 0; i < treeNode.nodes.length; i++) {
+            for (let i = 0; i < treeNode.nodes.length; i++) {
                 var n = treeNode.nodes[i];
                 Utils.generateTreeNodeIds(n, i);
             }
-        };
-        Utils.isImageProfile = function (profile) {
+        }
+        static isImageProfile(profile) {
             if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
@@ -1998,8 +1730,8 @@ var Manifesto;
                 return true;
             }
             return false;
-        };
-        Utils.isLevel0ImageProfile = function (profile) {
+        }
+        static isLevel0ImageProfile(profile) {
             if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE0.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE0.toString() ||
@@ -2011,8 +1743,8 @@ var Manifesto;
                 return true;
             }
             return false;
-        };
-        Utils.isLevel1ImageProfile = function (profile) {
+        }
+        static isLevel1ImageProfile(profile) {
             if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString() ||
@@ -2024,8 +1756,8 @@ var Manifesto;
                 return true;
             }
             return false;
-        };
-        Utils.isLevel2ImageProfile = function (profile) {
+        }
+        static isLevel2ImageProfile(profile) {
             if (profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString() ||
                 profile.toString() === Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString() ||
@@ -2037,10 +1769,10 @@ var Manifesto;
                 return true;
             }
             return false;
-        };
-        Utils.loadResource = function (uri) {
-            return new Promise(function (resolve, reject) {
-                var u = url.parse(uri);
+        }
+        static loadResource(uri) {
+            return new Promise((resolve, reject) => {
+                const u = url.parse(uri);
                 var request;
                 var opts = {
                     host: u.hostname,
@@ -2050,174 +1782,161 @@ var Manifesto;
                     withCredentials: false
                 };
                 if (u.protocol === 'https:') {
-                    request = https.request(opts, function (response) {
+                    request = https.request(opts, (response) => {
                         var result = "";
-                        response.on('data', function (chunk) {
+                        response.on('data', (chunk) => {
                             result += chunk;
                         });
-                        response.on('end', function () {
+                        response.on('end', () => {
                             resolve(result);
                         });
                     });
                 }
                 else {
-                    request = http.request(opts, function (response) {
+                    request = http.request(opts, (response) => {
                         var result = "";
-                        response.on('data', function (chunk) {
+                        response.on('data', (chunk) => {
                             result += chunk;
                         });
-                        response.on('end', function () {
+                        response.on('end', () => {
                             resolve(result);
                         });
                     });
                 }
-                request.on('error', function (error) {
+                request.on('error', (error) => {
                     reject(error);
                 });
                 request.end();
             });
-        };
-        Utils.loadExternalResourceAuth1 = function (resource, openContentProviderWindow, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages) {
-            return new Promise(function (resolve, reject) {
-                resource.getData().then(function () {
-                    if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY || resource.status === HTTPStatusCode.UNAUTHORIZED) {
-                        Utils.doAuthChain(resource, openContentProviderWindow, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages);
-                    }
-                })["catch"](function (error) {
-                    reject(Utils.createAuthorizationFailedError());
+        }
+        static loadExternalResourcesAuth1(resources, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
+            return new Promise((resolve, reject) => {
+                const promises = resources.map((resource) => {
+                    return Utils.loadExternalResourceAuth1(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages);
+                });
+                Promise.all(promises)
+                    .then(() => {
+                    resolve(resources);
+                })["catch"]((error) => {
+                    reject(error);
                 });
             });
-        };
-        Utils.doAuthChain = function (resource, openContentProviderWindow, userInteractionWithContentProvider, getContentProviderWindow, showOutOfOptionsMessages) {
-            return __awaiter(this, void 0, void 0, function () {
-                var serviceToTry, lastAttempted, requestedId, success, kioskWindow, success, contentProviderWindow, success, contentProviderWindow, success;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            // This function enters the flowchart at the < External? > junction
-                            // http://iiif.io/api/auth/1.0/#workflow-from-the-browser-client-perspective
-                            if (!resource.isAccessControlled()) {
-                                return [2 /*return*/]; // no services found
-                            }
-                            serviceToTry = null;
-                            lastAttempted = null;
-                            requestedId = resource.dataUri;
-                            // repetition of logic is left in these steps for clarity:
-                            // Looking for external pattern
-                            serviceToTry = resource.externalService;
-                            if (!serviceToTry) return [3 /*break*/, 2];
-                            lastAttempted = serviceToTry;
-                            return [4 /*yield*/, Utils.attemptResourceWithToken(serviceToTry, requestedId)];
-                        case 1:
-                            success = _a.sent();
-                            if (success)
-                                return [2 /*return*/];
-                            _a.label = 2;
-                        case 2:
-                            // Looking for kiosk pattern
-                            serviceToTry = resource.kioskService;
-                            if (!serviceToTry) return [3 /*break*/, 5];
-                            lastAttempted = serviceToTry;
-                            kioskWindow = openContentProviderWindow(serviceToTry);
-                            if (!kioskWindow) return [3 /*break*/, 5];
-                            return [4 /*yield*/, userInteractionWithContentProvider(kioskWindow)];
-                        case 3:
-                            _a.sent();
-                            return [4 /*yield*/, Utils.attemptResourceWithToken(serviceToTry, requestedId)];
-                        case 4:
-                            success = _a.sent();
-                            if (success)
-                                return [2 /*return*/];
-                            return [3 /*break*/, 5];
-                        case 5:
-                            // The code for the next two patterns is identical (other than the profile name).
-                            // The difference is in the expected behaviour of
-                            //
-                            //    await userInteractionWithContentProvider(contentProviderWindow);
-                            // 
-                            // For clickthrough the opened window should close immediately having established
-                            // a session, whereas for login the user might spend some time entering credentials etc.
-                            // Looking for clickthrough pattern
-                            serviceToTry = resource.clickThroughService;
-                            if (!serviceToTry) return [3 /*break*/, 9];
-                            lastAttempted = serviceToTry;
-                            return [4 /*yield*/, getContentProviderWindow(serviceToTry)];
-                        case 6:
-                            contentProviderWindow = _a.sent();
-                            if (!contentProviderWindow) return [3 /*break*/, 9];
-                            // should close immediately
-                            return [4 /*yield*/, userInteractionWithContentProvider(contentProviderWindow)];
-                        case 7:
-                            // should close immediately
-                            _a.sent();
-                            return [4 /*yield*/, Utils.attemptResourceWithToken(serviceToTry, requestedId)];
-                        case 8:
-                            success = _a.sent();
-                            if (success)
-                                return [2 /*return*/];
-                            _a.label = 9;
-                        case 9:
-                            // Looking for login pattern
-                            serviceToTry = resource.loginService;
-                            if (!serviceToTry) return [3 /*break*/, 13];
-                            lastAttempted = serviceToTry;
-                            return [4 /*yield*/, getContentProviderWindow(serviceToTry)];
-                        case 10:
-                            contentProviderWindow = _a.sent();
-                            if (!contentProviderWindow) return [3 /*break*/, 13];
-                            // we expect the user to spend some time interacting
-                            return [4 /*yield*/, userInteractionWithContentProvider(contentProviderWindow)];
-                        case 11:
-                            // we expect the user to spend some time interacting
-                            _a.sent();
-                            return [4 /*yield*/, Utils.attemptResourceWithToken(serviceToTry, requestedId)];
-                        case 12:
-                            success = _a.sent();
-                            if (success)
-                                return [2 /*return*/];
-                            _a.label = 13;
-                        case 13:
-                            // nothing worked! Use the most recently tried service as the source of
-                            // messages to show to the user.
-                            if (lastAttempted) {
-                                showOutOfOptionsMessages(lastAttempted);
-                            }
-                            return [2 /*return*/];
+        }
+        static loadExternalResourceAuth1(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
+            return __awaiter(this, void 0, void 0, function* () {
+                yield resource.getData();
+                if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY || resource.status === HTTPStatusCode.UNAUTHORIZED) {
+                    yield Utils.doAuthChain(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages);
+                }
+                return resource;
+            });
+        }
+        static doAuthChain(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
+            return __awaiter(this, void 0, void 0, function* () {
+                // This function enters the flowchart at the < External? > junction
+                // http://iiif.io/api/auth/1.0/#workflow-from-the-browser-client-perspective
+                if (!resource.isAccessControlled()) {
+                    return resource; // no services found
+                }
+                let serviceToTry = null;
+                let lastAttempted = null;
+                // repetition of logic is left in these steps for clarity:
+                // Looking for external pattern
+                serviceToTry = resource.externalService;
+                if (serviceToTry) {
+                    serviceToTry.options = resource.options;
+                    lastAttempted = serviceToTry;
+                    yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
+                    return resource;
+                }
+                // Looking for kiosk pattern
+                serviceToTry = resource.kioskService;
+                if (serviceToTry) {
+                    serviceToTry.options = resource.options;
+                    lastAttempted = serviceToTry;
+                    let kioskInteraction = openContentProviderInteraction(serviceToTry);
+                    if (kioskInteraction) {
+                        yield userInteractedWithContentProvider(kioskInteraction);
+                        yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
+                        return resource;
                     }
+                }
+                // The code for the next two patterns is identical (other than the profile name).
+                // The difference is in the expected behaviour of
+                //
+                //    await userInteractedWithContentProvider(contentProviderInteraction);
+                // 
+                // For clickthrough the opened window should close immediately having established
+                // a session, whereas for login the user might spend some time entering credentials etc.
+                // Looking for clickthrough pattern
+                serviceToTry = resource.clickThroughService;
+                if (serviceToTry) {
+                    serviceToTry.options = resource.options;
+                    lastAttempted = serviceToTry;
+                    let contentProviderInteraction = yield getContentProviderInteraction(serviceToTry);
+                    if (contentProviderInteraction) {
+                        // should close immediately
+                        yield userInteractedWithContentProvider(contentProviderInteraction);
+                        yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
+                        return resource;
+                    }
+                }
+                // Looking for login pattern
+                serviceToTry = resource.loginService;
+                if (serviceToTry) {
+                    serviceToTry.options = resource.options;
+                    lastAttempted = serviceToTry;
+                    let contentProviderInteraction = yield getContentProviderInteraction(serviceToTry);
+                    if (contentProviderInteraction) {
+                        // we expect the user to spend some time interacting
+                        yield userInteractedWithContentProvider(contentProviderInteraction);
+                        yield Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry);
+                        return resource;
+                    }
+                }
+                // nothing worked! Use the most recently tried service as the source of
+                // messages to show to the user.
+                if (lastAttempted) {
+                    showOutOfOptionsMessages(lastAttempted);
+                }
+            });
+        }
+        static attemptResourceWithToken(resource, openTokenService, authService) {
+            return __awaiter(this, void 0, void 0, function* () {
+                // attempting token interaction for " + authService["@id"]
+                const tokenService = authService.getService(Manifesto.ServiceProfile.AUTH1TOKEN.toString());
+                if (tokenService) {
+                    // found token service: " + tokenService["@id"]);
+                    let tokenMessage = yield openTokenService(tokenService);
+                    if (tokenMessage && tokenMessage.accessToken) {
+                        yield resource.getData(tokenMessage);
+                        return resource;
+                    }
+                }
+            });
+        }
+        static loadExternalResourcesAuth09(resources, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+            return new Promise((resolve, reject) => {
+                const promises = resources.map((resource) => {
+                    return Utils.loadExternalResourceAuth09(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
+                });
+                Promise.all(promises)
+                    .then(() => {
+                    resolve(resources);
+                })["catch"]((error) => {
+                    reject(error);
                 });
             });
-        };
-        Utils.attemptResourceWithToken = function (authService, resourceId) {
-            return __awaiter(this, void 0, void 0, function () {
-                var tokenService;
-                return __generator(this, function (_a) {
-                    tokenService = authService.getService(Manifesto.ServiceProfile.AUTH1TOKEN.toString());
-                    if (tokenService) {
-                        // found token service: " + tokenService["@id"]);
-                        //let tokenMessage = await openTokenService(tokenService); 
-                        //if (tokenMessage && tokenMessage.accessToken) {
-                        //let withTokenInfoResponse = await loadImage(imageService, tokenMessage.accessToken);
-                        // info request with token resulted in " + withTokenInfoResponse.status
-                        //if (withTokenInfoResponse.status == 200) {
-                        //renderImage(withTokenInfoResponse.info);
-                        //return true;
-                        //}
-                        //}  
-                    }
-                    // Didn't get a 200 info response.
-                    return [2 /*return*/, false];
-                });
-            });
-        };
+        }
         // IIIF auth api pre v1.0
         // Keeping this around for now until the auth 1.0 implementation is stable
-        Utils.loadExternalResourceAuth09 = function (resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
-            return new Promise(function (resolve, reject) {
+        static loadExternalResourceAuth09(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
+            return new Promise((resolve, reject) => {
                 if (options && options.pessimisticAccessControl) {
                     // pessimistic: access control cookies may have been deleted.
                     // always request the access token for every access controlled info.json request
                     // returned access tokens are not stored, therefore the login window flashes for every request.
-                    resource.getData().then(function () {
+                    resource.getData().then(() => {
                         if (resource.isAccessControlled()) {
                             // if the resource has a click through service, use that.
                             if (resource.clickThroughService) {
@@ -2226,17 +1945,17 @@ var Manifesto;
                                 resolve(restricted(resource));
                             }
                             else {
-                                login(resource).then(function () {
-                                    getAccessToken(resource, true).then(function (token) {
-                                        resource.getData(token).then(function () {
+                                login(resource).then(() => {
+                                    getAccessToken(resource, true).then((token) => {
+                                        resource.getData(token).then(() => {
                                             resolve(handleResourceResponse(resource));
-                                        })["catch"](function (message) {
+                                        })["catch"]((message) => {
                                             reject(Utils.createInternalServerError(message));
                                         });
-                                    })["catch"](function (message) {
+                                    })["catch"]((message) => {
                                         reject(Utils.createInternalServerError(message));
                                     });
-                                })["catch"](function (message) {
+                                })["catch"]((message) => {
                                     reject(Utils.createInternalServerError(message));
                                 });
                             }
@@ -2245,7 +1964,7 @@ var Manifesto;
                             // this info.json isn't access controlled, therefore no need to request an access token.
                             resolve(resource);
                         }
-                    })["catch"](function (message) {
+                    })["catch"]((message) => {
                         reject(Utils.createInternalServerError(message));
                     });
                 }
@@ -2255,10 +1974,10 @@ var Manifesto;
                     // if cookies are deleted a page refresh is required.
                     // try loading the resource using an access token that matches the info.json domain.
                     // if an access token is found, request the resource using it regardless of whether it is access controlled.
-                    getStoredAccessToken(resource, tokenStorageStrategy).then(function (storedAccessToken) {
+                    getStoredAccessToken(resource, tokenStorageStrategy).then((storedAccessToken) => {
                         if (storedAccessToken) {
                             // try using the stored access token
-                            resource.getData(storedAccessToken).then(function () {
+                            resource.getData(storedAccessToken).then(() => {
                                 // if the info.json loaded using the stored access token
                                 if (resource.status === HTTPStatusCode.OK) {
                                     resolve(handleResourceResponse(resource));
@@ -2266,9 +1985,9 @@ var Manifesto;
                                 else {
                                     // otherwise, load the resource data to determine the correct access control services.
                                     // if access controlled, do login.
-                                    Utils.authorize(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                                    Utils.authorize(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(() => {
                                         resolve(handleResourceResponse(resource));
-                                    })["catch"](function (error) {
+                                    })["catch"]((error) => {
                                         // if (resource.restrictedService){
                                         //     reject(Utils.createRestrictedError());
                                         // } else {
@@ -2276,59 +1995,46 @@ var Manifesto;
                                         //}
                                     });
                                 }
-                            })["catch"](function (error) {
+                            })["catch"]((error) => {
                                 reject(Utils.createAuthorizationFailedError());
                             });
                         }
                         else {
-                            Utils.authorize(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(function () {
+                            Utils.authorize(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken).then(() => {
                                 resolve(handleResourceResponse(resource));
-                            })["catch"](function (error) {
+                            })["catch"]((error) => {
                                 reject(Utils.createAuthorizationFailedError());
                             });
                         }
-                    })["catch"](function (error) {
+                    })["catch"]((error) => {
                         reject(Utils.createAuthorizationFailedError());
                     });
                 }
             });
-        };
-        Utils.createError = function (name, message) {
-            var error = new Error();
+        }
+        static createError(name, message) {
+            const error = new Error();
             error.message = message;
             error.name = name;
             return error;
-        };
-        Utils.createAuthorizationFailedError = function () {
+        }
+        static createAuthorizationFailedError() {
             return Utils.createError(manifesto.StatusCodes.AUTHORIZATION_FAILED.toString(), "Authorization failed");
-        };
-        Utils.createRestrictedError = function () {
+        }
+        static createRestrictedError() {
             return Utils.createError(manifesto.StatusCodes.RESTRICTED.toString(), "Restricted");
-        };
-        Utils.createInternalServerError = function (message) {
+        }
+        static createInternalServerError(message) {
             return Utils.createError(manifesto.StatusCodes.INTERNAL_SERVER_ERROR.toString(), message);
-        };
-        Utils.loadExternalResourcesAuth09 = function (resources, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options) {
-            return new Promise(function (resolve, reject) {
-                var promises = resources.map(function (resource) {
-                    return Utils.loadExternalResourceAuth09(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken, handleResourceResponse, options);
-                });
-                Promise.all(promises)
-                    .then(function () {
-                    resolve(resources);
-                })["catch"](function (error) {
-                    reject(error);
-                });
-            });
-        };
-        Utils.authorize = function (resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
-            return new Promise(function (resolve, reject) {
-                resource.getData().then(function () {
+        }
+        static authorize(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, getStoredAccessToken) {
+            return new Promise((resolve, reject) => {
+                resource.getData().then(() => {
                     if (resource.isAccessControlled()) {
-                        getStoredAccessToken(resource, tokenStorageStrategy).then(function (storedAccessToken) {
+                        getStoredAccessToken(resource, tokenStorageStrategy).then((storedAccessToken) => {
                             if (storedAccessToken) {
                                 // try using the stored access token
-                                resource.getData(storedAccessToken).then(function () {
+                                resource.getData(storedAccessToken).then(() => {
                                     if (resource.status === HTTPStatusCode.OK) {
                                         resolve(resource); // happy path ended
                                     }
@@ -2336,17 +2042,17 @@ var Manifesto;
                                         // the stored token is no good for this resource
                                         Utils.showAuthInteraction(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, resolve, reject);
                                     }
-                                })["catch"](function (message) {
+                                })["catch"]((message) => {
                                     reject(Utils.createInternalServerError(message));
                                 });
                             }
                             else {
                                 // There was no stored token, but the user might have a cookie that will grant a token
-                                getAccessToken(resource, false).then(function (accessToken) {
+                                getAccessToken(resource, false).then((accessToken) => {
                                     if (accessToken) {
-                                        storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
+                                        storeAccessToken(resource, accessToken, tokenStorageStrategy).then(() => {
                                             // try using the fresh access token
-                                            resource.getData(accessToken).then(function () {
+                                            resource.getData(accessToken).then(() => {
                                                 if (resource.status === HTTPStatusCode.OK) {
                                                     resolve(resource);
                                                 }
@@ -2354,10 +2060,10 @@ var Manifesto;
                                                     // User has a token, but it's not good enough
                                                     Utils.showAuthInteraction(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, resolve, reject);
                                                 }
-                                            })["catch"](function (message) {
+                                            })["catch"]((message) => {
                                                 reject(Utils.createInternalServerError(message));
                                             });
-                                        })["catch"](function (message) {
+                                        })["catch"]((message) => {
                                             // not able to store access token
                                             reject(Utils.createInternalServerError(message));
                                         });
@@ -2368,7 +2074,7 @@ var Manifesto;
                                     }
                                 });
                             }
-                        })["catch"](function (message) {
+                        })["catch"]((message) => {
                             reject(Utils.createInternalServerError(message));
                         });
                     }
@@ -2378,8 +2084,8 @@ var Manifesto;
                     }
                 });
             });
-        };
-        Utils.showAuthInteraction = function (resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, resolve, reject) {
+        }
+        static showAuthInteraction(resource, tokenStorageStrategy, clickThrough, restricted, login, getAccessToken, storeAccessToken, resolve, reject) {
             if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY && !resource.isResponseHandled) {
                 // if the resource was redirected to a degraded version
                 // and the response hasn't been handled yet.
@@ -2392,74 +2098,74 @@ var Manifesto;
             }
             else if (resource.clickThroughService && !resource.isResponseHandled) {
                 // if the resource has a click through service, use that.
-                clickThrough(resource).then(function () {
-                    getAccessToken(resource, true).then(function (accessToken) {
-                        storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
-                            resource.getData(accessToken).then(function () {
+                clickThrough(resource).then(() => {
+                    getAccessToken(resource, true).then((accessToken) => {
+                        storeAccessToken(resource, accessToken, tokenStorageStrategy).then(() => {
+                            resource.getData(accessToken).then(() => {
                                 resolve(resource);
-                            })["catch"](function (message) {
+                            })["catch"]((message) => {
                                 reject(Utils.createInternalServerError(message));
                             });
-                        })["catch"](function (message) {
+                        })["catch"]((message) => {
                             reject(Utils.createInternalServerError(message));
                         });
-                    })["catch"](function (message) {
+                    })["catch"]((message) => {
                         reject(Utils.createInternalServerError(message));
                     });
                 });
             }
             else {
                 // get an access token
-                login(resource).then(function () {
-                    getAccessToken(resource, true).then(function (accessToken) {
-                        storeAccessToken(resource, accessToken, tokenStorageStrategy).then(function () {
-                            resource.getData(accessToken).then(function () {
+                login(resource).then(() => {
+                    getAccessToken(resource, true).then((accessToken) => {
+                        storeAccessToken(resource, accessToken, tokenStorageStrategy).then(() => {
+                            resource.getData(accessToken).then(() => {
                                 resolve(resource);
-                            })["catch"](function (message) {
+                            })["catch"]((message) => {
                                 reject(Utils.createInternalServerError(message));
                             });
-                        })["catch"](function (message) {
+                        })["catch"]((message) => {
                             reject(Utils.createInternalServerError(message));
                         });
-                    })["catch"](function (message) {
+                    })["catch"]((message) => {
                         reject(Utils.createInternalServerError(message));
                     });
                 });
             }
-        };
+        }
         ;
-        Utils.getService = function (resource, profile) {
-            var services = this.getServices(resource);
+        static getService(resource, profile) {
+            const services = this.getServices(resource);
             // coerce profile to string
             if (typeof (profile) !== 'string') {
                 profile = profile.toString();
             }
-            for (var i = 0; i < services.length; i++) {
-                var service = services[i];
+            for (let i = 0; i < services.length; i++) {
+                const service = services[i];
                 if (service.getProfile().toString() === profile) {
                     return service;
                 }
             }
             return null;
-        };
-        Utils.getResourceById = function (parentResource, id) {
-            return [parentResource.__jsonld].en().traverseUnique(function (x) { return Utils.getAllArrays(x); })
-                .first(function (r) { return r['@id'] === id; });
-        };
-        Utils.getAllArrays = function (obj) {
+        }
+        static getResourceById(parentResource, id) {
+            return [parentResource.__jsonld].en().traverseUnique(x => Utils.getAllArrays(x))
+                .first(r => r['@id'] === id);
+        }
+        static getAllArrays(obj) {
             var all = [].en();
             if (!obj)
                 return all;
-            for (var key in obj) {
+            for (let key in obj) {
                 var val = obj[key];
                 if (Array.isArray(val)) {
                     all = all.concat(val);
                 }
             }
             return all;
-        };
-        Utils.getServices = function (resource) {
-            var service;
+        }
+        static getServices(resource) {
+            let service;
             // if passing a manifesto-parsed object, use the __jsonld.service property,
             // otherwise look for a service property (info.json services)
             if (resource.__jsonld) {
@@ -2468,17 +2174,17 @@ var Manifesto;
             else {
                 service = resource.service;
             }
-            var services = [];
+            const services = [];
             if (!service)
                 return services;
             // coerce to array
             if (!Array.isArray(service)) {
                 service = [service];
             }
-            for (var i = 0; i < service.length; i++) {
-                var s = service[i];
+            for (let i = 0; i < service.length; i++) {
+                const s = service[i];
                 if (typeof (s) === 'string') {
-                    var r = this.getResourceById(resource.options.resource, s);
+                    const r = this.getResourceById(resource.options.resource, s);
                     if (r) {
                         services.push(new Manifesto.Service(r.__jsonld || r, resource.options));
                     }
@@ -2488,39 +2194,37 @@ var Manifesto;
                 }
             }
             return services;
-        };
-        return Utils;
-    }());
+        }
+    }
     Manifesto.Utils = Utils;
 })(Manifesto || (Manifesto = {}));
 
 var Manifesto;
 (function (Manifesto) {
-    var MetadataItem = (function () {
-        function MetadataItem(defaultLocale) {
+    class MetadataItem {
+        constructor(defaultLocale) {
             this.defaultLocale = defaultLocale;
         }
-        MetadataItem.prototype.parse = function (resource) {
+        parse(resource) {
             this.resource = resource;
             this.label = Manifesto.TranslationCollection.parse(this.resource.label, this.defaultLocale);
             this.value = Manifesto.TranslationCollection.parse(this.resource.value, this.defaultLocale);
-        };
+        }
         // shortcuts to get/set values based on default locale
-        MetadataItem.prototype.getLabel = function () {
+        getLabel() {
             if (this.label) {
                 return Manifesto.TranslationCollection.getValue(this.label, this.defaultLocale);
             }
             return null;
-        };
-        MetadataItem.prototype.setLabel = function (value) {
-            var _this = this;
+        }
+        setLabel(value) {
             if (this.label && this.label.length) {
-                var t = this.label.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
+                var t = this.label.en().where(x => x.locale === this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(this.defaultLocale)).first();
                 if (t)
                     t.value = value;
             }
-        };
-        MetadataItem.prototype.getValue = function () {
+        }
+        getValue() {
             if (this.value) {
                 var locale = this.defaultLocale;
                 // if the label has a locale, prefer that to the default locale
@@ -2530,57 +2234,40 @@ var Manifesto;
                 return Manifesto.TranslationCollection.getValue(this.value, locale);
             }
             return null;
-        };
-        MetadataItem.prototype.setValue = function (value) {
-            var _this = this;
+        }
+        setValue(value) {
             if (this.value && this.value.length) {
-                var t = this.value.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
+                var t = this.value.en().where(x => x.locale === this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(this.defaultLocale)).first();
                 if (t)
                     t.value = value;
             }
-        };
-        return MetadataItem;
-    }());
+        }
+    }
     Manifesto.MetadataItem = MetadataItem;
 })(Manifesto || (Manifesto = {}));
 
 var Manifesto;
 (function (Manifesto) {
-    var Translation = (function () {
-        function Translation(value, locale) {
+    class Translation {
+        constructor(value, locale) {
             this.value = value;
             this.locale = locale;
         }
-        return Translation;
-    }());
+    }
     Manifesto.Translation = Translation;
 })(Manifesto || (Manifesto = {}));
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var TranslationCollection = (function (_super) {
-        __extends(TranslationCollection, _super);
-        function TranslationCollection() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        TranslationCollection.parse = function (translation, defaultLocale) {
-            var tc = [];
-            var t;
+    class TranslationCollection extends Array {
+        static parse(translation, defaultLocale) {
+            const tc = [];
+            let t;
             if (!translation) {
                 return tc;
             }
             else if (Array.isArray(translation)) {
-                for (var i = 0; i < translation.length; i++) {
+                for (let i = 0; i < translation.length; i++) {
                     var value = translation[i];
                     if (typeof (value) === 'string') {
                         t = new Manifesto.Translation(value, defaultLocale);
@@ -2604,11 +2291,11 @@ var Manifesto;
                 return tc;
             }
             return tc;
-        };
-        TranslationCollection.getValue = function (translationCollection, locale) {
+        }
+        static getValue(translationCollection, locale) {
             if (translationCollection.length) {
                 if (locale) {
-                    var translation = translationCollection.en().where(function (t) { return t.locale === locale || Manifesto.Utils.getInexactLocale(t.locale) === Manifesto.Utils.getInexactLocale(locale); }).first();
+                    const translation = translationCollection.en().where(t => t.locale === locale || Manifesto.Utils.getInexactLocale(t.locale) === Manifesto.Utils.getInexactLocale(locale)).first();
                     if (translation) {
                         return translation.value;
                     }
@@ -2617,9 +2304,8 @@ var Manifesto;
                 return translationCollection[0].value;
             }
             return null;
-        };
-        return TranslationCollection;
-    }(Array));
+        }
+    }
     Manifesto.TranslationCollection = TranslationCollection;
 })(Manifesto || (Manifesto = {}));
 
@@ -2654,39 +2340,84 @@ global.manifesto = global.Manifesto = module.exports = {
     }
 };
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Manifesto;
 (function (Manifesto) {
-    var Annotation = (function (_super) {
-        __extends(Annotation, _super);
-        function Annotation(jsonld, options) {
-            return _super.call(this, jsonld, options) || this;
+    class Annotation extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
         }
-        Annotation.prototype.getMotivation = function () {
-            var motivation = this.getProperty('motivation');
+        getBody() {
+            const bodies = [];
+            const body = this.getProperty('body');
+            if (body) {
+                if (body.items) {
+                    for (var i = 0; i < body.items.length; i++) {
+                        const b = body.items[i];
+                        bodies.push(b);
+                    }
+                }
+                else {
+                    bodies.push(new Manifesto.AnnotationBody(body));
+                }
+            }
+            return bodies;
+        }
+        getMotivation() {
+            const motivation = this.getProperty('motivation');
             if (motivation) {
                 return new Manifesto.AnnotationMotivation(motivation.toLowerCase());
             }
             return null;
-        };
-        Annotation.prototype.getOn = function () {
+        }
+        // open annotation
+        getOn() {
             return this.getProperty('on');
-        };
-        Annotation.prototype.getResource = function () {
+        }
+        getTarget() {
+            return this.getProperty('target');
+        }
+        getResource() {
             return new Manifesto.Resource(this.getProperty('resource'), this.options);
-        };
-        return Annotation;
-    }(Manifesto.ManifestResource));
+        }
+    }
     Manifesto.Annotation = Annotation;
+})(Manifesto || (Manifesto = {}));
+
+var Manifesto;
+(function (Manifesto) {
+    class AnnotationBody extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
+        }
+        getFormat() {
+            const format = this.getProperty('format');
+            if (format) {
+                return new Manifesto.ResourceFormat(Manifesto.Utils.getResourceFormat(format));
+            }
+            return null;
+        }
+        getType() {
+            const type = this.getProperty('type');
+            if (type) {
+                return new Manifesto.ResourceType(type.toLowerCase());
+            }
+            return null;
+        }
+    }
+    Manifesto.AnnotationBody = AnnotationBody;
+})(Manifesto || (Manifesto = {}));
+
+var Manifesto;
+(function (Manifesto) {
+    class AnnotationPage extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
+        }
+        getItems() {
+            return this.getProperty('items');
+        }
+    }
+    Manifesto.AnnotationPage = AnnotationPage;
 })(Manifesto || (Manifesto = {}));
 
 
@@ -2707,57 +2438,47 @@ var Manifesto;
 
 
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+
+
 var Manifesto;
 (function (Manifesto) {
-    var Resource = (function (_super) {
-        __extends(Resource, _super);
-        function Resource(jsonld, options) {
-            return _super.call(this, jsonld, options) || this;
+    class Resource extends Manifesto.ManifestResource {
+        constructor(jsonld, options) {
+            super(jsonld, options);
         }
-        Resource.prototype.getFormat = function () {
-            var format = this.getProperty('format');
+        getFormat() {
+            const format = this.getProperty('format');
             if (format) {
                 return new Manifesto.ResourceFormat(format.toLowerCase());
             }
             return null;
-        };
-        Resource.prototype.getType = function () {
-            var type = this.getProperty('@type');
+        }
+        getType() {
+            const type = this.getProperty('type');
             if (type) {
                 return new Manifesto.ResourceType(type.toLowerCase());
             }
             return null;
-        };
-        Resource.prototype.getWidth = function () {
+        }
+        getWidth() {
             return this.getProperty('width');
-        };
-        Resource.prototype.getHeight = function () {
+        }
+        getHeight() {
             return this.getProperty('height');
-        };
-        Resource.prototype.getMaxWidth = function () {
+        }
+        getMaxWidth() {
             return this.getProperty('maxWidth');
-        };
-        Resource.prototype.getMaxHeight = function () {
-            var maxHeight = this.getProperty('maxHeight');
+        }
+        getMaxHeight() {
+            const maxHeight = this.getProperty('maxHeight');
             // if a maxHeight hasn't been specified, default to maxWidth.
             // maxWidth in essence becomes maxEdge
             if (!maxHeight) {
                 return this.getMaxWidth();
             }
             return null;
-        };
-        return Resource;
-    }(Manifesto.ManifestResource));
+        }
+    }
     Manifesto.Resource = Resource;
 })(Manifesto || (Manifesto = {}));
 

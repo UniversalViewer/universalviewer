@@ -42,7 +42,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     $shareDialogue: JQuery;
     annotations: AnnotationGroup[] | null = [];
     centerPanel: SeadragonCenterPanel;
-    currentAnnotationRect: AnnotationRect;
+    currentAnnotationRect: AnnotationRect | null;
     currentRotation: number = 0;
     downloadDialogue: DownloadDialogue;
     externalContentDialogue: ExternalContentDialogue;
@@ -55,7 +55,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     mode: Mode;
     moreInfoDialogue: MoreInfoDialogue;
     multiSelectDialogue: MultiSelectDialogue;
-    previousAnnotationRect: AnnotationRect;
+    previousAnnotationRect: AnnotationRect | null;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
@@ -76,11 +76,13 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+            this.previousAnnotationRect = null;
+            this.currentAnnotationRect = null;
             this.viewPage(canvasIndex);
         });
 
         $.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
-            this.annotations = null;
+            this.clearAnnotations();
             $.publish(BaseEvents.ANNOTATIONS_CLEARED);
             this.fire(BaseEvents.CLEAR_ANNOTATIONS);
         });
@@ -232,6 +234,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             this.print();
         });
 
+        $.subscribe(BaseEvents.RELOAD, () => {
+            $.publish(BaseEvents.CLEAR_ANNOTATIONS);
+        });
+
         $.subscribe(BaseEvents.RIGHT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
                 $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
@@ -327,10 +333,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
-            this.fire(Events.VIEW_PAGE, index);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
-        });
+        // $.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
+        //     this.fire(Events.VIEW_PAGE, index);
+        //     $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
+        // });
     }
 
     createModules(): void {
@@ -561,8 +567,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    clearSearch(): void {
-        this.annotations = [];
+    clearAnnotations(): void {
+        this.annotations = null;
 
         // reload current index as it may contain results.
         $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
@@ -1042,7 +1048,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     getCurrentAnnotationRectIndex(): number {
         const annotationRects: AnnotationRect[] = this.getAnnotationRects();
-        return annotationRects.indexOf(this.currentAnnotationRect);
+
+        if (this.currentAnnotationRect) {
+            return annotationRects.indexOf(this.currentAnnotationRect);
+        }
+        
+        return -1;
     }
 
     getTotalAnnotationRects(): number {
