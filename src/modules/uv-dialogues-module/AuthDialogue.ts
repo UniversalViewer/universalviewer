@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
+import {UVUtils} from "../uv-shared-module/Utils";
 
 export class AuthDialogue extends Dialogue {
 
@@ -81,25 +82,27 @@ export class AuthDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        // let label: string = "";
-        // let header: string = "";
+        let header: string | null = this.service.getHeader();
         let description: string | null = this.service.getDescription();
         let confirmLabel: string | null = this.service.getConfirmLabel();
 
-        console.log(description, confirmLabel);
+        if (header) {
+            this.$title.text(UVUtils.sanitize(header));
+        }
 
-        // if (this.resource.loginService) {
-        //     this.$title.text(this.resource.loginService.getProperty('label'));
-        //     message = this.resource.loginService.getProperty('description');
-        // }
+        if (description) {
+            this.$message.html(UVUtils.sanitize(description));
+            this.$message.targetBlank();
 
-        // this.$message.html(message);
-        // this.$message.targetBlank();
+            this.$message.find('a').on('click', function() {
+                const url: string = $(this).attr('href');
+                $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
+            });
+        }
 
-        // this.$message.find('a').on('click', function() {
-        //     var url: string = $(this).attr('href');
-        //     $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
-        // });
+        if (confirmLabel) {
+            this.$confirmButton.text(UVUtils.sanitize(confirmLabel));
+        }
 
         this.resize();
     }
