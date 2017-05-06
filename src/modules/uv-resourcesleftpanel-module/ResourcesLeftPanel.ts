@@ -73,7 +73,7 @@ export class ResourcesLeftPanel extends LeftPanel {
                 const label: string | null = Manifesto.TranslationCollection.getValue(<Manifesto.TranslationCollection>resource.getLabel());
 
                 if (label) {
-                    const mime: string = Utils.Files.simplifyMimeType((<Manifesto.ResourceFormat>resource.getFormat()).toString());
+                    const mime: string = Utils.Files.simplifyMimeType((<Manifesto.MediaType>resource.getFormat()).toString());
                     const $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + label + ' (' + mime + ')' + '</li>');
                     this.$resources.append($listItem);
                 }

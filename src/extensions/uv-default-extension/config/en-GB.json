@@ -1,0 +1,82 @@
+{
+  "options":
+  {
+    "authAPIVersion": 0.9,
+    "bookmarkThumbHeight": 150,
+    "bookmarkThumbWidth": 90,
+    "dropEnabled": true,
+    "footerPanelEnabled": true,
+    "headerPanelEnabled": true,
+    "leftPanelEnabled": true,
+    "limitLocales": false,
+    "openTemplate": "http://universalviewer.io?manifest={0}",
+    "pessimisticAccessControl": false,
+    "rightPanelEnabled": true,
+    "theme": "uv-en-GB-theme"
+  },
+  "modules":
+  {
+    "shareDialogue":
+    {
+      "options":
+      {
+        "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-collectionindex=\"{3}\" data-manifestindex=\"{4}\" data-sequenceindex=\"{5}\" data-canvasindex=\"{6}\" style=\"width:{7}px; height:{8}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{9}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
+      }
+    },
+    "fileLinkCenterPanel":
+    {
+
+    },
+    "footerPanel":
+    {
+      "options": {
+        "bookmarkEnabled": false,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "minimiseButtons": true,
+        "openEnabled": false,
+        "shareEnabled": true
+      }
+    },
+    "genericDialogue":
+    {
+
+    },
+    "headerPanel":
+    {
+
+    },
+    "helpDialogue":
+    {
+
+    },
+    "moreInfoRightPanel":
+    {
+      "options":
+      {
+        "canvasDisplayOrder": "",
+        "canvasExclude": "",
+        "copyToClipboardEnabled": false,
+        "manifestDisplayOrder": "",
+        "manifestExclude": "",
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false,
+        "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
+        "showAllLanguages": false,
+        "textLimit": 4,
+        "textLimitType": "lines"
+      }
+    },
+    "resourcesLeftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": true
+      }
+    }
+  }
+}

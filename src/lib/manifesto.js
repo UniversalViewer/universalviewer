@@ -189,30 +189,30 @@ var Manifesto;
 
 var Manifesto;
 (function (Manifesto) {
-    class ResourceFormat extends Manifesto.StringValue {
+    class MediaType extends Manifesto.StringValue {
         // todo: use getters when ES3 target is no longer required.
         jpg() {
-            return new ResourceFormat(ResourceFormat.JPG.toString());
+            return new MediaType(MediaType.JPG.toString());
         }
         mp4() {
-            return new ResourceFormat(ResourceFormat.MP4.toString());
+            return new MediaType(MediaType.MP4.toString());
         }
         pdf() {
-            return new ResourceFormat(ResourceFormat.PDF.toString());
+            return new MediaType(MediaType.PDF.toString());
         }
         threejs() {
-            return new ResourceFormat(ResourceFormat.THREEJS.toString());
+            return new MediaType(MediaType.THREEJS.toString());
         }
         webm() {
-            return new ResourceFormat(ResourceFormat.WEBM.toString());
+            return new MediaType(MediaType.WEBM.toString());
         }
     }
-    ResourceFormat.JPG = new ResourceFormat("image/jpeg");
-    ResourceFormat.MP4 = new ResourceFormat("video/mp4");
-    ResourceFormat.PDF = new ResourceFormat("application/pdf");
-    ResourceFormat.THREEJS = new ResourceFormat("application/vnd.threejs+json");
-    ResourceFormat.WEBM = new ResourceFormat("video/webm");
-    Manifesto.ResourceFormat = ResourceFormat;
+    MediaType.JPG = new MediaType("image/jpeg");
+    MediaType.MP4 = new MediaType("video/mp4");
+    MediaType.PDF = new MediaType("application/pdf");
+    MediaType.THREEJS = new MediaType("application/vnd.threejs+json");
+    MediaType.WEBM = new MediaType("video/webm");
+    Manifesto.MediaType = MediaType;
 })(Manifesto || (Manifesto = {}));
 
 var Manifesto;
@@ -583,7 +583,7 @@ var Manifesto;
             const rotation = 0;
             let quality = 'default';
             let width = w;
-            var size;
+            let size;
             // if an info.json has been loaded
             if (this.externalResource && this.externalResource.data && this.externalResource.data['@id']) {
                 id = this.externalResource.data['@id'];
@@ -600,16 +600,16 @@ var Manifesto;
             }
             else {
                 // info.json hasn't been loaded yet
-                var images = this.getImages();
+                const images = this.getImages();
                 if (images && images.length) {
-                    var firstImage = images[0];
-                    var resource = firstImage.getResource();
-                    var services = resource.getServices();
+                    const firstImage = images[0];
+                    const resource = firstImage.getResource();
+                    const services = resource.getServices();
                     if (!width) {
                         width = resource.getWidth();
                     }
                     if (services.length) {
-                        var service = services[0];
+                        const service = services[0];
                         id = service.id;
                         quality = Manifesto.Utils.getImageQuality(service.getProfile());
                     }
@@ -621,7 +621,7 @@ var Manifesto;
                 }
             }
             size = width + ',';
-            var uri = [id, region, size, rotation, quality + '.jpg'].join('/');
+            const uri = [id, region, size, rotation, quality + '.jpg'].join('/');
             return uri;
         }
         // Presentation API 3.0
@@ -639,8 +639,8 @@ var Manifesto;
             }
             const annotations = annotationPage.getItems();
             for (let i = 0; i < annotations.length; i++) {
-                var a = annotations[i];
-                var annotation = new Manifesto.Annotation(a, this.options);
+                const a = annotations[i];
+                const annotation = new Manifesto.Annotation(a, this.options);
                 content.push(annotation);
             }
             return content;
@@ -650,8 +650,8 @@ var Manifesto;
             if (!this.__jsonld.images)
                 return images;
             for (let i = 0; i < this.__jsonld.images.length; i++) {
-                var a = this.__jsonld.images[i];
-                var annotation = new Manifesto.Annotation(a, this.options);
+                const a = this.__jsonld.images[i];
+                const annotation = new Manifesto.Annotation(a, this.options);
                 images.push(annotation);
             }
             return images;
@@ -1635,10 +1635,10 @@ var url = require("url");
 var Manifesto;
 (function (Manifesto) {
     class Utils {
-        static getResourceFormat(format) {
-            format = format.toLowerCase();
-            format = format.split(';')[0];
-            return format.trim();
+        static getMediaType(type) {
+            type = type.toLowerCase();
+            type = type.split(';')[0];
+            return type.trim();
         }
         static getImageQuality(profile) {
             const p = profile.toString();
@@ -2317,9 +2317,9 @@ global.manifesto = global.Manifesto = module.exports = {
     ElementType: new Manifesto.ElementType(),
     IIIFResourceType: new Manifesto.IIIFResourceType(),
     ManifestType: new Manifesto.ManifestType(),
+    MediaType: new Manifesto.MediaType(),
     MetadataItem: Manifesto.MetadataItem,
     RenderingFormat: new Manifesto.RenderingFormat(),
-    ResourceFormat: new Manifesto.ResourceFormat(),
     ResourceType: new Manifesto.ResourceType(),
     ServiceProfile: new Manifesto.ServiceProfile(),
     Translation: Manifesto.Translation,
@@ -2395,7 +2395,7 @@ var Manifesto;
         getFormat() {
             const format = this.getProperty('format');
             if (format) {
-                return new Manifesto.ResourceFormat(Manifesto.Utils.getResourceFormat(format));
+                return new Manifesto.MediaType(Manifesto.Utils.getMediaType(format));
             }
             return null;
         }
@@ -2452,7 +2452,7 @@ var Manifesto;
         getFormat() {
             const format = this.getProperty('format');
             if (format) {
-                return new Manifesto.ResourceFormat(format.toLowerCase());
+                return new Manifesto.MediaType(format.toLowerCase());
             }
             return null;
         }

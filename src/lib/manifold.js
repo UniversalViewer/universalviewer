@@ -1,4 +1,4 @@
-// manifold v1.1.11 https://github.com/viewdir/manifold#readme
+// manifold v1.1.12 https://github.com/viewdir/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 ///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
@@ -101,33 +101,35 @@ var Manifold;
         Bootstrapper.prototype.bootstrap = function () {
             var that = this;
             return new Promise(function (resolve, reject) {
-                var msie = that._msieversion();
-                // if not a recent version of IE
-                if (msie > 0 && msie < 11) {
-                    if (msie === 9) {
-                        // CORS not available, use jsonp
-                        var settings = {
-                            url: that._options.iiifResourceUri,
-                            type: 'GET',
-                            dataType: 'jsonp',
-                            jsonp: 'callback',
-                            jsonpCallback: 'manifestCallback'
-                        };
-                        $.ajax(settings);
-                        global.manifestCallback = function (json) {
-                            that._loaded(that, JSON.stringify(json), resolve, reject);
-                        };
-                    }
-                    else if (msie === 10) {
-                        $.getJSON(that._options.iiifResourceUri, function (json) {
-                            that._loaded(that, JSON.stringify(json), resolve, reject);
-                        });
-                    }
-                }
-                else {
+                var msie = that._detectIE();
+                if (msie === false) {
                     manifesto.loadManifest(that._options.iiifResourceUri).then(function (json) {
                         that._loaded(that, json, resolve, reject);
                     });
+                }
+                else {
+                    // if not a recent version of IE
+                    if (msie > 0) {
+                        if (msie === 9) {
+                            // CORS not available, use jsonp
+                            var settings = {
+                                url: that._options.iiifResourceUri,
+                                type: 'GET',
+                                dataType: 'jsonp',
+                                jsonp: 'callback',
+                                jsonpCallback: 'manifestCallback'
+                            };
+                            $.ajax(settings);
+                            global.manifestCallback = function (json) {
+                                that._loaded(that, JSON.stringify(json), resolve, reject);
+                            };
+                        }
+                        else {
+                            $.getJSON(that._options.iiifResourceUri, function (json) {
+                                that._loaded(that, JSON.stringify(json), resolve, reject);
+                            });
+                        }
+                    }
                 }
             });
         };
@@ -177,15 +179,35 @@ var Manifold;
                 resolve(helper);
             }
         };
-        Bootstrapper.prototype._msieversion = function () {
-            var ua = global.navigator.userAgent;
-            var msie = ua.indexOf("MSIE ");
+        Bootstrapper.prototype._detectIE = function () {
+            var ua = window.navigator.userAgent;
+            // Test values; Uncomment to check result …
+            // IE 10
+            // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+            // IE 11
+            // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+            // Edge 12 (Spartan)
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+            // Edge 13
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+            var msie = ua.indexOf('MSIE ');
             if (msie > 0) {
-                return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
+                // IE 10 or older => return version number
+                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
             }
-            else {
-                return 0;
+            var trident = ua.indexOf('Trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
             }
+            var edge = ua.indexOf('Edge/');
+            if (edge > 0) {
+                // Edge (IE 12+) => return version number
+                return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+            }
+            // other browser
+            return false;
         };
         return Bootstrapper;
     }());

@@ -1,12 +1,13 @@
 import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
+import {Extension as DefaultExtension} from "./extensions/uv-default-extension/Extension";
 import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
 import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
 import {Extension as PDFExtension} from "./extensions/uv-pdf-extension/Extension";
 import {Extension as VirtexExtension} from "./extensions/uv-virtex-extension/Extension";
+import {IExtension} from "./modules/uv-shared-module/IExtension";
 import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
-import {IExtension} from "./modules/uv-shared-module/IExtension";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
@@ -55,6 +56,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         this._extensions[manifesto.RenderingFormat.pdf().toString()] = {
             type: PDFExtension,
             name: 'uv-pdf-extension'
+        };
+
+        this._extensions['default'] = {
+            type: DefaultExtension,
+            name: 'uv-default-extension'
         };
 
         this.set(this.options.data);
@@ -190,21 +196,42 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 return;
             }
 
-            const canvasType: Manifesto.ElementType = canvas.getType();
+            let extension: IExtension | null = null;
 
-            // try using canvasType
-            let extension: IExtension | null = that._extensions[canvasType.toString()];
+            // canvasType will always be "canvas" in IIIF presentation 3.0
+            // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
+            // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
+            const content: Manifesto.IAnnotation[] = canvas.getContent();
+            
+            if (content.length) {
+                const annotation: Manifesto.IAnnotation = content[0];
+                const body: Manifesto.IAnnotationBody[] = annotation.getBody();
 
-            // if there isn't an extension for the canvasType, try the format
-            if (!extension) {
-                const format: any = canvas.getProperty('format');
-                extension = that._extensions[format];
+                if (body) {
+                    const format: Manifesto.MediaType | null = body[0].getFormat();
+
+                    if (format) {
+                        extension = that._extensions[format.toString()];
+                    }
+                    
+                }
+
+            } else {
+                const canvasType: Manifesto.ElementType = canvas.getType();
+
+                // try using canvasType
+                extension = that._extensions[canvasType.toString()];
+
+                // if there isn't an extension for the canvasType, try the format
+                if (!extension) {
+                    const format: any = canvas.getProperty('format');
+                    extension = that._extensions[format];
+                }
             }
 
-            // if there still isn't a matching extension, show an error.
+            // if there still isn't a matching extension, use the default extension.
             if (!extension) {
-                this._error('No matching UV extension found.');
-                return;
+                extension = that._extensions['default'];
             }
 
             that._configure(data, extension, (config: any) => {

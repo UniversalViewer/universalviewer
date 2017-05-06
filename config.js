@@ -34,6 +34,7 @@ module.exports = function () {
         npm: './node_modules',
         src: './src',
         themes: './src/themes',
+        uvDefaultExtension: './src/extensions/uv-default-extension',
         uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
         uvPdfExtension: './src/extensions/uv-pdf-extension',
         uvSeadragonExtension: './src/extensions/uv-seadragon-extension',

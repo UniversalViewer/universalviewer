@@ -22,7 +22,9 @@ if (typeof jQuery === "function") {
     return;
 })();
 
-// things in src/lib that are generic to all extensions
+// - things in src/lib that are generic to all extensions
+// - bundled data providers
+// - UVComponent
 requirejs([
     './lib/base64.min.js',
     './lib/browserdetect.js',

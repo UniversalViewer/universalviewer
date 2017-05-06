@@ -492,7 +492,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         const resource: Manifesto.IResource | null = this.getCanvasImageResource(canvas);
 
         if (resource) {
-            const format: Manifesto.ResourceFormat | null = resource.getFormat();
+            const format: Manifesto.MediaType | null = resource.getFormat();
 
             if (format){
                 return format.toString();
