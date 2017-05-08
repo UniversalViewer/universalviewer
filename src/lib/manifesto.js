@@ -2356,11 +2356,11 @@ var Manifesto;
                 if (body.items) {
                     for (var i = 0; i < body.items.length; i++) {
                         const b = body.items[i];
-                        bodies.push(b);
+                        bodies.push(new Manifesto.AnnotationBody(b, this.options));
                     }
                 }
                 else {
-                    bodies.push(new Manifesto.AnnotationBody(body));
+                    bodies.push(new Manifesto.AnnotationBody(body, this.options));
                 }
             }
             return bodies;

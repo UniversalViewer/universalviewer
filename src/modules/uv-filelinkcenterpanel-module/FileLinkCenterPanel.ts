@@ -1,9 +1,12 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import {UVUtils} from "../uv-shared-module/Utils";
 
 export class FileLinkCenterPanel extends CenterPanel {
 
-    $downloadLink: JQuery;
+    $scroll: JQuery;
+    $downloadLinks: JQuery;
+    $downloadLinkTemplate: JQuery;
 
     title: string | null;
 
@@ -21,8 +24,13 @@ export class FileLinkCenterPanel extends CenterPanel {
             this.openMedia(resources);
         });
 
-        this.$downloadLink = $('<a target="_blank"></a>');
-        this.$content.append(this.$downloadLink);
+        this.$scroll = $('<div class="scroll"><div>');
+        this.$content.append(this.$scroll);
+
+        this.$downloadLinks = $('<ul></ul>');
+        this.$scroll.append(this.$downloadLinks);
+
+        this.$downloadLinkTemplate = $('<li><img><a target="_blank" download></a></li>');
 
         this.title = this.extension.helper.getLabel();
     }
@@ -31,9 +39,39 @@ export class FileLinkCenterPanel extends CenterPanel {
 
         this.extension.getExternalResources(resources).then(() => {
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const annotations: Manifesto.IAnnotation[] = canvas.getContent();
 
-            this.$downloadLink.text(String.format(this.content.downloadLink, canvas.getLabel()));
-            //this.$downloadLink.attr('href', canvas.thumbnail);
+            let $link: JQuery;
+
+            for (let i = 0; i < annotations.length; i++) {
+                const annotation: Manifesto.IAnnotation = annotations[i];
+
+                if (!annotation.getBody().length) {
+                    continue;
+                }
+
+                $link = this.$downloadLinkTemplate.clone();
+                const $a: JQuery = $link.find('a');
+                const $img: JQuery = $link.find('img');
+                const annotationBody: Manifesto.IAnnotationBody = annotation.getBody()[0];
+                $a.prop('href', annotationBody.getProperty('id'));
+                let label: string | null = Manifesto.TranslationCollection.getValue(annotationBody.getLabel());
+
+                if (label) {
+                    $a.text(String.format(this.content.downloadLink, UVUtils.sanitize(label)));
+                }
+
+                const thumbnail: string = annotation.getProperty('thumbnail');
+
+                if (thumbnail) {
+                    $img.prop('src', thumbnail);
+                } else {
+                    $img.hide();
+                }
+
+                this.$downloadLinks.append($link);
+            }
+
         });
     }
 
@@ -43,5 +81,7 @@ export class FileLinkCenterPanel extends CenterPanel {
         if (this.title) {
             this.$title.ellipsisFill(this.title);
         }
+
+        this.$scroll.height(this.$content.height() - this.$scroll.verticalMargins());
     }
 }

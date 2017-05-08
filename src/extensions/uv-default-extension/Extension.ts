@@ -1,6 +1,5 @@
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
-import {DownloadDialogue} from "./DownloadDialogue";
 import {FileLinkCenterPanel} from "../../modules/uv-filelinkcenterpanel-module/FileLinkCenterPanel";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
 import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
@@ -19,7 +18,6 @@ export class Extension extends BaseExtension implements IDefaultExtension {
     $helpDialogue: JQuery;
     $settingsDialogue: JQuery;
     centerPanel: FileLinkCenterPanel;
-    downloadDialogue: DownloadDialogue;
     shareDialogue: ShareDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
@@ -77,10 +75,6 @@ export class Extension extends BaseExtension implements IDefaultExtension {
         this.$helpDialogue = $('<div class="overlay help"></div>');
         Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
-
-        this.$downloadDialogue = $('<div class="overlay download"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
-        this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$shareDialogue = $('<div class="overlay share"></div>');
         Shell.$overlays.append(this.$shareDialogue);

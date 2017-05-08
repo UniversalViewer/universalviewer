@@ -140,6 +140,13 @@ module.exports = function (grunt) {
                         src: ['<%= config.directories.lib %>/offline.js'],
                         dest: '<%= config.directories.build %>/lib'
                     },
+                    // helpers
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['<%= config.directories.src %>/helpers/*'],
+                        dest: '<%= config.directories.build %>/helpers/'
+                    },
                     // extension configuration files
                     {
                         expand: true,
