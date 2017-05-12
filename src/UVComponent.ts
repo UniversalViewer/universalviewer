@@ -58,6 +58,28 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-pdf-extension'
         };
 
+        // presentation 3
+
+        this._extensions[manifesto.MediaType.pdf().toString()] = {
+            type: PDFExtension,
+            name: 'uv-pdf-extension'
+        };
+
+        this._extensions[manifesto.MediaType.mp4().toString()] = {
+            type: MediaElementExtension,
+            name: 'uv-mediaelement-extension'
+        };
+
+        this._extensions[manifesto.MediaType.webm().toString()] = {
+            type: MediaElementExtension,
+            name: 'uv-mediaelement-extension'
+        };
+
+        this._extensions[manifesto.MediaType.threejs().toString()] = {
+            type: VirtexExtension,
+            name: 'uv-virtex-extension'
+        };
+
         this._extensions['default'] = {
             type: DefaultExtension,
             name: 'uv-default-extension'

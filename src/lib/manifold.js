@@ -458,9 +458,17 @@ var Manifold;
             return 0;
         };
         Helper.prototype.getInfoUri = function (canvas) {
+            var content = canvas.getContent();
             var images = canvas.getImages();
-            // if the canvas has images it's IIIF
-            if (images && images.length) {
+            if (content && content.length) {
+                var annotation = content[0];
+                var annotationBody = annotation.getBody();
+                if (annotationBody.length) {
+                    return annotationBody[0].id;
+                }
+                return null;
+            }
+            else if (images && images.length) {
                 var infoUri = null;
                 var firstImage = images[0];
                 var resource = firstImage.getResource();
