@@ -935,6 +935,24 @@ export class BaseExtension implements IExtension {
         }
     }
 
+    getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[] {
+
+        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+
+        if (annotations && annotations.length) {
+            const annotation: Manifesto.IAnnotation = annotations[0];
+            return annotation.getBody();
+        } else {
+            const body: Manifesto.IAnnotationBody = <any>{
+                id: canvas.id,
+                type: canvas.getType()
+            }
+
+            return [body];
+        }
+
+    }
+
     viewCanvas(canvasIndex: number): void {
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {

@@ -67,12 +67,33 @@ export class MediaElementCenterPanel extends CenterPanel {
             const poster: string = (<IMediaElementExtension>this.extension).getPosterImageUri();
             const sources: any[] = [];
 
-            $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
-                sources.push({
-                    type: rendering.getFormat().toString(),
-                    src: rendering.id
+            const renderings: Manifesto.IRendering[] = canvas.getRenderings();
+            
+            if (renderings && renderings.length) {
+                $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
+                    sources.push({
+                        type: rendering.getFormat().toString(),
+                        src: rendering.id
+                    });
                 });
-            });
+            } else {
+                const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
+
+                if (formats && formats.length) {
+                    $.each(formats, (index: number, format: Manifesto.IAnnotationBody) => {
+                        
+                        const type: Manifesto.MediaType | null = format.getFormat();
+
+                        if (type) {
+                            sources.push({
+                                type: type.toString(),
+                                src: format.id
+                            });
+                        }
+                        
+                    });
+                }
+            }
 
             if (this.isVideo()) {
 

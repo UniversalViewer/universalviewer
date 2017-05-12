@@ -162,11 +162,47 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
 
     // todo: use canvas.getThumbnail()
     getPosterImageUri(): string {
-        return this.helper.getCurrentCanvas().getProperty('thumbnail');
+
+        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+        
+        if (annotations && annotations.length) {
+            return annotations[0].getProperty('thumbnail');
+        } else {
+            return canvas.getProperty('thumbnail');
+        }
+    }
+
+    isVideoFormat(type: string): boolean {
+        const videoFormats: string[] = [manifesto.MediaType.mp4().toString(), manifesto.MediaType.webm().toString()];
+        return videoFormats.indexOf(type) != -1;
     }
 
     isVideo(): boolean {
-        const elementType: Manifesto.ElementType = this.helper.getElementType();
-        return elementType.toString() === manifesto.ElementType.movingimage().toString();
+
+        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+        
+        if (annotations && annotations.length) {
+
+            const formats: Manifesto.IAnnotationBody[] | null = this.getMediaFormats(canvas);
+
+            for (let i = 0; i < formats.length; i++) {
+
+                const format: Manifesto.IAnnotationBody = formats[i];
+                const type: Manifesto.MediaType | null = format.getFormat();
+
+                if (type) {
+                    if (this.isVideoFormat(type.toString())) {
+                        return true;
+                    }
+                }
+            }
+
+        } else {
+            return canvas.getType().toString() === manifesto.ElementType.movingimage().toString();
+        }
+
+        throw(new Error("Unable to determine media type"));
     }
 }

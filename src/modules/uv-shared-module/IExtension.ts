@@ -23,6 +23,7 @@ export interface IExtension {
     getEmbedDomain(): string | null;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getIIIFShareUrl(): string;
+    getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[];
     getPagedIndices(canvasIndex?: number): number[];
     getSerializedLocales(): string;
     getSettings(): ISettings;

@@ -20,11 +20,19 @@ export class PDFCenterPanel extends CenterPanel {
 
     openMedia(resources: Manifesto.IExternalResource[]) {
 
-        this.extension.getExternalResources(resources).then(() => {
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        this.extension.getExternalResources(resources).then(() => {   
+            
+            let mediaUri: string | null = null;
+            let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(canvas);
 
-            const pdfUri: string = canvas.id;
-            window.PDFObject.embed(pdfUri, '#content', {id: "PDF"});
+            if (formats && formats.length) {
+                mediaUri = formats[0].id;
+            } else {
+                mediaUri = canvas.id;
+            }
+
+            window.PDFObject.embed(mediaUri, '#content', {id: "PDF"});
         });
     }
 

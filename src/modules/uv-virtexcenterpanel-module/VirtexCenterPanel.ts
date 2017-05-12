@@ -77,12 +77,21 @@ export class VirtexCenterPanel extends CenterPanel {
         this.extension.getExternalResources(resources).then(() => {
 
             this.$viewport.empty();
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+
+            let mediaUri: string | null = null;
+            let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+
+            if (formats && formats.length) {
+                mediaUri = formats[0].id;
+            } else {
+                mediaUri = canvas.id;
+            }
 
             this.viewport = new Virtex.Viewport({
                 target: this.$viewport[0],
                 data: {
-                    file: canvas.id,
+                    file: mediaUri,
                     fullscreenEnabled: false,
                     type: new Virtex.FileType("application/vnd.threejs+json"),
                     showStats: this.options.showStats
