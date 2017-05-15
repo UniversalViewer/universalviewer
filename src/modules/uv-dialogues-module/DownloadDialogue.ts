@@ -65,18 +65,44 @@ export class DownloadDialogue extends Dialogue {
 
             let renderingFound: boolean = false;
 
-            $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
+            const renderings: Manifesto.IRendering[] = canvas.getRenderings();
+
+            for (let i = 0; i < renderings.length; i++) {
+                const rendering: Manifesto.IRendering = renderings[i];
                 const renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
                 let format: string = '';
-                if (renderingFormat){
+                if (renderingFormat) {
                     format = renderingFormat.toString();
                 }
                 this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
                 renderingFound = true;
-            });
+            }
 
             if (!renderingFound) {
-                this.addEntireFileDownloadOption(canvas.id, '', '');
+
+                let annotationFound: boolean = false;
+
+                const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+
+                for (let i = 0; i < annotations.length; i++) {
+                    const annotation: Manifesto.IAnnotation = annotations[i];
+                    const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+
+                    if (body.length) {
+                        const format: Manifesto.MediaType | null = body[0].getFormat();
+
+                        if (format) {
+                            this.addEntireFileDownloadOption(body[0].id, '', format.toString());
+                            annotationFound = true;
+                        }
+                        
+                    }
+                }
+
+                if (!annotationFound) {
+                    this.addEntireFileDownloadOption(canvas.id, '', '');
+                }
+
             }
         }
     }

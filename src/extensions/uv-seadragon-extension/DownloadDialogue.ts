@@ -222,7 +222,6 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             // dimensions
             const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
-
             if (!size){
                 this.$wholeImageHighResButton.hide();
             } else {

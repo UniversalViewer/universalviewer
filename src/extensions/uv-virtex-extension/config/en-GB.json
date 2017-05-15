@@ -25,7 +25,7 @@
     "footerPanel":
     {
       "options": {
-        "downloadEnabled": false,
+        "downloadEnabled": true,
         "embedEnabled": false,
         "feedbackEnabled": false,
         "minimiseButtons": true,
