@@ -5,8 +5,8 @@ import {UVUtils} from "../uv-shared-module/Utils";
 export class FileLinkCenterPanel extends CenterPanel {
 
     $scroll: JQuery;
-    $downloadLinks: JQuery;
-    $downloadLinkTemplate: JQuery;
+    $downloadItems: JQuery;
+    $downloadItemTemplate: JQuery;
 
     title: string | null;
 
@@ -27,10 +27,10 @@ export class FileLinkCenterPanel extends CenterPanel {
         this.$scroll = $('<div class="scroll"><div>');
         this.$content.append(this.$scroll);
 
-        this.$downloadLinks = $('<ul></ul>');
-        this.$scroll.append(this.$downloadLinks);
+        this.$downloadItems = $('<ol></ol>');
+        this.$scroll.append(this.$downloadItems);
 
-        this.$downloadLinkTemplate = $('<li><img><a target="_blank" download></a></li>');
+        this.$downloadItemTemplate = $('<li><img><div class="col2"><a class="filename" target="_blank" download></a><span class="label"></span><a class="description" target="_blank" download></a></div></li>');
 
         this.title = this.extension.helper.getLabel();
     }
@@ -38,10 +38,11 @@ export class FileLinkCenterPanel extends CenterPanel {
     openMedia(resources: Manifesto.IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
+            
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
             const annotations: Manifesto.IAnnotation[] = canvas.getContent();
 
-            let $link: JQuery;
+            let $item: JQuery;
 
             for (let i = 0; i < annotations.length; i++) {
                 const annotation: Manifesto.IAnnotation = annotations[i];
@@ -50,26 +51,41 @@ export class FileLinkCenterPanel extends CenterPanel {
                     continue;
                 }
 
-                $link = this.$downloadLinkTemplate.clone();
-                const $a: JQuery = $link.find('a');
-                const $img: JQuery = $link.find('img');
+                $item = this.$downloadItemTemplate.clone();
+                const $fileName: JQuery = $item.find('.filename');
+                const $label: JQuery = $item.find('.label');
+                const $thumb: JQuery = $item.find('img');
+                const $description: JQuery = $item.find('.description');
+
                 const annotationBody: Manifesto.IAnnotationBody = annotation.getBody()[0];
-                $a.prop('href', annotationBody.getProperty('id'));
+
+                const id: string = annotationBody.getProperty('id');
+
+                $fileName.prop('href', id);
+                $fileName.text(id.substr(id.lastIndexOf('/') + 1));
+
                 let label: string | null = Manifesto.TranslationCollection.getValue(annotationBody.getLabel());
 
                 if (label) {
-                    $a.text(String.format(this.content.downloadLink, UVUtils.sanitize(label)));
+                    $label.text(UVUtils.sanitize(label));
                 }
 
                 const thumbnail: string = annotation.getProperty('thumbnail');
 
                 if (thumbnail) {
-                    $img.prop('src', thumbnail);
+                    $thumb.prop('src', thumbnail);
                 } else {
-                    $img.hide();
+                    $thumb.hide();
                 }
 
-                this.$downloadLinks.append($link);
+                let description: string | null = annotationBody.getProperty('description');
+
+                if (description) {
+                    $description.text(UVUtils.sanitize(description));
+                    $description.prop('href', id);
+                }
+
+                this.$downloadItems.append($item);
             }
 
         });
