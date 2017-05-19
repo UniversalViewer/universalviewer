@@ -14,7 +14,6 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     private _extensions: IExtension[];
     public extension: IExtension;
     public isFullScreen: boolean = false;
-    public socket: any;
     public URLDataProvider: IUVDataProvider;
 
     constructor(options: _Components.IBaseComponentOptions) {
