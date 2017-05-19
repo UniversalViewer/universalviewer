@@ -6,13 +6,9 @@ export interface IUVData {
     collectionIndex: number;
     config: any;
     configUri: string | null;
-    domain: string | null;
-    embedDomain: string | null;
-    embedScriptUri: string | null;
+    deepLinkingEnabled: boolean;
     iiifResourceUri: string;
-    isHomeDomain: boolean;
     isLightbox: boolean;
-    isOnlyInstance: boolean;
     isReload: boolean;
     locales: ILocale[];
     manifestIndex: number;

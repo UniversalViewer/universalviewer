@@ -20,7 +20,6 @@ export interface IExtension {
     getCurrentCanvasRange(): Manifesto.IRange | null;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
-    getEmbedDomain(): string | null;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
     getIIIFShareUrl(): string;
     getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[];
@@ -37,7 +36,6 @@ export interface IExtension {
     isHeaderPanelEnabled(): boolean;
     isLeftPanelEnabled(): boolean;
     isLoggedIn: boolean;
-    isOnHomeDomain(): boolean;
     isOverlayActive(): boolean;
     isRightPanelEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;

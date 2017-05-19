@@ -140,7 +140,7 @@ export class FooterPanel extends BaseView {
     updateOpenButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.openEnabled, false);
 
-        if (configEnabled && !this.extension.data.isHomeDomain){
+        if (configEnabled && Utils.Documents.isInIFrame()){
             this.$openButton.show();
         } else {
             this.$openButton.hide();

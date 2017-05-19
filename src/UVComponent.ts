@@ -97,13 +97,9 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             collectionIndex: 0,
             config: null,
             configUri: null,
-            domain: null,
-            embedDomain: null,
-            embedScriptUri: null,
+            deepLinkingEnabled: true,
             iiifResourceUri: '',
-            isHomeDomain: true,
             isLightbox: false,
-            isOnlyInstance: true,
             isReload: false,
             limitLocales: false,
             locales: [
@@ -200,7 +196,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }).then((helper: Manifold.IHelper) => {
             
             let trackingLabel: string = helper.getTrackingLabel();
-            trackingLabel += ', URI: ' + data.embedDomain;
+            trackingLabel += ', URI: ' + (window.location !== window.parent.location) ? document.referrer : document.location;
             window.trackingLabel = trackingLabel;
 
             const sequence: Manifesto.ISequence = helper.getSequenceByIndex(data.sequenceIndex);

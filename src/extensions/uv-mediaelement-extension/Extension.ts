@@ -155,9 +155,9 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number): string {
-        const configUri: string = this.data.config.uri || '';
-        const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
-        return script;
+        //const configUri: string = this.data.config.uri || '';
+        //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
+        return '';// script;
     }
 
     // todo: use canvas.getThumbnail()

@@ -69,7 +69,6 @@ export class BaseExtension implements IExtension {
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         this.$element.prop('tabindex', 0);
-        if (!this.data.isHomeDomain) this.$element.addClass('embedded');
         if (this.data.isLightbox) this.$element.addClass('lightbox');
 
         this.$element.on('mousemove', (e) => {
@@ -161,17 +160,15 @@ export class BaseExtension implements IExtension {
                 }
             });
 
-            if (this.data.isHomeDomain) {
-
-                $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
-                    if (this.isOverlayActive()) {
-                        $.publish(BaseEvents.ESCAPE);
-                    }
-
+            $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+                if (this.isOverlayActive()) {
                     $.publish(BaseEvents.ESCAPE);
-                    $.publish(BaseEvents.RESIZE);
-                });
-            }
+                }
+
+                $.publish(BaseEvents.ESCAPE);
+                $.publish(BaseEvents.RESIZE);
+            });
+
         }
 
         this.$element.append('<a href="/" id="top"></a>');
@@ -772,20 +769,12 @@ export class BaseExtension implements IExtension {
     }
 
     isDeepLinkingEnabled(): boolean {
-        return (this.data.isHomeDomain && this.data.isOnlyInstance);
-    }
-
-    isOnHomeDomain(): boolean {
-        return this.isDeepLinkingEnabled();
+        return this.data.deepLinkingEnabled;
     }
 
     getDomain(): string {
         const parts: any = Utils.Urls.getUrlParts(this.helper.iiifResourceUri);
         return parts.host;
-    }
-
-    getEmbedDomain(): string | null {
-        return this.data.embedDomain;
     }
 
     getSettings(): ISettings {
