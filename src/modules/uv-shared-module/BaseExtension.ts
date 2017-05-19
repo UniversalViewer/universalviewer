@@ -206,7 +206,8 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            this.fire(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
+            this.data.canvasIndex = canvasIndex;
+            this.fire(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
         });
 
         $.subscribe(BaseEvents.CLICKTHROUGH, () => {
@@ -228,7 +229,8 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.COLLECTION_INDEX_CHANGED, (e: any, collectionIndex: number) => {
-            this.fire(BaseEvents.COLLECTION_INDEX_CHANGED, collectionIndex);
+            this.data.collectionIndex = collectionIndex;
+            this.fire(BaseEvents.COLLECTION_INDEX_CHANGED, this.data.collectionIndex);
         });
 
         $.subscribe(BaseEvents.CREATED, () => {
@@ -342,7 +344,8 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.MANIFEST_INDEX_CHANGED, (e: any, manifestIndex: number) => {
-            this.fire(BaseEvents.MANIFEST_INDEX_CHANGED, manifestIndex);
+            this.data.manifestIndex = manifestIndex;
+            this.fire(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
         });
 
         $.subscribe(BaseEvents.NOT_FOUND, () => {
@@ -409,7 +412,8 @@ export class BaseExtension implements IExtension {
         });
 
         $.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, (e: any, sequenceIndex: number) => {
-            this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED, sequenceIndex);
+            this.data.sequenceIndex = sequenceIndex;
+            this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
         });
 
         $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {

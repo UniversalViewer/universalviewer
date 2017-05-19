@@ -256,7 +256,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             
             if (this.centerPanel && bounds) {
                 $.publish(Events.XYWH_CHANGED, [bounds.toString()]);
-                this.fire(Events.XYWH_CHANGED, bounds.toString());
+                (<ISeadragonExtensionData>this.data).xywh = bounds.toString();
+                this.fire(Events.XYWH_CHANGED, (<ISeadragonExtensionData>this.data).xywh);
             }
 
             const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
@@ -283,7 +284,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEADRAGON_ROTATION, (e: any, rotation: number) => {
-            this.fire(Events.SEADRAGON_ROTATION, rotation);
+            (<ISeadragonExtensionData>this.data).rotation = rotation;
+            this.fire(Events.SEADRAGON_ROTATION, (<ISeadragonExtensionData>this.data).rotation);
             this.currentRotation = rotation;
         });
 
