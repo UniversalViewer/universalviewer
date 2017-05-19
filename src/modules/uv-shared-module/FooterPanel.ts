@@ -114,7 +114,7 @@ export class FooterPanel extends BaseView {
     updateMinimisedButtons(): void {
         
         // if configured to always minimise buttons
-        if (Utils.Bools.getBool(this.options.minimiseButtons, false)){
+        if (Utils.Bools.getBool(this.options.minimiseButtons, false)) {
             this.$options.addClass('minimiseButtons');
             return;
         }
@@ -130,7 +130,7 @@ export class FooterPanel extends BaseView {
     updateMoreInfoButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
 
-        if (configEnabled && this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()){
+        if (configEnabled && this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
             this.$moreInfoButton.show();
         } else {
             this.$moreInfoButton.hide();
@@ -140,7 +140,7 @@ export class FooterPanel extends BaseView {
     updateOpenButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.openEnabled, false);
 
-        if (configEnabled && Utils.Documents.isInIFrame()){
+        if (configEnabled && Utils.Documents.isInIFrame()) {
             this.$openButton.show();
         } else {
             this.$openButton.hide();
@@ -148,11 +148,12 @@ export class FooterPanel extends BaseView {
     }
 
     updateFullScreenButton(): void {
-        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true)){
+        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true) || Utils.Documents.isInIFrame()) {
             this.$fullScreenBtn.hide();
+            return;
         }
 
-        if (this.extension.data.isLightbox){
+        if (this.extension.data.isLightbox) {
             this.$fullScreenBtn.addClass('lightbox');
         }
 
@@ -168,9 +169,9 @@ export class FooterPanel extends BaseView {
     }
 
     updateEmbedButton(): void {
-        if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)){
-            //current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
-            if (!$.browser.mobile){
+        if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)) {
+            // current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
+            if (!$.browser.mobile) {
               this.$embedButton.show();
             }
         } else {
@@ -179,7 +180,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateShareButton(): void {
-        if (this.extension.helper.isUIEnabled('share') && Utils.Bools.getBool(this.options.shareEnabled, true)){
+        if (this.extension.helper.isUIEnabled('share') && Utils.Bools.getBool(this.options.shareEnabled, true)) {
             this.$shareButton.show();
         } else {
             this.$shareButton.hide();
