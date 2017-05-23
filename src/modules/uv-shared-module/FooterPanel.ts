@@ -148,7 +148,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateFullScreenButton(): void {
-        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true) || Utils.Documents.isInIFrame()) {
+        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true) || !Utils.Documents.supportsFullscreen()) {
             this.$fullScreenBtn.hide();
             return;
         }
