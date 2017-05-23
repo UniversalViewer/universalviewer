@@ -777,6 +777,33 @@ export class BaseExtension implements IExtension {
         return parts.host;
     }
 
+    getAppUri(): string {
+        const parts: any = Utils.Urls.getUrlParts(document.location.href);
+        const origin: string = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+        let pathname: string = parts.pathname;
+
+        if (!pathname.startsWith('/')) {
+            pathname = '/' + pathname;
+        }
+
+        pathname = pathname.substr(0, pathname.lastIndexOf('/')); // remove the file name
+        
+        let appUri: string = origin + pathname;
+        let root: string = this.data.root || '';
+
+        if (root.startsWith('.')) {
+            root = root.substr(1);
+        }
+
+        if (!root.endsWith('/')) {
+            root += '/';
+        }
+
+        appUri += root + 'uv.html';        
+
+        return appUri;
+    }
+
     getSettings(): ISettings {
         if (Utils.Bools.getBool(this.data.config.options.saveUserSettings, false)) {
 

@@ -15,6 +15,7 @@ export interface IExtension {
     exitFullScreen(): void;
     fire(name: string, ...args: any[]): void;
     getAlternateLocale(): ILocale | null;
+    getAppUri(): string;
     getCanvasLabels(label: string): string;
     getCurrentCanvases(): Manifesto.ICanvas[];
     getCurrentCanvasRange(): Manifesto.IRange | null;

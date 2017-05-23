@@ -858,13 +858,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string {
         //const configUri = this.data.config.uri || '';
         // const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.data.embedScriptUri);
-
-        const parts: any = Utils.Urls.getUrlParts(document.location.href);
-        const origin: string = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-        let appUri: string = origin + '/' + parts.pathname;
-        if (!appUri.endsWith('uv.html')) {
-            appUri += 'uv.html';
-        }
+        const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&xywh=${zoom}&r=${rotation}`;
         const script: string = String.format(template, iframeSrc, width, height);
         

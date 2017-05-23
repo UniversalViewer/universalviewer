@@ -140,12 +140,29 @@ module.exports = function (grunt) {
                         src: ['<%= config.directories.lib %>/offline.js'],
                         dest: '<%= config.directories.build %>/lib'
                     },
-                    // helpers
+                    // js
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.src %>/helpers/*'],
-                        dest: '<%= config.directories.build %>/helpers/'
+                        src: ['<%= config.directories.src %>/Helpers.js'],
+                        dest: '<%= config.directories.build %>',
+                        rename: function(dest, src) {
+                            return dest + '/helpers.js';
+                        }
+                    },
+                    // html
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['<%= config.directories.src %>/uv.html'],
+                        dest: '<%= config.directories.build %>'
+                    },
+                    // css
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['<%= config.directories.src %>/uv.css'],
+                        dest: '<%= config.directories.build %>'
                     },
                     // extension configuration files
                     {
