@@ -33,6 +33,7 @@
             urlDataProvider = new UV.URLDataProvider();
 
             uv = createUV('#uv', {
+                root: '../uv',
                 iiifResourceUri: urlDataProvider.get('manifest'),
                 collectionIndex: Number(urlDataProvider.get('c', 0)),
                 manifestIndex: Number(urlDataProvider.get('m', 0)),

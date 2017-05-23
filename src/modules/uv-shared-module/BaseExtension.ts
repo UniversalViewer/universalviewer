@@ -786,17 +786,22 @@ export class BaseExtension implements IExtension {
             pathname = '/' + pathname;
         }
 
-        pathname = pathname.substr(0, pathname.lastIndexOf('/')); // remove the file name
+        pathname = pathname.substr(0, pathname.lastIndexOf('/') + 1); // remove the file name
         
         let appUri: string = origin + pathname;
-        let root: string = this.data.root || '';
+        let root: string = '';
 
-        if (root.startsWith('.')) {
-            root = root.substr(1);
-        }
+        if (!Utils.Documents.isInIFrame()) {
 
-        if (!root.endsWith('/')) {
-            root += '/';
+            root = this.data.root || '';
+
+            if (root.startsWith('./')) {
+                root = root.substr(2);
+            }
+
+            if (!root.endsWith('/')) {
+                root += '/';
+            }
         }
 
         appUri += root + 'uv.html';        
