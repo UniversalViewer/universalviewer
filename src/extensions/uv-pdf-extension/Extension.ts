@@ -146,6 +146,9 @@ export class Extension extends BaseExtension implements IPDFExtension {
     getEmbedScript(template: string, width: number, height: number): string{
         //const configUri = this.data.config.uri || '';
         //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
-        return '';// script;
+        const appUri: string = this.getAppUri();
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        const script: string = String.format(template, iframeSrc, width, height);
+        return script;
     }
 }

@@ -141,7 +141,8 @@ var Manifold;
             if (!bootstrapper._options.iiifResource) {
                 bootstrapper._options.iiifResource = iiifResource;
             }
-            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString()) {
+            if (iiifResource.getIIIFResourceType().toString() === manifesto.IIIFResourceType.collection().toString() ||
+                iiifResource.getIIIFResourceType().toString().toLowerCase() === 'collection') {
                 // if it's a collection and has child collections, get the collection by index
                 var collections = iiifResource.getCollections();
                 if (collections && collections.length) {

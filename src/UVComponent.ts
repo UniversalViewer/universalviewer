@@ -12,7 +12,7 @@ import {IUVDataProvider} from "./IUVDataProvider";
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
     private _extensions: IExtension[];
-    public extension: IExtension;
+    public extension: IExtension | null;
     public isFullScreen: boolean = false;
     public URLDataProvider: IUVDataProvider;
 
@@ -159,11 +159,17 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     }
 
     private _propertyChanged(data: IUVData, propertyName: string): boolean {
-        return !!data[propertyName] && this.extension.data[propertyName] !== data[propertyName];
+        if (this.extension) {
+            return !!data[propertyName] && this.extension.data[propertyName] !== data[propertyName];
+        }
+
+        return false;
     }
 
     public get(key: string): any {
-        return this.extension.data[key];
+        if (this.extension) {
+            return this.extension.data[key];
+        }
     }
 
     private _reload(data: IUVData): void {
@@ -346,18 +352,24 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
     private _createExtension(extension: any, data: IUVData, helper: Manifold.IHelper): void {
         this.extension = new extension.type();
-        this.extension.component = this;
-        this.extension.data = data;
-        this.extension.helper = helper;
-        this.extension.name = extension.name;
-        this.extension.create();
+        if (this.extension) {
+            this.extension.component = this;
+            this.extension.data = data;
+            this.extension.helper = helper;
+            this.extension.name = extension.name;
+            this.extension.create();
+        }
     }
 
     public exitFullScreen(): void {
-        this.extension.exitFullScreen();
+        if (this.extension) {
+            this.extension.exitFullScreen();
+        }
     }
 
     public resize(): void {
-        this.extension.resize();
+        if (this.extension) {
+            this.extension.resize();
+        }
     }
 }

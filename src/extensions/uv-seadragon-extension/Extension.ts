@@ -13,7 +13,6 @@ import {FooterPanel} from "../../modules/uv-searchfooterpanel-module/FooterPanel
 import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
 import {ISeadragonExtension} from "./ISeadragonExtension";
 import {ISeadragonExtensionData} from "./ISeadragonExtensionData";
-import {MetricType} from "../../modules/uv-shared-module/MetricType";
 import {Mode} from "./Mode";
 import {MoreInfoDialogue} from "../../modules/uv-dialogues-module/MoreInfoDialogue";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
@@ -64,7 +63,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         super.create();
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            if (this.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
+            if (this.isMobileView()) {
                 const settings: ISettings = {};
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
@@ -137,7 +136,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            if (this.metric.toString() !== MetricType.MOBILELANDSCAPE.toString()) {
+            if (!this.isMobileView()) {
                 Shell.$rightPanel.show();
             }
         });
@@ -344,13 +343,13 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     createModules(): void {
         super.createModules();
 
-        if (this.isHeaderPanelEnabled()){
+        if (this.isHeaderPanelEnabled()) {
             this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
         } else {
             Shell.$headerPanel.hide();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
         } else {
             Shell.$leftPanel.hide();
@@ -358,13 +357,13 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         } else {
             Shell.$rightPanel.hide();
         }
 
-        if (this.isFooterPanelEnabled()){
+        if (this.isFooterPanelEnabled()) {
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
             this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
         } else {
@@ -861,7 +860,6 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&xywh=${zoom}&r=${rotation}`;
         const script: string = String.format(template, iframeSrc, width, height);
-        
         return script;
     }
 

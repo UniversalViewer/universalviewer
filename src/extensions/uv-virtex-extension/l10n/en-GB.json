@@ -31,7 +31,8 @@
         "embed": "Embed",
         "exitFullScreen": "Exit Full Screen",
         "fullScreen": "Full Screen",
-        "open": "Open"
+        "open": "Open",
+        "share": "Share"
       }
     },
     "genericDialogue": {

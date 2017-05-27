@@ -203,6 +203,12 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: 'src/img/*',
                         dest: '<%= config.directories.build %>/img/'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: 'src/favicon.ico',
+                        dest: '<%= config.directories.build %>'
                     }
                 ]
             },

@@ -83,12 +83,19 @@ export class Dialogue extends BaseView {
         const top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
         let left: number = 0;
         let arrowLeft: number = 0;
+        let normalisedPos: number = 0;
 
         if (this.$triggerButton) {
             // get the normalised position of the button
-            const buttonPos: number = Math.normalise(this.$triggerButton.position().left, 0, this.extension.width());
-            left = Math.floor((this.extension.width() * buttonPos) - (this.$element.width() * buttonPos));
-            arrowLeft = (this.$element.width() * buttonPos);
+            if (this.extension.isMobileView()) {
+                normalisedPos = Math.normalise(this.$triggerButton.offset().left, 0, this.extension.width());
+            } else {
+                normalisedPos = Math.normalise(this.$triggerButton.position().left, 0, this.extension.width());
+            }
+            
+            left = Math.floor((this.extension.width() * normalisedPos) - (this.$element.width() * normalisedPos));
+            //left = Math.floor((this.extension.width() * normalisedPos));
+            arrowLeft = (this.$element.width() * normalisedPos);
         }
 
         this.$bottom.css('backgroundPosition', arrowLeft + 'px 0px');

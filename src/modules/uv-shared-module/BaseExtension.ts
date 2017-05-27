@@ -804,7 +804,7 @@ export class BaseExtension implements IExtension {
             }
         }
 
-        appUri += root + 'uv.html';        
+        appUri += root + 'uv.html';
 
         return appUri;
     }
@@ -1004,15 +1004,19 @@ export class BaseExtension implements IExtension {
             }]);
     }
 
-    closeActiveDialogue(): void{
+    closeActiveDialogue(): void {
         $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
     }
 
-    isOverlayActive(): boolean{
+    isOverlayActive(): boolean {
         return Shell.$overlays.is(':visible');
     }
 
-    viewManifest(manifest: Manifesto.IManifest): void{
+    isMobileView(): boolean {
+        return this.metric.toString() === MetricType.MOBILELANDSCAPE.toString();
+    }
+
+    viewManifest(manifest: Manifesto.IManifest): void {
         const data: IUVData = <IUVData>{};
         data.iiifResourceUri = this.helper.iiifResourceUri;
         data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
@@ -1023,7 +1027,7 @@ export class BaseExtension implements IExtension {
         this.reload(data);
     }
 
-    viewCollection(collection: Manifesto.ICollection): void{
+    viewCollection(collection: Manifesto.ICollection): void {
         const data: IUVData = <IUVData>{};
         data.iiifResourceUri = this.helper.iiifResourceUri;
         data.collectionIndex = collection.index;
