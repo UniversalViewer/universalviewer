@@ -855,10 +855,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string {
-        //const configUri = this.data.config.uri || '';
-        // const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.data.embedScriptUri);
+        const config: string = this.data.config.uri || '';
+        const locales: string =this.getSerializedLocales();
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&xywh=${zoom}&r=${rotation}`;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
         const script: string = String.format(template, iframeSrc, width, height);
         return script;
     }
@@ -869,7 +869,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.isPagingSettingEnabled()) {
             let indices: number[] = this.getPagedIndices(canvasIndex);
 
-            if (this.helper.isRightToLeft()){
+            if (this.helper.isRightToLeft()) {
                 index = indices[indices.length - 1] - 1;
             } else {
                 index = indices[0] - 1;
@@ -883,7 +883,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     isSearchEnabled(): boolean {
-        if (!Utils.Bools.getBool(this.data.config.options.searchWithinEnabled, false)){
+        if (!Utils.Bools.getBool(this.data.config.options.searchWithinEnabled, false)) {
             return false;
         }
 
@@ -895,7 +895,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     isPagingSettingEnabled(): boolean {
-        if (this.helper.isPagingAvailable()){
+        if (this.helper.isPagingAvailable()) {
             return <boolean>this.getSettings().pagingEnabled;
         }
 
@@ -906,7 +906,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     
        let index: number;
     
-       if (this.isPagingSettingEnabled()){
+       if (this.isPagingSettingEnabled()) {
            let indices: number[] = this.getPagedIndices(canvasIndex);
     
            if (this.helper.isRightToLeft()){

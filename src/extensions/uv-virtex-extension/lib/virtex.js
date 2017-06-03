@@ -41,6 +41,7 @@ var Virtex;
     }(Virtex.StringValue));
     FileType.DRACO = new FileType("application/octet-stream");
     FileType.GLTF = new FileType("model/gltf+json");
+    FileType.OBJ = new FileType("text/plain");
     FileType.THREEJS = new FileType("application/vnd.threejs+json");
     Virtex.FileType = FileType;
 })(Virtex || (Virtex = {}));
@@ -112,6 +113,28 @@ var Virtex;
     Virtex.glTFFileTypeHandler = glTFFileTypeHandler;
 })(Virtex || (Virtex = {}));
 
+
+var Virtex;
+(function (Virtex) {
+    var ObjFileTypeHandler = (function () {
+        function ObjFileTypeHandler() {
+        }
+        ObjFileTypeHandler.setup = function (viewport, obj, objpath) {
+            var imgloader = new THREE.MTLLoader();
+            imgloader.setPath(objpath.substring(0, objpath.lastIndexOf("/") + 1));
+            imgloader.load(obj.materialLibraries[0], function (materials) {
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load(objpath, function (object) {
+                    viewport.objectGroup.add(object);
+                    viewport.createCamera();
+                }, function (e) { console.log("obj progress", e); }, function (e) { console.log("obj error", e); });
+            }, function (e) { console.log("mtl progress", e); }, function (e) { console.log("mtl error", e); });
+        };
+        return ObjFileTypeHandler;
+    }());
+    Virtex.ObjFileTypeHandler = ObjFileTypeHandler;
+})(Virtex || (Virtex = {}));
 
 var Virtex;
 (function (Virtex) {
@@ -213,8 +236,10 @@ var Virtex;
         };
         Viewport.prototype.data = function () {
             return {
+                alpha: true,
                 ambientLightColor: 0xd0d0d0,
                 ambientLightIntensity: 1,
+                antialias: true,
                 cameraZ: 4.5,
                 directionalLight1Color: 0xffffff,
                 directionalLight1Intensity: 0.75,
@@ -270,8 +295,8 @@ var Virtex;
         };
         Viewport.prototype._createRenderer = function () {
             this._renderer = new THREE.WebGLRenderer({
-                antialias: true,
-                alpha: true
+                antialias: this.options.data.antialias,
+                alpha: this.options.data.alpha
             });
             if (this._isVRMode) {
                 this._renderer.setClearColor(this.options.data.vrBackgroundColor);
@@ -326,7 +351,7 @@ var Virtex;
             });
             window.addEventListener('resize', function () { return _this._resize(); }, false);
         };
-        Viewport.prototype._loadObject = function (object) {
+        Viewport.prototype._loadObject = function (objectPath) {
             var _this = this;
             this._$loading.show();
             var loader;
@@ -337,6 +362,9 @@ var Virtex;
                 case Virtex.FileType.GLTF.toString():
                     loader = new THREE.GLTFLoader();
                     break;
+                case Virtex.FileType.OBJ.toString():
+                    loader = new THREE.OBJLoader();
+                    break;
                 case Virtex.FileType.THREEJS.toString():
                     loader = new THREE.ObjectLoader();
                     break;
@@ -344,7 +372,7 @@ var Virtex;
             if (loader.setCrossOrigin) {
                 loader.setCrossOrigin('anonymous');
             }
-            loader.load(object, function (obj) {
+            loader.load(objectPath, function (obj) {
                 switch (_this.options.data.type.toString()) {
                     case Virtex.FileType.DRACO.toString():
                         Virtex.DRACOFileTypeHandler.setup(_this, obj);
@@ -354,6 +382,9 @@ var Virtex;
                         break;
                     case Virtex.FileType.THREEJS.toString():
                         Virtex.ThreeJSFileTypeHandler.setup(_this, obj);
+                        break;
+                    case Virtex.FileType.OBJ.toString():
+                        Virtex.ObjFileTypeHandler.setup(_this, obj, objectPath);
                         break;
                 }
                 _this._$loading.fadeOut(_this.options.data.fadeSpeed);

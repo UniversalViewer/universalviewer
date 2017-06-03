@@ -88,9 +88,12 @@ export class VirtexCenterPanel extends CenterPanel {
                 mediaUri = canvas.id;
             }
 
+            const isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+
             this.viewport = new Virtex.Viewport({
                 target: this.$viewport[0],
                 data: {
+                    antialias: !isAndroid,
                     file: mediaUri,
                     fullscreenEnabled: false,
                     type: new Virtex.FileType("application/vnd.threejs+json"),
