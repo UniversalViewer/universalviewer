@@ -16,6 +16,7 @@
     "url": "https://github.com/universalviewer/universalviewer/issues"
   },
   "scripts": {
+    "postinstall": "opencollective postinstall"
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
@@ -60,5 +61,13 @@
     "units": "edsilv/Units",
     "utils": "edsilv/utils",
     "virtex3d": "^0.2.6"
+  },
+  "dependencies": {
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/universalviewer",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }
