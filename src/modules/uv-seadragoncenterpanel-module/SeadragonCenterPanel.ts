@@ -522,19 +522,24 @@ export class SeadragonCenterPanel extends CenterPanel {
         }
         
         this.setNavigatorVisible();
-        this.overlayAnnotations();
-        this.updateBounds();
 
-        let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+        //setTimeout(() => {
+            this.overlayAnnotations();
 
-        (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
-        (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+            this.updateBounds();
 
-        if (annotationRect && this.isZoomToSearchResultEnabled()) {
-            this.zoomToAnnotation(annotationRect);
-        }
+            let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
 
-        this.isFirstLoad = false;
+            (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
+            (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+
+            if (annotationRect && this.isZoomToSearchResultEnabled()) {
+                this.zoomToAnnotation(annotationRect);
+            }
+
+            this.isFirstLoad = false;
+        //}, 1000);
+    
     }
 
     updateBounds(): void {

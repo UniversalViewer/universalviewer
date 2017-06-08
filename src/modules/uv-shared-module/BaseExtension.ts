@@ -611,21 +611,31 @@ export class BaseExtension implements IExtension {
         this.createModules();
         this.modulesCreated();
         $.publish(BaseEvents.RESIZE); // initial sizing
-        $.publish(BaseEvents.CREATED);
-        this.update();
-        this._setDefaultFocus();
+
+        setTimeout(() => {
+            this.update();
+            $.publish(BaseEvents.CREATED);
+            this._setDefaultFocus();
+        }, 1);
+        
     }
 
     public update(): void {
-
-        // allow 1ms for subclasses to subscribe to events.
-        setTimeout(() => {
+        if (!this.isCreated || (this.data.collectionIndex !== this.helper.collectionIndex)) {
             $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.data.collectionIndex]);
-            $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.data.manifestIndex]);
-            $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.data.sequenceIndex]);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex]);
-        }, 1);
+        }
 
+        if (!this.isCreated || (this.data.manifestIndex !== this.helper.manifestIndex)) {
+            $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.data.manifestIndex]);
+        }
+
+        if (!this.isCreated || (this.data.sequenceIndex !== this.helper.sequenceIndex)) {
+            $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.data.sequenceIndex]);
+        }
+
+        if (!this.isCreated || (this.data.canvasIndex !== this.helper.canvasIndex)) {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex]);
+        }
     }
 
     private _setDefaultFocus(): void {

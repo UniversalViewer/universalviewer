@@ -418,13 +418,15 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     update(): void {
         super.update();
 
-        Utils.Async.waitFor(() => {
-            return this.centerPanel && this.centerPanel.isCreated;
-        }, () => {
+        //Utils.Async.waitFor(() => {
+        //    return this.centerPanel && this.centerPanel.isCreated;
+        //}, () => {
+
             this.checkForAnnotations();
             this.checkForSearchParam();
             this.checkForRotationParam();
-        });
+
+        //});
     }
 
     checkForAnnotations(): void {
@@ -433,6 +435,24 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             $.publish(BaseEvents.CLEAR_ANNOTATIONS);
             this.annotate(annotations);
         }
+    }
+
+    annotate(annotations: AnnotationGroup[], terms?: string): void {
+        this.annotations = annotations;
+
+        // sort the annotations by canvasIndex
+        this.annotations = annotations.sort((a: AnnotationGroup, b: AnnotationGroup) => {
+            return a.canvasIndex - b.canvasIndex;
+        });
+        
+        const annotationResults: AnnotationResults = new AnnotationResults();
+        annotationResults.terms = terms;
+        annotationResults.annotations = <AnnotationGroup[]>this.annotations;
+
+        $.publish(BaseEvents.ANNOTATIONS, [annotationResults]);
+
+        // reload current index as it may contain annotations.
+        //$.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
     }
 
     checkForSearchParam(): void {
@@ -978,24 +998,6 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 });
             }
         });
-    }
-
-    annotate(annotations: AnnotationGroup[], terms?: string): void {
-        this.annotations = annotations;
-
-        // sort the annotations by canvasIndex
-        this.annotations = annotations.sort((a: AnnotationGroup, b: AnnotationGroup) => {
-            return a.canvasIndex - b.canvasIndex;
-        });
-        
-        const annotationResults: AnnotationResults = new AnnotationResults();
-        annotationResults.terms = terms;
-        annotationResults.annotations = <AnnotationGroup[]>this.annotations;
-
-        $.publish(BaseEvents.ANNOTATIONS, [annotationResults]);
-
-        // reload current index as it may contain annotations.
-        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
     }
 
     getSearchResults(searchUri: string, 
