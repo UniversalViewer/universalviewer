@@ -362,7 +362,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         // order by image area
-        let $options: JQuery = this.$imageOptions.find('li.single');
+        let $options: any = this.$imageOptions.find('li.single');
 
         $options = $options.sort((a: any, b: any) => {
             let aWidth: any = $(a).data('width');
