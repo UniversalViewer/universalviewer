@@ -13,6 +13,7 @@ import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/Res
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import {Shell} from "../../modules/uv-shared-module/Shell";
+import IThumb = Manifold.IThumb;
 
 export class Extension extends BaseExtension implements IMediaElementExtension {
 
@@ -46,8 +47,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
