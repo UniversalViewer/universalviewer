@@ -39,11 +39,54 @@ var Virtex;
         }
         return FileType;
     }(Virtex.StringValue));
-    FileType.DRACO = new FileType("application/octet-stream");
+    FileType.DRACO = new FileType("application/draco");
+    FileType.CORTO = new FileType("application/corto");
     FileType.GLTF = new FileType("model/gltf+json");
     FileType.OBJ = new FileType("text/plain");
     FileType.THREEJS = new FileType("application/vnd.threejs+json");
     Virtex.FileType = FileType;
+})(Virtex || (Virtex = {}));
+
+var Virtex;
+(function (Virtex) {
+    var CORTOFileTypeHandler = (function () {
+        function CORTOFileTypeHandler() {
+        }
+        CORTOFileTypeHandler.setup = function (viewport, obj) {
+            var bufferGeometry = obj.geometry;
+            /*            const material = new THREE.MeshStandardMaterial({vertexColors: THREE.VertexColors});
+                        let geometry;
+                        // Point cloud does not have face indices.
+                        if (bufferGeometry.index == null) {
+                            geometry = new THREE.Points(bufferGeometry, material);
+                        } else {
+                            bufferGeometry.computeVertexNormals();
+                            geometry = new THREE.Mesh(bufferGeometry, material);
+                        }
+            */
+            // Compute range of the geometry coordinates for proper rendering.
+            bufferGeometry.computeBoundingBox();
+            var sizeX = bufferGeometry.boundingBox.max.x - bufferGeometry.boundingBox.min.x;
+            var sizeY = bufferGeometry.boundingBox.max.y - bufferGeometry.boundingBox.min.y;
+            var sizeZ = bufferGeometry.boundingBox.max.z - bufferGeometry.boundingBox.min.z;
+            var diagonalSize = Math.sqrt(sizeX * sizeX + sizeY * sizeY + sizeZ * sizeZ);
+            var scale = 1.0 / diagonalSize;
+            var midX = (bufferGeometry.boundingBox.min.x + bufferGeometry.boundingBox.max.x) / 2;
+            var midY = (bufferGeometry.boundingBox.min.y + bufferGeometry.boundingBox.max.y) / 2;
+            var midZ = (bufferGeometry.boundingBox.min.z + bufferGeometry.boundingBox.max.z) / 2;
+            obj.scale.multiplyScalar(scale);
+            obj.position.x = -midX * scale;
+            obj.position.y = -midY * scale;
+            obj.position.z = -midZ * scale;
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+            //            obj = geometry;
+            viewport.objectGroup.add(obj);
+            viewport.createCamera();
+        };
+        return CORTOFileTypeHandler;
+    }());
+    Virtex.CORTOFileTypeHandler = CORTOFileTypeHandler;
 })(Virtex || (Virtex = {}));
 
 var Virtex;
@@ -359,6 +402,9 @@ var Virtex;
                 case Virtex.FileType.DRACO.toString():
                     loader = new THREE.DRACOLoader();
                     break;
+                case Virtex.FileType.CORTO.toString():
+                    loader = new THREE.CORTOLoader();
+                    break;
                 case Virtex.FileType.GLTF.toString():
                     loader = new THREE.GLTFLoader();
                     break;
@@ -376,6 +422,9 @@ var Virtex;
                 switch (_this.options.data.type.toString()) {
                     case Virtex.FileType.DRACO.toString():
                         Virtex.DRACOFileTypeHandler.setup(_this, obj);
+                        break;
+                    case Virtex.FileType.CORTO.toString():
+                        Virtex.CORTOFileTypeHandler.setup(_this, obj);
                         break;
                     case Virtex.FileType.GLTF.toString():
                         Virtex.glTFFileTypeHandler.setup(_this, obj);
