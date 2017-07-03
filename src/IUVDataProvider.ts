@@ -1,4 +1,4 @@
 export interface IUVDataProvider {
-    get<T>(key: string, defaultValue: T): T;
-    set<T>(key: string, value: T): void;
+    get(key: string, defaultValue: string | null): string | null;
+    set(key: string, value: string): void;
 }
