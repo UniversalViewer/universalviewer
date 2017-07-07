@@ -29,7 +29,7 @@
 - **Configurable**
   <p>The UV has its own visual configuration editor allowing all settings to be customised.</p>
 - **Extensible**
-  <p>Supports "IxIF" out of the box, allowing <a href="http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json">3D</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest">audio</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest">video</a>, and <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest">pdf</a> viewing experiences.</p>
+  <p>Supports IIIF Presentation API v3 (in development), allowing <a href="http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json">3D</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest">audio</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest">video</a>, and <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest">pdf</a> viewing experiences.</p>
 
 [More about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
@@ -50,11 +50,11 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
 1. Install the grunt command line interface:
 
-    npm install -g grunt-cli
+    `npm install -g grunt-cli`
 
 1. Install typings:
 
-    npm install typings -g
+    `npm install typings -g`
 
 <!--
 1. Install [Sorcery](https://github.com/Rich-Harris/sorcery):
@@ -63,13 +63,13 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 -->
 1. Clone the `universalviewer` repository and sub modules:
 
-    git clone https://github.com/UniversalViewer/universalviewer.git --recursive
+    `git clone https://github.com/UniversalViewer/universalviewer.git --recursive`
 
 1. On the command line, go in to the `universalviewer` folder
 
 1. Run
 
-    npm install
+    `npm install`
 
 ### Debug Builds
 
@@ -77,7 +77,7 @@ To build the debug version of the viewer, just run (on the command line, in the 
 
     grunt build
 
-This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with source maps to aid in debugging.
+This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js.
 
 ### Distribution Builds
 

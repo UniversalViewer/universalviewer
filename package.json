@@ -74,8 +74,8 @@
     "requirejs": "2.2.0",
     "three": "^0.85.2",
     "utils": "edsilv/utils#es6",
-    "uv-cy-GB-theme": "UniversalViewer/uv-cy-GB-theme#component",
-    "uv-en-GB-theme": "UniversalViewer/uv-en-GB-theme#component",
+    "uv-cy-gb-theme": "UniversalViewer/uv-cy-GB-theme#component",
+    "uv-en-gb-theme": "UniversalViewer/uv-en-GB-theme#component",
     "virtex3d": "edsilv/virtex"
   }
 }

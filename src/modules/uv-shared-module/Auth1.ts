@@ -1,5 +1,7 @@
 import {BaseEvents} from "./BaseEvents";
 import {UVUtils} from "./Utils";
+import {InformationArgs} from "./InformationArgs";
+import {InformationType} from "./InformationType";
 
 export class Auth1 {
 
@@ -22,6 +24,7 @@ export class Auth1 {
                 Auth1.openTokenService,
                 Auth1.userInteractedWithContentProvider,
                 Auth1.getContentProviderInteraction,
+                Auth1.handleMovedTemporarily,
                 Auth1.showOutOfOptionsMessages).then((r: Manifesto.IExternalResource[]) => {
                     resolve(r);
                 })['catch']((error: any) => {
@@ -70,8 +73,18 @@ export class Auth1 {
         });
     }
 
-    static getContentProviderInteraction(service: Manifesto.IService): Promise<Window | null> {
+    static handleMovedTemporarily(resource: Manifesto.IExternalResource): Promise<void> {
+        return new Promise<void>((resolve) => {   
+            const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
+            $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+            resource.isResponseHandled = true;
+            resolve();
+        });
+    }
+
+    static getContentProviderInteraction(resource: Manifesto.IExternalResource, service: Manifesto.IService): Promise<Window | null> {
         return new Promise<Window | null>((resolve) => {
+
             $.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
                 service: service,
                 closeCallback: () => {
@@ -85,6 +98,7 @@ export class Auth1 {
                     resolve(null);
                 }
             }]);
+
         });
     }
 

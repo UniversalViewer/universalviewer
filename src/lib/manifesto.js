@@ -2180,10 +2180,10 @@ var Manifesto;
                 request.end();
             });
         };
-        Utils.loadExternalResourcesAuth1 = function (resources, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
+        Utils.loadExternalResourcesAuth1 = function (resources, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, handleMovedTemporarily, showOutOfOptionsMessages) {
             return new Promise(function (resolve, reject) {
                 var promises = resources.map(function (resource) {
-                    return Utils.loadExternalResourceAuth1(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages);
+                    return Utils.loadExternalResourceAuth1(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, handleMovedTemporarily, showOutOfOptionsMessages);
                 });
                 Promise.all(promises)
                     .then(function () {
@@ -2193,7 +2193,7 @@ var Manifesto;
                 });
             });
         };
-        Utils.loadExternalResourceAuth1 = function (resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
+        Utils.loadExternalResourceAuth1 = function (resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, handleMovedTemporarily, showOutOfOptionsMessages) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2201,12 +2201,12 @@ var Manifesto;
                         case 1:
                             _a.sent();
                             if (!(resource.status === HTTPStatusCode.MOVED_TEMPORARILY || resource.status === HTTPStatusCode.UNAUTHORIZED)) return [3 /*break*/, 3];
-                            return [4 /*yield*/, Utils.doAuthChain(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages)];
+                            return [4 /*yield*/, Utils.doAuthChain(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, handleMovedTemporarily, showOutOfOptionsMessages)];
                         case 2:
                             _a.sent();
                             _a.label = 3;
                         case 3:
-                            if (resource.status === HTTPStatusCode.OK) {
+                            if (resource.status === HTTPStatusCode.OK || resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                                 return [2 /*return*/, resource];
                             }
                             throw Utils.createAuthorizationFailedError();
@@ -2214,7 +2214,7 @@ var Manifesto;
                 });
             });
         };
-        Utils.doAuthChain = function (resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, showOutOfOptionsMessages) {
+        Utils.doAuthChain = function (resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, handleMovedTemporarily, showOutOfOptionsMessages) {
             return __awaiter(this, void 0, void 0, function () {
                 var serviceToTry, lastAttempted, kioskInteraction, contentProviderInteraction, contentProviderInteraction;
                 return __generator(this, function (_a) {
@@ -2225,34 +2225,40 @@ var Manifesto;
                             if (!resource.isAccessControlled()) {
                                 return [2 /*return*/, resource]; // no services found
                             }
+                            if (!(!resource.isResponseHandled && resource.status === HTTPStatusCode.MOVED_TEMPORARILY)) return [3 /*break*/, 2];
+                            return [4 /*yield*/, handleMovedTemporarily(resource)];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/, resource];
+                        case 2:
                             serviceToTry = null;
                             lastAttempted = null;
                             // repetition of logic is left in these steps for clarity:
                             // Looking for external pattern
                             serviceToTry = resource.externalService;
-                            if (!serviceToTry) return [3 /*break*/, 2];
+                            if (!serviceToTry) return [3 /*break*/, 4];
                             serviceToTry.options = resource.options;
                             lastAttempted = serviceToTry;
                             return [4 /*yield*/, Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry)];
-                        case 1:
+                        case 3:
                             _a.sent();
                             return [2 /*return*/, resource];
-                        case 2:
+                        case 4:
                             // Looking for kiosk pattern
                             serviceToTry = resource.kioskService;
-                            if (!serviceToTry) return [3 /*break*/, 5];
+                            if (!serviceToTry) return [3 /*break*/, 7];
                             serviceToTry.options = resource.options;
                             lastAttempted = serviceToTry;
                             kioskInteraction = openContentProviderInteraction(serviceToTry);
-                            if (!kioskInteraction) return [3 /*break*/, 5];
+                            if (!kioskInteraction) return [3 /*break*/, 7];
                             return [4 /*yield*/, userInteractedWithContentProvider(kioskInteraction)];
-                        case 3:
+                        case 5:
                             _a.sent();
                             return [4 /*yield*/, Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry)];
-                        case 4:
+                        case 6:
                             _a.sent();
                             return [2 /*return*/, resource];
-                        case 5:
+                        case 7:
                             // The code for the next two patterns is identical (other than the profile name).
                             // The difference is in the expected behaviour of
                             //
@@ -2262,42 +2268,42 @@ var Manifesto;
                             // a session, whereas for login the user might spend some time entering credentials etc.
                             // Looking for clickthrough pattern
                             serviceToTry = resource.clickThroughService;
-                            if (!serviceToTry) return [3 /*break*/, 9];
+                            if (!serviceToTry) return [3 /*break*/, 11];
                             serviceToTry.options = resource.options;
                             lastAttempted = serviceToTry;
-                            return [4 /*yield*/, getContentProviderInteraction(serviceToTry)];
-                        case 6:
+                            return [4 /*yield*/, getContentProviderInteraction(resource, serviceToTry)];
+                        case 8:
                             contentProviderInteraction = _a.sent();
-                            if (!contentProviderInteraction) return [3 /*break*/, 9];
+                            if (!contentProviderInteraction) return [3 /*break*/, 11];
                             // should close immediately
                             return [4 /*yield*/, userInteractedWithContentProvider(contentProviderInteraction)];
-                        case 7:
+                        case 9:
                             // should close immediately
                             _a.sent();
                             return [4 /*yield*/, Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry)];
-                        case 8:
+                        case 10:
                             _a.sent();
                             return [2 /*return*/, resource];
-                        case 9:
+                        case 11:
                             // Looking for login pattern
                             serviceToTry = resource.loginService;
-                            if (!serviceToTry) return [3 /*break*/, 13];
+                            if (!serviceToTry) return [3 /*break*/, 15];
                             serviceToTry.options = resource.options;
                             lastAttempted = serviceToTry;
-                            return [4 /*yield*/, getContentProviderInteraction(serviceToTry)];
-                        case 10:
+                            return [4 /*yield*/, getContentProviderInteraction(resource, serviceToTry)];
+                        case 12:
                             contentProviderInteraction = _a.sent();
-                            if (!contentProviderInteraction) return [3 /*break*/, 13];
+                            if (!contentProviderInteraction) return [3 /*break*/, 15];
                             // we expect the user to spend some time interacting
                             return [4 /*yield*/, userInteractedWithContentProvider(contentProviderInteraction)];
-                        case 11:
+                        case 13:
                             // we expect the user to spend some time interacting
                             _a.sent();
                             return [4 /*yield*/, Utils.attemptResourceWithToken(resource, openTokenService, serviceToTry)];
-                        case 12:
+                        case 14:
                             _a.sent();
                             return [2 /*return*/, resource];
-                        case 13:
+                        case 15:
                             // nothing worked! Use the most recently tried service as the source of
                             // messages to show to the user.
                             if (lastAttempted) {
