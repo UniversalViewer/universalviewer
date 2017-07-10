@@ -38,7 +38,7 @@ export class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifesto.IExternalResource[];
+    resources: Manifesto.IExternalResource[] | null;
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -865,6 +865,13 @@ export class BaseExtension implements IExtension {
             title: title,
             image: thumbnail
         }
+    }
+
+    getCanvasResource(canvas: Manifesto.ICanvas): Manifesto.IExternalResource | null {
+        if (this.resources) {
+            return this.resources.en().where(r => r.index === canvas.index).first();
+        }
+        return null;
     }
 
     public getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {

@@ -222,7 +222,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             // dimensions
             const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
-            if (!size){
+            if (!size) {
                 this.$wholeImageHighResButton.hide();
             } else {
                 const label: string = hasNormalDimensions ?
@@ -502,17 +502,26 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getCanvasDimensions(canvas: Manifesto.ICanvas): Size {
+        const canvasResource: any = this.extension.getCanvasResource(canvas);
+        
         // externalResource may not have loaded yet
-        if (canvas.externalResource.data){
-            return new Size(canvas.externalResource.data.width, canvas.externalResource.data.height);
+        if (canvasResource) {
+            return new Size(canvasResource.width, canvasResource.height);
         }
         
         return new Size(0, 0);
     }
 
     getCanvasMaxDimensions(canvas: Manifesto.ICanvas): Size | null {
-        if (canvas.externalResource.data && canvas.externalResource.data.profile[1]){
-            return new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
+        const canvasResource: any = this.extension.getCanvasResource(canvas);
+
+        if (canvasResource && canvasResource.profile) {
+
+            const profile: any = (<any[]>canvasResource.profile).en().where(p => p["maxWidth"]).first();
+
+            if (profile) {
+                return new Size(profile.maxWidth, profile.maxHeight ? profile.maxHeight : profile.maxWidth);
+            }
         }
         return null;
     }
@@ -521,7 +530,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         const size: Size = this.getCanvasDimensions(canvas);
         const maxSize: Size | null =  this.getCanvasMaxDimensions(canvas);
 
-        if (!maxSize) return null;
+        if (!maxSize) {
+            return size;
+        }
 
         let finalWidth: number = size.width;
         let finalHeight: number = size.height;
@@ -543,6 +554,11 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
+
+        if (!this.extension.resources) {
+            return false;
+        }
+
         switch (option){
             case DownloadOption.currentViewAsJpg:
             case DownloadOption.dynamicCanvasRenderings:
@@ -553,12 +569,13 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                     (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
                     const maxSize: Size | null = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
                     if (maxSize) {
-                        if (typeof(maxSize.width) === 'undefined') {
+                        if (maxSize.width <= this.options.maxImageWidth) {
                             return true;
-                        } else if (maxSize.width <= this.options.maxImageWidth) {
-                            return true;
+                        } else {
+                            return false;
                         }
                     }
+                    return true;
                 }
                 return false;
             case DownloadOption.wholeImagesHighRes:

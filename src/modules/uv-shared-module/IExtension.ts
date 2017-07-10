@@ -17,6 +17,7 @@ export interface IExtension {
     getAlternateLocale(): ILocale | null;
     getAppUri(): string;
     getCanvasLabels(label: string): string;
+    getCanvasResource(canvas: Manifesto.ICanvas): any;
     getCurrentCanvases(): Manifesto.ICanvas[];
     getCurrentCanvasRange(): Manifesto.IRange | null;
     getDependencies(callback: (deps: any) => void): any;
@@ -51,7 +52,7 @@ export interface IExtension {
     refresh(): void;
     reload(data?: IUVData): void;
     resize(): void;
-    resources: Manifesto.IExternalResource[];
+    resources: Manifesto.IExternalResource[] | null;
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
