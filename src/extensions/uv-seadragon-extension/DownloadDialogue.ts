@@ -6,6 +6,7 @@ import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import {DownloadType} from "./DownloadType";
 import {ISeadragonExtension} from "./ISeadragonExtension";
 import Size = Manifesto.Size;
+import {IUVData} from "../../IUVData";
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
@@ -27,9 +28,11 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     $wholeImageLowResAsJpgButton: JQuery;
     renderingUrls: string[];
     renderingUrlsCount: number;
+    data: IUVData;
 
-    constructor($element: JQuery) {
+    constructor($element: JQuery, data: IUVData) {
         super($element);
+        this.data = data;
     }
 
     create(): void {
@@ -416,7 +419,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         this.$downloadOptions.find('li.group:visible').last().addClass('lastVisible');
 
-        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (this.data.config.options.downloadPagingNoteEnabled)) {
             this.$pagingNote.show();
         } else {
             this.$pagingNote.hide();
