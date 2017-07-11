@@ -867,7 +867,7 @@ export class BaseExtension implements IExtension {
         }
     }
 
-    getCanvasResource(canvas: Manifesto.ICanvas): Manifesto.IExternalResource | null {
+    public getCanvasResource(canvas: Manifesto.ICanvas): Manifesto.IExternalResource | null {
         if (this.resources) {
             return this.resources.en().where(r => r.index === canvas.index).first();
         }
@@ -922,10 +922,16 @@ export class BaseExtension implements IExtension {
 
         $.each(indices, (i: number, index: number) => {
             const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
-            const r: Manifesto.IExternalResource = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
-            r.index = index;
+            let r: Manifesto.IExternalResource;
 
-            // used to reload resources with isResponseHandled = true.
+            if (!canvas.externalResource) {
+                r = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
+                r.index = index;
+            } else {
+                r = canvas.externalResource;
+            }
+
+            // reload resources if passed
             if (resources) {
 
                 const found: Manifesto.IExternalResource | undefined = resources.find((f: Manifesto.IExternalResource) => {

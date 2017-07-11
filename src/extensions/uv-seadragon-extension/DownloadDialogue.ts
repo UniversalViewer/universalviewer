@@ -475,12 +475,18 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     getCanvasHighResImageUri(canvas: Manifesto.ICanvas): string {
         const size: Size | null = this.getCanvasComputedDimensions(canvas);
-        if (size){
+        if (size) {
             const width: number = size.width;
             let uri: string = canvas.getCanonicalImageUri(width);
             const uri_parts: string [] = uri.split('/');
+
+            // if maxwidth is set in info.json, you must include a height.
+            // if () {
+
+            // }
+
             const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
-            uri_parts[ uri_parts.length - 2 ] = String(rotation);
+            uri_parts[uri_parts.length - 2] = String(rotation);
             uri = uri_parts.join('/');
             return uri;
         }
@@ -493,7 +499,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (resource) {
             const format: Manifesto.MediaType | null = resource.getFormat();
 
-            if (format){
+            if (format) {
                 return format.toString();
             }
         }
