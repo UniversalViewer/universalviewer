@@ -28,7 +28,7 @@ import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import AnnotationGroup = Manifold.AnnotationGroup;
 import AnnotationRect = Manifold.AnnotationRect;
-import Size = Utils.Measurements.Size;
+import Size = Manifesto.Size;
 
 export class Extension extends BaseExtension implements ISeadragonExtension {
 
@@ -662,7 +662,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             return null;
         }
 
-        const bounds = viewer.viewport.getBounds(true);
+        const bounds: any = viewer.viewport.getBounds(true);
 
         const dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
@@ -676,6 +676,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             width = canvas.getWidth() - x;
         } else if (x < 0) {
             width = width + x;
+        }
+
+        if (x < 0) {
             x = 0;
         }
 
@@ -683,6 +686,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             height = canvas.getHeight() - y;
         } else if (y < 0) {
             height = height + y;
+        }
+
+        if (y < 0) {
             y = 0;
         }
 
@@ -691,31 +697,26 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         let regionWidth: number = width;
         let regionHeight: number = height;
 
-        if (canvas.externalResource.data && canvas.externalResource.data.profile) {
+        const maxDimensions: Size | null = canvas.getMaxDimensions();
 
-            const profile: any = (<any[]>canvas.externalResource.data.profile).en().where(p => p["maxWidth"]).first();
+        if (maxDimensions) {
 
-            if (profile) {
-                const maxSize: Size = new Size(profile.maxWidth, profile.maxHeight ? profile.maxHeight : profile.maxWidth);
-
-                if (width > maxSize.width) {
-                    let newWidth: number = maxSize.width;
-                    height = Math.round(newWidth * (height / width));
-                    width = newWidth;
-                }
-
-                if (height > maxSize.height) {
-                    let newHeight: number = maxSize.height;
-                    width = Math.round((width / height) * newHeight);
-                    height = newHeight;
-                }
+            if (width > maxDimensions.width) {
+                let newWidth: number = maxDimensions.width;
+                height = Math.round(newWidth * (height / width));
+                width = newWidth;
             }
 
+            if (height > maxDimensions.height) {
+                let newHeight: number = maxDimensions.height;
+                width = Math.round((width / height) * newHeight);
+                height = newHeight;
+            }
         }
 
-        dimensions.region = new Size(regionWidth, regionHeight);
+        dimensions.region = new manifesto.Size(regionWidth, regionHeight);
         dimensions.regionPos = new Point(x, y);
-        dimensions.size = new Size(width, height);
+        dimensions.size = new manifesto.Size(width, height);
 
         return dimensions;
     }
@@ -781,9 +782,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     //     var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
-    //     dimensions.region = new Size(regionWidth, regionHeight);
+    //     dimensions.region = new manifesto.Size(regionWidth, regionHeight);
     //     dimensions.regionPos = new Point(regionLeft, regionTop);
-    //     dimensions.size = new Size(sizeWidth, sizeHeight);
+    //     dimensions.size = new manifesto.Size(sizeWidth, sizeHeight);
 
     //     return dimensions;
     // }
@@ -795,13 +796,20 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         const dimensions: CroppedImageDimensions | null = this.getCroppedImageDimensions(canvas, viewer);
 
-        if (!dimensions) return null;
+        if (!dimensions) {
+            return null;
+        }
 
         // construct uri
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
 
         const baseUri: string = this.getImageBaseUri(canvas);
-        const id: string = this.getImageId(canvas);
+        const id: string | null = this.getImageId(canvas);
+
+        if (!id) {
+            return null;
+        }
+
         const region: string = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
         const size: string = dimensions.size.width + ',' + dimensions.size.height;
         const rotation: number = <number>this.getViewerRotation();
@@ -810,18 +818,23 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
-        const dimensions: Size = new Size(0, 0);
+        const dimensions: Size = new manifesto.Size(0, 0);
         dimensions.width = width;
         const normWidth = Math.normalise(width, 0, canvas.getWidth());
         dimensions.height = Math.floor(canvas.getHeight() * normWidth);
         return dimensions;
     }
 
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string {
+    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string | null {
         const baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
-        const id: string = this.getImageId(canvas);
+        const id: string | null = this.getImageId(canvas);
+
+        if (!id) {
+            return null;
+        }
+
         const region: string = 'full';
         const dimensions: Size = this.getConfinedImageDimensions(canvas, width);
         const size: string = dimensions.width + ',' + dimensions.height;
@@ -830,11 +843,17 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
-    getImageId(canvas: Manifesto.ICanvas): string {
-        let id = this.getInfoUri(canvas);
-        // First trim off info.json, then extract ID:
-        id = id.substr(0, id.lastIndexOf("/"));
-        return id.substr(id.lastIndexOf("/") + 1);
+    getImageId(canvas: Manifesto.ICanvas): string | null {
+
+        if (canvas.externalResource) {
+            const id: string | undefined = canvas.externalResource.data['@id'];
+
+            if (id) {
+                return id.substr(id.lastIndexOf("/") + 1);
+            }
+        }
+
+        return null;
     }
 
     getImageBaseUri(canvas: Manifesto.ICanvas): string {
