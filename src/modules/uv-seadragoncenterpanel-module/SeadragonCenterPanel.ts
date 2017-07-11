@@ -842,6 +842,11 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
         let newRects: any[] = [];
+
+        if (!this.extension.resources) {
+            return newRects;
+        }
+        
         let resource: any = this.extension.resources.en().where(x => x.index === annotationGroup.canvasIndex).first();
         let index: number = this.extension.resources.indexOf(resource);
         let offsetX: number = 0;

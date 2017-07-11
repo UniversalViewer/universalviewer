@@ -5,7 +5,7 @@ import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogu
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import {DownloadType} from "./DownloadType";
 import {ISeadragonExtension} from "./ISeadragonExtension";
-import Size = Utils.Measurements.Size;
+import Size = Manifesto.Size;
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
@@ -147,7 +147,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                         type = DownloadType.WHOLEIMAGESHIGHRES;
                         break;
                     case DownloadOption.wholeImageLowResAsJpg.toString():
-                        window.open((<ISeadragonExtension>that.extension).getConfinedImageUri(canvas, that.options.confinedImageSize));
+                        const imageUri: string | null = (<ISeadragonExtension>that.extension).getConfinedImageUri(canvas, that.options.confinedImageSize);
+
+                        if (imageUri) {
+                            window.open(imageUri);
+                        }
+                        
                         type = DownloadType.WHOLEIMAGELOWRES;
                         break;
                 }
@@ -224,7 +229,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             // dimensions
             const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
-            if (!size){
+            if (!size) {
                 this.$wholeImageHighResButton.hide();
             } else {
                 const label: string = hasNormalDimensions ?
@@ -483,12 +488,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     getCanvasHighResImageUri(canvas: Manifesto.ICanvas): string {
         const size: Size | null = this.getCanvasComputedDimensions(canvas);
-        if (size){
+        if (size) {
             const width: number = size.width;
             let uri: string = canvas.getCanonicalImageUri(width);
             const uri_parts: string [] = uri.split('/');
             const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
-            uri_parts[ uri_parts.length - 2 ] = String(rotation);
+            uri_parts[uri_parts.length - 2] = String(rotation);
             uri = uri_parts.join('/');
             return uri;
         }
@@ -501,7 +506,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (resource) {
             const format: Manifesto.MediaType | null = resource.getFormat();
 
-            if (format){
+            if (format) {
                 return format.toString();
             }
         }
@@ -510,47 +515,40 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getCanvasDimensions(canvas: Manifesto.ICanvas): Size {
+
         // externalResource may not have loaded yet
-        if (canvas.externalResource.data){
+        if (canvas.externalResource.data) {
             return new Size(canvas.externalResource.data.width, canvas.externalResource.data.height);
         }
         
         return new Size(0, 0);
     }
 
-    getCanvasMaxDimensions(canvas: Manifesto.ICanvas): Size | null {
-        if (canvas.externalResource.data && canvas.externalResource.data.profile[1]){
-            return new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
-        }
-        return null;
-    }
-
     getCanvasComputedDimensions(canvas: Manifesto.ICanvas): Size | null {
-        const size: Size = this.getCanvasDimensions(canvas);
-        const maxSize: Size | null =  this.getCanvasMaxDimensions(canvas);
+        const imageSize: Size = this.getCanvasDimensions(canvas);
+        const requiredSize: Size | null =  canvas.getMaxDimensions();
 
-        if (!maxSize) return null;
-
-        let finalWidth: number = size.width;
-        let finalHeight: number = size.height;
-
-        // if the maxWidth is less than the advertised width
-        if (!(typeof(maxSize.width) === 'undefined') && maxSize.width < size.width) {
-            finalWidth = maxSize.width;
-
-            if (!(typeof(maxSize.height) === 'undefined')) {
-                finalHeight = maxSize.height;
-            } else {
-                // calculate finalHeight
-                const ratio: number = Math.normalise(maxSize.width, 0, size.width);
-                finalHeight = Math.floor(size.height * ratio);
-            }
+        if (!requiredSize) {
+            return imageSize;
         }
 
-        return new Size(finalWidth, finalHeight);
+        if (imageSize.width <= requiredSize.width && imageSize.height <= requiredSize.height) {
+            return imageSize;
+        }
+
+        const scaleW: number = requiredSize.width / imageSize.width;
+        const scaleH: number = requiredSize.height / imageSize.height;
+        const scale: number = Math.min(scaleW, scaleH);
+
+        return new Size(Math.floor(imageSize.width * scale), Math.floor(imageSize.height * scale));
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
+
+        if (!this.extension.resources) {
+            return false;
+        }
+
         switch (option){
             case DownloadOption.currentViewAsJpg:
             case DownloadOption.dynamicCanvasRenderings:
@@ -559,14 +557,17 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 // if in one-up mode, or in two-up mode with a single page being shown
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
                     (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
-                    const maxSize: Size | null = this.getCanvasMaxDimensions(this.extension.helper.getCurrentCanvas());
-                    if (maxSize) {
-                        if (typeof(maxSize.width) === 'undefined') {
+                    const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+                    const maxDimensions: Size | null = canvas.getMaxDimensions();
+                    
+                    if (maxDimensions) {
+                        if (maxDimensions.width <= this.options.maxImageWidth) {
                             return true;
-                        } else if (maxSize.width <= this.options.maxImageWidth) {
-                            return true;
+                        } else {
+                            return false;
                         }
                     }
+                    return true;
                 }
                 return false;
             case DownloadOption.wholeImagesHighRes:

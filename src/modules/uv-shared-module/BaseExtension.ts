@@ -38,7 +38,7 @@ export class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifesto.IExternalResource[];
+    resources: Manifesto.IExternalResource[] | null;
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -915,10 +915,16 @@ export class BaseExtension implements IExtension {
 
         $.each(indices, (i: number, index: number) => {
             const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
-            const r: Manifesto.IExternalResource = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
-            r.index = index;
+            let r: Manifesto.IExternalResource;
 
-            // used to reload resources with isResponseHandled = true.
+            if (!canvas.externalResource) {
+                r = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
+                r.index = index;
+            } else {
+                r = canvas.externalResource;
+            }
+
+            // reload resources if passed
             if (resources) {
 
                 const found: Manifesto.IExternalResource | undefined = resources.find((f: Manifesto.IExternalResource) => {

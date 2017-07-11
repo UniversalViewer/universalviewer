@@ -11,8 +11,8 @@
     "iiif-tree-component": "github:viewdir/iiif-tree-component/dist/iiif-tree-component.d.ts#es6",
     "jquery-plugins": "github:edsilv/jquery-plugins/dist/jquery-plugins.d.ts#es6",
     "key-codes": "github:edsilv/key-codes/dist/key-codes.d.ts#v0.0.5",
-    "manifesto.js": "github:viewdir/manifesto/dist/manifesto.d.ts#auth1",
-    "manifold": "github:viewdir/manifold/dist/manifold.d.ts#auth1",
+    "manifesto.js": "github:viewdir/manifesto/dist/manifesto.d.ts#es6",
+    "manifold": "github:viewdir/manifold/dist/manifold.d.ts#es6",
     "utils": "github:edsilv/utils/dist/utils.d.ts#es6",
     "virtex": "github:edsilv/virtex/dist/virtex.d.ts#dev"
   }

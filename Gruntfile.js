@@ -144,7 +144,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.src %>/Helpers.js'],
+                        src: ['<%= config.directories.src %>/helpers.js'],
                         dest: '<%= config.directories.build %>',
                         rename: function(dest, src) {
                             return dest + '/helpers.js';

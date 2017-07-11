@@ -51,7 +51,7 @@ export interface IExtension {
     refresh(): void;
     reload(data?: IUVData): void;
     resize(): void;
-    resources: Manifesto.IExternalResource[];
+    resources: Manifesto.IExternalResource[] | null;
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;

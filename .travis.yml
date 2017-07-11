@@ -1,18 +1,19 @@
 language: node_js
 node_js:
-- '0.12.7'
+- '6.10.2'
 before_install:
 - npm install -g grunt-cli
-- npm install -g bower
+- npm install -g typings
+#- npm install -g bower
 - export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
-- curl -Lo chrome.zip https://download-chromium.appspot.com/dl/Linux_x64 && unzip chrome.zip
+#- sh -e /etc/init.d/xvfb start
+#- curl -Lo chrome.zip https://download-chromium.appspot.com/dl/Linux_x64 && unzip chrome.zip
 install:
 - npm install
-- bower install
-before_script:
-- ./node_modules/protractor/bin/webdriver-manager update
-- ./node_modules/protractor/bin/webdriver-manager start &
+#- bower install
+#before_script:
+#- ./node_modules/protractor/bin/webdriver-manager update
+#- ./node_modules/protractor/bin/webdriver-manager start &
 script:
 - grunt build --dist
 #- grunt examples &

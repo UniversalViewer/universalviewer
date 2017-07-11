@@ -1,34 +1,34 @@
-import {AnnotationResults} from "../../modules/uv-shared-module/AnnotationResults";
-import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
-import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
-import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
-import {Bounds} from "./Bounds";
-import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
-import {CroppedImageDimensions} from "./CroppedImageDimensions";
-import {DownloadDialogue} from "./DownloadDialogue";
-import {Events} from "./Events";
-import {ExternalContentDialogue} from "../../modules/uv-dialogues-module/ExternalContentDialogue";
-import {FooterPanel as MobileFooterPanel} from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
-import {FooterPanel} from "../../modules/uv-searchfooterpanel-module/FooterPanel";
-import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
-import {ISeadragonExtension} from "./ISeadragonExtension";
-import {ISeadragonExtensionData} from "./ISeadragonExtensionData";
-import {Mode} from "./Mode";
-import {MoreInfoDialogue} from "../../modules/uv-dialogues-module/MoreInfoDialogue";
-import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import {MultiSelectDialogue} from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
-import {MultiSelectionArgs} from "./MultiSelectionArgs";
-import {PagingHeaderPanel} from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
-import {Point} from "../../modules/uv-shared-module/Point";
-import {SeadragonCenterPanel} from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
-import {SettingsDialogue} from "./SettingsDialogue";
-import {ShareDialogue} from "./ShareDialogue";
-import {Shell} from "../../modules/uv-shared-module/Shell";
+import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
+import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
+import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
+import { Bounds } from "./Bounds";
+import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
+import { CroppedImageDimensions } from "./CroppedImageDimensions";
+import { DownloadDialogue } from "./DownloadDialogue";
+import { Events } from "./Events";
+import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/ExternalContentDialogue";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
+import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
+import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
+import { ISeadragonExtension } from "./ISeadragonExtension";
+import { ISeadragonExtensionData } from "./ISeadragonExtensionData";
+import { Mode } from "./Mode";
+import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
+import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
+import { MultiSelectionArgs } from "./MultiSelectionArgs";
+import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
+import { Point } from "../../modules/uv-shared-module/Point";
+import { SeadragonCenterPanel } from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
+import { SettingsDialogue } from "./SettingsDialogue";
+import { ShareDialogue } from "./ShareDialogue";
+import { Shell } from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import AnnotationGroup = Manifold.AnnotationGroup;
 import AnnotationRect = Manifold.AnnotationRect;
-import Size = Utils.Measurements.Size;
+import Size = Manifesto.Size;
 
 export class Extension extends BaseExtension implements ISeadragonExtension {
 
@@ -142,7 +142,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            Shell.$centerPanel.show();            
+            Shell.$centerPanel.show();
             this.resize();
         });
 
@@ -250,9 +250,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEADRAGON_ANIMATION_FINISH, (e: any, viewer: any) => {
-            
+
             const bounds: Bounds | null = this.centerPanel.getViewportBounds();
-            
+
             if (this.centerPanel && bounds) {
                 $.publish(Events.XYWH_CHANGED, [bounds.toString()]);
                 (<ISeadragonExtensionData>this.data).xywh = bounds.toString();
@@ -273,7 +273,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(Events.SEADRAGON_OPEN, () => {
-            if (!this.useArrowKeysToNavigate()){
+            if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
         });
@@ -398,19 +398,19 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         Shell.$overlays.append(this.$externalContentDialogue);
         this.externalContentDialogue = new ExternalContentDialogue(this.$externalContentDialogue);
 
-        if (this.isHeaderPanelEnabled()){
+        if (this.isHeaderPanelEnabled()) {
             this.headerPanel.init();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel.init();
         }
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel.init();
         }
 
-        if (this.isFooterPanelEnabled()){
+        if (this.isFooterPanelEnabled()) {
             this.footerPanel.init();
         }
     }
@@ -422,9 +422,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         //    return this.centerPanel && this.centerPanel.isCreated;
         //}, () => {
 
-            this.checkForAnnotations();
-            this.checkForSearchParam();
-            this.checkForRotationParam();
+        this.checkForAnnotations();
+        this.checkForSearchParam();
+        this.checkForRotationParam();
 
         //});
     }
@@ -444,7 +444,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         this.annotations = annotations.sort((a: AnnotationGroup, b: AnnotationGroup) => {
             return a.canvasIndex - b.canvasIndex;
         });
-        
+
         const annotationResults: AnnotationResults = new AnnotationResults();
         annotationResults.terms = terms;
         annotationResults.annotations = <AnnotationGroup[]>this.annotations;
@@ -469,9 +469,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    checkForRotationParam(): void{
+    checkForRotationParam(): void {
         // if a rotation value is in the hash params, set currentRotation
-        if (this.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()) {
 
             const rotation: number | null = (<ISeadragonExtensionData>this.data).rotation;
 
@@ -568,12 +568,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    treeNodeSelected(node: ITreeNode): void{
+    treeNodeSelected(node: ITreeNode): void {
         const data: any = node.data;
-        
+
         if (!data.type) return;
 
-        switch (data.type){
+        switch (data.type) {
             case manifesto.IIIFResourceType.manifest().toString():
                 this.viewManifest(data);
                 break;
@@ -596,7 +596,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     prevSearchResult(): void {
-        let foundResult: AnnotationGroup; 
+        let foundResult: AnnotationGroup;
         if (!this.annotations) return;
 
         // get the first result with a canvasIndex less than the current index.
@@ -612,9 +612,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     nextSearchResult(): void {
-        let foundResult: AnnotationGroup; 
+        let foundResult: AnnotationGroup;
         if (!this.annotations) return;
-        
+
         // get the first result with an index greater than the current index.
         for (let i = 0; i < this.annotations.length; i++) {
             const result: AnnotationGroup = this.annotations[i];
@@ -658,11 +658,11 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
-        if (!canvas.getHeight() || !canvas.getWidth()){
+        if (!canvas.getHeight() || !canvas.getWidth()) {
             return null;
         }
 
-        const bounds = viewer.viewport.getBounds(true);
+        const bounds: any = viewer.viewport.getBounds(true);
 
         const dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
@@ -674,46 +674,49 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         // constrain to image bounds
         if (x + width > canvas.getWidth()) {
             width = canvas.getWidth() - x;
-        } else if (x < 0){
+        } else if (x < 0) {
             width = width + x;
+        }
+
+        if (x < 0) {
             x = 0;
         }
 
         if (y + height > canvas.getHeight()) {
             height = canvas.getHeight() - y;
-        } else if (y < 0){
+        } else if (y < 0) {
             height = height + y;
+        }
+
+        if (y < 0) {
             y = 0;
         }
-        
+
         width = Math.min(width, canvas.getWidth());
-        height = Math.min(height, canvas.getHeight());       
+        height = Math.min(height, canvas.getHeight());
         let regionWidth: number = width;
         let regionHeight: number = height;
 
-        if (canvas.externalResource.data && canvas.externalResource.data.profile && canvas.externalResource.data.profile[1]) {
+        const maxDimensions: Size | null = canvas.getMaxDimensions();
 
-          const maxSize: Size =  new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
+        if (maxDimensions) {
 
-          if (!(typeof(maxSize.width) === 'undefined') && !(typeof(maxSize.height) === 'undefined')) {
-
-            if (width > maxSize.width) {
-                let newWidth: number = maxSize.width;
+            if (width > maxDimensions.width) {
+                let newWidth: number = maxDimensions.width;
                 height = Math.round(newWidth * (height / width));
                 width = newWidth;
             }
 
-            if (height > maxSize.height) {
-                let newHeight: number = maxSize.height;
+            if (height > maxDimensions.height) {
+                let newHeight: number = maxDimensions.height;
                 width = Math.round((width / height) * newHeight);
                 height = newHeight;
             }
-          } 
         }
 
-        dimensions.region = new Size(regionWidth, regionHeight);
+        dimensions.region = new manifesto.Size(regionWidth, regionHeight);
         dimensions.regionPos = new Point(x, y);
-        dimensions.size = new Size(width, height);
+        dimensions.size = new manifesto.Size(width, height);
 
         return dimensions;
     }
@@ -779,9 +782,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     //     var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
-    //     dimensions.region = new Size(regionWidth, regionHeight);
+    //     dimensions.region = new manifesto.Size(regionWidth, regionHeight);
     //     dimensions.regionPos = new Point(regionLeft, regionTop);
-    //     dimensions.size = new Size(sizeWidth, sizeHeight);
+    //     dimensions.size = new manifesto.Size(sizeWidth, sizeHeight);
 
     //     return dimensions;
     // }
@@ -793,13 +796,20 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         const dimensions: CroppedImageDimensions | null = this.getCroppedImageDimensions(canvas, viewer);
 
-        if (!dimensions) return null;
+        if (!dimensions) {
+            return null;
+        }
 
         // construct uri
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
 
         const baseUri: string = this.getImageBaseUri(canvas);
-        const id: string = this.getImageId(canvas);
+        const id: string | null = this.getImageId(canvas);
+
+        if (!id) {
+            return null;
+        }
+
         const region: string = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
         const size: string = dimensions.size.width + ',' + dimensions.size.height;
         const rotation: number = <number>this.getViewerRotation();
@@ -808,18 +818,23 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
-        const dimensions: Size = new Size(0, 0);
+        const dimensions: Size = new manifesto.Size(0, 0);
         dimensions.width = width;
         const normWidth = Math.normalise(width, 0, canvas.getWidth());
         dimensions.height = Math.floor(canvas.getHeight() * normWidth);
         return dimensions;
     }
 
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string {
+    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string | null {
         const baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
-        const id: string = this.getImageId(canvas);
+        const id: string | null = this.getImageId(canvas);
+
+        if (!id) {
+            return null;
+        }
+
         const region: string = 'full';
         const dimensions: Size = this.getConfinedImageDimensions(canvas, width);
         const size: string = dimensions.width + ',' + dimensions.height;
@@ -828,11 +843,17 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
-    getImageId(canvas: Manifesto.ICanvas): string {
-        let id = this.getInfoUri(canvas);
-        // First trim off info.json, then extract ID:
-        id = id.substr(0, id.lastIndexOf("/"));
-        return id.substr(id.lastIndexOf("/") + 1);
+    getImageId(canvas: Manifesto.ICanvas): string | null {
+
+        if (canvas.externalResource) {
+            const id: string | undefined = canvas.externalResource.data['@id'];
+
+            if (id) {
+                return id.substr(id.lastIndexOf("/") + 1);
+            }
+        }
+
+        return null;
     }
 
     getImageBaseUri(canvas: Manifesto.ICanvas): string {
@@ -842,7 +863,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         return uri.substr(0, uri.lastIndexOf("/"));
     }
 
-    getInfoUri(canvas: Manifesto.ICanvas): string{
+    getInfoUri(canvas: Manifesto.ICanvas): string {
         let infoUri: string | null = null;
 
         const images: Manifesto.IAnnotation[] = canvas.getImages();
@@ -860,13 +881,13 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                     id += '/';
                 }
 
-                if (manifesto.Utils.isImageProfile(service.getProfile())){
+                if (manifesto.Utils.isImageProfile(service.getProfile())) {
                     infoUri = id + 'info.json';
                 }
             }
         }
 
-        if (!infoUri){
+        if (!infoUri) {
             // todo: use compiler flag (when available)
             infoUri = 'lib/imageunavailable.json';
         }
@@ -876,7 +897,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string {
         const config: string = this.data.config.uri || '';
-        const locales: string =this.getSerializedLocales();
+        const locales: string = this.getSerializedLocales();
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
         const script: string = String.format(template, iframeSrc, width, height);
@@ -923,33 +944,33 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     getNextPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
-    
-       let index: number;
-    
-       if (this.isPagingSettingEnabled()) {
-           let indices: number[] = this.getPagedIndices(canvasIndex);
-    
-           if (this.helper.isRightToLeft()){
-               index = indices[0] + 1;
-           } else {
-               index = indices[indices.length - 1] + 1;
-           }
-    
-       } else {
-           index = canvasIndex + 1;
-       }
-    
-       if (index > this.helper.getTotalCanvases() - 1) {
-           return -1;
-       }
-    
-       return index;
+
+        let index: number;
+
+        if (this.isPagingSettingEnabled()) {
+            let indices: number[] = this.getPagedIndices(canvasIndex);
+
+            if (this.helper.isRightToLeft()) {
+                index = indices[0] + 1;
+            } else {
+                index = indices[indices.length - 1] + 1;
+            }
+
+        } else {
+            index = canvasIndex + 1;
+        }
+
+        if (index > this.helper.getTotalCanvases() - 1) {
+            return -1;
+        }
+
+        return index;
     }
-    
+
     getAutoCompleteService(): Manifesto.IService | null {
-       const service: Manifesto.IService | null = this.helper.getSearchService();
-       if (!service) return null;
-       return service.getService(manifesto.ServiceProfile.autoComplete());
+        const service: Manifesto.IService | null = this.helper.getSearchService();
+        if (!service) return null;
+        return service.getService(manifesto.ServiceProfile.autoComplete());
     }
 
     getAutoCompleteUri(): string | null {
@@ -987,7 +1008,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         searchUri = String.format(searchUri, terms);
 
         this.getSearchResults(searchUri, terms, this.annotations, (annotations: AnnotationGroup[]) => {
-            
+
             that.isAnnotating = false;
 
             if (annotations.length) {
@@ -1000,13 +1021,13 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
     }
 
-    getSearchResults(searchUri: string, 
-                    terms: string,
-                    searchResults: AnnotationGroup[],
-                    cb: (results: AnnotationGroup[]) => void): void {
+    getSearchResults(searchUri: string,
+        terms: string,
+        searchResults: AnnotationGroup[],
+        cb: (results: AnnotationGroup[]) => void): void {
 
         $.getJSON(searchUri, (results: any) => {
-            
+
             if (results.resources && results.resources.length) {
                 searchResults = searchResults.concat(this.parseAnnotationList(results));
             }
@@ -1058,7 +1079,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (this.currentAnnotationRect) {
             return annotationRects.indexOf(this.currentAnnotationRect);
         }
-        
+
         return -1;
     }
 
@@ -1069,11 +1090,11 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     isFirstAnnotationRect(): boolean {
         return this.getCurrentAnnotationRectIndex() === 0;
-    } 
+    }
 
     getLastAnnotationRectIndex(): number {
         return this.getTotalAnnotationRects() - 1;
-    } 
+    }
 
     getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
 

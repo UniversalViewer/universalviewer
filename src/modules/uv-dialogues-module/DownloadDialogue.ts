@@ -107,7 +107,7 @@ export class DownloadDialogue extends Dialogue {
         }
     }
 
-    addEntireFileDownloadOption(uri: string, label: string, format: string): void{
+    addEntireFileDownloadOption(uri: string, label: string, format: string): void {
         if (label) {
             label += " ({0})";
         } else {
@@ -123,7 +123,7 @@ export class DownloadDialogue extends Dialogue {
     }
 
     updateNoneAvailable(): void {
-        if (!this.$downloadOptions.find('li:visible').length){
+        if (!this.$downloadOptions.find('li:visible').length) {
             this.$noneAvailable.show();
         } else {
             // select first option.
