@@ -117,6 +117,7 @@ docReady(function() {
          *  Taken from http://stackoverflow.com/a/6832721/11236
          */
         function compareVersionNumbers(v1, v2){
+
             var v1parts = v1.split('.');
             var v2parts = v2.split('.');
 
@@ -154,8 +155,14 @@ docReady(function() {
             return 0;
         }
 
-        // only load jQuery if not already included in page.
-        if (!(j = window.jQuery) || compareVersionNumbers(version, j.fn.jquery) || callback(j, scriptUri, absScriptUri, loaded)) {
+        function correctVersionOfJqueryAvailable(version) {
+            var comparison = compareVersionNumbers(version, j.fn.jquery);
+            return comparison === -1 || comparison === 0;
+        }
+
+        // load jQuery if not already included in page or
+        // if the version we want (1.10.2) is greater than what's available
+        if (!(j = window.jQuery) || !correctVersionOfJqueryAvailable(version) || callback(j, scriptUri, absScriptUri, loaded)) {
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = "//cdnjs.cloudflare.com/ajax/libs/jquery/" + version + "/jquery.min.js";
