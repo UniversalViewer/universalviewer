@@ -633,6 +633,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             width = canvas.getWidth() - x;
         } else if (x < 0){
             width = width + x;
+        }
+
+        if (x < 0) {
             x = 0;
         }
 
@@ -640,6 +643,9 @@ class Extension extends BaseExtension implements ISeadragonExtension {
             height = canvas.getHeight() - y;
         } else if (y < 0){
             height = height + y;
+        }
+
+        if (y < 0) {
             y = 0;
         }
         
