@@ -691,11 +691,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         let regionWidth: number = width;
         let regionHeight: number = height;
 
-        const canvasResource: any = this.getCanvasResource(canvas);
+        if (canvas.externalResource.data && canvas.externalResource.data.profile) {
 
-        if (canvasResource && canvasResource.profile) {
-
-            const profile: any = (<any[]>canvasResource.profile).en().where(p => p["maxWidth"]).first();
+            const profile: any = (<any[]>canvas.externalResource.data.profile).en().where(p => p["maxWidth"]).first();
 
             if (profile) {
                 const maxSize: Size = new Size(profile.maxWidth, profile.maxHeight ? profile.maxHeight : profile.maxWidth);

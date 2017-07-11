@@ -480,9 +480,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             let uri: string = canvas.getCanonicalImageUri(width);
             const uri_parts: string [] = uri.split('/');
 
-            // if maxwidth is set in info.json, you must include a height.
-            // if () {
-
+            // todo: if maxwidth is set in info.json, you must include a height.
+            // if (canvas.) {
+            //      uri_parts[uri_parts.length - 3] = 
             // }
 
             const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
@@ -508,22 +508,20 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     getCanvasDimensions(canvas: Manifesto.ICanvas): Size {
-        const canvasResource: any = this.extension.getCanvasResource(canvas);
-        
+
         // externalResource may not have loaded yet
-        if (canvasResource) {
-            return new Size(canvasResource.width, canvasResource.height);
+        if (canvas.externalResource.data) {
+            return new Size(canvas.externalResource.data.width, canvas.externalResource.data.height);
         }
         
         return new Size(0, 0);
     }
 
     getCanvasMaxDimensions(canvas: Manifesto.ICanvas): Size | null {
-        const canvasResource: any = this.extension.getCanvasResource(canvas);
 
-        if (canvasResource && canvasResource.profile) {
+        if (canvas.externalResource.data && canvas.externalResource.data.profile) {
 
-            const profile: any = (<any[]>canvasResource.profile).en().where(p => p["maxWidth"]).first();
+            const profile: any = (<any[]>canvas.externalResource.data.profile).en().where(p => p["maxWidth"]).first();
 
             if (profile) {
                 return new Size(profile.maxWidth, profile.maxHeight ? profile.maxHeight : profile.maxWidth);

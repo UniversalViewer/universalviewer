@@ -17,7 +17,6 @@ export interface IExtension {
     getAlternateLocale(): ILocale | null;
     getAppUri(): string;
     getCanvasLabels(label: string): string;
-    getCanvasResource(canvas: Manifesto.ICanvas): any;
     getCurrentCanvases(): Manifesto.ICanvas[];
     getCurrentCanvasRange(): Manifesto.IRange | null;
     getDependencies(callback: (deps: any) => void): any;

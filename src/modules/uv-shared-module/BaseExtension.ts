@@ -867,13 +867,6 @@ export class BaseExtension implements IExtension {
         }
     }
 
-    public getCanvasResource(canvas: Manifesto.ICanvas): Manifesto.IExternalResource | null {
-        if (this.resources) {
-            return this.resources.en().where(r => r.index === canvas.index).first();
-        }
-        return null;
-    }
-
     public getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
         return [canvasIndex];
     }
