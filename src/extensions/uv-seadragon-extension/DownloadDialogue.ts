@@ -10,6 +10,8 @@ import Size = Manifesto.Size;
 export class DownloadDialogue extends BaseDownloadDialogue {
 
     $buttonsContainer: JQuery;
+    $pagingNote: JQuery;
+    $settingsButton: JQuery;
     $canvasOptionsContainer: JQuery;
     $canvasOptions: JQuery;
     $currentViewAsJpgButton: JQuery;
@@ -37,10 +39,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         super.create();
 
         // create ui.
-        // this.$settingsButton = $('<a class="settings" href="#">' + this.content.editSettings + '</a>');
-        // this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + ' </div>');
-        // this.$pagingNote.append(this.$settingsButton);
-        // this.$content.append(this.$pagingNote);
+        this.$settingsButton = $('<a class="settings" href="#">' + this.content.editSettings + '</a>');
+        this.$pagingNote = $('<div class="pagingNote">' + this.content.pagingNote + ' </div>');
+        this.$pagingNote.append(this.$settingsButton);
+        this.$content.append(this.$pagingNote);
 
         this.$imageOptionsContainer = $('<li class="group image"></li>');
         this.$downloadOptions.append(this.$imageOptionsContainer);
@@ -164,10 +166,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             this.close();
         });
 
-        // this.$settingsButton.onPressed(() => {
-        //     $.publish(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
-        //     $.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
-        // });
+        this.$settingsButton.onPressed(() => {
+            $.publish(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
+            $.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+        });
     }
 
     open($triggerButton?: JQuery) {
@@ -413,6 +415,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         });
 
         this.$downloadOptions.find('li.group:visible').last().addClass('lastVisible');
+
+        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (this.config.options.downloadPagingNoteEnabled)) {
+            this.$pagingNote.show();
+        } else {
+            this.$pagingNote.hide();
+        }
 
         if (!this.$downloadOptions.find('li.option:visible').length){
             this.$noneAvailable.show();
