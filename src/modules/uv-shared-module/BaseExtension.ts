@@ -921,12 +921,14 @@ class BaseExtension implements IExtension {
     serializeLocales(locales: any[]): string {
         var str = '';
 
-        for (var i = 0; i < locales.length; i++){
-            var l = locales[i];
-            if (i > 0) str += ',';
-            str += l.name;
-            if (l.label){
-                str += ':' + l.label;
+        if (locales) {
+            for (var i = 0; i < locales.length; i++){
+                var l = locales[i];
+                if (i > 0) str += ',';
+                str += l.name;
+                if (l.label){
+                    str += ':' + l.label;
+                }
             }
         }
 
