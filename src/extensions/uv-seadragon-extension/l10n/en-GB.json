@@ -55,7 +55,7 @@
         "downloadSelectionExplanation": "Opens a dialogue to select which pages to download.",
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
-        "entireFileAsOriginal": "Entire file ({0})",
+        "entireFileAsOriginal": "Entire file",
         "noneAvailable": "No download options are available.",
         "pagingNote": "Please turn off Two Page View for additional options.",
         "preview": "Preview",

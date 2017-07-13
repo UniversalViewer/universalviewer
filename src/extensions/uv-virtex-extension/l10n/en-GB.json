@@ -18,7 +18,7 @@
     "downloadDialogue": {
       "content": {
         "download": "Download",
-        "entireFileAsOriginal": "Entire file ({0})",
+        "entireFileAsOriginal": "Entire file",
         "noneAvailable": "No download options are available.",
         "preview": "Preview",
         "title": "Download"

@@ -108,18 +108,24 @@ export class DownloadDialogue extends Dialogue {
     }
 
     addEntireFileDownloadOption(uri: string, label: string, format: string): void {
-        if (label) {
-            label += " ({0})";
-        } else {
-            label = this.content.entireFileAsOriginal;
-        }
-        let fileType: string;
+        
+        let fileType: string | null;
+
         if (format) {
             fileType = Utils.Files.simplifyMimeType(format);
         } else {
             fileType = this.getFileExtension(uri);
         }
-        this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download tabindex="0">' + String.format(label, fileType) + '</li>');
+
+        if (!label) {
+            label = this.content.entireFileAsOriginal;
+        }
+
+        if (fileType) {
+            label += " (" + fileType + ")";
+        }
+
+        this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download tabindex="0">' + label + '</li>');
     }
 
     updateNoneAvailable(): void {
@@ -141,8 +147,15 @@ export class DownloadDialogue extends Dialogue {
         }
     }
 
-    getFileExtension(fileUri: string): string {
-        return <string>fileUri.split('.').pop();
+    getFileExtension(fileUri: string): string | null {
+        let extension: string = <string>fileUri.split('.').pop();
+
+        // if it's not a valid file extension
+        if (extension.length > 5 || extension.indexOf('/') !== -1) {
+            return null;
+        }
+
+        return extension;
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
