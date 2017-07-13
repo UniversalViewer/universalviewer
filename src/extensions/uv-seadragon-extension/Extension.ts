@@ -388,7 +388,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         this.$downloadDialogue = $('<div class="overlay download"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
-        this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue, this.data);
+        this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
