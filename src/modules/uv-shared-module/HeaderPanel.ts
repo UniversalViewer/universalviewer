@@ -41,6 +41,10 @@ export class HeaderPanel extends BaseView {
         this.$centerOptions = $('<div class="centerOptions"></div>');
         this.$options.append(this.$centerOptions);
 
+        if (!Utils.Bools.getBool(this.options.centerOptionsEnabled, true)){
+            this.$centerOptions.hide();
+        }
+
         this.$rightOptions = $('<div class="rightOptions"></div>');
         this.$options.append(this.$rightOptions);
 
