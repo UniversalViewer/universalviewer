@@ -1,4 +1,4 @@
-// virtex v0.2.7 https://github.com/edsilv/virtex#readme
+// virtex v0.3.0 https://github.com/edsilv/virtex#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 ///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
@@ -37,13 +37,13 @@ var Virtex;
         function FileType() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
+        FileType.DRACO = new FileType("application/draco");
+        FileType.CORTO = new FileType("application/corto");
+        FileType.GLTF = new FileType("model/gltf+json");
+        FileType.OBJ = new FileType("text/plain");
+        FileType.THREEJS = new FileType("application/vnd.threejs+json");
         return FileType;
     }(Virtex.StringValue));
-    FileType.DRACO = new FileType("application/draco");
-    FileType.CORTO = new FileType("application/corto");
-    FileType.GLTF = new FileType("model/gltf+json");
-    FileType.OBJ = new FileType("text/plain");
-    FileType.THREEJS = new FileType("application/vnd.threejs+json");
     Virtex.FileType = FileType;
 })(Virtex || (Virtex = {}));
 
@@ -548,14 +548,14 @@ var Virtex;
             event.stopPropagation();
             var touches = event.touches;
             switch (touches.length) {
-                case 1:
+                case 1:// one-fingered touch: rotate
                     event.preventDefault();
                     this._mousePos.x = touches[0].pageX - this._viewportCenter.x;
                     this._targetRotation.x = this._targetRotationOnMouseDown.x + (this._mousePos.x - this._mousePosOnMouseDown.x) * 0.05;
                     this._mousePos.y = touches[0].pageY - this._viewportCenter.y;
                     this._targetRotation.y = this._targetRotationOnMouseDown.y + (this._mousePos.y - this._mousePosOnMouseDown.y) * 0.05;
                     break;
-                case 2:
+                case 2:// two-fingered touch: zoom
                     var dx = touches[0].pageX - touches[1].pageX;
                     var dy = touches[0].pageY - touches[1].pageY;
                     var distance = Math.sqrt(dx * dx + dy * dy);
@@ -570,7 +570,7 @@ var Virtex;
                     }
                     this._pinchStart.copy(pinchEnd);
                     break;
-                case 3:
+                case 3:// three-fingered touch: pan
                     //var panEnd = new THREE.Vector2();
                     //panEnd.set(touches[0].pageX, touches[0].pageY);
                     //var panDelta = new THREE.Vector2();
@@ -810,9 +810,9 @@ var Virtex;
     var Events = (function () {
         function Events() {
         }
+        Events.LOADED = 'loaded';
         return Events;
     }());
-    Events.LOADED = 'loaded';
     Virtex.Events = Events;
 })(Virtex || (Virtex = {}));
 (function (g) {

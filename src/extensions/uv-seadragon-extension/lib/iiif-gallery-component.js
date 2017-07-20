@@ -1,12 +1,18 @@
-// iiif-gallery-component v1.0.7 https://github.com/viewdir/iiif-gallery-component#readme
+// iiif-gallery-component v1.1.0 https://github.com/viewdir/iiif-gallery-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifGalleryComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
+///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
 
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var IIIFComponents;
 (function (IIIFComponents) {
     var GalleryComponent = (function (_super) {
@@ -216,7 +222,6 @@ var IIIFComponents;
             return this.options.data.helper.getMultiSelectState();
         };
         GalleryComponent.prototype._createThumbs = function () {
-            var _this = this;
             var that = this;
             if (!this._thumbs)
                 return;
@@ -225,8 +230,8 @@ var IIIFComponents;
             var multiSelectState = this._getMultiSelectState();
             // set initial thumb sizes
             var heights = [];
-            for (var i = 0; i < this._thumbs.length; i++) {
-                var thumb = this._thumbs[i];
+            for (var i_2 = 0; i_2 < this._thumbs.length; i_2++) {
+                var thumb = this._thumbs[i_2];
                 var initialWidth = thumb.width;
                 var initialHeight = thumb.height;
                 thumb.initialWidth = initialWidth;
@@ -235,8 +240,8 @@ var IIIFComponents;
                 thumb.multiSelectEnabled = multiSelectState.isEnabled;
             }
             var medianHeight = Math.median(heights);
-            for (var i = 0; i < this._thumbs.length; i++) {
-                var thumb = this._thumbs[i];
+            for (var i_3 = 0; i_3 < this._thumbs.length; i_3++) {
+                var thumb = this._thumbs[i_3];
                 thumb.initialHeight = medianHeight;
             }
             this._$thumbs.link($.templates.galleryThumbsTemplate, this._thumbs);
@@ -251,24 +256,29 @@ var IIIFComponents;
             }
             else {
                 // make each thumb a checkboxButton
-                $.each(this._$thumbs.find('.thumb'), function (index, thumb) {
-                    var that = _this;
-                    var $thumb = $(thumb);
+                var thumbs = this._$thumbs.find('.thumb');
+                var _loop_1 = function () {
+                    var that_1 = this_1;
+                    var $thumb = $(thumbs[i]);
                     $thumb.checkboxButton(function (checked) {
                         var thumb = $.view(this).data;
-                        that._setThumbMultiSelected(thumb, !thumb.multiSelected);
-                        var range = that.options.data.helper.getCanvasRange(thumb.data);
-                        var multiSelectState = that._getMultiSelectState();
+                        that_1._setThumbMultiSelected(thumb, !thumb.multiSelected);
+                        var range = that_1.options.data.helper.getCanvasRange(thumb.data);
+                        var multiSelectState = that_1._getMultiSelectState();
                         if (range) {
                             multiSelectState.selectRange(range, thumb.multiSelected);
                         }
                         else {
                             multiSelectState.selectCanvas(thumb.data, thumb.multiSelected);
                         }
-                        that._update();
-                        that.fire(GalleryComponent.Events.THUMB_MULTISELECTED, thumb);
+                        that_1._update();
+                        that_1.fire(GalleryComponent.Events.THUMB_MULTISELECTED, thumb);
                     });
-                });
+                };
+                var this_1 = this;
+                for (var i = 0; i < thumbs.length; i++) {
+                    _loop_1();
+                }
             }
         };
         GalleryComponent.prototype._getThumbByCanvas = function (canvas) {
@@ -388,6 +398,9 @@ var IIIFComponents;
                 }
                 else {
                     $thumb.removeClass('insideScrollArea');
+                    // if (debug) {
+                    //     $label.append(', i: false');
+                    // }
                 }
             }
             if (debug) {
@@ -449,13 +462,13 @@ var IIIFComponents;
         var Events = (function () {
             function Events() {
             }
+            Events.DECREASE_SIZE = 'decreaseSize';
+            Events.INCREASE_SIZE = 'increaseSize';
+            Events.MULTISELECTION_MADE = 'multiSelectionMade';
+            Events.THUMB_SELECTED = 'thumbSelected';
+            Events.THUMB_MULTISELECTED = 'thumbMultiSelected';
             return Events;
         }());
-        Events.DECREASE_SIZE = 'decreaseSize';
-        Events.INCREASE_SIZE = 'increaseSize';
-        Events.MULTISELECTION_MADE = 'multiSelectionMade';
-        Events.THUMB_SELECTED = 'thumbSelected';
-        Events.THUMB_MULTISELECTED = 'thumbMultiSelected';
         GalleryComponent.Events = Events;
     })(GalleryComponent = IIIFComponents.GalleryComponent || (IIIFComponents.GalleryComponent = {}));
 })(IIIFComponents || (IIIFComponents = {}));
