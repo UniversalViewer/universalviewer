@@ -106,8 +106,8 @@ export class PagingHeaderPanel extends HeaderPanel {
                     const canvases: Manifesto.ICanvas[] = this.extension.helper.getCanvases();
 
                     // if in page mode, get canvases by label.
-                    if (this.isPageModeEnabled()){
-                        for (let i = 0; i < canvases.length; i++){
+                    if (this.isPageModeEnabled()) {
+                        for (let i = 0; i < canvases.length; i++) {
                             const canvas: Manifesto.ICanvas = canvases[i];
                             const label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
                             if (label && label.startsWith(term)) {

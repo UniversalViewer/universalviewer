@@ -1,5 +1,5 @@
 export class InformationAction {
-    public label: string;
+    public label: string | null;
     public action: () => void;
 
     constructor() {

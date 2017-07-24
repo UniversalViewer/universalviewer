@@ -20,15 +20,18 @@ export class InformationFactory {
             case (InformationType.DEGRADED_RESOURCE):
                 const actions: InformationAction[] = [];
                 const loginAction: InformationAction = new InformationAction();
-                loginAction.label = this.extension.data.config.content.degradedResourceLogin;
+                loginAction.label = args.param.loginService.getConfirmLabel();
+
+                const resource: Manifesto.IExternalResource = args.param;
+                resource.contentProviderInteractionEnabled = false;
 
                 loginAction.action = () => {
                     $.publish(BaseEvents.HIDE_INFORMATION);
-                    $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [[args.param]]);
+                    $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [[resource]]);
                 };
 
                 actions.push(loginAction);
-                return new Information(this.extension.data.config.content.degradedResourceMessage, actions);
+                return new Information(args.param.loginService.getServiceLabel(), actions);
         }
     }
 }

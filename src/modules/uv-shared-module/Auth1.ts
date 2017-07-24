@@ -85,19 +85,28 @@ export class Auth1 {
     static getContentProviderInteraction(resource: Manifesto.IExternalResource, service: Manifesto.IService): Promise<Window | null> {
         return new Promise<Window | null>((resolve) => {
 
-            $.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
-                service: service,
-                closeCallback: () => {
-                    resolve(null);
-                },
-                confirmCallback: () => {
-                    const win: Window = Auth1.openContentProviderInteraction(service);
-                    resolve(win);
-                },
-                cancelCallback: () => {
-                    resolve(null);
-                }
-            }]);
+            if (!resource.contentProviderInteractionEnabled) {
+
+                const win: Window = Auth1.openContentProviderInteraction(service);
+                resolve(win);
+
+            } else {
+
+                $.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
+                    service: service,
+                    closeCallback: () => {
+                        resolve(null);
+                    },
+                    confirmCallback: () => {
+                        const win: Window = Auth1.openContentProviderInteraction(service);
+                        resolve(win);
+                    },
+                    cancelCallback: () => {
+                        resolve(null);
+                    }
+                }]);
+
+            }
 
         });
     }

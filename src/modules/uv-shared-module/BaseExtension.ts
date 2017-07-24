@@ -617,7 +617,6 @@ export class BaseExtension implements IExtension {
             $.publish(BaseEvents.CREATED);
             this._setDefaultFocus();
         }, 1);
-        
     }
 
     public update(): void {
@@ -918,8 +917,7 @@ export class BaseExtension implements IExtension {
             let r: Manifesto.IExternalResource;
 
             if (!canvas.externalResource) {
-                r = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri);
-                r.index = index;
+                r = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri, index, this.data.config.options.authAPIVersion);
             } else {
                 r = canvas.externalResource;
             }
