@@ -9,7 +9,6 @@ import Size = Manifesto.Size;
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
-    $buttonsContainer: JQuery;
     $pagingNote: JQuery;
     $settingsButton: JQuery;
     $canvasOptionsContainer: JQuery;
@@ -79,11 +78,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.$sequenceOptions.append(this.$selectionButton);
         this.$selectionButton.hide();
 
-        this.$buttonsContainer = $('<div class="buttons"></div>');
-        this.$content.append(this.$buttonsContainer);
-
         this.$downloadButton = $('<a class="btn btn-primary" href="#" tabindex="0">' + this.content.download + '</a>');
-        this.$buttonsContainer.append(this.$downloadButton);
+        this.$buttons.prepend(this.$downloadButton);
 
         this.$explanatoryTextTemplate = $('<span class="explanatory"></span>');
 
