@@ -269,6 +269,13 @@ export class SeadragonCenterPanel extends CenterPanel {
         // when mouse move stopped
         this.$element.on('mousemove', () => {
             // if over element, hide controls.
+            // When over prev/next buttons keep controls enabled
+            if (this.$prevButton.ismouseover()) {
+                return;
+            }
+            if (this.$nextButton.ismouseover()) {
+                return;
+            }
             if (!this.$viewer.find('.navigator').ismouseover()) {
                 if (!this.controlsVisible) return;
                 this.controlsVisible = false;
@@ -376,6 +383,19 @@ export class SeadragonCenterPanel extends CenterPanel {
                     $.publish(Events.PREV);
                     break;
             }
+        });
+
+        // When Prev/Next buttons are focused, make sure the controls are enabled
+        this.$prevButton.on('focus', () => {
+            if (this.controlsVisible) return;
+            this.controlsVisible = true;
+            this.viewer.setControlsEnabled(true);
+        });
+        
+        this.$nextButton.on('focus', () => {
+            if (this.controlsVisible) return;
+            this.controlsVisible = true;
+            this.viewer.setControlsEnabled(true);
         });
     }
 
