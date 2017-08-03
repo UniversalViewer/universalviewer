@@ -107,6 +107,7 @@ export class Dialogue extends BaseView {
     }
 
     open($triggerButton?: JQuery): void {
+        this.$element.attr('aria-hidden', 'false');
         this.$element.show();
 
         if ($triggerButton && $triggerButton.length) {
@@ -152,7 +153,7 @@ export class Dialogue extends BaseView {
 
     close(): void {
         if (!this.isActive) return;
-
+        this.$element.attr('aria-hidden', 'true');
         this.$element.hide();
         this.isActive = false;
 

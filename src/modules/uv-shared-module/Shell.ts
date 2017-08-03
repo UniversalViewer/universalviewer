@@ -54,7 +54,7 @@ export class Shell extends BaseView {
         Shell.$overlays = $('<div class="overlays"></div>');
         Shell.$element.append(Shell.$overlays);
 
-        Shell.$genericDialogue = $('<div class="overlay genericDialogue"></div>');
+        Shell.$genericDialogue = $('<div class="overlay genericDialogue" aria-hidden="true"></div>');
         Shell.$overlays.append(Shell.$genericDialogue);
 
         Shell.$overlays.on('click', (e) => {

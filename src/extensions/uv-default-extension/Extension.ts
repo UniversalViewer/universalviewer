@@ -72,15 +72,15 @@ export class Extension extends BaseExtension implements IDefaultExtension {
             Shell.$footerPanel.hide();
         }
 
-        this.$helpDialogue = $('<div class="overlay help"></div>');
+        this.$helpDialogue = $('<div class="overlay help" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
-        this.$shareDialogue = $('<div class="overlay share"></div>');
+        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 

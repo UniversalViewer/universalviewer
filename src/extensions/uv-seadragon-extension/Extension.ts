@@ -370,31 +370,31 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             Shell.$footerPanel.hide();
         }
 
-        this.$helpDialogue = $('<div class="overlay help"></div>');
+        this.$helpDialogue = $('<div class="overlay help" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
-        this.$moreInfoDialogue = $('<div class="overlay moreInfo"></div>');
+        this.$moreInfoDialogue = $('<div class="overlay moreInfo" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$moreInfoDialogue);
         this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
-        this.$multiSelectDialogue = $('<div class="overlay multiSelect"></div>');
+        this.$multiSelectDialogue = $('<div class="overlay multiSelect" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$multiSelectDialogue);
         this.multiSelectDialogue = new MultiSelectDialogue(this.$multiSelectDialogue);
 
-        this.$shareDialogue = $('<div class="overlay share"></div>');
+        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
-        this.$externalContentDialogue = $('<div class="overlay externalContent"></div>');
+        this.$externalContentDialogue = $('<div class="overlay externalContent" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$externalContentDialogue);
         this.externalContentDialogue = new ExternalContentDialogue(this.$externalContentDialogue);
 
