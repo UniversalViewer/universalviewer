@@ -190,7 +190,7 @@ export class ThumbsView extends BaseView {
                     let src: string = $thumb.attr('data-src');
                     src += '?t=' + Utils.Dates.getTimeStamp();
                     //console.log(i, src);
-                    const $img: JQuery = $('<img src="' + src + '" />');
+                    const $img: JQuery = $('<img src="' + src + '" alt=""/>');
                     // fade in on load.
                     $img.hide().load(function () {
                         $(this).fadeIn(fadeDuration, function () {
