@@ -92,12 +92,12 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
 
-        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="0"/>');
+        this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="0" aria-label="' + this.content.pageSearchLabel + '"/>');
         this.$search.append(this.$searchText);
 
         if (Utils.Bools.getBool(this.options.autoCompleteBoxEnabled, true)) {
             this.$searchText.hide();
-            this.$autoCompleteBox = $('<input class="autocompleteText" type="text" maxlength="100" />');
+            this.$autoCompleteBox = $('<input class="autocompleteText" type="text" maxlength="100" aria-label="' + this.content.pageSearchLabel + '"/>');
             this.$search.append(this.$autoCompleteBox);
 
             new AutoComplete(this.$autoCompleteBox,

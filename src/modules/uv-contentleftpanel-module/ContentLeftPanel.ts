@@ -109,7 +109,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.$topOptions = $('<div class="top"></div>');
         this.$options.append(this.$topOptions);
 
-        this.$treeSelect = $('<select></select>');
+        this.$treeSelect = $('<select aria-label="' + this.content.manifestRanges + '"></select>');
         this.$topOptions.append(this.$treeSelect);
         
         this.$bottomOptions = $('<div class="bottom"></div>');
