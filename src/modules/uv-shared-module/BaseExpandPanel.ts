@@ -105,6 +105,9 @@ export class BaseExpandPanel extends BaseView {
 
         // if collapsing, hide contents immediately.
         if (this.isExpanded) {
+            this.$top.attr('aria-hidden', 'true');
+            this.$main.attr('aria-hidden', 'true');
+            this.$closed.attr('aria-hidden', 'false');
             this.$top.hide();
             this.$main.hide();
             this.$closed.show();
@@ -127,6 +130,9 @@ export class BaseExpandPanel extends BaseView {
 
         // if expanded show content when animation finished.
         if (this.isExpanded) {
+            this.$top.attr('aria-hidden', 'false');
+            this.$main.attr('aria-hidden', 'false');
+            this.$closed.attr('aria-hidden', 'true');
             this.$closed.hide();
             this.$top.show();
             this.$main.show();

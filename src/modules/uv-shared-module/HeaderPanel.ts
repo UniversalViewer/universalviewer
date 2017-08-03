@@ -54,7 +54,7 @@ export class HeaderPanel extends BaseView {
         this.$settingsButton.attr('title', this.content.settings);
         this.$rightOptions.append(this.$settingsButton);
 
-        this.$informationBox = $('<div class="informationBox"> \
+        this.$informationBox = $('<div class="informationBox" aria-hidden="true"> \
                                     <div class="message"></div> \
                                     <div class="actions"></div> \
                                     <div class="close"></div> \
@@ -129,6 +129,7 @@ export class HeaderPanel extends BaseView {
             $actions.append($action);
         }
 
+        this.$informationBox.attr('aria-hidden', 'false');
         this.$informationBox.show();
         this.$element.addClass('showInformation');
         this.extension.resize();
@@ -136,6 +137,7 @@ export class HeaderPanel extends BaseView {
 
     hideInformation(): void {
         this.$element.removeClass('showInformation');
+        this.$informationBox.attr('aria-hidden', 'true');
         this.$informationBox.hide();
         this.extension.resize();
     }

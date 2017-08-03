@@ -100,15 +100,15 @@ export class Extension extends BaseExtension implements IPDFExtension {
             Shell.$footerPanel.hide();
         }
 
-        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$shareDialogue = $('<div class="overlay share"></div>');
+        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
