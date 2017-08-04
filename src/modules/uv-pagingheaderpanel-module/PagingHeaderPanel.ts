@@ -70,10 +70,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$prevOptions = $('<div class="prevOptions"></div>');
         this.$centerOptions.append(this.$prevOptions);
 
-        this.$firstButton = $('<a class="imageBtn first" tabindex="0"></a>');
+        this.$firstButton = $('<button class="imageBtn first" tabindex="0"><i></i></button>');
         this.$prevOptions.append(this.$firstButton);
 
-        this.$prevButton = $('<a class="imageBtn prev" tabindex="0"></a>');
+        this.$prevButton = $('<button class="imageBtn prev" tabindex="0"><i></i></button>');
         this.$prevOptions.append(this.$prevButton);
 
         this.$modeOptions = $('<div class="mode"></div>');
@@ -161,10 +161,10 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
 
-        this.$nextButton = $('<a class="imageBtn next" tabindex="0"></a>');
+        this.$nextButton = $('<button class="imageBtn next" tabindex="0"><i></i></button>');
         this.$nextOptions.append(this.$nextButton);
 
-        this.$lastButton = $('<a class="imageBtn last" tabindex="0"></a>');
+        this.$lastButton = $('<button class="imageBtn last" tabindex="0"><i></i></button>');
         this.$nextOptions.append(this.$lastButton);
 
         if (this.isPageModeEnabled()) {
@@ -184,16 +184,16 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.text(this.content.page);
         }
 
-        this.$galleryButton = $('<a class="imageBtn gallery" title="' + this.content.gallery + '" tabindex="0"></a>');
+        this.$galleryButton = $('<button class="imageBtn gallery" title="' + this.content.gallery + '" tabindex="0"><i></i></button>');
         this.$rightOptions.prepend(this.$galleryButton);
 
         this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
         this.$rightOptions.prepend(this.$pagingToggleButtons);
 
-        this.$oneUpButton = $('<a class="imageBtn one-up" title="' + this.content.oneUp + '" tabindex="0"></a>');
+        this.$oneUpButton = $('<button class="imageBtn one-up" title="' + this.content.oneUp + '" tabindex="0"><i></i></button>');
         this.$pagingToggleButtons.append(this.$oneUpButton);
 
-        this.$twoUpButton = $('<a class="imageBtn two-up" title="' + this.content.twoUp + '" tabindex="0"></a>');
+        this.$twoUpButton = $('<button class="imageBtn two-up" title="' + this.content.twoUp + '" tabindex="0"><i></i></button>');
         this.$pagingToggleButtons.append(this.$twoUpButton);
 
         this.updatePagingToggle();

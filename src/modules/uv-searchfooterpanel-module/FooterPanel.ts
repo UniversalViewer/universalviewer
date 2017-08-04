@@ -79,7 +79,7 @@ export class FooterPanel extends BaseFooterPanel {
             this.updateNextButton();
         });
 
-        this.$printButton = $('<a class="print" title="' + this.content.print + '" tabindex="0">' + this.content.print + '</a>');
+        this.$printButton = $('<button class="print imageBtn" title="' + this.content.print + '" tabindex="0"><i></i></button>');
         this.$options.prepend(this.$printButton);
 
         // search input.

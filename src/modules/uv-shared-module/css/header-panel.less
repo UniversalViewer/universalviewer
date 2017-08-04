@@ -4,10 +4,12 @@
 
         color: @text-secondary-color;
 
-        a.imageBtn {
-            height: 30px;
-            width: 30px;
+        button.imageBtn {
             float: left;
+            i {
+                height: 30px;
+                width: 30px;
+            }
         }
 
         &.showInformation {
@@ -38,9 +40,9 @@
 //              }
 
                 .settings {
-                    background: data-uri('@{img-path}settings.png');
-                    height: 30px;
-                    width: 30px;
+                    i {
+                        background: data-uri('@{img-path}settings.png');
+                    }
                     margin-right: 8px;
                 }
             }
