@@ -57,7 +57,9 @@ export class HeaderPanel extends BaseView {
         this.$informationBox = $('<div class="informationBox" aria-hidden="true"> \
                                     <div class="message"></div> \
                                     <div class="actions"></div> \
-                                    <div class="close"></div> \
+                                    <button type="button" class="close" aria-label="Close"> \
+                                        <span aria-hidden="true">&times;</span>\
+                                    </button> \
                                   </div>');
 
         this.$element.append(this.$informationBox);
