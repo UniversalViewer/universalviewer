@@ -146,7 +146,7 @@ export class Auth1 {
         let errorMessage: string = "";
 
         if (service.getFailureHeader()) {
-            errorMessage += service.getFailureHeader() + '\n';
+            errorMessage += '<p>' + service.getFailureHeader() + '</p>';
         }
 
         if (service.getFailureDescription()) {
