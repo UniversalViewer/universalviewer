@@ -69,14 +69,16 @@
             }
 
             .close {
-                float: right;
-                background-image: data-uri('@{img-path}close_information_box.png');
-                background-repeat: no-repeat;
-                width: 17px;
-                height: 17px;
-                background-position: 4px 4px;
+                background: 0 0;
+                border: 0;
+                color: @gray-dark;
+                font-size: 1.5rem;
                 cursor: pointer;
-                margin: 12px;
+                margin-right: 6px;
+                &:focus,
+                &:hover {
+                  color: @gray-darker;
+                }
             }
         }
     }
