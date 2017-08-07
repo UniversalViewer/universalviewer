@@ -38,28 +38,28 @@ export class FooterPanel extends BaseView {
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
-        this.$feedbackButton = $('<a class="feedback" title="' + this.content.feedback + '" tabindex="0">' + this.content.feedback + '</a>');
+        this.$feedbackButton = $('<button class="feedback imageBtn" title="' + this.content.feedback + '" tabindex="0"><i></i></button>');
         this.$options.prepend(this.$feedbackButton);
 
-        this.$openButton = $('<a class="open" title="' + this.content.open + '" tabindex="0">' + this.content.open + '</a>');
+        this.$openButton = $('<button class="open imageBtn" title="' + this.content.open + '" tabindex="0"><i></i></button>');
         this.$options.prepend(this.$openButton);
 
-        this.$bookmarkButton = $('<a class="bookmark" title="' + this.content.bookmark + '" tabindex="0">' + this.content.bookmark + '</a>');
+        this.$bookmarkButton = $('<button class="bookmark imageBtn" title="' + this.content.bookmark + '" tabindex="0"><i></i></button>');
         this.$options.prepend(this.$bookmarkButton);
 
-        this.$shareButton = $('<a href="#" class="share" title="' + this.content.share + '" tabindex="0">' + this.content.share + '</a>');
+        this.$shareButton = $('<button class="share imageBtn" title="' + this.content.share + '" tabindex="0"><i></i></button>');
         this.$options.append(this.$shareButton);
 
-        this.$embedButton = $('<a href="#" class="embed" title="' + this.content.embed + '" tabindex="0">' + this.content.embed + '</a>');
+        this.$embedButton = $('<button class="embed imageBtn" title="' + this.content.embed + '" tabindex="0"><i></i></button>');
         this.$options.append(this.$embedButton);
 
-        this.$downloadButton = $('<a class="download" title="' + this.content.download + '" tabindex="0">' + this.content.download + '</a>');
+        this.$downloadButton = $('<button class="download imageBtn" title="' + this.content.download + '" tabindex="0"><i></i></button>');
         this.$options.prepend(this.$downloadButton);
 
-        this.$moreInfoButton = $('<a href="#" class="moreInfo" title="' + this.content.moreInfo + '" tabindex="0">' + this.content.moreInfo + '</a>');
+        this.$moreInfoButton = $('<button class="moreInfo imageBtn" title="' + this.content.moreInfo + '" tabindex="0"><i></i></button>');
         this.$options.prepend(this.$moreInfoButton);
 
-        this.$fullScreenBtn = $('<a href="#" class="fullScreen" title="' + this.content.fullScreen + '" tabindex="0">' + this.content.fullScreen + '</a>');
+        this.$fullScreenBtn = $('<button class="fullScreen imageBtn" title="' + this.content.fullScreen + '" tabindex="0"><i></i></button>');
         this.$options.append(this.$fullScreenBtn);
 
         this.$openButton.onPressed(() => {
@@ -158,11 +158,9 @@ export class FooterPanel extends BaseView {
 
         if (this.extension.isFullScreen()) {
             this.$fullScreenBtn.swapClass('fullScreen', 'exitFullscreen');
-            this.$fullScreenBtn.text(this.content.exitFullScreen);
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
         } else {
             this.$fullScreenBtn.swapClass('exitFullscreen', 'fullScreen');
-            this.$fullScreenBtn.text(this.content.fullScreen);
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
         }
     }

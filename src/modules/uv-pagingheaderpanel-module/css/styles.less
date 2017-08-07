@@ -15,53 +15,58 @@
 
         color: @text-secondary-color;
 
-        a.imageBtn {
+        button.imageBtn {
 
             &.first {
-                background-color: @gray;
-                background-image: data-uri('@{img-path}first.png');
-                background-repeat: no-repeat;
-                margin: 0 0 0 0;
-                &:hover {
-                    background-color: @gray-dark;
+                i {
+                    background-color: @gray;
+                    background-image: data-uri('@{img-path}first.png');
+                    &:hover {
+                        background-color: @gray-dark;
+                    }
                 }
+                margin: 0 0 0 0;
             }
 
             &.prev {
-                background-color: @gray;
-                background-image: data-uri('@{img-path}prev.png');
-                background-repeat: no-repeat;
-                margin: 0 0 0 5px;
-                &:hover {
-                    background-color: @gray-dark;
+                i {
+                    background-color: @gray;
+                    background-image: data-uri('@{img-path}prev.png');
+                    &:hover {
+                        background-color: @gray-dark;
+                    }
                 }
+                margin: 0 0 0 5px;
             }
 
             &.next {
-                background-color: @gray;
-                background-image: data-uri('@{img-path}next.png');
-                background-repeat: no-repeat;
-                margin: 0 5px 0 0;
-                &:hover {
-                    background-color: @gray-dark;
+                i {
+                    background-color: @gray;
+                    background-image: data-uri('@{img-path}next.png');
+                    &:hover {
+                        background-color: @gray-dark;
+                    }
                 }
+                margin: 0 5px 0 0;
             }
 
             &.last {
-                background-color: @gray;
-                background-image: data-uri('@{img-path}last.png') ;
-                background-repeat: no-repeat;
-                margin: 0 0 0 0;
-                &:hover {
-                    background-color: @gray-dark;
+                i {
+                    background-color: @gray;
+                    background-image: data-uri('@{img-path}last.png') ;
+                    &:hover {
+                        background-color: @gray-dark;
+                    }
                 }
+                margin: 0 0 0 0;
             }
 
             &.go {
-                background: data-uri('@{img-path}go.png');
-                background-repeat: no-repeat;
-                width: 28px;
-                line-height: 24px;
+                i {
+                    background: data-uri('@{img-path}go.png');
+                    line-height: 24px;
+                    width: 28px;
+                }
             }
 
             &.disabled {
@@ -189,16 +194,18 @@
                 float: left;
                 //margin: -1px 4px 0 0;
                 .one-up {
-                    background-image: data-uri('@{img-path}one_up.png');
-                    background-repeat: no-repeat;
+                    i {
+                        background-image: data-uri('@{img-path}one_up.png');
+                    }
                     .opacity(1);
                     &.on {
                         .opacity(.75);
                     }
                 }
                 .two-up {
-                    background-image: data-uri('@{img-path}two_up.png');
-                    background-repeat: no-repeat;
+                    i {
+                        background-image: data-uri('@{img-path}two_up.png');
+                    }
                     .opacity(1);
                     &.on {
                         .opacity(.75);
@@ -206,8 +213,9 @@
                 }
             }
             .gallery {
-                background-image: data-uri('@{img-path}grid.png');
-                background-repeat: no-repeat;
+                i {
+                    background-image: data-uri('@{img-path}grid.png');
+                }
                 margin-right: @margin-small-horizontal;
                 .opacity(1);
                 &.on {
