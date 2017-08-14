@@ -23,9 +23,9 @@ export class InformationFactory {
                 loginAction.label = args.param.loginService.getConfirmLabel();
 
                 const resource: Manifesto.IExternalResource = args.param;
-                resource.contentProviderInteractionEnabled = false;
 
                 loginAction.action = () => {
+                    resource.authHoldingPage = window.open("", "_blank");
                     $.publish(BaseEvents.HIDE_INFORMATION);
                     $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [[resource]]);
                 };

@@ -45,8 +45,13 @@ export class Auth1 {
         });
     }
     
-    static openContentProviderInteraction(service: Manifesto.IService): Window {
+    static getCookieServiceUrl(service: Manifesto.IService): string {
         let cookieServiceUrl: string = service.id + "?origin=" + Auth1.getOrigin();
+        return cookieServiceUrl;
+    }
+
+    static openContentProviderInteraction(service: Manifesto.IService): Window {
+        const cookieServiceUrl: string = Auth1.getCookieServiceUrl(service);
         return window.open(cookieServiceUrl);
     }
 
@@ -85,10 +90,11 @@ export class Auth1 {
     static getContentProviderInteraction(resource: Manifesto.IExternalResource, service: Manifesto.IService): Promise<Window | null> {
         return new Promise<Window | null>((resolve) => {
 
-            if (!resource.contentProviderInteractionEnabled) {
+            if (resource.authHoldingPage) {
 
-                const win: Window = Auth1.openContentProviderInteraction(service);
-                resolve(win);
+                // redirect holding page
+                resource.authHoldingPage.location.href = Auth1.getCookieServiceUrl(service);
+                resolve(resource.authHoldingPage);
 
             } else {
 
