@@ -32,9 +32,14 @@ export class GenericDialogue extends Dialogue {
         this.$message = $('<p></p>');
         this.$content.append(this.$message);
 
-        this.$acceptButton = $('<a href="#" class="btn btn-primary accept default"></a>');
-        this.$content.append(this.$acceptButton);
-        this.$acceptButton.text(this.content.ok);
+        this.$acceptButton = $(`
+          <button class="btn btn-primary accept default">
+            ${this.content.ok}
+          </button>
+        `);
+        this.$buttons.append(this.$acceptButton);
+        // Hide the redundant close button
+        this.$buttons.find('.close').hide();
 
         this.$acceptButton.onPressed(() => {
             this.accept();

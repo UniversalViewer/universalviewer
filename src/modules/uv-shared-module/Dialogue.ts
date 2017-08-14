@@ -48,7 +48,7 @@ export class Dialogue extends BaseView {
         this.$top = $('<div class="top"></div>');
         this.$element.append(this.$top);
 
-        this.$closeButton = $('<a href="#" class="close" tabindex="0">' + this.content.close + '</a>');
+        this.$closeButton = $('<button type="button" class="btn btn-default close" tabindex="0">' + this.content.close + '</button>');
 
         this.$middle = $('<div class="middle"></div>');
         this.$element.append(this.$middle);
