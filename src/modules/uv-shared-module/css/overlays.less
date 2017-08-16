@@ -30,6 +30,16 @@
         .middle {
             width: 100%;
             background: @overlay-bg;
+            overflow: hidden;
+
+            .buttons {
+              padding: @padding-medium-vertical;
+              float: right;
+
+              .btn {
+                margin: 0 0 0 @margin-medium-horizontal;
+              }
+            }
 
             .content {
                 padding-right: @padding-medium-horizontal;
@@ -37,15 +47,6 @@
                 padding-left: @padding-medium-horizontal;
 
                 overflow: auto;
-
-                .buttons {
-                    padding: @padding-medium-vertical 0 0 0;
-                    float: right;
-
-                    .btn {
-                        margin: 0 0 0 @margin-medium-horizontal;
-                    }
-                }
 
                 h1 {
                     color: @headings-color;
