@@ -44,19 +44,17 @@ export class AuthDialogue extends Dialogue {
         this.$content.append('\
             <div>\
                 <p class="message scroll"></p>\
-                <div class="buttons">\
-                    <a class="confirm btn btn-primary" href="#" target="_parent"></a>\
-                    <a class="cancel btn btn-primary" href="#"></a>\
-                </div>\
             </div>'
         );
 
+        this.$buttons.prepend(this._buttonsToAdd());
+
         this.$message = this.$content.find('.message');
 
-        this.$confirmButton = this.$content.find('.confirm');
+        this.$confirmButton = this.$buttons.find('.confirm');
         this.$confirmButton.text(this.content.confirm);
 
-        this.$cancelButton = this.$content.find('.cancel');
+        this.$cancelButton = this.$buttons.find('.close');
         this.$cancelButton.text(this.content.cancel);
 
         this.$element.hide();
@@ -109,5 +107,14 @@ export class AuthDialogue extends Dialogue {
 
     resize(): void {
         super.resize();
+    }
+
+    _buttonsToAdd() : string {
+      var buttonsToAdd = '<a class="confirm btn btn-primary" href="#" target="_parent"></a>';
+      // If the top button is enabled, add an additional close button for consistency.
+      if (this.config.topCloseButtonEnabled) {
+        buttonsToAdd += '<button class="close btn btn-default"></button>';
+      }
+      return buttonsToAdd;
     }
 }

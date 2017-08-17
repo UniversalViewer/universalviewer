@@ -14,6 +14,7 @@ export class Dialogue extends BaseView {
     $triggerButton: JQuery;
     $closeButton: JQuery;
     $content: JQuery;
+    $buttons: JQuery;
     $middle: JQuery;
     $top: JQuery;
 
@@ -47,8 +48,7 @@ export class Dialogue extends BaseView {
         this.$top = $('<div class="top"></div>');
         this.$element.append(this.$top);
 
-        this.$closeButton = $('<a href="#" class="close" tabindex="0">' + this.content.close + '</a>');
-        this.$top.append(this.$closeButton);
+        this.$closeButton = $('<button type="button" class="btn btn-default close" tabindex="0">' + this.content.close + '</button>');
 
         this.$middle = $('<div class="middle"></div>');
         this.$element.append(this.$middle);
@@ -56,8 +56,17 @@ export class Dialogue extends BaseView {
         this.$content = $('<div class="content"></div>');
         this.$middle.append(this.$content);
 
+        this.$buttons = $('<div class="buttons"></div>');
+        this.$middle.append(this.$buttons);
+
         this.$bottom = $('<div class="bottom"></div>');
         this.$element.append(this.$bottom);
+
+        if (this.config.topCloseButtonEnabled) {
+            this.$top.append(this.$closeButton);
+        } else {
+            this.$buttons.append(this.$closeButton);
+        }
 
         this.$closeButton.on('click', (e) => {
             e.preventDefault();
