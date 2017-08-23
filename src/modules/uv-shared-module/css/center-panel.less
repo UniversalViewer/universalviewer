@@ -19,7 +19,6 @@
                 background: fadeout(@gray-dark, 30%);
                 position: absolute;
                 width: 190px;
-                padding: @padding-medium;
                 margin: @margin-medium-horizontal 0 @margin-large-vertical @margin-large-horizontal;
                 font-size: @font-size-small;
 
@@ -30,27 +29,39 @@
                     .title {
                         font-size: @font-size-small;
                         font-weight: bold;
-                        height: 20px;
-                        width: 150px;
                         line-height: 18px;
                         float: left;
-                        padding: 0;
+                        padding: @padding-medium;
                         text-transform: uppercase;
                     }
 
                     .close {
-                        width: 16px;
-                        height: 16px;
-                        margin: 2px;
-                        float: right;
-                        background-image: data-uri('@{img-path}close_attribution.png');
-                        cursor: pointer;
+                      background: 0 0;
+                      border: 0;
+                      color: @text-color;
+                      font-size: 1.2rem;
+                      font-weight: 700;
+                      opacity: 0.5;
+                      position: relative;
+                      float: right;
+                      right: 8px;
+                      top: 4px;
+                      padding: 4px 8px;
+                      line-height: 1;
+                      text-shadow: 0 1px 0 #fff;
+                      &:hover, &:focus {
+                        opacity: .75;
+                      }
+                      &:focus {
+                        .tab-focus(@text-color);
+                      }
                     }
                 }
 
                 .main {
 
                     margin-top: @margin-small-vertical;
+                    padding: @padding-medium;
 
                     img {
                         margin-top: @margin-small-vertical;
@@ -77,11 +88,6 @@
                     .attribution-text {
                         overflow: hidden;
                     }
-                    //
-                    //                    .license {
-                    //                        margin-top: @margin-small-vertical;
-                    //                        overflow: hidden;
-                    //                    }
                 }
             }
         }

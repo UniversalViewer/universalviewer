@@ -22,17 +22,21 @@ export class CenterPanel extends BaseView {
         this.$content = $('<div id="content" class="content"></div>');
         this.$element.append(this.$content);
 
-        this.$attribution = $('<div class="attribution">\
-                                   <div class="header">\
-                                       <div class="title"></div>\
-                                       <div class="close"></div>\
-                                   </div>\
-                                   <div class="main">\
-                                       <div class="attribution-text"></div>\
-                                       <div class="license"></div>\
-                                       <div class="logo"></div>\
-                                   </div>\
-                              </div>');
+        this.$attribution = $(`
+                                <div class="attribution">
+                                  <div class="header">
+                                    <div class="title"></div>
+                                    <button type="button" class="close" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="main">
+                                    <div class="attribution-text"></div>
+                                    <div class="license"></div>
+                                    <div class="logo"></div>
+                                  </div>
+                                </div>
+        `);
 
         this.$attribution.find('.header .title').text(this.content.attribution);
         this.$content.append(this.$attribution);
