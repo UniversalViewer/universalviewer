@@ -93,7 +93,7 @@ export class ShareDialogue extends Dialogue {
         this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
         this.$shareView.append(this.$shareLink);
 
-        this.$shareInput = $('<input class="shareInput" type="text" readonly="true" />');
+        this.$shareInput = $(`<input class="shareInput" type="text" readonly aria-label="${this.content.shareUrl}"/>`);
         this.$shareView.append(this.$shareInput);
 
         this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
@@ -111,7 +111,7 @@ export class ShareDialogue extends Dialogue {
         // this.$image = $('<img class="share" />');
         // this.$embedView.append(this.$image);
 
-        this.$code = $('<input class="code" type="text" readonly="true" />');
+        this.$code = $(`<input class="code" type="text" readonly aria-label="${this.content.embed }"/>`);
         this.$embedView.append(this.$code);
 
         this.$customSize = $('<div class="customSize"></div>');
@@ -120,20 +120,20 @@ export class ShareDialogue extends Dialogue {
         this.$size = $('<span class="size">' + this.content.size  + '</span>');
         this.$customSize.append(this.$size);
 
-        this.$customSizeDropDown = $('<select id="size"></select>');
+        this.$customSizeDropDown = $('<select id="size" aria-label="' + this.content.size + '"></select>');
         this.$customSize.append(this.$customSizeDropDown);
         this.$customSizeDropDown.append('<option value="small" data-width="560" data-height="420">560 x 420</option>');
         this.$customSizeDropDown.append('<option value="medium" data-width="640" data-height="480">640 x 480</option>');
         this.$customSizeDropDown.append('<option value="large" data-width="800" data-height="600">800 x 600</option>');
         this.$customSizeDropDown.append('<option value="custom">' + this.content.customSize + '</option>');
 
-        this.$widthInput = $('<input class="width" type="text" maxlength="10" />');
+        this.$widthInput = $('<input class="width" type="text" maxlength="10" aria-label="' + this.content.width + '"/>');
         this.$customSize.append(this.$widthInput);
 
         this.$x = $('<span class="x">x</span>');
         this.$customSize.append(this.$x);
 
-        this.$heightInput = $('<input class="height" type="text" maxlength="10" />');
+        this.$heightInput = $('<input class="height" type="text" maxlength="10" aria-label="' + this.content.height + '"/>');
         this.$customSize.append(this.$heightInput);
 
         const iiifUrl: string = this.extension.getIIIFShareUrl();
