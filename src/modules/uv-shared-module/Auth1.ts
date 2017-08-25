@@ -5,11 +5,14 @@ import {InformationType} from "./InformationType";
 
 export class Auth1 {
 
-    static messages: any = {}
+    static messages: any = {};
+    static storageStrategy: string;
 
     static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string, options: Manifesto.IManifestoOptions): Promise<Manifesto.IExternalResource[]> {
         
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+
+            Auth1.storageStrategy = storageStrategy;
 
             // set all resources to Auth API V1
             resourcesToLoad = resourcesToLoad.map((resource: Manifesto.IExternalResource) => {
@@ -22,6 +25,7 @@ export class Auth1 {
                 resourcesToLoad,
                 Auth1.openContentProviderInteraction,
                 Auth1.openTokenService,
+                Auth1.getStoredAccessToken,
                 Auth1.userInteractedWithContentProvider,
                 Auth1.getContentProviderInteraction,
                 Auth1.handleMovedTemporarily,
@@ -87,6 +91,60 @@ export class Auth1 {
         });
     }
 
+    static storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            if (resource.tokenService) {
+                Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(Auth1.storageStrategy));
+                resolve();
+            } else {
+                reject('Token service not found');
+            } 
+        });
+    }
+
+    static getStoredAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken | null> {
+
+        return new Promise<Manifesto.IAccessToken | null>((resolve, reject) => {
+
+            let foundItems: Utils.StorageItem[] = [];
+            let item: Utils.StorageItem | null = null;
+
+            // try to match on the tokenService, if the resource has one:
+            if (resource.tokenService) {
+                item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(Auth1.storageStrategy));
+            }
+
+            if (item) {
+                foundItems.push(item);
+            } else {
+                // find an access token for the domain
+                const domain: string = Utils.Urls.getUrlParts(resource.dataUri).hostname;
+                const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(Auth1.storageStrategy));
+
+                for (let i = 0; i < items.length; i++) {
+                    item = items[i];
+
+                    if (item.key.includes(domain)) {
+                        foundItems.push(item);
+                    }
+                }
+            }
+
+            // sort by expiresAt, earliest to most recent.
+            foundItems = foundItems.sort((a: Utils.StorageItem, b: Utils.StorageItem) => {
+                return a.expiresAt - b.expiresAt;
+            });
+
+            let foundToken: Manifesto.IAccessToken | null = null;
+
+            if (foundItems.length) {
+                foundToken = <Manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
+            }
+
+            resolve(foundToken);
+        });
+    }
+
     static getContentProviderInteraction(resource: Manifesto.IExternalResource, service: Manifesto.IService): Promise<Window | null> {
         return new Promise<Window | null>((resolve) => {
 
@@ -117,25 +175,34 @@ export class Auth1 {
         });
     }
 
-    static openTokenService(tokenService: Manifesto.IService): Promise<void> {
+    static openTokenService(resource: Manifesto.IExternalResource, tokenService: Manifesto.IService): Promise<any> {
         // use a Promise across a postMessage call. Discuss...
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
+
             // if necessary, the client can decide not to trust this origin
             const serviceOrigin: string = Auth1.getOrigin(tokenService.id);
             const messageId: number = new Date().getTime();
+
             Auth1.messages[messageId] = { 
                 "resolve": resolve,
                 "reject": reject,
-                "serviceOrigin": serviceOrigin
+                "serviceOrigin": serviceOrigin,
+                "resource": resource
             };
 
-            window.addEventListener("message", Auth1.receiveMessage, false);
+            window.addEventListener("message", Auth1.receiveToken, false);
 
             const tokenUrl: string = tokenService.id + "?messageId=" + messageId + "&origin=" + Auth1.getOrigin();
+
+            // load the access token service url in the #commsFrame iframe.
+            // when the message event listener (Auth1.receiveToken) receives a message from the iframe
+            // it looks in Auth1.messages to find a corresponding message id with the same origin.
+            // if found, it stores the returned access token, resolves and deletes the message.
+            // resolving the message resolves the openTokenService promise.
             $('#commsFrame').prop('src', tokenUrl);
 
             // reject any unhandled messages after a configurable timeout
-            const postMessageTimeout = 5000;
+            const postMessageTimeout: number = 5000;
 
             setTimeout(() => {
                 if (Auth1.messages[messageId]) {
@@ -144,7 +211,24 @@ export class Auth1 {
                     delete Auth1.messages[messageId];
                 }
             }, postMessageTimeout);
+
         });
+    }
+
+    static receiveToken(event: any): void {    
+        if (event.data.hasOwnProperty("messageId")) {
+
+            const message: any = Auth1.messages[event.data.messageId];
+
+            if (message && event.origin == message.serviceOrigin) {
+                // Any message with a messageId is a success
+                Auth1.storeAccessToken(message.resource, event.data).then(() => {
+                    message.resolve(event.data); // resolves openTokenService with the token
+                    delete Auth1.messages[event.data.messageId];
+                    return;
+                });
+            }    
+        }
     }
 
     static showOutOfOptionsMessages(service: Manifesto.IService): void {
@@ -162,17 +246,4 @@ export class Auth1 {
         $.publish(BaseEvents.SHOW_MESSAGE, [UVUtils.sanitize(errorMessage)]);
     }
 
-    static receiveMessage(event: any): void {    
-        if (event.data.hasOwnProperty("messageId")) {
-
-            var message = Auth1.messages[event.data.messageId];
-
-            if (message && event.origin == message.serviceOrigin) {
-                // Any message with a messageId is a success
-                message.resolve(event.data);
-                delete Auth1.messages[event.data.messageId];
-                return;
-            }    
-        }
-    }
 }
