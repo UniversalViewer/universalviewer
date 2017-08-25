@@ -29,9 +29,9 @@
 }
 
 // Webkit-style focus
-.tab-focus() {
+.tab-focus(@color: #333) {
     // Default
-    outline: thin dotted #333;
+    outline: thin dotted @color;
     // Webkit
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
