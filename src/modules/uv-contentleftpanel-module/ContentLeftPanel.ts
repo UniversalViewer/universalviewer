@@ -388,7 +388,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.databindGalleryView();
     }
 
-    databindGalleryView(): void{
+    databindGalleryView(): void {
         if (!this.galleryView) return;
         this.galleryView.galleryData = this.getGalleryData();
         this.galleryView.databind();
@@ -465,7 +465,7 @@ export class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    defaultToThumbsView(): boolean{
+    defaultToThumbsView(): boolean {
 
         const defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
         const defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
@@ -562,7 +562,7 @@ export class ContentLeftPanel extends LeftPanel {
 
         this.resize();
 
-        if (this.isFullyExpanded){
+        if (this.isFullyExpanded) {
             this.thumbsView.hide();
             if (this.galleryView) this.galleryView.show();
             if (this.galleryView) this.galleryView.resize();
@@ -601,7 +601,7 @@ export class ContentLeftPanel extends LeftPanel {
 
                 const range: Manifesto.IRange | null = this.extension.getCurrentCanvasRange();
 
-                if (range && range.treeNode){
+                if (range && range.treeNode) {
                     node = this.treeView.getNodeById(range.treeNode.id);
                 }
             }

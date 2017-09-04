@@ -1033,7 +1033,7 @@ export class BaseExtension implements IExtension {
     viewManifest(manifest: Manifesto.IManifest): void {
         const data: IUVData = <IUVData>{};
         data.iiifResourceUri = this.helper.iiifResourceUri;
-        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
+        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest) || 0;
         data.manifestIndex = <number>manifest.index;
         data.sequenceIndex = 0;
         data.canvasIndex = 0;

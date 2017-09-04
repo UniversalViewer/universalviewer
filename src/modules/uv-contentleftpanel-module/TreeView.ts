@@ -42,8 +42,7 @@ export class TreeView extends BaseView {
     }
 
     public databind(): void {
-        this.treeComponent.options.data = this.treeData;
-        this.treeComponent.set(new Object()); // todo: should be passing options.data
+        this.treeComponent.set(this.treeData);
         this.resize();
     }
 
