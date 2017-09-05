@@ -1,4 +1,5 @@
 import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
+import {Extension as AVExtension} from "./extensions/uv-av-extension/Extension";
 import {Extension as DefaultExtension} from "./extensions/uv-default-extension/Extension";
 import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
 import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
@@ -77,6 +78,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         this._extensions[manifesto.MediaType.threejs().toString()] = {
             type: VirtexExtension,
             name: 'uv-virtex-extension'
+        };
+
+        this._extensions["av"] = {
+            type: AVExtension,
+            name: 'uv-av-extension'
         };
 
         this._extensions['default'] = {
@@ -221,34 +227,43 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
             let extension: IExtension | null = null;
 
-            // canvasType will always be "canvas" in IIIF presentation 3.0
-            // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
-            // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
-            const content: Manifesto.IAnnotation[] = canvas.getContent();
-            
-            if (content.length) {
-                const annotation: Manifesto.IAnnotation = content[0];
-                const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+            // if the canvas has a duration, use the uv-av-extension
+            const duration: number | null = canvas.getDuration();
 
-                if (body) {
-                    const format: Manifesto.MediaType | null = body[0].getFormat();
+            if (typeof(duration) !== 'undefined') {
 
-                    if (format) {
-                        extension = that._extensions[format.toString()];
-                    }
-                    
-                }
+                extension = that._extensions["av"];
 
             } else {
-                const canvasType: Manifesto.ElementType = canvas.getType();
+                // canvasType will always be "canvas" in IIIF presentation 3.0
+                // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
+                // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
+                const content: Manifesto.IAnnotation[] = canvas.getContent();
+                
+                if (content.length) {
+                    const annotation: Manifesto.IAnnotation = content[0];
+                    const body: Manifesto.IAnnotationBody[] = annotation.getBody();
 
-                // try using canvasType
-                extension = that._extensions[canvasType.toString()];
+                    if (body) {
+                        const format: Manifesto.MediaType | null = body[0].getFormat();
 
-                // if there isn't an extension for the canvasType, try the format
-                if (!extension) {
-                    const format: any = canvas.getProperty('format');
-                    extension = that._extensions[format];
+                        if (format) {
+                            extension = that._extensions[format.toString()];
+                        }
+                        
+                    }
+
+                } else {
+                    const canvasType: Manifesto.ElementType = canvas.getType();
+
+                    // try using canvasType
+                    extension = that._extensions[canvasType.toString()];
+
+                    // if there isn't an extension for the canvasType, try the format
+                    if (!extension) {
+                        const format: any = canvas.getProperty('format');
+                        extension = that._extensions[format];
+                    }
                 }
             }
 

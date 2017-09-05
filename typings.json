@@ -6,6 +6,7 @@
     "exjs": "github:BSick7/exjs/dist/ex.d.ts#0.5.0",
     "extensions": "github:edsilv/extensions/dist/extensions.d.ts#v0.2.0",
     "http-status-codes": "github:edsilv/http-status-codes/dist/http-status-codes.d.ts#v0.0.5",
+    "iiif-av-component": "github:viewdir/iiif-av-component/dist/iiif-av-component.d.ts",
     "iiif-gallery-component": "github:viewdir/iiif-gallery-component/dist/iiif-gallery-component.d.ts#v1.1.0",
     "iiif-metadata-component": "github:viewdir/iiif-metadata-component/dist/iiif-metadata-component.d.ts#v1.1.0",
     "iiif-tree-component": "github:viewdir/iiif-tree-component/dist/iiif-tree-component.d.ts#v1.1.2",
