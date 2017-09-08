@@ -60,7 +60,7 @@ export class ResourcesLeftPanel extends LeftPanel {
 
     dataBind(): void {
         this.dataBindThumbsView();
-        const annotations: Manifesto.IAnnotation[] = this.extension.helper.getResources();
+        const annotations: Manifesto.IAnnotation[] = this.extension.helper.getCurrentCanvas().getResources();
 
         if (annotations.length === 0) {
             this.$resourcesView.hide();

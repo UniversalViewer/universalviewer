@@ -59,10 +59,12 @@ export class FileLinkCenterPanel extends CenterPanel {
 
                 const annotationBody: Manifesto.IAnnotationBody = annotation.getBody()[0];
 
-                const id: string = annotationBody.getProperty('id');
+                const id: string | null = annotationBody.getProperty('id');
 
-                $fileName.prop('href', id);
-                $fileName.text(id.substr(id.lastIndexOf('/') + 1));
+                if (id) {
+                    $fileName.prop('href', id);
+                    $fileName.text(id.substr(id.lastIndexOf('/') + 1));
+                }
 
                 let label: string | null = Manifesto.TranslationCollection.getValue(annotationBody.getLabel());
 
@@ -82,7 +84,10 @@ export class FileLinkCenterPanel extends CenterPanel {
 
                 if (description) {
                     $description.text(UVUtils.sanitize(description));
-                    $description.prop('href', id);
+
+                    if (id) {
+                        $description.prop('href', id);
+                    }
                 }
 
                 this.$downloadItems.append($item);

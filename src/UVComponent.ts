@@ -267,8 +267,6 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 extension = that._extensions['default'];
             }
 
-            console.log(extension);
-
             that._configure(data, extension, (config: any) => {
                 data.config = config;
                 that._injectCss(data, extension, () => {

@@ -222,8 +222,14 @@ export class ThumbsView extends BaseView {
     }
 
     isPDF(): boolean {
-        // todo: use constants
-        return (this.extension.helper.getElementType().toString().includes("pdf"));
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const type: Manifesto.ResourceType | null = canvas.getType();
+
+        if (type) {
+            return (type.toString().includes("pdf"));
+        }
+
+        return false;        
     }
 
     setLabel(): void {

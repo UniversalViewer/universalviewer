@@ -368,10 +368,12 @@ export class ContentLeftPanel extends LeftPanel {
                 // find the thumb with the same canvasIndex and add the searchResult
                 let thumb: IThumb = thumbs.en().where(t => t.index === searchResult.canvasIndex).first();
 
-                // clone the data so searchResults isn't persisted on the canvas.
-                let data = $.extend(true, {}, thumb.data);
-                data.searchResults = searchResult.rects.length;
-                thumb.data = data;
+                if (thumb) {
+                    // clone the data so searchResults isn't persisted on the canvas.
+                    let data = $.extend(true, {}, thumb.data);
+                    data.searchResults = searchResult.rects.length;
+                    thumb.data = data;
+                }
             }
 
         }

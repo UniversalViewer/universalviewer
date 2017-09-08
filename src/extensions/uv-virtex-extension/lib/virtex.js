@@ -1,4 +1,4 @@
-// virtex v0.3.0 https://github.com/edsilv/virtex#readme
+// virtex v0.3.1 https://github.com/edsilv/virtex#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 ///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
@@ -164,7 +164,7 @@ var Virtex;
         }
         ObjFileTypeHandler.setup = function (viewport, obj, objpath) {
             var imgloader = new THREE.MTLLoader();
-            imgloader.setCrossOrigin('anonymous');
+            imgloader.setCrossOrigin(true);
             imgloader.setPath(objpath.substring(0, objpath.lastIndexOf("/") + 1));
             imgloader.load(obj.materialLibraries[0], function (materials) {
                 var objLoader = new THREE.OBJLoader();
@@ -172,8 +172,16 @@ var Virtex;
                 objLoader.load(objpath, function (object) {
                     viewport.objectGroup.add(object);
                     viewport.createCamera();
-                }, function (e) { console.log("obj progress", e); }, function (e) { console.log("obj error", e); });
-            }, function (e) { console.log("mtl progress", e); }, function (e) { console.log("mtl error", e); });
+                }, function () {
+                    //console.log("obj progress", e);
+                }, function () {
+                    //console.log("obj error", e);
+                });
+            }, function () {
+                //console.log("mtl progress", e);
+            }, function () {
+                //console.log("mtl error", e);
+            });
         };
         return ObjFileTypeHandler;
     }());
