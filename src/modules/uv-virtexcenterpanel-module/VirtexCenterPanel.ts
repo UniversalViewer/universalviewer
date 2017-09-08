@@ -81,14 +81,22 @@ export class VirtexCenterPanel extends CenterPanel {
             let mediaUri: string | null = null;
             let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
             const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+            let resourceType: Manifesto.MediaType | null = null;
+            // default to threejs format.
+            let fileType: Virtex.FileType = new Virtex.FileType("application/vnd.threejs+json");
 
             if (formats && formats.length) {
                 mediaUri = formats[0].id;
+                resourceType = formats[0].getFormat();
             } else {
                 mediaUri = canvas.id;
             }
 
-            const isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+            if (resourceType) {
+                fileType = new Virtex.FileType(resourceType.toString());
+            }
+
+            const isAndroid: boolean = navigator.userAgent.toLowerCase().indexOf("android") > -1;
 
             this.viewport = new Virtex.Viewport({
                 target: this.$viewport[0],
@@ -96,7 +104,7 @@ export class VirtexCenterPanel extends CenterPanel {
                     antialias: !isAndroid,
                     file: mediaUri,
                     fullscreenEnabled: false,
-                    type: new Virtex.FileType("application/vnd.threejs+json"),
+                    type: fileType,
                     showStats: this.options.showStats
                 }
             });

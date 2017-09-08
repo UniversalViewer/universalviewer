@@ -147,9 +147,9 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         bookmark.trackingLabel = window.trackingLabel;
 
         if (this.isVideo()){
-            bookmark.type = manifesto.ElementType.movingimage().toString();
+            bookmark.type = manifesto.ResourceType.movingimage().toString();
         } else {
-            bookmark.type = manifesto.ElementType.sound().toString();
+            bookmark.type = manifesto.ResourceType.sound().toString();
         }
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
@@ -204,7 +204,12 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
             }
 
         } else {
-            return canvas.getType().toString() === manifesto.ElementType.movingimage().toString();
+            const type: Manifesto.ResourceType | null = canvas.getType();
+
+            if (type) {
+                return type.toString() === manifesto.ResourceType.movingimage().toString();
+            }
+            
         }
 
         throw(new Error("Unable to determine media type"));

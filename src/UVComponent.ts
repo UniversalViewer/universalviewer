@@ -32,22 +32,22 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         this._extensions = <IExtension[]>{};
 
-        this._extensions[manifesto.ElementType.canvas().toString()] = {
+        this._extensions[manifesto.ResourceType.canvas().toString()] = {
             type: OpenSeadragonExtension,
             name: 'uv-seadragon-extension'
         };
 
-        this._extensions[manifesto.ElementType.movingimage().toString()] = {
+        this._extensions[manifesto.ResourceType.movingimage().toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
         };
 
-        this._extensions[manifesto.ElementType.physicalobject().toString()] = {
+        this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
             type: VirtexExtension,
             name: 'uv-virtex-extension'
         };
 
-        this._extensions[manifesto.ElementType.sound().toString()] = {
+        this._extensions[manifesto.ResourceType.sound().toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
         };
@@ -235,15 +235,25 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
                     if (format) {
                         extension = that._extensions[format.toString()];
+
+                        if (!extension) {
+                            // try type
+                            const type: Manifesto.ResourceType | null = body[0].getType();
+                        
+                            if (type) {
+                                extension = that._extensions[type.toString()];
+                            }
+                        }
                     }
-                    
                 }
 
             } else {
-                const canvasType: Manifesto.ElementType = canvas.getType();
+                const canvasType: Manifesto.ResourceType | null = canvas.getType();
 
-                // try using canvasType
-                extension = that._extensions[canvasType.toString()];
+                if (canvasType) {
+                    // try using canvasType
+                    extension = that._extensions[canvasType.toString()];
+                }
 
                 // if there isn't an extension for the canvasType, try the format
                 if (!extension) {
@@ -256,6 +266,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             if (!extension) {
                 extension = that._extensions['default'];
             }
+
+            console.log(extension);
 
             that._configure(data, extension, (config: any) => {
                 data.config = config;

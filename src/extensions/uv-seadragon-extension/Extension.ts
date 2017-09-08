@@ -639,7 +639,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         bookmark.thumb = canvas.getCanonicalImageUri(this.data.config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ElementType.image().toString();
+        bookmark.type = manifesto.ResourceType.image().toString();
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }

@@ -66,16 +66,16 @@
     "jquery-tiny-pubsub": "edsilv/jquery-tiny-pubsub#v0.7.2",
     "jsviews": "^0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.6",
-    "manifesto.js": "viewdir/manifesto#v2.1.7",
+    "manifesto.js": "viewdir/manifesto#dev",
     "manifold": "viewdir/manifold#v1.2.5",
     "mediaelement": "4.0.2",
     "openseadragon": "^2.2.1",
     "pdfobject": "^2.0",
     "requirejs": "2.2.0",
-    "three": "^0.85.2",
+    "three": "^0.87.1",
     "utils": "edsilv/utils#v0.1.0",
     "uv-cy-gb-theme": "UniversalViewer/uv-cy-gb-theme#v1.1.0",
     "uv-en-gb-theme": "UniversalViewer/uv-en-gb-theme#v1.1.0",
-    "virtex3d": "edsilv/virtex#v0.3.0"
+    "virtex3d": "edsilv/virtex#dev"
   }
 }
