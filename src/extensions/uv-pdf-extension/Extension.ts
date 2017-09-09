@@ -132,7 +132,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ElementType.document().toString();
+        bookmark.type = manifesto.ResourceType.document().toString();
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }

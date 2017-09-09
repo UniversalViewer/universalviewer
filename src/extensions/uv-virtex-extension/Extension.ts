@@ -117,7 +117,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ElementType.physicalobject().toString();
+        bookmark.type = manifesto.ResourceType.physicalobject().toString();
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }

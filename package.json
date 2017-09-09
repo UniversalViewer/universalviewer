@@ -52,7 +52,7 @@
   "dependencies": {
     "@types/modernizr": "^3.2.29",
     "@types/requirejs": "^2.1.28",
-    "@types/three": "^0.83.4",
+    "@types/three": "^0.84.20",
     "base-component": "viewdir/base-component#v1.1.0",
     "core-js": "^2.4.1",
     "exjs": "BSick7/exjs#0.5.0",
@@ -68,16 +68,16 @@
     "jquery-ui-dist": "^1.12.1",
     "jsviews": "^0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.6",
-    "manifesto.js": "viewdir/manifesto#v2.1.7",
-    "manifold": "viewdir/manifold#v1.2.5",
+    "manifesto.js": "viewdir/manifesto#v2.1.8",
+    "manifold": "viewdir/manifold#v1.2.6",
     "mediaelement": "4.0.2",
     "openseadragon": "^2.2.1",
     "pdfobject": "^2.0",
     "requirejs": "2.2.0",
-    "three": "^0.85.2",
+    "three": "^0.87.1",
     "utils": "edsilv/utils#v0.1.0",
     "uv-cy-gb-theme": "UniversalViewer/uv-cy-gb-theme#v1.1.0",
     "uv-en-gb-theme": "UniversalViewer/uv-en-gb-theme#v1.1.0",
-    "virtex3d": "edsilv/virtex#v0.3.0"
+    "virtex3d": "edsilv/virtex#v0.3.1"
   }
 }

@@ -982,9 +982,13 @@ export class BaseExtension implements IExtension {
             const annotation: Manifesto.IAnnotation = annotations[0];
             return annotation.getBody();
         } else {
+            // legacy IxIF compatibility
             const body: Manifesto.IAnnotationBody = <any>{
                 id: canvas.id,
-                type: canvas.getType()
+                type: canvas.getType(),
+                getFormat: function() {
+                    return ''
+                }
             }
 
             return [body];
