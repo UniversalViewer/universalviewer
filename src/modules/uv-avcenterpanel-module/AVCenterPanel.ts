@@ -41,8 +41,7 @@ export class AVCenterPanel extends CenterPanel {
 
             this.avcomponent.set({
                 helper: this.extension.helper,
-                defaultCanvasHeight: 400,
-                defaultCanvasWidth: 600
+                defaultAspectRatio: 0.56
             });
 
             this.resize();
@@ -53,34 +52,11 @@ export class AVCenterPanel extends CenterPanel {
 
         super.resize();
 
-        // const left: number = Math.floor((this.$content.width() - this.$container.width()) / 2);
-        // const top: number = Math.floor((this.$content.height() - this.$container.height()) / 2);
-
-        // this.$container.css({
-        //     'left': left,
-        //     'top': top
-        // });
-
         if (this.title) {
             this.$title.ellipsisFill(this.title);
         }
 
         this.$avcomponent.height(this.$content.height());
-
-        // if (this.player) {
-
-        //     if (!this.isVideo() || (this.isVideo() && !this.component.isFullScreen)) {
-        //         this.player.setPlayerSize();
-        //         this.player.setControlsSize();
-
-        //         const $mejs: JQuery = $('.mejs__container');
-
-        //         $mejs.css({
-        //             'margin-top': (this.$container.height() - $mejs.height()) / 2
-        //         });
-        //     }
-
-        // }
-        
+        this.avcomponent.resize();       
     }
 }
