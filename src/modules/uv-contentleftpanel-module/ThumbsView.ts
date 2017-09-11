@@ -45,16 +45,22 @@ export class ThumbsView extends BaseThumbsView {
     }
 
     addSelectedClassToThumbs(index: number): void {
-        if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
-            const indices: number[] = this.extension.getPagedIndices(index);
 
-            for (let i = 0; i < indices.length; i++) {
-                this.getThumbByIndex(indices[i]).addClass('selected');
-            }
-
-        } else {
-            this.getThumbByIndex(index).addClass('selected');
+        const indices: number[] = this.extension.getPagedIndices(index);
+        
+        for (let i = 0; i < indices.length; i++) {
+            this.getThumbByIndex(indices[i]).addClass('selected');
         }
+        // if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
+        //     const indices: number[] = this.extension.getPagedIndices(index);
+
+        //     for (let i = 0; i < indices.length; i++) {
+        //         this.getThumbByIndex(indices[i]).addClass('selected');
+        //     }
+
+        // } else {
+        //     this.getThumbByIndex(index).addClass('selected');
+        // }
     }
 
     isPageModeEnabled(): boolean {

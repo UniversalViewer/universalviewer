@@ -1,4 +1,4 @@
-// manifesto v2.1.8 https://github.com/viewdir/manifesto
+// manifesto v2.1.9 https://github.com/viewdir/manifesto
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifesto = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 ///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/>   
@@ -2881,8 +2881,23 @@ var Manifesto;
         Annotation.prototype.getBody = function () {
             var bodies = [];
             var body = this.getProperty('body');
+            // todo: make this a generic "property that can be an object or array enumerator" util
             if (body) {
-                if (body.items) {
+                if (Array.isArray(body)) {
+                    for (var i = 0; i < body.length; i++) {
+                        var b = body[i];
+                        if (b.items) {
+                            for (var i_1 = 0; i_1 < b.items.length; i_1++) {
+                                var c = b.items[i_1];
+                                bodies.push(new Manifesto.AnnotationBody(c, this.options));
+                            }
+                        }
+                        else {
+                            bodies.push(new Manifesto.AnnotationBody(b, this.options));
+                        }
+                    }
+                }
+                else if (body.items) {
                     for (var i = 0; i < body.items.length; i++) {
                         var b = body.items[i];
                         bodies.push(new Manifesto.AnnotationBody(b, this.options));
