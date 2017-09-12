@@ -28,17 +28,13 @@ export class TreeView extends BaseView {
             data: this.treeData
         });
 
-        // todo: casting as <any> is necessary because IBaseComponent doesn't implement ITinyEmitter
-        // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
-        // to implement it in BaseComponent.
-
-        (<any>this.treeComponent).on('treeNodeSelected', function(node: ITreeNode) {
+        this.treeComponent.on('treeNodeSelected', function(node: ITreeNode) {
             $.publish(BaseEvents.TREE_NODE_SELECTED, [node]);
-        });
+        }, false);
 
-        (<any>this.treeComponent).on('treeNodeMultiSelected', function(node: ITreeNode) {
+        this.treeComponent.on('treeNodeMultiSelected', function(node: ITreeNode) {
             $.publish(BaseEvents.TREE_NODE_MULTISELECTED, [node]);
-        });
+        }, false);
     }
 
     public databind(): void {
