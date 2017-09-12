@@ -36,18 +36,18 @@ export class GalleryView extends BaseView {
             data: this.galleryData
         });
 
-        (<any>this.galleryComponent).on('thumbSelected', function(thumb: any) {
+        this.galleryComponent.on('thumbSelected', function(thumb: any) {
             $.publish(BaseEvents.GALLERY_THUMB_SELECTED, [thumb]);
             $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
-        });
+        }, false);
 
-        (<any>this.galleryComponent).on('decreaseSize', function() {
+        this.galleryComponent.on('decreaseSize', function() {
             $.publish(BaseEvents.GALLERY_DECREASE_SIZE);
-        });
+        }, false);
 
-        (<any>this.galleryComponent).on('increaseSize', function() {
+        this.galleryComponent.on('increaseSize', function() {
             $.publish(BaseEvents.GALLERY_INCREASE_SIZE);
-        });
+        }, false);
     }
 
     public databind(): void {

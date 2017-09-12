@@ -71,10 +71,10 @@ export class MultiSelectDialogue extends Dialogue {
         const $selectButton: JQuery = this.$gallery.find('a.select');
         $selectButton.addClass('btn btn-primary');
 
-        (<any>this.galleryComponent).on('multiSelectionMade', (ids: string[]) => {
+        this.galleryComponent.on('multiSelectionMade', (ids: string[]) => {
             $.publish(BaseEvents.MULTISELECTION_MADE, [ids]);
             that.close();
-        });
+        }, false);
 
         this.$element.hide();
     }
