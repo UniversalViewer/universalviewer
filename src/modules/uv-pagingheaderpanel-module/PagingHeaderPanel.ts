@@ -231,10 +231,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(Events.FIRST);
+                    $.publish(BaseEvents.FIRST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Events.LAST);
+                    $.publish(BaseEvents.LAST);
                     break;
             }
         });
@@ -244,10 +244,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Events.PREV);
+                    $.publish(BaseEvents.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Events.NEXT);
+                    $.publish(BaseEvents.NEXT);
                     break;
             }
         });
@@ -257,10 +257,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Events.NEXT);
+                    $.publish(BaseEvents.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Events.PREV);
+                    $.publish(BaseEvents.PREV);
                     break;
             }
         });
@@ -270,10 +270,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(Events.LAST);
+                    $.publish(BaseEvents.LAST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Events.FIRST);
+                    $.publish(BaseEvents.FIRST);
                     break;
             }
         });

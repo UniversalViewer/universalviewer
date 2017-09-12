@@ -1,6 +1,5 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {BaseView} from "../uv-shared-module/BaseView";
-import {Events} from "../../extensions/uv-seadragon-extension/Events";
 
 export class GalleryView extends BaseView {
 
@@ -38,16 +37,16 @@ export class GalleryView extends BaseView {
         });
 
         (<any>this.galleryComponent).on('thumbSelected', function(thumb: any) {
-            $.publish(Events.GALLERY_THUMB_SELECTED, [thumb]);
+            $.publish(BaseEvents.GALLERY_THUMB_SELECTED, [thumb]);
             $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
         });
 
         (<any>this.galleryComponent).on('decreaseSize', function() {
-            $.publish(Events.GALLERY_DECREASE_SIZE);
+            $.publish(BaseEvents.GALLERY_DECREASE_SIZE);
         });
 
         (<any>this.galleryComponent).on('increaseSize', function() {
-            $.publish(Events.GALLERY_INCREASE_SIZE);
+            $.publish(BaseEvents.GALLERY_INCREASE_SIZE);
         });
     }
 
