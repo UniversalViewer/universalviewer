@@ -33,7 +33,7 @@ export class TreeView extends BaseView {
         // to implement it in BaseComponent.
 
         (<any>this.treeComponent).on('treeNodeSelected', function(node: ITreeNode) {
-            $.publish(Events.TREE_NODE_SELECTED, [node]);
+            $.publish(Events.TREE_NODE_SELECTED, [node]); // todo: use treenode event instead of namespacing to extension?
         });
 
         (<any>this.treeComponent).on('treeNodeMultiSelected', function(node: ITreeNode) {

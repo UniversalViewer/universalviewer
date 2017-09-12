@@ -1,7 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
-//import {Events} from "../../extensions/uv-av-extension/Events";
+import {Events} from "../../extensions/uv-av-extension/Events";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-//import {IAVExtension} from "../../extensions/uv-av-extension/IAVExtension";
 
 export class AVCenterPanel extends CenterPanel {
 
@@ -25,6 +24,10 @@ export class AVCenterPanel extends CenterPanel {
             that.openMedia(resources);
         });
 
+        $.subscribe(Events.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
+            that.viewRange(range);
+        });
+
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
         this.$content.append(this.$avcomponent);
 
@@ -46,6 +49,32 @@ export class AVCenterPanel extends CenterPanel {
 
             this.resize();
         });
+    }
+
+    viewRange(range: Manifesto.IRange): void {
+        let r = range;
+        console.log(r);
+        // const canvasId = node.data.canvases[0];
+        // const canvas = helper.getCanvasById(canvasId);
+
+        // if (canvas) {
+            
+        //     showCanvas(canvas.id);
+
+        //     const canvasInstance = getCanvasInstanceByID(canvasId);
+
+        //     const temporal = /t=([^&]+)/g.exec(canvasId);
+            
+        //     if (temporal && temporal[1]) {
+        //         const rangeTiming = temporal[1].split(',');
+        //         canvasInstance.setCurrentTime(rangeTiming[0]);
+        //         canvasInstance.playCanvas();
+        //     }
+
+        //     //logMessage('SELECT RANGE: '+ node.label);
+        // } else {
+        //     //logMessage('ERROR: Could not find canvas for range '+ node.label);
+        // }
     }
 
     resize() {

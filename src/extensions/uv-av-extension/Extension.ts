@@ -2,6 +2,7 @@ import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { DownloadDialogue } from "./DownloadDialogue";
+import { Events } from "./Events";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { IAVExtension } from "./IAVExtension";
@@ -10,6 +11,7 @@ import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPan
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Shell } from "../../modules/uv-shared-module/Shell";
+import ITreeNode = Manifold.ITreeNode;
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -31,6 +33,11 @@ export class Extension extends BaseExtension implements IAVExtension {
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
+        });
+
+        $.subscribe(Events.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+            this.fire(Events.TREE_NODE_SELECTED, node.data.path);
+            this.treeNodeSelected(node);
         });
     }
 
@@ -101,6 +108,30 @@ export class Extension extends BaseExtension implements IAVExtension {
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
         const script: string = String.format(template, iframeSrc, width, height);
         return script;
+    }
+
+    treeNodeSelected(node: ITreeNode): void {
+        const data: any = node.data;
+
+        if (!data.type) return;
+
+        switch (data.type) {
+            case manifesto.IIIFResourceType.manifest().toString():
+                // do nothing
+                break;
+            case manifesto.IIIFResourceType.collection().toString():
+                // do nothing
+                break;
+            default:
+                this.viewRange(data.path);
+                break;
+        }
+    }
+
+    viewRange(path: string): void {
+        const range: Manifesto.IRange = this.helper.getRangeByPath(path);
+        if (!range) return;
+        $.publish(Events.RANGE_CHANGED, [range]);
     }
 
 }
