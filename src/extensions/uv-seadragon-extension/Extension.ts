@@ -96,21 +96,21 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
         });
 
-        $.subscribe(Events.FIRST, () => {
-            this.fire(Events.FIRST);
+        $.subscribe(BaseEvents.FIRST, () => {
+            this.fire(BaseEvents.FIRST);
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getFirstPageIndex()]);
         });
 
-        $.subscribe(Events.GALLERY_DECREASE_SIZE, () => {
-            this.fire(Events.GALLERY_DECREASE_SIZE);
+        $.subscribe(BaseEvents.GALLERY_DECREASE_SIZE, () => {
+            this.fire(BaseEvents.GALLERY_DECREASE_SIZE);
         });
 
-        $.subscribe(Events.GALLERY_INCREASE_SIZE, () => {
-            this.fire(Events.GALLERY_INCREASE_SIZE);
+        $.subscribe(BaseEvents.GALLERY_INCREASE_SIZE, () => {
+            this.fire(BaseEvents.GALLERY_INCREASE_SIZE);
         });
 
-        $.subscribe(Events.GALLERY_THUMB_SELECTED, () => {
-            this.fire(Events.GALLERY_THUMB_SELECTED);
+        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+            this.fire(BaseEvents.GALLERY_THUMB_SELECTED);
         });
 
         $.subscribe(BaseEvents.HOME, () => {
@@ -122,8 +122,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
         });
 
-        $.subscribe(Events.LAST, () => {
-            this.fire(Events.LAST);
+        $.subscribe(BaseEvents.LAST, () => {
+            this.fire(BaseEvents.LAST);
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
         });
 
@@ -162,18 +162,18 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Events.MULTISELECTION_MADE, (e: any, ids: string[]) => {
+        $.subscribe(BaseEvents.MULTISELECTION_MADE, (e: any, ids: string[]) => {
             const args: MultiSelectionArgs = new MultiSelectionArgs();
             args.manifestUri = this.helper.iiifResourceUri;
             args.allCanvases = ids.length === this.helper.getCanvases().length;
             args.canvases = ids;
             args.format = this.data.config.options.multiSelectionMimeType;
             args.sequence = this.helper.getCurrentSequence().id;
-            this.fire(Events.MULTISELECTION_MADE, args);
+            this.fire(BaseEvents.MULTISELECTION_MADE, args);
         });
 
-        $.subscribe(Events.NEXT, () => {
-            this.fire(Events.NEXT);
+        $.subscribe(BaseEvents.NEXT, () => {
+            this.fire(BaseEvents.NEXT);
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
         });
 
@@ -191,12 +191,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             this.prevSearchResult();
         });
 
-        $.subscribe(Events.OPEN_THUMBS_VIEW, () => {
-            this.fire(Events.OPEN_THUMBS_VIEW);
+        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+            this.fire(BaseEvents.OPEN_THUMBS_VIEW);
         });
 
-        $.subscribe(Events.OPEN_TREE_VIEW, () => {
-            this.fire(Events.OPEN_TREE_VIEW);
+        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+            this.fire(BaseEvents.OPEN_TREE_VIEW);
         });
 
         $.subscribe(BaseEvents.PAGE_DOWN, () => {
@@ -220,8 +220,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             this.centerPanel.setFocus();
         });
 
-        $.subscribe(Events.PREV, () => {
-            this.fire(Events.PREV);
+        $.subscribe(BaseEvents.PREV, () => {
+            this.fire(BaseEvents.PREV);
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
         });
 
@@ -317,8 +317,8 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
         });
 
-        $.subscribe(Events.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
-            this.fire(Events.TREE_NODE_SELECTED, node.data.path);
+        $.subscribe(BaseEvents.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+            this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 

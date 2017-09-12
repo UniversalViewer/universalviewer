@@ -2,26 +2,14 @@ export class Events {
     static namespace: string = 'openseadragonExtension.';
 
     static CURRENT_VIEW_URI: string                             = Events.namespace + 'currentViewUri';
-    static FIRST: string                                        = Events.namespace + 'first';
-    static GALLERY_DECREASE_SIZE: string                        = Events.namespace + 'galleryDecreaseSize';
-    static GALLERY_INCREASE_SIZE: string                        = Events.namespace + 'galleryIncreaseSize';
-    static GALLERY_THUMB_SELECTED: string                       = Events.namespace + 'galleryThumbSelected';
-    static HIDE_MULTISELECT_DIALOGUE: string                    = Events.namespace + 'hideMultiSelectDialogue';
     static IMAGE_SEARCH: string                                 = Events.namespace + 'imageSearch';
-    static LAST: string                                         = Events.namespace + 'last';
     static MODE_CHANGED: string                                 = Events.namespace + 'modeChanged';
-    static MULTISELECT_CHANGE: string                           = Events.namespace + 'multiSelectChange';
-    static MULTISELECTION_MADE: string                          = Events.namespace + 'multiSelectionMade';
     static NEXT_SEARCH_RESULT: string                           = Events.namespace + 'nextSearchResult';
-    static NEXT: string                                         = Events.namespace + 'next';
     static NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE: string        = Events.namespace + 'nextImagesSearchResultUnavailable';
     static PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE: string        = Events.namespace + 'prevImagesSearchResultUnavailable';
-    static OPEN_THUMBS_VIEW: string                             = Events.namespace + 'openThumbsView';
-    static OPEN_TREE_VIEW: string                               = Events.namespace + 'openTreeView';
     static PAGE_SEARCH: string                                  = Events.namespace + 'pageSearch';
     static PAGING_TOGGLED: string                               = Events.namespace + 'pagingToggled';
     static PREV_SEARCH_RESULT: string                           = Events.namespace + 'prevSearchResult';
-    static PREV: string                                         = Events.namespace + 'prev';
     static PRINT: string                                        = Events.namespace + 'print';
     static ROTATE: string                                       = Events.namespace + 'rotate';
     static SEADRAGON_ANIMATION_FINISH: string                   = Events.namespace + 'animationFinish';
@@ -33,10 +21,6 @@ export class Events {
     static SEARCH_PREVIEW_FINISH: string                        = Events.namespace + 'searchPreviewFinish';
     static SEARCH_PREVIEW_START: string                         = Events.namespace + 'searchPreviewStart';
     static SEARCH: string                                       = Events.namespace + 'search';
-    static SHOW_MULTISELECT_DIALOGUE: string                    = Events.namespace + 'showMultiSelectDialogue';
-    static THUMB_MULTISELECTED: string                          = Events.namespace + 'thumbMultiSelected';
-    static TREE_NODE_MULTISELECTED: string                      = Events.namespace + 'treeNodeMultiSelected';
-    static TREE_NODE_SELECTED: string                           = Events.namespace + 'treeNodeSelected';
     static XYWH_CHANGED: string                                 = Events.namespace + 'xywhChanged';
     static ZOOM_IN: string                                      = Events.namespace + 'zoomIn';
     static ZOOM_OUT: string                                     = Events.namespace + 'zoomOut';

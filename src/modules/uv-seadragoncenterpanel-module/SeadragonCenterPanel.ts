@@ -359,10 +359,10 @@ export class SeadragonCenterPanel extends CenterPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Events.PREV);
+                    $.publish(BaseEvents.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Events.NEXT);
+                    $.publish(BaseEvents.NEXT);
                     break;
             }
         });
@@ -377,10 +377,10 @@ export class SeadragonCenterPanel extends CenterPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(Events.NEXT);
+                    $.publish(BaseEvents.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(Events.PREV);
+                    $.publish(BaseEvents.PREV);
                     break;
             }
         });

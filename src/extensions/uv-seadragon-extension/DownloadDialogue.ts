@@ -1,5 +1,4 @@
 import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
-import {Events} from "./Events";
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
@@ -126,7 +125,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                         Utils.Async.waitFor(() => {
                             return !this.isActive;
                         }, () => {
-                            $.publish(Events.SHOW_MULTISELECT_DIALOGUE);
+                            $.publish(BaseEvents.SHOW_MULTISELECT_DIALOGUE);
                         });
                         break;
                     case DownloadOption.wholeImageHighRes.toString():

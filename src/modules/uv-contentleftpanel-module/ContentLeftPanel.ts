@@ -1,5 +1,4 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {GalleryView} from "./GalleryView";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
@@ -54,7 +53,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.databind();
         });
 
-        $.subscribe(Events.GALLERY_THUMB_SELECTED, () => {
+        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
@@ -169,13 +168,13 @@ export class ContentLeftPanel extends LeftPanel {
         this.$treeButton.onPressed(() => {
             this.openTreeView();
 
-            $.publish(Events.OPEN_TREE_VIEW);
+            $.publish(BaseEvents.OPEN_TREE_VIEW);
         });
 
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
-            $.publish(Events.OPEN_THUMBS_VIEW);
+            $.publish(BaseEvents.OPEN_THUMBS_VIEW);
         });
 
         this.setTitle(this.content.title);
