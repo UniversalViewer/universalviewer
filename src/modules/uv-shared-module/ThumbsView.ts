@@ -64,7 +64,7 @@ export class ThumbsView extends BaseView {
                 return extraHeight;
             },
             className: function() {
-                var className = "thumb";
+                let className: string = "thumb";
 
                 if (this.data.index === 0){
                     className += " first";
@@ -74,7 +74,7 @@ export class ThumbsView extends BaseView {
                     className += " placeholder";
                 }
 
-                var viewingDirection = that.extension.helper.getViewingDirection().toString();
+                const viewingDirection: string = that.extension.helper.getViewingDirection().toString();
 
                 if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
                     className += " oneCol";

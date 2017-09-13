@@ -81,7 +81,7 @@ export class ContentLeftPanel extends LeftPanel {
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
-            if (this.isFullyExpanded){
+            if (this.isFullyExpanded) {
                 this.collapseFull();
             }
 

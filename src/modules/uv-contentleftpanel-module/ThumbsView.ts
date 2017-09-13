@@ -64,6 +64,7 @@ export class ThumbsView extends BaseThumbsView {
     }
 
     isPageModeEnabled(): boolean {
+        // todo: move getMode to BaseExtension. call it getIndexingMode which can be Label or Index
         if (typeof (<ISeadragonExtension>this.extension).getMode === "function") {
             return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
         }
@@ -72,7 +73,7 @@ export class ThumbsView extends BaseThumbsView {
 
     searchPreviewStart(canvasIndex: number): void {
         this.scrollToThumb(canvasIndex);
-        var $thumb: JQuery = this.getThumbByIndex(canvasIndex);
+        const $thumb: JQuery = this.getThumbByIndex(canvasIndex);
         $thumb.addClass('searchpreview');
     }
 

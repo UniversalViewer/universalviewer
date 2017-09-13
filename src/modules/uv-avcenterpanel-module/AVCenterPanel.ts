@@ -7,6 +7,7 @@ export class AVCenterPanel extends CenterPanel {
     $avcomponent: JQuery;
     avcomponent: IIIFComponents.AVComponent;
     title: string | null;
+    private _resourceOpened: boolean = false;
 
     constructor($element: JQuery) {
         super($element);
@@ -21,7 +22,18 @@ export class AVCenterPanel extends CenterPanel {
         const that = this;
 
         $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
-            that.openMedia(resources);
+            if (!this._resourceOpened) {
+                that.openMedia(resources);
+                this._resourceOpened = true;
+            }
+        });
+
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+            const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
+
+            if (canvas) {
+                this.avcomponent.showCanvas(canvas.id);
+            }
         });
 
         $.subscribe(Events.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
@@ -52,29 +64,23 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     viewRange(range: Manifesto.IRange): void {
-        let r = range;
-        console.log(r);
-        // const canvasId = node.data.canvases[0];
-        // const canvas = helper.getCanvasById(canvasId);
 
-        // if (canvas) {
-            
-        //     showCanvas(canvas.id);
+        if (!range.canvases || !range.canvases.length) return;
 
-        //     const canvasInstance = getCanvasInstanceByID(canvasId);
+        const canvasId: string = range.canvases[0];
+        const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasById(canvasId);
 
-        //     const temporal = /t=([^&]+)/g.exec(canvasId);
-            
-        //     if (temporal && temporal[1]) {
-        //         const rangeTiming = temporal[1].split(',');
-        //         canvasInstance.setCurrentTime(rangeTiming[0]);
-        //         canvasInstance.playCanvas();
-        //     }
+        if (canvas) {
+            this.avcomponent.playCanvas(canvasId);
+        }
+    }
 
-        //     //logMessage('SELECT RANGE: '+ node.label);
-        // } else {
-        //     //logMessage('ERROR: Could not find canvas for range '+ node.label);
-        // }
+    viewCanvas(canvasIndex: number): void {
+        const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
+        
+        if (canvas) {
+            this.avcomponent.showCanvas(canvas.id);
+        }
     }
 
     resize() {

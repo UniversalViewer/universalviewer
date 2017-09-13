@@ -124,6 +124,43 @@ var IIIFComponents;
             $timingControls.find('.canvasDuration').text(IIIFComponents.AVComponentUtils.Utils.formatTime(canvasInstance.canvasClockDuration));
             this._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
         };
+        AVComponent.prototype.getCanvasInstanceById = function (canvasId) {
+            canvasId = manifesto.Utils.normaliseUrl(canvasId);
+            for (var i = 0; i < this.canvasInstances.length; i++) {
+                var canvasInstance = this.canvasInstances[i];
+                if (canvasInstance.data && canvasInstance.data.id) {
+                    var canvasInstanceId = manifesto.Utils.normaliseUrl(canvasInstance.data.id);
+                    if (canvasInstanceId === canvasId) {
+                        return canvasInstance;
+                    }
+                }
+            }
+            return null;
+        };
+        AVComponent.prototype.playCanvas = function (canvasId) {
+            this.showCanvas(canvasId);
+            var canvasInstance = this.getCanvasInstanceById(canvasId);
+            if (canvasInstance) {
+                var temporal = /t=([^&]+)/g.exec(canvasId);
+                if (temporal && temporal[1]) {
+                    var rangeTiming = temporal[1].split(',');
+                    canvasInstance.setCurrentTime(rangeTiming[0]);
+                    canvasInstance.playCanvas();
+                }
+            }
+        };
+        AVComponent.prototype.showCanvas = function (canvasId) {
+            // pause all canvases
+            for (var i = 0; i < this.canvasInstances.length; i++) {
+                this.canvasInstances[i].pauseCanvas();
+            }
+            // hide all players
+            this._$element.find('.player').hide();
+            var canvasInstance = this.getCanvasInstanceById(canvasId);
+            if (canvasInstance && canvasInstance.$playerElement) {
+                canvasInstance.$playerElement.show();
+            }
+        };
         AVComponent.prototype._logMessage = function (message) {
             this.fire(AVComponent.Events.LOG, message);
         };
@@ -390,13 +427,13 @@ var IIIFComponents;
             }
             this.canvasClockStartDate = Date.now() - (this.canvasClockTime * 1000);
             var self = this;
-            this._highPriorityInterval = window.setInterval(function () {
+            this.highPriorityInterval = window.setInterval(function () {
                 self.highPriorityUpdater();
             }, this._highPriorityFrequency);
-            this._lowPriorityInterval = window.setInterval(function () {
+            this.lowPriorityInterval = window.setInterval(function () {
                 self.lowPriorityUpdater();
             }, this._lowPriorityFrequency);
-            this._canvasClockInterval = window.setInterval(function () {
+            this.canvasClockInterval = window.setInterval(function () {
                 self.canvasClockUpdater();
             }, this._canvasClockFrequency);
             this.isPlaying = true;
@@ -406,9 +443,9 @@ var IIIFComponents;
             this.logMessage('PLAY canvas');
         };
         CanvasInstance.prototype.pauseCanvas = function (withoutUpdate) {
-            window.clearInterval(this._highPriorityInterval);
-            window.clearInterval(this._lowPriorityInterval);
-            window.clearInterval(this._canvasClockInterval);
+            window.clearInterval(this.highPriorityInterval);
+            window.clearInterval(this.lowPriorityInterval);
+            window.clearInterval(this.canvasClockInterval);
             this.isPlaying = false;
             if (!withoutUpdate) {
                 this.highPriorityUpdater();

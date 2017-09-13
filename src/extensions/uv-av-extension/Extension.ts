@@ -12,6 +12,7 @@ import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Shell } from "../../modules/uv-shared-module/Shell";
 import ITreeNode = Manifold.ITreeNode;
+import IThumb = Manifold.IThumb;
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -35,9 +36,13 @@ export class Extension extends BaseExtension implements IAVExtension {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(Events.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
-            this.fire(Events.TREE_NODE_SELECTED, node.data.path);
+        $.subscribe(BaseEvents.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+            this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
+        });
+
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
         });
     }
 
@@ -99,6 +104,17 @@ export class Extension extends BaseExtension implements IAVExtension {
         }
     }
 
+    isLeftPanelEnabled(): boolean {
+        let isEnabled: boolean = super.isLeftPanelEnabled();
+        const tree: Manifesto.ITreeNode | null = this.helper.getTree();
+
+        if (tree && tree.nodes.length) {
+            isEnabled = true;
+        }
+
+        return isEnabled;
+    }
+
     update(): void {
         super.update();
     }
@@ -132,6 +148,19 @@ export class Extension extends BaseExtension implements IAVExtension {
         const range: Manifesto.IRange = this.helper.getRangeByPath(path);
         if (!range) return;
         $.publish(Events.RANGE_CHANGED, [range]);
+
+        if (range.canvases && range.canvases.length) {
+            const canvasId: string = range.canvases[0];
+            const canvas: Manifesto.ICanvas | null = this.helper.getCanvasById(canvasId);
+
+            if (canvas) {
+                const canvasIndex: number = canvas.index;
+                
+                if (canvasIndex !== this.helper.canvasIndex) {
+                    $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+                }
+            }
+        }
     }
 
 }
