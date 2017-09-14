@@ -159,17 +159,15 @@ export class BaseExtension implements IExtension {
                     $.publish(event);
                 }
             });
-
-            $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
-                if (this.isOverlayActive()) {
-                    $.publish(BaseEvents.ESCAPE);
-                }
-
-                $.publish(BaseEvents.ESCAPE);
-                $.publish(BaseEvents.RESIZE);
-            });
-
         }
+
+        $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+            if (this.isOverlayActive()) {
+                $.publish(BaseEvents.ESCAPE);
+            }
+            $.publish(BaseEvents.ESCAPE);
+            $.publish(BaseEvents.RESIZE);
+        });
 
         this.$element.append('<a href="/" id="top"></a>');
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
