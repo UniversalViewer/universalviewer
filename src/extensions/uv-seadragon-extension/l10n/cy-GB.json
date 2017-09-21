@@ -6,6 +6,8 @@
         "authCORSError": "Mae angen diweddaru'ch porwr er mwyn galluogi rhannu adnoddau traws-safle.",
         "authorisationFailedMessage": "Ni lwyddoch i fewngofnodi. Rhowch gynnig arni eto.",
         "canvasIndexOutOfRange": "Canfas yn rhy fawr i'w arddangos (ceisiwch eto)",
+        "fallbackDegradedLabel": "Mewngofnodi",
+        "fallbackDegradedMessage": "Mewngofnodwch i weld y cynnwys hwn gyda phenderfyniad llawn.",
         "forbiddenResourceMessage": "Nid yw'ch hawliau mynediad presennol yn ddigonol i weld y ddelwedd hon",
         "termsOfUse": "Telerau Defnydd"
     },

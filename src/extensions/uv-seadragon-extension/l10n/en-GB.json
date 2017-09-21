@@ -8,6 +8,8 @@
     "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
     "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
     "canvasIndexOutOfRange": "Canvas index out of range.",
+    "fallbackDegradedLabel": "Login",
+    "fallbackDegradedMessage": "Please log in to view this content at full resolution.",
     "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
     "termsOfUse": "Terms of Use"
   },

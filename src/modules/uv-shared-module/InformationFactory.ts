@@ -20,7 +20,14 @@ export class InformationFactory {
             case (InformationType.DEGRADED_RESOURCE):
                 const actions: InformationAction[] = [];
                 const loginAction: InformationAction = new InformationAction();
-                loginAction.label = args.param.loginService.getConfirmLabel();
+
+                let label: string | null = args.param.loginService.getConfirmLabel();
+
+                if (!label) {
+                    label = this.extension.data.config.content.fallbackDegradedLabel;
+                }
+
+                loginAction.label = label;
 
                 const resource: Manifesto.IExternalResource = args.param;
 
@@ -31,7 +38,14 @@ export class InformationFactory {
                 };
 
                 actions.push(loginAction);
-                return new Information(args.param.loginService.getServiceLabel(), actions);
+
+                let message: string | null = args.param.loginService.getServiceLabel();
+
+                if (!message) {
+                    message = this.extension.data.config.content.fallbackDegradedMessage;
+                }
+
+                return new Information(<string>message, actions);
         }
     }
 }
