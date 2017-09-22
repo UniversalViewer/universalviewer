@@ -1,6 +1,7 @@
 ﻿@import 'variables';
 @import 'mixins';
 @import 'mixins-extended';
+@import 'icons';
 @import 'scaffolding';
 @import 'buttons';
 @import 'range';
@@ -37,18 +38,13 @@
         .border-radius(0);
     }
 
+    // A button that should not have the browser default characteristics
     .imageBtn {
         background: 0 0;
         border: 0;
+        // border-radius: 0;
         cursor: pointer;
-        padding: 0px;
         .btn-focus();
-        i { 
-            background-repeat: no-repeat;
-            display: inline-block;
-            height: 100%;
-            width: 100%;
-        }
     }
 
     .action, a.action.black, input.action {

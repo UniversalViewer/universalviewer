@@ -7,159 +7,19 @@
         }
 
         .options {
-            height: 41px;
-
-            button {
-                float: left;
-                margin-top: 10px;
-                margin-right: 15px;
-
-                &.moreInfo {
-                    i {
-                        .icon-left('@{img-path}moreinfo.png', 21px, 35px);
-                    }
-                }
-
-                &.open {
-                    i {
-                        .icon-left('@{img-path}open.png', 21px, 35px);
-                    }
-                }
-
-                &.share {
-                    i {
-                        .icon-left('@{img-path}share.png', 21px, 35px);
-                    }
-                }
-
-                &.embed {
-                    i {
-                        .icon-left('@{img-path}embed.png', 21px, 35px);
-                    }
-                }
-
-                &.download {
-                    i {
-                        .icon-left('@{img-path}download.png', 21px, 30px);
-                    }
-                }
-
-                &.bookmark {
-                    i {
-                        .icon-left('@{img-path}bookmark.png', 21px, 30px);
-                    }
-                }
-
-                &.feedback {
-                    i {
-                        .icon-left('@{img-path}feedback.png', 21px, 30px);
-                    }
-                }
-
-                &.print {
-                    i {
-                        .icon-left('@{img-path}print.png', 21px, 30px);
-                    }
-                }
-
-                &.fullScreen {
-                    i {
-                        .icon-right('@{img-path}fullscreen.png', 21px, 30px);
-                    }
-                    min-width: 25px;
-                    float: right;
-                    margin-right: 0;
-                }
-
-                &.exitFullscreen {
-                    i {
-                        .icon-right('@{img-path}exit_fullscreen.png', 21px, 30px);
-                    }
-                    min-width: 25px;
-                    float: right;
-                    margin-right: 0;
-                }
+            height: 42px;
+            
+            .btn {
+              color: white;
+              font-size: 0;
+              
+              &.fullScreen,
+              &.exitFullscreen {
+                float: right;
+              }
             }
-
-            &.minimiseButtons {
-
-                a:first-child {
-                    margin-left: 10px;
-                }
-
-                a {
-
-                    &.moreInfo {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-                    
-                    &.open {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-
-                    &.download {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-
-                    &.bookmark {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-
-                    &.feedback {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-                    
-                    &.print {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-
-                    &.share {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-
-                    &.embed {
-                        .hide-text();
-                        width: 27px;
-                        padding: 0;
-                    }
-
-                    &.fullScreen {
-                        .hide-text();
-                        width: 21px;
-                        padding: 0;
-                    }
-
-                    &.exitFullscreen {
-                        .hide-text();
-                        width: 21px;
-                        padding: 0;
-                    }
-
-                    &.normal {
-                        .hide-text();
-                        width: 21px;
-                        padding: 0;
-                    }
-                }
-            }
-
         }
     }
-
 }
 
 .uv.lightbox {

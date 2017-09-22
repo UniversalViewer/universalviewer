@@ -38,28 +38,60 @@ export class FooterPanel extends BaseView {
         this.$options = $('<div class="options"></div>');
         this.$element.append(this.$options);
 
-        this.$feedbackButton = $('<button class="feedback imageBtn" title="' + this.content.feedback + '" tabindex="0"><i></i></button>');
+        this.$feedbackButton = $(`
+          <button class="feedback btn imageBtn" title="${this.content.feedback}" tabindex="0">
+            <i class="uv-icon uv-icon-feedback" aria-hidden="true"></i>${this.content.feedback}
+          </button>
+        `);
         this.$options.prepend(this.$feedbackButton);
 
-        this.$openButton = $('<button class="open imageBtn" title="' + this.content.open + '" tabindex="0"><i></i></button>');
+        this.$openButton = $(`
+          <button class="open btn imageBtn" title="${this.content.open}" tabindex="0">
+            <i class="uv-icon-open" aria-hidden="true"></i>${this.content.open}
+          </button>
+        `);
         this.$options.prepend(this.$openButton);
 
-        this.$bookmarkButton = $('<button class="bookmark imageBtn" title="' + this.content.bookmark + '" tabindex="0"><i></i></button>');
+        this.$bookmarkButton = $(`
+          <button class="bookmark btn imageBtn" title="${this.content.bookmark}" tabindex="0">
+            <i class="uv-icon uv-icon-bookmark" aria-hidden="true"></i>${this.content.bookmark}
+          </button>
+        `);
         this.$options.prepend(this.$bookmarkButton);
 
-        this.$shareButton = $('<button class="share imageBtn" title="' + this.content.share + '" tabindex="0"><i></i></button>');
+        this.$shareButton = $(`
+          <button class="share btn imageBtn" title="${this.content.share}" tabindex="0">
+            <i class="uv-icon uv-icon-share" aria-hidden="true"></i>${this.content.share}
+          </button>
+        `);
         this.$options.append(this.$shareButton);
 
-        this.$embedButton = $('<button class="embed imageBtn" title="' + this.content.embed + '" tabindex="0"><i></i></button>');
+        this.$embedButton = $(`
+          <button class="embed btn imageBtn" title="${this.content.embed}" tabindex="0">
+            <i class="uv-icon uv-icon-embed" aria-hidden="true"></i>
+          </button>
+        `);
         this.$options.append(this.$embedButton);
 
-        this.$downloadButton = $('<button class="download imageBtn" title="' + this.content.download + '" tabindex="0"><i></i></button>');
+        this.$downloadButton = $(`
+          <button class="download btn imageBtn" title="${this.content.download}" tabindex="0">
+            <i class="uv-icon uv-icon-download" aria-hidden="true"></i>${this.content.download}
+          </button>
+        `);
         this.$options.prepend(this.$downloadButton);
 
-        this.$moreInfoButton = $('<button class="moreInfo imageBtn" title="' + this.content.moreInfo + '" tabindex="0"><i></i></button>');
+        this.$moreInfoButton = $(`
+          <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}" tabindex="0">
+            <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>
+          </button>
+        `);
         this.$options.prepend(this.$moreInfoButton);
 
-        this.$fullScreenBtn = $('<button class="fullScreen imageBtn" title="' + this.content.fullScreen + '" tabindex="0"><i></i></button>');
+        this.$fullScreenBtn = $(`
+          <button class="fullScreen btn imageBtn" title="${this.content.fullScreen}" tabindex="0">
+            <i class="uv-icon uv-icon-fullscreen" aria-hidden="true"></i>
+          </button>
+        `);
         this.$options.append(this.$fullScreenBtn);
 
         this.$openButton.onPressed(() => {
@@ -158,9 +190,11 @@ export class FooterPanel extends BaseView {
 
         if (this.extension.isFullScreen()) {
             this.$fullScreenBtn.swapClass('fullScreen', 'exitFullscreen');
+            this.$fullScreenBtn.find('i').swapClass('uv-icon-fullscreen', 'uv-icon-exit-fullscreen');
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
         } else {
             this.$fullScreenBtn.swapClass('exitFullscreen', 'fullScreen');
+            this.$fullScreenBtn.find('i').swapClass('uv-icon-exit-fullscreen', 'uv-icon-fullscreen');
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
         }
     }
