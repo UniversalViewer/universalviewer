@@ -84,11 +84,15 @@ export class Auth1 {
 
     static handleMovedTemporarily(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {   
-            const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
-            $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+            Auth1.showDegradedMessage(resource);
             resource.isResponseHandled = true;
             resolve();
         });
+    }
+
+    static showDegradedMessage(resource: Manifesto.IExternalResource): void {
+        const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
+        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }
 
     static storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
@@ -148,7 +152,13 @@ export class Auth1 {
     static getContentProviderInteraction(resource: Manifesto.IExternalResource, service: Manifesto.IService): Promise<Window | null> {
         return new Promise<Window | null>((resolve) => {
 
-            if (resource.authHoldingPage) {
+            // if the info bar has already been shown for degraded logins
+            if (resource.isResponseHandled && !resource.authHoldingPage) {
+
+                Auth1.showDegradedMessage(resource);
+                resolve(null);
+
+            } else if (resource.authHoldingPage) {
 
                 // redirect holding page
                 resource.authHoldingPage.location.href = Auth1.getCookieServiceUrl(service);
