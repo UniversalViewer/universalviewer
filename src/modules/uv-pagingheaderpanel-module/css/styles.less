@@ -1,71 +1,24 @@
-﻿
+@import 'icons';﻿
+
 .uv {
-
-    @img-path: '../../../modules/uv-pagingheaderpanel-module/img/';
-
-    // &.embedded {
-//        .headerPanel {
-//            background-image: data-uri('@{img-path}logo.png');
-//            background-repeat: no-repeat;
-//            background-position: 8px 8px;
-//        }
-    //}
 
     .headerPanel {
 
         color: @text-secondary-color;
 
-        button.imageBtn {
+        button.btn.imageBtn {
+          padding-left: 2px;
+          padding-right: 2px;
 
-            &.first {
-                i {
-                    background-color: @gray;
-                    background-image: data-uri('@{img-path}first.png');
-                    &:hover {
-                        background-color: @gray-dark;
-                    }
-                }
-                margin: 0 0 0 0;
-            }
-
-            &.prev {
-                i {
-                    background-color: @gray;
-                    background-image: data-uri('@{img-path}prev.png');
-                    &:hover {
-                        background-color: @gray-dark;
-                    }
-                }
-                margin: 0 0 0 5px;
-            }
-
-            &.next {
-                i {
-                    background-color: @gray;
-                    background-image: data-uri('@{img-path}next.png');
-                    &:hover {
-                        background-color: @gray-dark;
-                    }
-                }
-                margin: 0 5px 0 0;
-            }
-
+            &.first,
+            &.prev,
+            &.next,
             &.last {
                 i {
                     background-color: @gray;
-                    background-image: data-uri('@{img-path}last.png') ;
                     &:hover {
                         background-color: @gray-dark;
                     }
-                }
-                margin: 0 0 0 0;
-            }
-
-            &.go {
-                i {
-                    background: data-uri('@{img-path}go.png');
-                    line-height: 24px;
-                    width: 28px;
                 }
             }
 
@@ -97,12 +50,12 @@
 
             .mode {
                 float: left;
-                margin: 6px 0 0 0;
+                margin: 12px 0 0 0;
             }
 
             .search {
                 float: left;
-                margin: 0 0 0 5px;
+                margin: 6px 0 0 5px;
                 width: 113px;
 
                 .searchText {
@@ -192,20 +145,13 @@
         .rightOptions {
             .pagingToggleButtons {
                 float: left;
-                //margin: -1px 4px 0 0;
                 .one-up {
-                    i {
-                        background-image: data-uri('@{img-path}one_up.png');
-                    }
                     .opacity(1);
                     &.on {
                         .opacity(.75);
                     }
                 }
                 .two-up {
-                    i {
-                        background-image: data-uri('@{img-path}two_up.png');
-                    }
                     .opacity(1);
                     &.on {
                         .opacity(.75);
@@ -213,10 +159,6 @@
                 }
             }
             .gallery {
-                i {
-                    background-image: data-uri('@{img-path}grid.png');
-                }
-                margin-right: @margin-small-horizontal;
                 .opacity(1);
                 &.on {
                     .opacity(.75);
