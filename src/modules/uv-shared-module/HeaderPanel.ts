@@ -50,7 +50,11 @@ export class HeaderPanel extends BaseView {
         this.$localeToggleButton = $('<a class="localeToggle" tabindex="0"></a>');
         this.$rightOptions.append(this.$localeToggleButton);
 
-        this.$settingsButton = $('<button class="imageBtn settings" tabindex="0"><i></i></button>');
+        this.$settingsButton = $(`
+          <button class="btn imageBtn settings" tabindex="0">
+            <i class="uv-icon-settings" aria-hidden="true"></i>
+          </button>
+        `);
         this.$settingsButton.attr('title', this.content.settings);
         this.$rightOptions.append(this.$settingsButton);
 

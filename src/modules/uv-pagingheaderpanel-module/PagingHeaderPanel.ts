@@ -70,10 +70,18 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$prevOptions = $('<div class="prevOptions"></div>');
         this.$centerOptions.append(this.$prevOptions);
 
-        this.$firstButton = $('<button class="imageBtn first" tabindex="0"><i></i></button>');
+        this.$firstButton = $(`
+          <button class="btn imageBtn first" tabindex="0">
+            <i class="uv-icon-first" aria-hidden="true"></i>
+          </button>
+        `);
         this.$prevOptions.append(this.$firstButton);
 
-        this.$prevButton = $('<button class="imageBtn prev" tabindex="0"><i></i></button>');
+        this.$prevButton = $(`
+          <button class="btn imageBtn prev" tabindex="0">
+            <i class="uv-icon-prev" aria-hidden="true"></i>
+          </button>
+        `);
         this.$prevOptions.append(this.$prevButton);
 
         this.$modeOptions = $('<div class="mode"></div>');
@@ -161,10 +169,18 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
 
-        this.$nextButton = $('<button class="imageBtn next" tabindex="0"><i></i></button>');
+        this.$nextButton = $(`
+          <button class="btn imageBtn next" tabindex="0">
+            <i class="uv-icon-next" aria-hidden="true"></i>
+          </button>
+        `);
         this.$nextOptions.append(this.$nextButton);
 
-        this.$lastButton = $('<button class="imageBtn last" tabindex="0"><i></i></button>');
+        this.$lastButton = $(`
+          <button class="btn imageBtn last" tabindex="0">
+            <i class="uv-icon-last" aria-hidden="true"></i>
+          </button>
+        `);
         this.$nextOptions.append(this.$lastButton);
 
         if (this.isPageModeEnabled()) {
@@ -184,16 +200,27 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.text(this.content.page);
         }
 
-        this.$galleryButton = $('<button class="imageBtn gallery" title="' + this.content.gallery + '" tabindex="0"><i></i></button>');
+        this.$galleryButton = $(`
+          <button class="btn imageBtn gallery" title="${this.content.gallery}" tabindex="0">
+            <i class="uv-icon-gallery" aria-hidden="true"></i>
+          </button>
+        `);
         this.$rightOptions.prepend(this.$galleryButton);
 
         this.$pagingToggleButtons = $('<div class="pagingToggleButtons"></div>');
         this.$rightOptions.prepend(this.$pagingToggleButtons);
 
-        this.$oneUpButton = $('<button class="imageBtn one-up" title="' + this.content.oneUp + '" tabindex="0"><i></i></button>');
+        this.$oneUpButton = $(`
+          <button class="btn imageBtn one-up" title="${this.content.oneUp}" tabindex="0">
+            <i class="uv-icon-one-up" aria-hidden="true"></i>
+          </button>`);
         this.$pagingToggleButtons.append(this.$oneUpButton);
 
-        this.$twoUpButton = $('<button class="imageBtn two-up" title="' + this.content.twoUp + '" tabindex="0"><i></i></button>');
+        this.$twoUpButton = $(`
+          <button class="btn imageBtn two-up" title="${this.content.twoUp}" tabindex="0">
+            <i class="uv-icon-two-up" aria-hidden="true"></i>
+          </button>
+        `);
         this.$pagingToggleButtons.append(this.$twoUpButton);
 
         this.updatePagingToggle();
