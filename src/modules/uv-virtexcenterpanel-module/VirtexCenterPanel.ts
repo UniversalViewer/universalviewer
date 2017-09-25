@@ -30,13 +30,25 @@ export class VirtexCenterPanel extends CenterPanel {
         this.$navigation = $('<div class="navigation"></div>');
         this.$content.prepend(this.$navigation);
 
-        this.$zoomInButton = $('<button class="imageBtn zoomIn" title="' + this.content.zoomIn + '"><i></i></button>');
+        this.$zoomInButton = $(`
+          <button class="btn imageBtn zoomIn" title="${this.content.zoomIn}">
+            <i class="uv-icon-zoom-in" aria-hidden="true"></i>
+          </button>
+        `);
         this.$navigation.append(this.$zoomInButton);
 
-        this.$zoomOutButton = $('<button class="imageBtn zoomOut" title="' + this.content.zoomOut + '"><i></i></button>');
+        this.$zoomOutButton = $(`
+          <button class="btn imageBtn zoomOut" title="${this.content.zoomOut}">
+            <i class="uv-icon-zoom-out" aria-hidden="true"></i>
+          </button>
+        `);
         this.$navigation.append(this.$zoomOutButton);
 
-        this.$vrButton = $('<button class="imageBtn vr" title="' + this.content.vr + '"><i></i></button>');
+        this.$vrButton = $(`
+          <button class="btn imageBtn vr" title="${this.content.vr}">
+            <i class="uv-icon-vr" aria-hidden="true"></i>
+          </button>
+        `);
         this.$navigation.append(this.$vrButton);
 
         this.$viewport = $('<div class="virtex"></div>');
