@@ -1,8 +1,7 @@
 @import 'virtex.less';
+@import 'icons';
 
 .uv {
-
-    @img-path: '../../../modules/uv-virtexcenterpanel-module/img/';
 
     .centerPanel {
 
@@ -22,30 +21,6 @@
                 top: 0;
                 overflow: hidden;
                 margin-left: @margin-large-horizontal;
-
-                button.imageBtn {
-                    height: 28px;
-                    width: 28px;
-                    &.zoomIn{
-                        i {
-                            background-image: data-uri('@{img-path}zoom_in.png');
-                        }
-                    }
-
-                    &.zoomOut {
-                        i {
-                            background-image: data-uri('@{img-path}zoom_out.png');
-                        }
-                    }
-
-                    &.vr {
-                        i {
-                            margin-left: @margin-medium-horizontal;
-                            background-image: data-uri('@{img-path}vr.png');
-                        }
-                    }
-                }
-
             }
 
             .virtex {
