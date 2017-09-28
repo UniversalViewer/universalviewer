@@ -71,6 +71,8 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
     `npm install`
 
+> If switching between branches, ensure that you check out the correct branch in the `examples` sub-repository too. By default this should be `gh-pages`.
+
 ### Debug Builds
 
 To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
