@@ -202,6 +202,8 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.data.canvasIndex = canvasIndex;
+            this.lastCanvasIndex = this.helper.canvasIndex;
+            this.helper.canvasIndex = canvasIndex;
             this.fire(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
         });
 
@@ -1001,11 +1003,8 @@ export class BaseExtension implements IExtension {
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
             this.showMessage(this.data.config.content.canvasIndexOutOfRange);
-            canvasIndex = 0;
+            return;
         }
-
-        this.lastCanvasIndex = this.helper.canvasIndex;
-        this.helper.canvasIndex = canvasIndex;
 
         $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     }
