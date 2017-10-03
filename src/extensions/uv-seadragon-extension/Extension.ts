@@ -62,7 +62,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {         
             if (this.isMobileView()) {
                 const settings: ISettings = {};
                 settings.pagingEnabled = false;

@@ -717,16 +717,19 @@ export class BaseExtension implements IExtension {
 
     private _updateMetric(): void {
 
-        for (let i = 0; i < this.metrics.length; i++) {
-            const metric: Metric = this.metrics[i];
+        setTimeout(() => {
+            for (let i = 0; i < this.metrics.length; i++) {
+                const metric: Metric = this.metrics[i];
 
-            if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
-                if (this.metric !== metric.type) {
-                    this.metric = metric.type;
-                    $.publish(BaseEvents.METRIC_CHANGED);
+                if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
+                    if (this.metric !== metric.type) {
+                        this.metric = metric.type;
+
+                        $.publish(BaseEvents.METRIC_CHANGED);
+                    }
                 }
             }
-        }
+        }, 1);
     }
 
     resize(): void {
