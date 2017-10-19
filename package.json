@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "url": "https://github.com/universalviewer/universalviewer/issues"
   },
   "scripts": {
-    "postinstall": "typings install"
+    "postinstall": "typings install && opencollective postinstall"
   },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
@@ -41,7 +41,7 @@
     "grunt-text-replace": "~0.3.7",
     "grunt-ts": "^6.0.0-beta.11",
     "hooker": "^0.2.3",
-    "json-schema-generator": "krg7880/json-schema-generator",
+    "json-schema-generator": "edsilv/json-schema-generator",
     "less": "^2.4.0",
     "lodash": "^4.17.4",
     "ncp": "^2.0.0",
@@ -53,21 +53,22 @@
     "@types/modernizr": "^3.2.29",
     "@types/requirejs": "^2.1.28",
     "@types/three": "^0.84.20",
-    "base-component": "viewdir/base-component#v1.1.0",
+    "opencollective": "^1.0.3",
+    "base-component": "iiif-commons/base-component#v1.1.0",
     "core-js": "^2.4.1",
     "exjs": "BSick7/exjs#0.5.0",
     "extensions": "edsilv/extensions#v0.2.0",
     "http-status-codes": "edsilv/http-status-codes#v0.0.5",
-    "iiif-gallery-component": "viewdir/iiif-gallery-component#v1.1.0",
-    "iiif-metadata-component": "viewdir/iiif-metadata-component#v1.1.0",
-    "iiif-tree-component": "viewdir/iiif-tree-component#v1.1.2",
+    "iiif-gallery-component": "iiif-commons/iiif-gallery-component#v1.1.0",
+    "iiif-metadata-component": "iiif-commons/iiif-metadata-component#v1.1.0",
+    "iiif-tree-component": "iiif-commons/iiif-tree-component#v1.1.2",
     "jquery": "^2.2.4",
     "jquery-plugins": "edsilv/jquery-plugins#v0.1.0",
     "jquery-tiny-pubsub": "edsilv/jquery-tiny-pubsub#v0.7.2",
     "jsviews": "^0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.6",
-    "manifesto.js": "viewdir/manifesto#v2.1.9",
-    "manifold": "viewdir/manifold#v1.2.8",
+    "manifesto.js": "iiif-commons/manifesto#v2.1.9",
+    "manifold": "iiif-commons/manifold#v1.2.8",
     "mediaelement": "4.0.2",
     "openseadragon": "^2.2.1",
     "pdfobject": "^2.0",
@@ -77,5 +78,10 @@
     "uv-cy-gb-theme": "UniversalViewer/uv-cy-gb-theme#v1.1.0",
     "uv-en-gb-theme": "UniversalViewer/uv-en-gb-theme#v1.1.0",
     "virtex3d": "edsilv/virtex#v0.3.1"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/universalviewer",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }
