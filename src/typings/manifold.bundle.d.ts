@@ -1296,7 +1296,7 @@ declare namespace Manifold {
         constructor(options: Manifold.IManifoldOptions);
         bootstrap(): Promise<Manifold.IHelper>;
         private _loaded(bootstrapper, json, resolve, reject);
-        private _msieversion();
+        private _detectIE();
     }
 }
 
