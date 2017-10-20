@@ -1,11 +1,10 @@
-// manifold v1.2.8 https://github.com/viewdir/manifold#readme
+// manifold v1.2.9 https://github.com/iiif-commons/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
 
 var Manifold;
 (function (Manifold) {
-    var StringValue = (function () {
+    var StringValue = /** @class */ (function () {
         function StringValue(value) {
             this.value = "";
             if (value) {
@@ -32,7 +31,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Manifold;
 (function (Manifold) {
-    var TreeSortType = (function (_super) {
+    var TreeSortType = /** @class */ (function (_super) {
         __extends(TreeSortType, _super);
         function TreeSortType() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -53,7 +52,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var AnnotationGroup = (function () {
+    var AnnotationGroup = /** @class */ (function () {
         function AnnotationGroup(resource, canvasIndex) {
             this.rects = [];
             this.canvasIndex = canvasIndex;
@@ -76,7 +75,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var AnnotationRect = (function () {
+    var AnnotationRect = /** @class */ (function () {
         function AnnotationRect(result) {
             this.isVisible = true;
             var xywh = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
@@ -93,7 +92,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var Bootstrapper = (function () {
+    var Bootstrapper = /** @class */ (function () {
         function Bootstrapper(options) {
             this._options = options;
             this._options.locale = this._options.locale || 'en-GB'; // default locale
@@ -217,7 +216,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var ExternalResource = (function () {
+    var ExternalResource = /** @class */ (function () {
         function ExternalResource(resource, dataUriFunc, index, authApiVersion) {
             if (authApiVersion === void 0) { authApiVersion = 0.9; }
             this.authHoldingPage = null;
@@ -358,7 +357,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var Helper = (function () {
+    var Helper = /** @class */ (function () {
         function Helper(options) {
             this.options = options;
             this.iiifResource = this.options.iiifResource;
@@ -1028,7 +1027,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var MetadataGroup = (function () {
+    var MetadataGroup = /** @class */ (function () {
         function MetadataGroup(resource, label) {
             this.items = [];
             this.resource = resource;
@@ -1052,7 +1051,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var MetadataOptions = (function () {
+    var MetadataOptions = /** @class */ (function () {
         function MetadataOptions() {
         }
         return MetadataOptions;
@@ -1062,7 +1061,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var MultiSelectState = (function () {
+    var MultiSelectState = /** @class */ (function () {
         function MultiSelectState() {
             this.isEnabled = false;
             this.ranges = [];
@@ -1153,7 +1152,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var Translation = (function () {
+    var Translation = /** @class */ (function () {
         function Translation(value, locale) {
             this.value = value;
             this.locale = locale;
@@ -1166,7 +1165,7 @@ var Manifold;
 var Manifold;
 (function (Manifold) {
     // This class formats URIs into HTML <a> links, applying labels when available
-    var UriLabeller = (function () {
+    var UriLabeller = /** @class */ (function () {
         function UriLabeller(labels) {
             this.labels = labels;
         }
