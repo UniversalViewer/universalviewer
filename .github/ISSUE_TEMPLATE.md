@@ -1,29 +1,30 @@
-##### Description of the problem 
+**UV version:**
+<!-- (run `npm list universalviewer` from a terminal/cmd prompt and paste output below): -->
+```
+ universalviewer@<version>
+```
 
-This form is for UV bug reports and feature requests only.  
-If you need help, please use [stackoverflow](http://stackoverflow.com/questions/tagged/iiif).
+**I'm submitting a:**
+<!-- (check one with "x") -->
+- [ ] bug report
+- [ ] feature request
+- [ ] support request => Please do not submit support requests here, use [stackoverflow](http://stackoverflow.com/questions/tagged/iiif)
 
-Describe the bug or feature request in detail.  
-A code snippet, screenshot, and small-test help us understand.
+**Current behavior:**
+<!-- Describe how the bug manifests. -->
 
-##### UV version
+**Expected behavior:**
+<!-- Describe what the behavior would be without the bug. -->
 
+**Steps to reproduce:**
+<!-- If you are able to illustrate the bug or feature request with an example, please provide steps to reproduce and if possible a demo
+-->
 
-##### Browser
+**Related code:**
 
-- [x] All of them
-- [ ] Chrome
-- [ ] Firefox
-- [ ] Internet Explorer
+```
+// insert any relevant code here
+```
 
-##### OS
-
-- [x] All of them
-- [ ] Windows
-- [ ] macOS
-- [ ] Linux
-- [ ] Android
-- [ ] iOS
-
-##### Hardware Requirements (graphics card, VR Device, ...)
-
+**Other information:**
+<!-- List any other information that is relevant to your issue. Stack traces, related issues, suggestions on how to fix, Stack Overflow links, forum links, etc. -->
