@@ -1,5 +1,6 @@
 **UV version:**
-<!-- (run `npm list universalviewer` from a terminal/cmd prompt and paste output below): -->
+<!-- (run `npm list universalviewer` from a terminal/cmd prompt and paste output below). 
+Alternatively select the settings cog icon in the top right-hand corner of the UV to view the version number. -->
 ```
  universalviewer@<version>
 ```
