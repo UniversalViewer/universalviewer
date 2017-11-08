@@ -97,6 +97,7 @@
     },
     "headerPanel": {
       "options": {
+        "centerOptionsEnabled": true,
         "localeToggleEnabled": false,
         "settingsButtonEnabled": true
       }
@@ -133,7 +134,6 @@
     "pagingHeaderPanel": {
       "options": {
         "autoCompleteBoxEnabled": true,
-        "centerOptionsEnabled": true,
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
         "pageModeEnabled": false,
