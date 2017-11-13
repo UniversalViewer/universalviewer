@@ -909,7 +909,7 @@ export class BaseExtension implements IExtension {
         return range;
     }
 
-    // todo: move to manifold
+    // todo: move to manifold?
     public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]> {
 
         const indices: number[] = this.getPagedIndices();
@@ -920,7 +920,9 @@ export class BaseExtension implements IExtension {
             let r: Manifesto.IExternalResource;
 
             if (!canvas.externalResource) {
-                r = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri, index, this.data.config.options.authAPIVersion);
+                r = new Manifold.ExternalResource(canvas, <Manifesto.IExternalResourceOptions>{
+                    authApiVersion: this.data.config.options.authAPIVersion
+                });
             } else {
                 r = canvas.externalResource;
             }
@@ -962,7 +964,7 @@ export class BaseExtension implements IExtension {
                         resource.data.index = resource.index;
 
                         if (!resource.data['@id'] && !resource.data.id) {
-                            resource.data.id = resource.dataUri;
+                            resource.data.id = <string>resource.dataUri;
                         }
 
                         return Utils.Objects.toPlainObject(resource.data);

@@ -122,7 +122,7 @@ export class Auth1 {
                 foundItems.push(item);
             } else {
                 // find an access token for the domain
-                const domain: string = Utils.Urls.getUrlParts(resource.dataUri).hostname;
+                const domain: string = Utils.Urls.getUrlParts(<string>resource.dataUri).hostname;
                 const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(Auth1.storageStrategy));
 
                 for (let i = 0; i < items.length; i++) {
