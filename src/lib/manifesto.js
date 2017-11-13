@@ -1,4 +1,4 @@
-// manifesto v2.1.12 https://github.com/viewdir/manifesto
+// manifesto v2.1.12 https://github.com/iiif-commons/manifesto
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifesto = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
@@ -1286,13 +1286,21 @@ var Manifesto;
             return this._manifests = this.members.en().where(function (m) { return m.isManifest(); }).toArray();
         };
         Collection.prototype.getCollectionByIndex = function (collectionIndex) {
-            var collection = this.getCollections()[collectionIndex];
+            var collections = this.getCollections();
+            if (!collections[collectionIndex]) {
+                throw new Error("Collection index is outside range of array");
+            }
+            var collection = collections[collectionIndex];
             collection.options.index = collectionIndex;
             // id for collection MUST be dereferenceable
             return collection.load();
         };
         Collection.prototype.getManifestByIndex = function (manifestIndex) {
-            var manifest = this.getManifests()[manifestIndex];
+            var manifests = this.getManifests();
+            if (!manifests[manifestIndex]) {
+                throw new Error("Manifest index is outside range of array");
+            }
+            var manifest = manifests[manifestIndex];
             manifest.options.index = manifestIndex;
             return manifest.load();
         };
@@ -2993,6 +3001,8 @@ var Manifesto;
     }(Manifesto.ManifestResource));
     Manifesto.AnnotationPage = AnnotationPage;
 })(Manifesto || (Manifesto = {}));
+
+
 
 
 

@@ -513,7 +513,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         // externalResource may not have loaded yet
         if (canvas.externalResource.data) {
-            return new Size(canvas.externalResource.data.width, canvas.externalResource.data.height);
+            return new Size((<Manifesto.IExternalImageResourceData>canvas.externalResource.data).width, (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).height);
         }
         
         return new Size(0, 0);

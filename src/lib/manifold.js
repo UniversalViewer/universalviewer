@@ -474,17 +474,21 @@ var Manifold;
                 var firstImage = images[0];
                 var resource = firstImage.getResource();
                 var services = resource.getServices();
-                for (var i = 0; i < services.length; i++) {
-                    var service = services[i];
-                    var id = service.id;
-                    if (!id.endsWith('/')) {
-                        id += '/';
+                if (services.length) {
+                    for (var i = 0; i < services.length; i++) {
+                        var service = services[i];
+                        var id = service.id;
+                        if (!id.endsWith('/')) {
+                            id += '/';
+                        }
+                        if (manifesto.Utils.isImageProfile(service.getProfile())) {
+                            infoUri = id + 'info.json';
+                        }
                     }
-                    if (manifesto.Utils.isImageProfile(service.getProfile())) {
-                        infoUri = id + 'info.json';
-                    }
+                    return infoUri;
                 }
-                return infoUri;
+                // no image services. return the image id
+                return resource.id;
             }
             else {
                 // IxIF

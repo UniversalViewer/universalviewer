@@ -38,7 +38,7 @@ export class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifesto.IExternalResource[] | null;
+    resources: Manifesto.IExternalResourceData[] | null;
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -910,7 +910,7 @@ export class BaseExtension implements IExtension {
     }
 
     // todo: move to manifold
-    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
+    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]> {
 
         const indices: number[] = this.getPagedIndices();
         const resourcesToLoad: Manifesto.IExternalResource[] = [];
@@ -947,16 +947,25 @@ export class BaseExtension implements IExtension {
 
         // if using auth api v1
         if (authAPIVersion === 1) {
-            return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+            return new Promise<Manifesto.IExternalResourceData[]>((resolve) => {
 
                 const options: Manifesto.IManifestoOptions = <Manifesto.IManifestoOptions>{
                     locale: this.helper.options.locale
                 }
 
                 Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
+                    
                     this.resources = r.map((resource: Manifesto.IExternalResource) => {
+                        
+                        // copy useful properties over to the data object to be opened in center panel's openMedia
+                        // this is the info.json if there is one, which can be opened natively by openseadragon.
                         resource.data.index = resource.index;
-                        return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
+
+                        if (!resource.data['@id'] && !resource.data.id) {
+                            resource.data.id = resource.dataUri;
+                        }
+
+                        return Utils.Objects.toPlainObject(resource.data);
                     });
 
                     resolve(this.resources);
@@ -964,11 +973,11 @@ export class BaseExtension implements IExtension {
             });
         } else {
         
-            return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-                Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifesto.IExternalResource[]) => {
+            return new Promise<any[]>((resolve) => {
+                Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: any[]) => {
                     this.resources = r.map((resource: Manifesto.IExternalResource) => {
                         resource.data.index = resource.index;
-                        return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
+                        return Utils.Objects.toPlainObject(resource.data);
                     });
 
                     resolve(this.resources);

@@ -21,7 +21,7 @@ export interface IExtension {
     getCurrentCanvasRange(): Manifesto.IRange | null;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
-    getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]>;
+    getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]>;
     getIIIFShareUrl(): string;
     getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[];
     getPagedIndices(canvasIndex?: number): number[];
@@ -51,7 +51,7 @@ export interface IExtension {
     refresh(): void;
     reload(data?: IUVData): void;
     resize(): void;
-    resources: Manifesto.IExternalResource[] | null;
+    resources: Manifesto.IExternalResourceData[] | null;
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;

@@ -404,8 +404,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$spinner.show();
         this.items = [];
 
-        // todo: this should be a more specific Manifold.IImageResource
-        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalResource[]) => {
+        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalImageResourceData[]) => {
             // OSD can open an array info.json objects
             //this.viewer.open(resources);
 
@@ -414,25 +413,58 @@ export class SeadragonCenterPanel extends CenterPanel {
             resources = this.getPagePositions(resources);
 
             for (let i = 0; i < resources.length; i++) {
-                const resource: Manifesto.IExternalResource = resources[i];
-                this.viewer.addTiledImage({
-                    tileSource: resource,
-                    x: resource.x,
-                    y: resource.y,
-                    width: resource.width,
-                    success: (item: any) => {
-                        this.items.push(item);
-                        if (this.items.length === resources.length) {
-                            this.openPagesHandler();
-                        }
-                        this.resize();
+                const resource: any = resources[i];
+                
+                if (resource.profile) { 
+                    
+                    // todo: check if image profile Manifesto.Utils.isImageProfile(resource.profile)
+                    // need to check if array first
+
+                    /*
+
+                    if (Array.isArray(profile)){
+                        profile = profile[0];
                     }
-                });
+
+                    */
+
+                    this.viewer.addTiledImage({
+                        tileSource: resource,
+                        x: resource.x,
+                        y: resource.y,
+                        width: resource.width, // from info.json
+                        success: (item: any) => {
+                            this.items.push(item);
+                            if (this.items.length === resources.length) {
+                                this.openPagesHandler();
+                            }
+                            this.resize();
+                        }
+                    });
+
+                } else {
+                    // load a static image (no tiling)
+                    this.viewer.addTiledImage({
+                        tileSource: {
+                            type: 'image',
+                            url:  resource.id,
+                            buildPyramid: false
+                        },
+                        width: resource.width, // from resource
+                        success: (item: any) => {
+                            this.items.push(item);
+                            if (this.items.length === resources.length) {
+                                this.openPagesHandler();
+                            }
+                            this.resize();
+                        }
+                    });
+                }
             }
         });
     }
 
-    getPagePositions(resources: Manifesto.IExternalResource[]): Manifesto.IExternalResource[] {
+    getPagePositions(resources: Manifesto.IExternalImageResourceData[]): Manifesto.IExternalImageResourceData[] {
         let leftPage: any;
         let rightPage: any;
         let topPage: any;
@@ -872,7 +904,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         let offsetX: number = 0;
 
         if (index > 0) {
-            offsetX = this.extension.resources[index - 1].width;
+            offsetX = (<Manifesto.IExternalImageResourceData>this.extension.resources[index - 1]).width;
         }
 
         for (let i = 0; i < annotationGroup.rects.length; i++) {
