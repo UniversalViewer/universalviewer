@@ -957,17 +957,8 @@ export class BaseExtension implements IExtension {
 
                 Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
                     
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {
-                        
-                        // copy useful properties over to the data object to be opened in center panel's openMedia
-                        // this is the info.json if there is one, which can be opened natively by openseadragon.
-                        resource.data.index = resource.index;
-
-                        if (!resource.data['@id'] && !resource.data.id) {
-                            resource.data.id = <string>resource.dataUri;
-                        }
-
-                        return Utils.Objects.toPlainObject(resource.data);
+                    this.resources = r.map((resource: Manifesto.IExternalResource) => {                        
+                        return this._prepareResourceData(resource);
                     });
 
                     resolve(this.resources);
@@ -977,15 +968,33 @@ export class BaseExtension implements IExtension {
         
             return new Promise<any[]>((resolve) => {
                 Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: any[]) => {
+                    
                     this.resources = r.map((resource: Manifesto.IExternalResource) => {
-                        resource.data.index = resource.index;
-                        return Utils.Objects.toPlainObject(resource.data);
+                        return this._prepareResourceData(resource);
                     });
 
                     resolve(this.resources);
                 });
             });
         }
+    }
+
+    // copy useful properties over to the data object to be opened in center panel's openMedia method
+    // this is the info.json if there is one, which can be opened natively by openseadragon.
+    private _prepareResourceData(resource: Manifesto.IExternalResource): any {
+        
+        resource.data.hasServiceDescriptor = resource.hasServiceDescriptor();
+  
+        // if the data isn't an info.json, give it the necessary viewing properties
+        if (!resource.hasServiceDescriptor()) {
+            resource.data.id = <string>resource.dataUri;
+            (<Manifesto.IExternalImageResourceData>resource.data).width = resource.width;
+            (<Manifesto.IExternalImageResourceData>resource.data).height = resource.height;
+        }
+
+        resource.data.index = resource.index;
+
+        return Utils.Objects.toPlainObject(resource.data);
     }
 
     getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[] {

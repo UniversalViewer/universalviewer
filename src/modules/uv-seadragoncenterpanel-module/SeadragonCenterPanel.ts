@@ -405,61 +405,39 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.items = [];
 
         this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalImageResourceData[]) => {
-            // OSD can open an array info.json objects
-            //this.viewer.open(resources);
 
             this.viewer.close();
 
             resources = this.getPagePositions(resources);
 
             for (let i = 0; i < resources.length; i++) {
-                const resource: any = resources[i];
+                const data: any = resources[i];
                 
-                if (resource.profile) { 
-                    
-                    // todo: check if image profile Manifesto.Utils.isImageProfile(resource.profile)
-                    // need to check if array first
+                let tileSource: any;
 
-                    /*
-
-                    if (Array.isArray(profile)){
-                        profile = profile[0];
-                    }
-
-                    */
-
-                    this.viewer.addTiledImage({
-                        tileSource: resource,
-                        x: resource.x,
-                        y: resource.y,
-                        width: resource.width, // from info.json
-                        success: (item: any) => {
-                            this.items.push(item);
-                            if (this.items.length === resources.length) {
-                                this.openPagesHandler();
-                            }
-                            this.resize();
-                        }
-                    });
-
+                if (data.hasServiceDescriptor) {
+                    tileSource = data;
                 } else {
-                    // load a static image (no tiling)
-                    this.viewer.addTiledImage({
-                        tileSource: {
-                            type: 'image',
-                            url:  resource.id,
-                            buildPyramid: false
-                        },
-                        width: resource.width, // from resource
-                        success: (item: any) => {
-                            this.items.push(item);
-                            if (this.items.length === resources.length) {
-                                this.openPagesHandler();
-                            }
-                            this.resize();
-                        }
-                    });
+                    tileSource = {
+                        type: 'image',
+                        url: data.id,
+                        buildPyramid: false
+                    };
                 }
+
+                this.viewer.addTiledImage({
+                    tileSource: tileSource,
+                    x: data.x,
+                    y: data.y,
+                    width: data.width,
+                    success: (item: any) => {
+                        this.items.push(item);
+                        if (this.items.length === resources.length) {
+                            this.openPagesHandler();
+                        }
+                        this.resize();
+                    }
+                });
             }
         });
     }
@@ -972,8 +950,8 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         // stretch navigator, allowing time for OSD to resize
         setTimeout(() => {
-            if (this.extension.helper.isContinuous()){
-                if (this.extension.helper.isHorizontallyAligned()){
+            if (this.extension.helper.isContinuous()) {
+                if (this.extension.helper.isHorizontallyAligned()) {
                     const width: number = this.$viewer.width() - this.$viewer.rightMargin();
                     this.$navigator.width(width);
                 } else {

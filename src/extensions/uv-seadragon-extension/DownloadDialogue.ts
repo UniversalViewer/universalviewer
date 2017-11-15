@@ -486,10 +486,14 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (size) {
             const width: number = size.width;
             let uri: string = canvas.getCanonicalImageUri(width);
-            const uri_parts: string [] = uri.split('/');
-            const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
-            uri_parts[uri_parts.length - 2] = String(rotation);
-            uri = uri_parts.join('/');
+
+            if (canvas.externalResource && canvas.externalResource.hasServiceDescriptor()) {
+                const uri_parts: string [] = uri.split('/');
+                const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
+                uri_parts[uri_parts.length - 2] = String(rotation);
+                uri = uri_parts.join('/');
+            }
+            
             return uri;
         }
         return '';
@@ -544,7 +548,23 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             return false;
         }
 
-        switch (option){
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+
+        // if the external resource doesn't have a service descriptor
+        // only allow wholeImageHighRes
+        if (!canvas.externalResource.hasServiceDescriptor()) {
+            if (option === DownloadOption.wholeImageHighRes) {
+                // if in one-up mode, or in two-up mode with a single page being shown
+                if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
+                    (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        switch (option) {
             case DownloadOption.currentViewAsJpg:
             case DownloadOption.dynamicCanvasRenderings:
             case DownloadOption.dynamicImageRenderings:
@@ -552,7 +572,6 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 // if in one-up mode, or in two-up mode with a single page being shown
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
                     (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
-                    const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
                     const maxDimensions: Size | null = canvas.getMaxDimensions();
                     
                     if (maxDimensions) {
@@ -572,8 +591,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return false;
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
-                const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
-                if (!size) return false;
+                const size: Size | null = this.getCanvasComputedDimensions(canvas);
+                if (!size) {
+                     return false;
+                }
                 return (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.selection:
                 return this.options.selectionEnabled;

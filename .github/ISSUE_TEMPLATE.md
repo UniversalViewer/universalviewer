@@ -8,7 +8,7 @@ Alternatively select the settings cog icon in the top right-hand corner of the U
 **I'm submitting a:**
 <!-- (check one with "x") -->
 - [ ] bug report
-- [ ] feature request
+- [ ] feature request => please use the [user stories repo](https://github.com/UniversalViewer/user-stories)
 - [ ] support request => Please do not submit support requests here, use [stackoverflow](http://stackoverflow.com/questions/tagged/iiif)
 
 **Current behavior:**
