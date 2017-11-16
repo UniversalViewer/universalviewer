@@ -612,7 +612,6 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     nextSearchResult(): void {
-        let foundResult: AnnotationGroup;
         if (!this.annotations) return;
 
         // get the first result with an index greater than the current index.
@@ -620,7 +619,6 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             const result: AnnotationGroup = this.annotations[i];
 
             if (result && result.canvasIndex >= this.getNextPageIndex()) {
-                foundResult = result;
                 $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [result.canvasIndex]);
                 break;
             }

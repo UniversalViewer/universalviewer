@@ -54,7 +54,7 @@ export class Auth1 {
         return cookieServiceUrl;
     }
 
-    static openContentProviderInteraction(service: Manifesto.IService): Window {
+    static openContentProviderInteraction(service: Manifesto.IService): Window | null {
         const cookieServiceUrl: string = Auth1.getCookieServiceUrl(service);
         return window.open(cookieServiceUrl);
     }
@@ -172,7 +172,7 @@ export class Auth1 {
                         resolve(null);
                     },
                     confirmCallback: () => {
-                        const win: Window = Auth1.openContentProviderInteraction(service);
+                        const win: Window | null = Auth1.openContentProviderInteraction(service);
                         resolve(win);
                     },
                     cancelCallback: () => {
