@@ -12,7 +12,7 @@
     "jquery-plugins": "github:edsilv/jquery-plugins/dist/jquery-plugins.d.ts#v0.1.0",
     "key-codes": "github:edsilv/key-codes/dist/key-codes.d.ts#v0.0.6",
     "manifesto.js": "github:iiif-commons/manifesto/dist/manifesto.d.ts#v2.1.13",
-    "manifold": "github:iiif-commons/manifold/dist/manifold.d.ts#v1.2.10",
+    "manifold": "github:iiif-commons/manifold/dist/manifold.d.ts#v1.2.11",
     "utils": "github:edsilv/utils/dist/utils.d.ts#v0.1.0",
     "virtex": "github:edsilv/virtex/dist/virtex.d.ts#v0.3.1"
   }

@@ -68,7 +68,7 @@
     "jsviews": "^0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.6",
     "manifesto.js": "iiif-commons/manifesto#v2.1.13",
-    "manifold": "iiif-commons/manifold#v1.2.10",
+    "manifold": "iiif-commons/manifold#v1.2.11",
     "mediaelement": "4.0.2",
     "openseadragon": "^2.2.1",
     "pdfobject": "^2.0",
