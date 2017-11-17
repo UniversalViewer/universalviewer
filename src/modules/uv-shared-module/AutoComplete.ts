@@ -13,11 +13,10 @@ export class AutoComplete {
 
 	private _$searchResultsList: JQuery;
 	private _$searchResultTemplate: JQuery;
-
-    // valid keys that are not 
-    private _validKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
-    private _validKeyPressCodes: number[] = [KeyCodes.KeyPress.GraveAccent, KeyCodes.KeyPress.DoubleQuote];
-    private _lastKeyDownWasValid: boolean = false;
+ 
+    //private _navigationKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
+    //private _validKeyPressCodes: number[] = [KeyCodes.KeyPress.GraveAccent, KeyCodes.KeyPress.DoubleQuote];
+    //private _lastKeyDownWasNavigation: boolean = false;
 
     constructor(element: JQuery,
                 autoCompleteFunc: (terms: string, cb: (results: string[]) => void) => void,
@@ -59,12 +58,10 @@ export class AutoComplete {
 
         const that = this;
 
-        // validate
-
         this._$element.on("keydown", function(e: JQueryEventObject) {
 
             const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
-            that._lastKeyDownWasValid = that._isValidKeyDown(originalEvent);
+            //that._lastKeyDownWasNavigation = that._isNavigationKeyDown(originalEvent);
             const charCode: number = Utils.Keyboard.getCharCode(originalEvent);
             let cancelEvent: boolean = false;
 
@@ -81,17 +78,17 @@ export class AutoComplete {
         });
 
         // prevent invalid characters being entered
-        this._$element.on("keypress", function(e: JQueryEventObject) {
+        // this._$element.on("keypress", function(e: JQueryEventObject) {
 
-            const isValidKeyPress: boolean = that._isValidKeyPress(<KeyboardEvent>e.originalEvent);
+        //     const isValidKeyPress: boolean = that._isValidKeyPress(<KeyboardEvent>e.originalEvent);
 
-            if (!(that._lastKeyDownWasValid || isValidKeyPress)) {
-                e.preventDefault();
-                return false;
-            }
+        //     if (!(that._lastKeyDownWasNavigation || isValidKeyPress)) {
+        //         e.preventDefault();
+        //         return false;
+        //     }
 
-            return true;
-        });
+        //     return true;
+        // });
 
         // auto complete
         this._$element.on("keyup", function(e) {
@@ -147,17 +144,17 @@ export class AutoComplete {
         this._hideResults();
     }
 
-    private _isValidKeyDown(e: KeyboardEvent): boolean {
-        const isValid: boolean = this._validKeyDownCodes.includes(Utils.Keyboard.getCharCode(e));
-        return isValid;
-    }
+    // private _isNavigationKeyDown(e: KeyboardEvent): boolean {
+    //     const isNavigationKeyDown: boolean = this._navigationKeyDownCodes.includes(Utils.Keyboard.getCharCode(e));
+    //     return isNavigationKeyDown;
+    // }
 
-    private _isValidKeyPress(e: KeyboardEvent): boolean {
-        const charCode: number = Utils.Keyboard.getCharCode(e);
-        const key: string = String.fromCharCode(charCode);
-        const isValid: boolean = key.isAlphanumeric() || this._validKeyPressCodes.includes(charCode);
-        return isValid;
-    }
+    // private _isValidKeyPress(e: KeyboardEvent): boolean {
+    //     const charCode: number = Utils.Keyboard.getCharCode(e);
+    //     const key: string = String.fromCharCode(charCode);
+    //     const isValid: boolean = key.isAlphanumeric() || this._validKeyPressCodes.includes(charCode);
+    //     return isValid;
+    // }
 
     private _getTerms(): string {
         return this._$element.val().trim();

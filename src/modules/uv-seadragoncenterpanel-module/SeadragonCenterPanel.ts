@@ -59,7 +59,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             this.zoomToInitialAnnotation();
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: ISettings) => {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 
