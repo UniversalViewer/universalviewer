@@ -54,6 +54,11 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
+        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, args: any) => {
+            this.overlayAnnotations();
+            this.zoomToInitialAnnotation();
+        });
+
         $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
@@ -553,23 +558,45 @@ export class SeadragonCenterPanel extends CenterPanel {
         
         this.setNavigatorVisible();
 
-        //setTimeout(() => {
-            this.overlayAnnotations();
+        this.overlayAnnotations();
 
-            this.updateBounds();
+        this.updateBounds();
 
-            let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+        this.zoomToInitialAnnotation();
 
-            (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
-            (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+        this.isFirstLoad = false;
+    }
 
-            if (annotationRect && this.isZoomToSearchResultEnabled()) {
-                this.zoomToAnnotation(annotationRect);
+    zoomToInitialAnnotation(): void {
+        let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+        
+        (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
+        (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+
+        if (annotationRect && this.isZoomToSearchResultEnabled()) {
+            this.zoomToAnnotation(annotationRect);
+        }
+    }
+
+    overlayAnnotations(): void {
+        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+
+        for (let i = 0; i < annotations.length; i++) {
+
+            const annotation: AnnotationGroup = annotations[i];
+            const overlayRects: any[] = this.getAnnotationOverlayRects(annotation);
+
+            for (let k = 0; k < overlayRects.length; k++) {
+                const overlayRect = overlayRects[k];
+
+                const div: HTMLElement = document.createElement('div');
+                div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
+                div.className = 'searchOverlay';
+                div.title = UVUtils.sanitize(overlayRect.chars);
+
+                this.viewer.addOverlay(div, overlayRect);
             }
-
-            this.isFirstLoad = false;
-        //}, 1000);
-    
+        }
     }
 
     updateBounds(): void {
@@ -693,27 +720,6 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     clearAnnotations(): void {
         this.$canvas.find('.searchOverlay').hide();
-    }
-
-    overlayAnnotations(): void {
-        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
-
-        for (let i = 0; i < annotations.length; i++) {
-
-            const annotation: AnnotationGroup = annotations[i];
-            const overlayRects: any[] = this.getAnnotationOverlayRects(annotation);
-
-            for (let k = 0; k < overlayRects.length; k++) {
-                const overlayRect = overlayRects[k];
-
-                const div: HTMLElement = document.createElement('div');
-                div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
-                div.className = 'searchOverlay';
-                div.title = UVUtils.sanitize(overlayRect.chars);
-
-                this.viewer.addOverlay(div, overlayRect);
-            }
-        }
     }
 
     getAnnotationsForCurrentImages(): AnnotationGroup[] {
