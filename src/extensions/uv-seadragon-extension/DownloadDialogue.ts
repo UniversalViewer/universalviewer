@@ -215,7 +215,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const $label: JQuery = this.$wholeImageHighResButton.find('label');
             let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
-            if (mime){
+            if (mime) {
                 mime = Utils.Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
@@ -225,15 +225,25 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
             if (!size) {
-                this.$wholeImageHighResButton.hide();
+                // if there is no image service, allow the image to be downloaded directly.
+                if (canvas.externalResource && !canvas.externalResource.hasServiceDescriptor()) {
+                    const label: string = String.format(this.content.wholeImageHighRes, '?', '?', mime);
+                    $label.text(label);
+                    $input.prop('title', label);
+                    this.$wholeImageHighResButton.show();
+                } else {
+                    this.$wholeImageHighResButton.hide();
+                }
             } else {
                 const label: string = hasNormalDimensions ?
                   String.format(this.content.wholeImageHighRes, size.width, size.height, mime) :
                   String.format(this.content.wholeImageHighRes, size.height, size.width, mime);
                 $label.text(label);
                 $input.prop('title', label);
+
                 this.$wholeImageHighResButton.data('width', size.width);
                 this.$wholeImageHighResButton.data('height', size.height);
+                
                 this.$wholeImageHighResButton.show();
             }
 
@@ -483,6 +493,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     getCanvasHighResImageUri(canvas: Manifesto.ICanvas): string {
         const size: Size | null = this.getCanvasComputedDimensions(canvas);
+        
         if (size) {
             const width: number = size.width;
             let uri: string = canvas.getCanonicalImageUri(width);
@@ -495,6 +506,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             }
             
             return uri;
+        } else if (canvas.externalResource && !canvas.externalResource.hasServiceDescriptor()) {
+            // if there is no image service, return the dataUri.
+            return <string>canvas.externalResource.dataUri;
         }
         return '';
     }
@@ -513,19 +527,27 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return null;
     }
 
-    getCanvasDimensions(canvas: Manifesto.ICanvas): Size {
+    getCanvasDimensions(canvas: Manifesto.ICanvas): Size | null {
 
         // externalResource may not have loaded yet
         if (canvas.externalResource.data) {
-            return new Size((<Manifesto.IExternalImageResourceData>canvas.externalResource.data).width, (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).height);
+            const width: number | undefined = (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).width;
+            const height: number | undefined = (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).height;
+            if (width && height) {
+                return new Size(width, height);
+            }
         }
         
-        return new Size(0, 0);
+        return null;
     }
 
     getCanvasComputedDimensions(canvas: Manifesto.ICanvas): Size | null {
-        const imageSize: Size = this.getCanvasDimensions(canvas);
+        const imageSize: Size | null = this.getCanvasDimensions(canvas);
         const requiredSize: Size | null =  canvas.getMaxDimensions();
+
+        if (!imageSize) {
+            return null;
+        }
 
         if (!requiredSize) {
             return imageSize;
