@@ -33,12 +33,12 @@
             overflow: hidden;
 
             .buttons {
-              padding: @padding-medium-vertical;
-              float: right;
+                padding: @padding-medium-vertical;
+                float: right;
 
-              .btn {
-                margin: 0 0 0 @margin-medium-horizontal;
-              }
+                .btn {
+                    margin: 0 0 0 @margin-medium-horizontal;
+                }
             }
 
             .content {
@@ -47,6 +47,7 @@
                 padding-left: @padding-medium-horizontal;
 
                 overflow: auto;
+                text-overflow: ellipsis;
 
                 h1 {
                     color: @headings-color;
@@ -67,9 +68,13 @@
                 p {
                     margin: 0;
                     padding: @padding-medium-vertical 0 @padding-medium-vertical 0;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
 
                     p {
                         padding-top: 0;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
 

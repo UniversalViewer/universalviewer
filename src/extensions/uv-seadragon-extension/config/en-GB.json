@@ -33,7 +33,7 @@
     "saveUserSettings": false,
     "clickToZoomEnabled": true,
     "searchWithinEnabled": true,
-    "termsOfUseEnabled": false,
+    "termsOfUseEnabled": true,
     "theme": "uv-en-GB-theme",
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,

@@ -70,12 +70,14 @@ export class CenterPanel extends BaseView {
         const $license = this.$attribution.find('.license');
         const $logo = this.$attribution.find('.logo');
 
-        $attribution.html(UVUtils.sanitize(attribution));
+        const sanitized: string = UVUtils.sanitize(attribution);
 
-        $attribution.find('img').one("load", () => {
+        $attribution.html(sanitized);
+
+        $attribution.find('img').one('load', () => {
             this.resize();
         }).each(function() {
-            if(this.complete) $(this).load();
+            if (this.complete) $(this).load();
         });
 
         $attribution.targetBlank();
