@@ -336,7 +336,17 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             this.$selectionButton.hide();
         }
 
-        this.resetDynamicDownloadOptions();
+        this.resetDynamicDownloadOptions(); // todo: not very nice
+
+        if (this.isDownloadOptionAvailable(DownloadOption.rangeRendering)) {
+            
+            if (canvas.ranges && canvas.ranges.length) {
+                for (let i = 0; i < canvas.ranges.length; i++) {
+                    const range: Manifesto.IRange = canvas.ranges[i];
+                    this.addDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
+                }
+            }
+        }
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
             const images: Manifesto.IAnnotation[] = canvas.getImages();
@@ -620,6 +630,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.selection:
                 return this.options.selectionEnabled;
+            case DownloadOption.rangeRendering:                
+                if (canvas.ranges.length) {
+                    const range: Manifesto.IRange = canvas.ranges[0];
+                    return range.getRenderings().length > 0;
+                }
+                return false;
             default:
                 return super.isDownloadOptionAvailable(option);
         }
