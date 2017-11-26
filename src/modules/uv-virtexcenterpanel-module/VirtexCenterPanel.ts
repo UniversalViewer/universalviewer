@@ -79,7 +79,7 @@ export class VirtexCenterPanel extends CenterPanel {
             }
         });
 
-        if (!WEBVR.isAvailable()) {
+        if (!this._isVREnabled()) {
             this.$vrButton.hide();
         }
     }
@@ -123,6 +123,10 @@ export class VirtexCenterPanel extends CenterPanel {
 
             this.resize();
         });
+    }
+
+    private _isVREnabled(): boolean {
+        return (Utils.Bools.getBool(this.config.options.vrEnabled, false) && WEBVR.isAvailable());
     }
 
     resize() {

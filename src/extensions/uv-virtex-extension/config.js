@@ -17,6 +17,7 @@ module.exports = {
                 //'three/examples/js/loaders/GLTFLoader.js',
                 'three/examples/js/loaders/OBJLoader.js',
                 'three/examples/js/loaders/MTLLoader.js',
+                'three/examples/js/loaders/PLYLoader.js',
                 'three/examples/js/Detector.js',
                 'three/examples/js/vr/WebVR.js'
             ],
