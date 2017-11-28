@@ -1,7 +1,4 @@
-
-
-
-## Download chromedriver
+Download chromedriver:
 
 http://chromedriver.storage.googleapis.com/index.html
 
