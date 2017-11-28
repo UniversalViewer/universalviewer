@@ -9,3 +9,5 @@ Put it somewhere like:
 and add it to your PATH.
 
 Ensure that vscode is running as admin.
+
+Hit F5
