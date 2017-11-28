@@ -2,6 +2,10 @@
   "name": "universalviewer",
   "version": "3.0.0",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
+  "scripts": {
+    "postinstall": "typings install && opencollective postinstall",
+    "test": "mocha test/test.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/universalviewer/universalviewer.git"
@@ -18,14 +22,11 @@
   "bugs": {
     "url": "https://github.com/universalviewer/universalviewer/issues"
   },
-  "scripts": {
-    "postinstall": "typings install && opencollective postinstall"
-  },
   "homepage": "https://github.com/universalviewer/universalviewer",
   "devDependencies": {
     "async": "^0.9.0",
+    "chai": "^4.1.2",
     "chalk": "^0.5.1",
-    "cucumber": "^0.4.5",
     "glob": "^4.3.5",
     "glob-array": "^0.1.2",
     "grunt": "^0.4.5",
@@ -36,7 +37,6 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-exec": "~0.4.2",
-    "grunt-protractor-runner": "^1.1.4",
     "grunt-sync": "^0.2.3",
     "grunt-text-replace": "~0.3.7",
     "grunt-ts": "^6.0.0-beta.11",
@@ -44,8 +44,9 @@
     "json-schema-generator": "edsilv/json-schema-generator",
     "less": "^2.4.0",
     "lodash": "^4.17.4",
+    "mocha": "^4.0.1",
     "ncp": "^2.0.0",
-    "protractor": "1.3.1",
+    "selenium-webdriver": "^3.6.0",
     "typescript": "^2.6.1",
     "typings": "^2.1.0"
   },
