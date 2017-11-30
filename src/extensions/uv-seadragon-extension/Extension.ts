@@ -276,6 +276,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
+            this.fire(Events.SEADRAGON_OPEN);
         });
 
         $.subscribe(Events.SEADRAGON_RESIZE, () => {
