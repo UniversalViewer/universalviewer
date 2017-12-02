@@ -468,8 +468,11 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
             this.fire(BaseEvents.SHOW_TERMS_OF_USE);
             
-            // todo: Eventually this should be replaced with a suitable IIIF Presentation API field - until then, use attribution
-            const terms: string | null = this.helper.getAttribution();
+            let terms: string | null = this.helper.getLicense();
+            
+            if (!terms) {
+                terms = this.helper.getAttribution();
+            }
             
             if (terms) {
                 this.showMessage(terms);
