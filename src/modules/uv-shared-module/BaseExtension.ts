@@ -851,8 +851,7 @@ export class BaseExtension implements IExtension {
     }
 
     getLocale(): string {
-        const locale: ILocale = this.data.locales[0];
-        return locale.name;
+        return this.helper.options.locale;
     }
 
     getSharePreview(): ISharePreview {
