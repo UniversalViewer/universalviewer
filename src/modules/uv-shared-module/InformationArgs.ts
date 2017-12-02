@@ -1,9 +1,7 @@
-import InformationType = require("./InformationType");
+import {InformationType} from "./InformationType";
 
-class InformationArgs {
+export class InformationArgs {
     constructor(public informationType: InformationType, public param: any) {
 
     }
 }
-
-export = InformationArgs;

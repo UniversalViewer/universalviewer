@@ -1,123 +1,81 @@
-﻿
-#app{
+@import 'icons';﻿
 
-    @img-path: '../../../modules/uv-pagingheaderpanel-module/img/';
+.uv {
 
-    &.embedded{
-
-//        .headerPanel {
-//            background-image: url('@{img-path}logo.png');
-//            background-repeat: no-repeat;
-//            background-position: 8px 8px;
-//        }
-    }
-
-    .headerPanel{
+    .headerPanel {
 
         color: @text-secondary-color;
 
-        a.imageBtn{
+        button.btn.imageBtn {
+          padding-left: 2px;
+          padding-right: 2px;
 
-            &.first{
-                background-color: @gray;
-                background-image: url('@{img-path}first.png');
-                background-repeat: no-repeat;
-                margin: 0 0 0 0;
-                &:hover{
-                    background-color: @gray-dark;
+            &.first,
+            &.prev,
+            &.next,
+            &.last {
+                i {
+                    background-color: @gray;
+                    &:hover {
+                        background-color: @gray-dark;
+                    }
                 }
             }
 
-            &.prev{
-                background-color: @gray;
-                background-image: url('@{img-path}prev.png');
-                background-repeat: no-repeat;
-                margin: 0 0 0 5px;
-                &:hover{
-                    background-color: @gray-dark;
-                }
-            }
-
-            &.next{
-                background-color: @gray;
-                background-image: url('@{img-path}next.png');
-                background-repeat: no-repeat;
-                margin: 0 5px 0 0;
-                &:hover{
-                    background-color: @gray-dark;
-                }
-            }
-
-            &.last{
-                background-color: @gray;
-                background-image: url('@{img-path}last.png') ;
-                background-repeat: no-repeat;
-                margin: 0 0 0 0;
-                &:hover{
-                    background-color: @gray-dark;
-                }
-            }
-
-            &.go{
-                background: url('@{img-path}go.png') no-repeat;
-                width: 28px;
-                line-height: 24px;
-            }
-
-            &.disabled{
+            &.disabled {
                 opacity: 0.4;
                 filter: alpha(opacity=40);
                 background-color: transparent;
-                &:hover{
+                &:hover {
                     background-color: transparent;
                 }
             }
         }
 
-        .centerOptions{
+        .centerOptions {
 
-            .image-selectionbox-options{
+            .image-selectionbox-options {
                 float: left;
                 margin: 0 0 0 0;
             }
 
-            .image-selectionbox{
+            .image-selectionbox {
                 height: 30px;
             }
 
-            .prevOptions{
+            .prevOptions {
                 float: left;
                 margin: 0 15px 0 0;
             }
 
-            .mode{
+            .mode {
                 float: left;
-                margin: 6px 0 0 0;
+                margin: 12px 0 0 0;
             }
 
-            .search{
+            .search {
                 float: left;
-                margin: 0 0 0 5px;
+                margin: 6px 0 0 5px;
                 width: 113px;
 
-                .searchText{
+                .searchText {
                     border: none;
                     padding: 0 0 0 2px;
                 }
             }
 
-            .nextOptions{
+            .nextOptions {
                 float: left;
                 margin: 0 0 0 15px;
             }
 
-            .mode{
+            .mode {
 
-                input{
+                input {
                     float: left;
                 }
 
-                label{
+                label {
                     clear: none;
                     width: 30px;
                     margin: 0 0 0 0;
@@ -127,17 +85,17 @@
                     line-height: 18px;
                     text-align: right;
 
-                    &.disabled{
+                    &.disabled {
                         color: @disabled;
                     }
                 }
             }
 
-            &.modeOptionsDisabled{
+            &.modeOptionsDisabled {
                 width: 280px;
             }
 
-            .autocompleteText{
+            .autocompleteText {
                 width: 30px;
                 height: 19px;
                 line-height: 19px;
@@ -147,7 +105,7 @@
                 margin-top: 6px;
             }
 
-            .autocomplete{
+            .autocomplete {
                 position: absolute;
                 background: #fff;
                 width: 60px;
@@ -165,19 +123,19 @@
                 overflow-x: hidden;
                 z-index: 1000;
 
-                .result{
+                .result {
                     padding: 4px;
                     width: 270px;
                     overflow: hidden;
 
-                    &.loading{
-                        background-image: url(@loader-white-bg);
+                    &.loading {
+                        background-image: data-uri(@loader-white-bg);
                         background-repeat: no-repeat;
                         background-position: 4px 4px;
                         height: 25px;
                     }
 
-                    &.selected{
+                    &.selected {
                         background: @gray-lighter;
                     }
                 }
@@ -185,45 +143,37 @@
         }
 
         .rightOptions {
-            .pagingToggleButtons{
+            .pagingToggleButtons {
                 float: left;
-                //margin: -1px 4px 0 0;
-                .one-up{
-                    background-image: url('@{img-path}one_up.png');
-                    background-repeat: no-repeat;
+                .one-up {
                     .opacity(1);
-                    &.on{
+                    &.on {
                         .opacity(.75);
                     }
                 }
-                .two-up{
-                    background-image: url('@{img-path}two_up.png');
-                    background-repeat: no-repeat;
+                .two-up {
                     .opacity(1);
-                    &.on{
+                    &.on {
                         .opacity(.75);
                     }
                 }
             }
-            .gallery{
-                background-image: url('@{img-path}grid.png');
-                background-repeat: no-repeat;
-                margin-right: @margin-small-horizontal;
+            .gallery {
                 .opacity(1);
-                &.on{
+                &.on {
                     .opacity(.75);
                 }
             }
-            .localeToggle{
+            .localeToggle {
                 .link-color-decoration(#fff, none);
                 font-size: @font-size-large;
                 float: left;
-                margin: 4px 8px 4px 4px;
+                margin: 4px 8px 4px 8px;
                 cursor: pointer;
             }
         }
 
-        .searchText{
+        .searchText {
             width: 30px;
             height: 19px;
             line-height: 19px;
@@ -233,7 +183,7 @@
             margin-top: 6px;
         }
 
-        .total{
+        .total {
             float: left;
             display: block;
             height: 18px;

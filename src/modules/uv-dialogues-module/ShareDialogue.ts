@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class ShareDialogue extends Dialogue {
+export class ShareDialogue extends Dialogue {
 
     $code: JQuery;
     $customSize: JQuery;
@@ -30,10 +30,10 @@ class ShareDialogue extends Dialogue {
     currentWidth: number;
     isEmbedViewVisible: boolean = false;
     isShareViewVisible: boolean = false;
-    maxHeight: number = this.maxWidth * this.aspectRatio;
     maxWidth: number = 8000;
-    minHeight: number = this.minWidth * this.aspectRatio;
+    maxHeight: number = this.maxWidth * this.aspectRatio;
     minWidth: number = 200;
+    minHeight: number = this.minWidth * this.aspectRatio;
 
     constructor($element: JQuery) {
         super($element);
@@ -45,10 +45,10 @@ class ShareDialogue extends Dialogue {
         
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_SHARE_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_SHARE_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_SHARE_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_SHARE_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, $triggerButton) => {
+        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
 
             if (this.isShareAvailable()){
@@ -58,11 +58,11 @@ class ShareDialogue extends Dialogue {
             }
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
-        $.subscribe(BaseCommands.SHOW_EMBED_DIALOGUE, (e, $triggerButton) => {
+        $.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
             this.openEmbedView();
         });
@@ -93,7 +93,7 @@ class ShareDialogue extends Dialogue {
         this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
         this.$shareView.append(this.$shareLink);
 
-        this.$shareInput = $('<input class="shareInput" type="text" readonly="true" />');
+        this.$shareInput = $(`<input class="shareInput" type="text" readonly aria-label="${this.content.shareUrl}"/>`);
         this.$shareView.append(this.$shareInput);
 
         this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
@@ -111,7 +111,7 @@ class ShareDialogue extends Dialogue {
         // this.$image = $('<img class="share" />');
         // this.$embedView.append(this.$image);
 
-        this.$code = $('<input class="code" type="text" readonly="true" />');
+        this.$code = $(`<input class="code" type="text" readonly aria-label="${this.content.embed }"/>`);
         this.$embedView.append(this.$code);
 
         this.$customSize = $('<div class="customSize"></div>');
@@ -120,28 +120,28 @@ class ShareDialogue extends Dialogue {
         this.$size = $('<span class="size">' + this.content.size  + '</span>');
         this.$customSize.append(this.$size);
 
-        this.$customSizeDropDown = $('<select id="size"></select>');
+        this.$customSizeDropDown = $('<select id="size" aria-label="' + this.content.size + '"></select>');
         this.$customSize.append(this.$customSizeDropDown);
         this.$customSizeDropDown.append('<option value="small" data-width="560" data-height="420">560 x 420</option>');
         this.$customSizeDropDown.append('<option value="medium" data-width="640" data-height="480">640 x 480</option>');
         this.$customSizeDropDown.append('<option value="large" data-width="800" data-height="600">800 x 600</option>');
         this.$customSizeDropDown.append('<option value="custom">' + this.content.customSize + '</option>');
 
-        this.$widthInput = $('<input class="width" type="text" maxlength="10" />');
+        this.$widthInput = $('<input class="width" type="text" maxlength="10" aria-label="' + this.content.width + '"/>');
         this.$customSize.append(this.$widthInput);
 
         this.$x = $('<span class="x">x</span>');
         this.$customSize.append(this.$x);
 
-        this.$heightInput = $('<input class="height" type="text" maxlength="10" />');
+        this.$heightInput = $('<input class="height" type="text" maxlength="10" aria-label="' + this.content.height + '"/>');
         this.$customSize.append(this.$heightInput);
 
-        var iiifUrl: string = this.extension.getIIIFShareUrl();
+        const iiifUrl: string = this.extension.getIIIFShareUrl();
 
         this.$iiifButton = $('<a class="imageBtn iiif" href="' + iiifUrl + '" title="' + this.content.iiif + '" target="_blank"></a>');
         this.$footer.append(this.$iiifButton);
 
-        this.$termsOfUseButton = $('<a href="#">' + this.extension.config.content.termsOfUse + '</a>');
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.data.config.content.termsOfUse + '</a>');
         this.$footer.append(this.$termsOfUseButton);
 
         this.$widthInput.on('keydown', (e) => {
@@ -183,7 +183,7 @@ class ShareDialogue extends Dialogue {
         });
 
         this.$termsOfUseButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_TERMS_OF_USE);
+            $.publish(BaseEvents.SHOW_TERMS_OF_USE);
         });
 
         this.$element.hide();
@@ -195,7 +195,7 @@ class ShareDialogue extends Dialogue {
         this.update();
     }
 
-    getShareUrl(): string {
+    getShareUrl(): string | null {
         return this.extension.getShareUrl();
     }
 
@@ -211,7 +211,7 @@ class ShareDialogue extends Dialogue {
             this.$shareButton.hide();
         }
 
-        var $selected: JQuery = this.getSelectedSize();
+        const $selected: JQuery = this.getSelectedSize();
 
         if ($selected.val() === 'custom') {
             this.$widthInput.show();
@@ -235,10 +235,14 @@ class ShareDialogue extends Dialogue {
 
     updateShareOptions(): void {
         
-        this.$shareInput.val(this.getShareUrl());
-        this.$shareLink.prop('href', this.getShareUrl());
-        this.$shareLink.text(this.getShareUrl());
-        
+        const shareUrl: string | null = this.getShareUrl();
+
+        if (shareUrl) {
+            this.$shareInput.val(shareUrl);
+            this.$shareLink.prop('href', shareUrl);
+            this.$shareLink.text(shareUrl);
+        }
+
         if ($.browser.mobile){
             this.$shareInput.hide();
             this.$shareLink.show();
@@ -268,7 +272,7 @@ class ShareDialogue extends Dialogue {
     //     var thumbnail = canvas.getProperty('thumbnail');
 
     //     if (!thumbnail || !_.isString(thumbnail)){
-    //         thumbnail = canvas.getCanonicalImageUri(this.extension.config.options.bookmarkThumbWidth);
+    //         thumbnail = canvas.getCanonicalImageUri(this.extension.data.config.options.bookmarkThumbWidth);
     //     }
 
     //     this.$link.attr('href', thumbnail);
@@ -281,10 +285,10 @@ class ShareDialogue extends Dialogue {
 
     updateWidthRatio(): void {        
         this.currentHeight = Number(this.$heightInput.val());
-        if (this.currentHeight < this.minHeight){
+        if (this.currentHeight < this.minHeight) {
             this.currentHeight = this.minHeight;
             this.$heightInput.val(String(this.currentHeight));
-        } else if (this.currentHeight > this.maxHeight){
+        } else if (this.currentHeight > this.maxHeight) {
             this.currentHeight = this.maxHeight;
             this.$heightInput.val(String(this.currentHeight));
         } 
@@ -294,10 +298,10 @@ class ShareDialogue extends Dialogue {
 
     updateHeightRatio(): void {
         this.currentWidth = Number(this.$widthInput.val());
-        if (this.currentWidth < this.minWidth){
+        if (this.currentWidth < this.minWidth) {
             this.currentWidth = this.minWidth;
             this.$widthInput.val(String(this.currentWidth));
-        } else if (this.currentWidth > this.maxWidth){
+        } else if (this.currentWidth > this.maxWidth) {
             this.currentWidth = this.maxWidth;
             this.$widthInput.val(String(this.currentWidth));
         }
@@ -306,7 +310,11 @@ class ShareDialogue extends Dialogue {
     }
 
     updateShareFrame(): void {
-        var shareUrl: string = this.extension.helper.getShareServiceUrl();
+        const shareUrl: string | null = this.extension.helper.getShareServiceUrl();
+
+        if (!shareUrl) { 
+            return;
+        }
 
         if (Utils.Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
             this.$shareFrame.prop('src', shareUrl);
@@ -317,9 +325,9 @@ class ShareDialogue extends Dialogue {
     }
 
     updateTermsOfUseButton(): void {
-        var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        const attribution: string | null = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
-        if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
+        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();
@@ -371,5 +379,3 @@ class ShareDialogue extends Dialogue {
         this.setDockedPosition();
     }
 }
-
-export = ShareDialogue;

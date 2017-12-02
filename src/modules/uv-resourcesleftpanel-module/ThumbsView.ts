@@ -1,12 +1,9 @@
-import BaseView = require("../uv-shared-module/ThumbsView");
+import {ThumbsView as BaseView} from "../uv-shared-module/ThumbsView";
 
-class ThumbsView extends BaseView {
+export class ThumbsView extends BaseView {
     create(): void {
 
         this.setConfig('resourcesLeftPanel');
-
         super.create();
     }
 }
-
-export = ThumbsView;

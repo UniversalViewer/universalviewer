@@ -1,22 +1,15 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import GalleryView = require("./GalleryView");
-import ICanvas = Manifold.ICanvas;
-import IRange = Manifold.IRange;
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {GalleryView} from "./GalleryView";
+import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
+import {LeftPanel} from "../uv-shared-module/LeftPanel";
+import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import {ThumbsView} from "./ThumbsView";
+import {TreeView} from "./TreeView";
+import AnnotationGroup = Manifold.AnnotationGroup;
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
-import LeftPanel = require("../uv-shared-module/LeftPanel");
-import {MetricType} from "../uv-shared-module/MetricType";
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
-import MultiSelectState = Manifold.MultiSelectState;
-import SearchResult = Manifold.SearchResult;
-import SearchResultRect = Manifold.SearchResultRect;
-import ThumbsView = require("./ThumbsView");
-import TreeSortType = Manifold.TreeSortType;
-import TreeView = require("./TreeView");
 
-class ContentLeftPanel extends LeftPanel {
+export class ContentLeftPanel extends LeftPanel {
 
     $bottomOptions: JQuery;
     $galleryView: JQuery;
@@ -56,40 +49,38 @@ class ContentLeftPanel extends LeftPanel {
 
         super.create();
 
-        var that = this;
-
-        $.subscribe(BaseCommands.SETTINGS_CHANGED, () => {
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(Commands.GALLERY_THUMB_SELECTED, () => {
+        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
-            if (this.extension.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+            if (this.extension.isMobileView()) {
                 if (this.isFullyExpanded) {
                     this.collapseFull();
                 }
             }
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, () => {
+        $.subscribe(BaseEvents.ANNOTATIONS, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_CLEARED, () => {
+        $.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, () => {
+        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             if (this.isFullyExpanded){
                 this.collapseFull();
             }
@@ -117,7 +108,7 @@ class ContentLeftPanel extends LeftPanel {
         this.$topOptions = $('<div class="top"></div>');
         this.$options.append(this.$topOptions);
 
-        this.$treeSelect = $('<select></select>');
+        this.$treeSelect = $('<select aria-label="' + this.content.manifestRanges + '"></select>');
         this.$topOptions.append(this.$treeSelect);
         
         this.$bottomOptions = $('<div class="bottom"></div>');
@@ -177,13 +168,13 @@ class ContentLeftPanel extends LeftPanel {
         this.$treeButton.onPressed(() => {
             this.openTreeView();
 
-            $.publish(Commands.OPEN_TREE_VIEW);
+            $.publish(BaseEvents.OPEN_TREE_VIEW);
         });
 
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
 
-            $.publish(Commands.OPEN_THUMBS_VIEW);
+            $.publish(BaseEvents.OPEN_THUMBS_VIEW);
         });
 
         this.setTitle(this.content.title);
@@ -209,16 +200,16 @@ class ContentLeftPanel extends LeftPanel {
 
     createTreeView(): void {
         this.treeView = new TreeView(this.$treeView);
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.setup();
         this.databindTreeView();
 
         // populate the tree select drop down when there are multiple top-level ranges
-        var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        const topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
 
         if (topRanges.length > 1){            
-            for (var i = 0; i < topRanges.length; i++){
-                var range: Manifesto.IRange = topRanges[i];
+            for (let i = 0; i < topRanges.length; i++){
+                const range: Manifesto.IRange = topRanges[i];
                 this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.TranslationCollection.getValue(range.getLabel()) + '</option>');
             }
         }
@@ -233,8 +224,12 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     updateTreeViewOptions(): void {
-        var treeData: ITreeNode = this.getTreeData();
+        const treeData: ITreeNode | null = this.getTree();
         
+        if (!treeData) {
+            return;
+        }
+
         if (this.isCollection() && this.extension.helper.treeHasNavDates(treeData)){
             this.$treeViewOptions.show();
         } else {
@@ -250,7 +245,7 @@ class ContentLeftPanel extends LeftPanel {
 
     sortByDate(): void {
         this.treeSortType = Manifold.TreeSortType.DATE;
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.addClass('on');
@@ -260,7 +255,7 @@ class ContentLeftPanel extends LeftPanel {
 
     sortByVolume(): void {
         this.treeSortType = Manifold.TreeSortType.NONE;
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
         this.$sortByDateButton.removeClass('on');
@@ -269,21 +264,25 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     isCollection(): boolean {
-        var treeData: ITreeNode = this.getTreeData();
-        return treeData.data.type === manifesto.TreeNodeType.collection().toString();
+        var treeData: ITreeNode | null = this.getTree();
+
+        if (treeData) {
+            return treeData.data.type === manifesto.TreeNodeType.collection().toString();
+        }
+        
+        throw new Error("Tree not available");
     }
 
-    databindTreeView(): void{
+    databindTreeView(): void {
         if (!this.treeView) return;
-        this.treeView.treeOptions = this.getTreeOptions();
+        this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
     }
 
-    getTreeOptions(): IIIFComponents.ITreeComponentOptions {
-        return <IIIFComponents.ITreeComponentOptions>{
+    getTreeData(): IIIFComponents.ITreeComponentData {
+        return <IIIFComponents.ITreeComponentData>{
             branchNodesSelectable: false,
-            element: ".views .treeView .iiif-tree-component",
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
             treeSortType: this.treeSortType
@@ -292,11 +291,11 @@ class ContentLeftPanel extends LeftPanel {
 
     updateTreeTabByCanvasIndex(): void {
         // update tab to current top range label (if there is one)
-        var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        const topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
         if (topRanges.length > 1){
-            var index: number = this.getCurrentCanvasTopRangeIndex();
-            var currentRange: Manifesto.IRange = topRanges[index];
-            this.setTreeTabTitle(Manifesto.TranslationCollection.getValue(currentRange.getLabel()));
+            const index: number = this.getCurrentCanvasTopRangeIndex();
+            const currentRange: Manifesto.IRange = topRanges[index];
+            this.setTreeTabTitle(<string>Manifesto.TranslationCollection.getValue(currentRange.getLabel()));
         } else {
             this.setTreeTabTitle(this.content.index);
         }
@@ -308,8 +307,8 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     updateTreeTabBySelection(): void {
-        var title: string;
-        var topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        let title: string | null = null;
+        const topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
         
         if (topRanges.length > 1){
             if (this.treeView){
@@ -319,7 +318,7 @@ class ContentLeftPanel extends LeftPanel {
             }
         }
 
-        if (title){
+        if (title) {
             this.setTreeTabTitle(title);
         } else {
             this.setTreeTabTitle(this.content.index);
@@ -335,11 +334,13 @@ class ContentLeftPanel extends LeftPanel {
         this.databindThumbsView();
     }
 
-    databindThumbsView(): void{
+    databindThumbsView(): void {
         if (!this.thumbsView) return;
-        var width, height;
+        
+        let width: number;
+        let height: number;
 
-        var viewingDirection: string = this.getViewingDirection().toString();
+        const viewingDirection: string = this.getViewingDirection().toString();
 
         if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
             width = this.config.options.oneColThumbWidth;
@@ -356,20 +357,22 @@ class ContentLeftPanel extends LeftPanel {
         }
 
         // add a search result icon for pages with results
-        const searchResults: SearchResult[] = (<ISeadragonExtension>this.extension).searchResults;
+        const searchResults: AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
         
         if (searchResults && searchResults.length) {
 
             for (let i = 0; i < searchResults.length; i++) {
-                var searchResult: SearchResult = searchResults[i];
+                const searchResult: AnnotationGroup = searchResults[i];
 
                 // find the thumb with the same canvasIndex and add the searchResult
                 let thumb: IThumb = thumbs.en().where(t => t.index === searchResult.canvasIndex).first();
 
-                // clone the data so searchResults isn't persisted on the canvas.
-                let data = $.extend(true, {}, thumb.data);
-                data.searchResults = searchResult.rects.length;
-                thumb.data = data;
+                if (thumb) {
+                    // clone the data so searchResults isn't persisted on the canvas.
+                    let data = $.extend(true, {}, thumb.data);
+                    data.searchResults = searchResult.rects.length;
+                    thumb.data = data;
+                }
             }
 
         }
@@ -381,20 +384,19 @@ class ContentLeftPanel extends LeftPanel {
 
     createGalleryView(): void {
         this.galleryView = new GalleryView(this.$galleryView);
-        this.galleryView.galleryOptions = this.getGalleryOptions();
+        this.galleryView.galleryData = this.getGalleryData();
         this.galleryView.setup();
         this.databindGalleryView();
     }
 
-    databindGalleryView(): void{
+    databindGalleryView(): void {
         if (!this.galleryView) return;
-        this.galleryView.galleryOptions = this.getGalleryOptions();
+        this.galleryView.galleryData = this.getGalleryData();
         this.galleryView.databind();
     }
 
-    getGalleryOptions(): IIIFComponents.IGalleryComponentOptions {
-        return <IIIFComponents.IGalleryComponentOptions>{
-            element: ".views .galleryView .iiif-gallery-component",
+    getGalleryData(): IIIFComponents.IGalleryComponentData {
+        return <IIIFComponents.IGalleryComponentData>{
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
@@ -404,7 +406,7 @@ class ContentLeftPanel extends LeftPanel {
             minLabelWidth: 20,
             pageModeEnabled: this.isPageModeEnabled(),
             scrollStopDuration: 100,
-            searchResults: (<ISeadragonExtension>this.extension).searchResults,
+            searchResults: (<ISeadragonExtension>this.extension).annotations,
             sizingEnabled: Modernizr.inputtypes.range,
             thumbHeight: this.config.options.galleryThumbHeight,
             thumbLoadPadding: this.config.options.galleryThumbLoadPadding,
@@ -427,15 +429,15 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     getSelectedTopRangeIndex(): number {
-        var topRangeIndex: number = this.getSelectedTree().index();
+        let topRangeIndex: number = this.getSelectedTree().index();
         if (topRangeIndex === -1){
             topRangeIndex = 0;
         }
         return topRangeIndex;
     }
 
-    getTreeData(): ITreeNode {
-        var topRangeIndex: number = this.getSelectedTopRangeIndex();
+    getTree(): ITreeNode | null {
+        const topRangeIndex: number = this.getSelectedTopRangeIndex();
         return this.extension.helper.getTree(topRangeIndex, Manifold.TreeSortType.NONE);
     }
 
@@ -444,10 +446,10 @@ class ContentLeftPanel extends LeftPanel {
 
         if (this.isUnopened) {
 
-            var treeEnabled: boolean = Utils.Bools.getBool(this.config.options.treeEnabled, true);
-            var thumbsEnabled: boolean = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
+            let treeEnabled: boolean = Utils.Bools.getBool(this.config.options.treeEnabled, true);
+            const thumbsEnabled: boolean = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
-            var treeData: ITreeNode = this.getTreeData();
+            const treeData: ITreeNode | null = this.getTree();
 
             if (!treeData || !treeData.nodes.length) {
                 treeEnabled = false;
@@ -464,15 +466,15 @@ class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    defaultToThumbsView(): boolean{
+    defaultToThumbsView(): boolean {
 
-        var defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
-        var defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
+        const defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
+        const defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
 
-        var treeData: ITreeNode = this.getTreeData();
+        const treeData: ITreeNode | null = this.getTree();
 
         if (defaultToTreeEnabled){
-            if (treeData.nodes.length > defaultToTreeIfGreaterThan){
+            if (treeData && treeData.nodes.length > defaultToTreeIfGreaterThan){
                 return false;
             }
         }
@@ -482,7 +484,7 @@ class ContentLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_START);
+        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
@@ -494,13 +496,13 @@ class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseCommands.LEFTPANEL_EXPAND_FULL_FINISH);
+        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START);
+        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
@@ -513,7 +515,7 @@ class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     openTreeView(): void {
@@ -561,7 +563,7 @@ class ContentLeftPanel extends LeftPanel {
 
         this.resize();
 
-        if (this.isFullyExpanded){
+        if (this.isFullyExpanded) {
             this.thumbsView.hide();
             if (this.galleryView) this.galleryView.show();
             if (this.galleryView) this.galleryView.resize();
@@ -577,11 +579,11 @@ class ContentLeftPanel extends LeftPanel {
     }
 
     getCurrentCanvasTopRangeIndex(): number {
-        var topRangeIndex: number = -1;
+        let topRangeIndex: number = -1;
         
-        var range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
+        const range: Manifesto.IRange | null = this.extension.getCurrentCanvasRange();
         
-        if (range){
+        if (range) {
             topRangeIndex = Number(range.path.split('/')[0]);
         }
         
@@ -591,18 +593,16 @@ class ContentLeftPanel extends LeftPanel {
     selectCurrentTreeNode(): void{
         if (this.treeView) {
 
-            var id: string;
-            var node: Manifesto.ITreeNode;
+            let node: Manifesto.ITreeNode | null = null;
+            const currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
+            const selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
+            const usingCorrectTree: boolean = currentCanvasTopRangeIndex === selectedTopRangeIndex;
 
-            var currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
-            var selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
-            var usingCorrectTree: boolean = currentCanvasTopRangeIndex === selectedTopRangeIndex;
+            if (currentCanvasTopRangeIndex != -1) {
 
-            if (currentCanvasTopRangeIndex != -1){
+                const range: Manifesto.IRange | null = this.extension.getCurrentCanvasRange();
 
-                var range: Manifesto.IRange = this.extension.getCurrentCanvasRange();
-
-                if (range && range.treeNode){
+                if (range && range.treeNode) {
                     node = this.treeView.getNodeById(range.treeNode.id);
                 }
             }
@@ -628,5 +628,3 @@ class ContentLeftPanel extends LeftPanel {
         this.$views.height(this.$tabsContent.height() - this.$options.outerHeight());
     }
 }
-
-export = ContentLeftPanel;

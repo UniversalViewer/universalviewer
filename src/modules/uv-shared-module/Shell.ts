@@ -1,8 +1,8 @@
-import BaseCommands = require("./BaseCommands");
-import BaseView = require("./BaseView");
-import GenericDialogue = require("./GenericDialogue");
+import {BaseEvents} from "./BaseEvents";
+import {BaseView} from "./BaseView";
+import {GenericDialogue} from "./GenericDialogue";
 
-class Shell extends BaseView {
+export class Shell extends BaseView {
     static $centerPanel: JQuery;
     static $element: JQuery;
     static $footerPanel: JQuery;
@@ -22,11 +22,11 @@ class Shell extends BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.SHOW_OVERLAY, () => {
+        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             Shell.$overlays.show();
         });
 
-        $.subscribe(BaseCommands.HIDE_OVERLAY, () => {
+        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             Shell.$overlays.hide();
         });
 
@@ -54,13 +54,13 @@ class Shell extends BaseView {
         Shell.$overlays = $('<div class="overlays"></div>');
         Shell.$element.append(Shell.$overlays);
 
-        Shell.$genericDialogue = $('<div class="overlay genericDialogue"></div>');
+        Shell.$genericDialogue = $('<div class="overlay genericDialogue" aria-hidden="true"></div>');
         Shell.$overlays.append(Shell.$genericDialogue);
 
         Shell.$overlays.on('click', (e) => {
             if ($(e.target).hasClass('overlays')) {
                 e.preventDefault();
-                $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
+                $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
             }
         });
 
@@ -74,7 +74,7 @@ class Shell extends BaseView {
         Shell.$overlays.width(this.extension.width());
         Shell.$overlays.height(this.extension.height());
 
-        var mainHeight: number = this.$element.height() - parseInt(Shell.$mainPanel.css('marginTop')) 
+        const mainHeight: number = this.$element.height() - parseInt(Shell.$mainPanel.css('marginTop')) 
             - (Shell.$headerPanel.is(':visible') ? Shell.$headerPanel.height() : 0)
             - (Shell.$footerPanel.is(':visible') ? Shell.$footerPanel.height() : 0)
             - (Shell.$mobileFooterPanel.is(':visible') ? Shell.$mobileFooterPanel.height() : 0);
@@ -82,5 +82,3 @@ class Shell extends BaseView {
         Shell.$mainPanel.height(mainHeight);
     }
 }
-
-export = Shell;

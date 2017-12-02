@@ -1,0 +1,19 @@
+{
+  "name": "universalviewer",
+  "dependencies": {},
+  "globalDependencies": {
+    "base-component": "github:iiif-commons/base-component/dist/base-component.d.ts#v1.1.0",
+    "exjs": "github:BSick7/exjs/dist/ex.d.ts#0.5.0",
+    "extensions": "github:edsilv/extensions/dist/extensions.d.ts#v0.2.0",
+    "http-status-codes": "github:edsilv/http-status-codes/dist/http-status-codes.d.ts#v0.0.5",
+    "iiif-gallery-component": "github:iiif-commons/iiif-gallery-component/dist/iiif-gallery-component.d.ts#v1.1.0",
+    "iiif-metadata-component": "github:iiif-commons/iiif-metadata-component/dist/iiif-metadata-component.d.ts#v1.1.0",
+    "iiif-tree-component": "github:iiif-commons/iiif-tree-component/dist/iiif-tree-component.d.ts#v1.1.2",
+    "jquery-plugins": "github:edsilv/jquery-plugins/dist/jquery-plugins.d.ts#v0.1.0",
+    "key-codes": "github:edsilv/key-codes/dist/key-codes.d.ts#v0.0.6",
+    "manifesto.js": "github:iiif-commons/manifesto/dist/manifesto.d.ts#v2.1.13",
+    "manifold": "github:iiif-commons/manifold/dist/manifold.d.ts#v1.2.11",
+    "utils": "github:edsilv/utils/dist/utils.d.ts#v0.1.0",
+    "virtex": "github:edsilv/virtex/dist/virtex.d.ts#v0.3.3"
+  }
+}

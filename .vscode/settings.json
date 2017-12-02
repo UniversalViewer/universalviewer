@@ -3,8 +3,8 @@
     "**/.git": true,
     "**/.svn": true,
     "**/.DS_Store": true,
-    //"node_modules": true,
-    //"dist": true,
+    "node_modules": false,
+    "dist": true,
     "**/*.js": { "when": "$(basename).ts"},
     "**/*.js.map": true
   }

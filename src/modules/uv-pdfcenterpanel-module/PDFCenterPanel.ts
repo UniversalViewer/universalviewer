@@ -1,10 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import CenterPanel = require("../uv-shared-module/CenterPanel");
-import Params = require("../../Params");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {CenterPanel} from "../uv-shared-module/CenterPanel";
 
-declare var PDFView: any;
-
-class PDFCenterPanel extends CenterPanel {
+export class PDFCenterPanel extends CenterPanel {
 
     constructor($element: JQuery) {
         super($element);
@@ -16,60 +13,26 @@ class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseCommands.OPEN_EXTERNAL_RESOURCE, (e, resources: Manifesto.IExternalResource[]) => {
+        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
         });
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
 
-        var that = this;
+        this.extension.getExternalResources(resources).then(() => {   
+            
+            let mediaUri: string | null = null;
+            let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+            const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(canvas);
 
-        this.extension.getExternalResources(resources).then(() => {
-            var canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-
-            var pdfUri = canvas.id;
-            var browser = window.browserDetect.browser;
-            var version = window.browserDetect.version;
-
-            if ((browser === 'Explorer' && version < 10) || !this.config.options.usePdfJs) {
-
-                // create pdf object
-                new PDFObject({
-                    url: pdfUri,
-                    id: "PDF"
-                }).embed('content');
-
+            if (formats && formats.length) {
+                mediaUri = formats[0].id;
             } else {
-
-                var viewerPath;
-
-                // todo: use compiler conditional
-                if (window.DEBUG){
-                    viewerPath = 'modules/uv-pdfcenterpanel-module/html/viewer.html';
-                } else {
-                    viewerPath = 'html/uv-pdfcenterpanel-module/viewer.html';
-                }
-
-                // load viewer.html
-                this.$content.load(viewerPath, () => {
-                    if (window.DEBUG){
-                        PDFJS.workerSrc = 'extensions/uv-pdf-extension/lib/pdf.worker.min.js';
-                    } else {
-                        PDFJS.workerSrc = 'lib/pdf.worker.min.js';
-                    }
-
-                    PDFJS.DEFAULT_URL = pdfUri;
-
-                    var anchorIndex = (1 + parseInt(that.extension.getParam(Params.anchor))) || 0;
-
-                    PDFView.initialBookmark = "page=" + anchorIndex;
-
-                    window.webViewerLoad();
-
-                    this.resize();
-                });
+                mediaUri = canvas.id;
             }
+
+            window.PDFObject.embed(mediaUri, '#content', {id: "PDF"});
         });
     }
 
@@ -77,5 +40,3 @@ class PDFCenterPanel extends CenterPanel {
         super.resize();
     }
 }
-
-export = PDFCenterPanel;

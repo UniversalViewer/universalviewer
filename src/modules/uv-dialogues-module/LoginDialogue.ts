@@ -1,8 +1,8 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
-import ILoginDialogueOptions = require("../uv-shared-module/ILoginDialogueOptions");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
+import {ILoginDialogueOptions} from "../uv-shared-module/ILoginDialogueOptions";
 
-class LoginDialogue extends Dialogue {
+export class LoginDialogue extends Dialogue {
 
     loginCallback: any;
     logoutCallback: any;
@@ -24,10 +24,10 @@ class LoginDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_LOGIN_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_LOGIN_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_LOGIN_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_LOGIN_DIALOGUE;
 
-        $.subscribe(this.openCommand, (s, e: any) => {
+        $.subscribe(this.openCommand, (s: any, e: any) => {
             this.loginCallback = e.loginCallback;
             this.logoutCallback = e.logoutCallback;
             this.options = e.options;
@@ -35,7 +35,7 @@ class LoginDialogue extends Dialogue {
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -89,12 +89,15 @@ class LoginDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        this.$title.text(this.resource.loginService.getProperty('label'));
+        let message: string = "";
 
-        var message: string = this.resource.loginService.getProperty('description');
-
+        if (this.resource.loginService) {
+            this.$title.text(this.resource.loginService.getProperty('label'));
+            message = this.resource.loginService.getProperty('description');
+        }
+    
         if (this.options.warningMessage){
-            message = '<span class="warning">' + this.extension.config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
+            message = '<span class="warning">' + this.extension.data.config.content[this.options.warningMessage] + '</span><span class="description">' + message + '</span>';
         }
 
         this.updateLogoutButton();
@@ -104,7 +107,7 @@ class LoginDialogue extends Dialogue {
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
         });
 
         if (this.options.showCancelButton){
@@ -128,5 +131,3 @@ class LoginDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = LoginDialogue;

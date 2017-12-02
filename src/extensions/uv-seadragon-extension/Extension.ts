@@ -1,41 +1,36 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Bookmark = require("../../modules/uv-shared-module/Bookmark");
-import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
-import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
-import CroppedImageDimensions = require("./CroppedImageDimensions");
-import DownloadDialogue = require("./DownloadDialogue");
-import ExternalContentDialogue = require("../../modules/uv-dialogues-module/ExternalContentDialogue");
-import ExternalResource = Manifesto.IExternalResource;
-import FooterPanel = require("../../modules/uv-searchfooterpanel-module/FooterPanel");
-import GalleryView = require("../../modules/uv-contentleftpanel-module/GalleryView");
-import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
-import ISeadragonExtension = require("./ISeadragonExtension");
+import { AnnotationResults } from "../../modules/uv-shared-module/AnnotationResults";
+import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
+import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
+import { Bookmark } from "../../modules/uv-shared-module/Bookmark";
+import { Bounds } from "./Bounds";
+import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
+import { CroppedImageDimensions } from "./CroppedImageDimensions";
+import { DownloadDialogue } from "./DownloadDialogue";
+import { Events } from "./Events";
+import { ExternalContentDialogue } from "../../modules/uv-dialogues-module/ExternalContentDialogue";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-osdmobilefooterpanel-module/MobileFooter";
+import { FooterPanel } from "../../modules/uv-searchfooterpanel-module/FooterPanel";
+import { HelpDialogue } from "../../modules/uv-dialogues-module/HelpDialogue";
+import { ISeadragonExtension } from "./ISeadragonExtension";
+import { ISeadragonExtensionData } from "./ISeadragonExtensionData";
+import { Mode } from "./Mode";
+import { MoreInfoDialogue } from "../../modules/uv-dialogues-module/MoreInfoDialogue";
+import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import { MultiSelectDialogue } from "../../modules/uv-multiselectdialogue-module/MultiSelectDialogue";
+import { MultiSelectionArgs } from "./MultiSelectionArgs";
+import { PagingHeaderPanel } from "../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel";
+import { Point } from "../../modules/uv-shared-module/Point";
+import { SeadragonCenterPanel } from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
+import { SettingsDialogue } from "./SettingsDialogue";
+import { ShareDialogue } from "./ShareDialogue";
+import { Shell } from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import {MetricType} from "../../modules/uv-shared-module/MetricType";
-import MobileFooterPanel = require("../../modules/uv-osdmobilefooterpanel-module/MobileFooter");
-import Mode = require("./Mode");
-import MoreInfoDialogue = require("../../modules/uv-dialogues-module/MoreInfoDialogue");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import MultiSelectDialogue = require("../../modules/uv-multiselectdialogue-module/MultiSelectDialogue");
-import MultiSelectionArgs = require("./MultiSelectionArgs");
-import PagingHeaderPanel = require("../../modules/uv-pagingheaderpanel-module/PagingHeaderPanel");
-import Params = require("../../Params");
-import Point = require("../../modules/uv-shared-module/Point");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
-import SeadragonCenterPanel = require("../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel");
-import SearchResult = Manifold.SearchResult;
-import SearchResultRect = Manifold.SearchResultRect;
-import Settings = require("../../modules/uv-shared-module/Settings");
-import SettingsDialogue = require("./SettingsDialogue");
-import ShareDialogue = require("./ShareDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
-import Size = Utils.Measurements.Size;
+import AnnotationGroup = Manifold.AnnotationGroup;
+import AnnotationRect = Manifold.AnnotationRect;
+import Size = Manifesto.Size;
 
-class Extension extends BaseExtension implements ISeadragonExtension {
+export class Extension extends BaseExtension implements ISeadragonExtension {
 
     $downloadDialogue: JQuery;
     $externalContentDialogue: JQuery;
@@ -44,315 +39,318 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
     $shareDialogue: JQuery;
+    annotations: AnnotationGroup[] | null = [];
     centerPanel: SeadragonCenterPanel;
+    currentAnnotationRect: AnnotationRect | null;
     currentRotation: number = 0;
-    currentSearchResultRect: SearchResultRect;
     downloadDialogue: DownloadDialogue;
     externalContentDialogue: ExternalContentDialogue;
     footerPanel: FooterPanel;
     headerPanel: PagingHeaderPanel;
     helpDialogue: HelpDialogue;
-    isSearching: boolean = false;
+    isAnnotating: boolean = false;
     leftPanel: ContentLeftPanel;
     mobileFooterPanel: MobileFooterPanel;
     mode: Mode;
     moreInfoDialogue: MoreInfoDialogue;
     multiSelectDialogue: MultiSelectDialogue;
-    previousSearchResultRect: SearchResultRect;
+    previousAnnotationRect: AnnotationRect | null;
     rightPanel: MoreInfoRightPanel;
-    searchResults: SearchResult[] = [];
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
 
-    constructor(bootstrapper: BootStrapper) {
-        super(bootstrapper);
-    }
+    create(): void {
+        super.create();
 
-    create(overrideDependencies?: any): void {
-        super.create(overrideDependencies);
-
-        const that = this;
-
-        $.subscribe(BaseCommands.METRIC_CHANGED, () => {
-            if (this.metric.toString() === MetricType.MOBILELANDSCAPE.toString()) {
-                var settings: ISettings = {};
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {         
+            if (this.isMobileView()) {
+                const settings: ISettings = {};
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
-                $.publish(BaseCommands.UPDATE_SETTINGS);
+                $.publish(BaseEvents.UPDATE_SETTINGS);
                 Shell.$rightPanel.hide();
             } else {
                 Shell.$rightPanel.show();
             }
         });
 
-        $.subscribe(Commands.CLEAR_SEARCH, (e) => {
-            this.searchResults = null;
-            $.publish(Commands.SEARCH_RESULTS_CLEARED);
-            this.triggerSocket(Commands.CLEAR_SEARCH);
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+            this.previousAnnotationRect = null;
+            this.currentAnnotationRect = null;
+            this.viewPage(canvasIndex);
         });
 
-        $.subscribe(BaseCommands.DOWN_ARROW, (e) => {
+        $.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+            this.clearAnnotations();
+            $.publish(BaseEvents.ANNOTATIONS_CLEARED);
+            this.fire(BaseEvents.CLEAR_ANNOTATIONS);
+        });
+
+        $.subscribe(BaseEvents.DOWN_ARROW, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseCommands.END, (e) => {
-            this.viewPage(this.helper.getLastPageIndex());
+        $.subscribe(BaseEvents.END, () => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
         });
 
-        $.subscribe(Commands.FIRST, (e) => {
-            this.triggerSocket(Commands.FIRST);
-            this.viewPage(this.helper.getFirstPageIndex());
+        $.subscribe(BaseEvents.FIRST, () => {
+            this.fire(BaseEvents.FIRST);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getFirstPageIndex()]);
         });
 
-        $.subscribe(Commands.GALLERY_DECREASE_SIZE, (e) => {
-            this.triggerSocket(Commands.GALLERY_DECREASE_SIZE);
+        $.subscribe(BaseEvents.GALLERY_DECREASE_SIZE, () => {
+            this.fire(BaseEvents.GALLERY_DECREASE_SIZE);
         });
 
-        $.subscribe(Commands.GALLERY_INCREASE_SIZE, (e) => {
-            this.triggerSocket(Commands.GALLERY_INCREASE_SIZE);
+        $.subscribe(BaseEvents.GALLERY_INCREASE_SIZE, () => {
+            this.fire(BaseEvents.GALLERY_INCREASE_SIZE);
         });
 
-        $.subscribe(Commands.GALLERY_THUMB_SELECTED, (e) => {
-            this.triggerSocket(Commands.GALLERY_THUMB_SELECTED);
+        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+            this.fire(BaseEvents.GALLERY_THUMB_SELECTED);
         });
 
-        $.subscribe(BaseCommands.HOME, (e) => {
-            this.viewPage(this.helper.getFirstPageIndex());
+        $.subscribe(BaseEvents.HOME, () => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getFirstPageIndex()]);
         });
 
-        $.subscribe(Commands.IMAGE_SEARCH, (e, index: number) => {
-            this.triggerSocket(Commands.IMAGE_SEARCH, index);
-            this.viewPage(index);
+        $.subscribe(Events.IMAGE_SEARCH, (e: any, index: number) => {
+            this.fire(Events.IMAGE_SEARCH, index);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
         });
 
-        $.subscribe(Commands.LAST, (e) => {
-            this.triggerSocket(Commands.LAST);
-            this.viewPage(this.helper.getLastPageIndex());
+        $.subscribe(BaseEvents.LAST, () => {
+            this.fire(BaseEvents.LAST);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
         });
 
-        $.subscribe(BaseCommands.LEFT_ARROW, (e) => {
+        $.subscribe(BaseEvents.LEFT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.getPrevPageIndex());
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
             } else {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_START, (e) => {
-            if (this.metric.toString() !== MetricType.MOBILELANDSCAPE.toString()) {
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+            if (!this.isMobileView()) {
                 Shell.$rightPanel.show();
             }
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
-            Shell.$centerPanel.show();            
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            Shell.$centerPanel.show();
             this.resize();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.MINUS, (e) => {
+        $.subscribe(BaseEvents.MINUS, () => {
             this.centerPanel.setFocus();
         });
 
-        $.subscribe(Commands.MODE_CHANGED, (e, mode: string) => {
-            this.triggerSocket(Commands.MODE_CHANGED, mode);
+        $.subscribe(Events.MODE_CHANGED, (e: any, mode: string) => {
+            this.fire(Events.MODE_CHANGED, mode);
             this.mode = new Mode(mode);
-            var settings: ISettings = this.getSettings();
-            $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
+            const settings: ISettings = this.getSettings();
+            $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Commands.MULTISELECTION_MADE, (e, ids: string[]) => {
-            var args: MultiSelectionArgs = new MultiSelectionArgs();
+        $.subscribe(BaseEvents.MULTISELECTION_MADE, (e: any, ids: string[]) => {
+            const args: MultiSelectionArgs = new MultiSelectionArgs();
             args.manifestUri = this.helper.iiifResourceUri;
             args.allCanvases = ids.length === this.helper.getCanvases().length;
             args.canvases = ids;
-            args.format = this.config.options.multiSelectionMimeType;
+            args.format = this.data.config.options.multiSelectionMimeType;
             args.sequence = this.helper.getCurrentSequence().id;
-            this.triggerSocket(Commands.MULTISELECTION_MADE, args);
+            this.fire(BaseEvents.MULTISELECTION_MADE, args);
         });
 
-        $.subscribe(Commands.NEXT, (e) => {
-            this.triggerSocket(Commands.NEXT);
-            this.viewPage(this.getNextPageIndex());
+        $.subscribe(BaseEvents.NEXT, () => {
+            this.fire(BaseEvents.NEXT);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
         });
 
-        $.subscribe(Commands.NEXT_SEARCH_RESULT, () => {
-            this.triggerSocket(Commands.NEXT_SEARCH_RESULT);
+        $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
+            this.fire(Events.NEXT_SEARCH_RESULT);
         });
 
-        $.subscribe(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
-            this.triggerSocket(Commands.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+        $.subscribe(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+            this.fire(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.nextSearchResult();
         });
 
-        $.subscribe(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
-            this.triggerSocket(Commands.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+        $.subscribe(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+            this.fire(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.prevSearchResult();
         });
 
-        $.subscribe(Commands.OPEN_THUMBS_VIEW, (e) => {
-            this.triggerSocket(Commands.OPEN_THUMBS_VIEW);
+        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+            this.fire(BaseEvents.OPEN_THUMBS_VIEW);
         });
 
-        $.subscribe(Commands.OPEN_TREE_VIEW, (e) => {
-            this.triggerSocket(Commands.OPEN_TREE_VIEW);
+        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+            this.fire(BaseEvents.OPEN_TREE_VIEW);
         });
 
-        $.subscribe(BaseCommands.PAGE_DOWN, (e) => {
-            this.viewPage(this.getNextPageIndex());
+        $.subscribe(BaseEvents.PAGE_DOWN, () => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
         });
 
-        $.subscribe(Commands.PAGE_SEARCH, (e, value: string) => {
-            this.triggerSocket(Commands.PAGE_SEARCH, value);
+        $.subscribe(Events.PAGE_SEARCH, (e: any, value: string) => {
+            this.fire(Events.PAGE_SEARCH, value);
             this.viewLabel(value);
         });
 
-        $.subscribe(BaseCommands.PAGE_UP, (e) => {
-            this.viewPage(this.getPrevPageIndex());
+        $.subscribe(BaseEvents.PAGE_UP, () => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
         });
 
-        $.subscribe(Commands.PAGING_TOGGLED, (e, obj) => {
-            this.triggerSocket(Commands.PAGING_TOGGLED, obj);
+        $.subscribe(Events.PAGING_TOGGLED, (e: any, obj: any) => {
+            this.fire(Events.PAGING_TOGGLED, obj);
         });
 
-        $.subscribe(BaseCommands.PLUS, (e) => {
+        $.subscribe(BaseEvents.PLUS, () => {
             this.centerPanel.setFocus();
         });
 
-        $.subscribe(Commands.PREV, (e) => {
-            this.triggerSocket(Commands.PREV);
-            this.viewPage(this.getPrevPageIndex());
+        $.subscribe(BaseEvents.PREV, () => {
+            this.fire(BaseEvents.PREV);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
         });
 
-        $.subscribe(Commands.PREV_SEARCH_RESULT, () => {
-            this.triggerSocket(Commands.PREV_SEARCH_RESULT);
+        $.subscribe(Events.PREV_SEARCH_RESULT, () => {
+            this.fire(Events.PREV_SEARCH_RESULT);
         });
 
-        $.subscribe(Commands.PRINT, () => {
+        $.subscribe(Events.PRINT, () => {
             this.print();
         });
 
-        $.subscribe(BaseCommands.RIGHT_ARROW, (e) => {
+        $.subscribe(BaseEvents.RELOAD, () => {
+            $.publish(BaseEvents.CLEAR_ANNOTATIONS);
+        });
+
+        $.subscribe(BaseEvents.RIGHT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
-                this.viewPage(this.getNextPageIndex());
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
             } else {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION, () => {
-            this.triggerSocket(Commands.SEADRAGON_ANIMATION);
+        $.subscribe(Events.SEADRAGON_ANIMATION, () => {
+            this.fire(Events.SEADRAGON_ANIMATION);
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION_FINISH, (e, viewer) => {
-            if (this.centerPanel && this.centerPanel.currentBounds){
-                this.setParam(Params.xywh, this.centerPanel.getViewportBounds().toString());
+        $.subscribe(Events.SEADRAGON_ANIMATION_FINISH, (e: any, viewer: any) => {
+
+            const bounds: Bounds | null = this.centerPanel.getViewportBounds();
+
+            if (this.centerPanel && bounds) {
+                $.publish(Events.XYWH_CHANGED, [bounds.toString()]);
+                (<ISeadragonExtensionData>this.data).xywh = bounds.toString();
+                this.fire(Events.XYWH_CHANGED, (<ISeadragonExtensionData>this.data).xywh);
             }
 
-            var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+            const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
 
-            this.triggerSocket(Commands.CURRENT_VIEW_URI,
+            this.fire(Events.CURRENT_VIEW_URI,
                 {
                     cropUri: this.getCroppedImageUri(canvas, this.getViewer()),
                     fullUri: this.getConfinedImageUri(canvas, canvas.getWidth())
                 });
         });
 
-        $.subscribe(Commands.SEADRAGON_ANIMATION_START, () => {
-            this.triggerSocket(Commands.SEADRAGON_ANIMATION_START);
+        $.subscribe(Events.SEADRAGON_ANIMATION_START, () => {
+            this.fire(Events.SEADRAGON_ANIMATION_START);
         });
 
-        $.subscribe(Commands.SEADRAGON_OPEN, () => {
-            if (!this.useArrowKeysToNavigate()){
+        $.subscribe(Events.SEADRAGON_OPEN, () => {
+            if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
+            this.fire(Events.SEADRAGON_OPEN);
         });
 
-        $.subscribe(Commands.SEADRAGON_RESIZE, () => {
-            this.triggerSocket(Commands.SEADRAGON_RESIZE);
+        $.subscribe(Events.SEADRAGON_RESIZE, () => {
+            this.fire(Events.SEADRAGON_RESIZE);
         });
 
-        $.subscribe(Commands.SEADRAGON_ROTATION, (e, rotation) => {
-            this.triggerSocket(Commands.SEADRAGON_ROTATION);
+        $.subscribe(Events.SEADRAGON_ROTATION, (e: any, rotation: number) => {
+            (<ISeadragonExtensionData>this.data).rotation = rotation;
+            this.fire(Events.SEADRAGON_ROTATION, (<ISeadragonExtensionData>this.data).rotation);
             this.currentRotation = rotation;
-            this.setParam(Params.rotation, rotation);
         });
 
-        $.subscribe(Commands.SEARCH, (e, terms: string) => {
-            this.triggerSocket(Commands.SEARCH, terms);
-            this.searchWithin(terms);
+        $.subscribe(Events.SEARCH, (e: any, terms: string) => {
+            this.fire(Events.SEARCH, terms);
+            this.search(terms);
         });
 
-        $.subscribe(Commands.SEARCH_PREVIEW_FINISH, (e) => {
-            this.triggerSocket(Commands.SEARCH_PREVIEW_FINISH);
+        $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
+            this.fire(Events.SEARCH_PREVIEW_FINISH);
         });
 
-        $.subscribe(Commands.SEARCH_PREVIEW_START, (e) => {
-            this.triggerSocket(Commands.SEARCH_PREVIEW_START);
+        $.subscribe(Events.SEARCH_PREVIEW_START, () => {
+            this.fire(Events.SEARCH_PREVIEW_START);
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS, (e, obj) => {
-            this.triggerSocket(Commands.SEARCH_RESULTS, obj);
+        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, obj: any) => {
+            this.fire(BaseEvents.ANNOTATIONS, obj);
         });
 
-        $.subscribe(Commands.SEARCH_RESULT_CANVAS_CHANGED, (e, rect: SearchResultRect) => {
-            this.viewPage(rect.canvasIndex);
+        $.subscribe(BaseEvents.ANNOTATION_CANVAS_CHANGED, (e: any, rect: AnnotationRect) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [rect.canvasIndex]);
         });
 
-        $.subscribe(Commands.SEARCH_RESULTS_EMPTY, (e) => {
-            this.triggerSocket(Commands.SEARCH_RESULTS_EMPTY);
+        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+            this.fire(BaseEvents.ANNOTATIONS_EMPTY);
         });
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
-            this.viewPage(thumb.index);
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
         });
 
-        $.subscribe(Commands.TREE_NODE_SELECTED, (e, node: ITreeNode) => {
-            this.triggerSocket(Commands.TREE_NODE_SELECTED, node.data.path);
+        $.subscribe(BaseEvents.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+            this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
-        $.subscribe(BaseCommands.UP_ARROW, (e) => {
+        $.subscribe(BaseEvents.UP_ARROW, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseCommands.UPDATE_SETTINGS, (e) => {
-            this.viewPage(this.helper.canvasIndex, true);
-            var settings: ISettings = this.getSettings();
-            $.publish(BaseCommands.SETTINGS_CHANGED, [settings]);
+        $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
+            const settings: ISettings = this.getSettings();
+            $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
         });
 
-        $.subscribe(Commands.VIEW_PAGE, (e, index: number) => {
-            this.triggerSocket(Commands.VIEW_PAGE, index);
-            this.viewPage(index);
-        });
-
-        Utils.Async.waitFor(() => {
-            return this.centerPanel && this.centerPanel.isCreated;
-        }, () => {
-            this.checkForSearchParam();
-            this.checkForRotationParam();
-        });
+        // $.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
+        //     this.fire(Events.VIEW_PAGE, index);
+        //     $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
+        // });
     }
 
     createModules(): void {
         super.createModules();
 
-        if (this.isHeaderPanelEnabled()){
+        if (this.isHeaderPanelEnabled()) {
             this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
         } else {
             Shell.$headerPanel.hide();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
         } else {
             Shell.$leftPanel.hide();
@@ -360,105 +358,151 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         } else {
             Shell.$rightPanel.hide();
         }
 
-        if (this.isFooterPanelEnabled()){
+        if (this.isFooterPanelEnabled()) {
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
             this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
         } else {
             Shell.$footerPanel.hide();
         }
 
-        this.$helpDialogue = $('<div class="overlay help"></div>');
+        this.$helpDialogue = $('<div class="overlay help" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
-        this.$moreInfoDialogue = $('<div class="overlay moreInfo"></div>');
+        this.$moreInfoDialogue = $('<div class="overlay moreInfo" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$moreInfoDialogue);
         this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
-        this.$multiSelectDialogue = $('<div class="overlay multiSelect"></div>');
+        this.$multiSelectDialogue = $('<div class="overlay multiSelect" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$multiSelectDialogue);
         this.multiSelectDialogue = new MultiSelectDialogue(this.$multiSelectDialogue);
 
-        this.$shareDialogue = $('<div class="overlay share"></div>');
+        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
-        this.$externalContentDialogue = $('<div class="overlay externalContent"></div>');
+        this.$externalContentDialogue = $('<div class="overlay externalContent" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$externalContentDialogue);
         this.externalContentDialogue = new ExternalContentDialogue(this.$externalContentDialogue);
 
-        if (this.isHeaderPanelEnabled()){
+        if (this.isHeaderPanelEnabled()) {
             this.headerPanel.init();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel.init();
         }
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel.init();
         }
 
-        if (this.isFooterPanelEnabled()){
+        if (this.isFooterPanelEnabled()) {
             this.footerPanel.init();
         }
     }
 
-    checkForSearchParam(): void{
+    update(): void {
+        super.update();
+
+        //Utils.Async.waitFor(() => {
+        //    return this.centerPanel && this.centerPanel.isCreated;
+        //}, () => {
+
+        this.checkForAnnotations();
+        this.checkForSearchParam();
+        this.checkForRotationParam();
+
+        //});
+    }
+
+    checkForAnnotations(): void {
+        if (this.data.annotations) {
+            const annotations: AnnotationGroup[] = this.parseAnnotationList(this.data.annotations);
+            $.publish(BaseEvents.CLEAR_ANNOTATIONS);
+            this.annotate(annotations);
+        }
+    }
+
+    annotate(annotations: AnnotationGroup[], terms?: string): void {
+        this.annotations = annotations;
+
+        // sort the annotations by canvasIndex
+        this.annotations = annotations.sort((a: AnnotationGroup, b: AnnotationGroup) => {
+            return a.canvasIndex - b.canvasIndex;
+        });
+
+        const annotationResults: AnnotationResults = new AnnotationResults();
+        annotationResults.terms = terms;
+        annotationResults.annotations = <AnnotationGroup[]>this.annotations;
+
+        $.publish(BaseEvents.ANNOTATIONS, [annotationResults]);
+
+        // reload current index as it may contain annotations.
+        //$.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
+    }
+
+    checkForSearchParam(): void {
         // if a h value is in the hash params, do a search.
-        if (this.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()) {
 
             // if a highlight param is set, use it to search.
-            var highlight: string = this.getParam(Params.highlight);
+            const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
 
-            if (highlight){
+            if (highlight) {
                 highlight.replace(/\+/g, " ").replace(/"/g, "");
-                $.publish(Commands.SEARCH, [highlight]);
+                $.publish(Events.SEARCH, [highlight]);
             }
         }
     }
 
-    checkForRotationParam(): void{
+    checkForRotationParam(): void {
         // if a rotation value is in the hash params, set currentRotation
-        if (this.isDeepLinkingEnabled()){
+        if (this.isDeepLinkingEnabled()) {
 
-            var rotation: number = Number(this.getParam(Params.rotation));
+            const rotation: number | null = (<ISeadragonExtensionData>this.data).rotation;
 
-            if (rotation){
-                $.publish(Commands.SEADRAGON_ROTATION, [rotation]);
+            if (rotation) {
+                $.publish(Events.SEADRAGON_ROTATION, [rotation]);
             }
         }
     }
 
-    viewPage(canvasIndex: number, isReload?: boolean): void {
+    viewPage(canvasIndex: number): void {
 
-        // if it's a valid canvas index.
+        // if it's an invalid canvas index.
         if (canvasIndex === -1) return;
 
-        if (this.helper.isCanvasIndexOutOfRange(canvasIndex)){
-            this.showMessage(this.config.content.canvasIndexOutOfRange);
+        let isReload: boolean = false;
+
+        if (canvasIndex === this.helper.canvasIndex) {
+            isReload = true;
+        }
+
+        if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
+            this.showMessage(this.data.config.content.canvasIndexOutOfRange);
             canvasIndex = 0;
         }
 
-        if (this.isPagingSettingEnabled() && !isReload){
-            var indices: number[] = this.getPagedIndices(canvasIndex);
+        if (this.isPagingSettingEnabled() && !isReload) {
+            const indices: number[] = this.getPagedIndices(canvasIndex);
 
             // if the page is already displayed, only advance canvasIndex.
-            if (indices.contains(this.helper.canvasIndex)) {
+            if (indices.includes(this.helper.canvasIndex)) {
                 this.viewCanvas(canvasIndex);
                 return;
             }
@@ -477,16 +521,14 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         switch (this.helper.getManifestType().toString()) {
             case manifesto.ManifestType.monograph().toString():
                 return Mode.page;
-                break;
             case manifesto.ManifestType.manuscript().toString():
                 return Mode.page;
-                break;
             default:
                 return Mode.image;
         }
     }
 
-    getViewportBounds(): string {
+    getViewportBounds(): string | null {
         if (!this.centerPanel) return null;
         const bounds = this.centerPanel.getViewportBounds();
         if (bounds) {
@@ -495,44 +537,44 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return null;
     }
 
-    getViewerRotation(): number{
+    getViewerRotation(): number | null {
         if (!this.centerPanel) return null;
         return this.currentRotation;
     }
 
     viewRange(path: string): void {
         //this.currentRangePath = path;
-        var range: Manifesto.IRange = this.helper.getRangeByPath(path);
+        const range: Manifesto.IRange = this.helper.getRangeByPath(path);
         if (!range) return;
-        var canvasId: string = range.getCanvasIds()[0];
-        var index: number = this.helper.getCanvasIndexById(canvasId);
-        this.viewPage(index);
+        const canvasId: string = range.getCanvasIds()[0];
+        const index: number | null = this.helper.getCanvasIndexById(canvasId);
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
     }
 
     viewLabel(label: string): void {
 
         if (!label) {
-            this.showMessage(this.config.modules.genericDialogue.content.emptyValue);
-            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+            this.showMessage(this.data.config.modules.genericDialogue.content.emptyValue);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
 
-        var index = this.helper.getCanvasIndexByLabel(label);
+        const index: number = this.helper.getCanvasIndexByLabel(label);
 
         if (index != -1) {
-            this.viewPage(index);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
         } else {
-            this.showMessage(this.config.modules.genericDialogue.content.pageNotFound);
-            $.publish(BaseCommands.CANVAS_INDEX_CHANGE_FAILED);
+            this.showMessage(this.data.config.modules.genericDialogue.content.pageNotFound);
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         }
     }
 
-    treeNodeSelected(node: ITreeNode): void{
+    treeNodeSelected(node: ITreeNode): void {
         const data: any = node.data;
-        
+
         if (!data.type) return;
 
-        switch (data.type){
+        switch (data.type) {
             case manifesto.IIIFResourceType.manifest().toString():
                 this.viewManifest(data);
                 break;
@@ -547,38 +589,38 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         }
     }
 
-    clearSearch(): void {
-        this.searchResults = [];
+    clearAnnotations(): void {
+        this.annotations = null;
 
         // reload current index as it may contain results.
-        this.viewPage(this.helper.canvasIndex);
+        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
     }
 
     prevSearchResult(): void {
-        let foundResult: SearchResult; 
+        let foundResult: AnnotationGroup;
+        if (!this.annotations) return;
 
         // get the first result with a canvasIndex less than the current index.
-        for (let i = this.searchResults.length - 1; i >= 0; i--) {
-            const result: SearchResult = this.searchResults[i];
+        for (let i = this.annotations.length - 1; i >= 0; i--) {
+            const result: AnnotationGroup = this.annotations[i];
 
             if (result.canvasIndex <= this.getPrevPageIndex()) {
                 foundResult = result;
-                this.viewPage(foundResult.canvasIndex);
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [foundResult.canvasIndex]);
                 break;
             }
         }
     }
 
     nextSearchResult(): void {
-        let foundResult: SearchResult; 
-        
-        // get the first result with an index greater than the current index.
-        for (let i = 0; i < this.searchResults.length; i++) {
-            const result: SearchResult = this.searchResults[i];
+        if (!this.annotations) return;
 
-            if (result.canvasIndex >= this.getNextPageIndex()) {
-                foundResult = result;
-                this.viewPage(result.canvasIndex);
+        // get the first result with an index greater than the current index.
+        for (let i = 0; i < this.annotations.length; i++) {
+            const result: AnnotationGroup = this.annotations[i];
+
+            if (result && result.canvasIndex >= this.getNextPageIndex()) {
+                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [result.canvasIndex]);
                 break;
             }
         }
@@ -591,35 +633,35 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
-        bookmark.path = this.getCroppedImageUri(canvas, this.getViewer());
-        bookmark.thumb = canvas.getCanonicalImageUri(this.config.options.bookmarkThumbWidth);
+        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
+        bookmark.path = <string>this.getCroppedImageUri(canvas, this.getViewer());
+        bookmark.thumb = canvas.getCanonicalImageUri(this.data.config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ElementType.image().toString();
+        bookmark.type = manifesto.ResourceType.image().toString();
 
-        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        this.fire(BaseEvents.BOOKMARK, bookmark);
     }
 
     print(): void {
         // var args: MultiSelectionArgs = new MultiSelectionArgs();
         // args.manifestUri = this.helper.iiifResourceUri;
         // args.allCanvases = true;
-        // args.format = this.config.options.printMimeType;
+        // args.format = this.data.config.options.printMimeType;
         // args.sequence = this.helper.getCurrentSequence().id;
         window.print();
-        this.triggerSocket(Commands.PRINT);
+        this.fire(Events.PRINT);
     }
 
-    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions {
+    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null {
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
-        if (!canvas.getHeight() || !canvas.getWidth()){
+        if (!canvas.getHeight() || !canvas.getWidth()) {
             return null;
         }
 
-        const bounds = viewer.viewport.getBounds(true);
+        const bounds: any = viewer.viewport.getBounds(true);
 
         const dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
@@ -631,7 +673,7 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         // constrain to image bounds
         if (x + width > canvas.getWidth()) {
             width = canvas.getWidth() - x;
-        } else if (x < 0){
+        } else if (x < 0) {
             width = width + x;
         }
 
@@ -641,42 +683,39 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
         if (y + height > canvas.getHeight()) {
             height = canvas.getHeight() - y;
-        } else if (y < 0){
+        } else if (y < 0) {
             height = height + y;
         }
 
         if (y < 0) {
             y = 0;
         }
-        
+
         width = Math.min(width, canvas.getWidth());
-        height = Math.min(height, canvas.getHeight());       
+        height = Math.min(height, canvas.getHeight());
         let regionWidth: number = width;
         let regionHeight: number = height;
 
-        if (canvas.externalResource.data && canvas.externalResource.data.profile && canvas.externalResource.data.profile[1]) {
+        const maxDimensions: Size | null = canvas.getMaxDimensions();
 
-          const maxSize: Size =  new Size(canvas.externalResource.data.profile[1].maxWidth, canvas.externalResource.data.profile[1].maxHeight);
+        if (maxDimensions) {
 
-          if (!_.isUndefined(maxSize.width) && !_.isUndefined(maxSize.height)){
-
-            if (width > maxSize.width) {
-                let newWidth: number = maxSize.width;
+            if (width > maxDimensions.width) {
+                let newWidth: number = maxDimensions.width;
                 height = Math.round(newWidth * (height / width));
                 width = newWidth;
             }
 
-            if (height > maxSize.height) {
-                let newHeight: number = maxSize.height;
+            if (height > maxDimensions.height) {
+                let newHeight: number = maxDimensions.height;
                 width = Math.round((width / height) * newHeight);
                 height = newHeight;
             }
-          } 
         }
 
-        dimensions.region = new Size(regionWidth, regionHeight);
+        dimensions.region = new manifesto.Size(regionWidth, regionHeight);
         dimensions.regionPos = new Point(x, y);
-        dimensions.size = new Size(width, height);
+        dimensions.size = new manifesto.Size(width, height);
 
         return dimensions;
     }
@@ -742,58 +781,78 @@ class Extension extends BaseExtension implements ISeadragonExtension {
 
     //     var dimensions: CroppedImageDimensions = new CroppedImageDimensions();
 
-    //     dimensions.region = new Size(regionWidth, regionHeight);
+    //     dimensions.region = new manifesto.Size(regionWidth, regionHeight);
     //     dimensions.regionPos = new Point(regionLeft, regionTop);
-    //     dimensions.size = new Size(sizeWidth, sizeHeight);
+    //     dimensions.size = new manifesto.Size(sizeWidth, sizeHeight);
 
     //     return dimensions;
     // }
 
-    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string {
+    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string | null {
 
         if (!viewer) return null;
         if (!viewer.viewport) return null;
 
-        const dimensions: CroppedImageDimensions = this.getCroppedImageDimensions(canvas, viewer);
+        const dimensions: CroppedImageDimensions | null = this.getCroppedImageDimensions(canvas, viewer);
+
+        if (!dimensions) {
+            return null;
+        }
 
         // construct uri
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
 
         const baseUri: string = this.getImageBaseUri(canvas);
-        const id: string = this.getImageId(canvas);
+        const id: string | null = this.getImageId(canvas);
+
+        if (!id) {
+            return null;
+        }
+
         const region: string = dimensions.regionPos.x + "," + dimensions.regionPos.y + "," + dimensions.region.width + "," + dimensions.region.height;
         const size: string = dimensions.size.width + ',' + dimensions.size.height;
-        const rotation: number = this.getViewerRotation();
+        const rotation: number = <number>this.getViewerRotation();
         const quality: string = 'default';
         return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
-        const dimensions: Size = new Size(0, 0);
+        const dimensions: Size = new manifesto.Size(0, 0);
         dimensions.width = width;
         const normWidth = Math.normalise(width, 0, canvas.getWidth());
         dimensions.height = Math.floor(canvas.getHeight() * normWidth);
         return dimensions;
     }
 
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string {
+    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number): string | null {
         const baseUri = this.getImageBaseUri(canvas);
 
         // {baseuri}/{id}/{region}/{size}/{rotation}/{quality}.jpg
-        const id: string = this.getImageId(canvas);
+        const id: string | null = this.getImageId(canvas);
+
+        if (!id) {
+            return null;
+        }
+
         const region: string = 'full';
         const dimensions: Size = this.getConfinedImageDimensions(canvas, width);
         const size: string = dimensions.width + ',' + dimensions.height;
-        const rotation: number = this.getViewerRotation();
+        const rotation: number = <number>this.getViewerRotation();
         const quality: string = 'default';
         return `${baseUri}/${id}/${region}/${size}/${rotation}/${quality}.jpg`;
     }
 
-    getImageId(canvas: Manifesto.ICanvas): string {
-        let id = this.getInfoUri(canvas);
-        // First trim off info.json, then extract ID:
-        id = id.substr(0, id.lastIndexOf("/"));
-        return id.substr(id.lastIndexOf("/") + 1);
+    getImageId(canvas: Manifesto.ICanvas): string | null {
+
+        if (canvas.externalResource) {
+            const id: string | undefined = canvas.externalResource.data['@id'];
+
+            if (id) {
+                return id.substr(id.lastIndexOf("/") + 1);
+            }
+        }
+
+        return null;
     }
 
     getImageBaseUri(canvas: Manifesto.ICanvas): string {
@@ -803,13 +862,13 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return uri.substr(0, uri.lastIndexOf("/"));
     }
 
-    getInfoUri(canvas: Manifesto.ICanvas): string{
-        let infoUri: string;
+    getInfoUri(canvas: Manifesto.ICanvas): string {
+        let infoUri: string | null = null;
 
         const images: Manifesto.IAnnotation[] = canvas.getImages();
 
         if (images && images.length) {
-            let firstImage = images[0];
+            let firstImage: Manifesto.IAnnotation = images[0];
             let resource: Manifesto.IResource = firstImage.getResource();
             let services: Manifesto.IService[] = resource.getServices();
 
@@ -817,40 +876,41 @@ class Extension extends BaseExtension implements ISeadragonExtension {
                 let service: Manifesto.IService = services[i];
                 let id = service.id;
 
-                if (!_.endsWith(id, '/')) {
+                if (!id.endsWith('/')) {
                     id += '/';
                 }
 
-                if (manifesto.Utils.isImageProfile(service.getProfile())){
+                if (manifesto.Utils.isImageProfile(service.getProfile())) {
                     infoUri = id + 'info.json';
                 }
             }
         }
 
-        if (!infoUri){
+        if (!infoUri) {
             // todo: use compiler flag (when available)
-            infoUri = (window.DEBUG)? '/src/extensions/uv-seadragon-extension/lib/imageunavailable.json' : 'lib/imageunavailable.json';
+            infoUri = 'lib/imageunavailable.json';
         }
 
         return infoUri;
     }
 
-    getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string{
-        const configUri = this.config.uri || '';
-        let script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, zoom, rotation, width, height, this.embedScriptUri);
+    getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string {
+        const config: string = this.data.config.uri || '';
+        const locales: string = this.getSerializedLocales();
+        const appUri: string = this.getAppUri();
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
+        const script: string = String.format(template, iframeSrc, width, height);
         return script;
     }
 
-    getPrevPageIndex(canvasIndex?: number): number {
-        if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
-
+    getPrevPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
         let index: number;
 
-        if (this.isPagingSettingEnabled()){
+        if (this.isPagingSettingEnabled()) {
             let indices: number[] = this.getPagedIndices(canvasIndex);
 
-            if (this.helper.isRightToLeft()){
-                index = indices.last() - 1;
+            if (this.helper.isRightToLeft()) {
+                index = indices[indices.length - 1] - 1;
             } else {
                 index = indices[0] - 1;
             }
@@ -862,12 +922,12 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return index;
     }
 
-    isSearchWithinEnabled(): boolean {
-        if (!Utils.Bools.getBool(this.config.options.searchWithinEnabled, false)){
+    isSearchEnabled(): boolean {
+        if (!Utils.Bools.getBool(this.data.config.options.searchWithinEnabled, false)) {
             return false;
         }
 
-        if (!this.helper.getSearchWithinService()) {
+        if (!this.helper.getSearchService()) {
             return false;
         }
 
@@ -875,53 +935,51 @@ class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     isPagingSettingEnabled(): boolean {
-        if (this.helper.isPagingAvailable()){
-            return this.getSettings().pagingEnabled;
+        if (this.helper.isPagingAvailable()) {
+            return <boolean>this.getSettings().pagingEnabled;
         }
 
         return false;
     }
 
-    getNextPageIndex(canvasIndex?: number): number {
-       if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
-    
-       let index: number;
-    
-       if (this.isPagingSettingEnabled()){
-           let indices: number[] = this.getPagedIndices(canvasIndex);
-    
-           if (this.helper.isRightToLeft()){
-               index = indices[0] + 1;
-           } else {
-               index = indices.last() + 1;
-           }
-    
-       } else {
-           index = canvasIndex + 1;
-       }
-    
-       if (index > this.helper.getTotalCanvases() - 1) {
-           return -1;
-       }
-    
-       return index;
-    }
-    
-    getAutoCompleteService(): Manifesto.IService {
-       const service: Manifesto.IService = this.helper.getSearchWithinService();
-       if (!service) return null;
-       return service.getService(manifesto.ServiceProfile.autoComplete());
+    getNextPageIndex(canvasIndex: number = this.helper.canvasIndex): number {
+
+        let index: number;
+
+        if (this.isPagingSettingEnabled()) {
+            let indices: number[] = this.getPagedIndices(canvasIndex);
+
+            if (this.helper.isRightToLeft()) {
+                index = indices[0] + 1;
+            } else {
+                index = indices[indices.length - 1] + 1;
+            }
+
+        } else {
+            index = canvasIndex + 1;
+        }
+
+        if (index > this.helper.getTotalCanvases() - 1) {
+            return -1;
+        }
+
+        return index;
     }
 
-    getAutoCompleteUri(): string{
-        const service = this.getAutoCompleteService();
+    getAutoCompleteService(): Manifesto.IService | null {
+        const service: Manifesto.IService | null = this.helper.getSearchService();
+        if (!service) return null;
+        return service.getService(manifesto.ServiceProfile.autoComplete());
+    }
+
+    getAutoCompleteUri(): string | null {
+        const service: Manifesto.IService | null = this.getAutoCompleteService();
         if (!service) return null;
         return service.id + '?q={0}';
     }
 
-    getSearchWithinServiceUri(): string {
-        const service: Manifesto.IService = this.helper.getSearchWithinService();
-
+    getSearchServiceUri(): string | null {
+        const service: Manifesto.IService | null = this.helper.getSearchService();
         if (!service) return null;
 
         let uri: string = service.id;
@@ -929,50 +987,48 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return uri;
     }
 
-    searchWithin(terms: string): void {
+    search(terms: string): void {
 
-        if (this.isSearching) return;
+        if (this.isAnnotating) return;
 
-        this.isSearching = true;
+        this.isAnnotating = true;
 
         // clear search results
-        this.searchResults = [];
+        this.annotations = [];
 
         const that = this;
 
-        let searchUri: string = this.getSearchWithinServiceUri();
+        // searching
+
+        let searchUri: string | null = this.getSearchServiceUri();
+
+        if (!searchUri) return;
+
         searchUri = String.format(searchUri, terms);
 
-        this.getSearchResults(searchUri, terms, this.searchResults, (results: SearchResult[]) => {
-            
-            this.isSearching = false;
+        this.getSearchResults(searchUri, terms, this.annotations, (annotations: AnnotationGroup[]) => {
 
-            if (results.length) {
-                this.searchResults = results.sort((a, b) => {
-                    return a.canvasIndex - b.canvasIndex;
-                });
-                
-                $.publish(Commands.SEARCH_RESULTS, [{terms, results}]);
+            that.isAnnotating = false;
 
-                // reload current index as it may contain results.
-                that.viewPage(that.helper.canvasIndex, true);
+            if (annotations.length) {
+                that.annotate(annotations, terms);
             } else {
-                that.showMessage(that.config.modules.genericDialogue.content.noMatches, () => {
-                    $.publish(Commands.SEARCH_RESULTS_EMPTY);
+                that.showMessage(that.data.config.modules.genericDialogue.content.noMatches, () => {
+                    $.publish(BaseEvents.ANNOTATIONS_EMPTY);
                 });
             }
         });
     }
 
-    getSearchResults(searchUri: string, 
-                    terms: string,
-                    searchResults: SearchResult[],
-                    cb: (results: SearchResult[]) => void): void {
+    getSearchResults(searchUri: string,
+        terms: string,
+        searchResults: AnnotationGroup[],
+        cb: (results: AnnotationGroup[]) => void): void {
 
         $.getJSON(searchUri, (results: any) => {
-            
+
             if (results.resources && results.resources.length) {
-                searchResults = searchResults.concat(this.parseSearchJson(results, searchResults));
+                searchResults = searchResults.concat(this.parseAnnotationList(results));
             }
 
             if (results.next) {
@@ -983,62 +1039,69 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         });
     }
 
-    parseSearchJson(resultsToParse: any, searchResults: SearchResult[]): SearchResult[] {
+    parseAnnotationList(annotations: any): AnnotationGroup[] {
 
-        const parsedResults: SearchResult[] = [];
+        const parsed: AnnotationGroup[] = [];
 
-        for (let i = 0; i < resultsToParse.resources.length; i++) {
-            const resource: any = resultsToParse.resources[i];
-            const canvasIndex: number = this.helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
-            var searchResult: SearchResult = new SearchResult(resource, canvasIndex);
-            const match: SearchResult = parsedResults.en().where(x => x.canvasIndex === searchResult.canvasIndex).first();
+        for (let i = 0; i < annotations.resources.length; i++) {
+            const resource: any = annotations.resources[i];
+            const canvasIndex: number | null = this.helper.getCanvasIndexById(resource.on.match(/(.*)#/)[1]);
+            const annotationGroup: AnnotationGroup = new AnnotationGroup(resource, <number>canvasIndex);
+            const match: AnnotationGroup = parsed.en().where(x => x.canvasIndex === annotationGroup.canvasIndex).first();
 
-            // if there's already a SearchResult for the canvas index, add a rect to it, otherwise create a new SearchResult
+            // if there's already an annotation for the canvas index, add a rect to it, otherwise create a new AnnotationGroup
             if (match) {
                 match.addRect(resource);
             } else {
-                parsedResults.push(searchResult);
+                parsed.push(annotationGroup);
             }
         }
 
         // sort by canvasIndex
-        parsedResults.sort((a, b) => {
+        parsed.sort((a, b) => {
             return a.canvasIndex - b.canvasIndex;
         });
 
-        return parsedResults;
+        return parsed;
     }
 
-    getSearchResultRects(): SearchResultRect[] {
-        return this.searchResults.en().selectMany(x => x.rects).toArray();
+    getAnnotationRects(): AnnotationRect[] {
+        if (this.annotations) {
+            return this.annotations.en().selectMany(x => x.rects).toArray();
+        }
+        return [];
     }
 
-    getCurrentSearchResultRectIndex(): number {
-        const searchResultRects: SearchResultRect[] = this.getSearchResultRects();
-        return searchResultRects.indexOf(this.currentSearchResultRect);
+    getCurrentAnnotationRectIndex(): number {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRects();
+
+        if (this.currentAnnotationRect) {
+            return annotationRects.indexOf(this.currentAnnotationRect);
+        }
+
+        return -1;
     }
 
-    getTotalSearchResultRects(): number {
-        const searchResultRects: SearchResultRect[] = this.getSearchResultRects();
-        return searchResultRects.length;
+    getTotalAnnotationRects(): number {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRects();
+        return annotationRects.length;
     }
 
-    isFirstSearchResultRect(): boolean {
-        return this.getCurrentSearchResultRectIndex() === 0;
-    } 
+    isFirstAnnotationRect(): boolean {
+        return this.getCurrentAnnotationRectIndex() === 0;
+    }
 
-    getLastSearchResultRectIndex(): number {
-        return this.getTotalSearchResultRects() - 1;
-    } 
+    getLastAnnotationRectIndex(): number {
+        return this.getTotalAnnotationRects() - 1;
+    }
 
-    getPagedIndices(canvasIndex?: number): number[] {
-        if (_.isUndefined(canvasIndex)) canvasIndex = this.helper.canvasIndex;
+    getPagedIndices(canvasIndex: number = this.helper.canvasIndex): number[] {
 
-        let indices: number[] = [];
+        let indices: number[] | undefined = [];
 
         // if it's a continuous manifest, get all resources.
         if (this.helper.isContinuous()) {
-            indices = _.map(this.helper.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
+            indices = $.map(this.helper.getCanvases(), (c: Manifesto.ICanvas, index: number) => {
                 return index;
             });
         } else {
@@ -1046,11 +1109,11 @@ class Extension extends BaseExtension implements ISeadragonExtension {
                 indices.push(this.helper.canvasIndex);
             } else {
                 if (this.helper.isFirstCanvas(canvasIndex) || (this.helper.isLastCanvas(canvasIndex) && this.helper.isTotalCanvasesEven())) {
-                    indices = [canvasIndex];
+                    indices = <number[]>[canvasIndex];
                 } else if (canvasIndex % 2) {
-                    indices = [canvasIndex, canvasIndex + 1];
+                    indices = <number[]>[canvasIndex, canvasIndex + 1];
                 } else {
-                    indices = [canvasIndex - 1, canvasIndex];
+                    indices = <number[]>[canvasIndex - 1, canvasIndex];
                 }
 
                 if (this.helper.isRightToLeft()) {
@@ -1062,5 +1125,3 @@ class Extension extends BaseExtension implements ISeadragonExtension {
         return indices;
     }
 }
-
-export = Extension;

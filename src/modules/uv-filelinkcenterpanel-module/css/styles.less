@@ -1,0 +1,57 @@
+
+.uv {
+    .centerPanel {
+
+        @img-path: '../../../modules/uv-filelinkcenterpanel-module/img/';
+        @shared-img-path: '../../../modules/uv-shared-module/img/';
+
+        .content {
+
+            .scroll {
+                margin: @margin-medium-vertical @margin-medium-horizontal @margin-medium-vertical @margin-xlarge-horizontal;
+                overflow: auto;
+                
+                ol {
+                    margin: @margin-medium-vertical 0 0 0;
+                    padding: 0;
+                    list-style-type: none;
+
+                    li {
+                        
+                        margin: 0 0 @margin-xlarge-vertical 0;
+                        overflow: hidden;
+
+                        img {
+                            float: left;
+                            width: 70px;
+                            margin: 0 @margin-large-horizontal 0 0;
+                        }
+
+                        .col2 {
+                            float: left;
+
+                            .filename {
+                                display: block;
+                                margin: 0 0 2px 0;
+                                font-size: 16px;
+                            }
+
+                            .label {
+                                display: block;
+                                margin: 0 0 2px 0;
+                            }
+
+                            .description {
+                                display: block;
+                                .icon-left('@{img-path}download.png', 24px, 24px);
+                                line-height: 24px;
+                                margin: 0 0 0 -4px;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+}

@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class RestrictedDialogue extends Dialogue {
+export class RestrictedDialogue extends Dialogue {
 
     $cancelButton: JQuery;
     $message: JQuery;
@@ -21,17 +21,17 @@ class RestrictedDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_RESTRICTED_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_RESTRICTED_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_RESTRICTED_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_RESTRICTED_DIALOGUE;
 
-        $.subscribe(this.openCommand, (s, e: any) => {
+        $.subscribe(this.openCommand, (s: any, e: any) => {
             this.acceptCallback = e.acceptCallback;
             this.options = e.options;
             this.resource = e.resource;
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -70,16 +70,19 @@ class RestrictedDialogue extends Dialogue {
 
         this.isAccepted = false;
 
-        this.$title.text(this.resource.restrictedService.getProperty('label'));
+        let message: string = "";
 
-        var message: string = this.resource.restrictedService.getProperty('description');
+        if (this.resource.restrictedService) {
+            this.$title.text(this.resource.restrictedService.getProperty('label'));
+            message = this.resource.restrictedService.getProperty('description');
+        }
 
         this.$message.html(message);
         this.$message.targetBlank();
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
         });
 
         this.resize();
@@ -98,5 +101,3 @@ class RestrictedDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = RestrictedDialogue;

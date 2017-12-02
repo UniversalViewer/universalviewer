@@ -1,6 +1,7 @@
 {
   "options":
   {
+    "authAPIVersion": 1,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
@@ -18,7 +19,7 @@
     {
       "options":
       {
-        "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-collectionindex=\"{3}\" data-manifestindex=\"{4}\" data-sequenceindex=\"{5}\" data-canvasindex=\"{6}\" style=\"width:{7}px; height:{8}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{9}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>"
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>"
       }
     },
     "footerPanel":
@@ -66,8 +67,7 @@
     "pdfCenterPanel":
     {
       "options":{
-        "titleEnabled": false,
-        "usePdfJs": true
+        "titleEnabled": false
       }
     },
     "resourcesLeftPanel":{

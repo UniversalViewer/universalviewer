@@ -1,7 +1,7 @@
-import BaseView = require("./BaseView");
-import Commands = require("./BaseCommands");
+import {BaseView} from "./BaseView";
+import {BaseEvents} from "./BaseEvents";
 
-class Dialogue extends BaseView {
+export class Dialogue extends BaseView {
 
     allowClose: boolean = true;
     isActive: boolean = false;
@@ -14,6 +14,7 @@ class Dialogue extends BaseView {
     $triggerButton: JQuery;
     $closeButton: JQuery;
     $content: JQuery;
+    $buttons: JQuery;
     $middle: JQuery;
     $top: JQuery;
 
@@ -28,7 +29,7 @@ class Dialogue extends BaseView {
         super.create();
 
         // events.
-        $.subscribe(Commands.CLOSE_ACTIVE_DIALOGUE, () => {
+        $.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -36,7 +37,7 @@ class Dialogue extends BaseView {
             }
         });
 
-        $.subscribe(Commands.ESCAPE, () => {
+        $.subscribe(BaseEvents.ESCAPE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -47,8 +48,7 @@ class Dialogue extends BaseView {
         this.$top = $('<div class="top"></div>');
         this.$element.append(this.$top);
 
-        this.$closeButton = $('<a href="#" class="close" tabindex="0">' + this.content.close + '</a>');
-        this.$top.append(this.$closeButton);
+        this.$closeButton = $('<button type="button" class="btn btn-default close" tabindex="0">' + this.content.close + '</button>');
 
         this.$middle = $('<div class="middle"></div>');
         this.$element.append(this.$middle);
@@ -56,8 +56,17 @@ class Dialogue extends BaseView {
         this.$content = $('<div class="content"></div>');
         this.$middle.append(this.$content);
 
+        this.$buttons = $('<div class="buttons"></div>');
+        this.$middle.append(this.$buttons);
+
         this.$bottom = $('<div class="bottom"></div>');
         this.$element.append(this.$bottom);
+
+        if (this.config.topCloseButtonEnabled) {
+            this.$top.append(this.$closeButton);
+        } else {
+            this.$buttons.append(this.$closeButton);
+        }
 
         this.$closeButton.on('click', (e) => {
             e.preventDefault();
@@ -80,15 +89,22 @@ class Dialogue extends BaseView {
 
     setDockedPosition(): void {
 
-        var top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
-        var left: number = 0;
-        var arrowLeft: number = 0;
+        const top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
+        let left: number = 0;
+        let arrowLeft: number = 0;
+        let normalisedPos: number = 0;
 
         if (this.$triggerButton) {
             // get the normalised position of the button
-            var buttonPos: number = Math.normalise(this.$triggerButton.offset().left, 0, this.extension.width());
-            left = Math.floor((this.extension.width() * buttonPos) - (this.$element.width() * buttonPos));
-            arrowLeft = (this.$element.width() * buttonPos);
+            if (this.extension.isMobileView()) {
+                normalisedPos = Math.normalise(this.$triggerButton.offset().left, 0, this.extension.width());
+            } else {
+                normalisedPos = Math.normalise(this.$triggerButton.position().left, 0, this.extension.width());
+            }
+            
+            left = Math.floor((this.extension.width() * normalisedPos) - (this.$element.width() * normalisedPos));
+            //left = Math.floor((this.extension.width() * normalisedPos));
+            arrowLeft = (this.$element.width() * normalisedPos);
         }
 
         this.$bottom.css('backgroundPosition', arrowLeft + 'px 0px');
@@ -100,6 +116,7 @@ class Dialogue extends BaseView {
     }
 
     open($triggerButton?: JQuery): void {
+        this.$element.attr('aria-hidden', 'false');
         this.$element.show();
 
         if ($triggerButton && $triggerButton.length) {
@@ -113,14 +130,14 @@ class Dialogue extends BaseView {
 
         // set the focus to the default button.
         setTimeout(() => {
-            var $defaultButton = this.$element.find('.default');
-            if ($defaultButton.length){
+            const $defaultButton: JQuery = this.$element.find('.default');
+            if ($defaultButton.length) {
                 $defaultButton.focus();
             } else {
                 // if there's no default button, focus on the first visible input
-                var $input = this.$element.find('input:visible').first();
+                const $input: JQuery = this.$element.find('input:visible').first();
 
-                if ($input.length){
+                if ($input.length) {
                     $input.focus();
                 } else {
                     // if there's no visible first input, focus on the close button
@@ -129,9 +146,9 @@ class Dialogue extends BaseView {
             }
         }, 1);
 
-        $.publish(Commands.SHOW_OVERLAY);
+        $.publish(BaseEvents.SHOW_OVERLAY);
 
-        if (this.isUnopened){
+        if (this.isUnopened) {
             this.isUnopened = false;
             this.afterFirstOpen();
         }
@@ -145,12 +162,12 @@ class Dialogue extends BaseView {
 
     close(): void {
         if (!this.isActive) return;
-
+        this.$element.attr('aria-hidden', 'true');
         this.$element.hide();
         this.isActive = false;
 
         $.publish(this.closeCommand);
-        $.publish(Commands.HIDE_OVERLAY);
+        $.publish(BaseEvents.HIDE_OVERLAY);
     }
 
     resize(): void {
@@ -162,5 +179,3 @@ class Dialogue extends BaseView {
         });
     }
 }
-
-export = Dialogue;

@@ -1,24 +1,19 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Bookmark = require("../../modules/uv-shared-module/Bookmark");
-import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
-import DownloadDialogue = require("./DownloadDialogue");
-import ShareDialogue = require("./ShareDialogue");
-import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
-import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
-import IPDFExtension = require("./IPDFExtension");
+import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
+import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
+import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
+import {DownloadDialogue} from "./DownloadDialogue";
+import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
+import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
+import {IPDFExtension} from "./IPDFExtension";
+import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import {PDFCenterPanel} from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
+import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
+import {SettingsDialogue} from "./SettingsDialogue";
+import {ShareDialogue} from "./ShareDialogue";
+import {Shell} from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import PDFCenterPanel = require("../../modules/uv-pdfcenterpanel-module/PDFCenterPanel");
-import Params = require("../../Params");
-import ResourcesLeftPanel = require("../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
-import SettingsDialogue = require("./SettingsDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
 
-class Extension extends BaseExtension implements IPDFExtension {
+export class Extension extends BaseExtension implements IPDFExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -33,44 +28,48 @@ class Extension extends BaseExtension implements IPDFExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor(bootstrapper: BootStrapper) {
-        super(bootstrapper);
-    }
-
-    create(overrideDependencies?: any): void {
+    create(): void {
         super.create();
 
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, thumb: IThumb) => {
-            this.viewCanvas(thumb.index);
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+            this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_EXPAND_FULL_START, (e) => {
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        });
+
+        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseCommands.LEFTPANEL_COLLAPSE_FULL_FINISH, (e) => {
+        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(BaseCommands.SHOW_OVERLAY, (e, params) => {
+        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.hide();
             }
         });
 
-        $.subscribe(BaseCommands.HIDE_OVERLAY, (e, params) => {
+        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
             }
         });
     }
 
+    update(): void {
+        super.update();
+    }
+
     IsOldIE(): boolean {
-        var browser = window.browserDetect.browser;
-        var version = window.browserDetect.version;
+        const browser: string = window.browserDetect.browser;
+        const version: number = window.browserDetect.version;
 
         if (browser === 'Explorer' && version <= 9) return true;
         return false;
@@ -101,15 +100,15 @@ class Extension extends BaseExtension implements IPDFExtension {
             Shell.$footerPanel.hide();
         }
 
-        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$shareDialogue = $('<div class="overlay share"></div>');
+        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
@@ -125,25 +124,31 @@ class Extension extends BaseExtension implements IPDFExtension {
     bookmark() : void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
-        var bookmark: Bookmark = new Bookmark();
+        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
-        bookmark.path = this.getBookmarkUri();
+        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ElementType.document().toString();
+        bookmark.type = manifesto.ResourceType.document().toString();
 
-        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        this.fire(BaseEvents.BOOKMARK, bookmark);
+    }
+
+    dependencyLoaded(index: number, dep: any): void {
+        if (index === 0) {
+            window.PDFObject = dep;
+        }
     }
 
     getEmbedScript(template: string, width: number, height: number): string{
-        var configUri = this.config.uri || '';
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+        //const configUri = this.data.config.uri || '';
+        //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
+        const appUri: string = this.getAppUri();
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        const script: string = String.format(template, iframeSrc, width, height);
         return script;
     }
 }
-
-export = Extension;

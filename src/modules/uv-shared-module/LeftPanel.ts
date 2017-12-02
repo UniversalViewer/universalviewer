@@ -1,7 +1,7 @@
-import BaseCommands = require("./BaseCommands");
-import BaseExpandPanel = require("./BaseExpandPanel");
+import {BaseEvents} from "./BaseEvents";
+import {BaseExpandPanel} from "./BaseExpandPanel";
 
-class LeftPanel extends BaseExpandPanel {
+export class LeftPanel extends BaseExpandPanel {
 
     constructor($element: JQuery) {
         super($element);
@@ -13,7 +13,7 @@ class LeftPanel extends BaseExpandPanel {
 
         this.$element.width(this.options.panelCollapsedWidth);
 
-        $.subscribe(BaseCommands.TOGGLE_EXPAND_LEFT_PANEL, () => {
+        $.subscribe(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL, () => {
             if (this.isFullyExpanded){
                 this.collapseFull();
             } else {
@@ -25,7 +25,8 @@ class LeftPanel extends BaseExpandPanel {
     init(): void{
         super.init();
 
-        var shouldOpenPanel = Utils.Bools.getBool(this.extension.getSettings().leftPanelOpen, this.options.panelOpen);
+        const shouldOpenPanel: boolean = Utils.Bools.getBool(this.extension.getSettings().leftPanelOpen, this.options.panelOpen);
+        
         if (shouldOpenPanel) {
             this.toggle(true);
         }
@@ -47,9 +48,9 @@ class LeftPanel extends BaseExpandPanel {
         super.toggleFinish();
 
         if (this.isExpanded) {
-            $.publish(BaseCommands.OPEN_LEFT_PANEL);
+            $.publish(BaseEvents.OPEN_LEFT_PANEL);
         } else {           
-            $.publish(BaseCommands.CLOSE_LEFT_PANEL);
+            $.publish(BaseEvents.CLOSE_LEFT_PANEL);
         }
         this.extension.updateSettings({leftPanelOpen: this.isExpanded});
     }
@@ -62,5 +63,3 @@ class LeftPanel extends BaseExpandPanel {
         }
     }
 }
-
-export = LeftPanel;

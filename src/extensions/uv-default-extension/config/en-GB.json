@@ -1,0 +1,83 @@
+{
+  "options":
+  {
+    "authAPIVersion": 1,
+    "bookmarkThumbHeight": 150,
+    "bookmarkThumbWidth": 90,
+    "dropEnabled": true,
+    "footerPanelEnabled": true,
+    "headerPanelEnabled": true,
+    "leftPanelEnabled": true,
+    "limitLocales": false,
+    "openTemplate": "http://universalviewer.io?manifest={0}",
+    "pessimisticAccessControl": false,
+    "rightPanelEnabled": true,
+    "theme": "uv-en-GB-theme"
+  },
+  "modules":
+  {
+    "shareDialogue":
+    {
+      "options":
+      {
+        "embedTemplate": "<iframe src=\"{0}\" width=\"{1}\" height=\"{2}\" allowfullscreen frameborder=\"0\"></iframe>"
+      }
+    },
+    "fileLinkCenterPanel":
+    {
+
+    },
+    "footerPanel":
+    {
+      "options": {
+        "bookmarkEnabled": false,
+        "downloadEnabled": false,
+        "embedEnabled": false,
+        "feedbackEnabled": false,
+        "minimiseButtons": true,
+        "openEnabled": false,
+        "shareEnabled": true
+      }
+    },
+    "genericDialogue":
+    {
+
+    },
+    "headerPanel":
+    {
+
+    },
+    "helpDialogue":
+    {
+
+    },
+    "moreInfoRightPanel":
+    {
+      "options":
+      {
+        "canvasDisplayOrder": "",
+        "canvasExclude": "",
+        "copyToClipboardEnabled": false,
+        "manifestDisplayOrder": "",
+        "manifestExclude": "",
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": false,
+        "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
+        "showAllLanguages": false,
+        "textLimit": 4,
+        "textLimitType": "lines"
+      }
+    },
+    "resourcesLeftPanel": {
+      "options": {
+        "expandFullEnabled": false,
+        "panelAnimationDuration": 250,
+        "panelCollapsedWidth": 30,
+        "panelExpandedWidth": 255,
+        "panelOpen": true
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-﻿#app{
+﻿.uv{
 
     .overlay{
 
@@ -133,7 +133,7 @@
                             }
 
                             &.iiif{
-                                background-image: url('@{img-path}iiif.png');
+                                background-image: data-uri('@{img-path}iiif.png');
                                 background-repeat: no-repeat;
                                 margin-right: @margin-small-horizontal;
                             }
@@ -323,6 +323,32 @@
                 height: 180px;
 
                 h1{
+                    border-bottom: none !important;
+                    font-size: @font-size-base !important;
+                }
+
+                .warning {
+                    display: block;
+                    background-color: @brand-warning;
+                    font-weight: bold;
+                    padding: @padding-medium;
+                    margin-bottom: @margin-medium-vertical;
+                }
+            }
+
+            .bottom{
+                background: none;
+            }
+        }
+
+        &.auth{
+            width: 470px;
+            height: 250px;
+
+            .message {
+                height: 180px;
+
+                h1 {
                     border-bottom: none !important;
                     font-size: @font-size-base !important;
                 }

@@ -1,26 +1,19 @@
-import BaseCommands = require("../../modules/uv-shared-module/BaseCommands");
-import BaseExtension = require("../../modules/uv-shared-module/BaseExtension");
-import Bookmark = require("../../modules/uv-shared-module/Bookmark");
-import BootStrapper = require("../../Bootstrapper");
-import Commands = require("./Commands");
-import ContentLeftPanel = require("../../modules/uv-contentleftpanel-module/ContentLeftPanel");
-import DownloadDialogue = require("./DownloadDialogue");
-import ShareDialogue = require("./ShareDialogue");
-import ExternalResource = Manifesto.IExternalResource;
-import FooterPanel = require("../../modules/uv-shared-module/FooterPanel");
-import HeaderPanel = require("../../modules/uv-shared-module/HeaderPanel");
-import HelpDialogue = require("../../modules/uv-dialogues-module/HelpDialogue");
-import IVirtexExtension = require("./IVirtexExtension");
-import LeftPanel = require("../../modules/uv-shared-module/LeftPanel");
-import MoreInfoRightPanel = require("../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel");
-import Params = require("../../Params");
-import RightPanel = require("../../modules/uv-shared-module/RightPanel");
-import SettingsDialogue = require("./SettingsDialogue");
-import Shell = require("../../modules/uv-shared-module/Shell");
-import TreeView = require("../../modules/uv-contentleftpanel-module/TreeView");
-import VirtexCenterPanel = require("../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel");
+import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
+import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
+import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
+import {ContentLeftPanel} from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
+import {DownloadDialogue} from "./DownloadDialogue";
+import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
+import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
+import {HelpDialogue} from "../../modules/uv-dialogues-module/HelpDialogue";
+import {IVirtexExtension} from "./IVirtexExtension";
+import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
+import {SettingsDialogue} from "./SettingsDialogue";
+import {ShareDialogue} from "./ShareDialogue";
+import {Shell} from "../../modules/uv-shared-module/Shell";
+import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
 
-class Extension extends BaseExtension implements IVirtexExtension {
+export class Extension extends BaseExtension implements IVirtexExtension {
 
     $downloadDialogue: JQuery;
     $shareDialogue: JQuery;
@@ -36,15 +29,15 @@ class Extension extends BaseExtension implements IVirtexExtension {
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
-    constructor(bootstrapper: BootStrapper) {
-        super(bootstrapper);
-    }
+    create(): void {
+        super.create();
 
-    create(overrideDependencies?: any): void {
-        super.create(overrideDependencies);
-
-        $.subscribe(BaseCommands.THUMB_SELECTED, (e, canvasIndex: number) => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
+        });
+
+        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
+            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
         });
     }
 
@@ -73,15 +66,15 @@ class Extension extends BaseExtension implements IVirtexExtension {
             Shell.$footerPanel.hide();
         }
 
-        this.$downloadDialogue = $('<div class="overlay download"></div>');
+        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$shareDialogue = $('<div class="overlay share"></div>');
+        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$settingsDialogue = $('<div class="overlay settings"></div>');
+        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
@@ -98,33 +91,43 @@ class Extension extends BaseExtension implements IVirtexExtension {
         }
     }
 
+    update(): void {
+        super.update();
+    }
+
+    dependencyLoaded(index: number, dep: any): void {
+        if (index === 0) {
+            window.THREE = dep; //https://github.com/mrdoob/three.js/issues/9602
+        }
+    }
+
     isLeftPanelEnabled(): boolean{
-        return Utils.Bools.getBool(this.config.options.leftPanelEnabled, true)
+        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)
                 && (this.helper.isMultiCanvas() || this.helper.isMultiSequence());
     }
 
     bookmark(): void {
         super.bookmark();
 
-        var canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
-        var bookmark: Bookmark = new Bookmark();
+        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = Manifesto.TranslationCollection.getValue(canvas.getLabel());
-        bookmark.path = this.getBookmarkUri();
+        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ElementType.physicalobject().toString();
+        bookmark.type = manifesto.ResourceType.physicalobject().toString();
 
-        this.triggerSocket(BaseCommands.BOOKMARK, bookmark);
+        this.fire(BaseEvents.BOOKMARK, bookmark);
     }
 
-    getEmbedScript(template: string, width: number, height: number): string{
-        var configUri = this.config.uri || '';
-        var script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.embedScriptUri);
+    getEmbedScript(template: string, width: number, height: number): string {
+        //const configUri: string = this.data.config.uri || '';
+        //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
+        const appUri: string = this.getAppUri();
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        const script: string = String.format(template, iframeSrc, width, height);
         return script;
     }
 }
-
-export = Extension;

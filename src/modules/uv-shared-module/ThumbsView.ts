@@ -1,11 +1,10 @@
-import BaseCommands = require("./BaseCommands");
-import BaseView = require("./BaseView");
+import {BaseEvents} from "./BaseEvents";
+import {BaseView} from "./BaseView";
 import IThumb = Manifold.IThumb;
-import Shell = require("./Shell");
 
-class ThumbsView extends BaseView {
+export class ThumbsView extends BaseView {
 
-    private _thumbsCache: JQuery;
+    private _$thumbsCache: JQuery | null;
     $selectedThumb: JQuery;
     $thumbs: JQuery;
     isCreated: boolean = false;
@@ -22,15 +21,15 @@ class ThumbsView extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseCommands.CANVAS_INDEX_CHANGED, (e, index) => {
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, index: any) => {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(BaseCommands.LOGIN, () => {
+        $.subscribe(BaseEvents.LOGIN, () => {
             this.loadThumbs();
         });
 
-        $.subscribe(BaseCommands.CLICKTHROUGH, () => {
+        $.subscribe(BaseEvents.CLICKTHROUGH, () => {
             this.loadThumbs();
         });
 
@@ -39,7 +38,7 @@ class ThumbsView extends BaseView {
 
         this.$thumbs.addClass(this.extension.helper.getViewingDirection().toString()); // defaults to "left-to-right"
 
-        var that = this;
+        const that = this;
 
         $.templates({
             thumbsTemplate: '<div id="thumb{{>index}}" class="{{:~className()}}" data-src="{{>uri}}" data-visible="{{>visible}}" data-index="{{>index}}">\
@@ -55,7 +54,7 @@ class ThumbsView extends BaseView {
                              {{/if}}'
         });
 
-        var extraHeight = this.options.thumbsExtraHeight;
+        const extraHeight: number = this.options.thumbsExtraHeight;
 
         $.views.helpers({
             separator: function() {
@@ -96,6 +95,8 @@ class ThumbsView extends BaseView {
 
                     return String.format(that.content.searchResult, searchResults);
                 }
+
+                return '';
             }
         });
 
@@ -107,9 +108,9 @@ class ThumbsView extends BaseView {
         this.resize();
     }
 
-    public databind(): void{
+    public databind(): void {
         if (!this.thumbs) return;
-        this._thumbsCache = null; // delete cache
+        this._$thumbsCache = null; // delete cache
         this.createThumbs();
         // do initial load to show padlocks
         this.loadThumbs(0);
@@ -142,79 +143,63 @@ class ThumbsView extends BaseView {
 
         this.$thumbs.delegate(".thumb", "click", function (e) {
             e.preventDefault();
-
             const data = $.view(this).data;
-
             that.lastThumbClickedIndex = data.index;
-
-            $.publish(BaseCommands.THUMB_SELECTED, [data]);
+            $.publish(BaseEvents.THUMB_SELECTED, [data]);
         });
 
         this.setLabel();
-
         this.isCreated = true;
     }
 
-    public selectAll(selected): void {
-
-    }
-
     scrollStop(): void {
-
-        var scrollPos = 1 / ((this.$thumbs.height() - this.$element.height()) / this.$element.scrollTop());
-
+        let scrollPos: number = 1 / ((this.$thumbs.height() - this.$element.height()) / this.$element.scrollTop());
         if (scrollPos > 1) scrollPos = 1;
-
-        var thumbRangeMid = Math.floor((this.thumbs.length - 1) * scrollPos);
-
+        const thumbRangeMid: number = Math.floor((this.thumbs.length - 1) * scrollPos);
         this.loadThumbs(thumbRangeMid);
     }
 
-    loadThumbs(index?: number): void {
+    loadThumbs(index: number = this.extension.helper.canvasIndex): void {
 
         if (!this.thumbs || !this.thumbs.length) return;
 
-        if (_.isUndefined(index)){
-            index = this.extension.helper.canvasIndex;
-        }
+        const thumbRangeMid: number = index;
+        const thumbLoadRange: number = this.options.thumbsLoadRange;
 
-        var thumbRangeMid = index;
-        var thumbLoadRange = this.options.thumbsLoadRange;
-
-        var thumbRange = {
+        const thumbRange: any = {
             start: (thumbRangeMid > thumbLoadRange) ? thumbRangeMid - thumbLoadRange : 0,
             end: (thumbRangeMid < (this.thumbs.length - 1) - thumbLoadRange) ? thumbRangeMid + thumbLoadRange : this.thumbs.length - 1
         };
 
         //console.log('start: ' + thumbRange.start + ' end: ' + thumbRange.end);
 
-        var fadeDuration = this.options.thumbsImageFadeInDuration;
+        const fadeDuration: number = this.options.thumbsImageFadeInDuration;
 
-        for (var i = thumbRange.start; i <= thumbRange.end; i++) {
+        for (let i = thumbRange.start; i <= thumbRange.end; i++) {
 
-            var $thumb = this.getThumbByIndex(i);
-            var $wrap = $thumb.find('.wrap');
+            const $thumb: JQuery = this.getThumbByIndex(i);
+            const $wrap: JQuery = $thumb.find('.wrap');
 
             // if no img has been added yet
             if (!$wrap.hasClass('loading') && !$wrap.hasClass('loaded')) {
-                var visible = $thumb.attr('data-visible');
+                const visible: string = $thumb.attr('data-visible');
 
                 if (visible !== "false") {
                     $wrap.removeClass('loadingFailed');
                     $wrap.addClass('loading');
-                    var src = $thumb.attr('data-src');
+                    let src: string = $thumb.attr('data-src');
                     src += '?t=' + Utils.Dates.getTimeStamp();
                     //console.log(i, src);
-                    var img = $('<img src="' + src + '" />');
+                    const $img: JQuery = $('<img src="' + src + '" alt=""/>');
                     // fade in on load.
-                    $(img).hide().load(function () {
+                    $img.hide().load(function () {
                         $(this).fadeIn(fadeDuration, function () {
                             $(this).parent().swapClass('loading', 'loaded');
                         });
                     }).error(function() {
                         $(this).parent().swapClass('loading', 'loadingFailed');
                     });
-                    $wrap.append(img);
+                    $wrap.append($img);
                 } else {
                     $wrap.addClass('hidden');
                 }
@@ -237,8 +222,14 @@ class ThumbsView extends BaseView {
     }
 
     isPDF(): boolean {
-        // todo: use constants
-        return (this.extension.helper.getElementType().toString().contains("pdf"));
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const type: Manifesto.ResourceType | null = canvas.getType();
+
+        if (type) {
+            return (type.toString().includes("pdf"));
+        }
+
+        return false;        
     }
 
     setLabel(): void {
@@ -254,15 +245,10 @@ class ThumbsView extends BaseView {
 
         // may be authenticating
         if (index === -1) return;
-
         if (!this.thumbs || !this.thumbs.length) return;
-
         this.getAllThumbs().removeClass('selected');
-
         this.$selectedThumb = this.getThumbByIndex(index);
-
         this.addSelectedClassToThumbs(index);
-
         const indices: number[] = this.extension.getPagedIndices(index);
 
         // scroll to thumb if the index change didn't originate
@@ -276,10 +262,10 @@ class ThumbsView extends BaseView {
     }
 
     getAllThumbs(): JQuery {
-        if (!this._thumbsCache){
-            this._thumbsCache = this.$thumbs.find('.thumb');
+        if (!this._$thumbsCache) {
+            this._$thumbsCache = this.$thumbs.find('.thumb');
         }
-        return this._thumbsCache;
+        return this._$thumbsCache;
     }
 
     getThumbByIndex(canvasIndex: number): JQuery {
@@ -287,7 +273,7 @@ class ThumbsView extends BaseView {
     }
 
     scrollToThumb(canvasIndex: number): void {
-        var $thumb = this.getThumbByIndex(canvasIndex);
+        const $thumb: JQuery = this.getThumbByIndex(canvasIndex);
         this.$element.scrollTop($thumb.position().top);
     }
 
@@ -295,5 +281,3 @@ class ThumbsView extends BaseView {
         super.resize();
     }
 }
-
-export = ThumbsView;

@@ -1,19 +1,19 @@
 // @edsilv additions
 
-.loading(@img){
+.loading(@img) {
     background-image: url(@img);
     background-repeat: no-repeat;
     background-position: 50% 50%;
 }
 
-.border-radius(@radius){
+.border-radius(@radius) {
     -webkit-border-radius: @radius;
     -moz-border-radius: @radius;
     -o-border-radius: @radius;
     border-radius: @radius;
 }
 
-.link-color-decoration(@color, @decoration){
+.link-color-decoration(@color, @decoration) {
     color: @color;
     text-decoration: @decoration;
     &:link, &:visited, &:hover, &:active {
@@ -22,8 +22,18 @@
     }
 }
 
-.icon-btn(@img, @height){
-    background-image: @img;
+.icon-btn-2(@img) {
+  background-image: data-uri(@img);
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 30px;
+  vertical-align: middle;
+  width: 30px;
+  cursor: pointer;
+}
+
+.icon-btn(@img, @height) {
+    background-image: data-uri(@img);
     background-repeat: no-repeat;
     height: @height;
     line-height: @height;
@@ -31,27 +41,27 @@
     .link-color-decoration(@text-color, none);
 }
 
-.icon-left(@img, @height, @padding-left){
+.icon-left(@img, @height, @padding-left) {
     .icon-btn(@img, @height);
     background-position: left center;
     padding-left: @padding-left;
     padding-right: @padding-medium-horizontal;
 }
 
-.icon-right(@img, @height, @padding-right){
+.icon-right(@img, @height, @padding-right) {
     .icon-btn(@img, @height);
     background-position: right center;
     padding-right: @padding-right;
     padding-left: @padding-medium-horizontal;
 }
 
-.hide-text(){
+.hide-text() {
     line-height: 0;
     font-size: 0;
     color: transparent;
 }
 
-.single-line-code(){
+.single-line-code() {
     width: 100%;
     background: @gray-lighter;
     border: 1px solid @gray-light;

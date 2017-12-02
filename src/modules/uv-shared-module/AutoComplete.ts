@@ -1,5 +1,5 @@
 
-class AutoComplete{
+export class AutoComplete {
 
 	private _results: any;
 	private _selectedResultIndex: number;
@@ -13,12 +13,10 @@ class AutoComplete{
 
 	private _$searchResultsList: JQuery;
 	private _$searchResultTemplate: JQuery;
-	private _element: HTMLInputElement;
-
-    // valid keys that are not 
-    private _validKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
-    private _validKeyPressCodes: number[] = [KeyCodes.KeyPress.GraveAccent, KeyCodes.KeyPress.DoubleQuote];
-    private _lastKeyDownWasValid: boolean = false;
+ 
+    //private _navigationKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
+    //private _validKeyPressCodes: number[] = [KeyCodes.KeyPress.GraveAccent, KeyCodes.KeyPress.DoubleQuote];
+    //private _lastKeyDownWasNavigation: boolean = false;
 
     constructor(element: JQuery,
                 autoCompleteFunc: (terms: string, cb: (results: string[]) => void) => void,
@@ -51,48 +49,46 @@ class AutoComplete{
 
         // callback after set period.
         const typewatch = (function () {
-            var timer = 0;
-            return function (callback, ms) {
+            let timer: number = 0;
+            return function (cb: Function, ms: number) {
                 clearTimeout(timer);
-                timer = setTimeout(callback, ms);
+                timer = setTimeout(cb, ms);
             };
         })();
 
         const that = this;
 
-        // validate
-
         this._$element.on("keydown", function(e: JQueryEventObject) {
 
             const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
-            that._lastKeyDownWasValid = that._isValidKeyDown(originalEvent);
+            //that._lastKeyDownWasNavigation = that._isNavigationKeyDown(originalEvent);
             const charCode: number = Utils.Keyboard.getCharCode(originalEvent);
             let cancelEvent: boolean = false;
 
-            if (charCode === KeyCodes.KeyDown.LeftArrow){
+            if (charCode === KeyCodes.KeyDown.LeftArrow) {
                 cancelEvent = true;
             } else if (charCode === KeyCodes.KeyDown.RightArrow){
                 cancelEvent = true;
             }
 
-            if (cancelEvent){
+            if (cancelEvent) {
                 originalEvent.cancelBubble = true;
                 if(originalEvent.stopPropagation) originalEvent.stopPropagation();
             }
         });
 
         // prevent invalid characters being entered
-        this._$element.on("keypress", function(e: JQueryEventObject) {
+        // this._$element.on("keypress", function(e: JQueryEventObject) {
 
-            const isValidKeyPress: boolean = that._isValidKeyPress(<KeyboardEvent>e.originalEvent);
+        //     const isValidKeyPress: boolean = that._isValidKeyPress(<KeyboardEvent>e.originalEvent);
 
-            if (!(that._lastKeyDownWasValid || isValidKeyPress)){
-                e.preventDefault();
-                return false;
-            }
+        //     if (!(that._lastKeyDownWasNavigation || isValidKeyPress)) {
+        //         e.preventDefault();
+        //         return false;
+        //     }
 
-            return true;
-        });
+        //     return true;
+        // });
 
         // auto complete
         this._$element.on("keyup", function(e) {
@@ -124,7 +120,7 @@ class AutoComplete{
 
                     // if there are more than x chars and no spaces
                     // update the autocomplete list.
-                    if (val && val.length > that._minChars && !val.contains(' ')) {
+                    if (val && val.length > that._minChars && !val.includes(' ')) {
                         that._search(val);
                     } else {
                         // otherwise, hide the autocomplete list.
@@ -148,23 +144,23 @@ class AutoComplete{
         this._hideResults();
     }
 
-    private _isValidKeyDown(e: KeyboardEvent): boolean {
-        const isValid: boolean = this._validKeyDownCodes.contains(Utils.Keyboard.getCharCode(e));
-        return isValid;
-    }
+    // private _isNavigationKeyDown(e: KeyboardEvent): boolean {
+    //     const isNavigationKeyDown: boolean = this._navigationKeyDownCodes.includes(Utils.Keyboard.getCharCode(e));
+    //     return isNavigationKeyDown;
+    // }
 
-    private _isValidKeyPress(e: KeyboardEvent): boolean {
-        const charCode: number = Utils.Keyboard.getCharCode(e);
-        const key: string = String.fromCharCode(charCode);
-        const isValid: boolean = key.isAlphanumeric() || this._validKeyPressCodes.contains(charCode);
-        return isValid;
-    }
+    // private _isValidKeyPress(e: KeyboardEvent): boolean {
+    //     const charCode: number = Utils.Keyboard.getCharCode(e);
+    //     const key: string = String.fromCharCode(charCode);
+    //     const isValid: boolean = key.isAlphanumeric() || this._validKeyPressCodes.includes(charCode);
+    //     return isValid;
+    // }
 
     private _getTerms(): string {
         return this._$element.val().trim();
     }
 
-    private _setSelectedResultIndex(direction): void {
+    private _setSelectedResultIndex(direction: number): void {
 
         let nextIndex: number;
 
@@ -264,13 +260,13 @@ class AutoComplete{
 
         const that = this;
 
-        this._$searchResultsList.find('li').on('click', function (e) {
+        this._$searchResultsList.find('li').on('click', function (e: any) {
             e.preventDefault();
             that._searchForItem($(this));
         });
     }
 
-    private _searchForItem($item): void {
+    private _searchForItem($item: JQuery): void {
         const term: string = $item.find('a').text();
         this._$element.val(term);
         this._hideResults();
@@ -284,5 +280,3 @@ class AutoComplete{
     }
 
 }
-
-export = AutoComplete;

@@ -46,7 +46,7 @@ module.exports = function (grunt) {
             async.eachSeries(that.files, function (f, nextFileObj) {
                 var parent = path.dirname(f.dest);
                 parent = parent.substring(0, parent.lastIndexOf('/'));
-                parent = path.join(parent, 'build/');
+                parent = path.join(parent, '.build/');
 
                 var destFile = path.join(parent, theme + '.css');
 
@@ -119,29 +119,29 @@ module.exports = function (grunt) {
             // ./src/themes/[theme]/img/[image]
             // goes to
             // [global.buildDir]/themes/[theme]/img/[image]
-            copyFiles('./src/themes/' + theme + '/img/*', path.join(getThemeDest(theme), 'img'));
+            //copyFiles('./src/themes/' + theme + '/img/*', path.join(getThemeDest(theme), 'img'));
 
-            // ./src/extensions/*/build/[theme].css
+            // ./src/extensions/*/.build/[theme].css
             // goes to
             // [global.buildDir]/themes/[theme]/css/[extension]/theme.css'
-            copyFiles('./src/extensions/*/build/' + theme + '.css', path.join(getThemeDest(theme), 'css'), function(src, dest) {
+            copyFiles('./src/extensions/*/.build/' + theme + '.css', path.join(getThemeDest(theme), 'css'), function(src, dest) {
 
                 // get the extension name from the src string.
                 // ./src/extensions/[extension]/build/[theme].css
-                var extensionName = src.match(/extensions\/(.*)\/build/)[1];
+                var extensionName = src.match(/extensions\/(.*)\/.build/)[1];
 
                 return path.join(dest, extensionName, 'theme.css');
             });
 
-            // ./src/modules/*/img/*
+            // ./src/modules/*/assets/*
             // goes to
-            // [global.buildDir]/themes/[theme]/img/[module]/',
-            copyFiles('./src/modules/*/img/*', path.join(getThemeDest(theme), 'img'), function(src, dest) {
+            // [global.buildDir]/themes/[theme]/assets/[module]/',
+            copyFiles('./src/modules/*/assets/*', path.join(getThemeDest(theme), 'assets'), function(src, dest) {
                 var fileName = path.basename(src);
 
                 // get the module name from the src string.
-                // ./src/modules/[module]/img
-                var moduleName = src.match(/modules\/(.*)\/img/)[1];
+                // ./src/modules/[module]/assets
+                var moduleName = src.match(/modules\/(.*)\/assets/)[1];
 
                 return path.join(dest, moduleName, fileName);
             });
@@ -252,7 +252,7 @@ module.exports = function (grunt) {
     };
 
     var parseVariableOptions = function(options) {
-        var pairs = _.pairs(options);
+        var pairs = _.toPairs(options);
         var output = '';
         pairs.forEach(function(pair) {
             output += '@' + pair[0] + ':' + pair[1] + ';';

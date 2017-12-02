@@ -1,7 +1,7 @@
-import BaseDownloadDialogue = require("../../modules/uv-dialogues-module/DownloadDialogue");
-import DownloadOption = require("../../modules/uv-shared-module/DownloadOption");
+import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
+import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 
-class DownloadDialogue extends BaseDownloadDialogue {
+export class DownloadDialogue extends BaseDownloadDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -27,5 +27,3 @@ class DownloadDialogue extends BaseDownloadDialogue {
         return super.isDownloadOptionAvailable(option);
     }
 }
-
-export = DownloadDialogue;

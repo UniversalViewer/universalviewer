@@ -1,10 +1,11 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
+import {UVUtils} from "../uv-shared-module/Utils";
 
-class MoreInfoDialogue extends Dialogue {
+export class MoreInfoDialogue extends Dialogue {
 
     $title: JQuery;
-    component: IIIFComponents.IMetadataComponent;
+    metadataComponent: IIIFComponents.IMetadataComponent;
     $metadata: JQuery;
 
     constructor($element: JQuery) {
@@ -17,19 +18,19 @@ class MoreInfoDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_MOREINFO_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_MOREINFO_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, $triggerButton) => {
+        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
-        this.config.content = this.extension.config.modules.moreInfoRightPanel.content;
-        this.config.options = this.extension.config.modules.moreInfoRightPanel.options;
+        this.config.content = this.extension.data.config.modules.moreInfoRightPanel.content;
+        this.config.options = this.extension.data.config.modules.moreInfoRightPanel.options;
 
         // create ui
         this.$title = $('<h1>' + this.config.content.title + '</h1>');
@@ -38,7 +39,10 @@ class MoreInfoDialogue extends Dialogue {
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
         this.$content.append(this.$metadata);
 
-        this.component = new IIIFComponents.MetadataComponent(this._getOptions());
+        this.metadataComponent = new IIIFComponents.MetadataComponent({
+            target: this.$metadata[0],
+            data: this._getData()
+        });
 
         // hide
         this.$element.hide();
@@ -46,19 +50,18 @@ class MoreInfoDialogue extends Dialogue {
 
     open($triggerButton?: JQuery): void {
         super.open($triggerButton);
-        this.component.databind();
+        this.metadataComponent.set(new Object()); // todo: should be passing data
     }
 
-    private _getOptions(): IIIFComponents.IMetadataComponentOptions {
-        return <IIIFComponents.IMetadataComponentOptions>{
+    private _getData(): IIIFComponents.IMetadataComponentData {
+        return <IIIFComponents.IMetadataComponentData>{
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
-            canvasLabels: "Left Page, Right Page",
+            canvasLabels: this.extension.getCanvasLabels(this.content.page),
             content: this.config.content,
             copiedMessageDuration: 2000,
             copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
-            element: ".overlay.moreInfo .iiif-metadata-component",
             helper: this.extension.helper,
             licenseFormatter: null,
             limit: this.config.options.textLimit || 4,
@@ -68,7 +71,7 @@ class MoreInfoDialogue extends Dialogue {
             range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html) => {
-                return this.extension.sanitize(html);
+                return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages
         };
@@ -82,5 +85,3 @@ class MoreInfoDialogue extends Dialogue {
         this.setDockedPosition();
     }
 }
-
-export = MoreInfoDialogue;

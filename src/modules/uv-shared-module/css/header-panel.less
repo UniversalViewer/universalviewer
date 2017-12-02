@@ -1,65 +1,62 @@
-#app{
+.uv {
 
-    .headerPanel{
+    .headerPanel {
 
         color: @text-secondary-color;
 
-        a.imageBtn {
-            height: 30px;
-            width: 30px;
+        button.imageBtn {
             float: left;
+            i {
+                height: 30px;
+                width: 30px;
+            }
         }
 
-        &.showInformation{
+        &.showInformation {
             height: 80px;
         }
 
-        .options{
+        .options {
             height: 40px;
             background-color: @panel-dark-bg;
 
-            .centerOptions{
-                margin: 5px 0 0 0;
+            .centerOptions {
                 position: absolute;
             }
 
-            .rightOptions{
+            .rightOptions {
                 float: right;
-                margin: @margin-small-vertical 0 0 0;
 
 //              .help {
 //                  margin-left: 1em;
 //                  padding-right: 22px;
 //                  padding-bottom: 2px;
-//                  background: url('@{img-path}sprite.png');
+//                  background: data-uri('@{img-path}sprite.png');
 //                  background-repeat: no-repeat;
 //                  background-position: 0 -2999px;
 //                  margin-top: 6px;
 //              }
 
-                .settings{
-                    background: url('@{img-path}settings.png');
-                    height: 30px;
-                    width: 30px;
+                .settings {
                     margin-right: 8px;
                 }
             }
         }
 
-        .informationBox{
+        .informationBox {
             background: @brand-warning;
             color: @gray-dark;
             width: 100%;
             position: absolute;
             height: 40px;
 
-            .message{
+            .message {
                 float: left;
                 overflow: hidden;
                 margin: 13px;
             }
 
-            .actions{
+            .actions {
                 float: left;
                 margin: 6px 0 0 0;
 
@@ -68,15 +65,17 @@
                 }
             }
 
-            .close{
-                float: right;
-                background-image: url('@{img-path}close_information_box.png');
-                background-repeat: no-repeat;
-                width: 17px;
-                height: 17px;
-                background-position: 4px 4px;
+            .close {
+                background: 0 0;
+                border: 0;
+                color: @gray-dark;
+                font-size: 1.5rem;
                 cursor: pointer;
-                margin: 12px;
+                margin-right: 6px;
+                &:focus,
+                &:hover {
+                  color: @gray-darker;
+                }
             }
         }
     }

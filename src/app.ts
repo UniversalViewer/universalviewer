@@ -4,51 +4,68 @@ if (typeof jQuery === "function") {
     });
 }
 
-require([
-    'Bootstrapper',
-    'extensions/uv-mediaelement-extension/Extension',
-    'extensions/uv-pdf-extension/Extension',
-    'extensions/uv-seadragon-extension/Extension',
-    'extensions/uv-virtex-extension/Extension'
+// IE CustomEvent Polyfill
+// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+(function () {
+
+    if ( typeof window.CustomEvent === "function" ) return false;
+
+    function CustomEvent ( event: any, params: any ) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent( 'CustomEvent' );
+        evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+        return evt;
+    }
+
+    CustomEvent.prototype = window.Event.prototype;
+    window.CustomEvent = CustomEvent;
+    return;
+})();
+
+// uv.js
+// - things in src/lib that are generic to all extensions
+// - bundled data providers
+// - UVComponent
+requirejs([
+    './lib/base64.min.js',
+    './lib/browserdetect.js',
+    './lib/detectmobilebrowser.js',
+    './lib/jquery.xdomainrequest.js',
+    './lib/modernizr.js',
+    './lib/sanitize.js',
+    './lib/ex.es3.min.js',
+    './lib/base-component.js',
+    './lib/key-codes.js',
+    './lib/extensions.js',
+    './lib/http-status-codes.js',
+    './lib/jquery-plugins.js',
+    './lib/ba-tiny-pubsub.js',
+    './lib/manifesto.js',
+    './lib/manifold.js',
+    './lib/utils.js',
+    'URLDataProvider',
+    'UVComponent'
 ], (
-    bootstrapper,
-    mediaelementExtension,
-    pdfExtension,
-    seadragonExtension,
-    virtexExtension
+    base64: any,
+    browserdetect: any,
+    detectmobilebrowser: any,
+    xdomainrequest: any,
+    modernizr: any,
+    sanitize: any,
+    exjs: any,
+    basecomponent: any,
+    keycodes: any,
+    extensions: any,
+    httpstatuscodes: any,
+    jqueryplugins: any,
+    pubsub: any,
+    manifesto: any,
+    manifold: any,
+    utils: any,
+    URLDataProvider: any,
+    UVComponent: any
 ) => {
-
-    // todo: use a compiler flag (when available)
-    window.DEBUG = true; // this line is removed on build.
-
-    var extensions = {};
-
-    extensions[manifesto.ElementType.canvas().toString()] = {
-        type: seadragonExtension,
-        name: 'uv-seadragon-extension'
-    };
-
-    extensions[manifesto.ElementType.movingimage().toString()] = {
-        type: mediaelementExtension,
-        name: 'uv-mediaelement-extension'
-    };
-
-    extensions[manifesto.ElementType.physicalobject().toString()] = {
-        type: virtexExtension,
-        name: 'uv-virtex-extension'
-    };
-
-    extensions[manifesto.ElementType.sound().toString()] = {
-        type: mediaelementExtension,
-        name: 'uv-mediaelement-extension'
-    };
-
-    extensions[manifesto.RenderingFormat.pdf().toString()] = {
-        type: pdfExtension,
-        name: 'uv-pdf-extension'
-    };
-
-    var bs = new bootstrapper(extensions);
-
-    bs.bootstrap();
+    window.UV = UVComponent.default;
+    window.UV.URLDataProvider = URLDataProvider.default;
+    window.dispatchEvent(new CustomEvent('uvLoaded'));
 });

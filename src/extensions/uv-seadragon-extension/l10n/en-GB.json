@@ -8,12 +8,18 @@
     "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
     "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
     "canvasIndexOutOfRange": "Canvas index out of range.",
-    "degradedResourceMessage": "Please log in to view at full quality.",
-    "degradedResourceLogin": "log in",
+    "fallbackDegradedLabel": "Login",
+    "fallbackDegradedMessage": "Please log in to view this content at full resolution.",
     "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
     "termsOfUse": "Terms of Use"
   },
   "modules": {
+    "authDialogue": {
+      "content": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      }
+    },
     "clickThroughDialogue": {
       "content": {
         "viewTerms": "Read Full Terms and Conditions"
@@ -27,6 +33,7 @@
         "expand": "Expand Contents",
         "expandFull": "Expand Gallery",
         "index": "Index",
+        "manifestRanges": "Manifest Ranges",
         "searchResult": "{0} search result",
         "searchResults": "{0} search results",
         "sortBy": "Sort By:",
@@ -49,7 +56,7 @@
         "downloadSelectionExplanation": "Opens a dialogue to select which pages to download.",
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
-        "entireFileAsOriginal": "Entire file ({0})",
+        "entireFileAsOriginal": "Entire file",
         "noneAvailable": "No download options are available.",
         "pagingNote": "Please turn off Two Page View for additional options.",
         "preview": "Preview",
@@ -155,6 +162,7 @@
         "of": "of {0}",
         "oneUp": "Single page view",
         "page": "Page",
+        "pageSearchLabel": "Search by Page Number",
         "previous": "Previous",
         "previousImage": "Previous Image",
         "previousPage": "Previous Page",

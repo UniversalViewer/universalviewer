@@ -1,10 +1,8 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BootstrapParams = require("../../BootstrapParams");
-import Commands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
-import Shell = require("../uv-shared-module/Shell");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
+import {ILocale} from "../../ILocale";
 
-class SettingsDialogue extends Dialogue {
+export class SettingsDialogue extends Dialogue {
 
     $locale: JQuery;
     $localeDropDown: JQuery;
@@ -24,14 +22,14 @@ class SettingsDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_SETTINGS_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_SETTINGS_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_SETTINGS_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_SETTINGS_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, () => {
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -62,22 +60,7 @@ class SettingsDialogue extends Dialogue {
         this.$website.html(this.content.website);
         this.$website.targetBlank();
 
-        var locales: any[] = this.extension.getLocales();
-
-        for (var i = 0; i < locales.length; i++) {
-            var locale = locales[i];
-            this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
-        }
-
-        this.$localeDropDown.val(this.extension.locale);
-
-        this.$localeDropDown.change(() => {
-            this.extension.changeLocale(this.$localeDropDown.val());
-        });
-
-        if (this.extension.getLocales().length < 2){
-            this.$locale.hide();
-        }
+        this._createLocalesMenu();
 
         this.$element.hide();
     }
@@ -89,22 +72,39 @@ class SettingsDialogue extends Dialogue {
     updateSettings(settings: ISettings): void {
         this.extension.updateSettings(settings);
 
-        $.publish(Commands.UPDATE_SETTINGS, [settings]);
+        $.publish(BaseEvents.UPDATE_SETTINGS, [settings]);
     }
 
     open(): void {
         super.open();
 
-        if (!window.DEBUG) {
-            $.getJSON("package.json", (pjson: any) => {
-                this.$version.text("v" + pjson.version);
-            });
+        $.getJSON(this.extension.data.root + "/package.json", (pjson: any) => {
+            this.$version.text("v" + pjson.version);
+        });
+    }
+
+    private _createLocalesMenu(): void {
+
+        const locales: ILocale[] = this.extension.data.locales;
+
+        if (locales && locales.length > 1) {
+            
+            for (let i = 0; i < locales.length; i++) {
+                const locale: ILocale = locales[i];
+                this.$localeDropDown.append('<option value="' + locale.name + '">' + locale.label + '</option>');
+            }
+
+            this.$localeDropDown.val(locales[0].name);
+        } else {
+            this.$locale.hide();
         }
+
+        this.$localeDropDown.change(() => {
+            this.extension.changeLocale(this.$localeDropDown.val());
+        });
     }
 
     resize(): void {
         super.resize();
     }
 }
-
-export = SettingsDialogue;

@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 // uv-2.0.2
 
 //https://raw.githubusercontent.com/jfriend00/docReady/master/docready.js
+=======
+>>>>>>> v3
 (function(funcName, baseObj) {
     // The public function name defaults to window.docReady
     // but you can pass in your own object and own function name and those will be used
@@ -72,6 +75,7 @@
 })("docReady", window);
 
 docReady(function() {
+<<<<<<< HEAD
     (function (window, document, version, callback) {
 
         // only run this script once per page.
@@ -556,5 +560,48 @@ docReady(function() {
                 });
             }
         }
+=======
+    // only run this script once per page.
+    if (window.embedScriptIncluded) return;
+    window.embedScriptIncluded = true;
+
+    // get the script location.
+    var s = document.getElementById('embedUV');
+    var scriptUri = (/.*src="(.*)"/).exec(s.outerHTML)[1];
+    var absScriptUri = s.src;
+    var loaded = false;
+    if (!s){
+        var scripts = document.getElementsByTagName('script');
+        s = scripts[scripts.length - 1];
+    }
+    //get the part preceding 'lib/embed.js'
+    var baseUri = (/(.*)lib\/embed.js/).exec(scriptUri)[1];
+    appUri = baseUri + 'uv.html';
+    var a = document.createElement('a');
+    a.href = absScriptUri;
+    var domain = a.hostname;
+    //window.isHomeDomain = document.domain === domain;
+    var uvDiv = document.getElementsByClassName('uv');
+
+    Array.prototype.forEach.call(uvDiv, function(ud) {
+        var z = ud.getAttribute('data-uri');
+        var ci = ud.getAttribute('data-collectionindex');
+        var mi = ud.getAttribute('data-manifestindex');
+        var si = ud.getAttribute('data-sequenceindex');
+        var cvi = ud.getAttribute('data-canvasindex');
+        var xywh = ud.getAttribute('data-xywh');
+        var r = ud.getAttribute('data-rotation');
+        var cfg = ud.getAttribute('data-config');
+        var dl = ud.getAttribute('data-locale');
+        var manifestUrl = z;
+
+        var fullUrl = appUri + '#?manifest=' + manifestUrl + '&c=' + ci + '&m=' + mi + '&s=' + si + '&cv=' + cvi + '&config=' + cfg + '&locales=' + dl;
+
+        var iframe = document.createElement('iframe');
+        iframe.src = fullUrl;
+        iframe.width = ud.clientWidth;
+        iframe.height = ud.clientHeight;
+        ud.appendChild(iframe);
+>>>>>>> v3
     });
 });

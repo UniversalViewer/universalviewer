@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class ClickThroughDialogue extends Dialogue {
+export class ClickThroughDialogue extends Dialogue {
 
     acceptCallback: any;
     $acceptTermsButton: JQuery;
@@ -19,16 +19,16 @@ class ClickThroughDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_CLICKTHROUGH_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_CLICKTHROUGH_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_CLICKTHROUGH_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, (e: any, params: any) => {
             this.acceptCallback = params.acceptCallback;
             this.resource = params.resource;
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -55,7 +55,7 @@ class ClickThroughDialogue extends Dialogue {
         this.$acceptTermsButton.on('click', (e) => {
             e.preventDefault();
             this.close();
-            $.publish(BaseCommands.ACCEPT_TERMS);
+            $.publish(BaseEvents.ACCEPT_TERMS);
             if (this.acceptCallback) this.acceptCallback();
         });
     }
@@ -63,13 +63,15 @@ class ClickThroughDialogue extends Dialogue {
     open(): void {
         super.open();
 
-        this.$title.text(this.resource.clickThroughService.getProperty('label'));
-        this.$message.html(this.resource.clickThroughService.getProperty('description'));
-        this.$message.targetBlank();
+        if (this.resource.clickThroughService) {
+            this.$title.text(this.resource.clickThroughService.getProperty('label'));
+            this.$message.html(this.resource.clickThroughService.getProperty('description'));
+            this.$message.targetBlank();
+        }
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseCommands.EXTERNAL_LINK_CLICKED, [url]);
+            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
         });
 
         this.resize();
@@ -79,5 +81,3 @@ class ClickThroughDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = ClickThroughDialogue;

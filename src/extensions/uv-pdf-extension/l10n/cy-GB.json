@@ -18,7 +18,7 @@
     "downloadDialogue": {
       "content": {
         "download": "Lawrlwytho",
-        "entireFileAsOriginal": "Y ffeil gyfan ({0})",
+        "entireFileAsOriginal": "Y ffeil gyfan",
         "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
         "preview": "Rhagolwg",
         "title": "Lawrlwytho"

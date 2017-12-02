@@ -3,6 +3,7 @@
 #################
 
 lib
+src/lib/bundle.js
 src/lib/bundle.min.js
 !src/lib
 !src/extensions/**/lib
@@ -13,6 +14,7 @@ src/lib/bundle.min.js
 #################
 
 .tscache
+typings
 
 #################
 ## Webstorm
@@ -56,13 +58,16 @@ node_modules
 !src/*/*/lib/*.js
 !src/extensions/*/dependencies.js
 !dist/**/*.js
+!src/helpers.js
+!dev.build.js
+!dist.build.js
 
 #################
 ## Build
 #################
 
-build/
-src/extensions/*/build
+.build/
+src/extensions/*/.build
 
 #################
 ## Dist

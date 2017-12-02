@@ -1,6 +1,6 @@
-import BaseCommands = require("./BaseCommands");
+import {BaseEvents} from "./BaseEvents";
 
-class Panel {
+export class Panel {
 
     $element: JQuery;
     fitToParentWidth: boolean;
@@ -16,13 +16,13 @@ class Panel {
     }
 
     create(): void {
-        $.subscribe(BaseCommands.RESIZE, () => {
+        $.subscribe(BaseEvents.RESIZE, () => {
             this.resize();
         });
     }
 
     resize(): void {
-        var $parent = this.$element.parent();
+        const $parent: JQuery = this.$element.parent();
 
         if (this.fitToParentWidth) {
             this.$element.width($parent.width());
@@ -35,5 +35,3 @@ class Panel {
         this.isResized = true;
     }
 }
-
-export = Panel;

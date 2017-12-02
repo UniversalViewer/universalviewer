@@ -1,18 +1,11 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseView = require("../uv-shared-module/BaseView");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import ICanvas = Manifold.ICanvas;
-import IRange = Manifold.IRange;
-import ISeadragonExtension = require("../../extensions/uv-seadragon-extension/ISeadragonExtension");
-import IThumb = Manifold.IThumb;
-import ITreeNode = Manifold.ITreeNode;
-import Mode = require("../../extensions/uv-seadragon-extension/Mode");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {BaseView} from "../uv-shared-module/BaseView";
 
-class GalleryView extends BaseView {
+export class GalleryView extends BaseView {
 
     isOpen: boolean = false;
-    component: IIIFComponents.IGalleryComponent;
-    galleryOptions: IIIFComponents.IGalleryComponentOptions;
+    galleryComponent: IIIFComponents.IGalleryComponent;
+    galleryData: IIIFComponents.IGalleryComponentData;
     $gallery: JQuery;
 
     constructor($element: JQuery) {
@@ -25,12 +18,12 @@ class GalleryView extends BaseView {
 
         // search preview doesn't work well with the gallery because it loads thumbs in "chunks"
 
-        // $.subscribe(Commands.SEARCH_PREVIEW_START, (e, canvasIndex) => {
-        //     this.component.searchPreviewStart(canvasIndex);
+        // $.subscribe(Events.SEARCH_PREVIEW_START, (e, canvasIndex) => {
+        //     this.galleryComponent.searchPreviewStart(canvasIndex);
         // });
 
-        // $.subscribe(Commands.SEARCH_PREVIEW_FINISH, () => {
-        //     this.component.searchPreviewFinish();
+        // $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
+        //     this.galleryComponent.searchPreviewFinish();
         // });
 
         this.$gallery = $('<div class="iiif-gallery-component"></div>');
@@ -38,26 +31,28 @@ class GalleryView extends BaseView {
     }
 
     public setup(): void {
-        this.component = new IIIFComponents.GalleryComponent(this.galleryOptions);
-
-        (<any>this.component).on('thumbSelected', function(args) {
-            var thumb = args[0];
-            $.publish(Commands.GALLERY_THUMB_SELECTED, [thumb]);
-            $.publish(BaseCommands.THUMB_SELECTED, [thumb]);
+        this.galleryComponent = new IIIFComponents.GalleryComponent({
+            target: this.$gallery[0], 
+            data: this.galleryData
         });
 
-        (<any>this.component).on('decreaseSize', function() {
-            $.publish(Commands.GALLERY_DECREASE_SIZE);
-        });
+        this.galleryComponent.on('thumbSelected', function(thumb: any) {
+            $.publish(BaseEvents.GALLERY_THUMB_SELECTED, [thumb]);
+            $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
+        }, false);
 
-        (<any>this.component).on('increaseSize', function() {
-            $.publish(Commands.GALLERY_INCREASE_SIZE);
-        });
+        this.galleryComponent.on('decreaseSize', function() {
+            $.publish(BaseEvents.GALLERY_DECREASE_SIZE);
+        }, false);
+
+        this.galleryComponent.on('increaseSize', function() {
+            $.publish(BaseEvents.GALLERY_INCREASE_SIZE);
+        }, false);
     }
 
     public databind(): void {
-        this.component.options = this.galleryOptions;
-        this.component.databind();
+        this.galleryComponent.options.data = this.galleryData;
+        this.galleryComponent.set(new Object()); // todo: should be passing options.data
         this.resize();
     }
 
@@ -67,7 +62,7 @@ class GalleryView extends BaseView {
 
         // todo: would be better to have no imperative methods on components and use a reactive pattern
         setTimeout(() => {
-            this.component.selectIndex(this.extension.helper.canvasIndex);
+            this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
         }, 10);
     }
 
@@ -78,11 +73,8 @@ class GalleryView extends BaseView {
 
     resize(): void {
         super.resize();
-        var $galleryElement = $(this.galleryOptions.element);
-        var $main: JQuery = $galleryElement.find('.main');
-        var $header: JQuery = $galleryElement.find('.header');
+        const $main: JQuery = this.$gallery.find('.main');
+        const $header: JQuery = this.$gallery.find('.header');
         $main.height(this.$element.height() - $header.height());
     }
 }
-
-export = GalleryView;

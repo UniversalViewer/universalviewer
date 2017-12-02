@@ -1,8 +1,8 @@
 var _ = require('lodash'),
-    glob = require('glob'),
-    globArray = require('glob-array'),
-    jsonSchemaGenerator = require('json-schema-generator'),
-    path = require('path');
+glob = require('glob'),
+globArray = require('glob-array'),
+jsonSchemaGenerator = require('json-schema-generator'),
+path = require('path');
 
 module.exports = function (grunt) {
 
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
             var regex = (/(.*)\/l10n\/(.*).json/).exec(localeFile);
 
             var extensionDir = regex[1];
-            var buildDir = path.join(extensionDir, '/build/');
+            var buildDir = path.join(extensionDir, '/.build/');
             var configDir = path.join(extensionDir, '/config/');
             var locale = regex[2];
             var configFile = path.join(configDir, locale + '.json');

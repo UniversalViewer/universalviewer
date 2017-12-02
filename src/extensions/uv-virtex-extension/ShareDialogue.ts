@@ -1,7 +1,7 @@
-import BaseShareDialogue = require("../../modules/uv-dialogues-module/ShareDialogue");
-import IVirtexExtension = require("./IVirtexExtension");
+import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
+import {IVirtexExtension} from "./IVirtexExtension";
 
-class ShareDialogue extends BaseShareDialogue {
+export class ShareDialogue extends BaseShareDialogue {
 
     constructor($element: JQuery) {
         super($element);
@@ -30,5 +30,3 @@ class ShareDialogue extends BaseShareDialogue {
         super.resize();
     }
 }
-
-export = ShareDialogue;

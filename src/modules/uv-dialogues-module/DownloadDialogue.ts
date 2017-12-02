@@ -1,8 +1,8 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
-import DownloadOption = require("../uv-shared-module/DownloadOption");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
+import {DownloadOption} from "../uv-shared-module/DownloadOption";
 
-class DownloadDialogue extends Dialogue {
+export class DownloadDialogue extends Dialogue {
 
     $downloadOptions: JQuery;
     $noneAvailable: JQuery;
@@ -20,14 +20,14 @@ class DownloadDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_DOWNLOAD_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_DOWNLOAD_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_DOWNLOAD_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, $triggerButton) => {
+        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
             this.open($triggerButton);
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -44,11 +44,11 @@ class DownloadDialogue extends Dialogue {
         this.$footer = $('<div class="footer"></div>');
         this.$content.append(this.$footer);
 
-        this.$termsOfUseButton = $('<a href="#">' + this.extension.config.content.termsOfUse + '</a>');
+        this.$termsOfUseButton = $('<a href="#">' + this.extension.data.config.content.termsOfUse + '</a>');
         this.$footer.append(this.$termsOfUseButton);
 
         this.$termsOfUseButton.onPressed(() => {
-            $.publish(BaseCommands.SHOW_TERMS_OF_USE);
+            $.publish(BaseEvents.SHOW_TERMS_OF_USE);
         });
 
         // hide
@@ -61,43 +61,75 @@ class DownloadDialogue extends Dialogue {
             this.$downloadOptions.empty();
 
             // add each file src
-            var canvas = this.extension.helper.getCurrentCanvas();
+            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-            var renderingFound: boolean = false;
+            let renderingFound: boolean = false;
 
-            _.each(canvas.getRenderings(), (rendering: Manifesto.IRendering) => {
-                var renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
-                var format: string = '';
-                if (renderingFormat){
+            const renderings: Manifesto.IRendering[] = canvas.getRenderings();
+
+            for (let i = 0; i < renderings.length; i++) {
+                const rendering: Manifesto.IRendering = renderings[i];
+                const renderingFormat: Manifesto.RenderingFormat = rendering.getFormat();
+                let format: string = '';
+                if (renderingFormat) {
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
+                this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
                 renderingFound = true;
-            });
+            }
 
             if (!renderingFound) {
-                this.addEntireFileDownloadOption(canvas.id, null, null);
+
+                let annotationFound: boolean = false;
+
+                const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+
+                for (let i = 0; i < annotations.length; i++) {
+                    const annotation: Manifesto.IAnnotation = annotations[i];
+                    const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+
+                    if (body.length) {
+                        const format: Manifesto.MediaType | null = body[0].getFormat();
+
+                        if (format) {
+                            this.addEntireFileDownloadOption(body[0].id, '', format.toString());
+                            annotationFound = true;
+                        }
+                        
+                    }
+                }
+
+                if (!annotationFound) {
+                    this.addEntireFileDownloadOption(canvas.id, '', '');
+                }
+
             }
         }
     }
 
-    addEntireFileDownloadOption(uri: string, label: string, format: string): void{
-        if (label) {
-            label += " ({0})";
-        } else {
-            label = this.content.entireFileAsOriginal;
-        }
-        var fileType;
+    addEntireFileDownloadOption(uri: string, label: string, format: string): void {
+        
+        let fileType: string | null;
+
         if (format) {
             fileType = Utils.Files.simplifyMimeType(format);
         } else {
             fileType = this.getFileExtension(uri);
         }
-        this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download tabindex="0">' + String.format(label, fileType) + '</li>');
+
+        if (!label) {
+            label = this.content.entireFileAsOriginal;
+        }
+
+        if (fileType) {
+            label += " (" + fileType + ")";
+        }
+
+        this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download tabindex="0">' + label + '</li>');
     }
 
     updateNoneAvailable(): void {
-        if (!this.$downloadOptions.find('li:visible').length){
+        if (!this.$downloadOptions.find('li:visible').length) {
             this.$noneAvailable.show();
         } else {
             // select first option.
@@ -106,26 +138,33 @@ class DownloadDialogue extends Dialogue {
     }
 
     updateTermsOfUseButton(): void {
-        var attribution: string = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
+        const attribution: string | null = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
         
-        if (Utils.Bools.getBool(this.extension.config.options.termsOfUseEnabled, false) && attribution) {
+        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && attribution) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();
         }
     }
 
-    getFileExtension(fileUri: string): string{
-        return fileUri.split('.').pop();
+    getFileExtension(fileUri: string): string | null {
+        let extension: string = <string>fileUri.split('.').pop();
+
+        // if it's not a valid file extension
+        if (extension.length > 5 || extension.indexOf('/') !== -1) {
+            return null;
+        }
+
+        return extension;
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
         switch (option){
             case DownloadOption.entireFileAsOriginal:
                 // check if ui-extensions disable it
-                var uiExtensions: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
+                const uiExtensions: Manifesto.IService | null = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
 
-                if (!this.extension.helper.isUIEnabled('mediaDownload')) {
+                if (uiExtensions && !this.extension.helper.isUIEnabled('mediaDownload')) {
                     return false;
                 }
         }
@@ -141,5 +180,3 @@ class DownloadDialogue extends Dialogue {
         this.setDockedPosition();
     }
 }
-
-export = DownloadDialogue;

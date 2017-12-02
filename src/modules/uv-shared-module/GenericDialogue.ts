@@ -1,7 +1,7 @@
-import BaseCommands = require("./BaseCommands");
-import Dialogue = require("./Dialogue");
+import {BaseEvents} from "./BaseEvents";
+import {Dialogue} from "./Dialogue";
 
-class GenericDialogue extends Dialogue {
+export class GenericDialogue extends Dialogue {
 
     acceptCallback: any;
     $acceptButton: JQuery;
@@ -17,24 +17,29 @@ class GenericDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_GENERIC_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_GENERIC_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_GENERIC_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_GENERIC_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, (e: any, params: any) => {
             this.acceptCallback = params.acceptCallback;
             this.showMessage(params);
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
         this.$message = $('<p></p>');
         this.$content.append(this.$message);
 
-        this.$acceptButton = $('<a href="#" class="btn btn-primary accept default"></a>');
-        this.$content.append(this.$acceptButton);
-        this.$acceptButton.text(this.content.ok);
+        this.$acceptButton = $(`
+          <button class="btn btn-primary accept default">
+            ${this.content.ok}
+          </button>
+        `);
+        this.$buttons.append(this.$acceptButton);
+        // Hide the redundant close button
+        this.$buttons.find('.close').hide();
 
         this.$acceptButton.onPressed(() => {
             this.accept();
@@ -50,13 +55,11 @@ class GenericDialogue extends Dialogue {
     }
 
     accept(): void {
-
-        $.publish(BaseCommands.CLOSE_ACTIVE_DIALOGUE);
-
+        $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
         if (this.acceptCallback) this.acceptCallback();
     }
 
-    showMessage(params): void {
+    showMessage(params: any): void {
 
         this.$message.html(params.message);
 
@@ -77,5 +80,3 @@ class GenericDialogue extends Dialogue {
         super.resize();
     }
 }
-
-export = GenericDialogue;

@@ -1,10 +1,10 @@
-import Panel = require("./Panel");
-import Bootstrapper = require("../../Bootstrapper");
-import IExtension = require("./IExtension");
+import {Panel} from "./Panel";
+import {IExtension} from "./IExtension";
+import {IUVComponent} from "../../IUVComponent";
 
-class BaseView extends Panel{
+export class BaseView extends Panel{
 
-    bootstrapper: any;
+    component: IUVComponent;
     config: any;
     content: any;
     extension: IExtension;
@@ -12,31 +12,33 @@ class BaseView extends Panel{
     options: any;
 
     constructor($element: JQuery, fitToParentWidth?: boolean, fitToParentHeight?: boolean) {
-        this.modules = [];
-        this.bootstrapper = $("body > #app").data("bootstrapper");
         super($element, fitToParentWidth, fitToParentHeight);
     }
 
     create(): void {
 
+        this.component = this.$element.closest('.uv').data("component");
+
         super.create();
-        this.extension = (<Bootstrapper>this.bootstrapper).extension;
+        
+        this.extension = <IExtension>(<IUVComponent>this.component).extension;
 
         this.config = {};
         this.config.content = {};
         this.config.options = {};
-        this.content = this.config.content;
-        this.options = this.config.options;
 
         var that = this;
 
         // build config inheritance chain
-        if (that.modules.length) {
+        if (that.modules && that.modules.length) {
             that.modules = that.modules.reverse();
-            _.each(that.modules, (moduleName: string) => {
-                that.config = $.extend(true, that.config, that.extension.config.modules[moduleName]);
+            $.each(that.modules, (index: number, moduleName: string) => {
+                that.config = $.extend(true, that.config, that.extension.data.config.modules[moduleName]);
             });
         }
+
+        this.content = this.config.content;
+        this.options = this.config.options;
     }
 
     init(): void{
@@ -44,6 +46,9 @@ class BaseView extends Panel{
     }
 
     setConfig(moduleName: string): void {
+        if (!this.modules) {
+            this.modules = [];
+        }
         this.modules.push(moduleName);
     }
 
@@ -51,5 +56,3 @@ class BaseView extends Panel{
         super.resize();
     }
 }
-
-export = BaseView;

@@ -1,39 +1,51 @@
-import BaseCommands = require("./BaseCommands");
-import Information = require("./Information");
-import InformationAction = require("./InformationAction");
-import InformationArgs = require("./InformationArgs");
-import InformationType = require("./InformationType");
-import IExtension = require("./IExtension");
+import {BaseEvents} from "./BaseEvents";
+import {Information} from "./Information";
+import {InformationAction} from "./InformationAction";
+import {InformationArgs} from "./InformationArgs";
+import {InformationType} from "./InformationType";
+import {IExtension} from "./IExtension";
 
-class InformationFactory{
+export class InformationFactory {
 
     extension: IExtension;
 
-    constructor(extension: IExtension){
+    constructor(extension: IExtension) {
         this.extension = extension;
     }
 
     public Get(args: InformationArgs): Information {
         switch(args.informationType){
             case (InformationType.AUTH_CORS_ERROR):
-                return new Information(this.extension.config.content.authCORSError, []);
+                return new Information(this.extension.data.config.content.authCORSError, []);
             case (InformationType.DEGRADED_RESOURCE):
-                var actions: InformationAction[] = [];
+                const actions: InformationAction[] = [];
+                const loginAction: InformationAction = new InformationAction();
 
-                var loginAction: InformationAction = new InformationAction();
+                let label: string | null = args.param.loginService.getConfirmLabel();
 
-                loginAction.label = this.extension.config.content.degradedResourceLogin;
+                if (!label) {
+                    label = this.extension.data.config.content.fallbackDegradedLabel;
+                }
+
+                loginAction.label = label;
+
+                const resource: Manifesto.IExternalResource = args.param;
 
                 loginAction.action = () => {
-                    $.publish(BaseCommands.HIDE_INFORMATION);
-                    $.publish(BaseCommands.OPEN_EXTERNAL_RESOURCE, [[args.param]]);
+                    resource.authHoldingPage = window.open("", "_blank");
+                    $.publish(BaseEvents.HIDE_INFORMATION);
+                    $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [[resource]]);
                 };
 
                 actions.push(loginAction);
 
-                return new Information(this.extension.config.content.degradedResourceMessage, actions);
+                let message: string | null = args.param.loginService.getServiceLabel();
+
+                if (!message) {
+                    message = this.extension.data.config.content.fallbackDegradedMessage;
+                }
+
+                return new Information(<string>message, actions);
         }
     }
 }
-
-export = InformationFactory;

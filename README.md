@@ -29,7 +29,7 @@
 - **Configurable**
   <p>The UV has its own visual configuration editor allowing all settings to be customised.</p>
 - **Extensible**
-  <p>Supports "IxIF" out of the box, allowing <a href="http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json">3D</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest">audio</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest">video</a>, and <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest">pdf</a> viewing experiences.</p>
+  <p>Supports IIIF Presentation API v3 (in development), allowing <a href="http://universalviewer.io/examples/?manifest=http://files.universalviewer.io/manifests/nelis/ecorche.json">3D</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17307922/manifest">audio</a>, <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b16659090/manifest">video</a>, and <a href="http://universalviewer.io/examples/?manifest=http://wellcomelibrary.org/iiif/b17502792/manifest">pdf</a> viewing experiences.</p>
 
 [More about the Universal Viewer](https://github.com/UniversalViewer/universalviewer/wiki/About)
 
@@ -37,64 +37,56 @@
 
 See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
 
-## Development
-
-The most up-to-date code can usually be found on the `dev` branch.
-Please see the [wiki](https://github.com/UniversalViewer/UniversalViewer/wiki) for instructions on how to customise the viewer for your own projects.
-
-### First Time Setup
+## First Time Setup
 
 All command-line operations for building the UV are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). To get set up:
 
 1. Install [Node.js](http://nodejs.org), if you haven't already
 
-1. Install the grunt command line interface (if you haven't already); on the command line, run:
+1. Install the grunt command line interface:
 
-	    npm install -g grunt-cli
+    `npm install -g grunt-cli`
 
-1. Install bower (if you haven't already)
+1. Install typings:
 
-        npm install -g bower
+    `npm install typings -g`
 
+<!--
+1. Install [Sorcery](https://github.com/Rich-Harris/sorcery):
+
+    npm install -g sorcery
+-->
 1. Clone the `universalviewer` repository and sub modules:
 
-	    git clone https://github.com/UniversalViewer/universalviewer.git --recursive
+    `git clone https://github.com/UniversalViewer/universalviewer.git --recursive`
 
 1. On the command line, go in to the `universalviewer` folder
 
 1. Run
 
-        npm install
-        bower install
-        grunt sync
+    `npm install`
 
-### Debug Builds
+> If switching between branches, ensure that you check out the correct branch in the `examples` sub-repository too. By default this should be `gh-pages`.
+
+## Debug Builds
 
 To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
 
-	grunt
+    grunt build
 
-This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js with source maps to aid in debugging.
+This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js.
 
-### Distribution Builds
+## Distribution Builds
 
 To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
-	grunt build
+    grunt build --dist
 
-A versioned `uv-major.minor.patch` folder along with compressed .zip and .tar files will appear in the `/dist` folder. Use these in your website, or alternatively use:
- 
-    npm install universalviewer --save
-    
-which will download the distribution folder to `node_modules`.
-
-### Examples
+## Examples
 
 To view the examples run:
 
-    grunt
     grunt examples
-
 
 ## Backers
 
@@ -166,7 +158,6 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 <a href="https://opencollective.com/universalviewer/sponsor/27/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/27/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/sponsor/28/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/28/avatar.svg"></a>
 <a href="https://opencollective.com/universalviewer/sponsor/29/website" target="_blank"><img src="https://opencollective.com/universalviewer/sponsor/29/avatar.svg"></a>
-
 
 ## License
 

@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class HelpDialogue extends Dialogue {
+export class HelpDialogue extends Dialogue {
 
     $message: JQuery;
     $scroll: JQuery;
@@ -17,14 +17,14 @@ class HelpDialogue extends Dialogue {
         
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_HELP_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_HELP_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_HELP_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_HELP_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, () => {
             this.open();
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -52,5 +52,3 @@ class HelpDialogue extends Dialogue {
 
     }
 }
-
-export = HelpDialogue;

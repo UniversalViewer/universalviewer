@@ -1,14 +1,14 @@
-#app{
+.uv {
 
     @expandFullEnabled: false;
 
-    .rightPanel{
+    .rightPanel {
 
-        .top{
+        .top {
             height: 35px;
             position: relative;
 
-            .title{
+            .title {
                 position: absolute;
                 height: 20px;
                 margin-top: 9px;
@@ -16,9 +16,10 @@
                 left: 35px;
             }
 
-            .collapseButton{
+            .collapseButton {
                 position: absolute;
-                background: url('@{img-path}arrows_right.png') no-repeat;
+                background-image: data-uri('@{img-path}arrows_right.png');
+                background-repeat: no-repeat;
                 width: 20px;
                 height: 20px;
                 cursor: pointer;
@@ -27,9 +28,10 @@
                 left: 5px;
             }
 
-            .expandFullButton{
+            .expandFullButton {
                 position: absolute;
-                background: url('@{img-path}arrows_left.png') no-repeat;
+                background-image: data-uri('@{img-path}arrows_left.png');
+                background-repeat: no-repeat;
                 width: 20px;
                 height: 20px;
                 cursor: pointer;
@@ -41,10 +43,10 @@
             .expandFull();
         }
 
-        .closed{
+        .closed {
             width: 25px;
 
-            .title{
+            .title {
                 .link-color-decoration(@text-color, none);
                 white-space: nowrap;
                 display: block;
@@ -54,8 +56,9 @@
                 .rotate(90deg);
             }
 
-            .expandButton{
-                background: url('@{img-path}arrows_left.png') no-repeat;
+            .expandButton {
+                background-image: data-uri('@{img-path}arrows_left.png');
+                background-repeat: no-repeat;
                 width: 20px;
                 height: 20px;
                 cursor: pointer;
@@ -64,7 +67,7 @@
                 .btn-focus();
             }
 
-            .expandFullButton{
+            .expandFullButton {
                 .btn-focus();
             }
         }
@@ -80,21 +83,21 @@
             left: 55px;
         }
 
-        .collapseButton{
+        .collapseButton {
             left: 30px;
         }
 
-        .expandFullButton{
+        .expandFullButton {
             display: block;
         }
     }
 }
 
 // ie8
-#app.browser-Explorer.browser-version-8 {
-    .rightPanel{
-        .closed{
-            .title{
+.uv.browser-Explorer.browser-version-8 {
+    .rightPanel {
+        .closed {
+            .title {
                 //filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
                 //width: 250px;
                 writing-mode: tb-lr;

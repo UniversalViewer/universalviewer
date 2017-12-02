@@ -1,71 +1,46 @@
 var metadata = require('./package');
 
-var Config = (function () {
-    function Config() {
-        this.name = metadata.name;
-        this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
-        this.dependencies = {
-            libs: [
-                'node_modules/base-component/dist/base-component.bundle.js',
-                'node_modules/jquery-plugins/dist/jquery-plugins.js',
-                'node_modules/jquery-tiny-pubsub/dist/ba-tiny-pubsub.min.js',
-                'node_modules/key-codes/dist/key-codes.js',
-                'node_modules/manifold/dist/manifold.bundle.js',
-                'node_modules/units/Length.min.js',
-                'node_modules/utils/dist/utils.js'
-            ],
-            typings: [
-                'node_modules/base-component/dist/base-component.d.ts',
-                'node_modules/base-component/typings/corejs.d.ts',
-                'node_modules/base-component/typings/jquery.d.ts',
-                'node_modules/jquery-plugins/typings/jquery-plugins.d.ts',
-                'node_modules/key-codes/dist/key-codes.d.ts',
-                'node_modules/manifold/dist/manifold.bundle.d.ts',
-                'node_modules/utils/dist/utils.d.ts'
-            ]
-        };
-        this.directories = {
-            bower: './lib',
-            build: './build',
-            dist: './dist',
-            examples: './examples',
-            extensions: './src/extensions',
-            lib: './src/lib',
-            modules: './src/modules',
-            npm: './node_modules',
-            themes: './src/themes',
-            typings: './src/typings',
-            uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
-            uvPdfExtension: './src/extensions/uv-pdf-extension',
-            uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
-            uvVirtexExtension: './src/extensions/uv-virtex-extension'
-        };
-        this.typescript = {
-            dev: {
-                src: ['./src/**/*.ts'],
-                options: {
-                    target: 'es3',
-                    module: 'amd',
-                    sourceMap: true,
-                    declarations: false,
-                    nolib: false,
-                    comments: true
-                }
-            },
-            dist: {
-                src: ['./src/**/*.ts'],
-                options: {
-                    target: 'es3',
-                    module: 'amd',
-                    sourceMap: false,
-                    declarations: false,
-                    nolib: false,
-                    comments: false
-                }
-            }
-        };
+module.exports = function () {
+    this.name = metadata.name;
+    this.header = '// ' + this.name + ' v' + metadata.version + ' ' + metadata.homepage + '\n';
+    this.examplesPort = 8002;
+    this.dependencies = {
+        bundle: [
+            'node_modules/base-component/dist/base-component.js',
+            'node_modules/exjs/dist/ex.es3.min.js',
+            'node_modules/extensions/dist/extensions.js',
+            'node_modules/http-status-codes/dist/http-status-codes.js',
+            'node_modules/jquery-plugins/dist/jquery-plugins.js',
+            'node_modules/jquery-tiny-pubsub/dist/ba-tiny-pubsub.js',
+            'node_modules/key-codes/dist/key-codes.js',
+            'node_modules/manifesto.js/dist/client/manifesto.js',
+            'node_modules/manifold/dist/manifold.js',
+            'node_modules/utils/dist/utils.js'
+        ],
+        offline: [ // when offline, make these libs available as they can't be loaded from a cdn
+            'node_modules/jquery/dist/jquery.min.js',
+            'node_modules/jsviews/jsviews.min.js',
+            'node_modules/core-js/client/shim.min.js'
+        ]
+    };
+    this.directories = {
+        bower: './lib',
+        build: './.build',
+        dist: './dist',
+        examples: './examples',
+        extensions: './src/extensions',
+        lib: './src/lib',
+        modules: './src/modules',
+        npm: './node_modules',
+        src: './src',
+        themes: './src/themes',
+        uvDefaultExtension: './src/extensions/uv-default-extension',
+        uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
+        uvPdfExtension: './src/extensions/uv-pdf-extension',
+        uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
+        uvVirtexExtension: './src/extensions/uv-virtex-extension'
+    };
+    this.themes = {
+        
     }
-    return Config;
-})();
-
-module.exports = Config;
+}

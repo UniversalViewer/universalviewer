@@ -1,7 +1,7 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import Dialogue = require("../uv-shared-module/Dialogue");
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {Dialogue} from "../uv-shared-module/Dialogue";
 
-class ExternalContentDialogue extends Dialogue {
+export class ExternalContentDialogue extends Dialogue {
 
     $iframe: JQuery;
 
@@ -15,15 +15,15 @@ class ExternalContentDialogue extends Dialogue {
 
         super.create();
 
-        this.openCommand = BaseCommands.SHOW_EXTERNALCONTENT_DIALOGUE;
-        this.closeCommand = BaseCommands.HIDE_EXTERNALCONTENT_DIALOGUE;
+        this.openCommand = BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE;
+        this.closeCommand = BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e, params) => {
+        $.subscribe(this.openCommand, (e: any, params: any) => {
             this.open();
             this.$iframe.prop('src', params.uri);
         });
 
-        $.subscribe(this.closeCommand, (e) => {
+        $.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -40,5 +40,3 @@ class ExternalContentDialogue extends Dialogue {
         this.$iframe.height(this.$content.height());
     }
 }
-
-export = ExternalContentDialogue;

@@ -1,9 +1,7 @@
-import InformationAction = require("./InformationAction");
+import {InformationAction} from "./InformationAction";
 
-class Information {
+export class Information {
     constructor(public message: string, public actions: InformationAction[]) {
 
     }
 }
-
-export = Information;

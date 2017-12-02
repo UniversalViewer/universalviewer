@@ -1,15 +1,12 @@
-import BaseCommands = require("../uv-shared-module/BaseCommands");
-import BaseView = require("../uv-shared-module/BaseView");
-import Commands = require("../../extensions/uv-seadragon-extension/Commands");
-import IRange = Manifold.IRange;
+import {BaseEvents} from "../uv-shared-module/BaseEvents";
+import {BaseView} from "../uv-shared-module/BaseView";
 import ITreeNode = Manifold.ITreeNode;
-import MultiSelectState = Manifold.MultiSelectState;
 
-class TreeView extends BaseView {
+export class TreeView extends BaseView {
 
     isOpen: boolean = false;
-    component: IIIFComponents.ITreeComponent;
-    treeOptions: IIIFComponents.ITreeComponentOptions;
+    treeComponent: IIIFComponents.ITreeComponent;
+    treeData: IIIFComponents.ITreeComponentData;
     $tree: JQuery;
 
     constructor($element: JQuery) {
@@ -25,28 +22,23 @@ class TreeView extends BaseView {
     }
 
     setup(): void {
-        var that = this;
 
-        this.component = new IIIFComponents.TreeComponent(this.treeOptions);
-
-        // todo: casting as <any> is necessary because IBaseComponent doesn't implement ITinyEmitter
-        // it is mixed-in a runtime. figure out how to add .on etc to IBaseComponent without needing
-        // to implement it in BaseComponent.
-
-        (<any>this.component).on('treeNodeSelected', function(args) {
-            var node = args[0];
-            $.publish(Commands.TREE_NODE_SELECTED, [node]);
+        this.treeComponent = new IIIFComponents.TreeComponent({
+            target: this.$tree[0], 
+            data: this.treeData
         });
 
-        (<any>this.component).on('treeNodeMultiSelected', function(args) {
-            var node = args[0];
-            $.publish(Commands.TREE_NODE_MULTISELECTED, [node]);
-        });
+        this.treeComponent.on('treeNodeSelected', function(node: ITreeNode) {
+            $.publish(BaseEvents.TREE_NODE_SELECTED, [node]);
+        }, false);
+
+        this.treeComponent.on('treeNodeMultiSelected', function(node: ITreeNode) {
+            $.publish(BaseEvents.TREE_NODE_MULTISELECTED, [node]);
+        }, false);
     }
 
     public databind(): void {
-        this.component.options = this.treeOptions;
-        this.component.databind();
+        this.treeComponent.set(this.treeData);
         this.resize();
     }
 
@@ -61,20 +53,18 @@ class TreeView extends BaseView {
     }
 
     public selectNode(node: Manifold.ITreeNode): void {
-        this.component.selectNode(node);
+        this.treeComponent.selectNode(node);
     }
 
     public deselectCurrentNode(): void {
-        this.component.deselectCurrentNode();
+        this.treeComponent.deselectCurrentNode();
     }
 
     public getNodeById(id: string): ITreeNode {
-        return this.component.getNodeById(id);
+        return this.treeComponent.getNodeById(id);
     }
 
     resize(): void {
         super.resize();
     }
 }
-
-export = TreeView;

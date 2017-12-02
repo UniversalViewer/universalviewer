@@ -1,10 +1,8 @@
-class InformationAction {
-    public label: string;
+export class InformationAction {
+    public label: string | null;
     public action: () => void;
 
     constructor() {
 
     }
 }
-
-export = InformationAction;

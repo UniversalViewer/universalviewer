@@ -1,37 +1,35 @@
-import CroppedImageDimensions = require("./CroppedImageDimensions");
-import IExtension = require("../../modules/uv-shared-module/IExtension");
-import Mode = require("./Mode");
-import SearchResult = Manifold.SearchResult;
-import SearchResultRect = Manifold.SearchResultRect;
+import {CroppedImageDimensions} from "./CroppedImageDimensions";
+import {IExtension} from "../../modules/uv-shared-module/IExtension";
+import {Mode} from "./Mode";
+import AnnotationGroup = Manifold.AnnotationGroup;
+import AnnotationRect = Manifold.AnnotationRect;
 import Size = Utils.Measurements.Size;
 
-interface ISeadragonExtension extends IExtension{
-    currentSearchResultRect: SearchResultRect;
-    getAutoCompleteUri(): string;
+export interface ISeadragonExtension extends IExtension{
+    annotations: AnnotationGroup[] | null;
+    currentAnnotationRect: AnnotationRect | null;
+    getAnnotationRects(): AnnotationRect[];
+    getAutoCompleteUri(): string | null;
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size;
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string;
-    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions;
-    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string;
-    getCurrentSearchResultRectIndex(): number;
+    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string | null;
+    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null;
+    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string | null;
+    getCurrentAnnotationRectIndex(): number;
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string;
     getImageBaseUri(canvas: Manifesto.ICanvas): string;
-    getImageId(canvas: Manifesto.ICanvas): string;
-    getLastSearchResultRectIndex(): number;
+    getImageId(canvas: Manifesto.ICanvas): string | null;
+    getLastAnnotationRectIndex(): number;
     getMode(): Mode;
     getNextPageIndex(index?: number): number;
     getPrevPageIndex(index?: number): number;
-    getSearchResultRects(): SearchResultRect[];
-    getSearchWithinServiceUri(): string;
-    getTotalSearchResultRects(): number;
+    getSearchServiceUri(): string | null;
+    getTotalAnnotationRects(): number;
     getViewer(): any;
-    getViewerRotation(): number;
-    getViewportBounds(): string;
-    isFirstSearchResultRect(): boolean;
+    getViewerRotation(): number | null;
+    getViewportBounds(): string | null;
+    isFirstAnnotationRect(): boolean;
     isPagingSettingEnabled(): boolean;
-    isSearchWithinEnabled(): boolean;
-    previousSearchResultRect: SearchResultRect;
-    searchResults: SearchResult[];
-    searchWithin(terms: string, callback: (results: any) => void): void;
+    isSearchEnabled(): boolean;
+    previousAnnotationRect: AnnotationRect | null;
+    search(terms: string, callback: (results: any) => void): void;
 }
-
-export = ISeadragonExtension;
