@@ -6,7 +6,7 @@
 &nbsp;&nbsp;
 <a href="https://universalviewerinvite.herokuapp.com"><img src="https://worldvectorlogo.com/logos/slack.svg" width="60" /></a>
 
-    npm install universalviewer --save
+    npm install universalviewer@beta --save
 
 [Examples](http://universalviewer.io/examples/)
 
@@ -16,7 +16,7 @@
 
 ## Contributors
 
-![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/logos.jpg "Contributors")
+![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
 
 ## Features:
 
