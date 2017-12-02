@@ -850,6 +850,11 @@ export class BaseExtension implements IExtension {
         this.data.config.options = $.extend(this.data.config.options, settings);
     }
 
+    getLocale(): string {
+        const locale: ILocale = this.data.locales[0];
+        return locale.name;
+    }
+
     getSharePreview(): ISharePreview {
 
         const title: string | null = this.helper.getLabel();
