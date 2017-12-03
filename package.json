@@ -1,6 +1,5 @@
 {
   "name": "universalviewer",
-  "version": "3.0.1",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "scripts": {
     "postinstall": "typings install && opencollective postinstall",
@@ -17,7 +16,7 @@
     "OpenSeadragon",
     "PDF"
   ],
-  "author": "Edward Silverton <ed@edsilv.com> (http://edsilv.com)",
+  "author": "@edsilv",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/universalviewer/universalviewer/issues"
