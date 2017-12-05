@@ -13,7 +13,6 @@ module.exports = function (grunt) {
 
     function refresh() {
         packageJson = grunt.file.readJSON("package.json");
-        grunt.config.set('config.directories.uvVersioned', 'uv-' + packageJson.version);
         grunt.config.set('config.directories.uv', 'uv');
     }
 
@@ -108,14 +107,6 @@ module.exports = function (grunt) {
             },
             build: {
                 files: [
-                    // package.json
-                    {
-                        expand: true,
-                        flatten: true,
-                        cwd: '.',
-                        src: ['package.json'],
-                        dest: '<%= config.directories.build %>'
-                    },
                     // js
                     {
                         expand: true,
@@ -257,7 +248,7 @@ module.exports = function (grunt) {
             zip: {
                 options: {
                     mode: 'zip',
-                    archive: '<%= config.directories.examples %>/<%= config.directories.uvVersioned %>.zip',
+                    archive: '<%= config.directories.examples %>/<%= config.directories.uv %>.zip',
                     level: 9
                 },
                 files: [
@@ -312,17 +303,6 @@ module.exports = function (grunt) {
                     from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
                     to: '\(\'../../assets/$2\'\)'
                 }]
-            },
-            versions: {
-                // replace uv version
-                src: [
-                    '<%= config.directories.examples %>/embed.js'
-                ],
-                overwrite: true,
-                replacements: [{
-                    from: /uv-\d+\.\d+\.\d+/g,
-                    to: '<%= config.directories.uvVersioned %>'
-                }]
             }
         },
 
@@ -336,14 +316,6 @@ module.exports = function (grunt) {
                     open: {
                         target: 'http://localhost:<%= config.examplesPort %>/<%= config.directories.examples %>/'
                     }
-                }
-            }
-        },
-
-        protractor: {
-            dev: {
-                options: {
-                    configFile: "tests/protractor-conf.js"
                 }
             }
         },
@@ -384,7 +356,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-text-replace');
 
@@ -416,7 +387,6 @@ module.exports = function (grunt) {
             'theme:dist',
             'replace:moduleassets',
             'replace:themeassets',
-            'replace:versions',
             'clean:dist',
             'copy:dist',
             'compress:zip'
@@ -427,12 +397,6 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'connect'
-        );
-    });
-
-    grunt.registerTask("test", '', function(){
-        grunt.task.run(
-            'protractor:dev'
         );
     });
 };

@@ -82,9 +82,9 @@ export class CenterPanel extends BaseView {
 
         $attribution.targetBlank();
 
-        $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
-            this.resize();
-        });
+        // $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
+        //     this.resize();
+        // });
 
         //if (license){
         //    $license.append('<a href="' + license + '">' + license + '</a>');

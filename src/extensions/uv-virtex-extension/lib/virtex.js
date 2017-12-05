@@ -1,11 +1,10 @@
-// virtex v0.3.2 https://github.com/edsilv/virtex#readme
+// virtex v0.3.4 https://github.com/edsilv/virtex#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
 
 var Virtex;
 (function (Virtex) {
-    var StringValue = (function () {
+    var StringValue = /** @class */ (function () {
         function StringValue(value) {
             this.value = "";
             if (value) {
@@ -32,7 +31,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Virtex;
 (function (Virtex) {
-    var FileType = (function (_super) {
+    var FileType = /** @class */ (function (_super) {
         __extends(FileType, _super);
         function FileType() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -50,7 +49,7 @@ var Virtex;
 
 var Virtex;
 (function (Virtex) {
-    var CORTOFileTypeHandler = (function () {
+    var CORTOFileTypeHandler = /** @class */ (function () {
         function CORTOFileTypeHandler() {
         }
         CORTOFileTypeHandler.setup = function (viewport, obj, cb) {
@@ -93,7 +92,7 @@ var Virtex;
 
 var Virtex;
 (function (Virtex) {
-    var DRACOFileTypeHandler = (function () {
+    var DRACOFileTypeHandler = /** @class */ (function () {
         function DRACOFileTypeHandler() {
         }
         DRACOFileTypeHandler.setup = function (viewport, obj, cb) {
@@ -136,7 +135,7 @@ var Virtex;
 
 var Virtex;
 (function (Virtex) {
-    var glTFFileTypeHandler = (function () {
+    var glTFFileTypeHandler = /** @class */ (function () {
         function glTFFileTypeHandler() {
         }
         glTFFileTypeHandler.setup = function (viewport, obj, cb) {
@@ -163,7 +162,7 @@ var Virtex;
 
 var Virtex;
 (function (Virtex) {
-    var ObjFileTypeHandler = (function () {
+    var ObjFileTypeHandler = /** @class */ (function () {
         function ObjFileTypeHandler() {
         }
         ObjFileTypeHandler.setup = function (viewport, objpath, obj, cb) {
@@ -212,7 +211,7 @@ var Virtex;
 
 var Virtex;
 (function (Virtex) {
-    var PLYFileTypeHandler = (function () {
+    var PLYFileTypeHandler = /** @class */ (function () {
         function PLYFileTypeHandler() {
         }
         PLYFileTypeHandler.setup = function (viewport, geometry, cb) {
@@ -229,7 +228,7 @@ var Virtex;
 
 var Virtex;
 (function (Virtex) {
-    var ThreeJSFileTypeHandler = (function () {
+    var ThreeJSFileTypeHandler = /** @class */ (function () {
         function ThreeJSFileTypeHandler() {
         }
         ThreeJSFileTypeHandler.setup = function (viewport, obj, cb) {
@@ -270,7 +269,7 @@ var requestAnimFrame = (function () {
 })();
 var Virtex;
 (function (Virtex) {
-    var Viewport = (function (_super) {
+    var Viewport = /** @class */ (function (_super) {
         __extends(Viewport, _super);
         function Viewport(options) {
             var _this = _super.call(this, options) || this;
@@ -915,7 +914,7 @@ var Virtex;
         return Viewport;
     }(_Components.BaseComponent));
     Virtex.Viewport = Viewport;
-    var Events = (function () {
+    var Events = /** @class */ (function () {
         function Events() {
         }
         Events.LOADED = 'loaded';
