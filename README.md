@@ -2,6 +2,9 @@
 
 ![Universal Viewer](https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg "Universal Viewer")
 
+</p>
+
+<p align="center">
 # Universal Viewer
 
 [![Backers on Open Collective](https://opencollective.com/universalviewer/backers/badge.svg)](#backers)
@@ -18,6 +21,10 @@
 [Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
 [Twitter](https://twitter.com/universalviewer)
+
+</p>
+
+<p align="center">
 
 ## Contributors
 
