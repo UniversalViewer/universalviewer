@@ -27,6 +27,8 @@
     <a href="https://universalviewerinvite.herokuapp.com" rel="nofollow">#slack</a>
 </p>
 
+<br><br>
+
 
     npm install universalviewer@beta --save
 
