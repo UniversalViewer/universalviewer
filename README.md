@@ -1,4 +1,3 @@
-![Universal Viewer](https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg "Universal Viewer")
 
 # Universal Viewer
 
