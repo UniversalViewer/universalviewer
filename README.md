@@ -1,7 +1,7 @@
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg">
-    <h1 align="center">Universal Viewer</h1>
+    <h1 align="center" style="border-bottom: none; margin: 10px 0 20px 0">Universal Viewer</h1>
 </p>
 
 <p align="center">
@@ -24,11 +24,11 @@
 
     npm install universalviewer@beta --save
 
-[Examples](http://universalviewer.io/examples/)
-
-[Google group](https://groups.google.com/forum/#!forum/universalviewer)
-
-[Twitter](https://twitter.com/universalviewer)
+<p align="center">
+    <a style="float: left" href="http://universalviewer.io/examples/">Examples</a>
+    <a style="float: left" href="https://groups.google.com/forum/#!forum/universalviewer">Google group</a>
+    <a style="float: left" href="https://twitter.com/universalviewer">Twitter</a>
+</p>
 
 ## Contributors
 
