@@ -1,7 +1,7 @@
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg">
-    <h1>Universal Viewer</h1>
+    <h1 align="center">Universal Viewer</h1>
 </p>
 
 <p align="center">
@@ -13,12 +13,14 @@
     <a href="https://universalviewerinvite.herokuapp.com" rel="nofollow"><img src="https://camo.githubusercontent.com/5a922d105d7dde468e8cad8c6bf6e94800d1d734/68747470733a2f2f776f726c64766563746f726c6f676f2e636f6d2f6c6f676f732f736c61636b2e737667" width="60" data-canonical-src="https://worldvectorlogo.com/logos/slack.svg" style="max-width:100%;"></a>
 </p>
 
+<!--
 [![Backers on Open Collective](https://opencollective.com/universalviewer/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/universalviewer/sponsors/badge.svg)](#sponsors)
 [![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer?ref=badge_shield)
 &nbsp;&nbsp;
 <a href="https://universalviewerinvite.herokuapp.com"><img src="https://worldvectorlogo.com/logos/slack.svg" width="60" /></a>
+-->
 
     npm install universalviewer@beta --save
 
