@@ -1,3 +1,7 @@
+<p align="center">
+
+![Universal Viewer](https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg "Universal Viewer")
+
 # Universal Viewer
 
 [![Backers on Open Collective](https://opencollective.com/universalviewer/backers/badge.svg)](#backers)
@@ -18,6 +22,8 @@
 ## Contributors
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
+
+</p>
 
 ## Features:
 
