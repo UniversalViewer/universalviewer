@@ -1,5 +1,17 @@
 
-# Universal Viewer
+<p align="center">
+    <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg">
+    <h1>Universal Viewer</h1>
+</p>
+
+<p align="center">
+    <a href="#backers"><img src="https://camo.githubusercontent.com/8f205f0459eaafbbcf78554ae3182da599b178b9/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f6261636b6572732f62616467652e737667" alt="Backers on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/backers/badge.svg" style="max-width:100%;"></a>
+    <a href="#sponsors"><img src="https://camo.githubusercontent.com/db8439fd8526d52fbc36437f988d0d8d8dd6913a/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f73706f6e736f72732f62616467652e737667" alt="Sponsors on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/sponsors/badge.svg" style="max-width:100%;"></a>
+    <a href="https://travis-ci.org/UniversalViewer/universalviewer" rel="nofollow"><img src="https://camo.githubusercontent.com/f8b81af36c9c573b23dff74a97943ae97f7c0aa9/68747470733a2f2f7472617669732d63692e6f72672f556e6976657273616c5669657765722f756e6976657273616c7669657765722e7376673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master" style="max-width:100%;"></a>
+    <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer?ref=badge_shield" rel="nofollow"><img src="https://camo.githubusercontent.com/eedb4c09b3beed6d26cfef59a2ee31ce8e1c80d7/68747470733a2f2f6170702e666f7373612e696f2f6170692f70726f6a656374732f6769742532426769746875622e636f6d253246556e6976657273616c566965776572253246756e6976657273616c7669657765722e7376673f747970653d736869656c64" alt="FOSSA Status" data-canonical-src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer.svg?type=shield" style="max-width:100%;"></a>
+    &nbsp;&nbsp;
+    <a href="https://universalviewerinvite.herokuapp.com" rel="nofollow"><img src="https://camo.githubusercontent.com/5a922d105d7dde468e8cad8c6bf6e94800d1d734/68747470733a2f2f776f726c64766563746f726c6f676f2e636f6d2f6c6f676f732f736c61636b2e737667" width="60" data-canonical-src="https://worldvectorlogo.com/logos/slack.svg" style="max-width:100%;"></a>
+</p>
 
 [![Backers on Open Collective](https://opencollective.com/universalviewer/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/universalviewer/sponsors/badge.svg)](#sponsors)
