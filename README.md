@@ -22,13 +22,15 @@
 <a href="https://universalviewerinvite.herokuapp.com"><img src="https://worldvectorlogo.com/logos/slack.svg" width="60" /></a>
 -->
 
-    npm install universalviewer@beta --save
-
 <p align="center">
-    <a href="http://universalviewer.io/examples/">Examples</a>&nbsp;&nbsp;
-    <a href="https://groups.google.com/forum/#!forum/universalviewer">Google group</a>&nbsp;&nbsp;
+    <a href="http://universalviewer.io/examples/">Examples</a>&nbsp;&nbsp;&nbsp;
+    <a href="https://groups.google.com/forum/#!forum/universalviewer">Google group</a>&nbsp;&nbsp;&nbsp;
     <a href="https://twitter.com/universalviewer">Twitter</a>
 </p>
+
+
+    npm install universalviewer@beta --save
+
 
 ## Contributors
 
