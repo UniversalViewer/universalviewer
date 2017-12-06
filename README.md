@@ -48,16 +48,12 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
     `npm install -g grunt-cli`
 
-1. Install typings:
-
-    `npm install typings -g`
-
 <!--
 1. Install [Sorcery](https://github.com/Rich-Harris/sorcery):
 
     npm install -g sorcery
 -->
-1. Clone the `universalviewer` repository and sub modules:
+1. Clone the `universalviewer` repository and examples sub module:
 
     `git clone https://github.com/UniversalViewer/universalviewer.git --recursive`
 
