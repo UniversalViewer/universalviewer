@@ -54,7 +54,7 @@ export class Auth1 {
         return cookieServiceUrl;
     }
 
-    static openContentProviderInteraction(service: Manifesto.IService): Window {
+    static openContentProviderInteraction(service: Manifesto.IService): Window | null {
         const cookieServiceUrl: string = Auth1.getCookieServiceUrl(service);
         return window.open(cookieServiceUrl);
     }
@@ -122,7 +122,7 @@ export class Auth1 {
                 foundItems.push(item);
             } else {
                 // find an access token for the domain
-                const domain: string = Utils.Urls.getUrlParts(resource.dataUri).hostname;
+                const domain: string = Utils.Urls.getUrlParts(<string>resource.dataUri).hostname;
                 const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(Auth1.storageStrategy));
 
                 for (let i = 0; i < items.length; i++) {
@@ -172,7 +172,7 @@ export class Auth1 {
                         resolve(null);
                     },
                     confirmCallback: () => {
-                        const win: Window = Auth1.openContentProviderInteraction(service);
+                        const win: Window | null = Auth1.openContentProviderInteraction(service);
                         resolve(win);
                     },
                     cancelCallback: () => {

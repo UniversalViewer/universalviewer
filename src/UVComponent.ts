@@ -60,6 +60,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         // presentation 3
 
+        this._extensions[manifesto.MediaType.jpg().toString()] = {
+            type: OpenSeadragonExtension,
+            name: 'uv-seadragon-extension'
+        };
+        
         this._extensions[manifesto.MediaType.pdf().toString()] = {
             type: PDFExtension,
             name: 'uv-pdf-extension'

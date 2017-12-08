@@ -21,13 +21,25 @@ export class FooterPanel extends BaseFooterPanel {
         this.$spacer = $('<div class="spacer"></div>');
         this.$options.prepend(this.$spacer);
 
-        this.$rotateButton = $('<a class="rotate" title="' + this.content.rotateRight + '" tabindex="0">' + this.content.rotateRight + '</a>');
+        this.$rotateButton = $(`
+            <button class="btn imageBtn rotate" title="${this.content.rotateRight}">
+                <i class="uv-icon-rotate" aria-hidden="true"></i>
+            </button>
+        `);
         this.$options.prepend(this.$rotateButton);
 
-        this.$zoomOutButton = $('<a class="zoomOut" title="' + this.content.zoomOut + '" tabindex="0">' + this.content.zoomOut + '</a>');
+        this.$zoomOutButton = $(`
+            <button class="btn imageBtn zoomOut" title="${this.content.zoomOut}">
+                <i class="uv-icon-zoom-out" aria-hidden="true"></i>
+            </button>
+        `);
         this.$options.prepend(this.$zoomOutButton);
 
-        this.$zoomInButton = $('<a class="zoomIn" title="' + this.content.zoomIn + '" tabindex="0">' + this.content.zoomIn + '</a>');
+        this.$zoomInButton = $(`
+            <button class="btn imageBtn zoomIn" title="${this.content.zoomOut}">
+                <i class="uv-icon-zoom-in" aria-hidden="true"></i>
+            </button>
+        `);
         this.$options.prepend(this.$zoomInButton);
 
         this.$zoomInButton.onPressed(() => {

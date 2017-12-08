@@ -62,7 +62,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {         
             if (this.isMobileView()) {
                 const settings: ISettings = {};
                 settings.pagingEnabled = false;
@@ -276,6 +276,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
+            this.fire(Events.SEADRAGON_OPEN);
         });
 
         $.subscribe(Events.SEADRAGON_RESIZE, () => {
@@ -612,7 +613,6 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     nextSearchResult(): void {
-        let foundResult: AnnotationGroup;
         if (!this.annotations) return;
 
         // get the first result with an index greater than the current index.
@@ -620,7 +620,6 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             const result: AnnotationGroup = this.annotations[i];
 
             if (result && result.canvasIndex >= this.getNextPageIndex()) {
-                foundResult = result;
                 $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [result.canvasIndex]);
                 break;
             }

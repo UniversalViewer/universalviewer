@@ -1,11 +1,10 @@
-// iiif-metadata-component v1.1.0 https://github.com/viewdir/iiif-metadata-component#readme
+// iiif-metadata-component v1.1.2 https://github.com/iiif-commons/iiif-metadata-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifMetadataComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/>  
 
 var IIIFComponents;
 (function (IIIFComponents) {
-    var StringValue = (function () {
+    var StringValue = /** @class */ (function () {
         function StringValue(value) {
             this.value = "";
             if (value) {
@@ -34,7 +33,7 @@ var IIIFComponents;
 (function (IIIFComponents) {
     var MetadataComponentOptions;
     (function (MetadataComponentOptions) {
-        var LimitType = (function (_super) {
+        var LimitType = /** @class */ (function (_super) {
             __extends(LimitType, _super);
             function LimitType() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -62,7 +61,7 @@ var __extends = (this && this.__extends) || (function () {
 var MetadataGroup = Manifold.MetadataGroup;
 var IIIFComponents;
 (function (IIIFComponents) {
-    var MetadataComponent = (function (_super) {
+    var MetadataComponent = /** @class */ (function (_super) {
         __extends(MetadataComponent, _super);
         function MetadataComponent(options) {
             var _this = _super.call(this, options) || this;
@@ -99,6 +98,7 @@ var IIIFComponents;
                 aggregateValues: "",
                 canvases: null,
                 canvasDisplayOrder: "",
+                metadataGroupOrder: "",
                 canvasExclude: "",
                 canvasLabels: "",
                 content: {
@@ -148,13 +148,16 @@ var IIIFComponents;
             this._metadataGroups = this.options.data.helper.getMetadata(options);
             if (this.options.data.manifestDisplayOrder) {
                 var manifestGroup = this._getManifestGroup();
-                manifestGroup.items = this._sort(manifestGroup.items, this._readCSV(this.options.data.manifestDisplayOrder));
+                manifestGroup.items = this._sortItems(manifestGroup.items, this._readCSV(this.options.data.manifestDisplayOrder));
             }
             if (this.options.data.canvasDisplayOrder) {
                 var canvasGroups = this._getCanvasGroups();
                 $.each(canvasGroups, function (index, canvasGroup) {
-                    canvasGroup.items = _this._sort(canvasGroup.items, _this._readCSV(_this.options.data.canvasDisplayOrder));
+                    canvasGroup.items = _this._sortItems(canvasGroup.items, _this._readCSV(_this.options.data.canvasDisplayOrder));
                 });
+            }
+            if (this.options.data.metadataGroupOrder) {
+                this._metadataGroups = this._sortGroups(this._metadataGroups, this._readCSV(this.options.data.metadataGroupOrder));
             }
             if (this.options.data.canvasLabels) {
                 this._label(this._getCanvasGroups(), this._readCSV(this.options.data.canvasLabels, false));
@@ -176,7 +179,7 @@ var IIIFComponents;
             this._$noData.hide();
             this._render();
         };
-        MetadataComponent.prototype._sort = function (items, displayOrder) {
+        MetadataComponent.prototype._sortItems = function (items, displayOrder) {
             var _this = this;
             var sorted = [];
             var unsorted = items.clone();
@@ -190,6 +193,18 @@ var IIIFComponents;
             // add remaining items that were not in the displayOrder.
             $.each(unsorted, function (index, item) {
                 sorted.push(item);
+            });
+            return sorted;
+        };
+        MetadataComponent.prototype._sortGroups = function (groups, metadataGroupOrder) {
+            var sorted = [];
+            var unsorted = groups.clone();
+            $.each(metadataGroupOrder, function (index, group) {
+                var match = unsorted.en().where(function (x) { return x.resource.constructor.name.toLowerCase() == group; }).first();
+                if (match) {
+                    sorted.push(match);
+                    unsorted.remove(match);
+                }
             });
             return sorted;
         };
@@ -446,7 +461,7 @@ var IIIFComponents;
 (function (IIIFComponents) {
     var MetadataComponent;
     (function (MetadataComponent) {
-        var Events = (function () {
+        var Events = /** @class */ (function () {
             function Events() {
             }
             return Events;

@@ -1,22 +1,42 @@
-# Universal Viewer
 
+<p align="center">
+    <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg">
+    <h1 align="center">Universal Viewer</h1>
+</p>
+
+<p align="center">
+    <a href="#backers"><img src="https://camo.githubusercontent.com/8f205f0459eaafbbcf78554ae3182da599b178b9/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f6261636b6572732f62616467652e737667" alt="Backers on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/backers/badge.svg" style="max-width:100%;"></a>
+    <a href="#sponsors"><img src="https://camo.githubusercontent.com/db8439fd8526d52fbc36437f988d0d8d8dd6913a/68747470733a2f2f6f70656e636f6c6c6563746976652e636f6d2f756e6976657273616c7669657765722f73706f6e736f72732f62616467652e737667" alt="Sponsors on Open Collective" data-canonical-src="https://opencollective.com/universalviewer/sponsors/badge.svg" style="max-width:100%;"></a>
+    <a href="https://travis-ci.org/UniversalViewer/universalviewer" rel="nofollow"><img src="https://camo.githubusercontent.com/f8b81af36c9c573b23dff74a97943ae97f7c0aa9/68747470733a2f2f7472617669732d63692e6f72672f556e6976657273616c5669657765722f756e6976657273616c7669657765722e7376673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master" style="max-width:100%;"></a>
+    <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer?ref=badge_shield" rel="nofollow"><img src="https://camo.githubusercontent.com/eedb4c09b3beed6d26cfef59a2ee31ce8e1c80d7/68747470733a2f2f6170702e666f7373612e696f2f6170692f70726f6a656374732f6769742532426769746875622e636f6d253246556e6976657273616c566965776572253246756e6976657273616c7669657765722e7376673f747970653d736869656c64" alt="FOSSA Status" data-canonical-src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer.svg?type=shield" style="max-width:100%;"></a>
+    <a href="https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt"><img src="https://camo.githubusercontent.com/e80e20b31b4af7da8580f68d415779d250eee229/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f74687265652e737667" alt="License" data-canonical-src="https://img.shields.io/npm/l/universalviewer.svg" style="max-width:100%;"></a>
+</p>
+
+<!--
 [![Backers on Open Collective](https://opencollective.com/universalviewer/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/universalviewer/sponsors/badge.svg)](#sponsors)
 [![Build Status](https://travis-ci.org/UniversalViewer/universalviewer.svg?branch=master)](https://travis-ci.org/UniversalViewer/universalviewer) 
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FUniversalViewer%2Funiversalviewer?ref=badge_shield)
 &nbsp;&nbsp;
 <a href="https://universalviewerinvite.herokuapp.com"><img src="https://worldvectorlogo.com/logos/slack.svg" width="60" /></a>
+-->
 
-    npm install universalviewer --save
+<p align="center">
+    <a href="http://universalviewer.io/examples/">examples</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://groups.google.com/forum/#!forum/universalviewer">google group</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://twitter.com/universalviewer">twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://universalviewerinvite.herokuapp.com" rel="nofollow">#slack</a>
+</p>
 
-[Examples](http://universalviewer.io/examples/)
+<br>
 
-[Google group](https://groups.google.com/forum/#!forum/universalviewer)
 
-[Twitter](https://twitter.com/universalviewer)
+    npm install universalviewer@beta --save
+
 
 ## Contributors
 
-![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/logos.jpg "Contributors")
+![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
 
 ## Features:
 
@@ -37,12 +57,7 @@
 
 See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
 
-## Development
-
-The most up-to-date code can usually be found on the `dev` branch.
-Please see the [wiki](https://github.com/UniversalViewer/UniversalViewer/wiki) for instructions on how to customise the viewer for your own projects.
-
-### First Time Setup
+## First Time Setup
 
 All command-line operations for building the UV are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). To get set up:
 
@@ -52,16 +67,12 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
     `npm install -g grunt-cli`
 
-1. Install typings:
-
-    `npm install typings -g`
-
 <!--
 1. Install [Sorcery](https://github.com/Rich-Harris/sorcery):
 
     npm install -g sorcery
 -->
-1. Clone the `universalviewer` repository and sub modules:
+1. Clone the `universalviewer` repository and `examples` sub module:
 
     `git clone https://github.com/UniversalViewer/universalviewer.git --recursive`
 
@@ -71,7 +82,9 @@ All command-line operations for building the UV are scripted using [Grunt](http:
 
     `npm install`
 
-### Debug Builds
+> If switching between branches, ensure that you check out the correct branch in the `examples` sub-repository too. By default this should be `gh-pages`.
+
+## Debug Builds
 
 To build the debug version of the viewer, just run (on the command line, in the `universalviewer` folder):
 
@@ -79,13 +92,13 @@ To build the debug version of the viewer, just run (on the command line, in the 
 
 This will compile the [.less](http://lesscss.org) files into .css and [.ts](http://typescriptlang.org) files into .js.
 
-### Distribution Builds
+## Distribution Builds
 
 To build the distribution version of the UV, just run (on the command line, in the `universalviewer` folder):
 
     grunt build --dist
 
-### Examples
+## Examples
 
 To view the examples run:
 
@@ -165,3 +178,4 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 ## License
 
 The Universal Viewer is released under the [MIT license](https://github.com/UniversalViewer/universalviewer/blob/master/LICENSE.txt).
+

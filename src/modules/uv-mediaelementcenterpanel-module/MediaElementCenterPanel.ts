@@ -131,16 +131,6 @@ export class MediaElementCenterPanel extends CenterPanel {
 
             } else { // audio
 
-                // Try to find an MP3, since this is most likely to work:
-                let preferredSource: any = 0;
-
-                for (let i in sources) {
-                    if (sources[i].type === "audio/mp3") {
-                        preferredSource = i;
-                        break;
-                    }
-                }
-
                 this.$media = $('<audio controls="controls" preload="none"></audio>');
                 this.$container.append(this.$media);
 

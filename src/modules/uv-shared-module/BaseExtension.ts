@@ -38,7 +38,7 @@ export class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifesto.IExternalResource[] | null;
+    resources: Manifesto.IExternalResourceData[] | null;
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -202,6 +202,8 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.data.canvasIndex = canvasIndex;
+            this.lastCanvasIndex = this.helper.canvasIndex;
+            this.helper.canvasIndex = canvasIndex;
             this.fire(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
         });
 
@@ -466,8 +468,11 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
             this.fire(BaseEvents.SHOW_TERMS_OF_USE);
             
-            // todo: Eventually this should be replaced with a suitable IIIF Presentation API field - until then, use attribution
-            const terms: string | null = this.helper.getAttribution();
+            let terms: string | null = this.helper.getLicense();
+            
+            if (!terms) {
+                terms = this.helper.getAttribution();
+            }
             
             if (terms) {
                 this.showMessage(terms);
@@ -717,16 +722,19 @@ export class BaseExtension implements IExtension {
 
     private _updateMetric(): void {
 
-        for (let i = 0; i < this.metrics.length; i++) {
-            const metric: Metric = this.metrics[i];
+        setTimeout(() => {
+            for (let i = 0; i < this.metrics.length; i++) {
+                const metric: Metric = this.metrics[i];
 
-            if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
-                if (this.metric !== metric.type) {
-                    this.metric = metric.type;
-                    $.publish(BaseEvents.METRIC_CHANGED);
+                if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
+                    if (this.metric !== metric.type) {
+                        this.metric = metric.type;
+
+                        $.publish(BaseEvents.METRIC_CHANGED);
+                    }
                 }
             }
-        }
+        }, 1);
     }
 
     resize(): void {
@@ -845,6 +853,10 @@ export class BaseExtension implements IExtension {
         this.data.config.options = $.extend(this.data.config.options, settings);
     }
 
+    getLocale(): string {
+        return this.helper.options.locale;
+    }
+
     getSharePreview(): ISharePreview {
 
         const title: string | null = this.helper.getLabel();
@@ -904,8 +916,8 @@ export class BaseExtension implements IExtension {
         return range;
     }
 
-    // todo: move to manifold
-    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResource[]> {
+    // todo: move to manifold?
+    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]> {
 
         const indices: number[] = this.getPagedIndices();
         const resourcesToLoad: Manifesto.IExternalResource[] = [];
@@ -915,7 +927,9 @@ export class BaseExtension implements IExtension {
             let r: Manifesto.IExternalResource;
 
             if (!canvas.externalResource) {
-                r = new Manifold.ExternalResource(canvas, <(r: Manifesto.IManifestResource) => string>this.helper.getInfoUri, index, this.data.config.options.authAPIVersion);
+                r = new Manifold.ExternalResource(canvas, <Manifesto.IExternalResourceOptions>{
+                    authApiVersion: this.data.config.options.authAPIVersion
+                });
             } else {
                 r = canvas.externalResource;
             }
@@ -942,16 +956,16 @@ export class BaseExtension implements IExtension {
 
         // if using auth api v1
         if (authAPIVersion === 1) {
-            return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+            return new Promise<Manifesto.IExternalResourceData[]>((resolve) => {
 
                 const options: Manifesto.IManifestoOptions = <Manifesto.IManifestoOptions>{
                     locale: this.helper.options.locale
                 }
 
                 Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {
-                        resource.data.index = resource.index;
-                        return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
+                    
+                    this.resources = r.map((resource: Manifesto.IExternalResource) => {                        
+                        return this._prepareResourceData(resource);
                     });
 
                     resolve(this.resources);
@@ -959,17 +973,35 @@ export class BaseExtension implements IExtension {
             });
         } else {
         
-            return new Promise<Manifesto.IExternalResource[]>((resolve) => {
-                Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: Manifesto.IExternalResource[]) => {
+            return new Promise<any[]>((resolve) => {
+                Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: any[]) => {
+                    
                     this.resources = r.map((resource: Manifesto.IExternalResource) => {
-                        resource.data.index = resource.index;
-                        return <Manifesto.IExternalResource>Utils.Objects.toPlainObject(resource.data);
+                        return this._prepareResourceData(resource);
                     });
 
                     resolve(this.resources);
                 });
             });
         }
+    }
+
+    // copy useful properties over to the data object to be opened in center panel's openMedia method
+    // this is the info.json if there is one, which can be opened natively by openseadragon.
+    private _prepareResourceData(resource: Manifesto.IExternalResource): any {
+        
+        resource.data.hasServiceDescriptor = resource.hasServiceDescriptor();
+  
+        // if the data isn't an info.json, give it the necessary viewing properties
+        if (!resource.hasServiceDescriptor()) {
+            resource.data.id = <string>resource.dataUri;
+            (<Manifesto.IExternalImageResourceData>resource.data).width = resource.width;
+            (<Manifesto.IExternalImageResourceData>resource.data).height = resource.height;
+        }
+
+        resource.data.index = resource.index;
+
+        return Utils.Objects.toPlainObject(resource.data);
     }
 
     getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[] {
@@ -998,11 +1030,8 @@ export class BaseExtension implements IExtension {
 
         if (this.helper.isCanvasIndexOutOfRange(canvasIndex)) {
             this.showMessage(this.data.config.content.canvasIndexOutOfRange);
-            canvasIndex = 0;
+            return;
         }
-
-        this.lastCanvasIndex = this.helper.canvasIndex;
-        this.helper.canvasIndex = canvasIndex;
 
         $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     }

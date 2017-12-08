@@ -1,11 +1,11 @@
 // jquery-plugins v0.1.0 https://github.com/edsilv/jquery-plugins
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.jqueryPlugins = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
 // declare var Length: Length;
 // interface Length{
 //     toPx(elem, value, prop?, force?): number;
 // }
 
+/// <reference types="extensions" />
 (function ($) {
     $.fn.checkboxButton = function (onClick) {
         return this.each(function () {
@@ -92,12 +92,12 @@
                 if (expanded) {
                     $self.html(expandedText + " ");
                     $toggleButton.text("less");
-                    $toggleButton.toggleClass("less", "more");
+                    $toggleButton.switchClass("less", "more");
                 }
                 else {
                     $self.html(collapsedText + "&hellip; ");
                     $toggleButton.text("more");
-                    $toggleButton.toggleClass("more", "less");
+                    $toggleButton.switchClass("more", "less");
                 }
                 $toggleButton.one('click', function (e) {
                     e.preventDefault();
@@ -281,7 +281,7 @@
             $(this).find('a').prop('target', '_blank');
         });
     };
-    $.fn.toggleClass = function (class1, class2) {
+    $.fn.switchClass = function (class1, class2) {
         return this.each(function () {
             var $this = $(this);
             if ($this.hasClass(class1)) {
@@ -307,12 +307,12 @@
                 if (expanded) {
                     $self.html(expandedText + "&nbsp;");
                     $toggleButton.text(lessText);
-                    $toggleButton.toggleClass("less", "more");
+                    $toggleButton.switchClass("less", "more");
                 }
                 else {
                     $self.html(collapsedText + "&nbsp;");
                     $toggleButton.text(moreText);
-                    $toggleButton.toggleClass("more", "less");
+                    $toggleButton.switchClass("more", "less");
                 }
                 $toggleButton.one('click', function (e) {
                     e.preventDefault();
@@ -360,12 +360,12 @@
                 if (expanded) {
                     $self.html(expandedText + " ");
                     $toggleButton.text(lessText);
-                    $toggleButton.toggleClass("less", "more");
+                    $toggleButton.switchClass("less", "more");
                 }
                 else {
                     $self.html(collapsedText + "&hellip; ");
                     $toggleButton.text(moreText);
-                    $toggleButton.toggleClass("more", "less");
+                    $toggleButton.switchClass("more", "less");
                 }
                 $toggleButton.one('click', function (e) {
                     e.preventDefault();

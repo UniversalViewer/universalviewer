@@ -215,7 +215,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const $label: JQuery = this.$wholeImageHighResButton.find('label');
             let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
-            if (mime){
+            if (mime) {
                 mime = Utils.Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
@@ -225,15 +225,25 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
 
             if (!size) {
-                this.$wholeImageHighResButton.hide();
+                // if there is no image service, allow the image to be downloaded directly.
+                if (canvas.externalResource && !canvas.externalResource.hasServiceDescriptor()) {
+                    const label: string = String.format(this.content.wholeImageHighRes, '?', '?', mime);
+                    $label.text(label);
+                    $input.prop('title', label);
+                    this.$wholeImageHighResButton.show();
+                } else {
+                    this.$wholeImageHighResButton.hide();
+                }
             } else {
                 const label: string = hasNormalDimensions ?
                   String.format(this.content.wholeImageHighRes, size.width, size.height, mime) :
                   String.format(this.content.wholeImageHighRes, size.height, size.width, mime);
                 $label.text(label);
                 $input.prop('title', label);
+
                 this.$wholeImageHighResButton.data('width', size.width);
                 this.$wholeImageHighResButton.data('height', size.height);
+                
                 this.$wholeImageHighResButton.show();
             }
 
@@ -327,6 +337,16 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         this.resetDynamicDownloadOptions();
+
+        if (this.isDownloadOptionAvailable(DownloadOption.rangeRendering)) {
+            
+            if (canvas.ranges && canvas.ranges.length) {
+                for (let i = 0; i < canvas.ranges.length; i++) {
+                    const range: Manifesto.IRange = canvas.ranges[i];
+                    this.addDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
+                }
+            }
+        }
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
             const images: Manifesto.IAnnotation[] = canvas.getImages();
@@ -442,7 +462,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         for (let i = 0; i < renderings.length; i++) {
             const rendering: Manifesto.IRendering = renderings[i];
             if (rendering) {
-                let label: string | null = Manifesto.TranslationCollection.getValue(rendering.getLabel());
+                let label: string | null = Manifesto.TranslationCollection.getValue(rendering.getLabel(), this.extension.getLocale());
                 const currentId: string = "downloadOption" + ++this.renderingUrlsCount;
                 if (label) {
                     label += " ({0})";
@@ -483,14 +503,22 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
     getCanvasHighResImageUri(canvas: Manifesto.ICanvas): string {
         const size: Size | null = this.getCanvasComputedDimensions(canvas);
+        
         if (size) {
             const width: number = size.width;
             let uri: string = canvas.getCanonicalImageUri(width);
-            const uri_parts: string [] = uri.split('/');
-            const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
-            uri_parts[uri_parts.length - 2] = String(rotation);
-            uri = uri_parts.join('/');
+
+            if (canvas.externalResource && canvas.externalResource.hasServiceDescriptor()) {
+                const uri_parts: string [] = uri.split('/');
+                const rotation: number = <number>(<ISeadragonExtension>this.extension).getViewerRotation();
+                uri_parts[uri_parts.length - 2] = String(rotation);
+                uri = uri_parts.join('/');
+            }
+            
             return uri;
+        } else if (canvas.externalResource && !canvas.externalResource.hasServiceDescriptor()) {
+            // if there is no image service, return the dataUri.
+            return <string>canvas.externalResource.dataUri;
         }
         return '';
     }
@@ -509,19 +537,27 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return null;
     }
 
-    getCanvasDimensions(canvas: Manifesto.ICanvas): Size {
+    getCanvasDimensions(canvas: Manifesto.ICanvas): Size | null {
 
         // externalResource may not have loaded yet
         if (canvas.externalResource.data) {
-            return new Size(canvas.externalResource.data.width, canvas.externalResource.data.height);
+            const width: number | undefined = (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).width;
+            const height: number | undefined = (<Manifesto.IExternalImageResourceData>canvas.externalResource.data).height;
+            if (width && height) {
+                return new Size(width, height);
+            }
         }
         
-        return new Size(0, 0);
+        return null;
     }
 
     getCanvasComputedDimensions(canvas: Manifesto.ICanvas): Size | null {
-        const imageSize: Size = this.getCanvasDimensions(canvas);
+        const imageSize: Size | null = this.getCanvasDimensions(canvas);
         const requiredSize: Size | null =  canvas.getMaxDimensions();
+
+        if (!imageSize) {
+            return null;
+        }
 
         if (!requiredSize) {
             return imageSize;
@@ -544,7 +580,23 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             return false;
         }
 
-        switch (option){
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+
+        // if the external resource doesn't have a service descriptor
+        // only allow wholeImageHighRes
+        if (!canvas.externalResource.hasServiceDescriptor()) {
+            if (option === DownloadOption.wholeImageHighRes) {
+                // if in one-up mode, or in two-up mode with a single page being shown
+                if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
+                    (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        switch (option) {
             case DownloadOption.currentViewAsJpg:
             case DownloadOption.dynamicCanvasRenderings:
             case DownloadOption.dynamicImageRenderings:
@@ -552,7 +604,6 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 // if in one-up mode, or in two-up mode with a single page being shown
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
                     (<ISeadragonExtension>this.extension).isPagingSettingEnabled() && this.extension.resources && this.extension.resources.length === 1) {
-                    const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
                     const maxDimensions: Size | null = canvas.getMaxDimensions();
                     
                     if (maxDimensions) {
@@ -572,11 +623,19 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return false;
             case DownloadOption.wholeImageLowResAsJpg:
                 // hide low-res option if hi-res width is smaller than constraint
-                const size: Size | null = this.getCanvasComputedDimensions(this.extension.helper.getCurrentCanvas());
-                if (!size) return false;
+                const size: Size | null = this.getCanvasComputedDimensions(canvas);
+                if (!size) {
+                     return false;
+                }
                 return (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.selection:
                 return this.options.selectionEnabled;
+            case DownloadOption.rangeRendering:                
+                if (canvas.ranges.length) {
+                    const range: Manifesto.IRange = canvas.ranges[0];
+                    return range.getRenderings().length > 0;
+                }
+                return false;
             default:
                 return super.isDownloadOptionAvailable(option);
         }

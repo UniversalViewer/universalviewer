@@ -1,7 +1,7 @@
 {
   "options":
   {
-    "authAPIVersion": 0.9,
+    "authAPIVersion": 1,
     "bookmarkThumbHeight": 150,
     "bookmarkThumbWidth": 90,
     "dropEnabled": true,
@@ -88,7 +88,8 @@
     "virtexCenterPanel": {
       "options": {
         "showStats": false,
-        "trimAttributionCount": 150
+        "trimAttributionCount": 150,
+        "vrEnabled": false
       }
     }
   }

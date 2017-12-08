@@ -1,11 +1,10 @@
-// utils v0.1.0 https://github.com/edsilv/utils
+// utils v0.1.2 https://github.com/edsilv/utils
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.utils = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
 
 var Utils;
 (function (Utils) {
-    var Async = (function () {
+    var Async = /** @class */ (function () {
         function Async() {
         }
         Async.waitFor = function (test, successCallback, failureCallback, interval, maxTries, numTries) {
@@ -36,7 +35,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Bools = (function () {
+    var Bools = /** @class */ (function () {
         function Bools() {
         }
         Bools.getBool = function (val, defaultVal) {
@@ -52,7 +51,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Clipboard = (function () {
+    var Clipboard = /** @class */ (function () {
         function Clipboard() {
         }
         Clipboard.copy = function (text) {
@@ -77,7 +76,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Colors = (function () {
+    var Colors = /** @class */ (function () {
         function Colors() {
         }
         Colors.float32ColorToARGB = function (float32Color) {
@@ -112,7 +111,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Dates = (function () {
+    var Dates = /** @class */ (function () {
         function Dates() {
         }
         Dates.getTimeStamp = function () {
@@ -125,7 +124,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Device = (function () {
+    var Device = /** @class */ (function () {
         function Device() {
         }
         Device.getPixelRatio = function (ctx) {
@@ -147,7 +146,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Documents = (function () {
+    var Documents = /** @class */ (function () {
         function Documents() {
         }
         Documents.isInIFrame = function () {
@@ -193,7 +192,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Events = (function () {
+    var Events = /** @class */ (function () {
         function Events() {
         }
         Events.debounce = function (fn, debounceDuration) {
@@ -226,7 +225,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Files = (function () {
+    var Files = /** @class */ (function () {
         function Files() {
         }
         Files.simplifyMimeType = function (mime) {
@@ -251,7 +250,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Keyboard = (function () {
+    var Keyboard = /** @class */ (function () {
         function Keyboard() {
         }
         Keyboard.getCharCode = function (e) {
@@ -267,7 +266,7 @@ var Utils;
 (function (Utils) {
     var Maths;
     (function (Maths) {
-        var Vector = (function () {
+        var Vector = /** @class */ (function () {
             function Vector(x, y) {
                 this.X = x;
                 this.Y = y;
@@ -356,7 +355,7 @@ var Utils;
                 return -1 * angle;
             };
             Vector.random2D = function () {
-                return Vector.fromAngle((Math.random() * Math.TAU));
+                return Vector.fromAngle((Math.random() * (Math.PI * 2)));
             };
             Vector.fromAngle = function (angle) {
                 return new Vector(Math.cos(angle), Math.sin(angle));
@@ -371,7 +370,7 @@ var Utils;
 (function (Utils) {
     var Measurements;
     (function (Measurements) {
-        var Size = (function () {
+        var Size = /** @class */ (function () {
             function Size(width, height) {
                 this.width = width;
                 this.height = height;
@@ -379,7 +378,7 @@ var Utils;
             return Size;
         }());
         Measurements.Size = Size;
-        var Dimensions = (function () {
+        var Dimensions = /** @class */ (function () {
             function Dimensions() {
             }
             Dimensions.fitRect = function (width1, height1, width2, height2) {
@@ -414,7 +413,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Numbers = (function () {
+    var Numbers = /** @class */ (function () {
         function Numbers() {
         }
         Numbers.numericalInput = function (event) {
@@ -443,7 +442,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Objects = (function () {
+    var Objects = /** @class */ (function () {
         function Objects() {
         }
         Objects.toPlainObject = function (value) {
@@ -461,7 +460,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Storage = (function () {
+    var Storage = /** @class */ (function () {
         function Storage() {
         }
         Storage.clear = function (storageType) {
@@ -604,7 +603,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var StorageItem = (function () {
+    var StorageItem = /** @class */ (function () {
         function StorageItem() {
         }
         return StorageItem;
@@ -614,7 +613,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var StorageType = (function () {
+    var StorageType = /** @class */ (function () {
         function StorageType(value) {
             this.value = value;
         }
@@ -631,7 +630,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Strings = (function () {
+    var Strings = /** @class */ (function () {
         function Strings() {
         }
         Strings.ellipsis = function (text, chars) {
@@ -656,7 +655,7 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Urls = (function () {
+    var Urls = /** @class */ (function () {
         function Urls() {
         }
         Urls.getHashParameter = function (key, doc) {

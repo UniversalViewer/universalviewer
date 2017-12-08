@@ -54,7 +54,12 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
+        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, args: any) => {
+            this.overlayAnnotations();
+            this.zoomToInitialAnnotation();
+        });
+
+        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: ISettings) => {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 
@@ -404,22 +409,32 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$spinner.show();
         this.items = [];
 
-        // todo: this should be a more specific Manifold.IImageResource
-        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalResource[]) => {
-            // OSD can open an array info.json objects
-            //this.viewer.open(resources);
+        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalImageResourceData[]) => {
 
             this.viewer.close();
 
             resources = this.getPagePositions(resources);
 
             for (let i = 0; i < resources.length; i++) {
-                const resource: Manifesto.IExternalResource = resources[i];
+                const data: any = resources[i];
+                
+                let tileSource: any;
+
+                if (data.hasServiceDescriptor) {
+                    tileSource = data;
+                } else {
+                    tileSource = {
+                        type: 'image',
+                        url: data.id,
+                        buildPyramid: false
+                    };
+                }
+
                 this.viewer.addTiledImage({
-                    tileSource: resource,
-                    x: resource.x,
-                    y: resource.y,
-                    width: resource.width,
+                    tileSource: tileSource,
+                    x: data.x,
+                    y: data.y,
+                    width: data.width,
                     success: (item: any) => {
                         this.items.push(item);
                         if (this.items.length === resources.length) {
@@ -432,7 +447,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    getPagePositions(resources: Manifesto.IExternalResource[]): Manifesto.IExternalResource[] {
+    getPagePositions(resources: Manifesto.IExternalImageResourceData[]): Manifesto.IExternalImageResourceData[] {
         let leftPage: any;
         let rightPage: any;
         let topPage: any;
@@ -543,23 +558,45 @@ export class SeadragonCenterPanel extends CenterPanel {
         
         this.setNavigatorVisible();
 
-        //setTimeout(() => {
-            this.overlayAnnotations();
+        this.overlayAnnotations();
 
-            this.updateBounds();
+        this.updateBounds();
 
-            let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+        this.zoomToInitialAnnotation();
 
-            (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
-            (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+        this.isFirstLoad = false;
+    }
 
-            if (annotationRect && this.isZoomToSearchResultEnabled()) {
-                this.zoomToAnnotation(annotationRect);
+    zoomToInitialAnnotation(): void {
+        let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+        
+        (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
+        (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
+
+        if (annotationRect && this.isZoomToSearchResultEnabled()) {
+            this.zoomToAnnotation(annotationRect);
+        }
+    }
+
+    overlayAnnotations(): void {
+        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+
+        for (let i = 0; i < annotations.length; i++) {
+
+            const annotation: AnnotationGroup = annotations[i];
+            const overlayRects: any[] = this.getAnnotationOverlayRects(annotation);
+
+            for (let k = 0; k < overlayRects.length; k++) {
+                const overlayRect = overlayRects[k];
+
+                const div: HTMLElement = document.createElement('div');
+                div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
+                div.className = 'searchOverlay';
+                div.title = UVUtils.sanitize(overlayRect.chars);
+
+                this.viewer.addOverlay(div, overlayRect);
             }
-
-            this.isFirstLoad = false;
-        //}, 1000);
-    
+        }
     }
 
     updateBounds(): void {
@@ -683,27 +720,6 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     clearAnnotations(): void {
         this.$canvas.find('.searchOverlay').hide();
-    }
-
-    overlayAnnotations(): void {
-        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
-
-        for (let i = 0; i < annotations.length; i++) {
-
-            const annotation: AnnotationGroup = annotations[i];
-            const overlayRects: any[] = this.getAnnotationOverlayRects(annotation);
-
-            for (let k = 0; k < overlayRects.length; k++) {
-                const overlayRect = overlayRects[k];
-
-                const div: HTMLElement = document.createElement('div');
-                div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
-                div.className = 'searchOverlay';
-                div.title = UVUtils.sanitize(overlayRect.chars);
-
-                this.viewer.addOverlay(div, overlayRect);
-            }
-        }
     }
 
     getAnnotationsForCurrentImages(): AnnotationGroup[] {
@@ -872,7 +888,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         let offsetX: number = 0;
 
         if (index > 0) {
-            offsetX = this.extension.resources[index - 1].width;
+            offsetX = (<Manifesto.IExternalImageResourceData>this.extension.resources[index - 1]).width;
         }
 
         for (let i = 0; i < annotationGroup.rects.length; i++) {
@@ -940,8 +956,8 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         // stretch navigator, allowing time for OSD to resize
         setTimeout(() => {
-            if (this.extension.helper.isContinuous()){
-                if (this.extension.helper.isHorizontallyAligned()){
+            if (this.extension.helper.isContinuous()) {
+                if (this.extension.helper.isHorizontallyAligned()) {
                     const width: number = this.$viewer.width() - this.$viewer.rightMargin();
                     this.$navigator.width(width);
                 } else {

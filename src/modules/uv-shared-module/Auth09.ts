@@ -46,10 +46,10 @@ export class Auth09 {
                 acceptCallback: () => {
 
                     if (resource.clickThroughService) {
-                        const win: Window = window.open(resource.clickThroughService.id);
+                        const win: Window | null = window.open(resource.clickThroughService.id);
 
                         const pollTimer: number = window.setInterval(() => {
-                            if (win.closed) {
+                            if (win && win.closed) {
                                 window.clearInterval(pollTimer);
                                 $.publish(BaseEvents.CLICKTHROUGH);
                                 resolve();
@@ -89,9 +89,9 @@ export class Auth09 {
                 resource: resource,
                 loginCallback: () => {
                     if (resource.loginService) {
-                        const win: Window = window.open(resource.loginService.id + "?t=" + new Date().getTime());
+                        const win: Window | null = window.open(resource.loginService.id + "?t=" + new Date().getTime());
                         const pollTimer: number = window.setInterval(function () {
-                            if (win.closed) {
+                            if (win && win.closed) {
                                 window.clearInterval(pollTimer);
                                 $.publish(BaseEvents.LOGIN);
                                 resolve();
@@ -101,9 +101,9 @@ export class Auth09 {
                 },
                 logoutCallback: () => {
                     if (resource.logoutService) {
-                        const win: Window = window.open(resource.logoutService.id + "?t=" + new Date().getTime());
+                        const win: Window | null = window.open(resource.logoutService.id + "?t=" + new Date().getTime());
                         const pollTimer: number = window.setInterval(function () {
-                            if (win.closed) {
+                            if (win && win.closed) {
                                 window.clearInterval(pollTimer);
                                 $.publish(BaseEvents.LOGOUT);
                                 resolve();
@@ -177,7 +177,7 @@ export class Auth09 {
                 foundItems.push(item);
             } else {
                 // find an access token for the domain
-                const domain: string = Utils.Urls.getUrlParts(resource.dataUri).hostname;
+                const domain: string = Utils.Urls.getUrlParts(<string>resource.dataUri).hostname;
                 const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(storageStrategy));
 
                 for (let i = 0; i < items.length; i++) {

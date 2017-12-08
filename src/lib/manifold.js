@@ -1,11 +1,10 @@
-// manifold v1.2.8 https://github.com/viewdir/manifold#readme
+// manifold v1.2.12 https://github.com/iiif-commons/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/> 
 
 var Manifold;
 (function (Manifold) {
-    var StringValue = (function () {
+    var StringValue = /** @class */ (function () {
         function StringValue(value) {
             this.value = "";
             if (value) {
@@ -32,7 +31,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Manifold;
 (function (Manifold) {
-    var TreeSortType = (function (_super) {
+    var TreeSortType = /** @class */ (function (_super) {
         __extends(TreeSortType, _super);
         function TreeSortType() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -53,7 +52,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var AnnotationGroup = (function () {
+    var AnnotationGroup = /** @class */ (function () {
         function AnnotationGroup(resource, canvasIndex) {
             this.rects = [];
             this.canvasIndex = canvasIndex;
@@ -76,7 +75,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var AnnotationRect = (function () {
+    var AnnotationRect = /** @class */ (function () {
         function AnnotationRect(result) {
             this.isVisible = true;
             var xywh = result.on.match(/.*xywh=(\d*),(\d*),(\d*),(\d*)/);
@@ -93,14 +92,19 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var Bootstrapper = (function () {
+    var Bootstrapper = /** @class */ (function () {
         function Bootstrapper(options) {
             this._options = options;
             this._options.locale = this._options.locale || 'en-GB'; // default locale
         }
-        Bootstrapper.prototype.bootstrap = function () {
+        Bootstrapper.prototype.bootstrap = function (res, rej) {
             var that = this;
             return new Promise(function (resolve, reject) {
+                // if this is a recursive bootstrap we will have existing resolve & reject methods.
+                if (res && rej) {
+                    resolve = res;
+                    reject = rej;
+                }
                 var msie = that._detectIE();
                 if (msie === false) {
                     manifesto.loadManifest(that._options.iiifResourceUri).then(function (json) {
@@ -157,13 +161,15 @@ var Manifold;
                         if (collection.getTotalManifests() === 0 && bootstrapper._options.manifestIndex === 0 && collection.getTotalCollections() > 0) {
                             bootstrapper._options.collectionIndex = 0;
                             bootstrapper._options.iiifResourceUri = collection.id;
-                            bootstrapper.bootstrap();
+                            bootstrapper.bootstrap(resolve, reject);
                         }
-                        collection.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
-                            bootstrapper._options.manifest = manifest;
-                            var helper = new Manifold.Helper(bootstrapper._options);
-                            resolve(helper);
-                        });
+                        else {
+                            collection.getManifestByIndex(bootstrapper._options.manifestIndex).then(function (manifest) {
+                                bootstrapper._options.manifest = manifest;
+                                var helper = new Manifold.Helper(bootstrapper._options);
+                                resolve(helper);
+                            });
+                        }
                     });
                 }
                 else {
@@ -217,22 +223,67 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var ExternalResource = (function () {
-        function ExternalResource(resource, dataUriFunc, index, authApiVersion) {
-            if (authApiVersion === void 0) { authApiVersion = 0.9; }
+    var ExternalResource = /** @class */ (function () {
+        function ExternalResource(canvas, options) {
             this.authHoldingPage = null;
             this.clickThroughService = null;
             this.externalService = null;
             this.isResponseHandled = false;
+            this.kioskService = null;
             this.loginService = null;
             this.logoutService = null;
+            this.restrictedService = null;
             this.tokenService = null;
-            resource.externalResource = this;
-            this.dataUri = dataUriFunc(resource);
-            this.index = index;
-            this.authAPIVersion = authApiVersion;
-            this._parseAuthServices(resource);
+            canvas.externalResource = this;
+            this.dataUri = this._getDataUri(canvas);
+            this.index = canvas.index;
+            this.authAPIVersion = options.authApiVersion;
+            this._parseAuthServices(canvas);
+            // get the height and width of the image resource if available
+            this._parseDimensions(canvas);
         }
+        ExternalResource.prototype._getDataUri = function (canvas) {
+            var content = canvas.getContent();
+            var images = canvas.getImages();
+            if (content && content.length) {
+                var annotation = content[0];
+                var annotationBody = annotation.getBody();
+                if (annotationBody.length) {
+                    return annotationBody[0].id;
+                }
+                return null;
+            }
+            else if (images && images.length) {
+                var infoUri = null;
+                var firstImage = images[0];
+                var resource = firstImage.getResource();
+                var services = resource.getServices();
+                if (services.length) {
+                    for (var i = 0; i < services.length; i++) {
+                        var service = services[i];
+                        var id = service.id;
+                        if (!id.endsWith('/')) {
+                            id += '/';
+                        }
+                        if (manifesto.Utils.isImageProfile(service.getProfile())) {
+                            infoUri = id + 'info.json';
+                        }
+                    }
+                    return infoUri;
+                }
+                // no image services. return the image id
+                return resource.id;
+            }
+            else {
+                // Legacy IxIF
+                var service = canvas.getService(manifesto.ServiceProfile.ixif());
+                if (service) {
+                    return service.getInfoUri();
+                }
+                // return the canvas id.
+                return canvas.id;
+            }
+        };
         ExternalResource.prototype._parseAuthServices = function (resource) {
             if (this.authAPIVersion === 0.9) {
                 this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
@@ -274,6 +325,15 @@ var Manifold;
                 }
             }
         };
+        ExternalResource.prototype._parseDimensions = function (canvas) {
+            var images = canvas.getImages();
+            if (images && images.length) {
+                var firstImage = images[0];
+                var resource = firstImage.getResource();
+                this.width = resource.getWidth();
+                this.height = resource.getHeight();
+            }
+        };
         ExternalResource.prototype.isAccessControlled = function () {
             if (this.clickThroughService || this.loginService || this.externalService || this.kioskService) {
                 return true;
@@ -281,12 +341,19 @@ var Manifold;
             return false;
         };
         ExternalResource.prototype.hasServiceDescriptor = function () {
-            return this.dataUri.endsWith('info.json');
+            if (this.dataUri) {
+                return this.dataUri.endsWith('info.json');
+            }
+            return false;
         };
         ExternalResource.prototype.getData = function (accessToken) {
+            var _this = this;
             var that = this;
             that.data = {};
             return new Promise(function (resolve, reject) {
+                if (!_this.dataUri) {
+                    reject('There is no dataUri to fetch');
+                }
                 // check if dataUri ends with info.json
                 // if not issue a HEAD request.
                 var type = 'GET';
@@ -329,7 +396,7 @@ var Manifold;
                             uri = uri.substr(0, uri.lastIndexOf('/'));
                         }
                         var dataUri = that.dataUri;
-                        if (dataUri.endsWith('/info.json')) {
+                        if (dataUri && dataUri.endsWith('/info.json')) {
                             dataUri = dataUri.substr(0, dataUri.lastIndexOf('/'));
                         }
                         // if the request was redirected to a degraded version and there's a login service to get the full quality version
@@ -358,7 +425,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var Helper = (function () {
+    var Helper = /** @class */ (function () {
         function Helper(options) {
             this.options = options;
             this.iiifResource = this.options.iiifResource;
@@ -458,44 +525,6 @@ var Manifold;
         };
         Helper.prototype.getFirstPageIndex = function () {
             return 0;
-        };
-        Helper.prototype.getInfoUri = function (canvas) {
-            var content = canvas.getContent();
-            var images = canvas.getImages();
-            if (content && content.length) {
-                var annotation = content[0];
-                var annotationBody = annotation.getBody();
-                if (annotationBody.length) {
-                    return annotationBody[0].id;
-                }
-                return null;
-            }
-            else if (images && images.length) {
-                var infoUri = null;
-                var firstImage = images[0];
-                var resource = firstImage.getResource();
-                var services = resource.getServices();
-                for (var i = 0; i < services.length; i++) {
-                    var service = services[i];
-                    var id = service.id;
-                    if (!id.endsWith('/')) {
-                        id += '/';
-                    }
-                    if (manifesto.Utils.isImageProfile(service.getProfile())) {
-                        infoUri = id + 'info.json';
-                    }
-                }
-                return infoUri;
-            }
-            else {
-                // IxIF
-                var service = canvas.getService(manifesto.ServiceProfile.ixif());
-                if (service) {
-                    return service.getInfoUri();
-                }
-                // return the canvas id.
-                return canvas.id;
-            }
         };
         Helper.prototype.getLabel = function () {
             var label = this.manifest.getLabel();
@@ -1012,6 +1041,8 @@ var Manifold;
 
 
 
+/// <reference types="manifesto.js" />
+/// <reference types="http-status-codes" />
 var Manifold;
 (function (Manifold) {
     function loadManifest(options) {
@@ -1028,7 +1059,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var MetadataGroup = (function () {
+    var MetadataGroup = /** @class */ (function () {
         function MetadataGroup(resource, label) {
             this.items = [];
             this.resource = resource;
@@ -1052,7 +1083,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var MetadataOptions = (function () {
+    var MetadataOptions = /** @class */ (function () {
         function MetadataOptions() {
         }
         return MetadataOptions;
@@ -1062,7 +1093,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var MultiSelectState = (function () {
+    var MultiSelectState = /** @class */ (function () {
         function MultiSelectState() {
             this.isEnabled = false;
             this.ranges = [];
@@ -1153,7 +1184,7 @@ var Manifold;
 
 var Manifold;
 (function (Manifold) {
-    var Translation = (function () {
+    var Translation = /** @class */ (function () {
         function Translation(value, locale) {
             this.value = value;
             this.locale = locale;
@@ -1166,7 +1197,7 @@ var Manifold;
 var Manifold;
 (function (Manifold) {
     // This class formats URIs into HTML <a> links, applying labels when available
-    var UriLabeller = (function () {
+    var UriLabeller = /** @class */ (function () {
         function UriLabeller(labels) {
             this.labels = labels;
         }
