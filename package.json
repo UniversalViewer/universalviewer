@@ -54,7 +54,7 @@
     "@types/three": "0.84.20",
     "base-component": "iiif-commons/base-component#v1.1.2",
     "core-js": "2.4.1",
-    "exjs": "BSick7/exjs#0.5.0",
+    "exjs": "BSick7/exjs#0.5.1",
     "extensions": "edsilv/extensions#v0.2.2",
     "http-status-codes": "edsilv/http-status-codes#v0.0.8",
     "iiif-av-component": "iiif-commons/iiif-av-component#v0.0.3",

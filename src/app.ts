@@ -1,4 +1,5 @@
 /// <reference types="base-component" />
+/// <reference types="exjs" />
 /// <reference types="extensions" />
 /// <reference types="http-status-codes" />
 /// <reference types="iiif-av-component" />
