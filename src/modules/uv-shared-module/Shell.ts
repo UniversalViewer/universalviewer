@@ -74,7 +74,7 @@ export class Shell extends BaseView {
         Shell.$overlays.width(this.extension.width());
         Shell.$overlays.height(this.extension.height());
 
-        const mainHeight: number = this.$element.height() - parseInt(Shell.$mainPanel.css('marginTop')) 
+        const mainHeight: number = this.$element.height() - parseInt(Shell.$mainPanel.css('paddingTop')) 
             - (Shell.$headerPanel.is(':visible') ? Shell.$headerPanel.height() : 0)
             - (Shell.$footerPanel.is(':visible') ? Shell.$footerPanel.height() : 0)
             - (Shell.$mobileFooterPanel.is(':visible') ? Shell.$mobileFooterPanel.height() : 0);
