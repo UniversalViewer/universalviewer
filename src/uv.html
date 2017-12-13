@@ -31,13 +31,24 @@
         window.addEventListener('uvLoaded', function(e) { 
 
             urlDataProvider = new UV.URLDataProvider();
+            var formattedLocales;
             var locales = urlDataProvider.get('locales', '');
-            var names = locales.split(',');
-            var formattedLocales = [];
 
-            for (var i in names) {
-                var nameparts = String(names[i]).split(':');
-                formattedLocales[i] = {name: nameparts[0], label: nameparts[1]};
+            if (locales) {
+                var names = locales.split(',');
+                formattedLocales = [];
+
+                for (var i in names) {
+                    var nameparts = String(names[i]).split(':');
+                    formattedLocales[i] = {name: nameparts[0], label: nameparts[1]};
+                }
+                
+            } else {
+                formattedLocales = [
+                    {
+                        name: 'en-GB'
+                    }
+                ]
             }
 
             uv = createUV('#uv', {

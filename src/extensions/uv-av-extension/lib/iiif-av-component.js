@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.5 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.6 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /// <reference types="exjs" /> 
@@ -80,7 +80,8 @@ var IIIFComponents;
             var $controlsContainer = $('<div class="controlsContainer"></div>');
             var $playButton = $('<button class="playButton">' + this.options.data.content.play + '</button>');
             var $timingControls = $('<span>' + this.options.data.content.currentTime + ': <span class="canvasTime"></span> / ' + this.options.data.content.duration + ': <span class="canvasDuration"></span></span>');
-            $controlsContainer.append($playButton, $timingControls);
+            var $volumeControl = $('<input type="range" class="volume" min="0" max="1" step="0.01" value="1">');
+            $controlsContainer.append($playButton, $timingControls, $volumeControl);
             $optionsContainer.append($timelineContainer, $timelineItemContainer, $controlsContainer);
             $player.append($canvasContainer, $optionsContainer);
             this._$element.append($player);
@@ -137,6 +138,9 @@ var IIIFComponents;
                 else {
                     canvasInstance.play();
                 }
+            });
+            $volumeControl.on('change', function () {
+                canvasInstance.setVolume(Number(this.value));
             });
             canvasInstance.setCurrentTime(0);
             if (this.options.data.autoPlay) {
@@ -341,30 +345,30 @@ var IIIFComponents;
             return percentage;
         };
         CanvasInstance.prototype._renderMediaElement = function (data) {
-            var mediaElement;
+            var $mediaElement;
             switch (data.type) {
                 case 'Image':
-                    mediaElement = $('<img class="anno" src="' + data.source + '" />');
+                    $mediaElement = $('<img class="anno" src="' + data.source + '" />');
                     break;
                 case 'Video':
-                    mediaElement = $('<video class="anno" src="' + data.source + '" />');
+                    $mediaElement = $('<video class="anno" src="' + data.source + '" />');
                     break;
                 case 'Audio':
-                    mediaElement = $('<audio class="anno" src="' + data.source + '" />');
+                    $mediaElement = $('<audio class="anno" src="' + data.source + '" />');
                     break;
                 case 'TextualBody':
-                    mediaElement = $('<div class="anno">' + data.source + '</div>');
+                    $mediaElement = $('<div class="anno">' + data.source + '</div>');
                     break;
                 default:
                     return;
             }
-            mediaElement.css({
+            $mediaElement.css({
                 top: data.top + '%',
                 left: data.left + '%',
                 width: data.width + '%',
                 height: data.height + '%'
             }).hide();
-            data.element = mediaElement;
+            data.element = $mediaElement;
             if (data.type == 'Video' || data.type == 'Audio') {
                 data.timeout = null;
                 var that_1 = this;
@@ -393,26 +397,32 @@ var IIIFComponents;
             this._mediaElements.push(data);
             if (this.$playerElement) {
                 var targetElement = this.$playerElement.find('.canvasContainer');
-                targetElement.append(mediaElement);
+                targetElement.append($mediaElement);
             }
             if (data.type == 'Video' || data.type == 'Audio') {
                 var self_1 = data;
-                mediaElement.on('loadstart', function () {
+                $mediaElement.on('loadstart', function () {
                     //console.log('loadstart');
                     self_1.checkForStall();
                 });
-                mediaElement.on('waiting', function () {
+                $mediaElement.on('waiting', function () {
                     //console.log('waiting');
                     self_1.checkForStall();
                 });
-                mediaElement.on('seeking', function () {
+                $mediaElement.on('seeking', function () {
                     //console.log('seeking');
                     //self.checkForStall();
                 });
-                mediaElement.attr('preload', 'auto');
-                mediaElement.get(0).load(); // todo: type
+                $mediaElement.attr('preload', 'auto');
+                $mediaElement.get(0).load(); // todo: type
             }
             this._renderSyncIndicator(data);
+        };
+        CanvasInstance.prototype.setVolume = function (value) {
+            for (var i = 0; i < this._mediaElements.length; i++) {
+                var $mediaElement = this._mediaElements[i];
+                $($mediaElement.element).prop("volume", value);
+            }
         };
         CanvasInstance.prototype._renderSyncIndicator = function (mediaElementData) {
             var leftPercent = this._convertToPercentage(mediaElementData.start, this.canvasClockDuration);
