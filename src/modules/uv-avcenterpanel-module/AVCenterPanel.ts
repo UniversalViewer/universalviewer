@@ -56,7 +56,14 @@ export class AVCenterPanel extends CenterPanel {
 
             this.avcomponent.set({
                 helper: this.extension.helper,
-                defaultAspectRatio: 0.56
+                autoPlay: this.config.options.autoPlay,
+                defaultAspectRatio: 0.56,
+                content: <IIIFComponents.IAVComponentContent> {
+                    play: this.content.play,
+                    pause: this.content.pause,
+                    currentTime: this.content.currentTime,
+                    duration: this.content.duration
+                }
             });
 
             this.resize();
@@ -71,7 +78,7 @@ export class AVCenterPanel extends CenterPanel {
         const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasById(canvasId);
 
         if (canvas) {
-            this.avcomponent.playCanvas(canvasId);
+            this.avcomponent.play(canvasId);
         }
     }
 

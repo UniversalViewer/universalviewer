@@ -70,15 +70,6 @@
     "dialogue": {
       "topCloseButtonEnabled": false
     },
-    "downloadDialogue": {
-      "options": {
-        "confinedImageSize": 1000,
-        "currentViewDisabledPercentage": 90,
-        "maxImageWidth": 5000,
-        "optionsExplanatoryTextEnabled": false,
-        "selectionEnabled": false
-      }
-    },
     "footerPanel": {
       "options":{
         "bookmarkEnabled": false,
@@ -120,51 +111,9 @@
         "textLimitType": "lines"
       }
     },
-    "multiSelectDialogue": {
+    "avCenterPanel": {
       "options": {
-        "galleryThumbChunkedResizingEnabled": true,
-        "galleryThumbChunkedResizingThreshold": 400,
-        "galleryThumbHeight": 320,
-        "galleryThumbLoadPadding": 3,
-        "galleryThumbWidth": 200,
-        "pageModeEnabled": true
-      }
-    },
-    "pagingHeaderPanel": {
-      "options": {
-        "autoCompleteBoxEnabled": true,
-        "galleryButtonEnabled": true,
-        "imageSelectionBoxEnabled": false,
-        "pageModeEnabled": false,
-        "pagingToggleEnabled": true
-      }
-    },
-    "seadragonCenterPanel": {
-      "options": {
-        "animationTime": 0.15,
-        "autoHideControls": true,
-        "attributionEnabled": true,
-        "blendTime": 0,
-        "constrainDuringPan": false,
-        "controlsFadeAfterInactive": 1500,
-        "controlsFadeDelay": 250,
-        "controlsFadeLength": 250,
-        "defaultZoomLevel": 0,
-        "immediateRender": false,
-        "maxZoomPixelRatio": 1.25,
-        "navigatorPosition": "BOTTOM_RIGHT",
-        "pageGap": 50,
-        "showHomeControl": false,
-        "trimAttributionCount": 150,
-        "visibilityRatio": 0.5
-      }
-    },
-    "searchFooterPanel": {
-      "options": {
-        "elideDetailsTermsCount": 20,
-        "elideResultsTermsCount": 10,
-        "pageModeEnabled": true,
-        "positionMarkerEnabled": true
+        "autoPlay": false
       }
     },
     "settingsDialogue": {
