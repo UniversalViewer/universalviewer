@@ -151,7 +151,7 @@ export class FooterPanel extends BaseView {
         }
 
         // otherwise, check metric
-        if (this.extension.isMobileView()) {
+        if (this.extension.isMobileMetric()) {
             this.$options.addClass('minimiseButtons');
         } else {
             this.$options.removeClass('minimiseButtons');
@@ -161,7 +161,7 @@ export class FooterPanel extends BaseView {
     updateMoreInfoButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
 
-        if (configEnabled && this.extension.isMobileView()) {
+        if (configEnabled && this.extension.isMobileMetric()) {
             this.$moreInfoButton.show();
         } else {
             this.$moreInfoButton.hide();

@@ -58,7 +58,7 @@ export class ContentLeftPanel extends LeftPanel {
         });
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            if (this.extension.isMobileView()) {
+            if (this.extension.isMobileMetric()) {
                 if (this.isFullyExpanded) {
                     this.collapseFull();
                 }

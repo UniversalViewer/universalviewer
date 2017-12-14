@@ -11,14 +11,32 @@
     "limitLocales": false,
     "metrics": [
       {
-        "type": "mobilelandscape",
+        "type": "watch",
         "minWidth": 0, 
-        "maxWidth": 640
+        "maxWidth": 312,
+        "minHeight": 0,
+        "maxHeight": 390
+      },
+      {
+        "type": "mobileportrait",
+        "minWidth": 312, 
+        "maxWidth": 480,
+        "minHeight": 390,
+        "maxHeight": 640
+      },
+      {
+        "type": "mobilelandscape",
+        "minWidth": 480, 
+        "maxWidth": 800,
+        "minHeight": 390,
+        "maxHeight": 480
       },
       {
         "type": "laptop",
-        "minWidth": 640,
-        "maxWidth": 100000
+        "minWidth": 800,
+        "maxWidth": 100000,
+        "minHeight": 640,
+        "maxHeight": 100000
       }
     ],
     "multiSelectionMimeType": "application/zip",

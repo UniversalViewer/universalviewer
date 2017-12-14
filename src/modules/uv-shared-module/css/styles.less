@@ -16,7 +16,11 @@
 @import 'iiif-gallery-component';
 @import 'iiif-tree-component';
 @import 'iiif-metadata-component';
-@import 'mobile';
+@import 'catch-all';
+@import 'watch';
+@import 'mobile-landscape';
+@import 'mobile-portrait';
+@import 'laptop';
 
 @img-path: '../../../modules/uv-shared-module/img/';
 
@@ -59,6 +63,27 @@
         font-weight: bold;
     }
 
+    #debug {
+        position: fixed;
+        z-index: 1000;
+
+        #watch {
+            display: none;
+        }
+
+        #mobile-portrait {
+            display: none;
+        }
+
+        #mobile-landscape {
+            display: none;
+        }
+
+        #laptop {
+            display: none;
+        }
+    }
+    
     #commsFrame {
         width: 1px;
         height: 1px;
