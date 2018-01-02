@@ -15,6 +15,7 @@ import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDi
 import {Shell} from "./Shell";
 import {SynchronousRequire} from "../../SynchronousRequire";
 import IThumb = Manifold.IThumb;
+import { UVUtils } from "./Utils";
 
 export class BaseExtension implements IExtension {
 
@@ -810,11 +811,16 @@ export class BaseExtension implements IExtension {
 
             root = this.data.root || '';
 
+            // if root is a URL, ignore it.
+            if (UVUtils.isValidUrl(root)) {
+                root = '';
+            }
+            
             if (root.startsWith('./')) {
                 root = root.substr(2);
             }
 
-            if (!root.endsWith('/')) {
+            if (root && !root.endsWith('/')) {
                 root += '/';
             }
         }

@@ -20,4 +20,10 @@ export class UVUtils {
 
         return $elem.html();
     }
+
+    static isValidUrl(value: string): boolean {
+        const a = document.createElement('a');
+        a.href = value;
+        return (!!a.host && a.host !== window.location.host);
+    }
 }

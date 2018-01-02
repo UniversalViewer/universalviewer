@@ -205,7 +205,7 @@ export class ShareDialogue extends Dialogue {
 
     update(): void {
 
-        if (this.isShareAvailable()){
+        if (this.isShareAvailable()) {
             this.$shareButton.show();
         } else {
             this.$shareButton.hide();
@@ -243,7 +243,7 @@ export class ShareDialogue extends Dialogue {
             this.$shareLink.text(shareUrl);
         }
 
-        if ($.browser.mobile){
+        if ($.browser.mobile) {
             this.$shareInput.hide();
             this.$shareLink.show();
         } else {
