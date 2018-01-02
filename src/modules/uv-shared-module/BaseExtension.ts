@@ -810,11 +810,6 @@ export class BaseExtension implements IExtension {
         if (!Utils.Documents.isInIFrame()) {
 
             root = this.data.root || '';
-
-            // if root is a URL, ignore it.
-            if (UVUtils.isValidUrl(root)) {
-                root = '';
-            }
             
             if (root.startsWith('./')) {
                 root = root.substr(2);
@@ -825,9 +820,13 @@ export class BaseExtension implements IExtension {
             }
         }
 
-        appUri += root + 'uv.html';
+        // if root is a URL, use that instead of appUri.
+        if (UVUtils.isValidUrl(root)) {
+            return root + 'uv.html';
+        }
 
-        return appUri;
+        return appUri + root + 'uv.html';
+
     }
 
     getSettings(): ISettings {
