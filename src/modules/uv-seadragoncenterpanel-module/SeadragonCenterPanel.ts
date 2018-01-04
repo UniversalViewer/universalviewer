@@ -141,7 +141,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     updateResponsiveView(): void {
         this.setNavigatorVisible();
         
-        if (this.extension.isMobileMetric()) {
+        if (!this.extension.isDesktopMetric()) {
             this.viewer.autoHideControls = false;
             this.$viewportNavButtons.hide();
         } else {
@@ -977,7 +977,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     
     setNavigatorVisible(): void {
 
-        const navigatorEnabled: boolean = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && !this.extension.isMobileMetric();
+        const navigatorEnabled: boolean = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.isDesktopMetric();
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         

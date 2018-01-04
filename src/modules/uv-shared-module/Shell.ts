@@ -48,7 +48,7 @@ export class Shell extends BaseView {
         Shell.$footerPanel = $('<div class="footerPanel"></div>');
         Shell.$element.append(Shell.$footerPanel);
 
-        Shell.$mobileFooterPanel = $('<div class="footerPanel mobile"></div>');
+        Shell.$mobileFooterPanel = $('<div class="mobileFooterPanel"></div>');
         Shell.$element.append(Shell.$mobileFooterPanel);
 
         Shell.$overlays = $('<div class="overlays"></div>');

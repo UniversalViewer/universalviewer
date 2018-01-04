@@ -127,7 +127,7 @@ export class FooterPanel extends BaseView {
             $.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
-        if (!Utils.Bools.getBool(this.options.embedEnabled, true)){
+        if (!Utils.Bools.getBool(this.options.embedEnabled, true)) {
             this.$embedButton.hide();
         }
 
@@ -151,7 +151,7 @@ export class FooterPanel extends BaseView {
         }
 
         // otherwise, check metric
-        if (this.extension.isMobileMetric()) {
+        if (!this.extension.isDesktopMetric()) {
             this.$options.addClass('minimiseButtons');
         } else {
             this.$options.removeClass('minimiseButtons');
@@ -161,7 +161,7 @@ export class FooterPanel extends BaseView {
     updateMoreInfoButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
 
-        if (configEnabled && this.extension.isMobileMetric()) {
+        if (configEnabled && !this.extension.isDesktopMetric()) {
             this.$moreInfoButton.show();
         } else {
             this.$moreInfoButton.hide();

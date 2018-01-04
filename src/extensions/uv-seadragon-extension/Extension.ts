@@ -63,7 +63,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         super.create();
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {         
-            if (this.isMobileMetric()) {
+            if (!this.isDesktopMetric()) {
                 const settings: ISettings = {};
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
@@ -136,7 +136,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         });
 
         $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
-            if (!this.isMobileMetric()) {
+            if (this.isDesktopMetric()) {
                 Shell.$rightPanel.show();
             }
         });

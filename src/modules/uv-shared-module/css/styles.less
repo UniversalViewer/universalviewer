@@ -64,7 +64,7 @@
     }
 
     #debug {
-        display: none;
+        display: block;
         position: fixed;
         z-index: 1000;
 
@@ -128,10 +128,6 @@
         margin-bottom: 0px;
         margin-left: @panel-margin;
     }
-
-    .footerPanel.mobile {
-        display: none;
-    }
 }
 
 @media print {
@@ -153,8 +149,8 @@
            display: none;
        }
 
-       .mobileFooter {
-           display: none;
-       }
+       .mobileFooterPanel {
+            display: none;
+        }
    }
 }

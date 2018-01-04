@@ -33,7 +33,7 @@ export class BaseExtension implements IExtension {
     isLoggedIn: boolean = false;
     lastCanvasIndex: number;
     loginDialogue: LoginDialogue;
-    metric: MetricType = MetricType.LAPTOP;
+    metric: MetricType = MetricType.NONE;
     metrics: Metric[] = [];
     mouseX: number;
     mouseY: number;
@@ -725,6 +725,9 @@ export class BaseExtension implements IExtension {
     private _updateMetric(): void {
 
         setTimeout(() => {
+
+            let metricChanged: boolean = false;
+
             for (let i = 0; i < this.metrics.length; i++) {
                 const metric: Metric = this.metrics[i];
 
@@ -735,11 +738,16 @@ export class BaseExtension implements IExtension {
                     if (this.metric !== metric.type) {
                         this.metric = metric.type;
 
+                        metricChanged = true;
                         console.log("metric changed", metric.type.toString());
 
                         $.publish(BaseEvents.METRIC_CHANGED);
                     }
                 }
+            }
+
+            if (!metricChanged) {
+                this.metric = MetricType.NONE;
             }
         }, 1);
     }
@@ -1064,10 +1072,8 @@ export class BaseExtension implements IExtension {
         return Shell.$overlays.is(':visible');
     }
 
-    isMobileMetric(): boolean {
-        return this.metric.toString() === MetricType.WATCH.toString() 
-            || this.metric.toString() === MetricType.MOBILEPORTRAIT.toString()
-            || this.metric.toString() === MetricType.MOBILELANDSCAPE.toString();
+    isDesktopMetric(): boolean {
+        return this.metric.toString() === MetricType.LAPTOP.toString();
     }
 
     viewManifest(manifest: Manifesto.IManifest): void {
