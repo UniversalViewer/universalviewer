@@ -172,7 +172,7 @@ export class BaseExtension implements IExtension {
         this.$element.append('<a href="/" id="top"></a>');
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
-        this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="laptop">Laptop</span></div>');
+        this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
 
         $.subscribe(BaseEvents.ACCEPT_TERMS, () => {
             this.fire(BaseEvents.ACCEPT_TERMS);
@@ -732,8 +732,8 @@ export class BaseExtension implements IExtension {
                 const metric: Metric = this.metrics[i];
 
                 // if the width and height is within this metric's defined range
-                if (this.width() > metric.minWidth && this.width() <= metric.maxWidth &&
-                    this.height() > metric.minHeight && this.height() <= metric.maxHeight) {
+                if (this.width() >= metric.minWidth && this.width() <= metric.maxWidth &&
+                    this.height() >= metric.minHeight && this.height() <= metric.maxHeight) {
 
                     if (this.metric !== metric.type) {
                         this.metric = metric.type;
@@ -1073,7 +1073,7 @@ export class BaseExtension implements IExtension {
     }
 
     isDesktopMetric(): boolean {
-        return this.metric.toString() === MetricType.LAPTOP.toString();
+        return this.metric.toString() === MetricType.DESKTOP.toString();
     }
 
     viewManifest(manifest: Manifesto.IManifest): void {

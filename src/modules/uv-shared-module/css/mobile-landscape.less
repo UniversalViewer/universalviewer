@@ -1,12 +1,13 @@
-@media only screen and (min-width: @mobile-landscape-min-width) and (max-width: @mobile-landscape-max-width) and (min-height: @mobile-landscape-min-height) and (max-height: @mobile-landscape-max-height) {
-    .uv {
+.uv {
 
-        #debug {
+    #debug {
 
-            #mobile-landscape {
+        #mobile-landscape {
+
+            .mobile-landscape-mediaquery({
                 display: block !important;
-            }
-        }
+            });
 
+        }
     }
 }
