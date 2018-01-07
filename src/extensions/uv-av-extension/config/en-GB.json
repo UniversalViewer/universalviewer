@@ -20,16 +20,16 @@
       {
         "type": "mobileportrait",
         "minWidth": 312, 
-        "maxWidth": 414,
+        "maxWidth": 415,
         "minHeight": 640,
-        "maxHeight": 812
+        "maxHeight": 813
       },
       {
         "type": "mobilelandscape",
         "minWidth": 640, 
-        "maxWidth": 812,
+        "maxWidth": 813,
         "minHeight": 360,
-        "maxHeight": 414
+        "maxHeight": 415
       },
       {
         "type": "desktop",
