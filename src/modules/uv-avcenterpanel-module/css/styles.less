@@ -2,6 +2,40 @@
 
 .uv{
     .centerPanel {
-    
+
+        .canvasContainer {
+
+            .watch-mediaquery({
+                display: none;
+            });
+
+            .mobile-landscape-mediaquery({
+                display: none;
+            });
+
+            .mobile-portrait-mediaquery({
+                display: none;
+            });
+
+        }
+
+        .optionsContainer {
+
+            @margin-top: 110px;
+
+            .watch-mediaquery({
+                margin-top: @margin-top;
+            });
+
+            .mobile-landscape-mediaquery({
+                margin-top: @margin-top;
+            });
+
+            .mobile-portrait-mediaquery({
+                margin-top: @margin-top;
+            });
+
+        }
+        
     }
 }
