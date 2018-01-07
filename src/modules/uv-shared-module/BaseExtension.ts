@@ -34,7 +34,7 @@ export class BaseExtension implements IExtension {
     isLoggedIn: boolean = false;
     lastCanvasIndex: number;
     loginDialogue: LoginDialogue;
-    metric: MetricType = MetricType.LAPTOP;
+    metric: MetricType = MetricType.NONE;
     metrics: Metric[] = [];
     mouseX: number;
     mouseY: number;
@@ -172,6 +172,8 @@ export class BaseExtension implements IExtension {
 
         this.$element.append('<a href="/" id="top"></a>');
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
+
+        this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
 
         $.subscribe(BaseEvents.ACCEPT_TERMS, () => {
             this.fire(BaseEvents.ACCEPT_TERMS);
@@ -724,16 +726,29 @@ export class BaseExtension implements IExtension {
     private _updateMetric(): void {
 
         setTimeout(() => {
+
+            let metricChanged: boolean = false;
+
             for (let i = 0; i < this.metrics.length; i++) {
                 const metric: Metric = this.metrics[i];
 
-                if (this.width() > metric.minWidth && this.width() <= metric.maxWidth) {
+                // if the width and height is within this metric's defined range
+                if (this.width() >= metric.minWidth && this.width() <= metric.maxWidth &&
+                    this.height() >= metric.minHeight && this.height() <= metric.maxHeight) {
+
                     if (this.metric !== metric.type) {
                         this.metric = metric.type;
+
+                        metricChanged = true;
+                        console.log("metric changed", metric.type.toString());
 
                         $.publish(BaseEvents.METRIC_CHANGED);
                     }
                 }
+            }
+
+            if (!metricChanged) {
+                this.metric = MetricType.NONE;
             }
         }, 1);
     }
@@ -1062,8 +1077,8 @@ export class BaseExtension implements IExtension {
         return Shell.$overlays.is(':visible');
     }
 
-    isMobileView(): boolean {
-        return this.metric.toString() === MetricType.MOBILELANDSCAPE.toString();
+    isDesktopMetric(): boolean {
+        return this.metric.toString() === MetricType.DESKTOP.toString();
     }
 
     viewManifest(manifest: Manifesto.IManifest): void {

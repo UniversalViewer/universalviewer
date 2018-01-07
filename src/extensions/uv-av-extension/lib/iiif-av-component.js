@@ -139,15 +139,21 @@ var IIIFComponents;
                     canvasInstance.play();
                 }
             });
+            $volumeControl.on('input', function () {
+                canvasInstance.setVolume(Number(this.value));
+            });
             $volumeControl.on('change', function () {
                 canvasInstance.setVolume(Number(this.value));
             });
-            canvasInstance.setCurrentTime(0);
-            if (this.options.data.autoPlay) {
-                canvasInstance.play();
-            }
-            $timingControls.find('.canvasDuration').text(IIIFComponents.AVComponentUtils.Utils.formatTime(canvasInstance.canvasClockDuration));
-            this._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
+            var that = this;
+            canvasInstance.$playerElement[0].addEventListener('loadedmetadata', function () {
+                canvasInstance.setCurrentTime(0);
+                if (that.options.data.autoPlay) {
+                    canvasInstance.play();
+                }
+                $timingControls.find('.canvasDuration').text(IIIFComponents.AVComponentUtils.Utils.formatTime(canvasInstance.canvasClockDuration));
+                that._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
+            }, false);
         };
         AVComponent.prototype.getCanvasInstanceById = function (canvasId) {
             canvasId = manifesto.Utils.normaliseUrl(canvasId);

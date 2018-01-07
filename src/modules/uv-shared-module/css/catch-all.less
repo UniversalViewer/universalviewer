@@ -1,0 +1,69 @@
+.uv {
+
+    .headerPanel {
+        display: none;
+    }
+
+    .mainPanel {
+
+        .leftPanel {
+            display: none;
+        }
+
+        .rightPanel {
+            display: none;
+        }
+    }
+
+    .footerPanel {
+        display: none;
+    }
+
+    .mobileFooterPanel {
+
+        display: block;
+        position: relative;
+        height: 50px;
+
+        .options {
+
+            position: absolute;
+            width: 315px;
+            height: 42px;
+
+            .spacer {
+                float: left;
+                width: 30px;
+                height: 41px;
+            }
+
+            .btn {
+
+                margin-right: @margin-small-horizontal;
+
+                color: white;
+              	font-size: 0;
+
+                &.bookmark {
+                    display: none;
+                }
+
+                &.open {
+                    display: none;
+                }
+
+                &.feedback {
+                    display: none;
+                }
+
+                &.embed {
+                    display: none;
+                }
+                
+                &.fullScreen {
+                    display: none;
+                }
+            }
+        }
+    }
+}

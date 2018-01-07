@@ -7,9 +7,9 @@ export interface IExtension {
     addTimestamp(uri: string): string;
     changeLocale(locale: string): void;
     component: IUVComponent;
-    data: IUVData;
     create(): void;
     createModules(): void;
+    data: IUVData;
     dependenciesLoaded(...args: any[]): void;
     dependencyLoaded(index: number, dep: any): void;
     exitFullScreen(): void;
@@ -33,12 +33,12 @@ export interface IExtension {
     helper: Manifold.IHelper;
     isCreated: boolean;
     isDeepLinkingEnabled(): boolean;
+    isDesktopMetric(): boolean;
     isFooterPanelEnabled(): boolean;
     isFullScreen(): boolean;
     isHeaderPanelEnabled(): boolean;
     isLeftPanelEnabled(): boolean;
     isLoggedIn: boolean;
-    isMobileView(): boolean;
     isOverlayActive(): boolean;
     isRightPanelEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;

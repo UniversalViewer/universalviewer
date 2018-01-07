@@ -16,7 +16,11 @@
 @import 'iiif-gallery-component';
 @import 'iiif-tree-component';
 @import 'iiif-metadata-component';
-@import 'mobile';
+@import 'catch-all';
+@import 'watch';
+@import 'mobile-landscape';
+@import 'mobile-portrait';
+@import 'desktop';
 
 @img-path: '../../../modules/uv-shared-module/img/';
 
@@ -59,6 +63,28 @@
         font-weight: bold;
     }
 
+    #debug {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+
+        #watch {
+            display: none;
+        }
+
+        #mobile-portrait {
+            display: none;
+        }
+
+        #mobile-landscape {
+            display: none;
+        }
+
+        #desktop {
+            display: none;
+        }
+    }
+    
     #commsFrame {
         width: 1px;
         height: 1px;
@@ -102,10 +128,6 @@
         margin-bottom: 0px;
         margin-left: @panel-margin;
     }
-
-    .footerPanel.mobile {
-        display: none;
-    }
 }
 
 @media print {
@@ -127,8 +149,8 @@
            display: none;
        }
 
-       .mobileFooter {
-           display: none;
-       }
+       .mobileFooterPanel {
+            display: none;
+        }
    }
 }

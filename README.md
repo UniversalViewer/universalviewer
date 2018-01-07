@@ -57,7 +57,11 @@
 
 See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewer/releases).
 
-## First Time Setup
+## Getting Started
+
+For an example of how to use the Universal Viewer in a simple starter project, try [uv-app-starter](https://github.com/UniversalViewer/uv-app-starter).
+
+## Building the Universal Viewer
 
 All command-line operations for building the UV are scripted using [Grunt](http://gruntjs.com/) which is based on [Node.js](http://nodejs.org/). To get set up:
 

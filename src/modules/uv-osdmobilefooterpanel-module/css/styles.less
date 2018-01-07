@@ -1,51 +1,13 @@
-@import 'icons';
+@mobile-footer-img-path: '../../../modules/uv-osdmobilefooterpanel-module/img/';
 
-@media only screen and (min-width: @min-width) and (max-width: @max-width) {
-    .uv{
-        .footerPanel.mobile {
+.@{icon-prefix}-rotate {
+    .icon-btn-2('@{mobile-footer-img-path}rotate_right.png');
+  }
 
-            @img-path: '../../../modules/uv-osdmobilefooterpanel-module/img/';
+.@{icon-prefix}-zoom-in {
+  .icon-btn-2('@{mobile-footer-img-path}zoom_in.png');
+}
 
-            display: block;
-            position: relative;
-            height: 50px;
-
-            .options {
-
-                position: absolute;
-                width: 315px;
-
-                .spacer {
-                    float: left;
-                    width: 30px;
-                    height: 41px;
-                }
-
-                .btn{
-
-                    margin-right: @margin-small-horizontal;
-
-                    &.bookmark {
-                        display: none;
-                    }
-
-                    &.open {
-                        display: none;
-                    }
-
-                    &.feedback {
-                        display: none;
-                    }
-
-                    &.embed {
-                        display: none;
-                    }
-                    
-                    &.fullScreen {
-                        display: none;
-                    }
-                }
-            }
-        }
-    }
+.@{icon-prefix}-zoom-out {
+  .icon-btn-2('@{mobile-footer-img-path}zoom_out.png');
 }
