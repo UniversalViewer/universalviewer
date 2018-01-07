@@ -740,7 +740,7 @@ export class BaseExtension implements IExtension {
                         this.metric = metric.type;
 
                         metricChanged = true;
-                        console.log("metric changed", metric.type.toString());
+                        //console.log("metric changed", metric.type.toString());
 
                         $.publish(BaseEvents.METRIC_CHANGED);
                     }
