@@ -1,4 +1,4 @@
-// manifesto v2.2.2 https://github.com/iiif-commons/manifesto
+// manifesto v2.2.10 https://github.com/iiif-commons/manifesto
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifesto = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
@@ -866,12 +866,13 @@ var Manifesto;
         // Presentation API 3.0
         Canvas.prototype.getContent = function () {
             var content = [];
-            if (!this.__jsonld.content)
+            var items = this.__jsonld.items || this.__jsonld.content;
+            if (!items)
                 return content;
             // should be contained in an AnnotationPage
             var annotationPage = null;
-            if (this.__jsonld.content.length) {
-                annotationPage = new Manifesto.AnnotationPage(this.__jsonld.content[0], this.options);
+            if (items.length) {
+                annotationPage = new Manifesto.AnnotationPage(items[0], this.options);
             }
             if (!annotationPage) {
                 return content;
@@ -1098,7 +1099,7 @@ var Manifesto;
             var _this = _super.call(this, jsonld, options) || this;
             _this.index = 0;
             _this._allRanges = null;
-            _this._sequences = null;
+            _this.items = [];
             _this._topRanges = [];
             if (_this.__jsonld.structures && _this.__jsonld.structures.length) {
                 var topRanges = _this._getTopRanges();
@@ -1158,7 +1159,7 @@ var Manifesto;
         //private _parseRangeCanvas(json: any, range: IRange): void {
         // todo: currently this isn't needed
         //var canvas: IJSONLDResource = new JSONLDResource(json);
-        //range.members.push(<IManifestResource>canvas);
+        //range.items.push(<IManifestResource>canvas);
         //}
         Manifest.prototype._parseRanges = function (r, path, parentRange) {
             var range;
@@ -1178,21 +1179,22 @@ var Manifesto;
                 this._topRanges.push(range);
             }
             else {
-                parentRange.members.push(range);
+                parentRange.items.push(range);
             }
-            if (r.members) {
-                for (var i = 0; i < r.members.length; i++) {
-                    var child = r.members[i];
-                    // todo: use constants
-                    if (child['@type'] && child['@type'].toLowerCase() === 'sc:range' || child['type'] && child['type'].toLowerCase() === 'range') {
-                        this._parseRanges(child, path + '/' + i, range);
+            var items = r.items || r.members;
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    // todo: use an ItemType constant?
+                    if (item['@type'] && item['@type'].toLowerCase() === 'sc:range' || item['type'] && item['type'].toLowerCase() === 'range') {
+                        this._parseRanges(item, path + '/' + i, range);
                     }
-                    else if (child['@type'] && child['@type'].toLowerCase() === 'sc:canvas' || child['type'] && child['type'].toLowerCase() === 'canvas') {
+                    else if (item['@type'] && item['@type'].toLowerCase() === 'sc:canvas' || item['type'] && item['type'].toLowerCase() === 'canvas') {
                         // store the ids on the __jsonld object to be used by Range.getCanvasIds()
                         if (!range.canvases) {
                             range.canvases = [];
                         }
-                        var id_1 = child['@id'] || child.id;
+                        var id_1 = item.id || item['@id'];
                         range.canvases.push(id_1);
                     }
                 }
@@ -1239,19 +1241,20 @@ var Manifesto;
             return null;
         };
         Manifest.prototype.getSequences = function () {
-            if (this._sequences !== null)
-                return this._sequences;
-            this._sequences = [];
-            // if IxIF mediaSequences is present, use that. Otherwise fall back to IIIF sequences.
-            var children = this.__jsonld.mediaSequences || this.__jsonld.sequences;
-            if (children) {
-                for (var i = 0; i < children.length; i++) {
-                    var s = children[i];
+            if (this.items.length) {
+                return this.items;
+            }
+            // IxIF mediaSequences overrode sequences, so need to be checked first.
+            // deprecate this when presentation 3 ships
+            var items = this.__jsonld.items || this.__jsonld.mediaSequences || this.__jsonld.sequences;
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    var s = items[i];
                     var sequence = new Manifesto.Sequence(s, this.options);
-                    this._sequences.push(sequence);
+                    this.items.push(sequence);
                 }
             }
-            return this._sequences;
+            return this.items;
         };
         Manifest.prototype.getSequenceByIndex = function (sequenceIndex) {
             return this.getSequences()[sequenceIndex];
@@ -1312,7 +1315,7 @@ var Manifesto;
         __extends(Collection, _super);
         function Collection(jsonld, options) {
             var _this = _super.call(this, jsonld, options) || this;
-            _this.members = [];
+            _this.items = [];
             _this._collections = null;
             _this._manifests = null;
             jsonld.__collection = _this;
@@ -1322,13 +1325,13 @@ var Manifesto;
             if (this._collections) {
                 return this._collections;
             }
-            return this._collections = this.members.en().where(function (m) { return m.isCollection(); }).toArray();
+            return this._collections = this.items.en().where(function (m) { return m.isCollection(); }).toArray();
         };
         Collection.prototype.getManifests = function () {
             if (this._manifests) {
                 return this._manifests;
             }
-            return this._manifests = this.members.en().where(function (m) { return m.isManifest(); }).toArray();
+            return this._manifests = this.items.en().where(function (m) { return m.isManifest(); }).toArray();
         };
         Collection.prototype.getCollectionByIndex = function (collectionIndex) {
             var collections = this.getCollections();
@@ -1355,8 +1358,14 @@ var Manifesto;
         Collection.prototype.getTotalManifests = function () {
             return this.getManifests().length;
         };
-        Collection.prototype.getTotalMembers = function () {
-            return this.members.length;
+        Collection.prototype.getTotalItems = function () {
+            return this.items.length;
+        };
+        Collection.prototype.getViewingDirection = function () {
+            if (this.getProperty('viewingDirection')) {
+                return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
+            }
+            return Manifesto.ViewingDirection.LEFTTORIGHT;
         };
         /**
          * Get a tree of sub collections and manifests, using each child manifest's first 'top' range.
@@ -1419,7 +1428,7 @@ var Manifesto;
             var _this = _super.call(this, jsonld, options) || this;
             _this._ranges = null;
             _this.canvases = null;
-            _this.members = [];
+            _this.items = [];
             return _this;
         }
         Range.prototype.getCanvasIds = function () {
@@ -1435,13 +1444,13 @@ var Manifesto;
         //     if (this._canvases) {
         //         return this._canvases;
         //     }
-        //     return this._canvases = <ICanvas[]>this.members.en().where(m => m.isCanvas()).toArray();
+        //     return this._canvases = <ICanvas[]>this.items.en().where(m => m.isCanvas()).toArray();
         // }
         Range.prototype.getRanges = function () {
             if (this._ranges) {
                 return this._ranges;
             }
-            return this._ranges = this.members.en().where(function (m) { return m.isRange(); }).toArray();
+            return this._ranges = this.items.en().where(function (m) { return m.isRange(); }).toArray();
         };
         Range.prototype.getViewingDirection = function () {
             if (this.getProperty('viewingDirection')) {
@@ -1531,25 +1540,24 @@ var Manifesto;
         __extends(Sequence, _super);
         function Sequence(jsonld, options) {
             var _this = _super.call(this, jsonld, options) || this;
-            _this._canvases = null;
+            _this.items = [];
             _this._thumbnails = null;
             return _this;
         }
         Sequence.prototype.getCanvases = function () {
-            if (this._canvases != null)
-                return this._canvases;
-            this._canvases = [];
-            // if IxIF elements are present, use them. Otherwise fall back to IIIF canvases.
-            var children = this.__jsonld.elements || this.__jsonld.canvases;
-            if (children) {
-                for (var i = 0; i < children.length; i++) {
-                    var c = children[i];
+            if (this.items.length) {
+                return this.items;
+            }
+            var items = this.__jsonld.items || this.__jsonld.canvases || this.__jsonld.elements;
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    var c = items[i];
                     var canvas = new Manifesto.Canvas(c, this.options);
                     canvas.index = i;
-                    this._canvases.push(canvas);
+                    this.items.push(canvas);
                 }
             }
-            return this._canvases;
+            return this.items;
         };
         Sequence.prototype.getCanvasById = function (id) {
             for (var i = 0; i < this.getTotalCanvases(); i++) {
@@ -1822,20 +1830,26 @@ var Manifesto;
             }
             this.parseCollections(collection, options);
             this.parseManifests(collection, options);
-            this.parseMembers(collection, options);
+            this.parseItems(collection, options);
             return collection;
         };
         Deserialiser.parseCollections = function (collection, options) {
-            var children = collection.__jsonld.collections;
-            if (children) {
-                for (var i = 0; i < children.length; i++) {
+            var items;
+            if (collection.__jsonld.collections) {
+                items = collection.__jsonld.collections;
+            }
+            else if (collection.__jsonld.items) {
+                items = collection.__jsonld.items.en().where(function (m) { return m.type.toLowerCase() === 'collection'; }).toArray();
+            }
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
                     if (options) {
                         options.index = i;
                     }
-                    var child = this.parseCollection(children[i], options);
-                    child.index = i;
-                    child.parentCollection = collection;
-                    collection.members.push(child);
+                    var item = this.parseCollection(items[i], options);
+                    item.index = i;
+                    item.parentCollection = collection;
+                    collection.items.push(item);
                 }
             }
         };
@@ -1844,17 +1858,23 @@ var Manifesto;
             return manifest;
         };
         Deserialiser.parseManifests = function (collection, options) {
-            var children = collection.__jsonld.manifests;
-            if (children) {
-                for (var i = 0; i < children.length; i++) {
-                    var child = this.parseManifest(children[i], options);
-                    child.index = i;
-                    child.parentCollection = collection;
-                    collection.members.push(child);
+            var items;
+            if (collection.__jsonld.manifests) {
+                items = collection.__jsonld.manifests;
+            }
+            else if (collection.__jsonld.items) {
+                items = collection.__jsonld.items.en().where(function (m) { return m.type.toLowerCase() === 'manifest'; }).toArray();
+            }
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    var item = this.parseManifest(items[i], options);
+                    item.index = i;
+                    item.parentCollection = collection;
+                    collection.items.push(item);
                 }
             }
         };
-        Deserialiser.parseMember = function (json, options) {
+        Deserialiser.parseItem = function (json, options) {
             if (json['@type']) {
                 if (json['@type'].toLowerCase() === 'sc:manifest') {
                     return this.parseManifest(json, options);
@@ -1873,23 +1893,29 @@ var Manifesto;
             }
             return null;
         };
-        Deserialiser.parseMembers = function (collection, options) {
-            var children = collection.__jsonld.members;
-            if (children) {
-                for (var i = 0; i < children.length; i++) {
+        Deserialiser.parseItems = function (collection, options) {
+            var items = collection.__jsonld.members || collection.__jsonld.items;
+            if (items) {
+                var _loop_1 = function (i) {
                     if (options) {
                         options.index = i;
                     }
-                    var child = this.parseMember(children[i], options);
-                    if (!child)
-                        return;
-                    // only add to members if not already parsed from backwards-compatible collections/manifests arrays
-                    if (collection.members.en().where(function (m) { return m.id === child.id; }).first()) {
-                        continue;
+                    var item = this_1.parseItem(items[i], options);
+                    if (!item)
+                        return { value: void 0 };
+                    // only add to items if not already parsed from backwards-compatible collections/manifests arrays
+                    if (collection.items.en().where(function (m) { return m.id === item.id; }).first()) {
+                        return "continue";
                     }
-                    child.index = i;
-                    child.parentCollection = collection;
-                    collection.members.push(child);
+                    item.index = i;
+                    item.parentCollection = collection;
+                    collection.items.push(item);
+                };
+                var this_1 = this;
+                for (var i = 0; i < items.length; i++) {
+                    var state_1 = _loop_1(i);
+                    if (typeof state_1 === "object")
+                        return state_1.value;
                 }
             }
         };
@@ -2868,9 +2894,24 @@ var Manifesto;
             }
             else {
                 // it's an object
-                t = new Manifesto.Translation(translation['@value'], translation['@language'] || defaultLocale);
-                tc.push(t);
-                return tc;
+                if (translation['@value']) {
+                    // presentation 2
+                    t = new Manifesto.Translation(translation['@value'], translation['@language'] || defaultLocale);
+                    tc.push(t);
+                }
+                else {
+                    // presentation 3
+                    Object.keys(translation).forEach(function (key) {
+                        // todo: support multiple values in array
+                        if (translation[key].length) {
+                            t = new Manifesto.Translation(translation[key][0], key);
+                            tc.push(t);
+                        }
+                        else {
+                            throw new Error('Translation must have a value');
+                        }
+                    });
+                }
             }
             return tc;
         };
@@ -2882,7 +2923,7 @@ var Manifesto;
                         return translation.value;
                     }
                 }
-                // return the first value
+                // return the first valuel
                 return translationCollection[0].value;
             }
             return null;
