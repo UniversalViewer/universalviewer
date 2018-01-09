@@ -457,16 +457,12 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     checkForSearchParam(): void {
-        // if a h value is in the hash params, do a search.
-        if (this.isDeepLinkingEnabled()) {
+        // if a highlight param is set, use it to search.
+        const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
 
-            // if a highlight param is set, use it to search.
-            const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
-
-            if (highlight) {
-                highlight.replace(/\+/g, " ").replace(/"/g, "");
-                $.publish(Events.SEARCH, [highlight]);
-            }
+        if (highlight) {
+            highlight.replace(/\+/g, " ").replace(/"/g, "");
+            $.publish(Events.SEARCH, [highlight]);
         }
     }
 
