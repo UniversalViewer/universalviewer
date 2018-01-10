@@ -85,7 +85,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-virtex-extension'
         };
 
-        this._extensions["av"] = {
+        this._extensions['av'] = {
             type: AVExtension,
             name: 'uv-av-extension'
         };
@@ -119,6 +119,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 }
             ],
             manifestIndex: 0,
+            rangeId: null,
             rotation: 0,
             sequenceIndex: 0,
             xywh: ''
@@ -209,6 +210,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             manifestIndex: data.manifestIndex,
             sequenceIndex: data.sequenceIndex,
             canvasIndex: data.canvasIndex,
+            rangeId: data.rangeId,
             locale: data.locales[0].name
         }).then((helper: Manifold.IHelper) => {
             

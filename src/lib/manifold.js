@@ -671,6 +671,9 @@ var Manifold;
         Helper.prototype.getRangeByPath = function (path) {
             return this.manifest.getRangeByPath(path);
         };
+        Helper.prototype.getRangeById = function (id) {
+            return this.manifest.getRangeById(id);
+        };
         Helper.prototype.getRangeCanvases = function (range) {
             var ids = range.getCanvasIds();
             return this.getCanvasesById(ids);

@@ -2,7 +2,6 @@ import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { DownloadDialogue } from "./DownloadDialogue";
-import { Events } from "./Events";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { IAVExtension } from "./IAVExtension";
@@ -121,7 +120,7 @@ export class Extension extends BaseExtension implements IAVExtension {
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
         const script: string = String.format(template, iframeSrc, width, height);
         return script;
     }
@@ -145,9 +144,9 @@ export class Extension extends BaseExtension implements IAVExtension {
     }
 
     viewRange(path: string): void {
-        const range: Manifesto.IRange = this.helper.getRangeByPath(path);
+        const range: Manifesto.IRange | null = this.helper.getRangeByPath(path);
         if (!range) return;
-        $.publish(Events.RANGE_CHANGED, [range]);
+        $.publish(BaseEvents.RANGE_CHANGED, [range]);
 
         if (range.canvases && range.canvases.length) {
             const canvasId: string = range.canvases[0];

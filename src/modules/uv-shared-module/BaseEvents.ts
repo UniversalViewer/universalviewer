@@ -74,6 +74,7 @@ export class BaseEvents {
     static PAGE_UP: string                          = 'pageUp';
     static PLUS: string                             = 'plus';
     static PREV: string                             = 'prev';
+    static RANGE_CHANGED: string                    = 'rangeChanged';
     static REDIRECT: string                         = 'redirect';
     static REFRESH: string                          = 'refresh';
     static RELOAD: string                           = 'reload';

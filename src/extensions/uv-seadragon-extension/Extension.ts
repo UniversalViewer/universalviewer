@@ -544,7 +544,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
     viewRange(path: string): void {
         //this.currentRangePath = path;
-        const range: Manifesto.IRange = this.helper.getRangeByPath(path);
+        const range: Manifesto.IRange | null = this.helper.getRangeByPath(path);
         if (!range) return;
         const canvasId: string = range.getCanvasIds()[0];
         const index: number | null = this.helper.getCanvasIndexById(canvasId);

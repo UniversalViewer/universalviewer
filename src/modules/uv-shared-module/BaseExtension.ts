@@ -382,6 +382,12 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.PAGE_UP);
         });
 
+        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
+            this.data.rangeId = range.id;
+            this.helper.rangeId = range.id;
+            this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
+        });
+
         $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: Manifesto.IExternalResource) => {
             this.fire(BaseEvents.RESOURCE_DEGRADED);
             Auth09.handleDegraded(resource)
@@ -640,6 +646,18 @@ export class BaseExtension implements IExtension {
 
         if (!this.isCreated || (this.data.canvasIndex !== this.helper.canvasIndex)) {
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex]);
+        }
+
+        if (!this.isCreated || (this.data.rangeId !== this.helper.rangeId)) {
+
+            if (this.data.rangeId) {
+                const range: Manifesto.IRange | null = this.helper.getRangeById(this.data.rangeId);
+
+                if (range) {
+                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                }
+            }
+            
         }
     }
 

@@ -54,6 +54,10 @@ function createUV(selector, data, dataProvider) {
         dataProvider.set('cv', canvasIndex);
     }, false);
 
+    uv.on('rangeChanged', function(rangeId) {
+        dataProvider.set('rid', rangeId);
+    }, false);
+
     uv.on('openseadragonExtension.rotationChanged', function(rotation) {
         dataProvider.set('r', rotation);
     }, false);

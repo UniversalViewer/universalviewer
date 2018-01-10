@@ -12,6 +12,7 @@ export interface IUVData {
     isReload: boolean;
     locales: ILocale[];
     manifestIndex: number;
+    rangeId: string | null;
     root: string | null;
     sequenceIndex: number;
 }

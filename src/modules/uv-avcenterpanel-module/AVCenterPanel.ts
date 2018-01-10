@@ -1,5 +1,4 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Events} from "../../extensions/uv-av-extension/Events";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 
 export class AVCenterPanel extends CenterPanel {
@@ -7,6 +6,7 @@ export class AVCenterPanel extends CenterPanel {
     $avcomponent: JQuery;
     avcomponent: IIIFComponents.AVComponent;
     title: string | null;
+    private _canvasReady: boolean = false;
     private _resourceOpened: boolean = false;
 
     constructor($element: JQuery) {
@@ -36,7 +36,7 @@ export class AVCenterPanel extends CenterPanel {
             }
         });
 
-        $.subscribe(Events.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
+        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
             that.viewRange(range);
         });
 
@@ -48,6 +48,10 @@ export class AVCenterPanel extends CenterPanel {
         this.avcomponent = new IIIFComponents.AVComponent({
             target: this.$avcomponent[0]
         });
+
+        this.avcomponent.on('canvasready', () => {
+            this._canvasReady = true;
+        }, false);
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
@@ -78,7 +82,13 @@ export class AVCenterPanel extends CenterPanel {
         const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasById(canvasId);
 
         if (canvas) {
-            this.avcomponent.play(canvasId);
+
+            Utils.Async.waitFor(() => {
+                return this._canvasReady;
+            }, () => {
+                this.avcomponent.play(canvasId);
+            });
+            
         }
     }
 

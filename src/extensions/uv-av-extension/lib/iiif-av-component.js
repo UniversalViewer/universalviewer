@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.6 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.8 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /// <reference types="exjs" /> 
@@ -146,13 +146,14 @@ var IIIFComponents;
                 canvasInstance.setVolume(Number(this.value));
             });
             var that = this;
-            canvasInstance.$playerElement[0].addEventListener('loadedmetadata', function () {
+            canvasInstance.on('canvasready', function () {
                 canvasInstance.setCurrentTime(0);
                 if (that.options.data.autoPlay) {
                     canvasInstance.play();
                 }
                 $timingControls.find('.canvasDuration').text(IIIFComponents.AVComponentUtils.Utils.formatTime(canvasInstance.canvasClockDuration));
                 that._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
+                that.fire(AVComponent.Events.CANVASREADY);
             }, false);
         };
         AVComponent.prototype.getCanvasInstanceById = function (canvasId) {
@@ -226,6 +227,7 @@ var IIIFComponents;
         var Events = /** @class */ (function () {
             function Events() {
             }
+            Events.CANVASREADY = 'canvasready';
             Events.PLAYCANVAS = 'play';
             Events.PAUSECANVAS = 'pause';
             Events.LOG = 'log';
@@ -260,6 +262,7 @@ var IIIFComponents;
             this.data = null;
             this.isPlaying = false;
             this.isStalled = false;
+            this.readyCanvasesCount = 0;
             this.stallRequestedBy = []; //todo: type
             this.wasPlaying = false;
             this.data = canvas;
@@ -406,6 +409,7 @@ var IIIFComponents;
                 targetElement.append($mediaElement);
             }
             if (data.type == 'Video' || data.type == 'Audio') {
+                var that_2 = this;
                 var self_1 = data;
                 $mediaElement.on('loadstart', function () {
                     //console.log('loadstart');
@@ -418,6 +422,12 @@ var IIIFComponents;
                 $mediaElement.on('seeking', function () {
                     //console.log('seeking');
                     //self.checkForStall();
+                });
+                $mediaElement.on('loadedmetadata', function () {
+                    that_2.readyCanvasesCount++;
+                    if (that_2.readyCanvasesCount === that_2._mediaElements.length) {
+                        that_2.fire(IIIFComponents.AVComponent.Events.CANVASREADY);
+                    }
                 });
                 $mediaElement.attr('preload', 'auto');
                 $mediaElement.get(0).load(); // todo: type
