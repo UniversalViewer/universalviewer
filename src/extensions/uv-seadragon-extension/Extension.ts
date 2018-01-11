@@ -457,28 +457,21 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     checkForSearchParam(): void {
-        // if a h value is in the hash params, do a search.
-        if (this.isDeepLinkingEnabled()) {
+        // if a highlight param is set, use it to search.
+        const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
 
-            // if a highlight param is set, use it to search.
-            const highlight: string | null = (<ISeadragonExtensionData>this.data).highlight;
-
-            if (highlight) {
-                highlight.replace(/\+/g, " ").replace(/"/g, "");
-                $.publish(Events.SEARCH, [highlight]);
-            }
+        if (highlight) {
+            highlight.replace(/\+/g, " ").replace(/"/g, "");
+            $.publish(Events.SEARCH, [highlight]);
         }
     }
 
     checkForRotationParam(): void {
-        // if a rotation value is in the hash params, set currentRotation
-        if (this.isDeepLinkingEnabled()) {
+        // if a rotation value is passed, set rotation
+        const rotation: number | null = (<ISeadragonExtensionData>this.data).rotation;
 
-            const rotation: number | null = (<ISeadragonExtensionData>this.data).rotation;
-
-            if (rotation) {
-                $.publish(Events.SEADRAGON_ROTATION, [rotation]);
-            }
+        if (rotation) {
+            $.publish(Events.SEADRAGON_ROTATION, [rotation]);
         }
     }
 

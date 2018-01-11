@@ -108,7 +108,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             collectionIndex: 0,
             config: null,
             configUri: null,
-            deepLinkingEnabled: true,
+            embedded: false,
             iiifResourceUri: '',
             isLightbox: false,
             isReload: false,

@@ -785,9 +785,10 @@ export class BaseExtension implements IExtension {
         return this.data.config.options.seeAlsoEnabled !== false;
     }
 
+
     getShareUrl(): string | null {
-        // If embedded on the home domain and it's the only instance of the UV on the page
-        if (this.isDeepLinkingEnabled()) {
+        // If not embedded on an external domain (this causes CORS errors when fetching parent url)
+        if (!this.data.embedded) {
             // Use the current page URL with hash params
             if (Utils.Documents.isInIFrame()) {
                 return parent.document.location.href;
@@ -807,7 +808,7 @@ export class BaseExtension implements IExtension {
         }
 
         return null;
-    }
+    }   
 
     getIIIFShareUrl(): string {
         return this.helper.iiifResourceUri + "?manifest=" + this.helper.iiifResourceUri;
@@ -815,10 +816,6 @@ export class BaseExtension implements IExtension {
 
     addTimestamp(uri: string): string {
         return uri + "?t=" + Utils.Dates.getTimeStamp();
-    }
-
-    isDeepLinkingEnabled(): boolean {
-        return this.data.deepLinkingEnabled;
     }
 
     getDomain(): string {

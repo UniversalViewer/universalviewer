@@ -30,7 +30,7 @@
 
         window.addEventListener('uvLoaded', function(e) { 
 
-            urlDataProvider = new UV.URLDataProvider();
+            urlDataProvider = new UV.URLDataProvider(true);
             var formattedLocales;
             var locales = urlDataProvider.get('locales', '');
 
@@ -58,10 +58,10 @@
                 manifestIndex: Number(urlDataProvider.get('m', 0)),
                 sequenceIndex: Number(urlDataProvider.get('s', 0)),
                 canvasIndex: Number(urlDataProvider.get('cv', 0)),
-                deepLinkingEnabled: false,
                 rotation: Number(urlDataProvider.get('r', 0)),
-                locales: formattedLocales,
-                xywh: urlDataProvider.get('xywh', '')
+                xywh: urlDataProvider.get('xywh', ''),
+                embedded: true,
+                locales: formattedLocales
             }, urlDataProvider);
 
         }, false);

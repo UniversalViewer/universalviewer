@@ -6,7 +6,7 @@ export interface IUVData {
     collectionIndex: number;
     config: any;
     configUri: string | null;
-    deepLinkingEnabled: boolean;
+    embedded: boolean;
     iiifResourceUri: string;
     isLightbox: boolean;
     isReload: boolean;

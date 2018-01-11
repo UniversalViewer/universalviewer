@@ -32,7 +32,6 @@ export interface IExtension {
     height(): number;
     helper: Manifold.IHelper;
     isCreated: boolean;
-    isDeepLinkingEnabled(): boolean;
     isDesktopMetric(): boolean;
     isFooterPanelEnabled(): boolean;
     isFullScreen(): boolean;
