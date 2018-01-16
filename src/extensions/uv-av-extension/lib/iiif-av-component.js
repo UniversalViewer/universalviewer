@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.9 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.13 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /// <reference types="exjs" /> 
@@ -178,7 +178,8 @@ var IIIFComponents;
                 if (temporal && temporal.length > 1) {
                     var rangeTiming = temporal[1].split(',');
                     var duration = new IIIFComponents.AVComponentObjects.Duration(Number(rangeTiming[0]), Number(rangeTiming[1]));
-                    canvasInstance.highlightDuration(duration);
+                    canvasInstance.currentDuration = duration;
+                    canvasInstance.highlightDuration();
                     canvasInstance.setCurrentTime(duration.start);
                     canvasInstance.play();
                 }
@@ -217,6 +218,7 @@ var IIIFComponents;
                         var $options = canvasInstance.$playerElement.find('.optionsContainer');
                         $canvasContainer.height(this._$element.height() - $options.height());
                     }
+                    canvasInstance.highlightDuration();
                 }
             }
         };
@@ -261,6 +263,7 @@ var IIIFComponents;
             this.canvasClockTime = 0;
             this.canvasHeight = 0;
             this.canvasWidth = 0;
+            this.currentDuration = null;
             this.data = null;
             this.isPlaying = false;
             this.isStalled = false;
@@ -274,29 +277,32 @@ var IIIFComponents;
             if (!this.data)
                 return;
             this._mediaElements = [];
-            var mediaItems = this.data.__jsonld.content[0].items; //todo: use canvas.getContent()
-            for (var i = 0; i < mediaItems.length; i++) {
-                var mediaItem = mediaItems[i];
+            var items = this.data.__jsonld.content[0].items; //todo: use canvas.getContent()
+            if (items.length === 1) {
+                this._getTimelineItemContainer().hide();
+            }
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
                 /*
-                if (mediaItem.motivation != 'painting') {
+                if (item.motivation != 'painting') {
                     return null;
                 }
                 */
                 var mediaSource = void 0;
-                if (mediaItem.body.type == 'TextualBody') {
-                    mediaSource = mediaItem.body.value;
+                if (item.body.type == 'TextualBody') {
+                    mediaSource = item.body.value;
                 }
-                else if (Array.isArray(mediaItem.body) && mediaItem.body[0].type == 'Choice') {
+                else if (Array.isArray(item.body) && item.body[0].type == 'Choice') {
                     // Choose first "Choice" item as body
-                    var tmpItem = mediaItem;
-                    mediaItem.body = tmpItem.body[0].items[0];
-                    mediaSource = mediaItem.body.id.split('#')[0];
+                    var tmpItem = item;
+                    item.body = tmpItem.body[0].items[0];
+                    mediaSource = item.body.id.split('#')[0];
                 }
                 else {
-                    mediaSource = mediaItem.body.id.split('#')[0];
+                    mediaSource = item.body.id.split('#')[0];
                 }
                 /*
-                var targetFragment = (mediaItem.target.indexOf('#') != -1) ? mediaItem.target.split('#t=')[1] : '0, '+ canvasClockDuration,
+                var targetFragment = (item.target.indexOf('#') != -1) ? item.target.split('#t=')[1] : '0, '+ canvasClockDuration,
                     fragmentTimings = targetFragment.split(','),
                     startTime = parseFloat(fragmentTimings[0]),
                     endTime = parseFloat(fragmentTimings[1]);
@@ -308,8 +314,8 @@ var IIIFComponents;
                     mediaWidth = fragmentPosition[2],
                     mediaHeight = fragmentPosition[3];
                 */
-                var spatial = /xywh=([^&]+)/g.exec(mediaItem.target);
-                var temporal = /t=([^&]+)/g.exec(mediaItem.target);
+                var spatial = /xywh=([^&]+)/g.exec(item.target);
+                var temporal = /t=([^&]+)/g.exec(item.target);
                 var xywh = void 0;
                 if (spatial && spatial[1]) {
                     xywh = spatial[1].split(',');
@@ -326,7 +332,7 @@ var IIIFComponents;
                 }
                 var positionLeft = parseInt(xywh[0]), positionTop = parseInt(xywh[1]), mediaWidth = parseInt(xywh[2]), mediaHeight = parseInt(xywh[3]), startTime = parseInt(t[0]), endTime = parseInt(t[1]);
                 var percentageTop = this._convertToPercentage(positionTop, this.canvasHeight), percentageLeft = this._convertToPercentage(positionLeft, this.canvasWidth), percentageWidth = this._convertToPercentage(mediaWidth, this.canvasWidth), percentageHeight = this._convertToPercentage(mediaHeight, this.canvasHeight);
-                var temporalOffsets = /t=([^&]+)/g.exec(mediaItem.body.id);
+                var temporalOffsets = /t=([^&]+)/g.exec(item.body.id);
                 var ot = void 0;
                 if (temporalOffsets && temporalOffsets[1]) {
                     ot = temporalOffsets[1].split(',');
@@ -336,7 +342,7 @@ var IIIFComponents;
                 }
                 var offsetStart = (ot[0]) ? parseInt(ot[0]) : ot[0], offsetEnd = (ot[1]) ? parseInt(ot[1]) : ot[1];
                 var itemData = {
-                    'type': mediaItem.body.type,
+                    'type': item.body.type,
                     'source': mediaSource,
                     'start': startTime,
                     'end': endTime,
@@ -436,16 +442,22 @@ var IIIFComponents;
             }
             this._renderSyncIndicator(data);
         };
-        CanvasInstance.prototype.highlightDuration = function (duration) {
-            var $durationHighlight = this.$playerElement.find('.durationHighlight');
+        CanvasInstance.prototype._getDurationHighlight = function () {
+            return this.$playerElement.find('.durationHighlight');
+        };
+        CanvasInstance.prototype.highlightDuration = function () {
+            if (!this.currentDuration) {
+                return;
+            }
+            var $durationHighlight = this._getDurationHighlight();
             // get the total length in seconds.
             var totalLength = this.canvasClockDuration;
             // get the length of the timeline container
             var timelineLength = this._getTimelineContainer().width();
             // get the ratio of seconds to length
             var ratio = timelineLength / totalLength;
-            var start = duration.start * ratio;
-            var end = duration.end * ratio;
+            var start = this.currentDuration.start * ratio;
+            var end = this.currentDuration.end * ratio;
             var width = end - start;
             // set the start position and width
             $durationHighlight.css({
@@ -471,7 +483,7 @@ var IIIFComponents;
             $timelineItem.appendTo($lineWrapper);
             mediaElementData.timelineElement = $timelineItem;
             if (this.$playerElement) {
-                var $itemContainer = this.$playerElement.find('.timelineItemContainer');
+                var $itemContainer = this._getTimelineItemContainer();
                 $itemContainer.append($lineWrapper);
             }
         };
@@ -534,6 +546,9 @@ var IIIFComponents;
         };
         CanvasInstance.prototype._getTimelineContainer = function () {
             return this.$playerElement.find('.timelineContainer');
+        };
+        CanvasInstance.prototype._getTimelineItemContainer = function () {
+            return this.$playerElement.find('.timelineItemContainer');
         };
         CanvasInstance.prototype.highPriorityUpdater = function () {
             var $timelineContainer = this._getTimelineContainer();

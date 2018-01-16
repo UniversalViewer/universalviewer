@@ -87,6 +87,7 @@ export class AVCenterPanel extends CenterPanel {
                 return this._canvasReady;
             }, () => {
                 this.avcomponent.play(canvasId);
+                this.resize();
             });
             
         }
@@ -109,6 +110,8 @@ export class AVCenterPanel extends CenterPanel {
         }
 
         this.$avcomponent.height(this.$content.height());
-        this.avcomponent.resize();       
+
+        this.avcomponent.resize(); 
+              
     }
 }
