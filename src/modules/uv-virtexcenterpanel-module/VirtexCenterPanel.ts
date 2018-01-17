@@ -121,6 +121,14 @@ export class VirtexCenterPanel extends CenterPanel {
                 }
             });
 
+            this.viewport.on('vravailable', () => {
+                this.$vrButton.show();
+            }, false);
+
+            this.viewport.on('vrunavailable', function() {
+                this.$vrButton.hide();
+            }, false);
+
             this.resize();
         });
     }
