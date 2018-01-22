@@ -119,7 +119,7 @@ module.exports = function (grunt) {
             // ./src/themes/[theme]/img/[image]
             // goes to
             // [global.buildDir]/themes/[theme]/img/[image]
-            //copyFiles('./src/themes/' + theme + '/img/*', path.join(getThemeDest(theme), 'img'));
+            copyFiles('./src/themes/' + theme + '/assets/*', path.join(getThemeDest(theme), 'assets'));
 
             // ./src/extensions/*/.build/[theme].css
             // goes to

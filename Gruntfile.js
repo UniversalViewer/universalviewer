@@ -69,6 +69,7 @@ module.exports = function (grunt) {
         },
 
         clean: {
+            themes : ['<%= config.directories.themes %>'],
             build : ['<%= config.directories.build %>'],
             dist: ['<%= config.directories.examples %>/uv/*'],
             extension: ['<%= config.directories.src %>/extensions/*/.build/*'],
@@ -375,6 +376,7 @@ module.exports = function (grunt) {
 
         grunt.task.run(
             'clean:libs',
+            'clean:themes',
             'sync',
             'copy:bundle',
             'concat:offline',
