@@ -116,9 +116,9 @@ module.exports = function (grunt) {
         _.each(dirs, function(dir) {
             var theme = path.basename(dir);
 
-            // ./src/themes/[theme]/img/[image]
+            // ./src/themes/[theme]/assets/[image]
             // goes to
-            // [global.buildDir]/themes/[theme]/img/[image]
+            // [global.buildDir]/themes/[theme]/assets/[image]
             copyFiles('./src/themes/' + theme + '/assets/*', path.join(getThemeDest(theme), 'assets'));
 
             // ./src/extensions/*/.build/[theme].css
