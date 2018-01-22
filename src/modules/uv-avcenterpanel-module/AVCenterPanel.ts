@@ -40,6 +40,12 @@ export class AVCenterPanel extends CenterPanel {
             that.viewRange(range);
         });
 
+        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+            this.avcomponent.set({
+                limitToRange: !this.extension.isDesktopMetric()
+            });
+        });
+
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
         this.$content.append(this.$avcomponent);
 
@@ -62,6 +68,7 @@ export class AVCenterPanel extends CenterPanel {
                 helper: this.extension.helper,
                 autoPlay: this.config.options.autoPlay,
                 defaultAspectRatio: 0.56,
+                limitToRange: false,
                 content: <IIIFComponents.IAVComponentContent> {
                     play: this.content.play,
                     pause: this.content.pause,

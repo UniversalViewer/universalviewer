@@ -35,11 +35,23 @@
         color: #fff;
     }
 
-    .timelineContainer {
+    .rangeTimelineContainer {
+        background: chartreuse;
+        height: 20px;
+        border: none;
+    }
+
+    .canvasTimelineContainer {
         background: #AFAFAF;
         height: 20px;
         width: 0px;
         border: none;
+    }
+
+    .canvasTimelineContainer .durationHighlight {
+        position: absolute;
+        background: chartreuse;
+        height: 20px;
     }
 
     .timelineItemContainer {
@@ -68,20 +80,14 @@
         background: #333;
     }
 
-    .timelineContainer .durationHighlight {
-        position: absolute;
-        background: chartreuse;
-        height: 20px;
-    }
-
-    .timelineContainer .ui-slider-range {
+    .ui-slider-range {
         background: #888888;
         box-sizing: border-box;
         border-right: 2px solid #000000;
         .opacity(.6);
     }
 
-    .timelineContainer .ui-slider-handle {
+    .ui-slider-handle {
         top: 0px;
         height: 100%;
         width: 16px;
@@ -91,11 +97,11 @@
         z-index: 1;
     }
 
-    .timelineContainer .ui-slider-handle:focus {
+    .ui-slider-handle:focus {
         outline: none;
     }
 
-    .timelineContainer .ui-slider-handle:after {
+    .ui-slider-handle:after {
         position: absolute;
         top: 0px;
         left: 0px;
