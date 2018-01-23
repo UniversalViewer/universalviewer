@@ -25,6 +25,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     }
 
     protected _init(): boolean {
+
         const success: boolean = super._init();
 
         if (!success) {
