@@ -1,18 +1,3 @@
-/// <reference types="base-component" />
-/// <reference types="exjs" />
-/// <reference types="extensions" />
-/// <reference types="http-status-codes" />
-/// <reference types="iiif-av-component" />
-/// <reference types="iiif-gallery-component" />
-/// <reference types="iiif-metadata-component" />
-/// <reference types="iiif-tree-component" />
-/// <reference types="jquery-plugins" />
-/// <reference types="key-codes" />
-/// <reference types="manifesto.js" />
-/// <reference types="manifold" />
-/// <reference types="utils" />
-/// <reference types="virtex3d" />
-
 if (typeof jQuery === "function") {
     define('jquery', [], function() {
         return jQuery;

@@ -14,7 +14,7 @@ module.exports = function () {
             'node_modules/jquery-tiny-pubsub/dist/ba-tiny-pubsub.js',
             'node_modules/key-codes/dist/key-codes.js',
             'node_modules/manifesto.js/dist/client/manifesto.js',
-            'node_modules/manifold/dist/manifold.js',
+            'node_modules/@iiif/manifold/dist/manifold.js',
             'node_modules/utils/dist/utils.js'
         ],
         offline: [ // when offline, make these libs available as they can't be loaded from a cdn

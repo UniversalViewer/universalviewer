@@ -27,7 +27,7 @@ module.exports = function (grunt) {
 
         ts: {
             dev: {
-                src: ['./src/**/*.ts', 'typings/**/*.ts'],
+                src: ['./src/**/*.ts'],
                 options: {
                     module: 'amd',
                     sourceMap: true,
@@ -43,11 +43,30 @@ module.exports = function (grunt) {
                     strictNullChecks: true,
                     suppressImplicitAnyIndexErrors: true,
                     target: "es5",
-                    types: ['requirejs', 'jquery', 'modernizr', 'three']
+                    types: [
+                        '@iiif/manifold', 
+                        'base-component',
+                        'exjs',
+                        'extensions',
+                        'http-status-codes',
+                        'iiif-av-component',
+                        'iiif-gallery-component',
+                        'iiif-metadata-component',
+                        'iiif-tree-component',
+                        'jquery-plugins',
+                        'jquery', 
+                        'key-codes',
+                        'manifesto.js', 
+                        'modernizr', 
+                        'requirejs', 
+                        'three',
+                        'utils',
+                        'virtex3d'
+                    ]
                 }
             },
             dist: {
-                src: ['./src/**/*.ts', 'typings/**/*.ts'],
+                src: ['./src/**/*.ts'],
                 options: {
                     module: 'amd',
                     sourceMap: false,
@@ -63,7 +82,26 @@ module.exports = function (grunt) {
                     strictNullChecks: true,
                     suppressImplicitAnyIndexErrors: true,
                     target: "es5",
-                    types: ['requirejs', 'jquery', 'modernizr', 'three']
+                    types: [
+                        '@iiif/manifold', 
+                        'base-component',
+                        'exjs',
+                        'extensions',
+                        'http-status-codes',
+                        'iiif-av-component',
+                        'iiif-gallery-component',
+                        'iiif-metadata-component',
+                        'iiif-tree-component',
+                        'jquery-plugins',
+                        'jquery', 
+                        'key-codes',
+                        'manifesto.js', 
+                        'modernizr', 
+                        'requirejs', 
+                        'three',
+                        'utils',
+                        'virtex3d'
+                    ]
                 }
             }
         },
