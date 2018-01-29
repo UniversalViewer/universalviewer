@@ -127,7 +127,9 @@
         "play": "Play",
         "pause": "Pause",
         "currentTime": "Current Time",
-        "duration": "Duration"
+        "duration": "Duration",
+        "previous": "Previous",
+        "next": "Next"
       }
     },
     "restrictedDialogue": {

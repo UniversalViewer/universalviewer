@@ -69,11 +69,14 @@ export class AVCenterPanel extends CenterPanel {
                 autoPlay: this.config.options.autoPlay,
                 defaultAspectRatio: 0.56,
                 limitToRange: false,
+                doubleClickMS: 350,
                 content: <IIIFComponents.IAVComponentContent> {
-                    play: this.content.play,
-                    pause: this.content.pause,
                     currentTime: this.content.currentTime,
-                    duration: this.content.duration
+                    duration: this.content.duration,
+                    next: this.content.next,
+                    pause: this.content.pause,
+                    play: this.content.play,
+                    previous: this.content.previous
                 }
             });
 
@@ -93,7 +96,7 @@ export class AVCenterPanel extends CenterPanel {
             Utils.Async.waitFor(() => {
                 return this._canvasReady;
             }, () => {
-                this.avcomponent.play(canvasId);
+                this.avcomponent.playCanvas(canvasId);
                 this.resize();
             });
             

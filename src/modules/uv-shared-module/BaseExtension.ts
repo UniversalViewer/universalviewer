@@ -655,6 +655,8 @@ export class BaseExtension implements IExtension {
 
                 if (range) {
                     $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                } else {
+                    console.warn('range id not found:', this.data.rangeId);
                 }
             }
             
