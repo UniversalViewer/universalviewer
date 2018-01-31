@@ -128,6 +128,7 @@
                 "play": "Chwarae",
                 "pause": "Seibiant",
                 "currentTime": "Amser Presennol",
+                "delimiter": " - ",
                 "duration": "Hyd",
                 "previous": "Blaenorol",
                 "next": "Nesaf"

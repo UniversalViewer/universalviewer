@@ -5,13 +5,13 @@
 
     // todo: put colours in variables.less
 
-    .canvasContainer {
+    .canvas-container {
         position: relative;
         background: #000000;
         width: 100%;
     }
 
-    .canvasContainer .workingIndicator {
+    .canvas-container .working-indicator {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -26,7 +26,7 @@
         font-size: 20px;
     }
 
-    .canvasContainer .anno {
+    .canvas-container .anno {
         position: absolute;
         /*border: 1px solid rgba(0,255,0,.4);*/
         background: transparent;
@@ -35,26 +35,26 @@
         color: #fff;
     }
 
-    .rangeTimelineContainer {
+    .range-timeline-container {
         background: chartreuse;
         height: 20px;
         border: none;
     }
 
-    .canvasTimelineContainer {
+    .canvas-timeline-container {
         background: #AFAFAF;
         height: 20px;
         width: 0px;
         border: none;
     }
 
-    .canvasTimelineContainer .durationHighlight {
+    .canvas-timeline-container .duration-highlight {
         position: absolute;
         background: chartreuse;
         height: 20px;
     }
 
-    .timelineItemContainer {
+    .timeline-item-container {
         position: relative;
         width: 100%;
         min-height: 6px;
@@ -63,11 +63,11 @@
         padding-bottom: 3px;
     }
 
-    .timelineItemContainer .lineWrapper {
+    .timeline-item-container .line-wrapper {
         margin-top: 2px;
     }
 
-    .timelineItemContainer .timelineItem {
+    .timeline-item-container .timeline-item {
         position: relative;
         height: 6px;
         box-sizing: border-box;
@@ -76,7 +76,7 @@
         background: #777;
     }
 
-    .timelineItemContainer .timelineItem.active {
+    .timeline-item-container .timeline-item.active {
         background: #333;
     }
 
@@ -111,12 +111,69 @@
         border-right: 8px solid transparent;
     }
 
-    .controlsContainer {
-        margin-top: 16px;
+    .controls-container {
+        margin-top: 10px;
     }
 
-    .controlsContainer .pauseButton {
+    .controls-container .pause-button {
         margin-right: 14px;
+    }
+
+    .controls-container .time-display {
+        display: inline-block;
+    }
+
+    .controls-container .volume {
+        display: inline-block;
+
+        .volume-slider {
+            width: 100px;
+        }
+    }
+
+    .btn {
+        background: 0 0;
+        border: 0;
+
+        i {
+            background-repeat: no-repeat;
+            display: inline-block;
+            height: 30px;
+            vertical-align: middle;
+            width: 30px;
+            cursor: pointer;
+        }
+    }
+
+    .av-icon-mute {
+
+        &.on {
+            background-image: data-uri('@{img-path}volume-on.png');
+        }
+
+        &.off {
+            background-image: data-uri('@{img-path}volume-off.png');
+        }
+    }
+
+    .av-icon-previous {
+        background-image: data-uri('@{img-path}previous.png');
+    }
+
+    .av-icon-play {
+
+        &.play {
+            background-image: data-uri('@{img-path}play.png');
+        }
+
+        &.pause {
+            background-image: data-uri('@{img-path}pause.png');
+        }
+        
+    }
+
+    .av-icon-next {
+        background-image: data-uri('@{img-path}next.png');
     }
 
 }

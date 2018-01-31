@@ -127,6 +127,7 @@
         "play": "Play",
         "pause": "Pause",
         "currentTime": "Current Time",
+        "delimiter": " - ",
         "duration": "Duration",
         "previous": "Previous",
         "next": "Next"

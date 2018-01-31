@@ -37,7 +37,8 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
-            that.viewRange(range);
+            that._viewRange(range);
+            that._setTitle();
         });
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
@@ -46,10 +47,12 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
+        $.subscribe(BaseEvents.CREATED, () => {
+            this._setTitle();
+        });
+
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
         this.$content.append(this.$avcomponent);
-
-        this.title = this.extension.helper.getLabel();
 
         this.avcomponent = new IIIFComponents.AVComponent({
             target: this.$avcomponent[0]
@@ -58,6 +61,54 @@ export class AVCenterPanel extends CenterPanel {
         this.avcomponent.on('canvasready', () => {
             this._canvasReady = true;
         }, false);
+
+        this.avcomponent.on('previousrange', () => {
+            this._setTitle();
+        }, false);
+
+        this.avcomponent.on('nextrange', () => {
+            this._setTitle();
+        }, false);
+    }
+
+    private _setTitle(): void {
+
+        let title: string = '';
+        let value: string | null;
+        let label: Manifesto.TranslationCollection;
+
+        // get the current range or canvas title
+        const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+
+        if (currentRange) {
+            label = currentRange.getLabel();
+        } else {
+            label = this.extension.helper.getCurrentCanvas().getLabel();
+        }
+
+        value = Manifesto.TranslationCollection.getValue(label);
+
+        if (value) {
+            title = value;
+        }
+
+        // get the parent range or manifest's title
+        if (currentRange) {
+            if (currentRange.parentRange) {
+                label = currentRange.parentRange.getLabel();
+                value = Manifesto.TranslationCollection.getValue(label);
+            }
+        } else {
+            value = this.extension.helper.getLabel();
+        }
+
+        if (value) {
+            title += this.content.delimiter + value;
+        }
+
+        this.title = title;
+
+        this.resize();
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
@@ -84,7 +135,7 @@ export class AVCenterPanel extends CenterPanel {
         });
     }
 
-    viewRange(range: Manifesto.IRange): void {
+    private _viewRange(range: Manifesto.IRange): void {
 
         if (!range.canvases || !range.canvases.length) return;
 

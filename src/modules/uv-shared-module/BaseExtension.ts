@@ -1098,6 +1098,7 @@ export class BaseExtension implements IExtension {
         return this.metric.toString() === MetricType.DESKTOP.toString();
     }
 
+    // todo: use redux in manifold to get reset state
     viewManifest(manifest: Manifesto.IManifest): void {
         const data: IUVData = <IUVData>{};
         data.iiifResourceUri = this.helper.iiifResourceUri;
@@ -1109,6 +1110,7 @@ export class BaseExtension implements IExtension {
         this.reload(data);
     }
 
+    // todo: use redux in manifold to get reset state
     viewCollection(collection: Manifesto.ICollection): void {
         const data: IUVData = <IUVData>{};
         data.iiifResourceUri = this.helper.iiifResourceUri;
