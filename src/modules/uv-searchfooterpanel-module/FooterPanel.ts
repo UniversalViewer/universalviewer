@@ -80,10 +80,10 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         this.$printButton = $(`
-          <button class="print btn imageBtn" title="${this.content.print}" tabindex="0">
-            <i class="uv-icon uv-icon-print" aria-hidden="true"></i>${this.content.print}
-          </button>
-        `);
+<button class="print btn imageBtn" title="${this.content.print}" tabindex="0">
+<i class="uv-icon uv-icon-print" aria-hidden="true"></i>${this.content.print}
+</button>
+`);
         this.$options.prepend(this.$printButton);
 
         // search input.
@@ -213,21 +213,21 @@ export class FooterPanel extends BaseFooterPanel {
         if (autocompleteService) {
 
             new AutoComplete(this.$searchText,
-                (terms: string, cb: (results: string[]) => void) => {
-                    $.getJSON(String.format(autocompleteService, terms), (results: string[]) => {
-                        cb(results);
-                    });
-                },
-                (results: any) => {
-                    return $.map(results.terms, (result: any) => {
-                        return result.match;
-                    });
-                },
-                (terms: string) => {
-                    this.search(terms);
-                },
-                300, 2, true
-            );
+                             (terms: string, cb: (results: string[]) => void) => {
+                                 $.getJSON(String.format(autocompleteService, terms), (results: string[]) => {
+                                     cb(results);
+                                 });
+                             },
+                             (results: any) => {
+                                 return $.map(results.terms, (result: any) => {
+                                     return result.match;
+                                 });
+                             },
+                             (terms: string) => {
+                                 this.search(terms);
+                             },
+                             300, 2, true
+                            );
 
         } else {
             this.$searchText.on("keyup", (e) => {
@@ -630,21 +630,26 @@ export class FooterPanel extends BaseFooterPanel {
 
         const displaying: string = this.content.displaying;
         const index: number = this.extension.helper.canvasIndex;
+        const integerSearchSliderLabel: boolean = Utils.Bools.getBool(this.config.options.integerSearchSliderLabel, true);
 
         if (this.isPageModeEnabled()) {
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
-            let label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
-            if (!label) {
-                label = this.content.defaultLabel;
+            if (integerSearchSliderLabel) {
+                this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.extension.helper.getTotalCanvases()));
+            } else {
+                const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+                let label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+
+                if (!label) {
+                    label = this.content.defaultLabel;
+                }
+
+                const lastCanvasOrderLabel: string | null = this.extension.helper.getLastCanvasLabel(true);
+
+                if (lastCanvasOrderLabel) {
+                    this.$pagePositionLabel.html(String.format(displaying, this.content.page, UVUtils.sanitize(<string>label), UVUtils.sanitize(<string>lastCanvasOrderLabel)));
+                }
             }
-
-            const lastCanvasOrderLabel: string | null = this.extension.helper.getLastCanvasLabel(true);
-
-            if (lastCanvasOrderLabel) {
-                this.$pagePositionLabel.html(String.format(displaying, this.content.page, UVUtils.sanitize(<string>label), UVUtils.sanitize(<string>lastCanvasOrderLabel)));
-            }
-
         } else {
             this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.extension.helper.getTotalCanvases()));
         }

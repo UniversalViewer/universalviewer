@@ -36,7 +36,8 @@
         "feedbackEnabled": false,
         "minimiseButtons": true,
         "openEnabled": false,
-        "shareEnabled": true
+        "shareEnabled": true,
+        "integerSearchSliderLabel": false
       }
     },
     "genericDialogue":
