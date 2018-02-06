@@ -74,9 +74,10 @@
         "bookmark": "Add to bookmarks",
         "download": "Download",
         "embed": "Embed",
-        "feedback": "Feedback",
         "exitFullScreen": "Exit Full Screen",
+        "feedback": "Feedback",
         "fullScreen": "Full Screen",
+        "moreInfo": "More Information",
         "open": "Open",
         "share": "Share"
       }

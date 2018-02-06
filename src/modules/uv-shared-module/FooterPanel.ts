@@ -68,7 +68,7 @@ export class FooterPanel extends BaseView {
 
         this.$embedButton = $(`
           <button class="embed btn imageBtn" title="${this.content.embed}" tabindex="0">
-            <i class="uv-icon uv-icon-embed" aria-hidden="true"></i>
+            <i class="uv-icon uv-icon-embed" aria-hidden="true"></i>${this.content.embed}
           </button>
         `);
         this.$options.append(this.$embedButton);
@@ -82,14 +82,14 @@ export class FooterPanel extends BaseView {
 
         this.$moreInfoButton = $(`
           <button class="moreInfo btn imageBtn" title="${this.content.moreInfo}" tabindex="0">
-            <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>
+            <i class="uv-icon uv-icon-more-info" aria-hidden="true"></i>${this.content.moreInfo}
           </button>
         `);
         this.$options.prepend(this.$moreInfoButton);
 
         this.$fullScreenBtn = $(`
           <button class="fullScreen btn imageBtn" title="${this.content.fullScreen}" tabindex="0">
-            <i class="uv-icon uv-icon-fullscreen" aria-hidden="true"></i>
+            <i class="uv-icon uv-icon-fullscreen" aria-hidden="true"></i>${this.content.fullScreen}
           </button>
         `);
         this.$options.append(this.$fullScreenBtn);

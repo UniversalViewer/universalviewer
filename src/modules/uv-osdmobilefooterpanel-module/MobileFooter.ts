@@ -23,21 +23,21 @@ export class FooterPanel extends BaseFooterPanel {
 
         this.$rotateButton = $(`
             <button class="btn imageBtn rotate" title="${this.content.rotateRight}">
-                <i class="uv-icon-rotate" aria-hidden="true"></i>
+                <i class="uv-icon-rotate" aria-hidden="true"></i>${this.content.rotateRight}
             </button>
         `);
         this.$options.prepend(this.$rotateButton);
 
         this.$zoomOutButton = $(`
             <button class="btn imageBtn zoomOut" title="${this.content.zoomOut}">
-                <i class="uv-icon-zoom-out" aria-hidden="true"></i>
+                <i class="uv-icon-zoom-out" aria-hidden="true"></i>${this.content.zoomOut}
             </button>
         `);
         this.$options.prepend(this.$zoomOutButton);
 
         this.$zoomInButton = $(`
-            <button class="btn imageBtn zoomIn" title="${this.content.zoomOut}">
-                <i class="uv-icon-zoom-in" aria-hidden="true"></i>
+            <button class="btn imageBtn zoomIn" title="${this.content.zoomIn}">
+                <i class="uv-icon-zoom-in" aria-hidden="true"></i>${this.content.zoomIn}
             </button>
         `);
         this.$options.prepend(this.$zoomInButton);
