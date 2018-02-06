@@ -60,6 +60,7 @@
   "modules": {
     "contentLeftPanel": {
       "options": {
+        "branchNodesSelectable": true,
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
         "elideCount": 40,

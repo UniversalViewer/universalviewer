@@ -43,7 +43,8 @@ export class AVCenterPanel extends CenterPanel {
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.avcomponent.set({
-                limitToRange: !this.extension.isDesktopMetric()
+                limitToRange: !this.extension.isDesktopMetric(),
+                constrainNavigationToRange: true
             });
         });
 
@@ -64,10 +65,17 @@ export class AVCenterPanel extends CenterPanel {
 
         this.avcomponent.on('previousrange', () => {
             this._setTitle();
+            $.publish(BaseEvents.RANGE_CHANGED, [this.extension.helper.getCurrentRange()]);
         }, false);
 
         this.avcomponent.on('nextrange', () => {
             this._setTitle();
+            $.publish(BaseEvents.RANGE_CHANGED, [this.extension.helper.getCurrentRange()]);
+        }, false);
+
+        this.avcomponent.on('norange', () => {
+            this._setTitle();
+            $.publish(BaseEvents.NO_RANGE);
         }, false);
     }
 
@@ -121,14 +129,7 @@ export class AVCenterPanel extends CenterPanel {
                 defaultAspectRatio: 0.56,
                 limitToRange: false,
                 doubleClickMS: 350,
-                content: <IIIFComponents.IAVComponentContent> {
-                    currentTime: this.content.currentTime,
-                    duration: this.content.duration,
-                    next: this.content.next,
-                    pause: this.content.pause,
-                    play: this.content.play,
-                    previous: this.content.previous
-                }
+                content: this.content
             });
 
             this.resize();

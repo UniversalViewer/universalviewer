@@ -89,6 +89,20 @@ export class ContentLeftPanel extends LeftPanel {
             this.updateTreeTabBySelection();
         });
 
+        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+            if (this.isFullyExpanded) {
+                this.collapseFull();
+            }
+
+            this.selectCurrentTreeNode();
+            this.updateTreeTabBySelection();
+        });
+
+        $.subscribe(BaseEvents.NO_RANGE, () => {
+            this.selectCurrentTreeNode();
+            this.updateTreeTabBySelection();
+        });
+
         this.$tabs = $('<div class="tabs"></div>');
         this.$main.append(this.$tabs);
 
@@ -282,7 +296,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     getTreeData(): IIIFComponents.ITreeComponentData {
         return <IIIFComponents.ITreeComponentData>{
-            branchNodesSelectable: false,
+            branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
             treeSortType: this.treeSortType
@@ -294,6 +308,11 @@ export class ContentLeftPanel extends LeftPanel {
         const topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
         if (topRanges.length > 1){
             const index: number = this.getCurrentCanvasTopRangeIndex();
+
+            if (index === -1) {
+                return;
+            }
+
             const currentRange: Manifesto.IRange = topRanges[index];
             this.setTreeTabTitle(<string>Manifesto.TranslationCollection.getValue(currentRange.getLabel()));
         } else {
@@ -590,6 +609,8 @@ export class ContentLeftPanel extends LeftPanel {
         return topRangeIndex;
     }
 
+    // todo: a lot of this was written prior to manifold storing the current range id
+    // use that instead - probably after porting manifold to redux.
     selectCurrentTreeNode(): void{
         if (this.treeView) {
 
@@ -597,10 +618,11 @@ export class ContentLeftPanel extends LeftPanel {
             const currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
             const selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
             const usingCorrectTree: boolean = currentCanvasTopRangeIndex === selectedTopRangeIndex;
+            let range: Manifesto.IRange | null = null;
 
-            if (currentCanvasTopRangeIndex != -1) {
+            if (currentCanvasTopRangeIndex !== -1) {
 
-                const range: Manifesto.IRange | null = this.extension.getCurrentCanvasRange();
+                range = this.extension.getCurrentCanvasRange();
 
                 if (range && range.treeNode) {
                     node = this.treeView.getNodeById(range.treeNode.id);
@@ -616,7 +638,17 @@ export class ContentLeftPanel extends LeftPanel {
             if (node && usingCorrectTree){
                 this.treeView.selectNode(<Manifold.ITreeNode>node);
             } else {
-                this.treeView.deselectCurrentNode();
+                range = this.extension.helper.getCurrentRange();
+                
+                if (range && range.treeNode) {
+                    node = this.treeView.getNodeById(range.treeNode.id);
+                }
+
+                if (node) {
+                    this.treeView.selectNode(<Manifold.ITreeNode>node);
+                } else {
+                    this.treeView.deselectCurrentNode();
+                }
             }
         }
     }

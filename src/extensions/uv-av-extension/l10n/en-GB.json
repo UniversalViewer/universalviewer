@@ -125,13 +125,14 @@
     },
     "avCenterPanel": {
       "content": {
-        "play": "Play",
-        "pause": "Pause",
         "currentTime": "Current Time",
         "delimiter": " - ",
         "duration": "Duration",
-        "previous": "Previous",
-        "next": "Next"
+        "mute": "Mute",
+        "next": "Next",
+        "pause": "Pause",
+        "play": "Play",
+        "previous": "Previous"
       }
     },
     "restrictedDialogue": {

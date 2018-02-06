@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.22 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.23 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /// <reference types="exjs" /> 
@@ -36,12 +36,14 @@ var IIIFComponents;
         AVComponent.prototype.data = function () {
             return {
                 autoPlay: false,
+                constrainNavigationToRange: false,
                 defaultAspectRatio: 0.56,
                 doubleClickMS: 350,
                 limitToRange: false,
                 content: {
                     currentTime: "Current Time",
                     duration: "Duration",
+                    mute: "Mute",
                     next: "Next",
                     pause: "Pause",
                     play: "Play",
@@ -125,6 +127,9 @@ var IIIFComponents;
             }, false);
             canvasInstance.on(AVComponent.Events.NEXT_RANGE, function () {
                 _this._nextRage();
+            }, false);
+            canvasInstance.on(AVComponent.Events.NO_RANGE, function () {
+                _this.fire(AVComponent.Events.NO_RANGE);
             }, false);
         };
         AVComponent.prototype._prevRange = function () {
@@ -256,6 +261,7 @@ var IIIFComponents;
             Events.CANVASREADY = 'canvasready';
             Events.LOG = 'log';
             Events.NEXT_RANGE = 'nextrange';
+            Events.NO_RANGE = 'norange';
             Events.PAUSECANVAS = 'pause';
             Events.PLAYCANVAS = 'play';
             Events.PREVIOUS_RANGE = 'previousrange';
@@ -303,7 +309,7 @@ var IIIFComponents;
             if (!success) {
                 console.error("Component failed to initialise");
             }
-            this._$volumeMute = $('<button class="btn volume-mute"><i class="av-icon-mute on" aria-hidden="true"></i></button>');
+            this._$volumeMute = $("\n                                <button class=\"btn volume-mute\" title=\"" + this.options.data.content.mute + "\">\n                                    <i class=\"av-icon-mute on\" aria-hidden=\"true\"></i>" + this.options.data.content.mute + "\n                                </button>");
             this._$volumeSlider = $('<input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">');
             this._$element.append(this._$volumeMute, this._$volumeSlider);
             var that = this;
@@ -408,15 +414,16 @@ var IIIFComponents;
             this._$durationHighlight = $('<div class="duration-highlight"></div>');
             this._$timelineItemContainer = $('<div class="timeline-item-container"></div>');
             this._$controlsContainer = $('<div class="controls-container"></div>');
-            this._$prevButton = $('<button class="btn"><i class="av-icon-previous" aria-hidden="true"></i></button>');
-            this._$playButton = $('<button class="btn"><i class="av-icon-play play" aria-hidden="true"></i></button>');
-            this._$nextButton = $('<button class="btn"><i class="av-icon-next" aria-hidden="true"></i></button>');
+            this._$prevButton = $("\n                                <button class=\"btn\" title=\"" + this.options.data.content.previous + "\">\n                                    <i class=\"av-icon-previous\" aria-hidden=\"true\"></i>" + this.options.data.content.previous + "\n                                </button>");
+            this._$playButton = $("\n                                <button class=\"btn\" title=\"" + this.options.data.content.play + "\">\n                                    <i class=\"av-icon-play play\" aria-hidden=\"true\"></i>" + this.options.data.content.play + "\n                                </button>");
+            this._$nextButton = $("\n                                <button class=\"btn\" title=\"" + this.options.data.content.next + "\">\n                                    <i class=\"av-icon-next\" aria-hidden=\"true\"></i>" + this.options.data.content.next + "\n                                </button>");
             this._$timeDisplay = $('<div class="time-display"><span class="canvas-time"></span> / <span class="canvas-duration"></span></div>');
             this._$canvasTime = this._$timeDisplay.find('.canvas-time');
             this._$canvasDuration = this._$timeDisplay.find('.canvas-duration');
             var $volume = $('<div class="volume"></div>');
             this._volume = new IIIFComponents.AVVolumeControl({
-                target: $volume[0]
+                target: $volume[0],
+                data: Object.assign({}, this.options.data)
             });
             this._volume.on(IIIFComponents.AVVolumeControl.Events.VOLUME_CHANGED, function (value) {
                 _this.setVolume(value);
@@ -472,7 +479,7 @@ var IIIFComponents;
                 }
             });
             this._$nextButton.on('click', function () {
-                _this.fire(IIIFComponents.AVComponent.Events.NEXT_RANGE);
+                _this._next();
             });
             this._$canvasTimelineContainer.slider({
                 value: 0,
@@ -578,9 +585,14 @@ var IIIFComponents;
         };
         CanvasInstance.prototype._previous = function (isDouble) {
             if (this._isLimitedToRange() && this.currentDuration) {
-                // if only showing the range, single click rewinds, double click goes to previous range
+                // if only showing the range, single click rewinds, double click goes to previous range unless navigation is contrained to range
                 if (isDouble) {
-                    this.fire(IIIFComponents.AVComponent.Events.PREVIOUS_RANGE);
+                    if (this._isNavigationConstrainedToRange()) {
+                        this.rewind();
+                    }
+                    else {
+                        this.fire(IIIFComponents.AVComponent.Events.PREVIOUS_RANGE);
+                    }
                 }
                 else {
                     this.rewind();
@@ -602,6 +614,19 @@ var IIIFComponents;
                 else {
                     this.rewind();
                 }
+            }
+        };
+        CanvasInstance.prototype._next = function () {
+            if (this._isLimitedToRange() && this.currentDuration) {
+                if (this._isNavigationConstrainedToRange()) {
+                    this.fastforward();
+                }
+                else {
+                    this.fire(IIIFComponents.AVComponent.Events.NEXT_RANGE);
+                }
+            }
+            else {
+                this.fire(IIIFComponents.AVComponent.Events.NEXT_RANGE);
             }
         };
         CanvasInstance.prototype.set = function (data) {
@@ -823,7 +848,20 @@ var IIIFComponents;
             else {
                 this._canvasClockTime = 0;
             }
+            if (!this._isLimitedToRange()) {
+                this.options.data.helper.rangeId = null;
+                this.fire(IIIFComponents.AVComponent.Events.NO_RANGE);
+            }
             this.play();
+        };
+        CanvasInstance.prototype.fastforward = function () {
+            if (this._isLimitedToRange() && this.currentDuration) {
+                this._canvasClockTime = this.currentDuration.end;
+            }
+            else {
+                this._canvasClockTime = this._canvasClockDuration;
+            }
+            this.pause();
         };
         CanvasInstance.prototype.play = function (withoutUpdate) {
             if (this._isPlaying)
@@ -866,6 +904,9 @@ var IIIFComponents;
             this._$playButton.find('i').switchClass('pause', 'play');
             this.fire(IIIFComponents.AVComponent.Events.PAUSECANVAS);
             this.logMessage('PAUSE canvas');
+        };
+        CanvasInstance.prototype._isNavigationConstrainedToRange = function () {
+            return this.options.data.constrainNavigationToRange;
         };
         CanvasInstance.prototype._isLimitedToRange = function () {
             return this.options.data.limitToRange;

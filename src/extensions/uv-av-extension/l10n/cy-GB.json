@@ -126,13 +126,14 @@
         },
         "avCenterPanel": {
             "content": {
-                "play": "Chwarae",
-                "pause": "Seibiant",
                 "currentTime": "Amser Presennol",
                 "delimiter": " - ",
                 "duration": "Hyd",
-                "previous": "Blaenorol",
-                "next": "Nesaf"
+                "mute": "Mudo",
+                "next": "Nesaf",
+                "pause": "Seibiant",
+                "play": "Chwarae",
+                "previous": "Blaenorol"
             }
         },
         "restrictedDialogue": {
