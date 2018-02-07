@@ -44,7 +44,8 @@
     "headerPanel": {
       "content": {
         "close": "Cau",
-        "help": "Cymorth"
+        "help": "Cymorth",
+        "settings": "Dewisiadau"
       }
     },
     "helpDialogue": {

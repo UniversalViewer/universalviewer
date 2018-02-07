@@ -44,7 +44,8 @@
     "headerPanel": {
       "content": {
         "close": "Close",
-        "help": "Help"
+        "help": "Help",
+        "settings": "Settings"
       }
     },
     "helpDialogue": {

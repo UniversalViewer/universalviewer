@@ -88,6 +88,11 @@
         "refresh": "Refresh"
       }
     },
+    "headerPanel": {
+      "content": {
+        "settings": "Settings"
+      }
+    },
     "helpDialogue": {
       "content": {
         "text": "placeholder text",

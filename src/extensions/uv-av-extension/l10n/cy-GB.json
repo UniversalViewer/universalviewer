@@ -81,6 +81,11 @@
                 "refresh": "Ailosod"
             }
         },
+        "headerPanel": {
+            "content": {
+              "settings": "Dewisiadau"
+            }
+        },
         "helpDialogue": {
             "content": {
                 "text": "testun i'w osod",
