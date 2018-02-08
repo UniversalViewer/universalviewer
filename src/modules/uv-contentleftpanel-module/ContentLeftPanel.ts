@@ -296,11 +296,28 @@ export class ContentLeftPanel extends LeftPanel {
 
     getTreeData(): IIIFComponents.ITreeComponentData {
         return <IIIFComponents.ITreeComponentData>{
+            autoExpand: this._isTreeAutoExpanded(),
             branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
             treeSortType: this.treeSortType
         };
+    }
+
+    private _isTreeAutoExpanded(): boolean {
+        const autoExpandTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.autoExpandTreeEnabled, false);
+        const autoExpandTreeIfFewerThan: number = this.config.options.autoExpandTreeIfFewerThan || 0;
+
+        if (autoExpandTreeEnabled) {
+            // get total number of tree nodes
+            const flatTree: Manifesto.ITreeNode[] = this.extension.helper.getFlattenedTree();
+
+            if (flatTree.length < autoExpandTreeIfFewerThan) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     updateTreeTabByCanvasIndex(): void {

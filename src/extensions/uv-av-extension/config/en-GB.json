@@ -60,6 +60,8 @@
   "modules": {
     "contentLeftPanel": {
       "options": {
+        "autoExpandTreeEnabled": true,
+        "autoExpandTreeIfFewerThan": 20,
         "branchNodesSelectable": true,
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
