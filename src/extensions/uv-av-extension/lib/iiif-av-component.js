@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.23 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.24 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /// <reference types="exjs" /> 
@@ -500,7 +500,7 @@ var IIIFComponents;
             });
             // create annotations
             this._contentAnnotations = [];
-            var items = this.options.data.canvas.__jsonld.content[0].items; //todo: use canvas.getContent()
+            var items = this.options.data.canvas.getContent(); // (<any>this.options.data.canvas).__jsonld.content[0].items; //todo: use canvas.getContent()
             if (items.length === 1) {
                 this._$timelineItemContainer.hide();
             }
@@ -512,17 +512,24 @@ var IIIFComponents;
                 }
                 */
                 var mediaSource = void 0;
-                if (Array.isArray(item.body) && item.body[0].type.toLowerCase() === 'choice') {
-                    // Choose first "Choice" item as body
-                    var tmpItem = item;
-                    item.body = tmpItem.body[0].items[0];
-                    mediaSource = item.body.id.split('#')[0];
+                var bodies = item.getBody();
+                if (!bodies.length) {
+                    console.warn('item has no body');
+                    return;
                 }
-                else if (item.body.type.toLowerCase() === 'textualbody') {
-                    mediaSource = item.body.value;
+                var body = bodies[0];
+                var type = body.getType();
+                // if (type && type.toString() === 'choice') {
+                //     // Choose first "Choice" item as body
+                //     const tmpItem = item;
+                //     item.body = tmpItem.body[0].items[0];
+                //     mediaSource = item.body.id.split('#')[0];
+                // } else 
+                if (type && type.toString() === 'textualbody') {
+                    //mediaSource = (<any>body).value;
                 }
                 else {
-                    mediaSource = item.body.id.split('#')[0];
+                    mediaSource = body.id.split('#')[0];
                 }
                 /*
                 var targetFragment = (item.target.indexOf('#') != -1) ? item.target.split('#t=')[1] : '0, '+ canvasClockDuration,
@@ -537,8 +544,13 @@ var IIIFComponents;
                     mediaWidth = fragmentPosition[2],
                     mediaHeight = fragmentPosition[3];
                 */
-                var spatial = /xywh=([^&]+)/g.exec(item.target);
-                var temporal = /t=([^&]+)/g.exec(item.target);
+                var target = item.getTarget();
+                if (!target) {
+                    console.warn('item has no target');
+                    return;
+                }
+                var spatial = /xywh=([^&]+)/g.exec(target);
+                var temporal = /t=([^&]+)/g.exec(target);
                 var xywh = void 0;
                 if (spatial && spatial[1]) {
                     xywh = spatial[1].split(',');
@@ -555,7 +567,7 @@ var IIIFComponents;
                 }
                 var positionLeft = parseInt(xywh[0]), positionTop = parseInt(xywh[1]), mediaWidth = parseInt(xywh[2]), mediaHeight = parseInt(xywh[3]), startTime = parseInt(t[0]), endTime = parseInt(t[1]);
                 var percentageTop = this._convertToPercentage(positionTop, this._canvasHeight), percentageLeft = this._convertToPercentage(positionLeft, this._canvasWidth), percentageWidth = this._convertToPercentage(mediaWidth, this._canvasWidth), percentageHeight = this._convertToPercentage(mediaHeight, this._canvasHeight);
-                var temporalOffsets = /t=([^&]+)/g.exec(item.body.id);
+                var temporalOffsets = /t=([^&]+)/g.exec(body.id);
                 var ot = void 0;
                 if (temporalOffsets && temporalOffsets[1]) {
                     ot = temporalOffsets[1].split(',');
@@ -565,7 +577,7 @@ var IIIFComponents;
                 }
                 var offsetStart = (ot[0]) ? parseInt(ot[0]) : ot[0], offsetEnd = (ot[1]) ? parseInt(ot[1]) : ot[1];
                 var itemData = {
-                    'type': item.body.type,
+                    'type': type,
                     'source': mediaSource,
                     'start': startTime,
                     'end': endTime,
@@ -655,7 +667,8 @@ var IIIFComponents;
         };
         CanvasInstance.prototype._renderMediaElement = function (data) {
             var $mediaElement;
-            switch (data.type.toLowerCase()) {
+            var type = data.type.toString().toLowerCase();
+            switch (type) {
                 case 'image':
                     $mediaElement = $('<img class="anno" src="' + data.source + '" />');
                     break;
@@ -678,7 +691,7 @@ var IIIFComponents;
                 height: data.height + '%'
             }).hide();
             data.element = $mediaElement;
-            if (data.type.toLowerCase() === 'video' || data.type.toLowerCase() === 'audio') {
+            if (type === 'video' || type === 'audio') {
                 data.timeout = null;
                 var that_1 = this;
                 data.checkForStall = function () {
@@ -707,7 +720,7 @@ var IIIFComponents;
             if (this.$playerElement) {
                 this._$canvasContainer.append($mediaElement);
             }
-            if (data.type.toLowerCase() === 'video' || data.type.toLowerCase() === 'audio') {
+            if (type === 'video' || type === 'audio') {
                 var that_2 = this;
                 var self_1 = data;
                 $mediaElement.on('loadstart', function () {
@@ -938,6 +951,7 @@ var IIIFComponents;
             var contentAnnotation;
             for (var i = 0; i < this._contentAnnotations.length; i++) {
                 contentAnnotation = this._contentAnnotations[i];
+                var type = contentAnnotation.type.toString().toLowerCase();
                 if (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime) {
                     this._checkMediaSynchronization();
                     if (!contentAnnotation.active) {
@@ -946,7 +960,7 @@ var IIIFComponents;
                         contentAnnotation.element.show();
                         contentAnnotation.timelineElement.addClass('active');
                     }
-                    if (contentAnnotation.type.toLowerCase() === 'video' || contentAnnotation.type.toLowerCase() === 'audio') {
+                    if (type === 'video' || type === 'audio') {
                         if (contentAnnotation.element[0].currentTime > contentAnnotation.element[0].duration - contentAnnotation.endOffset) {
                             contentAnnotation.element[0].pause();
                         }
@@ -957,7 +971,7 @@ var IIIFComponents;
                         contentAnnotation.active = false;
                         contentAnnotation.element.hide();
                         contentAnnotation.timelineElement.removeClass('active');
-                        if (contentAnnotation.toLowerCase() === 'video' || contentAnnotation.toLowerCase() === 'audio') {
+                        if (type === 'video' || type === 'audio') {
                             contentAnnotation.element[0].pause();
                         }
                     }
@@ -969,7 +983,8 @@ var IIIFComponents;
             var contentAnnotation;
             for (var i = 0; i < this._contentAnnotations.length; i++) {
                 contentAnnotation = this._contentAnnotations[i];
-                if (contentAnnotation.type.toLowerCase() === 'video' || contentAnnotation.type.toLowerCase() === 'audio') {
+                var type = contentAnnotation.type.toString().toLowerCase();
+                if (type === 'video' || type === 'audio') {
                     contentAnnotation.element[0].currentTime = this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset;
                     if (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime) {
                         if (this._isPlaying) {
@@ -998,7 +1013,8 @@ var IIIFComponents;
             var contentAnnotation;
             for (var i = 0, l = this._contentAnnotations.length; i < l; i++) {
                 contentAnnotation = this._contentAnnotations[i];
-                if ((contentAnnotation.type.toLowerCase() === 'video' || contentAnnotation.type.toLowerCase() === 'audio') &&
+                var type = contentAnnotation.type.toString().toLowerCase();
+                if ((type === 'video' || type === 'audio') &&
                     (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime)) {
                     var correctTime = (this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset);
                     var factualTime = contentAnnotation.element[0].currentTime;
