@@ -28,19 +28,14 @@
     }
 }
 
-// Webkit-style focus
-.tab-focus(@color: #333) {
+// Webkit-style focus for everything
+// Firefox's default focuses are often not able to be seen in the UV. Ideally at
+// some point we should try and just get the browser default focus.
+.tab-focus(@color: Highlight) {
     // Default
-    outline: thin dotted @color;
-    // Webkit
-    outline: 5px auto -webkit-focus-ring-color;
+    outline: auto 2px @color; // Default
+    outline: auto 5px -webkit-focus-ring-color; // Webkit
     outline-offset: -2px;
-}
-
-.btn-focus() {
-    &:focus{
-        //border: 1px dotted @btn-focused-border;
-    }
 }
 
 // Center-align a block level element
