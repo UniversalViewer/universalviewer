@@ -54,7 +54,7 @@ export class MoreInfoRightPanel extends RightPanel {
             copiedMessageDuration: 2000,
             copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
             helper: this.extension.helper,
-            licenseFormatter: null,
+            licenseFormatter: new Manifold.UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
             limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
