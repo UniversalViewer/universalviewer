@@ -1,4 +1,4 @@
-// virtex v0.3.6 https://github.com/edsilv/virtex#readme
+// virtex v0.3.9 https://github.com/edsilv/virtex#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
@@ -225,6 +225,7 @@ var Virtex;
         PLYFileTypeHandler.setup = function (viewport, geometry) {
             return new Promise(function (resolve) {
                 var material = new THREE.PointsMaterial({ vertexColors: THREE.VertexColors });
+                material.sizeAttenuation = false;
                 var mesh = new THREE.Points(geometry, material);
                 viewport.objectGroup.add(mesh);
                 viewport.createCamera();
@@ -321,6 +322,8 @@ var Virtex;
                 this._stats.domElement.style.top = '0px';
                 this._viewport.appendChild(this._stats.domElement);
             }
+            var canvas = this._element.querySelector('canvas');
+            canvas.oncontextmenu = function () { return false; };
         };
         Viewport.prototype.data = function () {
             return {
@@ -546,10 +549,40 @@ var Virtex;
         Viewport.prototype._loaded = function (obj) {
             //const boundingBox = new THREE.BoxHelper(this.objectGroup, new THREE.Color(0xffffff));
             //this.scene.add(boundingBox);
+            // obj.children[0].transparent = true;
+            // obj.children[0].material.opacity = 0.01;
             this._loading.classList.remove('duringload');
             this._loading.classList.add('afterload');
-            this.fire(Events.LOADED, obj);
+            this.fire(Events.LOADED, [obj]);
         };
+        /*
+        public annotate(): void {
+            
+            const intersects: THREE.Intersection[] = this._getObjectsIntersectingWithMouse();
+            
+            if (intersects.length) {
+
+                const intersection: THREE.Intersection = intersects[0];
+
+                // create a sphere
+                const sphereGeometry: THREE.SphereGeometry = new THREE.SphereGeometry(.1);
+                const sphereMaterial: THREE.MeshLambertMaterial = new THREE.MeshLambertMaterial({
+                    color: 0x0000ff
+                });
+                const sphere: THREE.Mesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+                sphere.position.copy(intersection.point);
+
+                // https://stackoverflow.com/questions/26400570/translate-a-vector-from-global-space-to-local-vector-in-three-js
+                this.objectGroup.updateMatrixWorld(false);
+                sphere.applyMatrix(new THREE.Matrix4().getInverse(this.objectGroup.matrixWorld));
+                //this.scene.add(sphere);
+                this.objectGroup.add(sphere);
+
+                this.fire(Events.ANNOTATION_TARGET, intersection);
+            }
+        }
+        */
         Viewport.prototype._getBoundingBox = function () {
             return new THREE.Box3().setFromObject(this.objectGroup);
         };
@@ -703,37 +736,33 @@ var Virtex;
             }
             var zoomDelta = (this._targetZoom - this.camera.position.z) * 0.1;
             this.camera.position.z += zoomDelta;
-            // cast a ray from the mouse position
-            if (this.objectGroup.children.length) {
-                this._raycaster.setFromCamera(this._mousePosNorm, this.camera);
-                var obj = this._getRaycastObject();
-                if (obj) {
-                    var intersects = this._raycaster.intersectObject(obj);
-                    if (intersects.length > 0) {
-                        this._isMouseOver = true;
-                        // var obj2 = intersects[0].object;
-                        // (<any>obj2).material.emissive.setHex( 0xff0000 );
-                        // console.log("hit");
-                    }
-                    else {
-                        this._isMouseOver = false;
-                    }
-                }
-            }
+            this._isMouseOver = this._getObjectsIntersectingWithMouse().length > 0;
+            // update mouse cursor
             if (this._isMouseOver) {
                 this._element.classList.add('grabbable');
-                if (this._isMouseDown) {
-                    this._element.classList.add('grabbing');
-                }
-                else {
-                    this._element.classList.remove('grabbing');
-                }
             }
             else {
                 this._element.classList.remove('grabbable');
+            }
+            if (this._isMouseDown) {
+                this._element.classList.add('grabbing');
+            }
+            else {
                 this._element.classList.remove('grabbing');
             }
             this.renderer.render(this.scene, this.camera);
+        };
+        Viewport.prototype._getObjectsIntersectingWithMouse = function () {
+            var intersects = [];
+            if (this.objectGroup.children.length) {
+                // cast a ray from the mouse position
+                this._raycaster.setFromCamera(this._mousePosNorm, this.camera);
+                var obj = this._getRaycastObject();
+                if (obj) {
+                    intersects = this._raycaster.intersectObject(obj);
+                }
+            }
+            return intersects;
         };
         Viewport.prototype._getRaycastObject = function () {
             var _this = this;
@@ -831,7 +860,7 @@ var Virtex;
             for (var _i = 1; _i < arguments.length; _i++) {
                 args[_i - 1] = arguments[_i];
             }
-            var data = [].slice.call(args, 1);
+            var data = [].slice.call(arguments, 1);
             var evtArr = ((this._e || (this._e = {}))[name] || []).slice();
             var i = 0;
             var len = evtArr.length;
@@ -913,6 +942,7 @@ var Virtex;
     var Events = /** @class */ (function () {
         function Events() {
         }
+        //static ANNOTATION_TARGET: string = 'annotationtarget';
         Events.LOADED = 'loaded';
         Events.VR_AVAILABLE = 'vravailable';
         Events.VR_UNAVAILABLE = 'vrunavailable';

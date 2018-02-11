@@ -71,7 +71,7 @@
     "jquery-ui-dist": "^1.12.1",
     "jsviews": "0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.7",
-    "manifesto.js": "2.2.10",
+    "manifesto.js": "2.2.11",
     "@iiif/manifold": "1.2.19",
     "mediaelement": "4.0.2",
     "opencollective": "1.0.3",
@@ -82,7 +82,7 @@
     "utils": "edsilv/utils#v0.1.2",
     "uv-cy-gb-theme": "UniversalViewer/uv-cy-gb-theme#v1.1.1",
     "uv-en-gb-theme": "UniversalViewer/uv-en-gb-theme#v1.1.1",
-    "virtex3d": "0.3.7"
+    "virtex3d": "0.3.9"
   },
   "collective": {
     "type": "opencollective",
