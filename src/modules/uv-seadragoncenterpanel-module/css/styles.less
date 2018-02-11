@@ -92,10 +92,13 @@
                     background-image: data-uri('@{img-path}zoom_in.png') !important;
                     width: 28px;
                     height: 28px;
+                    margin: 3px !important;
                     img {
                         display: none;
                     }
-                    .btn-focus() !important;
+                    &:focus {
+                      .tab-focus();
+                    }
                 }
 
                 .zoomOut{
@@ -103,15 +106,17 @@
                     background-image: data-uri('@{img-path}zoom_out.png') !important;
                     width: 28px;
                     height: 28px;
+                    margin: 3px !important;
                     img {
                         display: none;
                     }
-                    .btn-focus() !important;
+                    &:focus {
+                      .tab-focus();
+                    }
                 }
 
                 .goHome{
                     cursor: pointer !important;
-                    .btn-focus() !important;
                 }
 
                 div[title="Rotate left"] {
@@ -123,10 +128,13 @@
                     background-image: data-uri('@{img-path}rotate_right.png') !important;
                     width: 28px;
                     height: 28px;
+                    margin: 3px !important;
                     img {
                         display: none;
                     }
-                    .btn-focus() !important;
+                    &:focus {
+                      .tab-focus();
+                    }
                 }
 
                 div[title="Previous page"] {
