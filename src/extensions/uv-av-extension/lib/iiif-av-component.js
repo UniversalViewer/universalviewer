@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.24 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.25 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /// <reference types="exjs" /> 
@@ -388,16 +388,16 @@ var IIIFComponents;
         __extends(CanvasInstance, _super);
         function CanvasInstance(options) {
             var _this = _super.call(this, options) || this;
-            _this._highPriorityFrequency = 25;
-            _this._lowPriorityFrequency = 100;
             _this._canvasClockDuration = 0; // todo: should these 0 values be undefined by default?
             _this._canvasClockFrequency = 25;
             _this._canvasClockStartDate = 0;
             _this._canvasClockTime = 0;
             _this._canvasHeight = 0;
             _this._canvasWidth = 0;
+            _this._highPriorityFrequency = 25;
             _this._isPlaying = false;
             _this._isStalled = false;
+            _this._lowPriorityFrequency = 100;
             _this._readyCanvasesCount = 0;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
@@ -407,10 +407,15 @@ var IIIFComponents;
         }
         CanvasInstance.prototype.init = function () {
             var _this = this;
+            this._$hoverPreviewTemplate = $('<div class="hover-preview"><div class="label"></div><div class="pointer"><span class="arrow"></span></div></div>');
             this._$canvasContainer = $('<div class="canvas-container"></div>');
             this._$optionsContainer = $('<div class="options-container"></div>');
             this._$rangeTimelineContainer = $('<div class="range-timeline-container"></div>');
             this._$canvasTimelineContainer = $('<div class="canvas-timeline-container"></div>');
+            this._$canvasHoverPreview = this._$hoverPreviewTemplate.clone();
+            this._$canvasHoverHighlight = $('<div class="hover-highlight"></div>');
+            this._$rangeHoverPreview = this._$hoverPreviewTemplate.clone();
+            this._$rangeHoverHighlight = $('<div class="hover-highlight"></div>');
             this._$durationHighlight = $('<div class="duration-highlight"></div>');
             this._$timelineItemContainer = $('<div class="timeline-item-container"></div>');
             this._$controlsContainer = $('<div class="controls-container"></div>');
@@ -429,9 +434,12 @@ var IIIFComponents;
                 _this.setVolume(value);
             }, false);
             this._$controlsContainer.append(this._$prevButton, this._$playButton, this._$nextButton, this._$timeDisplay, $volume);
-            this._$canvasTimelineContainer.append(this._$durationHighlight);
+            this._$canvasTimelineContainer.append(this._$canvasHoverPreview, this._$canvasHoverHighlight, this._$durationHighlight);
+            this._$rangeTimelineContainer.append(this._$rangeHoverPreview, this._$rangeHoverHighlight);
             this._$optionsContainer.append(this._$canvasTimelineContainer, this._$rangeTimelineContainer, this._$timelineItemContainer, this._$controlsContainer);
             this.$playerElement.append(this._$canvasContainer, this._$optionsContainer);
+            this._$canvasHoverPreview.hide();
+            this._$rangeHoverPreview.hide();
             this._canvasClockDuration = this.options.data.canvas.getDuration();
             var canvasWidth = this.options.data.canvas.getWidth();
             var canvasHeight = this.options.data.canvas.getHeight();
@@ -497,6 +505,20 @@ var IIIFComponents;
                 stop: function (evt, ui) {
                     //this.setCurrentTime(ui.value);
                 }
+            });
+            this._$canvasTimelineContainer.mouseout(function () {
+                that._$canvasHoverHighlight.width(0);
+                that._$canvasHoverPreview.hide();
+            });
+            this._$rangeTimelineContainer.mouseout(function () {
+                that._$rangeHoverHighlight.width(0);
+                that._$rangeHoverPreview.hide();
+            });
+            this._$canvasTimelineContainer.on("mousemove", function (e) {
+                _this._updateHoverPreview(e, _this._$canvasTimelineContainer, _this._canvasClockDuration);
+            });
+            this._$rangeTimelineContainer.on("mousemove", function (e) {
+                _this._updateHoverPreview(e, _this._$rangeTimelineContainer, _this.currentDuration ? _this.currentDuration.getLength() : 0);
             });
             // create annotations
             this._contentAnnotations = [];
@@ -594,6 +616,37 @@ var IIIFComponents;
         };
         CanvasInstance.prototype.getCanvasId = function () {
             return this.options.data.canvas.id;
+        };
+        CanvasInstance.prototype._updateHoverPreview = function (e, $container, duration) {
+            var offset = $container.offset();
+            var x = e.pageX - offset.left;
+            var $hoverArrow = $container.find('.arrow');
+            var $hoverHighlight = $container.find('.hover-highlight');
+            var $hoverPreview = $container.find('.hover-preview');
+            $hoverHighlight.width(x);
+            var fullWidth = $container.width();
+            var ratio = x / fullWidth;
+            var seconds = Math.min(duration * ratio);
+            $hoverPreview.find('.label').text(IIIFComponents.AVComponentUtils.Utils.formatTime(seconds));
+            var hoverPreviewWidth = $hoverPreview.outerWidth();
+            var hoverPreviewHeight = $hoverPreview.outerHeight();
+            var left = x - hoverPreviewWidth * 0.5;
+            var arrowLeft = hoverPreviewWidth * 0.5 - 6;
+            if (left < 0) {
+                left = 0;
+                arrowLeft = x - 6;
+            }
+            if (left + hoverPreviewWidth > fullWidth) {
+                left = fullWidth - hoverPreviewWidth;
+                arrowLeft = (hoverPreviewWidth - (fullWidth - x)) - 6;
+            }
+            $hoverPreview.css({
+                left: left,
+                top: hoverPreviewHeight * -1 + 'px'
+            }).show();
+            $hoverArrow.css({
+                left: arrowLeft
+            });
         };
         CanvasInstance.prototype._previous = function (isDouble) {
             if (this._isLimitedToRange() && this.currentDuration) {

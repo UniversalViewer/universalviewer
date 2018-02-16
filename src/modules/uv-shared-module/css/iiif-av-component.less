@@ -48,6 +48,41 @@
         border: none;
     }
 
+    .hover-preview {
+        position: absolute;
+
+        .label {
+            background: rgba(66, 66, 66, 0.85);
+            height: 18px;
+            padding: 5px;
+            color: #fff;
+        }
+        
+        .pointer {
+            height: 6px;
+            position: relative;
+
+            .arrow {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                border-top: 6px solid rgba(66, 66, 66, 0.85);
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+            }
+        }
+    }
+
+    .hover-highlight {
+        position: absolute;
+        background: rgb(226, 226, 226);
+        height: 20px;
+    }
+
+    .canvas-timeline-container {
+        border-radius: 0;
+    }
+
     .canvas-timeline-container .duration-highlight {
         position: absolute;
         background: chartreuse;
@@ -81,10 +116,11 @@
     }
 
     .ui-slider-range {
-        background: #888888;
+        background: rgba(66, 66, 66, 0.5);
         box-sizing: border-box;
-        border-right: 2px solid #000000;
-        .opacity(.6);
+        border-radius: 0;
+        //border-right: 2px solid #000000;
+        //.opacity(.6);
     }
 
     .ui-slider-handle {
@@ -101,15 +137,15 @@
         outline: none;
     }
 
-    .ui-slider-handle:after {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        content: "";
-        border-top: 12px solid #000000;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-    }
+    // .ui-slider-handle:after {
+    //     position: absolute;
+    //     top: 0px;
+    //     left: 0px;
+    //     content: "";
+    //     border-top: 12px solid #000000;
+    //     border-left: 8px solid transparent;
+    //     border-right: 8px solid transparent;
+    // }
 
     .controls-container {
         margin-top: 10px;
