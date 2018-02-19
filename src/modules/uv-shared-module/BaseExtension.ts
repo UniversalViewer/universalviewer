@@ -768,7 +768,7 @@ export class BaseExtension implements IExtension {
             }
 
             if (!metricChanged) {
-                this.metric = MetricType.NONE;
+                // If the metric hasn't changed, no need to set it to anything.
             }
         }, 1);
     }
