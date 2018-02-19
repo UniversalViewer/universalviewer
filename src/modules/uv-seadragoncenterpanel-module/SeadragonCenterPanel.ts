@@ -807,9 +807,11 @@ export class SeadragonCenterPanel extends CenterPanel {
         const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
 
-        if (!currentAnnotationRect) return;
+        if (this.isZoomToSearchResultEnabled() && !currentAnnotationRect) {
+            return;
+        }
 
-        const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(currentAnnotationRect);
+        const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(<AnnotationRect>currentAnnotationRect);
         let foundRect: AnnotationRect | null = null;
    
         for (let i = currentAnnotationRectIndex - 1; i >= 0; i--) {
