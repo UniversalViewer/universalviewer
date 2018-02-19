@@ -476,9 +476,8 @@ export class FooterPanel extends BaseFooterPanel {
         that.$placemarkerDetails.show();
 
         let title: string = "{0} {1}";
-        const mode: Mode = that.extension.getMode();
 
-        if (mode.toString() === Mode.page.toString()) {
+        if (that.isPageModeEnabled()) {
             const canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
             let label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
 
@@ -651,7 +650,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString() && !Utils.Bools.getBool(this.config.options.forceImageMode, false);
     }
 
     showSearchSpinner(): void {

@@ -185,6 +185,7 @@
       "options": {
         "elideDetailsTermsCount": 20,
         "elideResultsTermsCount": 10,
+        "forceImageMode": false,
         "pageModeEnabled": true,
         "positionMarkerEnabled": true
       }
