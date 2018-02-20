@@ -125,7 +125,7 @@ export class VirtexCenterPanel extends CenterPanel {
                 this.$vrButton.show();
             }, false);
 
-            this.viewport.on('vrunavailable', function() {
+            this.viewport.on('vrunavailable', () => {
                 this.$vrButton.hide();
             }, false);
 
