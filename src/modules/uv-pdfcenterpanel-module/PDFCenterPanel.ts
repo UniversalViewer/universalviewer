@@ -15,7 +15,7 @@ export class PDFCenterPanel extends CenterPanel {
     private _pageRendering: boolean = false;
     private _pageNumPending: number | null = null;
     private _viewport: any;
-    //private _scale: number = 0.75;
+    private _renderTask: any;
 
     constructor($element: JQuery) {
         super($element);
@@ -132,6 +132,10 @@ export class PDFCenterPanel extends CenterPanel {
         // Using promise to fetch the page
         this._pdfDoc.getPage(num).then((page: any) => {
 
+            if (this._renderTask) {
+                this._renderTask.cancel();
+            }
+
             const height: number = this.$content.height();
             this._canvas.height = height;
             this._viewport = page.getViewport(this._canvas.height / page.getViewport(1.0).height);
@@ -148,16 +152,18 @@ export class PDFCenterPanel extends CenterPanel {
                 viewport: this._viewport
             };
 
-            const renderTask = page.render(renderContext);
+            this._renderTask = page.render(renderContext);
 
             // Wait for rendering to finish
-            renderTask.promise.then(() => {
+            this._renderTask.promise.then(() => {
                 this._pageRendering = false;
                 if (this._pageNumPending !== null) {
                     // New page rendering is pending
                     this._render(this._pageNumPending);
                     this._pageNumPending = null;
                 }
+            }).catch((err: any) => {
+                //console.log(err);
             });
 
         });
@@ -193,9 +199,7 @@ export class PDFCenterPanel extends CenterPanel {
         //this._viewport.width = width;
         //this._viewport.height = height;
 
-        setTimeout(() => {
-            this._render(this._pageNum);
-        }, 10);
+        this._render(this._pageNum);
         
     }
 }
