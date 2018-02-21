@@ -29,6 +29,9 @@ export class Extension extends BaseExtension implements IPDFExtension {
     settingsDialogue: SettingsDialogue;
 
     create(): void {
+
+        requirejs.config({paths: {'pdfjs-dist/build/pdf.combined': this.data.root + '/lib/' + 'pdf.combined'}});
+
         super.create();
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
@@ -138,9 +141,10 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     dependencyLoaded(index: number, dep: any): void {
-        if (index === 0) {
-            window.PDFObject = dep;
-        }
+        console.log(dep);
+        // if (index === 0) {
+        //     window.PDFObject = dep;
+        // }
     }
 
     getEmbedScript(template: string, width: number, height: number): string{

@@ -82,7 +82,8 @@
     },
     "pdfCenterPanel": {
       "content": {
-
+        "previous": "Previous",
+        "next": "Next"
       }
     },
     "settingsDialogue": {
