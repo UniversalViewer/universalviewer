@@ -3,10 +3,10 @@ import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {DownloadDialogue} from "./DownloadDialogue";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
-import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
 import {IPDFExtension} from "./IPDFExtension";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import {PDFCenterPanel} from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
+import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPanel";
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
@@ -23,7 +23,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     downloadDialogue: DownloadDialogue;
     shareDialogue: ShareDialogue;
     footerPanel: FooterPanel;
-    headerPanel: HeaderPanel;
+    headerPanel: PDFHeaderPanel;
     leftPanel: ResourcesLeftPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
@@ -81,23 +81,23 @@ export class Extension extends BaseExtension implements IPDFExtension {
     createModules(): void{
         super.createModules();
 
-        if (this.isHeaderPanelEnabled()){
-            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        if (this.isHeaderPanelEnabled()) {
+            this.headerPanel = new PDFHeaderPanel(Shell.$headerPanel);
         } else {
             Shell.$headerPanel.hide();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
         }
 
         this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        if (this.isFooterPanelEnabled()){
+        if (this.isFooterPanelEnabled()) {
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
         } else {
             Shell.$footerPanel.hide();
@@ -115,11 +115,11 @@ export class Extension extends BaseExtension implements IPDFExtension {
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel.init();
         }
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel.init();
         }
     }
@@ -141,7 +141,6 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     dependencyLoaded(index: number, dep: any): void {
-        console.log(dep);
         // if (index === 0) {
         //     window.PDFObject = dep;
         // }

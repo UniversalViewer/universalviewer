@@ -1,5 +1,6 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
+import { Events } from "../../extensions/uv-pdf-extension/Events"; 
 
 declare var PDFJS: any;
 
@@ -7,13 +8,11 @@ export class PDFCenterPanel extends CenterPanel {
 
     private _$canvas: JQuery;
     private _canvas: HTMLCanvasElement;
-    private _$previousButton: JQuery;
-    private _$nextButton: JQuery;
     private _ctx: any;
     private _pdfDoc: any = null;
-    private _pageNum: number = 1;
+    private _pageIndex: number = 1;
     private _pageRendering: boolean = false;
-    private _pageNumPending: number | null = null;
+    private _pageIndexPending: number | null = null;
     private _viewport: any;
     private _renderTask: any;
 
@@ -33,48 +32,75 @@ export class PDFCenterPanel extends CenterPanel {
 
         this.$content.append(this._$canvas);
 
-        this._$previousButton = $(`
-          <button class="btn imageBtn previous" title="${this.content.previous}">
-            <i class="uv-icon-previous" aria-hidden="true"></i>${this.content.previous}
-          </button>
-        `);
+        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+            this.openMedia(resources);
+        });
 
-        this.$content.append(this._$previousButton);
-        
-        this._$nextButton = $(`
-          <button class="btn imageBtn next" title="${this.content.next}">
-            <i class="uv-icon-next" aria-hidden="true"></i>${this.content.next}
-          </button>
-        `);
+        $.subscribe(BaseEvents.FIRST, () => {
 
-        this.$content.append(this._$nextButton);
+            if (!this._pdfDoc) {
+                return;
+            }
 
-        this._$previousButton.on('click', (e: any) => {
-            e.preventDefault();
+            this._pageIndex = 1;
 
-            if (this._pageNum <= 1) {
+            this._queueRenderPage(this._pageIndex);
+        });
+
+        $.subscribe(BaseEvents.PREV, () => {
+
+            if (!this._pdfDoc) {
+                return;
+            }
+
+            if (this._pageIndex <= 1) {
                 return;
             }
             
-            this._pageNum--;
+            this._pageIndex--;
 
-            this._queueRenderPage(this._pageNum);
+            this._queueRenderPage(this._pageIndex);
         });
 
-        this._$nextButton.on('click', (e: any) => {
-            e.preventDefault();
+        $.subscribe(BaseEvents.NEXT, () => {
 
-            if (this._pageNum >= this._pdfDoc.numPages) {
+            if (!this._pdfDoc) {
                 return;
             }
 
-            this._pageNum++;
+            if (this._pageIndex >= this._pdfDoc.numPages) {
+                return;
+            }
 
-            this._queueRenderPage(this._pageNum);
+            this._pageIndex++;
+
+            this._queueRenderPage(this._pageIndex);
         });
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
-            this.openMedia(resources);
+        $.subscribe(BaseEvents.LAST, () => {
+
+            if (!this._pdfDoc) {
+                return;
+            }
+
+            this._pageIndex = this._pdfDoc.numPages;
+
+            this._queueRenderPage(this._pageIndex);
+        });
+
+        $.subscribe(Events.SEARCH, (e: any, pageIndex: number) => {
+
+            if (!this._pdfDoc) {
+                return;
+            }
+
+            if (pageIndex < 1 || pageIndex > this._pdfDoc.numPages) {
+                return;
+            }
+
+            this._pageIndex = pageIndex;
+
+            this._queueRenderPage(this._pageIndex);
         });
 
     }
@@ -97,7 +123,9 @@ export class PDFCenterPanel extends CenterPanel {
 
             PDFJS.getDocument(mediaUri).then((pdfDoc: any) => {
                 this._pdfDoc = pdfDoc;
-                this._render(this._pageNum);
+                this._render(this._pageIndex);
+
+                $.publish(Events.PDF_LOADED, [pdfDoc]);
 
                 // this._pdfDoc.getMetadata().then((data: any) => {
                 //     console.log('metadata', data);
@@ -120,16 +148,10 @@ export class PDFCenterPanel extends CenterPanel {
         });
     }
 
-    // whenResized(cb: () => void): void {
-    //     Utils.Async.waitFor(() => {
-    //         return this.isResized;
-    //     }, cb);
-    // }
-
     private _render(num: number): void {
 
         this._pageRendering = true;
-        // Using promise to fetch the page
+
         this._pdfDoc.getPage(num).then((page: any) => {
 
             if (this._renderTask) {
@@ -156,12 +178,17 @@ export class PDFCenterPanel extends CenterPanel {
 
             // Wait for rendering to finish
             this._renderTask.promise.then(() => {
+
+                $.publish(Events.PAGE_INDEX_CHANGED, [this._pageIndex]);
+
                 this._pageRendering = false;
-                if (this._pageNumPending !== null) {
+
+                if (this._pageIndexPending !== null) {
                     // New page rendering is pending
-                    this._render(this._pageNumPending);
-                    this._pageNumPending = null;
+                    this._render(this._pageIndexPending);
+                    this._pageIndexPending = null;
                 }
+                
             }).catch((err: any) => {
                 //console.log(err);
             });
@@ -171,7 +198,7 @@ export class PDFCenterPanel extends CenterPanel {
 
     private _queueRenderPage(num: number) {
         if (this._pageRendering) {
-            this._pageNumPending = num;
+            this._pageIndexPending = num;
         } else {
             this._render(num);
         }
@@ -184,22 +211,6 @@ export class PDFCenterPanel extends CenterPanel {
             return;
         }
 
-        // const ratio: number = this._$canvas.width() / this._$canvas.height();
-
-        // const height: number = this.$content.height();
-        // const width: number = height * ratio;
-
-        // this._canvas.height = height;
-        // this._canvas.width = width;
-
-        // this._$canvas.css({
-        //     left: (this.$content.width() / 2) - (width / 2)
-        // });
-
-        //this._viewport.width = width;
-        //this._viewport.height = height;
-
-        this._render(this._pageNum);
-        
+        this._render(this._pageIndex);
     }
 }
