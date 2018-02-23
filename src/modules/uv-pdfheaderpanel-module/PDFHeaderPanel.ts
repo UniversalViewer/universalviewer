@@ -130,15 +130,28 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         const of: string = this.content.of;
         this.$total.html(String.format(of, this._pdfDoc.numPages));
+
+        if (this._pageIndex === 1) {
+            this.$firstButton.disable();
+            this.$prevButton.disable();
+        } else {
+            this.$firstButton.enable();
+            this.$prevButton.enable();
+        }
+
+        if (this._pageIndex === this._pdfDoc.numPages) {
+            this.$lastButton.disable();
+            this.$nextButton.disable();
+        } else {
+            this.$lastButton.enable();
+            this.$nextButton.enable();
+        }
     }
 
     search(value: string): void {
 
         if (!value) {
-
             this.extension.showMessage(this.content.emptyValue);
-            //$.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
-
             return;
         }
 
@@ -146,57 +159,10 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         if (isNaN(index)) {
             this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.invalidNumber);
-            //$.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
 
         $.publish(Events.SEARCH, [index]);
-    }
-
-    pageIndexChanged(index: any): void {
-        //this.setSearchFieldValue(index);
-
-        // enabled/disable buttons
-    }
-
-    disableFirstButton(): void {
-        this.firstButtonEnabled = false;
-        this.$firstButton.disable();
-    }
-
-    enableFirstButton(): void {
-        this.firstButtonEnabled = true;
-        this.$firstButton.enable();
-    }
-
-    disableLastButton(): void {
-        this.lastButtonEnabled = false;
-        this.$lastButton.disable();
-    }
-
-    enableLastButton(): void {
-        this.lastButtonEnabled = true;
-        this.$lastButton.enable()
-    }
-
-    disablePrevButton(): void {
-        this.prevButtonEnabled = false;
-        this.$prevButton.disable();
-    }
-
-    enablePrevButton(): void {
-        this.prevButtonEnabled = true;
-        this.$prevButton.enable();
-    }
-
-    disableNextButton(): void {
-        this.nextButtonEnabled = false;
-        this.$nextButton.disable();
-    }
-
-    enableNextButton(): void {
-        this.nextButtonEnabled = true;
-        this.$nextButton.enable();
     }
 
     resize(): void {
