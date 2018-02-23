@@ -6,6 +6,16 @@
 
             position: relative;
 
+            .spinner {
+                position: absolute;
+                background: fadeout(#000, 10%);
+                width: 34px;
+                height: 34px;
+                border-radius: 34px;
+
+                .loading(@loader-black-bg);
+            }
+
             button {
                 color: #fff;
             }

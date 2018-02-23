@@ -7,6 +7,7 @@ declare var PDFJS: any;
 export class PDFCenterPanel extends CenterPanel {
 
     private _$canvas: JQuery;
+    private _$spinner: JQuery;
     private _canvas: HTMLCanvasElement;
     private _ctx: any;
     private _pdfDoc: any = null;
@@ -26,11 +27,13 @@ export class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
+        this._$spinner = $('<div class="spinner"></div>');
+        this.$content.append(this._$spinner);
         this._$canvas = $('<canvas></canvas>');
         this._canvas = (<HTMLCanvasElement>this._$canvas[0]);
         this._ctx = this._canvas.getContext('2d');
 
-        this.$content.append(this._$canvas);
+        this.$content.prepend(this._$canvas);
 
         $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
@@ -107,6 +110,8 @@ export class PDFCenterPanel extends CenterPanel {
 
     openMedia(resources: Manifesto.IExternalResource[]) {
 
+        this._$spinner.show();
+        
         this.extension.getExternalResources(resources).then(() => {
 
             let mediaUri: string | null = null;
@@ -126,26 +131,12 @@ export class PDFCenterPanel extends CenterPanel {
                 this._render(this._pageIndex);
 
                 $.publish(Events.PDF_LOADED, [pdfDoc]);
-
-                // this._pdfDoc.getMetadata().then((data: any) => {
-                //     console.log('metadata', data);
-                // });
-
-                // this._pdfDoc.getData().then((data: any) => {
-                //     console.log('data', data);
-                // });
-
-                // this._pdfDoc.getOutline().then((data: any) => {
-                //     console.log('outline', data);
-                // });
-
-                // this._pdfDoc.getStats().then((data: any) => {
-                //     console.log('stats', data);
-                // });
+                this._$spinner.hide();
             });
 
             //window.PDFObject.embed(mediaUri, '#content', { id: "PDF" });
         });
+
     }
 
     private _render(num: number): void {
@@ -206,6 +197,9 @@ export class PDFCenterPanel extends CenterPanel {
 
     resize() {
         super.resize();
+
+        this._$spinner.css('top', (this.$content.height() / 2) - (this._$spinner.height() / 2));
+        this._$spinner.css('left', (this.$content.width() / 2) - (this._$spinner.width() / 2));
 
         if (!this._viewport) {
             return;
