@@ -865,7 +865,19 @@ export class SeadragonCenterPanel extends CenterPanel {
         (<ISeadragonExtension>this.extension).previousAnnotationRect = (<ISeadragonExtension>this.extension).currentAnnotationRect || annotationRect;
         (<ISeadragonExtension>this.extension).currentAnnotationRect = annotationRect;
 
-        this.fitToBounds(new Bounds(annotationRect.viewportX, annotationRect.viewportY, annotationRect.width, annotationRect.height), false);
+        // if zoomToBoundsEnabled, zoom to the annotation's bounds.
+        // otherwise, pan into view preserving the current zoom level.
+        if (Utils.Bools.getBool(this.config.options.zoomToBoundsEnabled, false)) {
+            this.fitToBounds(new Bounds(annotationRect.viewportX, annotationRect.viewportY, annotationRect.width, annotationRect.height), false);
+        } else {
+            const x: number = annotationRect.viewportX - ((this.currentBounds.w * 0.5) - annotationRect.width * 0.5);
+            const y: number = annotationRect.viewportY - ((this.currentBounds.h * 0.5) - annotationRect.height * 0.5);
+            const w: number = this.currentBounds.w;
+            const h: number = this.currentBounds.h;
+
+            const bounds: Bounds = new Bounds(x, y, w, h);
+            this.fitToBounds(bounds);
+        }
 
         this.highlightAnnotationRect(annotationRect);
 
