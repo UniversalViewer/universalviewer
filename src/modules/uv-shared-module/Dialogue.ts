@@ -97,9 +97,9 @@ export class Dialogue extends BaseView {
         if (this.$triggerButton) {
             // get the normalised position of the button
             if (!this.extension.isDesktopMetric()) {
-                normalisedPos = Math.normalise(this.$triggerButton.offset().left, 0, this.extension.width());
+                normalisedPos = Math.normalise((<any>this.$triggerButton.offset()).left, 0, this.extension.width());
             } else {
-                normalisedPos = Math.normalise(this.$triggerButton.position().left, 0, this.extension.width());
+                normalisedPos = Math.normalise((<any>this.$triggerButton.position()).left, 0, this.extension.width());
             }
             
             left = Math.floor((this.extension.width() * normalisedPos) - (this.$element.width() * normalisedPos));

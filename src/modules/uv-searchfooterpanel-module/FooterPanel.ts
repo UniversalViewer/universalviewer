@@ -226,7 +226,7 @@ export class FooterPanel extends BaseFooterPanel {
                 (terms: string) => {
                     this.search(terms);
                 },
-                300, 2, true
+                300, 2, true, Utils.Bools.getBool(this.options.autocompleteAllowWords, false)
             );
 
         } else {
