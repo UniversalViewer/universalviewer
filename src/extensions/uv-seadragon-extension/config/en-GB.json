@@ -102,6 +102,7 @@
     },
     "footerPanel": {
       "options":{
+        "autocompleteAllowWords": false,
         "bookmarkEnabled": false,
         "downloadEnabled": true,
         "embedEnabled": false,
@@ -155,6 +156,7 @@
     "pagingHeaderPanel": {
       "options": {
         "autoCompleteBoxEnabled": true,
+        "autocompleteAllowWords": false,
         "galleryButtonEnabled": true,
         "imageSelectionBoxEnabled": false,
         "pageModeEnabled": false,

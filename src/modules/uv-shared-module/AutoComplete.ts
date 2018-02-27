@@ -10,6 +10,7 @@ export class AutoComplete {
     private _onSelect: (terms: string) => void;
     private _parseResultsFunc: (results: string[]) => string[];
     private _positionAbove: boolean;
+    private _allowWords: boolean;
 
 	private _$searchResultsList: JQuery;
 	private _$searchResultTemplate: JQuery;
@@ -24,7 +25,8 @@ export class AutoComplete {
                 onSelect: (terms: string) => void,
                 delay: number = 300,
                 minChars: number = 2,
-                positionAbove: boolean = false) {
+                positionAbove: boolean = false,
+                allowWords: boolean = false) {
 
         this._$element = element;
         this._autoCompleteFunc = autoCompleteFunc;
@@ -33,6 +35,7 @@ export class AutoComplete {
         this._onSelect = onSelect;
         this._parseResultsFunc = parseResultsFunc;
         this._positionAbove = positionAbove;
+        this._allowWords = allowWords;
 
         // create ui.
         this._$searchResultsList = $('<ul class="autocomplete"></ul>');
@@ -120,7 +123,7 @@ export class AutoComplete {
 
                     // if there are more than x chars
                     // update the autocomplete list.
-                    if (val && val.length > that._minChars) {
+                    if (val && val.length > that._minChars && that._searchForWords(val)) {
                         that._search(val);
                     } else {
                         // otherwise, hide the autocomplete list.
@@ -142,6 +145,14 @@ export class AutoComplete {
         });
 
         this._hideResults();
+    }
+
+    private _searchForWords(search: string): boolean {
+      if (this._allowWords || !search.includes(' ')) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     // private _isNavigationKeyDown(e: KeyboardEvent): boolean {

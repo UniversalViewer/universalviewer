@@ -140,7 +140,8 @@ export class PagingHeaderPanel extends HeaderPanel {
                     this.search(terms);
                 },
                 300,
-                0
+                0,
+                Utils.Bools.getBool(this.options.autocompleteAllowWords, false)
             );
         } else if (Utils.Bools.getBool(this.options.imageSelectionBoxEnabled, true)) {
             this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
