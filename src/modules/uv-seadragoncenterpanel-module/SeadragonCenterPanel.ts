@@ -564,12 +564,10 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.updateBounds();
 
-        // only happens if prev/next search result were clicked
+        // this only happens if prev/next search result were clicked and caused a reload
         if (this.navigatedFromSearch) {
             this.navigatedFromSearch = false;
             this.zoomToInitialAnnotation();
-        } else if ((<ISeadragonExtension>this.extension).currentAnnotationRect) {
-            this.highlightAnnotationRect(<AnnotationRect>(<ISeadragonExtension>this.extension).currentAnnotationRect);
         }
 
         this.isFirstLoad = false;
@@ -863,14 +861,20 @@ export class SeadragonCenterPanel extends CenterPanel {
         const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         if (!annotationRects.length) return null;
 
-        // if the previous AnnotationRect had a canvasIndex higher than the current canvasIndex
+        // if we've got this far it means that a reload has happened
+        // check if the lastCanvasIndex is greater or less than the current canvasIndex
+        // if greater than, select the last annotation on the current page
+        // if less than, select the first annotation on the current page
+        // otherwise default to the first annotation
+
         const previousAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).previousAnnotationRect;
 
-        if (previousAnnotationRect && previousAnnotationRect.canvasIndex > this.extension.helper.canvasIndex) {
-            return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
+        if (!previousAnnotationRect) {
+            if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
+                return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
+            }
         }
 
-        // get the first rect with the current canvasindex.
         return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).first();
     }
 
