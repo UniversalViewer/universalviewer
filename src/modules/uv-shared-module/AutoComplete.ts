@@ -118,9 +118,9 @@ export class AutoComplete {
 
                     const val = that._getTerms();
 
-                    // if there are more than x chars and no spaces
+                    // if there are more than x chars
                     // update the autocomplete list.
-                    if (val && val.length > that._minChars && !val.includes(' ')) {
+                    if (val && val.length > that._minChars) {
                         that._search(val);
                     } else {
                         // otherwise, hide the autocomplete list.
