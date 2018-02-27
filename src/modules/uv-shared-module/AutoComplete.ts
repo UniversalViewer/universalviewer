@@ -14,10 +14,6 @@ export class AutoComplete {
 
 	private _$searchResultsList: JQuery;
 	private _$searchResultTemplate: JQuery;
- 
-    //private _navigationKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
-    //private _validKeyPressCodes: number[] = [KeyCodes.KeyPress.GraveAccent, KeyCodes.KeyPress.DoubleQuote];
-    //private _lastKeyDownWasNavigation: boolean = false;
 
     constructor(element: JQuery,
                 autoCompleteFunc: (terms: string, cb: (results: string[]) => void) => void,
@@ -79,19 +75,6 @@ export class AutoComplete {
                 if(originalEvent.stopPropagation) originalEvent.stopPropagation();
             }
         });
-
-        // prevent invalid characters being entered
-        // this._$element.on("keypress", function(e: JQueryEventObject) {
-
-        //     const isValidKeyPress: boolean = that._isValidKeyPress(<KeyboardEvent>e.originalEvent);
-
-        //     if (!(that._lastKeyDownWasNavigation || isValidKeyPress)) {
-        //         e.preventDefault();
-        //         return false;
-        //     }
-
-        //     return true;
-        // });
 
         // auto complete
         this._$element.on("keyup", function(e) {
@@ -155,18 +138,6 @@ export class AutoComplete {
       }
     }
 
-    // private _isNavigationKeyDown(e: KeyboardEvent): boolean {
-    //     const isNavigationKeyDown: boolean = this._navigationKeyDownCodes.includes(Utils.Keyboard.getCharCode(e));
-    //     return isNavigationKeyDown;
-    // }
-
-    // private _isValidKeyPress(e: KeyboardEvent): boolean {
-    //     const charCode: number = Utils.Keyboard.getCharCode(e);
-    //     const key: string = String.fromCharCode(charCode);
-    //     const isValid: boolean = key.isAlphanumeric() || this._validKeyPressCodes.includes(charCode);
-    //     return isValid;
-    // }
-
     private _getTerms(): string {
         return this._$element.val().trim();
     }
@@ -197,7 +168,6 @@ export class AutoComplete {
 
         $selectedItem.addClass('selected');
 
-        //var top = selectedItem.offset().top;
         const top = $selectedItem.outerHeight(true) * this._selectedResultIndex;
 
         this._$searchResultsList.scrollTop(top);
