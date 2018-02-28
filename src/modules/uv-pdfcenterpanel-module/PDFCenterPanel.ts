@@ -7,15 +7,19 @@ declare var PDFJS: any;
 export class PDFCenterPanel extends CenterPanel {
 
     private _$canvas: JQuery;
+    private _$nextButton: JQuery;
+    private _$prevButton: JQuery;
     private _$spinner: JQuery;
     private _canvas: HTMLCanvasElement;
     private _ctx: any;
-    private _pdfDoc: any = null;
+    private _nextButtonEnabled: boolean = false;
     private _pageIndex: number = 1;
-    private _pageRendering: boolean = false;
     private _pageIndexPending: number | null = null;
-    private _viewport: any;
+    private _pageRendering: boolean = false;
+    private _pdfDoc: any = null;
+    private _prevButtonEnabled: boolean = false;
     private _renderTask: any;
+    private _viewport: any;
 
     constructor($element: JQuery) {
         super($element);
@@ -27,11 +31,15 @@ export class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
-        this._$spinner = $('<div class="spinner"></div>');
-        this.$content.append(this._$spinner);
         this._$canvas = $('<canvas></canvas>');
+        this._$spinner = $('<div class="spinner"></div>');
         this._canvas = (<HTMLCanvasElement>this._$canvas[0]);
         this._ctx = this._canvas.getContext('2d');
+        this.$content.append(this._$spinner);
+        this._$prevButton = $('<div class="btn prev" tabindex="0"></div>');
+        this.$content.append(this._$prevButton);
+        this._$nextButton = $('<div class="btn next" tabindex="0"></div>');
+        this.$content.append(this._$nextButton);
 
         this.$content.prepend(this._$canvas);
 
@@ -106,6 +114,65 @@ export class PDFCenterPanel extends CenterPanel {
             this._queueRenderPage(this._pageIndex);
         });
 
+        this._$prevButton.onPressed((e: any) => {
+            e.preventDefault();
+
+            if (!this._prevButtonEnabled) return;
+
+            $.publish(BaseEvents.PREV);
+        });
+
+        this.disablePrevButton();
+
+        this._$nextButton.onPressed((e: any) => {
+            e.preventDefault();
+
+            if (!this._nextButtonEnabled) return;
+
+            $.publish(BaseEvents.NEXT);
+        });
+
+        this.disableNextButton();
+    }
+    
+    disablePrevButton(): void {
+        this._prevButtonEnabled = false;
+        this._$prevButton.addClass('disabled');
+    }
+
+    enablePrevButton(): void {
+        this._prevButtonEnabled = true;
+        this._$prevButton.removeClass('disabled');
+    }
+
+    hidePrevButton(): void {
+        this.disablePrevButton();
+        this._$prevButton.hide();
+    }
+
+    showPrevButton(): void {
+        this.enablePrevButton();
+        this._$prevButton.show();
+    }
+
+    disableNextButton(): void {
+        this._nextButtonEnabled = false;
+        this._$nextButton.addClass('disabled');
+    }
+
+    enableNextButton(): void {
+        this._nextButtonEnabled = true;
+        this._$nextButton.removeClass('disabled');
+    }
+
+    hideNextButton(): void {
+        this.disableNextButton();
+        this._$nextButton.hide();
+    }
+
+    showNextButton(): void {
+        this.enableNextButton();
+        this._$nextButton.show();
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
@@ -179,6 +246,18 @@ export class PDFCenterPanel extends CenterPanel {
                     this._render(this._pageIndexPending);
                     this._pageIndexPending = null;
                 }
+
+                if (this._pageIndex === 1) {
+                    this.disablePrevButton();
+                } else {
+                    this.enablePrevButton();
+                }
+        
+                if (this._pageIndex === this._pdfDoc.numPages) {
+                    this.disableNextButton();
+                } else {
+                    this.enableNextButton();
+                }
                 
             }).catch((err: any) => {
                 //console.log(err);
@@ -200,6 +279,16 @@ export class PDFCenterPanel extends CenterPanel {
 
         this._$spinner.css('top', (this.$content.height() / 2) - (this._$spinner.height() / 2));
         this._$spinner.css('left', (this.$content.width() / 2) - (this._$spinner.width() / 2));
+
+        this._$prevButton.css({
+            top: (this.$content.height() - this._$prevButton.height()) / 2,
+            left: 0
+        });
+
+        this._$nextButton.css({
+            top: (this.$content.height() - this._$nextButton.height()) / 2,
+            left: this.$content.width() - this._$nextButton.width()
+        });
 
         if (!this._viewport) {
             return;
