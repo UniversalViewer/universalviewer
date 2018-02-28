@@ -2,6 +2,8 @@
 
 .uv{
 
+    @search-result: @brand-secondary;
+
     .centerPanel {
 
         @img-path: '../../../modules/uv-seadragoncenterpanel-module/img/';
@@ -157,10 +159,12 @@
             }
 
             .searchOverlay{
-                background-color: @brand-secondary;
+                background-color: desaturate(@search-result, 40%);
                 .opacity(.5);
                 &.current {
-                    border: 3px solid #fff;
+                    //border: 3px solid #fff;
+                    @col: lighten(@search-result, 20%);
+                    background-color: saturate(@col, 100%);
                 }
             }
         }

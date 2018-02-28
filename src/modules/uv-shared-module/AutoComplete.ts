@@ -10,13 +10,10 @@ export class AutoComplete {
     private _onSelect: (terms: string) => void;
     private _parseResultsFunc: (results: string[]) => string[];
     private _positionAbove: boolean;
+    private _allowWords: boolean;
 
 	private _$searchResultsList: JQuery;
 	private _$searchResultTemplate: JQuery;
- 
-    //private _navigationKeyDownCodes: number[] = [KeyCodes.KeyDown.Backspace, KeyCodes.KeyDown.Spacebar, KeyCodes.KeyDown.Tab, KeyCodes.KeyDown.LeftArrow, KeyCodes.KeyDown.RightArrow, KeyCodes.KeyDown.Delete];
-    //private _validKeyPressCodes: number[] = [KeyCodes.KeyPress.GraveAccent, KeyCodes.KeyPress.DoubleQuote];
-    //private _lastKeyDownWasNavigation: boolean = false;
 
     constructor(element: JQuery,
                 autoCompleteFunc: (terms: string, cb: (results: string[]) => void) => void,
@@ -24,7 +21,8 @@ export class AutoComplete {
                 onSelect: (terms: string) => void,
                 delay: number = 300,
                 minChars: number = 2,
-                positionAbove: boolean = false) {
+                positionAbove: boolean = false,
+                allowWords: boolean = false) {
 
         this._$element = element;
         this._autoCompleteFunc = autoCompleteFunc;
@@ -33,6 +31,7 @@ export class AutoComplete {
         this._onSelect = onSelect;
         this._parseResultsFunc = parseResultsFunc;
         this._positionAbove = positionAbove;
+        this._allowWords = allowWords;
 
         // create ui.
         this._$searchResultsList = $('<ul class="autocomplete"></ul>');
@@ -77,19 +76,6 @@ export class AutoComplete {
             }
         });
 
-        // prevent invalid characters being entered
-        // this._$element.on("keypress", function(e: JQueryEventObject) {
-
-        //     const isValidKeyPress: boolean = that._isValidKeyPress(<KeyboardEvent>e.originalEvent);
-
-        //     if (!(that._lastKeyDownWasNavigation || isValidKeyPress)) {
-        //         e.preventDefault();
-        //         return false;
-        //     }
-
-        //     return true;
-        // });
-
         // auto complete
         this._$element.on("keyup", function(e) {
 
@@ -118,9 +104,9 @@ export class AutoComplete {
 
                     const val = that._getTerms();
 
-                    // if there are more than x chars and no spaces
+                    // if there are more than x chars
                     // update the autocomplete list.
-                    if (val && val.length > that._minChars && !val.includes(' ')) {
+                    if (val && val.length > that._minChars && that._searchForWords(val)) {
                         that._search(val);
                     } else {
                         // otherwise, hide the autocomplete list.
@@ -144,17 +130,13 @@ export class AutoComplete {
         this._hideResults();
     }
 
-    // private _isNavigationKeyDown(e: KeyboardEvent): boolean {
-    //     const isNavigationKeyDown: boolean = this._navigationKeyDownCodes.includes(Utils.Keyboard.getCharCode(e));
-    //     return isNavigationKeyDown;
-    // }
-
-    // private _isValidKeyPress(e: KeyboardEvent): boolean {
-    //     const charCode: number = Utils.Keyboard.getCharCode(e);
-    //     const key: string = String.fromCharCode(charCode);
-    //     const isValid: boolean = key.isAlphanumeric() || this._validKeyPressCodes.includes(charCode);
-    //     return isValid;
-    // }
+    private _searchForWords(search: string): boolean {
+      if (this._allowWords || !search.includes(' ')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 
     private _getTerms(): string {
         return this._$element.val().trim();
@@ -186,7 +168,6 @@ export class AutoComplete {
 
         $selectedItem.addClass('selected');
 
-        //var top = selectedItem.offset().top;
         const top = $selectedItem.outerHeight(true) * this._selectedResultIndex;
 
         this._$searchResultsList.scrollTop(top);

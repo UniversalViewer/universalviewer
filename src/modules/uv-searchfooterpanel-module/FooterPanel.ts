@@ -183,12 +183,16 @@ export class FooterPanel extends BaseFooterPanel {
 
         this.$previousResultButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Events.PREV_SEARCH_RESULT);
+            if (this.isPreviousButtonEnabled()) {
+                $.publish(Events.PREV_SEARCH_RESULT);
+            }
         });
 
         this.$nextResultButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Events.NEXT_SEARCH_RESULT);
+            if (this.isNextButtonEnabled()) {
+                $.publish(Events.NEXT_SEARCH_RESULT);
+            }
         });
 
         this.$clearSearchResultsButton.on('click', (e: any) => {
@@ -226,7 +230,7 @@ export class FooterPanel extends BaseFooterPanel {
                 (terms: string) => {
                     this.search(terms);
                 },
-                300, 2, true
+                300, 2, true, Utils.Bools.getBool(this.options.autocompleteAllowWords, false)
             );
 
         } else {
