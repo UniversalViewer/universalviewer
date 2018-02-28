@@ -51,6 +51,7 @@ export class PDFHeaderPanel extends HeaderPanel {
           </button>
         `);
         this.$prevOptions.append(this.$firstButton);
+        this.$firstButton.disable();
 
         this.$prevButton = $(`
           <button class="btn imageBtn prev" tabindex="0" title="${this.content.previous}">
@@ -58,6 +59,7 @@ export class PDFHeaderPanel extends HeaderPanel {
           </button>
         `);
         this.$prevOptions.append(this.$prevButton);
+        this.$prevButton.disable();
 
         this.$search = $('<div class="search"></div>');
         this.$centerOptions.append(this.$search);
@@ -70,6 +72,7 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         this.$searchButton = $('<a class="go btn btn-primary" tabindex="0">' + this.content.go + '</a>');
         this.$search.append(this.$searchButton);
+        this.$searchButton.disable();
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
         this.$centerOptions.append(this.$nextOptions);
@@ -80,6 +83,7 @@ export class PDFHeaderPanel extends HeaderPanel {
           </button>
         `);
         this.$nextOptions.append(this.$nextButton);
+        this.$nextButton.disable();
 
         this.$lastButton = $(`
           <button class="btn imageBtn last" tabindex="0" title="${this.content.last}">
@@ -87,6 +91,7 @@ export class PDFHeaderPanel extends HeaderPanel {
           </button>
         `);
         this.$nextOptions.append(this.$lastButton);
+        this.$lastButton.disable();
 
         // ui event handlers.
         this.$firstButton.onPressed(() => {
@@ -130,6 +135,8 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         const of: string = this.content.of;
         this.$total.html(String.format(of, this._pdfDoc.numPages));
+
+        this.$searchButton.enable();
 
         if (this._pageIndex === 1) {
             this.$firstButton.disable();
