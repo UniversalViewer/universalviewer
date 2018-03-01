@@ -47,7 +47,6 @@ module.exports = function (grunt) {
                         '@iiif/manifold', 
                         'base-component',
                         'exjs',
-                        'extensions',
                         'http-status-codes',
                         'iiif-av-component',
                         'iiif-gallery-component',
