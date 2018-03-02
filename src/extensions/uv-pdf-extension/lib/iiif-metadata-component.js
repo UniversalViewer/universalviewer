@@ -1,5 +1,5 @@
-// iiif-metadata-component v1.1.4 https://github.com/iiif-commons/iiif-metadata-component#readme
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifMetadataComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// iiif-metadata-component v1.1.6 https://github.com/iiif-commons/iiif-metadata-component#readme
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifMetadataComponent = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 (function (global){
 
 var IIIFComponents;
@@ -182,12 +182,15 @@ var IIIFComponents;
         MetadataComponent.prototype._sortItems = function (items, displayOrder) {
             var _this = this;
             var sorted = [];
-            var unsorted = items.clone();
+            var unsorted = items.slice(0);
             $.each(displayOrder, function (index, item) {
                 var match = unsorted.en().where((function (x) { return _this._normalise(x.getLabel()) === item; })).first();
                 if (match) {
                     sorted.push(match);
-                    unsorted.remove(match);
+                    var index_1 = unsorted.indexOf(match);
+                    if (index_1 > -1) {
+                        unsorted.splice(index_1, 1);
+                    }
                 }
             });
             // add remaining items that were not in the displayOrder.
@@ -198,12 +201,15 @@ var IIIFComponents;
         };
         MetadataComponent.prototype._sortGroups = function (groups, metadataGroupOrder) {
             var sorted = [];
-            var unsorted = groups.clone();
+            var unsorted = groups.slice(0);
             $.each(metadataGroupOrder, function (index, group) {
                 var match = unsorted.en().where(function (x) { return x.resource.constructor.name.toLowerCase() == group; }).first();
                 if (match) {
                     sorted.push(match);
-                    unsorted.remove(match);
+                    var index_2 = unsorted.indexOf(match);
+                    if (index_2 > -1) {
+                        unsorted.splice(index_2, 1);
+                    }
                 }
             });
             return sorted;
@@ -218,7 +224,10 @@ var IIIFComponents;
             $.each(excludeConfig, function (index, item) {
                 var match = items.en().where((function (x) { return _this._normalise(x.getLabel()) === item; })).first();
                 if (match) {
-                    items.remove(match);
+                    var index_3 = items.indexOf(match);
+                    if (index_3 > -1) {
+                        items.splice(index_3, 1);
+                    }
                 }
             });
             return items;
@@ -330,7 +339,7 @@ var IIIFComponents;
             $label.html(label);
             // rtl?
             this._addReadingDirection($label, this._getItemLocale(item));
-            $metadataItem.addClass(label.toCssClass());
+            $metadataItem.addClass(Utils.Strings.toCssClass(label));
             var $value;
             // if the value is a URI
             if (originalLabel && originalLabel.toLowerCase() === "license" && (urlPattern.exec(item.value[0].value) != null)) {

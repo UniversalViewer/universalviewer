@@ -1,5 +1,5 @@
-// iiif-gallery-component v1.1.3 https://github.com/iiif-commons/iiif-gallery-component#readme
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifGalleryComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// iiif-gallery-component v1.1.4 https://github.com/iiif-commons/iiif-gallery-component#readme
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifGalleryComponent = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 (function (global){
 
 var __extends = (this && this.__extends) || (function () {
@@ -119,9 +119,9 @@ var IIIFComponents;
                     var searchResults = Number(this.data.data.searchResults);
                     if (searchResults) {
                         if (searchResults > 1) {
-                            return String.format(that.options.data.content.searchResults, searchResults);
+                            return Utils.Strings.format(that.options.data.content.searchResults, searchResults.toString());
                         }
-                        return String.format(that.options.data.content.searchResult, searchResults);
+                        return Utils.Strings.format(that.options.data.content.searchResult, searchResults.toString());
                     }
                     return null;
                 }
@@ -238,7 +238,7 @@ var IIIFComponents;
                 heights.push(initialHeight);
                 thumb.multiSelectEnabled = multiSelectState.isEnabled;
             }
-            var medianHeight = Math.median(heights);
+            var medianHeight = Utils.Maths.median(heights);
             for (var i_3 = 0; i_3 < this._thumbs.length; i_3++) {
                 var thumb = this._thumbs[i_3];
                 thumb.initialHeight = medianHeight;
@@ -443,8 +443,8 @@ var IIIFComponents;
             this._updateThumbs();
         };
         GalleryComponent.prototype._setRange = function () {
-            var norm = Math.normalise(Number(this._$sizeRange.val()), 0, 10);
-            this._range = Math.clamp(norm, 0.05, 1);
+            var norm = Utils.Maths.normalise(Number(this._$sizeRange.val()), 0, 10);
+            this._range = Utils.Maths.clamp(norm, 0.05, 1);
         };
         GalleryComponent.prototype._setThumbMultiSelected = function (thumb, selected) {
             $.observable(thumb).setProperty("multiSelected", selected);
