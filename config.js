@@ -8,7 +8,6 @@ module.exports = function () {
         bundle: [
             'node_modules/base-component/dist/base-component.js',
             'node_modules/exjs/dist/ex.es3.min.js',
-            'node_modules/extensions/dist/extensions.js',
             'node_modules/http-status-codes/dist/http-status-codes.js',
             'node_modules/jquery-plugins/dist/jquery-plugins.js',
             'node_modules/jquery-tiny-pubsub/dist/ba-tiny-pubsub.js',

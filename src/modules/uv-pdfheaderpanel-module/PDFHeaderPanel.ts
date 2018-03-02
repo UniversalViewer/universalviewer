@@ -134,7 +134,7 @@ export class PDFHeaderPanel extends HeaderPanel {
         this.$searchText.val(this._pageIndex);
 
         const of: string = this.content.of;
-        this.$total.html(String.format(of, this._pdfDoc.numPages));
+        this.$total.html(Utils.Strings.format(of, this._pdfDoc.numPages.toString()));
 
         this.$searchButton.enable();
 
