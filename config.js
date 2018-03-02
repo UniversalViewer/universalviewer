@@ -34,6 +34,7 @@ module.exports = function () {
         npm: './node_modules',
         src: './src',
         themes: './src/themes',
+        uv: 'uv',
         uvAVExtension: './src/extensions/uv-av-extension',
         uvDefaultExtension: './src/extensions/uv-default-extension',
         uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',

@@ -812,7 +812,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size {
         const dimensions: Size = new manifesto.Size(0, 0);
         dimensions.width = width;
-        const normWidth = Math.normalise(width, 0, canvas.getWidth());
+        const normWidth = Utils.Maths.normalise(width, 0, canvas.getWidth());
         dimensions.height = Math.floor(canvas.getHeight() * normWidth);
         return dimensions;
     }
@@ -892,7 +892,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const locales: string = this.getSerializedLocales();
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
-        const script: string = String.format(template, iframeSrc, width, height);
+        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 
@@ -997,7 +997,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         if (!searchUri) return;
 
-        searchUri = String.format(searchUri, terms);
+        searchUri = Utils.Strings.format(searchUri, terms);
 
         this.getSearchResults(searchUri, terms, this.annotations, (annotations: AnnotationGroup[]) => {
 

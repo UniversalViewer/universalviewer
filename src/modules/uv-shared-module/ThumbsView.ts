@@ -85,15 +85,15 @@ export class ThumbsView extends BaseView {
                 return className;
             },
             searchResultsTitle: function() {
-                const searchResults = Number(this.data.data.searchResults);
+                const searchResults: number = Number(this.data.data.searchResults);
 
                 if (searchResults) {
 
                     if (searchResults > 1) {
-                        return String.format(that.content.searchResults, searchResults);
+                        return Utils.Strings.format(that.content.searchResults, searchResults.toString());
                     }
 
-                    return String.format(that.content.searchResult, searchResults);
+                    return Utils.Strings.format(that.content.searchResult, searchResults.toString());
                 }
 
                 return '';
@@ -130,7 +130,7 @@ export class ThumbsView extends BaseView {
             heights.push(thumb.height);
         }
 
-        const medianHeight: number = Math.median(heights);
+        const medianHeight: number = Utils.Maths.median(heights);
 
         for (let i = 0; i < this.thumbs.length; i++) {
             const thumb: IThumb = this.thumbs[i];

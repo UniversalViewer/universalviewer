@@ -355,7 +355,7 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
 
-            const openUri: string = String.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
+            const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
 
             window.open(openUri);
         });
@@ -1204,13 +1204,14 @@ export class BaseExtension implements IExtension {
         // re-order locales so the passed locale is first
 
         const data: IUVData = <IUVData>{};
-        data.locales = this.data.locales.clone();
+        data.locales = this.data.locales.slice(0);
 
-        const index: number = data.locales.findIndex((l: any) => {
+        const fromIndex: number = data.locales.findIndex((l: any) => {
             return l.name === locale;
         });
 
-        data.locales.move(index, 0);
+        const toIndex: number = 0;
+        data.locales.splice(toIndex, 0, data.locales.splice(fromIndex, 1)[0])
 
         this.reload(data);
     }

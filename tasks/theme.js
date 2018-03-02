@@ -1,3 +1,5 @@
+var c = require('../config');
+var config = new c();
 var path = require('path');
 var _ = require('lodash');
 var glob = require('glob');
@@ -159,7 +161,7 @@ module.exports = function (grunt) {
     }
 
     function getThemeDest(theme) {
-        var buildDir = grunt.config('config.directories.build');
+        var buildDir = config.directories.build;
         return path.join(buildDir, 'themes', theme);
     }
 

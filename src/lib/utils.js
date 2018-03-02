@@ -264,106 +264,27 @@ var Utils;
 
 var Utils;
 (function (Utils) {
-    var Maths;
-    (function (Maths) {
-        var Vector = /** @class */ (function () {
-            function Vector(x, y) {
-                this.X = x;
-                this.Y = y;
+    var Maths = /** @class */ (function () {
+        function Maths() {
+        }
+        Maths.normalise = function (num, min, max) {
+            return (num - min) / (max - min);
+        };
+        Maths.median = function (values) {
+            values.sort(function (a, b) {
+                return a - b;
+            });
+            var half = Math.floor(values.length / 2);
+            if (values.length % 2) {
+                return values[half];
             }
-            Vector.prototype.get = function () {
-                return new Vector(this.X, this.Y);
-            };
-            Vector.prototype.set = function (x, y) {
-                this.X = x;
-                this.Y = y;
-            };
-            //get X(): number {
-            //    return this._X;
-            //}
-            //
-            //set X(value: number) {
-            //    this._X = value;
-            //    //this.OnPropertyChanged("X");
-            //}
-            //
-            //get Y(): number {
-            //    return this._Y;
-            //}
-            //
-            //set Y(value: number) {
-            //    this._Y = value;
-            //    //this.OnPropertyChanged("Y");
-            //}
-            Vector.prototype.add = function (v) {
-                this.X += v.X;
-                this.Y += v.Y;
-            };
-            Vector.add = function (v1, v2) {
-                return new Vector(v1.X + v2.X, v1.Y + v2.Y);
-            };
-            Vector.prototype.sub = function (v) {
-                this.X -= v.X;
-                this.Y -= v.Y;
-            };
-            Vector.sub = function (v1, v2) {
-                return new Vector(v1.X - v2.X, v1.Y - v2.Y);
-            };
-            Vector.prototype.mult = function (n) {
-                this.X = this.X * n;
-                this.Y = this.Y * n;
-            };
-            Vector.mult = function (v1, v2) {
-                return new Vector(v1.X * v2.X, v1.Y * v2.Y);
-            };
-            Vector.multN = function (v1, n) {
-                return new Vector(v1.X * n, v1.Y * n);
-            };
-            Vector.prototype.Div = function (n) {
-                this.X = this.X / n;
-                this.Y = this.Y / n;
-            };
-            Vector.div = function (v1, v2) {
-                return new Vector(v1.X / v2.X, v1.Y / v2.Y);
-            };
-            Vector.divN = function (v1, n) {
-                return new Vector(v1.X / n, v1.Y / n);
-            };
-            Vector.prototype.mag = function () {
-                return Math.sqrt(this.X * this.X + this.Y * this.Y);
-            };
-            Vector.prototype.magSq = function () {
-                return (this.X * this.X + this.Y * this.Y);
-            };
-            Vector.prototype.normalise = function () {
-                var m = this.mag();
-                if (m != 0 && m != 1) {
-                    this.Div(m);
-                }
-            };
-            Vector.prototype.limit = function (max) {
-                if (this.magSq() > max * max) {
-                    this.normalise();
-                    this.mult(max);
-                }
-            };
-            Vector.prototype.equals = function (v) {
-                return (this.X == v.X && this.Y == v.Y);
-            };
-            Vector.prototype.heading = function () {
-                var angle = Math.atan2(-this.Y, this.X);
-                return -1 * angle;
-            };
-            Vector.random2D = function () {
-                return Vector.fromAngle((Math.random() * (Math.PI * 2)));
-            };
-            Vector.fromAngle = function (angle) {
-                return new Vector(Math.cos(angle), Math.sin(angle));
-            };
-            return Vector;
-        }());
-        Maths.Vector = Vector;
-    })(Maths = Utils.Maths || (Utils.Maths = {}));
+            else {
+                return (values[half - 1] + values[half]) / 2.0;
+            }
+        };
+        return Maths;
+    }());
+    Utils.Maths = Maths;
 })(Utils || (Utils = {}));
 
 var Utils;
@@ -647,6 +568,36 @@ var Utils;
             var div = document.createElement('div');
             div.innerHTML = encoded;
             return div.firstChild.nodeValue;
+        };
+        Strings.format = function (str) {
+            var values = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                values[_i - 1] = arguments[_i];
+            }
+            for (var i = 0; i < values.length; i++) {
+                var reg = new RegExp("\\{" + i + "\\}", "gm");
+                str = str.replace(reg, values[i]);
+            }
+            return str;
+        };
+        Strings.isAlphanumeric = function (str) {
+            return /^[a-zA-Z0-9]*$/.test(str);
+        };
+        Strings.toCssClass = function (str) {
+            return str.replace(/[^a-z0-9]/g, function (s) {
+                var c = s.charCodeAt(0);
+                if (c == 32)
+                    return '-';
+                if (c >= 65 && c <= 90)
+                    return '_' + s.toLowerCase();
+                return '__' + ('000' + c.toString(16)).slice(-4);
+            });
+        };
+        Strings.toFileName = function (str) {
+            return str.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        };
+        Strings.utf8_to_b64 = function (str) {
+            return window.btoa(unescape(encodeURIComponent(str)));
         };
         return Strings;
     }());
