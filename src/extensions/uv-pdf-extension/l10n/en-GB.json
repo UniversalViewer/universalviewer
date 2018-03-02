@@ -46,6 +46,17 @@
         "help": "Help"
       }
     },
+    "pdfHeaderPanel": {
+      "content": {
+        "emptyValue": "Please enter a value",
+        "first": "First",
+        "go": "Go",
+        "last": "Last",
+        "next": "Next",
+        "of": "of {0}",
+        "previous": "Previous"
+      }
+    },
     "helpDialogue": {
       "content": {
         "text": "placeholder text",

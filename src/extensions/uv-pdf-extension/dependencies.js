@@ -1,6 +1,5 @@
 define(function() {
     return {
-        sync: ['pdfobject'],
-        async: ['iiif-metadata-component']
+        async: ['!pdfjs-dist/build/pdf.combined', 'iiif-metadata-component']
     };
 });

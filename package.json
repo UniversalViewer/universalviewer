@@ -75,6 +75,7 @@
     "mediaelement": "4.0.2",
     "opencollective": "1.0.3",
     "openseadragon": "2.2.1",
+    "pdfjs-dist": "2.0.161",
     "pdfobject": "2.0",
     "requirejs": "2.2.0",
     "three": "0.87.1",

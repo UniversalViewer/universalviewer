@@ -568,16 +568,23 @@ export class BaseExtension implements IExtension {
 
                 const baseUri: string = that.data.root + '/lib/';
 
-                // for each dependency, prepend baseUri.
+                // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
+                // check for a requirejs.config that sets a specific path, such as the PDF extension
                 if (deps.sync) {                    
                     for (let i = 0; i < deps.sync.length; i++) {
-                        deps.sync[i] = baseUri + deps.sync[i];
+                        const dep: string = deps.sync[i];
+                        if (!dep.startsWith('!')) {
+                            deps.sync[i] = baseUri + dep;
+                        }
                     }
                 }
 
                 if (deps.async) {                    
                     for (let i = 0; i < deps.async.length; i++) {
-                        deps.async[i] = baseUri + deps.async[i];
+                        const dep: string = deps.async[i];
+                        if (!dep.startsWith('!')) {
+                            deps.async[i] = baseUri + dep;
+                        }
                     }
                 }
                 

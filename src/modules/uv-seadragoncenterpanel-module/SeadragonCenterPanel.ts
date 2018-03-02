@@ -12,14 +12,15 @@ import AnnotationRect = Manifold.AnnotationRect;
 export class SeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
-    currentBounds: any;
     currentAnnotationRect: AnnotationRect;
+    currentBounds: any;
     handler: any;
     initialBounds: any;
     initialRotation: any;
     isCreated: boolean = false;
     isFirstLoad: boolean = true;
     items: any[];
+    navigatedFromSearch: boolean = false;
     nextButtonEnabled: boolean = false;
     pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
@@ -112,6 +113,7 @@ export class SeadragonCenterPanel extends CenterPanel {
                 this.updateResponsiveView();
             });
         });
+
     }
 
     whenResized(cb: () => void): void {
@@ -252,6 +254,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.$canvas = $(this.viewer.canvas);
 
+        // disable right click on canvas
         this.$canvas.on('contextmenu', () => { return false; });
 
         this.$navigator = this.$viewer.find(".navigator");
@@ -562,7 +565,11 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.updateBounds();
 
-        this.zoomToInitialAnnotation();
+        // this only happens if prev/next search result were clicked and caused a reload
+        if (this.navigatedFromSearch) {
+            this.navigatedFromSearch = false;
+            this.zoomToInitialAnnotation();
+        }
 
         this.isFirstLoad = false;
     }
@@ -770,50 +777,16 @@ export class SeadragonCenterPanel extends CenterPanel {
         return Utils.Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
     }
 
-    nextAnnotation(): void {
-        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-        const annotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
-
-        const currentAnnotationRectIndex: number = annotationRect ? this.getAnnotationRectIndex(annotationRect) : -1;
-        let foundRect: AnnotationRect | null = null;
-
-        for (let i = currentAnnotationRectIndex + 1; i < annotationRects.length; i++) {
-            const rect: AnnotationRect = annotationRects[i];
-
-            // this was removed as users found it confusing.
-            // find the next visible or non-visible rect.
-            //if (rect.isVisible) {
-            //    continue;
-            //} else {
-                foundRect = rect;
-                break;
-            //}
-        }
-
-        if (foundRect && this.isZoomToSearchResultEnabled()) {
-            // if the rect's canvasIndex is greater than the current canvasIndex
-            if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
-                (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
-                $.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
-            } else {
-                this.zoomToAnnotation(<AnnotationRect>foundRect);
-            }
-        } else {
-            $.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
-        }
-    }
-
     prevAnnotation(): void {
         const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
 
-        if (this.isZoomToSearchResultEnabled() && !currentAnnotationRect) {
-            return;
-        }
-
-        const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(<AnnotationRect>currentAnnotationRect);
+        const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : annotationRects.length;
+        //const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(<AnnotationRect>currentAnnotationRect);
         let foundRect: AnnotationRect | null = null;
    
+        // if there's no currentAnnotationRect selected, index is the total available annotation rects for the current images.
+        // minusing 1 makes the index the last of the available rects for the current images.
         for (let i = currentAnnotationRectIndex - 1; i >= 0; i--) {
             const rect: AnnotationRect = annotationRects[i];
 
@@ -831,12 +804,51 @@ export class SeadragonCenterPanel extends CenterPanel {
             // if the rect's canvasIndex is less than the current canvasIndex
             if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
+                this.navigatedFromSearch = true;
                 $.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
             } else {
                 this.zoomToAnnotation(foundRect);
             }
         } else {
+            this.navigatedFromSearch = true;
             $.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+        }
+    }
+
+    nextAnnotation(): void {
+        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+        const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
+
+        const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : -1;
+        let foundRect: AnnotationRect | null = null;
+
+        // if there's no currentAnnotationRect selected, index is -1.
+        // adding 1 makes the index 0 of available rects for the current images.
+        for (let i = currentAnnotationRectIndex + 1; i < annotationRects.length; i++) {
+            const rect: AnnotationRect = annotationRects[i];
+
+            // this was removed as users found it confusing.
+            // find the next visible or non-visible rect.
+            //if (rect.isVisible) {
+            //    continue;
+            //} else {
+                foundRect = rect;
+                break;
+            //}
+        }
+
+        if (foundRect && this.isZoomToSearchResultEnabled()) {
+            // if the rect's canvasIndex is greater than the current canvasIndex
+            if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
+                (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
+                this.navigatedFromSearch = true;
+                $.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
+            } else {
+                this.zoomToAnnotation(<AnnotationRect>foundRect);
+            }
+        } else {
+            this.navigatedFromSearch = true;
+            $.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
@@ -850,14 +862,20 @@ export class SeadragonCenterPanel extends CenterPanel {
         const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         if (!annotationRects.length) return null;
 
-        // if the previous AnnotationRect had a canvasIndex higher than the current canvasIndex
+        // if we've got this far it means that a reload has happened
+        // check if the lastCanvasIndex is greater or less than the current canvasIndex
+        // if greater than, select the last annotation on the current page
+        // if less than, select the first annotation on the current page
+        // otherwise default to the first annotation
+
         const previousAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).previousAnnotationRect;
 
-        if (previousAnnotationRect && previousAnnotationRect.canvasIndex > this.extension.helper.canvasIndex) {
-            return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
+        if (!previousAnnotationRect) {
+            if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
+                return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
+            }
         }
 
-        // get the first rect with the current canvasindex.
         return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).first();
     }
 
@@ -865,7 +883,19 @@ export class SeadragonCenterPanel extends CenterPanel {
         (<ISeadragonExtension>this.extension).previousAnnotationRect = (<ISeadragonExtension>this.extension).currentAnnotationRect || annotationRect;
         (<ISeadragonExtension>this.extension).currentAnnotationRect = annotationRect;
 
-        this.fitToBounds(new Bounds(annotationRect.viewportX, annotationRect.viewportY, annotationRect.width, annotationRect.height), false);
+        // if zoomToBoundsEnabled, zoom to the annotation's bounds.
+        // otherwise, pan into view preserving the current zoom level.
+        if (Utils.Bools.getBool(this.config.options.zoomToBoundsEnabled, false)) {
+            this.fitToBounds(new Bounds(annotationRect.viewportX, annotationRect.viewportY, annotationRect.width, annotationRect.height), false);
+        } else {
+            const x: number = annotationRect.viewportX - ((this.currentBounds.w * 0.5) - annotationRect.width * 0.5);
+            const y: number = annotationRect.viewportY - ((this.currentBounds.h * 0.5) - annotationRect.height * 0.5);
+            const w: number = this.currentBounds.w;
+            const h: number = this.currentBounds.h;
+
+            const bounds: Bounds = new Bounds(x, y, w, h);
+            this.fitToBounds(bounds);
+        }
 
         this.highlightAnnotationRect(annotationRect);
 
