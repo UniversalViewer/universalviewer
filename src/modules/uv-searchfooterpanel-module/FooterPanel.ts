@@ -68,6 +68,8 @@ export class FooterPanel extends BaseFooterPanel {
         $.subscribe(BaseEvents.ANNOTATIONS, (e: any, annotationResults: AnnotationResults) => {
             this.displaySearchResults(annotationResults.annotations, annotationResults.terms);
             this.setCurrentSearchResultPlacemarker();
+            this.updatePrevButton();
+            this.updateNextButton();
         });
 
         $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
