@@ -28,11 +28,13 @@
       "content": {
         "bookmark": "Add to bookmarks",
         "download": "Download",
-        "embed": "Share",
+        "embed": "Embed",
         "exitFullScreen": "Exit Full Screen",
+        "feedback": "Feedback",
         "fullScreen": "Full Screen",
         "moreInfo": "More Information",
-        "open": "Open"
+        "open": "Open",
+        "share": "Share"
       }
     },
     "genericDialogue": {

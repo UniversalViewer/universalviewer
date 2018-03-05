@@ -64,6 +64,12 @@ export class Extension extends BaseExtension implements IPDFExtension {
                 this.centerPanel.$element.show();
             }
         });
+
+        $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+            setTimeout(() => {
+                this.resize();
+            }, 10); // allow time to exit full screen, then resize
+        });
     }
 
     update(): void {
@@ -141,9 +147,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     dependencyLoaded(index: number, dep: any): void {
-        // if (index === 0) {
-        //     window.PDFObject = dep;
-        // }
+
     }
 
     getEmbedScript(template: string, width: number, height: number): string{

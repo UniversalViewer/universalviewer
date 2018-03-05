@@ -30,9 +30,11 @@
         "download": "Lawrlwytho",
         "embed": "Ymgorffori",
         "exitFullScreen": "Dianc o'r sgrin lawn",
+        "feedback": "Adborth",
         "fullScreen": "Sgrin lawn",
         "moreInfo": "Mwy o Wybodaeth",
-        "open": "agored"
+        "open": "Agor",
+        "share": "Rhannu"
       }
     },
     "genericDialogue": {

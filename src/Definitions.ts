@@ -49,7 +49,6 @@ interface Window {
     $: JQueryStatic;
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience (make this generic)
-    PDFObject: any;
     UV: any;
     THREE: any;
     Event: any;

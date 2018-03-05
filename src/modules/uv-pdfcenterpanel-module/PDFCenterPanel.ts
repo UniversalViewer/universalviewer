@@ -200,8 +200,7 @@ export class PDFCenterPanel extends CenterPanel {
                 $.publish(Events.PDF_LOADED, [pdfDoc]);
                 this._$spinner.hide();
             });
-
-            //window.PDFObject.embed(mediaUri, '#content', { id: "PDF" });
+            
         });
 
     }
