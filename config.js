@@ -8,13 +8,13 @@ module.exports = function () {
         bundle: [
             'node_modules/base-component/dist/base-component.js',
             'node_modules/exjs/dist/ex.es3.min.js',
-            'node_modules/extensions/dist/extensions.js',
             'node_modules/http-status-codes/dist/http-status-codes.js',
             'node_modules/jquery-plugins/dist/jquery-plugins.js',
             'node_modules/jquery-tiny-pubsub/dist/ba-tiny-pubsub.js',
             'node_modules/key-codes/dist/key-codes.js',
             'node_modules/manifesto.js/dist/client/manifesto.js',
             'node_modules/@iiif/manifold/dist/manifold.js',
+            'node_modules/pdfjs-dist/build/pdf.combined.js',
             'node_modules/utils/dist/utils.js'
         ],
         offline: [ // when offline, make these libs available as they can't be loaded from a cdn
@@ -34,6 +34,7 @@ module.exports = function () {
         npm: './node_modules',
         src: './src',
         themes: './src/themes',
+        uv: 'uv',
         uvAVExtension: './src/extensions/uv-av-extension',
         uvDefaultExtension: './src/extensions/uv-default-extension',
         uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',

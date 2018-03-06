@@ -186,8 +186,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             // dimensions
             if (dimensions) {
                 label = hasNormalDimensions ?
-                  String.format(label, dimensions.size.width, dimensions.size.height) :
-                  String.format(label, dimensions.size.height, dimensions.size.width);
+                  Utils.Strings.format(label, dimensions.size.width.toString(), dimensions.size.height.toString()) :
+                  Utils.Strings.format(label, dimensions.size.height.toString(), dimensions.size.width.toString());
                 $label.text(label);
                 $input.prop('title', label);
                 this.$currentViewAsJpgButton.data('width', dimensions.size.width);
@@ -227,7 +227,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             if (!size) {
                 // if there is no image service, allow the image to be downloaded directly.
                 if (canvas.externalResource && !canvas.externalResource.hasServiceDescriptor()) {
-                    const label: string = String.format(this.content.wholeImageHighRes, '?', '?', mime);
+                    const label: string = Utils.Strings.format(this.content.wholeImageHighRes, '?', '?', mime);
                     $label.text(label);
                     $input.prop('title', label);
                     this.$wholeImageHighResButton.show();
@@ -236,8 +236,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 }
             } else {
                 const label: string = hasNormalDimensions ?
-                  String.format(this.content.wholeImageHighRes, size.width, size.height, mime) :
-                  String.format(this.content.wholeImageHighRes, size.height, size.width, mime);
+                  Utils.Strings.format(this.content.wholeImageHighRes, size.width.toString(), size.height.toString(), mime) :
+                  Utils.Strings.format(this.content.wholeImageHighRes, size.height.toString(), size.width.toString(), mime);
                 $label.text(label);
                 $input.prop('title', label);
 
@@ -271,7 +271,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 mime = '?';
             }
             
-            const label: string = String.format(this.content.wholeImagesHighRes, mime);
+            const label: string = Utils.Strings.format(this.content.wholeImagesHighRes, mime);
             $label.text(label);
             $input.prop('title', label);
 
@@ -295,8 +295,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const $label: JQuery = this.$wholeImageLowResAsJpgButton.find('label');
             const size: Size | null = (<ISeadragonExtension>this.extension).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
             const label = hasNormalDimensions ?
-              String.format(this.content.wholeImageLowResAsJpg, size.width, size.height) :
-              String.format(this.content.wholeImageLowResAsJpg, size.height, size.width);
+              Utils.Strings.format(this.content.wholeImageLowResAsJpg, size.width.toString(), size.height.toString()) :
+              Utils.Strings.format(this.content.wholeImageLowResAsJpg, size.height.toString(), size.width.toString());
             $label.text(label);
             $input.prop('title', label);
             this.$wholeImageLowResAsJpgButton.data('width', size.width);
@@ -470,7 +470,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                     label = defaultLabel;
                 }
                 const mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
-                label = String.format(label, mime);
+                label = Utils.Strings.format(label, mime);
                 this.renderingUrls[<any>currentId] = rendering.id;
                 const $button: JQuery = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + currentId + '">' + label + '</label></li>');
 

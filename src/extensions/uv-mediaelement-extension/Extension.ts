@@ -160,7 +160,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = String.format(template, iframeSrc, width, height);
+        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 

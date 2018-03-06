@@ -3,10 +3,10 @@ import {BaseExtension} from "../../modules/uv-shared-module/BaseExtension";
 import {Bookmark} from "../../modules/uv-shared-module/Bookmark";
 import {DownloadDialogue} from "./DownloadDialogue";
 import {FooterPanel} from "../../modules/uv-shared-module/FooterPanel";
-import {HeaderPanel} from "../../modules/uv-shared-module/HeaderPanel";
 import {IPDFExtension} from "./IPDFExtension";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import {PDFCenterPanel} from "../../modules/uv-pdfcenterpanel-module/PDFCenterPanel";
+import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPanel";
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
@@ -23,12 +23,15 @@ export class Extension extends BaseExtension implements IPDFExtension {
     downloadDialogue: DownloadDialogue;
     shareDialogue: ShareDialogue;
     footerPanel: FooterPanel;
-    headerPanel: HeaderPanel;
+    headerPanel: PDFHeaderPanel;
     leftPanel: ResourcesLeftPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
 
     create(): void {
+
+        requirejs.config({paths: {'pdfjs-dist/build/pdf.combined': this.data.root + '/lib/' + 'pdf.combined'}});
+
         super.create();
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
@@ -61,6 +64,12 @@ export class Extension extends BaseExtension implements IPDFExtension {
                 this.centerPanel.$element.show();
             }
         });
+
+        $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+            setTimeout(() => {
+                this.resize();
+            }, 10); // allow time to exit full screen, then resize
+        });
     }
 
     update(): void {
@@ -78,23 +87,23 @@ export class Extension extends BaseExtension implements IPDFExtension {
     createModules(): void{
         super.createModules();
 
-        if (this.isHeaderPanelEnabled()){
-            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+        if (this.isHeaderPanelEnabled()) {
+            this.headerPanel = new PDFHeaderPanel(Shell.$headerPanel);
         } else {
             Shell.$headerPanel.hide();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
         }
 
         this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        if (this.isFooterPanelEnabled()){
+        if (this.isFooterPanelEnabled()) {
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
         } else {
             Shell.$footerPanel.hide();
@@ -112,11 +121,11 @@ export class Extension extends BaseExtension implements IPDFExtension {
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel.init();
         }
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel.init();
         }
     }
@@ -138,9 +147,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     dependencyLoaded(index: number, dep: any): void {
-        if (index === 0) {
-            window.PDFObject = dep;
-        }
+
     }
 
     getEmbedScript(template: string, width: number, height: number): string{
@@ -148,7 +155,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
         //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = String.format(template, iframeSrc, width, height);
+        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 }

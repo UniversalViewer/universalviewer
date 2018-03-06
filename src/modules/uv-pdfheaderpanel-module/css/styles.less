@@ -1,0 +1,81 @@
+@import 'icons';
+
+.uv {
+
+    .headerPanel {
+
+        color: @text-secondary-color;
+
+        button.btn.imageBtn {
+            font-size: 0;
+            padding-left: 2px;
+            padding-right: 2px;
+
+            &.first,
+            &.prev,
+            &.next,
+            &.last {
+                i {
+                    background-color: @gray;
+                    &:hover {
+                        background-color: @gray-dark;
+                    }
+                }
+            }
+
+            &.disabled {
+                opacity: 0.4;
+                filter: alpha(opacity=40);
+                background-color: transparent;
+                &:hover {
+                    background-color: transparent;
+                }
+            }
+        }
+
+        .centerOptions {
+
+            .prevOptions {
+                float: left;
+                margin: 0 15px 0 0;
+            }
+
+            .search {
+                float: left;
+                margin: 6px 0 0 5px;
+                width: 113px;
+
+                .searchText {
+                    border: none;
+                    padding: 0 0 0 2px;
+                }
+            }
+
+            .nextOptions {
+                float: left;
+                margin: 0 0 0 15px;
+            }
+        }
+
+        .searchText {
+            width: 30px;
+            height: 19px;
+            line-height: 19px;
+            float: left;
+            font-size: @font-size-small;
+            padding: 0;
+            margin-top: 6px;
+        }
+
+        .total {
+            float: left;
+            display: block;
+            height: 18px;
+            line-height: 18px;
+            margin: 6px 5px 0 5px;
+            width: 41px;
+            font-size: @font-size-small;
+            overflow: hidden;
+        }
+    }
+}

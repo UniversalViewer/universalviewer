@@ -448,9 +448,9 @@ export class PagingHeaderPanel extends HeaderPanel {
         const of: string = this.content.of;
 
         if (this.isPageModeEnabled()) {
-            this.$total.html(String.format(of, this.extension.helper.getLastCanvasLabel(true)));
+            this.$total.html(Utils.Strings.format(of, this.extension.helper.getLastCanvasLabel(true)));
         } else {
-            this.$total.html(String.format(of, this.extension.helper.getTotalCanvases()));
+            this.$total.html(Utils.Strings.format(of, this.extension.helper.getTotalCanvases().toString()));
         }
     }
 

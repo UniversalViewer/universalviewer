@@ -1,8 +1,11 @@
+var c = require('../../../config');
+var config = new c();
+
 module.exports = {
     sync: {
         dependencies: {
             // all files that need to be copied from /node_modules to /src/extensions/uv-virtex-extension/lib post npm install
-            cwd: '<%= config.directories.npm %>',
+            cwd: config.directories.npm,
             expand: true,
             flatten: true,
             src: [
@@ -21,7 +24,7 @@ module.exports = {
                 'three/examples/js/Detector.js',
                 'three/examples/js/vr/WebVR.js'
             ],
-            dest: '<%= config.directories.uvVirtexExtension %>/lib'
+            dest: config.directories.uvVirtexExtension + '/lib'
         }
     }
 }

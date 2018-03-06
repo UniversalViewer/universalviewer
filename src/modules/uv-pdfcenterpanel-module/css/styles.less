@@ -2,7 +2,29 @@
 
     .centerPanel {
 
+        @img-path: '../../../modules/uv-pdfcenterpanel-module/img/';
+
         .content {
+
+            position: relative;
+
+            .spinner {
+                position: absolute;
+                background: fadeout(#000, 10%);
+                width: 34px;
+                height: 34px;
+                border-radius: 34px;
+
+                .loading(@loader-black-bg);
+            }
+
+            button {
+                color: #fff;
+            }
+            
+            canvas {
+                position: absolute;
+            }
 
             .container {
                 margin: 0 20px 0 20px;
@@ -10,6 +32,33 @@
 
             #pdfContainer {
                 overflow: auto;
+            }
+
+            .btn {
+
+                position: absolute !important;
+                width: 30px;
+                height: 90px;
+                background-repeat: no-repeat;
+                background-color: @body-bg;
+                background-position: 0px 50%;
+                cursor: pointer;
+                padding: 0px;
+                border: none;
+
+                &.prev {
+                    background-image: data-uri('@{img-path}left_arrow.png');
+                    &.disabled {
+                        background-image: data-uri('@{img-path}left_arrow_disabled.png');
+                    }
+                }
+
+                &.next {
+                    background-image: data-uri('@{img-path}right_arrow.png');
+                    &.disabled {
+                        background-image: data-uri('@{img-path}right_arrow_disabled.png');
+                    }
+                }
             }
         }
     }

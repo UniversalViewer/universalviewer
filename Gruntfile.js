@@ -8,22 +8,37 @@ var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
 var seadragonExtensionConfig = require('./src/extensions/uv-seadragon-extension/config');
 var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config');
 
+var types = [
+    '@iiif/manifold', 
+    'base-component',
+    'exjs',
+    'http-status-codes',
+    'iiif-av-component',
+    'iiif-gallery-component',
+    'iiif-metadata-component',
+    'iiif-tree-component',
+    'jquery-plugins',
+    'jquery', 
+    'key-codes',
+    'manifesto.js', 
+    'modernizr', 
+    'requirejs', 
+    'three',
+    'utils',
+    'virtex3d'
+]
+
 module.exports = function (grunt) {
 
     var packageJson;
 
-    function refresh() {
-        packageJson = grunt.file.readJSON("package.json");
-        grunt.config.set('config.directories.uv', 'uv');
+    function readPackageJson() {
+        packageJson = grunt.file.readJSON('package.json');
     }
 
-    refresh();
+    readPackageJson();
 
     grunt.initConfig({
-
-        config: config,
-
-        pkg: packageJson,
 
         ts: {
             dev: {
@@ -34,7 +49,7 @@ module.exports = function (grunt) {
                     declarations: false,
                     noLib: false,
                     comments: true,
-                    lib: ['es6'],
+                    lib: ['es6', 'dom'],
                     noImplicitAny: true,
                     noImplicitReturns: true,
                     noImplicitThis: false,
@@ -42,27 +57,8 @@ module.exports = function (grunt) {
                     noUnusedParameters: false,
                     strictNullChecks: true,
                     suppressImplicitAnyIndexErrors: true,
-                    target: "es5",
-                    types: [
-                        '@iiif/manifold', 
-                        'base-component',
-                        'exjs',
-                        'extensions',
-                        'http-status-codes',
-                        'iiif-av-component',
-                        'iiif-gallery-component',
-                        'iiif-metadata-component',
-                        'iiif-tree-component',
-                        'jquery-plugins',
-                        'jquery', 
-                        'key-codes',
-                        'manifesto.js', 
-                        'modernizr', 
-                        'requirejs', 
-                        'three',
-                        'utils',
-                        'virtex3d'
-                    ]
+                    target: 'es5',
+                    types: types
                 }
             },
             dist: {
@@ -73,7 +69,7 @@ module.exports = function (grunt) {
                     declarations: false,
                     noLib: false,
                     comments: false,
-                    lib: ['es6'],
+                    lib: ['es6', 'dom'],
                     noImplicitAny: true,
                     noImplicitReturns: true,
                     noImplicitThis: false,
@@ -81,37 +77,18 @@ module.exports = function (grunt) {
                     noUnusedParameters: false,
                     strictNullChecks: true,
                     suppressImplicitAnyIndexErrors: true,
-                    target: "es5",
-                    types: [
-                        '@iiif/manifold', 
-                        'base-component',
-                        'exjs',
-                        'extensions',
-                        'http-status-codes',
-                        'iiif-av-component',
-                        'iiif-gallery-component',
-                        'iiif-metadata-component',
-                        'iiif-tree-component',
-                        'jquery-plugins',
-                        'jquery', 
-                        'key-codes',
-                        'manifesto.js', 
-                        'modernizr', 
-                        'requirejs', 
-                        'three',
-                        'utils',
-                        'virtex3d'
-                    ]
+                    target: 'es5',
+                    types: types
                 }
             }
         },
 
         clean: {
-            themes : ['<%= config.directories.themes %>'],
-            build : ['<%= config.directories.build %>'],
-            dist: ['<%= config.directories.examples %>/uv/*'],
-            extension: ['<%= config.directories.src %>/extensions/*/.build/*'],
-            libs: ['<%= config.directories.src %>/extensions/*/lib/*']
+            themes: config.directories.themes,
+            build: config.directories.build,
+            dist: config.directories.examples + '/uv/',
+            extension: config.directories.src + '/extensions/*/.build/*',
+            libs: config.directories.src + '/extensions/*/lib/*'
         },
 
         copy: {
@@ -123,7 +100,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         cwd: '.',
                         src: config.dependencies.bundle,
-                        dest: '<%= config.directories.lib %>/'
+                        dest: config.directories.lib
                     }
                 ]
             },
@@ -133,7 +110,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/extensions/*/.build/*.schema.json'],
-                        dest: '<%= config.directories.build %>/schema/',
+                        dest: config.directories.build + '/schema/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
                             // src/extensions/[extension]/.build/[locale].schema.json
@@ -151,8 +128,8 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.src %>/build.js'],
-                        dest: '<%= config.directories.build %>',
+                        src: [ config.directories.src + '/build.js'],
+                        dest: config.directories.build,
                         rename: function(dest, src) {
                             return dest + '/uv.js';
                         }
@@ -161,22 +138,22 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.src %>/build.js.map'],
-                        dest: '<%= config.directories.build %>'
+                        src: [config.directories.src + '/build.js.map'],
+                        dest: config.directories.build
                     },
                     // js
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.lib %>/offline.js'],
-                        dest: '<%= config.directories.build %>/lib'
+                        src: [config.directories.lib + '/offline.js'],
+                        dest: config.directories.build + '/lib'
                     },
                     // js
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.src %>/helpers.js'],
-                        dest: '<%= config.directories.build %>',
+                        src: [config.directories.src + '/helpers.js'],
+                        dest: config.directories.build,
                         rename: function(dest, src) {
                             return dest + '/helpers.js';
                         }
@@ -185,21 +162,21 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.src %>/uv.html'],
-                        dest: '<%= config.directories.build %>'
+                        src: [config.directories.src + '/uv.html'],
+                        dest: config.directories.build
                     },
                     // css
                     {
                         expand: true,
                         flatten: true,
-                        src: ['<%= config.directories.src %>/uv.css'],
-                        dest: '<%= config.directories.build %>'
+                        src: [config.directories.src + '/uv.css'],
+                        dest: config.directories.build
                     },
                     // extension configuration files
                     {
                         expand: true,
                         src: ['src/extensions/**/.build/*.config.json'],
-                        dest: '<%= config.directories.build %>/lib/',
+                        dest: config.directories.build + '/lib/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
                             // src/extensions/[extension]/[locale].config.json
@@ -213,7 +190,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['src/extensions/**/dependencies.js'],
-                        dest: '<%= config.directories.build %>/lib/',
+                        dest: config.directories.build + '/lib/',
                         rename: function(dest, src) {
                             // get the extension name from the src string.
                             var reg = /extensions\/(.*)\/dependencies.js/;
@@ -226,20 +203,20 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: ['src/extensions/**/lib/*'],
-                        dest: '<%= config.directories.build %>/lib/'
+                        dest: config.directories.build + '/lib/'
                     },
                     // images
                     {
                         expand: true,
                         flatten: true,
                         src: 'src/img/*',
-                        dest: '<%= config.directories.build %>/img/'
+                        dest: config.directories.build + '/img/'
                     },
                     {
                         expand: true,
                         flatten: true,
                         src: 'src/favicon.ico',
-                        dest: '<%= config.directories.build %>'
+                        dest: config.directories.build
                     }
                 ]
             },
@@ -247,17 +224,17 @@ module.exports = function (grunt) {
                 // copy contents of /.build to /examples/uv.
                 files: [
                     {
-                        cwd: '<%= config.directories.build %>',
+                        cwd: config.directories.build,
                         expand: true,
                         src: ['**'],
-                        dest: '<%= config.directories.examples %>/<%= config.directories.uv %>/'
+                        dest: config.directories.examples + '/' + config.directories.uv + '/'
                     },
                     // misc
                     {
                         expand: true,
                         flatten: true,
                         src: ['favicon.ico'],
-                        dest: '<%= config.directories.examples %>/'
+                        dest: config.directories.examples + '/'
                     }
                 ]
             }
@@ -267,10 +244,10 @@ module.exports = function (grunt) {
             themes: {
                 files: [
                     {
-                        cwd: '<%= config.directories.npm %>',
+                        cwd: config.directories.npm,
                         expand: true,
                         src: ['uv-*-theme/**'],
-                        dest: '<%= config.directories.themes %>'
+                        dest: config.directories.themes
                     }
                 ]
             },
@@ -289,13 +266,13 @@ module.exports = function (grunt) {
             zip: {
                 options: {
                     mode: 'zip',
-                    archive: '<%= config.directories.examples %>/<%= config.directories.uv %>.zip',
+                    archive: config.directories.examples + '/' + config.directories.uv + '.zip',
                     level: 9
                 },
                 files: [
                     {
                         expand: true,
-                        cwd: '<%= config.directories.build %>/',
+                        cwd: config.directories.build + '/',
                         src: ['**']
                     }
                 ]
@@ -306,7 +283,7 @@ module.exports = function (grunt) {
             offline: {
                 cwd: '.',
                 src: config.dependencies.offline,
-                dest: '<%= config.directories.lib %>/offline.js'
+                dest: config.directories.lib + '/offline.js'
             }
         },
 
@@ -327,7 +304,7 @@ module.exports = function (grunt) {
             // becomes
             // ../../../<module>/<asset>
             moduleassets: {
-                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
+                src: [config.directories.build + '/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*modules\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
@@ -338,7 +315,7 @@ module.exports = function (grunt) {
             // becomes
             // ../../assets/<asset>
             themeassets: {
-                src: ['<%= config.directories.build %>/themes/*/css/*/theme.css'],
+                src: [config.directories.build + '/themes/*/css/*/theme.css'],
                 overwrite: true,
                 replacements: [{
                     from: /\((?:'|"|)(?:.*themes\/(.*)\/assets\/(.*.\w{3,}))(?:'|"|)\)/g,
@@ -350,12 +327,12 @@ module.exports = function (grunt) {
         connect: {
             dev: {
                 options: {
-                    port: '<%= config.examplesPort %>',
+                    port: config.examplesPort,
                     base: '.',
                     directory: '.',
                     keepalive: true,
                     open: {
-                        target: 'http://localhost:<%= config.examplesPort %>/<%= config.directories.examples %>/'
+                        target: 'http://localhost:' + config.examplesPort + '/' + config.directories.examples + '/'
                     }
                 }
             }
@@ -407,7 +384,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', '', function() {
 
-        refresh();
+        readPackageJson();
 
         var tsType = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
         var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';

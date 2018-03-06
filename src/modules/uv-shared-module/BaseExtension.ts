@@ -355,7 +355,7 @@ export class BaseExtension implements IExtension {
         $.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
 
-            const openUri: string = String.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
+            const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
 
             window.open(openUri);
         });
@@ -568,16 +568,23 @@ export class BaseExtension implements IExtension {
 
                 const baseUri: string = that.data.root + '/lib/';
 
-                // for each dependency, prepend baseUri.
+                // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
+                // check for a requirejs.config that sets a specific path, such as the PDF extension
                 if (deps.sync) {                    
                     for (let i = 0; i < deps.sync.length; i++) {
-                        deps.sync[i] = baseUri + deps.sync[i];
+                        const dep: string = deps.sync[i];
+                        if (!dep.startsWith('!')) {
+                            deps.sync[i] = baseUri + dep;
+                        }
                     }
                 }
 
                 if (deps.async) {                    
                     for (let i = 0; i < deps.async.length; i++) {
-                        deps.async[i] = baseUri + deps.async[i];
+                        const dep: string = deps.async[i];
+                        if (!dep.startsWith('!')) {
+                            deps.async[i] = baseUri + dep;
+                        }
                     }
                 }
                 
@@ -1204,13 +1211,14 @@ export class BaseExtension implements IExtension {
         // re-order locales so the passed locale is first
 
         const data: IUVData = <IUVData>{};
-        data.locales = this.data.locales.clone();
+        data.locales = this.data.locales.slice(0);
 
-        const index: number = data.locales.findIndex((l: any) => {
+        const fromIndex: number = data.locales.findIndex((l: any) => {
             return l.name === locale;
         });
 
-        data.locales.move(index, 0);
+        const toIndex: number = 0;
+        data.locales.splice(toIndex, 0, data.locales.splice(fromIndex, 1)[0])
 
         this.reload(data);
     }

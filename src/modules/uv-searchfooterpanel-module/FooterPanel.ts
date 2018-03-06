@@ -68,6 +68,8 @@ export class FooterPanel extends BaseFooterPanel {
         $.subscribe(BaseEvents.ANNOTATIONS, (e: any, annotationResults: AnnotationResults) => {
             this.displaySearchResults(annotationResults.annotations, annotationResults.terms);
             this.setCurrentSearchResultPlacemarker();
+            this.updatePrevButton();
+            this.updateNextButton();
         });
 
         $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
@@ -183,12 +185,16 @@ export class FooterPanel extends BaseFooterPanel {
 
         this.$previousResultButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Events.PREV_SEARCH_RESULT);
+            if (this.isPreviousButtonEnabled()) {
+                $.publish(Events.PREV_SEARCH_RESULT);
+            }
         });
 
         this.$nextResultButton.on('click', (e: any) => {
             e.preventDefault();
-            $.publish(Events.NEXT_SEARCH_RESULT);
+            if (this.isNextButtonEnabled()) {
+                $.publish(Events.NEXT_SEARCH_RESULT);
+            }
         });
 
         this.$clearSearchResultsButton.on('click', (e: any) => {
@@ -214,7 +220,7 @@ export class FooterPanel extends BaseFooterPanel {
 
             new AutoComplete(this.$searchText,
                 (terms: string, cb: (results: string[]) => void) => {
-                    $.getJSON(String.format(autocompleteService, terms), (results: string[]) => {
+                    $.getJSON(Utils.Strings.format(autocompleteService, terms), (results: string[]) => {
                         cb(results);
                     });
                 },
@@ -485,9 +491,9 @@ export class FooterPanel extends BaseFooterPanel {
                 label = this.extension.helper.manifest.options.defaultLabel;
             }
 
-            title = String.format(title, that.content.pageCaps, label);
+            title = Utils.Strings.format(title, that.content.pageCaps, label);
         } else {
-            title = String.format(title, that.content.imageCaps, canvasIndex + 1);
+            title = Utils.Strings.format(title, that.content.imageCaps, String(canvasIndex + 1));
         }
 
         that.$placemarkerDetailsTop.html(title);
@@ -508,10 +514,10 @@ export class FooterPanel extends BaseFooterPanel {
             let text: string = '';
 
             if (result.rects.length === 1) {
-                text = String.format(instanceFoundText, terms);
+                text = Utils.Strings.format(instanceFoundText, terms);
                 that.$placemarkerDetailsBottom.html(text);
             } else {
-                text = String.format(instancesFoundText, result.rects.length, terms);
+                text = Utils.Strings.format(instancesFoundText, String(result.rects.length), terms);
                 that.$placemarkerDetailsBottom.html(text);
             }
         }
@@ -641,11 +647,11 @@ export class FooterPanel extends BaseFooterPanel {
             const lastCanvasOrderLabel: string | null = this.extension.helper.getLastCanvasLabel(true);
 
             if (lastCanvasOrderLabel) {
-                this.$pagePositionLabel.html(String.format(displaying, this.content.page, UVUtils.sanitize(<string>label), UVUtils.sanitize(<string>lastCanvasOrderLabel)));
+                this.$pagePositionLabel.html(Utils.Strings.format(displaying, this.content.page, UVUtils.sanitize(<string>label), UVUtils.sanitize(<string>lastCanvasOrderLabel)));
             }
 
         } else {
-            this.$pagePositionLabel.html(String.format(displaying, this.content.image, index + 1, this.extension.helper.getTotalCanvases()));
+            this.$pagePositionLabel.html(Utils.Strings.format(displaying, this.content.image, String(index + 1), this.extension.helper.getTotalCanvases().toString()));
         }
     }
 
