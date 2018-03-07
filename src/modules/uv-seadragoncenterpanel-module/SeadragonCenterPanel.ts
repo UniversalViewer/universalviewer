@@ -339,10 +339,20 @@ export class SeadragonCenterPanel extends CenterPanel {
         const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
 
         this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
-        this.$prevButton.prop('title', this.content.previous);
+
+        if (this.extension.helper.isRightToLeft()) {
+            this.$prevButton.prop('title', this.content.next);
+        } else {
+            this.$prevButton.prop('title', this.content.previous);
+        }
 
         this.$nextButton = $('<div class="paging btn next" tabindex="0"></div>');
-        this.$nextButton.prop('title', this.content.next);
+        
+        if (this.extension.helper.isRightToLeft()) {
+            this.$nextButton.prop('title', this.content.previous);
+        } else {
+            this.$nextButton.prop('title', this.content.next);
+        }
         
         this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
         this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});

@@ -72,14 +72,14 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         this.$firstButton = $(`
           <button class="btn imageBtn first" tabindex="0" title="${this.content.first}">
-            <i class="uv-icon-first" aria-hidden="true"></i>${this.content.first}
+            <i class="uv-icon-first" aria-hidden="true"></i><span>${this.content.first}</span>
           </button>
         `);
         this.$prevOptions.append(this.$firstButton);
 
         this.$prevButton = $(`
           <button class="btn imageBtn prev" tabindex="0" title="${this.content.previous}">
-            <i class="uv-icon-prev" aria-hidden="true"></i>${this.content.previous}
+            <i class="uv-icon-prev" aria-hidden="true"></i><span>${this.content.previous}</span>
           </button>
         `);
         this.$prevOptions.append(this.$prevButton);
@@ -164,7 +164,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$total = $('<span class="total"></span>');
         this.$search.append(this.$total);
 
-        this.$searchButton = $('<a class="go btn btn-primary" tabindex="0">' + this.content.go + '</a>');
+        this.$searchButton = $(`<a class="go btn btn-primary" title="${this.content.go}" tabindex="0">${this.content.go}</a>`);
         this.$search.append(this.$searchButton);
 
         this.$nextOptions = $('<div class="nextOptions"></div>');
@@ -172,14 +172,14 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         this.$nextButton = $(`
           <button class="btn imageBtn next" tabindex="0" title="${this.content.next}">
-            <i class="uv-icon-next" aria-hidden="true"></i>${this.content.next}
+            <i class="uv-icon-next" aria-hidden="true"></i><span>${this.content.next}</span>
           </button>
         `);
         this.$nextOptions.append(this.$nextButton);
 
         this.$lastButton = $(`
           <button class="btn imageBtn last" tabindex="0" title="${this.content.last}">
-            <i class="uv-icon-last" aria-hidden="true"></i>${this.content.last}
+            <i class="uv-icon-last" aria-hidden="true"></i><span>${this.content.last}</span>
           </button>
         `);
         this.$nextOptions.append(this.$lastButton);
@@ -243,7 +243,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             $.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
         });
 
-        this.setTitles();
+        this.setNavigationTitles();
         this.setTotal();
 
         const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
@@ -335,14 +335,14 @@ export class PagingHeaderPanel extends HeaderPanel {
         });
 
         this.$searchButton.onPressed(() => {
-            if (this.options.autoCompleteBoxEnabled){
+            if (this.options.autoCompleteBoxEnabled) {
                 this.search(this.$autoCompleteBox.val());
             } else {
                 this.search(this.$searchText.val());
             }
         });
 
-        if (this.options.modeOptionsEnabled === false){
+        if (this.options.modeOptionsEnabled === false) {
             this.$modeOptions.hide();
             this.$centerOptions.addClass('modeOptionsDisabled');
         }
@@ -397,21 +397,49 @@ export class PagingHeaderPanel extends HeaderPanel {
         return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
-    setTitles(): void {
+    setNavigationTitles(): void {
 
-        if (this.isPageModeEnabled()){
-            this.$firstButton.prop('title', this.content.firstPage);
-            this.$prevButton.prop('title', this.content.previousPage);
-            this.$nextButton.prop('title', this.content.nextPage);
-            this.$lastButton.prop('title', this.content.lastPage);
+        if (this.isPageModeEnabled()) {
+            if (this.extension.helper.isRightToLeft()) {
+                this.$firstButton.prop('title', this.content.lastPage);
+                this.$firstButton.find('span').text(this.content.lastPage);
+                this.$prevButton.prop('title', this.content.nextPage);
+                this.$prevButton.find('span').text(this.content.nextPage);
+                this.$nextButton.prop('title', this.content.previousPage);
+                this.$nextButton.find('span').text(this.content.previousPage);
+                this.$lastButton.prop('title', this.content.firstPage);
+                this.$lastButton.find('span').text(this.content.firstPage);
+            } else {
+                this.$firstButton.prop('title', this.content.firstPage);
+                this.$firstButton.find('span').text(this.content.firstPage);
+                this.$prevButton.prop('title', this.content.previousPage);
+                this.$prevButton.find('span').text(this.content.previousPage);
+                this.$nextButton.prop('title', this.content.nextPage);
+                this.$nextButton.find('span').text(this.content.nextPage);
+                this.$lastButton.prop('title', this.content.lastPage);
+                this.$lastButton.find('span').text(this.content.lastPage);
+            }
         } else {
-            this.$firstButton.prop('title', this.content.firstImage);
-            this.$prevButton.prop('title', this.content.previousImage);
-            this.$nextButton.prop('title', this.content.nextImage);
-            this.$lastButton.prop('title', this.content.lastImage);
+            if (this.extension.helper.isRightToLeft()) {
+                this.$firstButton.prop('title', this.content.lastImage);
+                this.$firstButton.find('span').text(this.content.lastPage);
+                this.$prevButton.prop('title', this.content.nextImage);
+                this.$prevButton.find('span').text(this.content.nextImage);
+                this.$nextButton.prop('title', this.content.previousImage);
+                this.$nextButton.find('span').text(this.content.previousImage);
+                this.$lastButton.prop('title', this.content.firstImage);
+                this.$lastButton.find('span').text(this.content.firstImage);
+            } else {
+                this.$firstButton.prop('title', this.content.firstImage);
+                this.$firstButton.find('span').text(this.content.firstImage);
+                this.$prevButton.prop('title', this.content.previousImage);
+                this.$prevButton.find('span').text(this.content.previousImage);
+                this.$nextButton.prop('title', this.content.nextImage);
+                this.$nextButton.find('span').text(this.content.nextImage);
+                this.$lastButton.prop('title', this.content.lastImage);
+                this.$lastButton.find('span').text(this.content.lastImage);
+            }
         }
-
-        this.$searchButton.prop('title', this.content.go);
     }
 
     updatePagingToggle(): void {
@@ -607,7 +635,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     modeChanged(): void {
         this.setSearchFieldValue(this.extension.helper.canvasIndex);
-        this.setTitles();
+        this.setNavigationTitles();
         this.setTotal();
     }
 
