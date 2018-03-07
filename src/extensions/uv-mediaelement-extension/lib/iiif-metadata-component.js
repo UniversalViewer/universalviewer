@@ -65,6 +65,7 @@ var IIIFComponents;
         __extends(MetadataComponent, _super);
         function MetadataComponent(options) {
             var _this = _super.call(this, options) || this;
+            _this._data = _this.data();
             _this._init();
             _this._resize();
             return _this;
@@ -84,12 +85,12 @@ var IIIFComponents;
                                                </div>');
             this._$metadataItemValueTemplate = $('<div class="value"></div>');
             this._$metadataItemURIValueTemplate = $('<a class="value" href="" target="_blank"></a>');
-            this._$copyTextTemplate = $('<div class="copyText" alt="' + this.options.data.content.copyToClipboard + '" title="' + this.options.data.content.copyToClipboard + '">\
-                                                   <div class="copiedText">' + this.options.data.content.copiedToClipboard + ' </div>\
+            this._$copyTextTemplate = $('<div class="copyText" alt="' + this._data.content.copyToClipboard + '" title="' + this._data.content.copyToClipboard + '">\
+                                                   <div class="copiedText">' + this._data.content.copiedToClipboard + ' </div>\
                                                </div>');
             this._$metadataGroups = $('<div class="groups"></div>');
             this._$element.append(this._$metadataGroups);
-            this._$noData = $('<div class="noData">' + this.options.data.content.noData + '</div>');
+            this._$noData = $('<div class="noData">' + this._data.content.noData + '</div>');
             this._$element.append(this._$noData);
             return success;
         };
@@ -137,53 +138,51 @@ var IIIFComponents;
         MetadataComponent.prototype._getCanvasGroups = function () {
             return this._metadataGroups.en().where(function (x) { return x.resource.isCanvas(); }).toArray();
         };
-        MetadataComponent.prototype.set = function () {
+        MetadataComponent.prototype.set = function (data) {
             var _this = this;
-            this._$metadataGroups.empty();
-            var options = {
-                canvases: this.options.data.canvases,
-                licenseFormatter: this.options.data.licenseFormatter,
-                range: this.options.data.range
-            };
-            this._metadataGroups = this.options.data.helper.getMetadata(options);
-            if (this.options.data.manifestDisplayOrder) {
-                var manifestGroup = this._getManifestGroup();
-                manifestGroup.items = this._sortItems(manifestGroup.items, this._readCSV(this.options.data.manifestDisplayOrder));
-            }
-            if (this.options.data.canvasDisplayOrder) {
-                var canvasGroups = this._getCanvasGroups();
-                $.each(canvasGroups, function (index, canvasGroup) {
-                    canvasGroup.items = _this._sortItems(canvasGroup.items, _this._readCSV(_this.options.data.canvasDisplayOrder));
-                });
-            }
-            if (this.options.data.metadataGroupOrder) {
-                this._metadataGroups = this._sortGroups(this._metadataGroups, this._readCSV(this.options.data.metadataGroupOrder));
-            }
-            if (this.options.data.canvasLabels) {
-                this._label(this._getCanvasGroups(), this._readCSV(this.options.data.canvasLabels, false));
-            }
-            if (this.options.data.manifestExclude) {
-                var manifestGroup = this._getManifestGroup();
-                manifestGroup.items = this._exclude(manifestGroup.items, this._readCSV(this.options.data.manifestExclude));
-            }
-            if (this.options.data.canvasExclude) {
-                var canvasGroups = this._getCanvasGroups();
-                $.each(canvasGroups, function (index, canvasGroup) {
-                    canvasGroup.items = _this._exclude(canvasGroup.items, _this._readCSV(_this.options.data.canvasExclude));
-                });
-            }
-            if (!this._metadataGroups.length) {
-                this._$noData.show();
+            $.extend(this._data, data);
+            if (!this._data || !this._data.helper) {
                 return;
             }
-            this._$noData.hide();
+            var options = {
+                canvases: this._data.canvases,
+                licenseFormatter: this._data.licenseFormatter,
+                range: this._data.range
+            };
+            this._metadataGroups = this._data.helper.getMetadata(options);
+            if (this._data.manifestDisplayOrder) {
+                var manifestGroup = this._getManifestGroup();
+                manifestGroup.items = this._sortItems(manifestGroup.items, this._readCSV(this._data.manifestDisplayOrder));
+            }
+            if (this._data.canvasDisplayOrder) {
+                var canvasGroups = this._getCanvasGroups();
+                canvasGroups.forEach(function (canvasGroup, index) {
+                    canvasGroup.items = _this._sortItems(canvasGroup.items, _this._readCSV(_this._data.canvasDisplayOrder));
+                });
+            }
+            if (this._data.metadataGroupOrder) {
+                this._metadataGroups = this._sortGroups(this._metadataGroups, this._readCSV(this._data.metadataGroupOrder));
+            }
+            if (this._data.canvasLabels) {
+                this._label(this._getCanvasGroups(), this._readCSV(this._data.canvasLabels, false));
+            }
+            if (this._data.manifestExclude) {
+                var manifestGroup = this._getManifestGroup();
+                manifestGroup.items = this._exclude(manifestGroup.items, this._readCSV(this._data.manifestExclude));
+            }
+            if (this._data.canvasExclude) {
+                var canvasGroups = this._getCanvasGroups();
+                canvasGroups.forEach(function (canvasGroup, index) {
+                    canvasGroup.items = _this._exclude(canvasGroup.items, _this._readCSV(_this._data.canvasExclude));
+                });
+            }
             this._render();
         };
         MetadataComponent.prototype._sortItems = function (items, displayOrder) {
             var _this = this;
             var sorted = [];
             var unsorted = items.slice(0);
-            $.each(displayOrder, function (index, item) {
+            displayOrder.forEach(function (item, index) {
                 var match = unsorted.en().where((function (x) { return _this._normalise(x.getLabel()) === item; })).first();
                 if (match) {
                     sorted.push(match);
@@ -194,7 +193,7 @@ var IIIFComponents;
                 }
             });
             // add remaining items that were not in the displayOrder.
-            $.each(unsorted, function (index, item) {
+            unsorted.forEach(function (item, index) {
                 sorted.push(item);
             });
             return sorted;
@@ -202,7 +201,7 @@ var IIIFComponents;
         MetadataComponent.prototype._sortGroups = function (groups, metadataGroupOrder) {
             var sorted = [];
             var unsorted = groups.slice(0);
-            $.each(metadataGroupOrder, function (index, group) {
+            metadataGroupOrder.forEach(function (group, index) {
                 var match = unsorted.en().where(function (x) { return x.resource.constructor.name.toLowerCase() == group; }).first();
                 if (match) {
                     sorted.push(match);
@@ -215,13 +214,13 @@ var IIIFComponents;
             return sorted;
         };
         MetadataComponent.prototype._label = function (groups, labels) {
-            $.each(groups, function (index, group) {
+            groups.forEach(function (group, index) {
                 group.label = labels[index];
             });
         };
         MetadataComponent.prototype._exclude = function (items, excludeConfig) {
             var _this = this;
-            $.each(excludeConfig, function (index, item) {
+            excludeConfig.forEach(function (item, index) {
                 var match = items.en().where((function (x) { return _this._normalise(x.getLabel()) === item; })).first();
                 if (match) {
                     var index_3 = items.indexOf(match);
@@ -235,7 +234,7 @@ var IIIFComponents;
         // private _flatten(items: MetadataItem[]): MetadataItem[] {
         //     // flatten metadata into array.
         //     var flattened: MetadataItem[] = [];
-        //     $.each(items, (index: number, item: any) => {
+        //     items.forEach(item: any, index: number) => {
         //         if (Array.isArray(item.value)){
         //             flattened = flattened.concat(<MetadataItem[]>item.value);
         //         } else {
@@ -248,8 +247,8 @@ var IIIFComponents;
         // todo: needs to be more generic taking a single concatenated array
         // private _aggregate(manifestMetadata: any[], canvasMetadata: any[]) {
         //     if (this._aggregateValues.length) {
-        //         $.each(canvasMetadata, (index: number, canvasItem: any) => {
-        //             $.each(this._aggregateValues, (index: number, value: string) => {
+        //         canvasMetadata.forEach((canvasItem: any, index: number) => {
+        //             this._aggregateValues.forEach((value: string, index: number) => {
         //                 value = this._normalise(value);
         //                 if (this._normalise(canvasItem.label) === value) {
         //                     var manifestItem = manifestMetadata.en().where(x => this._normalise(x.label) === value).first();
@@ -270,14 +269,20 @@ var IIIFComponents;
         };
         MetadataComponent.prototype._render = function () {
             var _this = this;
-            $.each(this._metadataGroups, function (index, metadataGroup) {
+            if (!this._metadataGroups.length) {
+                this._$noData.show();
+                return;
+            }
+            this._$noData.hide();
+            this._$metadataGroups.empty();
+            this._metadataGroups.forEach(function (metadataGroup, index) {
                 var $metadataGroup = _this._buildMetadataGroup(metadataGroup);
                 _this._$metadataGroups.append($metadataGroup);
-                if (_this.options.data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.LINES) {
-                    $metadataGroup.find('.value').toggleExpandTextByLines(_this.options.data.limit, _this.options.data.content.less, _this.options.data.content.more, function () { });
+                if (_this._data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.LINES) {
+                    $metadataGroup.find('.value').toggleExpandTextByLines(_this._data.limit, _this._data.content.less, _this._data.content.more, function () { });
                 }
-                else if (_this.options.data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.CHARS) {
-                    $metadataGroup.find('.value').ellipsisHtmlFixed(_this.options.data.limit, function () { });
+                else if (_this._data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.CHARS) {
+                    $metadataGroup.find('.value').ellipsisHtmlFixed(_this._data.limit, function () { });
                 }
             });
         };
@@ -285,21 +290,21 @@ var IIIFComponents;
             var $metadataGroup = this._$metadataGroupTemplate.clone();
             var $header = $metadataGroup.find('>.header');
             // add group header
-            if (metadataGroup.resource.isManifest() && this.options.data.content.manifestHeader) {
-                $header.html(this._sanitize(this.options.data.content.manifestHeader));
+            if (metadataGroup.resource.isManifest() && this._data.content.manifestHeader) {
+                $header.html(this._sanitize(this._data.content.manifestHeader));
             }
-            else if (metadataGroup.resource.isSequence() && this.options.data.content.sequenceHeader) {
-                $header.html(this._sanitize(this.options.data.content.sequenceHeader));
+            else if (metadataGroup.resource.isSequence() && this._data.content.sequenceHeader) {
+                $header.html(this._sanitize(this._data.content.sequenceHeader));
             }
-            else if (metadataGroup.resource.isRange() && this.options.data.content.rangeHeader) {
-                $header.html(this._sanitize(this.options.data.content.rangeHeader));
+            else if (metadataGroup.resource.isRange() && this._data.content.rangeHeader) {
+                $header.html(this._sanitize(this._data.content.rangeHeader));
             }
-            else if (metadataGroup.resource.isCanvas() && (metadataGroup.label || this.options.data.content.canvasHeader)) {
-                var header = metadataGroup.label || this.options.data.content.canvasHeader;
+            else if (metadataGroup.resource.isCanvas() && (metadataGroup.label || this._data.content.canvasHeader)) {
+                var header = metadataGroup.label || this._data.content.canvasHeader;
                 $header.html(this._sanitize(header));
             }
-            else if (metadataGroup.resource.isAnnotation() && this.options.data.content.imageHeader) {
-                $header.html(this._sanitize(this.options.data.content.imageHeader));
+            else if (metadataGroup.resource.isAnnotation() && this._data.content.imageHeader) {
+                $header.html(this._sanitize(this._data.content.imageHeader));
             }
             if (!$header.text()) {
                 $header.hide();
@@ -322,32 +327,32 @@ var IIIFComponents;
             if (label && item.isRootLevel) {
                 switch (label.toLowerCase()) {
                     case "attribution":
-                        label = this.options.data.content.attribution;
+                        label = this._data.content.attribution;
                         break;
                     case "description":
-                        label = this.options.data.content.description;
+                        label = this._data.content.description;
                         break;
                     case "license":
-                        label = this.options.data.content.license;
+                        label = this._data.content.license;
                         break;
                     case "logo":
-                        label = this.options.data.content.logo;
+                        label = this._data.content.logo;
                         break;
                 }
             }
             label = this._sanitize(label);
             $label.html(label);
             // rtl?
-            this._addReadingDirection($label, this._getItemLocale(item));
+            this._addReadingDirection($label, this._getLabelLocale(item));
             $metadataItem.addClass(Utils.Strings.toCssClass(label));
             var $value;
             // if the value is a URI
-            if (originalLabel && originalLabel.toLowerCase() === "license" && (urlPattern.exec(item.value[0].value) != null)) {
+            if (originalLabel && originalLabel.toLowerCase() === "license" && (urlPattern.exec(item.value[0].value) !== null)) {
                 $value = this._buildMetadataItemURIValue(item.value[0].value);
                 $values.append($value);
             }
             else {
-                if (this.options.data.showAllLanguages && item.value && item.value.length > 1) {
+                if (this._data.showAllLanguages && item.value && item.value.length > 1) {
                     // display all values in each locale
                     for (var i = 0; i < item.value.length; i++) {
                         var translation = item.value[i];
@@ -356,12 +361,12 @@ var IIIFComponents;
                     }
                 }
                 else {
-                    var itemLocale = this._getItemLocale(item);
+                    var valueLocale = this._getValueLocale(item);
                     var valueFound = false;
                     // display all values in the item's locale
                     for (var i = 0; i < item.value.length; i++) {
                         var translation = item.value[i];
-                        if (itemLocale === translation.locale) {
+                        if (valueLocale.toLowerCase() === translation.locale.toLowerCase()) {
                             valueFound = true;
                             $value = this._buildMetadataItemValue(translation.value, translation.locale);
                             $values.append($value);
@@ -377,14 +382,36 @@ var IIIFComponents;
                     }
                 }
             }
-            if (this.options.data.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $label.text()) {
+            if (this._data.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $label.text()) {
                 this._addCopyButton($metadataItem, $label, $values);
             }
             return $metadataItem;
         };
-        MetadataComponent.prototype._getItemLocale = function (item) {
-            // the item's label locale takes precedence
-            return (item.label.length && item.label[0].locale) ? item.label[0].locale : item.defaultLocale || this.options.data.helper.options.locale;
+        MetadataComponent.prototype._getLabelLocale = function (item) {
+            if (!this._data || !this._data.helper) {
+                return '';
+            }
+            var defaultLocale = this._data.helper.options.locale;
+            if (item.label.length) {
+                var labelLocale = item.label[0].locale;
+                if (labelLocale.toLowerCase() !== defaultLocale.toLowerCase()) {
+                    return labelLocale;
+                }
+            }
+            return defaultLocale;
+        };
+        MetadataComponent.prototype._getValueLocale = function (item) {
+            if (!this._data || !this._data.helper) {
+                return '';
+            }
+            var defaultLocale = this._data.helper.options.locale;
+            // if (item.value.length) {
+            //     const valueLocale: string = item.value[0].locale;
+            //     if (valueLocale.toLowerCase() !== defaultLocale.toLowerCase()) {
+            //         return valueLocale;
+            //     }
+            // }
+            return defaultLocale;
         };
         MetadataComponent.prototype._buildMetadataItemValue = function (value, locale) {
             value = this._sanitize(value);
@@ -407,7 +434,7 @@ var IIIFComponents;
         };
         MetadataComponent.prototype._addReadingDirection = function ($elem, locale) {
             locale = Manifesto.Utils.getInexactLocale(locale);
-            var rtlLanguages = this._readCSV(this.options.data.rtlLanguageCodes);
+            var rtlLanguages = this._readCSV(this._data.rtlLanguageCodes);
             var match = rtlLanguages.en().where(function (x) { return x === locale; }).toArray().length > 0;
             if (match) {
                 $elem.prop('dir', 'rtl');
@@ -444,7 +471,7 @@ var IIIFComponents;
             $copiedText.show();
             setTimeout(function () {
                 $copiedText.hide();
-            }, this.options.data.copiedMessageDuration);
+            }, this._data.copiedMessageDuration);
         };
         MetadataComponent.prototype._readCSV = function (config, normalise) {
             if (normalise === void 0) { normalise = true; }
@@ -460,7 +487,7 @@ var IIIFComponents;
             return csv;
         };
         MetadataComponent.prototype._sanitize = function (html) {
-            return this.options.data.sanitizer(html);
+            return this._data.sanitizer(html);
         };
         MetadataComponent.prototype._resize = function () {
         };

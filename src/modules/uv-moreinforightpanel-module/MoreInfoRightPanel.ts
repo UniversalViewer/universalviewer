@@ -40,8 +40,7 @@ export class MoreInfoRightPanel extends RightPanel {
     }
 
     databind(): void {
-        this.metadataComponent.options.data = this._getData();
-        this.metadataComponent.set(new Object()); // todo: should be passing data
+        this.metadataComponent.set(this._getData());
     }
 
     private _getData(): IIIFComponents.IMetadataComponentData {

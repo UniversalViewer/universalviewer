@@ -62,7 +62,7 @@
     "http-status-codes": "edsilv/http-status-codes#v0.0.8",
     "iiif-av-component": "iiif-commons/iiif-av-component#v0.0.26",
     "iiif-gallery-component": "iiif-commons/iiif-gallery-component#v1.1.4",
-    "iiif-metadata-component": "iiif-commons/iiif-metadata-component#v1.1.6",
+    "iiif-metadata-component": "iiif-commons/iiif-metadata-component#v1.1.7",
     "iiif-tree-component": "iiif-commons/iiif-tree-component#v1.1.6",
     "jquery": "2.2.4",
     "jquery-plugins": "edsilv/jquery-plugins#v1.0.0",
