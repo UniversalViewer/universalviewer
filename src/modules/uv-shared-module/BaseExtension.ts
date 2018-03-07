@@ -978,7 +978,6 @@ export class BaseExtension implements IExtension {
 
             if (!canvas.externalResource) {
                 r = new Manifold.ExternalResource(canvas, <Manifesto.IExternalResourceOptions>{
-                    authApiVersion: this.data.config.options.authAPIVersion
                 });
             } else {
                 r = canvas.externalResource;
@@ -1002,38 +1001,63 @@ export class BaseExtension implements IExtension {
         });
 
         const storageStrategy: string = this.data.config.options.tokenStorage;
-        const authAPIVersion: number = this.data.config.options.authAPIVersion;
+        let promise: Promise<void> = Promise.resolve();
+        let resourcesToMap: Manifesto.IExternalResource[] = [];
 
-        // if using auth api v1
-        if (authAPIVersion === 1) {
-            return new Promise<Manifesto.IExternalResourceData[]>((resolve) => {
+        resourcesToLoad.forEach( (resourceToLoad: Manifesto.IExternalResource) => {
 
-                const options: Manifesto.IManifestoOptions = <Manifesto.IManifestoOptions>{
-                    locale: this.helper.options.locale
-                }
+          if ( resourceToLoad.authAPIVersion == 1 ) {
 
-                Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
-                    
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {                        
-                        return this._prepareResourceData(resource);
-                    });
+            const options: Manifesto.IManifestoOptions = <Manifesto.IManifestoOptions>{
+              locale: this.helper.options.locale
+            };
 
-                    resolve(this.resources);
+            promise = promise.then( () => {
+
+              return Auth1.loadExternalResources([resourceToLoad], storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
+
+                r.forEach( (re) => {
+                  resourcesToMap.push(re);
                 });
-            });
-        } else {
-        
-            return new Promise<any[]>((resolve) => {
-                Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: any[]) => {
-                    
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {
-                        return this._prepareResourceData(resource);
-                    });
 
-                    resolve(this.resources);
-                });
+              });
+
             });
-        }
+
+
+          }
+          else {
+
+            promise = promise.then( () => {
+
+              return Auth09.loadExternalResources([resourceToLoad], storageStrategy).then((r: Manifesto.IExternalResource[]) => {
+
+                r.forEach( (re) => {
+                  resourcesToMap.push(re);
+                });
+
+              });
+
+            });
+
+
+          }
+
+        });
+
+        return new Promise<Manifesto.IExternalResourceData[]>( (resolve) => {
+
+          promise.then( () => {
+
+            this.resources = resourcesToMap.map((resource: Manifesto.IExternalResource) => {
+              return this._prepareResourceData(resource);
+            });
+            resolve(this.resources);
+
+          });
+
+        });
+
     }
 
     // copy useful properties over to the data object to be opened in center panel's openMedia method
