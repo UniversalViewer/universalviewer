@@ -43,7 +43,7 @@ export class AVCenterPanel extends CenterPanel {
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.avcomponent.set({
-                limitToRange: !this.extension.isDesktopMetric(),
+                limitToRange: this._limitToRange(),
                 constrainNavigationToRange: true
             });
         });
@@ -127,13 +127,17 @@ export class AVCenterPanel extends CenterPanel {
                 helper: this.extension.helper,
                 autoPlay: this.config.options.autoPlay,
                 defaultAspectRatio: 0.56,
-                limitToRange: false,
+                limitToRange: this._limitToRange(),
                 doubleClickMS: 350,
                 content: this.content
             });
 
             this.resize();
         });
+    }
+
+    private _limitToRange(): boolean {
+        return !this.extension.isDesktopMetric();
     }
 
     private _viewRange(range: Manifesto.IRange): void {
