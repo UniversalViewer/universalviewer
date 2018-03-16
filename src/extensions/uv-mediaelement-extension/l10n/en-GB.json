@@ -32,7 +32,8 @@
         "exitFullScreen": "Exit Full Screen",
         "fullScreen": "Full Screen",
         "moreInfo": "More Information",
-        "open": "Open"
+        "open": "Open",
+        "share": "Share"
       }
     },
     "genericDialogue": {
