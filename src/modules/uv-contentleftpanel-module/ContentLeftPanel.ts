@@ -571,6 +571,7 @@ export class ContentLeftPanel extends LeftPanel {
         if (this.galleryView) this.galleryView.hide();
 
         this.updateTreeViewOptions();
+
         this.selectCurrentTreeNode();
 
         this.resize();
@@ -626,9 +627,35 @@ export class ContentLeftPanel extends LeftPanel {
         return topRangeIndex;
     }
 
-    // todo: a lot of this was written prior to manifold storing the current range id
-    // use that instead - probably after porting manifold to redux.
-    selectCurrentTreeNode(): void{
+    selectCurrentTreeNode(): void {
+        // todo: merge selectCurrentTreeNodeByCanvas and selectCurrentTreeNodeByRange
+        // the openseadragon extension should keep track of the current range instead of using canvas index
+        if (this.extension.name === 'uv-seadragon-extension') {
+            this.selectCurrentTreeNodeByCanvas(); 
+        } else {
+            this.selectCurrentTreeNodeByRange();
+        }
+    }
+
+    selectCurrentTreeNodeByRange(): void{
+        if (this.treeView) {
+
+            const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+            let node: Manifesto.ITreeNode | null = null;
+
+            if (range && range.treeNode) {
+                node = this.treeView.getNodeById(range.treeNode.id);
+            }
+
+            if (node){
+                this.treeView.selectNode(<Manifold.ITreeNode>node);
+            } else {
+                this.treeView.deselectCurrentNode();
+            }
+        }
+    }
+
+    selectCurrentTreeNodeByCanvas(): void{
         if (this.treeView) {
 
             let node: Manifesto.ITreeNode | null = null;
@@ -640,6 +667,7 @@ export class ContentLeftPanel extends LeftPanel {
             if (currentCanvasTopRangeIndex !== -1) {
 
                 range = this.extension.getCurrentCanvasRange();
+                //range = this.extension.helper.getCurrentRange();
 
                 if (range && range.treeNode) {
                     node = this.treeView.getNodeById(range.treeNode.id);

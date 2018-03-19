@@ -56,27 +56,41 @@ export class AVCenterPanel extends CenterPanel {
         this.$content.append(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
-            target: this.$avcomponent[0]
+            target: this.$avcomponent[0],
+            data: {
+                autoSelectRanges: false
+            }
         });
 
         this.avcomponent.on('canvasready', () => {
             this._canvasReady = true;
         }, false);
 
-        this.avcomponent.on('previousrange', () => {
-            this._setTitle();
-            $.publish(BaseEvents.RANGE_CHANGED, [this.extension.helper.getCurrentRange()]);
+        this.avcomponent.on('rangechanged', (rangeId: string | null) => {        
+            
+            if (rangeId) {
+
+                this._setTitle();
+
+                const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
+
+                if (range) {
+                    const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+
+                    if (range !== currentRange) {
+                        $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                    }
+                    
+                } else {
+                    $.publish(BaseEvents.NO_RANGE);
+                }
+
+            } else {
+                $.publish(BaseEvents.NO_RANGE);
+            } 
+            
         }, false);
 
-        this.avcomponent.on('nextrange', () => {
-            this._setTitle();
-            $.publish(BaseEvents.RANGE_CHANGED, [this.extension.helper.getCurrentRange()]);
-        }, false);
-
-        this.avcomponent.on('norange', () => {
-            this._setTitle();
-            $.publish(BaseEvents.NO_RANGE);
-        }, false);
     }
 
     private _setTitle(): void {
@@ -142,22 +156,12 @@ export class AVCenterPanel extends CenterPanel {
 
     private _viewRange(range: Manifesto.IRange): void {
 
-        // todo: why not using avcomponent.playRange ?
-        if (!range.canvases || !range.canvases.length) return;
-
-        const canvasId: string = range.canvases[0];
-        const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasById(canvasId);
-
-        if (canvas) {
-
-            Utils.Async.waitFor(() => {
-                return this._canvasReady;
-            }, () => {
-                this.avcomponent.playCanvas(canvasId);
-                this.resize();
-            });
-            
-        }
+        Utils.Async.waitFor(() => {
+            return this._canvasReady;
+        }, () => {
+            this.avcomponent.playRange(range.id);
+            this.resize();
+        });
     }
 
     viewCanvas(canvasIndex: number): void {
