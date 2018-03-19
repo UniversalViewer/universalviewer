@@ -142,6 +142,7 @@ export class AVCenterPanel extends CenterPanel {
 
     private _viewRange(range: Manifesto.IRange): void {
 
+        // todo: why not using avcomponent.playRange ?
         if (!range.canvases || !range.canvases.length) return;
 
         const canvasId: string = range.canvases[0];
