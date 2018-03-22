@@ -36,7 +36,7 @@ export class AVCenterPanel extends CenterPanel {
             }
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
+        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
             that._viewRange(range);
             that._setTitle();
         });
@@ -44,7 +44,7 @@ export class AVCenterPanel extends CenterPanel {
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.avcomponent.set({
                 limitToRange: this._limitToRange(),
-                constrainNavigationToRange: true
+                constrainNavigationToRange: this._limitToRange()
             });
         });
 
@@ -56,10 +56,7 @@ export class AVCenterPanel extends CenterPanel {
         this.$content.append(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
-            target: this.$avcomponent[0],
-            data: {
-                autoSelectRanges: false
-            }
+            target: this.$avcomponent[0]
         });
 
         this.avcomponent.on('canvasready', () => {
@@ -82,11 +79,11 @@ export class AVCenterPanel extends CenterPanel {
                     }
                     
                 } else {
-                    $.publish(BaseEvents.NO_RANGE);
+                    $.publish(BaseEvents.RANGE_CHANGED, [null]);
                 }
 
             } else {
-                $.publish(BaseEvents.NO_RANGE);
+                $.publish(BaseEvents.RANGE_CHANGED, [null]);
             } 
             
         }, false);
@@ -140,8 +137,10 @@ export class AVCenterPanel extends CenterPanel {
             this.avcomponent.set({
                 helper: this.extension.helper,
                 autoPlay: this.config.options.autoPlay,
+                autoSelectRange: true,
                 defaultAspectRatio: 0.56,
                 limitToRange: this._limitToRange(),
+                constrainNavigationToRange: this._limitToRange(),
                 doubleClickMS: 350,
                 content: this.content
             });
@@ -154,12 +153,15 @@ export class AVCenterPanel extends CenterPanel {
         return !this.extension.isDesktopMetric();
     }
 
-    private _viewRange(range: Manifesto.IRange): void {
+    private _viewRange(range: Manifesto.IRange | null): void {
 
         Utils.Async.waitFor(() => {
             return this._canvasReady;
         }, () => {
-            this.avcomponent.playRange(range.id);
+            if (range) {
+                this.avcomponent.playRange(range.id);
+            }
+            
             this.resize();
         });
     }

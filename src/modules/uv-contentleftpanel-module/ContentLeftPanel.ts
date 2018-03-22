@@ -98,11 +98,6 @@ export class ContentLeftPanel extends LeftPanel {
             this.updateTreeTabBySelection();
         });
 
-        $.subscribe(BaseEvents.NO_RANGE, () => {
-            this.selectCurrentTreeNode();
-            this.updateTreeTabBySelection();
-        });
-
         this.$tabs = $('<div class="tabs"></div>');
         this.$main.append(this.$tabs);
 

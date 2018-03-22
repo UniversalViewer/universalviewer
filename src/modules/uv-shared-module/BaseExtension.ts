@@ -382,10 +382,18 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.PAGE_UP);
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange) => {
-            this.data.rangeId = range.id;
-            this.helper.rangeId = range.id;
-            this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
+        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+            
+            if (range) {
+                this.data.rangeId = range.id;
+                this.helper.rangeId = range.id;
+                this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
+            } else {
+                this.data.rangeId = null;
+                this.helper.rangeId = null;
+                this.fire(BaseEvents.RANGE_CHANGED, null);
+            }
+            
         });
 
         $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: Manifesto.IExternalResource) => {

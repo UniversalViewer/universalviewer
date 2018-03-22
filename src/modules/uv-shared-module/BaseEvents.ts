@@ -63,7 +63,6 @@ export class BaseEvents {
     static MULTISELECT_CHANGE: string               = 'multiSelectChange';
     static MULTISELECTION_MADE: string              = 'multiSelectionMade';
     static NEXT: string                             = 'next';
-    static NO_RANGE: string                         = 'norange';
     static NOT_FOUND: string                        = 'notFound';
     static OPEN_EXTERNAL_RESOURCE: string           = 'openExternalResource';
     static OPEN_LEFT_PANEL: string                  = 'openLeftPanel';
