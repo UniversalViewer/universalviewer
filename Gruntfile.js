@@ -8,26 +8,6 @@ var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
 var seadragonExtensionConfig = require('./src/extensions/uv-seadragon-extension/config');
 var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config');
 
-var types = [
-    '@iiif/manifold', 
-    'base-component',
-    'exjs',
-    'http-status-codes',
-    'iiif-av-component',
-    'iiif-gallery-component',
-    'iiif-metadata-component',
-    'iiif-tree-component',
-    'jquery-plugins',
-    'jquery', 
-    'key-codes',
-    'manifesto.js', 
-    'modernizr', 
-    'requirejs', 
-    'three',
-    'utils',
-    'virtex3d'
-]
-
 module.exports = function (grunt) {
 
     var packageJson;
@@ -42,43 +22,15 @@ module.exports = function (grunt) {
 
         ts: {
             dev: {
-                src: ['./src/**/*.ts'],
+                tsconfig: './tsconfig.json',
                 options: {
-                    module: 'amd',
-                    sourceMap: true,
-                    declarations: false,
-                    noLib: false,
-                    comments: true,
-                    lib: ['es6', 'dom'],
-                    noImplicitAny: true,
-                    noImplicitReturns: true,
-                    noImplicitThis: false,
-                    noUnusedLocals: true,
-                    noUnusedParameters: false,
-                    strictNullChecks: true,
-                    suppressImplicitAnyIndexErrors: true,
-                    target: 'es5',
-                    types: types
+                    additionalFlags: '--sourceMap'
                 }
             },
             dist: {
-                src: ['./src/**/*.ts'],
+                tsconfig: './tsconfig.json',
                 options: {
-                    module: 'amd',
-                    sourceMap: false,
-                    declarations: false,
-                    noLib: false,
-                    comments: false,
-                    lib: ['es6', 'dom'],
-                    noImplicitAny: true,
-                    noImplicitReturns: true,
-                    noImplicitThis: false,
-                    noUnusedLocals: true,
-                    noUnusedParameters: false,
-                    strictNullChecks: true,
-                    suppressImplicitAnyIndexErrors: true,
-                    target: 'es5',
-                    types: types
+                    additionalFlags: '--removeComments'
                 }
             }
         },

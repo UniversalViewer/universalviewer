@@ -1,0 +1,43 @@
+{
+  "src": ["./src/**/*.ts"],
+  "compilerOptions": {
+    "module": "amd",
+    "sourceMap": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": false,
+    "noLib": false,
+    "lib": ["es6", "dom"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "removeComments": false,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
+    "types": [
+      "@iiif/manifold", 
+      "base-component",
+      "exjs",
+      "http-status-codes",
+      "iiif-av-component",
+      "iiif-gallery-component",
+      "iiif-metadata-component",
+      "iiif-tree-component",
+      "jquery-plugins",
+      "jquery", 
+      "key-codes",
+      "manifesto.js", 
+      "modernizr", 
+      "requirejs", 
+      "three",
+      "utils",
+      "virtex3d"
+    ]
+  },
+  "files": [
+    "src/Definitions.ts"
+   ],
+  "include": [
+    "src/**/*"
+  ]
+}
