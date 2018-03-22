@@ -24,13 +24,13 @@ module.exports = function (grunt) {
             dev: {
                 tsconfig: './tsconfig.json',
                 options: {
-                  additionalFlags: '--sourceMap'
+                    additionalFlags: '--sourceMap'
                 }
             },
             dist: {
                 tsconfig: './tsconfig.json',
                 options: {
-                  additionalFlags: '--removeComments'
+                    additionalFlags: '--removeComments'
                 }
             }
         },
