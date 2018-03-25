@@ -1,35 +1,18 @@
-const assert = require('assert');
-const expect = require('chai').expect;
-const selenium = require('selenium-webdriver');
-const test = require('selenium-webdriver/testing');
-const manifests = require('./manifests');
-const shared = require('./shared');
-
-const driver = new selenium.Builder()
-.withCapabilities( { 'browserName' : 'chrome' } )
-.build();
-
-test.before(function() {
-    shared(driver);
-});
-
-test.after(function() {
-    driver.quit();
-});
-
-test.describe('Universal Viewer', function() {
-
-    test.it('has the correct page title', function() {
-
-        this.timeout('10000');
-
-        loadManifest(manifests.wunderDerVererbung);
-
-        driver.getTitle().then(function(title) {
-            expect(title).equals('Universal Viewer Examples');
-        });
-
-        driver.sleep();
-    });
-
+describe('Universal Viewer', () => {
+  beforeAll(async () => {
+    await page.goto('http://localhost:4444/examples');
+  });
+  it('has the correct page title', async () => {
+    const title = await page.title();
+    expect(title).toBe('Universal Viewer Examples');
+  });
+  it('loads the viewer images', async () => {
+    await page.waitForSelector('#thumb0');
+    const imageSrc = await page.$eval('#thumb0 img', e => e.src);
+    expect(imageSrc).toEqual(
+      expect.stringContaining(
+        'https://dlcs.io/iiif-img/wellcome/1/ff2085d5-a9c7-412e-9dbe-dda87712228d/full/90,/0/default.jpg?t='
+      )
+    );
+  });
 });
