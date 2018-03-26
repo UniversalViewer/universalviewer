@@ -7,7 +7,8 @@
   },
   "scripts": {
     "postinstall": "opencollective postinstall",
-    "test": "mocha test/test.js"
+    "server": "node_modules/.bin/http-server -p 4444",
+    "test": "node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "glob": "4.3.5",
     "glob-array": "0.1.2",
     "grunt": "0.4.5",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "0.4.0",
     "grunt-contrib-compress": "0.5.2",
     "grunt-contrib-concat": "1.0.1",
@@ -44,12 +46,14 @@
     "grunt-text-replace": "0.3.7",
     "grunt-ts": "6.0.0-beta.11",
     "hooker": "0.2.3",
+    "http-server": "^0.11.1",
+    "jest": "^22.4.3",
+    "jest-puppeteer": "^2.2.0",
     "json-schema-generator": "edsilv/json-schema-generator",
     "less": "2.4.0",
     "lodash": "4.17.4",
-    "mocha": "4.0.1",
     "ncp": "2.0.0",
-    "selenium-webdriver": "3.6.0",
+    "puppeteer": "^1.2.0",
     "typescript": "2.7.2"
   },
   "dependencies": {
@@ -87,5 +91,13 @@
     "type": "opencollective",
     "url": "https://opencollective.com/universalviewer",
     "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "jest": {
+    "preset": "jest-puppeteer",
+    "testRegex": "test.*test.js",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/examples"
+    ]
   }
 }

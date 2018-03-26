@@ -51,8 +51,7 @@ node_modules
 *.min.map
 !app.build.js
 !tasks/*.js
-!test/*.js
-!config.js
+/config.js
 !Gruntfile.js
 !gulpfile.js
 !src/lib/*.js
