@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.33 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.34 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
@@ -576,6 +576,7 @@ var IIIFComponents;
                 }
                 var body = bodies[0];
                 var type = body.getType();
+                var format = body.getFormat();
                 // if (type && type.toString() === 'choice') {
                 //     // Choose first "Choice" item as body
                 //     const tmpItem = item;
@@ -633,6 +634,7 @@ var IIIFComponents;
                     ot = [null, null];
                 }
                 var offsetStart = (ot[0]) ? parseInt(ot[0]) : ot[0], offsetEnd = (ot[1]) ? parseInt(ot[1]) : ot[1];
+                // todo: type this
                 var itemData = {
                     'type': type,
                     'source': mediaSource,
@@ -644,7 +646,8 @@ var IIIFComponents;
                     'height': percentageHeight,
                     'startOffset': offsetStart,
                     'endOffset': offsetEnd,
-                    'active': false
+                    'active': false,
+                    'format': format
                 };
                 this._renderMediaElement(itemData);
             }
@@ -839,16 +842,24 @@ var IIIFComponents;
                     $mediaElement = $('<img class="anno" src="' + data.source + '" />');
                     break;
                 case 'video':
-                    $mediaElement = $('<video class="anno" src="' + data.source + '" />');
+                    $mediaElement = $('<video class="anno" />');
                     break;
                 case 'audio':
-                    $mediaElement = $('<audio class="anno" src="' + data.source + '" />');
+                    $mediaElement = $('<audio class="anno" />');
                     break;
                 case 'textualbody':
                     $mediaElement = $('<div class="anno">' + data.source + '</div>');
                     break;
                 default:
                     return;
+            }
+            if (data.format && data.format.toString() === 'application/dash+xml') {
+                $mediaElement.attr('data-dashjs-player', '');
+                var player = dashjs.MediaPlayer().create();
+                player.initialize($mediaElement[0], data.source);
+            }
+            else {
+                $mediaElement.attr('src', data.source);
             }
             $mediaElement.css({
                 top: data.top + '%',
