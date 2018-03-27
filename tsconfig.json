@@ -23,6 +23,7 @@
       "iiif-gallery-component",
       "iiif-metadata-component",
       "iiif-tree-component",
+      "jest",
       "jquery-plugins",
       "jquery", 
       "key-codes",
@@ -37,6 +38,10 @@
   "files": [
     "src/Definitions.ts"
    ],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts"
+  ],
   "include": [
     "src/**/*"
   ]
