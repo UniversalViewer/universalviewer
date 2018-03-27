@@ -9,6 +9,7 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
+                'dashjs/dist/dash.all.min.js',
                 'iiif-av-component/dist/iiif-av-component.js',
                 'iiif-metadata-component/dist/iiif-metadata-component.js',
                 'iiif-tree-component/dist/iiif-tree-component.js',

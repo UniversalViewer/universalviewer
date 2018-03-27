@@ -57,11 +57,13 @@
     "typescript": "2.7.2"
   },
   "dependencies": {
+    "@iiif/manifold": "1.2.22",
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
     "base-component": "iiif-commons/base-component#v1.1.2",
     "core-js": "2.4.1",
+    "dashjs": "2.6.7",
     "exjs": "BSick7/exjs#0.5.1",
     "http-status-codes": "edsilv/http-status-codes#v0.0.8",
     "iiif-av-component": "iiif-commons/iiif-av-component#v0.0.34",
@@ -75,7 +77,6 @@
     "jsviews": "0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.7",
     "manifesto.js": "2.2.15",
-    "@iiif/manifold": "1.2.22",
     "mediaelement": "4.0.2",
     "opencollective": "1.0.3",
     "openseadragon": "2.2.1",
