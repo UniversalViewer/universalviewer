@@ -23,6 +23,10 @@ export class MoreInfoRightPanel extends RightPanel {
             this.databind();
         });
 
+        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+            this.databind();
+        });
+
         this.setTitle(this.config.content.title);
 
         this.$metadata = $('<div class="iiif-metadata-component"></div>');
