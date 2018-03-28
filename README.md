@@ -59,7 +59,9 @@ See the [GitHub releases page](https://github.com/UniversalViewer/UniversalViewe
 
 ## Getting Started
 
-For an example of how to use the Universal Viewer in a simple starter project, try [uv-app-starter](https://github.com/UniversalViewer/uv-app-starter).
+For a "hello world" getting started example see [uv-hello-world](https://github.com/UniversalViewer/uv-hello-world).
+
+For an example of how to use the Universal Viewer in a website starter project that uses [biiif](https://github.com/edsilv/biiif) to generate your IIIF data, see [uv-app-starter](https://github.com/UniversalViewer/uv-app-starter).
 
 ## Building the Universal Viewer
 
