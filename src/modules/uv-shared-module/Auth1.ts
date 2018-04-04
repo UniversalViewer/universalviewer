@@ -241,7 +241,12 @@ export class Auth1 {
         }
     }
 
-    static showOutOfOptionsMessages(service: Manifesto.IService): void {
+    static showOutOfOptionsMessages(resource: Manifesto.IExternalResource, service: Manifesto.IService): void {
+
+        // if the UV is already showing the info bar, no need to show an error message.
+        if (resource.status == HTTPStatusCode.MOVED_TEMPORARILY) {
+            return;
+        }
 
         let errorMessage: string = "";
 
