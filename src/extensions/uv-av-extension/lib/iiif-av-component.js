@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.34 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.32 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
@@ -56,8 +56,10 @@ var IIIFComponents;
             var diff = IIIFComponents.AVComponentUtils.Utils.diff(oldData, this._data);
             // changing any of these data properties forces a reload.
             if (diff.includes('helper')) {
+                // reset all global properties and terminate all running processes
                 // create canvases
                 this._reset();
+                return;
             }
             if (!this._data.helper) {
                 console.warn('must pass a helper object');
@@ -89,7 +91,8 @@ var IIIFComponents;
                 this.canvasInstances.forEach(function (canvasInstance, index) {
                     if (canvasInstance !== currentCanvasInstance_1) {
                         canvasInstance.set({
-                            visible: false
+                            visible: false,
+                            limitToRange: false
                         });
                     }
                     else {
@@ -142,7 +145,9 @@ var IIIFComponents;
                 _this._initCanvas(canvas);
             });
             if (this.canvasInstances.length > 0) {
-                this._data.canvasId = this.canvasInstances[0].getCanvasId();
+                this.set({
+                    canvasId: this.canvasInstances[0].getCanvasId()
+                });
             }
         };
         AVComponent.prototype._getCanvases = function () {
@@ -576,7 +581,6 @@ var IIIFComponents;
                 }
                 var body = bodies[0];
                 var type = body.getType();
-                var format = body.getFormat();
                 // if (type && type.toString() === 'choice') {
                 //     // Choose first "Choice" item as body
                 //     const tmpItem = item;
@@ -634,7 +638,6 @@ var IIIFComponents;
                     ot = [null, null];
                 }
                 var offsetStart = (ot[0]) ? parseInt(ot[0]) : ot[0], offsetEnd = (ot[1]) ? parseInt(ot[1]) : ot[1];
-                // todo: type this
                 var itemData = {
                     'type': type,
                     'source': mediaSource,
@@ -646,8 +649,7 @@ var IIIFComponents;
                     'height': percentageHeight,
                     'startOffset': offsetStart,
                     'endOffset': offsetEnd,
-                    'active': false,
-                    'format': format
+                    'active': false
                 };
                 this._renderMediaElement(itemData);
             }
@@ -834,7 +836,6 @@ var IIIFComponents;
             return percentage;
         };
         CanvasInstance.prototype._renderMediaElement = function (data) {
-            var _this = this;
             var $mediaElement;
             var type = data.type.toString().toLowerCase();
             switch (type) {
@@ -842,24 +843,16 @@ var IIIFComponents;
                     $mediaElement = $('<img class="anno" src="' + data.source + '" />');
                     break;
                 case 'video':
-                    $mediaElement = $('<video class="anno" />');
+                    $mediaElement = $('<video class="anno" src="' + data.source + '" />');
                     break;
                 case 'audio':
-                    $mediaElement = $('<audio class="anno" />');
+                    $mediaElement = $('<audio class="anno" src="' + data.source + '" />');
                     break;
                 case 'textualbody':
                     $mediaElement = $('<div class="anno">' + data.source + '</div>');
                     break;
                 default:
                     return;
-            }
-            if (data.format && data.format.toString() === 'application/dash+xml') {
-                $mediaElement.attr('data-dashjs-player', '');
-                var player = dashjs.MediaPlayer().create();
-                player.initialize($mediaElement[0], data.source);
-            }
-            else {
-                $mediaElement.attr('src', data.source);
             }
             $mediaElement.css({
                 top: data.top + '%',
@@ -898,6 +891,7 @@ var IIIFComponents;
                 this._$canvasContainer.append($mediaElement);
             }
             if (type === 'video' || type === 'audio') {
+                var that_3 = this;
                 $mediaElement.on('loadstart', function () {
                     //console.log('loadstart');
                     data.checkForStall();
@@ -911,16 +905,14 @@ var IIIFComponents;
                     //data.checkForStall();
                 });
                 $mediaElement.on('loadedmetadata', function () {
-                    _this._readyCanvasesCount++;
-                    if (_this._readyCanvasesCount === _this._contentAnnotations.length) {
-                        //if (!this._data.range) {
-                        _this._setCurrentTime(0);
-                        //}                        
-                        if (_this.options.data.autoPlay) {
-                            _this._play();
+                    that_3._readyCanvasesCount++;
+                    if (that_3._readyCanvasesCount === that_3._contentAnnotations.length) {
+                        that_3._setCurrentTime(0);
+                        if (that_3.options.data.autoPlay) {
+                            that_3._play();
                         }
-                        _this._updateDurationDisplay();
-                        _this.fire(IIIFComponents.AVComponent.Events.CANVASREADY);
+                        that_3._updateDurationDisplay();
+                        that_3.fire(IIIFComponents.AVComponent.Events.CANVASREADY);
                     }
                 });
                 $mediaElement.attr('preload', 'auto');
@@ -1097,7 +1089,7 @@ var IIIFComponents;
         };
         CanvasInstance.prototype._lowPriorityUpdater = function () {
             this._updateMediaActiveStates();
-            if (this._isPlaying && this._data.autoSelectRange) {
+            if (this._data.autoSelectRange) {
                 this._hasRangeChanged();
             }
         };
