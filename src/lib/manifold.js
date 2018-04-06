@@ -237,6 +237,7 @@ var Manifold;
             canvas.externalResource = this;
             this.dataUri = this._getDataUri(canvas);
             this.index = canvas.index;
+            this.authAPIVersion = options.authApiVersion;
             this._parseAuthServices(canvas);
             // get the height and width of the image resource if available
             this._parseDimensions(canvas);
@@ -284,21 +285,28 @@ var Manifold;
             }
         };
         ExternalResource.prototype._parseAuthServices = function (resource) {
-            var auth1_clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
-            var auth1_loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
-            var auth1_externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
-            var auth1_kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
-            if (auth1_clickThroughService || auth1_loginService || auth1_externalService || auth1_kioskService) {
-                this.authAPIVersion = 1;
+            if (this.authAPIVersion === 0.9) {
+                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
+                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
+                this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
+                if (this.clickThroughService) {
+                    this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
+                }
+                else if (this.loginService) {
+                    this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
+                }
+                else if (this.restrictedService) {
+                    this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
+                }
             }
             else {
-                this.authAPIVersion = 0.9;
-            }
-            if (this.authAPIVersion === 1) {
-                this.clickThroughService = auth1_clickThroughService;
-                this.loginService = auth1_loginService;
-                this.externalService = auth1_externalService;
-                this.kioskService = auth1_kioskService;
+                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
+                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
+                this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
+                this.kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
                 if (this.clickThroughService) {
                     this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Token().toString());
@@ -314,23 +322,6 @@ var Manifold;
                 else if (this.kioskService) {
                     this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
-                }
-            }
-            else {
-                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
-                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
-                this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
-                if (this.clickThroughService) {
-                    this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
-                }
-                else if (this.loginService) {
-                    this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
-                }
-                else if (this.restrictedService) {
-                    this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
                 }
             }
         };
