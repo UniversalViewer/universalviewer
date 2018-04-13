@@ -1,4 +1,4 @@
-// @iiif/manifold v1.2.22 https://github.com/iiif-commons/manifold#readme
+// @iiif/manifold v1.2.23 https://github.com/iiif-commons/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifmanifold = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
@@ -237,6 +237,7 @@ var Manifold;
             canvas.externalResource = this;
             this.dataUri = this._getDataUri(canvas);
             this.index = canvas.index;
+            this.authAPIVersion = options.authApiVersion;
             this._parseAuthServices(canvas);
             // get the height and width of the image resource if available
             this._parseDimensions(canvas);
@@ -284,21 +285,28 @@ var Manifold;
             }
         };
         ExternalResource.prototype._parseAuthServices = function (resource) {
-            var auth1_clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
-            var auth1_loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
-            var auth1_externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
-            var auth1_kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
-            if (auth1_clickThroughService || auth1_loginService || auth1_externalService || auth1_kioskService) {
-                this.authAPIVersion = 1;
+            if (this.authAPIVersion === 0.9) {
+                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
+                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
+                this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
+                if (this.clickThroughService) {
+                    this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
+                }
+                else if (this.loginService) {
+                    this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
+                }
+                else if (this.restrictedService) {
+                    this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
+                    this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
+                }
             }
             else {
-                this.authAPIVersion = 0.9;
-            }
-            if (this.authAPIVersion === 1) {
-                this.clickThroughService = auth1_clickThroughService;
-                this.loginService = auth1_loginService;
-                this.externalService = auth1_externalService;
-                this.kioskService = auth1_kioskService;
+                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Clickthrough().toString());
+                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Login().toString());
+                this.externalService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1External().toString());
+                this.kioskService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.auth1Kiosk().toString());
                 if (this.clickThroughService) {
                     this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.auth1Token().toString());
@@ -314,23 +322,6 @@ var Manifold;
                 else if (this.kioskService) {
                     this.logoutService = this.kioskService.getService(manifesto.ServiceProfile.auth1Logout().toString());
                     this.tokenService = this.kioskService.getService(manifesto.ServiceProfile.auth1Token().toString());
-                }
-            }
-            else {
-                this.clickThroughService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.clickThrough().toString());
-                this.loginService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.login().toString());
-                this.restrictedService = manifesto.Utils.getService(resource, manifesto.ServiceProfile.restricted().toString());
-                if (this.clickThroughService) {
-                    this.logoutService = this.clickThroughService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.clickThroughService.getService(manifesto.ServiceProfile.token().toString());
-                }
-                else if (this.loginService) {
-                    this.logoutService = this.loginService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.loginService.getService(manifesto.ServiceProfile.token().toString());
-                }
-                else if (this.restrictedService) {
-                    this.logoutService = this.restrictedService.getService(manifesto.ServiceProfile.logout().toString());
-                    this.tokenService = this.restrictedService.getService(manifesto.ServiceProfile.token().toString());
                 }
             }
         };
@@ -432,14 +423,6 @@ var Manifold;
     Manifold.ExternalResource = ExternalResource;
 })(Manifold || (Manifold = {}));
 
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 var Manifold;
 (function (Manifold) {
     var Helper = /** @class */ (function () {
@@ -697,7 +680,7 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                var flatTree = this.getFlattenedTree();
                 for (var i = 0; i < flatTree.length; i++) {
                     var node = flatTree[i];
                     // find current range in flattened tree
@@ -746,15 +729,31 @@ var Manifold;
             return null;
         };
         Helper.prototype.getFlattenedTree = function () {
-            return this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+            return this._flattenTree(this.getTree(), 'nodes');
         };
-        Helper.prototype._getFlattenedTree = function (children, extractChildren, level, parent) {
+        Helper.prototype._flattenTree = function (root, key) {
             var _this = this;
-            return Array.prototype.concat.apply(children.map(function (x) { return (__assign({}, x, { level: level || 1, parent: parent || null })); }), children.map(function (x) { return _this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, x.id); }));
+            var flatten = [Object.assign({}, root)];
+            delete flatten[0][key];
+            if (root[key] && root[key].length > 0) {
+                return flatten.concat(root[key]
+                    .map(function (child) { return _this._flattenTree(child, key); })
+                    .reduce(function (a, b) { return a.concat(b); }, []));
+            }
+            return flatten;
         };
-        Helper.prototype._extractChildren = function (treeNode) {
-            return treeNode.nodes;
-        };
+        // public getFlattenedTree(): ITreeNode[] {
+        //     return this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+        // }
+        // private _getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any) {
+        //     return Array.prototype.concat.apply(
+        //         children.map(x => ({ ...x, level: level || 1, parent: parent || null })), 
+        //         children.map(x => this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, (<ITreeNode>x).id))
+        //     );
+        // } 
+        // private _extractChildren(treeNode: NullableTreeNode): NullableTreeNode[] {
+        //     return (<Manifesto.ITreeNode>treeNode).nodes as NullableTreeNode[];
+        // }
         Helper.prototype.getRanges = function () {
             return this.manifest.getAllRanges();
         };

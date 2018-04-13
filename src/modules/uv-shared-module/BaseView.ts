@@ -32,7 +32,7 @@ export class BaseView extends Panel{
         // build config inheritance chain
         if (that.modules && that.modules.length) {
             that.modules = that.modules.reverse();
-            $.each(that.modules, (index: number, moduleName: string) => {
+            that.modules.forEach((moduleName: string) => {
                 that.config = $.extend(true, that.config, that.extension.data.config.modules[moduleName]);
             });
         }
