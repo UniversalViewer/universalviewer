@@ -423,14 +423,6 @@ var Manifold;
     Manifold.ExternalResource = ExternalResource;
 })(Manifold || (Manifold = {}));
 
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
 var Manifold;
 (function (Manifold) {
     var Helper = /** @class */ (function () {
@@ -688,7 +680,7 @@ var Manifold;
                 currentRange = this.getCurrentRange();
             }
             if (currentRange) {
-                var flatTree = this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+                var flatTree = this.getFlattenedTree();
                 for (var i = 0; i < flatTree.length; i++) {
                     var node = flatTree[i];
                     // find current range in flattened tree
@@ -737,15 +729,31 @@ var Manifold;
             return null;
         };
         Helper.prototype.getFlattenedTree = function () {
-            return this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(function (x) { return delete x.children && x; });
+            return this._flattenTree(this.getTree(), 'nodes');
         };
-        Helper.prototype._getFlattenedTree = function (children, extractChildren, level, parent) {
+        Helper.prototype._flattenTree = function (root, key) {
             var _this = this;
-            return Array.prototype.concat.apply(children.map(function (x) { return (__assign({}, x, { level: level || 1, parent: parent || null })); }), children.map(function (x) { return _this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, x.id); }));
+            var flatten = [Object.assign({}, root)];
+            delete flatten[0][key];
+            if (root[key] && root[key].length > 0) {
+                return flatten.concat(root[key]
+                    .map(function (child) { return _this._flattenTree(child, key); })
+                    .reduce(function (a, b) { return a.concat(b); }, []));
+            }
+            return flatten;
         };
-        Helper.prototype._extractChildren = function (treeNode) {
-            return treeNode.nodes;
-        };
+        // public getFlattenedTree(): ITreeNode[] {
+        //     return this._getFlattenedTree(this._extractChildren(this.getTree()), this._extractChildren).map(x => delete x.children && x);
+        // }
+        // private _getFlattenedTree(children: NullableTreeNode[], extractChildren: (treeNode: NullableTreeNode) => NullableTreeNode[], level?: any, parent?: any) {
+        //     return Array.prototype.concat.apply(
+        //         children.map(x => ({ ...x, level: level || 1, parent: parent || null })), 
+        //         children.map(x => this._getFlattenedTree(extractChildren(x) || [], extractChildren, (level || 1) + 1, (<ITreeNode>x).id))
+        //     );
+        // } 
+        // private _extractChildren(treeNode: NullableTreeNode): NullableTreeNode[] {
+        //     return (<Manifesto.ITreeNode>treeNode).nodes as NullableTreeNode[];
+        // }
         Helper.prototype.getRanges = function () {
             return this.manifest.getAllRanges();
         };
