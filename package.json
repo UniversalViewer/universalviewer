@@ -84,11 +84,11 @@
     "openseadragon": "2.2.1",
     "pdfjs-dist": "2.0.161",
     "requirejs": "2.2.0",
-    "three": "0.87.1",
+    "three": "0.91.0",
     "utils": "edsilv/utils#v0.2.1",
     "uv-cy-gb-theme": "UniversalViewer/uv-cy-gb-theme#v1.1.1",
     "uv-en-gb-theme": "UniversalViewer/uv-en-gb-theme#v1.1.1",
-    "virtex3d": "0.3.9"
+    "virtex3d": "0.3.10"
   },
   "collective": {
     "type": "opencollective",

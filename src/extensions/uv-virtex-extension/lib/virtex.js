@@ -1,5 +1,5 @@
-// virtex v0.3.9 https://github.com/edsilv/virtex#readme
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// virtex v0.3.10 https://github.com/edsilv/virtex#readme
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
 var Virtex;
@@ -142,22 +142,15 @@ var Virtex;
     var glTFFileTypeHandler = /** @class */ (function () {
         function glTFFileTypeHandler() {
         }
-        glTFFileTypeHandler.setup = function (viewport, obj) {
+        glTFFileTypeHandler.setup = function (viewport, gltf) {
             return new Promise(function (resolve) {
-                viewport.objectGroup.add(obj.scene);
-                if (obj.animations) {
-                    var animations = obj.animations;
-                    for (var i = 0, l = animations.length; i < l; i++) {
-                        //const animation = animations[i];
-                        //animation.loop = true;
-                        //animation.play();
-                    }
-                }
-                viewport.scene = obj.scene;
-                if (obj.cameras && obj.cameras.length) {
-                    viewport.camera = obj.cameras[0];
-                }
-                resolve(obj);
+                // todo: add animation, gltf camera support e.g.
+                // https://github.com/donmccurdy/three-gltf-viewer/blob/master/src/viewer.js#L183
+                // allow specifying envmap? https://github.com/mrdoob/three.js/blob/dev/examples/webgl_loader_gltf.html#L92
+                var scene = gltf.scene || gltf.scenes[0];
+                viewport.objectGroup.add(scene);
+                viewport.createCamera();
+                resolve(gltf);
             });
         };
         return glTFFileTypeHandler;
@@ -587,10 +580,14 @@ var Virtex;
             return new THREE.Box3().setFromObject(this.objectGroup);
         };
         Viewport.prototype._getBoundingWidth = function () {
-            return this._getBoundingBox().getSize().x;
+            var target = new THREE.Vector3();
+            this._getBoundingBox().getSize(target);
+            return target.x;
         };
         Viewport.prototype._getBoundingHeight = function () {
-            return this._getBoundingBox().getSize().y;
+            var target = new THREE.Vector3();
+            this._getBoundingBox().getSize(target);
+            return target.y;
         };
         // private _getDistanceToObject(): number {
         //     return this.camera.position.distanceTo(this.objectGroup.position);
