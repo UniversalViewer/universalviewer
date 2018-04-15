@@ -70,7 +70,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             const renderings: Manifesto.IRendering[] = canvas.getRenderings();
             
             if (renderings && renderings.length) {
-                $.each(canvas.getRenderings(), (index: number, rendering: Manifesto.IRendering) => {
+                canvas.getRenderings().forEach((rendering: Manifesto.IRendering) => {
                     sources.push({
                         type: rendering.getFormat().toString(),
                         src: rendering.id
@@ -80,7 +80,7 @@ export class MediaElementCenterPanel extends CenterPanel {
                 const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(this.extension.helper.getCurrentCanvas());
 
                 if (formats && formats.length) {
-                    $.each(formats, (index: number, format: Manifesto.IAnnotationBody) => {
+                    formats.forEach((format: Manifesto.IAnnotationBody) => {
                         
                         const type: Manifesto.MediaType | null = format.getFormat();
 
