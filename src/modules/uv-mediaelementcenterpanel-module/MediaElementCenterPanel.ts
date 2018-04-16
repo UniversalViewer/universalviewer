@@ -136,8 +136,8 @@ export class MediaElementCenterPanel extends CenterPanel {
 
                 this.player = new MediaElementPlayer($('audio')[0], {
                     poster: poster,
-                    defaultAudioWidth: that.mediaWidth,
-                    defaultAudioHeight: that.mediaHeight,
+                    defaultAudioWidth: 'auto',
+                    defaultAudioHeight: 'auto',
                     showPosterWhenPaused: true,
                     showPosterWhenEnded: true,
                     success: function(mediaElement: any, originalNode: any) {
