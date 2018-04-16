@@ -1,0 +1,389 @@
+{
+    "options": {
+        "allowStealFocus": false,
+        "authAPIVersion": 1,
+        "bookmarkThumbHeight": 150,
+        "bookmarkThumbWidth": 90,
+        "dropEnabled": true,
+        "footerPanelEnabled": true,
+        "headerPanelEnabled": true,
+        "leftPanelEnabled": true,
+        "limitLocales": false,
+        "metrics": [{
+            "type": "mobilelandscape",
+            "minWidth": 0,
+            "maxWidth": 640
+        }, {
+            "type": "laptop",
+            "minWidth": 640,
+            "maxWidth": 100000
+        }],
+        "multiSelectionMimeType": "application/zip",
+        "navigatorEnabled": true,
+        "openTemplate": "http://universalviewer.io?manifest={0}",
+        "overrideFullScreen": false,
+        "pagingEnabled": true,
+        "pagingOptionEnabled": true,
+        "pessimisticAccessControl": false,
+        "preserveViewport": false,
+        "rightPanelEnabled": true,
+        "saveUserSettings": false,
+        "clickToZoomEnabled": true,
+        "searchWithinEnabled": true,
+        "termsOfUseEnabled": true,
+        "theme": "uv-en-GB-theme",
+        "tokenStorage": "session",
+        "useArrowKeysToNavigate": false,
+        "zoomToSearchResultEnabled": true
+    },
+    "modules": {
+        "contentLeftPanel": {
+            "options": {
+                "defaultToTreeEnabled": false,
+                "defaultToTreeIfGreaterThan": 0,
+                "elideCount": 40,
+                "expandFullEnabled": true,
+                "galleryThumbChunkedResizingThreshold": 400,
+                "galleryThumbHeight": 320,
+                "galleryThumbLoadPadding": 3,
+                "galleryThumbWidth": 200,
+                "oneColThumbHeight": 320,
+                "oneColThumbWidth": 200,
+                "pageModeEnabled": true,
+                "panelAnimationDuration": 250,
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelOpen": true,
+                "tabOrder": "",
+                "thumbsEnabled": true,
+                "thumbsExtraHeight": 8,
+                "thumbsImageFadeInDuration": 300,
+                "thumbsLoadRange": 15,
+                "treeEnabled": true,
+                "twoColThumbHeight": 150,
+                "twoColThumbWidth": 90
+            },
+            "content": {
+                "collapse": "تصغير المحتويات",
+                "collapseFull": "تصغير المعرض",
+                "date": "التاريخ",
+                "expand": "توسيع المحتويات",
+                "expandFull": "توسيع المعرض",
+                "index": "فهرس",
+                "manifestRanges": "نطاقات القائمة",
+                "searchResult": "{0} نتائج البحث",
+                "searchResults": "{0} نتائج البحث",
+                "sortBy": "ترتيب حسب:",
+                "thumbnails": "الصور المصغرة",
+                "title": "المحتويات",
+                "volume": "درجة الصوت"
+            }
+        },
+        "dialogue": {
+            "topCloseButtonEnabled": false,
+            "content": {
+                "close": "إغلاق"
+            }
+        },
+        "downloadDialogue": {
+            "options": {
+                "confinedImageSize": 1000,
+                "currentViewDisabledPercentage": 90,
+                "maxImageWidth": 5000,
+                "optionsExplanatoryTextEnabled": false,
+                "selectionEnabled": false
+            },
+            "content": {
+                "currentViewAsJpg": "العرض الحالي {0} x {1}بكسل (jpg)",
+                "currentViewAsJpgExplanation": "يفتح في نافذة جديدة.",
+                "download": "تحميل",
+                "downloadSelection": "مجموعة التحميل",
+                "downloadSelectionExplanation": "يفتح محادثة لاختيار صفحات التحميل",
+                "editSettings": "إعدادات التحرير",
+                "entireDocument": "المستند الكامل ({0})",
+                "entireFileAsOriginal": "الملف الكامل",
+                "noneAvailable": "لا يوجد خيارات تحميل متاحة.",
+                "pagingNote": "الرجاء إغلاق عرض الصفحتين لخيارات أخرى",
+                "preview": "معاينة",
+                "title": "تحميل",
+                "wholeImageHighRes": "الصورة الكاملة {0} x {1}بكسل ({2})",
+                "wholeImageHighResExplanation": "يفتح في نافذة جديدة.",
+                "wholeImagesHighRes": "الصورة الكاملة ({0})",
+                "wholeImagesHighResExplanation": "يفتح في نافذتين جديدتين.",
+                "wholeImageLowResAsJpg": "الصورة الكاملة {0} x {1}بكسل (jpg)",
+                "wholeImageLowResAsJpgExplanation": "يفتح في نافذة جديدة."
+            }
+        },
+        "footerPanel": {
+            "options": {
+                "bookmarkEnabled": false,
+                "downloadEnabled": true,
+                "embedEnabled": false,
+                "feedbackEnabled": false,
+                "fullscreenEnabled": true,
+                "minimiseButtons": true,
+                "moreInfoEnabled": true,
+                "openEnabled": false,
+                "printEnabled": false,
+                "shareEnabled": true
+            },
+            "content": {
+                "bookmark": "أضف إلى العناوين",
+                "download": "تحميل",
+                "embed": "تضمين",
+                "feedback": "التغذية الراجعة",
+                "exitFullScreen": "الخروج من ملء الشاشة",
+                "fullScreen": "ملء الشاشة",
+                "open": "فتح",
+                "share": "مشاركة",
+                "moreInfo": "المزيد من المعلومات"
+            }
+        },
+        "genericDialogue": {
+            "content": {
+                "emptyValue": "الرجاء إدخال قيمة.",
+                "invalidNumber": "الرجاء إدخال رقم فعال.",
+                "noMatches": "لم يتم العثور على نتائج.",
+                "ok": "موافق",
+                "pageNotFound": "هذا العنصر لا يحتوي على صفحة تحمل الرقم الذي أدخلته. حاول تغيير نمط الترقيم إلى 'صورة'",
+                "refresh": "إعادة تنشيط"
+            }
+        },
+        "headerPanel": {
+            "options": {
+                "centerOptionsEnabled": true,
+                "localeToggleEnabled": false,
+                "settingsButtonEnabled": true
+            }
+        },
+        "helpDialogue": {
+            "content": {
+                "text": "النص النائب",
+                "title": "مساعدة"
+            }
+        },
+        "moreInfoRightPanel": {
+            "options": {
+                "canvasDisplayOrder": "",
+                "canvasExclude": "",
+                "copyToClipboardEnabled": false,
+                "manifestDisplayOrder": "",
+                "manifestExclude": "",
+                "panelAnimationDuration": 250,
+                "panelCollapsedWidth": 30,
+                "panelExpandedWidth": 255,
+                "panelOpen": false,
+                "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
+                "showAllLanguages": false,
+                "textLimit": 4,
+                "textLimitType": "lines"
+            },
+            "content": {
+                "attribution": "الإسناد",
+                "collapse": "تقليص معلومات أكثر",
+                "collapseFull": "تقليص المعرض",
+                "description": "الوصف",
+                "expand": "توسيع معلومات أكثر",
+                "expandFull": "توسيع المعرض",
+                "holdingText": "هنا نموذجك!",
+                "less": "أقل",
+                "license": "الرخصة",
+                "logo": "تسجيل الخروج",
+                "more": "أكثر",
+                "noData": "لا يوجد بيانات أكثر لعرضها",
+                "page": "الصفحة",
+                "title": "المزيد من المعلومات",
+                "manifestHeader": "عن المادة",
+                "canvasHeader": "عن الصورة",
+                "copyToClipboard": "انسخ إلى الحافظة",
+                "copiedToClipboard": "منسوخ على الحافظة"
+            }
+        },
+        "multiSelectDialogue": {
+            "options": {
+                "galleryThumbChunkedResizingEnabled": true,
+                "galleryThumbChunkedResizingThreshold": 400,
+                "galleryThumbHeight": 320,
+                "galleryThumbLoadPadding": 3,
+                "galleryThumbWidth": 200,
+                "pageModeEnabled": true
+            },
+            "content": {
+                "select": "تحميل",
+                "selectAll": "اختر الكلّ",
+                "title": "اختر صفحات للتحميل"
+            }
+        },
+        "pagingHeaderPanel": {
+            "options": {
+                "autoCompleteBoxEnabled": true,
+                "galleryButtonEnabled": true,
+                "imageSelectionBoxEnabled": false,
+                "pageModeEnabled": false,
+                "pagingToggleEnabled": true
+            },
+            "content": {
+                "close": "إغلاق",
+                "emptyValue": "الرجاء إدخال قيمة",
+                "first": "أولاً",
+                "firstImage": "الصورة الأولى",
+                "firstPage": "الصفحة الأولى",
+                "folio": "مطوية",
+                "gallery": "المعرض",
+                "go": "اذهب",
+                "help": "مساعدة",
+                "image": "صورة",
+                "last": "أخيراً",
+                "lastImage": "الصورة الأخيرة",
+                "lastPage": "الصفحة الأخيرة",
+                "next": "التالي",
+                "nextImage": "الصورة التالية",
+                "nextPage": "الصفحة التالية",
+                "of": "من {0}",
+                "oneUp": "عرض صفحة واحدة",
+                "page": "الصفحة",
+                "pageSearchLabel": "ابحث بواسطة رقم الصفحة",
+                "previous": "السابقة",
+                "previousImage": "الصورة السابقة",
+                "previousPage": "الصفحة السابقة",
+                "settings": "الإعدادات",
+                "twoUp": "عرض صفحتين"
+            }
+        },
+        "seadragonCenterPanel": {
+            "options": {
+                "animationTime": 0.15,
+                "autoHideControls": true,
+                "attributionEnabled": true,
+                "blendTime": 0,
+                "constrainDuringPan": false,
+                "controlsFadeAfterInactive": 1500,
+                "controlsFadeDelay": 250,
+                "controlsFadeLength": 250,
+                "defaultZoomLevel": 0,
+                "immediateRender": false,
+                "maxZoomPixelRatio": 1.25,
+                "navigatorPosition": "BOTTOM_RIGHT",
+                "pageGap": 50,
+                "showHomeControl": false,
+                "trimAttributionCount": 150,
+                "visibilityRatio": 0.5
+            },
+            "content": {
+                "attribution": "إسناد",
+                "goHome": "اذهب للصفحة الرئيسية",
+                "imageUnavailable": "الصورة غير متوفرة",
+                "next": "التالي",
+                "previous": "السابق",
+                "rotateRight": "تدوير لليمين",
+                "zoomIn": "تكبير",
+                "zoomOut": "تصغير"
+            }
+        },
+        "searchFooterPanel": {
+            "options": {
+                "elideDetailsTermsCount": 20,
+                "elideResultsTermsCount": 10,
+                "pageModeEnabled": true,
+                "positionMarkerEnabled": true
+            },
+            "content": {
+                "clearSearch": "امسح البحث",
+                "defaultLabel": "-",
+                "displaying": "عرض {0} {1} من {2}",
+                "enterKeyword": "أدخل الكلمة الرئيسية",
+                "image": "الصورة",
+                "imageCaps": "الصورة",
+                "instanceFound": "مثال واحد من '{0}' تم إيجاده",
+                "instancesFound": "{0}حالات من '{1}' تم إيجاده,",
+                "nextResult": "النتيجة التالية",
+                "page": "الصفحة",
+                "pageCaps": "الصفحة",
+                "previousResult": "النتيجة السابقة",
+                "print": "طباعة",
+                "resultFoundFor": "تم إيجاد نتيجة ل",
+                "resultsFoundFor": "تم إيجاد نتائج ل",
+                "searchWithin": "ابحث ضمن هذا العنصر:"
+            }
+        },
+        "settingsDialogue": {
+            "content": {
+                "locale": "المكان",
+                "navigatorEnabled": "تم تفعيل المستكشف",
+                "clickToZoomEnabled": "النقر بالفأرة للتكبير",
+                "pagingEnabled": "عرض صفحتين",
+                "preserveViewport": "الحفاظ على تكبير الصورة",
+                "title": "الإعدادات",
+                "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>المزيد من المعلومات</a>"
+            }
+        },
+        "shareDialogue": {
+            "options": {
+                "embedTemplate": "<div class=\"uv\" data-locale=\"{0}\" data-config=\"{1}\" data-uri=\"{2}\" data-collectionindex=\"{3}\" data-manifestindex=\"{4}\" data-sequenceindex=\"{5}\" data-canvasindex=\"{6}\" data-xywh=\"{7}\" data-rotation=\"{8}\" style=\"width:{9}px; height:{10}px; background-color: #000\"></div>\n<script type=\"text/javascript\" id=\"embedUV\" src=\"{11}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>",
+                "instructionsEnabled": false,
+                "shareFrameEnabled": true
+            },
+            "content": {
+                "customSize": "تخصيص",
+                "embed": "تضمين",
+                "embedInstructions": "لتضمين هذا العنصر في موقعك الإلكتروني، انسخ وألصق الرمز في الأسفل.",
+                "height": "الارتفاع",
+                "iiif": "IIIF قائمة",
+                "share": "مشاركة",
+                "shareInstructions": "لمشاركة هذه المادة، انسخ وألصق الرابط في الأسفل.",
+                "size": "الحجم:",
+                "width": "العرض"
+            }
+        },
+        "authDialogue": {
+            "content": {
+                "cancel": "إلغاء",
+                "confirm": "تأكيد"
+            }
+        },
+        "clickThroughDialogue": {
+            "content": {
+                "viewTerms": "اقرأ كامل الشروط والأحكام"
+            }
+        },
+        "loginDialogue": {
+            "content": {
+                "login": "تسجيل الدخول",
+                "logout": "تسجيل الخروج",
+                "cancel": "إلغاء"
+            }
+        },
+        "mobileFooterPanel": {
+            "content": {
+                "rotateRight": "تدوير إلى اليمين",
+                "moreInfo": "المزيد من المعلومات",
+                "zoomIn": "تكبير",
+                "zoomOut": "تصغير"
+            }
+        },
+        "restrictedDialogue": {
+            "content": {
+                "cancel": "إلغاء"
+            }
+        }
+    },
+    "localisation": {
+        "label": "اللغة العربية",
+        "locales": [{
+            "name": "ar-AR",
+            "label": "اللغة العربية"
+        }, {
+            "name": "en-GB",
+            "label": "English (GB)"
+        }]
+    },
+    "content": {
+        "authCORSError": "متصفحك لا يدعم CORS ، يرجى الترقية لعرض محتوى.",
+        "authorisationFailedMessage": "يبدو أنّ محاولتك لتسجيل الدخول غير ناجحة. الرجاء المحاولة مرّة أخرى.",
+        "canvasIndexOutOfRange": "مؤشر الصورة خارج النطاق",
+        "fallbackDegradedLabel": "تسجيل الدخول",
+        "fallbackDegradedMessage": "الرجاء تسجيل الدخول لعرض هذا المحتوى بدقة كاملة.",
+        "forbiddenResourceMessage": "حقوق الوصول الحالية الخاصة بك غير كافية لعرض هذه الصورة",
+        "termsOfUse": "شروط الاستخدام"
+    }
+}
