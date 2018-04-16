@@ -1,5 +1,5 @@
-// virtex v0.3.9 https://github.com/edsilv/virtex#readme
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// virtex v0.3.11 https://github.com/edsilv/virtex#readme
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.virtex = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
 var Virtex;
@@ -142,22 +142,15 @@ var Virtex;
     var glTFFileTypeHandler = /** @class */ (function () {
         function glTFFileTypeHandler() {
         }
-        glTFFileTypeHandler.setup = function (viewport, obj) {
+        glTFFileTypeHandler.setup = function (viewport, gltf) {
             return new Promise(function (resolve) {
-                viewport.objectGroup.add(obj.scene);
-                if (obj.animations) {
-                    var animations = obj.animations;
-                    for (var i = 0, l = animations.length; i < l; i++) {
-                        //const animation = animations[i];
-                        //animation.loop = true;
-                        //animation.play();
-                    }
-                }
-                viewport.scene = obj.scene;
-                if (obj.cameras && obj.cameras.length) {
-                    viewport.camera = obj.cameras[0];
-                }
-                resolve(obj);
+                // todo: add animation, gltf camera support e.g.
+                // https://github.com/donmccurdy/three-gltf-viewer/blob/master/src/viewer.js#L183
+                // allow specifying envmap? https://github.com/mrdoob/three.js/blob/dev/examples/webgl_loader_gltf.html#L92
+                var obj = gltf.scene || gltf.scenes[0];
+                viewport.objectGroup.add(obj);
+                viewport.createCamera();
+                resolve(gltf);
             });
         };
         return glTFFileTypeHandler;
@@ -331,7 +324,7 @@ var Virtex;
                 ambientLightColor: 0xd0d0d0,
                 ambientLightIntensity: 1,
                 antialias: true,
-                cameraZ: 4.5,
+                cameraZ: 6,
                 directionalLight1Color: 0xffffff,
                 directionalLight1Intensity: 0.75,
                 directionalLight2Color: 0x002958,
@@ -379,11 +372,17 @@ var Virtex;
             var ambientLight = new THREE.AmbientLight(this.options.data.ambientLightColor, this.options.data.ambientLightIntensity);
             this._lightGroup.add(ambientLight);
         };
-        Viewport.prototype.createCamera = function () {
-            this.camera = new THREE.PerspectiveCamera(this._getFov(), this._getAspectRatio(), this.options.data.near, this.options.data.far);
-            var cameraZ = this._getCameraZ();
-            this.camera.position.z = this._targetZoom = cameraZ;
+        Viewport.prototype.createCamera = function (camera) {
+            if (camera) {
+                this.camera = camera;
+            }
+            else {
+                this.camera = new THREE.PerspectiveCamera(this._getFov(), this._getAspectRatio(), this.options.data.near, this.options.data.far);
+                var cameraZ = this._getCameraZ();
+                this.camera.position.z = this._targetZoom = cameraZ;
+            }
             this.scene.add(this.camera);
+            //this.camera.updateProjectionMatrix();
         };
         Viewport.prototype._createRenderer = function () {
             this._viewport.innerHTML = '';
@@ -547,8 +546,8 @@ var Virtex;
             });
         };
         Viewport.prototype._loaded = function (obj) {
-            //const boundingBox = new THREE.BoxHelper(this.objectGroup, new THREE.Color(0xffffff));
-            //this.scene.add(boundingBox);
+            // const boundingBox = new THREE.BoxHelper(this.objectGroup, new THREE.Color(0xffffff));
+            // this.scene.add(boundingBox);
             // obj.children[0].transparent = true;
             // obj.children[0].material.opacity = 0.01;
             this._loading.classList.remove('duringload');
@@ -586,24 +585,34 @@ var Virtex;
         Viewport.prototype._getBoundingBox = function () {
             return new THREE.Box3().setFromObject(this.objectGroup);
         };
-        Viewport.prototype._getBoundingWidth = function () {
-            return this._getBoundingBox().getSize().x;
-        };
-        Viewport.prototype._getBoundingHeight = function () {
-            return this._getBoundingBox().getSize().y;
+        // private _getBoundingWidth(): number {
+        //     const target: THREE.Vector3 = new THREE.Vector3();
+        //     this._getBoundingBox().getSize(target);
+        //     return target.x;
+        // }
+        // private _getBoundingHeight(): number {
+        //     const target: THREE.Vector3 = new THREE.Vector3();
+        //     this._getBoundingBox().getSize(target);
+        //     return target.y;
+        // }
+        Viewport.prototype._getBoundingMag = function () {
+            var size = new THREE.Vector3();
+            this._getBoundingBox().getSize(size).length();
+            return size.length();
         };
         // private _getDistanceToObject(): number {
         //     return this.camera.position.distanceTo(this.objectGroup.position);
         // }
         Viewport.prototype._getCameraZ = function () {
-            return this._getBoundingWidth() * this.options.data.cameraZ;
+            return this._getBoundingMag() * this.options.data.cameraZ;
         };
         Viewport.prototype._getFov = function () {
-            var width = this._getBoundingWidth();
-            var height = this._getBoundingHeight(); // todo: use getSize and update definition
-            var dist = this._getCameraZ() - width;
+            // const width: number = this._getBoundingWidth();
+            // const height: number = this._getBoundingHeight(); // todo: use getSize and update definition
+            var dist = this._getCameraZ();
+            var mag = this._getBoundingMag();
             //http://stackoverflow.com/questions/14614252/how-to-fit-camera-to-object
-            var fov = 2 * Math.atan(height / (2 * dist)) * (180 / Math.PI);
+            var fov = 2 * Math.atan(mag / (2 * dist)) * (180 / Math.PI);
             //let fov: number = 2 * Math.atan((width / this._getAspectRatio()) / (2 * dist)) * (180 / Math.PI);
             return fov;
         };
@@ -789,13 +798,13 @@ var Virtex;
             return this._element.offsetHeight;
         };
         Viewport.prototype._getZoomSpeed = function () {
-            return this._getBoundingWidth() * this.options.data.zoomSpeed;
+            return this._getBoundingMag() * this.options.data.zoomSpeed;
         };
         Viewport.prototype._getMaxZoom = function () {
-            return this._getBoundingWidth() * this.options.data.maxZoom;
+            return this._getBoundingMag() * this.options.data.maxZoom;
         };
         Viewport.prototype._getMinZoom = function () {
-            return this._getBoundingWidth() * this.options.data.minZoom;
+            return this._getBoundingMag() * this.options.data.minZoom;
         };
         Viewport.prototype.zoomIn = function () {
             var targetZoom = this.camera.position.z - this._getZoomSpeed();
@@ -821,7 +830,7 @@ var Virtex;
             this._prevCameraPosition = this.camera.position.clone();
             this._prevCameraRotation = this.camera.rotation.clone();
             this._prevObjectPosition = this.objectGroup.position.clone();
-            this.objectGroup.position.z -= this._getBoundingWidth();
+            this.objectGroup.position.z -= this._getBoundingMag();
         };
         Viewport.prototype.exitVR = function () {
             this._vrDisplay.exitPresent();

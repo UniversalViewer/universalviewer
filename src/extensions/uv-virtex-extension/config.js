@@ -17,7 +17,7 @@ module.exports = {
                 'three/examples/js/libs/stats.min.js',
                 //'three/examples/js/loaders/draco/draco_decoder.js',
                 //'three/examples/js/loaders/draco/DRACOLoader.js',
-                //'three/examples/js/loaders/GLTFLoader.js',
+                'three/examples/js/loaders/GLTFLoader.js',
                 'three/examples/js/loaders/OBJLoader.js',
                 'three/examples/js/loaders/MTLLoader.js',
                 'three/examples/js/loaders/PLYLoader.js',
