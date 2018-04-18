@@ -1159,7 +1159,7 @@ var IIIFComponents;
                     }
                     if (type === 'video' || type === 'audio') {
                         if (contentAnnotation.element[0].currentTime > contentAnnotation.element[0].duration - contentAnnotation.endOffset) {
-                            contentAnnotation.element[0].pause();
+                            this._pauseMedia(contentAnnotation.element[0]);
                         }
                     }
                 }
@@ -1169,12 +1169,29 @@ var IIIFComponents;
                         contentAnnotation.element.hide();
                         contentAnnotation.timelineElement.removeClass('active');
                         if (type === 'video' || type === 'audio') {
-                            contentAnnotation.element[0].pause();
+                            this._pauseMedia(contentAnnotation.element[0]);
                         }
                     }
                 }
             }
             //this.logMessage('UPDATE MEDIA ACTIVE STATES at: '+ this._canvasClockTime + ' seconds.');
+        };
+        CanvasInstance.prototype._pauseMedia = function (media) {
+            var playPromise = media.play();
+            if (playPromise !== undefined) {
+                playPromise.then(function (_) {
+                    // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+                    media.pause();
+                });
+            }
+            else {
+                media.pause();
+            }
+        };
+        CanvasInstance.prototype._setMediaCurrentTime = function (media, time) {
+            if (!isNaN(media.duration)) {
+                media.currentTime = time;
+            }
         };
         CanvasInstance.prototype._synchronizeMedia = function () {
             var contentAnnotation;
@@ -1182,7 +1199,7 @@ var IIIFComponents;
                 contentAnnotation = this._contentAnnotations[i];
                 var type = contentAnnotation.type.toString().toLowerCase();
                 if (type === 'video' || type === 'audio') {
-                    contentAnnotation.element[0].currentTime = this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset;
+                    this._setMediaCurrentTime(contentAnnotation.element[0], this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset);
                     if (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime) {
                         if (this._isPlaying) {
                             if (contentAnnotation.element[0].paused) {
@@ -1193,14 +1210,14 @@ var IIIFComponents;
                             }
                         }
                         else {
-                            contentAnnotation.element[0].pause();
+                            this._pauseMedia(contentAnnotation.element[0]);
                         }
                     }
                     else {
-                        contentAnnotation.element[0].pause();
+                        this._pauseMedia(contentAnnotation.element[0]);
                     }
                     if (contentAnnotation.element[0].currentTime > contentAnnotation.element[0].duration - contentAnnotation.endOffset) {
-                        contentAnnotation.element[0].pause();
+                        this._pauseMedia(contentAnnotation.element[0]);
                     }
                 }
             }
@@ -1221,7 +1238,7 @@ var IIIFComponents;
                         //this.playbackStalled(true, contentAnnotation);
                         var lag = Math.abs(factualTime - correctTime);
                         this.logMessage('DETECTED synchronization lag: ' + Math.abs(lag));
-                        contentAnnotation.element[0].currentTime = correctTime;
+                        this._setMediaCurrentTime(contentAnnotation.element[0], correctTime);
                         //this.synchronizeMedia();
                     }
                     else {
