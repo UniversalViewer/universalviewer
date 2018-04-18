@@ -1,5 +1,3 @@
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts"/>  
-
 interface HTMLElement{
     ontouchstart: any;
 }
@@ -53,6 +51,7 @@ interface Window {
     THREE: any;
     Event: any;
     CustomEvent: any;
+    Hls: any;
 }
 
 interface Document {

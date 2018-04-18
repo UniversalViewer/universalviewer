@@ -10,6 +10,7 @@ module.exports = {
             flatten: true,
             src: [
                 'dashjs/dist/dash.all.min.js',
+                'hls.js/dist/hls.min.js',
                 'iiif-av-component/dist/iiif-av-component.js',
                 'iiif-metadata-component/dist/iiif-metadata-component.js',
                 'iiif-tree-component/dist/iiif-tree-component.js',

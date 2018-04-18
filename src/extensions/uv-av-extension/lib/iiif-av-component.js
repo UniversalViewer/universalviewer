@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.35 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.36 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 
@@ -875,10 +875,29 @@ var IIIFComponents;
                 default:
                     return;
             }
+            var video = $mediaElement[0];
             if (data.format && data.format.toString() === 'application/dash+xml') {
+                // dash
                 $mediaElement.attr('data-dashjs-player', '');
                 var player = dashjs.MediaPlayer().create();
-                player.initialize($mediaElement[0], data.source);
+                player.initialize(video, data.source);
+            }
+            else if (data.format && data.format.toString() === 'application/vnd.apple.mpegurl') {
+                // hls
+                if (Hls.isSupported()) {
+                    var hls = new Hls();
+                    hls.loadSource(data.source);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                        video.play();
+                    });
+                }
+                else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = data.source;
+                    video.addEventListener('canplay', function () {
+                        video.play();
+                    });
+                }
             }
             else {
                 $mediaElement.attr('src', data.source);

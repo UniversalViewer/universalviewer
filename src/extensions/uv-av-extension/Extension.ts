@@ -31,6 +31,8 @@ export class Extension extends BaseExtension implements IAVExtension {
     create(): void {
         super.create();
 
+        //requirejs.config({shim: {'uv/lib/hls.min': { deps: ['require'], exports: "Hls"}}});
+
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
@@ -43,6 +45,12 @@ export class Extension extends BaseExtension implements IAVExtension {
         $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
         });
+    }
+
+    dependencyLoaded(index: number, dep: any): void {
+        if (index === 0) {
+            window.Hls = dep; //https://github.com/mrdoob/three.js/issues/9602
+        }
     }
 
     createModules(): void {
