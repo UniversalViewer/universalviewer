@@ -4,7 +4,7 @@ export interface IUVData {
     annotations: string | null;
     canvasIndex: number;
     collectionIndex: number;
-    config: any;
+    config: any; // do not pass this on initialisation, internal use only
     configUri: string | null;
     embedded: boolean;
     iiifResourceUri: string;

@@ -323,11 +323,12 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     private _extendConfig(data: IUVData, extension: any, config: any, configExtension: any, cb: (config: any) => void): void {
         config.name = extension.name;
 
-        // if data-config has been set, extend the existing config object.
+        // if configUri has been set, extend the existing config object.
         if (configExtension) {
             // save a reference to the config extension uri.
             config.uri = data.configUri;
-            $.extend(true, config, configExtension, data.config);
+            $.extend(true, config, configExtension);
+            //$.extend(true, config, configExtension, data.config);
         }
 
         cb(config);
@@ -340,7 +341,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         if (sessionConfig) { // if config is stored in sessionstorage
             cb(JSON.parse(sessionConfig));
-        } else if (configUri) { // if data-config has been set
+        } else if (configUri) { // if data.configUri has been set
 
             if (this._isCORSEnabled()) {
                 $.getJSON(configUri, (configExtension) => {

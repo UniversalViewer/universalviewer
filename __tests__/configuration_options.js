@@ -4,7 +4,7 @@ describe('Configuration options', () => {
       await page.goto('http://localhost:4444/examples');
       await page.waitForSelector('#thumb0');
     });
-    it('when set to false does not provide timestamp', async () => {
+    it.skip('when set to false does not provide timestamp', async () => {
       await page.evaluate(() => uv.set(
         { config: { modules: { contentLeftPanel: { options: { thumbsCacheInvalidation: { enabled: false }}}}}}
       ));
@@ -16,7 +16,7 @@ describe('Configuration options', () => {
         )
       );
     });
-    it('has a configurable parameter type', async () => {
+    it.skip('has a configurable parameter type', async () => {
       await page.evaluate(() => uv.set(
         { config: { modules: { contentLeftPanel: { options: { thumbsCacheInvalidation: { paramType: '#' }}}}}}
       ));

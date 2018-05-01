@@ -1,3 +1,5 @@
+test.skip('Configuration options')
+
 describe('Universal Viewer', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:4444/examples');
