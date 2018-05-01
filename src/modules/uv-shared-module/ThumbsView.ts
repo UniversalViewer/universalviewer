@@ -171,9 +171,8 @@ export class ThumbsView extends BaseView {
             end: (thumbRangeMid < (this.thumbs.length - 1) - thumbLoadRange) ? thumbRangeMid + thumbLoadRange : this.thumbs.length - 1
         };
 
-        //console.log('start: ' + thumbRange.start + ' end: ' + thumbRange.end);
-
         const fadeDuration: number = this.options.thumbsImageFadeInDuration;
+        const that = this;
 
         for (let i = thumbRange.start; i <= thumbRange.end; i++) {
 
@@ -188,8 +187,9 @@ export class ThumbsView extends BaseView {
                     $wrap.removeClass('loadingFailed');
                     $wrap.addClass('loading');
                     let src: string = $thumb.attr('data-src');
-                    src += '?t=' + Utils.Dates.getTimeStamp();
-                    //console.log(i, src);
+                    if (that.config.options.thumbsCacheInvalidation.enabled) {
+                      src += `${that.config.options.thumbsCacheInvalidation.paramType}t=${Utils.Dates.getTimeStamp()}`;
+                    }
                     const $img: JQuery = $('<img src="' + src + '" alt=""/>');
                     // fade in on load.
                     $img.hide().load(function () {

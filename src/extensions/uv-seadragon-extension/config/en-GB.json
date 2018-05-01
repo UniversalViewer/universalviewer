@@ -80,6 +80,10 @@
         "panelExpandedWidth": 255,
         "panelOpen": true,
         "tabOrder": "",
+        "thumbsCacheInvalidation": {
+          "enabled": true,
+          "paramType": "?"
+        },
         "thumbsEnabled": true,
         "thumbsExtraHeight": 8,
         "thumbsImageFadeInDuration": 300,

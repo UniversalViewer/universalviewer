@@ -327,7 +327,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         if (configExtension) {
             // save a reference to the config extension uri.
             config.uri = data.configUri;
-            $.extend(true, config, configExtension);
+            $.extend(true, config, configExtension, data.config);
         }
 
         cb(config);

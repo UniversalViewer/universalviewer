@@ -1,5 +1,5 @@
-// iiif-av-component v0.0.36 https://github.com/iiif-commons/iiif-av-component#readme
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// iiif-av-component v0.0.38 https://github.com/iiif-commons/iiif-av-component#readme
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
 var __extends = (this && this.__extends) || (function () {
@@ -137,12 +137,25 @@ var IIIFComponents;
             });
             this.canvasInstances = [];
             this._$element.empty();
-            var canvases = this._getCanvases();
-            canvases.forEach(function (canvas) {
-                _this._initCanvas(canvas);
-            });
-            if (this.canvasInstances.length > 0) {
-                this._data.canvasId = this.canvasInstances[0].getCanvasId();
+            // if the manifest has an auto-advance behavior, join the canvases into a single "virtual" canvas
+            if (this._data && this._data.helper) {
+                var behavior = this._data.helper.manifest.getBehavior();
+                var canvases = this._getCanvases();
+                if (behavior && behavior.toString() === manifesto.Behavior.autoadvance().toString()) {
+                    var virtualCanvas_1 = new IIIFComponents.AVComponentObjects.VirtualCanvas();
+                    canvases.forEach(function (canvas) {
+                        virtualCanvas_1.addCanvas(canvas);
+                    });
+                    this._initCanvas(virtualCanvas_1);
+                }
+                else {
+                    canvases.forEach(function (canvas) {
+                        _this._initCanvas(canvas);
+                    });
+                }
+                if (this.canvasInstances.length > 0) {
+                    this._data.canvasId = this.canvasInstances[0].getCanvasId();
+                }
             }
         };
         AVComponent.prototype._getCanvases = function () {
@@ -215,11 +228,19 @@ var IIIFComponents;
             canvasId = Manifesto.Utils.normaliseUrl(canvasId);
             for (var i = 0; i < this.canvasInstances.length; i++) {
                 var canvasInstance = this.canvasInstances[i];
-                var id = canvasInstance.getCanvasId();
-                if (id) {
-                    var canvasInstanceId = Manifesto.Utils.normaliseUrl(id);
-                    if (canvasInstanceId === canvasId) {
+                // if the canvasinstance has a virtual canvas
+                if (canvasInstance.isVirtual()) {
+                    if (canvasInstance.includesVirtualSubCanvas(canvasId)) {
                         return canvasInstance;
+                    }
+                }
+                else {
+                    var id = canvasInstance.getCanvasId();
+                    if (id) {
+                        var canvasInstanceId = Manifesto.Utils.normaliseUrl(id);
+                        if (canvasInstanceId === canvasId) {
+                            return canvasInstance;
+                        }
                     }
                 }
             }
@@ -435,6 +456,7 @@ var IIIFComponents;
             _this._isPlaying = false;
             _this._isStalled = false;
             _this._lowPriorityFrequency = 250;
+            _this._mediaSyncMarginSecs = 1;
             _this._ranges = [];
             _this._readyCanvasesCount = 0;
             _this._stallRequestedBy = []; //todo: type
@@ -482,9 +504,29 @@ var IIIFComponents;
             this.$playerElement.append(this._$canvasContainer, this._$optionsContainer);
             this._$canvasHoverPreview.hide();
             this._$rangeHoverPreview.hide();
-            if (this._data.helper && this._data.canvas) {
-                var ranges = this._data.helper.getCanvasRanges(this._data.canvas);
-                ranges.forEach(function (range) {
+            if (this._data && this._data.helper && this._data.canvas) {
+                var ranges_1 = [];
+                // if the canvas is virtual, get the ranges for all sub canvases
+                if (this.isVirtual()) {
+                    this._data.canvas.canvases.forEach(function (canvas) {
+                        if (_this._data && _this._data.helper) {
+                            var r = _this._data.helper.getCanvasRanges(canvas);
+                            // shift the range targets forward by the duration of their previous canvases
+                            r.forEach(function (range) {
+                                if (range.canvases && range.canvases.length) {
+                                    for (var i = 0; i < range.canvases.length; i++) {
+                                        range.canvases[i] = IIIFComponents.AVComponentUtils.Utils.retargetTemporalComponent(_this._data.canvas.canvases, range.__jsonld.items[i].id);
+                                    }
+                                }
+                            });
+                            ranges_1.push.apply(ranges_1, r);
+                        }
+                    });
+                }
+                else {
+                    ranges_1.concat(this._data.helper.getCanvasRanges(this._data.canvas));
+                }
+                ranges_1.forEach(function (range) {
                     _this._ranges.push(new IIIFComponents.AVComponentObjects.CanvasRange(range));
                 });
             }
@@ -622,23 +664,15 @@ var IIIFComponents;
                     console.warn('item has no target');
                     return;
                 }
-                var spatial = /xywh=([^&]+)/g.exec(target);
-                var temporal = /t=([^&]+)/g.exec(target);
-                var xywh = void 0;
-                if (spatial && spatial[1]) {
-                    xywh = spatial[1].split(',');
-                }
-                else {
+                var xywh = IIIFComponents.AVComponentUtils.Utils.getSpatialComponent(target);
+                var t = IIIFComponents.AVComponentUtils.Utils.getTemporalComponent(target);
+                if (!xywh) {
                     xywh = [0, 0, this._canvasWidth, this._canvasHeight];
                 }
-                var t = void 0;
-                if (temporal && temporal[1]) {
-                    t = temporal[1].split(',');
-                }
-                else {
+                if (!t) {
                     t = [0, this._canvasClockDuration];
                 }
-                var positionLeft = parseInt(xywh[0]), positionTop = parseInt(xywh[1]), mediaWidth = parseInt(xywh[2]), mediaHeight = parseInt(xywh[3]), startTime = parseInt(t[0]), endTime = parseInt(t[1]);
+                var positionLeft = parseInt(String(xywh[0])), positionTop = parseInt(String(xywh[1])), mediaWidth = parseInt(String(xywh[2])), mediaHeight = parseInt(String(xywh[3])), startTime = parseInt(String(t[0])), endTime = parseInt(String(t[1]));
                 var percentageTop = this._convertToPercentage(positionTop, this._canvasHeight), percentageLeft = this._convertToPercentage(positionLeft, this._canvasWidth), percentageWidth = this._convertToPercentage(mediaWidth, this._canvasWidth), percentageHeight = this._convertToPercentage(mediaHeight, this._canvasHeight);
                 var temporalOffsets = /t=([^&]+)/g.exec(body.id);
                 var ot = void 0;
@@ -666,6 +700,20 @@ var IIIFComponents;
                 };
                 this._renderMediaElement(itemData);
             }
+        };
+        CanvasInstance.prototype.isVirtual = function () {
+            return this._data.canvas instanceof IIIFComponents.AVComponentObjects.VirtualCanvas;
+        };
+        CanvasInstance.prototype.includesVirtualSubCanvas = function (canvasId) {
+            if (this.isVirtual() && this._data.canvas && this._data.canvas.canvases) {
+                for (var i = 0; i < this._data.canvas.canvases.length; i++) {
+                    var canvas = this._data.canvas.canvases[i];
+                    if (Manifesto.Utils.normaliseUrl(canvas.id) === canvasId) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         };
         CanvasInstance.prototype.set = function (data) {
             var oldData = Object.assign({}, this._data);
@@ -765,7 +813,7 @@ var IIIFComponents;
             if (this._data && this._data.canvas) {
                 return this._data.canvas.id;
             }
-            return null;
+            return undefined;
         };
         CanvasInstance.prototype._updateHoverPreview = function (e, $container, duration) {
             var offset = $container.offset();
@@ -1233,7 +1281,7 @@ var IIIFComponents;
                     var correctTime = (this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset);
                     var factualTime = contentAnnotation.element[0].currentTime;
                     // off by 0.2 seconds
-                    if (Math.abs(factualTime - correctTime) > 0.4) {
+                    if (Math.abs(factualTime - correctTime) > this._mediaSyncMarginSecs) {
                         contentAnnotation.outOfSync = true;
                         //this.playbackStalled(true, contentAnnotation);
                         var lag = Math.abs(factualTime - correctTime);
@@ -1333,12 +1381,24 @@ var IIIFComponents;
                     return;
                 }
                 this.rangeId = range.id;
-                var canvasId = range.canvases[0];
-                // get the temporal part of the canvas id
-                var temporal = /t=([^&]+)/g.exec(canvasId);
-                if (temporal && temporal.length > 1) {
-                    var rangeTiming = temporal[1].split(',');
-                    this.duration = new AVComponentObjects.Duration(Number(rangeTiming[0]), Number(rangeTiming[1]));
+                // if there are multiple canvases, get the start of the first canvas,
+                // and the end of the last canvas.
+                var start;
+                var end;
+                for (var i = 0; i < range.canvases.length; i++) {
+                    var canvas = range.canvases[i];
+                    var temporal = IIIFComponents.AVComponentUtils.Utils.getTemporalComponent(canvas);
+                    if (temporal && temporal.length > 1) {
+                        if (i === 0) {
+                            start = Number(temporal[0]);
+                        }
+                        if (i === range.canvases.length - 1) {
+                            end = Number(temporal[1]);
+                        }
+                    }
+                }
+                if (start && end) {
+                    this.duration = new AVComponentObjects.Duration(start, end);
                 }
                 this.nonav = range.getProperty('behavior') === 'no-nav';
             }
@@ -1397,6 +1457,47 @@ var IIIFComponents;
             Utils.diff = function (a, b) {
                 return Array.from(new Set(Utils._compare(a, b).concat(Utils._compare(b, a))));
             };
+            Utils.getSpatialComponent = function (target) {
+                var spatial = /xywh=([^&]+)/g.exec(target);
+                var xywh = null;
+                if (spatial && spatial[1]) {
+                    xywh = spatial[1].split(',');
+                }
+                return xywh;
+            };
+            Utils.getTemporalComponent = function (target) {
+                var temporal = /t=([^&]+)/g.exec(target);
+                var t = null;
+                if (temporal && temporal[1]) {
+                    t = temporal[1].split(',');
+                }
+                return t;
+            };
+            Utils.retargetTemporalComponent = function (canvases, target) {
+                var t = AVComponentUtils.Utils.getTemporalComponent(target);
+                if (t) {
+                    var offset = 0;
+                    var targetWithoutTemporal = target.substr(0, target.indexOf('#'));
+                    // loop through canvases adding up their durations until we reach the targeted canvas
+                    for (var i = 0; i < canvases.length; i++) {
+                        var canvas = canvases[i];
+                        if (!canvas.id.includes(targetWithoutTemporal)) {
+                            var duration = canvas.getDuration();
+                            if (duration) {
+                                offset += duration;
+                            }
+                        }
+                        else {
+                            // we've reached the canvas whose target we're adjusting
+                            break;
+                        }
+                    }
+                    t[0] = Number(t[0]) + offset;
+                    t[1] = Number(t[1]) + offset;
+                    return targetWithoutTemporal + '#t=' + t[0] + ',' + t[1];
+                }
+                return undefined;
+            };
             Utils.formatTime = function (aNumber) {
                 var hours, minutes, seconds, hourValue;
                 seconds = Math.ceil(aNumber);
@@ -1418,6 +1519,71 @@ var IIIFComponents;
         }());
         AVComponentUtils.Utils = Utils;
     })(AVComponentUtils = IIIFComponents.AVComponentUtils || (IIIFComponents.AVComponentUtils = {}));
+})(IIIFComponents || (IIIFComponents = {}));
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var AVComponentObjects;
+    (function (AVComponentObjects) {
+        var VirtualCanvas = /** @class */ (function () {
+            function VirtualCanvas() {
+                this.canvases = [];
+            }
+            VirtualCanvas.prototype.addCanvas = function (canvas) {
+                this.canvases.push(canvas);
+            };
+            VirtualCanvas.prototype.getContent = function () {
+                var _this = this;
+                var annotations = [];
+                this.canvases.forEach(function (canvas) {
+                    var items = canvas.getContent();
+                    // if the annotations have no temporal target, add one so that
+                    // they specifically target the duration of their canvas
+                    items.forEach(function (item) {
+                        var target = item.getTarget();
+                        if (target) {
+                            var t = IIIFComponents.AVComponentUtils.Utils.getTemporalComponent(target);
+                            if (!t) {
+                                item.__jsonld.target += '#t=0,' + canvas.getDuration();
+                            }
+                        }
+                    });
+                    items.forEach(function (item) {
+                        var target = item.getTarget();
+                        if (target) {
+                            item.__jsonld.target = IIIFComponents.AVComponentUtils.Utils.retargetTemporalComponent(_this.canvases, target);
+                        }
+                    });
+                    annotations.push.apply(annotations, items);
+                });
+                return annotations;
+            };
+            VirtualCanvas.prototype.getDuration = function () {
+                var duration = 0;
+                this.canvases.forEach(function (canvas) {
+                    var d = canvas.getDuration();
+                    if (d) {
+                        duration += d;
+                    }
+                });
+                return duration;
+            };
+            VirtualCanvas.prototype.getWidth = function () {
+                if (this.canvases.length) {
+                    return this.canvases[0].getWidth();
+                }
+                return 0;
+            };
+            VirtualCanvas.prototype.getHeight = function () {
+                if (this.canvases.length) {
+                    return this.canvases[0].getHeight();
+                }
+                return 0;
+            };
+            return VirtualCanvas;
+        }());
+        AVComponentObjects.VirtualCanvas = VirtualCanvas;
+    })(AVComponentObjects = IIIFComponents.AVComponentObjects || (IIIFComponents.AVComponentObjects = {}));
 })(IIIFComponents || (IIIFComponents = {}));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})

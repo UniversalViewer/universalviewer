@@ -752,7 +752,9 @@ export class BaseExtension implements IExtension {
         if (metrics) {
             for (let i = 0; i < metrics.length; i++) {
                 const m: any = metrics[i];
-                m.type = new MetricType(m.type);
+                if (typeof(m.type) === "string") {
+                    m.type = new MetricType(m.type);
+                }                
                 this.metrics.push(m);
             }
         }
