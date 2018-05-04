@@ -1,21 +1,22 @@
-import {Auth09} from "./Auth09";
-import {Auth1} from "./Auth1";
-import {AuthDialogue} from "../../modules/uv-dialogues-module/AuthDialogue";
-import {BaseEvents} from "./BaseEvents";
-import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
-import {IExtension} from "./IExtension";
-import {ILocale} from "../../ILocale";
-import {ISharePreview} from "./ISharePreview";
-import {IUVComponent} from "../../IUVComponent";
-import {IUVData} from "../../IUVData";
-import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
-import {Metric} from "../../modules/uv-shared-module/Metric";
-import {MetricType} from "../../modules/uv-shared-module/MetricType";
-import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
-import {Shell} from "./Shell";
-import {SynchronousRequire} from "../../SynchronousRequire";
-import IThumb = Manifold.IThumb;
+import { IDependencies } from "./IDependencies";
 import { UVUtils } from "./Utils";
+import { Auth09 } from "./Auth09";
+import { Auth1 } from "./Auth1";
+import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
+import { BaseEvents } from "./BaseEvents";
+import { ClickThroughDialogue } from "../../modules/uv-dialogues-module/ClickThroughDialogue";
+import { IExtension } from "./IExtension";
+import { ILocale } from "../../ILocale";
+import { ISharePreview } from "./ISharePreview";
+import { IUVComponent } from "../../IUVComponent";
+import { IUVData } from "../../IUVData";
+import { LoginDialogue } from "../../modules/uv-dialogues-module/LoginDialogue";
+import { Metric } from "../../modules/uv-shared-module/Metric";
+import { MetricType } from "../../modules/uv-shared-module/MetricType";
+import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
+import { Shell } from "./Shell";
+import { SynchronousRequire } from "../../SynchronousRequire";
+import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
 
@@ -572,31 +573,51 @@ export class BaseExtension implements IExtension {
 
         if (!scripts.length) {
 
-            requirejs([depsUri], function(deps: any) {
+            requirejs([depsUri], function(getDeps: (format: string) => IDependencies) {
 
-                const baseUri: string = that.data.root + '/lib/';
-
-                // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
-                // check for a requirejs.config that sets a specific path, such as the PDF extension
-                if (deps.sync) {                    
-                    for (let i = 0; i < deps.sync.length; i++) {
-                        const dep: string = deps.sync[i];
-                        if (!dep.startsWith('!')) {
-                            deps.sync[i] = baseUri + dep;
-                        }
-                    }
-                }
-
-                if (deps.async) {                    
-                    for (let i = 0; i < deps.async.length; i++) {
-                        const dep: string = deps.async[i];
-                        if (!dep.startsWith('!')) {
-                            deps.async[i] = baseUri + dep;
-                        }
-                    }
-                }
+                // getDeps is a function that accepts a file format.
+                // it uses this to determine which dependencies are appropriate
+                // for example, 'application/vnd.apple.mpegurl' for the AV extension
+                // would return hls.min.js, and not dash.all.min.js.
                 
-                cb(deps);
+                let canvas: Manifesto.ICanvas = that.helper.getCurrentCanvas();
+                const formats: Manifesto.IAnnotationBody[] | null = that.getMediaFormats(canvas);
+                let format: Manifesto.MediaType | null = null;
+
+                if (formats && formats.length) {
+                    format = formats[0].getFormat();
+                }
+
+                if (format) {
+
+                    const deps: IDependencies = getDeps(format.toString());
+                    const baseUri: string = that.data.root + '/lib/';
+
+                    // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
+                    // check for a requirejs.config that sets a specific path, such as the PDF extension
+                    if (deps.sync) {                    
+                        for (let i = 0; i < deps.sync.length; i++) {
+                            const dep: string = deps.sync[i];
+                            if (!dep.startsWith('!')) {
+                                deps.sync[i] = baseUri + dep;
+                            }
+                        }
+                    }
+
+                    if (deps.async) {                    
+                        for (let i = 0; i < deps.async.length; i++) {
+                            const dep: string = deps.async[i];
+                            if (!dep.startsWith('!')) {
+                                deps.async[i] = baseUri + dep;
+                            }
+                        }
+                    }
+                    
+                    cb(deps);
+                }
+
+                cb(null);
+                
             });
         } else {
             cb(null);

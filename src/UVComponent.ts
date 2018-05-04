@@ -91,6 +91,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-av-extension'
         };
 
+        this._extensions['application/vnd.apple.mpegurl'] = {
+            type: AVExtension,
+            name: 'uv-av-extension'
+        };
+
         this._extensions['default'] = {
             type: DefaultExtension,
             name: 'uv-default-extension'
@@ -236,11 +241,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             let extension: IExtension | null = null;
 
             // if the canvas has a duration, use the uv-av-extension
-            const duration: number | null = canvas.getDuration();
+            // const duration: number | null = canvas.getDuration();
 
-            if (typeof(duration) !== 'undefined') {
-                extension = that._extensions["av"];
-            } else {
+            // if (typeof(duration) !== 'undefined') {
+            //     extension = that._extensions["av"];
+            // } else {
                 // canvasType will always be "canvas" in IIIF presentation 3.0
                 // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
                 // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
@@ -281,7 +286,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                         extension = that._extensions[format];
                     }
                 }
-            }
+            //}
 
             // if there still isn't a matching extension, use the default extension.
             if (!extension) {

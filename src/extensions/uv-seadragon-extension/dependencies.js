@@ -1,5 +1,7 @@
 define(function() {
-    return {
-        async: ['iiif-tree-component', 'iiif-gallery-component', 'iiif-metadata-component', 'openseadragon.min']
-    };
+    return function(format) {
+        return {
+            async: ['iiif-tree-component', 'iiif-gallery-component', 'iiif-metadata-component', 'openseadragon.min']
+        };
+    }
 });
