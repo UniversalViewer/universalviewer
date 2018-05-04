@@ -187,7 +187,7 @@ export class ThumbsView extends BaseView {
                     $wrap.removeClass('loadingFailed');
                     $wrap.addClass('loading');
                     let src: string = $thumb.attr('data-src');
-                    if (that.config.options.thumbsCacheInvalidation.enabled) {
+                    if (that.config.options.thumbsCacheInvalidation && that.config.options.thumbsCacheInvalidation.enabled) {
                       src += `${that.config.options.thumbsCacheInvalidation.paramType}t=${Utils.Dates.getTimeStamp()}`;
                     }
                     const $img: JQuery = $('<img src="' + src + '" alt=""/>');
