@@ -573,7 +573,7 @@ export class BaseExtension implements IExtension {
 
         if (!scripts.length) {
 
-            requirejs([depsUri], function(getDeps: (format: string) => IDependencies) {
+            requirejs([depsUri], function(getDeps: (formats: string[] | null | null) => IDependencies) {
 
                 // getDeps is a function that accepts a file format.
                 // it uses this to determine which dependencies are appropriate
@@ -581,42 +581,37 @@ export class BaseExtension implements IExtension {
                 // would return hls.min.js, and not dash.all.min.js.
                 
                 let canvas: Manifesto.ICanvas = that.helper.getCurrentCanvas();
-                const formats: Manifesto.IAnnotationBody[] | null = that.getMediaFormats(canvas);
-                let format: Manifesto.MediaType | null = null;
-
-                if (formats && formats.length) {
-                    format = formats[0].getFormat();
+                const mediaFormats: Manifesto.IAnnotationBody[] | null = that.getMediaFormats(canvas);
+                let formats: string[] = [];
+                if (mediaFormats && mediaFormats.length) {
+                    formats = mediaFormats.map((f: any) => {
+                        return f.getFormat().toString();
+                    });
                 }
+                const deps: IDependencies = getDeps(formats);
+                const baseUri: string = that.data.root + '/lib/';
 
-                if (format) {
-
-                    const deps: IDependencies = getDeps(format.toString());
-                    const baseUri: string = that.data.root + '/lib/';
-
-                    // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
-                    // check for a requirejs.config that sets a specific path, such as the PDF extension
-                    if (deps.sync) {                    
-                        for (let i = 0; i < deps.sync.length; i++) {
-                            const dep: string = deps.sync[i];
-                            if (!dep.startsWith('!')) {
-                                deps.sync[i] = baseUri + dep;
-                            }
+                // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
+                // check for a requirejs.config that sets a specific path, such as the PDF extension
+                if (deps.sync) {                    
+                    for (let i = 0; i < deps.sync.length; i++) {
+                        const dep: string = deps.sync[i];
+                        if (!dep.startsWith('!')) {
+                            deps.sync[i] = baseUri + dep;
                         }
                     }
-
-                    if (deps.async) {                    
-                        for (let i = 0; i < deps.async.length; i++) {
-                            const dep: string = deps.async[i];
-                            if (!dep.startsWith('!')) {
-                                deps.async[i] = baseUri + dep;
-                            }
-                        }
-                    }
-                    
-                    cb(deps);
                 }
 
-                cb(null);
+                if (deps.async) {                    
+                    for (let i = 0; i < deps.async.length; i++) {
+                        const dep: string = deps.async[i];
+                        if (!dep.startsWith('!')) {
+                            deps.async[i] = baseUri + dep;
+                        }
+                    }
+                }
+                
+                cb(deps);
                 
             });
         } else {

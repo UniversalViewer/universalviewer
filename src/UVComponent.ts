@@ -96,6 +96,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-av-extension'
         };
 
+        this._extensions['application/dash+xml'] = {
+            type: AVExtension,
+            name: 'uv-av-extension'
+        };
+
         this._extensions['default'] = {
             type: DefaultExtension,
             name: 'uv-default-extension'
