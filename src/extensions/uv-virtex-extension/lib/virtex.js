@@ -148,7 +148,16 @@ var Virtex;
                 // https://github.com/donmccurdy/three-gltf-viewer/blob/master/src/viewer.js#L183
                 // allow specifying envmap? https://github.com/mrdoob/three.js/blob/dev/examples/webgl_loader_gltf.html#L92
                 var obj = gltf.scene || gltf.scenes[0];
-                viewport.options.data.ambientLightIntensity = 0.1;
+                // obj.traverse(function (node: any) {
+                //     if (node.isMesh) {
+                //         console.log('change encoding');
+                //         if (node.material.map) node.material.map.encoding = THREE.sRGBEncoding;
+                //         if (node.material.emissiveMap) node.material.emissiveMap.encoding = THREE.sRGBEncoding;
+                //     }
+                // });
+                viewport.options.data.ambientLightIntensity = 0.05;
+                viewport.options.data.directionalLight1Intensity = 0.5;
+                viewport.options.data.directionalLight2Intensity = 0.1;
                 // https://github.com/mrdoob/three.js/pull/12766
                 viewport.renderer.gammaOutput = true;
                 viewport.objectGroup.add(obj);
