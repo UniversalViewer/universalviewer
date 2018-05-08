@@ -91,6 +91,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-av-extension'
         };
 
+        this._extensions['audio/mp4'] = {
+            type: AVExtension,
+            name: 'uv-av-extension'
+        };
+
         this._extensions['application/vnd.apple.mpegurl'] = {
             type: AVExtension,
             name: 'uv-av-extension'

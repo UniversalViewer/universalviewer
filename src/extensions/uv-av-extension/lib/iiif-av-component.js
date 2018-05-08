@@ -938,13 +938,13 @@ var IIIFComponents;
                     hls.loadSource(data.source);
                     hls.attachMedia(video);
                     hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                        video.play();
+                        //video.play();
                     });
                 }
                 else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = data.source;
                     video.addEventListener('canplay', function () {
-                        video.play();
+                        //video.play();
                     });
                 }
             }
