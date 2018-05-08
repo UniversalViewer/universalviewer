@@ -52,6 +52,8 @@ interface Window {
     Event: any;
     CustomEvent: any;
     Hls: any;
+    MediaSource: any;
+    WebKitMediaSource: any;
 }
 
 interface Document {

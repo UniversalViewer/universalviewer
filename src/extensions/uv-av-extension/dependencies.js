@@ -1,5 +1,4 @@
-define(function() {
-
+define(function () {
     // https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/Live_streaming_web_audio_and_video
     // Dash is supported everywhere except safari
     function isSafari() {
@@ -8,56 +7,51 @@ define(function() {
         console.log('isSafari', isSafari);
         return isSafari;
     }
-
     function isAdaptiveStreamingAvailable() {
         var isAvailable = !!(window.MediaSource || window.WebKitMediaSource);
         console.log('isAdaptiveStreamingAvailable', isAvailable);
         return isAvailable;
     }
-
     function isFormatAvailable(formats, format) {
         var isAvailable = formats.includes(format);
         console.log('isFormatAvailable', format, isAvailable);
         return isAvailable;
     }
-
     function isHLSAvailable(formats) {
         return isFormatAvailable(formats, 'application/vnd.apple.mpegurl');
     }
-
     function isMpegDashAvailable(formats) {
         return isFormatAvailable(formats, 'application/dash+xml');
     }
-
-    return function(formats) {
-
+    return function (formats) {
         var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min'];
-
         if (isAdaptiveStreamingAvailable()) {
-
             if (isMpegDashAvailable(formats) && !isSafari()) {
                 console.log('load mpeg dash');
                 return {
                     async: ['dash.all.min'].concat(alwaysRequired)
                 };
-            } else if (isHLSAvailable(formats)) {
+            }
+            else if (isHLSAvailable(formats)) {
                 console.log('load HLS');
                 return {
                     sync: ['hls.min'],
                     async: alwaysRequired
                 };
-            } else {
+            }
+            else {
                 console.log('adaptive streaming not available');
                 return {
                     async: alwaysRequired
                 };
             }
-
-        } else {
+        }
+        else {
             console.log('adaptive streaming not available');
             return {
                 async: alwaysRequired
             };
-        }        
-    }
+        }
+    };
 });
+//# sourceMappingURL=dependencies.js.map
