@@ -7,6 +7,7 @@ declare var PDFJS: any;
 export class PDFCenterPanel extends CenterPanel {
 
     private _$canvas: JQuery;
+    private _$pdfContainer: JQuery;
     private _$nextButton: JQuery;
     private _$prevButton: JQuery;
     private _$spinner: JQuery;
