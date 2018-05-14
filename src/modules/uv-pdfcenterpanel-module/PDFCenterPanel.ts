@@ -32,6 +32,7 @@ export class PDFCenterPanel extends CenterPanel {
 
         super.create();
 
+        this._$pdfContainer = $('<div class="pdfContainer"></div>');
         this._$canvas = $('<canvas></canvas>');
         this._$spinner = $('<div class="spinner"></div>');
         this._canvas = (<HTMLCanvasElement>this._$canvas[0]);
@@ -42,7 +43,8 @@ export class PDFCenterPanel extends CenterPanel {
         this._$nextButton = $('<div class="btn next" tabindex="0"></div>');
         this.$content.append(this._$nextButton);
 
-        this.$content.prepend(this._$canvas);
+        this._$pdfContainer.append(this._$canvas);
+        this.$content.prepend(this._$pdfContainer);
 
         $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
@@ -276,6 +278,9 @@ export class PDFCenterPanel extends CenterPanel {
 
     resize() {
         super.resize();
+
+        this._$pdfContainer.width(this.$content.width());
+        this._$pdfContainer.height(this.$content.height());
 
         this._$spinner.css('top', (this.$content.height() / 2) - (this._$spinner.height() / 2));
         this._$spinner.css('left', (this.$content.width() / 2) - (this._$spinner.width() / 2));
