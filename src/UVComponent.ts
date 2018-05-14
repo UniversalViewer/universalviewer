@@ -39,6 +39,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-seadragon-extension'
         };
 
+        this._extensions[manifesto.ResourceType.image().toString()] = {
+            type: OpenSeadragonExtension,
+            name: 'uv-seadragon-extension'
+        };
+
         this._extensions[manifesto.ResourceType.movingimage().toString()] = {
             type: MediaElementExtension,
             name: 'uv-mediaelement-extension'
@@ -265,7 +270,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                     const annotation: Manifesto.IAnnotation = content[0];
                     const body: Manifesto.IAnnotationBody[] = annotation.getBody();
 
-                    if (body) {
+                    if (body && body.length) {
                         const format: Manifesto.MediaType | null = body[0].getFormat();
 
                         if (format) {
@@ -278,6 +283,12 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                                 if (type) {
                                     extension = that._extensions[type.toString()];
                                 }
+                            }
+                        } else {
+                            const type: Manifesto.ResourceType | null = body[0].getType();
+
+                            if (type) {
+                                extension = that._extensions[type.toString()];
                             }
                         }
                     }
