@@ -91,7 +91,7 @@
     "utils": "edsilv/utils#v0.2.1",
     "uv-cy-gb-theme": "UniversalViewer/uv-cy-gb-theme#v1.1.1",
     "uv-en-gb-theme": "UniversalViewer/uv-en-gb-theme#v1.1.1",
-    "virtex3d": "0.3.13"
+    "virtex3d": "0.3.14"
   },
   "collective": {
     "type": "opencollective",
