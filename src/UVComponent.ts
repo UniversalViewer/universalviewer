@@ -77,13 +77,13 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         };
 
         this._extensions[manifesto.MediaType.mp4().toString()] = {
-            type: MediaElementExtension,
-            name: 'uv-mediaelement-extension'
+            type: AVExtension,
+            name: 'uv-av-extension'
         };
 
         this._extensions[manifesto.MediaType.webm().toString()] = {
-            type: MediaElementExtension,
-            name: 'uv-mediaelement-extension'
+            type: AVExtension,
+            name: 'uv-av-extension'
         };
 
         this._extensions[manifesto.MediaType.threejs().toString()] = {
@@ -92,6 +92,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         };
 
         this._extensions['av'] = {
+            type: AVExtension,
+            name: 'uv-av-extension'
+        };
+
+        this._extensions['video'] = {
             type: AVExtension,
             name: 'uv-av-extension'
         };
