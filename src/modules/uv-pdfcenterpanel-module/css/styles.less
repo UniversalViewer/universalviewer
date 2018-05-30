@@ -9,7 +9,7 @@
             position: relative;
 
             .pdfContainer {
-                //overflow: auto;
+                overflow: auto;
                 text-align: center;
             }
 
@@ -46,8 +46,42 @@
                 cursor: pointer;
                 padding: 0px;
                 border: none;
+                border-radius: 0px;
+
+                &.zoomIn{
+                    cursor: pointer !important;
+                    background-image: data-uri('@{img-path}zoom_in.png') !important;
+                    width: 28px;
+                    height: 28px;
+                    margin: 3px !important;
+                    top: 0px;
+                    left: 0px;
+                    img {
+                        display: none;
+                    }
+                    &:focus {
+                      .tab-focus();
+                    }
+                }
+
+                &.zoomOut{
+                    cursor: pointer !important;
+                    background-image: data-uri('@{img-path}zoom_out.png') !important;
+                    width: 28px;
+                    height: 28px;
+                    margin: 3px !important;
+                    top: 0px;
+                    left: 32px;
+                    img {
+                        display: none;
+                    }
+                    &:focus {
+                      .tab-focus();
+                    }
+                }
 
                 &.prev {
+                    margin-left: 5px;
                     background-image: data-uri('@{img-path}left_arrow.png');
                     &.disabled {
                         background-image: data-uri('@{img-path}left_arrow_disabled.png');
@@ -55,6 +89,7 @@
                 }
 
                 &.next {
+                    margin-right: 20px;
                     background-image: data-uri('@{img-path}right_arrow.png');
                     &.disabled {
                         background-image: data-uri('@{img-path}right_arrow_disabled.png');

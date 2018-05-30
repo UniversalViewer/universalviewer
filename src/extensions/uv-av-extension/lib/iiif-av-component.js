@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.39 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.43 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -357,7 +357,7 @@ var IIIFComponents;
                 console.error("Component failed to initialise");
             }
             this._$volumeMute = $("\n                                <button class=\"btn volume-mute\" title=\"" + this.options.data.content.mute + "\">\n                                    <i class=\"av-icon-mute on\" aria-hidden=\"true\"></i>" + this.options.data.content.mute + "\n                                </button>");
-            this._$volumeSlider = $('<input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">');
+            this._$volumeSlider = $('<div class="volume-slider"></div>');
             this._$element.append(this._$volumeMute, this._$volumeSlider);
             var that = this;
             this._$volumeMute.on('click', function () {
@@ -372,28 +372,28 @@ var IIIFComponents;
                     _this._data.volume = _this._lastVolume;
                 }
                 // end reducer
-                _this._render();
                 _this.fire(AVVolumeControl.Events.VOLUME_CHANGED, _this._data.volume);
             });
-            this._$volumeSlider.on('input', function () {
-                // start reducer
-                that._data.volume = Number(this.value);
-                if (that._data.volume === 0) {
-                    that._lastVolume = 0;
+            this._$volumeSlider.slider({
+                value: that._data.volume,
+                step: 0.1,
+                orientation: "horizontal",
+                min: 0,
+                max: 1,
+                animate: false,
+                create: function (evt, ui) {
+                },
+                slide: function (evt, ui) {
+                    // start reducer
+                    that._data.volume = ui.value;
+                    if (that._data.volume === 0) {
+                        that._lastVolume = 0;
+                    }
+                    // end reducer
+                    that.fire(AVVolumeControl.Events.VOLUME_CHANGED, that._data.volume);
+                },
+                stop: function (evt, ui) {
                 }
-                // end reducer
-                that._render();
-                that.fire(AVVolumeControl.Events.VOLUME_CHANGED, that._data.volume);
-            });
-            this._$volumeSlider.on('change', function () {
-                // start reducer
-                that._data.volume = Number(this.value);
-                if (that._data.volume === 0) {
-                    that._lastVolume = 0;
-                }
-                // end reducer
-                that._render();
-                that.fire(AVVolumeControl.Events.VOLUME_CHANGED, that._data.volume);
             });
             return success;
         };
@@ -402,12 +402,16 @@ var IIIFComponents;
             this._render();
         };
         AVVolumeControl.prototype._render = function () {
-            this._$volumeSlider.val(this._data.volume);
-            if (this._data.volume === 0) {
-                this._$volumeMute.find('i').switchClass('on', 'off');
-            }
-            else {
-                this._$volumeMute.find('i').switchClass('off', 'on');
+            if (this._data.volume !== undefined) {
+                this._$volumeSlider.slider({
+                    value: this._data.volume
+                });
+                if (this._data.volume === 0) {
+                    this._$volumeMute.find('i').switchClass('on', 'off');
+                }
+                else {
+                    this._$volumeMute.find('i').switchClass('off', 'on');
+                }
             }
         };
         AVVolumeControl.prototype._resize = function () {
@@ -524,7 +528,7 @@ var IIIFComponents;
                     });
                 }
                 else {
-                    ranges_1.concat(this._data.helper.getCanvasRanges(this._data.canvas));
+                    ranges_1 = ranges_1.concat(this._data.helper.getCanvasRanges(this._data.canvas));
                 }
                 ranges_1.forEach(function (range) {
                     _this._ranges.push(new IIIFComponents.AVComponentObjects.CanvasRange(range));
@@ -686,18 +690,18 @@ var IIIFComponents;
                 var offsetStart = (ot[0]) ? parseInt(ot[0]) : ot[0], offsetEnd = (ot[1]) ? parseInt(ot[1]) : ot[1];
                 // todo: type this
                 var itemData = {
-                    'type': type,
+                    'active': false,
+                    'end': endTime,
+                    'endOffset': offsetEnd,
+                    'format': format,
+                    'height': percentageHeight,
+                    'left': percentageLeft,
                     'source': mediaSource,
                     'start': startTime,
-                    'end': endTime,
-                    'top': percentageTop,
-                    'left': percentageLeft,
-                    'width': percentageWidth,
-                    'height': percentageHeight,
                     'startOffset': offsetStart,
-                    'endOffset': offsetEnd,
-                    'active': false,
-                    'format': format
+                    'top': percentageTop,
+                    'type': type,
+                    'width': percentageWidth
                 };
                 this._renderMediaElement(itemData);
             }
@@ -744,8 +748,8 @@ var IIIFComponents;
                         if (!this._data.range.spans(this._canvasClockTime)) {
                             this._setCurrentTime(this._data.range.duration.start);
                         }
-                        this._play();
                         this.fire(IIIFComponents.AVComponent.Events.RANGE_CHANGED, this._data.range.rangeId);
+                        this._play();
                     }
                 }
             }
@@ -937,15 +941,15 @@ var IIIFComponents;
                     var hls = new Hls();
                     hls.loadSource(data.source);
                     hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                        //video.play();
-                    });
+                    //hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    //video.play();
+                    //});
                 }
                 else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = data.source;
-                    video.addEventListener('canplay', function () {
-                        //video.play();
-                    });
+                    //video.addEventListener('canplay', function () {
+                    //video.play();
+                    //});
                 }
             }
             else {
@@ -1226,16 +1230,16 @@ var IIIFComponents;
             //this.logMessage('UPDATE MEDIA ACTIVE STATES at: '+ this._canvasClockTime + ' seconds.');
         };
         CanvasInstance.prototype._pauseMedia = function (media) {
-            var playPromise = media.play();
-            if (playPromise !== undefined) {
-                playPromise.then(function (_) {
-                    // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
-                    media.pause();
-                });
-            }
-            else {
-                media.pause();
-            }
+            media.pause();
+            // const playPromise = media.play();
+            // if (playPromise !== undefined) {
+            //     playPromise.then(_ => {
+            //         // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+            //         media.pause();
+            //     });
+            // } else {
+            //     media.pause();
+            // }
         };
         CanvasInstance.prototype._setMediaCurrentTime = function (media, time) {
             if (!isNaN(media.duration)) {
@@ -1515,6 +1519,59 @@ var IIIFComponents;
                     hourValue = '';
                 }
                 return hourValue + minutes + ':' + seconds;
+            };
+            Utils.detectIE = function () {
+                var ua = window.navigator.userAgent;
+                // Test values; Uncomment to check result …
+                // IE 10
+                // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+                // IE 11
+                // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+                // Edge 12 (Spartan)
+                // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+                // Edge 13
+                // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+                var msie = ua.indexOf('MSIE ');
+                if (msie > 0) {
+                    // IE 10 or older => return version number
+                    return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+                }
+                var trident = ua.indexOf('Trident/');
+                if (trident > 0) {
+                    // IE 11 => return version number
+                    var rv = ua.indexOf('rv:');
+                    return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+                }
+                var edge = ua.indexOf('Edge/');
+                if (edge > 0) {
+                    // Edge (IE 12+) => return version number
+                    return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+                }
+                // other browser
+                return false;
+            };
+            Utils.debounce = function (fn, debounceDuration) {
+                // summary:
+                //      Returns a debounced function that will make sure the given
+                //      function is not triggered too much.
+                // fn: Function
+                //      Function to debounce.
+                // debounceDuration: Number
+                //      OPTIONAL. The amount of time in milliseconds for which we
+                //      will debounce the function. (defaults to 100ms)
+                debounceDuration = debounceDuration || 100;
+                return function () {
+                    if (!fn.debouncing) {
+                        var args = Array.prototype.slice.apply(arguments);
+                        fn.lastReturnVal = fn.apply(window, args);
+                        fn.debouncing = true;
+                    }
+                    clearTimeout(fn.debounceTimeout);
+                    fn.debounceTimeout = setTimeout(function () {
+                        fn.debouncing = false;
+                    }, debounceDuration);
+                    return fn.lastReturnVal;
+                };
             };
             return Utils;
         }());
