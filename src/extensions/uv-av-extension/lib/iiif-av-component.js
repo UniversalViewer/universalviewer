@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.46 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.47 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -1024,17 +1024,26 @@ var IIIFComponents;
         };
         CanvasInstance.prototype._hasRangeChanged = function () {
             var range = this._getRangeForCurrentTime();
-            if (range && this._data.range && range.rangeId !== this._data.range.rangeId && !this._data.limitToRange) {
+            if (range && !this._data.limitToRange && this._data.range && range.rangeId !== this._data.range.rangeId) {
                 this.set({
                     range: range
                 });
+            }
+            else {
+                // no range found. 
             }
         };
         CanvasInstance.prototype._getRangeForCurrentTime = function () {
             for (var i = 0; i < this._ranges.length; i++) {
                 var range = this._ranges[i];
-                if (!range.nonav && range.spans(this._canvasClockTime)) {
-                    return range;
+                if (range.spans(this._canvasClockTime)) {
+                    // if it's a no-nav range. return the parent range
+                    if (range.nonav) {
+                        return range.parentRange;
+                    }
+                    else {
+                        return range;
+                    }
                 }
             }
             return undefined;
@@ -1379,33 +1388,19 @@ var IIIFComponents;
     (function (AVComponentObjects) {
         var CanvasRange = /** @class */ (function () {
             function CanvasRange(range) {
-                this.rangeId = null;
-                this.duration = null;
+                // if (!range.canvases || !range.canvases.length) {
+                //     return;
+                // }
                 this.nonav = false;
-                if (!range.canvases || !range.canvases.length) {
-                    return;
-                }
                 this.rangeId = range.id;
-                // if there are multiple canvases, get the start of the first canvas,
-                // and the end of the last canvas.
-                var start;
-                var end;
-                for (var i = 0; i < range.canvases.length; i++) {
-                    var canvas = range.canvases[i];
-                    var temporal = IIIFComponents.AVComponentUtils.Utils.getTemporalComponent(canvas);
-                    if (temporal && temporal.length > 1) {
-                        if (i === 0) {
-                            start = Number(temporal[0]);
-                        }
-                        if (i === range.canvases.length - 1) {
-                            end = Number(temporal[1]);
-                        }
-                    }
+                if (range.parentRange) {
+                    this.parentRange = new CanvasRange(range.parentRange);
                 }
-                if (start !== undefined && end !== undefined) {
-                    this.duration = new AVComponentObjects.Duration(start, end);
+                this.duration = IIIFComponents.AVComponentUtils.Utils.getRangeDuration(range);
+                var behavior = range.getProperty('behavior');
+                if (behavior) {
+                    this.nonav = behavior[0] === 'no-nav';
                 }
-                this.nonav = range.getProperty('behavior') === 'no-nav';
             }
             CanvasRange.prototype.spans = function (time) {
                 if (this.duration) {
@@ -1477,6 +1472,44 @@ var IIIFComponents;
                     t = temporal[1].split(',');
                 }
                 return t;
+            };
+            Utils.getRangeDuration = function (range) {
+                var start;
+                var end;
+                if (range.canvases && range.canvases.length) {
+                    for (var i = 0; i < range.canvases.length; i++) {
+                        var canvas = range.canvases[i];
+                        var temporal = Utils.getTemporalComponent(canvas);
+                        if (temporal && temporal.length > 1) {
+                            if (i === 0) {
+                                start = Number(temporal[0]);
+                            }
+                            if (i === range.canvases.length - 1) {
+                                end = Number(temporal[1]);
+                            }
+                        }
+                    }
+                }
+                else {
+                    // get child ranges and calculate the start and end based on them
+                    var childRanges = range.getRanges();
+                    for (var i = 0; i < childRanges.length; i++) {
+                        var childRange = childRanges[i];
+                        var duration = Utils.getRangeDuration(childRange);
+                        if (duration) {
+                            if (i === 0) {
+                                start = duration.start;
+                            }
+                            if (i === childRanges.length - 1) {
+                                end = duration.end;
+                            }
+                        }
+                    }
+                }
+                if (start !== undefined && end !== undefined) {
+                    return new IIIFComponents.AVComponentObjects.Duration(start, end);
+                }
+                return undefined;
             };
             Utils.retargetTemporalComponent = function (canvases, target) {
                 var t = AVComponentUtils.Utils.getTemporalComponent(target);
