@@ -292,6 +292,7 @@ export class ContentLeftPanel extends LeftPanel {
     getTreeData(): IIIFComponents.ITreeComponentData {
         return <IIIFComponents.ITreeComponentData>{
             autoExpand: this._isTreeAutoExpanded(),
+            branchNodesExpandOnClick: false,
             branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
