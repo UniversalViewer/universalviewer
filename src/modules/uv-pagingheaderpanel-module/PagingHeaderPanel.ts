@@ -246,7 +246,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.setNavigationTitles();
         this.setTotal();
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+        let viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
 
         // check if the book has more than one page, otherwise hide prev/next options.
         if (this.extension.helper.getTotalCanvases() === 1) {
@@ -556,7 +556,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox.val(index);
         }
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
 
         if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
             if (this.extension.helper.isFirstCanvas()){

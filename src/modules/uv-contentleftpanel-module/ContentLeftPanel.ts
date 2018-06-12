@@ -292,6 +292,7 @@ export class ContentLeftPanel extends LeftPanel {
     getTreeData(): IIIFComponents.ITreeComponentData {
         return <IIIFComponents.ITreeComponentData>{
             autoExpand: this._isTreeAutoExpanded(),
+            branchNodesExpandOnClick: false,
             branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
@@ -356,7 +357,11 @@ export class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    getViewingDirection(): Manifesto.ViewingDirection {
+    getViewingHint(): Manifesto.ViewingHint | null {
+        return this.extension.helper.getViewingHint();
+    }
+
+    getViewingDirection(): Manifesto.ViewingDirection | null {
         return this.extension.helper.getViewingDirection();
     }
 
@@ -371,19 +376,24 @@ export class ContentLeftPanel extends LeftPanel {
         let width: number;
         let height: number;
 
-        const viewingDirection: string = this.getViewingDirection().toString();
 
-        if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
-            width = this.config.options.oneColThumbWidth;
-            height = this.config.options.oneColThumbHeight;
-        } else {
+        const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
+        const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
+
+        if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
+        } else if (viewingHint && viewingHint.toString() === manifesto.ViewingHint.paged().toString()) {
+            width = this.config.options.twoColThumbWidth;
+            height = this.config.options.twoColThumbHeight;
+        } else {
+            width = this.config.options.oneColThumbWidth;
+            height = this.config.options.oneColThumbHeight;
         }
 
         const thumbs: IThumb[] = <IThumb[]>this.extension.helper.getThumbs(width, height);
 
-        if (viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
+        if (viewingDirection && viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString()) {
             thumbs.reverse();
         }
 

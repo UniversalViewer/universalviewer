@@ -87,18 +87,20 @@ export class ResourcesLeftPanel extends LeftPanel {
         let width: number;
         let height: number;
 
-        const viewingDirection: string = this.extension.helper.getViewingDirection().toString();
+        const viewingDirection: Manifesto.ViewingDirection | null = this.extension.helper.getViewingDirection();
 
-        if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()) {
-            width = this.config.options.oneColThumbWidth;
-            height = this.config.options.oneColThumbHeight;
-        } else {
+        if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
+        } else {
+            width = this.config.options.oneColThumbWidth;
+            height = this.config.options.oneColThumbHeight;
         }
+
         if (typeof(width) === "undefined") {
             width = 100;
         }
+        
         if (typeof(height) === "undefined") {
             height = 100;
         }

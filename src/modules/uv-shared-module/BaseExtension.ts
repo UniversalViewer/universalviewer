@@ -1,21 +1,22 @@
-import {Auth09} from "./Auth09";
-import {Auth1} from "./Auth1";
-import {AuthDialogue} from "../../modules/uv-dialogues-module/AuthDialogue";
-import {BaseEvents} from "./BaseEvents";
-import {ClickThroughDialogue} from "../../modules/uv-dialogues-module/ClickThroughDialogue";
-import {IExtension} from "./IExtension";
-import {ILocale} from "../../ILocale";
-import {ISharePreview} from "./ISharePreview";
-import {IUVComponent} from "../../IUVComponent";
-import {IUVData} from "../../IUVData";
-import {LoginDialogue} from "../../modules/uv-dialogues-module/LoginDialogue";
-import {Metric} from "../../modules/uv-shared-module/Metric";
-import {MetricType} from "../../modules/uv-shared-module/MetricType";
-import {RestrictedDialogue} from "../../modules/uv-dialogues-module/RestrictedDialogue";
-import {Shell} from "./Shell";
-import {SynchronousRequire} from "../../SynchronousRequire";
-import IThumb = Manifold.IThumb;
+import { IDependencies } from "./IDependencies";
 import { UVUtils } from "./Utils";
+import { Auth09 } from "./Auth09";
+import { Auth1 } from "./Auth1";
+import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
+import { BaseEvents } from "./BaseEvents";
+import { ClickThroughDialogue } from "../../modules/uv-dialogues-module/ClickThroughDialogue";
+import { IExtension } from "./IExtension";
+import { ILocale } from "../../ILocale";
+import { ISharePreview } from "./ISharePreview";
+import { IUVComponent } from "../../IUVComponent";
+import { IUVData } from "../../IUVData";
+import { LoginDialogue } from "../../modules/uv-dialogues-module/LoginDialogue";
+import { Metric } from "../../modules/uv-shared-module/Metric";
+import { MetricType } from "../../modules/uv-shared-module/MetricType";
+import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
+import { Shell } from "./Shell";
+import { SynchronousRequire } from "../../SynchronousRequire";
+import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
 
@@ -572,8 +573,22 @@ export class BaseExtension implements IExtension {
 
         if (!scripts.length) {
 
-            requirejs([depsUri], function(deps: any) {
+            requirejs([depsUri], function(getDeps: (formats: string[] | null | null) => IDependencies) {
 
+                // getDeps is a function that accepts a file format.
+                // it uses this to determine which dependencies are appropriate
+                // for example, 'application/vnd.apple.mpegurl' for the AV extension
+                // would return hls.min.js, and not dash.all.min.js.
+                
+                let canvas: Manifesto.ICanvas = that.helper.getCurrentCanvas();
+                const mediaFormats: Manifesto.IAnnotationBody[] | null = that.getMediaFormats(canvas);
+                let formats: string[] = [];
+                if (mediaFormats && mediaFormats.length) {
+                    formats = mediaFormats.map((f: any) => {
+                        return f.getFormat().toString();
+                    });
+                }
+                const deps: IDependencies = getDeps(formats);
                 const baseUri: string = that.data.root + '/lib/';
 
                 // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
@@ -597,6 +612,7 @@ export class BaseExtension implements IExtension {
                 }
                 
                 cb(deps);
+                
             });
         } else {
             cb(null);
@@ -1158,7 +1174,10 @@ export class BaseExtension implements IExtension {
             if (this.helper.hasParentCollection()) {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
-                if (this.helper.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()) {
+
+                const viewingHint: Manifesto.ViewingHint | null = this.helper.getViewingHint();
+
+                if (!viewingHint || (viewingHint && viewingHint.toString() !== manifesto.ViewingHint.continuous().toString())) {
                     return true;
                 }
             }

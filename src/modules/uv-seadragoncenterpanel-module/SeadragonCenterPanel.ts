@@ -336,7 +336,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     createNavigationButtons() {
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
 
         this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
 
@@ -540,7 +540,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             $('.navigator').addClass('extraMargin');
 
-            const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+            const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
 
             if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
                 if (this.extension.helper.isFirstCanvas()) {
@@ -970,7 +970,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection();
+        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();;
 
         if (this.extension.helper.isMultiCanvas() && this.$prevButton && this.$nextButton) {
 

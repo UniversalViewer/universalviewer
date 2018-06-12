@@ -116,26 +116,20 @@
         background: #333;
     }
 
-    .ui-slider-range {
-        background: rgba(66, 66, 66, 0.5);
-        box-sizing: border-box;
-        border-radius: 0;
-        //border-right: 2px solid #000000;
-        //.opacity(.6);
+    .canvas-timeline-container .ui-slider-range {
+        .ui-slider-range-scrub();
     }
 
-    .ui-slider-handle {
-        top: 0px;
-        height: 100%;
-        width: 16px;
-        margin-left: -8px;
-        background: transparent;
-        border: none;
-        z-index: 1;
+    .canvas-timeline-container .ui-slider-handle {
+        .ui-slider-handle-hidden();
     }
 
-    .ui-slider-handle:focus {
-        outline: none;
+    .range-timeline-container .ui-slider-range {
+        .ui-slider-range-scrub();
+    }
+
+    .range-timeline-container .ui-slider-handle {
+        .ui-slider-handle-hidden();
     }
 
     // .ui-slider-handle:after {
@@ -161,11 +155,30 @@
     }
 
     .controls-container .volume {
-        display: inline-block;
+        float: right;
+        overflow: hidden;
+        width: 160px;
+    }
 
-        .volume-slider {
-            width: 100px;
-        }
+    .controls-container .volume .volume-mute {
+        float: left;
+    }
+
+    .controls-container .volume .volume-slider {
+
+        float: left;
+        margin-top: 10px;
+        width: 100px;
+        // height: 40px;
+        // display: inline-block;
+
+        // .volume-slider {
+        //     width: 100px;
+        // }
+
+        // .wrap {
+        //     display: inline-block;
+        // }
     }
 
     .btn {
@@ -214,4 +227,27 @@
         background-image: data-uri('@{img-path}next.png');
     }
 
+}
+
+// mixins
+.ui-slider-range-scrub() {
+    background: rgba(66, 66, 66, 0.5);
+    box-sizing: border-box;
+    border-radius: 0;
+    //border-right: 2px solid #000000;
+    //.opacity(.6);
+}
+
+.ui-slider-handle-hidden() {
+    top: 0px;
+    height: 100%;
+    width: 16px;
+    margin-left: -8px;
+    background: transparent;
+    border: none;
+    z-index: 1;
+
+    &:focus {
+        outline: none;
+    }
 }

@@ -36,6 +36,14 @@
                                 background-position-y: 50%;
                             }
 
+                            &.audio {
+                                background-image: data-uri('@{img-path}audio.png');
+                            }
+
+                            &.video {
+                                background-image: data-uri('@{img-path}video.png');
+                            }
+
                             &.hidden {
                                 background-image: data-uri('@{img-path}hidden_thumb.png');
                                 background-repeat: no-repeat;
@@ -111,13 +119,31 @@
                         }
 
                         &.oneCol {
+
                             margin: 0 0 7px 0;
+
                             .label {
                                 width: 178px;
                             }
+
                             .wrap {
-                                width: 208px;
-                                max-height: 373px;
+                                float: left;
+                                width: 90px;
+                                max-height: 90px;
+                                //width: 208px; // full width
+                                //max-height: 373px; // full height
+                            }
+
+                            .info {
+                                width: 113px;
+                                float: left;
+                                margin: 0 0 0 7px;
+
+                                .searchResults {
+                                    clear: left;
+                                    float: left;
+                                    margin: 7px 0 0 0;
+                                }
                             }
                         }
 
