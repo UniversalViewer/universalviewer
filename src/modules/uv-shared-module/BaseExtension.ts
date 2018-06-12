@@ -1174,7 +1174,10 @@ export class BaseExtension implements IExtension {
             if (this.helper.hasParentCollection()) {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
-                if (this.helper.getViewingHint().toString() !== manifesto.ViewingHint.continuous().toString()) {
+
+                const viewingHint: Manifesto.ViewingHint | null = this.helper.getViewingHint();
+
+                if (!viewingHint || (viewingHint && viewingHint.toString() !== manifesto.ViewingHint.continuous().toString())) {
                     return true;
                 }
             }

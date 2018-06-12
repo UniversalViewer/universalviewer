@@ -44,23 +44,23 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     createModules(): void{
         super.createModules();
 
-        if (this.isHeaderPanelEnabled()){
+        if (this.isHeaderPanelEnabled()) {
             this.headerPanel = new HeaderPanel(Shell.$headerPanel);
         } else {
             Shell.$headerPanel.hide();
         }
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
         }
 
         this.centerPanel = new VirtexCenterPanel(Shell.$centerPanel);
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
         }
 
-        if (this.isFooterPanelEnabled()){
+        if (this.isFooterPanelEnabled()) {
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
         } else {
             Shell.$footerPanel.hide();

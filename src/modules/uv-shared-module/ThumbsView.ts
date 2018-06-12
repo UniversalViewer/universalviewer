@@ -36,7 +36,9 @@ export class ThumbsView extends BaseView {
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
-        this.$thumbs.addClass(this.extension.helper.getViewingDirection().toString()); // defaults to "left-to-right"
+        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+
+        this.$thumbs.addClass(viewingDirection.toString()); // defaults to "left-to-right"
 
         const that = this;
 
@@ -74,12 +76,15 @@ export class ThumbsView extends BaseView {
                     className += " placeholder";
                 }
 
-                const viewingDirection: string = that.extension.helper.getViewingDirection().toString();
+                const viewingHint: Manifesto.ViewingHint | null = that.extension.helper.getViewingHint();
+                const viewingDirection: Manifesto.ViewingDirection | null = that.extension.helper.getViewingDirection();
 
-                if (viewingDirection === manifesto.ViewingDirection.topToBottom().toString() || viewingDirection === manifesto.ViewingDirection.bottomToTop().toString()){
-                    className += " oneCol";
-                } else {
+                if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
                     className += " twoCol";
+                } else if (viewingHint && viewingHint.toString() === manifesto.ViewingHint.paged().toString()) {
+                    className += " twoCol";
+                } else {
+                    className += " oneCol";
                 }
 
                 return className;

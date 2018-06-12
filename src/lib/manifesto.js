@@ -1,4 +1,4 @@
-// manifesto v2.2.24 https://github.com/iiif-commons/manifesto
+// manifesto v2.2.25 https://github.com/iiif-commons/manifesto
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifesto = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -1345,19 +1345,23 @@ var Manifesto;
             return this.getTotalSequences() > 1;
         };
         Manifest.prototype.isPagingEnabled = function () {
-            return this.getViewingHint().toString() === Manifesto.ViewingHint.PAGED.toString();
+            var viewingHint = this.getViewingHint();
+            if (viewingHint) {
+                return viewingHint.toString() === Manifesto.ViewingHint.PAGED.toString();
+            }
+            return false;
         };
         Manifest.prototype.getViewingDirection = function () {
             if (this.getProperty('viewingDirection')) {
                 return new Manifesto.ViewingDirection(this.getProperty('viewingDirection'));
             }
-            return Manifesto.ViewingDirection.LEFTTORIGHT;
+            return null;
         };
         Manifest.prototype.getViewingHint = function () {
             if (this.getProperty('viewingHint')) {
                 return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
             }
-            return Manifesto.ViewingHint.EMPTY;
+            return null;
         };
         return Manifest;
     }(Manifesto.IIIFResource));
@@ -1772,7 +1776,8 @@ var Manifesto;
             var index;
             if (pagingEnabled) {
                 var indices = this.getPagedIndices(canvasIndex);
-                if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
+                var viewingDirection = this.getViewingDirection();
+                if (viewingDirection && viewingDirection.toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
                     index = indices[0] + 1;
                 }
                 else {
@@ -1802,7 +1807,8 @@ var Manifesto;
                 else {
                     indices = [canvasIndex - 1, canvasIndex];
                 }
-                if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
+                var viewingDirection = this.getViewingDirection();
+                if (viewingDirection && viewingDirection.toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
                     indices = indices.reverse();
                 }
             }
@@ -1812,7 +1818,8 @@ var Manifesto;
             var index;
             if (pagingEnabled) {
                 var indices = this.getPagedIndices(canvasIndex);
-                if (this.getViewingDirection().toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
+                var viewingDirection = this.getViewingDirection();
+                if (viewingDirection && viewingDirection.toString() === Manifesto.ViewingDirection.RIGHTTOLEFT.toString()) {
                     index = indices[indices.length - 1] - 1;
                 }
                 else {
@@ -1875,13 +1882,13 @@ var Manifesto;
             else if (this.options.resource.getViewingDirection) {
                 return this.options.resource.getViewingDirection();
             }
-            return Manifesto.ViewingDirection.LEFTTORIGHT;
+            return null;
         };
         Sequence.prototype.getViewingHint = function () {
             if (this.getProperty('viewingHint')) {
                 return new Manifesto.ViewingHint(this.getProperty('viewingHint'));
             }
-            return Manifesto.ViewingHint.EMPTY;
+            return null;
         };
         Sequence.prototype.isCanvasIndexOutOfRange = function (canvasIndex) {
             return canvasIndex > this.getTotalCanvases() - 1;
@@ -1896,7 +1903,11 @@ var Manifesto;
             return this.getTotalCanvases() > 1;
         };
         Sequence.prototype.isPagingEnabled = function () {
-            return this.getViewingHint().toString() === Manifesto.ViewingHint.PAGED.toString();
+            var viewingHint = this.getViewingHint();
+            if (viewingHint) {
+                return viewingHint.toString() === Manifesto.ViewingHint.PAGED.toString();
+            }
+            return false;
         };
         // checks if the number of canvases is even - therefore has a front and back cover
         Sequence.prototype.isTotalCanvasesEven = function () {

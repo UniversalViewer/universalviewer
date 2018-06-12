@@ -31,15 +31,17 @@ export class ThumbsView extends BaseThumbsView {
         
         $.views.helpers({
             separator: function() {
-                if (that.extension.helper.isVerticallyAligned()) {
-                    return true; // one thumb per line
-                }
+
                 // two thumbs per line
                 if (that.extension.helper.isPaged()) {
                     return ((this.data.index - 1) % 2 == 0) ? false : true;
                 }
 
-                return false;
+                // if (that.extension.helper.isVerticallyAligned()) {
+                //     return true; // one thumb per line
+                // }
+
+                return true; // default to one thumbnail per row
             }
         });
     }
