@@ -151,7 +151,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
                 const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                const label: string = UVUtils.sanitize(<string>Manifesto.TranslationCollection.getValue(canvas.getLabel()));
+                const label: string = UVUtils.sanitize(<string>Manifesto.TranslationCollection.getValue(canvas.getLabel(), this.extension.helper.options.locale));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
