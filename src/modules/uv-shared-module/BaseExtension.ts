@@ -98,7 +98,12 @@ export class BaseExtension implements IExtension {
                     e.preventDefault();
                     const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData('URL');
                     const a: HTMLAnchorElement = Utils.Urls.getUrlParts(dropUrl);
-                    const iiifResourceUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
+                    let iiifResourceUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
+
+                    if (!iiifResourceUri) {
+                        // look for collection param
+                        iiifResourceUri = Utils.Urls.getQuerystringParameterFromString('collection', a.search);
+                    }
                     //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
 
                     if (iiifResourceUri) {
