@@ -63,6 +63,7 @@
       "options": {
         "autoExpandTreeEnabled": false,
         "autoExpandTreeIfFewerThan": 20,
+        "branchNodesExpandOnClick": true,
         "branchNodesSelectable": false,
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
