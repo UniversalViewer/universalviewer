@@ -59,11 +59,11 @@
                 "pagingNote": "Veuillez fermer l'affichage en double page pour accéder aux options supplémentaires.",
                 "preview": "Aperçu",
                 "title": "Télécharger",
-                "wholeImageHighRes": "Image entière {0} x {1}px ({2})",
+                "wholeImageHighRes": "Image {0} x {1}px ({2})",
                 "wholeImageHighResExplanation": "Ouvre une nouvelle fenêtre.",
-                "wholeImagesHighRes": "Images en entier ({0})",
+                "wholeImagesHighRes": "Images ({0})",
                 "wholeImagesHighResExplanation": "S'ouvre dans deux nouvelles fenêtres.",
-                "wholeImageLowResAsJpg": "Image en entier {0} x {1}px (jpg)",
+                "wholeImageLowResAsJpg": "Image {0} x {1}px (jpg)",
                 "wholeImageLowResAsJpgExplanation": "Ouvre une nouvelle fenêtre."
             }
         },
@@ -74,7 +74,7 @@
                 "embed": "Intégrer",
                 "exitFullScreen": "Quitter le mode plein écran",
                 "feedback": "Commentaire",
-                "fullScreen": "Plein écran",
+                "fullScreen": "Affichage en plein écran",
                 "moreInfo": "Informations",
                 "open": "Ouvrir",
                 "share": "Partager"
@@ -106,7 +106,7 @@
         "mobileFooterPanel": {
             "content": {
                 "rotateRight": "Pivoter à droite",
-                "moreInfo": "Plus d'informations",
+                "moreInfo": "Informations",
                 "zoomIn": "Zoom avant",
                 "zoomOut": "Zoom arrière"
             }
@@ -126,7 +126,7 @@
                 "more": "suite",
                 "noData": "Aucune donnée à afficher",
                 "page": "Page",
-                "title": "Plus d'informations",
+                "title": "Informations",
                 "manifestHeader": "A propos du contenu",
                 "canvasHeader": "A propos de l'image",
                 "copyToClipboard": "Copier dans le presse-papiers",
@@ -191,7 +191,7 @@
                 "clearSearch": "Effacer",
                 "defaultLabel": "-",
                 "displaying": "{0} {1} de {2}",
-                "enterKeyword": "Saisir le mot clé",
+                "enterKeyword": "Saisir un mot",
                 "image": "image",
                 "imageCaps": "Image",
                 "instanceFound": "1 instance de '{0}' trouvée",
@@ -203,7 +203,7 @@
                 "print": "Imprimer",
                 "resultFoundFor": "résultat trouvé pour ",
                 "resultsFoundFor": "résultats trouvés pour",
-                "searchWithin": "Chercher dans ce contenu :"
+                "searchWithin": "Chercher dans ce document :"
             }
         },
         "settingsDialogue": {
@@ -214,12 +214,12 @@
                 "pagingEnabled": "Affichage double page",
                 "preserveViewport": "Conserver le zoom",
                 "title": "Paramètres",
-                "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>plus d'informations</a>"
+                "website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>informations</a>"
             }
         },
         "shareDialogue": {
             "content": {
-                "customSize": "personnalisé",
+                "customSize": "personnalisée",
                 "embed": "Intégrer",
                 "embedInstructions": "Pour afficher ce contenu sur votre site internet, copier-collez le code ci-dessous.",
                 "height": "Hauteur",
