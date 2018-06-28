@@ -8,6 +8,7 @@ export class AVCenterPanel extends CenterPanel {
     title: string | null;
     private _canvasReady: boolean = false;
     private _resourceOpened: boolean = false;
+    private _observeRangeChanges: boolean = false;
 
     constructor($element: JQuery) {
         super($element);
@@ -29,27 +30,65 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
-
-            if (canvas) {
-                this.avcomponent.showCanvas(canvas.id);
-            }
+            this._whenCanvasReady(() => {
+                this._viewCanvas(canvasIndex);
+            });            
         });
 
         $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
-            that._viewRange(range);
-            that._setTitle();
+
+            if (!this._observeRangeChanges) {
+                return;
+            }
+
+            this._whenCanvasReady(() => {
+                that._viewRange(range);
+                that._setTitle();
+            });
+
         });
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            this.avcomponent.set({
-                limitToRange: this._limitToRange(),
-                constrainNavigationToRange: this._limitToRange()
+            this._whenCanvasReady(() => {
+                this.avcomponent.set({
+                    limitToRange: this._limitToRange(),
+                    constrainNavigationToRange: this._limitToRange()
+                });
             });
         });
 
         $.subscribe(BaseEvents.CREATED, () => {
             this._setTitle();
+        });
+
+        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+
+            this._observeRangeChanges = false;
+
+            this._whenCanvasReady(() => {
+
+                this.avcomponent.set({
+                    virtualCanvasEnabled: false
+                });
+
+                const canvas: Manifesto.ICanvas | null = this.extension.helper.getCurrentCanvas();
+        
+                if (canvas) {
+                    this._viewCanvas(this.extension.helper.canvasIndex)
+                }
+
+            });
+        });
+
+        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+
+            this._observeRangeChanges = true;
+
+            this._whenCanvasReady(() => {
+                this.avcomponent.set({
+                    virtualCanvasEnabled: true
+                });
+            });
         });
 
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
@@ -153,11 +192,15 @@ export class AVCenterPanel extends CenterPanel {
         return !this.extension.isDesktopMetric();
     }
 
-    private _viewRange(range: Manifesto.IRange | null): void {
-
+    private _whenCanvasReady(cb: () => void): void {
         Utils.Async.waitFor(() => {
             return this._canvasReady;
-        }, () => {
+        }, cb);
+    }
+
+    private _viewRange(range: Manifesto.IRange | null): void {
+
+        this._whenCanvasReady(() => {
             if (range) {
                 this.avcomponent.playRange(range.id);
             }
@@ -166,12 +209,16 @@ export class AVCenterPanel extends CenterPanel {
         });
     }
 
-    viewCanvas(canvasIndex: number): void {
-        const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
+    private _viewCanvas(canvasIndex: number): void {
+
+        Utils.Async.waitFor(() => {
+            return this._canvasReady;
+        }, () => {
+
+            const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
         
-        if (canvas) {
             this.avcomponent.showCanvas(canvas.id);
-        }
+        });
     }
 
     resize() {

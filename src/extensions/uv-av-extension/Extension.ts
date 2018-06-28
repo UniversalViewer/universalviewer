@@ -156,18 +156,19 @@ export class Extension extends BaseExtension implements IAVExtension {
         if (!range) return;
         $.publish(BaseEvents.RANGE_CHANGED, [range]);
 
-        if (range.canvases && range.canvases.length) {
-            const canvasId: string = range.canvases[0];
-            const canvas: Manifesto.ICanvas | null = this.helper.getCanvasById(canvasId);
+        // don't update the canvas index, only when thumbs are clicked
+        // if (range.canvases && range.canvases.length) {
+        //     const canvasId: string = range.canvases[0];
+        //     const canvas: Manifesto.ICanvas | null = this.helper.getCanvasById(canvasId);
 
-            if (canvas) {
-                const canvasIndex: number = canvas.index;
+        //     if (canvas) {
+        //         const canvasIndex: number = canvas.index;
                 
-                if (canvasIndex !== this.helper.canvasIndex) {
-                    $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
-                }
-            }
-        }
+        //         if (canvasIndex !== this.helper.canvasIndex) {
+        //             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        //         }
+        //     }
+        // }
     }
 
 }

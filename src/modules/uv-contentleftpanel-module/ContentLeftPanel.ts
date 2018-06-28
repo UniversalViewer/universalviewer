@@ -176,14 +176,10 @@ export class ContentLeftPanel extends LeftPanel {
 
         this.$treeButton.onPressed(() => {
             this.openTreeView();
-
-            $.publish(BaseEvents.OPEN_TREE_VIEW);
         });
 
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
-
-            $.publish(BaseEvents.OPEN_THUMBS_VIEW);
         });
 
         this.setTitle(this.content.title);
@@ -375,7 +371,6 @@ export class ContentLeftPanel extends LeftPanel {
         
         let width: number;
         let height: number;
-
 
         const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
         const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
@@ -581,6 +576,8 @@ export class ContentLeftPanel extends LeftPanel {
 
         this.resize();
         this.treeView.resize();
+
+        $.publish(BaseEvents.OPEN_TREE_VIEW);
     }
 
     openThumbsView(): void {
@@ -614,6 +611,8 @@ export class ContentLeftPanel extends LeftPanel {
             this.thumbsView.show();
             this.thumbsView.resize();
         }
+
+        $.publish(BaseEvents.OPEN_THUMBS_VIEW);
     }
 
     selectTopRangeIndex(index: number): void {

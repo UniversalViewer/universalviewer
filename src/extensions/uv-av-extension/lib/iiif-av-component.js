@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.49 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.56 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -38,6 +38,7 @@ var IIIFComponents;
                 defaultAspectRatio: 0.56,
                 doubleClickMS: 350,
                 limitToRange: false,
+                virtualCanvasEnabled: true,
                 content: {
                     currentTime: "Current Time",
                     duration: "Duration",
@@ -85,17 +86,47 @@ var IIIFComponents;
                 });
             }
             if (diff.includes('canvasId') && this._data.canvasId) {
-                var currentCanvasInstance_1 = this._getCanvasInstanceById(this._data.canvasId);
-                this.canvasInstances.forEach(function (canvasInstance, index) {
-                    if (canvasInstance !== currentCanvasInstance_1) {
-                        canvasInstance.set({
-                            visible: false
-                        });
-                    }
-                    else {
-                        canvasInstance.set({ visible: true });
-                    }
+                var nextCanvasInstance_1 = this._getCanvasInstanceById(this._data.canvasId);
+                if (nextCanvasInstance_1) {
+                    this.canvasInstances.forEach(function (canvasInstance) {
+                        // hide canvases that don't have the same id        
+                        if (canvasInstance.getCanvasId() !== nextCanvasInstance_1.getCanvasId()) {
+                            canvasInstance.set({
+                                visible: false
+                            });
+                        }
+                        else {
+                            if (diff.includes('range')) {
+                                canvasInstance.set({
+                                    visible: true,
+                                    range: _this._data.range ? jQuery.extend(true, {}, _this._data.range) : undefined
+                                });
+                            }
+                            else {
+                                canvasInstance.set({
+                                    visible: true
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+            if (diff.includes('virtualCanvasEnabled')) {
+                this.set({
+                    range: undefined
                 });
+                // as you don't know the id of virtual canvases, you can toggle them on
+                // but when toggling off, you must call showCanvas to show the next canvas
+                if (this._data.virtualCanvasEnabled) {
+                    this.canvasInstances.forEach(function (canvasInstance) {
+                        if (canvasInstance.isVirtual()) {
+                            _this.set({
+                                canvasId: canvasInstance.getCanvasId(),
+                                range: undefined
+                            });
+                        }
+                    });
+                }
             }
             if (diff.includes('range') && this._data.range) {
                 var range = this._data.helper.getRangeById(this._data.range.id);
@@ -108,16 +139,30 @@ var IIIFComponents;
                         // get canvas by normalised id (without temporal part)
                         var canvasInstance = this._getCanvasInstanceById(canvasId);
                         if (canvasInstance) {
-                            // if not using the correct canvasinstance, switch to it
-                            if (this._data.canvasId && Manifesto.Utils.normaliseUrl(this._data.canvasId) !== canvasId) {
+                            if (canvasInstance.isVirtual() && this._data.virtualCanvasEnabled) {
+                                if (canvasInstance.includesVirtualSubCanvas(canvasId)) {
+                                    canvasId = canvasInstance.getCanvasId();
+                                    // use the retargeted range
+                                    for (var i = 0; i < canvasInstance.ranges.length; i++) {
+                                        var r = canvasInstance.ranges[i];
+                                        if (r.id === range.id) {
+                                            range = r;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            // if not using the correct canvasinstance, switch to it                    
+                            if (this._data.canvasId &&
+                                ((this._data.canvasId.includes('://')) ? Manifesto.Utils.normaliseUrl(this._data.canvasId) : this._data.canvasId) !== canvasId) {
                                 this.set({
                                     canvasId: canvasId,
-                                    range: Object.assign({}, range) // force diff
+                                    range: jQuery.extend(true, {}, range) // force diff
                                 });
                             }
                             else {
                                 canvasInstance.set({
-                                    range: range
+                                    range: jQuery.extend(true, {}, range)
                                 });
                             }
                         }
@@ -136,8 +181,8 @@ var IIIFComponents;
             });
             this.canvasInstances = [];
             this._$element.empty();
-            // if the manifest has an auto-advance behavior, join the canvases into a single "virtual" canvas
             if (this._data && this._data.helper) {
+                // if the manifest has an auto-advance behavior, join the canvases into a single "virtual" canvas
                 var behavior = this._data.helper.manifest.getBehavior();
                 var canvases = this._getCanvases();
                 if (behavior && behavior.toString() === manifesto.Behavior.autoadvance().toString()) {
@@ -147,11 +192,10 @@ var IIIFComponents;
                     });
                     this._initCanvas(virtualCanvas_1);
                 }
-                else {
-                    canvases.forEach(function (canvas) {
-                        _this._initCanvas(canvas);
-                    });
-                }
+                // all canvases need to be individually navigable
+                canvases.forEach(function (canvas) {
+                    _this._initCanvas(canvas);
+                });
                 if (this.canvasInstances.length > 0) {
                     this._data.canvasId = this.canvasInstances[0].getCanvasId();
                 }
@@ -224,16 +268,19 @@ var IIIFComponents;
             });
         };
         AVComponent.prototype._getCanvasInstanceById = function (canvasId) {
-            canvasId = Manifesto.Utils.normaliseUrl(canvasId);
-            for (var i = 0; i < this.canvasInstances.length; i++) {
-                var canvasInstance = this.canvasInstances[i];
-                // if the canvasinstance has a virtual canvas
-                if (canvasInstance.isVirtual()) {
-                    if (canvasInstance.includesVirtualSubCanvas(canvasId)) {
+            canvasId = (canvasId.includes('://')) ? Manifesto.Utils.normaliseUrl(canvasId) : canvasId;
+            // if virtual canvas is enabled, check for that first
+            if (this._data.virtualCanvasEnabled) {
+                for (var i = 0; i < this.canvasInstances.length; i++) {
+                    var canvasInstance = this.canvasInstances[i];
+                    if (canvasInstance.isVirtual() && canvasInstance.getCanvasId() === canvasId || canvasInstance.includesVirtualSubCanvas(canvasId)) {
                         return canvasInstance;
                     }
                 }
-                else {
+            }
+            else {
+                for (var i = 0; i < this.canvasInstances.length; i++) {
+                    var canvasInstance = this.canvasInstances[i];
                     var id = canvasInstance.getCanvasId();
                     if (id) {
                         var canvasInstanceId = Manifesto.Utils.normaliseUrl(id);
@@ -269,7 +316,7 @@ var IIIFComponents;
             var range = this._data.helper.getRangeById(rangeId);
             if (range) {
                 this.set({
-                    range: range
+                    range: jQuery.extend(true, {}, range)
                 });
             }
         };
@@ -448,11 +495,11 @@ var IIIFComponents;
             _this._isStalled = false;
             _this._lowPriorityFrequency = 250;
             _this._mediaSyncMarginSecs = 1;
-            _this._ranges = [];
             _this._rangeSpanPadding = 0.25;
             _this._readyCanvasesCount = 0;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
+            _this.ranges = [];
             _this._data = _this.options.data;
             _this.$playerElement = $('<div class="player"></div>');
             return _this;
@@ -481,6 +528,9 @@ var IIIFComponents;
             this._$timeDisplay = $('<div class="time-display"><span class="canvas-time"></span> / <span class="canvas-duration"></span></div>');
             this._$canvasTime = this._$timeDisplay.find('.canvas-time');
             this._$canvasDuration = this._$timeDisplay.find('.canvas-duration');
+            if (this.isVirtual()) {
+                this.$playerElement.addClass('virtual');
+            }
             var $volume = $('<div class="volume"></div>');
             this._volume = new IIIFComponents.AVVolumeControl({
                 target: $volume[0],
@@ -503,15 +553,18 @@ var IIIFComponents;
                     this._data.canvas.canvases.forEach(function (canvas) {
                         if (_this._data && _this._data.helper) {
                             var r = _this._data.helper.getCanvasRanges(canvas);
+                            var clonedRanges_1 = [];
                             // shift the range targets forward by the duration of their previous canvases
                             r.forEach(function (range) {
-                                if (range.canvases && range.canvases.length) {
-                                    for (var i = 0; i < range.canvases.length; i++) {
-                                        range.canvases[i] = IIIFComponents.AVComponentUtils.Utils.retargetTemporalComponent(_this._data.canvas.canvases, range.__jsonld.items[i].id);
+                                var clonedRange = jQuery.extend(true, {}, range);
+                                clonedRanges_1.push(clonedRange);
+                                if (clonedRange.canvases && clonedRange.canvases.length) {
+                                    for (var i = 0; i < clonedRange.canvases.length; i++) {
+                                        clonedRange.canvases[i] = IIIFComponents.AVComponentUtils.Utils.retargetTemporalComponent(_this._data.canvas.canvases, clonedRange.__jsonld.items[i].id);
                                     }
                                 }
                             });
-                            ranges_1.push.apply(ranges_1, r);
+                            ranges_1.push.apply(ranges_1, clonedRanges_1);
                         }
                     });
                 }
@@ -519,7 +572,7 @@ var IIIFComponents;
                     ranges_1 = ranges_1.concat(this._data.helper.getCanvasRanges(this._data.canvas));
                 }
                 ranges_1.forEach(function (range) {
-                    _this._ranges.push(range);
+                    _this.ranges.push(range);
                 });
             }
             this._canvasClockDuration = this._data.canvas.getDuration();
@@ -716,6 +769,7 @@ var IIIFComponents;
             if (diff.includes('visible')) {
                 if (this._data.canvas) {
                     if (this._data.visible) {
+                        this._rewind();
                         this.$playerElement.show();
                         //console.log('show ' + this._data.canvas.id);
                     }
@@ -736,8 +790,8 @@ var IIIFComponents;
                         var duration = this._data.range.getDuration();
                         if (duration) {
                             this._setCurrentTime(duration.start);
-                            this.fire(IIIFComponents.AVComponent.Events.RANGE_CHANGED, this._data.range.id);
                             this._play();
+                            this.fire(IIIFComponents.AVComponent.Events.RANGE_CHANGED, this._data.range.id);
                         }
                     }
                 }
@@ -755,7 +809,7 @@ var IIIFComponents;
         CanvasInstance.prototype._getRangeForCurrentTime = function (parentRange) {
             var ranges;
             if (!parentRange) {
-                ranges = this._ranges;
+                ranges = this.ranges;
             }
             else {
                 ranges = parentRange.getRanges();
@@ -809,7 +863,12 @@ var IIIFComponents;
                     var ratio = timelineLength / totalLength;
                     var start = duration.start * ratio;
                     var end = duration.end * ratio;
+                    // if the end is on the next canvas
+                    if (end > totalLength || end < start) {
+                        end = totalLength;
+                    }
                     var width = end - start;
+                    //console.log(width);
                     this._$durationHighlight.show();
                     // set the start position and width
                     this._$durationHighlight.css({
@@ -1168,6 +1227,7 @@ var IIIFComponents;
         // todo: can this be part of the _data state?
         // this._data.play = true?
         CanvasInstance.prototype._play = function (withoutUpdate) {
+            //console.log('playing ', this.getCanvasId());
             var _this = this;
             if (this._isPlaying)
                 return;
@@ -1645,7 +1705,8 @@ var IIIFComponents;
                 this.id = IIIFComponents.AVComponentUtils.Utils.getTimestamp();
             }
             VirtualCanvas.prototype.addCanvas = function (canvas) {
-                this.canvases.push(canvas);
+                // canvases need to be deep copied including functions
+                this.canvases.push(jQuery.extend(true, {}, canvas));
             };
             VirtualCanvas.prototype.getContent = function () {
                 var _this = this;

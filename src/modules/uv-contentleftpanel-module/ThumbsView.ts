@@ -37,10 +37,6 @@ export class ThumbsView extends BaseThumbsView {
                     return ((this.data.index - 1) % 2 == 0) ? false : true;
                 }
 
-                // if (that.extension.helper.isVerticallyAligned()) {
-                //     return true; // one thumb per line
-                // }
-
                 return true; // default to one thumbnail per row
             }
         });
@@ -53,16 +49,7 @@ export class ThumbsView extends BaseThumbsView {
         for (let i = 0; i < indices.length; i++) {
             this.getThumbByIndex(indices[i]).addClass('selected');
         }
-        // if ((<ISeadragonExtension>this.extension).isPagingSettingEnabled()) {
-        //     const indices: number[] = this.extension.getPagedIndices(index);
 
-        //     for (let i = 0; i < indices.length; i++) {
-        //         this.getThumbByIndex(indices[i]).addClass('selected');
-        //     }
-
-        // } else {
-        //     this.getThumbByIndex(index).addClass('selected');
-        // }
     }
 
     isPageModeEnabled(): boolean {
