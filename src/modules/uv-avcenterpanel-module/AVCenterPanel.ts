@@ -8,7 +8,7 @@ export class AVCenterPanel extends CenterPanel {
     title: string | null;
     private _canvasReady: boolean = false;
     private _resourceOpened: boolean = false;
-    private _observeRangeChanges: boolean = false;
+    private _isThumbsViewOpen: boolean = false;
 
     constructor($element: JQuery) {
         super($element);
@@ -37,7 +37,7 @@ export class AVCenterPanel extends CenterPanel {
 
         $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
 
-            if (!this._observeRangeChanges) {
+            if (!this._observeRangeChanges()) {
                 return;
             }
 
@@ -63,7 +63,7 @@ export class AVCenterPanel extends CenterPanel {
 
         $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
 
-            this._observeRangeChanges = false;
+            this._isThumbsViewOpen = true;
 
             this._whenCanvasReady(() => {
 
@@ -82,7 +82,7 @@ export class AVCenterPanel extends CenterPanel {
 
         $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
 
-            this._observeRangeChanges = true;
+            this._isThumbsViewOpen = false;
 
             this._whenCanvasReady(() => {
                 this.avcomponent.set({
@@ -99,6 +99,7 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         this.avcomponent.on('canvasready', () => {
+            console.log('canvasready');
             this._canvasReady = true;
         }, false);
 
@@ -127,6 +128,14 @@ export class AVCenterPanel extends CenterPanel {
             
         }, false);
 
+    }
+
+    private _observeRangeChanges(): boolean {
+        if (!this._isThumbsViewOpen) {
+            return true;
+        }
+
+        return false;
     }
 
     private _setTitle(): void {
@@ -202,7 +211,10 @@ export class AVCenterPanel extends CenterPanel {
 
         this._whenCanvasReady(() => {
             if (range) {
-                this.avcomponent.playRange(range.id);
+                //setTimeout(() => {
+                    //console.log('view ' + range.id);
+                    this.avcomponent.playRange(range.id);
+                //}, 500); // don't know why this is needed :-(
             }
             
             this.resize();

@@ -89,7 +89,7 @@ export class Dialogue extends BaseView {
 
     setDockedPosition(): void {
 
-        const top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
+        let top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
         let left: number = 0;
         let arrowLeft: number = 0;
         let normalisedPos: number = 0;
@@ -99,12 +99,14 @@ export class Dialogue extends BaseView {
             if (!this.extension.isDesktopMetric()) {
                 normalisedPos = Utils.Maths.normalise((<any>this.$triggerButton.offset()).left, 0, this.extension.width());
             } else {
-                normalisedPos = Utils.Maths.normalise((<any>this.$triggerButton.position()).left, 0, this.extension.width());
+                normalisedPos = Utils.Maths.normalise((<any>this.$triggerButton.position()).left + 8, 0, this.extension.width());
             }
             
             left = Math.floor((this.extension.width() * normalisedPos) - ((this.$element.width()) * normalisedPos));
-            //left = Math.floor((this.extension.width() * normalisedPos));
             arrowLeft = Math.floor(this.$element.width() * normalisedPos);
+
+            const offset: number = (<any>this.$triggerButton.offset()).top;
+            top = (Math.floor(this.extension.height() - this.$element.outerHeight(true))) - (this.extension.height() - offset);
         }
 
         this.$bottom.css('backgroundPosition', arrowLeft + 'px 0px');

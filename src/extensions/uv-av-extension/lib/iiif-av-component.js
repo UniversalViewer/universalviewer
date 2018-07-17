@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.56 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.60 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -20,6 +20,8 @@ var IIIFComponents;
             var _this = _super.call(this, options) || this;
             _this._data = _this.data();
             _this.canvasInstances = [];
+            _this._readyCanvases = 0;
+            _this._posterImageExpanded = false;
             _this._init();
             _this._resize();
             return _this;
@@ -41,12 +43,15 @@ var IIIFComponents;
                 virtualCanvasEnabled: true,
                 content: {
                     currentTime: "Current Time",
+                    collapse: "Collapse",
                     duration: "Duration",
+                    expand: "Expand",
                     mute: "Mute",
                     next: "Next",
                     pause: "Pause",
                     play: "Play",
-                    previous: "Previous"
+                    previous: "Previous",
+                    unmute: "Unmute"
                 }
             };
         };
@@ -199,6 +204,48 @@ var IIIFComponents;
                 if (this.canvasInstances.length > 0) {
                     this._data.canvasId = this.canvasInstances[0].getCanvasId();
                 }
+                this._checkAllCanvasesReadyInterval = setInterval(this._checkAllCanvasesReady.bind(this), 100);
+                this._$posterContainer = $('<div class="poster-container"></div>');
+                this._$element.append(this._$posterContainer);
+                this._$posterImage = $('<div class="poster-image"></div>');
+                this._$posterExpandButton = $("\n                    <button class=\"btn\" title=\"" + (this._data && this._data.content ? this._data.content.expand : '') + "\">\n                        <i class=\"av-icon-expand expand\" aria-hidden=\"true\"></i><span>" + (this._data && this._data.content ? this._data.content.expand : '') + "</span>\n                    </button>\n                ");
+                this._$posterImage.append(this._$posterExpandButton);
+                this._$posterImage.on('click', function () {
+                    var target = _this._getPosterImageCss(!_this._posterImageExpanded);
+                    //this._$posterImage.animate(target,"fast", "easein");
+                    _this._$posterImage.animate(target);
+                    _this._posterImageExpanded = !_this._posterImageExpanded;
+                    if (_this._posterImageExpanded) {
+                        var label = _this.options.data.content.collapse;
+                        _this._$posterExpandButton.prop('title', label);
+                        _this._$posterExpandButton.find('i').switchClass('expand', 'collapse');
+                    }
+                    else {
+                        var label = _this.options.data.content.expand;
+                        _this._$posterExpandButton.prop('title', label);
+                        _this._$posterExpandButton.find('i').switchClass('collapse', 'expand');
+                    }
+                });
+                // poster canvas
+                var posterImage = this._data.helper.getPosterImage();
+                if (posterImage) {
+                    this._$posterContainer.append(this._$posterImage);
+                    var css = this._getPosterImageCss(this._posterImageExpanded);
+                    css = Object.assign({}, css, {
+                        'background-image': 'url(' + posterImage + ')'
+                    });
+                    this._$posterImage.css(css);
+                }
+            }
+        };
+        AVComponent.prototype._checkAllCanvasesReady = function () {
+            console.log('loading media');
+            if (this._readyCanvases === this.canvasInstances.length) {
+                console.log('media ready');
+                clearInterval(this._checkAllCanvasesReadyInterval);
+                //that._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
+                this.fire(AVComponent.Events.CANVASREADY);
+                this.resize();
             }
         };
         AVComponent.prototype._getCanvases = function () {
@@ -218,8 +265,7 @@ var IIIFComponents;
             canvasInstance.init();
             this.canvasInstances.push(canvasInstance);
             canvasInstance.on(AVComponent.Events.CANVASREADY, function () {
-                //that._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
-                _this.fire(AVComponent.Events.CANVASREADY);
+                _this._readyCanvases++;
             }, false);
             // canvasInstance.on(AVComponent.Events.RESETCANVAS, () => {
             //     this.playCanvas(canvasInstance.canvas.id);
@@ -321,17 +367,67 @@ var IIIFComponents;
             }
         };
         AVComponent.prototype.showCanvas = function (canvasId) {
-            this.set({
-                canvasId: canvasId
-            });
+            // if the passed canvas id is already the current canvas id, but the canvas isn't visible
+            // (switching from virtual canvas)
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas && currentCanvas.getCanvasId() === canvasId && !currentCanvas.isVisible()) {
+                currentCanvas.set({
+                    visible: true
+                });
+            }
+            else {
+                this.set({
+                    canvasId: canvasId
+                });
+            }
         };
         AVComponent.prototype._logMessage = function (message) {
             this.fire(AVComponent.Events.LOG, message);
+        };
+        AVComponent.prototype._getPosterImageCss = function (expanded) {
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                var $options = currentCanvas.$playerElement.find('.options-container');
+                var width = currentCanvas.$playerElement.parent().width();
+                var height = currentCanvas.$playerElement.parent().height() - $options.height();
+                if (expanded) {
+                    return {
+                        'top': 0,
+                        'left': 0,
+                        'width': width,
+                        'height': height
+                    };
+                }
+                else {
+                    return {
+                        'top': 0,
+                        'left': (width / 3) * 2,
+                        'width': width / 3,
+                        'height': height / 3
+                    };
+                }
+            }
+            return null;
         };
         AVComponent.prototype.resize = function () {
             this.canvasInstances.forEach(function (canvasInstance) {
                 canvasInstance.resize();
             });
+            // get the visible player and align the poster to it
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                if (this._$posterImage && this._$posterImage.is(':visible')) {
+                    if (this._posterImageExpanded) {
+                        this._$posterImage.css(this._getPosterImageCss(true));
+                    }
+                    else {
+                        this._$posterImage.css(this._getPosterImageCss(false));
+                    }
+                    // this._$posterExpandButton.css({
+                    //     top: <number>this._$posterImage.height() - <number>this._$posterExpandButton.outerHeight()
+                    // });
+                }
+            }
         };
         return AVComponent;
     }(_Components.BaseComponent));
@@ -412,6 +508,7 @@ var IIIFComponents;
                 value: that._data.volume,
                 step: 0.1,
                 orientation: "horizontal",
+                range: "min",
                 min: 0,
                 max: 1,
                 animate: false,
@@ -441,9 +538,13 @@ var IIIFComponents;
                     value: this._data.volume
                 });
                 if (this._data.volume === 0) {
+                    var label = this.options.data.content.unmute;
+                    this._$volumeMute.prop('title', label);
                     this._$volumeMute.find('i').switchClass('on', 'off');
                 }
                 else {
+                    var label = this.options.data.content.mute;
+                    this._$volumeMute.prop('title', label);
                     this._$volumeMute.find('i').switchClass('off', 'on');
                 }
             }
@@ -496,7 +597,7 @@ var IIIFComponents;
             _this._lowPriorityFrequency = 250;
             _this._mediaSyncMarginSecs = 1;
             _this._rangeSpanPadding = 0.25;
-            _this._readyCanvasesCount = 0;
+            _this._readyMediaCount = 0;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
             _this.ranges = [];
@@ -748,8 +849,16 @@ var IIIFComponents;
                 this._renderMediaElement(itemData);
             }
         };
+        CanvasInstance.prototype.data = function () {
+            return {
+                volume: 1
+            };
+        };
         CanvasInstance.prototype.isVirtual = function () {
             return this._data.canvas instanceof IIIFComponents.AVComponentObjects.VirtualCanvas;
+        };
+        CanvasInstance.prototype.isVisible = function () {
+            return !!this._data.visible;
         };
         CanvasInstance.prototype.includesVirtualSubCanvas = function (canvasId) {
             if (this.isVirtual() && this._data.canvas && this._data.canvas.canvases) {
@@ -763,6 +872,7 @@ var IIIFComponents;
             return false;
         };
         CanvasInstance.prototype.set = function (data) {
+            var _this = this;
             var oldData = Object.assign({}, this._data);
             this._data = Object.assign(this._data, data);
             var diff = IIIFComponents.AVComponentUtils.Utils.diff(oldData, this._data);
@@ -789,20 +899,32 @@ var IIIFComponents;
                     else {
                         var duration = this._data.range.getDuration();
                         if (duration) {
-                            this._setCurrentTime(duration.start);
+                            if (!this._data.range.autoChanged) {
+                                this._setCurrentTime(duration.start);
+                            }
                             this._play();
                             this.fire(IIIFComponents.AVComponent.Events.RANGE_CHANGED, this._data.range.id);
                         }
                     }
                 }
             }
-            this._render();
+            if (diff.includes('volume')) {
+                this._contentAnnotations.forEach(function ($mediaElement) {
+                    $($mediaElement.element).prop("volume", _this._data.volume);
+                    _this._volume.set({
+                        volume: _this._data.volume
+                    });
+                });
+            }
+            else {
+                this._render();
+            }
         };
         CanvasInstance.prototype._hasRangeChanged = function () {
             var range = this._getRangeForCurrentTime();
             if (range && !this._data.limitToRange && (!this._data.range || (this._data.range && range.id !== this._data.range.id))) {
                 this.set({
-                    range: range
+                    range: jQuery.extend(true, { autoChanged: true }, range)
                 });
             }
         };
@@ -851,7 +973,6 @@ var IIIFComponents;
             return true;
         };
         CanvasInstance.prototype._render = function () {
-            var _this = this;
             if (this._data.range) {
                 var duration = this._data.range.getDuration();
                 if (duration) {
@@ -900,12 +1021,6 @@ var IIIFComponents;
             else {
                 this._$durationHighlight.hide();
             }
-            this._contentAnnotations.forEach(function ($mediaElement) {
-                $($mediaElement.element).prop("volume", _this._data.volume);
-                _this._volume.set({
-                    volume: _this._data.volume
-                });
-            });
             if (this._data.limitToRange && this._data.range) {
                 this._$canvasTimelineContainer.hide();
                 this._$rangeTimelineContainer.show();
@@ -1031,27 +1146,27 @@ var IIIFComponents;
                 default:
                     return;
             }
-            var video = $mediaElement[0];
+            var media = $mediaElement[0];
             if (data.format && data.format.toString() === 'application/dash+xml') {
                 // dash
                 $mediaElement.attr('data-dashjs-player', '');
                 var player = dashjs.MediaPlayer().create();
-                player.initialize(video, data.source);
+                player.initialize(media, data.source);
             }
             else if (data.format && data.format.toString() === 'application/vnd.apple.mpegurl') {
                 // hls
                 if (Hls.isSupported()) {
                     var hls = new Hls();
                     hls.loadSource(data.source);
-                    hls.attachMedia(video);
+                    hls.attachMedia(media);
                     //hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    //video.play();
+                    //media.play();
                     //});
                 }
-                else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    video.src = data.source;
-                    //video.addEventListener('canplay', function () {
-                    //video.play();
+                else if (media.canPlayType('application/vnd.apple.mpegurl')) {
+                    media.src = data.source;
+                    //media.addEventListener('canplay', function () {
+                    //media.play();
                     //});
                 }
             }
@@ -1097,19 +1212,19 @@ var IIIFComponents;
             if (type === 'video' || type === 'audio') {
                 $mediaElement.on('loadstart', function () {
                     //console.log('loadstart');
-                    data.checkForStall();
+                    //data.checkForStall();
                 });
                 $mediaElement.on('waiting', function () {
                     //console.log('waiting');
-                    data.checkForStall();
+                    //data.checkForStall();
                 });
                 $mediaElement.on('seeking', function () {
                     //console.log('seeking');
                     //data.checkForStall();
                 });
                 $mediaElement.on('loadedmetadata', function () {
-                    _this._readyCanvasesCount++;
-                    if (_this._readyCanvasesCount === _this._contentAnnotations.length) {
+                    _this._readyMediaCount++;
+                    if (_this._readyMediaCount === _this._contentAnnotations.length) {
                         //if (!this._data.range) {
                         _this._setCurrentTime(0);
                         //}                        
@@ -1121,7 +1236,7 @@ var IIIFComponents;
                     }
                 });
                 $mediaElement.attr('preload', 'auto');
-                $mediaElement.get(0).load(); // todo: type
+                $mediaElement.get(0).load();
             }
             this._renderSyncIndicator(data);
         };
@@ -1255,6 +1370,8 @@ var IIIFComponents;
             if (!withoutUpdate) {
                 this._synchronizeMedia();
             }
+            var label = (this._data && this._data.content) ? this._data.content.pause : '';
+            this._$playButton.prop('title', label);
             this._$playButton.find('i').switchClass('play', 'pause');
             this.fire(IIIFComponents.AVComponentCanvasInstance.Events.PLAYCANVAS);
             this.logMessage('PLAY canvas');
@@ -1271,6 +1388,8 @@ var IIIFComponents;
                 this._lowPriorityUpdater();
                 this._synchronizeMedia();
             }
+            var label = (this._data && this._data.content) ? this._data.content.play : '';
+            this._$playButton.prop('title', label);
             this._$playButton.find('i').switchClass('pause', 'play');
             this.fire(IIIFComponents.AVComponentCanvasInstance.Events.PAUSECANVAS);
             this.logMessage('PAUSE canvas');

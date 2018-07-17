@@ -47,6 +47,11 @@ export class MoreInfoRightPanel extends RightPanel {
         this.metadataComponent.set(this._getData());
     }
 
+    private _getCurrentRange(): Manifesto.IRange | null {
+        const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+        return range;
+    }
+
     private _getData(): IIIFComponents.IMetadataComponentData {
         return <IIIFComponents.IMetadataComponentData>{
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
@@ -62,7 +67,7 @@ export class MoreInfoRightPanel extends RightPanel {
             limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
-            range: this.extension.getCurrentCanvasRange(),
+            range: this._getCurrentRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html) => {
                 return UVUtils.sanitize(html);

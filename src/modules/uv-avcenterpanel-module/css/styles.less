@@ -13,14 +13,30 @@
 
         .iiif-av-component {
 
-            .volume {
+            .controls-container {
 
-                display: none;
+                .time-display {
+                    padding-top: 10px;
+                    
+                    @media only screen and (min-width: @watch-min-width) and (max-width: @mobile-landscape-max-width) {
+                        display: none;
+                    }
+                }
 
-                .desktop-mediaquery({
-                    display: block;
-                });
+                .volume {
 
+                    display: inline-block;
+                    float: none;
+
+                    @media only screen and (min-width: @watch-min-width) and (max-width: @mobile-landscape-max-width) {
+                        display: none;
+                    }
+
+                    .volume-slider {
+                        margin-top: 16px;
+                    }
+
+                }
             }
 
         }
