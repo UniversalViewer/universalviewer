@@ -510,6 +510,12 @@ export class BaseExtension implements IExtension {
             $('#top').focus();
             this.component.isFullScreen = !this.component.isFullScreen;
 
+            if (this.component.isFullScreen) {
+                this.$element.addClass('fullscreen');
+            } else {
+                this.$element.removeClass('fullscreen');
+            }
+
             this.fire(BaseEvents.TOGGLE_FULLSCREEN,
                 {
                     isFullScreen: this.component.isFullScreen,
