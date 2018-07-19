@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.60 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.61 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -353,6 +353,18 @@ var IIIFComponents;
                 canvasInstance.set({
                     range: undefined
                 });
+            }
+        };
+        AVComponent.prototype.play = function () {
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                currentCanvas.play();
+            }
+        };
+        AVComponent.prototype.pause = function () {
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                currentCanvas.pause();
             }
         };
         AVComponent.prototype.playRange = function (rangeId) {
@@ -716,10 +728,10 @@ var IIIFComponents;
             });
             this._$playButton.on('click', function () {
                 if (_this._isPlaying) {
-                    _this._pause();
+                    _this.pause();
                 }
                 else {
-                    _this._play();
+                    _this.play();
                 }
             });
             this._$nextButton.on('click', function () {
@@ -885,7 +897,7 @@ var IIIFComponents;
                     }
                     else {
                         this.$playerElement.hide();
-                        this._pause();
+                        this.pause();
                         //console.log('hide ' + this._data.canvas.id);
                     }
                     this.resize();
@@ -902,7 +914,7 @@ var IIIFComponents;
                             if (!this._data.range.autoChanged) {
                                 this._setCurrentTime(duration.start);
                             }
-                            this._play();
+                            this.play();
                             this.fire(IIIFComponents.AVComponent.Events.RANGE_CHANGED, this._data.range.id);
                         }
                     }
@@ -1229,7 +1241,7 @@ var IIIFComponents;
                         _this._setCurrentTime(0);
                         //}                        
                         if (_this.options.data.autoPlay) {
-                            _this._play();
+                            _this.play();
                         }
                         _this._updateDurationDisplay();
                         _this.fire(IIIFComponents.AVComponent.Events.CANVASREADY);
@@ -1304,7 +1316,7 @@ var IIIFComponents;
         // todo: can this be part of the _data state?
         // this._data.rewind = true?
         CanvasInstance.prototype._rewind = function (withoutUpdate) {
-            this._pause();
+            this.pause();
             var duration;
             if (this._data.range) {
                 duration = this._data.range.getDuration();
@@ -1322,7 +1334,7 @@ var IIIFComponents;
                     });
                 }
             }
-            this._play();
+            this.play();
         };
         // todo: can this be part of the _data state?
         // this._data.fastforward = true?
@@ -1337,11 +1349,11 @@ var IIIFComponents;
             else {
                 this._canvasClockTime = this._canvasClockDuration;
             }
-            this._pause();
+            this.pause();
         };
         // todo: can this be part of the _data state?
         // this._data.play = true?
-        CanvasInstance.prototype._play = function (withoutUpdate) {
+        CanvasInstance.prototype.play = function (withoutUpdate) {
             //console.log('playing ', this.getCanvasId());
             var _this = this;
             if (this._isPlaying)
@@ -1378,7 +1390,7 @@ var IIIFComponents;
         };
         // todo: can this be part of the _data state?
         // this._data.play = false?
-        CanvasInstance.prototype._pause = function (withoutUpdate) {
+        CanvasInstance.prototype.pause = function (withoutUpdate) {
             window.clearInterval(this._highPriorityInterval);
             window.clearInterval(this._lowPriorityInterval);
             window.clearInterval(this._canvasClockInterval);
@@ -1404,11 +1416,11 @@ var IIIFComponents;
                 duration = this._data.range.getDuration();
             }
             if (this._data.limitToRange && duration && this._canvasClockTime >= duration.end) {
-                this._pause();
+                this.pause();
             }
             if (this._canvasClockTime >= this._canvasClockDuration) {
                 this._canvasClockTime = this._canvasClockDuration;
-                this._pause();
+                this.pause();
             }
         };
         CanvasInstance.prototype._highPriorityUpdater = function () {
@@ -1541,7 +1553,7 @@ var IIIFComponents;
                         //this._showWorkingIndicator(this._$canvasContainer);
                     }
                     this._wasPlaying = this._isPlaying;
-                    this._pause(true);
+                    this.pause(true);
                     this._isStalled = aBoolean;
                 }
             }
@@ -1553,7 +1565,7 @@ var IIIFComponents;
                 if (this._stallRequestedBy.length === 0) {
                     //this._hideWorkingIndicator();
                     if (this._isStalled && this._wasPlaying) {
-                        this._play(true);
+                        this.play(true);
                     }
                     this._isStalled = aBoolean;
                 }
