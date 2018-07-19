@@ -4,6 +4,7 @@ import {IUVData} from "../../IUVData";
 import {MetricType} from "./MetricType";
 
 export interface IExtension {
+    $element: JQuery;
     addTimestamp(uri: string): string;
     changeLocale(locale: string): void;
     component: IUVComponent;
@@ -32,6 +33,7 @@ export interface IExtension {
     height(): number;
     helper: Manifold.IHelper;
     isCreated: boolean;
+    isCatchAllMetric(): boolean;
     isDesktopMetric(): boolean;
     isFooterPanelEnabled(): boolean;
     isFullScreen(): boolean;

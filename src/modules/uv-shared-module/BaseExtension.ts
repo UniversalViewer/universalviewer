@@ -510,6 +510,12 @@ export class BaseExtension implements IExtension {
             $('#top').focus();
             this.component.isFullScreen = !this.component.isFullScreen;
 
+            if (this.component.isFullScreen) {
+                this.$element.addClass('fullscreen');
+            } else {
+                this.$element.removeClass('fullscreen');
+            }
+
             this.fire(BaseEvents.TOGGLE_FULLSCREEN,
                 {
                     isFullScreen: this.component.isFullScreen,
@@ -1139,6 +1145,10 @@ export class BaseExtension implements IExtension {
 
     isDesktopMetric(): boolean {
         return this.metric.toString() === MetricType.DESKTOP.toString();
+    }
+
+    isCatchAllMetric(): boolean {
+        return this.metric.toString() === MetricType.NONE.toString();
     }
 
     // todo: use redux in manifold to get reset state
