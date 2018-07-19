@@ -1,5 +1,8 @@
 define(function () {
+    // https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/Live_streaming_web_audio_and_video
+    // Dash is supported everywhere except safari
     function isSafari() {
+        // https://stackoverflow.com/questions/7944460/detect-safari-browser?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
         var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         console.log('isSafari', isSafari);
         return isSafari;
@@ -51,3 +54,4 @@ define(function () {
         }
     };
 });
+//# sourceMappingURL=dependencies.js.map
