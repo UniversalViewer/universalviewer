@@ -1147,6 +1147,10 @@ export class BaseExtension implements IExtension {
         return this.metric.toString() === MetricType.DESKTOP.toString();
     }
 
+    isCatchAllMetric(): boolean {
+        return this.metric.toString() === MetricType.NONE.toString();
+    }
+
     // todo: use redux in manifold to get reset state
     viewManifest(manifest: Manifesto.IManifest): void {
         const data: IUVData = <IUVData>{};

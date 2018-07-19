@@ -161,7 +161,7 @@ export class FooterPanel extends BaseView {
     updateMoreInfoButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
 
-        if (configEnabled && !this.extension.isDesktopMetric()) {
+        if (configEnabled && !this.extension.isDesktopMetric() && !this.extension.isCatchAllMetric()) {
             this.$moreInfoButton.show();
         } else {
             this.$moreInfoButton.hide();
