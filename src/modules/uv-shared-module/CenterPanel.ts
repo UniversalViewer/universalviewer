@@ -113,7 +113,7 @@ export class CenterPanel extends BaseView {
 
         let titleHeight: number;
 
-        if (this.options && this.options.titleEnabled === false) {
+        if (this.options && this.options.titleEnabled === false || !this.$title.is(':visible')) {
             titleHeight = 0;
         } else {
             titleHeight = this.$title.height();
