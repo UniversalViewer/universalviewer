@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.62 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.63 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -612,7 +612,12 @@ var IIIFComponents;
             _this._readyMediaCount = 0;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
+            _this._waveforms = [];
             _this.ranges = [];
+            _this._scaleY = function (amplitude, height) {
+                var range = 256;
+                return Math.max(_this.options.data.waveformBarWidth, (amplitude * height / range));
+            };
             _this._data = _this.options.data;
             _this.$playerElement = $('<div class="player"></div>');
             return _this;
@@ -859,10 +864,21 @@ var IIIFComponents;
                     'width': percentageWidth
                 };
                 this._renderMediaElement(itemData);
+                // waveform
+                // todo: create annotation.getSeeAlso
+                var seeAlso = item.getProperty('seeAlso');
+                if (seeAlso && seeAlso.length) {
+                    var dat = seeAlso[0].id;
+                    this._waveforms.push(dat);
+                }
             }
+            this._renderWaveform();
         };
         CanvasInstance.prototype.data = function () {
             return {
+                waveformColor: "#fff",
+                waveformBarSpacing: 4,
+                waveformBarWidth: 2,
                 volume: 1
             };
         };
@@ -922,13 +938,16 @@ var IIIFComponents;
             }
             if (diff.includes('volume')) {
                 this._contentAnnotations.forEach(function ($mediaElement) {
-                    $($mediaElement.element).prop("volume", _this._data.volume);
+                    $($mediaElement.element).prop('volume', _this._data.volume);
                     _this._volume.set({
                         volume: _this._data.volume
                     });
                 });
             }
             else {
+                this._render();
+            }
+            if (diff.includes('limitToRange')) {
                 this._render();
             }
         };
@@ -1043,6 +1062,7 @@ var IIIFComponents;
             }
             this._updateCurrentTimeDisplay();
             this._updateDurationDisplay();
+            this._drawWaveform();
         };
         CanvasInstance.prototype.getCanvasId = function () {
             if (this._data && this._data.canvas) {
@@ -1251,6 +1271,88 @@ var IIIFComponents;
                 $mediaElement.get(0).load();
             }
             this._renderSyncIndicator(data);
+        };
+        CanvasInstance.prototype._getWaveformData = function (url) {
+            return new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.responseType = 'arraybuffer';
+                xhr.open('GET', url);
+                xhr.addEventListener('load', function (progressEvent) {
+                    if (xhr.status == 200) {
+                        resolve(WaveformData.create(progressEvent.target.response));
+                    }
+                    else {
+                        reject(new Error(xhr.statusText));
+                    }
+                });
+                xhr.onerror = function () {
+                    reject(new Error("Network Error"));
+                };
+                xhr.send();
+            });
+        };
+        CanvasInstance.prototype._renderWaveform = function () {
+            var _this = this;
+            if (!this._waveforms.length)
+                return;
+            var promises = this._waveforms.map(function (url) {
+                return _this._getWaveformData(url);
+            });
+            Promise.all(promises).then(function (waveforms) {
+                _this._waveformCanvas = document.createElement('canvas');
+                _this._waveformCanvas.classList.add('waveform');
+                _this._$canvasContainer.append(_this._waveformCanvas);
+                _this._waveformCtx = _this._waveformCanvas.getContext('2d');
+                if (_this._waveformCtx) {
+                    _this._waveformCtx.fillStyle = _this.options.data.waveformColor;
+                    _this._compositeWaveform = new IIIFComponents.AVComponentObjects.CompositeWaveform(waveforms);
+                    _this._resize();
+                }
+            });
+        };
+        CanvasInstance.prototype._drawWaveform = function () {
+            if (!this._waveformCtx)
+                return;
+            var duration;
+            var start = 0;
+            var end = this._compositeWaveform.duration;
+            if (this._data.range) {
+                duration = this._data.range.getDuration();
+            }
+            if (this._data.limitToRange && duration) {
+                start = duration.start;
+                end = duration.end;
+            }
+            var startpx = start * this._compositeWaveform.pixelsPerSecond;
+            var endpx = end * this._compositeWaveform.pixelsPerSecond;
+            var canvasWidth = this._waveformCtx.canvas.width;
+            var canvasHeight = this._waveformCtx.canvas.height;
+            var barSpacing = this.options.data.waveformBarSpacing;
+            var barWidth = this.options.data.waveformBarWidth;
+            var increment = Math.floor(((endpx - startpx) / canvasWidth) * barSpacing);
+            var sampleSpacing = (canvasWidth / barSpacing);
+            this._waveformCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+            this._waveformCtx.fillStyle = this.options.data.waveformColor;
+            for (var x = startpx; x < endpx; x += increment) {
+                var maxMin = this._getWaveformMaxAndMin(this._compositeWaveform, x, sampleSpacing);
+                var height = this._scaleY(maxMin.max - maxMin.min, canvasHeight);
+                var ypos = (canvasHeight - height) / 2;
+                var xpos = canvasWidth * IIIFComponents.AVComponentUtils.Utils.normalise(x, startpx, endpx);
+                this._waveformCtx.fillRect(xpos, ypos, barWidth, height);
+            }
+        };
+        CanvasInstance.prototype._getWaveformMaxAndMin = function (waveform, index, sampleSpacing) {
+            var max = -127;
+            var min = 128;
+            for (var x = index; x < index + sampleSpacing; x++) {
+                if (waveform.max(x) > max) {
+                    max = waveform.max(x);
+                }
+                if (waveform.min(x) < min) {
+                    min = waveform.min(x);
+                }
+            }
+            return { max: max, min: min };
         };
         CanvasInstance.prototype._updateCurrentTimeDisplay = function () {
             var duration;
@@ -1592,6 +1694,10 @@ var IIIFComponents;
                     var $options = this.$playerElement.find('.options-container');
                     this._$canvasContainer.height(this.$playerElement.parent().height() - $options.height());
                 }
+                if (this._waveformCanvas) {
+                    this._waveformCanvas.width = this._$canvasContainer.width();
+                    this._waveformCanvas.height = this._$canvasContainer.height();
+                }
                 this._render();
             }
         };
@@ -1613,6 +1719,51 @@ var IIIFComponents;
         }());
         AVComponentCanvasInstance.Events = Events;
     })(AVComponentCanvasInstance = IIIFComponents.AVComponentCanvasInstance || (IIIFComponents.AVComponentCanvasInstance = {}));
+})(IIIFComponents || (IIIFComponents = {}));
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var AVComponentObjects;
+    (function (AVComponentObjects) {
+        var CompositeWaveform = /** @class */ (function () {
+            function CompositeWaveform(waveforms) {
+                var _this = this;
+                this.length = 0;
+                this.duration = 0;
+                this.pixelsPerSecond = Number.MAX_VALUE;
+                this.secondsPerPixel = Number.MAX_VALUE;
+                this._waveforms = [];
+                waveforms.forEach(function (waveform) {
+                    _this._waveforms.push({
+                        start: _this.length,
+                        end: _this.length + waveform.adapter.length,
+                        waveform: waveform
+                    });
+                    _this.length += waveform.adapter.length;
+                    _this.duration += waveform.duration;
+                    _this.pixelsPerSecond = Math.min(_this.pixelsPerSecond, waveform.pixels_per_second);
+                    _this.secondsPerPixel = Math.min(_this.secondsPerPixel, waveform.seconds_per_pixel);
+                });
+            }
+            // Note: these could be optimised, assuming access is sequential
+            CompositeWaveform.prototype.min = function (index) {
+                var waveform = this._find(index);
+                return waveform ? waveform.waveform.min_sample(index - waveform.start) : 0;
+            };
+            CompositeWaveform.prototype.max = function (index) {
+                var waveform = this._find(index);
+                return waveform ? waveform.waveform.max_sample(index - waveform.start) : 0;
+            };
+            CompositeWaveform.prototype._find = function (index) {
+                var waveforms = this._waveforms.filter(function (waveform) {
+                    return index >= waveform.start && index < waveform.end;
+                });
+                return waveforms.length > 0 ? waveforms[0] : null;
+            };
+            return CompositeWaveform;
+        }());
+        AVComponentObjects.CompositeWaveform = CompositeWaveform;
+    })(AVComponentObjects = IIIFComponents.AVComponentObjects || (IIIFComponents.AVComponentObjects = {}));
 })(IIIFComponents || (IIIFComponents = {}));
 
 
@@ -1646,14 +1797,6 @@ var IIIFComponents;
                 }
                 return xywh;
             };
-            // public static getTemporalComponent(target: string): number[] | null {
-            //     const temporal: RegExpExecArray | null = /t=([^&]+)/g.exec(target);
-            //     let t: number[] | null = null;
-            //     if (temporal && temporal[1]) {
-            //         t = <any>temporal[1].split(',');
-            //     }
-            //     return t;
-            // }
             Utils.getFirstTargetedCanvasId = function (range) {
                 var canvasId;
                 if (range.canvases && range.canvases.length) {
@@ -1670,57 +1813,6 @@ var IIIFComponents;
                 }
                 return undefined;
             };
-            /*
-            public static getRangeDuration(range: Manifesto.IRange): AVComponentObjects.Duration | undefined {
-    
-                let start: number | undefined;
-                let end: number | undefined;
-    
-                if (range.canvases && range.canvases.length) {
-                    for (let i = 0; i < range.canvases.length; i++) {
-                        const canvas: string = range.canvases[i];
-                        let temporal: number[] | null = Utils.getTemporalComponent(canvas);
-                        if (temporal && temporal.length > 1) {
-                            if (i === 0) {
-                                start = Number(temporal[0]);
-                            }
-        
-                            if (i === range.canvases.length - 1) {
-                                end = Number(temporal[1]);
-                            }
-                        }
-                    }
-                } else {
-    
-                    // get child ranges and calculate the start and end based on them
-                    const childRanges: Manifesto.IRange[] = range.getRanges();
-    
-                    for (let i = 0; i < childRanges.length; i++) {
-                        const childRange: Manifesto.IRange = childRanges[i];
-    
-                        const duration: AVComponentObjects.Duration | undefined = Utils.getRangeDuration(childRange);
-    
-                        if (duration) {
-                            if (i === 0) {
-                                start = duration.start;
-                            }
-        
-                            if (i === childRanges.length - 1) {
-                                end = duration.end;
-                            }
-                        }
-                    }
-    
-                }
-    
-                if (start !== undefined && end !== undefined) {
-                    return new AVComponentObjects.Duration(start, end);
-                }
-    
-                return undefined;
-    
-            }
-            */
             Utils.getTimestamp = function () {
                 return String(new Date().valueOf());
             };
@@ -1819,6 +1911,9 @@ var IIIFComponents;
                     return fn.lastReturnVal;
                 };
             };
+            Utils.normalise = function (num, min, max) {
+                return (num - min) / (max - min);
+            };
             return Utils;
         }());
         AVComponentUtils.Utils = Utils;
@@ -1890,6 +1985,19 @@ var IIIFComponents;
             return VirtualCanvas;
         }());
         AVComponentObjects.VirtualCanvas = VirtualCanvas;
+    })(AVComponentObjects = IIIFComponents.AVComponentObjects || (IIIFComponents.AVComponentObjects = {}));
+})(IIIFComponents || (IIIFComponents = {}));
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var AVComponentObjects;
+    (function (AVComponentObjects) {
+        var Waveform = /** @class */ (function () {
+            function Waveform() {
+            }
+            return Waveform;
+        }());
+        AVComponentObjects.Waveform = Waveform;
     })(AVComponentObjects = IIIFComponents.AVComponentObjects || (IIIFComponents.AVComponentObjects = {}));
 })(IIIFComponents || (IIIFComponents = {}));
 
