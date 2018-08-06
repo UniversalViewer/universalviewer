@@ -52,6 +52,8 @@ export class Extension extends BaseExtension implements IAVExtension {
     dependencyLoaded(index: number, dep: any): void {
         if (index === 0) {
             window.Hls = dep; //https://github.com/mrdoob/three.js/issues/9602
+        } else if (index === 4) {
+            window.WaveformData = dep;
         }
     }
 

@@ -54,6 +54,7 @@ interface Window {
     Hls: any;
     MediaSource: any;
     WebKitMediaSource: any;
+    WaveformData: any;
 }
 
 interface Document {
