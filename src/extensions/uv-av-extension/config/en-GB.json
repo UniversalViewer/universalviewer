@@ -130,7 +130,8 @@
         "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
         "showAllLanguages": false,
         "textLimit": 4,
-        "textLimitType": "lines"
+        "textLimitType": "lines",
+        "limitToRange": false
       }
     },
     "avCenterPanel": {
