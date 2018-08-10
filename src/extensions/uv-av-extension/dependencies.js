@@ -22,12 +22,12 @@ define(function () {
         if (isAdaptiveStreamingAvailable()) {
             if (isMpegDashAvailable(formats) && !isSafari()) {
                 return {
-                    sync: ['dash.all.min'].concat(alwaysRequired)
+                    sync: alwaysRequired.push('dash.all.min')
                 };
             }
             else if (isHLSAvailable(formats)) {
                 return {
-                    sync: ['hls.min'].concat(alwaysRequired)
+                    sync: alwaysRequired.push('hls.min')
                 };
             }
             else {
