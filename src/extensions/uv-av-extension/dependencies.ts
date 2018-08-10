@@ -31,7 +31,7 @@ define(function() {
 
     return function(formats: string[]) {
 
-        var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min', 'waveform-data'];
+        var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'waveform-data'];
 
         if (isAdaptiveStreamingAvailable()) {
 
