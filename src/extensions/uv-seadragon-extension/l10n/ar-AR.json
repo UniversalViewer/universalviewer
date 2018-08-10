@@ -25,58 +25,50 @@
 			}
 		},
 		"contentLeftPanel": {
-			"options": {
-				"defaultToTreeEnabled": false,
-				"defaultToTreeIfGreaterThan": 0,
-				"elideCount": 40,
-				"expandFullEnabled": true,
-				"galleryThumbChunkedResizingThreshold": 400,
-				"galleryThumbHeight": 320,
-				"galleryThumbLoadPadding": 3,
-				"galleryThumbWidth": 200,
-				"oneColThumbHeight": 320,
-				"oneColThumbWidth": 200,
-				"pageModeEnabled": true,
-				"panelAnimationDuration": 250,
-				"panelCollapsedWidth": 30,
-				"panelExpandedWidth": 255,
-				"panelOpen": true,
-				"tabOrder": "",
-				"thumbsEnabled": true,
-				"thumbsExtraHeight": 8,
-				"thumbsImageFadeInDuration": 300,
-				"thumbsLoadRange": 15,
-				"treeEnabled": true,
-				"twoColThumbHeight": 150,
-				"twoColThumbWidth": 90
-			},
-			"dialogue": {
-				"content": {
-					"close": "إغلاق"
-				}
-			},
-			"downloadDialogue": {
-				"content": {
-					"currentViewAsJpg": "العرض الحالي {0} x {1}بكسل (jpg)",
-					"currentViewAsJpgExplanation": "يفتح في نافذة جديدة.",
-					"download": "تحميل",
-					"downloadSelection": "مجموعة التحميل",
-					"downloadSelectionExplanation": "يفتح محادثة لاختيار صفحات التحميل",
-					"editSettings": "إعدادات التحرير",
-					"entireDocument": "المستند الكامل ({0})",
-					"entireFileAsOriginal": "الملف الكامل",
-					"noneAvailable": "لا يوجد خيارات تحميل متاحة.",
-					"pagingNote": "الرجاء إغلاق عرض الصفحتين لخيارات أخرى",
-					"preview": "معاينة",
-					"title": "تحميل",
-					"wholeImageHighRes": "الصورة الكاملة {0} x {1}بكسل ({2})",
-					"wholeImageHighResExplanation": "يفتح في نافذة جديدة.",
-					"wholeImagesHighRes": "الصورة الكاملة ({0})",
-					"wholeImagesHighResExplanation": "يفتح في نافذتين جديدتين.",
-					"wholeImageLowResAsJpg": "الصورة الكاملة {0} x {1}بكسل (jpg)",
-					"wholeImageLowResAsJpgExplanation": "يفتح في نافذة جديدة."
-				}
-			},
+			"content": {
+				"collapse": "Collapse Contents",
+				"collapseFull": "Collapse Gallery",
+				"date": "date",
+				"expand": "Expand Contents",
+				"expandFull": "Expand Gallery",
+				"index": "Index",
+				"manifestRanges": "Manifest Ranges",
+				"searchResult": "{0} search result",
+				"searchResults": "{0} search results",
+				"sortBy": "Sort By:",
+				"thumbnails": "Thumbnails",
+				"title": "Contents",
+				"volume": "volume"
+			}
+		},
+		"dialogue": {
+			"content": {
+				"close": "إغلاق"
+			}
+		},
+		"downloadDialogue": {
+			"content": {
+				"currentViewAsJpg": "العرض الحالي {0} x {1}بكسل (jpg)",
+				"currentViewAsJpgExplanation": "يفتح في نافذة جديدة.",
+				"download": "تحميل",
+				"downloadSelection": "مجموعة التحميل",
+				"downloadSelectionExplanation": "يفتح محادثة لاختيار صفحات التحميل",
+				"editSettings": "إعدادات التحرير",
+				"entireDocument": "المستند الكامل ({0})",
+				"entireFileAsOriginal": "الملف الكامل",
+				"noneAvailable": "لا يوجد خيارات تحميل متاحة.",
+				"pagingNote": "الرجاء إغلاق عرض الصفحتين لخيارات أخرى",
+				"preview": "معاينة",
+				"title": "تحميل",
+				"wholeImageHighRes": "الصورة الكاملة {0} x {1}بكسل ({2})",
+				"wholeImageHighResExplanation": "يفتح في نافذة جديدة.",
+				"wholeImagesHighRes": "الصورة الكاملة ({0})",
+				"wholeImagesHighResExplanation": "يفتح في نافذتين جديدتين.",
+				"wholeImageLowResAsJpg": "الصورة الكاملة {0} x {1}بكسل (jpg)",
+				"wholeImageLowResAsJpgExplanation": "يفتح في نافذة جديدة."
+			}
+		},
+		"footerPanel": {
 			"content": {
 				"bookmark": "أضف إلى العناوين",
 				"download": "تحميل",
@@ -194,50 +186,50 @@
 			"content": {
 				"cancel": "إلغاء"
 			}
-		}
-	},
-	"searchFooterPanel": {
-		"content": {
-			"clearSearch": "امسح البحث",
-			"defaultLabel": "-",
-			"displaying": "عرض {0} {1} من {2}",
-			"enterKeyword": "أدخل الكلمة الرئيسية",
-			"image": "الصورة",
-			"imageCaps": "الصورة",
-			"instanceFound": "مثال واحد من '{0}' تم إيجاده",
-			"instancesFound": "{0}حالات من '{1}' تم إيجاده,",
-			"nextResult": "النتيجة التالية",
-			"page": "الصفحة",
-			"pageCaps": "الصفحة",
-			"previousResult": "النتيجة السابقة",
-			"print": "طباعة",
-			"resultFoundFor": "تم إيجاد نتيجة ل",
-			"resultsFoundFor": "تم إيجاد نتائج ل",
-			"searchWithin": "ابحث ضمن هذا العنصر:"
-		}
-	},
-	"settingsDialogue": {
-		"content": {
-			"locale": "المكان",
-			"navigatorEnabled": "تم تفعيل المستكشف",
-			"clickToZoomEnabled": "النقر بالفأرة للتكبير",
-			"pagingEnabled": "عرض صفحتين",
-			"preserveViewport": "الحفاظ على تكبير الصورة",
-			"title": "الإعدادات",
-			"website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>المزيد من المعلومات</a>"
-		}
-	},
-	"shareDialogue": {
-		"content": {
-			"customSize": "تخصيص",
-			"embed": "تضمين",
-			"embedInstructions": "لتضمين هذا العنصر في موقعك الإلكتروني، انسخ وألصق الرمز في الأسفل.",
-			"height": "الارتفاع",
-			"iiif": "IIIF قائمة",
-			"share": "مشاركة",
-			"shareInstructions": "لمشاركة هذه المادة، انسخ وألصق الرابط في الأسفل.",
-			"size": "الحجم:",
-			"width": "العرض"
+		},
+		"searchFooterPanel": {
+			"content": {
+				"clearSearch": "امسح البحث",
+				"defaultLabel": "-",
+				"displaying": "عرض {0} {1} من {2}",
+				"enterKeyword": "أدخل الكلمة الرئيسية",
+				"image": "الصورة",
+				"imageCaps": "الصورة",
+				"instanceFound": "مثال واحد من '{0}' تم إيجاده",
+				"instancesFound": "{0}حالات من '{1}' تم إيجاده,",
+				"nextResult": "النتيجة التالية",
+				"page": "الصفحة",
+				"pageCaps": "الصفحة",
+				"previousResult": "النتيجة السابقة",
+				"print": "طباعة",
+				"resultFoundFor": "تم إيجاد نتيجة ل",
+				"resultsFoundFor": "تم إيجاد نتائج ل",
+				"searchWithin": "ابحث ضمن هذا العنصر:"
+			}
+		},
+		"settingsDialogue": {
+			"content": {
+				"locale": "المكان",
+				"navigatorEnabled": "تم تفعيل المستكشف",
+				"clickToZoomEnabled": "النقر بالفأرة للتكبير",
+				"pagingEnabled": "عرض صفحتين",
+				"preserveViewport": "الحفاظ على تكبير الصورة",
+				"title": "الإعدادات",
+				"website": "<a href='https://github.com/universalviewer/universalviewer#contributors'>المزيد من المعلومات</a>"
+			}
+		},
+		"shareDialogue": {
+			"content": {
+				"customSize": "تخصيص",
+				"embed": "تضمين",
+				"embedInstructions": "لتضمين هذا العنصر في موقعك الإلكتروني، انسخ وألصق الرمز في الأسفل.",
+				"height": "الارتفاع",
+				"iiif": "IIIF قائمة",
+				"share": "مشاركة",
+				"shareInstructions": "لمشاركة هذه المادة، انسخ وألصق الرابط في الأسفل.",
+				"size": "الحجم:",
+				"width": "العرض"
+			}
 		}
 	}
 }
