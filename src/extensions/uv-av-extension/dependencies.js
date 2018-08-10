@@ -18,7 +18,7 @@ define(function () {
         return isFormatAvailable(formats, 'application/dash+xml');
     }
     return function (formats) {
-        var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min', 'waveform-data'];
+        var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'waveform-data'];
         if (isAdaptiveStreamingAvailable()) {
             if (isMpegDashAvailable(formats) && !isSafari()) {
                 return {
