@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.63 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.65 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -21,6 +21,8 @@ var IIIFComponents;
             _this._data = _this.data();
             _this.canvasInstances = [];
             _this._readyCanvases = 0;
+            _this._posterCanvasWidth = 0;
+            _this._posterCanvasHeight = 0;
             _this._posterImageExpanded = false;
             _this._init();
             _this._resize();
@@ -227,14 +229,19 @@ var IIIFComponents;
                     }
                 });
                 // poster canvas
-                var posterImage = this._data.helper.getPosterImage();
-                if (posterImage) {
-                    this._$posterContainer.append(this._$posterImage);
-                    var css = this._getPosterImageCss(this._posterImageExpanded);
-                    css = Object.assign({}, css, {
-                        'background-image': 'url(' + posterImage + ')'
-                    });
-                    this._$posterImage.css(css);
+                var posterCanvas = this._data.helper.getPosterCanvas();
+                if (posterCanvas) {
+                    this._posterCanvasWidth = posterCanvas.getWidth();
+                    this._posterCanvasHeight = posterCanvas.getHeight();
+                    var posterImage = this._data.helper.getPosterImage();
+                    if (posterImage) {
+                        this._$posterContainer.append(this._$posterImage);
+                        var css = this._getPosterImageCss(this._posterImageExpanded);
+                        css = Object.assign({}, css, {
+                            'background-image': 'url(' + posterImage + ')'
+                        });
+                        this._$posterImage.css(css);
+                    }
                 }
             }
         };
@@ -400,22 +407,37 @@ var IIIFComponents;
             var currentCanvas = this._getCurrentCanvas();
             if (currentCanvas) {
                 var $options = currentCanvas.$playerElement.find('.options-container');
-                var width = currentCanvas.$playerElement.parent().width();
-                var height = currentCanvas.$playerElement.parent().height() - $options.height();
+                var containerWidth = currentCanvas.$playerElement.parent().width();
+                var containerHeight = currentCanvas.$playerElement.parent().height() - $options.height();
                 if (expanded) {
                     return {
                         'top': 0,
                         'left': 0,
-                        'width': width,
-                        'height': height
+                        'width': containerWidth,
+                        'height': containerHeight
                     };
                 }
                 else {
+                    // get the longer edge of the poster canvas and make that a third of the container height/width.
+                    // scale the shorter edge proportionally.
+                    var ratio = void 0;
+                    var width = void 0;
+                    var height = void 0;
+                    if (this._posterCanvasWidth > this._posterCanvasHeight) {
+                        ratio = this._posterCanvasHeight / this._posterCanvasWidth;
+                        width = containerWidth / 3;
+                        height = width * ratio;
+                    }
+                    else {
+                        ratio = this._posterCanvasWidth / this._posterCanvasHeight;
+                        height = containerHeight / 3;
+                        width = height * ratio;
+                    }
                     return {
                         'top': 0,
-                        'left': (width / 3) * 2,
-                        'width': width / 3,
-                        'height': height / 3
+                        'left': containerWidth - width,
+                        'width': width,
+                        'height': height
                     };
                 }
             }
@@ -613,6 +635,7 @@ var IIIFComponents;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
             _this._waveforms = [];
+            _this._waveformNeedsRedraw = false;
             _this.ranges = [];
             _this._scaleY = function (amplitude, height) {
                 var range = 256;
@@ -1311,7 +1334,7 @@ var IIIFComponents;
             });
         };
         CanvasInstance.prototype._drawWaveform = function () {
-            if (!this._waveformCtx)
+            if (!this._waveformCtx || !this._waveformNeedsRedraw)
                 return;
             var duration;
             var start = 0;
@@ -1695,8 +1718,16 @@ var IIIFComponents;
                     this._$canvasContainer.height(this.$playerElement.parent().height() - $options.height());
                 }
                 if (this._waveformCanvas) {
-                    this._waveformCanvas.width = this._$canvasContainer.width();
-                    this._waveformCanvas.height = this._$canvasContainer.height();
+                    var canvasWidth = this._$canvasContainer.width();
+                    var canvasHeight = this._$canvasContainer.height();
+                    if (canvasWidth !== this._lastCanvasWidth || canvasHeight !== this._lastCanvasHeight) {
+                        this._waveformCanvas.width = this._lastCanvasWidth = canvasWidth;
+                        this._waveformCanvas.height = this._lastCanvasHeight = canvasHeight;
+                        this._waveformNeedsRedraw = true;
+                    }
+                    else {
+                        this._waveformNeedsRedraw = false;
+                    }
                 }
                 this._render();
             }
