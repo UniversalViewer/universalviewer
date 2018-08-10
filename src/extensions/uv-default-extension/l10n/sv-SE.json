@@ -181,6 +181,18 @@
                 "zoomOut": "Zooma ut"
             }
         },
+        "avCenterPanel": {
+            "content": {
+                "currentTime": "Aktuell tid",
+                "delimiter": " - ",
+                "duration": "Speltid",
+                "mute": "Tyst",
+                "next": "Nästa",
+                "pause": "Paus",
+                "play": "Spela",
+                "previous": "Föregående"
+            }
+        },        
         "restrictedDialogue": {
             "content": {
                 "cancel": "Avbryt"
