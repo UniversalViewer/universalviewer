@@ -265,7 +265,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const $label: JQuery = this.$wholeImagesHighResButton.find('label');
             let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
-            if (mime){
+            if (mime) {
                 mime = Utils.Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
@@ -631,7 +631,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.selection:
                 return this.options.selectionEnabled;
             case DownloadOption.rangeRendering:                
-                if (canvas.ranges.length) {
+                if (canvas.ranges && canvas.ranges.length) {
                     const range: Manifesto.IRange = canvas.ranges[0];
                     return range.getRenderings().length > 0;
                 }
