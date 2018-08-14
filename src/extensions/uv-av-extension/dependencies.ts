@@ -38,12 +38,12 @@ define(function() {
             if (isMpegDashAvailable(formats) && !isSafari()) {
                 //console.log('load mpeg dash');
                 return {
-                    sync: alwaysRequired.push('dash.all.min') // ['dash.all.min'].concat(alwaysRequired)
+                    sync: alwaysRequired.concat(['dash.all.min']) // ['dash.all.min'].concat(alwaysRequired)
                 };
             } else if (isHLSAvailable(formats)) {
                 //console.log('load HLS');
                 return {
-                    sync: alwaysRequired.push('hls.min') // ['hls.min'].concat(alwaysRequired)
+                    sync: alwaysRequired.concat(['hls.min']) // ['hls.min'].concat(alwaysRequired)
                 };
             } else {
                 //console.log('adaptive streaming not available');
