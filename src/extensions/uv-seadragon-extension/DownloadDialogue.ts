@@ -265,7 +265,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const $label: JQuery = this.$wholeImagesHighResButton.find('label');
             let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
-            if (mime){
+            if (mime) {
                 mime = Utils.Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
@@ -574,6 +574,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return new Size(Math.floor(imageSize.width * scale), Math.floor(imageSize.height * scale));
     }
 
+    private _isLevel0(profile: any): boolean {
+        if (!profile || !profile.length) return false;
+
+        return manifesto.Utils.isLevel0ImageProfile(profile[0]);
+    }
+
     isDownloadOptionAvailable(option: DownloadOption): boolean {
 
         if (!this.extension.resources) {
@@ -582,9 +588,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
-        // if the external resource doesn't have a service descriptor
+        // if the external resource doesn't have a service descriptor or is level 0
         // only allow wholeImageHighRes
-        if (!canvas.externalResource.hasServiceDescriptor()) {
+        if (!canvas.externalResource.hasServiceDescriptor() || this._isLevel0(canvas.externalResource.data.profile)) {
             if (option === DownloadOption.wholeImageHighRes) {
                 // if in one-up mode, or in two-up mode with a single page being shown
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
@@ -631,7 +637,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             case DownloadOption.selection:
                 return this.options.selectionEnabled;
             case DownloadOption.rangeRendering:                
-                if (canvas.ranges.length) {
+                if (canvas.ranges && canvas.ranges.length) {
                     const range: Manifesto.IRange = canvas.ranges[0];
                     return range.getRenderings().length > 0;
                 }

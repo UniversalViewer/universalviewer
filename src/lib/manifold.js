@@ -1,4 +1,4 @@
-// @iiif/manifold v1.2.29 https://github.com/iiif-commons/manifold#readme
+// @iiif/manifold v1.2.30 https://github.com/iiif-commons/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifmanifold = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -242,34 +242,51 @@ var Manifold;
             // get the height and width of the image resource if available
             this._parseDimensions(canvas);
         }
+        ExternalResource.prototype._getImageServiceDescriptor = function (services) {
+            var infoUri = null;
+            for (var i = 0; i < services.length; i++) {
+                var service = services[i];
+                var id = service.id;
+                if (!id.endsWith('/')) {
+                    id += '/';
+                }
+                if (manifesto.Utils.isImageProfile(service.getProfile())) {
+                    infoUri = id + 'info.json';
+                }
+            }
+            return infoUri;
+        };
         ExternalResource.prototype._getDataUri = function (canvas) {
             var content = canvas.getContent();
             var images = canvas.getImages();
+            var infoUri = null;
+            // presentation 3
             if (content && content.length) {
                 var annotation = content[0];
                 var annotationBody = annotation.getBody();
                 if (annotationBody.length) {
+                    var body = annotationBody[0];
+                    var services = body.getServices();
+                    if (services.length) {
+                        infoUri = this._getImageServiceDescriptor(services);
+                        if (infoUri) {
+                            return infoUri;
+                        }
+                    }
+                    // no image services. return the image id
                     return annotationBody[0].id;
                 }
                 return null;
             }
             else if (images && images.length) {
-                var infoUri = null;
                 var firstImage = images[0];
                 var resource = firstImage.getResource();
                 var services = resource.getServices();
                 if (services.length) {
-                    for (var i = 0; i < services.length; i++) {
-                        var service = services[i];
-                        var id = service.id;
-                        if (!id.endsWith('/')) {
-                            id += '/';
-                        }
-                        if (manifesto.Utils.isImageProfile(service.getProfile())) {
-                            infoUri = id + 'info.json';
-                        }
+                    infoUri = this._getImageServiceDescriptor(services);
+                    if (infoUri) {
+                        return infoUri;
                     }
-                    return infoUri;
                 }
                 // no image services. return the image id
                 return resource.id;

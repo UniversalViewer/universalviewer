@@ -60,7 +60,7 @@
     "typescript": "2.7.2"
   },
   "dependencies": {
-    "@iiif/manifold": "1.2.29",
+    "@iiif/manifold": "1.2.30",
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
@@ -81,7 +81,7 @@
     "jquery-ui-touch-punch": "0.2.3",
     "jsviews": "0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.7",
-    "manifesto.js": "2.2.31",
+    "manifesto.js": "2.2.32",
     "mediaelement": "4.0.2",
     "opencollective": "1.0.3",
     "openseadragon": "2.2.1",
@@ -91,6 +91,7 @@
     "utils": "edsilv/utils#v0.2.1",
     "uv-cy-gb-theme": "UniversalViewer/uv-cy-gb-theme#v1.1.1",
     "uv-en-gb-theme": "save-our-sounds/uv-en-gb-theme",
+    "uv-sv-se-theme": "save-our-sounds/uv-en-gb-theme",
     "virtex3d": "0.3.14",
     "waveform-data": "2.0.2"
   },
