@@ -978,7 +978,7 @@ var IIIFComponents;
                 this._render();
             }
             if (diff.includes('limitToRange')) {
-                this._render();
+                this._render(true);
             }
         };
         CanvasInstance.prototype._hasRangeChanged = function () {
@@ -1033,7 +1033,8 @@ var IIIFComponents;
             }
             return true;
         };
-        CanvasInstance.prototype._render = function () {
+        CanvasInstance.prototype._render = function (forceWaveformRedraw) {
+            if (forceWaveformRedraw === void 0) { forceWaveformRedraw = false; }
             if (this._data.range) {
                 var duration = this._data.range.getDuration();
                 if (duration) {
@@ -1092,7 +1093,7 @@ var IIIFComponents;
             }
             this._updateCurrentTimeDisplay();
             this._updateDurationDisplay();
-            this._drawWaveform();
+            this._drawWaveform(forceWaveformRedraw);
         };
         CanvasInstance.prototype.getCanvasId = function () {
             if (this._data && this._data.canvas) {
@@ -1340,8 +1341,9 @@ var IIIFComponents;
                 }
             });
         };
-        CanvasInstance.prototype._drawWaveform = function () {
-            if (!this._waveformCtx || !this._waveformNeedsRedraw)
+        CanvasInstance.prototype._drawWaveform = function (forceWaveformRedraw) {
+            if (forceWaveformRedraw === void 0) { forceWaveformRedraw = false; }
+            if (!this._waveformCtx || (!this._waveformNeedsRedraw && !forceWaveformRedraw))
                 return;
             var duration;
             var start = 0;
