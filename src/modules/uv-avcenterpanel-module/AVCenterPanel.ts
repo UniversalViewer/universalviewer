@@ -6,7 +6,7 @@ export class AVCenterPanel extends CenterPanel {
     $avcomponent: JQuery;
     avcomponent: IIIFComponents.AVComponent;
     title: string | null;
-    private _canvasReady: boolean = false;
+    private _mediaReady: boolean = false;
     private _resourceOpened: boolean = false;
     private _isThumbsViewOpen: boolean = false;
 
@@ -30,7 +30,7 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            this._whenCanvasReady(() => {
+            this._whenMediaReady(() => {
                 this._viewCanvas(canvasIndex);
             });            
         });
@@ -41,7 +41,7 @@ export class AVCenterPanel extends CenterPanel {
                 return;
             }
 
-            this._whenCanvasReady(() => {
+            this._whenMediaReady(() => {
                 that._viewRange(range);
                 that._setTitle();
             });
@@ -49,7 +49,7 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            this._whenCanvasReady(() => {
+            this._whenMediaReady(() => {
                 this.avcomponent.set({
                     limitToRange: this._limitToRange(),
                     constrainNavigationToRange: this._limitToRange()
@@ -65,7 +65,7 @@ export class AVCenterPanel extends CenterPanel {
 
             this._isThumbsViewOpen = true;
 
-            this._whenCanvasReady(() => {
+            this._whenMediaReady(() => {
 
                 this.avcomponent.set({
                     virtualCanvasEnabled: false
@@ -84,7 +84,7 @@ export class AVCenterPanel extends CenterPanel {
 
             this._isThumbsViewOpen = false;
 
-            this._whenCanvasReady(() => {
+            this._whenMediaReady(() => {
                 this.avcomponent.set({
                     virtualCanvasEnabled: true
                 });
@@ -98,9 +98,9 @@ export class AVCenterPanel extends CenterPanel {
             target: this.$avcomponent[0]
         });
 
-        this.avcomponent.on('canvasready', () => {
-            console.log('canvasready');
-            this._canvasReady = true;
+        this.avcomponent.on('mediaready', () => {
+            console.log('mediaready');
+            this._mediaReady = true;
         }, false);
 
         this.avcomponent.on('rangechanged', (rangeId: string | null) => {        
@@ -175,7 +175,7 @@ export class AVCenterPanel extends CenterPanel {
 
         this.title = title;
 
-        this.resize();
+        this.resize(false);
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
@@ -201,15 +201,15 @@ export class AVCenterPanel extends CenterPanel {
         return !this.extension.isDesktopMetric();
     }
 
-    private _whenCanvasReady(cb: () => void): void {
+    private _whenMediaReady(cb: () => void): void {
         Utils.Async.waitFor(() => {
-            return this._canvasReady;
+            return this._mediaReady;
         }, cb);
     }
 
     private _viewRange(range: Manifesto.IRange | null): void {
 
-        this._whenCanvasReady(() => {
+        this._whenMediaReady(() => {
             if (range) {
                 //setTimeout(() => {
                     //console.log('view ' + range.id);
@@ -217,14 +217,14 @@ export class AVCenterPanel extends CenterPanel {
                 //}, 500); // don't know why this is needed :-(
             }
             
-            this.resize();
+            this.resize(false);
         });
     }
 
     private _viewCanvas(canvasIndex: number): void {
 
         Utils.Async.waitFor(() => {
-            return this._canvasReady;
+            return this._mediaReady;
         }, () => {
 
             const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
@@ -233,7 +233,7 @@ export class AVCenterPanel extends CenterPanel {
         });
     }
 
-    resize() {
+    resize(resizeAVComponent: boolean = true) {
 
         super.resize();
 
@@ -243,7 +243,9 @@ export class AVCenterPanel extends CenterPanel {
 
         this.$avcomponent.height(this.$content.height());
 
-        this.avcomponent.resize(); 
-              
+        if (resizeAVComponent) {
+            this.avcomponent.resize(); 
+        }
+    
     }
 }
