@@ -16,6 +16,7 @@ module.exports = {
                 'iiif-tree-component/dist/iiif-tree-component.js',
                 'jquery-ui-dist/jquery-ui.min.js',
                 'jquery-ui-touch-punch/jquery.ui.touch-punch.min.js',
+                'jquery-binarytransport/jquery.binarytransport.js',
                 'waveform-data/dist/waveform-data.js'
             ],
             dest: config.directories.uvAVExtension + '/lib'
