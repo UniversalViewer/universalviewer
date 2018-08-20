@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.70 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.71 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -1324,22 +1324,35 @@ var IIIFComponents;
             this._renderSyncIndicator(data);
         };
         CanvasInstance.prototype._getWaveformData = function (url) {
+            // return new Promise(function (resolve, reject) {
+            //     const xhr = new XMLHttpRequest();
+            //     xhr.responseType = 'arraybuffer';
+            //     xhr.open('GET', url);
+            //     xhr.addEventListener('load', (progressEvent: any) => {
+            //         if (xhr.status == 200) {
+            //             resolve(WaveformData.create(progressEvent.target.response));
+            //         } else {
+            //             reject(new Error(xhr.statusText));
+            //         }
+            //     });
+            //     xhr.onerror = function () {
+            //         reject(new Error("Network Error"));
+            //     };
+            //     xhr.send();
+            // });
+            // must use this for IE11
             return new Promise(function (resolve, reject) {
-                var xhr = new XMLHttpRequest();
-                xhr.responseType = 'arraybuffer';
-                xhr.open('GET', url);
-                xhr.addEventListener('load', function (progressEvent) {
-                    if (xhr.status == 200) {
-                        resolve(WaveformData.create(progressEvent.target.response));
-                    }
-                    else {
-                        reject(new Error(xhr.statusText));
-                    }
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'binary',
+                    responseType: 'arraybuffer',
+                    processData: false
+                }).done(function (data) {
+                    resolve(WaveformData.create(data));
+                }).fail(function (err) {
+                    reject(new Error('Network Error'));
                 });
-                xhr.onerror = function () {
-                    reject(new Error("Network Error"));
-                };
-                xhr.send();
             });
         };
         CanvasInstance.prototype._renderWaveform = function () {
