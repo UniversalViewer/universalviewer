@@ -49,10 +49,10 @@ export class Extension extends BaseExtension implements IAVExtension {
         });
     }
 
-    dependencyLoaded(index: number, dep: any): void {
-        if (index === 6) {
+    dependencyLoaded(index: number, dep: any, deps: string[]): void {
+        if (index === deps.length - 2) {
             window.WaveformData = dep;            
-        } else if (index === 7) {
+        } else if (index === deps.length - 1) {
             window.Hls = dep; //https://github.com/mrdoob/three.js/issues/9602
         }
     }

@@ -12,7 +12,7 @@ export interface IExtension {
     createModules(): void;
     data: IUVData;
     dependenciesLoaded(...args: any[]): void;
-    dependencyLoaded(index: number, dep: any): void;
+    dependencyLoaded(index: number, dep: any, deps: string[]): void;
     exitFullScreen(): void;
     fire(name: string, ...args: any[]): void;
     getAlternateLocale(): ILocale | null;
