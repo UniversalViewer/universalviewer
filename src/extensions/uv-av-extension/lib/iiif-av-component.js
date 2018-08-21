@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.71 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.72 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -1072,12 +1072,17 @@ var IIIFComponents;
                     }
                     var width = end - start;
                     //console.log(width);
-                    this._$durationHighlight.show();
-                    // set the start position and width
-                    this._$durationHighlight.css({
-                        left: start,
-                        width: width
-                    });
+                    if (this.isVirtual()) {
+                        this._$durationHighlight.show();
+                        // set the start position and width
+                        this._$durationHighlight.css({
+                            left: start,
+                            width: width
+                        });
+                    }
+                    else {
+                        this._$durationHighlight.hide();
+                    }
                     var that_1 = this;
                     this._$rangeTimelineContainer.slider("destroy");
                     this._$rangeTimelineContainer.slider({
@@ -1598,7 +1603,7 @@ var IIIFComponents;
         };
         CanvasInstance.prototype._lowPriorityUpdater = function () {
             this._updateMediaActiveStates();
-            if (this._isPlaying && this._data.autoSelectRange) {
+            if (this._isPlaying && this._data.autoSelectRange && this.isVirtual()) {
                 this._hasRangeChanged();
             }
         };

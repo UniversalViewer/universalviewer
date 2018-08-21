@@ -159,18 +159,22 @@ export class AVCenterPanel extends CenterPanel {
             title = value;
         }
 
-        // get the parent range or manifest's title
-        if (currentRange) {
-            if (currentRange.parentRange) {
-                label = currentRange.parentRange.getLabel();
-                value = Manifesto.TranslationCollection.getValue(label);
-            }
-        } else {
-            value = this.extension.helper.getLabel();
-        }
+        if (Utils.Bools.getBool(this.config.options.includeParentInTitleEnabled, false)) {
 
-        if (value) {
-            title += this.content.delimiter + value;
+            // get the parent range or manifest's title
+            if (currentRange) {
+                if (currentRange.parentRange) {
+                    label = currentRange.parentRange.getLabel();
+                    value = Manifesto.TranslationCollection.getValue(label);
+                }
+            } else {
+                value = this.extension.helper.getLabel();
+            }
+
+            if (value) {
+                title += this.content.delimiter + value;
+            }
+
         }
 
         this.title = title;

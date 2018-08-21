@@ -136,7 +136,8 @@
     },
     "avCenterPanel": {
       "options": {
-        "autoPlay": false
+        "autoPlay": false,
+        "includeParentInTitleEnabled": false
       }
     },
     "settingsDialogue": {
