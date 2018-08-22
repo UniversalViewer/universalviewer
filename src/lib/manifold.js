@@ -1,4 +1,4 @@
-// @iiif/manifold v1.2.30 https://github.com/iiif-commons/manifold#readme
+// @iiif/manifold v1.2.31 https://github.com/iiif-commons/manifold#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifmanifold = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -578,14 +578,14 @@ var Manifold;
                 manifestGroup.addMetadata(manifestMetadata, true);
             }
             if (this.manifest.getDescription().length) {
-                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("description", this.options.locale)];
                 metadataItem.value = this.manifest.getDescription();
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
             }
             if (this.manifest.getAttribution().length) {
-                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.label = [new Manifesto.Translation("attribution", this.options.locale)];
                 metadataItem.value = this.manifest.getAttribution();
                 metadataItem.isRootLevel = true;
@@ -597,7 +597,7 @@ var Manifold;
                     label: "license",
                     value: (options && options.licenseFormatter) ? options.licenseFormatter.format(license) : license
                 };
-                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
@@ -607,7 +607,7 @@ var Manifold;
                     label: "logo",
                     value: '<img src="' + this.manifest.getLogo() + '"/>'
                 };
-                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.parse(item);
                 metadataItem.isRootLevel = true;
                 manifestGroup.addItem(metadataItem);
@@ -619,6 +619,16 @@ var Manifold;
             else {
                 return metadataGroups;
             }
+        };
+        Helper.prototype.getRequiredStatement = function () {
+            var requiredStatement = this.manifest.getRequiredStatement();
+            if (requiredStatement) {
+                return {
+                    label: requiredStatement.getLabel(),
+                    value: requiredStatement.getValue()
+                };
+            }
+            return null;
         };
         Helper.prototype._parseMetadataOptions = function (options, metadataGroups) {
             // get sequence metadata
@@ -1168,6 +1178,16 @@ var Manifold;
 })(Manifold || (Manifold = {}));
 
 
+
+var Manifold;
+(function (Manifold) {
+    var ILabelValuePair = /** @class */ (function () {
+        function ILabelValuePair() {
+        }
+        return ILabelValuePair;
+    }());
+    Manifold.ILabelValuePair = ILabelValuePair;
+})(Manifold || (Manifold = {}));
 
 
 
