@@ -485,7 +485,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         if (that.isPageModeEnabled()) {
             const canvas: Manifesto.ICanvas = that.extension.helper.getCanvasByIndex(canvasIndex);
-            let label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+            let label: string | null = Manifesto.LanguageMap.getValue(canvas.getLabel());
 
             if (!label) {
                 label = this.extension.helper.manifest.options.defaultLabel;
@@ -638,7 +638,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         if (this.isPageModeEnabled()) {
             const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
-            let label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+            let label: string | null = Manifesto.LanguageMap.getValue(canvas.getLabel());
 
             if (!label) {
                 label = this.content.defaultLabel;

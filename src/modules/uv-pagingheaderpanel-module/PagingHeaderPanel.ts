@@ -117,7 +117,7 @@ export class PagingHeaderPanel extends HeaderPanel {
                     if (this.isPageModeEnabled()) {
                         for (let i = 0; i < canvases.length; i++) {
                             const canvas: Manifesto.ICanvas = canvases[i];
-                            const label: string | null = Manifesto.TranslationCollection.getValue(canvas.getLabel());
+                            const label: string | null = Manifesto.LanguageMap.getValue(canvas.getLabel());
                             if (label && label.startsWith(term)) {
                                 results.push(label);
                             }
@@ -151,7 +151,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
                 const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                const label: string = UVUtils.sanitize(<string>Manifesto.TranslationCollection.getValue(canvas.getLabel(), this.extension.helper.options.locale));
+                const label: string = UVUtils.sanitize(<string>Manifesto.LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
@@ -489,7 +489,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         if (this.isPageModeEnabled()) {
 
-            const orderLabel: string = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
+            const orderLabel: string = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
 
             if (orderLabel === "-") {
                 value = "";

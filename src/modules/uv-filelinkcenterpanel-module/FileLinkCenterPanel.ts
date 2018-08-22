@@ -66,7 +66,7 @@ export class FileLinkCenterPanel extends CenterPanel {
                     $fileName.text(id.substr(id.lastIndexOf('/') + 1));
                 }
 
-                let label: string | null = Manifesto.TranslationCollection.getValue(annotationBody.getLabel());
+                let label: string | null = Manifesto.LanguageMap.getValue(annotationBody.getLabel());
 
                 if (label) {
                     $label.text(UVUtils.sanitize(label));

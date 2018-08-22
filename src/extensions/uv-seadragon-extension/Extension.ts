@@ -626,7 +626,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
+        bookmark.label = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
         bookmark.path = <string>this.getCroppedImageUri(canvas, this.getViewer());
         bookmark.thumb = canvas.getCanonicalImageUri(this.data.config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();

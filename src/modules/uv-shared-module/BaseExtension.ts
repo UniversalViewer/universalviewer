@@ -494,7 +494,12 @@ export class BaseExtension implements IExtension {
             let terms: string | null = this.helper.getLicense();
             
             if (!terms) {
-                terms = this.helper.getAttribution();
+                const requiredStatement: Manifold.ILabelValuePair | null = this.helper.getRequiredStatement();
+
+                if (requiredStatement && requiredStatement.value) {
+                    terms = requiredStatement.value;
+                }
+                
             }
             
             if (terms) {

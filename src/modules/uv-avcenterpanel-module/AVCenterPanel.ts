@@ -128,6 +128,8 @@ export class AVCenterPanel extends CenterPanel {
             
         }, false);
 
+        this.updateRequiredStatement();
+
     }
 
     private _observeRangeChanges(): boolean {
@@ -142,7 +144,7 @@ export class AVCenterPanel extends CenterPanel {
 
         let title: string = '';
         let value: string | null;
-        let label: Manifesto.TranslationCollection;
+        let label: Manifesto.LanguageMap;
 
         // get the current range or canvas title
         const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
@@ -153,7 +155,7 @@ export class AVCenterPanel extends CenterPanel {
             label = this.extension.helper.getCurrentCanvas().getLabel();
         }
 
-        value = Manifesto.TranslationCollection.getValue(label);
+        value = Manifesto.LanguageMap.getValue(label);
 
         if (value) {
             title = value;
@@ -165,7 +167,7 @@ export class AVCenterPanel extends CenterPanel {
             if (currentRange) {
                 if (currentRange.parentRange) {
                     label = currentRange.parentRange.getLabel();
-                    value = Manifesto.TranslationCollection.getValue(label);
+                    value = Manifesto.LanguageMap.getValue(label);
                 }
             } else {
                 value = this.extension.helper.getLabel();

@@ -462,7 +462,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         for (let i = 0; i < renderings.length; i++) {
             const rendering: Manifesto.IRendering = renderings[i];
             if (rendering) {
-                let label: string | null = Manifesto.TranslationCollection.getValue(rendering.getLabel(), this.extension.getLocale());
+                let label: string | null = Manifesto.LanguageMap.getValue(rendering.getLabel(), this.extension.getLocale());
                 const currentId: string = "downloadOption" + ++this.renderingUrlsCount;
                 if (label) {
                     label += " ({0})";
