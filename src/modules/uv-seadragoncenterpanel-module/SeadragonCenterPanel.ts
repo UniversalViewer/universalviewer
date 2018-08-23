@@ -157,7 +157,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
 
-        this.updateAttribution();
+        this.updateRequiredStatement();
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({

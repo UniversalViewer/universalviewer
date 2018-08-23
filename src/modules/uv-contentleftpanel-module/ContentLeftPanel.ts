@@ -215,7 +215,7 @@ export class ContentLeftPanel extends LeftPanel {
         if (topRanges.length > 1){            
             for (let i = 0; i < topRanges.length; i++){
                 const range: Manifesto.IRange = topRanges[i];
-                this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.TranslationCollection.getValue(range.getLabel()) + '</option>');
+                this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.LanguageMap.getValue(range.getLabel()) + '</option>');
             }
         }
 
@@ -323,7 +323,7 @@ export class ContentLeftPanel extends LeftPanel {
             }
 
             const currentRange: Manifesto.IRange = topRanges[index];
-            this.setTreeTabTitle(<string>Manifesto.TranslationCollection.getValue(currentRange.getLabel()));
+            this.setTreeTabTitle(<string>Manifesto.LanguageMap.getValue(currentRange.getLabel()));
         } else {
             this.setTreeTabTitle(this.content.index);
         }
@@ -342,7 +342,7 @@ export class ContentLeftPanel extends LeftPanel {
             if (this.treeView){
                 title = this.getSelectedTree().text();
             } else {
-                title = Manifesto.TranslationCollection.getValue(topRanges[0].getLabel());
+                title = Manifesto.LanguageMap.getValue(topRanges[0].getLabel());
             }
         }
 

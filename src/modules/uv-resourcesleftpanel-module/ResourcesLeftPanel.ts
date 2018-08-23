@@ -70,7 +70,7 @@ export class ResourcesLeftPanel extends LeftPanel {
             const annotation: Manifesto.IAnnotation = annotations[i];
             const resource: Manifesto.Resource = annotation.getResource();
             if (resource) {
-                const label: string | null = Manifesto.TranslationCollection.getValue(<Manifesto.TranslationCollection>resource.getLabel());
+                const label: string | null = Manifesto.LanguageMap.getValue(<Manifesto.LanguageMap>resource.getLabel());
 
                 if (label) {
                     const mime: string = Utils.Files.simplifyMimeType((<Manifesto.MediaType>resource.getFormat()).toString());

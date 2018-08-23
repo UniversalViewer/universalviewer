@@ -494,7 +494,12 @@ export class BaseExtension implements IExtension {
             let terms: string | null = this.helper.getLicense();
             
             if (!terms) {
-                terms = this.helper.getAttribution();
+                const requiredStatement: Manifold.ILabelValuePair | null = this.helper.getRequiredStatement();
+
+                if (requiredStatement && requiredStatement.value) {
+                    terms = requiredStatement.value;
+                }
+                
             }
             
             if (terms) {
@@ -1145,6 +1150,10 @@ export class BaseExtension implements IExtension {
 
     isDesktopMetric(): boolean {
         return this.metric.toString() === MetricType.DESKTOP.toString();
+    }
+
+    isWatchMetric(): boolean {
+        return this.metric.toString() === MetricType.WATCH.toString();
     }
 
     isCatchAllMetric(): boolean {

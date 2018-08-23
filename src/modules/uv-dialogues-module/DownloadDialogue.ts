@@ -74,7 +74,7 @@ export class DownloadDialogue extends Dialogue {
                 if (renderingFormat) {
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
+                this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.LanguageMap.getValue(rendering.getLabel()), format);
                 renderingFound = true;
             }
 
@@ -138,9 +138,10 @@ export class DownloadDialogue extends Dialogue {
     }
 
     updateTermsOfUseButton(): void {
-        const attribution: string | null = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
-        
-        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && attribution) {
+
+        const requiredStatement: Manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+
+        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();

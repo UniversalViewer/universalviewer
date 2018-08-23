@@ -56,7 +56,7 @@ export class VirtexCenterPanel extends CenterPanel {
 
         this.title = this.extension.helper.getLabel();
 
-        this.updateAttribution();
+        this.updateRequiredStatement();
 
         this.$zoomInButton.on('click', (e: any) => {
             e.preventDefault();
