@@ -1152,6 +1152,10 @@ export class BaseExtension implements IExtension {
         return this.metric.toString() === MetricType.DESKTOP.toString();
     }
 
+    isWatchMetric(): boolean {
+        return this.metric.toString() === MetricType.WATCH.toString();
+    }
+
     isCatchAllMetric(): boolean {
         return this.metric.toString() === MetricType.NONE.toString();
     }

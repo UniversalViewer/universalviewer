@@ -32,8 +32,8 @@ export interface IExtension {
     getShareUrl(): string | null;
     height(): number;
     helper: Manifold.IHelper;
-    isCreated: boolean;
     isCatchAllMetric(): boolean;
+    isCreated: boolean;
     isDesktopMetric(): boolean;
     isFooterPanelEnabled(): boolean;
     isFullScreen(): boolean;
@@ -43,6 +43,7 @@ export interface IExtension {
     isOverlayActive(): boolean;
     isRightPanelEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
+    isWatchMetric(): boolean;
     lastCanvasIndex: number;
     loadDependencies(deps: any): void;
     metric: MetricType;

@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import { Position } from "../uv-shared-module/Position";
 
 export class AVCenterPanel extends CenterPanel {
 
@@ -92,7 +93,7 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
-        this.$content.append(this.$avcomponent);
+        this.$content.prepend(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
             target: this.$avcomponent[0]
@@ -128,8 +129,10 @@ export class AVCenterPanel extends CenterPanel {
             
         }, false);
 
-        this.updateRequiredStatement();
-
+        this._whenMediaReady(() => {
+            this.attributionPosition = Position.BOTTOM_RIGHT;
+            this.updateRequiredStatement();
+        });
     }
 
     private _observeRangeChanges(): boolean {

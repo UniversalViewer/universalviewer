@@ -1,5 +1,6 @@
 import {Shell} from "./Shell";
 import {BaseView} from "./BaseView";
+import {Position} from "./Position";
 import {UVUtils} from "./Utils";
 
 export class CenterPanel extends BaseView {
@@ -8,6 +9,8 @@ export class CenterPanel extends BaseView {
     $closeAttributionButton: JQuery;
     $content: JQuery;
     $title: JQuery;
+    isAttributionOpen: boolean = false;
+    attributionPosition: Position = Position.BOTTOM_LEFT;
 
     constructor($element: JQuery) {
         super($element, false, true);
@@ -40,17 +43,27 @@ export class CenterPanel extends BaseView {
 
         this.$attribution.find('.header .title').text(this.content.attribution);
         this.$content.append(this.$attribution);
-        this.$attribution.hide();
+        this.closeAttribution();
 
         this.$closeAttributionButton = this.$attribution.find('.header .close');
         this.$closeAttributionButton.on('click', (e) => {
             e.preventDefault();
-            this.$attribution.hide();
+            this.closeAttribution();
         });
 
         if (!Utils.Bools.getBool(this.options.titleEnabled, true)) {
             this.$title.hide();
         }
+    }
+
+    openAttribution(): void {
+        this.$attribution.show();
+        this.isAttributionOpen = true;
+    }
+
+    closeAttribution(): void {
+        this.$attribution.hide();
+        this.isAttributionOpen = false;
     }
 
     updateRequiredStatement(): void {
@@ -64,7 +77,7 @@ export class CenterPanel extends BaseView {
             return;
         }
 
-        this.$attribution.show();
+        this.openAttribution();
 
         const $attributionTitle: JQuery = this.$attribution.find('.title');
         const $attributionText: JQuery = this.$attribution.find('.attribution-text');
@@ -105,6 +118,8 @@ export class CenterPanel extends BaseView {
         //} else {
         $logo.hide();
         //}
+
+        this.resize();
     }
 
     resize(): void {
@@ -130,8 +145,26 @@ export class CenterPanel extends BaseView {
         this.$content.height(this.$element.height() - titleHeight);
         this.$content.width(this.$element.width());
 
-        if (this.$attribution && this.$attribution.is(':visible')) {
-            this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
+        if (this.$attribution && this.isAttributionOpen) {
+
+            switch (this.attributionPosition) {
+                case Position.BOTTOM_LEFT :
+                    this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
+                    this.$attribution.css('left', 0);
+                    break;
+                case Position.BOTTOM_RIGHT :
+                    this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
+                    this.$attribution.css('left', this.$content.width() - this.$attribution.outerWidth() - this.$attribution.horizontalMargins());
+                    break;
+            }
+
+            // hide the attribution if there's no room for it
+            if (this.$content.width() <= this.$attribution.width()) {
+                this.$attribution.hide();
+            } else {
+                this.$attribution.show();
+            }
         }
+
     }
 }
