@@ -129,7 +129,7 @@ export class AVCenterPanel extends CenterPanel {
             
         }, false);
 
-        this._whenMediaReady(() => {
+        this.whenResized(() => {
             this.attributionPosition = Position.BOTTOM_RIGHT;
             this.updateRequiredStatement();
         });
