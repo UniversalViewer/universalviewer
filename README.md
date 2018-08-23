@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg">
+    <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.png">
     <h1 align="center">Universal Viewer</h1>
 </p>
 
