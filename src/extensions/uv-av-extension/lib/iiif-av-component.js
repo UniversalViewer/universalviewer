@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.72 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.74 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -43,6 +43,7 @@ var IIIFComponents;
                 defaultAspectRatio: 0.56,
                 doubleClickMS: 350,
                 limitToRange: false,
+                posterImageRatio: 0.3,
                 virtualCanvasEnabled: true,
                 content: {
                     currentTime: "Current Time",
@@ -438,19 +439,19 @@ var IIIFComponents;
                     };
                 }
                 else {
-                    // get the longer edge of the poster canvas and make that a third of the container height/width.
+                    // get the longer edge of the poster canvas and make that a ratio of the container height/width.
                     // scale the shorter edge proportionally.
                     var ratio = void 0;
                     var width = void 0;
                     var height = void 0;
                     if (this._posterCanvasWidth > this._posterCanvasHeight) {
                         ratio = this._posterCanvasHeight / this._posterCanvasWidth;
-                        width = containerWidth / 3;
+                        width = containerWidth * this._data.posterImageRatio;
                         height = width * ratio;
                     }
                     else {
                         ratio = this._posterCanvasWidth / this._posterCanvasHeight;
-                        height = containerHeight / 3;
+                        height = containerHeight * this._data.posterImageRatio;
                         width = height * ratio;
                     }
                     return {
