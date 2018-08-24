@@ -662,7 +662,7 @@ export class BaseExtension implements IExtension {
         }
     }
 
-    dependencyLoaded(index: number, dep: any, deps: string[]): void {
+    dependencyLoaded(index: number, dep: any): void {
         
     }
 

@@ -18,7 +18,10 @@
 
         .poster-image {
             position: absolute;
-            background-size: cover;
+            background-color: #000;
+            background-size: contain;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
             cursor: pointer;
 
             .btn {
@@ -76,6 +79,7 @@
 
     .hover-preview {
         position: absolute;
+        z-index: 1;
         padding-bottom: 7px;
 
         .label {
@@ -291,7 +295,7 @@
 // mixins
 
 .ui-slider-range-scrub() {
-    background: rgba(248, 196, 196, 0.5);
+    background: rgba(66, 66, 66, 0.5);
     box-sizing: border-box;
     border-radius: 0;
     cursor: pointer;

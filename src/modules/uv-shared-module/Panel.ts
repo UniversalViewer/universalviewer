@@ -21,6 +21,12 @@ export class Panel {
         });
     }
 
+    whenResized(cb: () => void): void {
+        Utils.Async.waitFor(() => {
+            return this.isResized;
+        }, cb);
+    }
+
     resize(): void {
         const $parent: JQuery = this.$element.parent();
 

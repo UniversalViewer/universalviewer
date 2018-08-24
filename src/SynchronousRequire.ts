@@ -1,6 +1,6 @@
 export class SynchronousRequire {
 
-    static load(deps: string[], cb: (index: number, dep: any, deps: string[]) => void): Promise<void> {
+    static load(deps: string[], cb: (index: number, dep: any) => void): Promise<void> {
         
         const loaders: DependencyLoader[] = [];
 
@@ -22,18 +22,22 @@ export class SynchronousRequire {
 
 }
 
-class DependencyLoader {
+export class DependencyLoader {
 
     private _dep: string;
     private _deps: string[];
-    private _cb: (index: number, dep: any, deps: string[]) => void;
+    private _cb: (index: number, dep: any) => void;
     private _index: number;
 
-    constructor(index: number, dep: string, deps: string[], cb: (index: number, dep: any, deps: string[]) => void) {
+    constructor(index: number, dep: string, deps: string[], cb: (index: number, dep: any) => void) {
         this._dep = dep;
         this._deps = deps;
         this._cb = cb;
         this._index = index;
+    }
+
+    getDependencyIndex(dep: string): number {
+        return this._deps.findIndex((el) => { return el.includes(dep) });
     }
 
     load(): Promise<void> {
@@ -41,7 +45,7 @@ class DependencyLoader {
 
         return new Promise<void>((resolve) => {
             requirejs([that._dep], (dep: any) => {
-                that._cb(that._index, dep, that._deps);
+                that._cb(that._index, dep);
                 resolve();
             });
         });

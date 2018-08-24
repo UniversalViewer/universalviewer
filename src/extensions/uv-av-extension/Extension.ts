@@ -11,8 +11,8 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Shell } from "../../modules/uv-shared-module/Shell";
-import ITreeNode = Manifold.ITreeNode;
 import IThumb = Manifold.IThumb;
+import ITreeNode = Manifold.ITreeNode;
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -49,10 +49,10 @@ export class Extension extends BaseExtension implements IAVExtension {
         });
     }
 
-    dependencyLoaded(index: number, dep: any, deps: string[]): void {
-        if (index === deps.indexOf('./uv/lib/waveform-data')) {
-            window.WaveformData = dep;            
-        } else if (index === deps.indexOf('./uv/lib/hls.min')) {
+    dependencyLoaded(index: number, dep: any): void {
+        if (index === (<any>this).getDependencyIndex('waveform-data')) {
+            window.WaveformData = dep;
+        } else if (index === (<any>this).getDependencyIndex('hls')) {
             window.Hls = dep; //https://github.com/mrdoob/three.js/issues/9602
         }
     }

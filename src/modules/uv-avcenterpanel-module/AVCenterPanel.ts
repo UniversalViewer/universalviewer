@@ -195,11 +195,12 @@ export class AVCenterPanel extends CenterPanel {
                 helper: this.extension.helper,
                 autoPlay: this.config.options.autoPlay,
                 autoSelectRange: true,
-                defaultAspectRatio: 0.56,
-                limitToRange: this._limitToRange(),
                 constrainNavigationToRange: this._limitToRange(),
+                content: this.content,
+                defaultAspectRatio: 0.56,
                 doubleClickMS: 350,
-                content: this.content
+                limitToRange: this._limitToRange(),
+                posterImageRatio: this.config.options.posterImageRatio
             });
 
             this.resize();

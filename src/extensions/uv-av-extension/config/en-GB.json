@@ -137,7 +137,8 @@
     "avCenterPanel": {
       "options": {
         "autoPlay": false,
-        "includeParentInTitleEnabled": false
+        "includeParentInTitleEnabled": false,
+        "posterImageRatio": 0.3
       }
     },
     "settingsDialogue": {

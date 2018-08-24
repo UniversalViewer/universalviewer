@@ -116,12 +116,6 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     }
 
-    whenResized(cb: () => void): void {
-        Utils.Async.waitFor(() => {
-            return this.isResized;
-        }, cb);
-    }
-
     whenCreated(cb: () => void): void {
         Utils.Async.waitFor(() => {
             return this.isCreated;
