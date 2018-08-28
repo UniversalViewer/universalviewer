@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.74 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.75 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -42,6 +42,7 @@ var IIIFComponents;
                 constrainNavigationToRange: false,
                 defaultAspectRatio: 0.56,
                 doubleClickMS: 350,
+                halveAtWidth: 200,
                 limitToRange: false,
                 posterImageRatio: 0.3,
                 virtualCanvasEnabled: true,
@@ -642,7 +643,6 @@ var IIIFComponents;
         __extends(CanvasInstance, _super);
         function CanvasInstance(options) {
             var _this = _super.call(this, options) || this;
-            _this._canvasClockDuration = 0; // todo: should these 0 values be undefined by default?
             _this._canvasClockFrequency = 25;
             _this._canvasClockStartDate = 0;
             _this._canvasClockTime = 0;
@@ -740,7 +740,6 @@ var IIIFComponents;
                     _this.ranges.push(range);
                 });
             }
-            this._canvasClockDuration = this._data.canvas.getDuration();
             var canvasWidth = this._data.canvas.getWidth();
             var canvasHeight = this._data.canvas.getHeight();
             if (!canvasWidth) {
@@ -797,7 +796,7 @@ var IIIFComponents;
                 step: 0.01,
                 orientation: "horizontal",
                 range: "min",
-                max: that._canvasClockDuration,
+                max: that._getDuration(),
                 animate: false,
                 create: function (evt, ui) {
                     // on create
@@ -818,7 +817,7 @@ var IIIFComponents;
                 that._$rangeHoverPreview.hide();
             });
             this._$canvasTimelineContainer.on("mousemove", function (e) {
-                _this._updateHoverPreview(e, _this._$canvasTimelineContainer, _this._canvasClockDuration);
+                _this._updateHoverPreview(e, _this._$canvasTimelineContainer, _this._getDuration());
             });
             this._$rangeTimelineContainer.on("mousemove", function (e) {
                 if (_this._data.range) {
@@ -885,7 +884,7 @@ var IIIFComponents;
                     xywh = [0, 0, this._canvasWidth, this._canvasHeight];
                 }
                 if (!t) {
-                    t = [0, this._canvasClockDuration];
+                    t = [0, this._getDuration()];
                 }
                 var positionLeft = parseInt(String(xywh[0])), positionTop = parseInt(String(xywh[1])), mediaWidth = parseInt(String(xywh[2])), mediaHeight = parseInt(String(xywh[3])), startTime = parseInt(String(t[0])), endTime = parseInt(String(t[1]));
                 var percentageTop = this._convertToPercentage(positionTop, this._canvasHeight), percentageLeft = this._convertToPercentage(positionLeft, this._canvasWidth), percentageWidth = this._convertToPercentage(mediaWidth, this._canvasWidth), percentageHeight = this._convertToPercentage(mediaHeight, this._canvasHeight);
@@ -923,6 +922,12 @@ var IIIFComponents;
                 }
             }
             this._renderWaveform();
+        };
+        CanvasInstance.prototype._getDuration = function () {
+            if (this._data && this._data.canvas) {
+                return this._data.canvas.getDuration();
+            }
+            return 0;
         };
         CanvasInstance.prototype.data = function () {
             return {
@@ -1060,7 +1065,7 @@ var IIIFComponents;
                 var duration = this._data.range.getDuration();
                 if (duration) {
                     // get the total length in seconds.
-                    var totalLength = this._canvasClockDuration;
+                    var totalLength = this._getDuration();
                     // get the length of the timeline container
                     var timelineLength = this._$canvasTimelineContainer.width();
                     // get the ratio of seconds to length
@@ -1448,7 +1453,7 @@ var IIIFComponents;
                 this._$canvasDuration.text(IIIFComponents.AVComponentUtils.Utils.formatTime(duration.getLength()));
             }
             else {
-                this._$canvasDuration.text(IIIFComponents.AVComponentUtils.Utils.formatTime(this._canvasClockDuration));
+                this._$canvasDuration.text(IIIFComponents.AVComponentUtils.Utils.formatTime(this._getDuration()));
             }
         };
         // public setVolume(value: number): void {
@@ -1460,8 +1465,8 @@ var IIIFComponents;
         //     }
         // }
         CanvasInstance.prototype._renderSyncIndicator = function (mediaElementData) {
-            var leftPercent = this._convertToPercentage(mediaElementData.start, this._canvasClockDuration);
-            var widthPercent = this._convertToPercentage(mediaElementData.end - mediaElementData.start, this._canvasClockDuration);
+            var leftPercent = this._convertToPercentage(mediaElementData.start, this._getDuration());
+            var widthPercent = this._convertToPercentage(mediaElementData.end - mediaElementData.start, this._getDuration());
             var $timelineItem = $('<div class="timeline-item" title="' + mediaElementData.source + '" data-start="' + mediaElementData.start + '" data-end="' + mediaElementData.end + '"></div>');
             $timelineItem.css({
                 left: leftPercent + '%',
@@ -1516,7 +1521,7 @@ var IIIFComponents;
                 this._canvasClockTime = duration.end;
             }
             else {
-                this._canvasClockTime = this._canvasClockDuration;
+                this._canvasClockTime = this._getDuration();
             }
             this.pause();
         };
@@ -1534,7 +1539,7 @@ var IIIFComponents;
             if (this._data.limitToRange && duration && this._canvasClockTime >= duration.end) {
                 this._canvasClockTime = duration.start;
             }
-            if (this._canvasClockTime === this._canvasClockDuration) {
+            if (this._canvasClockTime === this._getDuration()) {
                 this._canvasClockTime = 0;
             }
             this._canvasClockStartDate = Date.now() - (this._canvasClockTime * 1000);
@@ -1587,8 +1592,8 @@ var IIIFComponents;
             if (this._data.limitToRange && duration && this._canvasClockTime >= duration.end) {
                 this.pause();
             }
-            if (this._canvasClockTime >= this._canvasClockDuration) {
-                this._canvasClockTime = this._canvasClockDuration;
+            if (this._canvasClockTime >= this._getDuration()) {
+                this._canvasClockTime = this._getDuration();
                 this.pause();
             }
         };
@@ -1759,7 +1764,14 @@ var IIIFComponents;
                     //const resizeFactorY: number = containerWidth / this.canvasWidth;
                     //$canvasContainer.height(this.canvasHeight * resizeFactorY);
                     var $options = this.$playerElement.find('.options-container');
-                    this._$canvasContainer.height(this.$playerElement.parent().height() - $options.height());
+                    // if in the watch metric, make sure the canvasContainer isn't more than half the height to allow
+                    // room between buttons
+                    if (this._data.halveAtWidth !== undefined && this.$playerElement.parent().width() < this._data.halveAtWidth) {
+                        this._$canvasContainer.height(this.$playerElement.parent().height() / 2);
+                    }
+                    else {
+                        this._$canvasContainer.height(this.$playerElement.parent().height() - $options.height());
+                    }
                 }
                 if (this._waveformCanvas) {
                     var canvasWidth = this._$canvasContainer.width();

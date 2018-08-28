@@ -81,9 +81,6 @@ export class VirtexCenterPanel extends CenterPanel {
             this.$vrButton.hide();
         }
 
-        this.whenResized(() => {
-            this.updateRequiredStatement();
-        });
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
