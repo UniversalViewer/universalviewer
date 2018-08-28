@@ -13,6 +13,7 @@ export class AVCenterPanel extends CenterPanel {
 
     constructor($element: JQuery) {
         super($element);
+        this.attributionPosition = Position.BOTTOM_RIGHT;
     }
 
     create(): void {
@@ -129,10 +130,6 @@ export class AVCenterPanel extends CenterPanel {
             
         }, false);
 
-        this._whenMediaReady(() => {
-            this.attributionPosition = Position.BOTTOM_RIGHT;
-            this.updateRequiredStatement();
-        });
     }
 
     private _observeRangeChanges(): boolean {

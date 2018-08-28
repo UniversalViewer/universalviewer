@@ -54,6 +54,10 @@ export class CenterPanel extends BaseView {
         if (!Utils.Bools.getBool(this.options.titleEnabled, true)) {
             this.$title.hide();
         }
+
+        this.whenResized(() => {
+            this.updateRequiredStatement();
+        });
     }
 
     openAttribution(): void {
