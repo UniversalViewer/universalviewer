@@ -1,20 +1,14 @@
 define(function () {
-    // https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/Live_streaming_web_audio_and_video
-    // Dash is supported everywhere except safari
     function isSafari() {
-        // https://stackoverflow.com/questions/7944460/detect-safari-browser?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
         var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        //console.log('isSafari', isSafari);
         return isSafari;
     }
     function isAdaptiveStreamingAvailable() {
         var isAvailable = !!(window.MediaSource || window.WebKitMediaSource);
-        //console.log('isAdaptiveStreamingAvailable', isAvailable);
         return isAvailable;
     }
     function isFormatAvailable(formats, format) {
         var isAvailable = formats.includes(format);
-        //console.log('isFormatAvailable', format, isAvailable);
         return isAvailable;
     }
     function isHLSAvailable(formats) {
@@ -27,30 +21,25 @@ define(function () {
         var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'jquery.binarytransport', 'waveform-data'];
         if (isAdaptiveStreamingAvailable()) {
             if (isMpegDashAvailable(formats) && !isSafari()) {
-                //console.log('load mpeg dash');
                 return {
-                    sync: alwaysRequired.concat(['dash.all.min']) // ['dash.all.min'].concat(alwaysRequired)
+                    sync: alwaysRequired.concat(['dash.all.min'])
                 };
             }
             else if (isHLSAvailable(formats)) {
-                //console.log('load HLS');
                 return {
-                    sync: alwaysRequired.concat(['hls.min']) // ['hls.min'].concat(alwaysRequired)
+                    sync: alwaysRequired.concat(['hls.min'])
                 };
             }
             else {
-                //console.log('adaptive streaming not available');
                 return {
                     sync: alwaysRequired
                 };
             }
         }
         else {
-            //console.log('adaptive streaming not available');
             return {
                 sync: alwaysRequired
             };
         }
     };
 });
-//# sourceMappingURL=dependencies.js.map
