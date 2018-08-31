@@ -60,7 +60,7 @@
     "typescript": "2.7.2"
   },
   "dependencies": {
-    "@iiif/manifold": "1.2.32",
+    "@iiif/manifold": "iiif-commons/manifold#probe",
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
@@ -82,7 +82,7 @@
     "jquery-ui-touch-punch": "0.2.3",
     "jsviews": "0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.7",
-    "manifesto.js": "3.0.3",
+    "manifesto.js": "iiif-commons/manifesto#probe",
     "mediaelement": "4.0.2",
     "opencollective": "1.0.3",
     "openseadragon": "2.2.1",

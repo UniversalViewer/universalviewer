@@ -423,7 +423,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             $group.show();
 
-            if ($group.find('li.option:hidden').length === $group.find('li.option').length){
+            if ($group.find('li.option:hidden').length === $group.find('li.option').length) {
                 // all options are hidden, hide group.
                 $group.hide();
             }
@@ -437,7 +437,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             this.$pagingNote.hide();
         }
 
-        if (!this.$downloadOptions.find('li.option:visible').length){
+        if (!this.$downloadOptions.find('li.option:visible').length) {
             this.$noneAvailable.show();
             this.$downloadButton.hide();
         } else {
