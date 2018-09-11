@@ -5,10 +5,9 @@ import { Position } from "../uv-shared-module/Position";
 export class AVCenterPanel extends CenterPanel {
 
     $avcomponent: JQuery;
-    avcomponent: IIIFComponents.AVComponent | null = null;
+    avcomponent: IIIFComponents.AVComponent | null;
     title: string | null;
     private _mediaReady: boolean = false;
-    //private _resourceOpened: boolean = false;
     private _isThumbsViewOpen: boolean = false;
 
     constructor($element: JQuery) {
@@ -25,10 +24,7 @@ export class AVCenterPanel extends CenterPanel {
         const that = this;
 
         $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
-            //if (!this._resourceOpened) {
-                that.openMedia(resources);
-                //this._resourceOpened = true;
-            //}
+            that.openMedia(resources);
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
@@ -101,12 +97,10 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
+        this._createAVComponent();
     }
 
     private _createAVComponent(): void {
-
-        this.$content.empty();
-        this.avcomponent = null;
 
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
         this.$content.prepend(this.$avcomponent);
@@ -199,8 +193,6 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
-
-        this._createAVComponent();
 
         this.extension.getExternalResources(resources).then(() => {
 
