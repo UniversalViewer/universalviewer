@@ -40,6 +40,7 @@ export interface IExtension {
     isHeaderPanelEnabled(): boolean;
     isLeftPanelEnabled(): boolean;
     isLoggedIn: boolean;
+    isMobile(): boolean;
     isOverlayActive(): boolean;
     isRightPanelEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
