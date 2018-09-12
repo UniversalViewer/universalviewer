@@ -71,7 +71,18 @@ export class BaseExtension implements IExtension {
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         this.$element.prop('tabindex', 0);
-        if (this.data.isLightbox) this.$element.addClass('lightbox');
+
+        if (this.isMobile()) {
+            this.$element.addClass('mobile');
+        }
+
+        if (this.data.isLightbox) {
+            this.$element.addClass('lightbox');
+        }
+
+        if (Utils.Documents.supportsFullscreen()) {
+            this.$element.addClass('fullscreen-supported');
+        }
 
         this.$element.on('mousemove', (e) => {
             this.mouseX = e.pageX;
@@ -1215,6 +1226,10 @@ export class BaseExtension implements IExtension {
 
     isFooterPanelEnabled(): boolean {
         return Utils.Bools.getBool(this.data.config.options.footerPanelEnabled, true);
+    }
+
+    isMobile(): boolean {
+        return $.browser.mobile;
     }
 
     useArrowKeysToNavigate(): boolean {

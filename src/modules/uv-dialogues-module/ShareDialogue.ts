@@ -243,7 +243,7 @@ export class ShareDialogue extends Dialogue {
             this.$shareLink.text(shareUrl);
         }
 
-        if ($.browser.mobile) {
+        if (this.extension.isMobile()) {
             this.$shareInput.hide();
             this.$shareLink.show();
         } else {
