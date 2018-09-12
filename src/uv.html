@@ -17,19 +17,8 @@
             overflow: hidden;
         }
     </style>
-</head>    
-<body>
-
-<div id="uv" class="uv"></div>
-
-<script>
-
-    $(function() {
-
-        var $UV = $('#uv');
-
-        window.addEventListener('uvLoaded', function(e) { 
-
+    <script type="text/javascript">
+    window.addEventListener('uvLoaded', function(e) { 
             urlDataProvider = new UV.URLDataProvider(true);
             var formattedLocales;
             var locales = urlDataProvider.get('locales', '');
@@ -65,8 +54,18 @@
                 embedded: true,
                 locales: formattedLocales
             }, urlDataProvider);
-
         }, false);
+    </script>
+</head>    
+<body>
+
+<div id="uv" class="uv"></div>
+
+<script>
+
+    $(function() {
+
+        var $UV = $('#uv');
 
         function resize() {
             var windowWidth = window.innerWidth;
