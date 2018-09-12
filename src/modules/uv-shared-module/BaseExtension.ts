@@ -71,7 +71,12 @@ export class BaseExtension implements IExtension {
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         this.$element.prop('tabindex', 0);
-        if (this.data.isLightbox) this.$element.addClass('lightbox');
+        if (this.data.isLightbox) {
+            this.$element.addClass('lightbox');
+        }
+        if (Utils.Documents.supportsFullscreen()) {
+            this.$element.addClass('fullscreen-supported');
+        }
 
         this.$element.on('mousemove', (e) => {
             this.mouseX = e.pageX;
