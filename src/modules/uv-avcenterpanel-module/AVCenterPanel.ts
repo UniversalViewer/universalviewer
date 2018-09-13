@@ -198,6 +198,10 @@ export class AVCenterPanel extends CenterPanel {
 
             if (this.avcomponent) {
 
+                // this is necessary because a new file may have been returned
+                // by the degraded auth flow with the same helper object
+                this.avcomponent.reset();
+
                 this.avcomponent.set({
                     helper: this.extension.helper,
                     autoPlay: this.config.options.autoPlay,
