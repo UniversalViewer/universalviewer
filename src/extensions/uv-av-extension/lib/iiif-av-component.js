@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.75 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.76 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -845,7 +845,12 @@ var IIIFComponents;
                     console.warn('item has no body');
                     return;
                 }
-                var body = bodies[0];
+                var body = this._getBody(bodies);
+                if (!body) {
+                    // if no suitable format was found for the current browser, skip this item.
+                    console.warn('unable to find suitable format for', item.id);
+                    continue;
+                }
                 var type = body.getType();
                 var format = body.getFormat();
                 // if (type && type.toString() === 'choice') {
@@ -922,6 +927,40 @@ var IIIFComponents;
                 }
             }
             this._renderWaveform();
+        };
+        CanvasInstance.prototype._getBody = function (bodies) {
+            // if there's an HLS format and HLS is supported in this browser
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                var format = body.getFormat();
+                if (format) {
+                    if (IIIFComponents.AVComponentUtils.Utils.isHLSFormat(format) && IIIFComponents.AVComponentUtils.Utils.canPlayHls()) {
+                        return body;
+                    }
+                }
+            }
+            // if there's a Dash format and the browser isn't Safari
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                var format = body.getFormat();
+                if (format) {
+                    if (IIIFComponents.AVComponentUtils.Utils.isMpegDashFormat(format) && !IIIFComponents.AVComponentUtils.Utils.isSafari()) {
+                        return body;
+                    }
+                }
+            }
+            // otherwise, return the first format that isn't HLS or Dash
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                var format = body.getFormat();
+                if (format) {
+                    if (!IIIFComponents.AVComponentUtils.Utils.isHLSFormat(format) && !IIIFComponents.AVComponentUtils.Utils.isMpegDashFormat(format)) {
+                        return body;
+                    }
+                }
+            }
+            // couldn't find a suitable format
+            return null;
         };
         CanvasInstance.prototype._getDuration = function () {
             if (this._data && this._data.canvas) {
@@ -1974,6 +2013,12 @@ var IIIFComponents;
                 // other browser
                 return false;
             };
+            Utils.isSafari = function () {
+                // https://stackoverflow.com/questions/7944460/detect-safari-browser?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+                var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                console.log('isSafari', isSafari);
+                return isSafari;
+            };
             Utils.debounce = function (fn, debounceDuration) {
                 // summary:
                 //      Returns a debounced function that will make sure the given
@@ -2000,6 +2045,33 @@ var IIIFComponents;
             Utils.normalise = function (num, min, max) {
                 return (num - min) / (max - min);
             };
+            Utils.isHLSFormat = function (format) {
+                return this.hlsMimeTypes.includes(format.toString());
+            };
+            Utils.isMpegDashFormat = function (format) {
+                return format.toString() === 'application/dash+xml';
+            };
+            Utils.canPlayHls = function () {
+                var doc = typeof document === 'object' && document, videoelem = doc && doc.createElement('video'), isvideosupport = Boolean(videoelem && videoelem.canPlayType);
+                return isvideosupport && this.hlsMimeTypes.some(function (canItPlay) {
+                    return /maybe|probably/i.test(videoelem.canPlayType(canItPlay));
+                });
+            };
+            Utils.hlsMimeTypes = [
+                // Apple santioned
+                'application/vnd.apple.mpegurl',
+                'vnd.apple.mpegurl',
+                // Apple sanctioned for backwards compatibility
+                'audio/mpegurl',
+                // Very common
+                'audio/x-mpegurl',
+                // Very common
+                'application/x-mpegurl',
+                // Included for completeness
+                'video/x-mpegurl',
+                'video/mpegurl',
+                'application/mpegurl'
+            ];
             return Utils;
         }());
         AVComponentUtils.Utils = Utils;

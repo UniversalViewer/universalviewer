@@ -60,7 +60,7 @@
     "typescript": "2.7.2"
   },
   "dependencies": {
-    "@iiif/manifold": "1.2.32",
+    "@iiif/manifold": "1.2.33",
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
@@ -70,7 +70,7 @@
     "exjs": "BSick7/exjs#0.5.1",
     "hls.js": "0.9.1",
     "http-status-codes": "edsilv/http-status-codes#v0.0.8",
-    "iiif-av-component": "iiif-commons/iiif-av-component#v0.0.75",
+    "iiif-av-component": "iiif-commons/iiif-av-component#v0.0.76",
     "iiif-gallery-component": "iiif-commons/iiif-gallery-component#v1.1.6",
     "iiif-metadata-component": "iiif-commons/iiif-metadata-component#v1.1.8",
     "iiif-tree-component": "iiif-commons/iiif-tree-component#v1.1.7",
@@ -82,7 +82,7 @@
     "jquery-ui-touch-punch": "0.2.3",
     "jsviews": "0.9.83",
     "key-codes": "edsilv/key-codes#v0.0.7",
-    "manifesto.js": "3.0.3",
+    "manifesto.js": "3.0.4",
     "mediaelement": "4.0.2",
     "opencollective": "1.0.3",
     "openseadragon": "2.2.1",
