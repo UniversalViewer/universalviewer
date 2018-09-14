@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 define(function () {
     return function (formats) {
         return {
@@ -10,13 +9,3 @@ define(function () {
     };
 });
 //# sourceMappingURL=dependencies.js.map
-=======
-define(function () {
-    return function (formats) {
-        return {
-            sync: ['three.min'],
-            async: ['VRControls', 'VREffect', 'stats.min', 'OBJLoader', 'MTLLoader', 'PLYLoader', 'GLTFLoader', 'Detector', 'WebVR', 'virtex', 'iiif-metadata-component']
-        };
-    };
-});
->>>>>>> bl
