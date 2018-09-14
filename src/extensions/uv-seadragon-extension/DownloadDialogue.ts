@@ -5,6 +5,7 @@ import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import {DownloadType} from "./DownloadType";
 import {ISeadragonExtension} from "./ISeadragonExtension";
 import Size = Manifesto.Size;
+import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
@@ -23,8 +24,6 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     $wholeImageHighResButton: JQuery;
     $wholeImagesHighResButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
-    renderingUrls: string[];
-    renderingUrlsCount: number;
 
     constructor($element: JQuery) {
         super($element);
@@ -83,7 +82,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.$explanatoryTextTemplate = $('<span class="explanatory"></span>');
 
         const that = this;
-
+        
+        // what happens on download is specific to the extension (except for renderings which need to be moved to the base download dialogue)
+        // todo: we need to make everything a list of radio button options in the base class, then we can unify everything into a single render method
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
 
@@ -343,7 +344,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             if (canvas.ranges && canvas.ranges.length) {
                 for (let i = 0; i < canvas.ranges.length; i++) {
                     const range: Manifesto.IRange = canvas.ranges[i];
-                    this.addDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
+                    const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
+                    this.addDownloadOptionsForRenderings(renderingOptions);
                 }
             }
         }
@@ -351,16 +353,19 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicImageRenderings)) {
             const images: Manifesto.IAnnotation[] = canvas.getImages();
             for (let i = 0; i < images.length; i++) {
-                this.addDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.dynamicImageRenderings);
+                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.dynamicImageRenderings);
+                this.addDownloadOptionsForRenderings(renderingOptions);
             }
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicCanvasRenderings)) {
-            this.addDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
+            const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
+            this.addDownloadOptionsForRenderings(renderingOptions);
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.dynamicSequenceRenderings)) {
-            this.addDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
+            const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.dynamicSequenceRenderings);
+            this.addDownloadOptionsForRenderings(renderingOptions);
         }
 
         // hide the current view option if it's equivalent to whole image.
@@ -450,47 +455,22 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.resize();
     }
 
-    resetDynamicDownloadOptions(): void {
-        this.renderingUrls = [];
-        this.renderingUrlsCount = 0;
-        this.$downloadOptions.find('li.dynamic').remove();
-    }
+    addDownloadOptionsForRenderings(renderingOptions: IRenderingOption[]): void {
 
-    addDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption): void {
-        const renderings: Manifesto.IRendering[] = resource.getRenderings();
-
-        for (let i = 0; i < renderings.length; i++) {
-            const rendering: Manifesto.IRendering = renderings[i];
-            if (rendering) {
-                let label: string | null = Manifesto.LanguageMap.getValue(rendering.getLabel(), this.extension.getLocale());
-                const currentId: string = "downloadOption" + ++this.renderingUrlsCount;
-                if (label) {
-                    label += " ({0})";
-                } else {
-                    label = defaultLabel;
-                }
-                const mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
-                label = Utils.Strings.format(label, mime);
-                this.renderingUrls[<any>currentId] = rendering.id;
-                const $button: JQuery = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + currentId + '">' + label + '</label></li>');
-
-                switch (type) {
-                    case DownloadOption.dynamicImageRenderings:
-                        this.$imageOptions.append($button);
-                        break;
-                    case DownloadOption.dynamicCanvasRenderings:
-                        this.$canvasOptions.append($button);
-                        break;
-                    case DownloadOption.dynamicSequenceRenderings:
-                        this.$sequenceOptions.append($button);
-                        break;
-                }
+        renderingOptions.forEach((option: IRenderingOption) => {
+            switch (option.type) {
+                case DownloadOption.dynamicImageRenderings:
+                    this.$imageOptions.append(option.button);
+                    break;
+                case DownloadOption.dynamicCanvasRenderings:
+                    this.$canvasOptions.append(option.button);
+                    break;
+                case DownloadOption.dynamicSequenceRenderings:
+                    this.$sequenceOptions.append(option.button);
+                    break;
             }
-        }
-    }
+        });
 
-    getSelectedOption() {
-        return this.$downloadOptions.find("li.option input:checked");
     }
 
     getCanvasImageResource(canvas: Manifesto.ICanvas): Manifesto.IResource | null {
