@@ -91,6 +91,8 @@ export class CenterPanel extends BaseView {
         if (requiredStatement.label) {
             const sanitizedTitle: string = UVUtils.sanitize(requiredStatement.label);
             $attributionTitle.html(sanitizedTitle);
+        } else {
+            $attributionTitle.text(this.content.attribution);
         }
         
         if (requiredStatement.value) {

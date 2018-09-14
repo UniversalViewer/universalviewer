@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.76 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.81 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -184,9 +184,18 @@ var IIIFComponents;
         };
         AVComponent.prototype._render = function () {
         };
+        AVComponent.prototype.reset = function () {
+            this._reset();
+        };
         AVComponent.prototype._reset = function () {
             var _this = this;
-            this.canvasInstances.forEach(function (canvasInstance, index) {
+            this._readyMedia = 0;
+            this._readyWaveforms = 0;
+            this._posterCanvasWidth = 0;
+            this._posterCanvasHeight = 0;
+            clearInterval(this._checkAllMediaReadyInterval);
+            clearInterval(this._checkAllWaveformsReadyInterval);
+            this.canvasInstances.forEach(function (canvasInstance) {
                 canvasInstance.destroy();
             });
             this.canvasInstances = [];
@@ -287,6 +296,7 @@ var IIIFComponents;
                 data: Object.assign({}, { canvas: canvas }, this._data)
             });
             canvasInstance.logMessage = this._logMessage.bind(this);
+            canvasInstance.isOnlyCanvasInstance = this._getCanvases().length === 1;
             this._$element.append(canvasInstance.$playerElement);
             canvasInstance.init();
             this.canvasInstances.push(canvasInstance);
@@ -342,14 +352,22 @@ var IIIFComponents;
                 });
             });
         };
+        AVComponent.prototype._getNormaliseCanvasId = function (canvasId) {
+            return (canvasId.includes('://')) ? Manifesto.Utils.normaliseUrl(canvasId) : canvasId;
+        };
         AVComponent.prototype._getCanvasInstanceById = function (canvasId) {
-            canvasId = (canvasId.includes('://')) ? Manifesto.Utils.normaliseUrl(canvasId) : canvasId;
+            canvasId = this._getNormaliseCanvasId(canvasId);
             // if virtual canvas is enabled, check for that first
             if (this._data.virtualCanvasEnabled) {
                 for (var i = 0; i < this.canvasInstances.length; i++) {
                     var canvasInstance = this.canvasInstances[i];
-                    if (canvasInstance.isVirtual() && canvasInstance.getCanvasId() === canvasId || canvasInstance.includesVirtualSubCanvas(canvasId)) {
-                        return canvasInstance;
+                    var currentCanvasId = canvasInstance.getCanvasId();
+                    if (currentCanvasId) {
+                        currentCanvasId = this._getNormaliseCanvasId(currentCanvasId);
+                        if ((canvasInstance.isVirtual() || this.canvasInstances.length === 1) && currentCanvasId === canvasId ||
+                            canvasInstance.includesVirtualSubCanvas(canvasId)) {
+                            return canvasInstance;
+                        }
                     }
                 }
             }
@@ -661,6 +679,7 @@ var IIIFComponents;
             //private _waveformNeedsRedraw: boolean = true;
             _this.ranges = [];
             _this.waveforms = [];
+            _this.isOnlyCanvasInstance = false;
             _this._scaleY = function (amplitude, height) {
                 var range = 256;
                 return Math.max(_this._data.waveformBarWidth, (amplitude * height / range));
@@ -1117,7 +1136,7 @@ var IIIFComponents;
                     }
                     var width = end - start;
                     //console.log(width);
-                    if (this.isVirtual()) {
+                    if (this.isVirtual() || this.isOnlyCanvasInstance) {
                         this._$durationHighlight.show();
                         // set the start position and width
                         this._$durationHighlight.css({
@@ -1129,7 +1148,10 @@ var IIIFComponents;
                         this._$durationHighlight.hide();
                     }
                     var that_1 = this;
-                    this._$rangeTimelineContainer.slider("destroy");
+                    // try to destroy existing rangeTimelineContainer
+                    if (this._$rangeTimelineContainer.data("ui-sortable")) {
+                        this._$rangeTimelineContainer.slider("destroy");
+                    }
                     this._$rangeTimelineContainer.slider({
                         value: duration.start,
                         step: 0.01,
@@ -1284,6 +1306,7 @@ var IIIFComponents;
                 // dash
                 $mediaElement.attr('data-dashjs-player', '');
                 var player = dashjs.MediaPlayer().create();
+                player.getDebug().setLogToBrowserConsole(false);
                 player.initialize(media, data.source);
             }
             else if (data.format && data.format.toString() === 'application/vnd.apple.mpegurl') {

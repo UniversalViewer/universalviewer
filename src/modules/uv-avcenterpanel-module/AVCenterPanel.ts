@@ -1,5 +1,5 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
 
 export class AVCenterPanel extends CenterPanel {
@@ -7,6 +7,7 @@ export class AVCenterPanel extends CenterPanel {
     $avcomponent: JQuery;
     avcomponent: IIIFComponents.AVComponent | null;
     title: string | null;
+    private _lastCanvasIndex: number | undefined;
     private _mediaReady: boolean = false;
     private _isThumbsViewOpen: boolean = false;
 
@@ -28,9 +29,7 @@ export class AVCenterPanel extends CenterPanel {
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            this._whenMediaReady(() => {
-                this._viewCanvas(canvasIndex);
-            });            
+            this._viewCanvas(canvasIndex);           
         });
 
         $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
@@ -198,6 +197,13 @@ export class AVCenterPanel extends CenterPanel {
 
             if (this.avcomponent) {
 
+                // reset if the media has already been loaded (degraded flow has happened)
+                if (this.extension.helper.canvasIndex === this._lastCanvasIndex) {
+                    this.avcomponent.reset();
+                }
+
+                this._lastCanvasIndex = this.extension.helper.canvasIndex;
+
                 this.avcomponent.set({
                     helper: this.extension.helper,
                     autoPlay: this.config.options.autoPlay,
@@ -231,28 +237,22 @@ export class AVCenterPanel extends CenterPanel {
 
         this._whenMediaReady(() => {
             if (range && this.avcomponent) {
-                //setTimeout(() => {
-                    //console.log('view ' + range.id);
-                    this.avcomponent.playRange(range.id);
-                //}, 500); // don't know why this is needed :-(
+                this.avcomponent.playRange(range.id);
             }
             
+            // don't resize the av component to avoid expensively redrawing waveforms
             this.resize(false);
         });
     }
 
     private _viewCanvas(canvasIndex: number): void {
-
-        Utils.Async.waitFor(() => {
-            return this._mediaReady;
-        }, () => {
-
+        
+        this._whenMediaReady(() => {
             const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
             
             if (this.avcomponent) {
                 this.avcomponent.showCanvas(canvas.id);
             }
-            
         });
     }
 

@@ -55,6 +55,7 @@
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
         "entireFileAsOriginal": "Entire file",
+        "entireFileAsOriginalWithFormat": "Entire file ({0})",
         "noneAvailable": "No download options are available.",
         "pagingNote": "Please turn off Two Page View for additional options.",
         "preview": "Preview",
@@ -132,6 +133,7 @@
     },
     "avCenterPanel": {
       "content": {
+        "attribution": "Attribution",
         "currentTime": "Current Time",
         "delimiter": " - ",
         "duration": "Duration",

@@ -1,42 +1,44 @@
 define(function () {
-    function isSafari() {
-        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        return isSafari;
-    }
-    function isAdaptiveStreamingAvailable() {
-        var isAvailable = !!(window.MediaSource || window.WebKitMediaSource);
-        return isAvailable;
-    }
     function isFormatAvailable(formats, format) {
         var isAvailable = formats.includes(format);
         return isAvailable;
     }
-    function isHLSAvailable(formats) {
-        return isFormatAvailable(formats, 'application/vnd.apple.mpegurl');
+    function isHLSFormatAvailable(formats) {
+        return isFormatAvailable(formats, 'application/vnd.apple.mpegurl') || isFormatAvailable(formats, 'vnd.apple.mpegurl');
     }
-    function isMpegDashAvailable(formats) {
+    function isMpegDashFormatAvailable(formats) {
         return isFormatAvailable(formats, 'application/dash+xml');
+    }
+    function canPlayHls() {
+        var doc = typeof document === 'object' && document, videoelem = doc && doc.createElement('video'), isvideosupport = Boolean(videoelem && videoelem.canPlayType), canPlay = [
+            'application/vnd.apple.mpegurl',
+            'audio/mpegurl',
+            'audio/x-mpegurl',
+            'application/x-mpegurl',
+            'video/x-mpegurl',
+            'video/mpegurl',
+            'application/mpegurl'
+        ];
+        return isvideosupport && canPlay.some(function (canItPlay) {
+            return /maybe|probably/i.test(videoelem.canPlayType(canItPlay));
+        });
     }
     return function (formats) {
         var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'jquery.binarytransport', 'waveform-data'];
-        if (isAdaptiveStreamingAvailable()) {
-            if (isMpegDashAvailable(formats) && !isSafari()) {
-                return {
-                    sync: alwaysRequired.concat(['dash.all.min'])
-                };
-            }
-            else if (isHLSAvailable(formats)) {
-                return {
-                    sync: alwaysRequired.concat(['hls.min'])
-                };
-            }
-            else {
-                return {
-                    sync: alwaysRequired
-                };
-            }
+        if (isHLSFormatAvailable(formats) && canPlayHls()) {
+            console.log('load HLS');
+            return {
+                sync: alwaysRequired.concat(['hls.min'])
+            };
+        }
+        else if (isMpegDashFormatAvailable(formats)) {
+            console.log('load mpeg dash');
+            return {
+                sync: alwaysRequired.concat(['dash.all.min'])
+            };
         }
         else {
+            console.log('adaptive streaming not available');
             return {
                 sync: alwaysRequired
             };
