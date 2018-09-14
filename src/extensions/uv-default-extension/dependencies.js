@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 define(function () {
     return function (formats) {
         return {
@@ -6,3 +7,12 @@ define(function () {
     };
 });
 //# sourceMappingURL=dependencies.js.map
+=======
+define(function () {
+    return function (formats) {
+        return {
+            async: ['iiif-metadata-component']
+        };
+    };
+});
+>>>>>>> bl
