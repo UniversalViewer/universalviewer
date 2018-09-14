@@ -6,6 +6,7 @@ import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOptio
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
+    $entireFileAsOriginal: JQuery;
     $downloadButton: JQuery;
 
     constructor($element: JQuery) {
@@ -17,6 +18,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.setConfig('downloadDialogue');
 
         super.create();
+
+        this.$entireFileAsOriginal = $('<li class="option single"><input id="' + DownloadOption.entireFileAsOriginal.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.entireFileAsOriginal.toString() + 'label" for="' + DownloadOption.entireFileAsOriginal.toString() + '"></label></li>');
+        this.$downloadOptions.append(this.$entireFileAsOriginal);
+        this.$entireFileAsOriginal.hide();
 
         this.$downloadButton = $('<a class="btn btn-primary" href="#" tabindex="0">' + this.content.download + '</a>');
         this.$buttons.prepend(this.$downloadButton);
@@ -34,6 +39,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             if (this.renderingUrls[<any>id]) {
                 window.open(this.renderingUrls[<any>id]);
+            } else {
+                const id: string = this.getCurrentResourceId();
+                window.open(id);
             }
 
             $.publish(BaseEvents.DOWNLOAD, [{
@@ -45,11 +53,23 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         });
     }
 
+    private _isAdaptive(): boolean {
+        const format: string = this.getCurrentResourceFormat();
+        return format === 'mpd' || format === 'm3u8';
+    }
+
     open($triggerButton: JQuery) {
 
         super.open($triggerButton);
 
-        this.addEntireFileDownloadOptions();
+        if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal) && !this._isAdaptive()) {
+            const $input: JQuery = this.$entireFileAsOriginal.find('input');
+            const $label: JQuery = this.$entireFileAsOriginal.find('label');
+            const label: string = Utils.Strings.format(this.content.entireFileAsOriginalWithFormat, this.getCurrentResourceFormat());
+            $label.text(label);
+            $input.prop('title', label);
+            this.$entireFileAsOriginal.show();
+        }
 
         this.resetDynamicDownloadOptions();
 
@@ -68,7 +88,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             this.$downloadButton.hide();
         } else {
             // select first option.
-            this.$downloadOptions.find('li.option input:visible:first').prop("checked", true);
+            this.$downloadOptions.find('li.option input:visible:first').prop('checked', true);
             this.$noneAvailable.hide();
             this.$downloadButton.show();
         }
@@ -80,18 +100,6 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         renderingOptions.forEach((option: IRenderingOption) => {
             this.$downloadOptions.append(option.button);
-            
-            // switch (option.type) {
-            //     case DownloadOption.dynamicImageRenderings:
-            //         this.$imageOptions.append(option.button);
-            //         break;
-            //     case DownloadOption.dynamicCanvasRenderings:
-            //         this.$canvasOptions.append(option.button);
-            //         break;
-            //     case DownloadOption.dynamicSequenceRenderings:
-            //         this.$sequenceOptions.append(option.button);
-            //         break;
-            // }
         });
 
     }

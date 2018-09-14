@@ -55,6 +55,7 @@
                 "editSettings": "Ändra inställningar",
                 "entireDocument": "Hela dokumentet ({0})",
                 "entireFileAsOriginal": "Hela filen",
+                "entireFileAsOriginalWithFormat": "Hela filen ({0})",
                 "noneAvailable": "Inga nedladdningsalternativ är tillgängliga.",
                 "pagingNote": "Stäng dubbelsidig vy för fler alternativ",
                 "preview": "Förhandsgranska",
@@ -169,20 +170,9 @@
                 "twoUp": "Dubbelsidig vy"
             }
         },
-        "seadragonCenterPanel": {
-            "content": {
-                "attribution": "Upphov",
-                "goHome": "Visa hela sidan",
-                "imageUnavailable": "Bild ej tillgänglig",
-                "next": "Nästa",
-                "previous": "Föregående",
-                "rotateRight": "Rotera höger",
-                "zoomIn": "Zooma in",
-                "zoomOut": "Zooma ut"
-            }
-        },
         "avCenterPanel": {
             "content": {
+                "attribution": "Upphov",
                 "currentTime": "Aktuell tid",
                 "delimiter": " - ",
                 "duration": "Speltid",

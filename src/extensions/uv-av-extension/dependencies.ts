@@ -11,12 +11,12 @@ define(function() {
 
     function isFormatAvailable(formats: string[], format: string) {
         var isAvailable = formats.includes(format);
-        console.log('isFormatAvailable', format, isAvailable);
+        //console.log('isFormatAvailable', format, isAvailable);
         return isAvailable;
     }
 
     function isHLSFormatAvailable(formats: string[]) {
-        return isFormatAvailable(formats, 'application/vnd.apple.mpegurl') ||  isFormatAvailable(formats, 'vnd.apple.mpegurl');
+        return isFormatAvailable(formats, 'application/vnd.apple.mpegurl') || isFormatAvailable(formats, 'vnd.apple.mpegurl');
     }
 
     function isMpegDashFormatAvailable(formats: string[]) {

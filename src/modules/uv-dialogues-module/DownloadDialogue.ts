@@ -172,6 +172,16 @@ export class DownloadDialogue extends Dialogue {
         return this.$downloadOptions.find("li.option input:checked");
     }
 
+    getCurrentResourceId(): string {
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        return canvas.externalResource.data.id;
+    }
+
+    getCurrentResourceFormat(): string {
+        const id: string = this.getCurrentResourceId();
+        return id.substr(id.lastIndexOf('.') + 1).toLowerCase();
+    }
+
     updateNoneAvailable(): void {
         if (!this.$downloadOptions.find('li:visible').length) {
             this.$noneAvailable.show();

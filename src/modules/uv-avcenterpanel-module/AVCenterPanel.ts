@@ -1,5 +1,5 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
 
 export class AVCenterPanel extends CenterPanel {
@@ -237,12 +237,10 @@ export class AVCenterPanel extends CenterPanel {
 
         this._whenMediaReady(() => {
             if (range && this.avcomponent) {
-                //setTimeout(() => {
-                    //console.log('view ' + range.id);
-                    this.avcomponent.playRange(range.id);
-                //}, 500); // don't know why this is needed :-(
+                this.avcomponent.playRange(range.id);
             }
             
+            // don't resize the av component to avoid expensively redrawing waveforms
             this.resize(false);
         });
     }

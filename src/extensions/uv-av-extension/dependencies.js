@@ -9,7 +9,7 @@ define(function () {
     // }
     function isFormatAvailable(formats, format) {
         var isAvailable = formats.includes(format);
-        console.log('isFormatAvailable', format, isAvailable);
+        //console.log('isFormatAvailable', format, isAvailable);
         return isAvailable;
     }
     function isHLSFormatAvailable(formats) {
