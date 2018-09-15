@@ -1,6 +1,6 @@
 ---
-name: Custom issue template
-about: Bug reports
+name: Bug Reports
+about: Use to report issues with the UV
 
 ---
 
