@@ -191,6 +191,11 @@ export class AVCenterPanel extends CenterPanel {
         this.resize(false);
     }
 
+    private _isCurrentResourceAccessControlled(): boolean {
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        return canvas.externalResource.isAccessControlled();
+    }
+
     openMedia(resources: Manifesto.IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
@@ -206,6 +211,7 @@ export class AVCenterPanel extends CenterPanel {
 
                 this.avcomponent.set({
                     helper: this.extension.helper,
+                    adaptiveAuthEnabled: this._isCurrentResourceAccessControlled(),
                     autoPlay: this.config.options.autoPlay,
                     autoSelectRange: true,
                     constrainNavigationToRange: this._limitToRange(),

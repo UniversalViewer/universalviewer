@@ -70,7 +70,7 @@
     "exjs": "github:BSick7/exjs#0.5.1",
     "hls.js": "0.9.1",
     "http-status-codes": "github:edsilv/http-status-codes#v0.0.8",
-    "iiif-av-component": "github:iiif-commons/iiif-av-component#v0.0.81",
+    "iiif-av-component": "github:iiif-commons/iiif-av-component#v0.0.82",
     "iiif-gallery-component": "github:iiif-commons/iiif-gallery-component#v1.1.6",
     "iiif-metadata-component": "github:iiif-commons/iiif-metadata-component#v1.1.8",
     "iiif-tree-component": "github:iiif-commons/iiif-tree-component#v1.1.7",
