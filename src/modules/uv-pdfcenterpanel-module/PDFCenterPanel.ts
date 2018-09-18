@@ -99,6 +99,17 @@ export class PDFCenterPanel extends CenterPanel {
             this._queueRenderPage(this._pageIndex);
         });
 
+        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+
+            if (!this._pdfDoc) {
+                return;
+            }
+
+            this._pageIndex = 1;
+
+            this._queueRenderPage(this._pageIndex);
+        });
+
         $.subscribe(Events.SEARCH, (e: any, pageIndex: number) => {
 
             if (!this._pdfDoc) {
@@ -206,9 +217,9 @@ export class PDFCenterPanel extends CenterPanel {
     }
 
     private _render(num: number): void {
-
         this._pageRendering = true;
 
+        //this._pdfDoc.getPage(num).then((page: any) => {
         this._pdfDoc.getPage(num).then((page: any) => {
 
             if (this._renderTask) {
