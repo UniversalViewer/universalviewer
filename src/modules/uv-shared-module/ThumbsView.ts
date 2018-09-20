@@ -76,12 +76,11 @@ export class ThumbsView extends BaseView {
                     className += " placeholder";
                 }
 
-                const viewingHint: Manifesto.ViewingHint | null = that.extension.helper.getViewingHint();
                 const viewingDirection: Manifesto.ViewingDirection | null = that.extension.helper.getViewingDirection();
 
                 if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
                     className += " twoCol";
-                } else if (viewingHint && viewingHint.toString() === manifesto.ViewingHint.paged().toString()) {
+                } else if (that.extension.helper.isPaged()) {
                     className += " twoCol";
                 } else {
                     className += " oneCol";
