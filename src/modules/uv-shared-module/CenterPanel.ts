@@ -1,5 +1,6 @@
 import {Shell} from "./Shell";
 import {BaseView} from "./BaseView";
+import {Position} from "./Position";
 import {UVUtils} from "./Utils";
 
 export class CenterPanel extends BaseView {
@@ -8,6 +9,8 @@ export class CenterPanel extends BaseView {
     $closeAttributionButton: JQuery;
     $content: JQuery;
     $title: JQuery;
+    isAttributionOpen: boolean = false;
+    attributionPosition: Position = Position.BOTTOM_LEFT;
 
     constructor($element: JQuery) {
         super($element, false, true);
@@ -40,47 +43,71 @@ export class CenterPanel extends BaseView {
 
         this.$attribution.find('.header .title').text(this.content.attribution);
         this.$content.append(this.$attribution);
-        this.$attribution.hide();
+        this.closeAttribution();
 
         this.$closeAttributionButton = this.$attribution.find('.header .close');
         this.$closeAttributionButton.on('click', (e) => {
             e.preventDefault();
-            this.$attribution.hide();
+            this.closeAttribution();
         });
 
         if (!Utils.Bools.getBool(this.options.titleEnabled, true)) {
             this.$title.hide();
         }
+
+        this.whenResized(() => {
+            this.updateRequiredStatement();
+        });
     }
 
-    updateAttribution(): void {
-        const attribution: string | null = this.extension.helper.getAttribution();
+    openAttribution(): void {
+        this.$attribution.show();
+        this.isAttributionOpen = true;
+    }
+
+    closeAttribution(): void {
+        this.$attribution.hide();
+        this.isAttributionOpen = false;
+    }
+
+    updateRequiredStatement(): void {
+        const requiredStatement: Manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 
-        const enabled: boolean = Utils.Bools.getBool(this.options.attributionEnabled, true);
+        const enabled: boolean = Utils.Bools.getBool(this.options.requiredStatementEnabled, true);
 
-        if (!attribution || !enabled) {
+        if (!requiredStatement || !requiredStatement.value || !enabled) {
             return;
         }
 
-        this.$attribution.show();
+        this.openAttribution();
 
-        const $attribution = this.$attribution.find('.attribution-text');
-        const $license = this.$attribution.find('.license');
-        const $logo = this.$attribution.find('.logo');
+        const $attributionTitle: JQuery = this.$attribution.find('.title');
+        const $attributionText: JQuery = this.$attribution.find('.attribution-text');
+        const $license: JQuery = this.$attribution.find('.license');
+        const $logo: JQuery = this.$attribution.find('.logo');
 
-        const sanitized: string = UVUtils.sanitize(attribution);
+        if (requiredStatement.label) {
+            const sanitizedTitle: string = UVUtils.sanitize(requiredStatement.label);
+            $attributionTitle.html(sanitizedTitle);
+        } else {
+            $attributionTitle.text(this.content.attribution);
+        }
+        
+        if (requiredStatement.value) {
+            const sanitizedText: string = UVUtils.sanitize(requiredStatement.value);
 
-        $attribution.html(sanitized);
+            $attributionText.html(sanitizedText);
 
-        $attribution.find('img').one('load', () => {
-            this.resize();
-        }).each(function() {
-            if (this.complete) $(this).load();
-        });
+            $attributionText.find('img').one('load', () => {
+                this.resize();
+            }).each(function() {
+                if (this.complete) $(this).load();
+            });
 
-        $attribution.targetBlank();
+            $attributionText.targetBlank();
+        }
 
         // $attribution.toggleExpandText(this.options.trimAttributionCount, () => {
         //     this.resize();
@@ -97,6 +124,8 @@ export class CenterPanel extends BaseView {
         //} else {
         $logo.hide();
         //}
+
+        this.resize();
     }
 
     resize(): void {
@@ -113,7 +142,7 @@ export class CenterPanel extends BaseView {
 
         let titleHeight: number;
 
-        if (this.options && this.options.titleEnabled === false) {
+        if (this.options && this.options.titleEnabled === false || !this.$title.is(':visible')) {
             titleHeight = 0;
         } else {
             titleHeight = this.$title.height();
@@ -122,8 +151,26 @@ export class CenterPanel extends BaseView {
         this.$content.height(this.$element.height() - titleHeight);
         this.$content.width(this.$element.width());
 
-        if (this.$attribution && this.$attribution.is(':visible')) {
-            this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
+        if (this.$attribution && this.isAttributionOpen) {
+
+            switch (this.attributionPosition) {
+                case Position.BOTTOM_LEFT :
+                    this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
+                    this.$attribution.css('left', 0);
+                    break;
+                case Position.BOTTOM_RIGHT :
+                    this.$attribution.css('top', this.$content.height() - this.$attribution.outerHeight() - this.$attribution.verticalMargins());
+                    this.$attribution.css('left', this.$content.width() - this.$attribution.outerWidth() - this.$attribution.horizontalMargins());
+                    break;
+            }
+
+            // hide the attribution if there's no room for it
+            if (this.$content.width() <= this.$attribution.width()) {
+                this.$attribution.hide();
+            } else {
+                this.$attribution.show();
+            }
         }
+
     }
 }

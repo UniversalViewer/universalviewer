@@ -36,6 +36,20 @@ export class MoreInfoRightPanel extends RightPanel {
             target: this.$metadata[0],
             data: this._getData()
         });
+
+        this.metadataComponent.on('iiifViewerLinkClicked', (href: string) => {
+            // get the hash param.
+            const rangeId: string | null = Utils.Urls.getHashParameterFromString('rid', href);
+
+            if (rangeId) {
+                const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
+
+                if (range) {
+                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                }
+            }
+
+        }, false);
     }
 
     toggleFinish(): void {
@@ -45,6 +59,11 @@ export class MoreInfoRightPanel extends RightPanel {
 
     databind(): void {
         this.metadataComponent.set(this._getData());
+    }
+
+    private _getCurrentRange(): Manifesto.IRange | null {
+        const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+        return range;
     }
 
     private _getData(): IIIFComponents.IMetadataComponentData {
@@ -60,9 +79,10 @@ export class MoreInfoRightPanel extends RightPanel {
             licenseFormatter: new Manifold.UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
             limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+            limitToRange: Utils.Bools.getBool(this.config.options.limitToRange, false),
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
-            range: this.extension.getCurrentCanvasRange(),
+            range: this._getCurrentRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html) => {
                 return UVUtils.sanitize(html);

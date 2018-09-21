@@ -89,21 +89,30 @@ export class Dialogue extends BaseView {
 
     setDockedPosition(): void {
 
-        const top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
+        let top: number = Math.floor(this.extension.height() - this.$element.outerHeight(true));
         let left: number = 0;
         let arrowLeft: number = 0;
         let normalisedPos: number = 0;
 
         if (this.$triggerButton) {
-            // get the normalised position of the button
-            if (!this.extension.isDesktopMetric()) {
-                normalisedPos = Utils.Maths.normalise((<any>this.$triggerButton.offset()).left, 0, this.extension.width());
-            } else {
-                normalisedPos = Utils.Maths.normalise((<any>this.$triggerButton.position()).left, 0, this.extension.width());
-            }
-            
-            left = Math.floor((this.extension.width() * normalisedPos) - ((this.$element.width()) * normalisedPos));
-            //left = Math.floor((this.extension.width() * normalisedPos));
+
+            const verticalPadding: number = 4;
+            const horizontalPadding: number = 2;
+
+            const a: number = (<any>this.$triggerButton.offset()).top;
+            const b: number = (<JQueryCoordinates>this.extension.$element.offset()).top;
+            const d: number = this.$element.outerHeight(true);
+            const e: number = (a - b) - d;
+
+            top = e + verticalPadding;
+
+            const f: number = (<JQueryCoordinates>this.$triggerButton.offset()).left;
+            const g: number = (<JQueryCoordinates>this.extension.$element.offset()).left;
+            const h: number = f - g;
+
+            normalisedPos = Utils.Maths.normalise(h, 0, this.extension.width());
+
+            left = Math.floor((this.extension.width() * normalisedPos) - ((this.$element.width()) * normalisedPos)) + horizontalPadding;
             arrowLeft = Math.floor(this.$element.width() * normalisedPos);
         }
 

@@ -62,6 +62,7 @@
       "options": {
         "autoExpandTreeEnabled": true,
         "autoExpandTreeIfFewerThan": 20,
+        "branchNodesExpandOnClick": false,
         "branchNodesSelectable": true,
         "defaultToTreeEnabled": false,
         "defaultToTreeIfGreaterThan": 0,
@@ -129,12 +130,15 @@
         "rtlLanguageCodes": "ar, ara, dv, div, he, heb, ur, urd",
         "showAllLanguages": false,
         "textLimit": 4,
-        "textLimitType": "lines"
+        "textLimitType": "lines",
+        "limitToRange": false
       }
     },
     "avCenterPanel": {
       "options": {
-        "autoPlay": false
+        "autoPlay": false,
+        "includeParentInTitleEnabled": false,
+        "posterImageRatio": 0.3
       }
     },
     "settingsDialogue": {

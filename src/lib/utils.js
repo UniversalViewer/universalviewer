@@ -1,5 +1,5 @@
-// utils v0.2.1 https://github.com/edsilv/utils
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.utils = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// utils v0.2.2 https://github.com/edsilv/utils
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.utils = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
 var Utils;
@@ -54,20 +54,42 @@ var Utils;
     var Clipboard = /** @class */ (function () {
         function Clipboard() {
         }
-        Clipboard.copy = function (text) {
-            var $tempDiv = $("<div style='position:absolute;left:-9999px'>");
-            var brRegex = /<br\s*[\/]?>/gi;
-            text = text.replace(brRegex, "\n");
-            $("body").append($tempDiv);
-            $tempDiv.append(text);
-            var $tempInput = $("<textarea>");
-            $tempDiv.append($tempInput);
-            $tempInput.val($tempDiv.text()).select();
-            document.execCommand("copy");
-            $tempDiv.remove();
-        };
         Clipboard.supportsCopy = function () {
             return document.queryCommandSupported && document.queryCommandSupported('copy');
+        };
+        Clipboard.copy = function (text) {
+            text = Clipboard.convertBrToNewLine(text);
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            Clipboard.hideButKeepEnabled(textArea);
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        };
+        Clipboard.hideButKeepEnabled = function (textArea) {
+            // Place in top-left corner of screen regardless of scroll position.
+            textArea.style.position = 'fixed';
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            // Ensure it has a small width and height. Setting to 1px / 1em
+            // doesn't work as this gives a negative w/h on some browsers.
+            textArea.style.width = '2em';
+            textArea.style.height = '2em';
+            // We don't need padding, reducing the size if it does flash render.
+            textArea.style.padding = '0';
+            // Clean up any borders.
+            textArea.style.border = 'none';
+            textArea.style.outline = 'none';
+            textArea.style.boxShadow = 'none';
+            // Avoid flash of white box if rendered for any reason.
+            textArea.style.background = 'transparent';
+        };
+        Clipboard.convertBrToNewLine = function (text) {
+            var brRegex = /<br\s*[\/]?>/gi;
+            text = text.replace(brRegex, "\n");
+            return text;
         };
         return Clipboard;
     }());
@@ -316,7 +338,7 @@ var Utils;
                     width = width1 * scale;
                     height = height1 * scale;
                 }
-                if (ratio2 < ratio1) {
+                else {
                     scale = height2 / height1;
                     width = width1 * scale;
                     height = height1 * scale;
@@ -615,8 +637,11 @@ var Utils;
         Urls.getHashParameter = function (key, doc) {
             if (!doc)
                 doc = window.document;
+            return this.getHashParameterFromString(key, doc.location.hash);
+        };
+        Urls.getHashParameterFromString = function (key, fragment) {
             var regex = new RegExp("#.*[?&]" + key + "=([^&]+)(&|$)");
-            var match = regex.exec(doc.location.hash);
+            var match = regex.exec(fragment);
             return (match ? decodeURIComponent(match[1].replace(/\+/g, " ")) : null);
         };
         Urls.setHashParameter = function (key, value, doc) {

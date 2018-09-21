@@ -32,7 +32,6 @@ requirejs([
     './lib/detectmobilebrowser.js',
     './lib/jquery.xdomainrequest.js',
     './lib/modernizr.js',
-    './lib/sanitize.js',
     './lib/ex.es3.min.js',
     './lib/base-component.js',
     './lib/key-codes.js',
@@ -42,6 +41,7 @@ requirejs([
     './lib/manifesto.js',
     './lib/manifold.js',
     './lib/utils.js',
+    './lib/xss.min.js',
     'URLDataProvider',
     'UVComponent'
 ], (

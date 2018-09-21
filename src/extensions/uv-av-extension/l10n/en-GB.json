@@ -6,6 +6,8 @@
     "authCORSError": "Your browser does not support CORS, please upgrade to view this content.",
     "authorisationFailedMessage": "Your log-in attempt did not appear to be successful. Please try again.",
     "canvasIndexOutOfRange": "Canvas index out of range.",
+    "fallbackDegradedLabel": "Login",
+    "fallbackDegradedMessage": "Please log in to view this content at full resolution.",
     "forbiddenResourceMessage": "Your current access rights are insufficient to view this image",
     "termsOfUse": "Terms of Use"
   },
@@ -53,6 +55,7 @@
         "editSettings": "Edit Settings",
         "entireDocument": "Entire document ({0})",
         "entireFileAsOriginal": "Entire file",
+        "entireFileAsOriginalWithFormat": "Entire file ({0})",
         "noneAvailable": "No download options are available.",
         "pagingNote": "Please turn off Two Page View for additional options.",
         "preview": "Preview",
@@ -130,6 +133,7 @@
     },
     "avCenterPanel": {
       "content": {
+        "attribution": "Attribution",
         "currentTime": "Current Time",
         "delimiter": " - ",
         "duration": "Duration",

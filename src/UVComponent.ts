@@ -380,7 +380,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         } else if (configUri) { // if data.configUri has been set
 
             if (this._isCORSEnabled()) {
-                $.getJSON(configUri, (configExtension) => {
+                $.getJSON(configUri, (configExtension: any) => {
                     cb(configExtension);
                 });
             } else {

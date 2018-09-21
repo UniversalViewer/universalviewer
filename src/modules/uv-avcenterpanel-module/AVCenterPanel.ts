@@ -1,16 +1,19 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { CenterPanel } from "../uv-shared-module/CenterPanel";
+import { Position } from "../uv-shared-module/Position";
 
 export class AVCenterPanel extends CenterPanel {
 
     $avcomponent: JQuery;
-    avcomponent: IIIFComponents.AVComponent;
+    avcomponent: IIIFComponents.AVComponent | null;
     title: string | null;
-    private _canvasReady: boolean = false;
-    private _resourceOpened: boolean = false;
+    private _lastCanvasIndex: number | undefined;
+    private _mediaReady: boolean = false;
+    private _isThumbsViewOpen: boolean = false;
 
     constructor($element: JQuery) {
         super($element);
+        this.attributionPosition = Position.BOTTOM_RIGHT;
     }
 
     create(): void {
@@ -22,29 +25,34 @@ export class AVCenterPanel extends CenterPanel {
         const that = this;
 
         $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
-            if (!this._resourceOpened) {
-                that.openMedia(resources);
-                this._resourceOpened = true;
-            }
+            that.openMedia(resources);
         });
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
-            const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
-
-            if (canvas) {
-                this.avcomponent.showCanvas(canvas.id);
-            }
+            this._viewCanvas(canvasIndex);           
         });
 
         $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
-            that._viewRange(range);
-            that._setTitle();
+
+            if (!this._observeRangeChanges()) {
+                return;
+            }
+
+            this._whenMediaReady(() => {
+                that._viewRange(range);
+                that._setTitle();
+            });
+
         });
 
         $.subscribe(BaseEvents.METRIC_CHANGED, () => {
-            this.avcomponent.set({
-                limitToRange: this._limitToRange(),
-                constrainNavigationToRange: this._limitToRange()
+            this._whenMediaReady(() => {
+                if (this.avcomponent) {
+                    this.avcomponent.set({
+                        limitToRange: this._limitToRange(),
+                        constrainNavigationToRange: this._limitToRange()
+                    });
+                }
             });
         });
 
@@ -52,15 +60,57 @@ export class AVCenterPanel extends CenterPanel {
             this._setTitle();
         });
 
+        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+
+            this._isThumbsViewOpen = true;
+
+            this._whenMediaReady(() => {
+
+                if (this.avcomponent) {
+
+                    this.avcomponent.set({
+                        virtualCanvasEnabled: false
+                    });
+    
+                    const canvas: Manifesto.ICanvas | null = this.extension.helper.getCurrentCanvas();
+            
+                    if (canvas) {
+                        this._viewCanvas(this.extension.helper.canvasIndex)
+                    }
+                }
+            });
+        });
+
+        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+
+            this._isThumbsViewOpen = false;
+
+            this._whenMediaReady(() => {
+
+                if (this.avcomponent) {
+                    this.avcomponent.set({
+                        virtualCanvasEnabled: true
+                    });
+                }
+                
+            });
+        });
+
+        this._createAVComponent();
+    }
+
+    private _createAVComponent(): void {
+
         this.$avcomponent = $('<div class="iiif-av-component"></div>');
-        this.$content.append(this.$avcomponent);
+        this.$content.prepend(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
             target: this.$avcomponent[0]
         });
 
-        this.avcomponent.on('canvasready', () => {
-            this._canvasReady = true;
+        this.avcomponent.on('mediaready', () => {
+            console.log('mediaready');
+            this._mediaReady = true;
         }, false);
 
         this.avcomponent.on('rangechanged', (rangeId: string | null) => {        
@@ -87,14 +137,21 @@ export class AVCenterPanel extends CenterPanel {
             } 
             
         }, false);
+    }
 
+    private _observeRangeChanges(): boolean {
+        if (!this._isThumbsViewOpen) {
+            return true;
+        }
+
+        return false;
     }
 
     private _setTitle(): void {
 
         let title: string = '';
         let value: string | null;
-        let label: Manifesto.TranslationCollection;
+        let label: Manifesto.LanguageMap;
 
         // get the current range or canvas title
         const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
@@ -105,47 +162,70 @@ export class AVCenterPanel extends CenterPanel {
             label = this.extension.helper.getCurrentCanvas().getLabel();
         }
 
-        value = Manifesto.TranslationCollection.getValue(label);
+        value = Manifesto.LanguageMap.getValue(label);
 
         if (value) {
             title = value;
         }
 
-        // get the parent range or manifest's title
-        if (currentRange) {
-            if (currentRange.parentRange) {
-                label = currentRange.parentRange.getLabel();
-                value = Manifesto.TranslationCollection.getValue(label);
-            }
-        } else {
-            value = this.extension.helper.getLabel();
-        }
+        if (Utils.Bools.getBool(this.config.options.includeParentInTitleEnabled, false)) {
 
-        if (value) {
-            title += this.content.delimiter + value;
+            // get the parent range or manifest's title
+            if (currentRange) {
+                if (currentRange.parentRange) {
+                    label = currentRange.parentRange.getLabel();
+                    value = Manifesto.LanguageMap.getValue(label);
+                }
+            } else {
+                value = this.extension.helper.getLabel();
+            }
+
+            if (value) {
+                title += this.content.delimiter + value;
+            }
+
         }
 
         this.title = title;
 
-        this.resize();
+        this.resize(false);
+    }
+
+    private _isCurrentResourceAccessControlled(): boolean {
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        return canvas.externalResource.isAccessControlled();
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
 
-            this.avcomponent.set({
-                helper: this.extension.helper,
-                autoPlay: this.config.options.autoPlay,
-                autoSelectRange: true,
-                defaultAspectRatio: 0.56,
-                limitToRange: this._limitToRange(),
-                constrainNavigationToRange: this._limitToRange(),
-                doubleClickMS: 350,
-                content: this.content
-            });
+            if (this.avcomponent) {
 
-            this.resize();
+                // reset if the media has already been loaded (degraded flow has happened)
+                if (this.extension.helper.canvasIndex === this._lastCanvasIndex) {
+                    this.avcomponent.reset();
+                }
+
+                this._lastCanvasIndex = this.extension.helper.canvasIndex;
+
+                this.avcomponent.set({
+                    helper: this.extension.helper,
+                    adaptiveAuthEnabled: this._isCurrentResourceAccessControlled(),
+                    autoPlay: this.config.options.autoPlay,
+                    autoSelectRange: true,
+                    constrainNavigationToRange: this._limitToRange(),
+                    content: this.content,
+                    defaultAspectRatio: 0.56,
+                    doubleClickMS: 350,
+                    limitToRange: this._limitToRange(),
+                    posterImageRatio: this.config.options.posterImageRatio
+                });
+    
+                this.resize();
+
+            }
+            
         });
     }
 
@@ -153,28 +233,36 @@ export class AVCenterPanel extends CenterPanel {
         return !this.extension.isDesktopMetric();
     }
 
+    private _whenMediaReady(cb: () => void): void {
+        Utils.Async.waitFor(() => {
+            return this._mediaReady;
+        }, cb);
+    }
+
     private _viewRange(range: Manifesto.IRange | null): void {
 
-        Utils.Async.waitFor(() => {
-            return this._canvasReady;
-        }, () => {
-            if (range) {
+        this._whenMediaReady(() => {
+            if (range && this.avcomponent) {
                 this.avcomponent.playRange(range.id);
             }
             
-            this.resize();
+            // don't resize the av component to avoid expensively redrawing waveforms
+            this.resize(false);
         });
     }
 
-    viewCanvas(canvasIndex: number): void {
-        const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
+    private _viewCanvas(canvasIndex: number): void {
         
-        if (canvas) {
-            this.avcomponent.showCanvas(canvas.id);
-        }
+        this._whenMediaReady(() => {
+            const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
+            
+            if (this.avcomponent) {
+                this.avcomponent.showCanvas(canvas.id);
+            }
+        });
     }
 
-    resize() {
+    resize(resizeAVComponent: boolean = true) {
 
         super.resize();
 
@@ -182,9 +270,10 @@ export class AVCenterPanel extends CenterPanel {
             this.$title.ellipsisFill(this.title);
         }
 
-        this.$avcomponent.height(this.$content.height());
-
-        this.avcomponent.resize(); 
-              
+        if (resizeAVComponent && this.avcomponent) {
+            this.$avcomponent.height(this.$content.height());
+            this.avcomponent.resize(); 
+        }
+    
     }
 }

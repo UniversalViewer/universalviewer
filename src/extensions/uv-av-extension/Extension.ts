@@ -1,17 +1,18 @@
+import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPanel";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
+import { FooterPanel as MobileFooterPanel } from "../../modules/uv-avmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
 import { IAVExtension } from "./IAVExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
-import { AVCenterPanel } from "../../modules/uv-avcenterpanel-module/AVCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Shell } from "../../modules/uv-shared-module/Shell";
-import ITreeNode = Manifold.ITreeNode;
 import IThumb = Manifold.IThumb;
+import ITreeNode = Manifold.ITreeNode;
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -24,6 +25,7 @@ export class Extension extends BaseExtension implements IAVExtension {
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
     leftPanel: ContentLeftPanel;
+    mobileFooterPanel: MobileFooterPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
     shareDialogue: ShareDialogue;
@@ -48,7 +50,9 @@ export class Extension extends BaseExtension implements IAVExtension {
     }
 
     dependencyLoaded(index: number, dep: any): void {
-        if (index === 0) {
+        if (index === (<any>this).getDependencyIndex('waveform-data')) {
+            window.WaveformData = dep;
+        } else if (index === (<any>this).getDependencyIndex('hls')) {
             window.Hls = dep; //https://github.com/mrdoob/three.js/issues/9602
         }
     }
@@ -78,6 +82,7 @@ export class Extension extends BaseExtension implements IAVExtension {
 
         if (this.isFooterPanelEnabled()) {
             this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
         } else {
             Shell.$footerPanel.hide();
         }
@@ -156,18 +161,19 @@ export class Extension extends BaseExtension implements IAVExtension {
         if (!range) return;
         $.publish(BaseEvents.RANGE_CHANGED, [range]);
 
-        if (range.canvases && range.canvases.length) {
-            const canvasId: string = range.canvases[0];
-            const canvas: Manifesto.ICanvas | null = this.helper.getCanvasById(canvasId);
+        // don't update the canvas index, only when thumbs are clicked
+        // if (range.canvases && range.canvases.length) {
+        //     const canvasId: string = range.canvases[0];
+        //     const canvas: Manifesto.ICanvas | null = this.helper.getCanvasById(canvasId);
 
-            if (canvas) {
-                const canvasIndex: number = canvas.index;
+        //     if (canvas) {
+        //         const canvasIndex: number = canvas.index;
                 
-                if (canvasIndex !== this.helper.canvasIndex) {
-                    $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
-                }
-            }
-        }
+        //         if (canvasIndex !== this.helper.canvasIndex) {
+        //             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        //         }
+        //     }
+        // }
     }
 
 }

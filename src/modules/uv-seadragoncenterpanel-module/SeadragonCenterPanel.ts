@@ -113,13 +113,6 @@ export class SeadragonCenterPanel extends CenterPanel {
                 this.updateResponsiveView();
             });
         });
-
-    }
-
-    whenResized(cb: () => void): void {
-        Utils.Async.waitFor(() => {
-            return this.isResized;
-        }, cb);
     }
 
     whenCreated(cb: () => void): void {
@@ -156,8 +149,6 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.$spinner = $('<div class="spinner"></div>');
         this.$content.append(this.$spinner);
-
-        this.updateAttribution();
 
         // add to window object for testing automation purposes.
         window.openSeadragonViewer = this.viewer = OpenSeadragon({

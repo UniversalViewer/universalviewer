@@ -1,4 +1,4 @@
-// manifesto v2.2.25 https://github.com/iiif-commons/manifesto
+// manifesto v3.0.7 https://github.com/iiif-commons/manifesto
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifesto = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -35,9 +35,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -114,9 +117,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -137,17 +143,24 @@ var Manifesto;
         Behavior.prototype.nonav = function () {
             return new Behavior(Behavior.NONAV.toString());
         };
+        Behavior.prototype.paged = function () {
+            return new Behavior(Behavior.PAGED.toString());
+        };
         Behavior.AUTOADVANCE = new Behavior("auto-advance");
         Behavior.NONAV = new Behavior("no-nav");
+        Behavior.PAGED = new Behavior("paged");
         return Behavior;
     }(Manifesto.StringValue));
     Manifesto.Behavior = Behavior;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -192,9 +205,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -227,9 +243,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -262,9 +281,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -305,9 +327,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -360,9 +385,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -391,6 +419,9 @@ var Manifesto;
         };
         ServiceProfile.prototype.auth1Logout = function () {
             return new ServiceProfile(ServiceProfile.AUTH1LOGOUT.toString());
+        };
+        ServiceProfile.prototype.auth1Probe = function () {
+            return new ServiceProfile(ServiceProfile.AUTH1PROBE.toString());
         };
         ServiceProfile.prototype.auth1Token = function () {
             return new ServiceProfile(ServiceProfile.AUTH1TOKEN.toString());
@@ -506,6 +537,7 @@ var Manifesto;
         ServiceProfile.AUTH1KIOSK = new ServiceProfile("http://iiif.io/api/auth/1/kiosk");
         ServiceProfile.AUTH1LOGIN = new ServiceProfile("http://iiif.io/api/auth/1/login");
         ServiceProfile.AUTH1LOGOUT = new ServiceProfile("http://iiif.io/api/auth/1/logout");
+        ServiceProfile.AUTH1PROBE = new ServiceProfile("http://iiif.io/api/auth/1/probe");
         ServiceProfile.AUTH1TOKEN = new ServiceProfile("http://iiif.io/api/auth/1/token");
         // search api
         ServiceProfile.AUTOCOMPLETE = new ServiceProfile("http://iiif.io/api/search/0/autocomplete");
@@ -524,9 +556,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -563,9 +598,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -634,9 +672,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -656,7 +697,14 @@ var Manifesto;
             return new Manifesto.IIIFResourceType(Manifesto.Utils.normaliseType(this.getProperty('type')));
         };
         ManifestResource.prototype.getLabel = function () {
-            return Manifesto.TranslationCollection.parse(this.getProperty('label'), this.options.locale);
+            var label = this.getProperty('label');
+            if (label) {
+                return Manifesto.LanguageMap.parse(label, this.options.locale);
+            }
+            return [];
+        };
+        ManifestResource.prototype.getDefaultLabel = function () {
+            return Manifesto.LanguageMap.getValue(this.getLabel());
         };
         ManifestResource.prototype.getMetadata = function () {
             var _metadata = this.getProperty('metadata');
@@ -665,7 +713,7 @@ var Manifesto;
                 return metadata;
             for (var i = 0; i < _metadata.length; i++) {
                 var item = _metadata[i];
-                var metadataItem = new Manifesto.MetadataItem(this.options.locale);
+                var metadataItem = new Manifesto.LabelValuePair(this.options.locale);
                 metadataItem.parse(item);
                 metadata.push(metadataItem);
             }
@@ -748,9 +796,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -813,9 +864,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1014,9 +1068,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1041,16 +1098,17 @@ var Manifesto;
             return _this;
         }
         IIIFResource.prototype.getAttribution = function () {
+            console.warn('getAttribution will be deprecated, use getRequiredStatement instead.');
             var attribution = this.getProperty('attribution');
             if (attribution) {
-                return Manifesto.TranslationCollection.parse(attribution, this.options.locale);
+                return Manifesto.LanguageMap.parse(attribution, this.options.locale);
             }
             return [];
         };
         IIIFResource.prototype.getDescription = function () {
             var description = this.getProperty('description');
             if (description) {
-                return Manifesto.TranslationCollection.parse(description, this.options.locale);
+                return Manifesto.LanguageMap.parse(description, this.options.locale);
             }
             return [];
         };
@@ -1063,7 +1121,10 @@ var Manifesto;
                 return null;
             if (typeof (logo) === 'string')
                 return logo;
-            return logo['@id'];
+            if (Array.isArray(logo) && logo.length) {
+                logo = logo[0];
+            }
+            return logo['@id'] || logo.id;
         };
         IIIFResource.prototype.getLicense = function () {
             return Manifesto.Utils.getLocalisedValue(this.getProperty('license'), this.options.locale);
@@ -1077,20 +1138,27 @@ var Manifesto;
         IIIFResource.prototype.getSeeAlso = function () {
             return this.getProperty('seeAlso');
         };
-        IIIFResource.prototype.getLabel = function () {
-            var label = this.getProperty('label');
-            if (label) {
-                return Manifesto.TranslationCollection.parse(label, this.options.locale);
-            }
-            return [];
-        };
-        IIIFResource.prototype.getDefaultLabel = function () {
-            return Manifesto.TranslationCollection.getValue(this.getLabel());
-        };
         IIIFResource.prototype.getDefaultTree = function () {
             this.defaultTree = new Manifesto.TreeNode('root');
             this.defaultTree.data = this;
             return this.defaultTree;
+        };
+        IIIFResource.prototype.getRequiredStatement = function () {
+            var requiredStatement = null;
+            var _requiredStatement = this.getProperty('requiredStatement');
+            if (_requiredStatement) {
+                requiredStatement = new Manifesto.LabelValuePair(this.options.locale);
+                requiredStatement.parse(_requiredStatement);
+            }
+            else {
+                // fall back to attribution (if it exists)
+                var attribution = this.getAttribution();
+                if (attribution) {
+                    requiredStatement = new Manifesto.LabelValuePair(this.options.locale);
+                    requiredStatement.value = attribution;
+                }
+            }
+            return requiredStatement;
         };
         IIIFResource.prototype.isCollection = function () {
             if (this.getIIIFResourceType().toString() === Manifesto.IIIFResourceType.COLLECTION.toString()) {
@@ -1118,7 +1186,7 @@ var Manifesto;
                         id = that.__jsonld['@id'];
                     }
                     Manifesto.Utils.loadResource(id).then(function (data) {
-                        that.parentLabel = Manifesto.TranslationCollection.getValue(that.getLabel(), options_1.locale);
+                        that.parentLabel = Manifesto.LanguageMap.getValue(that.getLabel(), options_1.locale);
                         var parsed = Manifesto.Deserialiser.parse(data, options_1);
                         that = Object.assign(that, parsed);
                         that.index = options_1.index;
@@ -1133,9 +1201,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1161,6 +1232,13 @@ var Manifesto;
             }
             return _this;
         }
+        Manifest.prototype.getPosterCanvas = function () {
+            var posterCanvas = this.getProperty('posterCanvas');
+            if (posterCanvas) {
+                posterCanvas = new Manifesto.Canvas(posterCanvas, this.options);
+            }
+            return posterCanvas;
+        };
         Manifest.prototype.getBehavior = function () {
             var behavior = this.getProperty('behavior');
             if (Array.isArray(behavior)) {
@@ -1349,6 +1427,10 @@ var Manifesto;
             if (viewingHint) {
                 return viewingHint.toString() === Manifesto.ViewingHint.PAGED.toString();
             }
+            var behavior = this.getBehavior();
+            if (behavior) {
+                return behavior.toString() === Manifesto.Behavior.PAGED.toString();
+            }
             return false;
         };
         Manifest.prototype.getViewingDirection = function () {
@@ -1369,9 +1451,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1452,7 +1537,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.getManifests().length; i++) {
                     var manifest = parentCollection.getManifests()[i];
                     var tree = manifest.getDefaultTree();
-                    tree.label = manifest.parentLabel || Manifesto.TranslationCollection.getValue(manifest.getLabel(), this.options.locale) || 'manifest ' + (i + 1);
+                    tree.label = manifest.parentLabel || Manifesto.LanguageMap.getValue(manifest.getLabel(), this.options.locale) || 'manifest ' + (i + 1);
                     tree.navDate = manifest.getNavDate();
                     tree.data.id = manifest.id;
                     tree.data.type = Manifesto.Utils.normaliseType(Manifesto.TreeNodeType.MANIFEST.toString());
@@ -1465,7 +1550,7 @@ var Manifesto;
                 for (var i = 0; i < parentCollection.getCollections().length; i++) {
                     var collection = parentCollection.getCollections()[i];
                     var tree = collection.getDefaultTree();
-                    tree.label = collection.parentLabel || Manifesto.TranslationCollection.getValue(collection.getLabel(), this.options.locale) || 'collection ' + (i + 1);
+                    tree.label = collection.parentLabel || Manifesto.LanguageMap.getValue(collection.getLabel(), this.options.locale) || 'collection ' + (i + 1);
                     tree.navDate = collection.getNavDate();
                     tree.data.id = collection.id;
                     tree.data.type = Manifesto.Utils.normaliseType(Manifesto.TreeNodeType.COLLECTION.toString());
@@ -1480,9 +1565,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1606,7 +1694,7 @@ var Manifesto;
             return false;
         };
         Range.prototype._parseTreeNode = function (node, range) {
-            node.label = Manifesto.TranslationCollection.getValue(range.getLabel(), this.options.locale);
+            node.label = Manifesto.LanguageMap.getValue(range.getLabel(), this.options.locale);
             node.data = range;
             node.data.type = Manifesto.Utils.normaliseType(Manifesto.TreeNodeType.RANGE.toString());
             range.treeNode = node;
@@ -1632,9 +1720,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1657,9 +1748,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1724,7 +1818,7 @@ var Manifesto;
         };
         Sequence.prototype.getCanvasIndexByLabel = function (label, foliated) {
             label = label.trim();
-            if (!isNaN(label)) {
+            if (!isNaN(label)) { // if the label is numeric
                 label = parseInt(label, 10).toString(); // trim any preceding zeros.
                 if (foliated)
                     label += 'r'; // default to recto
@@ -1734,7 +1828,7 @@ var Manifesto;
             for (var i = 0; i < this.getTotalCanvases(); i++) {
                 var canvas = this.getCanvasByIndex(i);
                 // check if there's a literal match
-                if (Manifesto.TranslationCollection.getValue(canvas.getLabel(), this.options.locale) === label) {
+                if (Manifesto.LanguageMap.getValue(canvas.getLabel(), this.options.locale) === label) {
                     return i;
                 }
                 // check if there's a match for double-page spreads e.g. 100-101, 100_101, 100 101
@@ -1756,7 +1850,7 @@ var Manifesto;
         Sequence.prototype.getLastCanvasLabel = function (alphanumeric) {
             for (var i = this.getTotalCanvases() - 1; i >= 0; i--) {
                 var canvas = this.getCanvasByIndex(i);
-                var label = Manifesto.TranslationCollection.getValue(canvas.getLabel(), this.options.locale);
+                var label = Manifesto.LanguageMap.getValue(canvas.getLabel(), this.options.locale);
                 if (alphanumeric) {
                     var regExp = /^[a-zA-Z0-9]*$/;
                     if (regExp.test(label)) {
@@ -2082,9 +2176,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -2157,7 +2254,7 @@ var Manifesto;
                 this.height = width;
             }
             this.uri = canvas.getCanonicalImageUri(width);
-            this.label = Manifesto.TranslationCollection.getValue(canvas.getLabel()); // todo: pass locale?
+            this.label = Manifesto.LanguageMap.getValue(canvas.getLabel()); // todo: pass locale?
         }
         return Thumb;
     }());
@@ -2192,9 +2289,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -2241,8 +2341,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -2356,6 +2456,9 @@ var Manifesto;
             return Utils.normaliseUrl(url1) === Utils.normaliseUrl(url2);
         };
         Utils.isImageProfile = function (profile) {
+            if (typeof (profile) === 'string') {
+                profile = new Manifesto.ServiceProfile(profile);
+            }
             if (Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString()) ||
@@ -2385,6 +2488,9 @@ var Manifesto;
             return false;
         };
         Utils.isLevel0ImageProfile = function (profile) {
+            if (typeof (profile) === 'string') {
+                profile = new Manifesto.ServiceProfile(profile);
+            }
             if (Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE0.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE0.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE0.toString()) ||
@@ -2398,6 +2504,9 @@ var Manifesto;
             return false;
         };
         Utils.isLevel1ImageProfile = function (profile) {
+            if (typeof (profile) === 'string') {
+                profile = new Manifesto.ServiceProfile(profile);
+            }
             if (Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE1.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE1.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE1.toString()) ||
@@ -2411,6 +2520,9 @@ var Manifesto;
             return false;
         };
         Utils.isLevel2ImageProfile = function (profile) {
+            if (typeof (profile) === 'string') {
+                profile = new Manifesto.ServiceProfile(profile);
+            }
             if (Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECOMPLIANCE2.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIF1IMAGECOMPLIANCE2.toString()) ||
                 Utils.normalisedUrlsMatch(profile.toString(), Manifesto.ServiceProfile.STANFORDIIIFIMAGECONFORMANCE2.toString()) ||
@@ -2962,70 +3074,34 @@ var Manifesto;
 
 var Manifesto;
 (function (Manifesto) {
-    var MetadataItem = /** @class */ (function () {
-        function MetadataItem(defaultLocale) {
-            this.defaultLocale = defaultLocale;
-        }
-        MetadataItem.prototype.parse = function (resource) {
-            this.resource = resource;
-            this.label = Manifesto.TranslationCollection.parse(this.resource.label, this.defaultLocale);
-            this.value = Manifesto.TranslationCollection.parse(this.resource.value, this.defaultLocale);
-        };
-        // shortcuts to get/set values based on default locale
-        MetadataItem.prototype.getLabel = function () {
-            if (this.label) {
-                return Manifesto.TranslationCollection.getValue(this.label, this.defaultLocale);
-            }
-            return null;
-        };
-        MetadataItem.prototype.setLabel = function (value) {
-            var _this = this;
-            if (this.label && this.label.length) {
-                var t = this.label.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
-                if (t)
-                    t.value = value;
-            }
-        };
-        MetadataItem.prototype.getValue = function () {
-            if (this.value) {
-                var locale = this.defaultLocale;
-                // if the label has a locale, prefer that to the default locale
-                if (this.label.length && this.label[0].locale) {
-                    locale = this.label[0].locale;
+    var Language = /** @class */ (function () {
+        function Language(value, locale) {
+            if (Array.isArray(value)) {
+                if (value.length === 1) {
+                    this.value = value[0];
                 }
-                return Manifesto.TranslationCollection.getValue(this.value, locale);
+                else {
+                    // concatenate all of the values
+                    this.value = value.join('<br/>');
+                }
             }
-            return null;
-        };
-        MetadataItem.prototype.setValue = function (value) {
-            var _this = this;
-            if (this.value && this.value.length) {
-                var t = this.value.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
-                if (t)
-                    t.value = value;
+            else {
+                this.value = value;
             }
-        };
-        return MetadataItem;
-    }());
-    Manifesto.MetadataItem = MetadataItem;
-})(Manifesto || (Manifesto = {}));
-
-var Manifesto;
-(function (Manifesto) {
-    var Translation = /** @class */ (function () {
-        function Translation(value, locale) {
-            this.value = value;
             this.locale = locale;
         }
-        return Translation;
+        return Language;
     }());
-    Manifesto.Translation = Translation;
+    Manifesto.Language = Language;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -3034,74 +3110,124 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Manifesto;
 (function (Manifesto) {
-    var TranslationCollection = /** @class */ (function (_super) {
-        __extends(TranslationCollection, _super);
-        function TranslationCollection() {
+    var LanguageMap = /** @class */ (function (_super) {
+        __extends(LanguageMap, _super);
+        function LanguageMap() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        TranslationCollection.parse = function (translation, defaultLocale) {
+        LanguageMap.parse = function (language, defaultLocale) {
             var tc = [];
             var t;
-            if (!translation) {
+            if (!language) {
                 return tc;
             }
-            else if (Array.isArray(translation)) {
-                for (var i = 0; i < translation.length; i++) {
-                    var value = translation[i];
+            else if (Array.isArray(language)) {
+                for (var i = 0; i < language.length; i++) {
+                    var value = language[i];
                     if (typeof (value) === 'string') {
-                        t = new Manifesto.Translation(value, defaultLocale);
+                        t = new Manifesto.Language(value, defaultLocale);
                     }
                     else {
-                        t = new Manifesto.Translation(value['@value'], value['@language'] || defaultLocale);
+                        t = new Manifesto.Language(value['@value'], value['@language'] || defaultLocale);
                     }
                     tc.push(t);
                 }
             }
-            else if (typeof (translation) === 'string') {
-                // if it's just a single string value, create one translation in the configured locale
-                t = new Manifesto.Translation(translation, defaultLocale);
+            else if (typeof (language) === 'string') {
+                // if it's just a single string value, create one language in the configured locale
+                t = new Manifesto.Language(language, defaultLocale);
                 tc.push(t);
                 return tc;
             }
             else {
                 // it's an object
-                if (translation['@value']) {
+                if (language['@value']) {
                     // presentation 2
-                    t = new Manifesto.Translation(translation['@value'], translation['@language'] || defaultLocale);
+                    t = new Manifesto.Language(language['@value'], language['@language'] || defaultLocale);
                     tc.push(t);
                 }
                 else {
                     // presentation 3
-                    Object.keys(translation).forEach(function (key) {
+                    Object.keys(language).forEach(function (key) {
                         // todo: support multiple values in array
-                        if (translation[key].length) {
-                            t = new Manifesto.Translation(translation[key][0], key);
+                        if (language[key].length) {
+                            t = new Manifesto.Language(language[key], key);
                             tc.push(t);
                         }
                         else {
-                            throw new Error('Translation must have a value');
+                            throw new Error('language must have a value');
                         }
                     });
                 }
             }
             return tc;
         };
-        TranslationCollection.getValue = function (translationCollection, locale) {
-            if (translationCollection.length) {
+        LanguageMap.getValue = function (languageCollection, locale) {
+            if (languageCollection.length) {
                 if (locale) {
-                    var translation = translationCollection.en().where(function (t) { return t.locale === locale || Manifesto.Utils.getInexactLocale(t.locale) === Manifesto.Utils.getInexactLocale(locale); }).first();
-                    if (translation) {
-                        return translation.value;
+                    var language = languageCollection.en().where(function (t) { return t.locale === locale || Manifesto.Utils.getInexactLocale(t.locale) === Manifesto.Utils.getInexactLocale(locale); }).first();
+                    if (language) {
+                        return language.value;
                     }
                 }
                 // return the first valuel
-                return translationCollection[0].value;
+                return languageCollection[0].value;
             }
             return null;
         };
-        return TranslationCollection;
+        return LanguageMap;
     }(Array));
-    Manifesto.TranslationCollection = TranslationCollection;
+    Manifesto.LanguageMap = LanguageMap;
+})(Manifesto || (Manifesto = {}));
+
+var Manifesto;
+(function (Manifesto) {
+    var LabelValuePair = /** @class */ (function () {
+        function LabelValuePair(defaultLocale) {
+            this.defaultLocale = defaultLocale;
+        }
+        LabelValuePair.prototype.parse = function (resource) {
+            this.resource = resource;
+            this.label = Manifesto.LanguageMap.parse(this.resource.label, this.defaultLocale);
+            this.value = Manifesto.LanguageMap.parse(this.resource.value, this.defaultLocale);
+        };
+        // shortcuts to get/set values based on default locale
+        LabelValuePair.prototype.getLabel = function () {
+            if (this.label) {
+                return Manifesto.LanguageMap.getValue(this.label, this.defaultLocale);
+            }
+            return null;
+        };
+        LabelValuePair.prototype.setLabel = function (value) {
+            var _this = this;
+            if (this.label && this.label.length) {
+                var t = this.label.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
+                if (t)
+                    t.value = value;
+            }
+        };
+        LabelValuePair.prototype.getValue = function () {
+            if (this.value) {
+                var locale = this.defaultLocale;
+                // if the label has a locale, prefer that to the default locale
+                if (this.label && this.label.length && this.label[0].locale) {
+                    locale = this.label[0].locale;
+                }
+                return Manifesto.LanguageMap.getValue(this.value, locale);
+            }
+            return null;
+        };
+        LabelValuePair.prototype.setValue = function (value) {
+            var _this = this;
+            if (this.value && this.value.length) {
+                var t = this.value.en().where(function (x) { return x.locale === _this.defaultLocale || x.locale === Manifesto.Utils.getInexactLocale(_this.defaultLocale); }).first();
+                if (t)
+                    t.value = value;
+            }
+        };
+        return LabelValuePair;
+    }());
+    Manifesto.LabelValuePair = LabelValuePair;
 })(Manifesto || (Manifesto = {}));
 
 var Manifesto;
@@ -3120,15 +3246,15 @@ global.manifesto = global.Manifesto = module.exports = {
     AnnotationMotivation: new Manifesto.AnnotationMotivation(),
     Behavior: new Manifesto.Behavior(),
     IIIFResourceType: new Manifesto.IIIFResourceType(),
+    LabelValuePair: Manifesto.LabelValuePair,
+    Language: Manifesto.Language,
+    LanguageMap: Manifesto.LanguageMap,
     ManifestType: new Manifesto.ManifestType(),
     MediaType: new Manifesto.MediaType(),
-    MetadataItem: Manifesto.MetadataItem,
     RenderingFormat: new Manifesto.RenderingFormat(),
     ResourceType: new Manifesto.ResourceType(),
     ServiceProfile: new Manifesto.ServiceProfile(),
     Size: Manifesto.Size,
-    Translation: Manifesto.Translation,
-    TranslationCollection: Manifesto.TranslationCollection,
     TreeNode: Manifesto.TreeNode,
     TreeNodeType: new Manifesto.TreeNodeType(),
     Utils: Manifesto.Utils,
@@ -3149,9 +3275,12 @@ global.manifesto = global.Manifesto = module.exports = {
 };
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -3174,7 +3303,7 @@ var Manifesto;
                     for (var i = 0; i < body.length; i++) {
                         var b = body[i];
                         if (b.items) {
-                            for (var i_1 = 0; i_1 < b.items.length; i_1++) {
+                            for (var i_1 = 0; i_1 < b.items.length; i_1++) { // todo: don't ignore that it's a choice. maybe add isChoice() to IAnnotationBody?
                                 var c = b.items[i_1];
                                 bodies.push(new Manifesto.AnnotationBody(c, this.options));
                             }
@@ -3219,9 +3348,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -3255,9 +3387,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -3312,9 +3447,12 @@ var Manifesto;
 })(Manifesto || (Manifesto = {}));
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -3361,9 +3499,12 @@ var Manifesto;
 
 
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }

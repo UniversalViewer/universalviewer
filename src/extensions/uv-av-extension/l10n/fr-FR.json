@@ -55,6 +55,7 @@
                 "editSettings": "Modifier les paramètres",
                 "entireDocument": "Document entier ({0})",
                 "entireFileAsOriginal": "Fichier complet",
+                "entireFileAsOriginalWithFormat": "Fichier complet ({0})",
                 "noneAvailable": "Aucune option de téléchargement n'est disponible.",
                 "pagingNote": "Veuillez fermer l'affichage en double page pour accéder aux options supplémentaires.",
                 "preview": "Aperçu",

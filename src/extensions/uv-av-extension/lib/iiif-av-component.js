@@ -1,4 +1,4 @@
-// iiif-av-component v0.0.49 https://github.com/iiif-commons/iiif-av-component#readme
+// iiif-av-component v0.0.82 https://github.com/iiif-commons/iiif-av-component#readme
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifAvComponent = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -20,6 +20,11 @@ var IIIFComponents;
             var _this = _super.call(this, options) || this;
             _this._data = _this.data();
             _this.canvasInstances = [];
+            _this._readyMedia = 0;
+            _this._readyWaveforms = 0;
+            _this._posterCanvasWidth = 0;
+            _this._posterCanvasHeight = 0;
+            _this._posterImageExpanded = false;
             _this._init();
             _this._resize();
             return _this;
@@ -37,15 +42,21 @@ var IIIFComponents;
                 constrainNavigationToRange: false,
                 defaultAspectRatio: 0.56,
                 doubleClickMS: 350,
+                halveAtWidth: 200,
                 limitToRange: false,
+                posterImageRatio: 0.3,
+                virtualCanvasEnabled: true,
                 content: {
                     currentTime: "Current Time",
+                    collapse: "Collapse",
                     duration: "Duration",
+                    expand: "Expand",
                     mute: "Mute",
                     next: "Next",
                     pause: "Pause",
                     play: "Play",
-                    previous: "Previous"
+                    previous: "Previous",
+                    unmute: "Unmute"
                 }
             };
         };
@@ -85,17 +96,47 @@ var IIIFComponents;
                 });
             }
             if (diff.includes('canvasId') && this._data.canvasId) {
-                var currentCanvasInstance_1 = this._getCanvasInstanceById(this._data.canvasId);
-                this.canvasInstances.forEach(function (canvasInstance, index) {
-                    if (canvasInstance !== currentCanvasInstance_1) {
-                        canvasInstance.set({
-                            visible: false
-                        });
-                    }
-                    else {
-                        canvasInstance.set({ visible: true });
-                    }
+                var nextCanvasInstance_1 = this._getCanvasInstanceById(this._data.canvasId);
+                if (nextCanvasInstance_1) {
+                    this.canvasInstances.forEach(function (canvasInstance) {
+                        // hide canvases that don't have the same id        
+                        if (canvasInstance.getCanvasId() !== nextCanvasInstance_1.getCanvasId()) {
+                            canvasInstance.set({
+                                visible: false
+                            });
+                        }
+                        else {
+                            if (diff.includes('range')) {
+                                canvasInstance.set({
+                                    visible: true,
+                                    range: _this._data.range ? jQuery.extend(true, {}, _this._data.range) : undefined
+                                });
+                            }
+                            else {
+                                canvasInstance.set({
+                                    visible: true
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+            if (diff.includes('virtualCanvasEnabled')) {
+                this.set({
+                    range: undefined
                 });
+                // as you don't know the id of virtual canvases, you can toggle them on
+                // but when toggling off, you must call showCanvas to show the next canvas
+                if (this._data.virtualCanvasEnabled) {
+                    this.canvasInstances.forEach(function (canvasInstance) {
+                        if (canvasInstance.isVirtual()) {
+                            _this.set({
+                                canvasId: canvasInstance.getCanvasId(),
+                                range: undefined
+                            });
+                        }
+                    });
+                }
             }
             if (diff.includes('range') && this._data.range) {
                 var range = this._data.helper.getRangeById(this._data.range.id);
@@ -108,16 +149,30 @@ var IIIFComponents;
                         // get canvas by normalised id (without temporal part)
                         var canvasInstance = this._getCanvasInstanceById(canvasId);
                         if (canvasInstance) {
-                            // if not using the correct canvasinstance, switch to it
-                            if (this._data.canvasId && Manifesto.Utils.normaliseUrl(this._data.canvasId) !== canvasId) {
+                            if (canvasInstance.isVirtual() && this._data.virtualCanvasEnabled) {
+                                if (canvasInstance.includesVirtualSubCanvas(canvasId)) {
+                                    canvasId = canvasInstance.getCanvasId();
+                                    // use the retargeted range
+                                    for (var i = 0; i < canvasInstance.ranges.length; i++) {
+                                        var r = canvasInstance.ranges[i];
+                                        if (r.id === range.id) {
+                                            range = r;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            // if not using the correct canvasinstance, switch to it                    
+                            if (this._data.canvasId &&
+                                ((this._data.canvasId.includes('://')) ? Manifesto.Utils.normaliseUrl(this._data.canvasId) : this._data.canvasId) !== canvasId) {
                                 this.set({
                                     canvasId: canvasId,
-                                    range: Object.assign({}, range) // force diff
+                                    range: jQuery.extend(true, {}, range) // force diff
                                 });
                             }
                             else {
                                 canvasInstance.set({
-                                    range: range
+                                    range: jQuery.extend(true, {}, range)
                                 });
                             }
                         }
@@ -129,15 +184,24 @@ var IIIFComponents;
         };
         AVComponent.prototype._render = function () {
         };
+        AVComponent.prototype.reset = function () {
+            this._reset();
+        };
         AVComponent.prototype._reset = function () {
             var _this = this;
-            this.canvasInstances.forEach(function (canvasInstance, index) {
+            this._readyMedia = 0;
+            this._readyWaveforms = 0;
+            this._posterCanvasWidth = 0;
+            this._posterCanvasHeight = 0;
+            clearInterval(this._checkAllMediaReadyInterval);
+            clearInterval(this._checkAllWaveformsReadyInterval);
+            this.canvasInstances.forEach(function (canvasInstance) {
                 canvasInstance.destroy();
             });
             this.canvasInstances = [];
             this._$element.empty();
-            // if the manifest has an auto-advance behavior, join the canvases into a single "virtual" canvas
             if (this._data && this._data.helper) {
+                // if the manifest has an auto-advance behavior, join the canvases into a single "virtual" canvas
                 var behavior = this._data.helper.manifest.getBehavior();
                 var canvases = this._getCanvases();
                 if (behavior && behavior.toString() === manifesto.Behavior.autoadvance().toString()) {
@@ -147,15 +211,77 @@ var IIIFComponents;
                     });
                     this._initCanvas(virtualCanvas_1);
                 }
-                else {
-                    canvases.forEach(function (canvas) {
-                        _this._initCanvas(canvas);
-                    });
-                }
+                // all canvases need to be individually navigable
+                canvases.forEach(function (canvas) {
+                    _this._initCanvas(canvas);
+                });
                 if (this.canvasInstances.length > 0) {
                     this._data.canvasId = this.canvasInstances[0].getCanvasId();
                 }
+                this._checkAllMediaReadyInterval = setInterval(this._checkAllMediaReady.bind(this), 100);
+                this._checkAllWaveformsReadyInterval = setInterval(this._checkAllWaveformsReady.bind(this), 100);
+                this._$posterContainer = $('<div class="poster-container"></div>');
+                this._$element.append(this._$posterContainer);
+                this._$posterImage = $('<div class="poster-image"></div>');
+                this._$posterExpandButton = $("\n                    <button class=\"btn\" title=\"" + (this._data && this._data.content ? this._data.content.expand : '') + "\">\n                        <i class=\"av-icon  av-icon-expand expand\" aria-hidden=\"true\"></i><span>" + (this._data && this._data.content ? this._data.content.expand : '') + "</span>\n                    </button>\n                ");
+                this._$posterImage.append(this._$posterExpandButton);
+                this._$posterImage.on('touchstart click', function (e) {
+                    e.preventDefault();
+                    var target = _this._getPosterImageCss(!_this._posterImageExpanded);
+                    //this._$posterImage.animate(target,"fast", "easein");
+                    _this._$posterImage.animate(target);
+                    _this._posterImageExpanded = !_this._posterImageExpanded;
+                    if (_this._posterImageExpanded) {
+                        var label = _this.options.data.content.collapse;
+                        _this._$posterExpandButton.prop('title', label);
+                        _this._$posterExpandButton.find('i').switchClass('expand', 'collapse');
+                    }
+                    else {
+                        var label = _this.options.data.content.expand;
+                        _this._$posterExpandButton.prop('title', label);
+                        _this._$posterExpandButton.find('i').switchClass('collapse', 'expand');
+                    }
+                });
+                // poster canvas
+                var posterCanvas = this._data.helper.getPosterCanvas();
+                if (posterCanvas) {
+                    this._posterCanvasWidth = posterCanvas.getWidth();
+                    this._posterCanvasHeight = posterCanvas.getHeight();
+                    var posterImage = this._data.helper.getPosterImage();
+                    if (posterImage) {
+                        this._$posterContainer.append(this._$posterImage);
+                        var css = this._getPosterImageCss(this._posterImageExpanded);
+                        css = Object.assign({}, css, {
+                            'background-image': 'url(' + posterImage + ')'
+                        });
+                        this._$posterImage.css(css);
+                    }
+                }
             }
+        };
+        AVComponent.prototype._checkAllMediaReady = function () {
+            console.log('loading media');
+            if (this._readyMedia === this.canvasInstances.length) {
+                console.log('all media ready');
+                clearInterval(this._checkAllMediaReadyInterval);
+                //that._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
+                this.fire(AVComponent.Events.MEDIA_READY);
+                this.resize();
+            }
+        };
+        AVComponent.prototype._checkAllWaveformsReady = function () {
+            console.log('loading waveforms');
+            if (this._readyWaveforms === this._getCanvasInstancesWithWaveforms().length) {
+                console.log('waveforms ready');
+                clearInterval(this._checkAllWaveformsReadyInterval);
+                this.fire(AVComponent.Events.WAVEFORMS_READY);
+                this.resize();
+            }
+        };
+        AVComponent.prototype._getCanvasInstancesWithWaveforms = function () {
+            return this.canvasInstances.filter(function (c) {
+                return c.waveforms.length > 0;
+            });
         };
         AVComponent.prototype._getCanvases = function () {
             if (this._data.helper) {
@@ -170,12 +296,15 @@ var IIIFComponents;
                 data: Object.assign({}, { canvas: canvas }, this._data)
             });
             canvasInstance.logMessage = this._logMessage.bind(this);
+            canvasInstance.isOnlyCanvasInstance = this._getCanvases().length === 1;
             this._$element.append(canvasInstance.$playerElement);
             canvasInstance.init();
             this.canvasInstances.push(canvasInstance);
-            canvasInstance.on(AVComponent.Events.CANVASREADY, function () {
-                //that._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
-                _this.fire(AVComponent.Events.CANVASREADY);
+            canvasInstance.on(AVComponent.Events.MEDIA_READY, function () {
+                _this._readyMedia++;
+            }, false);
+            canvasInstance.on(AVComponent.Events.WAVEFORM_READY, function () {
+                _this._readyWaveforms++;
             }, false);
             // canvasInstance.on(AVComponent.Events.RESETCANVAS, () => {
             //     this.playCanvas(canvasInstance.canvas.id);
@@ -223,17 +352,28 @@ var IIIFComponents;
                 });
             });
         };
+        AVComponent.prototype._getNormaliseCanvasId = function (canvasId) {
+            return (canvasId.includes('://')) ? Manifesto.Utils.normaliseUrl(canvasId) : canvasId;
+        };
         AVComponent.prototype._getCanvasInstanceById = function (canvasId) {
-            canvasId = Manifesto.Utils.normaliseUrl(canvasId);
-            for (var i = 0; i < this.canvasInstances.length; i++) {
-                var canvasInstance = this.canvasInstances[i];
-                // if the canvasinstance has a virtual canvas
-                if (canvasInstance.isVirtual()) {
-                    if (canvasInstance.includesVirtualSubCanvas(canvasId)) {
-                        return canvasInstance;
+            canvasId = this._getNormaliseCanvasId(canvasId);
+            // if virtual canvas is enabled, check for that first
+            if (this._data.virtualCanvasEnabled) {
+                for (var i = 0; i < this.canvasInstances.length; i++) {
+                    var canvasInstance = this.canvasInstances[i];
+                    var currentCanvasId = canvasInstance.getCanvasId();
+                    if (currentCanvasId) {
+                        currentCanvasId = this._getNormaliseCanvasId(currentCanvasId);
+                        if ((canvasInstance.isVirtual() || this.canvasInstances.length === 1) && currentCanvasId === canvasId ||
+                            canvasInstance.includesVirtualSubCanvas(canvasId)) {
+                            return canvasInstance;
+                        }
                     }
                 }
-                else {
+            }
+            else {
+                for (var i = 0; i < this.canvasInstances.length; i++) {
+                    var canvasInstance = this.canvasInstances[i];
                     var id = canvasInstance.getCanvasId();
                     if (id) {
                         var canvasInstanceId = Manifesto.Utils.normaliseUrl(id);
@@ -262,6 +402,18 @@ var IIIFComponents;
                 });
             }
         };
+        AVComponent.prototype.play = function () {
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                currentCanvas.play();
+            }
+        };
+        AVComponent.prototype.pause = function () {
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                currentCanvas.pause();
+            }
+        };
         AVComponent.prototype.playRange = function (rangeId) {
             if (!this._data.helper) {
                 return;
@@ -269,22 +421,87 @@ var IIIFComponents;
             var range = this._data.helper.getRangeById(rangeId);
             if (range) {
                 this.set({
-                    range: range
+                    range: jQuery.extend(true, {}, range)
                 });
             }
         };
         AVComponent.prototype.showCanvas = function (canvasId) {
-            this.set({
-                canvasId: canvasId
-            });
+            // if the passed canvas id is already the current canvas id, but the canvas isn't visible
+            // (switching from virtual canvas)
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas && currentCanvas.getCanvasId() === canvasId && !currentCanvas.isVisible()) {
+                currentCanvas.set({
+                    visible: true
+                });
+            }
+            else {
+                this.set({
+                    canvasId: canvasId
+                });
+            }
         };
         AVComponent.prototype._logMessage = function (message) {
             this.fire(AVComponent.Events.LOG, message);
+        };
+        AVComponent.prototype._getPosterImageCss = function (expanded) {
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                var $options = currentCanvas.$playerElement.find('.options-container');
+                var containerWidth = currentCanvas.$playerElement.parent().width();
+                var containerHeight = currentCanvas.$playerElement.parent().height() - $options.height();
+                if (expanded) {
+                    return {
+                        'top': 0,
+                        'left': 0,
+                        'width': containerWidth,
+                        'height': containerHeight
+                    };
+                }
+                else {
+                    // get the longer edge of the poster canvas and make that a ratio of the container height/width.
+                    // scale the shorter edge proportionally.
+                    var ratio = void 0;
+                    var width = void 0;
+                    var height = void 0;
+                    if (this._posterCanvasWidth > this._posterCanvasHeight) {
+                        ratio = this._posterCanvasHeight / this._posterCanvasWidth;
+                        width = containerWidth * this._data.posterImageRatio;
+                        height = width * ratio;
+                    }
+                    else {
+                        ratio = this._posterCanvasWidth / this._posterCanvasHeight;
+                        height = containerHeight * this._data.posterImageRatio;
+                        width = height * ratio;
+                    }
+                    return {
+                        'top': 0,
+                        'left': containerWidth - width,
+                        'width': width,
+                        'height': height
+                    };
+                }
+            }
+            return null;
         };
         AVComponent.prototype.resize = function () {
             this.canvasInstances.forEach(function (canvasInstance) {
                 canvasInstance.resize();
             });
+            // get the visible player and align the poster to it
+            var currentCanvas = this._getCurrentCanvas();
+            if (currentCanvas) {
+                if (this._$posterImage && this._$posterImage.is(':visible')) {
+                    if (this._posterImageExpanded) {
+                        this._$posterImage.css(this._getPosterImageCss(true));
+                    }
+                    else {
+                        this._$posterImage.css(this._getPosterImageCss(false));
+                    }
+                    // this._$posterExpandButton.css({
+                    //     top: <number>this._$posterImage.height() - <number>this._$posterExpandButton.outerHeight()
+                    // });
+                }
+            }
         };
         return AVComponent;
     }(_Components.BaseComponent));
@@ -296,9 +513,11 @@ var IIIFComponents;
         var Events = /** @class */ (function () {
             function Events() {
             }
-            Events.CANVASREADY = 'canvasready';
+            Events.MEDIA_READY = 'mediaready';
             Events.LOG = 'log';
             Events.RANGE_CHANGED = 'rangechanged';
+            Events.WAVEFORM_READY = 'waveformready';
+            Events.WAVEFORMS_READY = 'waveformsready';
             return Events;
         }());
         AVComponent.Events = Events;
@@ -343,11 +562,12 @@ var IIIFComponents;
             if (!success) {
                 console.error("Component failed to initialise");
             }
-            this._$volumeMute = $("\n                                <button class=\"btn volume-mute\" title=\"" + this.options.data.content.mute + "\">\n                                    <i class=\"av-icon-mute on\" aria-hidden=\"true\"></i>" + this.options.data.content.mute + "\n                                </button>");
+            this._$volumeMute = $("\n                                <button class=\"btn volume-mute\" title=\"" + this.options.data.content.mute + "\">\n                                    <i class=\"av-icon av-icon-mute on\" aria-hidden=\"true\"></i>" + this.options.data.content.mute + "\n                                </button>");
             this._$volumeSlider = $('<div class="volume-slider"></div>');
             this._$element.append(this._$volumeMute, this._$volumeSlider);
             var that = this;
-            this._$volumeMute.on('click', function () {
+            this._$volumeMute.on('touchstart click', function (e) {
+                e.preventDefault();
                 // start reducer
                 if (_this._data.volume !== 0) {
                     // mute
@@ -365,6 +585,7 @@ var IIIFComponents;
                 value: that._data.volume,
                 step: 0.1,
                 orientation: "horizontal",
+                range: "min",
                 min: 0,
                 max: 1,
                 animate: false,
@@ -394,9 +615,13 @@ var IIIFComponents;
                     value: this._data.volume
                 });
                 if (this._data.volume === 0) {
+                    var label = this.options.data.content.unmute;
+                    this._$volumeMute.prop('title', label);
                     this._$volumeMute.find('i').switchClass('on', 'off');
                 }
                 else {
+                    var label = this.options.data.content.mute;
+                    this._$volumeMute.prop('title', label);
                     this._$volumeMute.find('i').switchClass('off', 'on');
                 }
             }
@@ -436,7 +661,6 @@ var IIIFComponents;
         __extends(CanvasInstance, _super);
         function CanvasInstance(options) {
             var _this = _super.call(this, options) || this;
-            _this._canvasClockDuration = 0; // todo: should these 0 values be undefined by default?
             _this._canvasClockFrequency = 25;
             _this._canvasClockStartDate = 0;
             _this._canvasClockTime = 0;
@@ -448,11 +672,18 @@ var IIIFComponents;
             _this._isStalled = false;
             _this._lowPriorityFrequency = 250;
             _this._mediaSyncMarginSecs = 1;
-            _this._ranges = [];
             _this._rangeSpanPadding = 0.25;
-            _this._readyCanvasesCount = 0;
+            _this._readyMediaCount = 0;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
+            //private _waveformNeedsRedraw: boolean = true;
+            _this.ranges = [];
+            _this.waveforms = [];
+            _this.isOnlyCanvasInstance = false;
+            _this._scaleY = function (amplitude, height) {
+                var range = 256;
+                return Math.max(_this._data.waveformBarWidth, (amplitude * height / range));
+            };
             _this._data = _this.options.data;
             _this.$playerElement = $('<div class="player"></div>');
             return _this;
@@ -475,12 +706,15 @@ var IIIFComponents;
             this._$durationHighlight = $('<div class="duration-highlight"></div>');
             this._$timelineItemContainer = $('<div class="timeline-item-container"></div>');
             this._$controlsContainer = $('<div class="controls-container"></div>');
-            this._$prevButton = $("\n                                <button class=\"btn\" title=\"" + this._data.content.previous + "\">\n                                    <i class=\"av-icon-previous\" aria-hidden=\"true\"></i>" + this._data.content.previous + "\n                                </button>");
-            this._$playButton = $("\n                                <button class=\"btn\" title=\"" + this._data.content.play + "\">\n                                    <i class=\"av-icon-play play\" aria-hidden=\"true\"></i>" + this._data.content.play + "\n                                </button>");
-            this._$nextButton = $("\n                                <button class=\"btn\" title=\"" + this._data.content.next + "\">\n                                    <i class=\"av-icon-next\" aria-hidden=\"true\"></i>" + this._data.content.next + "\n                                </button>");
+            this._$prevButton = $("\n                                <button class=\"btn\" title=\"" + this._data.content.previous + "\">\n                                    <i class=\"av-icon av-icon-previous\" aria-hidden=\"true\"></i>" + this._data.content.previous + "\n                                </button>");
+            this._$playButton = $("\n                                <button class=\"btn\" title=\"" + this._data.content.play + "\">\n                                    <i class=\"av-icon av-icon-play play\" aria-hidden=\"true\"></i>" + this._data.content.play + "\n                                </button>");
+            this._$nextButton = $("\n                                <button class=\"btn\" title=\"" + this._data.content.next + "\">\n                                    <i class=\"av-icon av-icon-next\" aria-hidden=\"true\"></i>" + this._data.content.next + "\n                                </button>");
             this._$timeDisplay = $('<div class="time-display"><span class="canvas-time"></span> / <span class="canvas-duration"></span></div>');
             this._$canvasTime = this._$timeDisplay.find('.canvas-time');
             this._$canvasDuration = this._$timeDisplay.find('.canvas-duration');
+            if (this.isVirtual()) {
+                this.$playerElement.addClass('virtual');
+            }
             var $volume = $('<div class="volume"></div>');
             this._volume = new IIIFComponents.AVVolumeControl({
                 target: $volume[0],
@@ -503,15 +737,18 @@ var IIIFComponents;
                     this._data.canvas.canvases.forEach(function (canvas) {
                         if (_this._data && _this._data.helper) {
                             var r = _this._data.helper.getCanvasRanges(canvas);
+                            var clonedRanges_1 = [];
                             // shift the range targets forward by the duration of their previous canvases
                             r.forEach(function (range) {
-                                if (range.canvases && range.canvases.length) {
-                                    for (var i = 0; i < range.canvases.length; i++) {
-                                        range.canvases[i] = IIIFComponents.AVComponentUtils.Utils.retargetTemporalComponent(_this._data.canvas.canvases, range.__jsonld.items[i].id);
+                                var clonedRange = jQuery.extend(true, {}, range);
+                                clonedRanges_1.push(clonedRange);
+                                if (clonedRange.canvases && clonedRange.canvases.length) {
+                                    for (var i = 0; i < clonedRange.canvases.length; i++) {
+                                        clonedRange.canvases[i] = IIIFComponents.AVComponentUtils.Utils.retargetTemporalComponent(_this._data.canvas.canvases, clonedRange.__jsonld.items[i].id);
                                     }
                                 }
                             });
-                            ranges_1.push.apply(ranges_1, r);
+                            ranges_1.push.apply(ranges_1, clonedRanges_1);
                         }
                     });
                 }
@@ -519,10 +756,9 @@ var IIIFComponents;
                     ranges_1 = ranges_1.concat(this._data.helper.getCanvasRanges(this._data.canvas));
                 }
                 ranges_1.forEach(function (range) {
-                    _this._ranges.push(range);
+                    _this.ranges.push(range);
                 });
             }
-            this._canvasClockDuration = this._data.canvas.getDuration();
             var canvasWidth = this._data.canvas.getWidth();
             var canvasHeight = this._data.canvas.getHeight();
             if (!canvasWidth) {
@@ -540,7 +776,8 @@ var IIIFComponents;
             var that = this;
             var prevClicks = 0;
             var prevTimeout = 0;
-            this._$prevButton.on('click', function () {
+            this._$prevButton.on('touchstart click', function (e) {
+                e.preventDefault();
                 prevClicks++;
                 if (prevClicks === 1) {
                     // single click
@@ -560,15 +797,17 @@ var IIIFComponents;
                     prevTimeout = 0;
                 }
             });
-            this._$playButton.on('click', function () {
+            this._$playButton.on('touchstart click', function (e) {
+                e.preventDefault();
                 if (_this._isPlaying) {
-                    _this._pause();
+                    _this.pause();
                 }
                 else {
-                    _this._play();
+                    _this.play();
                 }
             });
-            this._$nextButton.on('click', function () {
+            this._$nextButton.on('touchstart click', function (e) {
+                e.preventDefault();
                 _this._next();
             });
             this._$canvasTimelineContainer.slider({
@@ -576,7 +815,7 @@ var IIIFComponents;
                 step: 0.01,
                 orientation: "horizontal",
                 range: "min",
-                max: that._canvasClockDuration,
+                max: that._getDuration(),
                 animate: false,
                 create: function (evt, ui) {
                     // on create
@@ -597,7 +836,7 @@ var IIIFComponents;
                 that._$rangeHoverPreview.hide();
             });
             this._$canvasTimelineContainer.on("mousemove", function (e) {
-                _this._updateHoverPreview(e, _this._$canvasTimelineContainer, _this._canvasClockDuration);
+                _this._updateHoverPreview(e, _this._$canvasTimelineContainer, _this._getDuration());
             });
             this._$rangeTimelineContainer.on("mousemove", function (e) {
                 if (_this._data.range) {
@@ -625,7 +864,12 @@ var IIIFComponents;
                     console.warn('item has no body');
                     return;
                 }
-                var body = bodies[0];
+                var body = this._getBody(bodies);
+                if (!body) {
+                    // if no suitable format was found for the current browser, skip this item.
+                    console.warn('unable to find suitable format for', item.id);
+                    continue;
+                }
                 var type = body.getType();
                 var format = body.getFormat();
                 // if (type && type.toString() === 'choice') {
@@ -664,7 +908,7 @@ var IIIFComponents;
                     xywh = [0, 0, this._canvasWidth, this._canvasHeight];
                 }
                 if (!t) {
-                    t = [0, this._canvasClockDuration];
+                    t = [0, this._getDuration()];
                 }
                 var positionLeft = parseInt(String(xywh[0])), positionTop = parseInt(String(xywh[1])), mediaWidth = parseInt(String(xywh[2])), mediaHeight = parseInt(String(xywh[3])), startTime = parseInt(String(t[0])), endTime = parseInt(String(t[1]));
                 var percentageTop = this._convertToPercentage(positionTop, this._canvasHeight), percentageLeft = this._convertToPercentage(positionLeft, this._canvasWidth), percentageWidth = this._convertToPercentage(mediaWidth, this._canvasWidth), percentageHeight = this._convertToPercentage(mediaHeight, this._canvasHeight);
@@ -693,10 +937,69 @@ var IIIFComponents;
                     'width': percentageWidth
                 };
                 this._renderMediaElement(itemData);
+                // waveform
+                // todo: create annotation.getSeeAlso
+                var seeAlso = item.getProperty('seeAlso');
+                if (seeAlso && seeAlso.length) {
+                    var dat = seeAlso[0].id;
+                    this.waveforms.push(dat);
+                }
             }
+            this._renderWaveform();
+        };
+        CanvasInstance.prototype._getBody = function (bodies) {
+            // if there's an HLS format and HLS is supported in this browser
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                var format = body.getFormat();
+                if (format) {
+                    if (IIIFComponents.AVComponentUtils.Utils.isHLSFormat(format) && IIIFComponents.AVComponentUtils.Utils.canPlayHls()) {
+                        return body;
+                    }
+                }
+            }
+            // if there's a Dash format and the browser isn't Safari
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                var format = body.getFormat();
+                if (format) {
+                    if (IIIFComponents.AVComponentUtils.Utils.isMpegDashFormat(format) && !IIIFComponents.AVComponentUtils.Utils.isSafari()) {
+                        return body;
+                    }
+                }
+            }
+            // otherwise, return the first format that isn't HLS or Dash
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                var format = body.getFormat();
+                if (format) {
+                    if (!IIIFComponents.AVComponentUtils.Utils.isHLSFormat(format) && !IIIFComponents.AVComponentUtils.Utils.isMpegDashFormat(format)) {
+                        return body;
+                    }
+                }
+            }
+            // couldn't find a suitable format
+            return null;
+        };
+        CanvasInstance.prototype._getDuration = function () {
+            if (this._data && this._data.canvas) {
+                return this._data.canvas.getDuration();
+            }
+            return 0;
+        };
+        CanvasInstance.prototype.data = function () {
+            return {
+                waveformColor: "#fff",
+                waveformBarSpacing: 4,
+                waveformBarWidth: 2,
+                volume: 1
+            };
         };
         CanvasInstance.prototype.isVirtual = function () {
             return this._data.canvas instanceof IIIFComponents.AVComponentObjects.VirtualCanvas;
+        };
+        CanvasInstance.prototype.isVisible = function () {
+            return !!this._data.visible;
         };
         CanvasInstance.prototype.includesVirtualSubCanvas = function (canvasId) {
             if (this.isVirtual() && this._data.canvas && this._data.canvas.canvases) {
@@ -710,18 +1013,20 @@ var IIIFComponents;
             return false;
         };
         CanvasInstance.prototype.set = function (data) {
+            var _this = this;
             var oldData = Object.assign({}, this._data);
             this._data = Object.assign(this._data, data);
             var diff = IIIFComponents.AVComponentUtils.Utils.diff(oldData, this._data);
             if (diff.includes('visible')) {
                 if (this._data.canvas) {
                     if (this._data.visible) {
+                        this._rewind();
                         this.$playerElement.show();
                         //console.log('show ' + this._data.canvas.id);
                     }
                     else {
                         this.$playerElement.hide();
-                        this._pause();
+                        this.pause();
                         //console.log('hide ' + this._data.canvas.id);
                     }
                     this.resize();
@@ -735,27 +1040,44 @@ var IIIFComponents;
                     else {
                         var duration = this._data.range.getDuration();
                         if (duration) {
-                            this._setCurrentTime(duration.start);
+                            if (!this._data.range.autoChanged) {
+                                this._setCurrentTime(duration.start);
+                            }
+                            if (this._data.autoPlay) {
+                                this.play();
+                            }
                             this.fire(IIIFComponents.AVComponent.Events.RANGE_CHANGED, this._data.range.id);
-                            this._play();
                         }
                     }
                 }
             }
-            this._render();
+            if (diff.includes('volume')) {
+                this._contentAnnotations.forEach(function ($mediaElement) {
+                    $($mediaElement.element).prop('volume', _this._data.volume);
+                    _this._volume.set({
+                        volume: _this._data.volume
+                    });
+                });
+            }
+            else {
+                this._render();
+            }
+            if (diff.includes('limitToRange')) {
+                this._render();
+            }
         };
         CanvasInstance.prototype._hasRangeChanged = function () {
             var range = this._getRangeForCurrentTime();
             if (range && !this._data.limitToRange && (!this._data.range || (this._data.range && range.id !== this._data.range.id))) {
                 this.set({
-                    range: range
+                    range: jQuery.extend(true, { autoChanged: true }, range)
                 });
             }
         };
         CanvasInstance.prototype._getRangeForCurrentTime = function (parentRange) {
             var ranges;
             if (!parentRange) {
-                ranges = this._ranges;
+                ranges = this.ranges;
             }
             else {
                 ranges = parentRange.getRanges();
@@ -797,27 +1119,39 @@ var IIIFComponents;
             return true;
         };
         CanvasInstance.prototype._render = function () {
-            var _this = this;
             if (this._data.range) {
                 var duration = this._data.range.getDuration();
                 if (duration) {
                     // get the total length in seconds.
-                    var totalLength = this._canvasClockDuration;
+                    var totalLength = this._getDuration();
                     // get the length of the timeline container
                     var timelineLength = this._$canvasTimelineContainer.width();
                     // get the ratio of seconds to length
                     var ratio = timelineLength / totalLength;
                     var start = duration.start * ratio;
                     var end = duration.end * ratio;
+                    // if the end is on the next canvas
+                    if (end > totalLength || end < start) {
+                        end = totalLength;
+                    }
                     var width = end - start;
-                    this._$durationHighlight.show();
-                    // set the start position and width
-                    this._$durationHighlight.css({
-                        left: start,
-                        width: width
-                    });
+                    //console.log(width);
+                    if (this.isVirtual() || this.isOnlyCanvasInstance) {
+                        this._$durationHighlight.show();
+                        // set the start position and width
+                        this._$durationHighlight.css({
+                            left: start,
+                            width: width
+                        });
+                    }
+                    else {
+                        this._$durationHighlight.hide();
+                    }
                     var that_1 = this;
-                    this._$rangeTimelineContainer.slider("destroy");
+                    // try to destroy existing rangeTimelineContainer
+                    if (this._$rangeTimelineContainer.data("ui-sortable")) {
+                        this._$rangeTimelineContainer.slider("destroy");
+                    }
                     this._$rangeTimelineContainer.slider({
                         value: duration.start,
                         step: 0.01,
@@ -841,12 +1175,6 @@ var IIIFComponents;
             else {
                 this._$durationHighlight.hide();
             }
-            this._contentAnnotations.forEach(function ($mediaElement) {
-                $($mediaElement.element).prop("volume", _this._data.volume);
-                _this._volume.set({
-                    volume: _this._data.volume
-                });
-            });
             if (this._data.limitToRange && this._data.range) {
                 this._$canvasTimelineContainer.hide();
                 this._$rangeTimelineContainer.show();
@@ -857,6 +1185,7 @@ var IIIFComponents;
             }
             this._updateCurrentTimeDisplay();
             this._updateDurationDisplay();
+            this._drawWaveform();
         };
         CanvasInstance.prototype.getCanvasId = function () {
             if (this._data && this._data.canvas) {
@@ -972,27 +1301,43 @@ var IIIFComponents;
                 default:
                     return;
             }
-            var video = $mediaElement[0];
+            var media = $mediaElement[0];
             if (data.format && data.format.toString() === 'application/dash+xml') {
                 // dash
                 $mediaElement.attr('data-dashjs-player', '');
                 var player = dashjs.MediaPlayer().create();
-                player.initialize(video, data.source);
+                player.getDebug().setLogToBrowserConsole(false);
+                if (this._data.adaptiveAuthEnabled) {
+                    player.setXHRWithCredentialsForType('MPD', true); // send cookies
+                }
+                player.initialize(media, data.source);
             }
             else if (data.format && data.format.toString() === 'application/vnd.apple.mpegurl') {
                 // hls
                 if (Hls.isSupported()) {
                     var hls = new Hls();
+                    if (this._data.adaptiveAuthEnabled) {
+                        hls = new Hls({
+                            xhrSetup: function (xhr) {
+                                xhr.withCredentials = true; // send cookies
+                            }
+                        });
+                    }
+                    else {
+                        hls = new Hls();
+                    }
+                    if (this._data.adaptiveAuthEnabled) {
+                    }
                     hls.loadSource(data.source);
-                    hls.attachMedia(video);
+                    hls.attachMedia(media);
                     //hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    //video.play();
+                    //media.play();
                     //});
                 }
-                else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    video.src = data.source;
-                    //video.addEventListener('canplay', function () {
-                    //video.play();
+                else if (media.canPlayType('application/vnd.apple.mpegurl')) {
+                    media.src = data.source;
+                    //media.addEventListener('canplay', function () {
+                    //media.play();
                     //});
                 }
             }
@@ -1038,33 +1383,130 @@ var IIIFComponents;
             if (type === 'video' || type === 'audio') {
                 $mediaElement.on('loadstart', function () {
                     //console.log('loadstart');
-                    data.checkForStall();
+                    //data.checkForStall();
                 });
                 $mediaElement.on('waiting', function () {
                     //console.log('waiting');
-                    data.checkForStall();
+                    //data.checkForStall();
                 });
                 $mediaElement.on('seeking', function () {
                     //console.log('seeking');
                     //data.checkForStall();
                 });
                 $mediaElement.on('loadedmetadata', function () {
-                    _this._readyCanvasesCount++;
-                    if (_this._readyCanvasesCount === _this._contentAnnotations.length) {
+                    _this._readyMediaCount++;
+                    if (_this._readyMediaCount === _this._contentAnnotations.length) {
                         //if (!this._data.range) {
                         _this._setCurrentTime(0);
                         //}                        
-                        if (_this.options.data.autoPlay) {
-                            _this._play();
+                        if (_this._data.autoPlay) {
+                            _this.play();
                         }
                         _this._updateDurationDisplay();
-                        _this.fire(IIIFComponents.AVComponent.Events.CANVASREADY);
+                        _this.fire(IIIFComponents.AVComponent.Events.MEDIA_READY);
                     }
                 });
                 $mediaElement.attr('preload', 'auto');
-                $mediaElement.get(0).load(); // todo: type
+                $mediaElement.get(0).load();
             }
             this._renderSyncIndicator(data);
+        };
+        CanvasInstance.prototype._getWaveformData = function (url) {
+            // return new Promise(function (resolve, reject) {
+            //     const xhr = new XMLHttpRequest();
+            //     xhr.responseType = 'arraybuffer';
+            //     xhr.open('GET', url);
+            //     xhr.addEventListener('load', (progressEvent: any) => {
+            //         if (xhr.status == 200) {
+            //             resolve(WaveformData.create(progressEvent.target.response));
+            //         } else {
+            //             reject(new Error(xhr.statusText));
+            //         }
+            //     });
+            //     xhr.onerror = function () {
+            //         reject(new Error("Network Error"));
+            //     };
+            //     xhr.send();
+            // });
+            // must use this for IE11
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'binary',
+                    responseType: 'arraybuffer',
+                    processData: false
+                }).done(function (data) {
+                    resolve(WaveformData.create(data));
+                }).fail(function (err) {
+                    reject(new Error('Network Error'));
+                });
+            });
+        };
+        CanvasInstance.prototype._renderWaveform = function () {
+            var _this = this;
+            if (!this.waveforms.length)
+                return;
+            var promises = this.waveforms.map(function (url) {
+                return _this._getWaveformData(url);
+            });
+            Promise.all(promises).then(function (waveforms) {
+                _this._waveformCanvas = document.createElement('canvas');
+                _this._waveformCanvas.classList.add('waveform');
+                _this._$canvasContainer.append(_this._waveformCanvas);
+                _this._waveformCtx = _this._waveformCanvas.getContext('2d');
+                if (_this._waveformCtx) {
+                    _this._waveformCtx.fillStyle = _this._data.waveformColor;
+                    _this._compositeWaveform = new IIIFComponents.AVComponentObjects.CompositeWaveform(waveforms);
+                    //this._resize();
+                    _this.fire(IIIFComponents.AVComponent.Events.WAVEFORM_READY);
+                }
+            });
+        };
+        CanvasInstance.prototype._drawWaveform = function () {
+            //if (!this._waveformCtx || !this._waveformNeedsRedraw) return;
+            if (!this._waveformCtx)
+                return;
+            var duration;
+            var start = 0;
+            var end = this._compositeWaveform.duration;
+            if (this._data.range) {
+                duration = this._data.range.getDuration();
+            }
+            if (this._data.limitToRange && duration) {
+                start = duration.start;
+                end = duration.end;
+            }
+            var startpx = start * this._compositeWaveform.pixelsPerSecond;
+            var endpx = end * this._compositeWaveform.pixelsPerSecond;
+            var canvasWidth = this._waveformCtx.canvas.width;
+            var canvasHeight = this._waveformCtx.canvas.height;
+            var barSpacing = this._data.waveformBarSpacing;
+            var barWidth = this._data.waveformBarWidth;
+            var increment = Math.floor(((endpx - startpx) / canvasWidth) * barSpacing);
+            var sampleSpacing = (canvasWidth / barSpacing);
+            this._waveformCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+            this._waveformCtx.fillStyle = this._data.waveformColor;
+            for (var x = startpx; x < endpx; x += increment) {
+                var maxMin = this._getWaveformMaxAndMin(this._compositeWaveform, x, sampleSpacing);
+                var height = this._scaleY(maxMin.max - maxMin.min, canvasHeight);
+                var ypos = (canvasHeight - height) / 2;
+                var xpos = canvasWidth * IIIFComponents.AVComponentUtils.Utils.normalise(x, startpx, endpx);
+                this._waveformCtx.fillRect(xpos, ypos, barWidth, height);
+            }
+        };
+        CanvasInstance.prototype._getWaveformMaxAndMin = function (waveform, index, sampleSpacing) {
+            var max = -127;
+            var min = 128;
+            for (var x = index; x < index + sampleSpacing; x++) {
+                if (waveform.max(x) > max) {
+                    max = waveform.max(x);
+                }
+                if (waveform.min(x) < min) {
+                    min = waveform.min(x);
+                }
+            }
+            return { max: max, min: min };
         };
         CanvasInstance.prototype._updateCurrentTimeDisplay = function () {
             var duration;
@@ -1088,7 +1530,7 @@ var IIIFComponents;
                 this._$canvasDuration.text(IIIFComponents.AVComponentUtils.Utils.formatTime(duration.getLength()));
             }
             else {
-                this._$canvasDuration.text(IIIFComponents.AVComponentUtils.Utils.formatTime(this._canvasClockDuration));
+                this._$canvasDuration.text(IIIFComponents.AVComponentUtils.Utils.formatTime(this._getDuration()));
             }
         };
         // public setVolume(value: number): void {
@@ -1100,8 +1542,8 @@ var IIIFComponents;
         //     }
         // }
         CanvasInstance.prototype._renderSyncIndicator = function (mediaElementData) {
-            var leftPercent = this._convertToPercentage(mediaElementData.start, this._canvasClockDuration);
-            var widthPercent = this._convertToPercentage(mediaElementData.end - mediaElementData.start, this._canvasClockDuration);
+            var leftPercent = this._convertToPercentage(mediaElementData.start, this._getDuration());
+            var widthPercent = this._convertToPercentage(mediaElementData.end - mediaElementData.start, this._getDuration());
             var $timelineItem = $('<div class="timeline-item" title="' + mediaElementData.source + '" data-start="' + mediaElementData.start + '" data-end="' + mediaElementData.end + '"></div>');
             $timelineItem.css({
                 left: leftPercent + '%',
@@ -1127,10 +1569,8 @@ var IIIFComponents;
             this._lowPriorityUpdater();
             this._synchronizeMedia();
         };
-        // todo: can this be part of the _data state?
-        // this._data.rewind = true?
         CanvasInstance.prototype._rewind = function (withoutUpdate) {
-            this._pause();
+            this.pause();
             var duration;
             if (this._data.range) {
                 duration = this._data.range.getDuration();
@@ -1148,10 +1588,7 @@ var IIIFComponents;
                     });
                 }
             }
-            this._play();
         };
-        // todo: can this be part of the _data state?
-        // this._data.fastforward = true?
         CanvasInstance.prototype._fastforward = function () {
             var duration;
             if (this._data.range) {
@@ -1161,13 +1598,14 @@ var IIIFComponents;
                 this._canvasClockTime = duration.end;
             }
             else {
-                this._canvasClockTime = this._canvasClockDuration;
+                this._canvasClockTime = this._getDuration();
             }
-            this._pause();
+            this.pause();
         };
         // todo: can this be part of the _data state?
         // this._data.play = true?
-        CanvasInstance.prototype._play = function (withoutUpdate) {
+        CanvasInstance.prototype.play = function (withoutUpdate) {
+            //console.log('playing ', this.getCanvasId());
             var _this = this;
             if (this._isPlaying)
                 return;
@@ -1178,7 +1616,7 @@ var IIIFComponents;
             if (this._data.limitToRange && duration && this._canvasClockTime >= duration.end) {
                 this._canvasClockTime = duration.start;
             }
-            if (this._canvasClockTime === this._canvasClockDuration) {
+            if (this._canvasClockTime === this._getDuration()) {
                 this._canvasClockTime = 0;
             }
             this._canvasClockStartDate = Date.now() - (this._canvasClockTime * 1000);
@@ -1195,13 +1633,15 @@ var IIIFComponents;
             if (!withoutUpdate) {
                 this._synchronizeMedia();
             }
+            var label = (this._data && this._data.content) ? this._data.content.pause : '';
+            this._$playButton.prop('title', label);
             this._$playButton.find('i').switchClass('play', 'pause');
             this.fire(IIIFComponents.AVComponentCanvasInstance.Events.PLAYCANVAS);
             this.logMessage('PLAY canvas');
         };
         // todo: can this be part of the _data state?
         // this._data.play = false?
-        CanvasInstance.prototype._pause = function (withoutUpdate) {
+        CanvasInstance.prototype.pause = function (withoutUpdate) {
             window.clearInterval(this._highPriorityInterval);
             window.clearInterval(this._lowPriorityInterval);
             window.clearInterval(this._canvasClockInterval);
@@ -1211,6 +1651,8 @@ var IIIFComponents;
                 this._lowPriorityUpdater();
                 this._synchronizeMedia();
             }
+            var label = (this._data && this._data.content) ? this._data.content.play : '';
+            this._$playButton.prop('title', label);
             this._$playButton.find('i').switchClass('pause', 'play');
             this.fire(IIIFComponents.AVComponentCanvasInstance.Events.PAUSECANVAS);
             this.logMessage('PAUSE canvas');
@@ -1225,11 +1667,11 @@ var IIIFComponents;
                 duration = this._data.range.getDuration();
             }
             if (this._data.limitToRange && duration && this._canvasClockTime >= duration.end) {
-                this._pause();
+                this.pause();
             }
-            if (this._canvasClockTime >= this._canvasClockDuration) {
-                this._canvasClockTime = this._canvasClockDuration;
-                this._pause();
+            if (this._canvasClockTime >= this._getDuration()) {
+                this._canvasClockTime = this._getDuration();
+                this.pause();
             }
         };
         CanvasInstance.prototype._highPriorityUpdater = function () {
@@ -1244,7 +1686,7 @@ var IIIFComponents;
         };
         CanvasInstance.prototype._lowPriorityUpdater = function () {
             this._updateMediaActiveStates();
-            if (this._isPlaying && this._data.autoSelectRange) {
+            if (this._isPlaying && this._data.autoSelectRange && this.isVirtual()) {
                 this._hasRangeChanged();
             }
         };
@@ -1362,7 +1804,7 @@ var IIIFComponents;
                         //this._showWorkingIndicator(this._$canvasContainer);
                     }
                     this._wasPlaying = this._isPlaying;
-                    this._pause(true);
+                    this.pause(true);
                     this._isStalled = aBoolean;
                 }
             }
@@ -1374,7 +1816,7 @@ var IIIFComponents;
                 if (this._stallRequestedBy.length === 0) {
                     //this._hideWorkingIndicator();
                     if (this._isStalled && this._wasPlaying) {
-                        this._play(true);
+                        this.play(true);
                     }
                     this._isStalled = aBoolean;
                 }
@@ -1399,7 +1841,25 @@ var IIIFComponents;
                     //const resizeFactorY: number = containerWidth / this.canvasWidth;
                     //$canvasContainer.height(this.canvasHeight * resizeFactorY);
                     var $options = this.$playerElement.find('.options-container');
-                    this._$canvasContainer.height(this.$playerElement.parent().height() - $options.height());
+                    // if in the watch metric, make sure the canvasContainer isn't more than half the height to allow
+                    // room between buttons
+                    if (this._data.halveAtWidth !== undefined && this.$playerElement.parent().width() < this._data.halveAtWidth) {
+                        this._$canvasContainer.height(this.$playerElement.parent().height() / 2);
+                    }
+                    else {
+                        this._$canvasContainer.height(this.$playerElement.parent().height() - $options.height());
+                    }
+                }
+                if (this._waveformCanvas) {
+                    var canvasWidth = this._$canvasContainer.width();
+                    var canvasHeight = this._$canvasContainer.height();
+                    //if (canvasWidth !== this._lastCanvasWidth || canvasHeight !== this._lastCanvasHeight) {
+                    this._waveformCanvas.width = this._lastCanvasWidth = canvasWidth;
+                    this._waveformCanvas.height = this._lastCanvasHeight = canvasHeight;
+                    //     this._waveformNeedsRedraw = true;
+                    // } else {
+                    //     this._waveformNeedsRedraw = false;
+                    // }
                 }
                 this._render();
             }
@@ -1422,6 +1882,51 @@ var IIIFComponents;
         }());
         AVComponentCanvasInstance.Events = Events;
     })(AVComponentCanvasInstance = IIIFComponents.AVComponentCanvasInstance || (IIIFComponents.AVComponentCanvasInstance = {}));
+})(IIIFComponents || (IIIFComponents = {}));
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var AVComponentObjects;
+    (function (AVComponentObjects) {
+        var CompositeWaveform = /** @class */ (function () {
+            function CompositeWaveform(waveforms) {
+                var _this = this;
+                this.length = 0;
+                this.duration = 0;
+                this.pixelsPerSecond = Number.MAX_VALUE;
+                this.secondsPerPixel = Number.MAX_VALUE;
+                this._waveforms = [];
+                waveforms.forEach(function (waveform) {
+                    _this._waveforms.push({
+                        start: _this.length,
+                        end: _this.length + waveform.adapter.length,
+                        waveform: waveform
+                    });
+                    _this.length += waveform.adapter.length;
+                    _this.duration += waveform.duration;
+                    _this.pixelsPerSecond = Math.min(_this.pixelsPerSecond, waveform.pixels_per_second);
+                    _this.secondsPerPixel = Math.min(_this.secondsPerPixel, waveform.seconds_per_pixel);
+                });
+            }
+            // Note: these could be optimised, assuming access is sequential
+            CompositeWaveform.prototype.min = function (index) {
+                var waveform = this._find(index);
+                return waveform ? waveform.waveform.min_sample(index - waveform.start) : 0;
+            };
+            CompositeWaveform.prototype.max = function (index) {
+                var waveform = this._find(index);
+                return waveform ? waveform.waveform.max_sample(index - waveform.start) : 0;
+            };
+            CompositeWaveform.prototype._find = function (index) {
+                var waveforms = this._waveforms.filter(function (waveform) {
+                    return index >= waveform.start && index < waveform.end;
+                });
+                return waveforms.length > 0 ? waveforms[0] : null;
+            };
+            return CompositeWaveform;
+        }());
+        AVComponentObjects.CompositeWaveform = CompositeWaveform;
+    })(AVComponentObjects = IIIFComponents.AVComponentObjects || (IIIFComponents.AVComponentObjects = {}));
 })(IIIFComponents || (IIIFComponents = {}));
 
 
@@ -1455,14 +1960,6 @@ var IIIFComponents;
                 }
                 return xywh;
             };
-            // public static getTemporalComponent(target: string): number[] | null {
-            //     const temporal: RegExpExecArray | null = /t=([^&]+)/g.exec(target);
-            //     let t: number[] | null = null;
-            //     if (temporal && temporal[1]) {
-            //         t = <any>temporal[1].split(',');
-            //     }
-            //     return t;
-            // }
             Utils.getFirstTargetedCanvasId = function (range) {
                 var canvasId;
                 if (range.canvases && range.canvases.length) {
@@ -1479,57 +1976,6 @@ var IIIFComponents;
                 }
                 return undefined;
             };
-            /*
-            public static getRangeDuration(range: Manifesto.IRange): AVComponentObjects.Duration | undefined {
-    
-                let start: number | undefined;
-                let end: number | undefined;
-    
-                if (range.canvases && range.canvases.length) {
-                    for (let i = 0; i < range.canvases.length; i++) {
-                        const canvas: string = range.canvases[i];
-                        let temporal: number[] | null = Utils.getTemporalComponent(canvas);
-                        if (temporal && temporal.length > 1) {
-                            if (i === 0) {
-                                start = Number(temporal[0]);
-                            }
-        
-                            if (i === range.canvases.length - 1) {
-                                end = Number(temporal[1]);
-                            }
-                        }
-                    }
-                } else {
-    
-                    // get child ranges and calculate the start and end based on them
-                    const childRanges: Manifesto.IRange[] = range.getRanges();
-    
-                    for (let i = 0; i < childRanges.length; i++) {
-                        const childRange: Manifesto.IRange = childRanges[i];
-    
-                        const duration: AVComponentObjects.Duration | undefined = Utils.getRangeDuration(childRange);
-    
-                        if (duration) {
-                            if (i === 0) {
-                                start = duration.start;
-                            }
-        
-                            if (i === childRanges.length - 1) {
-                                end = duration.end;
-                            }
-                        }
-                    }
-    
-                }
-    
-                if (start !== undefined && end !== undefined) {
-                    return new AVComponentObjects.Duration(start, end);
-                }
-    
-                return undefined;
-    
-            }
-            */
             Utils.getTimestamp = function () {
                 return String(new Date().valueOf());
             };
@@ -1575,7 +2021,7 @@ var IIIFComponents;
                 }
                 return hourValue + minutes + ':' + seconds;
             };
-            Utils.detectIE = function () {
+            Utils.isIE = function () {
                 var ua = window.navigator.userAgent;
                 // Test values; Uncomment to check result …
                 // IE 10
@@ -1605,6 +2051,12 @@ var IIIFComponents;
                 // other browser
                 return false;
             };
+            Utils.isSafari = function () {
+                // https://stackoverflow.com/questions/7944460/detect-safari-browser?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+                var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                console.log('isSafari', isSafari);
+                return isSafari;
+            };
             Utils.debounce = function (fn, debounceDuration) {
                 // summary:
                 //      Returns a debounced function that will make sure the given
@@ -1628,6 +2080,36 @@ var IIIFComponents;
                     return fn.lastReturnVal;
                 };
             };
+            Utils.normalise = function (num, min, max) {
+                return (num - min) / (max - min);
+            };
+            Utils.isHLSFormat = function (format) {
+                return this.hlsMimeTypes.includes(format.toString());
+            };
+            Utils.isMpegDashFormat = function (format) {
+                return format.toString() === 'application/dash+xml';
+            };
+            Utils.canPlayHls = function () {
+                var doc = typeof document === 'object' && document, videoelem = doc && doc.createElement('video'), isvideosupport = Boolean(videoelem && videoelem.canPlayType);
+                return isvideosupport && this.hlsMimeTypes.some(function (canItPlay) {
+                    return /maybe|probably/i.test(videoelem.canPlayType(canItPlay));
+                });
+            };
+            Utils.hlsMimeTypes = [
+                // Apple santioned
+                'application/vnd.apple.mpegurl',
+                'vnd.apple.mpegurl',
+                // Apple sanctioned for backwards compatibility
+                'audio/mpegurl',
+                // Very common
+                'audio/x-mpegurl',
+                // Very common
+                'application/x-mpegurl',
+                // Included for completeness
+                'video/x-mpegurl',
+                'video/mpegurl',
+                'application/mpegurl'
+            ];
             return Utils;
         }());
         AVComponentUtils.Utils = Utils;
@@ -1645,7 +2127,8 @@ var IIIFComponents;
                 this.id = IIIFComponents.AVComponentUtils.Utils.getTimestamp();
             }
             VirtualCanvas.prototype.addCanvas = function (canvas) {
-                this.canvases.push(canvas);
+                // canvases need to be deep copied including functions
+                this.canvases.push(jQuery.extend(true, {}, canvas));
             };
             VirtualCanvas.prototype.getContent = function () {
                 var _this = this;
@@ -1698,6 +2181,19 @@ var IIIFComponents;
             return VirtualCanvas;
         }());
         AVComponentObjects.VirtualCanvas = VirtualCanvas;
+    })(AVComponentObjects = IIIFComponents.AVComponentObjects || (IIIFComponents.AVComponentObjects = {}));
+})(IIIFComponents || (IIIFComponents = {}));
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var AVComponentObjects;
+    (function (AVComponentObjects) {
+        var Waveform = /** @class */ (function () {
+            function Waveform() {
+            }
+            return Waveform;
+        }());
+        AVComponentObjects.Waveform = Waveform;
     })(AVComponentObjects = IIIFComponents.AVComponentObjects || (IIIFComponents.AVComponentObjects = {}));
 })(IIIFComponents || (IIIFComponents = {}));
 

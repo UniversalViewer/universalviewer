@@ -161,7 +161,7 @@ export class FooterPanel extends BaseView {
     updateMoreInfoButton(): void {
         const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
 
-        if (configEnabled && !this.extension.isDesktopMetric()) {
+        if (configEnabled && !this.extension.isDesktopMetric() && !this.extension.isCatchAllMetric()) {
             this.$moreInfoButton.show();
         } else {
             this.$moreInfoButton.hide();
@@ -202,8 +202,8 @@ export class FooterPanel extends BaseView {
     updateEmbedButton(): void {
         if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)) {
             // current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
-            if (!$.browser.mobile) {
-              this.$embedButton.show();
+            if (!this.extension.isMobile()) {
+                this.$embedButton.show();
             }
         } else {
             this.$embedButton.hide();

@@ -113,7 +113,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>Manifesto.TranslationCollection.getValue(canvas.getLabel());
+        bookmark.label = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;

@@ -4,6 +4,7 @@ import {IUVData} from "../../IUVData";
 import {MetricType} from "./MetricType";
 
 export interface IExtension {
+    $element: JQuery;
     addTimestamp(uri: string): string;
     changeLocale(locale: string): void;
     component: IUVComponent;
@@ -11,7 +12,7 @@ export interface IExtension {
     createModules(): void;
     data: IUVData;
     dependenciesLoaded(...args: any[]): void;
-    dependencyLoaded(index: number, dep: any): void;
+    dependencyLoaded(index: number, dep: any, deps: string[]): void;
     exitFullScreen(): void;
     fire(name: string, ...args: any[]): void;
     getAlternateLocale(): ILocale | null;
@@ -31,6 +32,7 @@ export interface IExtension {
     getShareUrl(): string | null;
     height(): number;
     helper: Manifold.IHelper;
+    isCatchAllMetric(): boolean;
     isCreated: boolean;
     isDesktopMetric(): boolean;
     isFooterPanelEnabled(): boolean;
@@ -38,9 +40,11 @@ export interface IExtension {
     isHeaderPanelEnabled(): boolean;
     isLeftPanelEnabled(): boolean;
     isLoggedIn: boolean;
+    isMobile(): boolean;
     isOverlayActive(): boolean;
     isRightPanelEnabled(): boolean;
     isSeeAlsoEnabled(): boolean;
+    isWatchMetric(): boolean;
     lastCanvasIndex: number;
     loadDependencies(deps: any): void;
     metric: MetricType;

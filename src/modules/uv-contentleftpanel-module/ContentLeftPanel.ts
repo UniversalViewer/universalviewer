@@ -176,14 +176,10 @@ export class ContentLeftPanel extends LeftPanel {
 
         this.$treeButton.onPressed(() => {
             this.openTreeView();
-
-            $.publish(BaseEvents.OPEN_TREE_VIEW);
         });
 
         this.$thumbsButton.onPressed(() => {
             this.openThumbsView();
-
-            $.publish(BaseEvents.OPEN_THUMBS_VIEW);
         });
 
         this.setTitle(this.content.title);
@@ -219,7 +215,7 @@ export class ContentLeftPanel extends LeftPanel {
         if (topRanges.length > 1){            
             for (let i = 0; i < topRanges.length; i++){
                 const range: Manifesto.IRange = topRanges[i];
-                this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.TranslationCollection.getValue(range.getLabel()) + '</option>');
+                this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.LanguageMap.getValue(range.getLabel()) + '</option>');
             }
         }
 
@@ -327,7 +323,7 @@ export class ContentLeftPanel extends LeftPanel {
             }
 
             const currentRange: Manifesto.IRange = topRanges[index];
-            this.setTreeTabTitle(<string>Manifesto.TranslationCollection.getValue(currentRange.getLabel()));
+            this.setTreeTabTitle(<string>Manifesto.LanguageMap.getValue(currentRange.getLabel()));
         } else {
             this.setTreeTabTitle(this.content.index);
         }
@@ -346,7 +342,7 @@ export class ContentLeftPanel extends LeftPanel {
             if (this.treeView){
                 title = this.getSelectedTree().text();
             } else {
-                title = Manifesto.TranslationCollection.getValue(topRanges[0].getLabel());
+                title = Manifesto.LanguageMap.getValue(topRanges[0].getLabel());
             }
         }
 
@@ -375,7 +371,6 @@ export class ContentLeftPanel extends LeftPanel {
         
         let width: number;
         let height: number;
-
 
         const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
         const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
@@ -581,6 +576,8 @@ export class ContentLeftPanel extends LeftPanel {
 
         this.resize();
         this.treeView.resize();
+
+        $.publish(BaseEvents.OPEN_TREE_VIEW);
     }
 
     openThumbsView(): void {
@@ -614,6 +611,8 @@ export class ContentLeftPanel extends LeftPanel {
             this.thumbsView.show();
             this.thumbsView.resize();
         }
+
+        $.publish(BaseEvents.OPEN_THUMBS_VIEW);
     }
 
     selectTopRangeIndex(index: number): void {

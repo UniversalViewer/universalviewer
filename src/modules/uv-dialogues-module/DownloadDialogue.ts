@@ -1,6 +1,7 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
-import {Dialogue} from "../uv-shared-module/Dialogue";
-import {DownloadOption} from "../uv-shared-module/DownloadOption";
+import { BaseEvents } from "../uv-shared-module/BaseEvents";
+import { Dialogue } from "../uv-shared-module/Dialogue";
+import { DownloadOption } from "../uv-shared-module/DownloadOption";
+import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
 
 export class DownloadDialogue extends Dialogue {
 
@@ -9,6 +10,9 @@ export class DownloadDialogue extends Dialogue {
     $title: JQuery;
     $footer: JQuery;
     $termsOfUseButton: JQuery;
+
+    renderingUrls: string[];
+    renderingUrlsCount: number;
 
     constructor($element: JQuery) {
         super($element);
@@ -74,7 +78,7 @@ export class DownloadDialogue extends Dialogue {
                 if (renderingFormat) {
                     format = renderingFormat.toString();
                 }
-                this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.TranslationCollection.getValue(rendering.getLabel()), format);
+                this.addEntireFileDownloadOption(rendering.id, <string>Manifesto.LanguageMap.getValue(rendering.getLabel()), format);
                 renderingFound = true;
             }
 
@@ -128,6 +132,56 @@ export class DownloadDialogue extends Dialogue {
         this.$downloadOptions.append('<li><a href="' + uri + '" target="_blank" download tabindex="0">' + label + '</li>');
     }
 
+    resetDynamicDownloadOptions(): void {
+        this.renderingUrls = [];
+        this.renderingUrlsCount = 0;
+        this.$downloadOptions.find('li.dynamic').remove();
+    }
+
+    getDownloadOptionsForRenderings(resource: Manifesto.IManifestResource, defaultLabel: string, type: DownloadOption): IRenderingOption[] {
+        const renderings: Manifesto.IRendering[] = resource.getRenderings();
+
+        const downloadOptions: any[] = [];
+
+        for (let i = 0; i < renderings.length; i++) {
+            const rendering: Manifesto.IRendering = renderings[i];
+            if (rendering) {
+                let label: string | null = Manifesto.LanguageMap.getValue(rendering.getLabel(), this.extension.getLocale());
+                const currentId: string = "downloadOption" + ++this.renderingUrlsCount;
+                if (label) {
+                    label += " ({0})";
+                } else {
+                    label = defaultLabel;
+                }
+                const mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
+                label = Utils.Strings.format(label, mime);
+                this.renderingUrls[<any>currentId] = rendering.id;
+                const $button: JQuery = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + currentId + '">' + label + '</label></li>');
+
+                downloadOptions.push({
+                    type: type, 
+                    button: $button
+                });
+            }
+        }
+
+        return downloadOptions;
+    }
+
+    getSelectedOption() {
+        return this.$downloadOptions.find("li.option input:checked");
+    }
+
+    getCurrentResourceId(): string {
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        return canvas.externalResource.data.id;
+    }
+
+    getCurrentResourceFormat(): string {
+        const id: string = this.getCurrentResourceId();
+        return id.substr(id.lastIndexOf('.') + 1).toLowerCase();
+    }
+
     updateNoneAvailable(): void {
         if (!this.$downloadOptions.find('li:visible').length) {
             this.$noneAvailable.show();
@@ -138,9 +192,10 @@ export class DownloadDialogue extends Dialogue {
     }
 
     updateTermsOfUseButton(): void {
-        const attribution: string | null = this.extension.helper.getAttribution(); // todo: this should eventually use a suitable IIIF 'terms' field.
-        
-        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && attribution) {
+
+        const requiredStatement: Manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+
+        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();
@@ -159,7 +214,7 @@ export class DownloadDialogue extends Dialogue {
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
-        switch (option){
+        switch (option) {
             case DownloadOption.entireFileAsOriginal:
                 // check if ui-extensions disable it
                 const uiExtensions: Manifesto.IService | null = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());

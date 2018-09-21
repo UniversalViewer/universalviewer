@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.jpg">
+    <img src="https://raw.githubusercontent.com/UniversalViewer/assets/master/logo.png">
     <h1 align="center">Universal Viewer</h1>
 </p>
 
@@ -37,6 +37,8 @@
 ## Contributors
 
 ![Contributors](https://raw.githubusercontent.com/UniversalViewer/assets/master/contributors.jpg "Contributors")
+
+<a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
 
 ## Features:
 

@@ -46,6 +46,7 @@
                 "editSettings": "Golygu'r dewisiadau",
                 "entireDocument": "Y Ddogfen Gyfan ({0})",
                 "entireFileAsOriginal": "Y ffeil gyfan",
+                "entireFileAsOriginalWithFormat": "Y ffeil gyfan ({0})",
                 "noneAvailable": "Nid oes unrhyw opsiynau lawrlwytho ar gael.",
                 "pagingNote": "Dad-ddewiswch 'Arddangos Dwy Dudalen' i weld dewisiadau pellach.",
                 "preview": "Rhagolwg",
@@ -131,6 +132,7 @@
         },
         "avCenterPanel": {
             "content": {
+                "attribution": "Priodoledd",
                 "currentTime": "Amser Presennol",
                 "delimiter": " - ",
                 "duration": "Hyd",

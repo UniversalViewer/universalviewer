@@ -7,7 +7,7 @@
         background: @overlay-modal-bg;
         background-image: data-uri('@{img-path}modal_bg.gif');
         display: none;
-        z-index: 1;
+        z-index: 10;
     }
 
     .overlay {
@@ -31,6 +31,7 @@
             width: 100%;
             background: @overlay-bg;
             overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
 
             .buttons {
                 padding: @padding-medium-vertical;
@@ -116,6 +117,7 @@
             height: 11px;
             background-image: data-uri('@{img-path}dialogue_arrow.png');
             background-repeat: no-repeat;
+            margin-top: -1px;
         }
 
         &.genericDialogue {

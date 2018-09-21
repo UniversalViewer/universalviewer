@@ -1,6 +1,6 @@
 @import 'jquery-ui.less';
 
-.uv{
+.uv {
     .centerPanel {
 
         @img-path: '../../../modules/uv-avcenterpanel-module/img/';
@@ -11,21 +11,35 @@
             }
         }
 
-        // .canvas-container {
+        .iiif-av-component {
 
-        //     .watch-mediaquery({
-        //         display: none;
-        //     });
+            .controls-container {
 
-        //     .mobile-landscape-mediaquery({
-        //         display: none;
-        //     });
+                .time-display {
+                    padding-top: 10px;
+                    
+                    @media only screen and (min-width: @watch-min-width) and (max-width: 600px) {
+                        display: none;
+                    }
+                }
 
-        //     .mobile-portrait-mediaquery({
-        //         display: none;
-        //     });
+                .volume {
 
-        // }
+                    display: inline-block;
+                    float: none;
+
+                    @media only screen and (min-width: @watch-min-width) and (max-width: 600px) {
+                        display: none;
+                    }
+
+                    .volume-slider {
+                        margin-top: 16px;
+                    }
+
+                }
+            }
+
+        }
 
         // .options-container {
 
@@ -45,5 +59,23 @@
 
         // }
         
+    }
+}
+
+.uv.mobile {
+    .centerPanel {
+
+        .iiif-av-component {
+
+            .controls-container {
+
+                // hide the volume control on mobile
+                .volume {
+                    display: none;
+                }
+            }
+
+        }
+
     }
 }

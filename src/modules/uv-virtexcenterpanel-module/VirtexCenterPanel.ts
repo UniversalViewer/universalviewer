@@ -56,8 +56,6 @@ export class VirtexCenterPanel extends CenterPanel {
 
         this.title = this.extension.helper.getLabel();
 
-        this.updateAttribution();
-
         this.$zoomInButton.on('click', (e: any) => {
             e.preventDefault();
             if (this.viewport) {
@@ -82,6 +80,7 @@ export class VirtexCenterPanel extends CenterPanel {
         if (!this._isVREnabled()) {
             this.$vrButton.hide();
         }
+
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {

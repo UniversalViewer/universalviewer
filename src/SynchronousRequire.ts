@@ -5,7 +5,7 @@ export class SynchronousRequire {
         const loaders: DependencyLoader[] = [];
 
         for (let i = 0; i < deps.length; i++) {
-            const depLoader: DependencyLoader = new DependencyLoader(i, deps[i], cb);
+            const depLoader: DependencyLoader = new DependencyLoader(i, deps[i], deps, cb);
             loaders.push(depLoader);
         }
 
@@ -22,16 +22,22 @@ export class SynchronousRequire {
 
 }
 
-class DependencyLoader {
+export class DependencyLoader {
 
     private _dep: string;
+    private _deps: string[];
     private _cb: (index: number, dep: any) => void;
     private _index: number;
 
-    constructor(index: number, dep: string, cb: (index: number, dep: any) => void) {
+    constructor(index: number, dep: string, deps: string[], cb: (index: number, dep: any) => void) {
         this._dep = dep;
+        this._deps = deps;
         this._cb = cb;
         this._index = index;
+    }
+
+    getDependencyIndex(dep: string): number {
+        return this._deps.findIndex((el) => { return el.includes(dep) });
     }
 
     load(): Promise<void> {
