@@ -72,7 +72,7 @@
     "http-status-codes": "github:edsilv/http-status-codes#v0.0.8",
     "iiif-av-component": "github:iiif-commons/iiif-av-component#v0.0.82",
     "iiif-gallery-component": "github:iiif-commons/iiif-gallery-component#v1.1.6",
-    "iiif-metadata-component": "github:iiif-commons/iiif-metadata-component#v1.1.8",
+    "iiif-metadata-component": "github:iiif-commons/iiif-metadata-component#v1.1.9",
     "iiif-tree-component": "github:iiif-commons/iiif-tree-component#v1.1.7",
     "jquery": "2.2.4",
     "jquery-binarytransport": "1.0.0",
@@ -89,12 +89,13 @@
     "pdfjs-dist": "2.0.161",
     "requirejs": "2.2.0",
     "three": "0.91.0",
-    "utils": "github:edsilv/utils#v0.2.1",
+    "utils": "github:edsilv/utils#v0.2.2",
     "uv-cy-gb-theme": "github:UniversalViewer/uv-cy-gb-theme#v1.1.1",
     "uv-en-gb-theme": "github:UniversalViewer/uv-en-gb-theme#v1.1.1",
     "uv-sv-se-theme": "UniversalViewer/uv-en-gb-theme#v1.1.1",
     "virtex3d": "0.3.14",
-    "waveform-data": "2.0.2"
+    "waveform-data": "2.0.2",
+    "xss": "1.0.3"
   },
   "collective": {
     "type": "opencollective",

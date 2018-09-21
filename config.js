@@ -15,7 +15,8 @@ module.exports = function () {
             'node_modules/manifesto.js/dist/client/manifesto.js',
             'node_modules/@iiif/manifold/dist/manifold.js',
             'node_modules/pdfjs-dist/build/pdf.combined.js',
-            'node_modules/utils/dist/utils.js'
+            'node_modules/utils/dist/utils.js',
+            'node_modules/xss/dist/xss.min.js'
         ],
         offline: [ // when offline, make these libs available as they can't be loaded from a cdn
             'node_modules/jquery/dist/jquery.min.js',

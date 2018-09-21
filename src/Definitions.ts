@@ -34,7 +34,7 @@ declare var OpenSeadragon: any;
 declare var MediaElementPlayer: any;
 declare var yepnope: any;
 declare var PDFJS: any;
-declare var Sanitize: any;
+declare var filterXSS: (html: string, config: any) => string;
 declare var WEBVR: any;
 
 // app

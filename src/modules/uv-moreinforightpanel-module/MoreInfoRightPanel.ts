@@ -36,6 +36,20 @@ export class MoreInfoRightPanel extends RightPanel {
             target: this.$metadata[0],
             data: this._getData()
         });
+
+        this.metadataComponent.on('iiifViewerLinkClicked', (href: string) => {
+            // get the hash param.
+            const rangeId: string | null = Utils.Urls.getHashParameterFromString('rid', href);
+
+            if (rangeId) {
+                const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
+
+                if (range) {
+                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                }
+            }
+
+        }, false);
     }
 
     toggleFinish(): void {
