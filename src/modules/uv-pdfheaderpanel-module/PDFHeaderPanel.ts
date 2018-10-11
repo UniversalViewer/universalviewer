@@ -125,10 +125,11 @@ export class PDFHeaderPanel extends HeaderPanel {
     }
 
     render(): void {
-
         // check if the book has more than one page, otherwise hide prev/next options.
         if (this._pdfDoc.numPages === 1) {
             this.$centerOptions.hide();
+        } else {
+            this.$centerOptions.show();
         }
 
         this.$searchText.val(this._pageIndex);
