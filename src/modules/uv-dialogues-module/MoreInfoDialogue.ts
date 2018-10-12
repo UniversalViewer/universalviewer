@@ -5,7 +5,7 @@ import {UVUtils} from "../uv-shared-module/Utils";
 export class MoreInfoDialogue extends Dialogue {
 
     $title: JQuery;
-    metadataComponent: IIIFComponents.IMetadataComponent;
+    metadataComponent: IIIFComponents.MetadataComponent;
     $metadata: JQuery;
 
     constructor($element: JQuery) {
@@ -40,8 +40,7 @@ export class MoreInfoDialogue extends Dialogue {
         this.$content.append(this.$metadata);
 
         this.metadataComponent = new IIIFComponents.MetadataComponent({
-            target: this.$metadata[0],
-            data: this._getData()
+            target: this.$metadata[0]
         });
 
         // hide
@@ -50,7 +49,7 @@ export class MoreInfoDialogue extends Dialogue {
 
     open($triggerButton?: JQuery): void {
         super.open($triggerButton);
-        this.metadataComponent.set(new Object()); // todo: should be passing data
+        this.metadataComponent.set(this._getData());
     }
 
     private _getData(): IIIFComponents.IMetadataComponentData {
@@ -65,7 +64,7 @@ export class MoreInfoDialogue extends Dialogue {
             helper: this.extension.helper,
             licenseFormatter: null,
             limit: this.config.options.textLimit || 4,
-            limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+            limitType: IIIFComponents.LimitType.LINES,
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
             range: this.extension.getCurrentCanvasRange(),

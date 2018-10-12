@@ -1,7 +1,7 @@
 var _ = require('lodash'),
 glob = require('glob'),
 globArray = require('glob-array'),
-jsonSchemaGenerator = require('json-schema-generator'),
+//jsonSchemaGenerator = require('json-schema-generator'),
 path = require('path');
 
 module.exports = function (grunt) {
@@ -72,9 +72,9 @@ module.exports = function (grunt) {
 
             grunt.file.write(configDest, JSON.stringify(merged));
 
-            var schema = jsonSchemaGenerator(merged);
+            //var schema = jsonSchemaGenerator(merged);
 
-            grunt.file.write(schemaDest, JSON.stringify(schema));
+            //grunt.file.write(schemaDest, JSON.stringify(schema));
         });
     }
 

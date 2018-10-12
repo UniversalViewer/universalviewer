@@ -9,9 +9,9 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-                'iiif-gallery-component/dist/iiif-gallery-component.js',
-                'iiif-metadata-component/dist/iiif-metadata-component.js',
-                'iiif-tree-component/dist/iiif-tree-component.js',
+                '@iiif/iiif-gallery-component/dist/GalleryComponent.js',
+                '@iiif/iiif-metadata-component/dist/MetadataComponent.js',
+                '@iiif/iiif-tree-component/dist/TreeComponent.js',
                 'openseadragon/build/openseadragon/openseadragon.min.js'
             ],
             dest: config.directories.uvSeadragonExtension + '/lib'

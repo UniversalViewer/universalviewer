@@ -196,7 +196,7 @@ module.exports = function (grunt) {
             themes: {
                 files: [
                     {
-                        cwd: config.directories.npm,
+                        cwd: config.directories.npmthemes,
                         expand: true,
                         src: ['uv-*-theme/**'],
                         dest: config.directories.themes

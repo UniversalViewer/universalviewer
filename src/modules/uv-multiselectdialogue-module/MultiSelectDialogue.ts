@@ -7,7 +7,7 @@ export class MultiSelectDialogue extends Dialogue {
 
     $title: JQuery;
     $gallery: JQuery;
-    galleryComponent: IIIFComponents.IGalleryComponent;
+    galleryComponent: IIIFComponents.GalleryComponent;
     data: IIIFComponents.IGalleryComponentData;
 
     constructor($element: JQuery) {
@@ -29,7 +29,7 @@ export class MultiSelectDialogue extends Dialogue {
             this.open();
             const multiSelectState: Manifold.MultiSelectState = this.extension.helper.getMultiSelectState();
             multiSelectState.setEnabled(true);
-            this.galleryComponent.set(new Object()); // todo: should be passing data
+            this.galleryComponent.set(this.data);
         });
 
         $.subscribe(this.closeCommand, () => {
@@ -64,8 +64,7 @@ export class MultiSelectDialogue extends Dialogue {
         };
 
         this.galleryComponent = new IIIFComponents.GalleryComponent({
-            target: this.$gallery[0],
-            data: this.data
+            target: this.$gallery[0]
         });
 
         const $selectButton: JQuery = this.$gallery.find('a.select');

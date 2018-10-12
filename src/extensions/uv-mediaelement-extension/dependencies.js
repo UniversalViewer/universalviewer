@@ -1,7 +1,7 @@
 define(function () {
     return function (formats) {
         return {
-            async: ['mediaelement-and-player', 'iiif-metadata-component']
+            async: ['mediaelement-and-player', 'MetadataComponent']
         };
     };
 });

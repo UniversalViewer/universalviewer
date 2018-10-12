@@ -765,7 +765,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             let rect: AnnotationRect = annotationRects[i];
             let viewportBounds: any = this.viewer.viewport.getBounds();
 
-            rect.isVisible = Utils.Measurements.Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
+            rect.isVisible = Utils.Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
         }
     }
 

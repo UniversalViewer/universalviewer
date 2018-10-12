@@ -4,7 +4,7 @@ import {BaseView} from "../uv-shared-module/BaseView";
 export class GalleryView extends BaseView {
 
     isOpen: boolean = false;
-    galleryComponent: IIIFComponents.IGalleryComponent;
+    galleryComponent: IIIFComponents.GalleryComponent;
     galleryData: IIIFComponents.IGalleryComponentData;
     $gallery: JQuery;
 
@@ -32,8 +32,7 @@ export class GalleryView extends BaseView {
 
     public setup(): void {
         this.galleryComponent = new IIIFComponents.GalleryComponent({
-            target: this.$gallery[0], 
-            data: this.galleryData
+            target: this.$gallery[0]
         });
 
         this.galleryComponent.on('thumbSelected', function(thumb: any) {
@@ -52,7 +51,7 @@ export class GalleryView extends BaseView {
 
     public databind(): void {
         this.galleryComponent.options.data = this.galleryData;
-        this.galleryComponent.set(new Object()); // todo: should be passing options.data
+        this.galleryComponent.set(this.galleryData);
         this.resize();
     }
 

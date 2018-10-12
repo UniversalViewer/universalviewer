@@ -3,7 +3,7 @@ import {IExtension} from "../../modules/uv-shared-module/IExtension";
 import {Mode} from "./Mode";
 import AnnotationGroup = Manifold.AnnotationGroup;
 import AnnotationRect = Manifold.AnnotationRect;
-import Size = Utils.Measurements.Size;
+import Size = Utils.Size;
 
 export interface ISeadragonExtension extends IExtension{
     annotations: AnnotationGroup[] | null;

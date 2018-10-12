@@ -189,13 +189,13 @@ export class FooterPanel extends BaseView {
         }
 
         if (this.extension.isFullScreen()) {
-            this.$fullScreenBtn.swapClass('fullScreen', 'exitFullscreen');
-            this.$fullScreenBtn.find('i').swapClass('uv-icon-fullscreen', 'uv-icon-exit-fullscreen');
+            this.$fullScreenBtn.switchClass('fullScreen', 'exitFullscreen');
+            this.$fullScreenBtn.find('i').switchClass('uv-icon-fullscreen', 'uv-icon-exit-fullscreen');
             this.$fullScreenBtn.attr('title', this.content.exitFullScreen);
             $((<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling).replaceWith(this.content.exitFullScreen);
         } else {
-            this.$fullScreenBtn.swapClass('exitFullscreen', 'fullScreen');
-            this.$fullScreenBtn.find('i').swapClass('uv-icon-exit-fullscreen', 'uv-icon-fullscreen');
+            this.$fullScreenBtn.switchClass('exitFullscreen', 'fullScreen');
+            this.$fullScreenBtn.find('i').switchClass('uv-icon-exit-fullscreen', 'uv-icon-fullscreen');
             this.$fullScreenBtn.attr('title', this.content.fullScreen);
             $((<any>this.$fullScreenBtn[0].firstChild).nextSibling.nextSibling).replaceWith(this.content.fullScreen);
         }
