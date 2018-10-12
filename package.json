@@ -7,7 +7,7 @@
   },
   "scripts": {
     "postinstall": "opencollective postinstall",
-    "start": "npx serve ./examples",
+    "server": "node_modules/.bin/http-server -p 4444",
     "test": "npx jest"
   },
   "repository": {
