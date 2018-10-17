@@ -264,6 +264,7 @@ export class FooterPanel extends BaseFooterPanel {
         }
         //If search term exists in url, call search
         if(this.searchUrl !== null && this.searchUrl !== "" && this.searchUrl !== undefined){
+            this.$searchText.val(this.searchUrl);
             this.search(this.searchUrl);
         }
     }
