@@ -10,13 +10,11 @@ export default class URLDataProvider extends UVDataProvider {
         return Utils.Urls.getHashParameter(key, document) || defaultValue;
     }
 
-    public set(key: string, value: string): void {
-        if (!this.readonly) {
+    public set(key: string, value: string): void {        
             if (value) {
                 Utils.Urls.setHashParameter(key, value.toString(), document);
             } else {
                 Utils.Urls.setHashParameter(key, '', document);
-            }
-        }
+            }      
     }
 }
