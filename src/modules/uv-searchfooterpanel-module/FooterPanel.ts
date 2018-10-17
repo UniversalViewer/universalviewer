@@ -6,6 +6,7 @@ import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISead
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {AnnotationResults} from "../uv-shared-module/AnnotationResults";
 import {UVUtils} from "../uv-shared-module/Utils";
+import URLDataProvider from "../../URLDataProvider";
 import AnnotationGroup = Manifold.AnnotationGroup;
 
 export class FooterPanel extends BaseFooterPanel {
@@ -34,6 +35,8 @@ export class FooterPanel extends BaseFooterPanel {
     currentPlacemarkerIndex: number;
     placemarkerTouched: boolean = false;
     terms: string;
+    searchUrl: string | null;
+    urlDataProvider: URLDataProvider;
 
     constructor($element: JQuery) {
         super($element);
@@ -44,6 +47,9 @@ export class FooterPanel extends BaseFooterPanel {
         this.setConfig('searchFooterPanel');
 
         super.create();
+
+        this.urlDataProvider = new URLDataProvider(true);
+        this.searchUrl = this.urlDataProvider.get('search', '');
 
         $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             this.canvasIndexChanged();
@@ -156,7 +162,7 @@ export class FooterPanel extends BaseFooterPanel {
         var that = this;
 
         this.$searchButton.on('click', (e: any) => {
-            e.preventDefault();
+            e.preventDefault();            
             this.search(this.$searchText.val());
         });
 
@@ -200,6 +206,7 @@ export class FooterPanel extends BaseFooterPanel {
         this.$clearSearchResultsButton.on('click', (e: any) => {
             e.preventDefault();
             $.publish(BaseEvents.CLEAR_ANNOTATIONS);
+            this.urlDataProvider.set('search', '');
         });
 
         // hide search options if not enabled/supported.
@@ -254,6 +261,11 @@ export class FooterPanel extends BaseFooterPanel {
         if (!positionMarkerEnabled) {
             this.$pagePositionMarker.hide();
             this.$pagePositionLabel.hide();
+        }
+        //If search term exists in url, call search
+        if(this.searchUrl !== null && this.searchUrl !== "" && this.searchUrl !== undefined){
+            this.$searchText.val(this.searchUrl);
+            this.search(this.searchUrl);
         }
     }
 
@@ -376,6 +388,8 @@ export class FooterPanel extends BaseFooterPanel {
     search(terms: string): void {
 
         this.terms = terms;
+
+        this.urlDataProvider.set('search', this.$searchText.val());
 
         if (this.terms === '' || this.terms === this.content.enterKeyword) {
             this.extension.showMessage(this.config.modules.genericDialogue.content.emptyValue, function(){
