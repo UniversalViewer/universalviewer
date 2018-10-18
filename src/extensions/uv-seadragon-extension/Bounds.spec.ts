@@ -1,5 +1,3 @@
-import 'Jest';
-
 import { Bounds } from './Bounds';
 
 describe('Bounds', () => {
