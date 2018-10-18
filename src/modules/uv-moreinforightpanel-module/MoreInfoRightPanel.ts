@@ -33,7 +33,7 @@ export class MoreInfoRightPanel extends RightPanel {
         this.$main.append(this.$metadata);
 
         this.metadataComponent = new IIIFComponents.MetadataComponent({
-            target: this.$metadata[0],
+            target:  <HTMLElement>this.$metadata[0],
             data: this._getData()
         });
 

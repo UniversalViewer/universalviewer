@@ -24,7 +24,7 @@ export class TreeView extends BaseView {
     setup(): void {
 
         this.treeComponent = new IIIFComponents.TreeComponent({
-            target: this.$tree[0], 
+            target:  <HTMLElement>this.$tree[0], 
             data: this.treeData
         });
 

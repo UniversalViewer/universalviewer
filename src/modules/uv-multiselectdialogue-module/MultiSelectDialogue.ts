@@ -64,7 +64,7 @@ export class MultiSelectDialogue extends Dialogue {
         };
 
         this.galleryComponent = new IIIFComponents.GalleryComponent({
-            target: this.$gallery[0]
+            target:  <HTMLElement>this.$gallery[0]
         });
 
         const $selectButton: JQuery = this.$gallery.find('a.select');

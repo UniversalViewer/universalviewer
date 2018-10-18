@@ -1,4 +1,4 @@
-import { } from 'Jest';
+import 'Jest';
 
 import { Bounds } from './Bounds';
 

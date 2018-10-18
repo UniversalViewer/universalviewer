@@ -110,7 +110,7 @@ export class VirtexCenterPanel extends CenterPanel {
             const isAndroid: boolean = navigator.userAgent.toLowerCase().indexOf("android") > -1;
 
             this.viewport = new Virtex.Viewport({
-                target: this.$viewport[0],
+                target:  <HTMLElement>this.$viewport[0],
                 data: {
                     antialias: !isAndroid,
                     file: mediaUri,
@@ -120,13 +120,15 @@ export class VirtexCenterPanel extends CenterPanel {
                 }
             });
 
-            this.viewport.on('vravailable', () => {
-                this.$vrButton.show();
-            }, false);
-
-            this.viewport.on('vrunavailable', () => {
-                this.$vrButton.hide();
-            }, false);
+            if (this.viewport) {
+                this.viewport.on('vravailable', () => {
+                    this.$vrButton.show();
+                }, false);
+    
+                this.viewport.on('vrunavailable', () => {
+                    this.$vrButton.hide();
+                }, false);
+            }
 
             this.resize();
         });

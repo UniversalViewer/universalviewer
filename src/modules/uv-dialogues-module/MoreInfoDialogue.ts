@@ -40,7 +40,7 @@ export class MoreInfoDialogue extends Dialogue {
         this.$content.append(this.$metadata);
 
         this.metadataComponent = new IIIFComponents.MetadataComponent({
-            target: this.$metadata[0]
+            target:  <HTMLElement>this.$metadata[0]
         });
 
         // hide
