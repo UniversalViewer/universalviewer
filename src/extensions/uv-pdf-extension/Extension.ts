@@ -72,8 +72,8 @@ export class Extension extends BaseExtension implements IPDFExtension {
         });
     }
 
-    update(): void {
-        super.update();
+    render(): void {
+        super.render();
     }
 
     IsOldIE(): boolean {

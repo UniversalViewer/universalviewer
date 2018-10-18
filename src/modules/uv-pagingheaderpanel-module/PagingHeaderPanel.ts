@@ -4,7 +4,7 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
-import {UVUtils} from "../uv-shared-module/Utils";
+import {UVUtils} from "../../Utils";
 
 export class PagingHeaderPanel extends HeaderPanel {
 

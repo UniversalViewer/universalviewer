@@ -91,8 +91,8 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         }
     }
 
-    update(): void {
-        super.update();
+    render(): void {
+        super.render();
     }
 
     dependencyLoaded(index: number, dep: any): void {

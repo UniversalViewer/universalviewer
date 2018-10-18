@@ -1,5 +1,5 @@
 import { IDependencies } from "./IDependencies";
-import { UVUtils } from "./Utils";
+import { UVUtils } from "../../Utils";
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
@@ -66,7 +66,9 @@ export class BaseExtension implements IExtension {
         this.$element.empty();
         this.$element.removeClass();
         this.$element.addClass('uv');
-        this.$element.addClass(this.data.locales[0].name.toLowerCase());
+        if (this.data.locales) {
+            this.$element.addClass(this.data.locales[0].name.toLowerCase());
+        }        
         this.$element.addClass(this.name);
         this.$element.addClass('browser-' + window.browserDetect.browser);
         this.$element.addClass('browser-version-' + window.browserDetect.version);
@@ -406,7 +408,7 @@ export class BaseExtension implements IExtension {
                 this.helper.rangeId = range.id;
                 this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
             } else {
-                this.data.rangeId = null;
+                this.data.rangeId = undefined;
                 this.helper.rangeId = null;
                 this.fire(BaseEvents.RANGE_CHANGED, null);
             }
@@ -683,13 +685,13 @@ export class BaseExtension implements IExtension {
         $.publish(BaseEvents.RESIZE); // initial sizing
 
         setTimeout(() => {
-            this.update();
+            this.render();
             $.publish(BaseEvents.CREATED);
             this._setDefaultFocus();
         }, 1);
     }
 
-    public update(): void {
+    public render(): void {
         if (!this.isCreated || (this.data.collectionIndex !== this.helper.collectionIndex)) {
             $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.data.collectionIndex]);
         }
@@ -755,7 +757,7 @@ export class BaseExtension implements IExtension {
 
     private _initLocales(): void {
         const availableLocales: any[] = this.data.config.localisation.locales.slice(0);
-        const configuredLocales: ILocale[] = this.data.locales;
+        const configuredLocales: ILocale[] | undefined = this.data.locales;
         const finalLocales: ILocale[] = [];
 
         // loop through configuredLocales array (those passed in when initialising the UV component)
@@ -765,28 +767,33 @@ export class BaseExtension implements IExtension {
         // if limitLocales is disabled,
         // loop through remaining availableLocales and add to finalLocales.
 
-        configuredLocales.forEach((configuredLocale: ILocale) => {
-            const match: any[] = availableLocales.filter((item: any) => { return item.name === configuredLocale.name; });
-            if (match.length) {
-                var m: any = match[0];
-                if (configuredLocale.label) m.label = configuredLocale.label;
-                m.added = true;
-                finalLocales.push(m);
-            }
-        });
-
-        const limitLocales: boolean = Utils.Bools.getBool(this.data.config.options.limitLocales, false);
-
-        if (!limitLocales) {
-            availableLocales.forEach((availableLocale: any) => {
-                if (!availableLocale.added) {
-                    finalLocales.push(availableLocale);
+        if (configuredLocales) {
+            configuredLocales.forEach((configuredLocale: ILocale) => {
+                const match: any[] = availableLocales.filter((item: any) => { return item.name === configuredLocale.name; });
+                if (match.length) {
+                    var m: any = match[0];
+                    if (configuredLocale.label) m.label = configuredLocale.label;
+                    m.added = true;
+                    finalLocales.push(m);
                 }
-                delete availableLocale.added;
             });
+    
+            const limitLocales: boolean = Utils.Bools.getBool(this.data.config.options.limitLocales, false);
+    
+            if (!limitLocales) {
+                availableLocales.forEach((availableLocale: any) => {
+                    if (!availableLocale.added) {
+                        finalLocales.push(availableLocale);
+                    }
+                    delete availableLocale.added;
+                });
+            }
+    
+            this.data.locales = finalLocales;
+        } else {
+            console.warn("No locales configured");
         }
-
-        this.data.locales = finalLocales;
+        
     }
 
     private _parseMetrics(): void {
@@ -858,9 +865,9 @@ export class BaseExtension implements IExtension {
         if (!this.data.embedded) {
             // Use the current page URL with hash params
             if (Utils.Documents.isInIFrame()) {
-                return parent.document.location.href;
+                return (<any>parent.document).location.href;
             } else {
-                return document.location.href;
+                return (<any>document).location.href;
             }            
         } else {
             // If there's a `related` property of format `text/html` in the manifest
@@ -891,7 +898,7 @@ export class BaseExtension implements IExtension {
     }
 
     getAppUri(): string {
-        const parts: any = Utils.Urls.getUrlParts(document.location.href);
+        const parts: any = Utils.Urls.getUrlParts((<any>document).location.href);
         const origin: string = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
         let pathname: string = parts.pathname;
 
@@ -1247,15 +1254,19 @@ export class BaseExtension implements IExtension {
     getAlternateLocale(): ILocale | null {
         let alternateLocale: ILocale | null = null;
 
-        if (this.data.locales.length > 1) {
+        if (this.data.locales && this.data.locales.length > 1) {
             alternateLocale = this.data.locales[1];
         }
 
         return alternateLocale;
     }
 
-    getSerializedLocales(): string {
-        return this.serializeLocales(this.data.locales);
+    getSerializedLocales(): string | null {
+        if (this.data.locales) {
+            return this.serializeLocales(this.data.locales);
+        }
+        
+        return null;
     }
 
     serializeLocales(locales: ILocale[]): string {
@@ -1278,16 +1289,20 @@ export class BaseExtension implements IExtension {
         // re-order locales so the passed locale is first
 
         const data: IUVData = <IUVData>{};
-        data.locales = this.data.locales.slice(0);
 
-        const fromIndex: number = data.locales.findIndex((l: any) => {
-            return l.name === locale;
-        });
+        if (this.data.locales) {
+            data.locales = this.data.locales.slice(0);
 
-        const toIndex: number = 0;
-        data.locales.splice(toIndex, 0, data.locales.splice(fromIndex, 1)[0])
+            const fromIndex: number = data.locales.findIndex((l: any) => {
+                return l.name === locale;
+            });
 
-        this.reload(data);
+            const toIndex: number = 0;
+            data.locales.splice(toIndex, 0, data.locales.splice(fromIndex, 1)[0])
+
+            this.reload(data);
+        }
+        
     }
 
     // auth

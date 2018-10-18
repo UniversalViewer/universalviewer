@@ -1,5 +1,5 @@
 describe('Configuration options', () => {
-  describe('thumb cache invaldiation', () => {
+  describe('thumb cache invalidation', () => {
     beforeEach(async () => {
       await page.goto('http://localhost:4444/examples');
       await page.waitForSelector('#thumb0');

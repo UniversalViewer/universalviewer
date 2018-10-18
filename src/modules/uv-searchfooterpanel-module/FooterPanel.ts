@@ -5,7 +5,7 @@ import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {AnnotationResults} from "../uv-shared-module/AnnotationResults";
-import {UVUtils} from "../uv-shared-module/Utils";
+import {UVUtils} from "../../Utils";
 import AnnotationGroup = Manifold.AnnotationGroup;
 
 export class FooterPanel extends BaseFooterPanel {

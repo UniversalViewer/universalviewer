@@ -27,7 +27,7 @@ export interface IExtension {
     getLocale(): string;
     getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[];
     getPagedIndices(canvasIndex?: number): number[];
-    getSerializedLocales(): string;
+    getSerializedLocales(): string | null;
     getSettings(): ISettings;
     getShareUrl(): string | null;
     height(): number;
@@ -59,7 +59,7 @@ export interface IExtension {
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
-    update(): void;
+    render(): void;
     updateSettings(settings: ISettings): void;
     viewCanvas(canvasIndex: number): void;
     viewCollection(collection: Manifesto.ICollection): void;

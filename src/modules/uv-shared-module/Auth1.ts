@@ -1,5 +1,5 @@
 import {BaseEvents} from "./BaseEvents";
-import {UVUtils} from "./Utils";
+import {UVUtils} from "../../Utils";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
 

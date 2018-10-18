@@ -127,8 +127,8 @@ export class Extension extends BaseExtension implements IAVExtension {
         return isEnabled;
     }
 
-    update(): void {
-        super.update();
+    render(): void {
+        super.render();
     }
 
     getEmbedScript(template: string, width: number, height: number): string {

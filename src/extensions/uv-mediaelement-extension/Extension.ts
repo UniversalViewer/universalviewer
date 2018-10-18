@@ -125,8 +125,8 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         }
     }
 
-    update(): void {
-        super.update();
+    render(): void {
+        super.render();
     }
 
     isLeftPanelEnabled(): boolean {
