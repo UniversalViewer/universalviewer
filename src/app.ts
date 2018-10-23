@@ -65,5 +65,5 @@ requirejs([
 ) => {
     window.UV = UVComponent.default;
     window.UV.URLDataProvider = URLDataProvider.default;
-    window.dispatchEvent(new CustomEvent('uvLoaded'));
+    window.dispatchEvent(new CustomEvent('uvLoaded', {}));
 });

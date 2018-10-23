@@ -5,4 +5,3 @@ define(function () {
         };
     };
 });
-//# sourceMappingURL=dependencies.js.map
