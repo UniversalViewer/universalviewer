@@ -7,7 +7,6 @@ src/lib/bundle.js
 src/lib/bundle.min.js
 !src/lib
 !src/extensions/**/lib
-!dist/**/lib
 
 #################
 ## TypeScript
