@@ -93,10 +93,10 @@ docReady(function() {
 
     Array.prototype.forEach.call(uvDiv, function(ud) {
         var z = ud.getAttribute('data-uri');
-        var ci = ud.getAttribute('data-collectionindex');
-        var mi = ud.getAttribute('data-manifestindex');
-        var si = ud.getAttribute('data-sequenceindex');
-        var cvi = ud.getAttribute('data-canvasindex');
+        var ci = ud.getAttribute('data-collectionindex') || 0;
+        var mi = ud.getAttribute('data-manifestindex') || 0;
+        var si = ud.getAttribute('data-sequenceindex') || 0;
+        var cvi = ud.getAttribute('data-canvasindex') || 0;
         var xywh = ud.getAttribute('data-xywh');
         var r = ud.getAttribute('data-rotation');
         var cfg = ud.getAttribute('data-config');

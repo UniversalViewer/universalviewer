@@ -22,10 +22,7 @@ module.exports = function (grunt) {
 
         ts: {
             dev: {
-                tsconfig: './tsconfig.json',
-                options: {
-                    additionalFlags: '--sourceMap'
-                }
+                tsconfig: './tsconfig.json'
             },
             dist: {
                 tsconfig: './tsconfig.json',
@@ -38,7 +35,8 @@ module.exports = function (grunt) {
         clean: {
             themes: config.directories.themes,
             build: config.directories.build,
-            dist: config.directories.examples + '/uv/',
+            dist: config.directories.dist,
+            examples: config.directories.examples + '/uv/',
             extension: config.directories.src + '/extensions/*/.build/*',
             libs: config.directories.src + '/extensions/*/lib/*'
         },
@@ -173,8 +171,14 @@ module.exports = function (grunt) {
                 ]
             },
             dist: {
-                // copy contents of /.build to /examples/uv.
+                // copy contents of /.build to /dist and /examples/uv.
                 files: [
+                    {
+                        cwd: config.directories.build,
+                        expand: true,
+                        src: ['**'],
+                        dest: config.directories.dist
+                    },
                     {
                         cwd: config.directories.build,
                         expand: true,
@@ -218,7 +222,7 @@ module.exports = function (grunt) {
             zip: {
                 options: {
                     mode: 'zip',
-                    archive: config.directories.examples + '/' + config.directories.uv + '.zip',
+                    archive: config.directories.dist + '/uv.zip',
                     level: 9
                 },
                 files: [
@@ -359,6 +363,7 @@ module.exports = function (grunt) {
             'replace:moduleassets',
             'replace:themeassets',
             'clean:dist',
+            'clean:examples',
             'copy:dist',
             'compress:zip'
         );
