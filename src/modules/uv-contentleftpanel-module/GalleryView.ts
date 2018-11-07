@@ -1,4 +1,4 @@
-import {BaseEvents} from "../uv-shared-module/BaseEvents";
+//import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {BaseView} from "../uv-shared-module/BaseView";
 
 export class GalleryView extends BaseView {
@@ -26,43 +26,47 @@ export class GalleryView extends BaseView {
         //     this.galleryComponent.searchPreviewFinish();
         // });
 
-        this.$gallery = $('<div class="iiif-gallery-component"></div>');
-        this.$element.append(this.$gallery);
+        // this.$gallery = $('<div class="iiif-gallery-component"></div>');
+        // this.$element.append(this.$gallery);
+
+        const gallery = document.createElement('iiif-gallery');
+        gallery.setAttribute('manifest', 'https://nomad-project.co.uk/objects/collection/index.json');
+        this.$element[0].appendChild(gallery);
     }
 
     public setup(): void {
-        this.galleryComponent = new IIIFComponents.GalleryComponent({
-            target:  <HTMLElement>this.$gallery[0]
-        });
+        // this.galleryComponent = new IIIFComponents.GalleryComponent({
+        //     target:  <HTMLElement>this.$gallery[0]
+        // });
 
-        this.galleryComponent.on('thumbSelected', function(thumb: any) {
-            $.publish(BaseEvents.GALLERY_THUMB_SELECTED, [thumb]);
-            $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
-        }, false);
+        // this.galleryComponent.on('thumbSelected', function(thumb: any) {
+        //     $.publish(BaseEvents.GALLERY_THUMB_SELECTED, [thumb]);
+        //     $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
+        // }, false);
 
-        this.galleryComponent.on('decreaseSize', function() {
-            $.publish(BaseEvents.GALLERY_DECREASE_SIZE);
-        }, false);
+        // this.galleryComponent.on('decreaseSize', function() {
+        //     $.publish(BaseEvents.GALLERY_DECREASE_SIZE);
+        // }, false);
 
-        this.galleryComponent.on('increaseSize', function() {
-            $.publish(BaseEvents.GALLERY_INCREASE_SIZE);
-        }, false);
+        // this.galleryComponent.on('increaseSize', function() {
+        //     $.publish(BaseEvents.GALLERY_INCREASE_SIZE);
+        // }, false);
     }
 
     public databind(): void {
-        this.galleryComponent.options.data = this.galleryData;
-        this.galleryComponent.set(this.galleryData);
-        this.resize();
+        // this.galleryComponent.options.data = this.galleryData;
+        // this.galleryComponent.set(this.galleryData);
+        // this.resize();
     }
 
     show(): void {
         this.isOpen = true;
-        this.$element.show();
+        // this.$element.show();
 
-        // todo: would be better to have no imperative methods on components and use a reactive pattern
-        setTimeout(() => {
-            this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
-        }, 10);
+        // // todo: would be better to have no imperative methods on components and use a reactive pattern
+        // setTimeout(() => {
+        //     this.galleryComponent.selectIndex(this.extension.helper.canvasIndex);
+        // }, 10);
     }
 
     hide(): void {

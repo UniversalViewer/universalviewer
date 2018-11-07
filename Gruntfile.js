@@ -10,14 +10,6 @@ var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config
 
 module.exports = function (grunt) {
 
-    var packageJson;
-
-    function readPackageJson() {
-        packageJson = grunt.file.readJSON('package.json');
-    }
-
-    readPackageJson();
-
     grunt.initConfig({
 
         ts: {
@@ -78,7 +70,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: [ config.directories.src + '/build.js'],
+                        src: [config.directories.src + '/build.js'],
                         dest: config.directories.build,
                         rename: function(dest, src) {
                             return dest + '/uv.js';
@@ -153,6 +145,13 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: ['src/extensions/**/lib/*'],
+                        dest: config.directories.build + '/lib/'
+                    },
+                    // extension dependencies (needed to copy stencil js files in sub directories https://github.com/ionic-team/stencil/issues/683)
+                    {
+                        cwd: 'src/extensions/uv-seadragon-extension/lib/',
+                        expand: true,
+                        src: ['**'],
                         dest: config.directories.build + '/lib/'
                     },
                     // images
@@ -340,13 +339,11 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', '', function() {
 
-        readPackageJson();
-
         var tsType = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
         var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
 
         grunt.task.run(
-            'clean:libs',
+            //'clean:libs',
             'clean:themes',
             'sync',
             'copy:bundle',

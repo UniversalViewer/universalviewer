@@ -1,5 +1,5 @@
 #################
-## libs
+## lib folders
 #################
 
 lib
@@ -59,6 +59,8 @@ node_modules
 !src/helpers.js
 !dev.build.js
 !dist.build.js
+src/extensions/*/lib/*.js
+!src/extensions/*/lib/*.proxy.js
 
 #################
 ## Build
