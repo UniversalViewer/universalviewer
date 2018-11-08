@@ -2,6 +2,6 @@
 (function() {
     var t = document.createElement('script');
     t.type = 'text/javascript';
-    t.src = 'iiifgallery.js';
+    t.src = 'uv/lib/iiifgallery.js';
     document.body.appendChild(t);
 })();
