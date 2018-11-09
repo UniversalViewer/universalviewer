@@ -1,4 +1,4 @@
-test.skip('Configuration options')
+test.skip('Configuration options', () => {});
 
 describe('Universal Viewer', () => {
   beforeAll(async () => {
