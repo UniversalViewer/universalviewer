@@ -30,7 +30,10 @@ module.exports = function (grunt) {
             dist: config.directories.dist,
             examples: config.directories.examples + '/uv/',
             extension: config.directories.src + '/extensions/*/.build/*',
-            libs: config.directories.src + '/extensions/*/lib/*'
+            libs: [
+                config.directories.src + '/extensions/*/lib/**/*',
+                '!' + config.directories.src + '/extensions/*/lib/**/*.proxy.js'
+            ]           
         },
 
         copy: {
@@ -343,7 +346,7 @@ module.exports = function (grunt) {
         var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
 
         grunt.task.run(
-            //'clean:libs',
+            'clean:libs',
             'clean:themes',
             'sync',
             'copy:bundle',
