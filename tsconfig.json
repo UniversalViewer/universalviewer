@@ -15,29 +15,26 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "types": [
+      "@edsilv/exjs",
+      "@edsilv/http-status-codes",
+      "@edsilv/jquery-plugins",
+      "@edsilv/key-codes",
+      "@edsilv/utils",
+      "@iiif/base-component",
+      "@iiif/iiif-av-component",
+      "@iiif/iiif-gallery-component",
+      "@iiif/iiif-metadata-component",
+      "@iiif/iiif-tree-component",
       "@iiif/manifold", 
-      "base-component",
-      "exjs",
-      "http-status-codes",
-      "iiif-av-component",
-      "iiif-gallery-component",
-      "iiif-metadata-component",
-      "iiif-tree-component",
       "jest",
-      "jquery-plugins",
       "jquery", 
-      "key-codes",
       "manifesto.js", 
       "modernizr", 
       "requirejs", 
       "three",
-      "utils",
       "virtex3d"
     ]
   },
-  "files": [
-    "src/Definitions.ts"
-   ],
   "exclude": [
     "src/**/*.test.ts",
     "src/**/*.spec.ts"

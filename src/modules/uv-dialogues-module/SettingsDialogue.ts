@@ -85,7 +85,7 @@ export class SettingsDialogue extends Dialogue {
 
     private _createLocalesMenu(): void {
 
-        const locales: ILocale[] = this.extension.data.locales;
+        const locales: ILocale[] | undefined = this.extension.data.locales;
 
         if (locales && locales.length > 1) {
             

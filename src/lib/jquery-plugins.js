@@ -1,11 +1,3 @@
-// jquery-plugins v0.1.0 https://github.com/edsilv/jquery-plugins
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.jqueryPlugins = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-// declare var Length: Length;
-// interface Length{
-//     toPx(elem, value, prop?, force?): number;
-// }
-
-/// <reference types="extensions" />
 (function ($) {
     $.fn.checkboxButton = function (onClick) {
         return this.each(function () {
@@ -136,7 +128,14 @@
         });
         var finalHeight = maxHeight;
         if (average) {
-            finalHeight = Math.median(heights);
+            heights.sort(function (a, b) { return a - b; });
+            var half = Math.floor(heights.length / 2);
+            if (heights.length % 2) {
+                finalHeight = heights[half];
+            }
+            else {
+                finalHeight = (heights[half - 1] + heights[half]) / 2.0;
+            }
         }
         this.each(function () {
             $(this).height(finalHeight);
@@ -185,7 +184,7 @@
     function documentHandler() {
         var $current = this === document ? $(this) : $(this).contents();
         $current.mousemove(function (e) { jQuery.mlp = { x: e.pageX, y: e.pageY }; });
-        $current.find("iframe").load(documentHandler);
+        $current.find('iframe').on('load', documentHandler);
     }
     $(documentHandler);
     $.fn.ismouseover = function () {
@@ -271,25 +270,14 @@
             }
         });
     };
-    $.fn.swapClass = function (removeClass, addClass) {
+    $.fn.switchClass = function (class1, class2) {
         return this.each(function () {
-            $(this).removeClass(removeClass).addClass(addClass);
+            $(this).removeClass(class1).addClass(class2);
         });
     };
     $.fn.targetBlank = function () {
         return this.each(function () {
             $(this).find('a').prop('target', '_blank');
-        });
-    };
-    $.fn.switchClass = function (class1, class2) {
-        return this.each(function () {
-            var $this = $(this);
-            if ($this.hasClass(class1)) {
-                $(this).removeClass(class1).addClass(class2);
-            }
-            else {
-                $(this).removeClass(class2).addClass(class1);
-            }
         });
     };
     $.fn.toggleExpandText = function (chars, lessText, moreText, cb) {
@@ -409,6 +397,3 @@
         return parseInt($self.css('paddingTop')) + parseInt($self.css('paddingBottom'));
     };
 })(jQuery);
-
-},{}]},{},[1])(1)
-});

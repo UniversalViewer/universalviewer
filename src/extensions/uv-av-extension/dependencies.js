@@ -24,7 +24,7 @@ define(function () {
         });
     }
     return function (formats) {
-        var alwaysRequired = ['iiif-tree-component', 'iiif-av-component', 'iiif-metadata-component', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'jquery.binarytransport', 'waveform-data'];
+        var alwaysRequired = ['TreeComponent', 'AVComponent', 'MetadataComponent', 'jquery-ui.min', 'jquery.ui.touch-punch.min', 'jquery.binarytransport', 'waveform-data'];
         if (isHLSFormatAvailable(formats) && canPlayHls()) {
             console.log('load HLS');
             return {

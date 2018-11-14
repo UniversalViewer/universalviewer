@@ -93,8 +93,8 @@ export class Extension extends BaseExtension implements IDefaultExtension {
         }
     }
 
-    update(): void {
-        super.update();
+    render(): void {
+        super.render();
     }
 
     isLeftPanelEnabled(): boolean {

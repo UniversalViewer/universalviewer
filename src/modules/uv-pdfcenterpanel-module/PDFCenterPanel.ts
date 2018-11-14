@@ -165,6 +165,8 @@ export class PDFCenterPanel extends CenterPanel {
 
             if (newScale < this._maxScale) {
                 this._scale = newScale;
+            } else {
+                this._scale = this._maxScale;
             }
 
             this._render(this._pageIndex);
@@ -177,6 +179,8 @@ export class PDFCenterPanel extends CenterPanel {
 
             if (newScale > this._minScale) {
                 this._scale = newScale;
+            } else {
+                this._scale = this._minScale;
             }
 
             this._render(this._pageIndex);
@@ -255,6 +259,18 @@ export class PDFCenterPanel extends CenterPanel {
 
     private _render(num: number): void {
         this._pageRendering = true;
+        this._$zoomOutButton.enable();
+        this._$zoomInButton.enable();
+
+        //disable zoom if not possible
+        const lowScale: number = this._scale - 0.5;
+        const highScale: number = this._scale + 0.5;
+        if (lowScale < this._minScale) {
+            this._$zoomOutButton.disable();
+        }
+        if (highScale > this._maxScale) {
+            this._$zoomInButton.disable();
+        }
 
         //this._pdfDoc.getPage(num).then((page: any) => {
         this._pdfDoc.getPage(num).then((page: any) => {

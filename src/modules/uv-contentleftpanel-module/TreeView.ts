@@ -5,7 +5,7 @@ import ITreeNode = Manifold.ITreeNode;
 export class TreeView extends BaseView {
 
     isOpen: boolean = false;
-    treeComponent: IIIFComponents.ITreeComponent;
+    treeComponent: IIIFComponents.TreeComponent;
     treeData: IIIFComponents.ITreeComponentData;
     $tree: JQuery;
 
@@ -24,7 +24,7 @@ export class TreeView extends BaseView {
     setup(): void {
 
         this.treeComponent = new IIIFComponents.TreeComponent({
-            target: this.$tree[0], 
+            target:  <HTMLElement>this.$tree[0], 
             data: this.treeData
         });
 

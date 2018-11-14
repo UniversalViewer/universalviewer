@@ -10,7 +10,7 @@ module.exports = {
             flatten: true,
             src: [
                 'virtex3d/dist/virtex.js',
-                'iiif-metadata-component/dist/iiif-metadata-component.js',
+                '@iiif/iiif-metadata-component/dist/MetadataComponent.js',
                 'three/build/three.min.js',
                 'three/examples/js/controls/VRControls.js',
                 'three/examples/js/effects/VREffect.js',

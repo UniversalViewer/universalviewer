@@ -1,7 +1,7 @@
 import {Shell} from "./Shell";
 import {BaseView} from "./BaseView";
 import {Position} from "./Position";
-import {UVUtils} from "./Utils";
+import {UVUtils} from "../../Utils";
 
 export class CenterPanel extends BaseView {
 

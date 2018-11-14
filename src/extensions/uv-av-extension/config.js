@@ -11,9 +11,9 @@ module.exports = {
             src: [
                 'dashjs/dist/dash.all.min.js',
                 'hls.js/dist/hls.min.js',
-                'iiif-av-component/dist/iiif-av-component.js',
-                'iiif-metadata-component/dist/iiif-metadata-component.js',
-                'iiif-tree-component/dist/iiif-tree-component.js',
+                '@iiif/iiif-av-component/dist/AVComponent.js',
+                '@iiif/iiif-metadata-component/dist/MetadataComponent.js',
+                '@iiif/iiif-tree-component/dist/TreeComponent.js',
                 'jquery-ui-dist/jquery-ui.min.js',
                 'jquery-ui-touch-punch/jquery.ui.touch-punch.min.js',
                 'jquery-binarytransport/jquery.binarytransport.js',

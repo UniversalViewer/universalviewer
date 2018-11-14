@@ -9,7 +9,7 @@ module.exports = {
             expand: true,
             flatten: true,
             src: [
-                'iiif-metadata-component/dist/iiif-metadata-component.js'
+                '@iiif/iiif-metadata-component/dist/MetadataComponent.js'
             ],
             dest: config.directories.uvDefaultExtension + '/lib'
         }

@@ -1,12 +1,12 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {RightPanel} from "../uv-shared-module/RightPanel";
-import {UVUtils} from "../uv-shared-module/Utils";
+import {UVUtils} from "../../Utils";
 
 export class MoreInfoRightPanel extends RightPanel {
 
-    metadataComponent: IIIFComponents.IMetadataComponent;
+    metadataComponent: IIIFComponents.MetadataComponent;
     $metadata: JQuery;
-    limitType: IIIFComponents.MetadataComponentOptions.LimitType;
+    limitType: IIIFComponents.LimitType;
     limit: number;
 
     constructor($element: JQuery) {
@@ -33,7 +33,7 @@ export class MoreInfoRightPanel extends RightPanel {
         this.$main.append(this.$metadata);
 
         this.metadataComponent = new IIIFComponents.MetadataComponent({
-            target: this.$metadata[0],
+            target:  <HTMLElement>this.$metadata[0],
             data: this._getData()
         });
 
@@ -78,7 +78,7 @@ export class MoreInfoRightPanel extends RightPanel {
             helper: this.extension.helper,
             licenseFormatter: new Manifold.UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
-            limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+            limitType: IIIFComponents.LimitType.LINES,
             limitToRange: Utils.Bools.getBool(this.config.options.limitToRange, false),
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,

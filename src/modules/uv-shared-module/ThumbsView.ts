@@ -220,13 +220,18 @@ export class ThumbsView extends BaseView {
                     }
                     const $img: JQuery = $('<img src="' + src + '" alt=""/>');
                     // fade in on load.
-                    $img.hide().load(function () {
+                    $img.hide();
+                    
+                    $img.on('load', function () {
                         $(this).fadeIn(fadeDuration, function () {
-                            $(this).parent().swapClass('loading', 'loaded');
+                            $(this).parent().switchClass('loading', 'loaded');
                         });
-                    }).error(function() {
-                        $(this).parent().swapClass('loading', 'loadingFailed');
                     });
+
+                    $img.on('error', function () {
+                        $(this).parent().switchClass('loading', 'loadingFailed');
+                    });
+
                     $wrap.append($img);
                 } else {
                     $wrap.addClass('hidden');

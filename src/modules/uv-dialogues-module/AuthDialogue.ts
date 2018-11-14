@@ -1,6 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
-import {UVUtils} from "../uv-shared-module/Utils";
+import {UVUtils} from "../../Utils";
 
 export class AuthDialogue extends Dialogue {
 
