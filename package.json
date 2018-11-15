@@ -80,7 +80,6 @@
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
-    "uv-en-gb-theme": "save-our-sounds/uv-en-gb-theme",
     "core-js": "2.4.1",
     "dashjs": "2.6.7",
     "hls.js": "0.9.1",
@@ -96,6 +95,7 @@
     "pdfjs-dist": "2.0.161",
     "requirejs": "2.2.0",
     "three": "0.91.0",
+    "uv-en-gb-theme": "github:save-our-sounds/uv-en-gb-theme",
     "virtex3d": "0.3.16",
     "waveform-data": "2.0.2",
     "xss": "1.0.3"
