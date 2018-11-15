@@ -8,9 +8,13 @@ export class UVUtils {
         return filterXSS(html, {
             whiteList: {
                 a: ["href", "title", "target", "class"],
+                b: [],
                 br: [],
+                i: [],
                 img: ["src"],
-                span: []
+                p: [],
+                span: [],
+                u: []
             }
         });
     }
