@@ -13,8 +13,10 @@ export class UVUtils {
                 i: [],
                 img: ["src"],
                 p: [],
+                small: [],
                 span: [],
-                u: []
+                sub: [],
+                sup: []
             }
         });
     }
