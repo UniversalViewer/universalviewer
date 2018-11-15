@@ -80,7 +80,6 @@
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
-    "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "uv-en-gb-theme": "save-our-sounds/uv-en-gb-theme",
     "core-js": "2.4.1",
     "dashjs": "2.6.7",

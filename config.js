@@ -33,7 +33,7 @@ module.exports = function () {
         lib: './src/lib',
         modules: './src/modules',
         npm: './node_modules',
-        npmthemes: './node_modules/@universalviewer',
+        npmthemes: './node_modules',
         src: './src',
         themes: './src/themes',
         uv: 'uv',
