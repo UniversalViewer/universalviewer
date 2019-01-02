@@ -620,24 +620,12 @@ export class BaseExtension implements IExtension {
                 const deps: IDependencies = getDeps(formats);
                 const baseUri: string = that.data.root + '/lib/';
 
-                // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
-                // check for a requirejs.config that sets a specific path, such as the PDF extension
                 if (deps.sync) {                    
-                    for (let i = 0; i < deps.sync.length; i++) {
-                        const dep: string = deps.sync[i];
-                        if (!dep.startsWith('!')) {
-                            deps.sync[i] = baseUri + dep;
-                        }
-                    }
+                    that._parseDeps(deps.sync, baseUri);
                 }
 
                 if (deps.async) {                    
-                    for (let i = 0; i < deps.async.length; i++) {
-                        const dep: string = deps.async[i];
-                        if (!dep.startsWith('!')) {
-                            deps.async[i] = baseUri + dep;
-                        }
-                    }
+                    that._parseDeps(deps.async, baseUri);
                 }
                 
                 cb(deps);
@@ -645,6 +633,17 @@ export class BaseExtension implements IExtension {
             });
         } else {
             cb(null);
+        }
+    }
+
+    private _parseDeps(deps: string[], baseUri: string): void {
+        // for each dependency, prepend baseUri unless it starts with a ! which indicates to ignore it.
+        // check for a requirejs.config that sets a specific path, such as the PDF extension
+        for (let i = 0; i < deps.length; i++) {
+            const dep: string = deps[i];
+            if (!dep.startsWith('!')) {
+                deps[i] = baseUri + dep;
+            }
         }
     }
 

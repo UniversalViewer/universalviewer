@@ -1,4 +1,5 @@
 import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
+import {Extension as AMIExtension} from "./extensions/uv-ami-extension/Extension";
 import {Extension as AVExtension} from "./extensions/uv-av-extension/Extension";
 import {Extension as DefaultExtension} from "./extensions/uv-default-extension/Extension";
 import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
@@ -50,9 +51,14 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-mediaelement-extension'
         };
 
+        // this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
+        //     type: VirtexExtension,
+        //     name: 'uv-virtex-extension'
+        // };
+
         this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
-            type: VirtexExtension,
-            name: 'uv-virtex-extension'
+            type: AMIExtension,
+            name: 'uv-ami-extension'
         };
 
         this._extensions[manifesto.ResourceType.sound().toString()] = {
