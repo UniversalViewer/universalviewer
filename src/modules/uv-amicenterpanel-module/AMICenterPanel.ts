@@ -28,7 +28,7 @@ export class AMICenterPanel extends CenterPanel {
 
     private _createAMIComponent(): void {
 
-        this.$amicomponent = $('<my-el name="ed"></my-el>');
+        this.$amicomponent = $('<ami-viewer series="36444280,36444294,36444308,36444322,36444336"></ami-viewer>');
         this.$content.prepend(this.$amicomponent);
 
     }

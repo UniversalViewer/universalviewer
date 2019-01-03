@@ -152,8 +152,15 @@ module.exports = function (grunt) {
                         dest: config.directories.build + '/lib/'
                     },
                     // extension dependencies (needed to copy stencil js files in sub directories https://github.com/ionic-team/stencil/issues/683)
+                    // this should iterate over all extensions
                     {
                         cwd: 'src/extensions/uv-seadragon-extension/lib/',
+                        expand: true,
+                        src: ['**'],
+                        dest: config.directories.build + '/lib/'
+                    },
+                    {
+                        cwd: 'src/extensions/uv-ami-extension/lib/',
                         expand: true,
                         src: ['**'],
                         dest: config.directories.build + '/lib/'
