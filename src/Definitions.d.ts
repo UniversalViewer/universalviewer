@@ -45,6 +45,7 @@ interface Window {
     trackVariable(slot: number, name: string, value: string, scope: number): void;
     trackingLabel: string;
     $: JQueryStatic;
+    AMI: any;
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience (make this generic)
     UV: any;

@@ -65,6 +65,7 @@
     "typescript": "2.7.2"
   },
   "dependencies": {
+    "@edsilv/ami.js": "0.27.0-edsilv.1",
     "@edsilv/exjs": "0.5.1",
     "@edsilv/http-status-codes": "0.0.12",
     "@edsilv/jquery-plugins": "1.0.7",
@@ -80,7 +81,7 @@
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
-    "@universalviewer/ami-viewer": "0.0.1-pre.1",
+    "@universalviewer/ami-viewer": "0.0.1-pre.4",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "@universalviewer/uv-en-gb-theme": "1.1.2",
     "core-js": "2.4.1",

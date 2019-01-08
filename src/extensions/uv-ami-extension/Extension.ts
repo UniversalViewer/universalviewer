@@ -96,6 +96,15 @@ export class Extension extends BaseExtension implements IAMIExtension {
         }
     }
 
+    dependencyLoaded(index: number, dep: any): void {
+        // if (index === (<any>this).getDependencyIndex('ami')) {
+        //     window.AMI = dep;
+        // } else 
+        if (index === (<any>this).getDependencyIndex('three.min')) {
+            window.THREE = dep; //https://github.com/mrdoob/three.js/issues/9602
+        }
+    }
+
     render(): void {
         super.render();
     }

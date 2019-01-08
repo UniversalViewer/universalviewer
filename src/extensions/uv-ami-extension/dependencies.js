@@ -1,8 +1,8 @@
 define(function () {
     return function (formats) {
         return {
-            async: ['MetadataComponent'],
-            sync: ['amiviewer.proxy']
+            sync: ['dat.gui.min', 'three.min', 'ami.min', 'amiviewer.proxy'],
+            async: ['MetadataComponent']
         };
     };
 });
