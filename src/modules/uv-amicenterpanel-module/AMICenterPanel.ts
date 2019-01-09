@@ -32,7 +32,7 @@ export class AMICenterPanel extends CenterPanel {
     private _createAMIComponent(): void {
 
         this.$guiContainer = $('<div id="my-gui-container"></div>');
-        this.$amicomponent = $('<ami-viewer files="36444280,36444294,36444308,36444322,36444336,36444350,36444364,36444378,36444392,36444406,36444434,36444448,36444462,36444476,36444490,36444504,36444518,36444532,36746856"></ami-viewer>');
+        this.$amicomponent = $('<ami-viewer></ami-viewer>');
         this.$content.prepend(this.$amicomponent);
         this.$content.prepend(this.$guiContainer);
 
@@ -99,6 +99,21 @@ export class AMICenterPanel extends CenterPanel {
     openMedia(resources: Manifesto.IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
+
+            let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+
+            const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+
+            if (annotations.length) {
+                const annotation: Manifesto.IAnnotation = annotations[0];
+                const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+
+                if (body.length) {
+                    //const type: Manifesto.ResourceType | null = body[0].getType();
+                    (<any>this.$amicomponent[0]).series = body[0].id;
+                }
+            }
+
             this.resize();
         });
     }
@@ -109,6 +124,10 @@ export class AMICenterPanel extends CenterPanel {
 
         this.$amicomponent.height(this.$content.height());
         this.$amicomponent.width(this.$content.width());
-    
+
+        if (this.$amicomponent[0] && (<any>this.$amicomponent[0]).resize) {
+            (<any>this.$amicomponent[0]).resize();
+        }
+        
     }
 }

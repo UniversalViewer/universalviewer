@@ -51,14 +51,9 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-mediaelement-extension'
         };
 
-        // this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
-        //     type: VirtexExtension,
-        //     name: 'uv-virtex-extension'
-        // };
-
         this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
-            type: AMIExtension,
-            name: 'uv-ami-extension'
+            type: VirtexExtension,
+            name: 'uv-virtex-extension'
         };
 
         this._extensions[manifesto.ResourceType.sound().toString()] = {
@@ -116,6 +111,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         this._extensions['audio/mp4'] = {
             type: AVExtension,
             name: 'uv-av-extension'
+        };
+
+        this._extensions['application/dicom'] = {
+            type: AMIExtension,
+            name: 'uv-ami-extension'
         };
 
         this._extensions['application/vnd.apple.mpegurl'] = {
