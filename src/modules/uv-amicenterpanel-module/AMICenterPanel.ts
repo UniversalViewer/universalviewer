@@ -32,18 +32,22 @@ export class AMICenterPanel extends CenterPanel {
     private _createAMIComponent(): void {
 
         this.$guiContainer = $('<div id="my-gui-container"></div>');
-        this.$amicomponent = $('<ami-viewer></ami-viewer>');
+        this.$amicomponent = $('<ami-viewer mode="volume"></ami-viewer>');
         this.$content.prepend(this.$amicomponent);
         this.$content.prepend(this.$guiContainer);
 
-        this.$amicomponent[0].addEventListener('onLoaded', (e: any) => {
-            const stackhelper = e.detail;
-            this._createGUI(stackhelper);
+        this.$amicomponent[0].addEventListener('onSlicesLoaded', (e: any) => {
+            this._createSlicesGUI(e.detail);
+        });
+
+        this.$amicomponent[0].addEventListener('onVolumeLoaded', (e: any) => {
+            this._createVolumeGUI(e.detail);
         });
     }
 
-    private _createGUI(stackHelper: any): void {
+    private _createSlicesGUI(params: any): void {
 
+        const stackHelper = params.stackHelper;
         const stack = stackHelper.stack;
 
         const gui = new dat.GUI({
@@ -94,6 +98,94 @@ export class AMICenterPanel extends CenterPanel {
         borderFolder.add(stackHelper.border, 'visible');
         borderFolder.addColor(stackHelper.border, 'color');
         borderFolder.open();
+    }
+
+    _createVolumeGUI(params: any) {
+
+        let myStack = {
+          algorithm: 'ray marching',
+          lut: 'random',
+          opacity: 'random',
+          steps: 128,
+          alphaCorrection: 0.5,
+          frequence: 0,
+          amplitude: 0,
+          interpolation: 1,
+        };
+  
+        const stackHelper = params.stackHelper;
+  
+        let gui = new dat.GUI({
+          autoPlace: false,
+        });
+  
+        this.$guiContainer.append(gui.domElement);
+  
+        let stackFolder = gui.addFolder('Settings');
+        let algorithmUpdate = stackFolder.add(myStack, 'algorithm', ['ray marching', 'mip']);
+        algorithmUpdate.onChange((value: any) => {
+          stackHelper.algorithm = value === 'mip' ? 1 : 0;
+          params.modified = true;
+        });
+  
+        let lutUpdate = stackFolder.add(myStack, 'lut', params.lut.lutsAvailable());
+        lutUpdate.onChange((value: any) => {
+          params.lut.lut = value;
+          stackHelper.uniforms.uTextureLUT.value.dispose();
+          stackHelper.uniforms.uTextureLUT.value = params.lut.texture;
+          params.modified = true;
+        });
+        // init LUT
+        params.lut.lut = myStack.lut;
+        stackHelper.uniforms.uTextureLUT.value.dispose();
+        stackHelper.uniforms.uTextureLUT.value = params.lut.texture;
+  
+        let opacityUpdate = stackFolder.add(myStack, 'opacity', params.lut.lutsAvailable('opacity'));
+        opacityUpdate.onChange((value: any) => {
+          params.lut.lutO = value;
+          stackHelper.uniforms.uTextureLUT.value.dispose();
+          stackHelper.uniforms.uTextureLUT.value = params.lut.texture;
+          params.modified = true;
+        });
+  
+        let stepsUpdate = stackFolder.add(myStack, 'steps', 0, 512).step(1);
+        stepsUpdate.onChange((value: any) => {
+          if (stackHelper.uniforms) {
+            stackHelper.uniforms.uSteps.value = value;
+            params.modified = true;
+          }
+        });
+  
+        let alphaCorrrectionUpdate = stackFolder.add(myStack, 'alphaCorrection', 0, 1).step(0.01);
+        alphaCorrrectionUpdate.onChange((value: any) => {
+          if (stackHelper.uniforms) {
+            stackHelper.uniforms.uAlphaCorrection.value = value;
+            params.modified = true;
+          }
+        });
+  
+        let interpolationUpdate = stackFolder.add(stackHelper, 'interpolation', 0, 1).step(1);
+        interpolationUpdate.onChange(() => {
+          if (stackHelper.uniforms) {
+            params.modified = true;
+          }
+        });
+  
+        let shadingUpdate = stackFolder.add(stackHelper, 'shading', 0, 1).step(1);
+        shadingUpdate.onChange(() => {
+          if (stackHelper.uniforms) {
+            params.modified = true;
+          }
+        });
+  
+        let shininessUpdate = stackFolder.add(stackHelper, 'shininess', 0, 20).step(0.1);
+        shininessUpdate.onChange(() => {
+          if (stackHelper.uniforms) {
+            params.modified = true;
+          }
+        });
+  
+        stackFolder.open();
     }
 
     openMedia(resources: Manifesto.IExternalResource[]) {
