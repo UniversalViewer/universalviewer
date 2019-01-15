@@ -997,7 +997,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         if (!searchUri) return;
 
-        searchUri = Utils.Strings.format(searchUri, terms);
+        searchUri = Utils.Strings.format(searchUri, encodeURIComponent(terms));
 
         this.getSearchResults(searchUri, terms, this.annotations, (annotations: AnnotationGroup[]) => {
 
