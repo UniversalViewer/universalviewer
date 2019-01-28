@@ -50,6 +50,7 @@ interface Window {
     openSeadragonViewer: any; // for testing convenience (make this generic)
     UV: any;
     THREE: any;
+    Redux: any;
     Event: any;
     CustomEvent: any;
     Hls: any;

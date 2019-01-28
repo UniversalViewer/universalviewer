@@ -118,6 +118,11 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-ami-extension'
         };
 
+        this._extensions['model/stl'] = {
+            type: AMIExtension,
+            name: 'uv-ami-extension'
+        };
+
         // todo: need to create a map
         this._extensions['application/gzip'] = {
             type: AMIExtension,

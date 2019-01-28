@@ -2,6 +2,7 @@
   "src": ["./src/**/*.ts"],
   "compilerOptions": {
     "module": "amd",
+    "moduleResolution": "node",
     "sourceMap": false,
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -29,7 +30,7 @@
       "jest",
       "jquery", 
       "manifesto.js", 
-      "modernizr", 
+      "modernizr",
       "requirejs", 
       "three",
       "virtex3d"
