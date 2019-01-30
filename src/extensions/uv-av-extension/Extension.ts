@@ -131,6 +131,14 @@ export class Extension extends BaseExtension implements IAVExtension {
         super.render();
     }
 
+    isThumbsViewOpen(): boolean {
+        if (!this.leftPanel) {
+            return false;
+        }
+
+        return this.leftPanel.isThumbsViewOpen;
+    }
+
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
