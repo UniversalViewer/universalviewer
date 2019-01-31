@@ -404,13 +404,13 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             return;
         }
 
-        const cssPath: string = data.root + '/themes/' + data.config.options.theme + '/css/' + extension.name + '/theme.css';
+        const cssPath: string = data.root + '/themes/' + data.config.options.theme.toLowerCase() + '/css/' + extension.name + '/theme.css';
         const locale: string = data.locales[0].name;
         const themeName: string = extension.name.toLowerCase() + '-theme-' + locale.toLowerCase();
         const $existingCSS: JQuery = $('#' + themeName.toLowerCase());
 
         if (!$existingCSS.length) {
-            $('head').append('<link rel="stylesheet" id="' + themeName + '" href="' + cssPath.toLowerCase() + '" />');
+            $('head').append('<link rel="stylesheet" id="' + themeName + '" href="' + cssPath + '" />');
             cb();
         } else {
             cb();
