@@ -23,7 +23,7 @@ function createUV(selector, data, dataProvider) {
 
     window.onresize = function() {
         resize();
-    }
+    };
 
     uv = new UV({
         target: $uv[0],
@@ -74,6 +74,18 @@ function createUV(selector, data, dataProvider) {
         data.isReload = true;
         uv.set(data);
     }, false);
+
+    // Exit fullscreen bugfix.
+    document.addEventListener('fullscreenchange', exitFullscreenHandler);
+    document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
+    document.addEventListener('mozfullscreenchange', exitFullscreenHandler);
+    document.addEventListener('MSFullscreenChange', exitFullscreenHandler);
+
+    function exitFullscreenHandler() {
+        if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+            uv.exitFullScreen();
+        }
+    }
 
     uv.on('toggleFullScreen', function(data) {
         isFullScreen = data.isFullScreen;
