@@ -84,6 +84,7 @@ function createUV(selector, data, dataProvider) {
     function exitFullscreenHandler() {
         if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
             uv.exitFullScreen();
+            resize();
         }
     }
 
