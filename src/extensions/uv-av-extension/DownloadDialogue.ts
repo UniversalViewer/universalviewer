@@ -29,6 +29,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.$buttons.prepend(this.$downloadButton);
 
         const that = this;
+
+        this.$downloadButton.find('.btn-primary').on('click', () => {
+            $.publish(BaseEvents.EXIT_FULLSCREEN);
+        });
         
         this.$downloadButton.on('click', (e) => {
             e.preventDefault();
