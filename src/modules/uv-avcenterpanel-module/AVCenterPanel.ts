@@ -270,7 +270,7 @@ export class AVCenterPanel extends CenterPanel {
 
         this._whenMediaReady(() => {
             if (range && this.avcomponent) {
-                this.avcomponent.playRange(range.id);
+                this.avcomponent.playRange(range.id, true);
             }
             
             // don't resize the av component to avoid expensively redrawing waveforms
