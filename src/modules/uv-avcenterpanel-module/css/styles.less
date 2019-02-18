@@ -2,14 +2,17 @@
 
 .uv {
     // For the loading animation.
-    .options-container, .mobileFooterPanel, .waveform {
+    .options-container, .mobileFooterPanel, .waveform, .time-display {
         transition: opacity .5s;
     }
 
     .player--loading {
-        .options-container, .mobileFooterPanel, .waveform {
+        .options-container, .mobileFooterPanel {
             opacity: 0.5;
             pointer-events: none;
+        }
+        .time-display, .waveform {
+            opacity: 0;
         }
     }
 
