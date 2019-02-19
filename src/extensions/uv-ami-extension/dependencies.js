@@ -1,7 +1,7 @@
 define(function () {
     return function (formats) {
         return {
-            sync: ['ionic.proxy', 'redux.min', 'three.min', 'STLLoader', 'ami.min', 'amiviewer.proxy'],
+            sync: ['ionic.proxy', 'three.min', 'GLTFLoader', 'DRACOLoader', 'STLLoader', 'ami.min', 'amiviewer.proxy'],
             async: ['MetadataComponent']
         };
     };
