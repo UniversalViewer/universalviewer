@@ -32,6 +32,14 @@ export class AVCenterPanel extends CenterPanel {
             this._viewCanvas(canvasIndex);           
         });
 
+        $.subscribe(BaseEvents.CURRENT_TIME_CHANGED, (e: any, currentTime: number) => {
+           this._whenMediaReady(() => {
+               if (this.avcomponent) {
+                   this.avcomponent.setCurrentTime(currentTime);
+               }
+           });
+        });
+
         $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
 
             if (!this._observeRangeChanges()) {
