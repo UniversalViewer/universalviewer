@@ -17,6 +17,7 @@ export class BaseEvents {
     static COLLECTION_INDEX_CHANGED: string         = 'collectionIndexChanged';
     static CREATE: string                           = 'create';
     static CREATED: string                          = 'created';
+    static CURRENT_TIME_CHANGED: string             = 'currentTimeChanged';
     static DOWN_ARROW: string                       = 'downArrow';
     static DOWNLOAD: string                         = 'download';
     static DROP: string                             = 'drop';
