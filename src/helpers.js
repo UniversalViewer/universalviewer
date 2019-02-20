@@ -30,8 +30,16 @@ function createUV(selector, data, dataProvider) {
         data: data
     });
 
-    uv.on('create', function(obj) {
+    uv.on('created', function(obj) {
         resize();
+        if (uv.extension.centerPanel.avcomponent) {
+            uv.extension.centerPanel.avcomponent.on('pause', function() {
+                var currentTime = uv.extension.centerPanel.avcomponent.getCurrentTime();
+                if (currentTime > 0) {
+                    dataProvider.set('t', currentTime);
+                }
+            }, false);
+        }
     }, false);
 
     uv.on('created', function(obj) {
