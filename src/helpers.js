@@ -120,6 +120,7 @@ function createUV(selector, data, dataProvider) {
 
     $(document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function(e) {
         if (e.type === 'webkitfullscreenchange' && !document.webkitIsFullScreen ||
+        e.type === 'fullscreenchange' && !document.fullscreenElement ||
         e.type === 'mozfullscreenchange' && !document.mozFullScreen ||
         e.type === 'MSFullscreenChange' && document.msFullscreenElement === null) {
             uv.exitFullScreen();
@@ -131,28 +132,42 @@ function createUV(selector, data, dataProvider) {
 
 function getRequestFullScreen(elem) {
 
-    if (elem.requestFullscreen) {
-        return elem.requestFullscreen;
-    } else if (elem.msRequestFullscreen) {
-        return elem.msRequestFullscreen;
-    } else if (elem.mozRequestFullScreen) {
-        return elem.mozRequestFullScreen;
-    } else if (elem.webkitRequestFullscreen) {
+    if (elem.webkitRequestFullscreen) {
         return elem.webkitRequestFullscreen;
     }
+
+    if (elem.mozRequestFullScreen) {
+        return elem.mozRequestFullScreen;
+    }
+
+    if (elem.msRequestFullscreen) {
+        return elem.msRequestFullscreen;
+    } 
+
+    if (elem.requestFullscreen) {
+        return elem.requestFullscreen;
+    }
+
     return false;
 }
 
 function getExitFullScreen() {
 
-    if (document.exitFullscreen) {
-        return document.exitFullscreen;
-    } else if (document.msExitFullscreen) {
-        return document.msExitFullscreen;
-    } else if (document.mozCancelFullScreen) {
-        return document.mozCancelFullScreen;
-    } else if (document.webkitExitFullscreen) {
+    if (document.webkitExitFullscreen) {
         return document.webkitExitFullscreen;
     }
+    
+    if (document.msExitFullscreen) {
+        return document.msExitFullscreen;
+    }
+    
+    if (document.mozCancelFullScreen) {
+        return document.mozCancelFullScreen;
+    }
+
+    if (document.exitFullscreen) {
+        return document.exitFullscreen;
+    }
+
     return false;
 }
