@@ -136,7 +136,7 @@
     },
     "amiCenterPanel": {
       "options": {
-
+        "dracoDecoderPath": "uv/lib/"
       }
     },
     "settingsDialogue": {

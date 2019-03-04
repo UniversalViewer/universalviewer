@@ -1,6 +1,7 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
+import { Mode } from "./Mode";
 
 export class AMICenterPanel extends CenterPanel {
   amiviewerContainer: HTMLElement;
@@ -45,19 +46,23 @@ export class AMICenterPanel extends CenterPanel {
           const media: Manifesto.IAnnotationBody = body[0];
           this._src = media.id;
           const format: Manifesto.MediaType | null = media.getFormat();
-          this._display = (format && format.toString() === "model/stl") ? "mesh" : "slices";
+          this._display = (format && format.toString() === "model/stl" || 
+                           format && format.toString() === "application/gltf") ? Mode.MESH : Mode.SLICES;
 
           this._render();
         }
       }
 
-      this.resize();
+      $.publish(BaseEvents.RESIZE);
     });
   }
 
   private _render(): void {
     this.amiviewerContainer.innerHTML = '';
     this.amiviewer = document.createElement('ami-viewer');
+    //this.amiviewer.setAttribute('draco-decoder-path', this.config.options.dracoDecoderPath);
+    const dracoDecoderPath: string = (window.self !== window.top)? 'lib/' : 'uv/lib/';
+    this.amiviewer.setAttribute('draco-decoder-path', dracoDecoderPath);
     this.amiviewerContainer.appendChild(this.amiviewer);
 
     this.amiviewer.addEventListener('onLoaded', () => {
@@ -67,7 +72,7 @@ export class AMICenterPanel extends CenterPanel {
 
     this.amiviewer.componentOnReady().then((component: any) => {
       component.setDisplay(this._display);
-      component.src = this._src;
+      component.setSrc(this._src);
     });
   }
 

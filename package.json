@@ -82,7 +82,7 @@
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
-    "@universalviewer/ami-viewer": "0.0.1-pre.12",
+    "@universalviewer/ami-viewer": "0.0.1-pre.14",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "@universalviewer/uv-en-gb-theme": "1.1.2",
     "core-js": "2.4.1",
@@ -99,7 +99,7 @@
     "openseadragon": "2.2.1",
     "pdfjs-dist": "2.0.161",
     "requirejs": "2.2.0",
-    "three": "0.91.0",
+    "three": "0.101.1",
     "virtex3d": "0.3.18",
     "waveform-data": "2.0.2",
     "xss": "1.0.3"

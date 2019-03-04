@@ -67,15 +67,15 @@ export class Extension extends BaseExtension implements IAMIExtension {
             Shell.$footerPanel.hide();
         }
 
-        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
+        this.$shareDialogue = $('<div class="uv-overlay share" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
+        this.$downloadDialogue = $('<div class="uv-overlay download" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
+        this.$settingsDialogue = $('<div class="uv-overlay settings" aria-hidden="true"></div>');
         Shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
@@ -102,8 +102,6 @@ export class Extension extends BaseExtension implements IAMIExtension {
         // } else 
         if (index === (<any>this).getDependencyIndex('three.min')) {
             window.THREE = dep; //https://github.com/mrdoob/three.js/issues/9602
-        } else if (index === (<any>this).getDependencyIndex('redux')) {
-            window.Redux = dep;
         }
     }
 

@@ -51,14 +51,14 @@ export class Shell extends BaseView {
         Shell.$mobileFooterPanel = $('<div class="mobileFooterPanel"></div>');
         Shell.$element.append(Shell.$mobileFooterPanel);
 
-        Shell.$overlays = $('<div class="overlays"></div>');
+        Shell.$overlays = $('<div class="uv-overlays"></div>');
         Shell.$element.append(Shell.$overlays);
 
-        Shell.$genericDialogue = $('<div class="overlay genericDialogue" aria-hidden="true"></div>');
+        Shell.$genericDialogue = $('<div class="uv-overlay genericDialogue" aria-hidden="true"></div>');
         Shell.$overlays.append(Shell.$genericDialogue);
 
         Shell.$overlays.on('click', (e) => {
-            if ($(e.target).hasClass('overlays')) {
+            if ($(e.target).hasClass('uv-overlays')) {
                 e.preventDefault();
                 $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
             }
@@ -71,8 +71,11 @@ export class Shell extends BaseView {
     resize(): void {
         super.resize();
 
-        Shell.$overlays.width(this.extension.width());
-        Shell.$overlays.height(this.extension.height());
+        const width: number = this.extension.width();
+        const height: number = this.extension.height();
+
+        Shell.$overlays.width(width);
+        Shell.$overlays.height(height);
 
         const mainHeight: number = this.$element.height() - parseInt(Shell.$mainPanel.css('paddingTop')) 
             - (Shell.$headerPanel.is(':visible') ? Shell.$headerPanel.height() : 0)

@@ -4,6 +4,7 @@
 (function() {
     var t = document.createElement('script');
     t.type = 'text/javascript';
-    t.src = 'uv/lib/amiviewer.js';
+    // if in an iframe (embedded) 
+    t.src = (window.self !== window.top)? 'lib/amiviewer.js' : 'uv/lib/amiviewer.js';
     document.body.appendChild(t);
 })();
