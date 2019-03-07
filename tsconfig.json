@@ -15,7 +15,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "types": [
-      "@edsilv/exjs",
       "@edsilv/http-status-codes",
       "@edsilv/jquery-plugins",
       "@edsilv/key-codes",
@@ -25,6 +24,7 @@
       "@iiif/iiif-gallery-component",
       "@iiif/iiif-metadata-component",
       "@iiif/iiif-tree-component",
+      "@iiif/vocabulary",
       "@iiif/manifold", 
       "jest",
       "jquery", 
