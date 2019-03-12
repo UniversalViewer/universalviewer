@@ -178,7 +178,7 @@ export class HeaderPanel extends BaseView {
             const $actions: JQuery = this.$informationBox.find('.actions');
             const $message: JQuery = this.$informationBox.find('.message');
             $message.width(Math.floor(this.$element.width()) - Math.ceil($message.horizontalMargins()) - Math.ceil($actions.outerWidth(true)) - Math.ceil(this.$informationBox.find('.close').outerWidth(true)) - 2);
-            $message.ellipsisFill(this.information.message);
+            $message.text(this.information.message);
         }
 
         // hide toggle buttons below minimum width

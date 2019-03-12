@@ -100,7 +100,7 @@ export class FileLinkCenterPanel extends CenterPanel {
         super.resize();
 
         if (this.title) {
-            this.$title.ellipsisFill(this.title);
+            this.$title.text(UVUtils.sanitize(this.title));
         }
 
         this.$scroll.height(this.$content.height() - this.$scroll.verticalMargins());

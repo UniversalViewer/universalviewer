@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import { UVUtils } from "../../Utils";
 
 export class VirtexCenterPanel extends CenterPanel {
 
@@ -142,7 +143,7 @@ export class VirtexCenterPanel extends CenterPanel {
         super.resize();
 
         if (this.title) {
-            this.$title.ellipsisFill(this.title);
+            this.$title.text(UVUtils.sanitize(this.title));
         }
         
         this.$viewport.width(this.$content.width());
