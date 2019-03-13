@@ -911,6 +911,7 @@ export class BaseExtension implements IExtension {
 
     getAppUri(): string {
         const parts: any = Utils.Urls.getUrlParts((<any>document).location.href);
+        const embedFile = this.data.config.modules.shareDialogue.options!.embedFile || 'uv.html';
         const origin: string = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
         let pathname: string = parts.pathname;
 
@@ -938,10 +939,10 @@ export class BaseExtension implements IExtension {
 
         // if root is a URL, use that instead of appUri.
         if (UVUtils.isValidUrl(root)) {
-            return root + 'uv.html';
+            return root + embedFile;
         }
 
-        return appUri + root + 'uv.html';
+        return appUri + root + embedFile;
 
     }
 

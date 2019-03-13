@@ -86,9 +86,10 @@
 
         .label {
             background: rgba(66, 66, 66, 0.85);
-            height: 18px;
+            height: 25px;
             padding: 5px;
             color: #fff;
+            pointer-events: none;
         }
         
         .pointer {
@@ -246,6 +247,10 @@
             vertical-align: middle;
             width: 30px;
             cursor: pointer;
+        }
+        &:focus .av-icon,
+        &:focus .uv-icon {
+            opacity: 1;
         }
     }
 

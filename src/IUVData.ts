@@ -16,4 +16,5 @@ export interface IUVData {
     root?: string;
     sequenceIndex?: number;
     startTime?: number;
+    embedFile?: string;
 }
