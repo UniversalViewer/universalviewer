@@ -88,12 +88,16 @@ export class CenterPanel extends BaseView {
             this.resize();
         });
 
-        if (!Utils.Bools.getBool(this.options.titleEnabled, true)) {
+        if (Utils.Bools.getBool(this.options.titleEnabled, true)) {
+            this.$title.show();
+        } else {
             this.$title.hide();
         }
 
         if (Utils.Bools.getBool(this.options.subtitleEnabled, false)) {
             this.$subtitle.show();
+        } else {
+            this.$subtitle.hide();
         }
 
         this.whenResized(() => {
@@ -220,8 +224,11 @@ export class CenterPanel extends BaseView {
             }
         }
 
-        if (this.subtitle) {
+        if (this.subtitle && this.options.subtitleEnabled) {
 
+            this.$subtitleText.html(UVUtils.sanitize(this.subtitle.replace(/<br\s*[\/]?>/gi, '; ')));
+            this.$subtitleText.removeClass('elided');
+            this.$subtitle.show();
             this.$subtitleWrapper.css('max-height', this.$content.height() + this.$subtitle.outerHeight());
             this.$subtitleWrapper.width(this.$content.width());
 
@@ -229,10 +236,6 @@ export class CenterPanel extends BaseView {
 
                 this.$subtitleText.width('auto');
                 this.$subtitleWrapper.width('auto');
-
-                this.$subtitleText.text(UVUtils.sanitize(this.subtitle));
-
-                //this.$subtitleText.css('display', 'inline');
                 this.$subtitleExpand.hide();
 
                 // if the subtitle span is wider than the container, set it to display:block 
@@ -240,9 +243,8 @@ export class CenterPanel extends BaseView {
                 // this will make it appear elided.
                 // show the expand button
                 if (this.$subtitleText.width() > this.$content.width()) {
-                    //this.$subtitleText.css('display', 'block');
-                    //this.$subtitleText.width(this.$content.width() - (this.$subtitleWrapper.horizontalPadding() + this.$subtitleWrapper.horizontalPadding() + this.$subtitleExpand.outerWidth()));
                     this.$subtitleExpand.show();
+                    this.$subtitleText.addClass('elided');
                     this.$subtitleText.width(this.$content.width() - (this.$subtitleExpand.outerWidth() + this.$subtitleText.horizontalMargins()));
                 }
             } else {

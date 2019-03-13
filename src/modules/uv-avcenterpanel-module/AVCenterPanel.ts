@@ -189,9 +189,29 @@ export class AVCenterPanel extends CenterPanel {
         this.title = title;
 
         // set subtitle
-        //this.subtitle = "this is a very long subtitle that will be elided as it fills more space that can fit within the current available width of the center panel";
-        this.subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id tortor in libero lacinia rutrum. Donec pretium, ipsum a tristique tempus, velit ex consequat tellus, ut malesuada risus enim vitae arcu. Sed lacinia mollis mi, fermentum feugiat mauris accumsan et. Sed vitae felis eu tellus suscipit eleifend ut vel elit. Suspendisse quis turpis id orci volutpat fringilla. Phasellus id tortor eu justo condimentum hendrerit sed sed urna. Morbi sed turpis porta, interdum ligula id, pellentesque nisl. Cras tincidunt nec eros et dapibus. Nulla rutrum, purus eget finibus facilisis, lorem nisi ullamcorper mauris, quis lobortis ipsum neque at purus. Aenean neque mauris, feugiat non risus vel, euismod convallis leo. Sed sit amet ipsum eget libero tempor pellentesque a ut quam. Maecenas consectetur pharetra tincidunt. Cras lacinia quam fermentum nisi dignissim pulvinar. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer lobortis ante commodo magna tincidunt, non porta lacus cursus. Sed pharetra, felis in scelerisque molestie, ipsum velit consectetur neque, sed auctor arcu eros et nunc. Donec tincidunt mollis finibus. Nunc vitae luctus velit. Suspendisse viverra maximus diam vel dignissim. Aenean eros ante, gravida eget viverra ut, dignissim vitae magna. Etiam dictum interdum nulla, id tincidunt lectus. Curabitur vitae justo rhoncus, vulputate ligula non, blandit massa. Quisque pulvinar rutrum nibh, eget accumsan lectus venenatis in. In hac habitasse platea dictumst. Donec tortor libero, pretium vel arcu sit amet, cursus ornare ipsum. Nulla facilisi. Quisque scelerisque dictum turpis ut lobortis. Phasellus congue viverra lacus id sodales.";
-        //this.subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id tortor in libero lacinia rutrum. Donec pretium, ipsum a tristique tempus, velit ex consequat tellus, ut malesuada risus enim vitae arcu. Sed lacinia mollis mi, fermentum feugiat mauris accumsan et.";
+        const groups: Manifold.MetadataGroup[] = this.extension.helper.getMetadata(<Manifold.MetadataOptions>{
+            range: currentRange
+        });
+
+        for (let i = 0; i < groups.length; i++) {
+            const group: Manifold.MetadataGroup = groups[i];
+
+            const item: Manifesto.LabelValuePair | undefined = group.items.find((el: Manifesto.LabelValuePair) => {
+                if (el.label) {
+                    const label: string | null = Manifesto.LanguageMap.getValue(el.label);
+                    if (label && label.toLowerCase() === this.config.options.subtitleMetadataField) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            if (item) {
+                this.subtitle = Manifesto.LanguageMap.getValue(item.value);
+                break;
+            }
+        }
 
         this.$title.text(UVUtils.sanitize(this.title));
 

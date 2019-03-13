@@ -25,7 +25,6 @@ export class SeadragonCenterPanel extends CenterPanel {
     pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
     previousAnnotationRect: AnnotationRect;
-    title: string | null;
     userData: any;
     viewer: any;
 

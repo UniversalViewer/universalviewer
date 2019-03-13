@@ -8,8 +8,6 @@ export class FileLinkCenterPanel extends CenterPanel {
     $downloadItems: JQuery;
     $downloadItemTemplate: JQuery;
 
-    title: string | null;
-
     constructor($element: JQuery) {
         super($element);
     }

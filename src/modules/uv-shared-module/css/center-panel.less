@@ -19,9 +19,8 @@
 
             .wrapper {
 
-                z-index: 9999;
-                background: #000000b0;
-                overflow: auto;
+                z-index: 1;
+                background: rgba(0, 0, 0, 0.7);
 
                 .expand-btn {
                     width: 20px;
@@ -39,11 +38,17 @@
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
-                    margin: 0 10px 0 0;
+                    margin: 0 10px 0 20px;
+
+                    &.elided {
+                        margin: 0 10px 0 0;
+                    }
                 }
 
                 &.expanded {
                     position: absolute;
+                    overflow-y: scroll;
+                    -ms-overflow-style: -ms-autohiding-scrollbar;
 
                     .text {                        
                         white-space: normal;

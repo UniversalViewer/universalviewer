@@ -9,7 +9,6 @@ export class VirtexCenterPanel extends CenterPanel {
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
     $vrButton: JQuery;
-    title: string | null;
     viewport: Virtex.Viewport | null;
 
     constructor($element: JQuery) {
