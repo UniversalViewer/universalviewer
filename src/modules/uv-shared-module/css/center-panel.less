@@ -16,11 +16,13 @@
             color: @text-color;               
             line-height: 30px;
             height: 30px;
+            scrollbar-width: none;
 
             .wrapper {
 
-                z-index: 1;
+                z-index: 3;
                 background: rgba(0, 0, 0, 0.7);
+                scrollbar-width: none;
 
                 .expand-btn {
                     width: 20px;
@@ -39,6 +41,7 @@
                     text-overflow: ellipsis;
                     overflow: hidden;
                     margin: 0 10px 0 20px;
+                    scrollbar-width: none;
 
                     &.elided {
                         margin: 0 10px 0 0;
