@@ -141,7 +141,7 @@
         "posterImageRatio": 0.3,
         "subtitleMetadataField": "contributor",
         "titleEnabled": true,
-        "subtitleEnabled": false
+        "subtitleEnabled": true
       }
     },
     "settingsDialogue": {
