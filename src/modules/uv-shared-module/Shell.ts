@@ -71,9 +71,11 @@ export class Shell extends BaseView {
     resize(): void {
         super.resize();
 
-        Shell.$overlays.width(this.extension.width());
-        Shell.$overlays.height(this.extension.height());
-
+        setTimeout(() => {
+            Shell.$overlays.width(this.extension.width());
+            Shell.$overlays.height(this.extension.height());
+        }, 1);
+        
         const mainHeight: number = this.$element.height() - parseInt(Shell.$mainPanel.css('paddingTop')) 
             - (Shell.$headerPanel.is(':visible') ? Shell.$headerPanel.height() : 0)
             - (Shell.$footerPanel.is(':visible') ? Shell.$footerPanel.height() : 0)

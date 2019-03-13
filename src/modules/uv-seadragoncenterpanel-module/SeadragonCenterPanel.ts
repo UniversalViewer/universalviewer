@@ -25,7 +25,6 @@ export class SeadragonCenterPanel extends CenterPanel {
     pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
     previousAnnotationRect: AnnotationRect;
-    title: string | null;
     userData: any;
     viewer: any;
 
@@ -955,7 +954,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (!this.isCreated) return;
 
         if (this.title) {
-            this.$title.ellipsisFill(UVUtils.sanitize(this.title));
+            this.$title.text(UVUtils.sanitize(this.title));
         }
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
