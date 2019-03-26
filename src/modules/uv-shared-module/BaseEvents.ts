@@ -76,6 +76,7 @@ export class BaseEvents {
     static PLUS: string                             = 'plus';
     static PREV: string                             = 'prev';
     static RANGE_CHANGED: string                    = 'rangeChanged';
+    static RANGE_NOT_FOUND: string                  = 'rangeNotFound';
     static REDIRECT: string                         = 'redirect';
     static REFRESH: string                          = 'refresh';
     static RELOAD: string                           = 'reload';

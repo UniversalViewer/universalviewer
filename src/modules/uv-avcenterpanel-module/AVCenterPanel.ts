@@ -113,11 +113,25 @@ export class AVCenterPanel extends CenterPanel {
         this.$content.prepend(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
-            target: <HTMLElement>this.$avcomponent[0]
+            target: <HTMLElement>this.$avcomponent[0],
+        });
+
+        // Trying to set this early, see what happens.
+        this.avcomponent.set({
+            helper: this.extension.helper,
+            autoPlay: this.config.options.autoPlay,
+            enableFastForward: this.config.options.enableFastForward,
+            enableFastRewind: this.config.options.enableFastRewind,
+            autoSelectRange: true,
+            constrainNavigationToRange: this._limitToRange(),
+            content: this.content,
+            defaultAspectRatio: 0.56,
+            doubleClickMS: 350,
+            limitToRange: this._limitToRange(),
+            posterImageRatio: this.config.options.posterImageRatio,
         });
 
         this.avcomponent.on('mediaready', () => {
-            console.log('mediaready');
             this._mediaReady = true;
         }, false);
 
@@ -248,6 +262,8 @@ export class AVCenterPanel extends CenterPanel {
                     helper: this.extension.helper,
                     adaptiveAuthEnabled: this._isCurrentResourceAccessControlled(),
                     autoPlay: this.config.options.autoPlay,
+                    enableFastForward: this.config.options.enableFastForward,
+                    enableFastRewind: this.config.options.enableFastRewind,
                     autoSelectRange: true,
                     constrainNavigationToRange: this._limitToRange(),
                     content: this.content,

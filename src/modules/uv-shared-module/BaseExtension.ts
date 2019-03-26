@@ -406,6 +406,10 @@ export class BaseExtension implements IExtension {
             this.fire(BaseEvents.PAGE_UP);
         });
 
+        $.subscribe(BaseEvents.RANGE_NOT_FOUND, (e: any, rangeId: string) => {
+            this.fire(BaseEvents.RANGE_NOT_FOUND, rangeId)
+        });
+
         $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
             
             if (range) {
@@ -721,7 +725,7 @@ export class BaseExtension implements IExtension {
                 if (range) {
                     $.publish(BaseEvents.RANGE_CHANGED, [range]);
                 } else {
-                    console.warn('range id not found:', this.data.rangeId);
+                    $.publish(BaseEvents.RANGE_NOT_FOUND, [this.data.rangeId]);
                 }
             }
             
