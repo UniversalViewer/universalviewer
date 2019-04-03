@@ -1,4 +1,4 @@
-import { AMICenterPanel } from "../../modules/uv-amicenterpanel-module/AMICenterPanel";
+import { AlephCenterPanel } from "../../modules/uv-alephcenterpanel-module/AlephCenterPanel";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
 import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
@@ -6,19 +6,19 @@ import { DownloadDialogue } from "./DownloadDialogue";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-avmobilefooterpanel-module/MobileFooter";
 import { HeaderPanel } from "../../modules/uv-shared-module/HeaderPanel";
-import { IAMIExtension } from "./IAMIExtension";
+import { IAlephExtension } from "./IAlephExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Shell } from "../../modules/uv-shared-module/Shell";
 
-export class Extension extends BaseExtension implements IAMIExtension {
+export class Extension extends BaseExtension implements IAlephExtension {
 
     $downloadDialogue: JQuery;
     $multiSelectDialogue: JQuery;
     $settingsDialogue: JQuery;
     $shareDialogue: JQuery;
-    centerPanel: AMICenterPanel;
+    centerPanel: AlephCenterPanel;
     downloadDialogue: DownloadDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
@@ -52,7 +52,7 @@ export class Extension extends BaseExtension implements IAMIExtension {
             Shell.$leftPanel.hide();
         }
 
-        this.centerPanel = new AMICenterPanel(Shell.$centerPanel);
+        this.centerPanel = new AlephCenterPanel(Shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);

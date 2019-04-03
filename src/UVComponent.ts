@@ -1,11 +1,10 @@
 import {BaseEvents} from "./modules/uv-shared-module/BaseEvents";
-import {Extension as AMIExtension} from "./extensions/uv-ami-extension/Extension";
+import {Extension as AlephExtension} from "./extensions/uv-aleph-extension/Extension";
 import {Extension as AVExtension} from "./extensions/uv-av-extension/Extension";
 import {Extension as DefaultExtension} from "./extensions/uv-default-extension/Extension";
 import {Extension as MediaElementExtension} from "./extensions/uv-mediaelement-extension/Extension";
 import {Extension as OpenSeadragonExtension} from "./extensions/uv-seadragon-extension/Extension";
 import {Extension as PDFExtension} from "./extensions/uv-pdf-extension/Extension";
-import {Extension as VirtexExtension} from "./extensions/uv-virtex-extension/Extension";
 import {IExtension} from "./modules/uv-shared-module/IExtension";
 import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
@@ -52,8 +51,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         };
 
         this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
-            type: VirtexExtension,
-            name: 'uv-virtex-extension'
+            type: AlephExtension,
+            name: 'uv-aleph-extension'
         };
 
         this._extensions[manifesto.ResourceType.sound().toString()] = {
@@ -88,11 +87,6 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             name: 'uv-av-extension'
         };
 
-        this._extensions[manifesto.MediaType.threejs().toString()] = {
-            type: VirtexExtension,
-            name: 'uv-virtex-extension'
-        };
-
         this._extensions['av'] = {
             type: AVExtension,
             name: 'uv-av-extension'
@@ -114,24 +108,24 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         };
 
         this._extensions['application/dicom'] = {
-            type: AMIExtension,
-            name: 'uv-ami-extension'
+            type: AlephExtension,
+            name: 'uv-aleph-extension'
         };
 
         this._extensions['model/stl'] = {
-            type: AMIExtension,
-            name: 'uv-ami-extension'
+            type: AlephExtension,
+            name: 'uv-aleph-extension'
         };
 
         this._extensions['application/gltf'] = {
-            type: AMIExtension,
-            name: 'uv-ami-extension'
+            type: AlephExtension,
+            name: 'uv-aleph-extension'
         };
 
         // todo: need to create a map
         this._extensions['application/gzip'] = {
-            type: AMIExtension,
-            name: 'uv-ami-extension'
+            type: AlephExtension,
+            name: 'uv-aleph-extension'
         };
 
         this._extensions['application/vnd.apple.mpegurl'] = {

@@ -134,7 +134,7 @@
         "limitToRange": false
       }
     },
-    "amiCenterPanel": {
+    "alephCenterPanel": {
       "options": {
         "dracoDecoderPath": "uv/lib/"
       }

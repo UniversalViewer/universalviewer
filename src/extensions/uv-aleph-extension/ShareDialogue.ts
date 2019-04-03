@@ -1,5 +1,5 @@
 import {ShareDialogue as BaseShareDialogue} from "../../modules/uv-dialogues-module/ShareDialogue";
-import {IAMIExtension} from "./IAMIExtension";
+import {IAlephExtension} from "./IAlephExtension";
 
 export class ShareDialogue extends BaseShareDialogue {
 
@@ -18,7 +18,7 @@ export class ShareDialogue extends BaseShareDialogue {
 
         super.update();
 
-        this.code = (<IAMIExtension>this.extension).getEmbedScript(
+        this.code = (<IAlephExtension>this.extension).getEmbedScript(
             this.options.embedTemplate,
             this.currentWidth,
             this.currentHeight);

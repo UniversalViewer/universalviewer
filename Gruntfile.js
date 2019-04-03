@@ -2,7 +2,7 @@ var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
-var amiExtensionConfig = require('./src/extensions/uv-ami-extension/config');
+var alephExtensionConfig = require('./src/extensions/uv-aleph-extension/config');
 var avExtensionConfig = require('./src/extensions/uv-av-extension/config');
 var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
 var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
@@ -160,7 +160,7 @@ module.exports = function (grunt) {
                         dest: config.directories.build + '/lib/'
                     },
                     {
-                        cwd: 'src/extensions/uv-ami-extension/lib/',
+                        cwd: 'src/extensions/uv-aleph-extension/lib/',
                         expand: true,
                         src: ['**'],
                         dest: config.directories.build + '/lib/'
@@ -219,7 +219,7 @@ module.exports = function (grunt) {
             },
             npmComponents: {
                 files: [
-                    amiExtensionConfig.sync.dependencies,
+                    alephExtensionConfig.sync.dependencies,
                     avExtensionConfig.sync.dependencies,
                     mediaelementExtensionConfig.sync.dependencies,
                     pdfExtensionConfig.sync.dependencies,
