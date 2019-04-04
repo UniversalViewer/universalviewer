@@ -1,7 +1,6 @@
 import { AlephCenterPanel } from "../../modules/uv-alephcenterpanel-module/AlephCenterPanel";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { BaseExtension } from "../../modules/uv-shared-module/BaseExtension";
-import { ContentLeftPanel } from "../../modules/uv-contentleftpanel-module/ContentLeftPanel";
 import { DownloadDialogue } from "./DownloadDialogue";
 import { FooterPanel } from "../../modules/uv-shared-module/FooterPanel";
 import { FooterPanel as MobileFooterPanel } from "../../modules/uv-avmobilefooterpanel-module/MobileFooter";
@@ -11,6 +10,7 @@ import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/M
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
 import { Shell } from "../../modules/uv-shared-module/Shell";
+import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
 
 export class Extension extends BaseExtension implements IAlephExtension {
 
@@ -22,7 +22,7 @@ export class Extension extends BaseExtension implements IAlephExtension {
     downloadDialogue: DownloadDialogue;
     footerPanel: FooterPanel;
     headerPanel: HeaderPanel;
-    leftPanel: ContentLeftPanel;
+    leftPanel: AlephLeftPanel;
     mobileFooterPanel: MobileFooterPanel;
     rightPanel: MoreInfoRightPanel;
     settingsDialogue: SettingsDialogue;
@@ -47,7 +47,7 @@ export class Extension extends BaseExtension implements IAlephExtension {
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new AlephLeftPanel(Shell.$leftPanel);
         } else {
             Shell.$leftPanel.hide();
         }
@@ -109,9 +109,13 @@ export class Extension extends BaseExtension implements IAlephExtension {
         super.render();
     }
 
+    isLeftPanelEnabled(): boolean {
+        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true);
+    }
+
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}}`;
         const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
