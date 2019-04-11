@@ -82,7 +82,7 @@
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
-    "@universalviewer/aleph": "0.0.1-pre.2",
+    "@universalviewer/aleph": "0.0.1-pre.6",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "@universalviewer/uv-en-gb-theme": "1.1.2",
     "core-js": "2.4.1",
