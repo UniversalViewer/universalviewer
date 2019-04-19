@@ -14,14 +14,16 @@ export class AlephLeftPanel extends LeftPanel {
         this.setConfig('alephLeftPanel');
         super.create();
 
-        this._$controlPanel = $('<al-control-panel nodes-visible="false"></al-control-panel>');
+        this._$controlPanel = $('<al-control-panel></al-control-panel>');
         const alControlPanel: any = this._$controlPanel[0];
+        this.$main.addClass('disabled');
         this.$main.append(this._$controlPanel);
         this.setTitle(this.content.title);
 
         $.subscribe(Events.LOADED, (e: any, args: any) => {
             alControlPanel.stackhelper = args.stackhelper;
             alControlPanel.displayMode = args.displayMode;
+            this.$main.removeClass('disabled');
         });
 
         alControlPanel.componentOnReady().then(function() {

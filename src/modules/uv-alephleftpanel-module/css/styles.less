@@ -1,3 +1,4 @@
+
 .uv{
     .leftPanel {
         @img-path: '../../../modules/uv-contentleftpanel-module/img/';
@@ -11,7 +12,20 @@
         
         .main{
             overflow: auto;
-            padding: @padding-medium-vertical @padding-medium-horizontal @padding-medium-vertical @padding-medium-horizontal;
+            padding: @padding-medium-vertical 0 0 0;
+            //padding: @padding-medium-vertical @padding-medium-horizontal @padding-medium-vertical @padding-medium-horizontal;
+            &.disabled {
+                pointer-events: none;
+                opacity: 0.4;
+            }
+
+            al-control-panel {
+                --ion-item-background: none;
+                --ion-text-color-rgb: 255,255,255;
+                --ion-color-primary-rgb: 255,255,255;
+                --ion-color-primary: #fff;
+            }
         }
+        
     }
 }

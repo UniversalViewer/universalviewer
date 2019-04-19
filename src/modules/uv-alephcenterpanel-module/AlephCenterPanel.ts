@@ -60,15 +60,12 @@ export class AlephCenterPanel extends CenterPanel {
   }
 
   private _render(): void {
-    //this.alephContainer.innerHTML = '';
     this.aleph = document.createElement('uv-aleph');
     this.$content.prepend(this.aleph);
     this.aleph.setAttribute('width', '100%');
     this.aleph.setAttribute('height', '100%');
-    //this.aleph.setAttribute('draco-decoder-path', this.config.options.dracoDecoderPath);
     const dracoDecoderPath: string = (window.self !== window.top)? 'lib/' : 'uv/lib/';
     this.aleph.setAttribute('draco-decoder-path', dracoDecoderPath);
-    //this.alephContainer.appendChild(this.aleph);
 
     this.aleph.addEventListener('changed', (e: any) => {
       this._displayMode = e.detail.displayMode;
@@ -81,8 +78,8 @@ export class AlephCenterPanel extends CenterPanel {
       }]);
     }, false);
 
-    this.aleph.componentOnReady().then((aleph: any) => {
-      aleph.load(this._src);
+    this.aleph.componentOnReady().then(() => {
+      this.aleph.load(this._src);
     });
 
     $.subscribe(Events.DISPLAY_MODE_CHANGED, (e: any, displayMode: DisplayMode) => {
