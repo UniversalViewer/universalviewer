@@ -90,8 +90,8 @@ export class AlephCenterPanel extends CenterPanel {
       this.aleph.setGraphEnabled(enabled);          
     });
 
-    $.subscribe(Events.BOUNDING_BOX_VISIBLE_CHANGED, (e: any, visible: boolean) => {
-      this.aleph.setBoundingBoxVisible(visible);          
+    $.subscribe(Events.BOUNDING_BOX_ENABLED_CHANGED, (e: any, enabled: boolean) => {
+      this.aleph.setBoundingBoxEnabled(enabled);          
     });
     
     $.subscribe(Events.SLICES_INDEX_CHANGED, (e: any, index: number) => {

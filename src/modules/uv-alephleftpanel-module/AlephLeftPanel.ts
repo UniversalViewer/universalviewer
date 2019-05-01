@@ -36,8 +36,8 @@ export class AlephLeftPanel extends LeftPanel {
                 $.publish(Events.GRAPH_ENABLED_CHANGED, [e.detail]);
             }, false);
   
-            alControlPanel.addEventListener("boundingBoxVisibleChanged", function(e: any) {
-                $.publish(Events.BOUNDING_BOX_VISIBLE_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("boundingBoxEnabledChanged", function(e: any) {
+                $.publish(Events.BOUNDING_BOX_ENABLED_CHANGED, [e.detail]);
             }, false);
   
             alControlPanel.addEventListener("slicesIndexChanged", function(e: any) {
