@@ -99,13 +99,13 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             if (this.renderingUrls[<any>id]) {
                 if (mime) {
                     if (mime.toLowerCase().indexOf('pdf') !== -1) {
-                        type = DownloadType.ENTIREDOCUMENTASPDF;
+                        type = DownloadType.ENTIRE_DOCUMENT_AS_PDF;
                     } else if (mime.toLowerCase().indexOf('txt') !== -1) {
-                        type = DownloadType.ENTIREDOCUMENTASTEXT;
+                        type = DownloadType.ENTIRE_DOCUMENT_AS_TEXT;
                     }
                 }
 
-                if (type = DownloadType.ENTIREDOCUMENTASPDF) {
+                if (type = DownloadType.ENTIRE_DOCUMENT_AS_PDF) {
                     //var printService: Manifesto.IService = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
                     
                     // if downloading a pdf - if there's a print service, generate an event instead of opening a new window.
@@ -120,7 +120,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                     case DownloadOption.currentViewAsJpg.toString():
                         const viewer: any = (<ISeadragonExtension>that.extension).getViewer();
                         window.open(<string>(<ISeadragonExtension>that.extension).getCroppedImageUri(canvas, viewer));
-                        type = DownloadType.CURRENTVIEW;
+                        type = DownloadType.CURRENT_VIEW;
                         break;
                     case DownloadOption.selection.toString():
                         Utils.Async.waitFor(() => {
@@ -131,7 +131,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                         break;
                     case DownloadOption.wholeImageHighRes.toString():
                         window.open(this.getCanvasHighResImageUri(this.extension.helper.getCurrentCanvas()));
-                        type = DownloadType.WHOLEIMAGEHIGHRES;
+                        type = DownloadType.WHOLE_IMAGE_HIGH_RES;
                         break;
                     case DownloadOption.wholeImagesHighRes.toString():
                         const indices: number[] = this.extension.getPagedIndices();
@@ -140,7 +140,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                             window.open(this.getCanvasHighResImageUri(this.extension.helper.getCanvasByIndex(indices[i])));
                         }
 
-                        type = DownloadType.WHOLEIMAGESHIGHRES;
+                        type = DownloadType.WHOLE_IMAGES_HIGH_RES;
                         break;
                     case DownloadOption.wholeImageLowResAsJpg.toString():
                         const imageUri: string | null = (<ISeadragonExtension>that.extension).getConfinedImageUri(canvas, that.options.confinedImageSize);
@@ -149,7 +149,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                             window.open(imageUri);
                         }
                         
-                        type = DownloadType.WHOLEIMAGELOWRES;
+                        type = DownloadType.WHOLE_IMAGE_LOW_RES;
                         break;
                 }
             }
@@ -611,7 +611,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 // hide low-res option if hi-res width is smaller than constraint
                 const size: Size | null = this.getCanvasComputedDimensions(canvas);
                 if (!size) {
-                     return false;
+                    return false;
                 }
                 return (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.selection:

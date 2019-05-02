@@ -1,9 +1,9 @@
 export enum DownloadType {
-    CURRENTVIEW = "currentView",
-    ENTIREDOCUMENTASPDF = "entireDocumentAsPdf",
-    ENTIREDOCUMENTASTEXT = "entireDocumentAsText",
-    WHOLEIMAGEHIGHRES = "wholeImageHighRes",
-    WHOLEIMAGESHIGHRES = "wholeImageHighRes",
-    WHOLEIMAGELOWRES = "wholeImageLowRes",
+    CURRENT_VIEW = "currentView",
+    ENTIRE_DOCUMENT_AS_PDF = "entireDocumentAsPdf",
+    ENTIRE_DOCUMENT_AS_TEXT = "entireDocumentAsText",
+    WHOLE_IMAGE_HIGH_RES = "wholeImageHighRes",
+    WHOLE_IMAGES_HIGH_RES = "wholeImageHighRes",
+    WHOLE_IMAGE_LOW_RES = "wholeImageLowRes",
     UNKNOWN = "unknown"
 }
