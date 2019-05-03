@@ -61,7 +61,7 @@ export class DownloadDialogue extends Dialogue {
     }
 
     addEntireFileDownloadOptions(): void {
-        if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL)) {
             this.$downloadOptions.empty();
 
             // add each file src
@@ -215,7 +215,7 @@ export class DownloadDialogue extends Dialogue {
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
         switch (option) {
-            case DownloadOption.entireFileAsOriginal:
+            case DownloadOption.ENTIRE_FILE_AS_ORIGINAL:
                 // check if ui-extensions disable it
                 const uiExtensions: Manifesto.IService | null = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
 

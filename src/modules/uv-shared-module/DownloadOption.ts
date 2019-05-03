@@ -1,19 +1,15 @@
-export class DownloadOption {
-    static currentViewAsJpg = new DownloadOption("currentViewAsJpg");
-    static dynamicCanvasRenderings = new DownloadOption("dynamicCanvasRenderings");
-    static dynamicImageRenderings = new DownloadOption("dynamicImageRenderings");
-    static dynamicSequenceRenderings = new DownloadOption("dynamicSequenceRenderings");
-    static entireFileAsOriginal = new DownloadOption("entireFileAsOriginal");
-    static rangeRendering = new DownloadOption("rangeRendering");
-    static selection = new DownloadOption("selection");
-    static wholeImageHighRes = new DownloadOption("wholeImageHighRes");
-    static wholeImageLowResAsJpg = new DownloadOption("wholeImageLowResAsJpg");
-    static wholeImagesHighRes = new DownloadOption("wholeImagesHighRes");
-
-    constructor(public value: string) {
-    }
-
-    toString() {
-        return this.value;
-    }
+export enum DownloadOption {
+    CURRENT_VIEW = "currentView",
+    DYNAMIC_CANVAS_RENDERINGS = "dynamicCanvasRenderings",
+    DYNAMIC_IMAGE_RENDERINGS = "dynamicImageRenderings",
+    DYNAMIC_SEQUENCE_RENDERINGS = "dynamicSequenceRenderings",
+    ENTIRE_DOCUMENT_AS_PDF = "entireDocumentAsPdf",
+    ENTIRE_DOCUMENT_AS_TEXT = "entireDocumentAsText",
+    ENTIRE_FILE_AS_ORIGINAL = "entireFileAsOriginal",
+    RANGE_RENDERING = "rangeRendering",
+    SELECTION = "selection",
+    UNKNOWN = "unknown",
+    WHOLE_IMAGE_HIGH_RES = "wholeImageHighRes",
+    WHOLE_IMAGE_LOW_RES = "wholeImageLowRes",
+    WHOLE_IMAGES_HIGH_RES = "wholeImagesHighRes"
 }

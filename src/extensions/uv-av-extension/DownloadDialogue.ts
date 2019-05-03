@@ -1,6 +1,5 @@
 import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
-import { DownloadType } from "../uv-seadragon-extension/DownloadType";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
 
@@ -19,7 +18,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         super.create();
 
-        this.$entireFileAsOriginal = $('<li class="option single"><input id="' + DownloadOption.entireFileAsOriginal.toString() + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.entireFileAsOriginal.toString() + 'label" for="' + DownloadOption.entireFileAsOriginal.toString() + '"></label></li>');
+        this.$entireFileAsOriginal = $('<li class="option single"><input id="' + DownloadOption.ENTIRE_FILE_AS_ORIGINAL + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.ENTIRE_FILE_AS_ORIGINAL + 'label" for="' + DownloadOption.ENTIRE_FILE_AS_ORIGINAL + '"></label></li>');
         this.$downloadOptions.append(this.$entireFileAsOriginal);
         this.$entireFileAsOriginal.hide();
 
@@ -35,7 +34,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
             const id: string = $selectedOption.attr('id');
             const label: string = $selectedOption.attr('title');
-            let type: string = DownloadType.UNKNOWN;
+            let type: string = DownloadOption.UNKNOWN;
 
             if (this.renderingUrls[<any>id]) {
                 window.open(this.renderingUrls[<any>id]);
@@ -62,7 +61,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         super.open($triggerButton);
 
-        if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal) && !this._isAdaptive()) {
+        if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL) && !this._isAdaptive()) {
             const $input: JQuery = this.$entireFileAsOriginal.find('input');
             const $label: JQuery = this.$entireFileAsOriginal.find('label');
             const label: string = Utils.Strings.format(this.content.entireFileAsOriginalWithFormat, this.getCurrentResourceFormat());
@@ -73,12 +72,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         this.resetDynamicDownloadOptions();
 
-        if (this.isDownloadOptionAvailable(DownloadOption.rangeRendering)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERING)) {
             
             const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
 
             if (range) {
-                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.dynamicCanvasRenderings);
+                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.DYNAMIC_CANVAS_RENDERINGS);
                 this.addDownloadOptionsForRenderings(renderingOptions);
             }
         }
