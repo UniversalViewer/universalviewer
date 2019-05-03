@@ -236,6 +236,7 @@ export class PDFCenterPanel extends CenterPanel {
             let mediaUri: string | null = null;
             let canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
             const formats: Manifesto.IAnnotationBody[] | null = this.extension.getMediaFormats(canvas);
+            const pdfUri: string = canvas.id;
 
             if (formats && formats.length) {
                 mediaUri = formats[0].id;
@@ -243,16 +244,19 @@ export class PDFCenterPanel extends CenterPanel {
                 mediaUri = canvas.id;
             }
 
-            PDFJS.disableWorker = true;
+            if (!this.config.options.usePdfJs) {
+                window.PDFObject.embed(pdfUri, '#content', {id: "PDF"});
+            } else {
+                PDFJS.disableWorker = true;
 
-            PDFJS.getDocument(mediaUri).then((pdfDoc: any) => {
-                this._pdfDoc = pdfDoc;
-                this._render(this._pageIndex);
+                PDFJS.getDocument(mediaUri).then((pdfDoc: any) => {
+                    this._pdfDoc = pdfDoc;
+                    this._render(this._pageIndex);
 
-                $.publish(Events.PDF_LOADED, [pdfDoc]);
-                this._$spinner.hide();
-            });
-            
+                    $.publish(Events.PDF_LOADED, [pdfDoc]);
+                    this._$spinner.hide();
+                });
+            }
         });
 
     }

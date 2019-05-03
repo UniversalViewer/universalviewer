@@ -11,7 +11,7 @@ export class UVUtils {
                 b: [],
                 br: [],
                 i: [],
-                img: ["src"],
+                img: ["src", "alt"],
                 p: [],
                 small: [],
                 span: [],

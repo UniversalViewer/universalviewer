@@ -146,6 +146,12 @@ export class Extension extends BaseExtension implements IPDFExtension {
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }
 
+    dependencyLoaded(index: number, dep: any): void {
+        if (index === 0) {
+            window.PDFObject = dep;
+        }
+    }
+
     getEmbedScript(template: string, width: number, height: number): string{
         //const configUri = this.data.config.uri || '';
         //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
