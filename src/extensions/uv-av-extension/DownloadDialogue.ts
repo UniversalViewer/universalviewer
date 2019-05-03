@@ -72,12 +72,12 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         this.resetDynamicDownloadOptions();
 
-        if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERING)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS)) {
             
             const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
 
             if (range) {
-                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.DYNAMIC_CANVAS_RENDERINGS);
+                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
                 this.addDownloadOptionsForRenderings(renderingOptions);
             }
         }

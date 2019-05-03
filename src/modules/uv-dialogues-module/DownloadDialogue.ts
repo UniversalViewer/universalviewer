@@ -64,6 +64,8 @@ export class DownloadDialogue extends Dialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL)) {
             this.$downloadOptions.empty();
 
+            // 
+
             // add each file src
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 

@@ -8,21 +8,21 @@ import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOptio
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
-    $pagingNote: JQuery;
-    $settingsButton: JQuery;
-    $canvasOptionsContainer: JQuery;
     $canvasOptions: JQuery;
+    $canvasOptionsContainer: JQuery;
     $currentViewAsJpgButton: JQuery;
     $downloadButton: JQuery;
     $explanatoryTextTemplate: JQuery;
-    $imageOptionsContainer: JQuery;
     $imageOptions: JQuery;
+    $imageOptionsContainer: JQuery;
+    $manifestOptions: JQuery;
+    $manifestOptionsContainer: JQuery;
+    $pagingNote: JQuery;
     $selectionButton: JQuery;
-    $sequenceOptionsContainer: JQuery;
-    $sequenceOptions: JQuery;
+    $settingsButton: JQuery;
     $wholeImageHighResButton: JQuery;
-    $wholeImagesHighResButton: JQuery;
     $wholeImageLowResAsJpgButton: JQuery;
+    $wholeImagesHighResButton: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -66,13 +66,13 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         this.$canvasOptions = $('<ul></ul>');
         this.$canvasOptionsContainer.append(this.$canvasOptions);
 
-        this.$sequenceOptionsContainer = $('<li class="group sequence"></li>');
-        this.$downloadOptions.append(this.$sequenceOptionsContainer);
-        this.$sequenceOptions = $('<ul></ul>');
-        this.$sequenceOptionsContainer.append(this.$sequenceOptions);
+        this.$manifestOptionsContainer = $('<li class="group manifest"></li>');
+        this.$downloadOptions.append(this.$manifestOptionsContainer);
+        this.$manifestOptions = $('<ul></ul>');
+        this.$manifestOptionsContainer.append(this.$manifestOptions);
 
         this.$selectionButton = $('<li class="option"><input id="' + DownloadOption.SELECTION + '" type="radio" name="downloadOptions" tabindex="0" /><label id="' + DownloadOption.SELECTION + 'label" for="' + DownloadOption.SELECTION + '"></label></li>');
-        this.$sequenceOptions.append(this.$selectionButton);
+        this.$manifestOptions.append(this.$selectionButton);
         this.$selectionButton.hide();
 
         this.$downloadButton = $('<a class="btn btn-primary" href="#" tabindex="0">' + this.content.download + '</a>');
@@ -334,32 +334,37 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         this.resetDynamicDownloadOptions();
 
-        if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERING)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS)) {
             
             if (canvas.ranges && canvas.ranges.length) {
                 for (let i = 0; i < canvas.ranges.length; i++) {
                     const range: Manifesto.IRange = canvas.ranges[i];
-                    const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.DYNAMIC_CANVAS_RENDERINGS);
+                    const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
                     this.addDownloadOptionsForRenderings(renderingOptions);
                 }
             }
         }
 
-        if (this.isDownloadOptionAvailable(DownloadOption.DYNAMIC_IMAGE_RENDERINGS)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
             const images: Manifesto.IAnnotation[] = canvas.getImages();
             for (let i = 0; i < images.length; i++) {
-                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.DYNAMIC_IMAGE_RENDERINGS);
+                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.IMAGE_RENDERINGS);
                 this.addDownloadOptionsForRenderings(renderingOptions);
             }
         }
 
-        if (this.isDownloadOptionAvailable(DownloadOption.DYNAMIC_CANVAS_RENDERINGS)) {
-            const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal, DownloadOption.DYNAMIC_CANVAS_RENDERINGS);
+        if (this.isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS)) {
+            const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
             this.addDownloadOptionsForRenderings(renderingOptions);
         }
 
-        if (this.isDownloadOptionAvailable(DownloadOption.DYNAMIC_SEQUENCE_RENDERINGS)) {
-            const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.DYNAMIC_SEQUENCE_RENDERINGS);
+        if (this.isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS)) {
+            let renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
+            
+            if (!renderingOptions.length) {
+                renderingOptions = this.getDownloadOptionsForRenderings(this.extension.helper.manifest, this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
+            }
+            
             this.addDownloadOptionsForRenderings(renderingOptions);
         }
 
@@ -454,14 +459,14 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         renderingOptions.forEach((option: IRenderingOption) => {
             switch (option.type) {
-                case DownloadOption.DYNAMIC_IMAGE_RENDERINGS:
+                case DownloadOption.IMAGE_RENDERINGS:
                     this.$imageOptions.append(option.button);
                     break;
-                case DownloadOption.DYNAMIC_CANVAS_RENDERINGS:
+                case DownloadOption.CANVAS_RENDERINGS:
                     this.$canvasOptions.append(option.button);
                     break;
-                case DownloadOption.DYNAMIC_SEQUENCE_RENDERINGS:
-                    this.$sequenceOptions.append(option.button);
+                case DownloadOption.MANIFEST_RENDERINGS:
+                    this.$manifestOptions.append(option.button);
                     break;
             }
         });
@@ -579,8 +584,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         switch (option) {
             case DownloadOption.CURRENT_VIEW:
-            case DownloadOption.DYNAMIC_CANVAS_RENDERINGS:
-            case DownloadOption.DYNAMIC_IMAGE_RENDERINGS:
+            case DownloadOption.CANVAS_RENDERINGS:
+            case DownloadOption.IMAGE_RENDERINGS:
             case DownloadOption.WHOLE_IMAGE_HIGH_RES:
                 // if in one-up mode, or in two-up mode with a single page being shown
                 if (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() || 
@@ -611,7 +616,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 return (!(<ISeadragonExtension>this.extension).isPagingSettingEnabled() && (size.width > this.options.confinedImageSize));
             case DownloadOption.SELECTION:
                 return this.options.selectionEnabled;
-            case DownloadOption.RANGE_RENDERING:                
+            case DownloadOption.RANGE_RENDERINGS:                
                 if (canvas.ranges && canvas.ranges.length) {
                     const range: Manifesto.IRange = canvas.ranges[0];
                     return range.getRenderings().length > 0;
