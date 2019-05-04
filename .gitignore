@@ -61,6 +61,7 @@ node_modules
 !dist.build.js
 src/extensions/*/lib/*.js
 !src/extensions/*/lib/*.proxy.js
+!src/extensions/*/config.js
 
 #################
 ## Build
