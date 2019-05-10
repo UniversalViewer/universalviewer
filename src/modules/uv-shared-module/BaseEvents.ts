@@ -60,6 +60,7 @@ export class BaseEvents {
     static LOGOUT: string                           = 'logout';
     static MANIFEST_INDEX_CHANGED: string           = 'manifestIndexChanged';
     static METRIC_CHANGED: string                   = 'metricChanged';
+    static MESSAGE_DISPLAYED: string                = 'messageDisplayed';
     static MINUS: string                            = 'minus';
     static MULTISELECT_CHANGE: string               = 'multiSelectChange';
     static MULTISELECTION_MADE: string              = 'multiSelectionMade';

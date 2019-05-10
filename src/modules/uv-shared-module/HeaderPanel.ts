@@ -128,6 +128,8 @@ export class HeaderPanel extends BaseView {
     showInformation(args: InformationArgs): void {
         const informationFactory: InformationFactory = new InformationFactory(this.extension);
         this.information = informationFactory.Get(args);
+        $.publish(BaseEvents.MESSAGE_DISPLAYED, [ this.information ]);
+
         var $message = this.$informationBox.find('.message');
         $message.html(this.information.message).find('a').attr('target', '_top');
         var $actions = this.$informationBox.find('.actions');

@@ -17,6 +17,7 @@ import { RestrictedDialogue } from "../../modules/uv-dialogues-module/Restricted
 import { Shell } from "./Shell";
 import { SynchronousRequire } from "../../SynchronousRequire";
 import IThumb = Manifold.IThumb;
+import {Information} from "./Information";
 
 export class BaseExtension implements IExtension {
 
@@ -508,6 +509,10 @@ export class BaseExtension implements IExtension {
 
         $.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+        });
+
+        $.subscribe(BaseEvents.MESSAGE_DISPLAYED, (e: any, message: Information) => {
+            this.fire(BaseEvents.MESSAGE_DISPLAYED, message);
         });
 
         $.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
