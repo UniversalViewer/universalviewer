@@ -78,8 +78,8 @@ export class AlephCenterPanel extends CenterPanel {
       }]);
     }, false);
 
-    this.aleph.componentOnReady().then(() => {
-      this.aleph.load(this._src);
+    this.aleph.componentOnReady().then((al: any) => {
+      al.load(this._src);
     });
 
     $.subscribe(Events.DISPLAY_MODE_CHANGED, (e: any, displayMode: DisplayMode) => {
