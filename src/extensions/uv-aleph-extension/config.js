@@ -15,7 +15,7 @@ module.exports = {
                     '@universalviewer/aleph/dist/collection/assets/aframe-master.min.js',
                     '@universalviewer/aleph/dist/aleph.js',
                     '@universalviewer/aleph/dist/collection/assets/draco_decoder.wasm',
-                    '@universalviewer/aleph/dist/collection/assets/draco_decoder_wrapper.js',
+                    '@universalviewer/aleph/dist/collection/assets/draco_wasm_wrapper.js',
                     '@ionic/core/dist/ionic.js'
                 ],
                 dest: config.directories.uvAlephExtension + '/lib'
