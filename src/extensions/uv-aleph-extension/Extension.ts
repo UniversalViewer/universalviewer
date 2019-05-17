@@ -115,7 +115,7 @@ export class Extension extends BaseExtension implements IAlephExtension {
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}}`;
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}`;
         const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
