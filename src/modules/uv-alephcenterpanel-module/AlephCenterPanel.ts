@@ -48,8 +48,8 @@ export class AlephCenterPanel extends CenterPanel {
         if (body.length) {
           const media: Manifesto.IAnnotationBody = body[0];
           this._src = media.id;
-          //const format: Manifesto.MediaType | null = media.getFormat();
-          //this._display = (format && format.toString() === "application/gltf") ? DisplayMode.MESH : DisplayMode.SLICES;
+          const format: Manifesto.MediaType | null = media.getFormat();
+          this._displayMode = (format && format.toString() === "model/gltf+json") ? DisplayMode.MESH : DisplayMode.SLICES;
 
           this._render();
         }
@@ -79,7 +79,7 @@ export class AlephCenterPanel extends CenterPanel {
     }, false);
 
     this.aleph.componentOnReady().then((al: any) => {
-      al.load(this._src);
+      al.load(this._src, this._displayMode);
     });
 
     $.subscribe(Events.DISPLAY_MODE_CHANGED, (e: any, displayMode: DisplayMode) => {
