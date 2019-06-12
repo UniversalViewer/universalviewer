@@ -23,7 +23,7 @@ export interface IExtension {
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]>;
-    getIIIFShareUrl(): string;
+    getIIIFShareUrl(shareManifests?: boolean): string;
     getLocale(): string;
     getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[];
     getPagedIndices(canvasIndex?: number): number[];
