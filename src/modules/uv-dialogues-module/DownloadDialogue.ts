@@ -215,15 +215,14 @@ export class DownloadDialogue extends Dialogue {
         return extension;
     }
 
+    isMediaDownloadEnabled(): boolean {
+      return this.extension.helper.isUIEnabled('mediaDownload');
+    }
+
     isDownloadOptionAvailable(option: DownloadOption): boolean {
         switch (option) {
             case DownloadOption.ENTIRE_FILE_AS_ORIGINAL:
-                // check if ui-extensions disable it
-                const uiExtensions: Manifesto.IService | null = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
-
-                if (uiExtensions && !this.extension.helper.isUIEnabled('mediaDownload')) {
-                    return false;
-                }
+                return this.isMediaDownloadEnabled();
         }
 
         return true;
