@@ -5,8 +5,14 @@ import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOptio
 
 export class DownloadDialogue extends BaseDownloadDialogue {
 
-    $entireFileAsOriginal: JQuery;
+    $canvasOptions: JQuery;
+    $canvasOptionsContainer: JQuery;
     $downloadButton: JQuery;
+    $entireFileAsOriginal: JQuery;
+    $imageOptions: JQuery;
+    $imageOptionsContainer: JQuery;
+    $manifestOptions: JQuery;
+    $manifestOptionsContainer: JQuery;
 
     constructor($element: JQuery) {
         super($element);
@@ -24,6 +30,17 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         this.$downloadButton = $('<a class="btn btn-primary" href="#" tabindex="0">' + this.content.download + '</a>');
         this.$buttons.prepend(this.$downloadButton);
+        this.$imageOptionsContainer = $('<li class="group image"></li>');
+        this.$imageOptions = $('<ul></ul>');
+        this.$imageOptionsContainer.append(this.$imageOptions);
+
+        this.$canvasOptionsContainer = $('<li class="group canvas"></li>');
+        this.$canvasOptions = $('<ul></ul>');
+        this.$canvasOptionsContainer.append(this.$canvasOptions);
+
+        this.$manifestOptionsContainer = $('<li class="group manifest"></li>');
+        this.$manifestOptions = $('<ul></ul>');
+        this.$manifestOptionsContainer.append(this.$manifestOptions);
 
         const that = this;
         
@@ -61,6 +78,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
 
         super.open($triggerButton);
 
+        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        
         if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL) && !this._isAdaptive()) {
             const $input: JQuery = this.$entireFileAsOriginal.find('input');
             const $label: JQuery = this.$entireFileAsOriginal.find('label');
@@ -69,17 +88,53 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             $input.prop('title', label);
             this.$entireFileAsOriginal.show();
         }
-
         this.resetDynamicDownloadOptions();
 
         if (this.isDownloadOptionAvailable(DownloadOption.RANGE_RENDERINGS)) {
             
-            const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+            if (canvas.ranges && canvas.ranges.length) {
+                for (let i = 0; i < canvas.ranges.length; i++) {
+                    const range: Manifesto.IRange = canvas.ranges[i];
+                    const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
+                    this.addDownloadOptionsForRenderings(renderingOptions);
+                }
+            }
+        }
 
-            if (range) {
-                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
+        if (this.isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
+            const images: Manifesto.IAnnotation[] = canvas.getImages();
+            if (images.length) {
+                this.$downloadOptions.append(this.$imageOptionsContainer);
+            }
+            for (let i = 0; i < images.length; i++) {
+                const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(images[i].getResource(), this.content.entireFileAsOriginal, DownloadOption.IMAGE_RENDERINGS);
                 this.addDownloadOptionsForRenderings(renderingOptions);
             }
+        }
+
+        if (this.isDownloadOptionAvailable(DownloadOption.CANVAS_RENDERINGS)) {
+            const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(canvas, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
+            if (renderingOptions.length) {
+                this.$downloadOptions.append(this.$canvasOptionsContainer);
+                this.addDownloadOptionsForRenderings(renderingOptions);
+            }
+        }
+
+        if (this.isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS)) {
+            let renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
+            
+            if (!renderingOptions.length) {
+                renderingOptions = this.getDownloadOptionsForRenderings(this.extension.helper.manifest, this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
+            }
+
+            if (renderingOptions.length) {
+                this.$downloadOptions.append(this.$manifestOptionsContainer);
+                this.addDownloadOptionsForRenderings(renderingOptions);
+            }
+        }
+
+        if (this.$downloadOptions.length) {
+            this.$entireFileAsOriginal.hide();
         }
 
         if (!this.$downloadOptions.find('li.option:visible').length) {
@@ -96,14 +151,22 @@ export class DownloadDialogue extends BaseDownloadDialogue {
     }
 
     addDownloadOptionsForRenderings(renderingOptions: IRenderingOption[]): void {
-
         renderingOptions.forEach((option: IRenderingOption) => {
-            this.$downloadOptions.append(option.button);
+            switch (option.type) {
+                case DownloadOption.IMAGE_RENDERINGS:
+                    this.$imageOptions.append(option.button);
+                    break;
+                case DownloadOption.CANVAS_RENDERINGS:
+                    this.$canvasOptions.append(option.button);
+                    break;
+                case DownloadOption.MANIFEST_RENDERINGS:
+                    this.$manifestOptions.append(option.button);
+                    break;
+            }
         });
-
     }
 
     isDownloadOptionAvailable(option: DownloadOption): boolean {
-        return super.isDownloadOptionAvailable(option);
+        return this.isMediaDownloadEnabled();
     }
 }
