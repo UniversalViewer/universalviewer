@@ -6,4 +6,7 @@ module.exports = {
     command: 'npm run server',
     port: 4444,
   },
+  setupFilesAfterEnv: [
+    './jest.setup.js'
+  ]
 }

@@ -61,8 +61,10 @@ export class DownloadDialogue extends Dialogue {
     }
 
     addEntireFileDownloadOptions(): void {
-        if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL)) {
             this.$downloadOptions.empty();
+
+            // 
 
             // add each file src
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
@@ -213,15 +215,14 @@ export class DownloadDialogue extends Dialogue {
         return extension;
     }
 
+    isMediaDownloadEnabled(): boolean {
+      return this.extension.helper.isUIEnabled('mediaDownload');
+    }
+
     isDownloadOptionAvailable(option: DownloadOption): boolean {
         switch (option) {
-            case DownloadOption.entireFileAsOriginal:
-                // check if ui-extensions disable it
-                const uiExtensions: Manifesto.IService | null = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
-
-                if (uiExtensions && !this.extension.helper.isUIEnabled('mediaDownload')) {
-                    return false;
-                }
+            case DownloadOption.ENTIRE_FILE_AS_ORIGINAL:
+                return this.isMediaDownloadEnabled();
         }
 
         return true;

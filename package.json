@@ -1,6 +1,6 @@
 {
   "name": "universalviewer",
-  "version": "3.0.33",
+  "version": "3.0.36",
   "description": "The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world.",
   "engines": {
     "node": ">=8.9.1",
@@ -94,6 +94,7 @@
     "opencollective": "1.0.3",
     "openseadragon": "2.2.1",
     "pdfjs-dist": "2.0.161",
+    "pdfobject": "^2.1.1",
     "requirejs": "2.2.0",
     "three": "0.91.0",
     "virtex3d": "0.4.0",

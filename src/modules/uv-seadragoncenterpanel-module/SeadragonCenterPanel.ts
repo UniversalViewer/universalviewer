@@ -25,7 +25,6 @@ export class SeadragonCenterPanel extends CenterPanel {
     pages: Manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
     previousAnnotationRect: AnnotationRect;
-    title: string | null;
     userData: any;
     viewer: any;
 
@@ -886,7 +885,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         // if zoomToBoundsEnabled, zoom to the annotation's bounds.
         // otherwise, pan into view preserving the current zoom level.
-        if (Utils.Bools.getBool(this.config.options.zoomToBoundsEnabled, false)) {
+        if (Utils.Bools.getBool(this.extension.data.config.options.zoomToBoundsEnabled, false)) {
             this.fitToBounds(new Bounds(annotationRect.viewportX, annotationRect.viewportY, annotationRect.width, annotationRect.height), false);
         } else {
             const x: number = annotationRect.viewportX - ((this.currentBounds.w * 0.5) - annotationRect.width * 0.5);
@@ -955,7 +954,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (!this.isCreated) return;
 
         if (this.title) {
-            this.$title.ellipsisFill(UVUtils.sanitize(this.title));
+            this.$title.text(UVUtils.sanitize(this.title));
         }
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));

@@ -56,7 +56,7 @@
     "tokenStorage": "session",
     "useArrowKeysToNavigate": false,
     "zoomToSearchResultEnabled": true,
-    "zoomToBoundsEnabled": false
+    "zoomToBoundsEnabled": true
   },
   "modules": {
     "contentLeftPanel": {

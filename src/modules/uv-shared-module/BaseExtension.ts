@@ -74,10 +74,15 @@ export class BaseExtension implements IExtension {
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         this.$element.prop('tabindex', 0);
 
+        if (this.data.embedded) {
+            this.$element.addClass('embedded');
+        }
+
         if (this.isMobile()) {
             this.$element.addClass('mobile');
         }
 
+        // todo: deprecate?
         if (this.data.isLightbox) {
             this.$element.addClass('lightbox');
         }

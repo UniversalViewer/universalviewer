@@ -1,12 +1,12 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
+import { UVUtils } from "../../Utils";
 
 export class AVCenterPanel extends CenterPanel {
 
     $avcomponent: JQuery;
     avcomponent: IIIFComponents.AVComponent | null;
-    title: string | null;
     private _lastCanvasIndex: number | undefined;
     private _mediaReady: boolean = false;
     private _isThumbsViewOpen: boolean = false;
@@ -188,6 +188,33 @@ export class AVCenterPanel extends CenterPanel {
 
         this.title = title;
 
+        // set subtitle
+        const groups: Manifold.MetadataGroup[] = this.extension.helper.getMetadata(<Manifold.MetadataOptions>{
+            range: currentRange
+        });
+
+        for (let i = 0; i < groups.length; i++) {
+            const group: Manifold.MetadataGroup = groups[i];
+
+            const item: Manifesto.LabelValuePair | undefined = group.items.find((el: Manifesto.LabelValuePair) => {
+                if (el.label) {
+                    const label: string | null = Manifesto.LanguageMap.getValue(el.label);
+                    if (label && label.toLowerCase() === this.config.options.subtitleMetadataField) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            if (item) {
+                this.subtitle = Manifesto.LanguageMap.getValue(item.value);
+                break;
+            }
+        }
+
+        this.$title.text(UVUtils.sanitize(this.title));
+
         this.resize(false);
     }
 
@@ -265,10 +292,6 @@ export class AVCenterPanel extends CenterPanel {
     resize(resizeAVComponent: boolean = true) {
 
         super.resize();
-
-        if (this.title) {
-            this.$title.ellipsisFill(this.title);
-        }
 
         if (resizeAVComponent && this.avcomponent) {
             this.$avcomponent.height(this.$content.height());
