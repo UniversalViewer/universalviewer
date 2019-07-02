@@ -5,7 +5,7 @@ import {UVUtils} from "../../Utils";
 export class MoreInfoDialogue extends Dialogue {
 
     $title: JQuery;
-    metadataComponent: IIIFComponents.MetadataComponent;
+    metadataComponent: any;
     $metadata: JQuery;
 
     constructor($element: JQuery) {
@@ -52,8 +52,8 @@ export class MoreInfoDialogue extends Dialogue {
         this.metadataComponent.set(this._getData());
     }
 
-    private _getData(): IIIFComponents.IMetadataComponentData {
-        return <IIIFComponents.IMetadataComponentData>{
+    private _getData() {
+        return {
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
@@ -69,7 +69,7 @@ export class MoreInfoDialogue extends Dialogue {
             manifestExclude: this.config.options.manifestExclude,
             range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
-            sanitizer: (html) => {
+            sanitizer: (html: string) => {
                 return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages

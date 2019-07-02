@@ -7,8 +7,8 @@ export class MultiSelectDialogue extends Dialogue {
 
     $title: JQuery;
     $gallery: JQuery;
-    galleryComponent: IIIFComponents.GalleryComponent;
-    data: IIIFComponents.IGalleryComponentData;
+    galleryComponent: any;
+    data: any;
 
     constructor($element: JQuery) {
         super($element);
@@ -45,7 +45,7 @@ export class MultiSelectDialogue extends Dialogue {
         this.$gallery = $('<div class="iiif-gallery-component"></div>');
         this.$content.append(this.$gallery);
 
-        this.data = <IIIFComponents.IGalleryComponentData>{
+        this.data = {
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,

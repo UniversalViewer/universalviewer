@@ -4,8 +4,8 @@ import {BaseView} from "../uv-shared-module/BaseView";
 export class GalleryView extends BaseView {
 
     isOpen: boolean = false;
-    galleryComponent: IIIFComponents.GalleryComponent;
-    galleryData: IIIFComponents.IGalleryComponentData;
+    galleryComponent: any;
+    galleryData: any;
     $gallery: JQuery;
 
     constructor($element: JQuery) {

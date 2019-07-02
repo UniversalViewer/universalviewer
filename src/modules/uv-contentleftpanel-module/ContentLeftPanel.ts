@@ -285,8 +285,8 @@ export class ContentLeftPanel extends LeftPanel {
         this.selectCurrentTreeNode();
     }
 
-    getTreeData(): IIIFComponents.ITreeComponentData {
-        return <IIIFComponents.ITreeComponentData>{
+    getTreeData() {
+        return {
             autoExpand: this._isTreeAutoExpanded(),
             branchNodesExpandOnClick: Utils.Bools.getBool(this.config.options.branchNodesExpandOnClick, true),
             branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
@@ -431,8 +431,8 @@ export class ContentLeftPanel extends LeftPanel {
         this.galleryView.databind();
     }
 
-    getGalleryData(): IIIFComponents.IGalleryComponentData {
-        return <IIIFComponents.IGalleryComponentData>{
+    getGalleryData() {
+        return {
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
