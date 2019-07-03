@@ -124,12 +124,12 @@ export class Dialogue extends BaseView {
         });
     }
 
-    open($triggerButton?: JQuery): void {
+    open(triggerButton?: HTMLElement): void {
         this.$element.attr('aria-hidden', 'false');
         this.$element.show();
 
-        if ($triggerButton && $triggerButton.length) {
-            this.$triggerButton = $triggerButton;
+        if (triggerButton) {
+            this.$triggerButton = $(triggerButton);
             this.$bottom.show();
         } else {
             this.$bottom.hide();

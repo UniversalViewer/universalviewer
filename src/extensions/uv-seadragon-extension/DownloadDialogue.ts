@@ -163,8 +163,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         });
     }
 
-    open($triggerButton?: JQuery) {
-        super.open($triggerButton);
+    open(triggerButton?: HTMLElement) {
+        super.open(triggerButton);
 
         const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 

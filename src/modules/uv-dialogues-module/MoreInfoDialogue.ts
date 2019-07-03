@@ -21,8 +21,8 @@ export class MoreInfoDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
 
-        this.component.subscribe(this.openCommand, ($triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
         });
 
         this.component.subscribe(this.closeCommand, () => {
@@ -47,8 +47,8 @@ export class MoreInfoDialogue extends Dialogue {
         this.$element.hide();
     }
 
-    open($triggerButton?: JQuery): void {
-        super.open($triggerButton);
+    open(triggerButton?: HTMLElement): void {
+        super.open(triggerButton);
         this.metadataComponent.set(this._getData());
     }
 

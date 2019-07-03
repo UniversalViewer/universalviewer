@@ -27,8 +27,8 @@ export class DownloadDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_DOWNLOAD_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
 
-        this.component.subscribe(this.openCommand, ($triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
         });
 
         this.component.subscribe(this.closeCommand, () => {
