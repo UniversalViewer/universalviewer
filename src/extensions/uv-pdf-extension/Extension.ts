@@ -84,6 +84,10 @@ export class Extension extends BaseExtension implements IPDFExtension {
         return false;
     }
 
+    isHeaderPanelEnabled(): boolean {
+        return super.isHeaderPanelEnabled() && Utils.Bools.getBool(this.data.config.options.usePdfJs, true);
+    }
+
     createModules(): void{
         super.createModules();
 
@@ -97,7 +101,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
         }
 
-        this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new PDFCenterPanel(Shell.$centerPanel, Utils.Bools.getBool(this.data.config.options.usePdfJs, true));
 
         if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);

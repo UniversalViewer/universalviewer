@@ -26,9 +26,11 @@ export class PDFCenterPanel extends CenterPanel {
     private _renderTask: any;
     private _scale: number = 0.7;
     private _viewport: any;
+    private _usePdfJs: boolean = true;
 
-    constructor($element: JQuery) {
+    constructor($element: JQuery, usePdfJs: boolean) {
         super($element);
+        this._usePdfJs = usePdfJs;
     }
 
     create(): void {
@@ -244,7 +246,7 @@ export class PDFCenterPanel extends CenterPanel {
                 mediaUri = canvas.id;
             }
 
-            if (!this.config.options.usePdfJs) {
+            if (!this._usePdfJs) {
                 window.PDFObject.embed(pdfUri, '#content', {id: "PDF"});
             } else {
                 PDFJS.disableWorker = true;
