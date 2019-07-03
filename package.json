@@ -71,7 +71,7 @@
     "@edsilv/key-codes": "0.0.9",
     "@edsilv/utils": "0.2.6",
     "@iiif/base-component": "1.1.4",
-    "@iiif/iiif-av-component": "jrgriffiniii/iiif-av-component#jrgriffiniii-postercanvas-expanded",
+    "@iiif/iiif-av-component": "0.0.93",
     "@iiif/iiif-gallery-component": "1.1.13",
     "@iiif/iiif-metadata-component": "1.1.13",
     "@iiif/iiif-tree-component": "1.1.16",
