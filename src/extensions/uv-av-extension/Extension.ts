@@ -35,17 +35,17 @@ export class Extension extends BaseExtension implements IAVExtension {
 
         //requirejs.config({shim: {'uv/lib/hls.min': { deps: ['require'], exports: "Hls"}}});
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: ITreeNode) => {
             this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
     }
 
@@ -159,7 +159,7 @@ export class Extension extends BaseExtension implements IAVExtension {
     viewRange(path: string): void {
         const range: Manifesto.IRange | null = this.helper.getRangeByPath(path);
         if (!range) return;
-        $.publish(BaseEvents.RANGE_CHANGED, [range]);
+        this.component.publish(BaseEvents.RANGE_CHANGED, range);
 
         // don't update the canvas index, only when thumbs are clicked
         // if (range.canvases && range.canvases.length) {
@@ -170,7 +170,7 @@ export class Extension extends BaseExtension implements IAVExtension {
         //         const canvasIndex: number = canvas.index;
                 
         //         if (canvasIndex !== this.helper.canvasIndex) {
-        //             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        //             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
         //         }
         //     }
         // }

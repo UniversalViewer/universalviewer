@@ -7,11 +7,11 @@ export class ShareDialogue extends BaseShareDialogue {
     constructor($element: JQuery) {
         super($element);
 
-        $.subscribe(Events.SEADRAGON_OPEN, () => {
+        this.component.subscribe(Events.SEADRAGON_OPEN, () => {
             this.update();
         });
 
-        $.subscribe(Events.SEADRAGON_ANIMATION_FINISH, () => {
+        this.component.subscribe(Events.SEADRAGON_ANIMATION_FINISH, () => {
             this.update();
         });
     }

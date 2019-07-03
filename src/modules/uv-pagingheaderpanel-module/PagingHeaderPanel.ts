@@ -46,24 +46,24 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.modeChanged();
             this.updatePagingToggle();
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
             this.setSearchFieldValue(this.extension.helper.canvasIndex);
         });
         
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             this.openGallery();
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             this.closeGallery();
         });
 
@@ -157,7 +157,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             this.$imageSelectionBox.change(() => {
                 const imageIndex: number = parseInt(this.$imageSelectionBox.val());
-                $.publish(Events.IMAGE_SEARCH, [imageIndex]);
+                this.component.publish(Events.IMAGE_SEARCH, imageIndex);
             });
         }
 
@@ -230,17 +230,17 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$oneUpButton.onPressed(() => {
             const enabled: boolean = false;
             this.updateSettings({ pagingEnabled: enabled });
-            $.publish(Events.PAGING_TOGGLED, [enabled]);
+            this.component.publish(Events.PAGING_TOGGLED, enabled);
         });
 
         this.$twoUpButton.onPressed(() => {
             const enabled: boolean = true;
             this.updateSettings({ pagingEnabled: enabled });
-            $.publish(Events.PAGING_TOGGLED, [enabled]);
+            this.component.publish(Events.PAGING_TOGGLED, enabled);
         });
 
         this.$galleryButton.onPressed(() => {
-            $.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
+            this.component.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
         });
 
         this.setNavigationTitles();
@@ -259,10 +259,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(BaseEvents.FIRST);
+                    this.component.publish(BaseEvents.FIRST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.LAST);
+                    this.component.publish(BaseEvents.LAST);
                     break;
             }
         });
@@ -272,10 +272,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.PREV);
+                    this.component.publish(BaseEvents.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.NEXT);
+                    this.component.publish(BaseEvents.NEXT);
                     break;
             }
         });
@@ -285,10 +285,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.NEXT);
+                    this.component.publish(BaseEvents.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.PREV);
+                    this.component.publish(BaseEvents.PREV);
                     break;
             }
         });
@@ -298,10 +298,10 @@ export class PagingHeaderPanel extends HeaderPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(BaseEvents.LAST);
+                    this.component.publish(BaseEvents.LAST);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.FIRST);
+                    this.component.publish(BaseEvents.FIRST);
                     break;
             }
         });
@@ -317,11 +317,11 @@ export class PagingHeaderPanel extends HeaderPanel {
             // visible, since otherwise, clicking on the "Image" label can
             // trigger unexpected/undesired side effects.
             this.$imageModeOption.on('click', (e) => {
-                $.publish(Events.MODE_CHANGED, [Mode.image.toString()]);
+                this.component.publish(Events.MODE_CHANGED, Mode.image.toString());
             });
 
             this.$pageModeOption.on('click', (e) => {
-                $.publish(Events.MODE_CHANGED, [Mode.page.toString()]);
+                this.component.publish(Events.MODE_CHANGED, Mode.page.toString());
             });
         }
 
@@ -513,13 +513,13 @@ export class PagingHeaderPanel extends HeaderPanel {
         if (!value) {
 
             this.extension.showMessage(this.content.emptyValue);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
 
             return;
         }
 
         if (this.isPageModeEnabled()) {
-            $.publish(Events.PAGE_SEARCH, [value]);
+            this.component.publish(Events.PAGE_SEARCH, value);
         } else {
             let index: number;
 
@@ -533,7 +533,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             if (isNaN(index)) {
                 this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.invalidNumber);
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
@@ -541,11 +541,11 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             if (!asset) {
                 this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.pageNotFound);
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            $.publish(Events.IMAGE_SEARCH, [index]);
+            this.component.publish(Events.IMAGE_SEARCH, index);
         }
     }
 

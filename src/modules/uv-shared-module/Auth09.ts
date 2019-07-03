@@ -7,6 +7,8 @@ import IAccessToken = Manifesto.IAccessToken;
 
 export class Auth09 {
 
+    static publish: (event: string, args?: any) => void;
+
     static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string): Promise<Manifesto.IExternalResource[]> {
         return new Promise<Manifesto.IExternalResource[]>((resolve) => {
             manifesto.Utils.loadExternalResourcesAuth09(
@@ -23,16 +25,16 @@ export class Auth09 {
                 })['catch']((error: any) => {
                     switch(error.name) {
                         case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
-                            $.publish(BaseEvents.LOGIN_FAILED);
+                            Auth09.publish(BaseEvents.LOGIN_FAILED);
                             break;
                         case manifesto.StatusCodes.FORBIDDEN.toString():
-                            $.publish(BaseEvents.FORBIDDEN);
+                            Auth09.publish(BaseEvents.FORBIDDEN);
                             break;
                         case manifesto.StatusCodes.RESTRICTED.toString():
                             // do nothing
                             break;
                         default:
-                            $.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
+                            Auth09.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
                     }
             });
         });
@@ -41,7 +43,7 @@ export class Auth09 {
     static clickThrough(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
-            $.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
+            Auth09.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
 
@@ -51,7 +53,7 @@ export class Auth09 {
                         const pollTimer: number = window.setInterval(() => {
                             if (win && win.closed) {
                                 window.clearInterval(pollTimer);
-                                $.publish(BaseEvents.CLICKTHROUGH);
+                                Auth09.publish(BaseEvents.CLICKTHROUGH);
                                 resolve();
                             }
                         }, 500);
@@ -65,10 +67,10 @@ export class Auth09 {
     static restricted(resource: Manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve, reject) => {
 
-            $.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
+            Auth09.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
-                    $.publish(BaseEvents.LOAD_FAILED);
+                    Auth09.publish(BaseEvents.LOAD_FAILED);
                     reject(resource);
                 }
             }]);
@@ -85,7 +87,7 @@ export class Auth09 {
                 options.showCancelButton = true;
             }
 
-            $.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [{
+            Auth09.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
                 loginCallback: () => {
                     if (resource.loginService) {
@@ -93,7 +95,7 @@ export class Auth09 {
                         const pollTimer: number = window.setInterval(function () {
                             if (win && win.closed) {
                                 window.clearInterval(pollTimer);
-                                $.publish(BaseEvents.LOGIN);
+                                Auth09.publish(BaseEvents.LOGIN);
                                 resolve();
                             }
                         }, 500);
@@ -105,7 +107,7 @@ export class Auth09 {
                         const pollTimer: number = window.setInterval(function () {
                             if (win && win.closed) {
                                 window.clearInterval(pollTimer);
-                                $.publish(BaseEvents.LOGOUT);
+                                Auth09.publish(BaseEvents.LOGOUT);
                                 resolve();
                             }
                         }, 500);
@@ -213,7 +215,7 @@ export class Auth09 {
                 resolve(resource);
             } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                 resolve(resource);
-                $.publish(BaseEvents.RESOURCE_DEGRADED, [resource]);
+                Auth09.publish(BaseEvents.RESOURCE_DEGRADED, [resource]);
             } else {
 
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
@@ -221,7 +223,7 @@ export class Auth09 {
                     // if the browser doesn't support CORS
                     if (!Modernizr.cors) {
                         const informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
-                        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+                        Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
                         resolve(resource);
                     } else {
                         reject(resource.error.statusText);
@@ -240,6 +242,6 @@ export class Auth09 {
 
     static handleDegraded(resource: Manifesto.IExternalResource): void {
         const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
-        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+        Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }
 }

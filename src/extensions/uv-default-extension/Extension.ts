@@ -31,19 +31,19 @@ export class Extension extends BaseExtension implements IDefaultExtension {
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
-            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
         $(window).bind('exitfullscreen', () => {
-            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (canvasIndex: number) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
         });
     }
 

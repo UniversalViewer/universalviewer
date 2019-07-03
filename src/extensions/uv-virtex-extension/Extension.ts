@@ -32,12 +32,12 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (canvasIndex: number) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
         });
     }
 

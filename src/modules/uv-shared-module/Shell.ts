@@ -22,11 +22,11 @@ export class Shell extends BaseView {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             Shell.$overlays.show();
         });
 
-        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             Shell.$overlays.hide();
         });
 
@@ -60,7 +60,7 @@ export class Shell extends BaseView {
         Shell.$overlays.on('click', (e) => {
             if ($(e.target).hasClass('overlays')) {
                 e.preventDefault();
-                $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+                this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
             }
         });
 

@@ -49,15 +49,15 @@ export class ContentLeftPanel extends LeftPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+        this.component.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             if (!this.extension.isDesktopMetric()) {
                 if (this.isFullyExpanded) {
                     this.collapseFull();
@@ -65,22 +65,22 @@ export class ContentLeftPanel extends LeftPanel {
             }
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             }
@@ -89,7 +89,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.updateTreeTabBySelection();
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             }
@@ -520,7 +520,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
@@ -532,13 +532,13 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
@@ -551,7 +551,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     openTreeView(): void {
@@ -577,7 +577,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.resize();
         this.treeView.resize();
 
-        $.publish(BaseEvents.OPEN_TREE_VIEW);
+        this.component.publish(BaseEvents.OPEN_TREE_VIEW);
     }
 
     openThumbsView(): void {
@@ -612,7 +612,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.thumbsView.resize();
         }
 
-        $.publish(BaseEvents.OPEN_THUMBS_VIEW);
+        this.component.publish(BaseEvents.OPEN_THUMBS_VIEW);
     }
 
     selectTopRangeIndex(index: number): void {

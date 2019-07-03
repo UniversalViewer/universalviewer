@@ -27,11 +27,11 @@ export class DownloadDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_DOWNLOAD_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
+        this.component.subscribe(this.openCommand, ($triggerButton: JQuery) => {
             this.open($triggerButton);
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -52,7 +52,7 @@ export class DownloadDialogue extends Dialogue {
         this.$footer.append(this.$termsOfUseButton);
 
         this.$termsOfUseButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_TERMS_OF_USE);
+            this.component.publish(BaseEvents.SHOW_TERMS_OF_USE);
         });
 
         // hide

@@ -21,7 +21,7 @@ export class RightPanel extends BaseExpandPanel {
             this.toggle(true);
         }
 
-        $.subscribe(BaseEvents.TOGGLE_EXPAND_RIGHT_PANEL, () => {
+        this.component.subscribe(BaseEvents.TOGGLE_EXPAND_RIGHT_PANEL, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             } else {
@@ -42,9 +42,9 @@ export class RightPanel extends BaseExpandPanel {
         super.toggleFinish();
 
         if (this.isExpanded) {
-            $.publish(BaseEvents.OPEN_RIGHT_PANEL);
+            this.component.publish(BaseEvents.OPEN_RIGHT_PANEL);
         } else {            
-            $.publish(BaseEvents.CLOSE_RIGHT_PANEL);
+            this.component.publish(BaseEvents.CLOSE_RIGHT_PANEL);
         }
         this.extension.updateSettings({rightPanelOpen: this.isExpanded});
     }

@@ -7,6 +7,7 @@ export class Auth1 {
 
     static messages: any = {};
     static storageStrategy: string;
+    static publish: (event: string, args?: any) => void;
 
     static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string, options: Manifesto.IManifestoOptions): Promise<Manifesto.IExternalResource[]> {
         
@@ -34,16 +35,16 @@ export class Auth1 {
                 })['catch']((error: any) => {
                     switch(error.name) {
                         case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
-                            $.publish(BaseEvents.LOGIN_FAILED);
+                            Auth1.publish(BaseEvents.LOGIN_FAILED);
                             break;
                         case manifesto.StatusCodes.FORBIDDEN.toString():
-                            $.publish(BaseEvents.FORBIDDEN);
+                            Auth1.publish(BaseEvents.FORBIDDEN);
                             break;
                         case manifesto.StatusCodes.RESTRICTED.toString():
                             // do nothing
                             break;
                         default:
-                            $.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
+                            Auth1.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
                     }
             });
         });
@@ -92,7 +93,7 @@ export class Auth1 {
 
     static showDegradedMessage(resource: Manifesto.IExternalResource): void {
         const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
-        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+        Auth1.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }
 
     static storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
@@ -166,7 +167,7 @@ export class Auth1 {
 
             } else {
 
-                $.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
+                Auth1.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
                     service: service,
                     closeCallback: () => {
                         resolve(null);
@@ -258,7 +259,7 @@ export class Auth1 {
            errorMessage += service.getFailureDescription();
         }
 
-        $.publish(BaseEvents.SHOW_MESSAGE, [UVUtils.sanitize(errorMessage)]);
+        Auth1.publish(BaseEvents.SHOW_MESSAGE, [UVUtils.sanitize(errorMessage)]);
     }
 
 }

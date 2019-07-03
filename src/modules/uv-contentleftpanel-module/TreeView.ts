@@ -23,17 +23,19 @@ export class TreeView extends BaseView {
 
     setup(): void {
 
+        const that = this;
+
         this.treeComponent = new IIIFComponents.TreeComponent({
             target:  <HTMLElement>this.$tree[0], 
             data: this.treeData
         });
 
         this.treeComponent.on('treeNodeSelected', function(node: ITreeNode) {
-            $.publish(BaseEvents.TREE_NODE_SELECTED, [node]);
+            that.component.publish(BaseEvents.TREE_NODE_SELECTED, [node]);
         }, false);
 
         this.treeComponent.on('treeNodeMultiSelected', function(node: ITreeNode) {
-            $.publish(BaseEvents.TREE_NODE_MULTISELECTED, [node]);
+            that.component.publish(BaseEvents.TREE_NODE_MULTISELECTED, [node]);
         }, false);
     }
 

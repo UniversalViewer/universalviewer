@@ -60,10 +60,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 window.open(id);
             }
 
-            $.publish(BaseEvents.DOWNLOAD, [{
+            this.component.publish(BaseEvents.DOWNLOAD, {
                 "type": type,
                 "label": label
-            }]);
+            });
 
             this.close();
         });

@@ -9,17 +9,21 @@ import {IExtension} from "./modules/uv-shared-module/IExtension";
 import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
-import { UVUtils } from "./Utils";
+import {UVUtils} from "./Utils";
+import {PubSub} from "./Pubsub";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
     private _extensions: IExtension[];
+    private _pubsub: PubSub;
     public extension: IExtension | null;
     public isFullScreen: boolean = false;
     public URLDataProvider: IUVDataProvider;
 
     constructor(options: _Components.IBaseComponentOptions) {
         super(options);
+
+        this._pubsub = new PubSub();
 
         this._init();
         this._resize();
@@ -195,11 +199,24 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }
     }
 
+    public publish(event: string, args?: any): void {
+        if (args) {
+            if (args.length) {
+                args = args[0];
+            }
+        }
+        this._pubsub.publish(event, args);
+    }
+
+    public subscribe(event: string, cb: any): void {
+        this._pubsub.subscribe(event, cb);
+    }
+
     private _reload(data: IUVData): void {
         
-        $.disposePubSub(); // remove any existing event listeners
+        this._pubsub.dispose(); // remove any existing event listeners
 
-        $.subscribe(BaseEvents.RELOAD, (e: any, data?: IUVData) => {
+        this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
             this.fire(BaseEvents.RELOAD, data);
         });
 

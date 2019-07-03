@@ -21,11 +21,11 @@ export class MoreInfoDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
+        this.component.subscribe(this.openCommand, ($triggerButton: JQuery) => {
             this.open($triggerButton);
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 

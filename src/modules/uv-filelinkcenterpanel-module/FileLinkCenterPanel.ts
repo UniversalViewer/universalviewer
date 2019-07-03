@@ -18,7 +18,7 @@ export class FileLinkCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
         });
 

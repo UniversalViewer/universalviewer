@@ -36,41 +36,41 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
-            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
         $(window).bind('exitfullscreen', () => {
-            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             Shell.$centerPanel.hide();
             Shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             Shell.$centerPanel.show();
             Shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(Events.MEDIA_ENDED, () => {
+        this.component.subscribe(Events.MEDIA_ENDED, () => {
             this.fire(Events.MEDIA_ENDED);
         });
 
-        $.subscribe(Events.MEDIA_PAUSED, () => {
+        this.component.subscribe(Events.MEDIA_PAUSED, () => {
             this.fire(Events.MEDIA_PAUSED);
         });
 
-        $.subscribe(Events.MEDIA_PLAYED, () => {
+        this.component.subscribe(Events.MEDIA_PLAYED, () => {
             this.fire(Events.MEDIA_PLAYED);
         });
     }

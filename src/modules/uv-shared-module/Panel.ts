@@ -1,7 +1,9 @@
 import {BaseEvents} from "./BaseEvents";
+import { IUVComponent } from "../../IUVComponent";
 
 export class Panel {
 
+    component: IUVComponent;
     $element: JQuery;
     fitToParentWidth: boolean;
     fitToParentHeight: boolean;
@@ -16,7 +18,7 @@ export class Panel {
     }
 
     create(): void {
-        $.subscribe(BaseEvents.RESIZE, () => {
+        this.component.subscribe(BaseEvents.RESIZE, () => {
             this.resize();
         });
     }

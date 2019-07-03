@@ -54,60 +54,60 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$viewer = $('<div id="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
-        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, args: any) => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
             this.overlayAnnotations();
             this.zoomToInitialAnnotation();
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: ISettings) => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: ISettings) => {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
             });
         });
 
-        $.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+        this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
             this.whenCreated(() => {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
                 this.clearAnnotations();
             });
         });
 
-        $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
+        this.component.subscribe(Events.NEXT_SEARCH_RESULT, () => {
             this.whenCreated(() => {
                 this.nextAnnotation();
             });
         });
 
-        $.subscribe(Events.PREV_SEARCH_RESULT, () => {
+        this.component.subscribe(Events.PREV_SEARCH_RESULT, () => {
             this.whenCreated(() => {
                 this.prevAnnotation();
             });
         });
 
-        $.subscribe(Events.ZOOM_IN, () => {
+        this.component.subscribe(Events.ZOOM_IN, () => {
             this.whenCreated(() => {
                 this.zoomIn();
             });
         });
 
-        $.subscribe(Events.ZOOM_OUT, () => {
+        this.component.subscribe(Events.ZOOM_OUT, () => {
             this.whenCreated(() => {
                 this.zoomOut();
             });
         });
 
-        $.subscribe(Events.ROTATE, () => {
+        this.component.subscribe(Events.ROTATE, () => {
             this.whenCreated(() => {
                 this.rotateRight();
             });
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.whenCreated(() => {
                 this.updateResponsiveView();
             });
@@ -289,16 +289,16 @@ export class SeadragonCenterPanel extends CenterPanel {
         //});
 
         this.viewer.addHandler('resize', (viewer: any) => {
-            $.publish(Events.SEADRAGON_RESIZE, [viewer]);
+            this.component.publish(Events.SEADRAGON_RESIZE, viewer);
             this.viewerResize(viewer);
         });
 
         this.viewer.addHandler('animation-start', (viewer: any) => {
-            $.publish(Events.SEADRAGON_ANIMATION_START, [viewer]);
+            this.component.publish(Events.SEADRAGON_ANIMATION_START, viewer);
         });
 
         this.viewer.addHandler('animation', (viewer: any) => {
-            $.publish(Events.SEADRAGON_ANIMATION, [viewer]);
+            this.component.publish(Events.SEADRAGON_ANIMATION, viewer);
         });
 
         this.viewer.addHandler('animation-finish', (viewer: any) => {
@@ -306,11 +306,11 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             this.updateVisibleAnnotationRects();
 
-            $.publish(Events.SEADRAGON_ANIMATION_FINISH, [viewer]);
+            this.component.publish(Events.SEADRAGON_ANIMATION_FINISH, viewer);
         });
 
         this.viewer.addHandler('rotate', (args: any) => {
-            $.publish(Events.SEADRAGON_ROTATION, [args.degrees]);
+            this.component.publish(Events.SEADRAGON_ROTATION, args.degrees);
         });
 
         this.title = this.extension.helper.getLabel();
@@ -367,10 +367,10 @@ export class SeadragonCenterPanel extends CenterPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.PREV);
+                    this.component.publish(BaseEvents.PREV);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.NEXT);
+                    this.component.publish(BaseEvents.NEXT);
                     break;
             }
         });
@@ -385,10 +385,10 @@ export class SeadragonCenterPanel extends CenterPanel {
                 case manifesto.ViewingDirection.leftToRight().toString() :
                 case manifesto.ViewingDirection.bottomToTop().toString() :
                 case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.NEXT);
+                    this.component.publish(BaseEvents.NEXT);
                     break;
                 case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.PREV);
+                    this.component.publish(BaseEvents.PREV);
                     break;
             }
         });
@@ -521,7 +521,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     openPagesHandler(): void {
 
-        $.publish(Events.SEADRAGON_OPEN);
+        this.component.publish(Events.SEADRAGON_OPEN);
 
         if (this.extension.helper.isMultiCanvas() && !this.extension.helper.isContinuous()) {
 
@@ -805,13 +805,13 @@ export class SeadragonCenterPanel extends CenterPanel {
             if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
                 this.navigatedFromSearch = true;
-                $.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
+                this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, foundRect);
             } else {
                 this.zoomToAnnotation(foundRect);
             }
         } else {
             this.navigatedFromSearch = true;
-            $.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            this.component.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
@@ -842,13 +842,13 @@ export class SeadragonCenterPanel extends CenterPanel {
             if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
                 this.navigatedFromSearch = true;
-                $.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
+                this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
             } else {
                 this.zoomToAnnotation(<AnnotationRect>foundRect);
             }
         } else {
             this.navigatedFromSearch = true;
-            $.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            this.component.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
@@ -899,7 +899,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.highlightAnnotationRect(annotationRect);
 
-        $.publish(BaseEvents.ANNOTATION_CHANGED);
+        this.component.publish(BaseEvents.ANNOTATION_CHANGED);
     }
 
     highlightAnnotationRect(annotationRect: AnnotationRect): void {
