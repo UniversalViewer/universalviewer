@@ -200,11 +200,6 @@ export default class UVComponent extends _Components.BaseComponent implements IU
     }
 
     public publish(event: string, args?: any): void {
-        if (args) {
-            if (args.length) {
-                args = args[0];
-            }
-        }
         this._pubsub.publish(event, args);
     }
 

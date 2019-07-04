@@ -149,7 +149,7 @@ export class ThumbsView extends BaseView {
             e.preventDefault();
             const data = $.view(this).data;
             that.lastThumbClickedIndex = data.index;
-            that.component.publish(BaseEvents.THUMB_SELECTED, [data]);
+            that.component.publish(BaseEvents.THUMB_SELECTED, data);
         });
 
         this.setLabel();
