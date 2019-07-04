@@ -1,4 +1,3 @@
-import {Shell} from "./Shell";
 import {BaseView} from "./BaseView";
 import {Position} from "./Position";
 import {UVUtils} from "../../Utils";
@@ -176,8 +175,8 @@ export class CenterPanel extends BaseView {
     resize(): void {
         super.resize();
 
-        const leftPanelWidth: number = Shell.$leftPanel.is(':visible') ? Math.floor(Shell.$leftPanel.width()) : 0;
-        const rightPanelWidth: number = Shell.$rightPanel.is(':visible') ? Math.floor(Shell.$rightPanel.width()) : 0;
+        const leftPanelWidth: number = this.extension.shell.$leftPanel.is(':visible') ? Math.floor(this.extension.shell.$leftPanel.width()) : 0;
+        const rightPanelWidth: number = this.extension.shell.$rightPanel.is(':visible') ? Math.floor(this.extension.shell.$rightPanel.width()) : 0;
         const width: number = Math.floor(this.$element.parent().width() - leftPanelWidth - rightPanelWidth)
 
         this.$element.css({

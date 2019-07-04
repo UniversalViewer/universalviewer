@@ -23,7 +23,6 @@ import { Point } from "../../modules/uv-shared-module/Point";
 import { SeadragonCenterPanel } from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Shell } from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import AnnotationGroup = Manifold.AnnotationGroup;
@@ -68,9 +67,9 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
                 this.component.publish(BaseEvents.UPDATE_SETTINGS);
-                Shell.$rightPanel.hide();
+                this.shell.$rightPanel.hide();
             } else {
-                Shell.$rightPanel.show();
+                this.shell.$rightPanel.show();
             }
         });
 
@@ -137,18 +136,18 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             if (this.isDesktopMetric()) {
-                Shell.$rightPanel.show();
+                this.shell.$rightPanel.show();
             }
         });
 
         this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            Shell.$centerPanel.show();
+            this.shell.$centerPanel.show();
             this.resize();
         });
 
         this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-            Shell.$centerPanel.hide();
-            Shell.$rightPanel.hide();
+            this.shell.$centerPanel.hide();
+            this.shell.$rightPanel.hide();
         });
 
         this.component.subscribe(BaseEvents.MINUS, () => {
@@ -345,58 +344,58 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new PagingHeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ContentLeftPanel(this.shell.$leftPanel);
         } else {
-            Shell.$leftPanel.hide();
+            this.shell.$leftPanel.hide();
         }
 
-        this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new SeadragonCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         } else {
-            Shell.$rightPanel.hide();
+            this.shell.$rightPanel.hide();
         }
 
         if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
-            this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+            this.mobileFooterPanel = new MobileFooterPanel(this.shell.$mobileFooterPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$helpDialogue = $('<div class="overlay help" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$helpDialogue);
+        this.shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
         this.$moreInfoDialogue = $('<div class="overlay moreInfo" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$moreInfoDialogue);
+        this.shell.$overlays.append(this.$moreInfoDialogue);
         this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
         this.$multiSelectDialogue = $('<div class="overlay multiSelect" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$multiSelectDialogue);
+        this.shell.$overlays.append(this.$multiSelectDialogue);
         this.multiSelectDialogue = new MultiSelectDialogue(this.$multiSelectDialogue);
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         this.$externalContentDialogue = $('<div class="overlay externalContent" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$externalContentDialogue);
+        this.shell.$overlays.append(this.$externalContentDialogue);
         this.externalContentDialogue = new ExternalContentDialogue(this.$externalContentDialogue);
 
         if (this.isHeaderPanelEnabled()) {

@@ -576,19 +576,19 @@ export class BaseExtension implements IExtension {
 
     createModules(): void {
         this.$authDialogue = $('<div class="overlay auth" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$authDialogue);
+        this.shell.$overlays.append(this.$authDialogue);
         this.authDialogue = new AuthDialogue(this.$authDialogue);
         
         this.$clickThroughDialogue = $('<div class="overlay clickthrough" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$clickThroughDialogue);
+        this.shell.$overlays.append(this.$clickThroughDialogue);
         this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
 
         this.$restrictedDialogue = $('<div class="overlay login" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$restrictedDialogue);
+        this.shell.$overlays.append(this.$restrictedDialogue);
         this.restrictedDialogue = new RestrictedDialogue(this.$restrictedDialogue);
 
         this.$loginDialogue = $('<div class="overlay login" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$loginDialogue);
+        this.shell.$overlays.append(this.$loginDialogue);
         this.loginDialogue = new LoginDialogue(this.$loginDialogue);
     }
 
@@ -1171,7 +1171,7 @@ export class BaseExtension implements IExtension {
     }
 
     isOverlayActive(): boolean {
-        return Shell.$overlays.is(':visible');
+        return this.shell.$overlays.is(':visible');
     }
 
     isDesktopMetric(): boolean {
@@ -1312,8 +1312,5 @@ export class BaseExtension implements IExtension {
         }
         
     }
-
-    // auth
-
     
 }

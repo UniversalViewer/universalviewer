@@ -31,11 +31,11 @@ export class TreeView extends BaseView {
         });
 
         this.treeComponent.on('treeNodeSelected', function(node: ITreeNode) {
-            that.component.publish(BaseEvents.TREE_NODE_SELECTED, [node]);
+            that.component.publish(BaseEvents.TREE_NODE_SELECTED, node);
         }, false);
 
         this.treeComponent.on('treeNodeMultiSelected', function(node: ITreeNode) {
-            that.component.publish(BaseEvents.TREE_NODE_MULTISELECTED, [node]);
+            that.component.publish(BaseEvents.TREE_NODE_MULTISELECTED, node);
         }, false);
     }
 

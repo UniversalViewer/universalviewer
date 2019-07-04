@@ -1,7 +1,8 @@
-import {ILocale} from "../../ILocale";
-import {IUVComponent} from "../../IUVComponent";
-import {IUVData} from "../../IUVData";
-import {MetricType} from "./MetricType";
+import { ILocale } from "../../ILocale";
+import { IUVComponent } from "../../IUVComponent";
+import { IUVData } from "../../IUVData";
+import { MetricType } from "./MetricType";
+import { Shell } from "./Shell";
 
 export interface IExtension {
     $element: JQuery;
@@ -60,6 +61,7 @@ export interface IExtension {
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
     render(): void;
+    shell: Shell;
     updateSettings(settings: ISettings): void;
     viewCanvas(canvasIndex: number): void;
     viewCollection(collection: Manifesto.ICollection): void;
