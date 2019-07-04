@@ -44,8 +44,8 @@ export class GalleryView extends BaseView {
         });
 
         this.galleryComponent.on('thumbSelected', function(thumb: any) {
-            that.component.publish(BaseEvents.GALLERY_THUMB_SELECTED, [thumb]);
-            that.component.publish(BaseEvents.THUMB_SELECTED, [thumb]);
+            that.component.publish(BaseEvents.GALLERY_THUMB_SELECTED, thumb);
+            that.component.publish(BaseEvents.THUMB_SELECTED, thumb);
         }, false);
 
         this.galleryComponent.on('decreaseSize', function() {

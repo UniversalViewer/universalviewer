@@ -166,7 +166,7 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         this.$placemarkerDetails.on('mouseover', () => {
-            that.component.publish(Events.SEARCH_PREVIEW_START, [this.currentPlacemarkerIndex]);
+            that.component.publish(Events.SEARCH_PREVIEW_START, this.currentPlacemarkerIndex);
         });
 
         this.$placemarkerDetails.on('mouseleave', function() {
@@ -180,7 +180,7 @@ export class FooterPanel extends BaseFooterPanel {
         });
 
         this.$placemarkerDetails.on('click', () => {
-            that.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.currentPlacemarkerIndex]);
+            that.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.currentPlacemarkerIndex);
         });
 
         this.$previousResultButton.on('click', (e: any) => {
@@ -472,7 +472,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         const canvasIndex: number = parseInt($placemarker.attr('data-index'));
 
-        that.component.publish(Events.SEARCH_PREVIEW_START, [canvasIndex]);
+        that.component.publish(Events.SEARCH_PREVIEW_START, canvasIndex);
 
         const $placemarkers: JQuery = that.getSearchResultPlacemarkers();
         const elemIndex: number = $placemarkers.index($placemarker[0]);

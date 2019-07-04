@@ -27,6 +27,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     previousAnnotationRect: AnnotationRect;
     userData: any;
     viewer: any;
+    viewerId: string;
 
     $canvas: JQuery;
     $goHomeButton: JQuery;
@@ -51,7 +52,8 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         super.create();
 
-        this.$viewer = $('<div id="viewer"></div>');
+        this.viewerId = "osd" + new Date().getTime();
+        this.$viewer = $('<div id="' + this.viewerId + '"></div>');
         this.$content.prepend(this.$viewer);
 
         this.component.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
@@ -150,8 +152,10 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$content.append(this.$spinner);
 
         // add to window object for testing automation purposes.
-        window.openSeadragonViewer = this.viewer = OpenSeadragon({
-            id: "viewer",
+        //window.openSeadragonViewer
+        // removed as causing issues for multiple UVs on page
+        this.viewer = OpenSeadragon({
+            id: this.viewerId,
             ajaxWithCredentials: false,
             showNavigationControl: true,
             showNavigator: true,

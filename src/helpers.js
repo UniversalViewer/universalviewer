@@ -7,9 +7,8 @@ function createUV(selector, data, dataProvider) {
         $container: $(selector),
         $parent: $('<div></div>'),
         $uv: $('<div></div>'),
-        resizeEvent: "window:" + selector + "resize",
 
-        init() {
+        init: function() {
 
             this.$container.empty();
             this.$container.append(this.$parent);
@@ -17,11 +16,7 @@ function createUV(selector, data, dataProvider) {
 
             var that = this;
 
-            window.onresize = function() {
-                $(window).trigger(that.resizeEvent);
-            }
-
-            $(window).on(that.resizeEvent, function (e) {
+            window.addEventListener('resize', function() {
                 that.resize();
             });
 
@@ -30,11 +25,11 @@ function createUV(selector, data, dataProvider) {
                 data: data
             });
         
-            this.uv.on('create', function(obj) {
+            this.uv.on('create', function() {
                 that.resize();
             }, false);
         
-            this.uv.on('created', function(obj) {
+            this.uv.on('created', function() {
                that.resize();
             }, false);
         
@@ -84,7 +79,7 @@ function createUV(selector, data, dataProvider) {
         
                 var elem = that.$parent[0];
 
-                if (isFullScreen) {
+                if (this.isFullScreen) {
                     var requestFullScreen = getRequestFullScreen(elem);
                     if (requestFullScreen) {
                         requestFullScreen.call(elem);
@@ -128,7 +123,7 @@ function createUV(selector, data, dataProvider) {
             });
         },
 
-        resize() {
+        resize: function () {
 
             if (this.uv) {
                 if (this.isFullScreen) {
