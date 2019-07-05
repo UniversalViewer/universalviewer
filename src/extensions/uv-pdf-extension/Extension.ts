@@ -101,7 +101,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
             this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
         }
 
-        this.centerPanel = new PDFCenterPanel(Shell.$centerPanel;
+        this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
             this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
