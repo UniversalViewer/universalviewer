@@ -40,6 +40,8 @@
 
 <a href="https://github.com/UniversalViewer/universalviewer/graphs/contributors"><img src="https://opencollective.com/universalviewer/contributors.svg?width=890&button=false" /></a>
 
+The Universal Viewer is a community-developed open source project on a mission to help you share your content with the world http://universalviewer.io
+
 ## Features:
 
 - **Zoomable**
