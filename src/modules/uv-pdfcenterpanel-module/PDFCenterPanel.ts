@@ -26,11 +26,9 @@ export class PDFCenterPanel extends CenterPanel {
     private _renderTask: any;
     private _scale: number = 0.7;
     private _viewport: any;
-    private _usePdfJs: boolean = true;
 
-    constructor($element: JQuery, usePdfJs: boolean) {
+    constructor($element: JQuery) {
         super($element);
-        this._usePdfJs = usePdfJs;
     }
 
     create(): void {
@@ -246,7 +244,7 @@ export class PDFCenterPanel extends CenterPanel {
                 mediaUri = canvas.id;
             }
 
-            if (!this._usePdfJs) {
+            if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
                 window.PDFObject.embed(pdfUri, '#content', {id: "PDF"});
             } else {
                 PDFJS.disableWorker = true;
@@ -264,6 +262,10 @@ export class PDFCenterPanel extends CenterPanel {
     }
 
     private _render(num: number): void {
+        if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+            return;
+        }
+        
         this._pageRendering = true;
         this._$zoomOutButton.enable();
         this._$zoomInButton.enable();
