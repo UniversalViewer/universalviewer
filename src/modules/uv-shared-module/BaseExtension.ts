@@ -200,7 +200,7 @@ export class BaseExtension implements IExtension {
         this.$element.append('<a href="/" id="top"></a>');
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
-        this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
+        //this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
 
         this.component.subscribe(BaseEvents.ACCEPT_TERMS, () => {
             this.fire(BaseEvents.ACCEPT_TERMS);
