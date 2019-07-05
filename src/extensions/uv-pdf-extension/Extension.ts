@@ -84,6 +84,10 @@ export class Extension extends BaseExtension implements IPDFExtension {
         return false;
     }
 
+    isHeaderPanelEnabled(): boolean {
+        return super.isHeaderPanelEnabled() && Utils.Bools.getBool(this.data.config.options.usePdfJs, true);
+    }
+
     createModules(): void{
         super.createModules();
 
