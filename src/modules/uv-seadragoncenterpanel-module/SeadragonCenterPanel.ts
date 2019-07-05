@@ -53,7 +53,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         super.create();
 
         this.viewerId = "osd" + new Date().getTime();
-        this.$viewer = $('<div id="' + this.viewerId + '"></div>');
+        this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
         this.component.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
