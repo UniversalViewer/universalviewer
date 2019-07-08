@@ -55,12 +55,25 @@ export class TreeView extends BaseView {
     }
 
     public selectNode(node: Manifold.ITreeNode): void {
-        this.treeComponent.selectNode(node);
+
+        if (!this.treeComponent.selectedNode) {
+
+            this.treeComponent.expandParents(node, true);
+
+            const link: Element | undefined = this.$tree.find("#tree-link-" + node.id)[0];
+
+            if (link) {
+                link.scrollIntoView();
+            }            
+        }
+
+        this.treeComponent.selectNode(node);        
     }
 
     public expandNode(node: Manifold.ITreeNode, expanded: boolean): void {
         this.treeComponent.expandNode(node, expanded);
     }
+
 
     public getAllNodes(): Manifold.ITreeNode[] {
         return this.treeComponent.getAllNodes();
