@@ -654,7 +654,7 @@ export class ContentLeftPanel extends LeftPanel {
             if (node){
                 this.treeView.selectNode(<Manifold.ITreeNode>node);
             } else {
-                this.treeView.deselectCurrentNode();
+                this.selectTreeNodeByManifest();
             }
         }
     }
@@ -684,7 +684,7 @@ export class ContentLeftPanel extends LeftPanel {
             //     node = this.treeView.getNodeById(id);
             // }
 
-            if (node && usingCorrectTree){
+            if (node && usingCorrectTree) {
                 this.treeView.selectNode(<Manifold.ITreeNode>node);
             } else {
                 range = this.extension.helper.getCurrentRange();
@@ -696,9 +696,37 @@ export class ContentLeftPanel extends LeftPanel {
                 if (node) {
                     this.treeView.selectNode(<Manifold.ITreeNode>node);
                 } else {
-                    this.treeView.deselectCurrentNode();
+                    this.selectTreeNodeByManifest();
                 }
             }
+        }
+    }
+
+    // fall through to this is there's no current range or canvas
+    selectTreeNodeByManifest(): void {
+
+        const collectionIndex: number = this.extension.helper.collectionIndex;
+        const manifestIndex: number = this.extension.helper.manifestIndex;
+
+        const allNodes: Manifold.ITreeNode[] = this.treeView.getAllNodes();
+
+        let nodeFound: boolean = false;
+
+        allNodes.map(node => {
+            if (node.isCollection() && node.data.index === collectionIndex) {
+                this.treeView.selectNode(node as Manifold.ITreeNode);
+                this.treeView.expandNode(node as Manifold.ITreeNode, true);
+                nodeFound = true;
+            }
+            
+            if (node.isManifest() && node.data.index === manifestIndex) {
+                this.treeView.selectNode(node as Manifold.ITreeNode);
+                nodeFound = true;
+            }
+        });
+
+        if (!nodeFound) {
+            this.treeView.deselectCurrentNode();
         }
     }
 

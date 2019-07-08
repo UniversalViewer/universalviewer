@@ -1329,7 +1329,7 @@ var Manifold;
             return this.ranges.en().where(function (r) { return r.multiSelected; }).toArray();
         };
         MultiSelectState.prototype.getCanvasById = function (id) {
-            return this.canvases.en().where(function (c) { return c.id === id; }).first();
+            return this.canvases.en().where(function (c) { return manifesto.Utils.normaliseUrl(c.id) === manifesto.Utils.normaliseUrl(id); }).first();
         };
         MultiSelectState.prototype.getCanvasesByIds = function (ids) {
             var canvases = [];

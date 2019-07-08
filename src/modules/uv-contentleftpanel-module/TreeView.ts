@@ -58,6 +58,14 @@ export class TreeView extends BaseView {
         this.treeComponent.selectNode(node);
     }
 
+    public expandNode(node: Manifold.ITreeNode, expanded: boolean): void {
+        this.treeComponent.expandNode(node, expanded);
+    }
+
+    public getAllNodes(): Manifold.ITreeNode[] {
+        return this.treeComponent.getAllNodes();
+    }
+
     public deselectCurrentNode(): void {
         this.treeComponent.deselectCurrentNode();
     }
