@@ -1,3 +1,7 @@
+interface Element {
+    scrollIntoViewIfNeeded: any;
+}
+
 interface HTMLElement{
     ontouchstart: any;
 }

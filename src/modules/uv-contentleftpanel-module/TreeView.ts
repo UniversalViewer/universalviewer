@@ -63,7 +63,7 @@ export class TreeView extends BaseView {
             const link: Element | undefined = this.$tree.find("#tree-link-" + node.id)[0];
 
             if (link) {
-                link.scrollIntoView();
+                link.scrollIntoViewIfNeeded();
             }            
         }
 

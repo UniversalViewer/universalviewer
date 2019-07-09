@@ -11,6 +11,7 @@ import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
 import {UVUtils} from "./Utils";
 import {PubSub} from "./Pubsub";
+import "./Polyfills";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
@@ -229,10 +230,10 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         Manifold.loadManifest(<Manifold.IManifoldOptions>{
             iiifResourceUri: data.iiifResourceUri,
-            collectionIndex: data.collectionIndex,
-            manifestIndex: data.manifestIndex,
-            sequenceIndex: data.sequenceIndex,
-            canvasIndex: data.canvasIndex,
+            collectionIndex: data.collectionIndex || 0,
+            manifestIndex: data.manifestIndex || 0,
+            sequenceIndex: data.sequenceIndex || 0,
+            canvasIndex: data.canvasIndex || 0,
             rangeId: data.rangeId,
             locale: (data.locales) ? data.locales[0].name : undefined
         }).then((helper: Manifold.IHelper) => {
