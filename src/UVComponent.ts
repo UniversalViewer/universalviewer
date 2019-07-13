@@ -142,7 +142,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             annotations: undefined,
             root: "./uv",
             canvasIndex: 0,
-            collectionIndex: 0,
+            collectionIndex: undefined,
             config: undefined,
             configUri: undefined,
             embedded: false,
@@ -230,7 +230,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         Manifold.loadManifest(<Manifold.IManifoldOptions>{
             iiifResourceUri: data.iiifResourceUri,
-            collectionIndex: data.collectionIndex || 0,
+            collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
             manifestIndex: data.manifestIndex || 0,
             sequenceIndex: data.sequenceIndex || 0,
             canvasIndex: data.canvasIndex || 0,

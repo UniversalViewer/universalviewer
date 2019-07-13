@@ -1190,7 +1190,7 @@ export class BaseExtension implements IExtension {
     viewManifest(manifest: Manifesto.IManifest): void {
         const data: IUVData = <IUVData>{};
         data.iiifResourceUri = this.helper.iiifResourceUri;
-        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest) || 0;
+        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
         data.manifestIndex = <number>manifest.index;
         data.sequenceIndex = 0;
         data.canvasIndex = 0;
@@ -1201,7 +1201,8 @@ export class BaseExtension implements IExtension {
     // todo: use redux in manifold to get reset state
     viewCollection(collection: Manifesto.ICollection): void {
         const data: IUVData = <IUVData>{};
-        data.iiifResourceUri = this.helper.iiifResourceUri;
+        //data.iiifResourceUri = this.helper.iiifResourceUri;
+        data.iiifResourceUri = collection.parentCollection ? collection.parentCollection.id : this.helper.iiifResourceUri;
         data.collectionIndex = collection.index;
         data.manifestIndex = 0;
         data.sequenceIndex = 0;

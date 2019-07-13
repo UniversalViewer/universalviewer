@@ -1,4 +1,4 @@
-// manifesto v3.0.11 https://github.com/iiif-commons/manifesto
+// manifesto v3.0.12 https://github.com/iiif-commons/manifesto
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.manifesto = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 
@@ -1138,6 +1138,13 @@ var Manifesto;
         IIIFResource.prototype.getSeeAlso = function () {
             return this.getProperty('seeAlso');
         };
+        IIIFResource.prototype.getTrackingLabel = function () {
+            var service = this.getService(Manifesto.ServiceProfile.TRACKINGEXTENSIONS);
+            if (service) {
+                return service.getProperty('trackingLabel');
+            }
+            return '';
+        };
         IIIFResource.prototype.getDefaultTree = function () {
             this.defaultTree = new Manifesto.TreeNode('root');
             this.defaultTree.data = this;
@@ -1189,6 +1196,7 @@ var Manifesto;
                         that.parentLabel = Manifesto.LanguageMap.getValue(that.getLabel(), options_1.locale);
                         var parsed = Manifesto.Deserialiser.parse(data, options_1);
                         that = Object.assign(that, parsed);
+                        //that.parentCollection = options.resource.parentCollection;
                         that.index = options_1.index;
                         resolve(that);
                     });
@@ -1424,13 +1432,6 @@ var Manifesto;
             }
             return new Manifesto.ManifestType('');
         };
-        Manifest.prototype.getTrackingLabel = function () {
-            var service = this.getService(Manifesto.ServiceProfile.TRACKINGEXTENSIONS);
-            if (service) {
-                return service.getProperty('trackingLabel');
-            }
-            return '';
-        };
         Manifest.prototype.isMultiSequence = function () {
             return this.getTotalSequences() > 1;
         };
@@ -1501,22 +1502,38 @@ var Manifesto;
         };
         Collection.prototype.getCollectionByIndex = function (collectionIndex) {
             var collections = this.getCollections();
-            if (!collections[collectionIndex]) {
-                throw new Error("Collection index is outside range of array");
+            var collection;
+            for (var i = 0; i < collections.length; i++) {
+                var c = collections[i];
+                if (c.index === collectionIndex) {
+                    collection = c;
+                }
             }
-            var collection = collections[collectionIndex];
-            collection.options.index = collectionIndex;
-            // id for collection MUST be dereferenceable
-            return collection.load();
+            if (collection) {
+                collection.options.index = collectionIndex;
+                // id for collection MUST be dereferenceable
+                return collection.load();
+            }
+            else {
+                throw new Error("Collection index not found");
+            }
         };
         Collection.prototype.getManifestByIndex = function (manifestIndex) {
             var manifests = this.getManifests();
-            if (!manifests[manifestIndex]) {
-                throw new Error("Manifest index is outside range of array");
+            var manifest;
+            for (var i = 0; i < manifests.length; i++) {
+                var m = manifests[i];
+                if (m.index === manifestIndex) {
+                    manifest = m;
+                }
             }
-            var manifest = manifests[manifestIndex];
-            manifest.options.index = manifestIndex;
-            return manifest.load();
+            if (manifest) {
+                manifest.options.index = manifestIndex;
+                return manifest.load();
+            }
+            else {
+                throw new Error("Manifest index not found");
+            }
         };
         Collection.prototype.getTotalCollections = function () {
             return this.getCollections().length;
@@ -1538,6 +1555,7 @@ var Manifesto;
          */
         Collection.prototype.getDefaultTree = function () {
             _super.prototype.getDefaultTree.call(this);
+            //console.log("get default tree for ", this.id);
             this.defaultTree.data.type = Manifesto.Utils.normaliseType(Manifesto.TreeNodeType.COLLECTION.toString());
             this._parseManifests(this);
             this._parseCollections(this);
@@ -1545,6 +1563,7 @@ var Manifesto;
             return this.defaultTree;
         };
         Collection.prototype._parseManifests = function (parentCollection) {
+            //console.log("parse manifests for ", parentCollection.id);
             if (parentCollection.getManifests() && parentCollection.getManifests().length) {
                 for (var i = 0; i < parentCollection.getManifests().length; i++) {
                     var manifest = parentCollection.getManifests()[i];
@@ -1558,6 +1577,7 @@ var Manifesto;
             }
         };
         Collection.prototype._parseCollections = function (parentCollection) {
+            //console.log("parse collections for ", parentCollection.id);
             if (parentCollection.getCollections() && parentCollection.getCollections().length) {
                 for (var i = 0; i < parentCollection.getCollections().length; i++) {
                     var collection = parentCollection.getCollections()[i];
@@ -1567,7 +1587,6 @@ var Manifesto;
                     tree.data.id = collection.id;
                     tree.data.type = Manifesto.Utils.normaliseType(Manifesto.TreeNodeType.COLLECTION.toString());
                     parentCollection.defaultTree.addNode(tree);
-                    this._parseCollections(collection);
                 }
             }
         };
@@ -2077,6 +2096,9 @@ var Manifesto;
             var collection = new Manifesto.Collection(json, options);
             if (options) {
                 collection.index = options.index || 0;
+                if (options.resource) {
+                    collection.parentCollection = options.resource.parentCollection;
+                }
             }
             else {
                 collection.index = 0;

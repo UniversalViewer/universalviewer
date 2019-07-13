@@ -41,6 +41,6 @@ export class UVUtils {
     }
 
     static propertyChanged(newData: IUVData, currentData: IUVData, propertyName: string): boolean {
-        return newData[propertyName] !== undefined && currentData[propertyName] !== newData[propertyName];
+        return currentData[propertyName] !== newData[propertyName];
     }
 }
