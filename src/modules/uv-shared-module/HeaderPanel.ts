@@ -62,7 +62,7 @@ export class HeaderPanel extends BaseView {
                                     <div class="message"></div> \
                                     <div class="actions"></div> \
                                     <button type="button" class="close" aria-label="Close"> \
-                                        <span aria-hidden="true">&times;</span>\
+                                        <span aria-hidden="true">&#215;</span>\
                                     </button> \
                                   </div>');
 
