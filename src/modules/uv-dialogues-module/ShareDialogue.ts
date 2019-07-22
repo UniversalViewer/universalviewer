@@ -93,7 +93,7 @@ export class ShareDialogue extends Dialogue {
         this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
         this.$shareView.append(this.$shareLink);
 
-        this.$shareInput = $(`<input class="shareInput" type="text" readonly aria-label="${this.content.shareUrl}"/>`);
+        this.$shareInput = $(`<input class="shareInput" type="text" readonly="readonly" aria-label="${this.content.shareUrl}"/>`);
         this.$shareView.append(this.$shareInput);
 
         this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
@@ -111,7 +111,7 @@ export class ShareDialogue extends Dialogue {
         // this.$image = $('<img class="share" />');
         // this.$embedView.append(this.$image);
 
-        this.$code = $(`<input class="code" type="text" readonly aria-label="${this.content.embed }"/>`);
+        this.$code = $(`<input class="code" type="text" readonly="readonly" aria-label="${this.content.embed }"/>`);
         this.$embedView.append(this.$code);
 
         this.$customSize = $('<div class="customSize"></div>');
