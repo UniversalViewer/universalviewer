@@ -74,7 +74,7 @@
     "@iiif/iiif-av-component": "0.0.87",
     "@iiif/iiif-gallery-component": "1.1.13",
     "@iiif/iiif-metadata-component": "1.1.13",
-    "@iiif/iiif-tree-component": "1.1.15",
+    "@iiif/iiif-tree-component": "1.1.16",
     "@iiif/manifold": "1.2.38",
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",

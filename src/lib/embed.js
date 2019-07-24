@@ -107,8 +107,8 @@ docReady(function() {
 
         var iframe = document.createElement('iframe');
         iframe.src = fullUrl;
-        iframe.width = ud.clientWidth;
-        iframe.height = ud.clientHeight;
+        iframe.width = ud.style.width;
+        iframe.height = ud.style.height;
         ud.appendChild(iframe);
     });
 });
