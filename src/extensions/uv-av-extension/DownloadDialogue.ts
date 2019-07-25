@@ -60,10 +60,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 window.open(id);
             }
 
-            $.publish(BaseEvents.DOWNLOAD, [{
+            this.component.publish(BaseEvents.DOWNLOAD, {
                 "type": type,
                 "label": label
-            }]);
+            });
 
             this.close();
         });
@@ -74,9 +74,9 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return format === 'mpd' || format === 'm3u8';
     }
 
-    open($triggerButton: JQuery) {
+    open(triggerButton: HTMLElement) {
 
-        super.open($triggerButton);
+        super.open(triggerButton);
 
         const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
         

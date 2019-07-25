@@ -50,6 +50,9 @@ export class BaseExtension implements IExtension {
 
         const that = this;
 
+        Auth09.publish = this.component.publish;
+        Auth1.publish = this.component.publish;
+
         this.$element = $(this.component.options.target);
         this.$element.data("component", this.component);
 
@@ -181,202 +184,202 @@ export class BaseExtension implements IExtension {
                     if (preventDefault) {
                         e.preventDefault();
                     }
-                    $.publish(event);
+                    this.component.publish(event);
                 }
             });
         }
 
-        $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+        this.component.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
             if (this.isOverlayActive()) {
-                $.publish(BaseEvents.ESCAPE);
+                this.component.publish(BaseEvents.ESCAPE);
             }
-            $.publish(BaseEvents.ESCAPE);
-            $.publish(BaseEvents.RESIZE);
+            this.component.publish(BaseEvents.ESCAPE);
+            this.component.publish(BaseEvents.RESIZE);
         });
 
         this.$element.append('<a href="/" id="top"></a>');
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
-        this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
+        //this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
 
-        $.subscribe(BaseEvents.ACCEPT_TERMS, () => {
+        this.component.subscribe(BaseEvents.ACCEPT_TERMS, () => {
             this.fire(BaseEvents.ACCEPT_TERMS);
         });
 
-        $.subscribe(BaseEvents.LOGIN_FAILED, () => {
+        this.component.subscribe(BaseEvents.LOGIN_FAILED, () => {
             this.fire(BaseEvents.LOGIN_FAILED);
             this.showMessage(this.data.config.content.authorisationFailedMessage);
         });
 
-        $.subscribe(BaseEvents.LOGIN, () => {
+        this.component.subscribe(BaseEvents.LOGIN, () => {
             this.isLoggedIn = true;
             this.fire(BaseEvents.LOGIN);
         });
 
-        $.subscribe(BaseEvents.LOGOUT, () => {
+        this.component.subscribe(BaseEvents.LOGOUT, () => {
             this.isLoggedIn = false;
             this.fire(BaseEvents.LOGOUT);
         });
 
-        $.subscribe(BaseEvents.BOOKMARK, () => {
+        this.component.subscribe(BaseEvents.BOOKMARK, () => {
             this.bookmark();
             this.fire(BaseEvents.BOOKMARK);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
             this.fire(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.data.canvasIndex = canvasIndex;
             this.lastCanvasIndex = this.helper.canvasIndex;
             this.helper.canvasIndex = canvasIndex;
             this.fire(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
         });
 
-        $.subscribe(BaseEvents.CLICKTHROUGH, () => {
+        this.component.subscribe(BaseEvents.CLICKTHROUGH, () => {
             this.fire(BaseEvents.CLICKTHROUGH);
         });
 
-        $.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
             this.fire(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
+        this.component.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
             this.fire(BaseEvents.CLOSE_LEFT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
+        this.component.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
             this.fire(BaseEvents.CLOSE_RIGHT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.COLLECTION_INDEX_CHANGED, (e: any, collectionIndex: number) => {
+        this.component.subscribe(BaseEvents.COLLECTION_INDEX_CHANGED, (collectionIndex: number) => {
             this.data.collectionIndex = collectionIndex;
             this.fire(BaseEvents.COLLECTION_INDEX_CHANGED, this.data.collectionIndex);
         });
 
-        $.subscribe(BaseEvents.CREATED, () => {
+        this.component.subscribe(BaseEvents.CREATED, () => {
             this.isCreated = true;
             this.fire(BaseEvents.CREATED);
         });
 
-        $.subscribe(BaseEvents.DOWN_ARROW, () => {
+        this.component.subscribe(BaseEvents.DOWN_ARROW, () => {
             this.fire(BaseEvents.DOWN_ARROW);
         });
 
-        $.subscribe(BaseEvents.DOWNLOAD, (e: any, obj: any) => {
+        this.component.subscribe(BaseEvents.DOWNLOAD, (obj: any) => {
             this.fire(BaseEvents.DOWNLOAD, obj);
         });
 
-        $.subscribe(BaseEvents.END, () => {
+        this.component.subscribe(BaseEvents.END, () => {
             this.fire(BaseEvents.END);
         });
 
-        $.subscribe(BaseEvents.ESCAPE, () => {
+        this.component.subscribe(BaseEvents.ESCAPE, () => {
             this.fire(BaseEvents.ESCAPE);
 
             if (this.isFullScreen() && !this.isOverlayActive()) {
-                $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+                this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
             }
         });
 
-        $.subscribe(BaseEvents.EXTERNAL_LINK_CLICKED, (e: any, url: string) => {
+        this.component.subscribe(BaseEvents.EXTERNAL_LINK_CLICKED, (url: string) => {
             this.fire(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
-        $.subscribe(BaseEvents.FEEDBACK, () => {
+        this.component.subscribe(BaseEvents.FEEDBACK, () => {
             this.feedback();
         });
 
-        $.subscribe(BaseEvents.FORBIDDEN, () => {
+        this.component.subscribe(BaseEvents.FORBIDDEN, () => {
             this.fire(BaseEvents.FORBIDDEN);
-            $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+            this.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
-        $.subscribe(BaseEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_EMBED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_EMBED_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_EMBED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_GENERIC_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_GENERIC_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_GENERIC_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_HELP_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_HELP_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_HELP_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_INFORMATION, () => {
+        this.component.subscribe(BaseEvents.HIDE_INFORMATION, () => {
             this.fire(BaseEvents.HIDE_INFORMATION);
         });
 
-        $.subscribe(BaseEvents.HIDE_LOGIN_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_LOGIN_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_LOGIN_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             this.fire(BaseEvents.HIDE_OVERLAY);
         });
 
-        $.subscribe(BaseEvents.HIDE_RESTRICTED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_RESTRICTED_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_RESTRICTED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_SETTINGS_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_SETTINGS_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HOME, () => {
+        this.component.subscribe(BaseEvents.HOME, () => {
             this.fire(BaseEvents.HOME);
         });
 
-        $.subscribe(BaseEvents.LEFT_ARROW, () => {
+        this.component.subscribe(BaseEvents.LEFT_ARROW, () => {
             this.fire(BaseEvents.LEFT_ARROW);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH, () => {
             this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
         });
 
-        $.subscribe(BaseEvents.LOAD_FAILED, () => {
+        this.component.subscribe(BaseEvents.LOAD_FAILED, () => {
             this.fire(BaseEvents.LOAD_FAILED);
 
             if (!that.lastCanvasIndex == null && that.lastCanvasIndex !== that.helper.canvasIndex){
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [that.lastCanvasIndex]);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, that.lastCanvasIndex);
             }
         });
 
-        $.subscribe(BaseEvents.MANIFEST_INDEX_CHANGED, (e: any, manifestIndex: number) => {
+        this.component.subscribe(BaseEvents.MANIFEST_INDEX_CHANGED, (manifestIndex: number) => {
             this.data.manifestIndex = manifestIndex;
             this.fire(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
         });
 
-        $.subscribe(BaseEvents.NOT_FOUND, () => {
+        this.component.subscribe(BaseEvents.NOT_FOUND, () => {
             this.fire(BaseEvents.NOT_FOUND);
         });
 
-        $.subscribe(BaseEvents.OPEN, () => {
+        this.component.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
 
             const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
@@ -384,29 +387,29 @@ export class BaseExtension implements IExtension {
             window.open(openUri);
         });
 
-        $.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+        this.component.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
             this.fire(BaseEvents.OPEN_LEFT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
             this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
-        $.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+        this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
             this.fire(BaseEvents.OPEN_RIGHT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.PAGE_DOWN, () => {
+        this.component.subscribe(BaseEvents.PAGE_DOWN, () => {
             this.fire(BaseEvents.PAGE_DOWN);
         });
 
-        $.subscribe(BaseEvents.PAGE_UP, () => {
+        this.component.subscribe(BaseEvents.PAGE_UP, () => {
             this.fire(BaseEvents.PAGE_UP);
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Manifesto.IRange | null) => {
             
             if (range) {
                 this.data.rangeId = range.id;
@@ -420,93 +423,93 @@ export class BaseExtension implements IExtension {
             
         });
 
-        $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: Manifesto.IExternalResource) => {
+        this.component.subscribe(BaseEvents.RESOURCE_DEGRADED, (resource: Manifesto.IExternalResource) => {
             this.fire(BaseEvents.RESOURCE_DEGRADED);
             Auth09.handleDegraded(resource)
         });
 
-        $.subscribe(BaseEvents.RETURN, () => {
+        this.component.subscribe(BaseEvents.RETURN, () => {
             this.fire(BaseEvents.RETURN);
         });
 
-        $.subscribe(BaseEvents.RIGHT_ARROW, () => {
+        this.component.subscribe(BaseEvents.RIGHT_ARROW, () => {
             this.fire(BaseEvents.RIGHT_ARROW);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
             this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START, () => {
             this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
             this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_START, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_START, () => {
             this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
         });
 
-        $.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, (e: any, sequenceIndex: number) => {
+        this.component.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, (sequenceIndex: number) => {
             this.data.sequenceIndex = sequenceIndex;
             this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: any) => {
             this.fire(BaseEvents.SETTINGS_CHANGED, args);
         });
 
-        $.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_GENERIC_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_GENERIC_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_GENERIC_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_HELP_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_HELP_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_HELP_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_INFORMATION, () => {
+        this.component.subscribe(BaseEvents.SHOW_INFORMATION, () => {
             this.fire(BaseEvents.SHOW_INFORMATION);
         });
 
-        $.subscribe(BaseEvents.SHOW_LOGIN_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_LOGIN_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_LOGIN_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_MESSAGE, (e: any, message: string) => {
+        this.component.subscribe(BaseEvents.SHOW_MESSAGE, (message: string) => {
             this.showMessage(message);
         });
 
-        $.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_RESTRICTED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             this.fire(BaseEvents.SHOW_OVERLAY);
         });
 
-        $.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
+        this.component.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
             this.fire(BaseEvents.SHOW_TERMS_OF_USE);
             
             let terms: string | null = this.helper.getLicense();
@@ -525,11 +528,11 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
             this.fire(BaseEvents.THUMB_SELECTED, thumb.index);
         });
 
-        $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+        this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
             $('#top').focus();
             this.component.isFullScreen = !this.component.isFullScreen;
 
@@ -546,19 +549,19 @@ export class BaseExtension implements IExtension {
                 });
         });
 
-        $.subscribe(BaseEvents.UP_ARROW, () => {
+        this.component.subscribe(BaseEvents.UP_ARROW, () => {
             this.fire(BaseEvents.UP_ARROW);
         });
 
-        $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
+        this.component.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
             this.fire(BaseEvents.UPDATE_SETTINGS);
         });
 
-        $.subscribe(BaseEvents.VIEW_FULL_TERMS, () => {
+        this.component.subscribe(BaseEvents.VIEW_FULL_TERMS, () => {
             this.fire(BaseEvents.VIEW_FULL_TERMS);
         });
 
-        $.subscribe(BaseEvents.WINDOW_UNLOAD, () => {
+        this.component.subscribe(BaseEvents.WINDOW_UNLOAD, () => {
             this.fire(BaseEvents.WINDOW_UNLOAD);
         });
 
@@ -573,19 +576,19 @@ export class BaseExtension implements IExtension {
 
     createModules(): void {
         this.$authDialogue = $('<div class="overlay auth" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$authDialogue);
+        this.shell.$overlays.append(this.$authDialogue);
         this.authDialogue = new AuthDialogue(this.$authDialogue);
         
         this.$clickThroughDialogue = $('<div class="overlay clickthrough" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$clickThroughDialogue);
+        this.shell.$overlays.append(this.$clickThroughDialogue);
         this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
 
         this.$restrictedDialogue = $('<div class="overlay login" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$restrictedDialogue);
+        this.shell.$overlays.append(this.$restrictedDialogue);
         this.restrictedDialogue = new RestrictedDialogue(this.$restrictedDialogue);
 
         this.$loginDialogue = $('<div class="overlay login" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$loginDialogue);
+        this.shell.$overlays.append(this.$loginDialogue);
         this.loginDialogue = new LoginDialogue(this.$loginDialogue);
     }
 
@@ -687,30 +690,30 @@ export class BaseExtension implements IExtension {
     dependenciesLoaded(...args: any[]): void {
         this.createModules();
         this.modulesCreated();
-        $.publish(BaseEvents.RESIZE); // initial sizing
+        this.component.publish(BaseEvents.RESIZE); // initial sizing
 
         setTimeout(() => {
             this.render();
-            $.publish(BaseEvents.CREATED);
+            this.component.publish(BaseEvents.CREATED);
             this._setDefaultFocus();
         }, 1);
     }
 
     public render(): void {
         if (!this.isCreated || (this.data.collectionIndex !== this.helper.collectionIndex)) {
-            $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.data.collectionIndex]);
+            this.component.publish(BaseEvents.COLLECTION_INDEX_CHANGED, this.data.collectionIndex);
         }
 
         if (!this.isCreated || (this.data.manifestIndex !== this.helper.manifestIndex)) {
-            $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.data.manifestIndex]);
+            this.component.publish(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
         }
 
         if (!this.isCreated || (this.data.sequenceIndex !== this.helper.sequenceIndex)) {
-            $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.data.sequenceIndex]);
+            this.component.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
         }
 
         if (!this.isCreated || (this.data.canvasIndex !== this.helper.canvasIndex)) {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
         }
 
         if (!this.isCreated || (this.data.rangeId !== this.helper.rangeId)) {
@@ -719,7 +722,7 @@ export class BaseExtension implements IExtension {
                 const range: Manifesto.IRange | null = this.helper.getRangeById(this.data.rangeId);
 
                 if (range) {
-                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, range);
                 } else {
                     console.warn('range id not found:', this.data.rangeId);
                 }
@@ -745,7 +748,7 @@ export class BaseExtension implements IExtension {
     }
 
     exitFullScreen(): void {
-        $.publish(BaseEvents.EXIT_FULLSCREEN);
+        this.component.publish(BaseEvents.EXIT_FULLSCREEN);
     }
 
     fire(name: string, ...args: any[]): void {
@@ -837,7 +840,7 @@ export class BaseExtension implements IExtension {
 
                     if (this.metric !== metric.type) {
                         this.metric = metric.type;
-                        $.publish(BaseEvents.METRIC_CHANGED);
+                        this.component.publish(BaseEvents.METRIC_CHANGED);
                     }
                 }
             }
@@ -845,7 +848,7 @@ export class BaseExtension implements IExtension {
             if (!metricFound) {
                 if (this.metric !== MetricType.NONE) {
                     this.metric = MetricType.NONE;
-                    $.publish(BaseEvents.METRIC_CHANGED);
+                    this.component.publish(BaseEvents.METRIC_CHANGED);
                 }
             }
         }, 1);
@@ -853,12 +856,12 @@ export class BaseExtension implements IExtension {
 
     resize(): void {
         this._updateMetric();
-        $.publish(BaseEvents.RESIZE);
+        this.component.publish(BaseEvents.RESIZE);
     }
 
     // re-bootstraps the application with new querystring params
     reload(data?: IUVData): void {
-        $.publish(BaseEvents.RELOAD, [data]);
+        this.component.publish(BaseEvents.RELOAD, data);
     }
 
     isSeeAlsoEnabled(): boolean {
@@ -1147,28 +1150,28 @@ export class BaseExtension implements IExtension {
             return;
         }
 
-        $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+        this.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     }
 
     showMessage(message: string, acceptCallback?: Function, buttonText?: string, allowClose?: boolean): void {
 
         this.closeActiveDialogue();
 
-        $.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, [
+        this.component.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, 
             {
                 message: message,
                 acceptCallback: acceptCallback,
                 buttonText: buttonText,
                 allowClose: allowClose
-            }]);
+            });
     }
 
     closeActiveDialogue(): void {
-        $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+        this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
     }
 
     isOverlayActive(): boolean {
-        return Shell.$overlays.is(':visible');
+        return this.shell.$overlays.is(':visible');
     }
 
     isDesktopMetric(): boolean {
@@ -1187,7 +1190,7 @@ export class BaseExtension implements IExtension {
     viewManifest(manifest: Manifesto.IManifest): void {
         const data: IUVData = <IUVData>{};
         data.iiifResourceUri = this.helper.iiifResourceUri;
-        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest) || 0;
+        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
         data.manifestIndex = <number>manifest.index;
         data.sequenceIndex = 0;
         data.canvasIndex = 0;
@@ -1198,7 +1201,8 @@ export class BaseExtension implements IExtension {
     // todo: use redux in manifold to get reset state
     viewCollection(collection: Manifesto.ICollection): void {
         const data: IUVData = <IUVData>{};
-        data.iiifResourceUri = this.helper.iiifResourceUri;
+        //data.iiifResourceUri = this.helper.iiifResourceUri;
+        data.iiifResourceUri = collection.parentCollection ? collection.parentCollection.id : this.helper.iiifResourceUri;
         data.collectionIndex = collection.index;
         data.manifestIndex = 0;
         data.sequenceIndex = 0;
@@ -1309,8 +1313,5 @@ export class BaseExtension implements IExtension {
         }
         
     }
-
-    // auth
-
     
 }

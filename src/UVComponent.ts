@@ -9,17 +9,22 @@ import {IExtension} from "./modules/uv-shared-module/IExtension";
 import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
-import { UVUtils } from "./Utils";
+import {UVUtils} from "./Utils";
+import {PubSub} from "./Pubsub";
+import "./Polyfills";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
     private _extensions: IExtension[];
+    private _pubsub: PubSub;
     public extension: IExtension | null;
     public isFullScreen: boolean = false;
     public URLDataProvider: IUVDataProvider;
 
     constructor(options: _Components.IBaseComponentOptions) {
         super(options);
+
+        this._pubsub = new PubSub();
 
         this._init();
         this._resize();
@@ -137,7 +142,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             annotations: undefined,
             root: "./uv",
             canvasIndex: 0,
-            collectionIndex: 0,
+            collectionIndex: undefined,
             config: undefined,
             configUri: undefined,
             embedded: false,
@@ -195,11 +200,19 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }
     }
 
+    public publish(event: string, args?: any): void {
+        this._pubsub.publish(event, args);
+    }
+
+    public subscribe(event: string, cb: any): void {
+        this._pubsub.subscribe(event, cb);
+    }
+
     private _reload(data: IUVData): void {
         
-        $.disposePubSub(); // remove any existing event listeners
+        this._pubsub.dispose(); // remove any existing event listeners
 
-        $.subscribe(BaseEvents.RELOAD, (e: any, data?: IUVData) => {
+        this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
             this.fire(BaseEvents.RELOAD, data);
         });
 
@@ -217,10 +230,10 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         Manifold.loadManifest(<Manifold.IManifoldOptions>{
             iiifResourceUri: data.iiifResourceUri,
-            collectionIndex: data.collectionIndex,
-            manifestIndex: data.manifestIndex,
-            sequenceIndex: data.sequenceIndex,
-            canvasIndex: data.canvasIndex,
+            collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
+            manifestIndex: data.manifestIndex || 0,
+            sequenceIndex: data.sequenceIndex || 0,
+            canvasIndex: data.canvasIndex || 0,
             rangeId: data.rangeId,
             locale: (data.locales) ? data.locales[0].name : undefined
         }).then((helper: Manifold.IHelper) => {

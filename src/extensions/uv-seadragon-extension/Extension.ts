@@ -23,7 +23,6 @@ import { Point } from "../../modules/uv-shared-module/Point";
 import { SeadragonCenterPanel } from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Shell } from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
 import ITreeNode = Manifold.ITreeNode;
 import AnnotationGroup = Manifold.AnnotationGroup;
@@ -62,107 +61,107 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {         
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {         
             if (!this.isDesktopMetric()) {
                 const settings: ISettings = {};
                 settings.pagingEnabled = false;
                 this.updateSettings(settings);
-                $.publish(BaseEvents.UPDATE_SETTINGS);
-                Shell.$rightPanel.hide();
+                this.component.publish(BaseEvents.UPDATE_SETTINGS);
+                this.shell.$rightPanel.hide();
             } else {
-                Shell.$rightPanel.show();
+                this.shell.$rightPanel.show();
             }
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.previousAnnotationRect = null;
             this.currentAnnotationRect = null;
             this.viewPage(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+        this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
             this.clearAnnotations();
-            $.publish(BaseEvents.ANNOTATIONS_CLEARED);
+            this.component.publish(BaseEvents.ANNOTATIONS_CLEARED);
             this.fire(BaseEvents.CLEAR_ANNOTATIONS);
         });
 
-        $.subscribe(BaseEvents.DOWN_ARROW, () => {
+        this.component.subscribe(BaseEvents.DOWN_ARROW, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseEvents.END, () => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
+        this.component.subscribe(BaseEvents.END, () => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.helper.getLastPageIndex());
         });
 
-        $.subscribe(BaseEvents.FIRST, () => {
+        this.component.subscribe(BaseEvents.FIRST, () => {
             this.fire(BaseEvents.FIRST);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getFirstPageIndex()]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.helper.getFirstPageIndex());
         });
 
-        $.subscribe(BaseEvents.GALLERY_DECREASE_SIZE, () => {
+        this.component.subscribe(BaseEvents.GALLERY_DECREASE_SIZE, () => {
             this.fire(BaseEvents.GALLERY_DECREASE_SIZE);
         });
 
-        $.subscribe(BaseEvents.GALLERY_INCREASE_SIZE, () => {
+        this.component.subscribe(BaseEvents.GALLERY_INCREASE_SIZE, () => {
             this.fire(BaseEvents.GALLERY_INCREASE_SIZE);
         });
 
-        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+        this.component.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
             this.fire(BaseEvents.GALLERY_THUMB_SELECTED);
         });
 
-        $.subscribe(BaseEvents.HOME, () => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getFirstPageIndex()]);
+        this.component.subscribe(BaseEvents.HOME, () => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.helper.getFirstPageIndex());
         });
 
-        $.subscribe(Events.IMAGE_SEARCH, (e: any, index: number) => {
+        this.component.subscribe(Events.IMAGE_SEARCH, (index: number) => {
             this.fire(Events.IMAGE_SEARCH, index);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, index);
         });
 
-        $.subscribe(BaseEvents.LAST, () => {
+        this.component.subscribe(BaseEvents.LAST, () => {
             this.fire(BaseEvents.LAST);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.getLastPageIndex()]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.helper.getLastPageIndex());
         });
 
-        $.subscribe(BaseEvents.LEFT_ARROW, () => {
+        this.component.subscribe(BaseEvents.LEFT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.getPrevPageIndex());
             } else {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             if (this.isDesktopMetric()) {
-                Shell.$rightPanel.show();
+                this.shell.$rightPanel.show();
             }
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            Shell.$centerPanel.show();
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.shell.$centerPanel.show();
             this.resize();
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-            Shell.$centerPanel.hide();
-            Shell.$rightPanel.hide();
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+            this.shell.$centerPanel.hide();
+            this.shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseEvents.MINUS, () => {
+        this.component.subscribe(BaseEvents.MINUS, () => {
             this.centerPanel.setFocus();
         });
 
-        $.subscribe(Events.MODE_CHANGED, (e: any, mode: string) => {
+        this.component.subscribe(Events.MODE_CHANGED, (mode: string) => {
             this.fire(Events.MODE_CHANGED, mode);
             this.mode = new Mode(mode);
             const settings: ISettings = this.getSettings();
-            $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
+            this.component.publish(BaseEvents.SETTINGS_CHANGED, settings);
         });
 
-        $.subscribe(BaseEvents.MULTISELECTION_MADE, (e: any, ids: string[]) => {
+        this.component.subscribe(BaseEvents.MULTISELECTION_MADE, (ids: string[]) => {
             const args: MultiSelectionArgs = new MultiSelectionArgs();
             args.manifestUri = this.helper.iiifResourceUri;
             args.allCanvases = ids.length === this.helper.getCanvases().length;
@@ -172,89 +171,89 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             this.fire(BaseEvents.MULTISELECTION_MADE, args);
         });
 
-        $.subscribe(BaseEvents.NEXT, () => {
+        this.component.subscribe(BaseEvents.NEXT, () => {
             this.fire(BaseEvents.NEXT);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.getNextPageIndex());
         });
 
-        $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
+        this.component.subscribe(Events.NEXT_SEARCH_RESULT, () => {
             this.fire(Events.NEXT_SEARCH_RESULT);
         });
 
-        $.subscribe(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+        this.component.subscribe(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
             this.fire(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.nextSearchResult();
         });
 
-        $.subscribe(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
+        this.component.subscribe(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE, () => {
             this.fire(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
             this.prevSearchResult();
         });
 
-        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
             this.fire(BaseEvents.OPEN_THUMBS_VIEW);
         });
 
-        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
             this.fire(BaseEvents.OPEN_TREE_VIEW);
         });
 
-        $.subscribe(BaseEvents.PAGE_DOWN, () => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
+        this.component.subscribe(BaseEvents.PAGE_DOWN, () => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.getNextPageIndex());
         });
 
-        $.subscribe(Events.PAGE_SEARCH, (e: any, value: string) => {
+        this.component.subscribe(Events.PAGE_SEARCH, (value: string) => {
             this.fire(Events.PAGE_SEARCH, value);
             this.viewLabel(value);
         });
 
-        $.subscribe(BaseEvents.PAGE_UP, () => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
+        this.component.subscribe(BaseEvents.PAGE_UP, () => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.getPrevPageIndex());
         });
 
-        $.subscribe(Events.PAGING_TOGGLED, (e: any, obj: any) => {
+        this.component.subscribe(Events.PAGING_TOGGLED, (obj: any) => {
             this.fire(Events.PAGING_TOGGLED, obj);
         });
 
-        $.subscribe(BaseEvents.PLUS, () => {
+        this.component.subscribe(BaseEvents.PLUS, () => {
             this.centerPanel.setFocus();
         });
 
-        $.subscribe(BaseEvents.PREV, () => {
+        this.component.subscribe(BaseEvents.PREV, () => {
             this.fire(BaseEvents.PREV);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getPrevPageIndex()]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.getPrevPageIndex());
         });
 
-        $.subscribe(Events.PREV_SEARCH_RESULT, () => {
+        this.component.subscribe(Events.PREV_SEARCH_RESULT, () => {
             this.fire(Events.PREV_SEARCH_RESULT);
         });
 
-        $.subscribe(Events.PRINT, () => {
+        this.component.subscribe(Events.PRINT, () => {
             this.print();
         });
 
-        $.subscribe(BaseEvents.RELOAD, () => {
-            $.publish(BaseEvents.CLEAR_ANNOTATIONS);
+        this.component.subscribe(BaseEvents.RELOAD, () => {
+            this.component.publish(BaseEvents.CLEAR_ANNOTATIONS);
         });
 
-        $.subscribe(BaseEvents.RIGHT_ARROW, () => {
+        this.component.subscribe(BaseEvents.RIGHT_ARROW, () => {
             if (this.useArrowKeysToNavigate()) {
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.getNextPageIndex()]);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.getNextPageIndex());
             } else {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(Events.SEADRAGON_ANIMATION, () => {
+        this.component.subscribe(Events.SEADRAGON_ANIMATION, () => {
             this.fire(Events.SEADRAGON_ANIMATION);
         });
 
-        $.subscribe(Events.SEADRAGON_ANIMATION_FINISH, (e: any, viewer: any) => {
+        this.component.subscribe(Events.SEADRAGON_ANIMATION_FINISH, (viewer: any) => {
 
             const bounds: Bounds | null = this.centerPanel.getViewportBounds();
 
             if (this.centerPanel && bounds) {
-                $.publish(Events.XYWH_CHANGED, [bounds.toString()]);
+                this.component.publish(Events.XYWH_CHANGED, bounds.toString());
                 (<ISeadragonExtensionData>this.data).xywh = bounds.toString();
                 this.fire(Events.XYWH_CHANGED, (<ISeadragonExtensionData>this.data).xywh);
             }
@@ -268,76 +267,76 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 });
         });
 
-        $.subscribe(Events.SEADRAGON_ANIMATION_START, () => {
+        this.component.subscribe(Events.SEADRAGON_ANIMATION_START, () => {
             this.fire(Events.SEADRAGON_ANIMATION_START);
         });
 
-        $.subscribe(Events.SEADRAGON_OPEN, () => {
+        this.component.subscribe(Events.SEADRAGON_OPEN, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
             this.fire(Events.SEADRAGON_OPEN);
         });
 
-        $.subscribe(Events.SEADRAGON_RESIZE, () => {
+        this.component.subscribe(Events.SEADRAGON_RESIZE, () => {
             this.fire(Events.SEADRAGON_RESIZE);
         });
 
-        $.subscribe(Events.SEADRAGON_ROTATION, (e: any, rotation: number) => {
+        this.component.subscribe(Events.SEADRAGON_ROTATION, (rotation: number) => {
             (<ISeadragonExtensionData>this.data).rotation = rotation;
             this.fire(Events.SEADRAGON_ROTATION, (<ISeadragonExtensionData>this.data).rotation);
             this.currentRotation = rotation;
         });
 
-        $.subscribe(Events.SEARCH, (e: any, terms: string) => {
+        this.component.subscribe(Events.SEARCH, (terms: string) => {
             this.fire(Events.SEARCH, terms);
             this.search(terms);
         });
 
-        $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
+        this.component.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
             this.fire(Events.SEARCH_PREVIEW_FINISH);
         });
 
-        $.subscribe(Events.SEARCH_PREVIEW_START, () => {
+        this.component.subscribe(Events.SEARCH_PREVIEW_START, () => {
             this.fire(Events.SEARCH_PREVIEW_START);
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, obj: any) => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS, (obj: any) => {
             this.fire(BaseEvents.ANNOTATIONS, obj);
         });
 
-        $.subscribe(BaseEvents.ANNOTATION_CANVAS_CHANGED, (e: any, rect: AnnotationRect) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [rect.canvasIndex]);
+        this.component.subscribe(BaseEvents.ANNOTATION_CANVAS_CHANGED, (rect: AnnotationRect) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, rect.canvasIndex);
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
             this.fire(BaseEvents.ANNOTATIONS_EMPTY);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
-        $.subscribe(BaseEvents.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: ITreeNode) => {
             this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
-        $.subscribe(BaseEvents.UP_ARROW, () => {
+        this.component.subscribe(BaseEvents.UP_ARROW, () => {
             if (!this.useArrowKeysToNavigate()) {
                 this.centerPanel.setFocus();
             }
         });
 
-        $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
+        this.component.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.helper.canvasIndex);
             const settings: ISettings = this.getSettings();
-            $.publish(BaseEvents.SETTINGS_CHANGED, [settings]);
+            this.component.publish(BaseEvents.SETTINGS_CHANGED, settings);
         });
 
-        // $.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
+        // this.component.subscribe(Events.VIEW_PAGE, (e: any, index: number) => {
         //     this.fire(Events.VIEW_PAGE, index);
-        //     $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
+        //     this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
         // });
     }
 
@@ -345,58 +344,58 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new PagingHeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new PagingHeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ContentLeftPanel(this.shell.$leftPanel);
         } else {
-            Shell.$leftPanel.hide();
+            this.shell.$leftPanel.hide();
         }
 
-        this.centerPanel = new SeadragonCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new SeadragonCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         } else {
-            Shell.$rightPanel.hide();
+            this.shell.$rightPanel.hide();
         }
 
         if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
-            this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+            this.mobileFooterPanel = new MobileFooterPanel(this.shell.$mobileFooterPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$helpDialogue = $('<div class="overlay help" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$helpDialogue);
+        this.shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
         this.$moreInfoDialogue = $('<div class="overlay moreInfo" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$moreInfoDialogue);
+        this.shell.$overlays.append(this.$moreInfoDialogue);
         this.moreInfoDialogue = new MoreInfoDialogue(this.$moreInfoDialogue);
 
         this.$multiSelectDialogue = $('<div class="overlay multiSelect" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$multiSelectDialogue);
+        this.shell.$overlays.append(this.$multiSelectDialogue);
         this.multiSelectDialogue = new MultiSelectDialogue(this.$multiSelectDialogue);
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         this.$externalContentDialogue = $('<div class="overlay externalContent" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$externalContentDialogue);
+        this.shell.$overlays.append(this.$externalContentDialogue);
         this.externalContentDialogue = new ExternalContentDialogue(this.$externalContentDialogue);
 
         if (this.isHeaderPanelEnabled()) {
@@ -433,7 +432,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     checkForAnnotations(): void {
         if (this.data.annotations) {
             const annotations: AnnotationGroup[] = this.parseAnnotationList(this.data.annotations);
-            $.publish(BaseEvents.CLEAR_ANNOTATIONS);
+            this.component.publish(BaseEvents.CLEAR_ANNOTATIONS);
             this.annotate(annotations);
         }
     }
@@ -450,10 +449,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         annotationResults.terms = terms;
         annotationResults.annotations = <AnnotationGroup[]>this.annotations;
 
-        $.publish(BaseEvents.ANNOTATIONS, [annotationResults]);
+        this.component.publish(BaseEvents.ANNOTATIONS, annotationResults);
 
         // reload current index as it may contain annotations.
-        //$.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
+        //this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
     }
 
     checkForSearchParam(): void {
@@ -462,7 +461,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         if (highlight) {
             highlight.replace(/\+/g, " ").replace(/"/g, "");
-            $.publish(Events.SEARCH, [highlight]);
+            this.component.publish(Events.SEARCH, highlight);
         }
     }
 
@@ -471,7 +470,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const rotation: number | null = (<ISeadragonExtensionData>this.data).rotation;
 
         if (rotation) {
-            $.publish(Events.SEADRAGON_ROTATION, [rotation]);
+            this.component.publish(Events.SEADRAGON_ROTATION, rotation);
         }
     }
 
@@ -541,24 +540,24 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (!range) return;
         const canvasId: string = range.getCanvasIds()[0];
         const index: number | null = this.helper.getCanvasIndexById(canvasId);
-        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, index);
     }
 
     viewLabel(label: string): void {
 
         if (!label) {
             this.showMessage(this.data.config.modules.genericDialogue.content.emptyValue);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
             return;
         }
 
         const index: number = this.helper.getCanvasIndexByLabel(label);
 
         if (index != -1) {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [index]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, index);
         } else {
             this.showMessage(this.data.config.modules.genericDialogue.content.pageNotFound);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         }
     }
 
@@ -586,7 +585,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         this.annotations = null;
 
         // reload current index as it may contain results.
-        $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.helper.canvasIndex]);
+        this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.helper.canvasIndex);
     }
 
     prevSearchResult(): void {
@@ -599,7 +598,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
             if (result.canvasIndex <= this.getPrevPageIndex()) {
                 foundResult = result;
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [foundResult.canvasIndex]);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, foundResult.canvasIndex);
                 break;
             }
         }
@@ -613,7 +612,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
             const result: AnnotationGroup = this.annotations[i];
 
             if (result && result.canvasIndex >= this.getNextPageIndex()) {
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [result.canvasIndex]);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, result.canvasIndex);
                 break;
             }
         }
@@ -1007,7 +1006,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
                 that.annotate(annotations, terms);
             } else {
                 that.showMessage(that.data.config.modules.genericDialogue.content.noMatches, () => {
-                    $.publish(BaseEvents.ANNOTATIONS_EMPTY);
+                    this.component.publish(BaseEvents.ANNOTATIONS_EMPTY);
                 });
             }
         });

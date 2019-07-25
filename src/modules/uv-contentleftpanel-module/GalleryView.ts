@@ -4,8 +4,8 @@ import {BaseView} from "../uv-shared-module/BaseView";
 export class GalleryView extends BaseView {
 
     isOpen: boolean = false;
-    galleryComponent: IIIFComponents.GalleryComponent;
-    galleryData: IIIFComponents.IGalleryComponentData;
+    galleryComponent: any;
+    galleryData: any;
     $gallery: JQuery;
 
     constructor($element: JQuery) {
@@ -18,11 +18,11 @@ export class GalleryView extends BaseView {
 
         // search preview doesn't work well with the gallery because it loads thumbs in "chunks"
 
-        // $.subscribe(Events.SEARCH_PREVIEW_START, (e, canvasIndex) => {
+        // this.component.subscribe(Events.SEARCH_PREVIEW_START, (e, canvasIndex) => {
         //     this.galleryComponent.searchPreviewStart(canvasIndex);
         // });
 
-        // $.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
+        // this.component.subscribe(Events.SEARCH_PREVIEW_FINISH, () => {
         //     this.galleryComponent.searchPreviewFinish();
         // });
 
@@ -36,21 +36,24 @@ export class GalleryView extends BaseView {
     }
 
     public setup(): void {
+
+        const that = this;
+
         this.galleryComponent = new IIIFComponents.GalleryComponent({
             target:  <HTMLElement>this.$gallery[0]
         });
 
         this.galleryComponent.on('thumbSelected', function(thumb: any) {
-            $.publish(BaseEvents.GALLERY_THUMB_SELECTED, [thumb]);
-            $.publish(BaseEvents.THUMB_SELECTED, [thumb]);
+            that.component.publish(BaseEvents.GALLERY_THUMB_SELECTED, thumb);
+            that.component.publish(BaseEvents.THUMB_SELECTED, thumb);
         }, false);
 
         this.galleryComponent.on('decreaseSize', function() {
-            $.publish(BaseEvents.GALLERY_DECREASE_SIZE);
+            that.component.publish(BaseEvents.GALLERY_DECREASE_SIZE);
         }, false);
 
         this.galleryComponent.on('increaseSize', function() {
-            $.publish(BaseEvents.GALLERY_INCREASE_SIZE);
+            that.component.publish(BaseEvents.GALLERY_INCREASE_SIZE);
         }, false);
     }
 

@@ -27,11 +27,11 @@ export class HeaderPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseEvents.SHOW_INFORMATION, (e: any, args: InformationArgs) => {
+        this.component.subscribe(BaseEvents.SHOW_INFORMATION, (args: InformationArgs) => {
             this.showInformation(args);
         });
 
-        $.subscribe(BaseEvents.HIDE_INFORMATION, () => {
+        this.component.subscribe(BaseEvents.HIDE_INFORMATION, () => {
             this.hideInformation();
         });
 
@@ -72,7 +72,7 @@ export class HeaderPanel extends BaseView {
         this.$informationBox.find('.close').attr('title', this.content.close);
         this.$informationBox.find('.close').on('click', (e) => {
             e.preventDefault();
-            $.publish(BaseEvents.HIDE_INFORMATION);
+            this.component.publish(BaseEvents.HIDE_INFORMATION);
         });
 
         this.$localeToggleButton.on('click', () => {
@@ -80,7 +80,7 @@ export class HeaderPanel extends BaseView {
         });
 
         this.$settingsButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+            this.component.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
 
@@ -159,7 +159,7 @@ export class HeaderPanel extends BaseView {
 
     updateSettings(settings: ISettings): void {
         this.extension.updateSettings(settings);
-        $.publish(BaseEvents.UPDATE_SETTINGS, [settings]);
+        this.component.publish(BaseEvents.UPDATE_SETTINGS, settings);
     }
 
     resize(): void {

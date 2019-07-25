@@ -24,14 +24,14 @@ export class RestrictedDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_RESTRICTED_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_RESTRICTED_DIALOGUE;
 
-        $.subscribe(this.openCommand, (s: any, e: any) => {
+        this.component.subscribe(this.openCommand, (e: any) => {
             this.acceptCallback = e.acceptCallback;
             this.options = e.options;
             this.resource = e.resource;
             this.open();
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -82,7 +82,7 @@ export class RestrictedDialogue extends Dialogue {
 
         this.$message.find('a').on('click', function() {
             var url: string = $(this).attr('href');
-            $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
+            this.component.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
         this.resize();

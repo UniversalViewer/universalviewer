@@ -6,7 +6,7 @@ import { UVUtils } from "../../Utils";
 export class AVCenterPanel extends CenterPanel {
 
     $avcomponent: JQuery;
-    avcomponent: IIIFComponents.AVComponent | null;
+    avcomponent: any;
     private _lastCanvasIndex: number | undefined;
     private _mediaReady: boolean = false;
     private _isThumbsViewOpen: boolean = false;
@@ -24,15 +24,15 @@ export class AVCenterPanel extends CenterPanel {
 
         const that = this;
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this._viewCanvas(canvasIndex);           
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Manifesto.IRange | null) => {
 
             if (!this._observeRangeChanges()) {
                 return;
@@ -45,7 +45,7 @@ export class AVCenterPanel extends CenterPanel {
 
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this._whenMediaReady(() => {
                 if (this.avcomponent) {
                     this.avcomponent.set({
@@ -56,11 +56,11 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
-        $.subscribe(BaseEvents.CREATED, () => {
+        this.component.subscribe(BaseEvents.CREATED, () => {
             this._setTitle();
         });
 
-        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
 
             this._isThumbsViewOpen = true;
 
@@ -81,7 +81,7 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
-        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
 
             this._isThumbsViewOpen = false;
 
@@ -125,15 +125,15 @@ export class AVCenterPanel extends CenterPanel {
                     const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
 
                     if (range !== currentRange) {
-                        $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                        this.component.publish(BaseEvents.RANGE_CHANGED, range);
                     }
                     
                 } else {
-                    $.publish(BaseEvents.RANGE_CHANGED, [null]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, null);
                 }
 
             } else {
-                $.publish(BaseEvents.RANGE_CHANGED, [null]);
+                this.component.publish(BaseEvents.RANGE_CHANGED, null);
             } 
             
         }, false);

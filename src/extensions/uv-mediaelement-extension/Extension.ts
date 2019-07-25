@@ -12,7 +12,6 @@ import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/Mor
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
-import {Shell} from "../../modules/uv-shared-module/Shell";
 import IThumb = Manifold.IThumb;
 
 export class Extension extends BaseExtension implements IMediaElementExtension {
@@ -36,41 +35,41 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
 
         // listen for mediaelement enter/exit fullscreen events.
         $(window).bind('enterfullscreen', () => {
-            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
         $(window).bind('exitfullscreen', () => {
-            $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+            this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: IThumb) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-            Shell.$centerPanel.hide();
-            Shell.$rightPanel.hide();
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+            this.shell.$centerPanel.hide();
+            this.shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            Shell.$centerPanel.show();
-            Shell.$rightPanel.show();
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.shell.$centerPanel.show();
+            this.shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(Events.MEDIA_ENDED, () => {
+        this.component.subscribe(Events.MEDIA_ENDED, () => {
             this.fire(Events.MEDIA_ENDED);
         });
 
-        $.subscribe(Events.MEDIA_PAUSED, () => {
+        this.component.subscribe(Events.MEDIA_PAUSED, () => {
             this.fire(Events.MEDIA_PAUSED);
         });
 
-        $.subscribe(Events.MEDIA_PLAYED, () => {
+        this.component.subscribe(Events.MEDIA_PLAYED, () => {
             this.fire(Events.MEDIA_PLAYED);
         });
     }
@@ -79,41 +78,41 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new HeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ResourcesLeftPanel(this.shell.$leftPanel);
         }
 
-        this.centerPanel = new MediaElementCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new MediaElementCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()){
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         }
 
         if (this.isFooterPanelEnabled()){
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$helpDialogue = $('<div class="overlay help" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$helpDialogue);
+        this.shell.$overlays.append(this.$helpDialogue);
         this.helpDialogue = new HelpDialogue(this.$helpDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()){

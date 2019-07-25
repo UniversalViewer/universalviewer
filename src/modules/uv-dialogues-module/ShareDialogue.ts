@@ -48,8 +48,8 @@ export class ShareDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_SHARE_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_SHARE_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
 
             if (this.isShareAvailable()){
                 this.openShareView();
@@ -58,12 +58,12 @@ export class ShareDialogue extends Dialogue {
             }
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
-        $.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, (e: any, $triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
             this.openEmbedView();
         });
 
@@ -183,15 +183,15 @@ export class ShareDialogue extends Dialogue {
         });
 
         this.$termsOfUseButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_TERMS_OF_USE);
+            this.component.publish(BaseEvents.SHOW_TERMS_OF_USE);
         });
 
         this.$element.hide();
         this.update();
     }
 
-    open($triggerButton?: JQuery): void {
-        super.open($triggerButton);
+    open(triggerButton?: HTMLElement): void {
+        super.open(triggerButton);
         this.update();
     }
 

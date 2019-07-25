@@ -109,7 +109,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                     
                     // if downloading a pdf - if there's a print service, generate an event instead of opening a new window.
                     // if (printService && this.extension.isOnHomeDomain()){
-                    //     $.publish(Events.PRINT);
+                    //     this.component.publish(Events.PRINT);
                     // } else {
                         window.open(this.renderingUrls[<any>id]);
                     //}
@@ -125,7 +125,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                         Utils.Async.waitFor(() => {
                             return !this.isActive;
                         }, () => {
-                            $.publish(BaseEvents.SHOW_MULTISELECT_DIALOGUE);
+                            this.component.publish(BaseEvents.SHOW_MULTISELECT_DIALOGUE);
                         });
                         break;
                     case DownloadOption.WHOLE_IMAGE_HIGH_RES:
@@ -149,22 +149,22 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 }
             }
 
-            $.publish(BaseEvents.DOWNLOAD, [{
+            this.component.publish(BaseEvents.DOWNLOAD, {
                 "type": type,
                 "label": label
-            }]);
+            });
 
             this.close();
         });
 
         this.$settingsButton.onPressed(() => {
-            $.publish(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
-            $.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+            this.component.publish(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
+            this.component.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
     }
 
-    open($triggerButton?: JQuery) {
-        super.open($triggerButton);
+    open(triggerButton?: HTMLElement) {
+        super.open(triggerButton);
 
         const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
 
