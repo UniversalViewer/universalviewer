@@ -99,7 +99,7 @@ docReady(function() {
         var cvi = ud.getAttribute('data-canvasindex') || 0;
         var xywh = ud.getAttribute('data-xywh');
         var r = ud.getAttribute('data-rotation');
-        var cfg = ud.getAttribute('data-config');
+        var cfg = ud.getAttribute('data-config') || '';
         var dl = ud.getAttribute('data-locale');
         var manifestUrl = z;
 
