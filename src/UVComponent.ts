@@ -10,7 +10,7 @@ import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
 import {UVUtils} from "./Utils";
-import {PubSub} from "./Pubsub";
+import {PubSub} from "./PubSub";
 import "./Polyfills";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
