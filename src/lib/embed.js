@@ -109,6 +109,7 @@ docReady(function() {
         iframe.src = fullUrl;
         iframe.width = ud.style.width;
         iframe.height = ud.style.height;
+        iframe.setAttribute("allowfullscreen", true);
         ud.appendChild(iframe);
     });
 });
