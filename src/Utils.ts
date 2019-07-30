@@ -15,6 +15,7 @@ export class UVUtils {
                 p: [],
                 small: [],
                 span: [],
+                strong: [],
                 sub: [],
                 sup: []
             }
