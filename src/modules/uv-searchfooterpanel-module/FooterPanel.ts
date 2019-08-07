@@ -378,8 +378,9 @@ export class FooterPanel extends BaseFooterPanel {
         this.terms = terms;
 
         if (this.terms === '' || this.terms === this.content.enterKeyword) {
+            const that = this;
             this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.emptyValue, function(){
-                this.$searchText.focus();
+                that.$searchText.focus();
             });
 
             return;
