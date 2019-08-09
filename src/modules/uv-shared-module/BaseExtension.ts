@@ -892,8 +892,9 @@ export class BaseExtension implements IExtension {
         return null;
     }   
 
-    getIIIFShareUrl(): string {
-        return this.helper.iiifResourceUri + "?manifest=" + this.helper.iiifResourceUri;
+    getIIIFShareUrl(shareManifests: boolean = false): string {
+        var manifestUri: string = shareManifests ? this.helper.manifest.id : this.helper.iiifResourceUri;
+        return `${manifestUri}?manifest=${manifestUri}`;
     }
 
     addTimestamp(uri: string): string {
