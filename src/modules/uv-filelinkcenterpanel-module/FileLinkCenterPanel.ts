@@ -22,13 +22,13 @@ export class FileLinkCenterPanel extends CenterPanel {
             this.openMedia(resources);
         });
 
-        this.$scroll = $('<div class="scroll"><div>');
+        this.$scroll = $('<div class="scroll"></div>');
         this.$content.append(this.$scroll);
 
         this.$downloadItems = $('<ol></ol>');
         this.$scroll.append(this.$downloadItems);
 
-        this.$downloadItemTemplate = $('<li><img><div class="col2"><a class="filename" target="_blank" download></a><span class="label"></span><a class="description" target="_blank" download></a></div></li>');
+        this.$downloadItemTemplate = $('<li><img/><div class="col2"><a class="filename" target="_blank" download=""></a><span class="label"></span><a class="description" target="_blank" download=""></a></div></li>');
 
         this.title = this.extension.helper.getLabel();
     }
