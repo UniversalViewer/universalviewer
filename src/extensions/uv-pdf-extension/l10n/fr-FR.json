@@ -90,6 +90,23 @@
                 "refresh": "Rafraîchir"
             }
         },
+        "headerPanel": {
+            "content": {
+              "close": "Fermer",
+              "help": "Aide"
+            }
+          },
+          "pdfHeaderPanel": {
+            "content": {
+              "emptyValue": "Entrer un nombre",
+              "first": "Premier",
+              "go": "Aller",
+              "last": "Dernière",
+              "next": "Aide",
+              "of": "de {0}",
+              "previous": "Précédent"
+            }
+          },
         "helpDialogue": {
             "content": {
                 "text": "texte d'exemple",
