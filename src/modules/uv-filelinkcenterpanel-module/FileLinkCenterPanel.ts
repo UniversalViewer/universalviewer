@@ -8,8 +8,6 @@ export class FileLinkCenterPanel extends CenterPanel {
     $downloadItems: JQuery;
     $downloadItemTemplate: JQuery;
 
-    title: string | null;
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -20,17 +18,17 @@ export class FileLinkCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             this.openMedia(resources);
         });
 
-        this.$scroll = $('<div class="scroll"><div>');
+        this.$scroll = $('<div class="scroll"></div>');
         this.$content.append(this.$scroll);
 
         this.$downloadItems = $('<ol></ol>');
         this.$scroll.append(this.$downloadItems);
 
-        this.$downloadItemTemplate = $('<li><img><div class="col2"><a class="filename" target="_blank" download></a><span class="label"></span><a class="description" target="_blank" download></a></div></li>');
+        this.$downloadItemTemplate = $('<li><img/><div class="col2"><a class="filename" target="_blank" download=""></a><span class="label"></span><a class="description" target="_blank" download=""></a></div></li>');
 
         this.title = this.extension.helper.getLabel();
     }
@@ -100,7 +98,7 @@ export class FileLinkCenterPanel extends CenterPanel {
         super.resize();
 
         if (this.title) {
-            this.$title.ellipsisFill(this.title);
+            this.$title.text(UVUtils.sanitize(this.title));
         }
 
         this.$scroll.height(this.$content.height() - this.$scroll.verticalMargins());

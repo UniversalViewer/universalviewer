@@ -34,6 +34,7 @@ export class ShareDialogue extends Dialogue {
     maxHeight: number = this.maxWidth * this.aspectRatio;
     minWidth: number = 200;
     minHeight: number = this.minWidth * this.aspectRatio;
+    shareManifests: boolean = false;
 
     constructor($element: JQuery) {
         super($element);
@@ -47,9 +48,10 @@ export class ShareDialogue extends Dialogue {
 
         this.openCommand = BaseEvents.SHOW_SHARE_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_SHARE_DIALOGUE;
+        this.shareManifests = this.options.shareManifests || false;
 
-        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
 
             if (this.isShareAvailable()){
                 this.openShareView();
@@ -58,12 +60,12 @@ export class ShareDialogue extends Dialogue {
             }
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
-        $.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, (e: any, $triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
             this.openEmbedView();
         });
 
@@ -93,7 +95,7 @@ export class ShareDialogue extends Dialogue {
         this.$shareLink = $('<a class="shareLink" onclick="return false;"></a>');
         this.$shareView.append(this.$shareLink);
 
-        this.$shareInput = $(`<input class="shareInput" type="text" readonly aria-label="${this.content.shareUrl}"/>`);
+        this.$shareInput = $(`<input class="shareInput" type="text" readonly="readonly" aria-label="${this.content.shareUrl}"/>`);
         this.$shareView.append(this.$shareInput);
 
         this.$shareFrame = $('<iframe class="shareFrame"></iframe>');
@@ -111,7 +113,7 @@ export class ShareDialogue extends Dialogue {
         // this.$image = $('<img class="share" />');
         // this.$embedView.append(this.$image);
 
-        this.$code = $(`<input class="code" type="text" readonly aria-label="${this.content.embed }"/>`);
+        this.$code = $(`<input class="code" type="text" readonly="readonly" aria-label="${this.content.embed }"/>`);
         this.$embedView.append(this.$code);
 
         this.$customSize = $('<div class="customSize"></div>');
@@ -136,7 +138,7 @@ export class ShareDialogue extends Dialogue {
         this.$heightInput = $('<input class="height" type="text" maxlength="10" aria-label="' + this.content.height + '"/>');
         this.$customSize.append(this.$heightInput);
 
-        const iiifUrl: string = this.extension.getIIIFShareUrl();
+        const iiifUrl: string = this.extension.getIIIFShareUrl(this.shareManifests);
 
         this.$iiifButton = $('<a class="imageBtn iiif" href="' + iiifUrl + '" title="' + this.content.iiif + '" target="_blank"></a>');
         this.$footer.append(this.$iiifButton);
@@ -183,15 +185,15 @@ export class ShareDialogue extends Dialogue {
         });
 
         this.$termsOfUseButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_TERMS_OF_USE);
+            this.component.publish(BaseEvents.SHOW_TERMS_OF_USE);
         });
 
         this.$element.hide();
         this.update();
     }
 
-    open($triggerButton?: JQuery): void {
-        super.open($triggerButton);
+    open(triggerButton?: HTMLElement): void {
+        super.open(triggerButton);
         this.update();
     }
 

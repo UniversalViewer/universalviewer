@@ -2,6 +2,7 @@ import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Events} from "../../extensions/uv-mediaelement-extension/Events";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
+import { UVUtils } from "../../Utils";
 
 export class MediaElementCenterPanel extends CenterPanel {
 
@@ -28,7 +29,7 @@ export class MediaElementCenterPanel extends CenterPanel {
 
         // only full screen video
         if (this.isVideo()){
-            $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+            this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
                 if (that.component.isFullScreen) {
                     that.player.enterFullScreen(false);
                 } else {
@@ -37,7 +38,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             });
         }
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -111,18 +112,18 @@ export class MediaElementCenterPanel extends CenterPanel {
                         });
 
                         mediaElement.addEventListener('play', () => {
-                            $.publish(Events.MEDIA_PLAYED, [Math.floor(mediaElement.currentTime)]);
+                            that.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
                         });
 
                         mediaElement.addEventListener('pause', () => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
-                                $.publish(Events.MEDIA_PAUSED, [Math.floor(mediaElement.currentTime)]);
+                                that.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
                             }
                         });
 
                         mediaElement.addEventListener('ended', () => {
-                            $.publish(Events.MEDIA_ENDED, [Math.floor(mediaElement.duration)]);
+                            that.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
                         });
 
                         mediaElement.setSrc(sources);
@@ -147,18 +148,18 @@ export class MediaElementCenterPanel extends CenterPanel {
                         });
 
                         mediaElement.addEventListener('play', () => {
-                            $.publish(Events.MEDIA_PLAYED, [Math.floor(mediaElement.currentTime)]);
+                            this.component.publish(Events.MEDIA_PLAYED, Math.floor(mediaElement.currentTime));
                         });
 
                         mediaElement.addEventListener('pause', () => {
                             // mediaelement creates a pause event before the ended event. ignore this.
                             if (Math.floor(mediaElement.currentTime) != Math.floor(mediaElement.duration)) {
-                                $.publish(Events.MEDIA_PAUSED, [Math.floor(mediaElement.currentTime)]);
+                                this.component.publish(Events.MEDIA_PAUSED, Math.floor(mediaElement.currentTime));
                             }
                         });
 
                         mediaElement.addEventListener('ended', () => {
-                            $.publish(Events.MEDIA_ENDED, [Math.floor(mediaElement.duration)]);
+                            this.component.publish(Events.MEDIA_ENDED, Math.floor(mediaElement.duration));
                         });
 
                         mediaElement.setSrc(sources);
@@ -204,7 +205,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         });
 
         if (this.title) {
-            this.$title.ellipsisFill(this.title);
+            this.$title.text(UVUtils.sanitize(this.title));
         }
 
         if (this.player) {

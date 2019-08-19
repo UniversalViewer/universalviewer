@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
+import { UVUtils } from "../../Utils";
 
 export class VirtexCenterPanel extends CenterPanel {
 
@@ -8,7 +9,6 @@ export class VirtexCenterPanel extends CenterPanel {
     $zoomInButton: JQuery;
     $zoomOutButton: JQuery;
     $vrButton: JQuery;
-    title: string | null;
     viewport: Virtex.Viewport | null;
 
     constructor($element: JQuery) {
@@ -23,7 +23,7 @@ export class VirtexCenterPanel extends CenterPanel {
 
         const that = this;
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 
@@ -142,7 +142,7 @@ export class VirtexCenterPanel extends CenterPanel {
         super.resize();
 
         if (this.title) {
-            this.$title.ellipsisFill(this.title);
+            this.$title.text(UVUtils.sanitize(this.title));
         }
         
         this.$viewport.width(this.$content.width());

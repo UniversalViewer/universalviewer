@@ -9,7 +9,6 @@ import { IAlephExtension } from "./IAlephExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Shell } from "../../modules/uv-shared-module/Shell";
 import { AlephLeftPanel } from "../../modules/uv-alephleftpanel-module/AlephLeftPanel";
 
 export class Extension extends BaseExtension implements IAlephExtension {
@@ -41,42 +40,42 @@ export class Extension extends BaseExtension implements IAlephExtension {
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new HeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new AlephLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new AlephLeftPanel(this.shell.$leftPanel);
         } else {
-            Shell.$leftPanel.hide();
+            this.shell.$leftPanel.hide();
         }
 
-        this.centerPanel = new AlephCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new AlephCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         } else {
-            Shell.$rightPanel.hide();
+            this.shell.$rightPanel.hide();
         }
 
         if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
-            this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+            this.mobileFooterPanel = new MobileFooterPanel(this.shell.$mobileFooterPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$shareDialogue = $('<div class="uv-overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$downloadDialogue = $('<div class="uv-overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="uv-overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isHeaderPanelEnabled()) {

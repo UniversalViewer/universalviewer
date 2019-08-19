@@ -21,9 +21,9 @@ function createUV(selector, data, dataProvider) {
         }
     }
 
-    window.onresize = function() {
+    window.addEventListener('resize', function() {
         resize();
-    }
+    });
 
     uv = new UV({
         target: $uv[0],

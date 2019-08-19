@@ -4,7 +4,6 @@ import {IUVComponent} from "../../IUVComponent";
 
 export class BaseView extends Panel{
 
-    component: IUVComponent;
     config: any;
     content: any;
     extension: IExtension;
@@ -17,7 +16,7 @@ export class BaseView extends Panel{
 
     create(): void {
 
-        this.component = this.$element.closest('.uv').data("component");
+        this.component = this.$element.closest(".uv").data("component");
 
         super.create();
         

@@ -1,12 +1,12 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
+import { UVUtils } from "../../Utils";
 
 export class AVCenterPanel extends CenterPanel {
 
     $avcomponent: JQuery;
-    avcomponent: IIIFComponents.AVComponent | null;
-    title: string | null;
+    avcomponent: any;
     private _lastCanvasIndex: number | undefined;
     private _mediaReady: boolean = false;
     private _isThumbsViewOpen: boolean = false;
@@ -24,15 +24,15 @@ export class AVCenterPanel extends CenterPanel {
 
         const that = this;
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: Manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this._viewCanvas(canvasIndex);           
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: Manifesto.IRange | null) => {
 
             if (!this._observeRangeChanges()) {
                 return;
@@ -45,7 +45,7 @@ export class AVCenterPanel extends CenterPanel {
 
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this._whenMediaReady(() => {
                 if (this.avcomponent) {
                     this.avcomponent.set({
@@ -56,11 +56,11 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
-        $.subscribe(BaseEvents.CREATED, () => {
+        this.component.subscribe(BaseEvents.CREATED, () => {
             this._setTitle();
         });
 
-        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
 
             this._isThumbsViewOpen = true;
 
@@ -81,7 +81,7 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
-        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
 
             this._isThumbsViewOpen = false;
 
@@ -105,7 +105,8 @@ export class AVCenterPanel extends CenterPanel {
         this.$content.prepend(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
-            target: <HTMLElement>this.$avcomponent[0]
+            target: <HTMLElement>this.$avcomponent[0],
+            posterImageExpanded: this.options.posterImageExpanded
         });
 
         this.avcomponent.on('mediaready', () => {
@@ -125,15 +126,15 @@ export class AVCenterPanel extends CenterPanel {
                     const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
 
                     if (range !== currentRange) {
-                        $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                        this.component.publish(BaseEvents.RANGE_CHANGED, range);
                     }
                     
                 } else {
-                    $.publish(BaseEvents.RANGE_CHANGED, [null]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, null);
                 }
 
             } else {
-                $.publish(BaseEvents.RANGE_CHANGED, [null]);
+                this.component.publish(BaseEvents.RANGE_CHANGED, null);
             } 
             
         }, false);
@@ -187,6 +188,33 @@ export class AVCenterPanel extends CenterPanel {
         }
 
         this.title = title;
+
+        // set subtitle
+        const groups: Manifold.MetadataGroup[] = this.extension.helper.getMetadata(<Manifold.MetadataOptions>{
+            range: currentRange
+        });
+
+        for (let i = 0; i < groups.length; i++) {
+            const group: Manifold.MetadataGroup = groups[i];
+
+            const item: Manifesto.LabelValuePair | undefined = group.items.find((el: Manifesto.LabelValuePair) => {
+                if (el.label) {
+                    const label: string | null = Manifesto.LanguageMap.getValue(el.label);
+                    if (label && label.toLowerCase() === this.config.options.subtitleMetadataField) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            if (item) {
+                this.subtitle = Manifesto.LanguageMap.getValue(item.value);
+                break;
+            }
+        }
+
+        this.$title.text(UVUtils.sanitize(this.title));
 
         this.resize(false);
     }
@@ -265,10 +293,6 @@ export class AVCenterPanel extends CenterPanel {
     resize(resizeAVComponent: boolean = true) {
 
         super.resize();
-
-        if (this.title) {
-            this.$title.ellipsisFill(this.title);
-        }
 
         if (resizeAVComponent && this.avcomponent) {
             this.$avcomponent.height(this.$content.height());

@@ -4,9 +4,9 @@ import {UVUtils} from "../../Utils";
 
 export class MoreInfoRightPanel extends RightPanel {
 
-    metadataComponent: IIIFComponents.MetadataComponent;
+    metadataComponent: any;
     $metadata: JQuery;
-    limitType: IIIFComponents.LimitType;
+    limitType: any;
     limit: number;
 
     constructor($element: JQuery) {
@@ -19,11 +19,11 @@ export class MoreInfoRightPanel extends RightPanel {
 
         super.create();
         
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, () => {
             this.databind();
         });
 
@@ -45,7 +45,7 @@ export class MoreInfoRightPanel extends RightPanel {
                 const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
 
                 if (range) {
-                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, range);
                 }
             }
 
@@ -66,8 +66,8 @@ export class MoreInfoRightPanel extends RightPanel {
         return range;
     }
 
-    private _getData(): IIIFComponents.IMetadataComponentData {
-        return <IIIFComponents.IMetadataComponentData>{
+    private _getData() {
+        return {
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
@@ -84,7 +84,7 @@ export class MoreInfoRightPanel extends RightPanel {
             manifestExclude: this.config.options.manifestExclude,
             range: this._getCurrentRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
-            sanitizer: (html) => {
+            sanitizer: (html: string) => {
                 return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages

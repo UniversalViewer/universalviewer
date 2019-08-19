@@ -27,11 +27,11 @@ export class DownloadDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_DOWNLOAD_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_DOWNLOAD_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -52,7 +52,7 @@ export class DownloadDialogue extends Dialogue {
         this.$footer.append(this.$termsOfUseButton);
 
         this.$termsOfUseButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_TERMS_OF_USE);
+            this.component.publish(BaseEvents.SHOW_TERMS_OF_USE);
         });
 
         // hide
@@ -61,8 +61,10 @@ export class DownloadDialogue extends Dialogue {
     }
 
     addEntireFileDownloadOptions(): void {
-        if (this.isDownloadOptionAvailable(DownloadOption.entireFileAsOriginal)) {
+        if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL)) {
             this.$downloadOptions.empty();
+
+            // 
 
             // add each file src
             const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
@@ -213,15 +215,14 @@ export class DownloadDialogue extends Dialogue {
         return extension;
     }
 
+    isMediaDownloadEnabled(): boolean {
+      return this.extension.helper.isUIEnabled('mediaDownload');
+    }
+
     isDownloadOptionAvailable(option: DownloadOption): boolean {
         switch (option) {
-            case DownloadOption.entireFileAsOriginal:
-                // check if ui-extensions disable it
-                const uiExtensions: Manifesto.IService | null = this.extension.helper.manifest.getService(manifesto.ServiceProfile.uiExtensions());
-
-                if (uiExtensions && !this.extension.helper.isUIEnabled('mediaDownload')) {
-                    return false;
-                }
+            case DownloadOption.ENTIRE_FILE_AS_ORIGINAL:
+                return this.isMediaDownloadEnabled();
         }
 
         return true;

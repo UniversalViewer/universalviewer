@@ -1,7 +1,8 @@
-import {ILocale} from "../../ILocale";
-import {IUVComponent} from "../../IUVComponent";
-import {IUVData} from "../../IUVData";
-import {MetricType} from "./MetricType";
+import { ILocale } from "../../ILocale";
+import { IUVComponent } from "../../IUVComponent";
+import { IUVData } from "../../IUVData";
+import { MetricType } from "./MetricType";
+import { Shell } from "./Shell";
 
 export interface IExtension {
     $element: JQuery;
@@ -23,7 +24,7 @@ export interface IExtension {
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
     getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]>;
-    getIIIFShareUrl(): string;
+    getIIIFShareUrl(shareManifests?: boolean): string;
     getLocale(): string;
     getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[];
     getPagedIndices(canvasIndex?: number): number[];
@@ -60,6 +61,7 @@ export interface IExtension {
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
     render(): void;
+    shell: Shell;
     updateSettings(settings: ISettings): void;
     viewCanvas(canvasIndex: number): void;
     viewCollection(collection: Manifesto.ICollection): void;

@@ -138,7 +138,10 @@
       "options": {
         "autoPlay": false,
         "includeParentInTitleEnabled": false,
-        "posterImageRatio": 0.3
+        "posterImageRatio": 0.3,
+        "subtitleMetadataField": "contributor",
+        "titleEnabled": true,
+        "subtitleEnabled": true
       }
     },
     "settingsDialogue": {

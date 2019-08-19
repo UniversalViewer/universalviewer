@@ -49,15 +49,15 @@ export class ContentLeftPanel extends LeftPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+        this.component.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             if (!this.extension.isDesktopMetric()) {
                 if (this.isFullyExpanded) {
                     this.collapseFull();
@@ -65,22 +65,22 @@ export class ContentLeftPanel extends LeftPanel {
             }
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             }
@@ -89,7 +89,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.updateTreeTabBySelection();
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             }
@@ -138,7 +138,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.$sortButtonGroup = $('<div class="btn-group"></div>');
         this.$treeViewOptions.append(this.$sortButtonGroup);
 
-        this.$sortByDateButton = $('<button class="btn tabindex="0"">' + this.content.date + '</button>');
+        this.$sortByDateButton = $('<button class="btn" tabindex="0">' + this.content.date + '</button>');
         this.$sortButtonGroup.append(this.$sortByDateButton);
 
         this.$sortByVolumeButton = $('<button class="btn" tabindex="0">' + this.content.volume + '</button>');
@@ -285,8 +285,8 @@ export class ContentLeftPanel extends LeftPanel {
         this.selectCurrentTreeNode();
     }
 
-    getTreeData(): IIIFComponents.ITreeComponentData {
-        return <IIIFComponents.ITreeComponentData>{
+    getTreeData() {
+        return {
             autoExpand: this._isTreeAutoExpanded(),
             branchNodesExpandOnClick: Utils.Bools.getBool(this.config.options.branchNodesExpandOnClick, true),
             branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
@@ -431,8 +431,8 @@ export class ContentLeftPanel extends LeftPanel {
         this.galleryView.databind();
     }
 
-    getGalleryData(): IIIFComponents.IGalleryComponentData {
-        return <IIIFComponents.IGalleryComponentData>{
+    getGalleryData() {
+        return {
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
@@ -520,7 +520,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
@@ -532,13 +532,13 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
@@ -551,7 +551,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     openTreeView(): void {
@@ -577,7 +577,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.resize();
         this.treeView.resize();
 
-        $.publish(BaseEvents.OPEN_TREE_VIEW);
+        this.component.publish(BaseEvents.OPEN_TREE_VIEW);
     }
 
     openThumbsView(): void {
@@ -612,7 +612,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.thumbsView.resize();
         }
 
-        $.publish(BaseEvents.OPEN_THUMBS_VIEW);
+        this.component.publish(BaseEvents.OPEN_THUMBS_VIEW);
     }
 
     selectTopRangeIndex(index: number): void {
@@ -654,7 +654,7 @@ export class ContentLeftPanel extends LeftPanel {
             if (node){
                 this.treeView.selectNode(<Manifold.ITreeNode>node);
             } else {
-                this.treeView.deselectCurrentNode();
+                this.selectTreeNodeByManifest();
             }
         }
     }
@@ -684,7 +684,7 @@ export class ContentLeftPanel extends LeftPanel {
             //     node = this.treeView.getNodeById(id);
             // }
 
-            if (node && usingCorrectTree){
+            if (node && usingCorrectTree) {
                 this.treeView.selectNode(<Manifold.ITreeNode>node);
             } else {
                 range = this.extension.helper.getCurrentRange();
@@ -696,9 +696,37 @@ export class ContentLeftPanel extends LeftPanel {
                 if (node) {
                     this.treeView.selectNode(<Manifold.ITreeNode>node);
                 } else {
-                    this.treeView.deselectCurrentNode();
+                    this.selectTreeNodeByManifest();
                 }
             }
+        }
+    }
+
+    // fall through to this is there's no current range or canvas
+    selectTreeNodeByManifest(): void {
+
+        const collectionIndex: number = this.extension.helper.collectionIndex;
+        const manifestIndex: number = this.extension.helper.manifestIndex;
+
+        const allNodes: Manifold.ITreeNode[] = this.treeView.getAllNodes();
+
+        let nodeFound: boolean = false;
+
+        allNodes.map(node => {
+            if (node.isCollection() && node.data.index === collectionIndex) {
+                this.treeView.selectNode(node as Manifold.ITreeNode);
+                this.treeView.expandNode(node as Manifold.ITreeNode, true);
+                nodeFound = true;
+            }
+            
+            if (node.isManifest() && node.data.index === manifestIndex) {
+                this.treeView.selectNode(node as Manifold.ITreeNode);
+                nodeFound = true;
+            }
+        });
+
+        if (!nodeFound) {
+            this.treeView.deselectCurrentNode();
         }
     }
 
