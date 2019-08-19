@@ -23,7 +23,7 @@ export class AlephCenterPanel extends CenterPanel {
 
     const that = this;
 
-    $.subscribe(
+    this.component.subscribe(
       BaseEvents.OPEN_EXTERNAL_RESOURCE,
       (e: any, resources: Manifesto.IExternalResource[]) => {
         that.openMedia(resources);
@@ -55,7 +55,7 @@ export class AlephCenterPanel extends CenterPanel {
         }
       }
 
-      $.publish(BaseEvents.RESIZE);
+      this.component.publish(BaseEvents.RESIZE);
     });
   }
 
@@ -72,54 +72,54 @@ export class AlephCenterPanel extends CenterPanel {
     }, false);
 
     this.aleph.addEventListener('loaded', (e: any) => {
-      $.publish(Events.LOADED, [{
+      this.component.publish(Events.LOADED, {
         stackhelper: (this._displayMode !== DisplayMode.MESH) ? e.detail : null,
         displayMode: this._displayMode
-      }]);
+      });
     }, false);
 
     this.aleph.componentOnReady().then((al: any) => {
       al.load(this._src, this._displayMode);
     });
 
-    $.subscribe(Events.DISPLAY_MODE_CHANGED, (e: any, displayMode: DisplayMode) => {
+    this.component.subscribe(Events.DISPLAY_MODE_CHANGED, (displayMode: DisplayMode) => {
       this.aleph.setDisplayMode(displayMode);          
     });
 
-    $.subscribe(Events.GRAPH_ENABLED_CHANGED, (e: any, enabled: boolean) => {
+    this.component.subscribe(Events.GRAPH_ENABLED_CHANGED, (enabled: boolean) => {
       this.aleph.setGraphEnabled(enabled);          
     });
 
-    $.subscribe(Events.BOUNDING_BOX_ENABLED_CHANGED, (e: any, enabled: boolean) => {
+    this.component.subscribe(Events.BOUNDING_BOX_ENABLED_CHANGED, (enabled: boolean) => {
       this.aleph.setBoundingBoxEnabled(enabled);          
     });
     
-    $.subscribe(Events.SLICES_INDEX_CHANGED, (e: any, index: number) => {
+    this.component.subscribe(Events.SLICES_INDEX_CHANGED, (index: number) => {
       this.aleph.setSlicesIndex(index);          
     });
 
-    $.subscribe(Events.ORIENTATION_CHANGED, (e: any, orientation: Orientation) => {
-        this.aleph.setOrientation(orientation);         
+    this.component.subscribe(Events.ORIENTATION_CHANGED, (orientation: Orientation) => {
+      this.aleph.setOrientation(orientation);         
     });
 
-    $.subscribe(Events.SLICES_WINDOW_CENTER_CHANGED, (e: any, center: number) => {
-        this.aleph.setSlicesWindowCenter(center);         
+    this.component.subscribe(Events.SLICES_WINDOW_CENTER_CHANGED, (center: number) => {
+      this.aleph.setSlicesWindowCenter(center);         
     });
 
-    $.subscribe(Events.SLICES_WINDOW_WIDTH_CHANGED, (e: any, width: number) => {
-        this.aleph.setSlicesWindowWidth(width);         
+    this.component.subscribe(Events.SLICES_WINDOW_WIDTH_CHANGED, (width: number) => {
+      this.aleph.setSlicesWindowWidth(width);         
     });
 
-    $.subscribe(Events.VOLUME_STEPS_CHANGED, (e: any, steps: number) => {
-        this.aleph.setVolumeSteps(steps);         
+    this.component.subscribe(Events.VOLUME_STEPS_CHANGED, (steps: number) => {
+      this.aleph.setVolumeSteps(steps);         
     });
     
-    $.subscribe(Events.VOLUME_WINDOW_CENTER_CHANGED, (e: any, center: number) => {
-        this.aleph.setVolumeWindowCenter(center);         
+    this.component.subscribe(Events.VOLUME_WINDOW_CENTER_CHANGED, (center: number) => {
+      this.aleph.setVolumeWindowCenter(center);         
     });
 
-    $.subscribe(Events.VOLUME_WINDOW_WIDTH_CHANGED, (e: any, width: number) => {
-        this.aleph.setVolumeWindowWidth(width);         
+    this.component.subscribe(Events.VOLUME_WINDOW_WIDTH_CHANGED, (width: number) => {
+      this.aleph.setVolumeWindowWidth(width);         
     });
   }
 

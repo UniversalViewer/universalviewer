@@ -20,74 +20,74 @@ export class AlephLeftPanel extends LeftPanel {
         this.$main.append(this._$controlPanel);
         this.setTitle(this.content.title);
 
-        $.subscribe(Events.LOADED, (e: any, args: any) => {
+        this.component.subscribe(Events.LOADED, (args: any) => {
             alControlPanel.stackhelper = args.stackhelper;
             alControlPanel.displayMode = args.displayMode;
             this.$main.removeClass('disabled');
         });
 
-        alControlPanel.componentOnReady().then(function() {
+        alControlPanel.componentOnReady().then(() => {
 
-            alControlPanel.addEventListener("displayModeChanged", function(e: any) {
-                $.publish(Events.DISPLAY_MODE_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("displayModeChanged", (e: any) => {
+                this.component.publish(Events.DISPLAY_MODE_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("graphEnabledChanged", function(e: any) {
-                $.publish(Events.GRAPH_ENABLED_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("graphEnabledChanged", (e: any) => {
+                this.component.publish(Events.GRAPH_ENABLED_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("boundingBoxEnabledChanged", function(e: any) {
-                $.publish(Events.BOUNDING_BOX_ENABLED_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("boundingBoxEnabledChanged", (e: any) => {
+                this.component.publish(Events.BOUNDING_BOX_ENABLED_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("slicesIndexChanged", function(e: any) {
-                $.publish(Events.SLICES_INDEX_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("slicesIndexChanged", (e: any) => {
+                this.component.publish(Events.SLICES_INDEX_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("orientationChanged", function(e: any) {
-                $.publish(Events.ORIENTATION_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("orientationChanged", (e: any) => {
+                this.component.publish(Events.ORIENTATION_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("slicesWindowCenterChanged", function(e: any) {
-                $.publish(Events.SLICES_WINDOW_CENTER_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("slicesWindowCenterChanged", (e: any) => {
+                this.component.publish(Events.SLICES_WINDOW_CENTER_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("slicesWindowWidthChanged", function(e: any) {
-                $.publish(Events.SLICES_WINDOW_WIDTH_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("slicesWindowWidthChanged", (e: any) => {
+                this.component.publish(Events.SLICES_WINDOW_WIDTH_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("volumeStepsChanged", function(e: any) {
-                $.publish(Events.VOLUME_STEPS_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("volumeStepsChanged", (e: any) => {
+                this.component.publish(Events.VOLUME_STEPS_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("volumeWindowCenterChanged", function(e: any) {
-                $.publish(Events.VOLUME_WINDOW_CENTER_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("volumeWindowCenterChanged", (e: any) => {
+                this.component.publish(Events.VOLUME_WINDOW_CENTER_CHANGED, e.detail);
             }, false);
   
-            alControlPanel.addEventListener("volumeWindowWidthChanged", function(e: any) {
-                $.publish(Events.VOLUME_WINDOW_WIDTH_CHANGED, [e.detail]);
+            alControlPanel.addEventListener("volumeWindowWidthChanged", (e: any) => {
+                this.component.publish(Events.VOLUME_WINDOW_WIDTH_CHANGED, e.detail);
             }, false);
         });
     }
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
         super.expandFullFinish();
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
         super.collapseFullFinish();
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     resize(): void {

@@ -30,7 +30,7 @@ export class Extension extends BaseExtension implements IAlephExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
