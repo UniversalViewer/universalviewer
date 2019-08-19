@@ -50,7 +50,7 @@ export class CenterPanel extends BaseView {
                                   <div class="header">
                                     <div class="title"></div>
                                     <button type="button" class="close" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
+                                      <span aria-hidden="true">&#215;</span>
                                     </button>
                                   </div>
                                   <div class="main">

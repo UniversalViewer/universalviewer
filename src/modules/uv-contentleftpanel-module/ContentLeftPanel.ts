@@ -138,7 +138,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.$sortButtonGroup = $('<div class="btn-group"></div>');
         this.$treeViewOptions.append(this.$sortButtonGroup);
 
-        this.$sortByDateButton = $('<button class="btn tabindex="0"">' + this.content.date + '</button>');
+        this.$sortByDateButton = $('<button class="btn" tabindex="0">' + this.content.date + '</button>');
         this.$sortButtonGroup.append(this.$sortByDateButton);
 
         this.$sortByVolumeButton = $('<button class="btn" tabindex="0">' + this.content.volume + '</button>');

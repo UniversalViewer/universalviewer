@@ -105,7 +105,8 @@ export class AVCenterPanel extends CenterPanel {
         this.$content.prepend(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
-            target: <HTMLElement>this.$avcomponent[0]
+            target: <HTMLElement>this.$avcomponent[0],
+            posterImageExpanded: this.options.posterImageExpanded
         });
 
         this.avcomponent.on('mediaready', () => {
