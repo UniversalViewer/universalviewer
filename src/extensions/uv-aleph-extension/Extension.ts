@@ -66,15 +66,15 @@ export class Extension extends BaseExtension implements IAlephExtension {
             this.shell.$footerPanel.hide();
         }
 
-        this.$shareDialogue = $('<div class="uv-overlay share" aria-hidden="true"></div>');
+        this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
         this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
-        this.$downloadDialogue = $('<div class="uv-overlay download" aria-hidden="true"></div>');
+        this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
         this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
-        this.$settingsDialogue = $('<div class="uv-overlay settings" aria-hidden="true"></div>');
+        this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
         this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
