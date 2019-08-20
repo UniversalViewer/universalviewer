@@ -167,7 +167,7 @@ export class PDFCenterPanel extends CenterPanel {
             const newScale: number = this._scale + 0.5;
 
             if (newScale < this._maxScale) {
-                this._scale =  newScale;
+                this._scale = newScale;
             } else {
                 this._scale = this._maxScale;
             }
