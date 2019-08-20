@@ -47,6 +47,9 @@ export class PDFCenterPanel extends CenterPanel {
         this._$zoomInButton = $('<div class="btn zoomIn" tabindex="0"></div>');
         this._$zoomOutButton = $('<div class="btn zoomOut" tabindex="0"></div>');
 
+        // Only attach PDF controls if we're using PDF.js; they have no meaning in
+        // PDFObject. However, we still create the objects above so that references
+        // to them do not cause errors (simpler than putting usePdfJs checks all over):
         if (Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
             this.$content.append(this._$spinner);
             this.$content.append(this._$prevButton);
