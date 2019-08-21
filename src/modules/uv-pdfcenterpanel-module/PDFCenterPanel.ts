@@ -42,15 +42,21 @@ export class PDFCenterPanel extends CenterPanel {
         this._$spinner = $('<div class="spinner"></div>');
         this._canvas = (<HTMLCanvasElement>this._$canvas[0]);
         this._ctx = this._canvas.getContext('2d');
-        this.$content.append(this._$spinner);
         this._$prevButton = $('<div class="btn prev" tabindex="0"></div>');
-        this.$content.append(this._$prevButton);
         this._$nextButton = $('<div class="btn next" tabindex="0"></div>');
-        this.$content.append(this._$nextButton);
         this._$zoomInButton = $('<div class="btn zoomIn" tabindex="0"></div>');
-        this.$content.append(this._$zoomInButton);
         this._$zoomOutButton = $('<div class="btn zoomOut" tabindex="0"></div>');
-        this.$content.append(this._$zoomOutButton);
+
+        // Only attach PDF controls if we're using PDF.js; they have no meaning in
+        // PDFObject. However, we still create the objects above so that references
+        // to them do not cause errors (simpler than putting usePdfJs checks all over):
+        if (Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+            this.$content.append(this._$spinner);
+            this.$content.append(this._$prevButton);
+            this.$content.append(this._$nextButton);
+            this.$content.append(this._$zoomInButton);
+            this.$content.append(this._$zoomOutButton);
+        }
 
         this._$pdfContainer.append(this._$canvas);
 
@@ -245,7 +251,7 @@ export class PDFCenterPanel extends CenterPanel {
             }
 
             if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
-                window.PDFObject.embed(pdfUri, '#content', {id: "PDF"});
+                window.PDFObject.embed(pdfUri, '.pdfContainer', {id: "PDF"});
             } else {
                 PDFJS.disableWorker = true;
 
