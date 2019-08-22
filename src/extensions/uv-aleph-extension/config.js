@@ -31,23 +31,6 @@ module.exports = {
                 cwd: config.directories.npm,
                 expand: true,
                 flatten: true,
-                src: [
-                    '@ionic/core/dist/ionic/svg/md-add-circle.svg', 
-                    '@ionic/core/dist/ionic/svg/md-compass.svg', 
-                    '@ionic/core/dist/ionic/svg/md-contrast.svg', 
-                    '@ionic/core/dist/ionic/svg/md-create.svg', 
-                    '@ionic/core/dist/ionic/svg/md-cube.svg', 
-                    '@ionic/core/dist/ionic/svg/md-eye.svg',
-                    '@ionic/core/dist/ionic/svg/md-options.svg',
-                    '@ionic/core/dist/ionic/svg/md-sunny.svg',
-                    '@ionic/core/dist/ionic/svg/md-swap.svg'
-                ],
-                dest: config.directories.uvAlephExtension + '/lib/ionic/svg'
-            },
-            {
-                cwd: config.directories.npm,
-                expand: true,
-                flatten: true,
                 src: '@universalviewer/aleph/dist/aleph/*',
                 dest: config.directories.uvAlephExtension + '/lib/aleph'
             }

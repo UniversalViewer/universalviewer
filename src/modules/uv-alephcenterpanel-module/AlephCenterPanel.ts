@@ -1,9 +1,11 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { Position } from "../uv-shared-module/Position";
 import { DisplayMode } from "./DisplayMode";
 import { Events } from "../../extensions/uv-aleph-extension/Events";
 import { Orientation } from "./Orientation";
+import { Position } from "../uv-shared-module/Position";
+import { Units } from "./Units";
+import { ControlsType } from "./ControlsType";
 
 export class AlephCenterPanel extends CenterPanel {
   //alephContainer: HTMLElement;
@@ -78,8 +80,8 @@ export class AlephCenterPanel extends CenterPanel {
       });
     }, false);
 
-    this.aleph.componentOnReady().then((al: any) => {
-      al.load(this._src, this._displayMode);
+    this.component.subscribe(Events.CONTROLS_TYPE_CHANGED, (controlsType: ControlsType) => {
+      this.aleph.setControlsType(controlsType);         
     });
 
     this.component.subscribe(Events.DISPLAY_MODE_CHANGED, (displayMode: DisplayMode) => {
@@ -102,12 +104,20 @@ export class AlephCenterPanel extends CenterPanel {
       this.aleph.setOrientation(orientation);         
     });
 
+    this.component.subscribe(Events.RECENTER, () => {
+      this.aleph.recenter();         
+    });
+
     this.component.subscribe(Events.SLICES_WINDOW_CENTER_CHANGED, (center: number) => {
       this.aleph.setSlicesWindowCenter(center);         
     });
 
     this.component.subscribe(Events.SLICES_WINDOW_WIDTH_CHANGED, (width: number) => {
       this.aleph.setSlicesWindowWidth(width);         
+    });
+
+    this.component.subscribe(Events.UNITS_CHANGED, (units: Units) => {
+      this.aleph.setUnits(units);         
     });
 
     this.component.subscribe(Events.VOLUME_STEPS_CHANGED, (steps: number) => {
@@ -120,6 +130,10 @@ export class AlephCenterPanel extends CenterPanel {
 
     this.component.subscribe(Events.VOLUME_WINDOW_WIDTH_CHANGED, (width: number) => {
       this.aleph.setVolumeWindowWidth(width);         
+    });
+
+    customElements.whenDefined("uv-aleph").then(() => {
+        this.aleph.load(this._src, this._displayMode);
     });
   }
 

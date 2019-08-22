@@ -26,48 +26,57 @@ export class AlephLeftPanel extends LeftPanel {
             this.$main.removeClass('disabled');
         });
 
-        alControlPanel.componentOnReady().then(() => {
+        alControlPanel.addEventListener("boundingBoxEnabledChanged", (e: any) => {
+            this.component.publish(Events.BOUNDING_BOX_ENABLED_CHANGED, e.detail);
+        }, false);
 
-            alControlPanel.addEventListener("displayModeChanged", (e: any) => {
-                this.component.publish(Events.DISPLAY_MODE_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("graphEnabledChanged", (e: any) => {
-                this.component.publish(Events.GRAPH_ENABLED_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("boundingBoxEnabledChanged", (e: any) => {
-                this.component.publish(Events.BOUNDING_BOX_ENABLED_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("slicesIndexChanged", (e: any) => {
-                this.component.publish(Events.SLICES_INDEX_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("orientationChanged", (e: any) => {
-                this.component.publish(Events.ORIENTATION_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("slicesWindowCenterChanged", (e: any) => {
-                this.component.publish(Events.SLICES_WINDOW_CENTER_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("slicesWindowWidthChanged", (e: any) => {
-                this.component.publish(Events.SLICES_WINDOW_WIDTH_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("volumeStepsChanged", (e: any) => {
-                this.component.publish(Events.VOLUME_STEPS_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("volumeWindowCenterChanged", (e: any) => {
-                this.component.publish(Events.VOLUME_WINDOW_CENTER_CHANGED, e.detail);
-            }, false);
-  
-            alControlPanel.addEventListener("volumeWindowWidthChanged", (e: any) => {
-                this.component.publish(Events.VOLUME_WINDOW_WIDTH_CHANGED, e.detail);
-            }, false);
-        });
+        alControlPanel.addEventListener("controlsTypeChanged", (e: any) => {
+            this.component.publish(Events.CONTROLS_TYPE_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("displayModeChanged", (e: any) => {
+            this.component.publish(Events.DISPLAY_MODE_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("graphEnabledChanged", (e: any) => {
+            this.component.publish(Events.GRAPH_ENABLED_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("orientationChanged", (e: any) => {
+            this.component.publish(Events.ORIENTATION_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("recenter", (e: any) => {
+            this.component.publish(Events.RECENTER, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("slicesIndexChanged", (e: any) => {
+            this.component.publish(Events.SLICES_INDEX_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("slicesWindowCenterChanged", (e: any) => {
+            this.component.publish(Events.SLICES_WINDOW_CENTER_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("slicesWindowWidthChanged", (e: any) => {
+            this.component.publish(Events.SLICES_WINDOW_WIDTH_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("unitsChanged", (e: any) => {
+            this.component.publish(Events.UNITS_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("volumeStepsChanged", (e: any) => {
+            this.component.publish(Events.VOLUME_STEPS_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("volumeWindowCenterChanged", (e: any) => {
+            this.component.publish(Events.VOLUME_WINDOW_CENTER_CHANGED, e.detail);
+        }, false);
+
+        alControlPanel.addEventListener("volumeWindowWidthChanged", (e: any) => {
+            this.component.publish(Events.VOLUME_WINDOW_WIDTH_CHANGED, e.detail);
+        }, false);
     }
 
     expandFullStart(): void {
