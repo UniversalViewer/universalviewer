@@ -13,10 +13,8 @@ module.exports = {
                     'three/examples/js/controls/OrbitControls.js',
                     '@universalviewer/aleph/dist/collection/assets/ami.min.js',
                     '@universalviewer/aleph/dist/collection/assets/aframe-master.min.js',
-                    '@universalviewer/aleph/dist/aleph.js',
                     '@universalviewer/aleph/dist/collection/assets/draco_decoder.wasm',
-                    '@universalviewer/aleph/dist/collection/assets/draco_wasm_wrapper.js',
-                    '@ionic/core/dist/ionic.js'
+                    '@universalviewer/aleph/dist/collection/assets/draco_wasm_wrapper.js'
                 ],
                 dest: config.directories.uvAlephExtension + '/lib'
             },

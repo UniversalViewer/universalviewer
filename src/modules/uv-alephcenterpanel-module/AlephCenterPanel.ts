@@ -8,10 +8,11 @@ import { Units } from "./Units";
 import { ControlsType } from "./ControlsType";
 
 export class AlephCenterPanel extends CenterPanel {
-  //alephContainer: HTMLElement;
-  aleph: any;
-  private _src: string;
-  private _displayMode: DisplayMode;
+
+  private _alViewer: any;
+  private _alViewerReady: boolean = false;
+  private _state: any = {};
+  private _prevState: any = {};
 
   constructor($element: JQuery) {
     super($element);
@@ -23,6 +24,120 @@ export class AlephCenterPanel extends CenterPanel {
 
     super.create();
 
+    this._alViewer = document.createElement("al-viewer");
+    this.$content.prepend(this._alViewer);
+    this._alViewer.setAttribute("width", "100%");
+    this._alViewer.setAttribute("height", "100%");
+    const dracoDecoderPath: string = (window.self !== window.top)? "lib/" : "uv/lib/";
+    this._alViewer.setAttribute("draco-decoder-path", dracoDecoderPath);
+
+    this._alViewer.addEventListener(
+      "changed",
+      (e: any) => {
+        if (this._alViewerReady) {
+          this._nextState(Object.assign({}, e.detail, {
+            src: this._prevState.src
+          }));
+        }
+      },
+      false
+    );
+
+    this._alViewer.addEventListener("loaded", (e: any) => {
+      this.component.publish(Events.LOADED, {        
+        stackhelper: (this._state.displayMode !== DisplayMode.MESH) ? e.detail : null
+      });
+    }, false);
+
+    this.component.subscribe(Events.CONTROLS_TYPE_CHANGED, (controlsType: ControlsType) => {
+      this._alViewer.setControlsType(controlsType);         
+    });
+
+    this.component.subscribe(Events.CLEAR_GRAPH, () => {
+      this._alViewer.clearGraph();         
+    });
+
+    this.component.subscribe(Events.DELETE_ANGLE, (id: string) => {
+      this._alViewer.deleteAngle(id);          
+    });
+
+    this.component.subscribe(Events.DELETE_EDGE, (id: string) => {
+      this._alViewer.deleteEdge(id);          
+    });
+
+    this.component.subscribe(Events.DELETE_NODE, (id: string) => {
+      this._alViewer.deleteNode(id);          
+    });
+
+    this.component.subscribe(Events.DISPLAY_MODE_CHANGED, (displayMode: DisplayMode) => {
+      this._alViewer.setDisplayMode(displayMode);          
+    });
+
+    this.component.subscribe(Events.GRAPH_ENABLED_CHANGED, (enabled: boolean) => {
+      this._alViewer.setGraphEnabled(enabled);          
+    });
+
+    this.component.subscribe(Events.BOUNDING_BOX_ENABLED_CHANGED, (enabled: boolean) => {
+      this._alViewer.setBoundingBoxEnabled(enabled);          
+    });
+
+    this.component.subscribe(Events.ORIENTATION_CHANGED, (orientation: Orientation) => {
+      this._alViewer.setOrientation(orientation);         
+    });
+
+    this.component.subscribe(Events.RECENTER, () => {
+      this._alViewer.recenter();         
+    });
+
+    this.component.subscribe(Events.SET_GRAPH, (graph: any) => {
+      this._alViewer.setGraph(graph);          
+    });
+
+    this.component.subscribe(Events.SET_NODE, (node: any) => {
+      this._alViewer.setNode(node);          
+    });
+
+    this.component.subscribe(Events.SELECT_NODE, (id: string) => {
+      this._alViewer.selectNode(id);          
+    });
+
+    this.component.subscribe(Events.SLICES_INDEX_CHANGED, (index: number) => {
+      this._alViewer.setSlicesIndex(index);          
+    });
+
+    this.component.subscribe(Events.SLICES_BRIGHTNESS_CHANGED, (brightness: number) => {
+      this._alViewer.setSlicesBrightness(brightness);         
+    });
+
+    this.component.subscribe(Events.SLICES_CONTRAST_CHANGED, (contrast: number) => {
+      this._alViewer.setSlicesContrast(contrast);         
+    });
+
+    this.component.subscribe(Events.UNITS_CHANGED, (units: Units) => {
+      this._alViewer.setUnits(units);         
+    });
+
+    this.component.subscribe(Events.VOLUME_STEPS_CHANGED, (steps: number) => {
+      this._alViewer.setVolumeSteps(steps);         
+    });
+    
+    this.component.subscribe(Events.VOLUME_BRIGHTNESS_CHANGED, (brightness: number) => {
+      this._alViewer.setVolumeBrightness(brightness);         
+    });
+
+    this.component.subscribe(Events.VOLUME_CONTRAST_CHANGED, (contrast: number) => {
+      this._alViewer.setVolumeContrast(contrast);         
+    });
+
+    Utils.Async.waitFor(() => {
+      return (window.customElements !== undefined);
+    }, () => {
+      customElements.whenDefined("al-viewer").then(() => {
+        this._alViewerReady = true;
+        this._alViewer.load(this._state.src, this._state.displayMode);
+      });
+    });
+
     const that = this;
 
     this.component.subscribe(
@@ -31,10 +146,6 @@ export class AlephCenterPanel extends CenterPanel {
         that.openMedia(resources);
       }
     );
-
-    //this.alephContainer = document.createElement('div');
-    //this.alephContainer.id = 'container';
-    //this.$content.prepend(this.alephContainer);
   }
 
   openMedia(resources: Manifesto.IExternalResource[]) {
@@ -49,11 +160,12 @@ export class AlephCenterPanel extends CenterPanel {
 
         if (body.length) {
           const media: Manifesto.IAnnotationBody = body[0];
-          this._src = media.id;
           const format: Manifesto.MediaType | null = media.getFormat();
-          this._displayMode = (format && format.toString() === "model/gltf+json") ? DisplayMode.MESH : DisplayMode.SLICES;
 
-          this._render();
+          this._nextState({
+            src: media.id,
+            displayMode: (format && format.toString() === "model/gltf+json") ? DisplayMode.MESH : DisplayMode.SLICES
+          });
         }
       }
 
@@ -61,88 +173,29 @@ export class AlephCenterPanel extends CenterPanel {
     });
   }
 
-  private _render(): void {
-    this.aleph = document.createElement('uv-aleph');
-    this.$content.prepend(this.aleph);
-    this.aleph.setAttribute('width', '100%');
-    this.aleph.setAttribute('height', '100%');
-    const dracoDecoderPath: string = (window.self !== window.top)? 'lib/' : 'uv/lib/';
-    this.aleph.setAttribute('draco-decoder-path', dracoDecoderPath);
+  private _nextState(s: any) {
 
-    this.aleph.addEventListener('changed', (e: any) => {
-      this._displayMode = e.detail.displayMode;
-    }, false);
+    this._state = Object.assign({}, this._state, s);
 
-    this.aleph.addEventListener('loaded', (e: any) => {
-      this.component.publish(Events.LOADED, {
-        stackhelper: (this._displayMode !== DisplayMode.MESH) ? e.detail : null,
-        displayMode: this._displayMode
+    if (this._state.src && this._state.src !== this._prevState.src) {
+      Utils.Async.waitFor(() => {
+        return this._alViewerReady;
+      }, () => {
+        this._alViewer.load(this._state.src);
       });
-    }, false);
+    }
 
-    this.component.subscribe(Events.CONTROLS_TYPE_CHANGED, (controlsType: ControlsType) => {
-      this.aleph.setControlsType(controlsType);         
-    });
+    this.component.publish(Events.VIEWER_CHANGED, this._state);
 
-    this.component.subscribe(Events.DISPLAY_MODE_CHANGED, (displayMode: DisplayMode) => {
-      this.aleph.setDisplayMode(displayMode);          
-    });
-
-    this.component.subscribe(Events.GRAPH_ENABLED_CHANGED, (enabled: boolean) => {
-      this.aleph.setGraphEnabled(enabled);          
-    });
-
-    this.component.subscribe(Events.BOUNDING_BOX_ENABLED_CHANGED, (enabled: boolean) => {
-      this.aleph.setBoundingBoxEnabled(enabled);          
-    });
-    
-    this.component.subscribe(Events.SLICES_INDEX_CHANGED, (index: number) => {
-      this.aleph.setSlicesIndex(index);          
-    });
-
-    this.component.subscribe(Events.ORIENTATION_CHANGED, (orientation: Orientation) => {
-      this.aleph.setOrientation(orientation);         
-    });
-
-    this.component.subscribe(Events.RECENTER, () => {
-      this.aleph.recenter();         
-    });
-
-    this.component.subscribe(Events.SLICES_WINDOW_CENTER_CHANGED, (center: number) => {
-      this.aleph.setSlicesWindowCenter(center);         
-    });
-
-    this.component.subscribe(Events.SLICES_WINDOW_WIDTH_CHANGED, (width: number) => {
-      this.aleph.setSlicesWindowWidth(width);         
-    });
-
-    this.component.subscribe(Events.UNITS_CHANGED, (units: Units) => {
-      this.aleph.setUnits(units);         
-    });
-
-    this.component.subscribe(Events.VOLUME_STEPS_CHANGED, (steps: number) => {
-      this.aleph.setVolumeSteps(steps);         
-    });
-    
-    this.component.subscribe(Events.VOLUME_WINDOW_CENTER_CHANGED, (center: number) => {
-      this.aleph.setVolumeWindowCenter(center);         
-    });
-
-    this.component.subscribe(Events.VOLUME_WINDOW_WIDTH_CHANGED, (width: number) => {
-      this.aleph.setVolumeWindowWidth(width);         
-    });
-
-    customElements.whenDefined("uv-aleph").then(() => {
-        this.aleph.load(this._src, this._displayMode);
-    });
+    this._prevState = Object.assign({}, this._state);
   }
 
   resize() {
 
     super.resize();
     
-    if (this.aleph && this.aleph.resize) {
-      this.aleph.resize();
+    if (this._alViewerReady && this._state.srcLoaded) {
+      this._alViewer.resize();
     }
   }
 }

@@ -80,7 +80,7 @@
     "@types/modernizr": "3.2.29",
     "@types/requirejs": "2.1.28",
     "@types/three": "0.84.20",
-    "@universalviewer/aleph": "0.0.1-pre.27",
+    "@universalviewer/aleph": "0.0.1-pre.41",
     "@universalviewer/uv-cy-gb-theme": "1.1.2",
     "@universalviewer/uv-en-gb-theme": "1.1.2",
     "core-js": "2.4.1",
@@ -101,6 +101,7 @@
     "three": "0.102.1",
     "virtex3d": "0.3.18",
     "waveform-data": "2.0.2",
+    "whatwg-fetch": "^3.0.0",
     "xss": "1.0.3"
   },
   "collective": {
