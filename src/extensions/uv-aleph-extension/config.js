@@ -22,16 +22,23 @@ module.exports = {
                 cwd: config.directories.npm,
                 expand: true,
                 flatten: true,
-                src: '@ionic/core/dist/ionic/*',
-                dest: config.directories.uvAlephExtension + '/lib/ionic'
-            },
-            {
-                cwd: config.directories.npm,
-                expand: true,
-                flatten: true,
                 src: '@universalviewer/aleph/dist/aleph/*',
-                dest: config.directories.uvAlephExtension + '/lib/aleph'
+                dest: config.directories.uvAlephExtension + '/lib'
             }
+            // {
+            //     cwd: config.directories.npm,
+            //     expand: true,
+            //     flatten: true,
+            //     src: '@ionic/core/dist/ionic/*',
+            //     dest: config.directories.uvAlephExtension + '/lib'
+            // }
+            // {
+            //     cwd: config.directories.npm,
+            //     expand: true,
+            //     flatten: true,
+            //     src: '@universalviewer/aleph/dist/aleph/*',
+            //     dest: config.directories.uvAlephExtension + '/lib/aleph'
+            // }
         ]
     }
 }
