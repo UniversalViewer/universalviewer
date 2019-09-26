@@ -28,8 +28,7 @@
       "manifesto.js", 
       "modernizr",
       "requirejs", 
-      "three",
-      "virtex3d"
+      "three"
     ]
   },
   "exclude": [

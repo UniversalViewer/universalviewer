@@ -41,8 +41,7 @@ module.exports = function () {
         uvDefaultExtension: './src/extensions/uv-default-extension',
         uvMediaElementExtension: './src/extensions/uv-mediaelement-extension',
         uvPdfExtension: './src/extensions/uv-pdf-extension',
-        uvSeadragonExtension: './src/extensions/uv-seadragon-extension',
-        uvVirtexExtension: './src/extensions/uv-virtex-extension'
+        uvSeadragonExtension: './src/extensions/uv-seadragon-extension'
     };
     this.themes = {
         

@@ -7,7 +7,6 @@ var avExtensionConfig = require('./src/extensions/uv-av-extension/config');
 var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
 var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
 var seadragonExtensionConfig = require('./src/extensions/uv-seadragon-extension/config');
-var virtexExtensionConfig = require('./src/extensions/uv-virtex-extension/config');
 
 module.exports = function (grunt) {
 
@@ -223,8 +222,7 @@ module.exports = function (grunt) {
                     avExtensionConfig.sync.dependencies,
                     mediaelementExtensionConfig.sync.dependencies,
                     pdfExtensionConfig.sync.dependencies,
-                    seadragonExtensionConfig.sync.dependencies,
-                    virtexExtensionConfig.sync.dependencies
+                    seadragonExtensionConfig.sync.dependencies
                 ]
             }
         },
