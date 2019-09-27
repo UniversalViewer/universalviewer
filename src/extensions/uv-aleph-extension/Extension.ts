@@ -95,15 +95,6 @@ export class Extension extends BaseExtension implements IAlephExtension {
         }
     }
 
-    dependencyLoaded(index: number, dep: any): void {
-        // if (index === (<any>this).getDependencyIndex('ami')) {
-        //     window.AMI = dep;
-        // } else 
-        if (index === (<any>this).getDependencyIndex('three.min')) {
-            window.THREE = dep; //https://github.com/mrdoob/three.js/issues/9602
-        }
-    }
-
     render(): void {
         super.render();
     }
@@ -117,7 +108,7 @@ export class Extension extends BaseExtension implements IAlephExtension {
     }
 
     isLeftPanelEnabled(): boolean {
-        if (this.IsOldIE) {
+        if (this.IsOldIE()) {
             return false;
         }
         return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true);
