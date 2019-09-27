@@ -69,6 +69,14 @@ module.exports = function (grunt) {
             },
             build: {
                 files: [
+                    // ionic
+                    {
+                        cwd: config.directories.ionic,
+                        expand: true,
+                        src: ['**'],
+                        expand: true,
+                        dest: config.directories.build + '/lib/ionic/'
+                    },
                     // js
                     {
                         expand: true,
@@ -90,7 +98,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: [config.directories.lib + '/offline.js'],
+                        src: [config.directories.lib + '/jquery.js'],
                         dest: config.directories.build + '/lib'
                     },
                     // js
@@ -245,10 +253,10 @@ module.exports = function (grunt) {
         },
 
         concat: {
-            offline: {
+            jquery: {
                 cwd: '.',
-                src: config.dependencies.offline,
-                dest: config.directories.lib + '/offline.js'
+                src: config.dependencies.jquery,
+                dest: config.directories.lib + '/jquery.js'
             }
         },
 
@@ -357,7 +365,7 @@ module.exports = function (grunt) {
             'clean:themes',
             'sync',
             'copy:bundle',
-            'concat:offline',
+            'concat:jquery',
             tsType,
             'clean:extension',
             'configure:apply',

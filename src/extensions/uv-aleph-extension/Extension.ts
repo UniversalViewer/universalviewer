@@ -108,7 +108,18 @@ export class Extension extends BaseExtension implements IAlephExtension {
         super.render();
     }
 
+    IsOldIE(): boolean {
+        const browser: string = window.browserDetect.browser;
+        const version: number = window.browserDetect.version;
+
+        if (browser === 'Explorer' && version <= 11) return true;
+        return false;
+    }
+
     isLeftPanelEnabled(): boolean {
+        if (this.IsOldIE) {
+            return false;
+        }
         return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true);
     }
 

@@ -27,8 +27,7 @@
       "jquery", 
       "manifesto.js", 
       "modernizr",
-      "requirejs", 
-      "three"
+      "requirejs"
     ]
   },
   "exclude": [

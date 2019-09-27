@@ -6,6 +6,8 @@ module.exports = function () {
     this.examplesPort = 8002;
     this.dependencies = {
         bundle: [
+            'node_modules/jquery/dist/jquery.min.js',
+            'node_modules/jsviews/jsviews.min.js',
             'node_modules/@iiif/base-component/dist/BaseComponent.js',
             'node_modules/@edsilv/exjs/dist/ex.es3.min.js',
             'node_modules/@edsilv/http-status-codes/dist/HTTPStatusCode.js',
@@ -18,7 +20,7 @@ module.exports = function () {
             'node_modules/@edsilv/utils/dist/Utils.js',
             'node_modules/xss/dist/xss.min.js'
         ],
-        offline: [ // when offline, make these libs available as they can't be loaded from a cdn
+        jquery: [
             'node_modules/jquery/dist/jquery.min.js',
             'node_modules/jsviews/jsviews.min.js'
         ]
@@ -29,6 +31,7 @@ module.exports = function () {
         dist: './dist',
         examples: './examples',
         extensions: './src/extensions',
+        ionic: './node_modules/@ionic/core/dist',
         lib: './src/lib',
         modules: './src/modules',
         npm: './node_modules',
