@@ -16,7 +16,6 @@ import { MetricType } from "../../modules/uv-shared-module/MetricType";
 import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import { SynchronousRequire } from "../../SynchronousRequire";
-import IThumb = Manifold.IThumb;
 
 export class BaseExtension implements IExtension {
 
@@ -30,7 +29,7 @@ export class BaseExtension implements IExtension {
     component: IUVComponent;
     data: IUVData;
     extensions: any;
-    helper: Manifold.IHelper;
+    helper: manifold.Helper;
     isCreated: boolean = false;
     isLoggedIn: boolean = false;
     lastCanvasIndex: number;
@@ -40,7 +39,7 @@ export class BaseExtension implements IExtension {
     mouseX: number;
     mouseY: number;
     name: string;
-    resources: Manifesto.IExternalResourceData[] | null;
+    resources: manifesto.IExternalResourceData[] | null;
     restrictedDialogue: RestrictedDialogue;
     shell: Shell;
     shifted: boolean = false;
@@ -49,6 +48,9 @@ export class BaseExtension implements IExtension {
     public create(): void {
 
         const that = this;
+
+        Auth09.publish = this.component.publish;
+        Auth1.publish = this.component.publish;
 
         this.$element = $(this.component.options.target);
         this.$element.data("component", this.component);
@@ -74,10 +76,15 @@ export class BaseExtension implements IExtension {
         this.$element.addClass('browser-version-' + window.browserDetect.version);
         this.$element.prop('tabindex', 0);
 
+        if (this.data.embedded) {
+            this.$element.addClass('embedded');
+        }
+
         if (this.isMobile()) {
             this.$element.addClass('mobile');
         }
 
+        // todo: deprecate?
         if (this.data.isLightbox) {
             this.$element.addClass('lightbox');
         }
@@ -111,18 +118,18 @@ export class BaseExtension implements IExtension {
                     e.preventDefault();
                     const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData('URL');
                     const a: HTMLAnchorElement = Utils.Urls.getUrlParts(dropUrl);
-                    let iiifResourceUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
+                    let manifestUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
 
-                    if (!iiifResourceUri) {
+                    if (!manifestUri) {
                         // look for collection param
-                        iiifResourceUri = Utils.Urls.getQuerystringParameterFromString('collection', a.search);
+                        manifestUri = Utils.Urls.getQuerystringParameterFromString('collection', a.search);
                     }
                     //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
 
-                    if (iiifResourceUri) {
-                        this.fire(BaseEvents.DROP, iiifResourceUri);
+                    if (manifestUri) {
+                        this.fire(BaseEvents.DROP, manifestUri);
                         const data: IUVData = <IUVData>{};
-                        data.iiifResourceUri = iiifResourceUri;
+                        data.manifestUri = manifestUri;
                         this.reload(data);
                     }
                 }));
@@ -176,232 +183,232 @@ export class BaseExtension implements IExtension {
                     if (preventDefault) {
                         e.preventDefault();
                     }
-                    $.publish(event);
+                    this.component.publish(event);
                 }
             });
         }
 
-        $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+        this.component.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
             if (this.isOverlayActive()) {
-                $.publish(BaseEvents.ESCAPE);
+                this.component.publish(BaseEvents.ESCAPE);
             }
-            $.publish(BaseEvents.ESCAPE);
-            $.publish(BaseEvents.RESIZE);
+            this.component.publish(BaseEvents.ESCAPE);
+            this.component.publish(BaseEvents.RESIZE);
         });
 
         this.$element.append('<a href="/" id="top"></a>');
         this.$element.append('<iframe id="commsFrame" style="display:none"></iframe>');
 
-        this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
+        //this.$element.append('<div id="debug"><span id="watch">Watch</span><span id="mobile-portrait">Mobile Portrait</span><span id="mobile-landscape">Mobile Landscape</span><span id="desktop">Desktop</span></div>');
 
-        $.subscribe(BaseEvents.ACCEPT_TERMS, () => {
+        this.component.subscribe(BaseEvents.ACCEPT_TERMS, () => {
             this.fire(BaseEvents.ACCEPT_TERMS);
         });
 
-        $.subscribe(BaseEvents.LOGIN_FAILED, () => {
+        this.component.subscribe(BaseEvents.LOGIN_FAILED, () => {
             this.fire(BaseEvents.LOGIN_FAILED);
             this.showMessage(this.data.config.content.authorisationFailedMessage);
         });
 
-        $.subscribe(BaseEvents.LOGIN, () => {
+        this.component.subscribe(BaseEvents.LOGIN, () => {
             this.isLoggedIn = true;
             this.fire(BaseEvents.LOGIN);
         });
 
-        $.subscribe(BaseEvents.LOGOUT, () => {
+        this.component.subscribe(BaseEvents.LOGOUT, () => {
             this.isLoggedIn = false;
             this.fire(BaseEvents.LOGOUT);
         });
 
-        $.subscribe(BaseEvents.BOOKMARK, () => {
+        this.component.subscribe(BaseEvents.BOOKMARK, () => {
             this.bookmark();
             this.fire(BaseEvents.BOOKMARK);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
             this.fire(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.data.canvasIndex = canvasIndex;
             this.lastCanvasIndex = this.helper.canvasIndex;
             this.helper.canvasIndex = canvasIndex;
             this.fire(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
         });
 
-        $.subscribe(BaseEvents.CLICKTHROUGH, () => {
+        this.component.subscribe(BaseEvents.CLICKTHROUGH, () => {
             this.fire(BaseEvents.CLICKTHROUGH);
         });
 
-        $.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
             this.fire(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
+        this.component.subscribe(BaseEvents.CLOSE_LEFT_PANEL, () => {
             this.fire(BaseEvents.CLOSE_LEFT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
+        this.component.subscribe(BaseEvents.CLOSE_RIGHT_PANEL, () => {
             this.fire(BaseEvents.CLOSE_RIGHT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.COLLECTION_INDEX_CHANGED, (e: any, collectionIndex: number) => {
+        this.component.subscribe(BaseEvents.COLLECTION_INDEX_CHANGED, (collectionIndex: number) => {
             this.data.collectionIndex = collectionIndex;
             this.fire(BaseEvents.COLLECTION_INDEX_CHANGED, this.data.collectionIndex);
         });
 
-        $.subscribe(BaseEvents.CREATED, () => {
+        this.component.subscribe(BaseEvents.CREATED, () => {
             this.isCreated = true;
             this.fire(BaseEvents.CREATED);
         });
 
-        $.subscribe(BaseEvents.DOWN_ARROW, () => {
+        this.component.subscribe(BaseEvents.DOWN_ARROW, () => {
             this.fire(BaseEvents.DOWN_ARROW);
         });
 
-        $.subscribe(BaseEvents.DOWNLOAD, (e: any, obj: any) => {
+        this.component.subscribe(BaseEvents.DOWNLOAD, (obj: any) => {
             this.fire(BaseEvents.DOWNLOAD, obj);
         });
 
-        $.subscribe(BaseEvents.END, () => {
+        this.component.subscribe(BaseEvents.END, () => {
             this.fire(BaseEvents.END);
         });
 
-        $.subscribe(BaseEvents.ESCAPE, () => {
+        this.component.subscribe(BaseEvents.ESCAPE, () => {
             this.fire(BaseEvents.ESCAPE);
 
             if (this.isFullScreen() && !this.isOverlayActive()) {
-                $.publish(BaseEvents.TOGGLE_FULLSCREEN);
+                this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
             }
         });
 
-        $.subscribe(BaseEvents.EXTERNAL_LINK_CLICKED, (e: any, url: string) => {
+        this.component.subscribe(BaseEvents.EXTERNAL_LINK_CLICKED, (url: string) => {
             this.fire(BaseEvents.EXTERNAL_LINK_CLICKED, url);
         });
 
-        $.subscribe(BaseEvents.FEEDBACK, () => {
+        this.component.subscribe(BaseEvents.FEEDBACK, () => {
             this.feedback();
         });
 
-        $.subscribe(BaseEvents.FORBIDDEN, () => {
+        this.component.subscribe(BaseEvents.FORBIDDEN, () => {
             this.fire(BaseEvents.FORBIDDEN);
-            $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+            this.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
-        $.subscribe(BaseEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_DOWNLOAD_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_EMBED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_EMBED_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_EMBED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_EXTERNALCONTENT_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_GENERIC_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_GENERIC_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_GENERIC_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_HELP_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_HELP_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_HELP_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_INFORMATION, () => {
+        this.component.subscribe(BaseEvents.HIDE_INFORMATION, () => {
             this.fire(BaseEvents.HIDE_INFORMATION);
         });
 
-        $.subscribe(BaseEvents.HIDE_LOGIN_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_LOGIN_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_LOGIN_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             this.fire(BaseEvents.HIDE_OVERLAY);
         });
 
-        $.subscribe(BaseEvents.HIDE_RESTRICTED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_RESTRICTED_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_RESTRICTED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HIDE_SETTINGS_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.HIDE_SETTINGS_DIALOGUE, () => {
             this.fire(BaseEvents.HIDE_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.HOME, () => {
+        this.component.subscribe(BaseEvents.HOME, () => {
             this.fire(BaseEvents.HOME);
         });
 
-        $.subscribe(BaseEvents.LEFT_ARROW, () => {
+        this.component.subscribe(BaseEvents.LEFT_ARROW, () => {
             this.fire(BaseEvents.LEFT_ARROW);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
             this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             this.fire(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH, () => {
             this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             this.fire(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
         });
 
-        $.subscribe(BaseEvents.LOAD_FAILED, () => {
+        this.component.subscribe(BaseEvents.LOAD_FAILED, () => {
             this.fire(BaseEvents.LOAD_FAILED);
 
             if (!that.lastCanvasIndex == null && that.lastCanvasIndex !== that.helper.canvasIndex){
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [that.lastCanvasIndex]);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, that.lastCanvasIndex);
             }
         });
 
-        $.subscribe(BaseEvents.MANIFEST_INDEX_CHANGED, (e: any, manifestIndex: number) => {
+        this.component.subscribe(BaseEvents.MANIFEST_INDEX_CHANGED, (manifestIndex: number) => {
             this.data.manifestIndex = manifestIndex;
             this.fire(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
         });
 
-        $.subscribe(BaseEvents.NOT_FOUND, () => {
+        this.component.subscribe(BaseEvents.NOT_FOUND, () => {
             this.fire(BaseEvents.NOT_FOUND);
         });
 
-        $.subscribe(BaseEvents.OPEN, () => {
+        this.component.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
 
-            const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.iiifResourceUri);
+            const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.manifestUri);
 
             window.open(openUri);
         });
 
-        $.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
+        this.component.subscribe(BaseEvents.OPEN_LEFT_PANEL, () => {
             this.fire(BaseEvents.OPEN_LEFT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, () => {
             this.fire(BaseEvents.OPEN_EXTERNAL_RESOURCE);
         });
 
-        $.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
+        this.component.subscribe(BaseEvents.OPEN_RIGHT_PANEL, () => {
             this.fire(BaseEvents.OPEN_RIGHT_PANEL);
             this.resize();
         });
 
-        $.subscribe(BaseEvents.PAGE_DOWN, () => {
+        this.component.subscribe(BaseEvents.PAGE_DOWN, () => {
             this.fire(BaseEvents.PAGE_DOWN);
         });
 
-        $.subscribe(BaseEvents.PAGE_UP, () => {
+        this.component.subscribe(BaseEvents.PAGE_UP, () => {
             this.fire(BaseEvents.PAGE_UP);
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: manifesto.Range | null) => {
             
             if (range) {
                 this.data.rangeId = range.id;
@@ -409,105 +416,105 @@ export class BaseExtension implements IExtension {
                 this.fire(BaseEvents.RANGE_CHANGED, this.data.rangeId);
             } else {
                 this.data.rangeId = undefined;
-                this.helper.rangeId = null;
+                this.helper.rangeId = undefined;
                 this.fire(BaseEvents.RANGE_CHANGED, null);
             }
             
         });
 
-        $.subscribe(BaseEvents.RESOURCE_DEGRADED, (e: any, resource: Manifesto.IExternalResource) => {
+        this.component.subscribe(BaseEvents.RESOURCE_DEGRADED, (resource: manifesto.IExternalResource) => {
             this.fire(BaseEvents.RESOURCE_DEGRADED);
             Auth09.handleDegraded(resource)
         });
 
-        $.subscribe(BaseEvents.RETURN, () => {
+        this.component.subscribe(BaseEvents.RETURN, () => {
             this.fire(BaseEvents.RETURN);
         });
 
-        $.subscribe(BaseEvents.RIGHT_ARROW, () => {
+        this.component.subscribe(BaseEvents.RIGHT_ARROW, () => {
             this.fire(BaseEvents.RIGHT_ARROW);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH, () => {
             this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START, () => {
             this.fire(BaseEvents.RIGHTPANEL_COLLAPSE_FULL_START);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH, () => {
             this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_FINISH);
         });
 
-        $.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_START, () => {
+        this.component.subscribe(BaseEvents.RIGHTPANEL_EXPAND_FULL_START, () => {
             this.fire(BaseEvents.RIGHTPANEL_EXPAND_FULL_START);
         });
 
-        $.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, (e: any, sequenceIndex: number) => {
+        this.component.subscribe(BaseEvents.SEQUENCE_INDEX_CHANGED, (sequenceIndex: number) => {
             this.data.sequenceIndex = sequenceIndex;
             this.fire(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: any) => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: any) => {
             this.fire(BaseEvents.SETTINGS_CHANGED, args);
         });
 
-        $.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_DOWNLOAD_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_DOWNLOAD_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_EMBED_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_EMBED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_EXTERNALCONTENT_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_GENERIC_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_GENERIC_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_GENERIC_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_HELP_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_HELP_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_HELP_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_INFORMATION, () => {
+        this.component.subscribe(BaseEvents.SHOW_INFORMATION, () => {
             this.fire(BaseEvents.SHOW_INFORMATION);
         });
 
-        $.subscribe(BaseEvents.SHOW_LOGIN_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_LOGIN_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_LOGIN_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_MESSAGE, (e: any, message: string) => {
+        this.component.subscribe(BaseEvents.SHOW_MESSAGE, (message: string) => {
             this.showMessage(message);
         });
 
-        $.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_RESTRICTED_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_RESTRICTED_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             this.fire(BaseEvents.SHOW_OVERLAY);
         });
 
-        $.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.SHOW_SETTINGS_DIALOGUE, () => {
             this.fire(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
-        $.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
+        this.component.subscribe(BaseEvents.SHOW_TERMS_OF_USE, () => {
             this.fire(BaseEvents.SHOW_TERMS_OF_USE);
             
             let terms: string | null = this.helper.getLicense();
             
             if (!terms) {
-                const requiredStatement: Manifold.ILabelValuePair | null = this.helper.getRequiredStatement();
+                const requiredStatement: manifold.ILabelValuePair | null = this.helper.getRequiredStatement();
 
                 if (requiredStatement && requiredStatement.value) {
                     terms = requiredStatement.value;
@@ -520,11 +527,11 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: manifesto.Thumb) => {
             this.fire(BaseEvents.THUMB_SELECTED, thumb.index);
         });
 
-        $.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
+        this.component.subscribe(BaseEvents.TOGGLE_FULLSCREEN, () => {
             $('#top').focus();
             this.component.isFullScreen = !this.component.isFullScreen;
 
@@ -541,19 +548,19 @@ export class BaseExtension implements IExtension {
                 });
         });
 
-        $.subscribe(BaseEvents.UP_ARROW, () => {
+        this.component.subscribe(BaseEvents.UP_ARROW, () => {
             this.fire(BaseEvents.UP_ARROW);
         });
 
-        $.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
+        this.component.subscribe(BaseEvents.UPDATE_SETTINGS, () => {
             this.fire(BaseEvents.UPDATE_SETTINGS);
         });
 
-        $.subscribe(BaseEvents.VIEW_FULL_TERMS, () => {
+        this.component.subscribe(BaseEvents.VIEW_FULL_TERMS, () => {
             this.fire(BaseEvents.VIEW_FULL_TERMS);
         });
 
-        $.subscribe(BaseEvents.WINDOW_UNLOAD, () => {
+        this.component.subscribe(BaseEvents.WINDOW_UNLOAD, () => {
             this.fire(BaseEvents.WINDOW_UNLOAD);
         });
 
@@ -568,19 +575,19 @@ export class BaseExtension implements IExtension {
 
     createModules(): void {
         this.$authDialogue = $('<div class="overlay auth" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$authDialogue);
+        this.shell.$overlays.append(this.$authDialogue);
         this.authDialogue = new AuthDialogue(this.$authDialogue);
         
         this.$clickThroughDialogue = $('<div class="overlay clickthrough" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$clickThroughDialogue);
+        this.shell.$overlays.append(this.$clickThroughDialogue);
         this.clickThroughDialogue = new ClickThroughDialogue(this.$clickThroughDialogue);
 
         this.$restrictedDialogue = $('<div class="overlay login" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$restrictedDialogue);
+        this.shell.$overlays.append(this.$restrictedDialogue);
         this.restrictedDialogue = new RestrictedDialogue(this.$restrictedDialogue);
 
         this.$loginDialogue = $('<div class="overlay login" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$loginDialogue);
+        this.shell.$overlays.append(this.$loginDialogue);
         this.loginDialogue = new LoginDialogue(this.$loginDialogue);
     }
 
@@ -609,8 +616,8 @@ export class BaseExtension implements IExtension {
                 // for example, 'application/vnd.apple.mpegurl' for the AV extension
                 // would return hls.min.js, and not dash.all.min.js.
                 
-                let canvas: Manifesto.ICanvas = that.helper.getCurrentCanvas();
-                const mediaFormats: Manifesto.IAnnotationBody[] | null = that.getMediaFormats(canvas);
+                let canvas: manifesto.Canvas = that.helper.getCurrentCanvas();
+                const mediaFormats: manifesto.AnnotationBody[] | null = that.getMediaFormats(canvas);
                 let formats: string[] = [];
                 if (mediaFormats && mediaFormats.length) {
                     formats = mediaFormats.map((f: any) => {
@@ -682,39 +689,39 @@ export class BaseExtension implements IExtension {
     dependenciesLoaded(...args: any[]): void {
         this.createModules();
         this.modulesCreated();
-        $.publish(BaseEvents.RESIZE); // initial sizing
+        this.component.publish(BaseEvents.RESIZE); // initial sizing
 
         setTimeout(() => {
             this.render();
-            $.publish(BaseEvents.CREATED);
+            this.component.publish(BaseEvents.CREATED);
             this._setDefaultFocus();
         }, 1);
     }
 
     public render(): void {
         if (!this.isCreated || (this.data.collectionIndex !== this.helper.collectionIndex)) {
-            $.publish(BaseEvents.COLLECTION_INDEX_CHANGED, [this.data.collectionIndex]);
+            this.component.publish(BaseEvents.COLLECTION_INDEX_CHANGED, this.data.collectionIndex);
         }
 
         if (!this.isCreated || (this.data.manifestIndex !== this.helper.manifestIndex)) {
-            $.publish(BaseEvents.MANIFEST_INDEX_CHANGED, [this.data.manifestIndex]);
+            this.component.publish(BaseEvents.MANIFEST_INDEX_CHANGED, this.data.manifestIndex);
         }
 
         if (!this.isCreated || (this.data.sequenceIndex !== this.helper.sequenceIndex)) {
-            $.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, [this.data.sequenceIndex]);
+            this.component.publish(BaseEvents.SEQUENCE_INDEX_CHANGED, this.data.sequenceIndex);
         }
 
         if (!this.isCreated || (this.data.canvasIndex !== this.helper.canvasIndex)) {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [this.data.canvasIndex]);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, this.data.canvasIndex);
         }
 
         if (!this.isCreated || (this.data.rangeId !== this.helper.rangeId)) {
 
             if (this.data.rangeId) {
-                const range: Manifesto.IRange | null = this.helper.getRangeById(this.data.rangeId);
+                const range: manifesto.Range | null = this.helper.getRangeById(this.data.rangeId);
 
                 if (range) {
-                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, range);
                 } else {
                     console.warn('range id not found:', this.data.rangeId);
                 }
@@ -740,7 +747,7 @@ export class BaseExtension implements IExtension {
     }
 
     exitFullScreen(): void {
-        $.publish(BaseEvents.EXIT_FULLSCREEN);
+        this.component.publish(BaseEvents.EXIT_FULLSCREEN);
     }
 
     fire(name: string, ...args: any[]): void {
@@ -832,7 +839,7 @@ export class BaseExtension implements IExtension {
 
                     if (this.metric !== metric.type) {
                         this.metric = metric.type;
-                        $.publish(BaseEvents.METRIC_CHANGED);
+                        this.component.publish(BaseEvents.METRIC_CHANGED);
                     }
                 }
             }
@@ -840,7 +847,7 @@ export class BaseExtension implements IExtension {
             if (!metricFound) {
                 if (this.metric !== MetricType.NONE) {
                     this.metric = MetricType.NONE;
-                    $.publish(BaseEvents.METRIC_CHANGED);
+                    this.component.publish(BaseEvents.METRIC_CHANGED);
                 }
             }
         }, 1);
@@ -848,12 +855,12 @@ export class BaseExtension implements IExtension {
 
     resize(): void {
         this._updateMetric();
-        $.publish(BaseEvents.RESIZE);
+        this.component.publish(BaseEvents.RESIZE);
     }
 
     // re-bootstraps the application with new querystring params
     reload(data?: IUVData): void {
-        $.publish(BaseEvents.RELOAD, [data]);
+        this.component.publish(BaseEvents.RELOAD, data);
     }
 
     isSeeAlsoEnabled(): boolean {
@@ -884,8 +891,18 @@ export class BaseExtension implements IExtension {
         return null;
     }   
 
-    getIIIFShareUrl(): string {
-        return this.helper.iiifResourceUri + "?manifest=" + this.helper.iiifResourceUri;
+    getIIIFShareUrl(shareManifests: boolean = false): string {
+        let manifestUri: string | undefined;
+        
+        if (shareManifests) {
+            if (this.helper.manifest) {
+                manifestUri = this.helper.manifest.id;
+            } else {
+                manifestUri = this.helper.manifestUri;
+            }
+        }
+
+        return `${manifestUri}?manifest=${manifestUri}`;
     }
 
     addTimestamp(uri: string): string {
@@ -893,7 +910,7 @@ export class BaseExtension implements IExtension {
     }
 
     getDomain(): string {
-        const parts: any = Utils.Urls.getUrlParts(this.helper.iiifResourceUri);
+        const parts: any = Utils.Urls.getUrlParts(this.helper.manifestUri);
         return parts.host;
     }
 
@@ -963,7 +980,7 @@ export class BaseExtension implements IExtension {
     }
 
     getLocale(): string {
-        return this.helper.options.locale;
+        return this.helper.options.locale as string;
     }
 
     getSharePreview(): ISharePreview {
@@ -972,7 +989,7 @@ export class BaseExtension implements IExtension {
 
         // todo: use getThumb (when implemented)
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const canvas: manifesto.Canvas = this.helper.getCurrentCanvas();
         let thumbnail: string = canvas.getProperty('thumbnail');
 
         if (!thumbnail || !(typeof(thumbnail) === 'string')) {
@@ -989,13 +1006,13 @@ export class BaseExtension implements IExtension {
         return [canvasIndex];
     }
 
-    public getCurrentCanvases(): Manifesto.ICanvas[] {
+    public getCurrentCanvases(): manifesto.Canvas[] {
         const indices: number[] = this.getPagedIndices(this.helper.canvasIndex);
-        const canvases: Manifesto.ICanvas[] = [];
+        const canvases: manifesto.Canvas[] = [];
         
         for (let i = 0; i < indices.length; i++) {
             const index: number = indices[i];
-            const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
+            const canvas: manifesto.Canvas = this.helper.getCanvasByIndex(index);
             canvases.push(canvas);
         }
         
@@ -1018,25 +1035,25 @@ export class BaseExtension implements IExtension {
         return labels;
     }
 
-    public getCurrentCanvasRange(): Manifesto.IRange | null {
+    public getCurrentCanvasRange(): manifesto.Range | null {
         //var rangePath: string = this.currentRangePath ? this.currentRangePath : '';
-        //var range: Manifesto.IRange = this.helper.getCanvasRange(this.helper.getCurrentCanvas(), rangePath);
-        const range: Manifesto.IRange | null = this.helper.getCanvasRange(this.helper.getCurrentCanvas());
+        //var range: manifesto.Range = this.helper.getCanvasRange(this.helper.getCurrentCanvas(), rangePath);
+        const range: manifesto.Range | null = this.helper.getCanvasRange(this.helper.getCurrentCanvas());
         return range;
     }
 
     // todo: move to manifold?
-    public getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]> {
+    public getExternalResources(resources?: manifesto.IExternalResource[]): Promise<manifesto.IExternalResourceData[]> {
 
         const indices: number[] = this.getPagedIndices();
-        const resourcesToLoad: Manifesto.IExternalResource[] = [];
+        const resourcesToLoad: manifesto.IExternalResource[] = [];
 
         indices.forEach((index: number) => {
-            const canvas: Manifesto.ICanvas = this.helper.getCanvasByIndex(index);
-            let r: Manifesto.IExternalResource;
+            const canvas: manifesto.Canvas = this.helper.getCanvasByIndex(index);
+            let r: manifesto.IExternalResource;
 
             if (!canvas.externalResource) {
-                r = new Manifold.ExternalResource(canvas, <Manifesto.IExternalResourceOptions>{
+                r = new manifold.ExternalResource(canvas, <manifesto.IExternalResourceOptions>{
                     authApiVersion: this.data.config.options.authAPIVersion
                 });
             } else {
@@ -1046,7 +1063,7 @@ export class BaseExtension implements IExtension {
             // reload resources if passed
             if (resources) {
 
-                const found: Manifesto.IExternalResource | undefined = resources.find((f: Manifesto.IExternalResource) => {
+                const found: manifesto.IExternalResource | undefined = resources.find((f: manifesto.IExternalResource) => {
                     return f.dataUri === r.dataUri;
                 });
 
@@ -1065,15 +1082,15 @@ export class BaseExtension implements IExtension {
 
         // if using auth api v1
         if (authAPIVersion === 1) {
-            return new Promise<Manifesto.IExternalResourceData[]>((resolve) => {
+            return new Promise<manifesto.IExternalResourceData[]>((resolve) => {
 
-                const options: Manifesto.IManifestoOptions = <Manifesto.IManifestoOptions>{
+                const options: manifesto.IManifestoOptions = <manifesto.IManifestoOptions>{
                     locale: this.helper.options.locale
                 }
 
-                Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: Manifesto.IExternalResource[]) => {
+                Auth1.loadExternalResources(resourcesToLoad, storageStrategy, options).then((r: manifesto.IExternalResource[]) => {
                     
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {                        
+                    this.resources = r.map((resource: manifesto.IExternalResource) => {                        
                         return this._prepareResourceData(resource);
                     });
 
@@ -1085,7 +1102,7 @@ export class BaseExtension implements IExtension {
             return new Promise<any[]>((resolve) => {
                 Auth09.loadExternalResources(resourcesToLoad, storageStrategy).then((r: any[]) => {
                     
-                    this.resources = r.map((resource: Manifesto.IExternalResource) => {
+                    this.resources = r.map((resource: manifesto.IExternalResource) => {
                         return this._prepareResourceData(resource);
                     });
 
@@ -1097,15 +1114,15 @@ export class BaseExtension implements IExtension {
 
     // copy useful properties over to the data object to be opened in center panel's openMedia method
     // this is the info.json if there is one, which can be opened natively by openseadragon.
-    private _prepareResourceData(resource: Manifesto.IExternalResource): any {
+    private _prepareResourceData(resource: manifesto.IExternalResource): any {
         
         resource.data.hasServiceDescriptor = resource.hasServiceDescriptor();
   
         // if the data isn't an info.json, give it the necessary viewing properties
         if (!resource.hasServiceDescriptor()) {
             resource.data.id = <string>resource.dataUri;
-            (<Manifesto.IExternalImageResourceData>resource.data).width = resource.width;
-            (<Manifesto.IExternalImageResourceData>resource.data).height = resource.height;
+            (<manifesto.IExternalImageResourceData>resource.data).width = resource.width;
+            (<manifesto.IExternalImageResourceData>resource.data).height = resource.height;
         }
 
         resource.data.index = resource.index;
@@ -1113,16 +1130,16 @@ export class BaseExtension implements IExtension {
         return Utils.Objects.toPlainObject(resource.data);
     }
 
-    getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[] {
+    getMediaFormats(canvas: manifesto.Canvas): manifesto.AnnotationBody[] {
 
-        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+        const annotations: manifesto.Annotation[] = canvas.getContent();
 
         if (annotations && annotations.length) {
-            const annotation: Manifesto.IAnnotation = annotations[0];
+            const annotation: manifesto.Annotation = annotations[0];
             return annotation.getBody();
         } else {
             // legacy IxIF compatibility
-            const body: Manifesto.IAnnotationBody = <any>{
+            const body: manifesto.AnnotationBody = <any>{
                 id: canvas.id,
                 type: canvas.getType(),
                 getFormat: function() {
@@ -1142,28 +1159,28 @@ export class BaseExtension implements IExtension {
             return;
         }
 
-        $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
+        this.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE);
     }
 
     showMessage(message: string, acceptCallback?: Function, buttonText?: string, allowClose?: boolean): void {
 
         this.closeActiveDialogue();
 
-        $.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, [
+        this.component.publish(BaseEvents.SHOW_GENERIC_DIALOGUE, 
             {
                 message: message,
                 acceptCallback: acceptCallback,
                 buttonText: buttonText,
                 allowClose: allowClose
-            }]);
+            });
     }
 
     closeActiveDialogue(): void {
-        $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+        this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
     }
 
     isOverlayActive(): boolean {
-        return Shell.$overlays.is(':visible');
+        return this.shell.$overlays.is(':visible');
     }
 
     isDesktopMetric(): boolean {
@@ -1179,10 +1196,10 @@ export class BaseExtension implements IExtension {
     }
 
     // todo: use redux in manifold to get reset state
-    viewManifest(manifest: Manifesto.IManifest): void {
+    viewManifest(manifest: manifesto.Manifest): void {
         const data: IUVData = <IUVData>{};
-        data.iiifResourceUri = this.helper.iiifResourceUri;
-        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest) || 0;
+        data.manifestUri = this.helper.manifestUri;
+        data.collectionIndex = <number>this.helper.getCollectionIndex(manifest);
         data.manifestIndex = <number>manifest.index;
         data.sequenceIndex = 0;
         data.canvasIndex = 0;
@@ -1191,9 +1208,10 @@ export class BaseExtension implements IExtension {
     }
 
     // todo: use redux in manifold to get reset state
-    viewCollection(collection: Manifesto.ICollection): void {
+    viewCollection(collection: manifesto.Collection): void {
         const data: IUVData = <IUVData>{};
-        data.iiifResourceUri = this.helper.iiifResourceUri;
+        //data.manifestUri = this.helper.manifestUri;
+        data.manifestUri = collection.parentCollection ? collection.parentCollection.id : this.helper.manifestUri;
         data.collectionIndex = collection.index;
         data.manifestIndex = 0;
         data.sequenceIndex = 0;
@@ -1216,9 +1234,9 @@ export class BaseExtension implements IExtension {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
 
-                const viewingHint: Manifesto.ViewingHint | null = this.helper.getViewingHint();
+                const viewingHint: ViewingHint | null = this.helper.getViewingHint();
 
-                if (!viewingHint || (viewingHint && viewingHint.toString() !== manifesto.ViewingHint.continuous().toString())) {
+                if (!viewingHint || (viewingHint && viewingHint !== ViewingHint.CONTINUOUS)) {
                     return true;
                 }
             }
@@ -1304,8 +1322,5 @@ export class BaseExtension implements IExtension {
         }
         
     }
-
-    // auth
-
     
 }

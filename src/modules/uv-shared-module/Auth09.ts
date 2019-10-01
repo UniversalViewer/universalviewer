@@ -3,12 +3,14 @@ import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
 import {ILoginDialogueOptions} from "./ILoginDialogueOptions";
 import {LoginWarningMessages} from "./LoginWarningMessages";
-import IAccessToken = Manifesto.IAccessToken;
+import IAccessToken = manifesto.IAccessToken;
 
 export class Auth09 {
 
-    static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string): Promise<Manifesto.IExternalResource[]> {
-        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+    static publish: (event: string, args?: any) => void;
+
+    static loadExternalResources(resourcesToLoad: manifesto.IExternalResource[], storageStrategy: string): Promise<manifesto.IExternalResource[]> {
+        return new Promise<manifesto.IExternalResource[]>((resolve) => {
             manifesto.Utils.loadExternalResourcesAuth09(
                 resourcesToLoad,
                 storageStrategy,
@@ -18,30 +20,30 @@ export class Auth09 {
                 Auth09.getAccessToken,
                 Auth09.storeAccessToken,
                 Auth09.getStoredAccessToken,
-                Auth09.handleExternalResourceResponse).then((r: Manifesto.IExternalResource[]) => {
+                Auth09.handleExternalResourceResponse).then((r: manifesto.IExternalResource[]) => {
                     resolve(r);
                 })['catch']((error: any) => {
                     switch(error.name) {
-                        case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
-                            $.publish(BaseEvents.LOGIN_FAILED);
+                        case manifesto.StatusCode.AUTHORIZATION_FAILED.toString():
+                            Auth09.publish(BaseEvents.LOGIN_FAILED);
                             break;
-                        case manifesto.StatusCodes.FORBIDDEN.toString():
-                            $.publish(BaseEvents.FORBIDDEN);
+                        case manifesto.StatusCode.FORBIDDEN.toString():
+                            Auth09.publish(BaseEvents.FORBIDDEN);
                             break;
-                        case manifesto.StatusCodes.RESTRICTED.toString():
+                        case manifesto.StatusCode.RESTRICTED.toString():
                             // do nothing
                             break;
                         default:
-                            $.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
+                            Auth09.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
                     }
             });
         });
     }
 
-    static clickThrough(resource: Manifesto.IExternalResource): Promise<void> {
+    static clickThrough(resource: manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
-            $.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
+            Auth09.publish(BaseEvents.SHOW_CLICKTHROUGH_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
 
@@ -51,7 +53,7 @@ export class Auth09 {
                         const pollTimer: number = window.setInterval(() => {
                             if (win && win.closed) {
                                 window.clearInterval(pollTimer);
-                                $.publish(BaseEvents.CLICKTHROUGH);
+                                Auth09.publish(BaseEvents.CLICKTHROUGH);
                                 resolve();
                             }
                         }, 500);
@@ -62,20 +64,20 @@ export class Auth09 {
         });
     }
 
-    static restricted(resource: Manifesto.IExternalResource): Promise<void> {
+    static restricted(resource: manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve, reject) => {
 
-            $.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
+            Auth09.publish(BaseEvents.SHOW_RESTRICTED_DIALOGUE, [{
                 resource: resource,
                 acceptCallback: () => {
-                    $.publish(BaseEvents.LOAD_FAILED);
+                    Auth09.publish(BaseEvents.LOAD_FAILED);
                     reject(resource);
                 }
             }]);
         });
     }
 
-    static login(resource: Manifesto.IExternalResource): Promise<void> {
+    static login(resource: manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {
 
             const options: ILoginDialogueOptions = <ILoginDialogueOptions>{};
@@ -85,7 +87,7 @@ export class Auth09 {
                 options.showCancelButton = true;
             }
 
-            $.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [{
+            Auth09.publish(BaseEvents.SHOW_LOGIN_DIALOGUE, [{
                 resource: resource,
                 loginCallback: () => {
                     if (resource.loginService) {
@@ -93,7 +95,7 @@ export class Auth09 {
                         const pollTimer: number = window.setInterval(function () {
                             if (win && win.closed) {
                                 window.clearInterval(pollTimer);
-                                $.publish(BaseEvents.LOGIN);
+                                Auth09.publish(BaseEvents.LOGIN);
                                 resolve();
                             }
                         }, 500);
@@ -105,7 +107,7 @@ export class Auth09 {
                         const pollTimer: number = window.setInterval(function () {
                             if (win && win.closed) {
                                 window.clearInterval(pollTimer);
-                                $.publish(BaseEvents.LOGOUT);
+                                Auth09.publish(BaseEvents.LOGOUT);
                                 resolve();
                             }
                         }, 500);
@@ -116,9 +118,9 @@ export class Auth09 {
         });
     }
 
-    static getAccessToken(resource: Manifesto.IExternalResource, rejectOnError: boolean): Promise<Manifesto.IAccessToken> {
+    static getAccessToken(resource: manifesto.IExternalResource, rejectOnError: boolean): Promise<manifesto.IAccessToken> {
 
-        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
+        return new Promise<manifesto.IAccessToken>((resolve, reject) => {
 
             if (resource.tokenService) {
                 const serviceUri: string = resource.tokenService.id;
@@ -150,7 +152,7 @@ export class Auth09 {
         });
     }
 
-    static storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken, storageStrategy: string): Promise<void> {
+    static storeAccessToken(resource: manifesto.IExternalResource, token: manifesto.IAccessToken, storageStrategy: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (resource.tokenService) {
                 Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(storageStrategy));
@@ -161,9 +163,9 @@ export class Auth09 {
         });
     }
 
-    static getStoredAccessToken(resource: Manifesto.IExternalResource, storageStrategy: string): Promise<Manifesto.IAccessToken> {
+    static getStoredAccessToken(resource: manifesto.IExternalResource, storageStrategy: string): Promise<manifesto.IAccessToken> {
 
-        return new Promise<Manifesto.IAccessToken>((resolve, reject) => {
+        return new Promise<manifesto.IAccessToken>((resolve, reject) => {
 
             let foundItems: Utils.StorageItem[] = [];
             let item: Utils.StorageItem | null = null;
@@ -197,14 +199,14 @@ export class Auth09 {
             let foundToken: IAccessToken | undefined;
 
             if (foundItems.length) {
-                foundToken = <Manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
+                foundToken = <manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
             }
 
             resolve(foundToken);
         });
     }
 
-    static handleExternalResourceResponse(resource: Manifesto.IExternalResource): Promise<any> {
+    static handleExternalResourceResponse(resource: manifesto.IExternalResource): Promise<any> {
 
         return new Promise<any>((resolve, reject) => {
             resource.isResponseHandled = true;
@@ -213,7 +215,7 @@ export class Auth09 {
                 resolve(resource);
             } else if (resource.status === HTTPStatusCode.MOVED_TEMPORARILY) {
                 resolve(resource);
-                $.publish(BaseEvents.RESOURCE_DEGRADED, [resource]);
+                Auth09.publish(BaseEvents.RESOURCE_DEGRADED, [resource]);
             } else {
 
                 if (resource.error.status === HTTPStatusCode.UNAUTHORIZED ||
@@ -221,7 +223,7 @@ export class Auth09 {
                     // if the browser doesn't support CORS
                     if (!Modernizr.cors) {
                         const informationArgs: InformationArgs = new InformationArgs(InformationType.AUTH_CORS_ERROR, null);
-                        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+                        Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
                         resolve(resource);
                     } else {
                         reject(resource.error.statusText);
@@ -229,7 +231,7 @@ export class Auth09 {
                 } else if (resource.error.status === HTTPStatusCode.FORBIDDEN) {
                     const error: Error = new Error();
                     error.message = "Forbidden";
-                    error.name = manifesto.StatusCodes.FORBIDDEN.toString();
+                    error.name = manifesto.StatusCode.FORBIDDEN.toString();
                     reject(error);
                 } else {
                     reject(resource.error.statusText);
@@ -238,8 +240,8 @@ export class Auth09 {
         });
     }
 
-    static handleDegraded(resource: Manifesto.IExternalResource): void {
+    static handleDegraded(resource: manifesto.IExternalResource): void {
         const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
-        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+        Auth09.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }
 }

@@ -1,3 +1,7 @@
+interface Element {
+    scrollIntoViewIfNeeded: any;
+}
+
 interface HTMLElement{
     ontouchstart: any;
 }
@@ -36,6 +40,7 @@ declare var yepnope: any;
 declare var PDFJS: any;
 declare var filterXSS: (html: string, config: any) => string;
 declare var WEBVR: any;
+declare var IIIFComponents: any; // have excluded component definitions from tsconfig to avoid needing to update all components when using a newer manifesto/manifold type definition
 
 // app
 interface Window {
@@ -47,6 +52,7 @@ interface Window {
     $: JQueryStatic;
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience (make this generic)
+    PDFObject: any;
     UV: any;
     THREE: any;
     Event: any;

@@ -5,9 +5,6 @@ import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {ThumbsView} from "./ThumbsView";
 import {TreeView} from "./TreeView";
-import AnnotationGroup = Manifold.AnnotationGroup;
-import IThumb = Manifold.IThumb;
-import ITreeNode = Manifold.ITreeNode;
 
 export class ContentLeftPanel extends LeftPanel {
 
@@ -35,8 +32,8 @@ export class ContentLeftPanel extends LeftPanel {
     isThumbsViewOpen: boolean = false;
     isTreeViewOpen: boolean = false;
     thumbsView: ThumbsView;
-    treeData: Manifesto.ITreeNode;
-    treeSortType: Manifold.TreeSortType = Manifold.TreeSortType.NONE;
+    treeData: manifesto.TreeNode;
+    treeSortType: manifold.TreeSortType = manifold.TreeSortType.NONE;
     treeView: TreeView;
 
     constructor($element: JQuery) {
@@ -49,15 +46,15 @@ export class ContentLeftPanel extends LeftPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
+        this.component.subscribe(BaseEvents.GALLERY_THUMB_SELECTED, () => {
             this.collapseFull();
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             if (!this.extension.isDesktopMetric()) {
                 if (this.isFullyExpanded) {
                     this.collapseFull();
@@ -65,22 +62,22 @@ export class ContentLeftPanel extends LeftPanel {
             }
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS_CLEARED, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS_EMPTY, () => {
             this.databindThumbsView();
             this.databindGalleryView();
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             }
@@ -89,7 +86,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.updateTreeTabBySelection();
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             }
@@ -138,7 +135,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.$sortButtonGroup = $('<div class="btn-group"></div>');
         this.$treeViewOptions.append(this.$sortButtonGroup);
 
-        this.$sortByDateButton = $('<button class="btn tabindex="0"">' + this.content.date + '</button>');
+        this.$sortByDateButton = $('<button class="btn" tabindex="0">' + this.content.date + '</button>');
         this.$sortButtonGroup.append(this.$sortByDateButton);
 
         this.$sortByVolumeButton = $('<button class="btn" tabindex="0">' + this.content.volume + '</button>');
@@ -210,12 +207,12 @@ export class ContentLeftPanel extends LeftPanel {
         this.databindTreeView();
 
         // populate the tree select drop down when there are multiple top-level ranges
-        const topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        const topRanges: manifesto.Range[] = this.extension.helper.getTopRanges();
 
-        if (topRanges.length > 1){            
-            for (let i = 0; i < topRanges.length; i++){
-                const range: Manifesto.IRange = topRanges[i];
-                this.$treeSelect.append('<option value="' + range.id + '">' + Manifesto.LanguageMap.getValue(range.getLabel()) + '</option>');
+        if (topRanges.length > 1) {            
+            for (let i = 0; i < topRanges.length; i++) {
+                const range: manifesto.Range = topRanges[i];
+                this.$treeSelect.append('<option value="' + range.id + '">' + manifesto.LanguageMap.getValue(range.getLabel()) + '</option>');
             }
         }
 
@@ -229,19 +226,19 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     updateTreeViewOptions(): void {
-        const treeData: ITreeNode | null = this.getTree();
+        const treeData: manifesto.TreeNode | null = this.getTree();
         
         if (!treeData) {
             return;
         }
 
-        if (this.isCollection() && this.extension.helper.treeHasNavDates(treeData)){
+        if (this.isCollection() && this.extension.helper.treeHasNavDates(treeData)) {
             this.$treeViewOptions.show();
         } else {
             this.$treeViewOptions.hide();
         }
 
-        if (this.$treeSelect.find('option').length){
+        if (this.$treeSelect.find('option').length) {
             this.$treeSelect.show();
         } else {
             this.$treeSelect.hide();
@@ -249,7 +246,7 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     sortByDate(): void {
-        this.treeSortType = Manifold.TreeSortType.DATE;
+        this.treeSortType = manifold.TreeSortType.DATE;
         this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
@@ -259,7 +256,7 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     sortByVolume(): void {
-        this.treeSortType = Manifold.TreeSortType.NONE;
+        this.treeSortType = manifold.TreeSortType.NONE;
         this.treeView.treeData = this.getTreeData();
         this.treeView.databind();
         this.selectCurrentTreeNode();
@@ -269,10 +266,10 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     isCollection(): boolean {
-        var treeData: ITreeNode | null = this.getTree();
+        var treeData: manifesto.TreeNode | null = this.getTree();
 
         if (treeData) {
-            return treeData.data.type === manifesto.TreeNodeType.collection().toString();
+            return treeData.data.type === manifesto.TreeNodeType.COLLECTION;
         }
         
         throw new Error("Tree not available");
@@ -285,8 +282,8 @@ export class ContentLeftPanel extends LeftPanel {
         this.selectCurrentTreeNode();
     }
 
-    getTreeData(): IIIFComponents.ITreeComponentData {
-        return <IIIFComponents.ITreeComponentData>{
+    getTreeData() {
+        return {
             autoExpand: this._isTreeAutoExpanded(),
             branchNodesExpandOnClick: Utils.Bools.getBool(this.config.options.branchNodesExpandOnClick, true),
             branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
@@ -302,9 +299,9 @@ export class ContentLeftPanel extends LeftPanel {
 
         if (autoExpandTreeEnabled) {
             // get total number of tree nodes
-            const flatTree: Manifesto.ITreeNode[] = this.extension.helper.getFlattenedTree();
+            const flatTree: manifesto.TreeNode[] | null = this.extension.helper.getFlattenedTree();
 
-            if (flatTree.length < autoExpandTreeIfFewerThan) {
+            if (flatTree && flatTree.length < autoExpandTreeIfFewerThan) {
                 return true;
             }
         }
@@ -314,7 +311,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     updateTreeTabByCanvasIndex(): void {
         // update tab to current top range label (if there is one)
-        const topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        const topRanges: manifesto.Range[] = this.extension.helper.getTopRanges();
         if (topRanges.length > 1){
             const index: number = this.getCurrentCanvasTopRangeIndex();
 
@@ -322,8 +319,8 @@ export class ContentLeftPanel extends LeftPanel {
                 return;
             }
 
-            const currentRange: Manifesto.IRange = topRanges[index];
-            this.setTreeTabTitle(<string>Manifesto.LanguageMap.getValue(currentRange.getLabel()));
+            const currentRange: manifesto.Range = topRanges[index];
+            this.setTreeTabTitle(<string>manifesto.LanguageMap.getValue(currentRange.getLabel()));
         } else {
             this.setTreeTabTitle(this.content.index);
         }
@@ -336,13 +333,13 @@ export class ContentLeftPanel extends LeftPanel {
 
     updateTreeTabBySelection(): void {
         let title: string | null = null;
-        const topRanges: Manifesto.IRange[] = this.extension.helper.getTopRanges();
+        const topRanges: manifesto.Range[] = this.extension.helper.getTopRanges();
         
         if (topRanges.length > 1){
             if (this.treeView){
                 title = this.getSelectedTree().text();
             } else {
-                title = Manifesto.LanguageMap.getValue(topRanges[0].getLabel());
+                title = manifesto.LanguageMap.getValue(topRanges[0].getLabel());
             }
         }
 
@@ -353,11 +350,11 @@ export class ContentLeftPanel extends LeftPanel {
         }
     }
 
-    getViewingHint(): Manifesto.ViewingHint | null {
+    getViewingHint(): ViewingHint | null {
         return this.extension.helper.getViewingHint();
     }
 
-    getViewingDirection(): Manifesto.ViewingDirection | null {
+    getViewingDirection(): ViewingDirection | null {
         return this.extension.helper.getViewingDirection();
     }
 
@@ -372,13 +369,13 @@ export class ContentLeftPanel extends LeftPanel {
         let width: number;
         let height: number;
 
-        const viewingHint: Manifesto.ViewingHint | null = this.getViewingHint();
-        const viewingDirection: Manifesto.ViewingDirection | null = this.getViewingDirection();
+        const viewingHint: ViewingHint | null = this.getViewingHint();
+        const viewingDirection: ViewingDirection | null = this.getViewingDirection();
 
-        if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
+        if (viewingDirection && (viewingDirection === ViewingDirection.LEFT_TO_RIGHT || viewingDirection === ViewingDirection.RIGHT_TO_LEFT)) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
-        } else if (viewingHint && viewingHint.toString() === manifesto.ViewingHint.paged().toString()) {
+        } else if (viewingHint && ViewingHint === ViewingHint.PAGED) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
         } else {
@@ -386,22 +383,22 @@ export class ContentLeftPanel extends LeftPanel {
             height = this.config.options.oneColThumbHeight;
         }
 
-        const thumbs: IThumb[] = <IThumb[]>this.extension.helper.getThumbs(width, height);
+        const thumbs: manifesto.Thumb[] = <manifesto.Thumb[]>this.extension.helper.getThumbs(width, height);
 
-        if (viewingDirection && viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString()) {
+        if (viewingDirection && viewingDirection === ViewingDirection.BOTTOM_TO_TOP) {
             thumbs.reverse();
         }
 
         // add a search result icon for pages with results
-        const searchResults: AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
+        const searchResults: manifold.AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
         
         if (searchResults && searchResults.length) {
 
             for (let i = 0; i < searchResults.length; i++) {
-                const searchResult: AnnotationGroup = searchResults[i];
+                const searchResult: manifold.AnnotationGroup = searchResults[i];
 
                 // find the thumb with the same canvasIndex and add the searchResult
-                let thumb: IThumb = thumbs.en().where(t => t.index === searchResult.canvasIndex).first();
+                let thumb: manifesto.Thumb = thumbs.filter(t => t.index === searchResult.canvasIndex)[0];
 
                 if (thumb) {
                     // clone the data so searchResults isn't persisted on the canvas.
@@ -431,8 +428,8 @@ export class ContentLeftPanel extends LeftPanel {
         this.galleryView.databind();
     }
 
-    getGalleryData(): IIIFComponents.IGalleryComponentData {
-        return <IIIFComponents.IGalleryComponentData>{
+    getGalleryData() {
+        return {
             helper: this.extension.helper,
             chunkedResizingThreshold: this.config.options.galleryThumbChunkedResizingThreshold,
             content: this.config.content,
@@ -472,9 +469,9 @@ export class ContentLeftPanel extends LeftPanel {
         return topRangeIndex;
     }
 
-    getTree(): ITreeNode | null {
+    getTree(): manifesto.TreeNode | null {
         const topRangeIndex: number = this.getSelectedTopRangeIndex();
-        return this.extension.helper.getTree(topRangeIndex, Manifold.TreeSortType.NONE);
+        return this.extension.helper.getTree(topRangeIndex, manifold.TreeSortType.NONE);
     }
 
     toggleFinish(): void {
@@ -485,7 +482,7 @@ export class ContentLeftPanel extends LeftPanel {
             let treeEnabled: boolean = Utils.Bools.getBool(this.config.options.treeEnabled, true);
             const thumbsEnabled: boolean = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
 
-            const treeData: ITreeNode | null = this.getTree();
+            const treeData: manifesto.TreeNode | null = this.getTree();
 
             if (!treeData || !treeData.nodes.length) {
                 treeEnabled = false;
@@ -507,7 +504,7 @@ export class ContentLeftPanel extends LeftPanel {
         const defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
         const defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
 
-        const treeData: ITreeNode | null = this.getTree();
+        const treeData: manifesto.TreeNode | null = this.getTree();
 
         if (defaultToTreeEnabled){
             if (treeData && treeData.nodes.length > defaultToTreeIfGreaterThan){
@@ -520,7 +517,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
@@ -532,13 +529,13 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
@@ -551,7 +548,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.openThumbsView();
         }
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     openTreeView(): void {
@@ -577,7 +574,7 @@ export class ContentLeftPanel extends LeftPanel {
         this.resize();
         this.treeView.resize();
 
-        $.publish(BaseEvents.OPEN_TREE_VIEW);
+        this.component.publish(BaseEvents.OPEN_TREE_VIEW);
     }
 
     openThumbsView(): void {
@@ -612,7 +609,7 @@ export class ContentLeftPanel extends LeftPanel {
             this.thumbsView.resize();
         }
 
-        $.publish(BaseEvents.OPEN_THUMBS_VIEW);
+        this.component.publish(BaseEvents.OPEN_THUMBS_VIEW);
     }
 
     selectTopRangeIndex(index: number): void {
@@ -622,7 +619,7 @@ export class ContentLeftPanel extends LeftPanel {
     getCurrentCanvasTopRangeIndex(): number {
         let topRangeIndex: number = -1;
         
-        const range: Manifesto.IRange | null = this.extension.getCurrentCanvasRange();
+        const range: manifesto.Range | null = this.extension.getCurrentCanvasRange();
         
         if (range) {
             topRangeIndex = Number(range.path.split('/')[0]);
@@ -644,17 +641,17 @@ export class ContentLeftPanel extends LeftPanel {
     selectCurrentTreeNodeByRange(): void{
         if (this.treeView) {
 
-            const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
-            let node: Manifesto.ITreeNode | null = null;
+            const range: manifesto.Range | null = this.extension.helper.getCurrentRange();
+            let node: manifesto.TreeNode | null = null;
 
             if (range && range.treeNode) {
                 node = this.treeView.getNodeById(range.treeNode.id);
             }
 
             if (node){
-                this.treeView.selectNode(<Manifold.ITreeNode>node);
+                this.treeView.selectNode(<manifesto.TreeNode>node);
             } else {
-                this.treeView.deselectCurrentNode();
+                this.selectTreeNodeByManifest();
             }
         }
     }
@@ -662,11 +659,11 @@ export class ContentLeftPanel extends LeftPanel {
     selectCurrentTreeNodeByCanvas(): void{
         if (this.treeView) {
 
-            let node: Manifesto.ITreeNode | null = null;
+            let node: manifesto.TreeNode | null = null;
             const currentCanvasTopRangeIndex: number = this.getCurrentCanvasTopRangeIndex();
             const selectedTopRangeIndex: number = this.getSelectedTopRangeIndex();
             const usingCorrectTree: boolean = currentCanvasTopRangeIndex === selectedTopRangeIndex;
-            let range: Manifesto.IRange | null = null;
+            let range: manifesto.Range | null = null;
 
             if (currentCanvasTopRangeIndex !== -1) {
 
@@ -684,8 +681,8 @@ export class ContentLeftPanel extends LeftPanel {
             //     node = this.treeView.getNodeById(id);
             // }
 
-            if (node && usingCorrectTree){
-                this.treeView.selectNode(<Manifold.ITreeNode>node);
+            if (node && usingCorrectTree) {
+                this.treeView.selectNode(<manifesto.TreeNode>node);
             } else {
                 range = this.extension.helper.getCurrentRange();
                 
@@ -694,11 +691,39 @@ export class ContentLeftPanel extends LeftPanel {
                 }
 
                 if (node) {
-                    this.treeView.selectNode(<Manifold.ITreeNode>node);
+                    this.treeView.selectNode(<manifesto.TreeNode>node);
                 } else {
-                    this.treeView.deselectCurrentNode();
+                    this.selectTreeNodeByManifest();
                 }
             }
+        }
+    }
+
+    // fall through to this is there's no current range or canvas
+    selectTreeNodeByManifest(): void {
+
+        const collectionIndex: number = this.extension.helper.collectionIndex;
+        const manifestIndex: number = this.extension.helper.manifestIndex;
+
+        const allNodes: manifesto.TreeNode[] = this.treeView.getAllNodes();
+
+        let nodeFound: boolean = false;
+
+        allNodes.map(node => {
+            if (node.isCollection() && node.data.index === collectionIndex) {
+                this.treeView.selectNode(node as manifesto.TreeNode);
+                this.treeView.expandNode(node as manifesto.TreeNode, true);
+                nodeFound = true;
+            }
+            
+            if (node.isManifest() && node.data.index === manifestIndex) {
+                this.treeView.selectNode(node as manifesto.TreeNode);
+                nodeFound = true;
+            }
+        });
+
+        if (!nodeFound) {
+            this.treeView.deselectCurrentNode();
         }
     }
 

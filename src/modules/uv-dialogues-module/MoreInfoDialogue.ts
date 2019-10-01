@@ -5,7 +5,7 @@ import {UVUtils} from "../../Utils";
 export class MoreInfoDialogue extends Dialogue {
 
     $title: JQuery;
-    metadataComponent: IIIFComponents.MetadataComponent;
+    metadataComponent: any;
     $metadata: JQuery;
 
     constructor($element: JQuery) {
@@ -21,11 +21,11 @@ export class MoreInfoDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_MOREINFO_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_MOREINFO_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, $triggerButton: JQuery) => {
-            this.open($triggerButton);
+        this.component.subscribe(this.openCommand, (triggerButton: HTMLElement) => {
+            this.open(triggerButton);
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -47,13 +47,13 @@ export class MoreInfoDialogue extends Dialogue {
         this.$element.hide();
     }
 
-    open($triggerButton?: JQuery): void {
-        super.open($triggerButton);
+    open(triggerButton?: HTMLElement): void {
+        super.open(triggerButton);
         this.metadataComponent.set(this._getData());
     }
 
-    private _getData(): IIIFComponents.IMetadataComponentData {
-        return <IIIFComponents.IMetadataComponentData>{
+    private _getData() {
+        return {
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
@@ -69,7 +69,7 @@ export class MoreInfoDialogue extends Dialogue {
             manifestExclude: this.config.options.manifestExclude,
             range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
-            sanitizer: (html) => {
+            sanitizer: (html: string) => {
                 return UVUtils.sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages

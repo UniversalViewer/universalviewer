@@ -1,4 +1,4 @@
 export class AnnotationResults {
     terms?: string;
-    annotations: Manifold.AnnotationGroup[];
+    annotations: manifold.AnnotationGroup[];
 }

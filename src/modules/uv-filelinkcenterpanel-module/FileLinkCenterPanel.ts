@@ -8,8 +8,6 @@ export class FileLinkCenterPanel extends CenterPanel {
     $downloadItems: JQuery;
     $downloadItemTemplate: JQuery;
 
-    title: string | null;
-
     constructor($element: JQuery) {
         super($element);
     }
@@ -20,32 +18,32 @@ export class FileLinkCenterPanel extends CenterPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
             this.openMedia(resources);
         });
 
-        this.$scroll = $('<div class="scroll"><div>');
+        this.$scroll = $('<div class="scroll"></div>');
         this.$content.append(this.$scroll);
 
         this.$downloadItems = $('<ol></ol>');
         this.$scroll.append(this.$downloadItems);
 
-        this.$downloadItemTemplate = $('<li><img><div class="col2"><a class="filename" target="_blank" download></a><span class="label"></span><a class="description" target="_blank" download></a></div></li>');
+        this.$downloadItemTemplate = $('<li><img/><div class="col2"><a class="filename" target="_blank" download=""></a><span class="label"></span><a class="description" target="_blank" download=""></a></div></li>');
 
         this.title = this.extension.helper.getLabel();
     }
 
-    openMedia(resources: Manifesto.IExternalResource[]) {
+    openMedia(resources: manifesto.IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
             
-            const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-            const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+            const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+            const annotations: manifesto.Annotation[] = canvas.getContent();
 
             let $item: JQuery;
 
             for (let i = 0; i < annotations.length; i++) {
-                const annotation: Manifesto.IAnnotation = annotations[i];
+                const annotation: manifesto.Annotation = annotations[i];
 
                 if (!annotation.getBody().length) {
                     continue;
@@ -57,7 +55,7 @@ export class FileLinkCenterPanel extends CenterPanel {
                 const $thumb: JQuery = $item.find('img');
                 const $description: JQuery = $item.find('.description');
 
-                const annotationBody: Manifesto.IAnnotationBody = annotation.getBody()[0];
+                const annotationBody: manifesto.AnnotationBody = annotation.getBody()[0];
 
                 const id: string | null = annotationBody.getProperty('id');
 
@@ -66,7 +64,7 @@ export class FileLinkCenterPanel extends CenterPanel {
                     $fileName.text(id.substr(id.lastIndexOf('/') + 1));
                 }
 
-                let label: string | null = Manifesto.LanguageMap.getValue(annotationBody.getLabel());
+                let label: string | null = manifesto.LanguageMap.getValue(annotationBody.getLabel());
 
                 if (label) {
                     $label.text(UVUtils.sanitize(label));
@@ -100,7 +98,7 @@ export class FileLinkCenterPanel extends CenterPanel {
         super.resize();
 
         if (this.title) {
-            this.$title.ellipsisFill(this.title);
+            this.$title.text(UVUtils.sanitize(this.title));
         }
 
         this.$scroll.height(this.$content.height() - this.$scroll.verticalMargins());

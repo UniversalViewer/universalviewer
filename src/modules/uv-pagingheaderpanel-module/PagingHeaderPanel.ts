@@ -46,24 +46,24 @@ export class PagingHeaderPanel extends HeaderPanel {
 
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.canvasIndexChanged(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, () => {
             this.modeChanged();
             this.updatePagingToggle();
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGE_FAILED, () => {
             this.setSearchFieldValue(this.extension.helper.canvasIndex);
         });
         
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
             this.openGallery();
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START, () => {
             this.closeGallery();
         });
 
@@ -111,13 +111,13 @@ export class PagingHeaderPanel extends HeaderPanel {
             new AutoComplete(this.$autoCompleteBox,
                 (term: string, cb: (results: string[]) => void) => {
                     const results: string[] = [];
-                    const canvases: Manifesto.ICanvas[] = this.extension.helper.getCanvases();
+                    const canvases: manifesto.Canvas[] = this.extension.helper.getCanvases();
 
                     // if in page mode, get canvases by label.
                     if (this.isPageModeEnabled()) {
                         for (let i = 0; i < canvases.length; i++) {
-                            const canvas: Manifesto.ICanvas = canvases[i];
-                            const label: string | null = Manifesto.LanguageMap.getValue(canvas.getLabel());
+                            const canvas: manifesto.Canvas = canvases[i];
+                            const label: string | null = manifesto.LanguageMap.getValue(canvas.getLabel());
                             if (label && label.startsWith(term)) {
                                 results.push(label);
                             }
@@ -125,7 +125,7 @@ export class PagingHeaderPanel extends HeaderPanel {
                     } else {
                         // get canvas by index
                         for (let i = 0; i < canvases.length; i++) {
-                            const canvas: Manifesto.ICanvas = canvases[i];
+                            const canvas: manifesto.Canvas = canvases[i];
                             if (canvas.index.toString().startsWith(term)) {
                                 results.push(canvas.index.toString());
                             }
@@ -150,14 +150,14 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$selectionBoxOptions.append(this.$imageSelectionBox);
 
             for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
-                const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                const label: string = UVUtils.sanitize(<string>Manifesto.LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
+                const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(imageIndex);
+                const label: string = UVUtils.sanitize(<string>manifesto.LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
             this.$imageSelectionBox.change(() => {
                 const imageIndex: number = parseInt(this.$imageSelectionBox.val());
-                $.publish(Events.IMAGE_SEARCH, [imageIndex]);
+                this.component.publish(Events.IMAGE_SEARCH, imageIndex);
             });
         }
 
@@ -195,7 +195,7 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$pageModeLabel.addClass('disabled');
         }
 
-        if (this.extension.helper.getManifestType().toString() === manifesto.ManifestType.manuscript().toString()){
+        if (this.extension.helper.getManifestType() === manifesto.ManifestType.MANUSCRIPT){
             this.$pageModeLabel.text(this.content.folio);
         } else {
             this.$pageModeLabel.text(this.content.page);
@@ -230,23 +230,23 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$oneUpButton.onPressed(() => {
             const enabled: boolean = false;
             this.updateSettings({ pagingEnabled: enabled });
-            $.publish(Events.PAGING_TOGGLED, [enabled]);
+            this.component.publish(Events.PAGING_TOGGLED, enabled);
         });
 
         this.$twoUpButton.onPressed(() => {
             const enabled: boolean = true;
             this.updateSettings({ pagingEnabled: enabled });
-            $.publish(Events.PAGING_TOGGLED, [enabled]);
+            this.component.publish(Events.PAGING_TOGGLED, enabled);
         });
 
         this.$galleryButton.onPressed(() => {
-            $.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
+            this.component.publish(BaseEvents.TOGGLE_EXPAND_LEFT_PANEL);
         });
 
         this.setNavigationTitles();
         this.setTotal();
 
-        let viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        let viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         // check if the book has more than one page, otherwise hide prev/next options.
         if (this.extension.helper.getTotalCanvases() === 1) {
@@ -256,52 +256,52 @@ export class PagingHeaderPanel extends HeaderPanel {
         // ui event handlers.
         this.$firstButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(BaseEvents.FIRST);
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.TOP_TO_BOTTOM :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                    this.component.publish(BaseEvents.FIRST);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.LAST);
+                case ViewingDirection.RIGHT_TO_LEFT :
+                    this.component.publish(BaseEvents.LAST);
                     break;
             }
         });
 
         this.$prevButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.PREV);
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                case ViewingDirection.TOP_TO_BOTTOM :
+                    this.component.publish(BaseEvents.PREV);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.NEXT);
+                case ViewingDirection.RIGHT_TO_LEFT :
+                    this.component.publish(BaseEvents.NEXT);
                     break;
             }
         });
 
         this.$nextButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.NEXT);
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                case ViewingDirection.TOP_TO_BOTTOM :
+                    this.component.publish(BaseEvents.NEXT);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.PREV);
+                case ViewingDirection.RIGHT_TO_LEFT :
+                    this.component.publish(BaseEvents.PREV);
                     break;
             }
         });
 
         this.$lastButton.onPressed(() => {
             switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                    $.publish(BaseEvents.LAST);
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.TOP_TO_BOTTOM :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                    this.component.publish(BaseEvents.LAST);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.FIRST);
+                case ViewingDirection.RIGHT_TO_LEFT :
+                    this.component.publish(BaseEvents.FIRST);
                     break;
             }
         });
@@ -317,11 +317,11 @@ export class PagingHeaderPanel extends HeaderPanel {
             // visible, since otherwise, clicking on the "Image" label can
             // trigger unexpected/undesired side effects.
             this.$imageModeOption.on('click', (e) => {
-                $.publish(Events.MODE_CHANGED, [Mode.image.toString()]);
+                this.component.publish(Events.MODE_CHANGED, Mode.image.toString());
             });
 
             this.$pageModeOption.on('click', (e) => {
-                $.publish(Events.MODE_CHANGED, [Mode.page.toString()]);
+                this.component.publish(Events.MODE_CHANGED, Mode.page.toString());
             });
         }
 
@@ -484,12 +484,12 @@ export class PagingHeaderPanel extends HeaderPanel {
 
     setSearchFieldValue(index: number): void {
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+        const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(index);
         let value: string | null = null;
 
         if (this.isPageModeEnabled()) {
 
-            const orderLabel: string = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
+            const orderLabel: string = <string>manifesto.LanguageMap.getValue(canvas.getLabel());
 
             if (orderLabel === "-") {
                 value = "";
@@ -513,13 +513,13 @@ export class PagingHeaderPanel extends HeaderPanel {
         if (!value) {
 
             this.extension.showMessage(this.content.emptyValue);
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
 
             return;
         }
 
         if (this.isPageModeEnabled()) {
-            $.publish(Events.PAGE_SEARCH, [value]);
+            this.component.publish(Events.PAGE_SEARCH, value);
         } else {
             let index: number;
 
@@ -533,19 +533,19 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             if (isNaN(index)) {
                 this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.invalidNumber);
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            const asset: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
+            const asset: manifesto.Canvas = this.extension.helper.getCanvasByIndex(index);
 
             if (!asset) {
                 this.extension.showMessage(this.extension.data.config.modules.genericDialogue.content.pageNotFound);
-                $.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
+                this.component.publish(BaseEvents.CANVAS_INDEX_CHANGE_FAILED);
                 return;
             }
 
-            $.publish(Events.IMAGE_SEARCH, [index]);
+            this.component.publish(Events.IMAGE_SEARCH, index);
         }
     }
 
@@ -556,9 +556,9 @@ export class PagingHeaderPanel extends HeaderPanel {
             this.$imageSelectionBox.val(index);
         }
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
-        if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
+        if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
             if (this.extension.helper.isFirstCanvas()){
                 this.disableLastButton();
                 this.disableNextButton();

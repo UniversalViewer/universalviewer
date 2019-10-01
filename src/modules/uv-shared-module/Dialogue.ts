@@ -29,7 +29,7 @@ export class Dialogue extends BaseView {
         super.create();
 
         // events.
-        $.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
+        this.component.subscribe(BaseEvents.CLOSE_ACTIVE_DIALOGUE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -37,7 +37,7 @@ export class Dialogue extends BaseView {
             }
         });
 
-        $.subscribe(BaseEvents.ESCAPE, () => {
+        this.component.subscribe(BaseEvents.ESCAPE, () => {
             if (this.isActive) {
                 if (this.allowClose) {
                     this.close();
@@ -124,12 +124,12 @@ export class Dialogue extends BaseView {
         });
     }
 
-    open($triggerButton?: JQuery): void {
+    open(triggerButton?: HTMLElement): void {
         this.$element.attr('aria-hidden', 'false');
         this.$element.show();
 
-        if ($triggerButton && $triggerButton.length) {
-            this.$triggerButton = $triggerButton;
+        if (triggerButton) {
+            this.$triggerButton = $(triggerButton);
             this.$bottom.show();
         } else {
             this.$bottom.hide();
@@ -155,7 +155,7 @@ export class Dialogue extends BaseView {
             }
         }, 1);
 
-        $.publish(BaseEvents.SHOW_OVERLAY);
+        this.component.publish(BaseEvents.SHOW_OVERLAY);
 
         if (this.isUnopened) {
             this.isUnopened = false;
@@ -175,8 +175,8 @@ export class Dialogue extends BaseView {
         this.$element.hide();
         this.isActive = false;
 
-        $.publish(this.closeCommand);
-        $.publish(BaseEvents.HIDE_OVERLAY);
+        this.component.publish(this.closeCommand);
+        this.component.publish(BaseEvents.HIDE_OVERLAY);
     }
 
     resize(): void {
