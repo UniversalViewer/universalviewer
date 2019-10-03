@@ -1,5 +1,6 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseExpandPanel} from "./BaseExpandPanel";
+import { Bools } from "@edsilv/utils";
 
 export class LeftPanel extends BaseExpandPanel {
 
@@ -25,7 +26,7 @@ export class LeftPanel extends BaseExpandPanel {
     init(): void {
         super.init();
 
-        const shouldOpenPanel: boolean = Utils.Bools.getBool(this.extension.getSettings().leftPanelOpen, this.options.panelOpen);
+        const shouldOpenPanel: boolean = Bools.getBool(this.extension.getSettings().leftPanelOpen, this.options.panelOpen);
         
         if (shouldOpenPanel) {
             this.toggle(true);

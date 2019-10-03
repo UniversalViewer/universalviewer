@@ -1,7 +1,7 @@
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {IExtension} from "../../modules/uv-shared-module/IExtension";
 import {Mode} from "./Mode";
-import Size = Utils.Size;
+import { Size } from "@edsilv/utils";
 
 export interface ISeadragonExtension extends IExtension{
     annotations: manifold.AnnotationGroup[] | null;

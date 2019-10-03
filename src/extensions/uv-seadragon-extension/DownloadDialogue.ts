@@ -3,9 +3,11 @@ import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogues-module/DownloadDialogue";
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import {ISeadragonExtension} from "./ISeadragonExtension";
-import Size = manifesto.Size;
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
-
+import { Async, Strings, Bools, Files } from "@edsilv/utils";
+import { MediaType } from "@iiif/vocabulary";
+import * as manifesto from "manifesto.js";
+import Size = manifesto.Size;
 export class DownloadDialogue extends BaseDownloadDialogue {
 
     $canvasOptions: JQuery;
@@ -122,7 +124,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                         window.open(<string>(<ISeadragonExtension>that.extension).getCroppedImageUri(canvas, viewer));
                         break;
                     case DownloadOption.SELECTION:
-                        Utils.Async.waitFor(() => {
+                        Async.waitFor(() => {
                             return !this.isActive;
                         }, () => {
                             this.component.publish(BaseEvents.SHOW_MULTISELECT_DIALOGUE);
@@ -182,8 +184,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             // dimensions
             if (dimensions) {
                 label = hasNormalDimensions ?
-                  Utils.Strings.format(label, dimensions.size.width.toString(), dimensions.size.height.toString()) :
-                  Utils.Strings.format(label, dimensions.size.height.toString(), dimensions.size.width.toString());
+                  Strings.format(label, dimensions.size.width.toString(), dimensions.size.height.toString()) :
+                  Strings.format(label, dimensions.size.height.toString(), dimensions.size.width.toString());
                 $label.text(label);
                 $input.prop('title', label);
                 this.$currentViewAsJpgButton.data('width', dimensions.size.width);
@@ -194,7 +196,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             }
 
             // explanatory text
-            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+            if (Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
                 const text: string = this.content.currentViewAsJpgExplanation;
                 if (text) {
                     const $span = this.$explanatoryTextTemplate.clone();
@@ -212,7 +214,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
             if (mime) {
-                mime = Utils.Files.simplifyMimeType(mime);
+                mime = Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
             }
@@ -223,7 +225,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             if (!size) {
                 // if there is no image service, allow the image to be downloaded directly.
                 if (canvas.externalResource && !canvas.externalResource.hasServiceDescriptor()) {
-                    const label: string = Utils.Strings.format(this.content.wholeImageHighRes, '?', '?', mime);
+                    const label: string = Strings.format(this.content.wholeImageHighRes, '?', '?', mime);
                     $label.text(label);
                     $input.prop('title', label);
                     this.$wholeImageHighResButton.show();
@@ -232,8 +234,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 }
             } else {
                 const label: string = hasNormalDimensions ?
-                  Utils.Strings.format(this.content.wholeImageHighRes, size.width.toString(), size.height.toString(), mime) :
-                  Utils.Strings.format(this.content.wholeImageHighRes, size.height.toString(), size.width.toString(), mime);
+                  Strings.format(this.content.wholeImageHighRes, size.width.toString(), size.height.toString(), mime) :
+                  Strings.format(this.content.wholeImageHighRes, size.height.toString(), size.width.toString(), mime);
                 $label.text(label);
                 $input.prop('title', label);
 
@@ -244,7 +246,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             }
 
             // explanatory text
-            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+            if (Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
                 const text: string = this.content.wholeImageHighResExplanation;
                 if (text) {
                     const $span: JQuery = this.$explanatoryTextTemplate.clone();
@@ -262,19 +264,19 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             let mime: string | null = this.getCanvasMimeType(this.extension.helper.getCurrentCanvas());
 
             if (mime) {
-                mime = Utils.Files.simplifyMimeType(mime);
+                mime = Files.simplifyMimeType(mime);
             } else {
                 mime = '?';
             }
             
-            const label: string = Utils.Strings.format(this.content.wholeImagesHighRes, mime);
+            const label: string = Strings.format(this.content.wholeImagesHighRes, mime);
             $label.text(label);
             $input.prop('title', label);
 
             this.$wholeImagesHighResButton.show();
 
             // explanatory text
-            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+            if (Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
                 const text: string = this.content.wholeImagesHighResExplanation;
                 if (text) {
                     const $span: JQuery = this.$explanatoryTextTemplate.clone();
@@ -291,8 +293,8 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             const $label: JQuery = this.$wholeImageLowResAsJpgButton.find('label');
             const size: Size | null = (<ISeadragonExtension>this.extension).getConfinedImageDimensions(canvas, this.options.confinedImageSize);
             const label = hasNormalDimensions ?
-              Utils.Strings.format(this.content.wholeImageLowResAsJpg, size.width.toString(), size.height.toString()) :
-              Utils.Strings.format(this.content.wholeImageLowResAsJpg, size.height.toString(), size.width.toString());
+              Strings.format(this.content.wholeImageLowResAsJpg, size.width.toString(), size.height.toString()) :
+              Strings.format(this.content.wholeImageLowResAsJpg, size.height.toString(), size.width.toString());
             $label.text(label);
             $input.prop('title', label);
             this.$wholeImageLowResAsJpgButton.data('width', size.width);
@@ -300,7 +302,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             this.$wholeImageLowResAsJpgButton.show();
 
             // explanatory text
-            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+            if (Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
                 const text: string = this.content.wholeImageLowResAsJpgExplanation;
                 if (text) {
                     const $span = this.$explanatoryTextTemplate.clone();
@@ -320,7 +322,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             this.$selectionButton.show();
 
             // explanatory text
-            if (Utils.Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
+            if (Bools.getBool(this.options.optionsExplanatoryTextEnabled, false)) {                
                 const text: string = this.content.selectionExplanation;
                 if (text) {
                     const $span = this.$explanatoryTextTemplate.clone();

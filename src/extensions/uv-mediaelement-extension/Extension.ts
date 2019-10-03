@@ -12,6 +12,9 @@ import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/Mor
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
+import { Bools, Strings } from "@edsilv/utils";
+import { ExternalResourceType, MediaType } from "@iiif/vocabulary";
+import * as manifesto from "manifesto.js";
 export class Extension extends BaseExtension implements IMediaElementExtension {
 
     $downloadDialogue: JQuery;
@@ -113,11 +116,11 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
-        if (this.isLeftPanelEnabled()){
+        if (this.isLeftPanelEnabled()) {
             this.leftPanel.init();
         }
 
-        if (this.isRightPanelEnabled()){
+        if (this.isRightPanelEnabled()) {
             this.rightPanel.init();
         }
     }
@@ -127,7 +130,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     }
 
     isLeftPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)
+        return Bools.getBool(this.data.config.options.leftPanelEnabled, true)
                 && ((this.helper.isMultiCanvas() || this.helper.isMultiSequence()) || this.helper.hasResources());
     }
 
@@ -157,7 +160,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
         //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 
@@ -175,7 +178,7 @@ export class Extension extends BaseExtension implements IMediaElementExtension {
     }
 
     isVideoFormat(type: string): boolean {
-        const videoFormats: string[] = [manifesto.MediaType.mp4().toString(), manifesto.MediaType.webm().toString()];
+        const videoFormats: string[] = [MediaType.MP4, MediaType.WEBM];
         return videoFormats.indexOf(type) != -1;
     }
 

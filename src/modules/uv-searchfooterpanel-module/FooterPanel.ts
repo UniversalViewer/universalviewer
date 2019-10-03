@@ -5,7 +5,11 @@ import {FooterPanel as BaseFooterPanel} from "../uv-shared-module/FooterPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {AnnotationResults} from "../uv-shared-module/AnnotationResults";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Bools, Strings } from "@edsilv/utils";
+import * as KeyCodes from "@edsilv/key-codes";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
 
 export class FooterPanel extends BaseFooterPanel {
 
@@ -219,7 +223,7 @@ export class FooterPanel extends BaseFooterPanel {
 
             new AutoComplete(this.$searchText,
                 (terms: string, cb: (results: string[]) => void) => {
-                    $.getJSON(Utils.Strings.format(autocompleteService, terms), (results: string[]) => {
+                    $.getJSON(Strings.format(autocompleteService, terms), (results: string[]) => {
                         cb(results);
                     });
                 },
@@ -231,7 +235,7 @@ export class FooterPanel extends BaseFooterPanel {
                 (terms: string) => {
                     this.search(terms);
                 },
-                300, 2, true, Utils.Bools.getBool(this.options.autocompleteAllowWords, false)
+                300, 2, true, Bools.getBool(this.options.autocompleteAllowWords, false)
             );
 
         } else {
@@ -248,7 +252,7 @@ export class FooterPanel extends BaseFooterPanel {
 
         this.updatePrintButton();
 
-        var positionMarkerEnabled: boolean = Utils.Bools.getBool(this.config.options.positionMarkerEnabled, true);
+        var positionMarkerEnabled: boolean = Bools.getBool(this.config.options.positionMarkerEnabled, true);
 
         if (!positionMarkerEnabled) {
             this.$pagePositionMarker.hide();
@@ -261,7 +265,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
+        return Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
     }
 
     isPreviousButtonEnabled(): boolean {
@@ -361,7 +365,7 @@ export class FooterPanel extends BaseFooterPanel {
     }
 
     updatePrintButton(): void {
-        const configEnabled: boolean = Utils.Bools.getBool(this.options.printEnabled, false);
+        const configEnabled: boolean = Bools.getBool(this.options.printEnabled, false);
         //var printService: manifesto.Service = this.extension.helper.manifest.getService(manifesto.ServiceProfile.printExtensions());
 
         //if (configEnabled && printService && this.extension.isOnHomeDomain()){
@@ -491,10 +495,10 @@ export class FooterPanel extends BaseFooterPanel {
             }
 
             if (label) {
-                title = Utils.Strings.format(title, that.content.pageCaps, label);
+                title = Strings.format(title, that.content.pageCaps, label);
             }
         } else {
-            title = Utils.Strings.format(title, that.content.imageCaps, String(canvasIndex + 1));
+            title = Strings.format(title, that.content.imageCaps, String(canvasIndex + 1));
         }
 
         that.$placemarkerDetailsTop.html(title);
@@ -507,7 +511,7 @@ export class FooterPanel extends BaseFooterPanel {
             let terms: string = "";
 
             if (that.terms) {
-                terms = Utils.Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
+                terms = Strings.ellipsis(that.terms, that.options.elideDetailsTermsCount);
             }
 
             let instanceFoundText: string = that.content.instanceFound;
@@ -515,10 +519,10 @@ export class FooterPanel extends BaseFooterPanel {
             let text: string = '';
 
             if (result.rects.length === 1) {
-                text = Utils.Strings.format(instanceFoundText, terms);
+                text = Strings.format(instanceFoundText, terms);
                 that.$placemarkerDetailsBottom.html(text);
             } else {
-                text = Utils.Strings.format(instancesFoundText, String(result.rects.length), terms);
+                text = Strings.format(instancesFoundText, String(result.rects.length), terms);
                 that.$placemarkerDetailsBottom.html(text);
             }
         }
@@ -648,16 +652,16 @@ export class FooterPanel extends BaseFooterPanel {
             const lastCanvasOrderLabel: string | null = this.extension.helper.getLastCanvasLabel(true);
 
             if (lastCanvasOrderLabel) {
-                this.$pagePositionLabel.html(Utils.Strings.format(displaying, this.content.page, UVUtils.sanitize(<string>label), UVUtils.sanitize(<string>lastCanvasOrderLabel)));
+                this.$pagePositionLabel.html(Strings.format(displaying, this.content.page, sanitize(<string>label), sanitize(<string>lastCanvasOrderLabel)));
             }
 
         } else {
-            this.$pagePositionLabel.html(Utils.Strings.format(displaying, this.content.image, String(index + 1), this.extension.helper.getTotalCanvases().toString()));
+            this.$pagePositionLabel.html(Strings.format(displaying, this.content.image, String(index + 1), this.extension.helper.getTotalCanvases().toString()));
         }
     }
 
     isPageModeEnabled(): boolean {
-        return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString() && !Utils.Bools.getBool(this.config.options.forceImageMode, false);
+        return this.config.options.pageModeEnabled && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString() && !Bools.getBool(this.config.options.forceImageMode, false);
     }
 
     showSearchSpinner(): void {
@@ -701,7 +705,7 @@ export class FooterPanel extends BaseFooterPanel {
                 $foundFor.html(this.content.resultsFoundFor);
             }
             
-            $terms.html(Utils.Strings.ellipsis(terms, this.options.elideResultsTermsCount));
+            $terms.html(Strings.ellipsis(terms, this.options.elideResultsTermsCount));
             $terms.prop('title', terms);
 
         } else {

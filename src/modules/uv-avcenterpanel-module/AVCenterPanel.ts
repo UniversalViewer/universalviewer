@@ -1,7 +1,9 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
-import { UVUtils } from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Async, Bools } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class AVCenterPanel extends CenterPanel {
 
@@ -169,7 +171,7 @@ export class AVCenterPanel extends CenterPanel {
             title = value;
         }
 
-        if (Utils.Bools.getBool(this.config.options.includeParentInTitleEnabled, false)) {
+        if (Bools.getBool(this.config.options.includeParentInTitleEnabled, false)) {
 
             // get the parent range or manifest's title
             if (currentRange) {
@@ -214,7 +216,7 @@ export class AVCenterPanel extends CenterPanel {
             }
         }
 
-        this.$title.text(UVUtils.sanitize(this.title));
+        this.$title.text(sanitize(this.title));
 
         this.resize(false);
     }
@@ -262,7 +264,7 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     private _whenMediaReady(cb: () => void): void {
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return this._mediaReady;
         }, cb);
     }

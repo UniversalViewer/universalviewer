@@ -2,6 +2,9 @@ import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { Dialogue } from "../uv-shared-module/Dialogue";
 import { DownloadOption } from "../uv-shared-module/DownloadOption";
 import { IRenderingOption } from "../uv-shared-module/IRenderingOption";
+import { Bools, Files, Strings } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
+import { RenderingFormat, MediaType } from "@iiif/vocabulary";
 
 export class DownloadDialogue extends Dialogue {
 
@@ -118,7 +121,7 @@ export class DownloadDialogue extends Dialogue {
         let fileType: string | null;
 
         if (format) {
-            fileType = Utils.Files.simplifyMimeType(format);
+            fileType = Files.simplifyMimeType(format);
         } else {
             fileType = this.getFileExtension(uri);
         }
@@ -155,8 +158,8 @@ export class DownloadDialogue extends Dialogue {
                 } else {
                     label = defaultLabel;
                 }
-                const mime: string = Utils.Files.simplifyMimeType(rendering.getFormat().toString());
-                label = Utils.Strings.format(label, mime);
+                const mime: string = Files.simplifyMimeType(rendering.getFormat().toString());
+                label = Strings.format(label, mime);
                 this.renderingUrls[<any>currentId] = rendering.id;
                 const $button: JQuery = $('<li class="option dynamic"><input id="' + currentId + '" data-mime="' + mime + '" title="' + label + '" type="radio" name="downloadOptions" tabindex="0" /><label for="' + currentId + '">' + label + '</label></li>');
 
@@ -197,7 +200,7 @@ export class DownloadDialogue extends Dialogue {
 
         const requiredStatement: manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
 
-        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
+        if (Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();

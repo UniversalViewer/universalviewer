@@ -2,7 +2,9 @@ import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Events} from "../../extensions/uv-mediaelement-extension/Events";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
 import {IMediaElementExtension} from "../../extensions/uv-mediaelement-extension/IMediaElementExtension";
-import { UVUtils } from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Dimensions, Size } from "@edsilv/utils";
+import { MediaType } from "@iiif/vocabulary";
 
 export class MediaElementCenterPanel extends CenterPanel {
 
@@ -185,7 +187,7 @@ export class MediaElementCenterPanel extends CenterPanel {
             this.$container.height(this.mediaHeight);
         } else {
             // fit media to available space.
-            const size: Utils.Size = Utils.Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
+            const size: Size = Dimensions.fitRect(this.mediaWidth, this.mediaHeight, this.$content.width(), this.$content.height());
 
             this.$container.height(size.height);
             this.$container.width(size.width);
@@ -205,7 +207,7 @@ export class MediaElementCenterPanel extends CenterPanel {
         });
 
         if (this.title) {
-            this.$title.text(UVUtils.sanitize(this.title));
+            this.$title.text(sanitize(this.title));
         }
 
         if (this.player) {

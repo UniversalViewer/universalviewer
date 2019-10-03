@@ -23,6 +23,10 @@ import { Point } from "../../modules/uv-shared-module/Point";
 import { SeadragonCenterPanel } from "../../modules/uv-seadragoncenterpanel-module/SeadragonCenterPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
+import { Bools, Maths, Strings } from "@edsilv/utils";
+import { IIIFResourceType, ExternalResourceType, ServiceProfile } from "@iiif/vocabulary";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
 import AnnotationGroup = manifold.AnnotationGroup;
 import AnnotationRect = manifold.AnnotationRect;
 import Size = manifesto.Size;
@@ -565,10 +569,10 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         if (!data.type) return;
 
         switch (data.type) {
-            case manifesto.IIIFResourceType.manifest().toString():
+            case IIIFResourceType.MANIFEST:
                 this.viewManifest(data);
                 break;
-            case manifesto.IIIFResourceType.collection().toString():
+            case IIIFResourceType.COLLECTION:
                 // note: this won't get called as the tree component now has branchNodesSelectable = false
                 // useful to keep around for reference
                 this.viewCollection(data);
@@ -628,7 +632,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         bookmark.thumb = canvas.getCanonicalImageUri(this.data.config.options.bookmarkThumbWidth);
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ResourceType.image().toString();
+        bookmark.type = ExternalResourceType.IMAGE;
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }
@@ -809,7 +813,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     getConfinedImageDimensions(canvas: manifesto.Canvas, width: number): Size {
         const dimensions: Size = new Size(0, 0);
         dimensions.width = width;
-        const normWidth = Utils.Maths.normalise(width, 0, canvas.getWidth());
+        const normWidth = Maths.normalise(width, 0, canvas.getWidth());
         dimensions.height = Math.floor(canvas.getHeight() * normWidth);
         return dimensions;
     }
@@ -889,7 +893,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
         const locales: string | null = this.getSerializedLocales();
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&config=${config}&locales=${locales}&xywh=${zoom}&r=${rotation}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 
@@ -913,7 +917,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
     }
 
     isSearchEnabled(): boolean {
-        if (!Utils.Bools.getBool(this.data.config.options.searchWithinEnabled, false)) {
+        if (!Bools.getBool(this.data.config.options.searchWithinEnabled, false)) {
             return false;
         }
 
@@ -994,7 +998,7 @@ export class Extension extends BaseExtension implements ISeadragonExtension {
 
         if (!searchUri) return;
 
-        searchUri = Utils.Strings.format(searchUri, encodeURIComponent(terms));
+        searchUri = Strings.format(searchUri, encodeURIComponent(terms));
 
         this.getSearchResults(searchUri, terms, this.annotations, (annotations: AnnotationGroup[]) => {
 

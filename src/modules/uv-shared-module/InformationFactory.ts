@@ -4,6 +4,7 @@ import {InformationAction} from "./InformationAction";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
 import {IExtension} from "./IExtension";
+import * as manifesto from "manifesto.js";
 
 export class InformationFactory {
 

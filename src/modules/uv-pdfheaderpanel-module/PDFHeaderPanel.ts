@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Events} from "../../extensions/uv-pdf-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
+import { Strings } from "@edsilv/utils";
 
 export class PDFHeaderPanel extends HeaderPanel {
 
@@ -135,7 +136,7 @@ export class PDFHeaderPanel extends HeaderPanel {
         this.$searchText.val(this._pageIndex);
 
         const of: string = this.content.of;
-        this.$total.html(Utils.Strings.format(of, this._pdfDoc.numPages.toString()));
+        this.$total.html(Strings.format(of, this._pdfDoc.numPages.toString()));
 
         this.$searchButton.enable();
 

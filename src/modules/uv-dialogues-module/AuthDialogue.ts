@@ -1,6 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
-import {UVUtils} from "../../Utils";
+import {sanitize} from "../../Utils";
 
 export class AuthDialogue extends Dialogue {
 
@@ -85,11 +85,11 @@ export class AuthDialogue extends Dialogue {
         let confirmLabel: string | null = this.service.getConfirmLabel();
 
         if (header) {
-            this.$title.text(UVUtils.sanitize(header));
+            this.$title.text(sanitize(header));
         }
 
         if (description) {
-            this.$message.html(UVUtils.sanitize(description));
+            this.$message.html(sanitize(description));
             this.$message.targetBlank();
 
             this.$message.find('a').on('click', function() {
@@ -99,7 +99,7 @@ export class AuthDialogue extends Dialogue {
         }
 
         if (confirmLabel) {
-            this.$confirmButton.text(UVUtils.sanitize(confirmLabel));
+            this.$confirmButton.text(sanitize(confirmLabel));
         }
 
         this.resize();

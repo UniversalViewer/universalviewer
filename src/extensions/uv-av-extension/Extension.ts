@@ -10,6 +10,8 @@ import { IAVExtension } from "./IAVExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
+import { IIIFResourceType } from "@iiif/vocabulary";
+import { Strings } from "@edsilv/utils";
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -131,7 +133,7 @@ export class Extension extends BaseExtension implements IAVExtension {
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 
@@ -141,10 +143,10 @@ export class Extension extends BaseExtension implements IAVExtension {
         if (!data.type) return;
 
         switch (data.type) {
-            case manifesto.IIIFResourceType.manifest().toString():
+            case IIIFResourceType.MANIFEST:
                 // do nothing
                 break;
-            case manifesto.IIIFResourceType.collection().toString():
+            case IIIFResourceType.COLLECTION:
                 // do nothing
                 break;
             default:

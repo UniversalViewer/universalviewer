@@ -2,7 +2,7 @@ import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogu
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
-
+import { Strings } from "@edsilv/utils";
 export class DownloadDialogue extends BaseDownloadDialogue {
 
     $canvasOptions: JQuery;
@@ -83,7 +83,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL) && !this._isAdaptive()) {
             const $input: JQuery = this.$entireFileAsOriginal.find('input');
             const $label: JQuery = this.$entireFileAsOriginal.find('label');
-            const label: string = Utils.Strings.format(this.content.entireFileAsOriginalWithFormat, this.getCurrentResourceFormat());
+            const label: string = Strings.format(this.content.entireFileAsOriginalWithFormat, this.getCurrentResourceFormat());
             $label.text(label);
             $input.prop('title', label);
             this.$entireFileAsOriginal.show();
@@ -166,7 +166,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         });
     }
 
-    isDownloadOptionAvailable(option: DownloadOption): boolean {
+    isDownloadOptionAvailable(_option: DownloadOption): boolean {
         return this.isMediaDownloadEnabled();
     }
 }

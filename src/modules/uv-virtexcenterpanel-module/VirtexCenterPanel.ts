@@ -1,6 +1,10 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import { UVUtils } from "../../Utils";
+import { sanitize } from "../../Utils";
+import { MediaType } from "@iiif/vocabulary";
+import * as virtex from "virtex3d";
+import * as manifesto from "manifesto.js";
+import { Bools } from "@edsilv/utils";
 
 export class VirtexCenterPanel extends CenterPanel {
 
@@ -94,7 +98,7 @@ export class VirtexCenterPanel extends CenterPanel {
             const formats: manifesto.AnnotationBody[] | null = this.extension.getMediaFormats(canvas);
             let resourceType: MediaType | null = null;
             // default to threejs format.
-            let fileType: virtex.FileType = virtex.FileType.THREEJS;
+            let fileType: any = MediaType.THREEJS;
 
             if (formats && formats.length) {
                 mediaUri = formats[0].id;
@@ -113,7 +117,7 @@ export class VirtexCenterPanel extends CenterPanel {
                 target:  <HTMLElement>this.$viewport[0],
                 data: {
                     antialias: !isAndroid,
-                    file: mediaUri,
+                    file: mediaUri as string,
                     fullscreenEnabled: false,
                     type: fileType,
                     showStats: this.options.showStats
@@ -135,14 +139,14 @@ export class VirtexCenterPanel extends CenterPanel {
     }
 
     private _isVREnabled(): boolean {
-        return (Utils.Bools.getBool(this.config.options.vrEnabled, false) && WEBVR.isAvailable());
+        return (Bools.getBool(this.config.options.vrEnabled, false) && WEBVR.isAvailable());
     }
 
     resize() {
         super.resize();
 
         if (this.title) {
-            this.$title.text(UVUtils.sanitize(this.title));
+            this.$title.text(sanitize(this.title));
         }
         
         this.$viewport.width(this.$content.width());

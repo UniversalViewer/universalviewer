@@ -1,5 +1,8 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
+import { ExternalResourceType, ViewingDirection } from "@iiif/vocabulary";
+import * as manifesto from "manifesto.js";
+import { Dates, Maths, Strings } from "@edsilv/utils";
 
 export class ThumbsView extends BaseView {
 
@@ -93,10 +96,10 @@ export class ThumbsView extends BaseView {
                 if (searchResults) {
 
                     if (searchResults > 1) {
-                        return Utils.Strings.format(that.content.searchResults, searchResults.toString());
+                        return Strings.format(that.content.searchResults, searchResults.toString());
                     }
 
-                    return Utils.Strings.format(that.content.searchResult, searchResults.toString());
+                    return Strings.format(that.content.searchResult, searchResults.toString());
                 }
 
                 return '';
@@ -133,7 +136,7 @@ export class ThumbsView extends BaseView {
             heights.push(thumb.height);
         }
 
-        const medianHeight: number = Utils.Maths.median(heights);
+        const medianHeight: number = Maths.median(heights);
 
         for (let i = 0; i < this.thumbs.length; i++) {
             const thumb: manifesto.Thumb = this.thumbs[i];
@@ -215,7 +218,7 @@ export class ThumbsView extends BaseView {
 
                     let src: string = $thumb.attr('data-src');
                     if (that.config.options.thumbsCacheInvalidation && that.config.options.thumbsCacheInvalidation.enabled) {
-                        src += `${that.config.options.thumbsCacheInvalidation.paramType}t=${Utils.Dates.getTimeStamp()}`;
+                        src += `${that.config.options.thumbsCacheInvalidation.paramType}t=${Dates.getTimeStamp()}`;
                     }
                     const $img: JQuery = $('<img src="' + src + '" alt=""/>');
                     // fade in on load.

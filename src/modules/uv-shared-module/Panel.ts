@@ -1,5 +1,6 @@
 import {BaseEvents} from "./BaseEvents";
 import { IUVComponent } from "../../IUVComponent";
+import { Async } from "@edsilv/utils";
 
 export class Panel {
 
@@ -24,7 +25,7 @@ export class Panel {
     }
 
     whenResized(cb: () => void): void {
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return this.isResized;
         }, cb);
     }

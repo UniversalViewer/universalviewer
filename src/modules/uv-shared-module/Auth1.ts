@@ -1,15 +1,18 @@
 import {BaseEvents} from "./BaseEvents";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
+import * as manifesto from "manifesto.js";
+import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
+import * as HTTPStatusCode from "@edsilv/http-status-codes";
 
 export class Auth1 {
 
     static messages: any = {};
-    static storageStrategy: string;
+    static storageStrategy: StorageType;
     static publish: (event: string, args?: any) => void;
 
-    static loadExternalResources(resourcesToLoad: manifesto.IExternalResource[], storageStrategy: string, options: manifesto.IManifestoOptions): Promise<manifesto.IExternalResource[]> {
+    static loadExternalResources(resourcesToLoad: manifesto.IExternalResource[], storageStrategy: StorageType, options: manifesto.IManifestoOptions): Promise<manifesto.IExternalResource[]> {
         
         return new Promise<manifesto.IExternalResource[]>((resolve) => {
 
@@ -99,7 +102,7 @@ export class Auth1 {
     static storeAccessToken(resource: manifesto.IExternalResource, token: manifesto.IAccessToken): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (resource.tokenService) {
-                Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(Auth1.storageStrategy));
+                Storage.set(resource.tokenService.id, token, token.expiresIn, Auth1.storageStrategy);
                 resolve();
             } else {
                 reject('Token service not found');
@@ -111,20 +114,20 @@ export class Auth1 {
 
         return new Promise<manifesto.IAccessToken | null>((resolve, reject) => {
 
-            let foundItems: Utils.StorageItem[] = [];
-            let item: Utils.StorageItem | null = null;
+            let foundItems: StorageItem[] = [];
+            let item: StorageItem | null = null;
 
             // try to match on the tokenService, if the resource has one:
             if (resource.tokenService) {
-                item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(Auth1.storageStrategy));
+                item = Storage.get(resource.tokenService.id, Auth1.storageStrategy);
             }
 
             if (item) {
                 foundItems.push(item);
             } else {
                 // find an access token for the domain
-                const domain: string = Utils.Urls.getUrlParts(<string>resource.dataUri).hostname;
-                const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(Auth1.storageStrategy));
+                const domain: string = Urls.getUrlParts(<string>resource.dataUri).hostname;
+                const items: StorageItem[] = Storage.getItems(Auth1.storageStrategy);
 
                 for (let i = 0; i < items.length; i++) {
                     item = items[i];
@@ -136,7 +139,7 @@ export class Auth1 {
             }
 
             // sort by expiresAt, earliest to most recent.
-            foundItems = foundItems.sort((a: Utils.StorageItem, b: Utils.StorageItem) => {
+            foundItems = foundItems.sort((a: StorageItem, b: StorageItem) => {
                 return a.expiresAt - b.expiresAt;
             });
 
@@ -259,7 +262,7 @@ export class Auth1 {
            errorMessage += service.getFailureDescription();
         }
 
-        Auth1.publish(BaseEvents.SHOW_MESSAGE, [UVUtils.sanitize(errorMessage)]);
+        Auth1.publish(BaseEvents.SHOW_MESSAGE, [sanitize(errorMessage)]);
     }
 
 }

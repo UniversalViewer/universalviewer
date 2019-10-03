@@ -1,5 +1,6 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
+import { Bools, Documents } from "@edsilv/utils";
 
 export class FooterPanel extends BaseView {
 
@@ -127,7 +128,7 @@ export class FooterPanel extends BaseView {
             this.component.publish(BaseEvents.TOGGLE_FULLSCREEN);
         });
 
-        if (!Utils.Bools.getBool(this.options.embedEnabled, true)) {
+        if (!Bools.getBool(this.options.embedEnabled, true)) {
             this.$embedButton.hide();
         }
 
@@ -145,7 +146,7 @@ export class FooterPanel extends BaseView {
     updateMinimisedButtons(): void {
         
         // if configured to always minimise buttons
-        if (Utils.Bools.getBool(this.options.minimiseButtons, false)) {
+        if (Bools.getBool(this.options.minimiseButtons, false)) {
             this.$options.addClass('minimiseButtons');
             return;
         }
@@ -159,7 +160,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateMoreInfoButton(): void {
-        const configEnabled: boolean = Utils.Bools.getBool(this.options.moreInfoEnabled, false);
+        const configEnabled: boolean = Bools.getBool(this.options.moreInfoEnabled, false);
 
         if (configEnabled && !this.extension.isDesktopMetric() && !this.extension.isCatchAllMetric()) {
             this.$moreInfoButton.show();
@@ -169,9 +170,9 @@ export class FooterPanel extends BaseView {
     }
 
     updateOpenButton(): void {
-        const configEnabled: boolean = Utils.Bools.getBool(this.options.openEnabled, false);
+        const configEnabled: boolean = Bools.getBool(this.options.openEnabled, false);
 
-        if (configEnabled && Utils.Documents.isInIFrame()) {
+        if (configEnabled && Documents.isInIFrame()) {
             this.$openButton.show();
         } else {
             this.$openButton.hide();
@@ -179,7 +180,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateFullScreenButton(): void {
-        if (!Utils.Bools.getBool(this.options.fullscreenEnabled, true) || !Utils.Documents.supportsFullscreen()) {
+        if (!Bools.getBool(this.options.fullscreenEnabled, true) || !Documents.supportsFullscreen()) {
             this.$fullScreenBtn.hide();
             return;
         }
@@ -202,7 +203,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateEmbedButton(): void {
-        if (this.extension.helper.isUIEnabled('embed') && Utils.Bools.getBool(this.options.embedEnabled, false)) {
+        if (this.extension.helper.isUIEnabled('embed') && Bools.getBool(this.options.embedEnabled, false)) {
             // current jquery version sets display to 'inline' in mobile version, while this should remain hidden (see media query)
             if (!this.extension.isMobile()) {
                 this.$embedButton.show();
@@ -213,7 +214,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateShareButton(): void {
-        if (this.extension.helper.isUIEnabled('share') && Utils.Bools.getBool(this.options.shareEnabled, true)) {
+        if (this.extension.helper.isUIEnabled('share') && Bools.getBool(this.options.shareEnabled, true)) {
             this.$shareButton.show();
         } else {
             this.$shareButton.hide();
@@ -221,7 +222,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateDownloadButton(): void {
-        const configEnabled: boolean = Utils.Bools.getBool(this.options.downloadEnabled, true);
+        const configEnabled: boolean = Bools.getBool(this.options.downloadEnabled, true);
 
         if (configEnabled){
             this.$downloadButton.show();
@@ -231,7 +232,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateFeedbackButton(): void {
-        const configEnabled: boolean = Utils.Bools.getBool(this.options.feedbackEnabled, false);
+        const configEnabled: boolean = Bools.getBool(this.options.feedbackEnabled, false);
 
         if (configEnabled){
             this.$feedbackButton.show();
@@ -241,7 +242,7 @@ export class FooterPanel extends BaseView {
     }
 
     updateBookmarkButton(): void {
-        const configEnabled: boolean = Utils.Bools.getBool(this.options.bookmarkEnabled, false);
+        const configEnabled: boolean = Bools.getBool(this.options.bookmarkEnabled, false);
 
         if (configEnabled) {
             this.$bookmarkButton.show();

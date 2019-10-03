@@ -10,6 +10,9 @@ import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPa
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
+import { ExternalResourceType } from "@iiif/manifold/node_modules/@iiif/vocabulary";
+import { Bools, Strings } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -83,7 +86,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
     }
 
     isHeaderPanelEnabled(): boolean {
-        return super.isHeaderPanelEnabled() && Utils.Bools.getBool(this.data.config.options.usePdfJs, true);
+        return super.isHeaderPanelEnabled() && Bools.getBool(this.data.config.options.usePdfJs, true);
     }
 
     createModules(): void{
@@ -159,7 +162,7 @@ export class Extension extends BaseExtension implements IPDFExtension {
         //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 }

@@ -3,6 +3,8 @@ import { IUVComponent } from "../../IUVComponent";
 import { IUVData } from "../../IUVData";
 import { MetricType } from "./MetricType";
 import { Shell } from "./Shell";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
 
 export interface IExtension {
     $element: JQuery;

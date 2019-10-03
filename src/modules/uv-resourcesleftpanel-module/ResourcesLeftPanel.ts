@@ -1,6 +1,9 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {ThumbsView} from "./ThumbsView";
+import { ViewingDirection, MediaType } from "@iiif/vocabulary";
+import { Files } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class ResourcesLeftPanel extends LeftPanel {
 
@@ -73,7 +76,7 @@ export class ResourcesLeftPanel extends LeftPanel {
                 const label: string | null = manifesto.LanguageMap.getValue(<manifesto.LanguageMap>resource.getLabel());
 
                 if (label) {
-                    const mime: string = Utils.Files.simplifyMimeType((<MediaType>resource.getFormat()).toString());
+                    const mime: string = Files.simplifyMimeType((<MediaType>resource.getFormat()).toString());
                     const $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + label + ' (' + mime + ')' + '</li>');
                     this.$resources.append($listItem);
                 }

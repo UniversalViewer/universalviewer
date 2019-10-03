@@ -1,3 +1,7 @@
+const ViewingDirectionEnum = require('@iiif/vocabulary/dist-commonjs/').ViewingDirection;
+const ViewingHintEnum = require('@iiif/vocabulary/dist-commonjs/').ViewingHint;
+import { Bools } from "@edsilv/utils";
+import { ViewingHint, ViewingDirection } from "@iiif/vocabulary";
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {GalleryView} from "./GalleryView";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
@@ -5,6 +9,8 @@ import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
 import {ThumbsView} from "./ThumbsView";
 import {TreeView} from "./TreeView";
+import * as manifesto from "manifesto.js";
+import * as manifold from "@iiif/manifold";
 
 export class ContentLeftPanel extends LeftPanel {
 
@@ -285,8 +291,8 @@ export class ContentLeftPanel extends LeftPanel {
     getTreeData() {
         return {
             autoExpand: this._isTreeAutoExpanded(),
-            branchNodesExpandOnClick: Utils.Bools.getBool(this.config.options.branchNodesExpandOnClick, true),
-            branchNodesSelectable: Utils.Bools.getBool(this.config.options.branchNodesSelectable, false),
+            branchNodesExpandOnClick: Bools.getBool(this.config.options.branchNodesExpandOnClick, true),
+            branchNodesSelectable: Bools.getBool(this.config.options.branchNodesSelectable, false),
             helper: this.extension.helper,
             topRangeIndex: this.getSelectedTopRangeIndex(),
             treeSortType: this.treeSortType
@@ -294,7 +300,7 @@ export class ContentLeftPanel extends LeftPanel {
     }
 
     private _isTreeAutoExpanded(): boolean {
-        const autoExpandTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.autoExpandTreeEnabled, false);
+        const autoExpandTreeEnabled: boolean = Bools.getBool(this.config.options.autoExpandTreeEnabled, false);
         const autoExpandTreeIfFewerThan: number = this.config.options.autoExpandTreeIfFewerThan || 0;
 
         if (autoExpandTreeEnabled) {
@@ -372,10 +378,10 @@ export class ContentLeftPanel extends LeftPanel {
         const viewingHint: ViewingHint | null = this.getViewingHint();
         const viewingDirection: ViewingDirection | null = this.getViewingDirection();
 
-        if (viewingDirection && (viewingDirection === ViewingDirection.LEFT_TO_RIGHT || viewingDirection === ViewingDirection.RIGHT_TO_LEFT)) {
+        if (viewingDirection && (viewingDirection === ViewingDirectionEnum.LEFT_TO_RIGHT || viewingDirection === ViewingDirectionEnum.RIGHT_TO_LEFT)) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
-        } else if (viewingHint && ViewingHint === ViewingHint.PAGED) {
+        } else if (viewingHint && ViewingHintEnum === ViewingHintEnum.PAGED) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
         } else {
@@ -385,7 +391,7 @@ export class ContentLeftPanel extends LeftPanel {
 
         const thumbs: manifesto.Thumb[] = <manifesto.Thumb[]>this.extension.helper.getThumbs(width, height);
 
-        if (viewingDirection && viewingDirection === ViewingDirection.BOTTOM_TO_TOP) {
+        if (viewingDirection && viewingDirection === ViewingDirectionEnum.BOTTOM_TO_TOP) {
             thumbs.reverse();
         }
 
@@ -452,9 +458,9 @@ export class ContentLeftPanel extends LeftPanel {
         // todo: checks if the panel is being used in the openseadragon extension.
         // pass a `isPageModeEnabled` function to the panel's constructor instead?
         if (typeof (<ISeadragonExtension>this.extension).getMode === "function") { 
-            return Utils.Bools.getBool(this.config.options.pageModeEnabled, true) && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+            return Bools.getBool(this.config.options.pageModeEnabled, true) && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
         }
-        return Utils.Bools.getBool(this.config.options.pageModeEnabled, true);
+        return Bools.getBool(this.config.options.pageModeEnabled, true);
     }
 
     getSelectedTree(): JQuery {
@@ -479,8 +485,8 @@ export class ContentLeftPanel extends LeftPanel {
 
         if (this.isUnopened) {
 
-            let treeEnabled: boolean = Utils.Bools.getBool(this.config.options.treeEnabled, true);
-            const thumbsEnabled: boolean = Utils.Bools.getBool(this.config.options.thumbsEnabled, true);
+            let treeEnabled: boolean = Bools.getBool(this.config.options.treeEnabled, true);
+            const thumbsEnabled: boolean = Bools.getBool(this.config.options.thumbsEnabled, true);
 
             const treeData: manifesto.TreeNode | null = this.getTree();
 
@@ -501,7 +507,7 @@ export class ContentLeftPanel extends LeftPanel {
 
     defaultToThumbsView(): boolean {
 
-        const defaultToTreeEnabled: boolean = Utils.Bools.getBool(this.config.options.defaultToTreeEnabled, false);
+        const defaultToTreeEnabled: boolean = Bools.getBool(this.config.options.defaultToTreeEnabled, false);
         const defaultToTreeIfGreaterThan: number = this.config.options.defaultToTreeIfGreaterThan || 0;
 
         const treeData: manifesto.TreeNode | null = this.getTree();

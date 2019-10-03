@@ -1,6 +1,8 @@
 import {BaseView} from "./BaseView";
 import {Position} from "./Position";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import * as manifold from "@iiif/manifold";
+import { Bools } from "@edsilv/utils";
 
 export class CenterPanel extends BaseView {
 
@@ -87,13 +89,13 @@ export class CenterPanel extends BaseView {
             this.resize();
         });
 
-        if (Utils.Bools.getBool(this.options.titleEnabled, true)) {
+        if (Bools.getBool(this.options.titleEnabled, true)) {
             this.$title.removeClass('hidden');
         } else {
             this.$title.addClass('hidden');
         }
 
-        if (Utils.Bools.getBool(this.options.subtitleEnabled, false)) {
+        if (Bools.getBool(this.options.subtitleEnabled, false)) {
             this.$subtitle.removeClass('hidden');
         } else {
             this.$subtitle.addClass('hidden');
@@ -119,7 +121,7 @@ export class CenterPanel extends BaseView {
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 
-        const enabled: boolean = Utils.Bools.getBool(this.options.requiredStatementEnabled, true);
+        const enabled: boolean = Bools.getBool(this.options.requiredStatementEnabled, true);
 
         if (!requiredStatement || !requiredStatement.value || !enabled) {
             return;
@@ -133,14 +135,14 @@ export class CenterPanel extends BaseView {
         const $logo: JQuery = this.$attribution.find('.logo');
 
         if (requiredStatement.label) {
-            const sanitizedTitle: string = UVUtils.sanitize(requiredStatement.label);
+            const sanitizedTitle: string = sanitize(requiredStatement.label);
             $attributionTitle.html(sanitizedTitle);
         } else {
             $attributionTitle.text(this.content.attribution);
         }
         
         if (requiredStatement.value) {
-            const sanitizedText: string = UVUtils.sanitize(requiredStatement.value);
+            const sanitizedText: string = sanitize(requiredStatement.value);
 
             $attributionText.html(sanitizedText);
 
@@ -225,7 +227,7 @@ export class CenterPanel extends BaseView {
 
         if (this.subtitle && this.options.subtitleEnabled) {
 
-            this.$subtitleText.html(UVUtils.sanitize(this.subtitle.replace(/<br\s*[\/]?>/gi, '; ')));
+            this.$subtitleText.html(sanitize(this.subtitle.replace(/<br\s*[\/]?>/gi, '; ')));
             this.$subtitleText.removeClass('elided');
             this.$subtitle.removeClass('hidden');
             this.$subtitleWrapper.css('max-height', this.$content.height() + this.$subtitle.outerHeight());

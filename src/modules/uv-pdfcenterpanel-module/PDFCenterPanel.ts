@@ -1,6 +1,7 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
-import { Events } from "../../extensions/uv-pdf-extension/Events"; 
+import { Events } from "../../extensions/uv-pdf-extension/Events";
+import { Bools } from "@edsilv/utils";
 
 declare var PDFJS: any;
 
@@ -244,7 +245,7 @@ export class PDFCenterPanel extends CenterPanel {
                 mediaUri = canvas.id;
             }
 
-            if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+            if (!Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
                 window.PDFObject.embed(pdfUri, '#content', {id: "PDF"});
             } else {
                 PDFJS.disableWorker = true;
@@ -262,7 +263,7 @@ export class PDFCenterPanel extends CenterPanel {
     }
 
     private _render(num: number): void {
-        if (!Utils.Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
+        if (!Bools.getBool(this.extension.data.config.options.usePdfJs, false)) {
             return;
         }
         

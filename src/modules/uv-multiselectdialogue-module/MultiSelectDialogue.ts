@@ -2,6 +2,7 @@ import {BaseEvents} from "../../modules/uv-shared-module/BaseEvents";
 import {Dialogue} from "../../modules/uv-shared-module/Dialogue";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
+import { Bools } from "@edsilv/utils";
 
 export class MultiSelectDialogue extends Dialogue {
 
@@ -79,7 +80,7 @@ export class MultiSelectDialogue extends Dialogue {
     }
 
     isPageModeEnabled(): boolean {
-        return Utils.Bools.getBool(this.config.options.pageModeEnabled, true) && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
+        return Bools.getBool(this.config.options.pageModeEnabled, true) && (<ISeadragonExtension>this.extension).getMode().toString() === Mode.page.toString();
     }
 
     open(): void {

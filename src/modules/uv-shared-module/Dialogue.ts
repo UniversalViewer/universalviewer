@@ -1,5 +1,6 @@
 import {BaseView} from "./BaseView";
 import {BaseEvents} from "./BaseEvents";
+import { Maths } from "@edsilv/utils";
 
 export class Dialogue extends BaseView {
 
@@ -110,7 +111,7 @@ export class Dialogue extends BaseView {
             const g: number = (<JQueryCoordinates>this.extension.$element.offset()).left;
             const h: number = f - g;
 
-            normalisedPos = Utils.Maths.normalise(h, 0, this.extension.width());
+            normalisedPos = Maths.normalise(h, 0, this.extension.width());
 
             left = Math.floor((this.extension.width() * normalisedPos) - ((this.$element.width()) * normalisedPos)) + horizontalPadding;
             arrowLeft = Math.floor(this.$element.width() * normalisedPos);

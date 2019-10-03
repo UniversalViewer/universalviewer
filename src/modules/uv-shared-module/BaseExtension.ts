@@ -1,5 +1,5 @@
 import { IDependencies } from "./IDependencies";
-import { UVUtils } from "../../Utils";
+import { isValidUrl } from "../../Utils";
 import { Auth09 } from "./Auth09";
 import { Auth1 } from "./Auth1";
 import { AuthDialogue } from "../../modules/uv-dialogues-module/AuthDialogue";
@@ -16,6 +16,11 @@ import { MetricType } from "../../modules/uv-shared-module/MetricType";
 import { RestrictedDialogue } from "../../modules/uv-dialogues-module/RestrictedDialogue";
 import { Shell } from "./Shell";
 import { SynchronousRequire } from "../../SynchronousRequire";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
+import { ViewingHint } from "@iiif/vocabulary";
+import * as KeyCodes from "@edsilv/key-codes";
+import { Bools, Dates, Documents, Objects, Storage, StorageType, Urls, Strings } from "@edsilv/utils";
 
 export class BaseExtension implements IExtension {
 
@@ -89,7 +94,7 @@ export class BaseExtension implements IExtension {
             this.$element.addClass('lightbox');
         }
 
-        if (Utils.Documents.supportsFullscreen()) {
+        if (Documents.supportsFullscreen()) {
             this.$element.addClass('fullscreen-supported');
         }
 
@@ -101,30 +106,30 @@ export class BaseExtension implements IExtension {
         // events
         if (!this.data.isReload) {
 
-            const visibilityProp: string | null = Utils.Documents.getHiddenProp();
+            const visibilityProp: string | null = Documents.getHiddenProp();
 
             if (visibilityProp) {
                 const event: string = visibilityProp.replace(/[H|h]idden/,'') + 'visibilitychange';
                 document.addEventListener(event, () => {
                     // resize after a tab has been shown (fixes safari layout issue)
-                    if (!Utils.Documents.isHidden()){
+                    if (!Documents.isHidden()){
                         this.resize();
                     }
                 });
             }
 
-            if (Utils.Bools.getBool(this.data.config.options.dropEnabled, true)) {
+            if (Bools.getBool(this.data.config.options.dropEnabled, true)) {
                 this.$element.on('drop', (e => {
                     e.preventDefault();
                     const dropUrl: any = (<any>e.originalEvent).dataTransfer.getData('URL');
-                    const a: HTMLAnchorElement = Utils.Urls.getUrlParts(dropUrl);
-                    let manifestUri: string | null = Utils.Urls.getQuerystringParameterFromString('manifest', a.search);
+                    const a: HTMLAnchorElement = Urls.getUrlParts(dropUrl);
+                    let manifestUri: string | null = Urls.getQuerystringParameterFromString('manifest', a.search);
 
                     if (!manifestUri) {
                         // look for collection param
-                        manifestUri = Utils.Urls.getQuerystringParameterFromString('collection', a.search);
+                        manifestUri = Urls.getQuerystringParameterFromString('collection', a.search);
                     }
-                    //var canvasUri = Utils.Urls.getQuerystringParameterFromString('canvas', url.search);
+                    //var canvasUri = Urls.getQuerystringParameterFromString('canvas', url.search);
 
                     if (manifestUri) {
                         this.fire(BaseEvents.DROP, manifestUri);
@@ -381,7 +386,7 @@ export class BaseExtension implements IExtension {
         this.component.subscribe(BaseEvents.OPEN, () => {
             this.fire(BaseEvents.OPEN);
 
-            const openUri: string = Utils.Strings.format(this.data.config.options.openTemplate, this.helper.manifestUri);
+            const openUri: string = Strings.format(this.data.config.options.openTemplate, this.helper.manifestUri);
 
             window.open(openUri);
         });
@@ -785,7 +790,7 @@ export class BaseExtension implements IExtension {
                 }
             });
     
-            const limitLocales: boolean = Utils.Bools.getBool(this.data.config.options.limitLocales, false);
+            const limitLocales: boolean = Bools.getBool(this.data.config.options.limitLocales, false);
     
             if (!limitLocales) {
                 availableLocales.forEach((availableLocale: any) => {
@@ -871,7 +876,7 @@ export class BaseExtension implements IExtension {
         // If not embedded on an external domain (this causes CORS errors when fetching parent url)
         if (!this.data.embedded) {
             // Use the current page URL with hash params
-            if (Utils.Documents.isInIFrame()) {
+            if (Documents.isInIFrame()) {
                 return (<any>parent.document).location.href;
             } else {
                 return (<any>document).location.href;
@@ -906,16 +911,16 @@ export class BaseExtension implements IExtension {
     }
 
     addTimestamp(uri: string): string {
-        return uri + "?t=" + Utils.Dates.getTimeStamp();
+        return uri + "?t=" + Dates.getTimeStamp();
     }
 
     getDomain(): string {
-        const parts: any = Utils.Urls.getUrlParts(this.helper.manifestUri);
+        const parts: any = Urls.getUrlParts(this.helper.manifestUri);
         return parts.host;
     }
 
     getAppUri(): string {
-        const parts: any = Utils.Urls.getUrlParts((<any>document).location.href);
+        const parts: any = Urls.getUrlParts((<any>document).location.href);
         const origin: string = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
         let pathname: string = parts.pathname;
 
@@ -928,7 +933,7 @@ export class BaseExtension implements IExtension {
         let appUri: string = origin + pathname;
         let root: string = '';
 
-        if (!Utils.Documents.isInIFrame()) {
+        if (!Documents.isInIFrame()) {
 
             root = this.data.root || '';
             
@@ -942,7 +947,7 @@ export class BaseExtension implements IExtension {
         }
 
         // if root is a URL, use that instead of appUri.
-        if (UVUtils.isValidUrl(root)) {
+        if (isValidUrl(root)) {
             return root + 'uv.html';
         }
 
@@ -951,9 +956,9 @@ export class BaseExtension implements IExtension {
     }
 
     getSettings(): ISettings {
-        if (Utils.Bools.getBool(this.data.config.options.saveUserSettings, false)) {
+        if (Bools.getBool(this.data.config.options.saveUserSettings, false)) {
 
-            const settings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+            const settings: any = Storage.get("uv.settings", StorageType.LOCAL);
             
             if (settings) {
                 return $.extend(this.data.config.options, settings.value);
@@ -964,16 +969,16 @@ export class BaseExtension implements IExtension {
     }
 
     updateSettings(settings: ISettings): void {
-        if (Utils.Bools.getBool(this.data.config.options.saveUserSettings, false)) {
+        if (Bools.getBool(this.data.config.options.saveUserSettings, false)) {
 
-            const storedSettings: any = Utils.Storage.get("uv.settings", Utils.StorageType.local);
+            const storedSettings: any = Storage.get("uv.settings", StorageType.LOCAL);
 
             if (storedSettings) {
                 settings = $.extend(storedSettings.value, settings);
             }
                 
             // store for ten years
-            Utils.Storage.set("uv.settings", settings, 315360000, Utils.StorageType.local);
+            Storage.set("uv.settings", settings, 315360000, StorageType.LOCAL);
         }
         
         this.data.config.options = $.extend(this.data.config.options, settings);
@@ -1077,7 +1082,7 @@ export class BaseExtension implements IExtension {
             }
         });
 
-        const storageStrategy: string = this.data.config.options.tokenStorage;
+        const storageStrategy: StorageType = this.data.config.options.tokenStorage;
         const authAPIVersion: number = this.data.config.options.authAPIVersion;
 
         // if using auth api v1
@@ -1127,7 +1132,7 @@ export class BaseExtension implements IExtension {
 
         resource.data.index = resource.index;
 
-        return Utils.Objects.toPlainObject(resource.data);
+        return Objects.toPlainObject(resource.data);
     }
 
     getMediaFormats(canvas: manifesto.Canvas): manifesto.AnnotationBody[] {
@@ -1225,11 +1230,11 @@ export class BaseExtension implements IExtension {
     }
 
     isHeaderPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.data.config.options.headerPanelEnabled, true);
+        return Bools.getBool(this.data.config.options.headerPanelEnabled, true);
     }
 
     isLeftPanelEnabled(): boolean {
-        if (Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)) {
+        if (Bools.getBool(this.data.config.options.leftPanelEnabled, true)) {
             if (this.helper.hasParentCollection()) {
                 return true;
             } else if (this.helper.isMultiCanvas()) {
@@ -1246,11 +1251,11 @@ export class BaseExtension implements IExtension {
     }
 
     isRightPanelEnabled(): boolean {
-        return  Utils.Bools.getBool(this.data.config.options.rightPanelEnabled, true);
+        return  Bools.getBool(this.data.config.options.rightPanelEnabled, true);
     }
 
     isFooterPanelEnabled(): boolean {
-        return Utils.Bools.getBool(this.data.config.options.footerPanelEnabled, true);
+        return Bools.getBool(this.data.config.options.footerPanelEnabled, true);
     }
 
     isMobile(): boolean {
@@ -1258,7 +1263,7 @@ export class BaseExtension implements IExtension {
     }
 
     useArrowKeysToNavigate(): boolean {
-        return Utils.Bools.getBool(this.data.config.options.useArrowKeysToNavigate, true);
+        return Bools.getBool(this.data.config.options.useArrowKeysToNavigate, true);
     }
 
     bookmark(): void {

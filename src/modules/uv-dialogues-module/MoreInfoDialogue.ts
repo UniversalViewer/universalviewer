@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Bools } from "@edsilv/utils";
 
 export class MoreInfoDialogue extends Dialogue {
 
@@ -60,7 +61,7 @@ export class MoreInfoDialogue extends Dialogue {
             canvasLabels: this.extension.getCanvasLabels(this.content.page),
             content: this.config.content,
             copiedMessageDuration: 2000,
-            copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
+            copyToClipboardEnabled: Bools.getBool(this.config.options.copyToClipboardEnabled, false),
             helper: this.extension.helper,
             licenseFormatter: null,
             limit: this.config.options.textLimit || 4,
@@ -70,7 +71,7 @@ export class MoreInfoDialogue extends Dialogue {
             range: this.extension.getCurrentCanvasRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html: string) => {
-                return UVUtils.sanitize(html);
+                return sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages
         };

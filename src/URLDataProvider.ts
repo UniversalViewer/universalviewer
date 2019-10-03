@@ -1,4 +1,5 @@
 import {UVDataProvider} from "./UVDataProvider";
+import {Urls} from "@edsilv/utils";
 
 export default class URLDataProvider extends UVDataProvider {
 
@@ -7,15 +8,15 @@ export default class URLDataProvider extends UVDataProvider {
     }
 
     public get(key: string, defaultValue: string | null): string | null {
-        return Utils.Urls.getHashParameter(key, document) || defaultValue;
+        return Urls.getHashParameter(key, document) || defaultValue;
     }
 
     public set(key: string, value: string): void {
         if (!this.readonly) {
             if (value) {
-                Utils.Urls.setHashParameter(key, value.toString(), document);
+                Urls.setHashParameter(key, value.toString(), document);
             } else {
-                Utils.Urls.setHashParameter(key, '', document);
+                Urls.setHashParameter(key, '', document);
             }
         }
     }

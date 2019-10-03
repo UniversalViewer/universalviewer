@@ -11,6 +11,9 @@ import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/Mor
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
+import { ExternalResourceType } from "@iiif/manifold/node_modules/@iiif/vocabulary";
+import { Bools, Strings } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class Extension extends BaseExtension implements IVirtexExtension {
 
@@ -101,7 +104,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     }
 
     isLeftPanelEnabled(): boolean{
-        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)
+        return Bools.getBool(this.data.config.options.leftPanelEnabled, true)
                 && (this.helper.isMultiCanvas() || this.helper.isMultiSequence());
     }
 
@@ -126,7 +129,7 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
         const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 }

@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {CenterPanel} from "../uv-shared-module/CenterPanel";
-import {UVUtils} from "../../Utils";
+import {sanitize} from "../../Utils";
+import * as manifesto from "manifesto.js";
 
 export class FileLinkCenterPanel extends CenterPanel {
 
@@ -67,7 +68,7 @@ export class FileLinkCenterPanel extends CenterPanel {
                 let label: string | null = manifesto.LanguageMap.getValue(annotationBody.getLabel());
 
                 if (label) {
-                    $label.text(UVUtils.sanitize(label));
+                    $label.text(sanitize(label));
                 }
 
                 const thumbnail: string = annotation.getProperty('thumbnail');
@@ -81,7 +82,7 @@ export class FileLinkCenterPanel extends CenterPanel {
                 let description: string | null = annotationBody.getProperty('description');
 
                 if (description) {
-                    $description.text(UVUtils.sanitize(description));
+                    $description.text(sanitize(description));
 
                     if (id) {
                         $description.prop('href', id);
@@ -98,7 +99,7 @@ export class FileLinkCenterPanel extends CenterPanel {
         super.resize();
 
         if (this.title) {
-            this.$title.text(UVUtils.sanitize(this.title));
+            this.$title.text(sanitize(this.title));
         }
 
         this.$scroll.height(this.$content.height() - this.$scroll.verticalMargins());

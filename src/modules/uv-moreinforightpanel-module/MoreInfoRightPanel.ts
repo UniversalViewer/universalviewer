@@ -1,6 +1,8 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {RightPanel} from "../uv-shared-module/RightPanel";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Bools, Urls } from "@edsilv/utils";
+import * as manifold from "@iiif/manifold";
 
 export class MoreInfoRightPanel extends RightPanel {
 
@@ -39,7 +41,7 @@ export class MoreInfoRightPanel extends RightPanel {
 
         this.metadataComponent.on('iiifViewerLinkClicked', (href: string) => {
             // get the hash param.
-            const rangeId: string | null = Utils.Urls.getHashParameterFromString('rid', href);
+            const rangeId: string | null = Urls.getHashParameterFromString('rid', href);
 
             if (rangeId) {
                 const range: manifesto.Range | null = this.extension.helper.getRangeById(rangeId);
@@ -74,18 +76,18 @@ export class MoreInfoRightPanel extends RightPanel {
             canvasLabels: this.extension.getCanvasLabels(this.content.page),
             content: this.config.content,
             copiedMessageDuration: 2000,
-            copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
+            copyToClipboardEnabled: Bools.getBool(this.config.options.copyToClipboardEnabled, false),
             helper: this.extension.helper,
             licenseFormatter: new manifold.UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
             limitType: IIIFComponents.LimitType.LINES,
-            limitToRange: Utils.Bools.getBool(this.config.options.limitToRange, false),
+            limitToRange: Bools.getBool(this.config.options.limitToRange, false),
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
             range: this._getCurrentRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
             sanitizer: (html: string) => {
-                return UVUtils.sanitize(html);
+                return sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages
         };

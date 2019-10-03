@@ -5,6 +5,7 @@ import {Information} from "../uv-shared-module/Information";
 import {InformationAction} from "../uv-shared-module/InformationAction";
 import {InformationArgs} from "../uv-shared-module/InformationArgs";
 import {InformationFactory} from "../uv-shared-module/InformationFactory";
+import { Bools } from "@edsilv/utils";
 
 export class HeaderPanel extends BaseView {
 
@@ -84,7 +85,7 @@ export class HeaderPanel extends BaseView {
         });
 
 
-        if (!Utils.Bools.getBool(this.options.centerOptionsEnabled, true)) {
+        if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
             this.$centerOptions.hide();
         }
 
@@ -107,7 +108,7 @@ export class HeaderPanel extends BaseView {
     }
 
     updateSettingsButton(): void {
-        const settingsEnabled: boolean = Utils.Bools.getBool(this.options.settingsButtonEnabled, true);
+        const settingsEnabled: boolean = Bools.getBool(this.options.settingsButtonEnabled, true);
         if (!settingsEnabled){
             this.$settingsButton.hide();
         } else {
@@ -119,7 +120,7 @@ export class HeaderPanel extends BaseView {
         const locales: ILocale[] | undefined = this.extension.data.locales;
 
         if (locales) {
-            return locales.length > 1 && Utils.Bools.getBool(this.options.localeToggleEnabled, false);
+            return locales.length > 1 && Bools.getBool(this.options.localeToggleEnabled, false);
         }
         
         return false;

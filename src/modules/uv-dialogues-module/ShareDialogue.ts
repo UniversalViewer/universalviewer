@@ -1,5 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
+import { Bools, Numbers } from "@edsilv/utils";
 
 export class ShareDialogue extends Dialogue {
 
@@ -147,11 +148,11 @@ export class ShareDialogue extends Dialogue {
         this.$footer.append(this.$termsOfUseButton);
 
         this.$widthInput.on('keydown', (e) => {
-            return Utils.Numbers.numericalInput(e);
+            return Numbers.numericalInput(e);
         });
 
         this.$heightInput.on('keydown', (e) => {
-            return Utils.Numbers.numericalInput(e);
+            return Numbers.numericalInput(e);
         });
 
         this.$shareInput.focus(function() {
@@ -255,7 +256,7 @@ export class ShareDialogue extends Dialogue {
     }
 
     updateInstructions(): void {
-        if (Utils.Bools.getBool(this.options.instructionsEnabled, false)) {
+        if (Bools.getBool(this.options.instructionsEnabled, false)) {
             this.$shareHeader.show();
             this.$embedHeader.show();
             this.$shareHeader.text(this.content.shareInstructions);
@@ -318,7 +319,7 @@ export class ShareDialogue extends Dialogue {
             return;
         }
 
-        if (Utils.Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
+        if (Bools.getBool(this.config.options.shareFrameEnabled, true) && shareUrl) {
             this.$shareFrame.prop('src', shareUrl);
             this.$shareFrame.show();
         } else {
@@ -330,7 +331,7 @@ export class ShareDialogue extends Dialogue {
 
         const requiredStatement: manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
 
-        if (Utils.Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
+        if (Bools.getBool(this.extension.data.config.options.termsOfUseEnabled, false) && requiredStatement && requiredStatement.value) {
             this.$termsOfUseButton.show();
         } else {
             this.$termsOfUseButton.hide();

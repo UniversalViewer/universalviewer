@@ -5,12 +5,16 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Async, Bools, Dimensions } from "@edsilv/utils";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
+import { ViewingDirection } from "@iiif/vocabulary";
 
 export class SeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
-    currentAnnotationRect: AnnotationRect;
+    currentAnnotationRect: manifold.AnnotationRect;
     currentBounds: any;
     handler: any;
     initialBounds: any;
@@ -22,7 +26,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     nextButtonEnabled: boolean = false;
     pages: manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
-    previousAnnotationRect: AnnotationRect;
+    previousAnnotationRect: manifold.AnnotationRect;
     userData: any;
     viewer: any;
     viewerId: string;
@@ -115,7 +119,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     whenCreated(cb: () => void): void {
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return this.isCreated;
         }, cb);
     }
@@ -158,7 +162,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
-            showHomeControl: Utils.Bools.getBool(this.config.options.showHomeControl, false),
+            showHomeControl: Bools.getBool(this.config.options.showHomeControl, false),
             showFullPageControl: false,
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
             maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
@@ -167,13 +171,13 @@ export class SeadragonCenterPanel extends CenterPanel {
             navigatorPosition: this.config.options.navigatorPosition || "BOTTOM_RIGHT",
             animationTime: this.config.options.animationTime || 1.2,
             visibilityRatio: this.config.options.visibilityRatio || 0.5,
-            constrainDuringPan: Utils.Bools.getBool(this.config.options.constrainDuringPan, false),
-            immediateRender: Utils.Bools.getBool(this.config.options.immediateRender, false),
+            constrainDuringPan: Bools.getBool(this.config.options.constrainDuringPan, false),
+            immediateRender: Bools.getBool(this.config.options.immediateRender, false),
             blendTime: this.config.options.blendTime || 0,
-            autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
+            autoHideControls: Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: this.extension.data.root + '/img/',
             gestureSettingsMouse: {
-                clickToZoom: Utils.Bools.getBool(this.extension.data.config.options.clickToZoomEnabled, true)
+                clickToZoom: Bools.getBool(this.extension.data.config.options.clickToZoomEnabled, true)
             },
             navImages: {
                 zoomIn: {
@@ -328,7 +332,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     createNavigationButtons() {
 
-        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.leftToRight();
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
 
@@ -349,9 +353,9 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
         this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
 
-        switch (viewingDirection.toString()) {
-            case ViewingDirection.bottomToTop().toString() :
-            case ViewingDirection.topToBottom().toString() :
+        switch (viewingDirection) {
+            case ViewingDirection.BOTTOM_TO_TOP :
+            case ViewingDirection.TOP_TO_BOTTOM :
                 this.$prevButton.addClass('vertical');
                 this.$nextButton.addClass('vertical');;
                 break;
@@ -365,13 +369,13 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.prevButtonEnabled) return;
 
-            switch (viewingDirection.toString()) {
-                case ViewingDirection.leftToRight().toString() :
-                case ViewingDirection.bottomToTop().toString() :
-                case ViewingDirection.topToBottom().toString() :
+            switch (viewingDirection) {
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                case ViewingDirection.TOP_TO_BOTTOM :
                     this.component.publish(BaseEvents.PREV);
                     break;
-                case ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT :
                     this.component.publish(BaseEvents.NEXT);
                     break;
             }
@@ -383,13 +387,13 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.nextButtonEnabled) return;
 
-            switch (viewingDirection.toString()) {
-                case ViewingDirection.leftToRight().toString() :
-                case ViewingDirection.bottomToTop().toString() :
-                case ViewingDirection.topToBottom().toString() :
+            switch (viewingDirection) {
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                case ViewingDirection.TOP_TO_BOTTOM :
                     this.component.publish(BaseEvents.NEXT);
                     break;
-                case ViewingDirection.rightToLeft().toString() :
+                case ViewingDirection.RIGHT_TO_LEFT :
                     this.component.publish(BaseEvents.PREV);
                     break;
             }
@@ -532,9 +536,9 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             $('.navigator').addClass('extraMargin');
 
-            const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.leftToRight();
+            const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
-            if (viewingDirection.toString() === ViewingDirection.rightToLeft().toString()) {
+            if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
                 if (this.extension.helper.isFirstCanvas()) {
                     this.disableNextButton();
                 } else {
@@ -601,7 +605,7 @@ export class SeadragonCenterPanel extends CenterPanel {
                 const div: HTMLElement = document.createElement('div');
                 div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
                 div.className = 'searchOverlay';
-                div.title = UVUtils.sanitize(overlayRect.chars);
+                div.title = sanitize(overlayRect.chars);
 
                 this.viewer.addOverlay(div, overlayRect);
             }
@@ -766,7 +770,7 @@ export class SeadragonCenterPanel extends CenterPanel {
             let rect: manifold.AnnotationRect = annotationRects[i];
             let viewportBounds: any = this.viewer.viewport.getBounds();
 
-            rect.isVisible = Utils.Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
+            rect.isVisible = Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
         }
     }
 
@@ -776,7 +780,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
+        return Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
     }
 
     prevAnnotation(): void {
@@ -888,7 +892,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         // if zoomToBoundsEnabled, zoom to the annotation's bounds.
         // otherwise, pan into view preserving the current zoom level.
-        if (Utils.Bools.getBool(this.extension.data.config.options.zoomToBoundsEnabled, false)) {
+        if (Bools.getBool(this.extension.data.config.options.zoomToBoundsEnabled, false)) {
             this.fitToBounds(new Bounds(annotationRect.viewportX, annotationRect.viewportY, annotationRect.width, annotationRect.height), false);
         } else {
             const x: number = annotationRect.viewportX - ((this.currentBounds.w * 0.5) - annotationRect.width * 0.5);
@@ -957,27 +961,27 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (!this.isCreated) return;
 
         if (this.title) {
-            this.$title.text(UVUtils.sanitize(this.title));
+            this.$title.text(sanitize(this.title));
         }
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
-        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.leftToRight();;
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         if (this.extension.helper.isMultiCanvas() && this.$prevButton && this.$nextButton) {
 
             const verticalButtonPos: number = Math.floor(this.$content.width() / 2);
 
-            switch (viewingDirection.toString()) {
-                case ViewingDirection.bottomToTop().toString() :
+            switch (viewingDirection) {
+                case ViewingDirection.BOTTOM_TO_TOP :
                     this.$prevButton.addClass('down');
                     this.$nextButton.addClass('up');
                     this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
                     this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()));
                     this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
                     break;
-                case ViewingDirection.topToBottom().toString() :
+                case ViewingDirection.TOP_TO_BOTTOM :
                     this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
                     this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
                     this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()));
@@ -1012,7 +1016,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     
     setNavigatorVisible(): void {
 
-        const navigatorEnabled: boolean = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.isDesktopMetric();
+        const navigatorEnabled: boolean = Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.isDesktopMetric();
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         

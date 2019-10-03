@@ -4,7 +4,10 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {Mode} from "../../extensions/uv-seadragon-extension/Mode";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import { ViewingDirection } from "@iiif/vocabulary";
+import { Bools, Strings } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class PagingHeaderPanel extends HeaderPanel {
 
@@ -103,7 +106,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         this.$searchText = $('<input class="searchText" maxlength="50" type="text" tabindex="0" aria-label="' + this.content.pageSearchLabel + '"/>');
         this.$search.append(this.$searchText);
 
-        if (Utils.Bools.getBool(this.options.autoCompleteBoxEnabled, true)) {
+        if (Bools.getBool(this.options.autoCompleteBoxEnabled, true)) {
             this.$searchText.hide();
             this.$autoCompleteBox = $('<input class="autocompleteText" type="text" maxlength="100" aria-label="' + this.content.pageSearchLabel + '"/>');
             this.$search.append(this.$autoCompleteBox);
@@ -141,9 +144,9 @@ export class PagingHeaderPanel extends HeaderPanel {
                 },
                 300,
                 0,
-                Utils.Bools.getBool(this.options.autocompleteAllowWords, false)
+                Bools.getBool(this.options.autocompleteAllowWords, false)
             );
-        } else if (Utils.Bools.getBool(this.options.imageSelectionBoxEnabled, true)) {
+        } else if (Bools.getBool(this.options.imageSelectionBoxEnabled, true)) {
             this.$selectionBoxOptions = $('<div class="image-selectionbox-options"></div>');
             this.$centerOptions.append(this.$selectionBoxOptions);
             this.$imageSelectionBox = $('<select class="image-selectionbox" name="image-select" tabindex="0" ></select>');
@@ -151,7 +154,7 @@ export class PagingHeaderPanel extends HeaderPanel {
 
             for (let imageIndex = 0; imageIndex < this.extension.helper.getTotalCanvases(); imageIndex++) {
                 const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(imageIndex);
-                const label: string = UVUtils.sanitize(<string>manifesto.LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
+                const label: string = sanitize(<string>manifesto.LanguageMap.getValue(canvas.getLabel(), this.extension.helper.options.locale));
                 this.$imageSelectionBox.append('<option value=' + (imageIndex) + '>' + label + '</option>')
             }
 
@@ -316,11 +319,11 @@ export class PagingHeaderPanel extends HeaderPanel {
             // Only activate click actions for mode buttons when controls are
             // visible, since otherwise, clicking on the "Image" label can
             // trigger unexpected/undesired side effects.
-            this.$imageModeOption.on('click', (e) => {
+            this.$imageModeOption.on('click', () => {
                 this.component.publish(Events.MODE_CHANGED, Mode.image.toString());
             });
 
-            this.$pageModeOption.on('click', (e) => {
+            this.$pageModeOption.on('click', () => {
                 this.component.publish(Events.MODE_CHANGED, Mode.page.toString());
             });
         }
@@ -377,7 +380,7 @@ export class PagingHeaderPanel extends HeaderPanel {
         //     }
         // });
 
-        if (!Utils.Bools.getBool(this.options.pagingToggleEnabled, true)){
+        if (!Bools.getBool(this.options.pagingToggleEnabled, true)){
             this.$pagingToggleButtons.hide();
         }
     }
@@ -458,7 +461,7 @@ export class PagingHeaderPanel extends HeaderPanel {
     }
 
     pagingToggleIsVisible(): boolean {
-        return Utils.Bools.getBool(this.options.pagingToggleEnabled, true) && this.extension.helper.isPagingAvailable();
+        return Bools.getBool(this.options.pagingToggleEnabled, true) && this.extension.helper.isPagingAvailable();
     }
 
     updateGalleryButton(): void {
@@ -468,7 +471,7 @@ export class PagingHeaderPanel extends HeaderPanel {
     }
 
     galleryIsVisible(): boolean {
-        return Utils.Bools.getBool(this.options.galleryButtonEnabled, true) && this.extension.isLeftPanelEnabled();
+        return Bools.getBool(this.options.galleryButtonEnabled, true) && this.extension.isLeftPanelEnabled();
     }
 
     setTotal(): void {
@@ -476,9 +479,9 @@ export class PagingHeaderPanel extends HeaderPanel {
         const of: string = this.content.of;
 
         if (this.isPageModeEnabled()) {
-            this.$total.html(Utils.Strings.format(of, this.extension.helper.getLastCanvasLabel(true)));
+            this.$total.html(Strings.format(of, this.extension.helper.getLastCanvasLabel(true)));
         } else {
-            this.$total.html(Utils.Strings.format(of, this.extension.helper.getTotalCanvases().toString()));
+            this.$total.html(Strings.format(of, this.extension.helper.getTotalCanvases().toString()));
         }
     }
 

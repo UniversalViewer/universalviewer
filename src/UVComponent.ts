@@ -10,13 +10,16 @@ import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
 import {PubSub} from "./PubSub";
-import {UVUtils} from "./Utils";
+import { propertiesChanged } from "./Utils";
 import "./Polyfills";
-import { RenderingFormat, MediaType, ExternalResourceType } from "../node_modules/@iiif/vocabulary/types/index";
+import { RenderingFormat, MediaType, ExternalResourceType } from "@iiif/vocabulary";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
+import { IExtensionCollection } from "./modules/uv-shared-module/IExtensionCollection";
 
 export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
 
-    private _extensions: IExtension[];
+    private _extensions: IExtensionCollection;
     private _pubsub: PubSub;
     public extension: IExtension | null;
     public isFullScreen: boolean = false;
@@ -39,98 +42,98 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             console.error("UV failed to initialise");
         }
 
-        this._extensions = <IExtension[]>{};
+        this._extensions = {};
 
         this._extensions[ExternalResourceType.CANVAS] = {
             type: OpenSeadragonExtension,
-            name: 'uv-seadragon-extension'
+            name: "uv-seadragon-extension"
         };
 
         this._extensions[ExternalResourceType.IMAGE] = {
             type: OpenSeadragonExtension,
-            name: 'uv-seadragon-extension'
+            name: "uv-seadragon-extension"
         };
 
         this._extensions[ExternalResourceType.MOVING_IMAGE] = {
             type: MediaElementExtension,
-            name: 'uv-mediaelement-extension'
+            name: "uv-mediaelement-extension"
         };
 
         this._extensions[ExternalResourceType.PHYSICAL_OBJECT] = {
             type: VirtexExtension,
-            name: 'uv-virtex-extension'
+            name: "uv-virtex-extension"
         };
 
         this._extensions[ExternalResourceType.SOUND] = {
             type: MediaElementExtension,
-            name: 'uv-mediaelement-extension'
+            name: "uv-mediaelement-extension"
         };
 
         this._extensions[RenderingFormat.PDF] = {
             type: PDFExtension,
-            name: 'uv-pdf-extension'
+            name: "uv-pdf-extension"
         };
 
         // presentation 3
 
         this._extensions[MediaType.JPG] = {
             type: OpenSeadragonExtension,
-            name: 'uv-seadragon-extension'
+            name: "uv-seadragon-extension"
         };
         
         this._extensions[MediaType.PDF] = {
             type: PDFExtension,
-            name: 'uv-pdf-extension'
+            name: "uv-pdf-extension"
         };
 
         this._extensions[MediaType.MP4] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
         this._extensions[MediaType.WEBM] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
         this._extensions[MediaType.THREEJS] = {
             type: VirtexExtension,
-            name: 'uv-virtex-extension'
+            name: "uv-virtex-extension"
         };
 
-        this._extensions['av'] = {
+        this._extensions["av"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['video'] = {
+        this._extensions["video"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['audio/mp3'] = {
+        this._extensions["audio/mp3"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['audio/mp4'] = {
+        this._extensions["audio/mp4"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['application/vnd.apple.mpegurl'] = {
+        this._extensions["application/vnd.apple.mpegurl"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['application/dash+xml'] = {
+        this._extensions["application/dash+xml"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['default'] = {
+        this._extensions["default"] = {
             type: DefaultExtension,
-            name: 'uv-default-extension'
+            name: "uv-default-extension"
         };
 
         this.set(this.options.data);
@@ -147,20 +150,20 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             config: undefined,
             configUri: undefined,
             embedded: false,
-            manifestUri: '',
+            manifestUri: "",
             isLightbox: false,
             isReload: false,
             limitLocales: false,
             locales: [
                 {
-                    name: 'en-GB'
+                    name: "en-GB"
                 }
             ],
             manifestIndex: 0,
             rangeId: undefined,
             rotation: 0,
             sequenceIndex: 0,
-            xywh: ''
+            xywh: ""
         };
     }
 
@@ -184,7 +187,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         } else {
 
             // changing any of these data properties forces the UV to reload.
-            if (UVUtils.propertiesChanged(data, this.extension.data, ['collectionIndex', 'manifestIndex', 'config', 'configUri', 'domain', 'embedDomain', 'embedScriptUri', 'manifestUri', 'isHomeDomain', 'isLightbox', 'isOnlyInstance', 'isReload', 'locales', 'root'])) {
+            if (propertiesChanged(data, this.extension.data, ['collectionIndex', 'manifestIndex', 'config', 'configUri', 'domain', 'embedDomain', 'embedScriptUri', 'manifestUri', 'isHomeDomain', 'isLightbox', 'isOnlyInstance', 'isReload', 'locales', 'root'])) {
                 this.extension.data = Object.assign({}, this.extension.data, data);
                 this._reload(this.extension.data);
             } else {
@@ -289,21 +292,21 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                         const format: MediaType | null = body[0].getFormat();
 
                         if (format) {
-                            extension = that._extensions[format.toString()];
+                            extension = that._extensions[format.toString()].type;
 
                             if (!extension) {
                                 // try type
                                 const type: ExternalResourceType | null = body[0].getType();
                             
                                 if (type) {
-                                    extension = that._extensions[type.toString()];
+                                    extension = that._extensions[type.toString()].type;
                                 }
                             }
                         } else {
                             const type: ExternalResourceType | null = body[0].getType();
 
                             if (type) {
-                                extension = that._extensions[type.toString()];
+                                extension = that._extensions[type.toString()].type;
                             }
                         }
                     }
@@ -313,20 +316,20 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
                     if (canvasType) {
                         // try using canvasType
-                        extension = that._extensions[canvasType.toString()];
+                        extension = that._extensions[canvasType.toString()].type;
                     }
 
                     // if there isn't an extension for the canvasType, try the format
                     if (!extension) {
                         const format: any = canvas.getProperty('format');
-                        extension = that._extensions[format];
+                        extension = that._extensions[format].type;
                     }
                 }
             //}
 
             // if there still isn't a matching extension, use the default extension.
             if (!extension) {
-                extension = that._extensions['default'];
+                extension = that._extensions['default'].type;
             }
 
             that._configure(data, extension, (config: any) => {
