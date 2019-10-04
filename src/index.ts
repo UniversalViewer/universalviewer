@@ -27,14 +27,7 @@ if (typeof jQuery === "function") {
 // - bundled data providers
 // - UVComponent
 requirejs([
-    './lib/base64.min.js',
-    './lib/browserdetect.js',
-    './lib/detectmobilebrowser.js',
-    './lib/jquery.xdomainrequest.js',
-    './lib/modernizr.js',
-    './lib/BaseComponent.js',
-    './lib/jquery-plugins.js',
-    './lib/xss.min.js',
+    ,
     'URLDataProvider',
     'UVComponent'
 ], (

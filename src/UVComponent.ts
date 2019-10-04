@@ -11,7 +11,6 @@ import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
 import {PubSub} from "./PubSub";
 import { propertiesChanged } from "./Utils";
-import "./Polyfills";
 import { RenderingFormat, MediaType, ExternalResourceType } from "@iiif/vocabulary";
 import * as manifold from "@iiif/manifold";
 import * as manifesto from "manifesto.js";

@@ -1,6 +1,6 @@
 import { IUVData } from "./IUVData";
+const filterXSS = require("xss");
 
-declare var filterXSS: any;
 
 export const sanitize = (html: string) => {
     return filterXSS(html, {
