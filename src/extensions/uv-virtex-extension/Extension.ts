@@ -11,7 +11,7 @@ import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/Mor
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
 import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
-import { ExternalResourceType } from "@iiif/manifold/node_modules/@iiif/vocabulary";
+import { ExternalResourceType } from "@iiif/vocabulary";
 import { Bools, Strings } from "@edsilv/utils";
 import * as manifesto from "manifesto.js";
 

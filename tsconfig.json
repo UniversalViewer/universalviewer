@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "sourceMap": false,
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": false,
     "noLib": false,
-    "lib": ["es6", "dom"],
+    "lib": ["es2015", "dom"],
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": false,
@@ -20,8 +20,7 @@
       "jest",
       "jquery",
       "modernizr", 
-      "node", 
-      "three"
+      "node"
     ]
   },
   "exclude": [
