@@ -1,9 +1,9 @@
 import {UVDataProvider} from "./UVDataProvider";
 import {Urls} from "@edsilv/utils";
 
-export default class URLDataProvider extends UVDataProvider {
+export class URLDataProvider extends UVDataProvider {
 
-    constructor(readonly: boolean) {
+    constructor(readonly: boolean = false) {
         super(readonly);
     }
 

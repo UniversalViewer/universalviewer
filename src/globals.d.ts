@@ -59,7 +59,7 @@ interface Window {
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience (make this generic)
     PDFObject: any;
-    UV: any;
+    UVURLDataProvider: any;
     THREE: any;
     Event: any;
     CustomEvent: any;

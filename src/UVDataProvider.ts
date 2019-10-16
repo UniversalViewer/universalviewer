@@ -8,11 +8,11 @@ export class UVDataProvider implements IUVDataProvider {
         this.readonly = readonly;
     }
 
-    public get(key: string, defaultValue: string | null): string | null {
+    public get(_key: string, _defaultValue: string | null): string | null {
         return null;
     }
 
-    public set(key: string, value: string): void {
+    public set(_key: string, _value: string): void {
 
     }
 }

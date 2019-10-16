@@ -15,18 +15,21 @@ import { RenderingFormat, MediaType, ExternalResourceType } from "@iiif/vocabula
 import * as manifold from "@iiif/manifold";
 import * as manifesto from "manifesto.js";
 import { IExtensionCollection } from "./modules/uv-shared-module/IExtensionCollection";
+import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
+import { URLDataProvider } from "./URLDataProvider";
 
-export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
+export default class Viewer extends BaseComponent implements IUVComponent {
 
     private _extensions: IExtensionCollection;
     private _pubsub: PubSub;
     public extension: IExtension | null;
     public isFullScreen: boolean = false;
-    public URLDataProvider: IUVDataProvider;
+    public dataProvider: IUVDataProvider;
 
-    constructor(options: _Components.IBaseComponentOptions) {
+    constructor(options: IBaseComponentOptions) {
         super(options);
 
+        this.dataProvider = new URLDataProvider();
         this._pubsub = new PubSub();
 
         this._init();

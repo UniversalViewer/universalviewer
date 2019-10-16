@@ -9,15 +9,15 @@ const config = {
     // These are the entry point of our library. We tell webpack to use the name we assign later, when creating the bundle.
     // We also use the name to filter the second entry point for applying code minification via UglifyJS
     entry: {
-        'uv': ['./src/index.ts']
+        'UV': ['./src/index.ts']
     },
     // The output defines how and where we want the bundles. The special value `[name]` in `filename` tells Webpack to use the name we defined above.
-    // We target a UMD and name it uv. When including the bundle in the browser it will be accessible at `window.uv`
+    // We target a UMD and name it UV. When including the bundle in the browser it will be accessible at `window.UV`
     output: {
         path: resolvePath('dist-umd'),
         filename: '[name].js',
         libraryTarget: 'umd',
-        library: 'uv',
+        library: 'UV',
         umdNamedDefine: true
     },
     // Add resolve for `tsx` and `ts` files, otherwise Webpack would
