@@ -257,7 +257,7 @@ export class PDFCenterPanel extends CenterPanel {
 
                 var parameter = {
                     url: mediaUri,
-                    withCredentials: true
+                    withCredentials: canvas.externalResource.isAccessControlled()
                   } 
 
                 PDFJS.getDocument(parameter).then((pdfDoc: any) => {
