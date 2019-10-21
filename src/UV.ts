@@ -9,17 +9,28 @@ import {IExtension} from "./modules/uv-shared-module/IExtension";
 import {IUVComponent} from "./IUVComponent";
 import {IUVData} from "./IUVData";
 import {IUVDataProvider} from "./IUVDataProvider";
-import { UVUtils } from "./Utils";
+import {PubSub} from "./PubSub";
+import { propertiesChanged } from "./Utils";
+import { RenderingFormat, MediaType, ExternalResourceType } from "@iiif/vocabulary";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
+import { IExtensionCollection } from "./modules/uv-shared-module/IExtensionCollection";
+import { BaseComponent, IBaseComponentOptions } from "@iiif/base-component";
+import { URLDataProvider } from "./URLDataProvider";
 
-export default class UVComponent extends _Components.BaseComponent implements IUVComponent {
+export default class Viewer extends BaseComponent implements IUVComponent {
 
-    private _extensions: IExtension[];
+    private _extensions: IExtensionCollection;
+    private _pubsub: PubSub;
     public extension: IExtension | null;
     public isFullScreen: boolean = false;
-    public URLDataProvider: IUVDataProvider;
+    public dataProvider: IUVDataProvider;
 
-    constructor(options: _Components.IBaseComponentOptions) {
+    constructor(options: IBaseComponentOptions) {
         super(options);
+
+        this.dataProvider = new URLDataProvider();
+        this._pubsub = new PubSub();
 
         this._init();
         this._resize();
@@ -33,98 +44,98 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             console.error("UV failed to initialise");
         }
 
-        this._extensions = <IExtension[]>{};
+        this._extensions = {};
 
-        this._extensions[manifesto.ResourceType.canvas().toString()] = {
+        this._extensions[ExternalResourceType.CANVAS] = {
             type: OpenSeadragonExtension,
-            name: 'uv-seadragon-extension'
+            name: "uv-seadragon-extension"
         };
 
-        this._extensions[manifesto.ResourceType.image().toString()] = {
+        this._extensions[ExternalResourceType.IMAGE] = {
             type: OpenSeadragonExtension,
-            name: 'uv-seadragon-extension'
+            name: "uv-seadragon-extension"
         };
 
-        this._extensions[manifesto.ResourceType.movingimage().toString()] = {
+        this._extensions[ExternalResourceType.MOVING_IMAGE] = {
             type: MediaElementExtension,
-            name: 'uv-mediaelement-extension'
+            name: "uv-mediaelement-extension"
         };
 
-        this._extensions[manifesto.ResourceType.physicalobject().toString()] = {
+        this._extensions[ExternalResourceType.PHYSICAL_OBJECT] = {
             type: VirtexExtension,
-            name: 'uv-virtex-extension'
+            name: "uv-virtex-extension"
         };
 
-        this._extensions[manifesto.ResourceType.sound().toString()] = {
+        this._extensions[ExternalResourceType.SOUND] = {
             type: MediaElementExtension,
-            name: 'uv-mediaelement-extension'
+            name: "uv-mediaelement-extension"
         };
 
-        this._extensions[manifesto.RenderingFormat.pdf().toString()] = {
+        this._extensions[RenderingFormat.PDF] = {
             type: PDFExtension,
-            name: 'uv-pdf-extension'
+            name: "uv-pdf-extension"
         };
 
         // presentation 3
 
-        this._extensions[manifesto.MediaType.jpg().toString()] = {
+        this._extensions[MediaType.JPG] = {
             type: OpenSeadragonExtension,
-            name: 'uv-seadragon-extension'
+            name: "uv-seadragon-extension"
         };
         
-        this._extensions[manifesto.MediaType.pdf().toString()] = {
+        this._extensions[MediaType.PDF] = {
             type: PDFExtension,
-            name: 'uv-pdf-extension'
+            name: "uv-pdf-extension"
         };
 
-        this._extensions[manifesto.MediaType.mp4().toString()] = {
+        this._extensions[MediaType.MP4] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions[manifesto.MediaType.webm().toString()] = {
+        this._extensions[MediaType.WEBM] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions[manifesto.MediaType.threejs().toString()] = {
+        this._extensions[MediaType.THREEJS] = {
             type: VirtexExtension,
-            name: 'uv-virtex-extension'
+            name: "uv-virtex-extension"
         };
 
-        this._extensions['av'] = {
+        this._extensions["av"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['video'] = {
+        this._extensions["video"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['audio/mp3'] = {
+        this._extensions["audio/mp3"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['audio/mp4'] = {
+        this._extensions["audio/mp4"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['application/vnd.apple.mpegurl'] = {
+        this._extensions["application/vnd.apple.mpegurl"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['application/dash+xml'] = {
+        this._extensions["application/dash+xml"] = {
             type: AVExtension,
-            name: 'uv-av-extension'
+            name: "uv-av-extension"
         };
 
-        this._extensions['default'] = {
+        this._extensions["default"] = {
             type: DefaultExtension,
-            name: 'uv-default-extension'
+            name: "uv-default-extension"
         };
 
         this.set(this.options.data);
@@ -137,24 +148,24 @@ export default class UVComponent extends _Components.BaseComponent implements IU
             annotations: undefined,
             root: "./uv",
             canvasIndex: 0,
-            collectionIndex: 0,
+            collectionIndex: undefined,
             config: undefined,
             configUri: undefined,
             embedded: false,
-            iiifResourceUri: '',
+            manifestUri: "",
             isLightbox: false,
             isReload: false,
             limitLocales: false,
             locales: [
                 {
-                    name: 'en-GB'
+                    name: "en-GB"
                 }
             ],
             manifestIndex: 0,
             rangeId: undefined,
             rotation: 0,
             sequenceIndex: 0,
-            xywh: ''
+            xywh: ""
         };
     }
 
@@ -163,8 +174,8 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         // if this is the first set
         if (!this.extension) {
 
-            if (!data.iiifResourceUri) {
-                this._error(`iiifResourceUri is required.`);
+            if (!data.manifestUri) {
+                this._error(`manifestUri is required.`);
                 return;
             }
 
@@ -178,7 +189,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         } else {
 
             // changing any of these data properties forces the UV to reload.
-            if (UVUtils.propertiesChanged(data, this.extension.data, ['collectionIndex', 'manifestIndex', 'config', 'configUri', 'domain', 'embedDomain', 'embedScriptUri', 'iiifResourceUri', 'isHomeDomain', 'isLightbox', 'isOnlyInstance', 'isReload', 'locales', 'root'])) {
+            if (propertiesChanged(data, this.extension.data, ['collectionIndex', 'manifestIndex', 'config', 'configUri', 'domain', 'embedDomain', 'embedScriptUri', 'manifestUri', 'isHomeDomain', 'isLightbox', 'isOnlyInstance', 'isReload', 'locales', 'root'])) {
                 this.extension.data = Object.assign({}, this.extension.data, data);
                 this._reload(this.extension.data);
             } else {
@@ -195,11 +206,19 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }
     }
 
+    public publish(event: string, args?: any): void {
+        this._pubsub.publish(event, args);
+    }
+
+    public subscribe(event: string, cb: any): void {
+        this._pubsub.subscribe(event, cb);
+    }
+
     private _reload(data: IUVData): void {
         
-        $.disposePubSub(); // remove any existing event listeners
+        this._pubsub.dispose(); // remove any existing event listeners
 
-        $.subscribe(BaseEvents.RELOAD, (e: any, data?: IUVData) => {
+        this.subscribe(BaseEvents.RELOAD, (data?: IUVData) => {
             this.fire(BaseEvents.RELOAD, data);
         });
 
@@ -215,21 +234,24 @@ export default class UVComponent extends _Components.BaseComponent implements IU
 
         const that = this;
 
-        Manifold.loadManifest(<Manifold.IManifoldOptions>{
-            iiifResourceUri: data.iiifResourceUri,
-            collectionIndex: data.collectionIndex,
-            manifestIndex: data.manifestIndex,
-            sequenceIndex: data.sequenceIndex,
-            canvasIndex: data.canvasIndex,
+        manifold.loadManifest(<manifold.IManifoldOptions>{
+            manifestUri: data.manifestUri,
+            collectionIndex: data.collectionIndex, // this has to be undefined by default otherwise it's assumed that the first manifest is within a collection
+            manifestIndex: data.manifestIndex || 0,
+            sequenceIndex: data.sequenceIndex || 0,
+            canvasIndex: data.canvasIndex || 0,
             rangeId: data.rangeId,
             locale: (data.locales) ? data.locales[0].name : undefined
-        }).then((helper: Manifold.IHelper) => {
+        }).then((helper: manifold.Helper) => {
             
-            let trackingLabel: string = helper.getTrackingLabel();
-            trackingLabel += ', URI: ' + (window.location !== window.parent.location) ? document.referrer : document.location;
-            window.trackingLabel = trackingLabel;
+            let trackingLabel: string | null = helper.getTrackingLabel();
 
-            let sequence: Manifesto.ISequence | undefined;
+            if (trackingLabel) {
+                trackingLabel += ', URI: ' + (window.location !== window.parent.location) ? document.referrer : document.location;
+                window.trackingLabel = trackingLabel;
+            }
+
+            let sequence: manifesto.Sequence | undefined;
 
             if (data.sequenceIndex !== undefined) {
                 sequence = helper.getSequenceByIndex(data.sequenceIndex);
@@ -240,7 +262,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 }
             }
 
-            let canvas: Manifesto.ICanvas | undefined;
+            let canvas: manifesto.Canvas | undefined;
 
             if (data.canvasIndex !== undefined) {
                 canvas = helper.getCanvasByIndex(data.canvasIndex);
@@ -262,54 +284,54 @@ export default class UVComponent extends _Components.BaseComponent implements IU
                 // canvasType will always be "canvas" in IIIF presentation 3.0
                 // to determine the correct extension to use, we need to inspect canvas.content.items[0].format
                 // which is an iana media type: http://www.iana.org/assignments/media-types/media-types.xhtml
-                const content: Manifesto.IAnnotation[] = canvas.getContent();
+                const content: manifesto.Annotation[] = canvas.getContent();
                 
                 if (content.length) {
-                    const annotation: Manifesto.IAnnotation = content[0];
-                    const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+                    const annotation: manifesto.Annotation = content[0];
+                    const body: manifesto.AnnotationBody[] = annotation.getBody();
 
                     if (body && body.length) {
-                        const format: Manifesto.MediaType | null = body[0].getFormat();
+                        const format: MediaType | null = body[0].getFormat();
 
                         if (format) {
-                            extension = that._extensions[format.toString()];
+                            extension = that._extensions[format.toString()].type;
 
                             if (!extension) {
                                 // try type
-                                const type: Manifesto.ResourceType | null = body[0].getType();
+                                const type: ExternalResourceType | null = body[0].getType();
                             
                                 if (type) {
-                                    extension = that._extensions[type.toString()];
+                                    extension = that._extensions[type.toString()].type;
                                 }
                             }
                         } else {
-                            const type: Manifesto.ResourceType | null = body[0].getType();
+                            const type: ExternalResourceType | null = body[0].getType();
 
                             if (type) {
-                                extension = that._extensions[type.toString()];
+                                extension = that._extensions[type.toString()].type;
                             }
                         }
                     }
 
                 } else {
-                    const canvasType: Manifesto.ResourceType | null = canvas.getType();
+                    const canvasType: ExternalResourceType | null = canvas.getType();
 
                     if (canvasType) {
                         // try using canvasType
-                        extension = that._extensions[canvasType.toString()];
+                        extension = that._extensions[canvasType.toString()].type;
                     }
 
                     // if there isn't an extension for the canvasType, try the format
                     if (!extension) {
                         const format: any = canvas.getProperty('format');
-                        extension = that._extensions[format];
+                        extension = that._extensions[format].type;
                     }
                 }
             //}
 
             // if there still isn't a matching extension, use the default extension.
             if (!extension) {
-                extension = that._extensions['default'];
+                extension = that._extensions['default'].type;
             }
 
             that._configure(data, extension, (config: any) => {
@@ -417,7 +439,7 @@ export default class UVComponent extends _Components.BaseComponent implements IU
         }
     }
 
-    private _createExtension(extension: any, data: IUVData, helper: Manifold.IHelper): void {
+    private _createExtension(extension: any, data: IUVData, helper: manifold.Helper): void {
         this.extension = new extension.type();
         if (this.extension) {
             this.extension.component = this;

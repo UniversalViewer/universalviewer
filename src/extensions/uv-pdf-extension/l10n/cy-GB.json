@@ -42,6 +42,23 @@
         "ok": "GWELD"
       }
     },
+    "headerPanel": {
+      "content": {
+        "close": "Cau",
+        "help": "Help"
+      }
+    },
+    "pdfHeaderPanel": {
+      "content": {
+        "emptyValue": "Rhowch werth",
+        "first": "Gyntaf",
+        "go": "Ewch",
+        "last": "Diwethaf",
+        "next": "Nesaf",
+        "of": "o {0}",
+        "previous": "Blaenorol"
+      }
+    },
     "helpDialogue": {
       "content": {
         "text": "testun i'w osod",

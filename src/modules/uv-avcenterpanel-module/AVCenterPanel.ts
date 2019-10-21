@@ -1,12 +1,14 @@
 import { BaseEvents } from "../uv-shared-module/BaseEvents";
 import { CenterPanel } from "../uv-shared-module/CenterPanel";
 import { Position } from "../uv-shared-module/Position";
-import { UVUtils } from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Async, Bools } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class AVCenterPanel extends CenterPanel {
 
     $avcomponent: JQuery;
-    avcomponent: IIIFComponents.AVComponent | null;
+    avcomponent: any;
     private _lastCanvasIndex: number | undefined;
     private _mediaReady: boolean = false;
     private _isThumbsViewOpen: boolean = false;
@@ -24,15 +26,15 @@ export class AVCenterPanel extends CenterPanel {
 
         const that = this;
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
             that.openMedia(resources);
         });
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this._viewCanvas(canvasIndex);           
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, (e: any, range: Manifesto.IRange | null) => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, (range: manifesto.Range | null) => {
 
             if (!this._observeRangeChanges()) {
                 return;
@@ -45,7 +47,7 @@ export class AVCenterPanel extends CenterPanel {
 
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this._whenMediaReady(() => {
                 if (this.avcomponent) {
                     this.avcomponent.set({
@@ -56,11 +58,11 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
-        $.subscribe(BaseEvents.CREATED, () => {
+        this.component.subscribe(BaseEvents.CREATED, () => {
             this._setTitle();
         });
 
-        $.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_THUMBS_VIEW, () => {
 
             this._isThumbsViewOpen = true;
 
@@ -72,7 +74,7 @@ export class AVCenterPanel extends CenterPanel {
                         virtualCanvasEnabled: false
                     });
     
-                    const canvas: Manifesto.ICanvas | null = this.extension.helper.getCurrentCanvas();
+                    const canvas: manifesto.Canvas | null = this.extension.helper.getCurrentCanvas();
             
                     if (canvas) {
                         this._viewCanvas(this.extension.helper.canvasIndex)
@@ -81,7 +83,7 @@ export class AVCenterPanel extends CenterPanel {
             });
         });
 
-        $.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
+        this.component.subscribe(BaseEvents.OPEN_TREE_VIEW, () => {
 
             this._isThumbsViewOpen = false;
 
@@ -105,7 +107,8 @@ export class AVCenterPanel extends CenterPanel {
         this.$content.prepend(this.$avcomponent);
 
         this.avcomponent = new IIIFComponents.AVComponent({
-            target: <HTMLElement>this.$avcomponent[0]
+            target: <HTMLElement>this.$avcomponent[0],
+            posterImageExpanded: this.options.posterImageExpanded
         });
 
         this.avcomponent.on('mediaready', () => {
@@ -119,21 +122,21 @@ export class AVCenterPanel extends CenterPanel {
 
                 this._setTitle();
 
-                const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
+                const range: manifesto.Range | null = this.extension.helper.getRangeById(rangeId);
 
                 if (range) {
-                    const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+                    const currentRange: manifesto.Range | null = this.extension.helper.getCurrentRange();
 
                     if (range !== currentRange) {
-                        $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                        this.component.publish(BaseEvents.RANGE_CHANGED, range);
                     }
                     
                 } else {
-                    $.publish(BaseEvents.RANGE_CHANGED, [null]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, null);
                 }
 
             } else {
-                $.publish(BaseEvents.RANGE_CHANGED, [null]);
+                this.component.publish(BaseEvents.RANGE_CHANGED, null);
             } 
             
         }, false);
@@ -151,10 +154,10 @@ export class AVCenterPanel extends CenterPanel {
 
         let title: string = '';
         let value: string | null;
-        let label: Manifesto.LanguageMap;
+        let label: manifesto.LanguageMap;
 
         // get the current range or canvas title
-        const currentRange: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+        const currentRange: manifesto.Range | null = this.extension.helper.getCurrentRange();
 
         if (currentRange) {
             label = currentRange.getLabel();
@@ -162,19 +165,19 @@ export class AVCenterPanel extends CenterPanel {
             label = this.extension.helper.getCurrentCanvas().getLabel();
         }
 
-        value = Manifesto.LanguageMap.getValue(label);
+        value = manifesto.LanguageMap.getValue(label);
 
         if (value) {
             title = value;
         }
 
-        if (Utils.Bools.getBool(this.config.options.includeParentInTitleEnabled, false)) {
+        if (Bools.getBool(this.config.options.includeParentInTitleEnabled, false)) {
 
             // get the parent range or manifest's title
             if (currentRange) {
                 if (currentRange.parentRange) {
                     label = currentRange.parentRange.getLabel();
-                    value = Manifesto.LanguageMap.getValue(label);
+                    value = manifesto.LanguageMap.getValue(label);
                 }
             } else {
                 value = this.extension.helper.getLabel();
@@ -189,16 +192,16 @@ export class AVCenterPanel extends CenterPanel {
         this.title = title;
 
         // set subtitle
-        const groups: Manifold.MetadataGroup[] = this.extension.helper.getMetadata(<Manifold.MetadataOptions>{
+        const groups: manifold.MetadataGroup[] = this.extension.helper.getMetadata(<manifold.MetadataOptions>{
             range: currentRange
         });
 
         for (let i = 0; i < groups.length; i++) {
-            const group: Manifold.MetadataGroup = groups[i];
+            const group: manifold.MetadataGroup = groups[i];
 
-            const item: Manifesto.LabelValuePair | undefined = group.items.find((el: Manifesto.LabelValuePair) => {
+            const item: manifesto.LabelValuePair | undefined = group.items.find((el: manifesto.LabelValuePair) => {
                 if (el.label) {
-                    const label: string | null = Manifesto.LanguageMap.getValue(el.label);
+                    const label: string | null = manifesto.LanguageMap.getValue(el.label);
                     if (label && label.toLowerCase() === this.config.options.subtitleMetadataField) {
                         return true;
                     }
@@ -208,22 +211,22 @@ export class AVCenterPanel extends CenterPanel {
             });
 
             if (item) {
-                this.subtitle = Manifesto.LanguageMap.getValue(item.value);
+                this.subtitle = manifesto.LanguageMap.getValue(item.value);
                 break;
             }
         }
 
-        this.$title.text(UVUtils.sanitize(this.title));
+        this.$title.text(sanitize(this.title));
 
         this.resize(false);
     }
 
     private _isCurrentResourceAccessControlled(): boolean {
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
         return canvas.externalResource.isAccessControlled();
     }
 
-    openMedia(resources: Manifesto.IExternalResource[]) {
+    openMedia(resources: manifesto.IExternalResource[]) {
 
         this.extension.getExternalResources(resources).then(() => {
 
@@ -261,12 +264,12 @@ export class AVCenterPanel extends CenterPanel {
     }
 
     private _whenMediaReady(cb: () => void): void {
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return this._mediaReady;
         }, cb);
     }
 
-    private _viewRange(range: Manifesto.IRange | null): void {
+    private _viewRange(range: manifesto.Range | null): void {
 
         this._whenMediaReady(() => {
             if (range && this.avcomponent) {
@@ -281,7 +284,7 @@ export class AVCenterPanel extends CenterPanel {
     private _viewCanvas(canvasIndex: number): void {
         
         this._whenMediaReady(() => {
-            const canvas: Manifesto.ICanvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
+            const canvas: manifesto.Canvas | null = this.extension.helper.getCanvasByIndex(canvasIndex);
             
             if (this.avcomponent) {
                 this.avcomponent.showCanvas(canvas.id);

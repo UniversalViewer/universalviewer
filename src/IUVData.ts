@@ -7,7 +7,7 @@ export interface IUVData {
     config?: any; // do not pass this on initialisation, internal use only
     configUri?: string;
     embedded?: boolean;
-    iiifResourceUri?: string;
+    manifestUri?: string;
     isLightbox?: boolean;
     isReload?: boolean;
     locales?: ILocale[];

@@ -10,9 +10,8 @@ import { IAVExtension } from "./IAVExtension";
 import { MoreInfoRightPanel } from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import { SettingsDialogue } from "./SettingsDialogue";
 import { ShareDialogue } from "./ShareDialogue";
-import { Shell } from "../../modules/uv-shared-module/Shell";
-import IThumb = Manifold.IThumb;
-import ITreeNode = Manifold.ITreeNode;
+import { IIIFResourceType } from "@iiif/vocabulary";
+import { Strings } from "@edsilv/utils";
 
 export class Extension extends BaseExtension implements IAVExtension {
 
@@ -35,17 +34,17 @@ export class Extension extends BaseExtension implements IAVExtension {
 
         //requirejs.config({shim: {'uv/lib/hls.min': { deps: ['require'], exports: "Hls"}}});
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.TREE_NODE_SELECTED, (e: any, node: ITreeNode) => {
+        this.component.subscribe(BaseEvents.TREE_NODE_SELECTED, (node: manifesto.TreeNode) => {
             this.fire(BaseEvents.TREE_NODE_SELECTED, node.data.path);
             this.treeNodeSelected(node);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: manifesto.Thumb) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
     }
 
@@ -61,42 +60,42 @@ export class Extension extends BaseExtension implements IAVExtension {
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new HeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ContentLeftPanel(this.shell.$leftPanel);
         } else {
-            Shell.$leftPanel.hide();
+            this.shell.$leftPanel.hide();
         }
 
-        this.centerPanel = new AVCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new AVCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         } else {
-            Shell.$rightPanel.hide();
+            this.shell.$rightPanel.hide();
         }
 
         if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
-            this.mobileFooterPanel = new MobileFooterPanel(Shell.$mobileFooterPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
+            this.mobileFooterPanel = new MobileFooterPanel(this.shell.$mobileFooterPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isHeaderPanelEnabled()) {
@@ -118,7 +117,7 @@ export class Extension extends BaseExtension implements IAVExtension {
 
     isLeftPanelEnabled(): boolean {
         let isEnabled: boolean = super.isLeftPanelEnabled();
-        const tree: Manifesto.ITreeNode | null = this.helper.getTree();
+        const tree: manifesto.TreeNode | null = this.helper.getTree();
 
         if (tree && tree.nodes.length) {
             isEnabled = true;
@@ -133,21 +132,21 @@ export class Extension extends BaseExtension implements IAVExtension {
 
     getEmbedScript(template: string, width: number, height: number): string {
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}&rid=${this.helper.rangeId}`;
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 
-    treeNodeSelected(node: ITreeNode): void {
+    treeNodeSelected(node: manifesto.TreeNode): void {
         const data: any = node.data;
 
         if (!data.type) return;
 
         switch (data.type) {
-            case manifesto.IIIFResourceType.manifest().toString():
+            case IIIFResourceType.MANIFEST:
                 // do nothing
                 break;
-            case manifesto.IIIFResourceType.collection().toString():
+            case IIIFResourceType.COLLECTION:
                 // do nothing
                 break;
             default:
@@ -157,20 +156,20 @@ export class Extension extends BaseExtension implements IAVExtension {
     }
 
     viewRange(path: string): void {
-        const range: Manifesto.IRange | null = this.helper.getRangeByPath(path);
+        const range: manifesto.Range | null = this.helper.getRangeByPath(path);
         if (!range) return;
-        $.publish(BaseEvents.RANGE_CHANGED, [range]);
+        this.component.publish(BaseEvents.RANGE_CHANGED, range);
 
         // don't update the canvas index, only when thumbs are clicked
         // if (range.canvases && range.canvases.length) {
         //     const canvasId: string = range.canvases[0];
-        //     const canvas: Manifesto.ICanvas | null = this.helper.getCanvasById(canvasId);
+        //     const canvas: manifesto.Canvas | null = this.helper.getCanvasById(canvasId);
 
         //     if (canvas) {
         //         const canvasIndex: number = canvas.index;
                 
         //         if (canvasIndex !== this.helper.canvasIndex) {
-        //             $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        //             this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
         //         }
         //     }
         // }

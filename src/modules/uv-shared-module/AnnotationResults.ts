@@ -1,4 +1,6 @@
+import * as manifold from "@iiif/manifold";
+
 export class AnnotationResults {
     terms?: string;
-    annotations: Manifold.AnnotationGroup[];
+    annotations: manifold.AnnotationGroup[];
 }

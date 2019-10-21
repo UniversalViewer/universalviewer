@@ -1,7 +1,10 @@
-import {ILocale} from "../../ILocale";
-import {IUVComponent} from "../../IUVComponent";
-import {IUVData} from "../../IUVData";
-import {MetricType} from "./MetricType";
+import { ILocale } from "../../ILocale";
+import { IUVComponent } from "../../IUVComponent";
+import { IUVData } from "../../IUVData";
+import { MetricType } from "./MetricType";
+import { Shell } from "./Shell";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
 
 export interface IExtension {
     $element: JQuery;
@@ -18,20 +21,20 @@ export interface IExtension {
     getAlternateLocale(): ILocale | null;
     getAppUri(): string;
     getCanvasLabels(label: string): string;
-    getCurrentCanvases(): Manifesto.ICanvas[];
-    getCurrentCanvasRange(): Manifesto.IRange | null;
+    getCurrentCanvases(): manifesto.Canvas[];
+    getCurrentCanvasRange(): manifesto.Range | null;
     getDependencies(callback: (deps: any) => void): any;
     getDomain(): string;
-    getExternalResources(resources?: Manifesto.IExternalResource[]): Promise<Manifesto.IExternalResourceData[]>;
-    getIIIFShareUrl(): string;
+    getExternalResources(resources?: manifesto.IExternalResource[]): Promise<manifesto.IExternalResourceData[]>;
+    getIIIFShareUrl(shareManifests?: boolean): string;
     getLocale(): string;
-    getMediaFormats(canvas: Manifesto.ICanvas): Manifesto.IAnnotationBody[];
+    getMediaFormats(canvas: manifesto.Canvas): manifesto.AnnotationBody[];
     getPagedIndices(canvasIndex?: number): number[];
     getSerializedLocales(): string | null;
     getSettings(): ISettings;
     getShareUrl(): string | null;
     height(): number;
-    helper: Manifold.IHelper;
+    helper: manifold.Helper;
     isCatchAllMetric(): boolean;
     isCreated: boolean;
     isDesktopMetric(): boolean;
@@ -55,14 +58,15 @@ export interface IExtension {
     refresh(): void;
     reload(data?: IUVData): void;
     resize(): void;
-    resources: Manifesto.IExternalResourceData[] | null;
+    resources: manifesto.IExternalResourceData[] | null;
     shifted: boolean;
     showMessage(message: string, acceptCallback?: any, buttonText?: string, allowClose?: boolean): void;
     tabbing: boolean;
     render(): void;
+    shell: Shell;
     updateSettings(settings: ISettings): void;
     viewCanvas(canvasIndex: number): void;
-    viewCollection(collection: Manifesto.ICollection): void;
-    viewManifest(manifest: Manifesto.IManifest): void;
+    viewCollection(collection: manifesto.Collection): void;
+    viewManifest(manifest: manifesto.Manifest): void;
     width(): number;
 }

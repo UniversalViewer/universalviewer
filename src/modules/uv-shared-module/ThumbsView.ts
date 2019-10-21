@@ -1,6 +1,8 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseView} from "./BaseView";
-import IThumb = Manifold.IThumb;
+import { ExternalResourceType, ViewingDirection } from "@iiif/vocabulary";
+import * as manifesto from "manifesto.js";
+import { Dates, Maths, Strings } from "@edsilv/utils";
 
 export class ThumbsView extends BaseView {
 
@@ -11,7 +13,7 @@ export class ThumbsView extends BaseView {
     isOpen: boolean = false;
     lastThumbClickedIndex: number;
 
-    public thumbs: IThumb[];
+    public thumbs: manifesto.Thumb[];
 
     constructor($element: JQuery) {
         super($element, true, true);
@@ -21,24 +23,24 @@ export class ThumbsView extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, index: any) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (index: any) => {
             this.selectIndex(parseInt(index));
         });
 
-        $.subscribe(BaseEvents.LOGIN, () => {
+        this.component.subscribe(BaseEvents.LOGIN, () => {
             this.loadThumbs();
         });
 
-        $.subscribe(BaseEvents.CLICKTHROUGH, () => {
+        this.component.subscribe(BaseEvents.CLICKTHROUGH, () => {
             this.loadThumbs();
         });
 
         this.$thumbs = $('<div class="thumbs"></div>');
         this.$element.append(this.$thumbs);
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
-        this.$thumbs.addClass(viewingDirection.toString()); // defaults to "left-to-right"
+        this.$thumbs.addClass(viewingDirection); // defaults to "left-to-right"
 
         const that = this;
 
@@ -76,9 +78,9 @@ export class ThumbsView extends BaseView {
                     className += " placeholder";
                 }
 
-                const viewingDirection: Manifesto.ViewingDirection | null = that.extension.helper.getViewingDirection();
+                const viewingDirection: ViewingDirection | null = that.extension.helper.getViewingDirection();
 
-                if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
+                if (viewingDirection && (viewingDirection === ViewingDirection.LEFT_TO_RIGHT || viewingDirection === ViewingDirection.RIGHT_TO_LEFT)) {
                     className += " twoCol";
                 } else if (that.extension.helper.isPaged()) {
                     className += " twoCol";
@@ -94,10 +96,10 @@ export class ThumbsView extends BaseView {
                 if (searchResults) {
 
                     if (searchResults > 1) {
-                        return Utils.Strings.format(that.content.searchResults, searchResults.toString());
+                        return Strings.format(that.content.searchResults, searchResults.toString());
                     }
 
-                    return Utils.Strings.format(that.content.searchResult, searchResults.toString());
+                    return Strings.format(that.content.searchResult, searchResults.toString());
                 }
 
                 return '';
@@ -127,17 +129,17 @@ export class ThumbsView extends BaseView {
         if (!this.thumbs) return;
 
         // get median height
-        let heights = [];
+        let heights: number[] = [];
 
         for (let i = 0; i < this.thumbs.length; i++) {
-            const thumb: IThumb = this.thumbs[i];
+            const thumb: manifesto.Thumb = this.thumbs[i];
             heights.push(thumb.height);
         }
 
-        const medianHeight: number = Utils.Maths.median(heights);
+        const medianHeight: number = Maths.median(heights);
 
         for (let i = 0; i < this.thumbs.length; i++) {
-            const thumb: IThumb = this.thumbs[i];
+            const thumb: manifesto.Thumb = this.thumbs[i];
             thumb.height = medianHeight;
         }
 
@@ -149,7 +151,7 @@ export class ThumbsView extends BaseView {
             e.preventDefault();
             const data = $.view(this).data;
             that.lastThumbClickedIndex = data.index;
-            $.publish(BaseEvents.THUMB_SELECTED, [data]);
+            that.component.publish(BaseEvents.THUMB_SELECTED, data);
         });
 
         this.setLabel();
@@ -170,15 +172,15 @@ export class ThumbsView extends BaseView {
         let thumbType: string | undefined;
 
         // get the type of the canvas content
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCanvasByIndex(index);
-        const annotations: Manifesto.IAnnotation[] = canvas.getContent();
+        const canvas: manifesto.Canvas = this.extension.helper.getCanvasByIndex(index);
+        const annotations: manifesto.Annotation[] = canvas.getContent();
 
         if (annotations.length) {
-            const annotation: Manifesto.IAnnotation = annotations[0];
-            const body: Manifesto.IAnnotationBody[] = annotation.getBody();
+            const annotation: manifesto.Annotation = annotations[0];
+            const body: manifesto.AnnotationBody[] = annotation.getBody();
 
             if (body.length) {
-                const type: Manifesto.ResourceType | null = body[0].getType();
+                const type: ExternalResourceType | null = body[0].getType();
 
                 if (type) {
                     thumbType = type.toString().toLowerCase();
@@ -216,7 +218,7 @@ export class ThumbsView extends BaseView {
 
                     let src: string = $thumb.attr('data-src');
                     if (that.config.options.thumbsCacheInvalidation && that.config.options.thumbsCacheInvalidation.enabled) {
-                        src += `${that.config.options.thumbsCacheInvalidation.paramType}t=${Utils.Dates.getTimeStamp()}`;
+                        src += `${that.config.options.thumbsCacheInvalidation.paramType}t=${Dates.getTimeStamp()}`;
                     }
                     const $img: JQuery = $('<img src="' + src + '" alt=""/>');
                     // fade in on load.
@@ -255,8 +257,8 @@ export class ThumbsView extends BaseView {
     }
 
     isPDF(): boolean {
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
-        const type: Manifesto.ResourceType | null = canvas.getType();
+        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
+        const type: ExternalResourceType | null = canvas.getType();
 
         if (type) {
             return (type.toString().includes("pdf"));

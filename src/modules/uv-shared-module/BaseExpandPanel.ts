@@ -1,4 +1,5 @@
 import {BaseView} from "./BaseView";
+import { Bools } from "@edsilv/utils";
 
 export class BaseExpandPanel extends BaseView {
 
@@ -36,7 +37,7 @@ export class BaseExpandPanel extends BaseView {
         this.$expandFullButton.prop('title', this.content.expandFull);
         this.$top.append(this.$expandFullButton);
         
-        if (!Utils.Bools.getBool(this.config.options.expandFullEnabled, true)) {
+        if (!Bools.getBool(this.config.options.expandFullEnabled, true)) {
             this.$expandFullButton.hide();
         } 
 
@@ -225,7 +226,7 @@ export class BaseExpandPanel extends BaseView {
     collapseFullFinish(): void {
         this.isFullyExpanded = false;
 
-        if (this.expandFullEnabled){
+        if (this.expandFullEnabled) {
             this.$expandFullButton.show();
         }
 

@@ -1,23 +1,21 @@
 import {CroppedImageDimensions} from "./CroppedImageDimensions";
 import {IExtension} from "../../modules/uv-shared-module/IExtension";
 import {Mode} from "./Mode";
-import AnnotationGroup = Manifold.AnnotationGroup;
-import AnnotationRect = Manifold.AnnotationRect;
-import Size = Utils.Size;
+import { Size } from "@edsilv/utils";
 
 export interface ISeadragonExtension extends IExtension{
-    annotations: AnnotationGroup[] | null;
-    currentAnnotationRect: AnnotationRect | null;
-    getAnnotationRects(): AnnotationRect[];
+    annotations: manifold.AnnotationGroup[] | null;
+    currentAnnotationRect: manifold.AnnotationRect | null;
+    getAnnotationRects(): manifold.AnnotationRect[];
     getAutoCompleteUri(): string | null;
-    getConfinedImageDimensions(canvas: Manifesto.ICanvas, width: number): Size;
-    getConfinedImageUri(canvas: Manifesto.ICanvas, width: number, height?: number): string | null;
-    getCroppedImageDimensions(canvas: Manifesto.ICanvas, viewer: any): CroppedImageDimensions | null;
-    getCroppedImageUri(canvas: Manifesto.ICanvas, viewer: any): string | null;
+    getConfinedImageDimensions(canvas: manifesto.Canvas, width: number): Size;
+    getConfinedImageUri(canvas: manifesto.Canvas, width: number, height?: number): string | null;
+    getCroppedImageDimensions(canvas: manifesto.Canvas, viewer: any): CroppedImageDimensions | null;
+    getCroppedImageUri(canvas: manifesto.Canvas, viewer: any): string | null;
     getCurrentAnnotationRectIndex(): number;
     getEmbedScript(template: string, width: number, height: number, zoom: string, rotation: number): string;
-    getImageBaseUri(canvas: Manifesto.ICanvas): string;
-    getImageId(canvas: Manifesto.ICanvas): string | null;
+    getImageBaseUri(canvas: manifesto.Canvas): string;
+    getImageId(canvas: manifesto.Canvas): string | null;
     getLastAnnotationRectIndex(): number;
     getMode(): Mode;
     getNextPageIndex(index?: number): number;
@@ -30,6 +28,6 @@ export interface ISeadragonExtension extends IExtension{
     isFirstAnnotationRect(): boolean;
     isPagingSettingEnabled(): boolean;
     isSearchEnabled(): boolean;
-    previousAnnotationRect: AnnotationRect | null;
+    previousAnnotationRect: manifold.AnnotationRect | null;
     search(terms: string, callback: (results: any) => void): void;
 }

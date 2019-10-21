@@ -1,13 +1,13 @@
 {
-  "src": ["./src/**/*.ts"],
   "compilerOptions": {
-    "module": "amd",
+    "module": "commonjs",
     "sourceMap": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": false,
     "noLib": false,
-    "lib": ["es6", "dom"],
+    "lib": ["es2015", "dom"],
+    "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "removeComments": false,
@@ -15,24 +15,12 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "types": [
-      "@edsilv/http-status-codes",
       "@edsilv/jquery-plugins",
-      "@edsilv/key-codes",
-      "@edsilv/utils",
       "@iiif/base-component",
-      "@iiif/iiif-av-component",
-      "@iiif/iiif-gallery-component",
-      "@iiif/iiif-metadata-component",
-      "@iiif/iiif-tree-component",
-      "@iiif/vocabulary",
-      "@iiif/manifold", 
       "jest",
-      "jquery", 
-      "manifesto.js", 
+      "jquery",
       "modernizr", 
-      "requirejs", 
-      "three",
-      "virtex3d"
+      "node"
     ]
   },
   "exclude": [

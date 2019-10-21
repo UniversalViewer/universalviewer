@@ -10,8 +10,9 @@ import {PDFHeaderPanel} from "../../modules/uv-pdfheaderpanel-module/PDFHeaderPa
 import {ResourcesLeftPanel} from "../../modules/uv-resourcesleftpanel-module/ResourcesLeftPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
-import {Shell} from "../../modules/uv-shared-module/Shell";
-import IThumb = Manifold.IThumb;
+import { ExternalResourceType } from "@iiif/vocabulary";
+import { Bools, Strings } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class Extension extends BaseExtension implements IPDFExtension {
 
@@ -34,38 +35,38 @@ export class Extension extends BaseExtension implements IPDFExtension {
 
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, thumb: IThumb) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [thumb.index]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (thumb: manifesto.Thumb) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, thumb.index);
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
-            Shell.$centerPanel.hide();
-            Shell.$rightPanel.hide();
+        this.component.subscribe(BaseEvents.LEFTPANEL_EXPAND_FULL_START, () => {
+            this.shell.$centerPanel.hide();
+            this.shell.$rightPanel.hide();
         });
 
-        $.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
-            Shell.$centerPanel.show();
-            Shell.$rightPanel.show();
+        this.component.subscribe(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH, () => {
+            this.shell.$centerPanel.show();
+            this.shell.$rightPanel.show();
             this.resize();
         });
 
-        $.subscribe(BaseEvents.SHOW_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.SHOW_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.hide();
             }
         });
 
-        $.subscribe(BaseEvents.HIDE_OVERLAY, () => {
+        this.component.subscribe(BaseEvents.HIDE_OVERLAY, () => {
             if (this.IsOldIE()) {
                 this.centerPanel.$element.show();
             }
         });
 
-        $.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
+        this.component.subscribe(BaseEvents.EXIT_FULLSCREEN, () => {
             setTimeout(() => {
                 this.resize();
             }, 10); // allow time to exit full screen, then resize
@@ -84,41 +85,45 @@ export class Extension extends BaseExtension implements IPDFExtension {
         return false;
     }
 
+    isHeaderPanelEnabled(): boolean {
+        return super.isHeaderPanelEnabled() && Bools.getBool(this.data.config.options.usePdfJs, true);
+    }
+
     createModules(): void{
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new PDFHeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new PDFHeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ResourcesLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ResourcesLeftPanel(this.shell.$leftPanel);
         }
 
-        this.centerPanel = new PDFCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new PDFCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         }
 
         if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()) {
@@ -133,15 +138,15 @@ export class Extension extends BaseExtension implements IPDFExtension {
     bookmark() : void {
         super.bookmark();
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const canvas: manifesto.Canvas = this.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
+        bookmark.label = <string>manifesto.LanguageMap.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ResourceType.document().toString();
+        bookmark.type = ExternalResourceType.DOCUMENT;
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }
@@ -154,10 +159,10 @@ export class Extension extends BaseExtension implements IPDFExtension {
 
     getEmbedScript(template: string, width: number, height: number): string{
         //const configUri = this.data.config.uri || '';
-        //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
+        //const script = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 }

@@ -20,12 +20,12 @@ export class GenericDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_GENERIC_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_GENERIC_DIALOGUE;
 
-        $.subscribe(this.openCommand, (e: any, params: any) => {
+        this.component.subscribe(this.openCommand, (params: any) => {
             this.acceptCallback = params.acceptCallback;
             this.showMessage(params);
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -55,7 +55,7 @@ export class GenericDialogue extends Dialogue {
     }
 
     accept(): void {
-        $.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
+        this.component.publish(BaseEvents.CLOSE_ACTIVE_DIALOGUE);
         if (this.acceptCallback) this.acceptCallback();
     }
 

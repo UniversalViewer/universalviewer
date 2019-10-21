@@ -1,12 +1,14 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {RightPanel} from "../uv-shared-module/RightPanel";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import { Bools, Urls } from "@edsilv/utils";
+import * as manifold from "@iiif/manifold";
 
 export class MoreInfoRightPanel extends RightPanel {
 
-    metadataComponent: IIIFComponents.MetadataComponent;
+    metadataComponent: any;
     $metadata: JQuery;
-    limitType: IIIFComponents.LimitType;
+    limitType: any;
     limit: number;
 
     constructor($element: JQuery) {
@@ -19,11 +21,11 @@ export class MoreInfoRightPanel extends RightPanel {
 
         super.create();
         
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, () => {
             this.databind();
         });
 
-        $.subscribe(BaseEvents.RANGE_CHANGED, () => {
+        this.component.subscribe(BaseEvents.RANGE_CHANGED, () => {
             this.databind();
         });
 
@@ -39,13 +41,13 @@ export class MoreInfoRightPanel extends RightPanel {
 
         this.metadataComponent.on('iiifViewerLinkClicked', (href: string) => {
             // get the hash param.
-            const rangeId: string | null = Utils.Urls.getHashParameterFromString('rid', href);
+            const rangeId: string | null = Urls.getHashParameterFromString('rid', href);
 
             if (rangeId) {
-                const range: Manifesto.IRange | null = this.extension.helper.getRangeById(rangeId);
+                const range: manifesto.Range | null = this.extension.helper.getRangeById(rangeId);
 
                 if (range) {
-                    $.publish(BaseEvents.RANGE_CHANGED, [range]);
+                    this.component.publish(BaseEvents.RANGE_CHANGED, range);
                 }
             }
 
@@ -61,31 +63,31 @@ export class MoreInfoRightPanel extends RightPanel {
         this.metadataComponent.set(this._getData());
     }
 
-    private _getCurrentRange(): Manifesto.IRange | null {
-        const range: Manifesto.IRange | null = this.extension.helper.getCurrentRange();
+    private _getCurrentRange(): manifesto.Range | null {
+        const range: manifesto.Range | null = this.extension.helper.getCurrentRange();
         return range;
     }
 
-    private _getData(): IIIFComponents.IMetadataComponentData {
-        return <IIIFComponents.IMetadataComponentData>{
+    private _getData() {
+        return {
             canvasDisplayOrder: this.config.options.canvasDisplayOrder,
             canvases: this.extension.getCurrentCanvases(),
             canvasExclude: this.config.options.canvasExclude,
             canvasLabels: this.extension.getCanvasLabels(this.content.page),
             content: this.config.content,
             copiedMessageDuration: 2000,
-            copyToClipboardEnabled: Utils.Bools.getBool(this.config.options.copyToClipboardEnabled, false),
+            copyToClipboardEnabled: Bools.getBool(this.config.options.copyToClipboardEnabled, false),
             helper: this.extension.helper,
-            licenseFormatter: new Manifold.UriLabeller(this.config.license ? this.config.license : {}), 
+            licenseFormatter: new manifold.UriLabeller(this.config.license ? this.config.license : {}), 
             limit: this.config.options.textLimit || 4,
             limitType: IIIFComponents.LimitType.LINES,
-            limitToRange: Utils.Bools.getBool(this.config.options.limitToRange, false),
+            limitToRange: Bools.getBool(this.config.options.limitToRange, false),
             manifestDisplayOrder: this.config.options.manifestDisplayOrder,
             manifestExclude: this.config.options.manifestExclude,
             range: this._getCurrentRange(),
             rtlLanguageCodes: this.config.options.rtlLanguageCodes,
-            sanitizer: (html) => {
-                return UVUtils.sanitize(html);
+            sanitizer: (html: string) => {
+                return sanitize(html);
             },
             showAllLanguages: this.config.options.showAllLanguages
         };

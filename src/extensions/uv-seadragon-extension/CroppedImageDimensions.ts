@@ -1,4 +1,4 @@
-import Size = Utils.Size;
+import { Size } from "@edsilv/utils";
 import {Point} from "../../modules/uv-shared-module/Point";
 
 export class CroppedImageDimensions {

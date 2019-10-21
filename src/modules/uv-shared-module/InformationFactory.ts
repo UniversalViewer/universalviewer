@@ -4,6 +4,7 @@ import {InformationAction} from "./InformationAction";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
 import {IExtension} from "./IExtension";
+import * as manifesto from "manifesto.js";
 
 export class InformationFactory {
 
@@ -29,12 +30,12 @@ export class InformationFactory {
 
                 loginAction.label = label;
 
-                const resource: Manifesto.IExternalResource = args.param;
+                const resource: manifesto.IExternalResource = args.param;
 
                 loginAction.action = () => {
                     resource.authHoldingPage = window.open("", "_blank");
-                    $.publish(BaseEvents.HIDE_INFORMATION);
-                    $.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [[resource]]);
+                    this.extension.component.publish(BaseEvents.HIDE_INFORMATION);
+                    this.extension.component.publish(BaseEvents.OPEN_EXTERNAL_RESOURCE, [[resource]]);
                 };
 
                 actions.push(loginAction);

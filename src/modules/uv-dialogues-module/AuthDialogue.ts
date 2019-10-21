@@ -1,6 +1,6 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Dialogue} from "../uv-shared-module/Dialogue";
-import {UVUtils} from "../../Utils";
+import {sanitize} from "../../Utils";
 
 export class AuthDialogue extends Dialogue {
 
@@ -11,7 +11,7 @@ export class AuthDialogue extends Dialogue {
     $confirmButton: JQuery;
     $message: JQuery;
     $title: JQuery;
-    service: Manifesto.IService;
+    service: manifesto.Service;
 
     constructor($element: JQuery) {
         super($element);
@@ -26,7 +26,7 @@ export class AuthDialogue extends Dialogue {
         this.openCommand = BaseEvents.SHOW_AUTH_DIALOGUE;
         this.closeCommand = BaseEvents.HIDE_AUTH_DIALOGUE;
 
-        $.subscribe(this.openCommand, (s: any, e: any) => {
+        this.component.subscribe(this.openCommand, (e: any) => {
             this.closeCallback = e.closeCallback;
             this.confirmCallback = e.confirmCallback;
             this.cancelCallback = e.cancelCallback;
@@ -34,7 +34,7 @@ export class AuthDialogue extends Dialogue {
             this.open();
         });
 
-        $.subscribe(this.closeCommand, () => {
+        this.component.subscribe(this.closeCommand, () => {
             this.close();
         });
 
@@ -85,21 +85,21 @@ export class AuthDialogue extends Dialogue {
         let confirmLabel: string | null = this.service.getConfirmLabel();
 
         if (header) {
-            this.$title.text(UVUtils.sanitize(header));
+            this.$title.text(sanitize(header));
         }
 
         if (description) {
-            this.$message.html(UVUtils.sanitize(description));
+            this.$message.html(sanitize(description));
             this.$message.targetBlank();
 
             this.$message.find('a').on('click', function() {
                 const url: string = $(this).attr('href');
-                $.publish(BaseEvents.EXTERNAL_LINK_CLICKED, [url]);
+                this.component.publish(BaseEvents.EXTERNAL_LINK_CLICKED, url);
             });
         }
 
         if (confirmLabel) {
-            this.$confirmButton.text(UVUtils.sanitize(confirmLabel));
+            this.$confirmButton.text(sanitize(confirmLabel));
         }
 
         this.resize();

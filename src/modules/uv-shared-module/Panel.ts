@@ -1,7 +1,10 @@
 import {BaseEvents} from "./BaseEvents";
+import { IUVComponent } from "../../IUVComponent";
+import { Async } from "@edsilv/utils";
 
 export class Panel {
 
+    component: IUVComponent;
     $element: JQuery;
     fitToParentWidth: boolean;
     fitToParentHeight: boolean;
@@ -16,13 +19,13 @@ export class Panel {
     }
 
     create(): void {
-        $.subscribe(BaseEvents.RESIZE, () => {
+        this.component.subscribe(BaseEvents.RESIZE, () => {
             this.resize();
         });
     }
 
     whenResized(cb: () => void): void {
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return this.isResized;
         }, cb);
     }

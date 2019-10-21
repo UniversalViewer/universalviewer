@@ -1,7 +1,8 @@
-import {Shell} from "./Shell";
 import {BaseView} from "./BaseView";
 import {Position} from "./Position";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
+import * as manifold from "@iiif/manifold";
+import { Bools } from "@edsilv/utils";
 
 export class CenterPanel extends BaseView {
 
@@ -51,7 +52,7 @@ export class CenterPanel extends BaseView {
                                   <div class="header">
                                     <div class="title"></div>
                                     <button type="button" class="close" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
+                                      <span aria-hidden="true">&#215;</span>
                                     </button>
                                   </div>
                                   <div class="main">
@@ -88,13 +89,13 @@ export class CenterPanel extends BaseView {
             this.resize();
         });
 
-        if (Utils.Bools.getBool(this.options.titleEnabled, true)) {
+        if (Bools.getBool(this.options.titleEnabled, true)) {
             this.$title.removeClass('hidden');
         } else {
             this.$title.addClass('hidden');
         }
 
-        if (Utils.Bools.getBool(this.options.subtitleEnabled, false)) {
+        if (Bools.getBool(this.options.subtitleEnabled, false)) {
             this.$subtitle.removeClass('hidden');
         } else {
             this.$subtitle.addClass('hidden');
@@ -116,11 +117,11 @@ export class CenterPanel extends BaseView {
     }
 
     updateRequiredStatement(): void {
-        const requiredStatement: Manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
+        const requiredStatement: manifold.ILabelValuePair | null = this.extension.helper.getRequiredStatement();
         //var license = this.provider.getLicense();
         //var logo = this.provider.getLogo();
 
-        const enabled: boolean = Utils.Bools.getBool(this.options.requiredStatementEnabled, true);
+        const enabled: boolean = Bools.getBool(this.options.requiredStatementEnabled, true);
 
         if (!requiredStatement || !requiredStatement.value || !enabled) {
             return;
@@ -134,14 +135,14 @@ export class CenterPanel extends BaseView {
         const $logo: JQuery = this.$attribution.find('.logo');
 
         if (requiredStatement.label) {
-            const sanitizedTitle: string = UVUtils.sanitize(requiredStatement.label);
+            const sanitizedTitle: string = sanitize(requiredStatement.label);
             $attributionTitle.html(sanitizedTitle);
         } else {
             $attributionTitle.text(this.content.attribution);
         }
         
         if (requiredStatement.value) {
-            const sanitizedText: string = UVUtils.sanitize(requiredStatement.value);
+            const sanitizedText: string = sanitize(requiredStatement.value);
 
             $attributionText.html(sanitizedText);
 
@@ -176,8 +177,8 @@ export class CenterPanel extends BaseView {
     resize(): void {
         super.resize();
 
-        const leftPanelWidth: number = Shell.$leftPanel.is(':visible') ? Math.floor(Shell.$leftPanel.width()) : 0;
-        const rightPanelWidth: number = Shell.$rightPanel.is(':visible') ? Math.floor(Shell.$rightPanel.width()) : 0;
+        const leftPanelWidth: number = this.extension.shell.$leftPanel.is(':visible') ? Math.floor(this.extension.shell.$leftPanel.width()) : 0;
+        const rightPanelWidth: number = this.extension.shell.$rightPanel.is(':visible') ? Math.floor(this.extension.shell.$rightPanel.width()) : 0;
         const width: number = Math.floor(this.$element.parent().width() - leftPanelWidth - rightPanelWidth)
 
         this.$element.css({
@@ -226,7 +227,7 @@ export class CenterPanel extends BaseView {
 
         if (this.subtitle && this.options.subtitleEnabled) {
 
-            this.$subtitleText.html(UVUtils.sanitize(this.subtitle.replace(/<br\s*[\/]?>/gi, '; ')));
+            this.$subtitleText.html(sanitize(this.subtitle.replace(/<br\s*[\/]?>/gi, '; ')));
             this.$subtitleText.removeClass('elided');
             this.$subtitle.removeClass('hidden');
             this.$subtitleWrapper.css('max-height', this.$content.height() + this.$subtitle.outerHeight());

@@ -1,4 +1,4 @@
-function createUV(selector, data, dataProvider) {
+function createUV(selector, data) {
     var uv;
     var isFullScreen = false;
     var $container = $(selector);
@@ -21,9 +21,9 @@ function createUV(selector, data, dataProvider) {
         }
     }
 
-    window.onresize = function() {
+    window.addEventListener('resize', function() {
         resize();
-    }
+    });
 
     uv = new UV({
         target: $uv[0],
@@ -39,31 +39,31 @@ function createUV(selector, data, dataProvider) {
     }, false);
 
     uv.on('collectionIndexChanged', function(collectionIndex) {
-        dataProvider.set('c', collectionIndex);
+        uv.dataProvider.set('c', collectionIndex);
     }, false);
 
     uv.on('manifestIndexChanged', function(manifestIndex) {
-        dataProvider.set('m', manifestIndex);
+        uv.dataProvider.set('m', manifestIndex);
     }, false);
 
     uv.on('sequenceIndexChanged', function(sequenceIndex) {
-        dataProvider.set('s', sequenceIndex);
+        uv.dataProvider.set('s', sequenceIndex);
     }, false);
 
     uv.on('canvasIndexChanged', function(canvasIndex) {
-        dataProvider.set('cv', canvasIndex);
+        uv.dataProvider.set('cv', canvasIndex);
     }, false);
 
     uv.on('rangeChanged', function(rangeId) {
-        dataProvider.set('rid', rangeId);
+        uv.dataProvider.set('rid', rangeId);
     }, false);
 
     uv.on('openseadragonExtension.rotationChanged', function(rotation) {
-        dataProvider.set('r', rotation);
+        uv.dataProvider.set('r', rotation);
     }, false);
 
     uv.on('openseadragonExtension.xywhChanged', function(xywh) {
-        dataProvider.set('xywh', xywh);
+        uv.dataProvider.set('xywh', xywh);
     }, false);
 
     uv.on('openseadragonExtension.currentViewUri', function(data) {

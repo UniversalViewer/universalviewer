@@ -1,5 +1,6 @@
 import {BaseEvents} from "./BaseEvents";
 import {BaseExpandPanel} from "./BaseExpandPanel";
+import { Bools } from "@edsilv/utils";
 
 export class RightPanel extends BaseExpandPanel {
 
@@ -15,13 +16,13 @@ export class RightPanel extends BaseExpandPanel {
     init(): void{
         super.init();
 
-        const shouldOpenPanel: boolean = Utils.Bools.getBool(this.extension.getSettings().rightPanelOpen, this.options.panelOpen);
+        const shouldOpenPanel: boolean = Bools.getBool(this.extension.getSettings().rightPanelOpen, this.options.panelOpen);
         
         if (shouldOpenPanel) {
             this.toggle(true);
         }
 
-        $.subscribe(BaseEvents.TOGGLE_EXPAND_RIGHT_PANEL, () => {
+        this.component.subscribe(BaseEvents.TOGGLE_EXPAND_RIGHT_PANEL, () => {
             if (this.isFullyExpanded) {
                 this.collapseFull();
             } else {
@@ -42,9 +43,9 @@ export class RightPanel extends BaseExpandPanel {
         super.toggleFinish();
 
         if (this.isExpanded) {
-            $.publish(BaseEvents.OPEN_RIGHT_PANEL);
+            this.component.publish(BaseEvents.OPEN_RIGHT_PANEL);
         } else {            
-            $.publish(BaseEvents.CLOSE_RIGHT_PANEL);
+            this.component.publish(BaseEvents.CLOSE_RIGHT_PANEL);
         }
         this.extension.updateSettings({rightPanelOpen: this.isExpanded});
     }

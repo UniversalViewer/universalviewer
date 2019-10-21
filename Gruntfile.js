@@ -2,6 +2,7 @@ var configure = require('./tasks/configure');
 var theme = require('./tasks/theme');
 var c = require('./config');
 var config = new c();
+const webpackConfig = require('./webpack.config.js');
 var avExtensionConfig = require('./src/extensions/uv-av-extension/config');
 var mediaelementExtensionConfig = require('./src/extensions/uv-mediaelement-extension/config');
 var pdfExtensionConfig = require('./src/extensions/uv-pdf-extension/config');
@@ -90,7 +91,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: [config.directories.lib + '/offline.js'],
+                        src: [config.directories.lib + '/bundle.js'],
                         dest: config.directories.build + '/lib'
                     },
                     // js
@@ -238,10 +239,10 @@ module.exports = function (grunt) {
         },
 
         concat: {
-            offline: {
+            bundle: {
                 cwd: '.',
-                src: config.dependencies.offline,
-                dest: config.directories.lib + '/offline.js'
+                src: config.dependencies.bundle,
+                dest: config.directories.lib + '/bundle.js'
             }
         },
 
@@ -321,7 +322,11 @@ module.exports = function (grunt) {
             options: {
                 mangle: false
             }
-        }
+        },
+
+        webpack: {
+            myConfig: webpackConfig,
+        },
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -334,6 +339,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-sync');
     grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-webpack');
 
     configure(grunt);
     theme(grunt);
@@ -343,20 +349,20 @@ module.exports = function (grunt) {
     grunt.registerTask('build', '', function() {
 
         var tsType = (grunt.option('dist')) ? 'ts:dist' : 'ts:dev';
-        var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
+        //var execType = (grunt.option('dist')) ? 'exec:distbuild' : 'exec:devbuild';
 
         grunt.task.run(
             'clean:libs',
             'clean:themes',
             'sync',
             'copy:bundle',
-            'concat:offline',
+            'concat:bundle',
             tsType,
             'clean:extension',
             'configure:apply',
             'clean:build',
             'copy:schema',
-            execType,
+            'webpack',
             'copy:build',
             'theme:create',
             'theme:dist',

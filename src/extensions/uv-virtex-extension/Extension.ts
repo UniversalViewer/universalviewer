@@ -10,8 +10,10 @@ import {IVirtexExtension} from "./IVirtexExtension";
 import {MoreInfoRightPanel} from "../../modules/uv-moreinforightpanel-module/MoreInfoRightPanel";
 import {SettingsDialogue} from "./SettingsDialogue";
 import {ShareDialogue} from "./ShareDialogue";
-import {Shell} from "../../modules/uv-shared-module/Shell";
 import {VirtexCenterPanel} from "../../modules/uv-virtexcenterpanel-module/VirtexCenterPanel";
+import { ExternalResourceType } from "@iiif/vocabulary";
+import { Bools, Strings } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class Extension extends BaseExtension implements IVirtexExtension {
 
@@ -32,12 +34,12 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     create(): void {
         super.create();
 
-        $.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (e: any, canvasIndex: number) => {
+        this.component.subscribe(BaseEvents.CANVAS_INDEX_CHANGED, (canvasIndex: number) => {
             this.viewCanvas(canvasIndex);
         });
 
-        $.subscribe(BaseEvents.THUMB_SELECTED, (e: any, canvasIndex: number) => {
-            $.publish(BaseEvents.CANVAS_INDEX_CHANGED, [canvasIndex]);
+        this.component.subscribe(BaseEvents.THUMB_SELECTED, (canvasIndex: number) => {
+            this.component.publish(BaseEvents.CANVAS_INDEX_CHANGED, canvasIndex);
         });
     }
 
@@ -45,49 +47,49 @@ export class Extension extends BaseExtension implements IVirtexExtension {
         super.createModules();
 
         if (this.isHeaderPanelEnabled()) {
-            this.headerPanel = new HeaderPanel(Shell.$headerPanel);
+            this.headerPanel = new HeaderPanel(this.shell.$headerPanel);
         } else {
-            Shell.$headerPanel.hide();
+            this.shell.$headerPanel.hide();
         }
 
         if (this.isLeftPanelEnabled()) {
-            this.leftPanel = new ContentLeftPanel(Shell.$leftPanel);
+            this.leftPanel = new ContentLeftPanel(this.shell.$leftPanel);
         }
 
-        this.centerPanel = new VirtexCenterPanel(Shell.$centerPanel);
+        this.centerPanel = new VirtexCenterPanel(this.shell.$centerPanel);
 
         if (this.isRightPanelEnabled()) {
-            this.rightPanel = new MoreInfoRightPanel(Shell.$rightPanel);
+            this.rightPanel = new MoreInfoRightPanel(this.shell.$rightPanel);
         }
 
         if (this.isFooterPanelEnabled()) {
-            this.footerPanel = new FooterPanel(Shell.$footerPanel);
+            this.footerPanel = new FooterPanel(this.shell.$footerPanel);
         } else {
-            Shell.$footerPanel.hide();
+            this.shell.$footerPanel.hide();
         }
 
         this.$downloadDialogue = $('<div class="overlay download" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$downloadDialogue);
+        this.shell.$overlays.append(this.$downloadDialogue);
         this.downloadDialogue = new DownloadDialogue(this.$downloadDialogue);
 
         this.$shareDialogue = $('<div class="overlay share" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$shareDialogue);
+        this.shell.$overlays.append(this.$shareDialogue);
         this.shareDialogue = new ShareDialogue(this.$shareDialogue);
 
         this.$settingsDialogue = $('<div class="overlay settings" aria-hidden="true"></div>');
-        Shell.$overlays.append(this.$settingsDialogue);
+        this.shell.$overlays.append(this.$settingsDialogue);
         this.settingsDialogue = new SettingsDialogue(this.$settingsDialogue);
 
         if (this.isLeftPanelEnabled()){
             this.leftPanel.init();
         } else {
-            Shell.$leftPanel.hide();
+            this.shell.$leftPanel.hide();
         }
 
         if (this.isRightPanelEnabled()){
             this.rightPanel.init();
         } else {
-            Shell.$rightPanel.hide();
+            this.shell.$rightPanel.hide();
         }
     }
 
@@ -102,32 +104,32 @@ export class Extension extends BaseExtension implements IVirtexExtension {
     }
 
     isLeftPanelEnabled(): boolean{
-        return Utils.Bools.getBool(this.data.config.options.leftPanelEnabled, true)
+        return Bools.getBool(this.data.config.options.leftPanelEnabled, true)
                 && (this.helper.isMultiCanvas() || this.helper.isMultiSequence());
     }
 
     bookmark(): void {
         super.bookmark();
 
-        const canvas: Manifesto.ICanvas = this.helper.getCurrentCanvas();
+        const canvas: manifesto.Canvas = this.helper.getCurrentCanvas();
         const bookmark: Bookmark = new Bookmark();
 
         bookmark.index = this.helper.canvasIndex;
-        bookmark.label = <string>Manifesto.LanguageMap.getValue(canvas.getLabel());
+        bookmark.label = <string>manifesto.LanguageMap.getValue(canvas.getLabel());
         bookmark.thumb = canvas.getProperty('thumbnail');
         bookmark.title = this.helper.getLabel();
         bookmark.trackingLabel = window.trackingLabel;
-        bookmark.type = manifesto.ResourceType.physicalobject().toString();
+        bookmark.type = ExternalResourceType.PHYSICAL_OBJECT;
 
         this.fire(BaseEvents.BOOKMARK, bookmark);
     }
 
     getEmbedScript(template: string, width: number, height: number): string {
         //const configUri: string = this.data.config.uri || '';
-        //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.iiifResourceUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
+        //const script: string = String.format(template, this.getSerializedLocales(), configUri, this.helper.manifestUri, this.helper.collectionIndex, this.helper.manifestIndex, this.helper.sequenceIndex, this.helper.canvasIndex, width, height, this.data.embedScriptUri);
         const appUri: string = this.getAppUri();
-        const iframeSrc: string = `${appUri}#?manifest=${this.helper.iiifResourceUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
-        const script: string = Utils.Strings.format(template, iframeSrc, width.toString(), height.toString());
+        const iframeSrc: string = `${appUri}#?manifest=${this.helper.manifestUri}&c=${this.helper.collectionIndex}&m=${this.helper.manifestIndex}&s=${this.helper.sequenceIndex}&cv=${this.helper.canvasIndex}`;
+        const script: string = Strings.format(template, iframeSrc, width.toString(), height.toString());
         return script;
     }
 }

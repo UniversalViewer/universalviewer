@@ -2,7 +2,7 @@ import {DownloadDialogue as BaseDownloadDialogue} from "../../modules/uv-dialogu
 import {DownloadOption} from "../../modules/uv-shared-module/DownloadOption";
 import { BaseEvents } from "../../modules/uv-shared-module/BaseEvents";
 import { IRenderingOption } from "../../modules/uv-shared-module/IRenderingOption";
-
+import { Strings } from "@edsilv/utils";
 export class DownloadDialogue extends BaseDownloadDialogue {
 
     $canvasOptions: JQuery;
@@ -60,10 +60,10 @@ export class DownloadDialogue extends BaseDownloadDialogue {
                 window.open(id);
             }
 
-            $.publish(BaseEvents.DOWNLOAD, [{
+            this.component.publish(BaseEvents.DOWNLOAD, {
                 "type": type,
                 "label": label
-            }]);
+            });
 
             this.close();
         });
@@ -74,16 +74,16 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         return format === 'mpd' || format === 'm3u8';
     }
 
-    open($triggerButton: JQuery) {
+    open(triggerButton: HTMLElement) {
 
-        super.open($triggerButton);
+        super.open(triggerButton);
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
         
         if (this.isDownloadOptionAvailable(DownloadOption.ENTIRE_FILE_AS_ORIGINAL) && !this._isAdaptive()) {
             const $input: JQuery = this.$entireFileAsOriginal.find('input');
             const $label: JQuery = this.$entireFileAsOriginal.find('label');
-            const label: string = Utils.Strings.format(this.content.entireFileAsOriginalWithFormat, this.getCurrentResourceFormat());
+            const label: string = Strings.format(this.content.entireFileAsOriginalWithFormat, this.getCurrentResourceFormat());
             $label.text(label);
             $input.prop('title', label);
             this.$entireFileAsOriginal.show();
@@ -94,7 +94,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
             
             if (canvas.ranges && canvas.ranges.length) {
                 for (let i = 0; i < canvas.ranges.length; i++) {
-                    const range: Manifesto.IRange = canvas.ranges[i];
+                    const range: manifesto.Range = canvas.ranges[i];
                     const renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(range, this.content.entireFileAsOriginal, DownloadOption.CANVAS_RENDERINGS);
                     this.addDownloadOptionsForRenderings(renderingOptions);
                 }
@@ -102,7 +102,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         }
 
         if (this.isDownloadOptionAvailable(DownloadOption.IMAGE_RENDERINGS)) {
-            const images: Manifesto.IAnnotation[] = canvas.getImages();
+            const images: manifesto.Annotation[] = canvas.getImages();
             if (images.length) {
                 this.$downloadOptions.append(this.$imageOptionsContainer);
             }
@@ -123,7 +123,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         if (this.isDownloadOptionAvailable(DownloadOption.MANIFEST_RENDERINGS)) {
             let renderingOptions: IRenderingOption[] = this.getDownloadOptionsForRenderings(this.extension.helper.getCurrentSequence(), this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
             
-            if (!renderingOptions.length) {
+            if (!renderingOptions.length && this.extension.helper.manifest) {
                 renderingOptions = this.getDownloadOptionsForRenderings(this.extension.helper.manifest, this.content.entireDocument, DownloadOption.MANIFEST_RENDERINGS);
             }
 
@@ -166,7 +166,7 @@ export class DownloadDialogue extends BaseDownloadDialogue {
         });
     }
 
-    isDownloadOptionAvailable(option: DownloadOption): boolean {
+    isDownloadOptionAvailable(_option: DownloadOption): boolean {
         return this.isMediaDownloadEnabled();
     }
 }

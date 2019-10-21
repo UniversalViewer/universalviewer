@@ -51,6 +51,7 @@ node_modules
 !tasks/*.js
 /config.js
 !Gruntfile.js
+!webpack.config.js
 !src/lib/*.js
 !src/*/*/lib/*.js
 !src/extensions/*/dependencies.js

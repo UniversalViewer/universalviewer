@@ -1,4 +1,5 @@
-
+import * as KeyCodes from "@edsilv/key-codes";
+import { Keyboard } from "@edsilv/utils";
 export class AutoComplete {
 
 	private _results: any;
@@ -61,7 +62,7 @@ export class AutoComplete {
 
             const originalEvent: KeyboardEvent = <KeyboardEvent>e.originalEvent;
             //that._lastKeyDownWasNavigation = that._isNavigationKeyDown(originalEvent);
-            const charCode: number = Utils.Keyboard.getCharCode(originalEvent);
+            const charCode: number = Keyboard.getCharCode(originalEvent);
             let cancelEvent: boolean = false;
 
             if (charCode === KeyCodes.KeyDown.LeftArrow) {

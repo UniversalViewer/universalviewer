@@ -5,6 +5,7 @@ import {Information} from "../uv-shared-module/Information";
 import {InformationAction} from "../uv-shared-module/InformationAction";
 import {InformationArgs} from "../uv-shared-module/InformationArgs";
 import {InformationFactory} from "../uv-shared-module/InformationFactory";
+import { Bools } from "@edsilv/utils";
 
 export class HeaderPanel extends BaseView {
 
@@ -27,11 +28,11 @@ export class HeaderPanel extends BaseView {
 
         super.create();
 
-        $.subscribe(BaseEvents.SHOW_INFORMATION, (e: any, args: InformationArgs) => {
+        this.component.subscribe(BaseEvents.SHOW_INFORMATION, (args: InformationArgs) => {
             this.showInformation(args);
         });
 
-        $.subscribe(BaseEvents.HIDE_INFORMATION, () => {
+        this.component.subscribe(BaseEvents.HIDE_INFORMATION, () => {
             this.hideInformation();
         });
 
@@ -62,7 +63,7 @@ export class HeaderPanel extends BaseView {
                                     <div class="message"></div> \
                                     <div class="actions"></div> \
                                     <button type="button" class="close" aria-label="Close"> \
-                                        <span aria-hidden="true">&times;</span>\
+                                        <span aria-hidden="true">&#215;</span>\
                                     </button> \
                                   </div>');
 
@@ -72,7 +73,7 @@ export class HeaderPanel extends BaseView {
         this.$informationBox.find('.close').attr('title', this.content.close);
         this.$informationBox.find('.close').on('click', (e) => {
             e.preventDefault();
-            $.publish(BaseEvents.HIDE_INFORMATION);
+            this.component.publish(BaseEvents.HIDE_INFORMATION);
         });
 
         this.$localeToggleButton.on('click', () => {
@@ -80,11 +81,11 @@ export class HeaderPanel extends BaseView {
         });
 
         this.$settingsButton.onPressed(() => {
-            $.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
+            this.component.publish(BaseEvents.SHOW_SETTINGS_DIALOGUE);
         });
 
 
-        if (!Utils.Bools.getBool(this.options.centerOptionsEnabled, true)) {
+        if (!Bools.getBool(this.options.centerOptionsEnabled, true)) {
             this.$centerOptions.hide();
         }
 
@@ -107,7 +108,7 @@ export class HeaderPanel extends BaseView {
     }
 
     updateSettingsButton(): void {
-        const settingsEnabled: boolean = Utils.Bools.getBool(this.options.settingsButtonEnabled, true);
+        const settingsEnabled: boolean = Bools.getBool(this.options.settingsButtonEnabled, true);
         if (!settingsEnabled){
             this.$settingsButton.hide();
         } else {
@@ -119,7 +120,7 @@ export class HeaderPanel extends BaseView {
         const locales: ILocale[] | undefined = this.extension.data.locales;
 
         if (locales) {
-            return locales.length > 1 && Utils.Bools.getBool(this.options.localeToggleEnabled, false);
+            return locales.length > 1 && Bools.getBool(this.options.localeToggleEnabled, false);
         }
         
         return false;
@@ -159,7 +160,7 @@ export class HeaderPanel extends BaseView {
 
     updateSettings(settings: ISettings): void {
         this.extension.updateSettings(settings);
-        $.publish(BaseEvents.UPDATE_SETTINGS, [settings]);
+        this.component.publish(BaseEvents.UPDATE_SETTINGS, settings);
     }
 
     resize(): void {

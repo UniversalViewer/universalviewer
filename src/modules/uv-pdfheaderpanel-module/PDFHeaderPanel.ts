@@ -1,6 +1,7 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {Events} from "../../extensions/uv-pdf-extension/Events";
 import {HeaderPanel} from "../uv-shared-module/HeaderPanel";
+import { Strings } from "@edsilv/utils";
 
 export class PDFHeaderPanel extends HeaderPanel {
 
@@ -33,12 +34,12 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         super.create();
 
-        $.subscribe(Events.PAGE_INDEX_CHANGED, (e: any, pageIndex: number) => {
+        this.component.subscribe(Events.PAGE_INDEX_CHANGED, (pageIndex: number) => {
             this._pageIndex = pageIndex;
             this.render();
         });
 
-        $.subscribe(Events.PDF_LOADED, (e: any, pdfDoc: any) => {
+        this.component.subscribe(Events.PDF_LOADED, (pdfDoc: any) => {
             this._pdfDoc = pdfDoc;
         });
 
@@ -95,19 +96,19 @@ export class PDFHeaderPanel extends HeaderPanel {
 
         // ui event handlers.
         this.$firstButton.onPressed(() => {
-            $.publish(BaseEvents.FIRST);
+            this.component.publish(BaseEvents.FIRST);
         });
 
         this.$prevButton.onPressed(() => {
-            $.publish(BaseEvents.PREV);
+            this.component.publish(BaseEvents.PREV);
         });
 
         this.$nextButton.onPressed(() => {
-            $.publish(BaseEvents.NEXT);
+            this.component.publish(BaseEvents.NEXT);
         });
 
         this.$lastButton.onPressed(() => {
-            $.publish(BaseEvents.LAST);
+            this.component.publish(BaseEvents.LAST);
         });
 
         this.$searchText.onEnter(() => {
@@ -135,7 +136,7 @@ export class PDFHeaderPanel extends HeaderPanel {
         this.$searchText.val(this._pageIndex);
 
         const of: string = this.content.of;
-        this.$total.html(Utils.Strings.format(of, this._pdfDoc.numPages.toString()));
+        this.$total.html(Strings.format(of, this._pdfDoc.numPages.toString()));
 
         this.$searchButton.enable();
 
@@ -170,7 +171,7 @@ export class PDFHeaderPanel extends HeaderPanel {
             return;
         }
 
-        $.publish(Events.SEARCH, [index]);
+        this.component.publish(Events.SEARCH, index);
     }
 
     resize(): void {

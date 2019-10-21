@@ -1,21 +1,25 @@
 import {BaseEvents} from "./BaseEvents";
-import {UVUtils} from "../../Utils";
+import { sanitize } from "../../Utils";
 import {InformationArgs} from "./InformationArgs";
 import {InformationType} from "./InformationType";
+import * as manifesto from "manifesto.js";
+import { Storage, StorageType, StorageItem, Urls } from "@edsilv/utils";
+import * as HTTPStatusCode from "@edsilv/http-status-codes";
 
 export class Auth1 {
 
     static messages: any = {};
-    static storageStrategy: string;
+    static storageStrategy: StorageType;
+    static publish: (event: string, args?: any) => void;
 
-    static loadExternalResources(resourcesToLoad: Manifesto.IExternalResource[], storageStrategy: string, options: Manifesto.IManifestoOptions): Promise<Manifesto.IExternalResource[]> {
+    static loadExternalResources(resourcesToLoad: manifesto.IExternalResource[], storageStrategy: StorageType, options: manifesto.IManifestoOptions): Promise<manifesto.IExternalResource[]> {
         
-        return new Promise<Manifesto.IExternalResource[]>((resolve) => {
+        return new Promise<manifesto.IExternalResource[]>((resolve) => {
 
             Auth1.storageStrategy = storageStrategy;
 
             // set all resources to Auth API V1
-            resourcesToLoad = resourcesToLoad.map((resource: Manifesto.IExternalResource) => {
+            resourcesToLoad = resourcesToLoad.map((resource: manifesto.IExternalResource) => {
                 resource.authAPIVersion = 1;
                 resource.options = options;
                 return resource;
@@ -29,32 +33,32 @@ export class Auth1 {
                 Auth1.userInteractedWithContentProvider,
                 Auth1.getContentProviderInteraction,
                 Auth1.handleMovedTemporarily,
-                Auth1.showOutOfOptionsMessages).then((r: Manifesto.IExternalResource[]) => {
+                Auth1.showOutOfOptionsMessages).then((r: manifesto.IExternalResource[]) => {
                     resolve(r);
                 })['catch']((error: any) => {
                     switch(error.name) {
-                        case manifesto.StatusCodes.AUTHORIZATION_FAILED.toString():
-                            $.publish(BaseEvents.LOGIN_FAILED);
+                        case manifesto.StatusCode.AUTHORIZATION_FAILED.toString():
+                            Auth1.publish(BaseEvents.LOGIN_FAILED);
                             break;
-                        case manifesto.StatusCodes.FORBIDDEN.toString():
-                            $.publish(BaseEvents.FORBIDDEN);
+                        case manifesto.StatusCode.FORBIDDEN.toString():
+                            Auth1.publish(BaseEvents.FORBIDDEN);
                             break;
-                        case manifesto.StatusCodes.RESTRICTED.toString():
+                        case manifesto.StatusCode.RESTRICTED.toString():
                             // do nothing
                             break;
                         default:
-                            $.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
+                            Auth1.publish(BaseEvents.SHOW_MESSAGE, [error.message || error]);
                     }
             });
         });
     }
     
-    static getCookieServiceUrl(service: Manifesto.IService): string {
+    static getCookieServiceUrl(service: manifesto.Service): string {
         let cookieServiceUrl: string = service.id + "?origin=" + Auth1.getOrigin();
         return cookieServiceUrl;
     }
 
-    static openContentProviderInteraction(service: Manifesto.IService): Window | null {
+    static openContentProviderInteraction(service: manifesto.Service): Window | null {
         const cookieServiceUrl: string = Auth1.getCookieServiceUrl(service);
         return window.open(cookieServiceUrl);
     }
@@ -82,7 +86,7 @@ export class Auth1 {
         });
     }
 
-    static handleMovedTemporarily(resource: Manifesto.IExternalResource): Promise<void> {
+    static handleMovedTemporarily(resource: manifesto.IExternalResource): Promise<void> {
         return new Promise<void>((resolve) => {   
             Auth1.showDegradedMessage(resource);
             resource.isResponseHandled = true;
@@ -90,15 +94,15 @@ export class Auth1 {
         });
     }
 
-    static showDegradedMessage(resource: Manifesto.IExternalResource): void {
+    static showDegradedMessage(resource: manifesto.IExternalResource): void {
         const informationArgs: InformationArgs = new InformationArgs(InformationType.DEGRADED_RESOURCE, resource);
-        $.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
+        Auth1.publish(BaseEvents.SHOW_INFORMATION, [informationArgs]);
     }
 
-    static storeAccessToken(resource: Manifesto.IExternalResource, token: Manifesto.IAccessToken): Promise<void> {
+    static storeAccessToken(resource: manifesto.IExternalResource, token: manifesto.IAccessToken): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (resource.tokenService) {
-                Utils.Storage.set(resource.tokenService.id, token, token.expiresIn, new Utils.StorageType(Auth1.storageStrategy));
+                Storage.set(resource.tokenService.id, token, token.expiresIn, Auth1.storageStrategy);
                 resolve();
             } else {
                 reject('Token service not found');
@@ -106,24 +110,24 @@ export class Auth1 {
         });
     }
 
-    static getStoredAccessToken(resource: Manifesto.IExternalResource): Promise<Manifesto.IAccessToken | null> {
+    static getStoredAccessToken(resource: manifesto.IExternalResource): Promise<manifesto.IAccessToken | null> {
 
-        return new Promise<Manifesto.IAccessToken | null>((resolve, reject) => {
+        return new Promise<manifesto.IAccessToken | null>((resolve, reject) => {
 
-            let foundItems: Utils.StorageItem[] = [];
-            let item: Utils.StorageItem | null = null;
+            let foundItems: StorageItem[] = [];
+            let item: StorageItem | null = null;
 
             // try to match on the tokenService, if the resource has one:
             if (resource.tokenService) {
-                item = Utils.Storage.get(resource.tokenService.id, new Utils.StorageType(Auth1.storageStrategy));
+                item = Storage.get(resource.tokenService.id, Auth1.storageStrategy);
             }
 
             if (item) {
                 foundItems.push(item);
             } else {
                 // find an access token for the domain
-                const domain: string = Utils.Urls.getUrlParts(<string>resource.dataUri).hostname;
-                const items: Utils.StorageItem[] = Utils.Storage.getItems(new Utils.StorageType(Auth1.storageStrategy));
+                const domain: string = Urls.getUrlParts(<string>resource.dataUri).hostname;
+                const items: StorageItem[] = Storage.getItems(Auth1.storageStrategy);
 
                 for (let i = 0; i < items.length; i++) {
                     item = items[i];
@@ -135,21 +139,21 @@ export class Auth1 {
             }
 
             // sort by expiresAt, earliest to most recent.
-            foundItems = foundItems.sort((a: Utils.StorageItem, b: Utils.StorageItem) => {
+            foundItems = foundItems.sort((a: StorageItem, b: StorageItem) => {
                 return a.expiresAt - b.expiresAt;
             });
 
-            let foundToken: Manifesto.IAccessToken | null = null;
+            let foundToken: manifesto.IAccessToken | null = null;
 
             if (foundItems.length) {
-                foundToken = <Manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
+                foundToken = <manifesto.IAccessToken>foundItems[foundItems.length - 1].value;
             }
 
             resolve(foundToken);
         });
     }
 
-    static getContentProviderInteraction(resource: Manifesto.IExternalResource, service: Manifesto.IService): Promise<Window | null> {
+    static getContentProviderInteraction(resource: manifesto.IExternalResource, service: manifesto.Service): Promise<Window | null> {
         return new Promise<Window | null>((resolve) => {
 
             // if the info bar has already been shown for degraded logins
@@ -166,7 +170,7 @@ export class Auth1 {
 
             } else {
 
-                $.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
+                Auth1.publish(BaseEvents.SHOW_AUTH_DIALOGUE, [{
                     service: service,
                     closeCallback: () => {
                         resolve(null);
@@ -185,7 +189,7 @@ export class Auth1 {
         });
     }
 
-    static openTokenService(resource: Manifesto.IExternalResource, tokenService: Manifesto.IService): Promise<any> {
+    static openTokenService(resource: manifesto.IExternalResource, tokenService: manifesto.Service): Promise<any> {
         // use a Promise across a postMessage call. Discuss...
         return new Promise<any>((resolve, reject) => {
 
@@ -241,7 +245,7 @@ export class Auth1 {
         }
     }
 
-    static showOutOfOptionsMessages(resource: Manifesto.IExternalResource, service: Manifesto.IService): void {
+    static showOutOfOptionsMessages(resource: manifesto.IExternalResource, service: manifesto.Service): void {
 
         // if the UV is already showing the info bar, no need to show an error message.
         if (resource.status == HTTPStatusCode.MOVED_TEMPORARILY) {
@@ -258,7 +262,7 @@ export class Auth1 {
            errorMessage += service.getFailureDescription();
         }
 
-        $.publish(BaseEvents.SHOW_MESSAGE, [UVUtils.sanitize(errorMessage)]);
+        Auth1.publish(BaseEvents.SHOW_MESSAGE, [sanitize(errorMessage)]);
     }
 
 }

@@ -5,14 +5,16 @@ import {Events} from "../../extensions/uv-seadragon-extension/Events";
 import {CroppedImageDimensions} from "../../extensions/uv-seadragon-extension/CroppedImageDimensions";
 import {ISeadragonExtension} from "../../extensions/uv-seadragon-extension/ISeadragonExtension";
 import {ISeadragonExtensionData} from "../../extensions/uv-seadragon-extension/ISeadragonExtensionData";
-import {UVUtils} from "../../Utils";
-import AnnotationGroup = Manifold.AnnotationGroup;
-import AnnotationRect = Manifold.AnnotationRect;
+import { sanitize } from "../../Utils";
+import { Async, Bools, Dimensions } from "@edsilv/utils";
+import * as manifold from "@iiif/manifold";
+import * as manifesto from "manifesto.js";
+import { ViewingDirection } from "@iiif/vocabulary";
 
 export class SeadragonCenterPanel extends CenterPanel {
 
     controlsVisible: boolean = false;
-    currentAnnotationRect: AnnotationRect;
+    currentAnnotationRect: manifold.AnnotationRect;
     currentBounds: any;
     handler: any;
     initialBounds: any;
@@ -22,11 +24,12 @@ export class SeadragonCenterPanel extends CenterPanel {
     items: any[];
     navigatedFromSearch: boolean = false;
     nextButtonEnabled: boolean = false;
-    pages: Manifesto.IExternalResource[];
+    pages: manifesto.IExternalResource[];
     prevButtonEnabled: boolean = false;
-    previousAnnotationRect: AnnotationRect;
+    previousAnnotationRect: manifold.AnnotationRect;
     userData: any;
     viewer: any;
+    viewerId: string;
 
     $canvas: JQuery;
     $goHomeButton: JQuery;
@@ -51,63 +54,64 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         super.create();
 
-        this.$viewer = $('<div id="viewer"></div>');
+        this.viewerId = "osd" + new Date().getTime();
+        this.$viewer = $('<div id="' + this.viewerId + '" class="viewer"></div>');
         this.$content.prepend(this.$viewer);
 
-        $.subscribe(BaseEvents.ANNOTATIONS, (e: any, args: any) => {
+        this.component.subscribe(BaseEvents.ANNOTATIONS, (args: any) => {
             this.overlayAnnotations();
             this.zoomToInitialAnnotation();
         });
 
-        $.subscribe(BaseEvents.SETTINGS_CHANGED, (e: any, args: ISettings) => {
+        this.component.subscribe(BaseEvents.SETTINGS_CHANGED, (args: ISettings) => {
             this.viewer.gestureSettingsMouse.clickToZoom = args.clickToZoomEnabled;
         });
 
-        $.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (e: any, resources: Manifesto.IExternalResource[]) => {
+        this.component.subscribe(BaseEvents.OPEN_EXTERNAL_RESOURCE, (resources: manifesto.IExternalResource[]) => {
             this.whenResized(() => {
                 if (!this.isCreated) this.createUI();
                 this.openMedia(resources);
             });
         });
 
-        $.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
+        this.component.subscribe(BaseEvents.CLEAR_ANNOTATIONS, () => {
             this.whenCreated(() => {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
                 this.clearAnnotations();
             });
         });
 
-        $.subscribe(Events.NEXT_SEARCH_RESULT, () => {
+        this.component.subscribe(Events.NEXT_SEARCH_RESULT, () => {
             this.whenCreated(() => {
                 this.nextAnnotation();
             });
         });
 
-        $.subscribe(Events.PREV_SEARCH_RESULT, () => {
+        this.component.subscribe(Events.PREV_SEARCH_RESULT, () => {
             this.whenCreated(() => {
                 this.prevAnnotation();
             });
         });
 
-        $.subscribe(Events.ZOOM_IN, () => {
+        this.component.subscribe(Events.ZOOM_IN, () => {
             this.whenCreated(() => {
                 this.zoomIn();
             });
         });
 
-        $.subscribe(Events.ZOOM_OUT, () => {
+        this.component.subscribe(Events.ZOOM_OUT, () => {
             this.whenCreated(() => {
                 this.zoomOut();
             });
         });
 
-        $.subscribe(Events.ROTATE, () => {
+        this.component.subscribe(Events.ROTATE, () => {
             this.whenCreated(() => {
                 this.rotateRight();
             });
         });
 
-        $.subscribe(BaseEvents.METRIC_CHANGED, () => {
+        this.component.subscribe(BaseEvents.METRIC_CHANGED, () => {
             this.whenCreated(() => {
                 this.updateResponsiveView();
             });
@@ -115,7 +119,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     whenCreated(cb: () => void): void {
-        Utils.Async.waitFor(() => {
+        Async.waitFor(() => {
             return this.isCreated;
         }, cb);
     }
@@ -150,13 +154,15 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$content.append(this.$spinner);
 
         // add to window object for testing automation purposes.
-        window.openSeadragonViewer = this.viewer = OpenSeadragon({
-            id: "viewer",
+        //window.openSeadragonViewer
+        // removed as causing issues for multiple UVs on page
+        this.viewer = OpenSeadragon({
+            id: this.viewerId,
             ajaxWithCredentials: false,
             showNavigationControl: true,
             showNavigator: true,
             showRotationControl: true,
-            showHomeControl: Utils.Bools.getBool(this.config.options.showHomeControl, false),
+            showHomeControl: Bools.getBool(this.config.options.showHomeControl, false),
             showFullPageControl: false,
             defaultZoomLevel: this.config.options.defaultZoomLevel || 0,
             maxZoomPixelRatio: this.config.options.maxZoomPixelRatio || 2,
@@ -165,13 +171,13 @@ export class SeadragonCenterPanel extends CenterPanel {
             navigatorPosition: this.config.options.navigatorPosition || "BOTTOM_RIGHT",
             animationTime: this.config.options.animationTime || 1.2,
             visibilityRatio: this.config.options.visibilityRatio || 0.5,
-            constrainDuringPan: Utils.Bools.getBool(this.config.options.constrainDuringPan, false),
-            immediateRender: Utils.Bools.getBool(this.config.options.immediateRender, false),
+            constrainDuringPan: Bools.getBool(this.config.options.constrainDuringPan, false),
+            immediateRender: Bools.getBool(this.config.options.immediateRender, false),
             blendTime: this.config.options.blendTime || 0,
-            autoHideControls: Utils.Bools.getBool(this.config.options.autoHideControls, true),
+            autoHideControls: Bools.getBool(this.config.options.autoHideControls, true),
             prefixUrl: this.extension.data.root + '/img/',
             gestureSettingsMouse: {
-                clickToZoom: Utils.Bools.getBool(this.extension.data.config.options.clickToZoomEnabled, true)
+                clickToZoom: Bools.getBool(this.extension.data.config.options.clickToZoomEnabled, true)
             },
             navImages: {
                 zoomIn: {
@@ -289,16 +295,16 @@ export class SeadragonCenterPanel extends CenterPanel {
         //});
 
         this.viewer.addHandler('resize', (viewer: any) => {
-            $.publish(Events.SEADRAGON_RESIZE, [viewer]);
+            this.component.publish(Events.SEADRAGON_RESIZE, viewer);
             this.viewerResize(viewer);
         });
 
         this.viewer.addHandler('animation-start', (viewer: any) => {
-            $.publish(Events.SEADRAGON_ANIMATION_START, [viewer]);
+            this.component.publish(Events.SEADRAGON_ANIMATION_START, viewer);
         });
 
         this.viewer.addHandler('animation', (viewer: any) => {
-            $.publish(Events.SEADRAGON_ANIMATION, [viewer]);
+            this.component.publish(Events.SEADRAGON_ANIMATION, viewer);
         });
 
         this.viewer.addHandler('animation-finish', (viewer: any) => {
@@ -306,11 +312,11 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             this.updateVisibleAnnotationRects();
 
-            $.publish(Events.SEADRAGON_ANIMATION_FINISH, [viewer]);
+            this.component.publish(Events.SEADRAGON_ANIMATION_FINISH, viewer);
         });
 
         this.viewer.addHandler('rotate', (args: any) => {
-            $.publish(Events.SEADRAGON_ROTATION, [args.degrees]);
+            this.component.publish(Events.SEADRAGON_ROTATION, args.degrees);
         });
 
         this.title = this.extension.helper.getLabel();
@@ -326,7 +332,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     createNavigationButtons() {
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         this.$prevButton = $('<div class="paging btn prev" tabindex="0"></div>');
 
@@ -347,9 +353,9 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.viewer.addControl(this.$prevButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT});
         this.viewer.addControl(this.$nextButton[0], {anchor: OpenSeadragon.ControlAnchor.TOP_RIGHT});
 
-        switch (viewingDirection.toString()) {
-            case manifesto.ViewingDirection.bottomToTop().toString() :
-            case manifesto.ViewingDirection.topToBottom().toString() :
+        switch (viewingDirection) {
+            case ViewingDirection.BOTTOM_TO_TOP :
+            case ViewingDirection.TOP_TO_BOTTOM :
                 this.$prevButton.addClass('vertical');
                 this.$nextButton.addClass('vertical');;
                 break;
@@ -363,14 +369,14 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.prevButtonEnabled) return;
 
-            switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.PREV);
+            switch (viewingDirection) {
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                case ViewingDirection.TOP_TO_BOTTOM :
+                    this.component.publish(BaseEvents.PREV);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.NEXT);
+                case ViewingDirection.RIGHT_TO_LEFT :
+                    this.component.publish(BaseEvents.NEXT);
                     break;
             }
         });
@@ -381,14 +387,14 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             if (!that.nextButtonEnabled) return;
 
-            switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.leftToRight().toString() :
-                case manifesto.ViewingDirection.bottomToTop().toString() :
-                case manifesto.ViewingDirection.topToBottom().toString() :
-                    $.publish(BaseEvents.NEXT);
+            switch (viewingDirection) {
+                case ViewingDirection.LEFT_TO_RIGHT :
+                case ViewingDirection.BOTTOM_TO_TOP :
+                case ViewingDirection.TOP_TO_BOTTOM :
+                    this.component.publish(BaseEvents.NEXT);
                     break;
-                case manifesto.ViewingDirection.rightToLeft().toString() :
-                    $.publish(BaseEvents.PREV);
+                case ViewingDirection.RIGHT_TO_LEFT :
+                    this.component.publish(BaseEvents.PREV);
                     break;
             }
         });
@@ -407,12 +413,12 @@ export class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    openMedia(resources?: Manifesto.IExternalResource[]): void {
+    openMedia(resources?: manifesto.IExternalResource[]): void {
 
         this.$spinner.show();
         this.items = [];
 
-        this.extension.getExternalResources(resources).then((resources: Manifesto.IExternalImageResourceData[]) => {
+        this.extension.getExternalResources(resources).then((resources: manifesto.IExternalImageResourceData[]) => {
 
             this.viewer.close();
 
@@ -450,7 +456,7 @@ export class SeadragonCenterPanel extends CenterPanel {
         });
     }
 
-    getPagePositions(resources: Manifesto.IExternalImageResourceData[]): Manifesto.IExternalImageResourceData[] {
+    getPagePositions(resources: manifesto.IExternalImageResourceData[]): manifesto.IExternalImageResourceData[] {
         let leftPage: any;
         let rightPage: any;
         let topPage: any;
@@ -521,7 +527,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
     openPagesHandler(): void {
 
-        $.publish(Events.SEADRAGON_OPEN);
+        this.component.publish(Events.SEADRAGON_OPEN);
 
         if (this.extension.helper.isMultiCanvas() && !this.extension.helper.isContinuous()) {
 
@@ -530,9 +536,9 @@ export class SeadragonCenterPanel extends CenterPanel {
 
             $('.navigator').addClass('extraMargin');
 
-            const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();
+            const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
-            if (viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString()) {
+            if (viewingDirection === ViewingDirection.RIGHT_TO_LEFT) {
                 if (this.extension.helper.isFirstCanvas()) {
                     this.disableNextButton();
                 } else {
@@ -575,7 +581,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     zoomToInitialAnnotation(): void {
-        let annotationRect: AnnotationRect | null = this.getInitialAnnotationRect();
+        let annotationRect: manifold.AnnotationRect | null = this.getInitialAnnotationRect();
         
         (<ISeadragonExtension>this.extension).previousAnnotationRect = null;
         (<ISeadragonExtension>this.extension).currentAnnotationRect = null;
@@ -586,11 +592,11 @@ export class SeadragonCenterPanel extends CenterPanel {
     }
 
     overlayAnnotations(): void {
-        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+        const annotations: manifold.AnnotationGroup[] = this.getAnnotationsForCurrentImages();
 
         for (let i = 0; i < annotations.length; i++) {
 
-            const annotation: AnnotationGroup = annotations[i];
+            const annotation: manifold.AnnotationGroup = annotations[i];
             const overlayRects: any[] = this.getAnnotationOverlayRects(annotation);
 
             for (let k = 0; k < overlayRects.length; k++) {
@@ -599,7 +605,7 @@ export class SeadragonCenterPanel extends CenterPanel {
                 const div: HTMLElement = document.createElement('div');
                 div.id = 'searchResult-' + overlayRect.canvasIndex + '-' + overlayRect.resultIndex;
                 div.className = 'searchOverlay';
-                div.title = UVUtils.sanitize(overlayRect.chars);
+                div.title = sanitize(overlayRect.chars);
 
                 this.viewer.addOverlay(div, overlayRect);
             }
@@ -691,7 +697,7 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         if (!this.viewer || !this.viewer.viewport) return null;
 
-        const canvas: Manifesto.ICanvas = this.extension.helper.getCurrentCanvas();
+        const canvas: manifesto.Canvas = this.extension.helper.getCurrentCanvas();
         const dimensions: CroppedImageDimensions | null = (<ISeadragonExtension>this.extension).getCroppedImageDimensions(canvas, this.viewer);
 
         if (dimensions) {
@@ -729,9 +735,9 @@ export class SeadragonCenterPanel extends CenterPanel {
         this.$canvas.find('.searchOverlay').hide();
     }
 
-    getAnnotationsForCurrentImages(): AnnotationGroup[] {
-        let annotationsForCurrentImages: AnnotationGroup[] = [];
-        const annotations: AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
+    getAnnotationsForCurrentImages(): manifold.AnnotationGroup[] {
+        let annotationsForCurrentImages: manifold.AnnotationGroup[] = [];
+        const annotations: manifold.AnnotationGroup[] | null = (<ISeadragonExtension>this.extension).annotations;
 
         if (!annotations || !annotations.length) return annotationsForCurrentImages;
 
@@ -751,44 +757,44 @@ export class SeadragonCenterPanel extends CenterPanel {
         return annotationsForCurrentImages;
     }
 
-    getAnnotationRectsForCurrentImages(): AnnotationRect[] {
-        const annotations: AnnotationGroup[] = this.getAnnotationsForCurrentImages();
-        return annotations.en().selectMany(x => x.rects).toArray();
+    getAnnotationRectsForCurrentImages(): manifold.AnnotationRect[] {
+        const annotations: manifold.AnnotationGroup[] = this.getAnnotationsForCurrentImages();
+        return annotations.map((x) => { return x.rects; }).reduce((a, b) => { return a.concat(b); });
     }
 
     updateVisibleAnnotationRects(): void {
         // after animating, loop through all search result rects and flag their visibility based on whether they are inside the current viewport.
-        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
 
         for (let i = 0; i < annotationRects.length; i++) {
-            let rect: AnnotationRect = annotationRects[i];
+            let rect: manifold.AnnotationRect = annotationRects[i];
             let viewportBounds: any = this.viewer.viewport.getBounds();
 
-            rect.isVisible = Utils.Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
+            rect.isVisible = Dimensions.hitRect(viewportBounds.x, viewportBounds.y, viewportBounds.width, viewportBounds.height, rect.viewportX, rect.viewportY);
         }
     }
 
-    getAnnotationRectIndex(annotationRect: AnnotationRect): number {
-        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    getAnnotationRectIndex(annotationRect: manifold.AnnotationRect): number {
+        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         return annotationRects.indexOf(annotationRect);
     }
 
     isZoomToSearchResultEnabled(): boolean {
-        return Utils.Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
+        return Bools.getBool(this.extension.data.config.options.zoomToSearchResultEnabled, true);
     }
 
     prevAnnotation(): void {
-        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-        const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
+        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+        const currentAnnotationRect: manifold.AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
 
         const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : annotationRects.length;
         //const currentAnnotationRectIndex: number = this.getAnnotationRectIndex(<AnnotationRect>currentAnnotationRect);
-        let foundRect: AnnotationRect | null = null;
+        let foundRect: manifold.AnnotationRect | null = null;
    
         // if there's no currentAnnotationRect selected, index is the total available annotation rects for the current images.
         // minusing 1 makes the index the last of the available rects for the current images.
         for (let i = currentAnnotationRectIndex - 1; i >= 0; i--) {
-            const rect: AnnotationRect = annotationRects[i];
+            const rect: manifold.AnnotationRect = annotationRects[i];
 
             // this was removed as users found it confusing.
             // find the prev visible or non-visible rect.
@@ -805,27 +811,27 @@ export class SeadragonCenterPanel extends CenterPanel {
             if (foundRect.canvasIndex < this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
                 this.navigatedFromSearch = true;
-                $.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
+                this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, foundRect);
             } else {
                 this.zoomToAnnotation(foundRect);
             }
         } else {
             this.navigatedFromSearch = true;
-            $.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            this.component.publish(Events.PREV_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
     nextAnnotation(): void {
-        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
-        const currentAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
+        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+        const currentAnnotationRect: manifold.AnnotationRect | null = (<ISeadragonExtension>this.extension).currentAnnotationRect;
 
         const currentAnnotationRectIndex: number = currentAnnotationRect ? this.getAnnotationRectIndex(currentAnnotationRect) : -1;
-        let foundRect: AnnotationRect | null = null;
+        let foundRect: manifold.AnnotationRect | null = null;
 
         // if there's no currentAnnotationRect selected, index is -1.
         // adding 1 makes the index 0 of available rects for the current images.
         for (let i = currentAnnotationRectIndex + 1; i < annotationRects.length; i++) {
-            const rect: AnnotationRect = annotationRects[i];
+            const rect: manifold.AnnotationRect = annotationRects[i];
 
             // this was removed as users found it confusing.
             // find the next visible or non-visible rect.
@@ -842,24 +848,24 @@ export class SeadragonCenterPanel extends CenterPanel {
             if (foundRect.canvasIndex > this.extension.helper.canvasIndex) {
                 (<ISeadragonExtension>this.extension).currentAnnotationRect = foundRect;
                 this.navigatedFromSearch = true;
-                $.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
+                this.component.publish(BaseEvents.ANNOTATION_CANVAS_CHANGED, [foundRect]);
             } else {
-                this.zoomToAnnotation(<AnnotationRect>foundRect);
+                this.zoomToAnnotation(<manifold.AnnotationRect>foundRect);
             }
         } else {
             this.navigatedFromSearch = true;
-            $.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
+            this.component.publish(Events.NEXT_IMAGES_SEARCH_RESULT_UNAVAILABLE);
         }
     }
 
-    getAnnotationRectByIndex(index: number): AnnotationRect | null {
-        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    getAnnotationRectByIndex(index: number): manifold.AnnotationRect | null {
+        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         if (!annotationRects.length) return null;
         return annotationRects[index];
     }
 
-    getInitialAnnotationRect(): AnnotationRect | null {
-        const annotationRects: AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
+    getInitialAnnotationRect(): manifold.AnnotationRect | null {
+        const annotationRects: manifold.AnnotationRect[] = this.getAnnotationRectsForCurrentImages();
         if (!annotationRects.length) return null;
 
         // if we've got this far it means that a reload has happened
@@ -868,24 +874,25 @@ export class SeadragonCenterPanel extends CenterPanel {
         // if less than, select the first annotation on the current page
         // otherwise default to the first annotation
 
-        const previousAnnotationRect: AnnotationRect | null = (<ISeadragonExtension>this.extension).previousAnnotationRect;
+        const previousAnnotationRect: manifold.AnnotationRect | null = (<ISeadragonExtension>this.extension).previousAnnotationRect;
 
         if (!previousAnnotationRect) {
             if (this.extension.lastCanvasIndex > this.extension.helper.canvasIndex) {
-                return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).last();
+                const result = annotationRects.filter(x => x.canvasIndex === this.extension.helper.canvasIndex);
+                return result[result.length - 1];
             }
         }
 
-        return annotationRects.en().where(x => x.canvasIndex === this.extension.helper.canvasIndex).first();
+        return annotationRects.filter(x => x.canvasIndex === this.extension.helper.canvasIndex)[0];
     }
 
-    zoomToAnnotation(annotationRect: AnnotationRect): void {
+    zoomToAnnotation(annotationRect: manifold.AnnotationRect): void {
         (<ISeadragonExtension>this.extension).previousAnnotationRect = (<ISeadragonExtension>this.extension).currentAnnotationRect || annotationRect;
         (<ISeadragonExtension>this.extension).currentAnnotationRect = annotationRect;
 
         // if zoomToBoundsEnabled, zoom to the annotation's bounds.
         // otherwise, pan into view preserving the current zoom level.
-        if (Utils.Bools.getBool(this.extension.data.config.options.zoomToBoundsEnabled, false)) {
+        if (Bools.getBool(this.extension.data.config.options.zoomToBoundsEnabled, false)) {
             this.fitToBounds(new Bounds(annotationRect.viewportX, annotationRect.viewportY, annotationRect.width, annotationRect.height), false);
         } else {
             const x: number = annotationRect.viewportX - ((this.currentBounds.w * 0.5) - annotationRect.width * 0.5);
@@ -899,32 +906,32 @@ export class SeadragonCenterPanel extends CenterPanel {
 
         this.highlightAnnotationRect(annotationRect);
 
-        $.publish(BaseEvents.ANNOTATION_CHANGED);
+        this.component.publish(BaseEvents.ANNOTATION_CHANGED);
     }
 
-    highlightAnnotationRect(annotationRect: AnnotationRect): void {
+    highlightAnnotationRect(annotationRect: manifold.AnnotationRect): void {
         const $rect = $('#searchResult-' + annotationRect.canvasIndex + '-' + annotationRect.index);
         $rect.addClass('current');
         $('.searchOverlay').not($rect).removeClass('current');
     }
 
-    getAnnotationOverlayRects(annotationGroup: AnnotationGroup): any[] {
+    getAnnotationOverlayRects(annotationGroup: manifold.AnnotationGroup): any[] {
         let newRects: any[] = [];
 
         if (!this.extension.resources) {
             return newRects;
         }
         
-        let resource: any = this.extension.resources.en().where(x => x.index === annotationGroup.canvasIndex).first();
+        let resource: any = this.extension.resources.filter(x => x.index === annotationGroup.canvasIndex)[0];
         let index: number = this.extension.resources.indexOf(resource);
         let offsetX: number = 0;
 
         if (index > 0) {
-            offsetX = (<Manifesto.IExternalImageResourceData>this.extension.resources[index - 1]).width;
+            offsetX = (<manifesto.IExternalImageResourceData>this.extension.resources[index - 1]).width;
         }
 
         for (let i = 0; i < annotationGroup.rects.length; i++) {
-            const searchRect: AnnotationRect = annotationGroup.rects[i];
+            const searchRect: manifold.AnnotationRect = annotationGroup.rects[i];
 
             const x: number = (searchRect.x + offsetX) + ((index > 0) ? this.config.options.pageGap : 0);
             const y: number = searchRect.y;
@@ -954,27 +961,27 @@ export class SeadragonCenterPanel extends CenterPanel {
         if (!this.isCreated) return;
 
         if (this.title) {
-            this.$title.text(UVUtils.sanitize(this.title));
+            this.$title.text(sanitize(this.title));
         }
 
         this.$spinner.css('top', (this.$content.height() / 2) - (this.$spinner.height() / 2));
         this.$spinner.css('left', (this.$content.width() / 2) - (this.$spinner.width() / 2));
 
-        const viewingDirection: Manifesto.ViewingDirection = this.extension.helper.getViewingDirection() || manifesto.ViewingDirection.leftToRight();;
+        const viewingDirection: ViewingDirection = this.extension.helper.getViewingDirection() || ViewingDirection.LEFT_TO_RIGHT;
 
         if (this.extension.helper.isMultiCanvas() && this.$prevButton && this.$nextButton) {
 
             const verticalButtonPos: number = Math.floor(this.$content.width() / 2);
 
-            switch (viewingDirection.toString()) {
-                case manifesto.ViewingDirection.bottomToTop().toString() :
+            switch (viewingDirection) {
+                case ViewingDirection.BOTTOM_TO_TOP :
                     this.$prevButton.addClass('down');
                     this.$nextButton.addClass('up');
                     this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
                     this.$prevButton.css('top', (this.$content.height() - this.$prevButton.height()));
                     this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
                     break;
-                case manifesto.ViewingDirection.topToBottom().toString() :
+                case ViewingDirection.TOP_TO_BOTTOM :
                     this.$prevButton.css('left', verticalButtonPos - (this.$prevButton.outerWidth() / 2));
                     this.$nextButton.css('left', (verticalButtonPos * -1) - (this.$nextButton.outerWidth() / 2));
                     this.$nextButton.css('top', (this.$content.height() - this.$nextButton.height()));
@@ -1009,7 +1016,7 @@ export class SeadragonCenterPanel extends CenterPanel {
     
     setNavigatorVisible(): void {
 
-        const navigatorEnabled: boolean = Utils.Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.isDesktopMetric();
+        const navigatorEnabled: boolean = Bools.getBool(this.extension.getSettings().navigatorEnabled, true) && this.extension.isDesktopMetric();
 
         this.viewer.navigator.setVisible(navigatorEnabled);
         

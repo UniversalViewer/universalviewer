@@ -1,6 +1,9 @@
 import {BaseEvents} from "../uv-shared-module/BaseEvents";
 import {LeftPanel} from "../uv-shared-module/LeftPanel";
 import {ThumbsView} from "./ThumbsView";
+import { ViewingDirection, MediaType } from "@iiif/vocabulary";
+import { Files } from "@edsilv/utils";
+import * as manifesto from "manifesto.js";
 
 export class ResourcesLeftPanel extends LeftPanel {
 
@@ -60,20 +63,20 @@ export class ResourcesLeftPanel extends LeftPanel {
 
     dataBind(): void {
         this.dataBindThumbsView();
-        const annotations: Manifesto.IAnnotation[] = this.extension.helper.getCurrentCanvas().getResources();
+        const annotations: manifesto.Annotation[] = this.extension.helper.getCurrentCanvas().getResources();
 
         if (annotations.length === 0) {
             this.$resourcesView.hide();
         }
 
         for (let i = 0; i < annotations.length; i++) {
-            const annotation: Manifesto.IAnnotation = annotations[i];
-            const resource: Manifesto.Resource = annotation.getResource();
+            const annotation: manifesto.Annotation = annotations[i];
+            const resource: manifesto.Resource = annotation.getResource();
             if (resource) {
-                const label: string | null = Manifesto.LanguageMap.getValue(<Manifesto.LanguageMap>resource.getLabel());
+                const label: string | null = manifesto.LanguageMap.getValue(<manifesto.LanguageMap>resource.getLabel());
 
                 if (label) {
-                    const mime: string = Utils.Files.simplifyMimeType((<Manifesto.MediaType>resource.getFormat()).toString());
+                    const mime: string = Files.simplifyMimeType((<MediaType>resource.getFormat()).toString());
                     const $listItem: JQuery = $('<li><a href="' + resource.id + '" target="_blank">' + label + ' (' + mime + ')' + '</li>');
                     this.$resources.append($listItem);
                 }
@@ -87,9 +90,9 @@ export class ResourcesLeftPanel extends LeftPanel {
         let width: number;
         let height: number;
 
-        const viewingDirection: Manifesto.ViewingDirection | null = this.extension.helper.getViewingDirection();
+        const viewingDirection: ViewingDirection | null = this.extension.helper.getViewingDirection();
 
-        if (viewingDirection && (viewingDirection.toString() === manifesto.ViewingDirection.leftToRight().toString() || viewingDirection.toString() === manifesto.ViewingDirection.rightToLeft().toString())) {
+        if (viewingDirection && (viewingDirection === ViewingDirection.LEFT_TO_RIGHT || viewingDirection === ViewingDirection.RIGHT_TO_LEFT)) {
             width = this.config.options.twoColThumbWidth;
             height = this.config.options.twoColThumbHeight;
         } else {
@@ -105,7 +108,7 @@ export class ResourcesLeftPanel extends LeftPanel {
             height = 100;
         }
 
-        this.thumbsView.thumbs = <Manifold.IThumb[]>this.extension.helper.getThumbs(width, height);
+        this.thumbsView.thumbs = this.extension.helper.getThumbs(width, height);
         // hide thumb selector for single-part manifests
         if (this.thumbsView.thumbs.length < 2) {
             this.$thumbsView.hide();
@@ -115,25 +118,25 @@ export class ResourcesLeftPanel extends LeftPanel {
 
     expandFullStart(): void {
         super.expandFullStart();
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_START);
     }
 
     expandFullFinish(): void {
         super.expandFullFinish();
 
-        $.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_EXPAND_FULL_FINISH);
     }
 
     collapseFullStart(): void {
         super.collapseFullStart();
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_START);
     }
 
     collapseFullFinish(): void {
         super.collapseFullFinish();
 
-        $.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
+        this.component.publish(BaseEvents.LEFTPANEL_COLLAPSE_FULL_FINISH);
     }
 
     resize(): void {

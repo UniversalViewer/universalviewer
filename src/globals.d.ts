@@ -1,3 +1,7 @@
+interface Element {
+    scrollIntoViewIfNeeded: any;
+}
+
 interface HTMLElement{
     ontouchstart: any;
 }
@@ -37,6 +41,13 @@ declare var PDFJS: any;
 declare var filterXSS: (html: string, config: any) => string;
 declare var WEBVR: any;
 
+// have excluded component definitions from tsconfig to avoid needing to update all components when using a newer manifesto/manifold type definition
+declare var IIIFComponents: any;
+
+// https://github.com/DefinitelyTyped/DefinitelyTyped/pull/35946
+declare var define: any;
+declare var requirejs: any;
+
 // app
 interface Window {
     configExtensionCallback: any;
@@ -48,7 +59,7 @@ interface Window {
     webViewerLoad: any; // pdfjs
     openSeadragonViewer: any; // for testing convenience (make this generic)
     PDFObject: any;
-    UV: any;
+    UVURLDataProvider: any;
     THREE: any;
     Event: any;
     CustomEvent: any;
